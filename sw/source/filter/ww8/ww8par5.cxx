@@ -408,7 +408,7 @@ OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, sal_uInt16 
     //Get the system date in the correct final language layout, convert to
     //a known language and modify the 2 digit year part to be 4 digit, and
     //convert back to the correct language layout.
-    sal_uLong nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, nLang);
+    const sal_uInt32 nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, nLang);
 
     SvNumberformat aFormat = const_cast<SvNumberformat &>
         (*(pFormatter->GetEntry(nIndex)));

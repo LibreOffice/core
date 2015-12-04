@@ -212,21 +212,20 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
 
         const SvNumberformat* pFormat;
         sal_Int32 i = 0;
-        sal_uLong  nFormat;
         Color* pCol;
         double fVal = GetDefValue( nFormatType );
         OUString sValue;
 
-        sal_uLong nSysNumFormat = pFormatter->GetFormatIndex(
+        const sal_uInt32 nSysNumFormat = pFormatter->GetFormatIndex(
                                         NF_NUMBER_SYSTEM, eCurLanguage );
-        sal_uLong nSysShortDateFormat = pFormatter->GetFormatIndex(
+        const sal_uInt32 nSysShortDateFormat = pFormatter->GetFormatIndex(
                                         NF_DATE_SYSTEM_SHORT, eCurLanguage );
-        sal_uLong nSysLongDateFormat = pFormatter->GetFormatIndex(
+        const sal_uInt32 nSysLongDateFormat = pFormatter->GetFormatIndex(
                                         NF_DATE_SYSTEM_LONG, eCurLanguage );
 
         for( long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex )
         {
-            nFormat = pFormatter->GetFormatIndex(
+            const sal_uInt32 nFormat = pFormatter->GetFormatIndex(
                             (NfIndexTableOffset)nIndex, eCurLanguage );
             pFormat = pFormatter->GetEntry( nFormat );
 
@@ -324,15 +323,15 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
     while (reinterpret_cast<sal_uLong>(GetEntryData(nPos)) == ULONG_MAX)
         nPos++;
 
-    sal_uLong nSysNumFormat = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
-    sal_uLong nSysShortDateFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
-    sal_uLong nSysLongDateFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
+    const sal_uInt32 nSysNumFormat = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
+    const sal_uInt32 nSysShortDateFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
+    const sal_uInt32 nSysLongDateFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
     bool bSysLang = false;
     if( eCurLanguage == GetAppLanguage() )
         bSysLang = true;
-    sal_uLong nNumFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysNumFormat, LANGUAGE_SYSTEM );
-    sal_uLong nShortDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysShortDateFormat, LANGUAGE_SYSTEM );
-    sal_uLong nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFormat, LANGUAGE_SYSTEM );
+    const sal_uInt32 nNumFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysNumFormat, LANGUAGE_SYSTEM );
+    const sal_uInt32 nShortDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysShortDateFormat, LANGUAGE_SYSTEM );
+    const sal_uInt32 nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFormat, LANGUAGE_SYSTEM );
 
     if (
          nDefaultFormat == nSysNumFormat ||

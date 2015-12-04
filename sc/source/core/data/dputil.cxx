@@ -123,7 +123,7 @@ OUString ScDPUtil::getDateGroupName(
             Date aNullDate = *pFormatter->GetNullDate();
             long nDays = aDate - aNullDate;
 
-            sal_uLong nFormat = pFormatter->GetFormatIndex(NF_DATE_SYS_DDMMM, ScGlobal::eLnge);
+            const sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_DATE_SYS_DDMMM, ScGlobal::eLnge);
             Color* pColor;
             OUString aStr;
             pFormatter->GetOutputString(nDays, nFormat, aStr, &pColor);

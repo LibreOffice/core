@@ -39,7 +39,7 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
 {
 }
 
-ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uLong nFormat,
+ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uInt32 nFormat,
                                      SvNumberFormatter& rFormatter)
 {
     PutFormatIndex(nFormat, rFormatter);
@@ -62,7 +62,7 @@ void ScNumFormatAbbrev::Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) 
     rStream.WriteUInt16( eSysLnge ).WriteUInt16( eLnge );
 }
 
-void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
+void ScNumFormatAbbrev::PutFormatIndex(sal_uInt32 nFormat,
                                        SvNumberFormatter& rFormatter)
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry(nFormat);
@@ -81,7 +81,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
     }
 }
 
-sal_uLong ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
+sal_uInt32 ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
 {
     short nType;
     bool bNewInserted;

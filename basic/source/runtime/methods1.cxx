@@ -2539,7 +2539,7 @@ RTLFUNC(FormatDateTime)
             }
 
             LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
-            sal_uIntPtr nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eLangType );
+            const sal_uInt32 nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eLangType );
             Color* pCol;
             pFormatter->GetOutputString( dDate, nIndex, aRetStr, &pCol );
 

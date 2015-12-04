@@ -34,11 +34,11 @@ class ScNumFormatAbbrev
 public:
     ScNumFormatAbbrev();
     ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat);
-    ScNumFormatAbbrev(sal_uLong nFormat, SvNumberFormatter& rFormatter);
+    ScNumFormatAbbrev(sal_uInt32 nFormat, SvNumberFormatter& rFormatter);
     void Load( SvStream& rStream, rtl_TextEncoding eByteStrSet );            // loading of the numberformats
     void Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) const;   // saving of the numberformats
-    void PutFormatIndex(sal_uLong nFormat, SvNumberFormatter& rFormatter);
-    sal_uLong GetFormatIndex( SvNumberFormatter& rFormatter);
+    void PutFormatIndex(sal_uInt32 nFormat, SvNumberFormatter& rFormatter);
+    sal_uInt32 GetFormatIndex( SvNumberFormatter& rFormatter);
     inline bool operator==(const ScNumFormatAbbrev& rNumFormat) const
     {
         return ((sFormatstring == rNumFormat.sFormatstring)

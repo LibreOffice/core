@@ -802,7 +802,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     else
                     {
                         SvNumberFormatter* pFormatter = rWrtSh.GetNumberFormatter();
-                        sal_uLong nSysNumFormat = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
+                        const sal_uInt32 nSysNumFormat = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
                         SwInsertField_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, OUString(), sFormula, nSysNumFormat);
                         aFieldMgr.InsertField(aData);
                     }

@@ -323,7 +323,7 @@ void SwHTMLParser::NewField()
     case RES_DATEFLD:
     case RES_TIMEFLD:
         {
-            sal_uLong nNumFormat = 0;
+            sal_uInt32 nNumFormat = 0;
             sal_Int64 nTime = tools::Time( tools::Time::SYSTEM ).GetTime();
             sal_Int32 nDate = Date( Date::SYSTEM ).GetDate();
             sal_uInt16 nSub = 0;
