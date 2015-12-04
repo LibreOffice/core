@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_939ff75e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-12-04T07:02:31Z",
+      "side": 1,
+      "message": "Could you please add a comment and explain why these are necessary?\nThanks!",
+      "revId": "741d32d4f97fbc0666ce32625dd845b95c2cced8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
