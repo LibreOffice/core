@@ -31,7 +31,7 @@
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLBinaryObjectReference.hxx"
 #include "OOXMLFastDocumentHandler.hxx"
-#include "OOXMLPropertySetImpl.hxx"
+#include "OOXMLPropertySet.hxx"
 
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -356,7 +356,7 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
         (new OOXMLPropertyImpl(NS_ooxml::LN_payload, pPayloadValue,
                                OOXMLPropertyImpl::ATTRIBUTE));
 
-    OOXMLPropertySet::Pointer_t pBlipSet(new OOXMLPropertySetImpl());
+    OOXMLPropertySet::Pointer_t pBlipSet(new OOXMLPropertySet);
 
     pBlipSet->add(pPayloadProperty);
 
@@ -366,7 +366,7 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
         (new OOXMLPropertyImpl(NS_ooxml::LN_blip, pBlipValue,
                                OOXMLPropertyImpl::ATTRIBUTE));
 
-    OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+    OOXMLPropertySet * pProps = new OOXMLPropertySet;
 
     pProps->add(pBlipProperty);
 

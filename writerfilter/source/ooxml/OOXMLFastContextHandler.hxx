@@ -29,7 +29,7 @@
 #include "cppuhelper/implbase.hxx"
 #include "com/sun/star/xml/sax/XFastContextHandler.hpp"
 #include "OOXMLParserState.hxx"
-#include "OOXMLPropertySetImpl.hxx"
+#include "OOXMLPropertySet.hxx"
 #include "OOXMLDocumentImpl.hxx"
 #include <oox/token/tokens.hxx>
 #include <svtools/embedhlp.hxx>

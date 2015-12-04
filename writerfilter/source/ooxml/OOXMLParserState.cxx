@@ -118,7 +118,7 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
     if (mpCharacterProps.get() != nullptr)
     {
         rStream.props(mpCharacterProps);
-        mpCharacterProps.reset(new OOXMLPropertySetImpl());
+        mpCharacterProps.reset(new OOXMLPropertySet);
     }
 }
 
@@ -165,7 +165,7 @@ void OOXMLParserState::resolveCellProperties(Stream & rStream)
         if (rCellProps.get() != nullptr)
         {
             rStream.props(rCellProps);
-            rCellProps.reset(new OOXMLPropertySetImpl());
+            rCellProps.reset(new OOXMLPropertySet);
         }
     }
 }
@@ -179,7 +179,7 @@ void OOXMLParserState::resolveRowProperties(Stream & rStream)
         if (rRowProps.get() != nullptr)
         {
             rStream.props(rRowProps);
-            rRowProps.reset(new OOXMLPropertySetImpl());
+            rRowProps.reset(new OOXMLPropertySet);
         }
     }
 }

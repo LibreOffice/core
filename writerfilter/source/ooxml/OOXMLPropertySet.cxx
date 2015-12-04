@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "OOXMLPropertySetImpl.hxx"
+#include "OOXMLPropertySet.hxx"
 #include <stdio.h>
 #include <iostream>
 #include <ooxml/QNameToString.hxx>
@@ -31,10 +31,6 @@ using namespace ::std;
 using namespace com::sun::star;
 
 OOXMLProperty::~OOXMLProperty()
-{
-}
-
-OOXMLPropertySet::~OOXMLPropertySet()
 {
 }
 
@@ -347,8 +343,8 @@ OOXMLValue * OOXMLInputStreamValue::clone() const
   struct OOXMLPropertySetImplCompare
  */
 
-bool OOXMLPropertySetImplCompare::operator()(const OOXMLProperty::Pointer_t& x,
-                                             const OOXMLProperty::Pointer_t& y) const
+bool OOXMLPropertySetCompare::operator()(const OOXMLProperty::Pointer_t& x,
+                                         const OOXMLProperty::Pointer_t& y) const
 {
     bool bResult = false;
 
@@ -361,20 +357,19 @@ bool OOXMLPropertySetImplCompare::operator()(const OOXMLProperty::Pointer_t& x,
 }
 
 /**
-   class OOXMLPropertySetImpl
+   class OOXMLPropertySet
 */
 
-OOXMLPropertySetImpl::OOXMLPropertySetImpl()
+OOXMLPropertySet::OOXMLPropertySet()
 {
-    static OString aName("OOXMLPropertySetImpl");
-    maType = aName;
+    maType = "OOXMLPropertySet";
 }
 
-OOXMLPropertySetImpl::~OOXMLPropertySetImpl()
+OOXMLPropertySet::~OOXMLPropertySet()
 {
 }
 
-void OOXMLPropertySetImpl::resolve(Properties & rHandler)
+void OOXMLPropertySet::resolve(Properties & rHandler)
 {
     // The pProp->resolve(rHandler) call below can cause elements to
     // be appended to mProperties. I don't think it can cause elements
@@ -389,29 +384,29 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
     }
 }
 
-OOXMLPropertySetImpl::OOXMLProperties_t::iterator OOXMLPropertySetImpl::begin()
+OOXMLPropertySet::OOXMLProperties_t::iterator OOXMLPropertySet::begin()
 {
     return mProperties.begin();
 }
 
-OOXMLPropertySetImpl::OOXMLProperties_t::iterator OOXMLPropertySetImpl::end()
+OOXMLPropertySet::OOXMLProperties_t::iterator OOXMLPropertySet::end()
 {
     return mProperties.end();
 }
 
-OOXMLPropertySetImpl::OOXMLProperties_t::const_iterator
-OOXMLPropertySetImpl::begin() const
+OOXMLPropertySet::OOXMLProperties_t::const_iterator
+OOXMLPropertySet::begin() const
 {
     return mProperties.begin();
 }
 
-OOXMLPropertySetImpl::OOXMLProperties_t::const_iterator
-OOXMLPropertySetImpl::end() const
+OOXMLPropertySet::OOXMLProperties_t::const_iterator
+OOXMLPropertySet::end() const
 {
     return mProperties.end();
 }
 
-void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
+void OOXMLPropertySet::add(OOXMLProperty::Pointer_t pProperty)
 {
     if (pProperty.get() != nullptr && pProperty->getId() != 0x0)
     {
@@ -419,12 +414,11 @@ void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
     }
 }
 
-void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
+void OOXMLPropertySet::add(OOXMLPropertySet::Pointer_t pPropertySet)
 {
     if (pPropertySet.get() != nullptr)
     {
-        OOXMLPropertySetImpl * pSet =
-            dynamic_cast<OOXMLPropertySetImpl *>(pPropertySet.get());
+        OOXMLPropertySet * pSet = pPropertySet.get();
 
         if (pSet != nullptr)
         {
@@ -436,13 +430,13 @@ void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
     }
 }
 
-OOXMLPropertySet * OOXMLPropertySetImpl::clone() const
+OOXMLPropertySet * OOXMLPropertySet::clone() const
 {
-    return new OOXMLPropertySetImpl(*this);
+    return new OOXMLPropertySet(*this);
 }
 
 #ifdef DEBUG_WRITERFILTER
-string OOXMLPropertySetImpl::toString()
+string OOXMLPropertySet::toString()
 {
     string sResult = "[";
     char sBuffer[256];

@@ -21,7 +21,7 @@
 
 #include <stack>
 #include "OOXMLDocumentImpl.hxx"
-#include "OOXMLPropertySetImpl.hxx"
+#include "OOXMLPropertySet.hxx"
 
 namespace writerfilter {
 namespace ooxml

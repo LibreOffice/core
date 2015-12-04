@@ -331,7 +331,7 @@ void OOXMLFastContextHandler::sendTableDepth() const
 {
     if (mnTableDepth > 0)
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+        OOXMLPropertySet * pProps = new OOXMLPropertySet;
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
             OOXMLProperty::Pointer_t pProp
@@ -418,7 +418,7 @@ void OOXMLFastContextHandler::endParagraphGroup()
 
 void OOXMLFastContextHandler::startSdt()
 {
-    OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+    OOXMLPropertySet * pProps = new OOXMLPropertySet;
     OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
     OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
     pProps->add(pProp);
@@ -427,7 +427,7 @@ void OOXMLFastContextHandler::startSdt()
 
 void OOXMLFastContextHandler::endSdt()
 {
-    OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+    OOXMLPropertySet * pProps = new OOXMLPropertySet;
     OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
     OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
     pProps->add(pProp);
@@ -654,7 +654,7 @@ void OOXMLFastContextHandler::propagateCharacterProperties()
 void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(const Id & rId)
 {
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
-    OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySetImpl());
+    OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
 
     OOXMLProperty::Pointer_t pProp
         (new OOXMLPropertyImpl(rId, pValue, OOXMLPropertyImpl::SPRM));
@@ -698,13 +698,13 @@ void OOXMLFastContextHandler::sendTableProperties()
 void OOXMLFastContextHandler::clearTableProps()
 {
     mpParserState->setTableProperties(OOXMLPropertySet::Pointer_t
-                                     (new OOXMLPropertySetImpl()));
+                                     (new OOXMLPropertySet));
 }
 
 void OOXMLFastContextHandler::sendPropertiesWithId(const Id & rId)
 {
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
-    OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySetImpl());
+    OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
 
     OOXMLProperty::Pointer_t pProp
     (new OOXMLPropertyImpl(rId, pValue, OOXMLPropertyImpl::SPRM));
@@ -715,7 +715,7 @@ void OOXMLFastContextHandler::sendPropertiesWithId(const Id & rId)
 
 void OOXMLFastContextHandler::clearProps()
 {
-    setPropertySet(OOXMLPropertySet::Pointer_t(new OOXMLPropertySetImpl()));
+    setPropertySet(OOXMLPropertySet::Pointer_t(new OOXMLPropertySet));
 }
 
 void OOXMLFastContextHandler::setDefaultBooleanValue()
@@ -876,7 +876,7 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
 OOXMLFastContextHandlerStream::OOXMLFastContextHandlerStream
 (OOXMLFastContextHandler * pContext)
 : OOXMLFastContextHandler(pContext),
-  mpPropertySetAttrs(new OOXMLPropertySetImpl())
+  mpPropertySetAttrs(new OOXMLPropertySet)
 {
 }
 
@@ -924,7 +924,7 @@ void OOXMLFastContextHandlerStream::handleHyperlink()
  */
 OOXMLFastContextHandlerProperties::OOXMLFastContextHandlerProperties
 (OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandler(pContext), mpPropertySet(new OOXMLPropertySetImpl()),
+: OOXMLFastContextHandler(pContext), mpPropertySet(new OOXMLPropertySet),
   mbResolve(false)
 {
     if (pContext->getResource() == STREAM)
@@ -1300,7 +1300,7 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
 {
     if (isForwardEvents())
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+        OOXMLPropertySet * pProps = new OOXMLPropertySet;
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
             OOXMLProperty::Pointer_t pProp
@@ -1348,7 +1348,7 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 
     if (isForwardEvents())
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+        OOXMLPropertySet * pProps = new OOXMLPropertySet;
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
             OOXMLProperty::Pointer_t pProp
@@ -1394,7 +1394,7 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_
         if (isForwardEvents())
         {
             // This whole part is OOXMLFastContextHandlerTextTableCell::endCell() .
-            OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+            OOXMLPropertySet * pProps = new OOXMLPropertySet;
             {
                 OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
                 OOXMLProperty::Pointer_t pProp
@@ -1417,9 +1417,9 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_
             mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
 
             // fake <w:tcBorders> with no border
-            OOXMLPropertySet::Pointer_t pCellProps( new OOXMLPropertySetImpl());
+            OOXMLPropertySet::Pointer_t pCellProps( new OOXMLPropertySet );
             {
-                OOXMLPropertySet::Pointer_t pBorderProps( new OOXMLPropertySetImpl());
+                OOXMLPropertySet::Pointer_t pBorderProps( new OOXMLPropertySet );
                 static Id borders[] = { NS_ooxml::LN_CT_TcBorders_top, NS_ooxml::LN_CT_TcBorders_bottom,
                     NS_ooxml::LN_CT_TcBorders_start, NS_ooxml::LN_CT_TcBorders_end };
                 for( size_t j = 0; j < SAL_N_ELEMENTS( borders ); ++j )
@@ -1439,7 +1439,7 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_
 
 OOXMLProperty::Pointer_t OOXMLFastContextHandlerTextTableRow::fakeNoBorder( Id id )
 {
-    OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySetImpl());
+    OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
     OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(0);
     OOXMLProperty::Pointer_t pPropVal
         (new OOXMLPropertyImpl(NS_ooxml::LN_CT_Border_val, pVal, OOXMLPropertyImpl::ATTRIBUTE));
@@ -1473,7 +1473,7 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
     mpParserState->startTable();
     mnTableDepth++;
 
-    std::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
+    std::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySet );
     {
         OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
         OOXMLProperty::Pointer_t pProp
@@ -1491,7 +1491,7 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 {
     endAction(Element);
 
-    std::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
+    std::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySet );
     {
         OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
         OOXMLProperty::Pointer_t pProp
@@ -2034,7 +2034,7 @@ void OOXMLFastContextHandlerMath::process()
     import.readFormulaOoxml(buffer);
     if (isForwardEvents())
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+        OOXMLPropertySet * pProps = new OOXMLPropertySet;
         OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
         OOXMLProperty::Pointer_t pProp( new OOXMLPropertyImpl( NS_ooxml::LN_starmath, pVal, OOXMLPropertyImpl::ATTRIBUTE ));
         pProps->add( pProp );
