@@ -17,23 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-#include <tools/rc.h>
-#include <tools/poly.hxx>
-
+#include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/spin.h>
-#include <vcl/toolbox.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclstatuslistener.hxx>
+
+#include <tools/debug.hxx>
+#include <tools/rc.h>
+#include <tools/poly.hxx>
+#include <svl/imageitm.hxx>
 
 #include <svdata.hxx>
 #include <window.h>
@@ -1398,6 +1400,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnLastFocusItemId = 0;
     mnKeyModifier     = 0;
     mnActivateCount   = 0;
+    mpStatusListener  = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
 
     mpIdle = new Idle("toolbox update");
     mpIdle->SetPriority( SchedulerPriority::RESIZE );
@@ -1658,6 +1661,10 @@ void ToolBox::dispose()
             pSVData->maCtrlData.mpTBDragMgr = nullptr;
         }
     }
+
+    if (mpStatusListener.is())
+        mpStatusListener->dispose();
+
     mpFloatWin.clear();
 
     delete mpIdle;
@@ -4540,6 +4547,21 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 
     maDataChangedHandler.Call( &rDCEvt );
+}
+
+void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
+{
+    // Update image mirroring/rotation
+    if ( Event.FeatureURL.Complete == ".uno:ImageOrientation" )
+    {
+        SfxImageItem aItem( 1, 0 );
+        aItem.PutValue( Event.State, 0 );
+
+        mbImagesMirrored = aItem.IsMirrored();
+        mnImagesRotationAngle = aItem.GetRotation();
+
+        UpdateImageOrientation();
+    }
 }
 
 bool ToolBox::PrepareToggleFloatingMode()
