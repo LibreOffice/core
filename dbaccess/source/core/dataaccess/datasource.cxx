@@ -1327,8 +1327,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_comp_dba_ODatabaseSource(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference< XDatabaseContext > xDBContext( DatabaseContext::create(context) );
-    return cppu::acquire(static_cast<OWeakObject*>(xDBContext->createInstance().get()));
+    css::uno::Reference<XInterface> inst(
+        DatabaseContext::create(context)->createInstance());
+    inst->acquire();
+    return inst.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
