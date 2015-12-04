@@ -22,6 +22,7 @@
 #include <tools/poly.hxx>
 #include <tools/rc.h>
 
+#include "vclstatuslistener.hxx"
 #include <vcl/image.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -32,7 +33,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/buttonstatuslistener.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
@@ -82,7 +82,7 @@ public:
     SymbolAlign     meSymbolAlign;
 
     /** StatusListener. Updates the button as the slot state changes */
-    rtl::Reference<ButtonStatusListener> mpStatusListener;
+    rtl::Reference<VclStatusListener<Button>> mpStatusListener;
 };
 
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
@@ -117,7 +117,7 @@ void Button::SetCommandHandler(const OUString& aCommand)
     maCommand = aCommand;
     SetClickHdl( LINK( this, Button, dispatchCommandHandler) );
 
-    mpButtonData->mpStatusListener = new ButtonStatusListener(this, aCommand);
+    mpButtonData->mpStatusListener = new VclStatusListener<Button>(this, aCommand);
 }
 
 void Button::Click()
@@ -617,7 +617,7 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-void Button::SetStateUno(const css::frame::FeatureStateEvent& rEvent)
+void Button::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
     Enable(rEvent.IsEnabled);
 }
@@ -1606,9 +1606,9 @@ void PushButton::SetState( TriState eState )
     }
 }
 
-void PushButton::SetStateUno(const css::frame::FeatureStateEvent& rEvent)
+void PushButton::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
-    Button::SetStateUno(rEvent);
+    Button::statusChanged(rEvent);
     if (rEvent.State.has<bool>())
         SetPressed(rEvent.State.get<bool>());
 }
