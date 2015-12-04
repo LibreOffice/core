@@ -20,12 +20,15 @@
 #ifndef INCLUDED_VCL_TOOLBOX_HXX
 #define INCLUDED_VCL_TOOLBOX_HXX
 
-#include <com/sun/star/frame/XFrame.hpp>
+#include <vcl/vclstatuslistener.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
 #include <vector>
+
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/FeatureStateEvent.hpp>
 
 class Timer;
 class UserDrawEvent;
@@ -94,6 +97,7 @@ private:
     long                mnBottomBorder;
     long                mnLastResizeDY;
     long                mnActivateCount;
+    long                mnImagesRotationAngle;
     sal_uInt16          mnLastFocusItemId;
     sal_uInt16          mnFocusPos;
     sal_uInt16          mnOutStyle;
@@ -128,7 +132,8 @@ private:
                         mbMenuStrings:1,
                         mbIsShift:1,
                         mbIsKeyEvent:1,
-                        mbChangingHighlight:1;
+                        mbChangingHighlight:1,
+                        mbImagesMirrored:1;
     WindowAlign         meAlign;
     WindowAlign         meDockAlign;
     ButtonType          meButtonType;
@@ -143,6 +148,8 @@ private:
     Link<CommandEvent const *, void> maCommandHandler;
     Link<StateChangedType const *, void> maStateChangedHandler;
     Link<DataChangedEvent const *, void> maDataChangedHandler;
+    /** StatusListener. Notifies about rotated images etc */
+    rtl::Reference<VclStatusListener<ToolBox>> mpStatusListener;
 
 public:
     using Window::ImplInit;
@@ -356,6 +363,7 @@ public:
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
     Image               GetItemImageOriginal( sal_uInt16 nItemId ) const;
+    void                UpdateImageOrientation();
     void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
@@ -499,6 +507,7 @@ public:
     void                ChangeHighlight( sal_uInt16 nPos );
 
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
+    void statusChanged(const css::frame::FeatureStateEvent& rEvent);
 };
 
 inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )
