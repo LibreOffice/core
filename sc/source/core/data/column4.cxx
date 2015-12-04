@@ -546,6 +546,7 @@ void ScColumn::CloneFormulaCell(
         std::vector<sc::CellTextAttr> aTextAttrs(nLen, rAttr);
         itAttrPos = maCellTextAttrs.set(itAttrPos, nRow1, aTextAttrs.begin(), aTextAttrs.end());
     }
+    SetMayHaveFormula(true);
 
     CellStorageModified();
 }
@@ -1353,6 +1354,9 @@ void ScColumn::StartListeningFormulaCells(
     sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
     SCROW nRow1, SCROW nRow2, SCROW* pStartRow, SCROW* pEndRow )
 {
+    if (!GetMayHaveFormula())
+        return;
+
     StartListeningFormulaCellsHandler aFunc(rStartCxt, rEndCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 
@@ -1371,6 +1375,9 @@ void ScColumn::EndListeningFormulaCells(
     sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
     SCROW* pStartRow, SCROW* pEndRow )
 {
+    if (!GetMayHaveFormula())
+        return;
+
     EndListeningFormulaCellsHandler aFunc(rCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 
@@ -1385,6 +1392,9 @@ void ScColumn::EndListeningIntersectedGroup(
     sc::EndListeningContext& rCxt, SCROW nRow, std::vector<ScAddress>* pGroupPos )
 {
     if (!ValidRow(nRow))
+        return;
+
+    if (!GetMayHaveFormula())
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
@@ -1418,6 +1428,9 @@ void ScColumn::EndListeningIntersectedGroup(
 void ScColumn::EndListeningIntersectedGroups(
     sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, std::vector<ScAddress>* pGroupPos )
 {
+    if (!GetMayHaveFormula())
+        return;
+
     // Only end the intersected group.
     sc::CellStoreType::position_type aPos = maCells.position(nRow1);
     sc::CellStoreType::iterator it = aPos.first;
