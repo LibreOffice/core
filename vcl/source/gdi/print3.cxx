@@ -375,7 +375,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                     pRangeVal->Value >>= aRange;
                 if( aRange.isEmpty() )
                 {
-                    sal_Int32 nPages = xController->getPageCount();
+                    sal_Int32 nPages = xController->getPageCount(false);
                     if( nPages > 0 )
                     {
                         OUStringBuffer aBuf( 32 );
@@ -791,6 +791,8 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
     mpImplData->maDefaultPageSize = mpImplData->mxPrinter->GetPaperSize();
     mpImplData->mxPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
+
+    updatePrinterContr(0, 0);
 }
 
 void PrinterController::resetPrinterOptions( bool i_bFileOutput )
@@ -940,13 +942,13 @@ void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
     mxPrinter->Pop();
 }
 
-int PrinterController::getPageCountProtected() const
+int PrinterController::getPageCountProtected(bool bAll) const
 {
     const MapMode aMapMode( MAP_100TH_MM );
 
     mpImplData->mxPrinter->Push();
     mpImplData->mxPrinter->SetMapMode( aMapMode );
-    int nPages = getPageCount();
+    int nPages = getPageCount(bAll);
     mpImplData->mxPrinter->Pop();
     return nPages;
 }
@@ -1076,7 +1078,9 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         rMPS.nLeftMargin == 0 && rMPS.nRightMargin == 0 &&
         rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
     {
-        PrinterController::PageSize aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
+        int StartPage = CalculateNextPage(i_nFilteredPage, nSubPages, 0,  1);
+
+        PrinterController::PageSize aPageSize = getPageFile( StartPage, o_rMtf, i_bMayUseCache );
         if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
         {   // rhbz#657394: check that we are still printing...
             return PrinterController::PageSize();
@@ -1125,7 +1129,8 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     o_rMtf.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
     o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
-    int nDocPages = getPageCountProtected();
+    // parameter is only needed when print in multi-file when true give the real pages back
+    int nDocPages = getPageCountProtected(true);
     if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
     {   // rhbz#657394: check that we are still printing...
         return PrinterController::PageSize();
@@ -1133,7 +1138,8 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     for( int nSubPage = 0; nSubPage < nSubPages; nSubPage++ )
     {
         // map current sub page to real page
-        int nPage = (i_nFilteredPage * nSubPages + nSubPage) / rMPS.nRepeat;
+        int nPage = CalculateNextPage(i_nFilteredPage, nSubPages, nSubPage, rMPS.nRepeat);
+
         if( nSubPage == nSubPages-1 ||
             nPage == nDocPages-1 )
         {
@@ -1198,12 +1204,17 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     return PrinterController::PageSize( aPaperSize, true );
 }
 
+int PrinterController::CalculateNextPage(int StartPage, int SubPages, int SubPage, int Repeat)
+{
+    return (StartPage * SubPages + SubPage) / Repeat;
+}
+
 int PrinterController::getFilteredPageCount()
 {
     int nDiv = mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns;
     if( nDiv < 1 )
         nDiv = 1;
-    return (getPageCountProtected() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
+    return (getPageCountProtected(false) * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
 DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
@@ -1673,7 +1684,7 @@ void PrinterController::createProgressDialog()
 
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
-            mpImplData->mpProgress = VclPtr<PrintProgressDialog>::Create( nullptr, getPageCountProtected() );
+            mpImplData->mpProgress = VclPtr<PrintProgressDialog>::Create( nullptr, getPageCountProtected(false) );
             mpImplData->mpProgress->Show();
         }
     }

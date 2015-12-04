@@ -86,11 +86,43 @@ public:
     virtual ~SfxPrinterController();
     virtual void Notify( SfxBroadcaster&, const SfxHint& ) override;
 
-    virtual int  getPageCount() const override;
-    virtual Sequence< beans::PropertyValue > getPageParameters( int i_nPage ) const override;
+    virtual int  getPageCount(bool) const override;
+    virtual Sequence<beans::PropertyValue> getPageParameters( int i_nPage ) const override;
     virtual void printPage( int i_nPage ) const override;
     virtual void jobStarted() override;
     virtual void jobFinished( css::view::PrintableState ) override;
+};
+
+// use for print in multi pages
+class SfxPrinterControllerMultiFiles : public SfxPrinterController
+{
+    int mPages,         // Count of DB-Elements pages
+        mDocPage,       // Pages for one document
+        mStartPage,     // Use this as start page, in inPrintMode
+        mAllPages;      // All Pages
+
+    bool inPrintMode;   // Print mode for the Dialog & for printing
+
+public:
+    SfxPrinterControllerMultiFiles( const VclPtr<Printer>& i_rPrinter,
+        const Any& i_rComplete,
+        const Any& i_rSelection,
+        const Any& i_rViewProp,
+        const Reference< view::XRenderable >& i_xRender,
+        bool i_bApi, bool i_bDirect,
+        SfxViewShell* pView,
+        const uno::Sequence< beans::PropertyValue >& rProps,
+        int Pages
+        );
+
+    virtual ~SfxPrinterControllerMultiFiles() {};
+
+    // The parameter bAll is need only here
+    // is only needed when print in multi-file when true give the real pages back,
+    // otherwise give the pages over set with updatePrinterContr
+    virtual int  getPageCount(bool bAll) const override;
+    virtual int  CalculateNextPage(int StartPage, int SubPages, int SubPage, int Repeat) override;
+    virtual void updatePrinterContr(int mode, int value) override;
 };
 
 SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
@@ -220,7 +252,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
     return aRenderOptions;
 }
 
-int SfxPrinterController::getPageCount() const
+int SfxPrinterController::getPageCount(bool) const
 {
     int nPages = 0;
     VclPtr<Printer> xPrinter( getPrinter() );
@@ -400,6 +432,77 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
     }
 }
 
+SfxPrinterControllerMultiFiles::SfxPrinterControllerMultiFiles( const VclPtr<Printer>& i_rPrinter,
+                                                        const Any& i_rComplete,
+                                                        const Any& i_rSelection,
+                                                        const Any& i_rViewProp,
+                                                        const Reference< view::XRenderable >& i_xRender,
+                                                        bool i_bApi, bool i_bDirect,
+                                                        SfxViewShell* pView,
+                                                        const uno::Sequence< beans::PropertyValue >& rProps,
+                                                        int Pages)
+    : SfxPrinterController(i_rPrinter, i_rComplete, i_rSelection, i_rViewProp,
+                           i_xRender, i_bApi, i_bDirect, pView, rProps)
+    , mPages(Pages)
+    , mDocPage(1)
+    , mStartPage(0)
+    , mAllPages(1)
+    , inPrintMode(false)
+{
+}
+
+void SfxPrinterControllerMultiFiles::updatePrinterContr(int mode, int value)
+{
+    switch(mode)
+    {
+        case 0:  // update counts of Page(s) for one document
+            if(!inPrintMode)
+            {
+                mDocPage = SfxPrinterController::getPageCount(false);
+
+                if(mDocPage <= 0)
+                    mDocPage = 1;
+
+                mAllPages = mPages * mDocPage;
+            }
+            break;
+
+        case 1: // switch the mode to the printing
+            inPrintMode = true;
+            // set for getPageCount, return only one Page
+            mPages      = 1;
+            mAllPages   = value * SfxPrinterController::getPageCount(false);
+            mDocPage    = 1;
+            break;
+
+        case 2: // set the Start Page
+            mStartPage = value;
+            SfxPrinterController::getPageCount(false);  // trigger the renderer for recalculate
+            break;
+    }
+}
+
+int  SfxPrinterControllerMultiFiles::getPageCount(bool bAll) const
+{
+    if(bAll)
+        return mAllPages;     // give all pages
+
+    return mPages * mDocPage; // give all pages in dialog-mode in printmode only one page(s)
+}
+
+int  SfxPrinterControllerMultiFiles::CalculateNextPage(int StartPage, int SubPages, int SubPage, int Repeat)
+{
+    int page = SfxPrinterController::CalculateNextPage(inPrintMode ? mStartPage : StartPage, SubPages, SubPage, Repeat);
+
+    if(page >=  mAllPages)
+        return -1;
+
+    if(inPrintMode)
+        return page;
+
+    return page % mDocPage; // give always the page(s) from the first document
+}
+
 /**
     An instance of this class is created for the life span of the
     printer dialogue, to create in its click handler for the additions by the
@@ -564,7 +667,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
     return pDocPrinter;
 }
 
-void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
+void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect, int Pages )
 {
     assert( pImp->m_xPrinterController.get() == nullptr );
 
@@ -573,7 +676,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
     Reference< view::XSelectionSupplier > xSupplier( xController, UNO_QUERY );
 
     Any aSelection;
-    if( xSupplier.is() )
+    if( xSupplier.is() && (Pages == 0))
         aSelection = xSupplier->getSelection();
     else
         aSelection <<= GetObjectShell()->GetModel();
@@ -593,17 +696,16 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
         }
     }
 
-    std::shared_ptr<vcl::PrinterController> xNewController(std::make_shared<SfxPrinterController>(
-                                                                               aPrt,
-                                                                               aComplete,
-                                                                               aSelection,
-                                                                               aViewProp,
-                                                                               GetRenderable(),
-                                                                               bIsAPI,
-                                                                               bIsDirect,
-                                                                               this,
-                                                                               rProps
-                                                                               ));
+    std::shared_ptr<vcl::PrinterController> xNewController;
+
+    if(Pages == 0)
+        xNewController = std::make_shared<SfxPrinterController>(aPrt, aComplete, aSelection, aViewProp,
+                                          GetRenderable(), bIsAPI, bIsDirect, this, rProps);
+    else
+        xNewController = std::make_shared<SfxPrinterControllerMultiFiles>(aPrt, aComplete, aSelection, aViewProp,
+                                          GetRenderable(), bIsAPI, bIsDirect, this, rProps, Pages);
+
+
     pImp->m_xPrinterController = xNewController;
 
     SfxObjectShell *pObjShell = GetObjectShell();

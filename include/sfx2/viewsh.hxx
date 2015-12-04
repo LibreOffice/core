@@ -288,7 +288,7 @@ public:
 
     void                        ExecPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.
-    void                        StartPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
+    void                        StartPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool, int Pages = 0 );
     std::shared_ptr< vcl::PrinterController > GetPrinterController() const;
 
     void                        AddRemoveClipboardListener( const css::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );

@@ -528,8 +528,15 @@ public:
     */
     OUString                            makeEnabled( const OUString& rPropName );
 
-    /// App must override this
-    virtual int                         getPageCount() const = 0;
+    /** App must override this
+
+        The parameter bAll is only needed when print in multi-file, otherwise not use
+    */
+    virtual int                         getPageCount(bool) const = 0;
+
+    // call in setPrinter in this case all components ready
+    virtual void                        updatePrinterContr(int , int ) {}
+    virtual int                         CalculateNextPage(int StartPage, int SubPages, int SubPage, int Repeat);
 
     /** Get the page parameters
 
@@ -588,7 +595,8 @@ public:
     VCL_PLUGIN_PUBLIC void              setJobState( css::view::PrintableState );
     SAL_DLLPRIVATE    bool              setupPrinter( vcl::Window* i_pDlgParent );
 
-    SAL_DLLPRIVATE    int               getPageCountProtected() const;
+    // The parameter bAll is only needed when print in multi-file
+    VCL_PLUGIN_PUBLIC int               getPageCountProtected(bool) const;
     SAL_DLLPRIVATE    css::uno::Sequence< css::beans::PropertyValue >
                                         getPageParametersProtected( int i_nPage ) const;
 

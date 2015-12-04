@@ -1362,7 +1362,7 @@ Size PrintDialog::getJobPageSize()
     {
         maFirstPageSize = maNupPortraitSize;
         GDIMetaFile aMtf;
-        if( maPController->getPageCountProtected() > 0 )
+        if( maPController->getPageCountProtected(false) > 0 )
         {
             PrinterController::PageSize aPageSize = maPController->getPageFile( 0, aMtf, true );
             maFirstPageSize = aPageSize.aSize;
