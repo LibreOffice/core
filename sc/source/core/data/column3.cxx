@@ -1589,7 +1589,27 @@ public:
 
 void ScColumn::StartListeners( sc::StartListeningContext& rCxt, bool bAll )
 {
-    std::for_each(maCells.begin(), maCells.end(), StartListenersHandler(rCxt, bAll));
+    if (!GetMayHaveFormula())
+        return;
+
+    StartListenersHandler   handler(rCxt, bAll);
+    sc::CellStoreType::iterator it = maCells.begin();
+    sc::CellStoreType::iterator itEnd = maCells.end();
+
+    bool hasFormula = false;
+    for (; it != itEnd ; ++it)
+    {
+        // Since we have to iterate the cells, we use this to update the formula flag
+        if (it->type == sc::element_type_formula)
+        {
+            // We have found a formula, flag goes to true
+            hasFormula = true;
+            handler(*it);
+        }
+    }
+
+    // Update the flag
+    SetMayHaveFormula(hasFormula);
 }
 
 namespace {
@@ -1758,6 +1778,12 @@ bool ScColumn::ParseString(
         }
     }
 
+    if (rCell.meType == CELLTYPE_FORMULA)
+    {
+        // We have found a formula, flag goes to true
+        SetMayHaveFormula(true);
+    }
+
     return bNumFmtSet;
 }
 
@@ -1846,6 +1872,9 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
 {
     ScAddress aPos(nCol, nRow, nTab);
 
+    // Update the flag
+    SetMayHaveFormula(true);
+
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rArray, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
@@ -1863,6 +1892,9 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 {
     ScAddress aPos(nCol, nRow, nTab);
 
+    // Update the flag
+    SetMayHaveFormula(true);
+
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rFormula, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
@@ -1879,6 +1911,9 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 ScFormulaCell* ScColumn::SetFormulaCell(
     SCROW nRow, ScFormulaCell* pCell, sc::StartListeningType eListenType )
 {
+   // Update the flag
+    SetMayHaveFormula(true);
+
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
@@ -1896,6 +1931,9 @@ ScFormulaCell* ScColumn::SetFormulaCell(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell,
     sc::StartListeningType eListenType )
 {
+    // Update the flag
+    SetMayHaveFormula(true);
+
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
@@ -1918,6 +1956,9 @@ bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells 
     SCROW nEndRow = nRow + rCells.size() - 1;
     if (!ValidRow(nEndRow))
         return false;
+
+    // Update the flag
+    SetMayHaveFormula(true);
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
 
