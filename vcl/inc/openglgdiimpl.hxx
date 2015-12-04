@@ -52,6 +52,8 @@ struct TextureCombo
     std::unique_ptr<OpenGLTexture> mpMask;
 };
 
+class OpenGLFlushIdle;
+
 class VCL_DLLPUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
     friend class OpenGLTests;
@@ -72,6 +74,9 @@ protected:
 
     /// Is it someone else's context we shouldn't be fiddling with ?
     static bool IsForeignContext(const rtl::Reference<OpenGLContext> &xContext);
+
+    /// This idle handler is used to swap buffers after rendering.
+    OpenGLFlushIdle *mpFlush;
 
     // clipping
     vcl::Region maClipRegion;
@@ -347,8 +352,12 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
 
-    /// flush contents of the back-buffer to the screen & swap.
+    /// queue an idle flush of contents of the back-buffer to the screen
     virtual void flush() override;
+
+public:
+    /// do flush of contents of the back-buffer to the screen & swap.
+    void doFlush();
 };
 
 #endif

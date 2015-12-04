@@ -39,12 +39,33 @@
 
 #include <stdlib.h>
 
+class OpenGLFlushIdle : public Idle
+{
+    OpenGLSalGraphicsImpl *m_pImpl;
+public:
+    OpenGLFlushIdle( OpenGLSalGraphicsImpl *pImpl )
+        : Idle( "gl idle swap" )
+        , m_pImpl( pImpl )
+    {
+        SetPriority( SchedulerPriority::HIGHEST );
+    }
+    ~OpenGLFlushIdle()
+    {
+    }
+    virtual void Invoke() override
+    {
+        m_pImpl->doFlush();
+        Stop();
+    }
+};
+
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider *pProvider)
     : mpContext(nullptr)
     , mrParent(rParent)
     , mpProvider(pProvider)
     , mpFramebuffer(nullptr)
     , mpProgram(nullptr)
+    , mpFlush(new OpenGLFlushIdle(this))
     , mbUseScissor(false)
     , mbUseStencil(false)
     , mnLineColor(SALCOLOR_NONE)
@@ -61,13 +82,10 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
 
 OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 {
-#ifdef DBG_UTIL
-    if( !IsOffscreen() )
-    {
-        // Check that all SalGraphics have flushed before being destroyed
-        assert( mnDrawCountAtFlush == mnDrawCount );
-    }
-#endif
+    if( !IsOffscreen() && mnDrawCountAtFlush != mnDrawCount )
+        VCL_GL_INFO( "Destroying un-flushed on-screen graphics" );
+
+    delete mpFlush;
 
     ReleaseContext();
 }
@@ -1942,6 +1960,20 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 }
 
 void OpenGLSalGraphicsImpl::flush()
+{
+    if( IsOffscreen() )
+        return;
+
+    // outside of the application's event loop (e.g. IntroWindow)
+    // nothing would trigger paint event handling
+    // => fall back to synchronous painting
+    if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+        doFlush();
+    else if( !mpFlush->IsActive() )
+        mpFlush->Start();
+}
+
+void OpenGLSalGraphicsImpl::doFlush()
 {
     if( IsOffscreen() )
         return;
