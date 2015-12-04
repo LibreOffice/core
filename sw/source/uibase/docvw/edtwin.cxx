@@ -4391,7 +4391,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             m_rView.GetDrawFuncPtr()->BreakCreate();   // abort drawing
 
         g_bNoInterrupt = false;
-        ReleaseMouse();
+        if (IsMouseCaptured())
+            ReleaseMouse();
         return;
     }
     bool bPopMode = false;
