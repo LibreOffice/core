@@ -199,6 +199,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     Rectangle                       m_aRestorePosSize;
 
 #if GTK_CHECK_VERSION(3,0,0)
+    GtkWindowType                   m_eWinType;
     cairo_region_t*                 m_pRegion;
 #else
     GdkRegion*                      m_pRegion;

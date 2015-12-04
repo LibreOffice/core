@@ -1101,7 +1101,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     m_aForeignTopLevelWindow = None;
     m_nStyle = nStyle;
 
-    GtkWindowType eWinType = (  (nStyle & SalFrameStyleFlags::FLOAT) &&
+    m_eWinType = (  (nStyle & SalFrameStyleFlags::FLOAT) &&
                               ! (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|
                                            SalFrameStyleFlags::FLOAT_FOCUSABLE))
                               )
@@ -1120,7 +1120,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     }
     else
     {
-        m_pWindow = gtk_widget_new( GTK_TYPE_WINDOW, "type", eWinType,
+        m_pWindow = gtk_widget_new( GTK_TYPE_WINDOW, "type", m_eWinType,
                                     "visible", FALSE, NULL );
     }
     g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
@@ -1180,7 +1180,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     else if( (nStyle & SalFrameStyleFlags::FLOAT) )
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_POPUP_MENU );
 
-    if( eWinType == GTK_WINDOW_TOPLEVEL )
+    if (m_eWinType == GTK_WINDOW_TOPLEVEL)
     {
 #ifdef ENABLE_GMENU_INTEGRATION
         // Enable DBus native menu if available.
@@ -1540,7 +1540,12 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         if( isChild( false ) )
             widget_set_size_request(nWidth, nHeight);
         else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
-            window_resize(nWidth, nHeight);
+        {
+            if (m_eWinType == GTK_WINDOW_POPUP)
+                window_resize(nWidth, nHeight);
+            else
+                widget_set_size_request(nWidth, nHeight);
+        }
 
         setMinMaxSize();
     }
