@@ -572,13 +572,16 @@ void VclGtkClipboard::setContents(
             aGtkTargets.push_back(makeGtkTargetEntry(aFlavor));
         }
 
-        //if there was a previous gtk_clipboard_set_with_data call then
-        //ClipboardClearFunc will be called now
-        GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
-        //use with_owner with m_pOwner so we can distinguish in handle_owner_change
-        //if we have gained or lost ownership of the clipboard
-        gtk_clipboard_set_with_owner(clipboard, aGtkTargets.data(), aGtkTargets.size(),
-                                    ClipboardGetFunc, ClipboardClearFunc, G_OBJECT(m_pOwner));
+        if (!aGtkTargets.empty())
+        {
+            //if there was a previous gtk_clipboard_set_with_data call then
+            //ClipboardClearFunc will be called now
+            GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+            //use with_owner with m_pOwner so we can distinguish in handle_owner_change
+            //if we have gained or lost ownership of the clipboard
+            gtk_clipboard_set_with_owner(clipboard, aGtkTargets.data(), aGtkTargets.size(),
+                                        ClipboardGetFunc, ClipboardClearFunc, G_OBJECT(m_pOwner));
+        }
         m_aGtkTargets = aGtkTargets;
     }
 
