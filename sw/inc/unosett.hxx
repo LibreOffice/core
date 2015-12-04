@@ -32,6 +32,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <svl/itemprop.hxx>
+#include <unobaseclass.hxx>
 
 class SwDoc;
 class SwFormatCol;
@@ -136,9 +137,12 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     css::beans::XPropertySet,
     css::container::XNamed,
     css::lang::XServiceInfo
->,
-    public SwClient
+>
 {
+private:
+   class Impl;
+   ::sw::UnoImplPtr<Impl> m_pImpl;
+
     OUString                    m_sNewCharStyleNames[MAXLEVEL];
     OUString                    m_sNewBulletFontNames[MAXLEVEL];
     OUString                    m_sCreatedNumRuleName; //connects to a numbering in SwDoc
@@ -146,12 +150,9 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     SwDocShell*                 pDocShell; // Only if used as chapter numbering.
     SwNumRule*                  pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
-    bool                    bOwnNumRuleCreated;
+    bool                        bOwnNumRuleCreated;
 protected:
     virtual ~SwXNumberingRules();
-
-    //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering

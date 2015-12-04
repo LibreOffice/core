@@ -1048,7 +1048,20 @@ void SwXLineNumberingProperties::removeVetoableChangeListener(const OUString& /*
 OSL_FAIL("not implemented");
 }
 
-const char aInvalidStyle[] = "__XXX___invalid";
+static const char aInvalidStyle[] = "__XXX___invalid";
+
+
+class SwXNumberingRules::Impl : public SwClient
+{
+private:
+    SwXNumberingRules& m_rParent;
+public:
+    Impl(SwXNumberingRules& rParent) : m_rParent(rParent) {}
+protected:
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+};
+
 
 bool SwXNumberingRules::isInvalidStyle(const OUString &rName)
 {
@@ -1094,6 +1107,7 @@ Sequence< OUString > SwXNumberingRules::getSupportedServiceNames() throw( Runtim
 }
 
 SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
+    m_pImpl(new SwXNumberingRules::Impl(*this)),
     pDoc(doc),
     pDocShell(nullptr),
     pNumRule(new SwNumRule(rRule)),
@@ -1113,7 +1127,7 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
         }
     }
     if(pDoc)
-        pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+        pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(&*m_pImpl);
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         m_sNewCharStyleNames[i] = aInvalidStyle;
@@ -1122,23 +1136,25 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
 }
 
 SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
+    m_pImpl(new SwXNumberingRules::Impl(*this)),
     pDoc(nullptr),
     pDocShell(&rDocSh),
     pNumRule(nullptr),
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(false)
 {
-    pDocShell->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDocShell->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(&*m_pImpl);
 }
 
 SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
+    m_pImpl(new SwXNumberingRules::Impl(*this)),
     pDoc(&rDoc),
     pDocShell(nullptr),
     pNumRule(nullptr),
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(false)
 {
-    rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(&*m_pImpl);
     m_sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
 #if OSL_DEBUG_LEVEL > 1
     const sal_uInt16 nIndex =
@@ -2249,15 +2265,15 @@ void SwXNumberingRules::setName(const OUString& /*rName*/) throw( RuntimeExcepti
     throw aExcept;
 }
 
-void SwXNumberingRules::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXNumberingRules::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
     {
-        if(bOwnNumRuleCreated)
-            delete pNumRule;
-        pNumRule = nullptr;
-        pDoc = nullptr;
+        if(m_rParent.bOwnNumRuleCreated)
+            delete m_rParent.pNumRule;
+        m_rParent.pNumRule = nullptr;
+        m_rParent.pDoc = nullptr;
     }
 }
 
