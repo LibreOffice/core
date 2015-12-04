@@ -170,6 +170,28 @@ namespace
 
         return extents;
     }
+
+    cairo_rectangle_int_t getStrokeDamage(cairo_t* cr)
+    {
+        cairo_rectangle_int_t extents;
+        double x1, y1, x2, y2;
+
+        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+        cairo_region_t *region = cairo_region_create_rectangle(&extents);
+
+        cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_intersect_rectangle(region, &extents);
+
+        cairo_region_get_extents(region, &extents);
+        cairo_region_destroy(region);
+#endif
+
+        return extents;
+    }
 }
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
@@ -195,7 +217,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
                               fTransparency);
     cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-    cairo_rectangle_int_t extents;
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
     if (xDamageTracker)
         extents = getFillDamage(cr);
@@ -744,7 +766,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
         AddPolygonToPath(cr, *pPoly, true);
 
-    cairo_rectangle_int_t extents;
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
     if (xDamageTracker)
         extents = getFillDamage(cr);
@@ -919,48 +941,66 @@ namespace
 
 void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
-    // FIXME: handle SAL_INVERT_TRACKFRAME
-    if ( nFlags & SAL_INVERT_TRACKFRAME )
+    if (m_aDrawMode != basebmp::DrawMode::XOR)
     {
-        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, unhandled SAL_INVERT_TRACKFRAME");
-    }
-    else if ( nFlags & SAL_INVERT_50 )
-    {
-        if (cairo_t* cr = getCairoContext())
+        cairo_t* cr = getCairoContext();
+        if (cr && cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
         {
             assert(m_aDevice->isTopDown());
 
             clipRegion(cr);
 
-            cairo_pattern_t *pattern = create_stipple();
-
-            cairo_rectangle_int_t extents;
+            cairo_rectangle_int_t extents = {0, 0, 0, 0};
             basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
 
             cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-            if (xDamageTracker)
-                extents = getFillDamage(cr);
-
-            cairo_clip(cr);
-
             cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
-            cairo_mask(cr, pattern);
-            cairo_pattern_destroy(pattern);
+
+            cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+
+            if (nFlags & SAL_INVERT_TRACKFRAME)
+            {
+                cairo_set_line_width(cr, 2.0);
+                const double dashLengths[2] = { 4.0, 4.0 };
+                cairo_set_dash(cr, dashLengths, 2, 0);
+
+                if (xDamageTracker)
+                    extents = getStrokeDamage(cr);
+
+                cairo_stroke(cr);
+            }
+            else
+            {
+                if (xDamageTracker)
+                    extents = getFillDamage(cr);
+
+                cairo_clip(cr);
+
+                if (nFlags & SAL_INVERT_50)
+                {
+                    cairo_pattern_t *pattern = create_stipple();
+                    cairo_mask(cr, pattern);
+                    cairo_pattern_destroy(pattern);
+                }
+                else
+                {
+                    cairo_paint(cr);
+                }
+            }
 
             cairo_surface_flush(cairo_get_target(cr));
             cairo_destroy(cr); // unref
 
+            if (xDamageTracker)
+            {
+                xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
+                                                        extents.y + extents.height));
+            }
+
             return;
         }
-        else
-            SAL_WARN("vcl.gdi", "SvpSalGraphics::invert unhandled XOR (?)");
     }
-    else
-    {
-        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, unhandled SAL_INVERT_TRACKFRAME");
-    }
-
 
     basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
     basegfx::B2DPolyPolygon aPolyPoly( aRect );
