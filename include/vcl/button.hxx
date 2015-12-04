@@ -94,7 +94,7 @@ public:
     virtual bool        set_property(const OString &rKey, const OString &rValue) override;
 
     /// Sets the button state according to the FeatureStateEvent emitted by an Uno state change.
-    virtual void        SetStateUno(const css::frame::FeatureStateEvent& rEvent);
+    void                statusChanged(const css::frame::FeatureStateEvent& rEvent);
 
 protected:
 
@@ -187,7 +187,7 @@ public:
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }
-    virtual void    SetStateUno(const css::frame::FeatureStateEvent& rEvent) override;
+    void            statusChanged(const css::frame::FeatureStateEvent& rEvent);
 
     void            Check( bool bCheck = true );
     bool            IsChecked() const;
