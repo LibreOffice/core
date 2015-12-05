@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_b34e7b94",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-12-05T01:26:20Z",
+      "side": 1,
+      "message": "Please don\u0027t make cosmetic change unless necessary.",
+      "revId": "95e950b49f525a483d60a9c993cdd0cf125d9e49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1344a772",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-12-05T01:26:20Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "95e950b49f525a483d60a9c993cdd0cf125d9e49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
