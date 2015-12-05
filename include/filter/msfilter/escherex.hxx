@@ -1145,10 +1145,8 @@ class ImplEscherExSdr;
 class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 {
     protected:
-        typedef ::std::unique_ptr< ImplEscherExSdr > ImplEscherExSdrPtr;
-
         EscherExGlobalRef           mxGlobal;
-        ImplEscherExSdrPtr          mpImplEscherExSdr;
+        ::std::unique_ptr< ImplEscherExSdr > mpImplEscherExSdr;
         SvStream*                   mpOutStrm;
         bool                        mbOwnsStrm;
         sal_uInt32                  mnStrmStartOfs;
