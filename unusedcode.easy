@@ -20,7 +20,6 @@ OutputDevice::PixelToLogic(vcl::Region const&, MapMode const&) const
 Picture::Type()
 Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
-Printer::Error()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScCellValue::set(ScRefCellValue const&)
 ScDocument::CreateFormatTable() const
