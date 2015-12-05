@@ -65,6 +65,9 @@
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objsh.hxx>
+#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <iostream>
 #include <map>
@@ -639,13 +642,35 @@ void UsageInfo::save()
     if (!mbIsCollecting)
         return;
 
-    // TODO - do a real saving here, not only dump to the screen
-    std::cerr << "Usage information:" << std::endl;
-    for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+    const OUString path( SvtPathOptions().GetUserConfigPath() + "/usage.txt");
+    osl::File file(path);
+
+    try
     {
-        std::cerr << it->first << ';' << it->second << std::endl;
+        if( file.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create  ) == osl::File::E_None )
+        {
+            // TODO - do a real saving here, not only dump to the screen
+            OUString item = "Usage information:";
+
+            for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+                item += "\n" + it->first + ";" + OUString::number(it->second);
+
+            item += "\nUsage information end";
+            OString a = item.toUtf8();
+            sal_uInt64 length = a.getLength();
+
+            sal_uInt64 written = 0;
+            file.write(&a, length, written);
+
+            if(length != written)
+                std::cerr << "Usage information can not write in " +path << std::endl;
+
+            file.close();
+        }
     }
-    std::cerr << "Usage information end" << std::endl;
+    catch(Exception e){
+        std::cerr << "Usage information can not write in " +path << std::endl;
+    }
 }
 
 class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
