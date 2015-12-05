@@ -312,7 +312,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="experimental">
-                    <property name="label" translatable="yes">Enable experimental features</property>
+                    <property name="label" translatable="yes">Enable experimental features (may be unstable)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -327,7 +327,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="macrorecording">
-                    <property name="label" translatable="yes">Enable macro recording (limited)</property>
+                    <property name="label" translatable="yes">Enable macro recording (may be limited)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -361,7 +361,7 @@
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Optional (Unstable) Options</property>
+            <property name="label" translatable="yes">Optional Features:</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
