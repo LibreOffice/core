@@ -314,7 +314,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="default">
-                                <property name="label" translatable="yes">_Default</property>
+                                <property name="label" translatable="yes">_full-scren</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -331,7 +331,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="window">
-                                <property name="label" translatable="yes">_Window</property>
+                                <property name="label" translatable="yes">_in a window</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -347,7 +347,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="auto">
-                                <property name="label" translatable="yes">A_uto</property>
+                                <property name="label" translatable="yes">_loop and repeat after:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -409,7 +409,7 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Type</property>
+                        <property name="label" translatable="yes">Run Slideshow:</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
