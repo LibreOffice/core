@@ -443,7 +443,7 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             }
 
             if (bCheckOk)
-                aContextMenu.CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, true );
+                aContextMenu.CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY );
 
             switch( aContextMenu.Execute( this, ptWhere ) )
             {
