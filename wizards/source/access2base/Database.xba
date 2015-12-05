@@ -1032,8 +1032,8 @@ Private Function _OutputDataToHTML(poTable As Object, piFile As Integer) As Bool
 &apos;	Exit when error without execution stop (to avoid file remaining open ...)
 
 Dim oTableRS As Object, vData() As Variant, i As Integer, j As Integer
-Dim vFieldsSkip() As Variant, iDataType As Integer, iNumRows As Integer, iNumFields As Integer, vDataCell As Variant
-Dim vTrClass() As Variant, vTdClass As Variant, iCountRows As Integer, iLastRow As Integer, iFirstCol As Integer, iLastCol As Integer
+Dim vFieldsBin() As Variant, iDataType As Integer, iNumRows As Integer, iNumFields As Integer, vDataCell As Variant
+Dim vTrClass() As Variant, vTdClass As Variant, iCountRows As Integer, iLastRow As Integer
 Const cstMaxRows = 200
 	On Local Error GoTo Error_Function
 
@@ -1041,20 +1041,14 @@ Const cstMaxRows = 200
 	Print #piFile, &quot;   &lt;caption&gt;&quot; &amp; poTable._Name &amp; &quot;&lt;/caption&gt;&quot;
 
 	Set oTableRS = poTable.OpenRecordset( , , dbReadOnly)
-	vFieldsSkip() = Array()
+	vFieldsBin() = Array()
 	iNumFields = oTableRS.Fields.Count
-	ReDim vFieldsSkip(0 To iNumFields - 1)
+	ReDim vFieldsBin(0 To iNumFields - 1)
 	With com.sun.star.sdbc.DataType
-		iFirstCol = -1
-		iLastCol = -1
 		For i = 0 To iNumFields - 1
 			iDataType = oTableRS.Fields(i).DataType
-			vFieldsSkip(i) = False
-			If iDataType = .BINARY Or iDataType = .VARBINARY Or iDataType = .LONGVARBINARY Or iDataType = .BLOB Or iDataType = .CLOB Then vFieldsSkip(i) = True
-			If Not vFieldsSkip(i) Then
-				If iFirstCol &lt; 0 Then iFirstCol = i
-				iLastCol = i
-			End If
+			vFieldsBin(i) = False
+			If iDataType = .BINARY Or iDataType = .VARBINARY Or iDataType = .LONGVARBINARY Or iDataType = .BLOB Or iDataType = .CLOB Then vFieldsBin(i) = True
 		Next i
 	End With
 
@@ -1062,9 +1056,7 @@ Const cstMaxRows = 200
 		Print #piFile, &quot;   &lt;thead&gt;&quot;
 		Print #piFile, &quot;    &lt;tr&gt;&quot;
 		For i = 0 To iNumFields - 1
-			If Not vFieldsSkip(i) Then
-				Print #piFile, &quot;     &lt;th scope=&quot;&quot;col&quot;&quot;&gt;&quot; &amp; .Fields(i)._Name &amp; &quot;&lt;/th&gt;&quot;
-			End If
+			Print #piFile, &quot;     &lt;th scope=&quot;&quot;col&quot;&quot;&gt;&quot; &amp; .Fields(i)._Name &amp; &quot;&lt;/th&gt;&quot;
 		Next i
 		Print #piFile, &quot;    &lt;/tr&gt;&quot;
 		Print #piFile, &quot;   &lt;/thead&gt;&quot;
@@ -1088,9 +1080,9 @@ Const cstMaxRows = 200
 				Print #piFile, &quot;    &lt;tr&quot; &amp; _OutputClassToHTML(vTrClass) &amp; &quot;&gt;&quot;
 				For i = 0 To iNumFields - 1
 					vTdClass() = Array()
-					If i = iFirstCol Then vTdClass() = _AddArray(vTdClass, &quot;firstcol&quot;)
-					If i = iLastCol Then vTdClass() = _AddArray(vTdClass, &quot;lastcol&quot;)
-					If Not vFieldsSkip(i) Then
+					If i = 0 Then vTdClass() = _AddArray(vTdClass, &quot;firstcol&quot;)
+					If i = iNumFields - 1 Then vTdClass() = _AddArray(vTdClass, &quot;lastcol&quot;)
+					If Not vFieldsBin(i) Then
 						vDataCell = vData(i, j)
 						Select Case VarType(vDataCell)
 							Case vbEmpty, vbNull
@@ -1112,6 +1104,8 @@ Const cstMaxRows = 200
 							Case Else
 								Print #piFile, &quot;     &lt;td&quot; &amp; _OutputClassToHTML(vTdClass) &amp; &quot;&gt;&quot; &amp; _CStr(vDataCell) &amp; &quot;&lt;/td&gt;&quot;
 						End Select
+					Else				&apos;	Binary fields
+						Print #piFile, &quot;     &lt;td&quot; &amp; _OutputClassToHTML(vTdClass) &amp; &quot;&gt;&quot; &amp; _OutputBinaryToHTML() &amp; &quot;&lt;/td&gt;&quot;
 					End If
 				Next i
 				Print #piFile, &quot;    &lt;/tr&gt;&quot;
@@ -1132,7 +1126,15 @@ Error_Function:
 	TraceError(TRACEWARNING, Err, &quot;_OutputDataToHTML&quot;, Erl)
 	_OutputDataToHTML = False
 	Resume Exit_Function
-End Function	&apos;	_OutputDataToHTML
+End Function	&apos;	_OutputDataToHTML	V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _OutputBinaryToHTML() As String
+&apos;	Converts Binary value to HTML compatible string
+
+	_OutputBinaryToHTML = &quot;&amp;nbsp;&quot;
+
+End Function	&apos;	_OutputBinaryToHTML	V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _OutputDateToHTML(ByVal psDate As Date) As String
