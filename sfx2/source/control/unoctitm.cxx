@@ -65,6 +65,9 @@
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objsh.hxx>
+#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <iostream>
 #include <map>
@@ -73,6 +76,8 @@
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+
+#define USAGE "file:///~/.config/libreofficedev/4/user/usage.txt"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -640,13 +645,28 @@ void UsageInfo::save()
     if (!mbIsCollecting)
         return;
 
-    // TODO - do a real saving here, not only dump to the screen
-    std::cerr << "Usage information:" << std::endl;
-    for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+    const OUString path(USAGE);
+    osl::File file(path);
+
+    if( file.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) == osl::File::E_None )
     {
-        std::cerr << it->first << ';' << it->second << std::endl;
+        OString jan = "Usage information:\n";
+
+        for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+            jan += "\n" + it->first.toUtf8() + ";" + OString::number(it->second);
+
+        jan += "\nUsage information end\n";
+        sal_uInt64 written = 0;
+        file.write(jan.pData->buffer, jan.getLength(), written);
+        file.close();
     }
-    std::cerr << "Usage information end" << std::endl;
+
+    else{
+        std::cerr << "Usage information:" << std::endl;
+        for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+            std::cerr << it->first << ';' << it->second << std::endl;
+        std::cerr << "Usage information end" << std::endl;
+    }
 }
 
 class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
