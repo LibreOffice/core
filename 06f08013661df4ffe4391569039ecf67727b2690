@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_8eb6aa3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-12-05T13:11:16Z",
+      "side": 1,
+      "message": "the tdf bug number should have no spaces in the middle in order for it to be linkified correctly",
+      "revId": "06f08013661df4ffe4391569039ecf67727b2690",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ee81364f",
+        "filename": "sd/uiconfig/simpress/ui/presentationdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-12-05T13:11:16Z",
+      "side": 1,
+      "message": "Can you remove these unrelated changes from this patch, and upload a separate one for them?",
+      "revId": "06f08013661df4ffe4391569039ecf67727b2690",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
