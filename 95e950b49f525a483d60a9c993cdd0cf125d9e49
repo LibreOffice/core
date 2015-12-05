@@ -33,6 +33,40 @@
       "revId": "95e950b49f525a483d60a9c993cdd0cf125d9e49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6e96e695",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2015-12-05T14:08:23Z",
+      "side": 1,
+      "message": "This change is more disruptive than it has to be.  If all you need to do is to set the hasFormula flag, you can do that within the handler class and get that value after the std::for_each call.  std::for_each actually returns the handler object itself, which you can catch and get the flag value to update the flag value.",
+      "revId": "95e950b49f525a483d60a9c993cdd0cf125d9e49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_0e811a4b",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2622,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2015-12-05T14:08:23Z",
+      "side": 1,
+      "message": "This change is pointless.  The old code does exactly what the new one does and it\u0027s not related to the change you are trying to make.",
+      "revId": "95e950b49f525a483d60a9c993cdd0cf125d9e49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
