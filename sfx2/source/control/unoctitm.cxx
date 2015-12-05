@@ -65,6 +65,7 @@
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objsh.hxx>
+#include <osl/file.hxx>
 
 #include <iostream>
 #include <map>
@@ -639,13 +640,29 @@ void UsageInfo::save()
     if (!mbIsCollecting)
         return;
 
-    // TODO - do a real saving here, not only dump to the screen
-    std::cerr << "Usage information:" << std::endl;
-    for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+    const OUString path = "~/.config/libreofficedev/4/user/stats/";
+    ::osl::Directory::createPath(path);
+
+    OUString url = path + "usage.txt";
+    osl::File file( url );
+
+    sal_uInt64 written = 0;
+    if( file.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create  ) == osl::File::E_None )
     {
-        std::cerr << it->first << ';' << it->second << std::endl;
+        // TODO - do a real saving here, not only dump to the screen
+        OUString item = "Usage information:";
+        file.write(&item, item.getLength(), written);
+        for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+        {
+            item = "\n" + it->first + ";";
+            file.write(&item, item.getLength(), written);
+            file.write(&it->second, sizeof(it->second), written);
+        }
+
+        item = "Usage information end";
+        file.write(&item, item.getLength(), written);
+        file.close();
     }
-    std::cerr << "Usage information end" << std::endl;
 }
 
 class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
