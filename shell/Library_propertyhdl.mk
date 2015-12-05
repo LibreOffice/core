@@ -48,8 +48,7 @@ $(eval $(call gb_Library_use_static_libraries,propertyhdl,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,propertyhdl,\
-	/EXPORT:DllCanUnloadNow \
-	/EXPORT:DllGetClassObject \
+	/DEF:$(SRCDIR)/shell/source/win32/shlxthandler/prophdl/propertyhdl.def \
 	/NODEFAULTLIB:libcmt.lib \
 ))
 
