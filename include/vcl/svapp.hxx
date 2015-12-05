@@ -1649,13 +1649,6 @@ inline void Application::EndYield()
     PostUserEvent( Link<void*,void>() );
 }
 
-namespace vcl
-{
-
-VCL_DLLPUBLIC bool IsWindowSystemAvailable();
-
-}
-
 #endif // _APP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

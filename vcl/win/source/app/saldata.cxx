@@ -74,15 +74,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
     return nRet;
 }
 
-namespace vcl
-{
 
-bool IsWindowSystemAvailable()
-{
-    return true; // FIXME: we want this to return false if logged in
-                 // to some Cygwin ssh session for instance
-}
-
-} // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
