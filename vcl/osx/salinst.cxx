@@ -1080,15 +1080,5 @@ NSImage* CreateNSImage( const Image& rImage )
     return pImage;
 }
 
-namespace vcl
-{
-
-bool IsWindowSystemAvailable()
-{
-    // Yes I know the parens are not needed. I like them in cases like this. So sue me.
-    return ([NSScreen screens] != nil && [[NSScreen screens] count] > 0);
-}
-
-} // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
