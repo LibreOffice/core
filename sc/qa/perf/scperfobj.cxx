@@ -33,6 +33,9 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/Border.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
+#include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
+#include <com/sun/star/sheet/SubTotalColumn.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <test/callgrind.hxx>
 
@@ -66,6 +69,9 @@ public:
     CPPUNIT_TEST(testLcm);
     CPPUNIT_TEST(testGcd);
     CPPUNIT_TEST(testPearson);
+    CPPUNIT_TEST(testSubTotalWithFormulas);
+    CPPUNIT_TEST(testSubTotalWithoutFormulas);
+    CPPUNIT_TEST(testLoadingFileWithSingleBigSheet);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -85,7 +91,9 @@ private:
     void testLcm();
     void testGcd();
     void testPearson();
-
+    void testSubTotalWithFormulas();
+    void testSubTotalWithoutFormulas();
+    void testLoadingFileWithSingleBigSheet();
 };
 
 sal_Int32 ScPerfObj::nTest = 0;
@@ -471,6 +479,88 @@ void ScPerfObj::testPearson()
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong Pearson result" , 0.01255, xCell->getValue(), 10e-4);
 }
 
+void ScPerfObj::testSubTotalWithFormulas()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigSingleSheet200.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Any rSheet = xSheets->getByName("scBigSingleSheet");
+
+    // query for the XCellRange interface
+    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
+
+    // query the cell range
+    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByPosition(0,0,1023,1000000);
+
+    // Create the subtotal interface
+    uno::Reference< sheet::XSubTotalCalculatable > xSub(xCellRange, UNO_QUERY_THROW);
+    uno::Reference< sheet::XSubTotalDescriptor > xSubDesc = xSub->createSubTotalDescriptor(true);
+
+    // Create the column used for subtotal
+    uno::Sequence < sheet::SubTotalColumn > xSubTotalColumns;
+    xSubTotalColumns.realloc(1);
+
+    // Add the column to the descriptor
+    xSubTotalColumns[0].Column   = 1;
+    xSubTotalColumns[0].Function = sheet::GeneralFunction_SUM;
+
+    xSubDesc->addNew(xSubTotalColumns, 0);
+
+    // Run the subtotal function
+    callgrindStart();
+    xSub->applySubTotals(xSubDesc, true);
+    callgrindDump("sc:doSubTotal_on_large_sheet_with_formulas");
+}
+
+void ScPerfObj::testSubTotalWithoutFormulas()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigSingleSheet200.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Any rSheet = xSheets->getByName("scBigSingleSheet");
+
+    // query for the XCellRange interface
+    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
+
+    // query the cell range
+    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByPosition(0,0,10,1000000);
+
+    // Create the subtotal interface
+    uno::Reference< sheet::XSubTotalCalculatable > xSub(xCellRange, UNO_QUERY_THROW);
+    uno::Reference< sheet::XSubTotalDescriptor > xSubDesc = xSub->createSubTotalDescriptor(true);
+
+    // Create the column used for subtotal
+    uno::Sequence < sheet::SubTotalColumn> xSubTotalColumns;
+    xSubTotalColumns.realloc(1);
+
+    // Add the column to the descriptor
+    xSubTotalColumns[0].Column   = 1;
+    xSubTotalColumns[0].Function = sheet::GeneralFunction_SUM;
+
+    xSubDesc->addNew(xSubTotalColumns, 0);
+
+    // Run the subtotal function
+    callgrindStart();
+    xSub->applySubTotals(xSubDesc, true);
+    callgrindDump("sc:doSubTotal_on_large_sheet_without_formulas");
+}
+
+void ScPerfObj::testLoadingFileWithSingleBigSheet()
+{
+    callgrindStart();
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc1(init("scBigSingleSheet2000.ods"), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc1.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable1(xDoc1, UNO_QUERY_THROW);
+    callgrindDump("sc:loadingFileWithSingleBigSheetdoSubTotal_2000lines");
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPerfObj);
 
