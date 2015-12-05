@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_53258fc0",
+        "filename": "dbaccess/source/ui/misc/WTypeSelect.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-12-05T06:15:00Z",
+      "side": 1,
+      "message": "This looks like it will check the \"primary key\" checkbox if only a part of all primary keys fields are selected: e.g. primary key is fields 1 \u0026 2, and current selection is field 1 only.\n\nIt also checks the \"primary key\" checkbox when no field is selected.",
+      "revId": "d4837f3b97ca2b97ae9134eacde72df2b632989d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_33228bba",
+        "filename": "dbaccess/source/ui/misc/WTypeSelect.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-12-05T06:15:00Z",
+      "side": 1,
+      "message": "Maybe linked to above, but if:\n1) primary key is made of fields 1 \u0026 2\n2) (only) field 1 is selected\nthen this removes the primary key, but should set it to field 1.",
+      "revId": "d4837f3b97ca2b97ae9134eacde72df2b632989d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
