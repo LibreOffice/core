@@ -48,10 +48,7 @@ $(eval $(call gb_Library_use_static_libraries,shlxthdl,\
 $(eval $(call gb_Library_add_nativeres,shlxthdl,shlxthdl))
 
 $(eval $(call gb_Library_add_ldflags,shlxthdl,\
-	/EXPORT:DllCanUnloadNow \
-	/EXPORT:DllGetClassObject \
-	/EXPORT:DllRegisterServer \
-	/EXPORT:DllUnregisterServer \
+	/DEF:$(SRCDIR)/shell/source/win32/shlxthandler/shlxthdl.def \
 	/NODEFAULTLIB:libcmt.lib \
 ))
 

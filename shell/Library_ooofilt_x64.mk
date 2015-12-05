@@ -56,10 +56,7 @@ $(eval $(call gb_Library_use_static_libraries,ooofilt_x64,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,ooofilt_x64,\
-	/EXPORT:DllCanUnloadNow \
-	/EXPORT:DllGetClassObject \
-	/EXPORT:DllRegisterServer \
-	/EXPORT:DllUnregisterServer \
+	/DEF:$(SRCDIR)/shell/source/win32/shlxthandler/ooofilt/ooofilt.def \
 	/NODEFAULTLIB:libcmt.lib \
 ))
 
