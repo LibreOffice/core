@@ -27,11 +27,7 @@ $(eval $(call gb_Library_use_libraries,inprocserv,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,inprocserv,\
-	/EXPORT:DllCanUnloadNow \
-	/EXPORT:DllGetClassObject \
-	/EXPORT:DllMain \
-	/EXPORT:DllRegisterServer \
-	/EXPORT:DllUnregisterServer \
+	/DEF:$(SRCDIR)/embedserv/source/inprocserv/inprocserv.def \
 ))
 endif
 
