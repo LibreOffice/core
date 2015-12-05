@@ -1187,6 +1187,7 @@ Dim i As Integer, l As Long
 					&quot;&amp;quot;&quot;, &quot;&amp;amp;&quot;, &quot;&amp;apos;&quot;, &quot;&amp;lt;&quot;, &quot;&amp;gt;&quot;, &quot;&amp;nbsp;&quot; _
 					, &quot;&lt;pre&gt;&quot;, &quot;&lt;/pre&gt;&quot;, &quot;&lt;br&gt;&quot; _
 					, &quot;&lt;a href=&quot;&quot;&quot;, &quot;&lt;a id=&quot;&quot;&quot;, &quot;&lt;/a&gt;&quot;, &quot;&lt;img src=&quot;&quot;&quot; _
+					, &quot;&lt;span style=&quot;&quot;&quot;, &quot;&lt;/span&gt;&quot; _
 					, &quot;&lt;b&gt;&quot;, &quot;&lt;/b&gt;&quot;, &quot;&lt;u&gt;&quot;, &quot;&lt;/u&gt;&quot;, &quot;&lt;i&gt;&quot;, &quot;&lt;/i&gt;&quot; _
 					)
 
@@ -1212,7 +1213,7 @@ Dim i As Integer, l As Long
 		&apos;	Process hyperlink patterns and keep others
 		If Len(sPattern) &gt; 0 Then
 			Select Case LCase(sPattern)
-				Case &quot;&lt;a href=&quot;&quot;&quot;, &quot;&lt;a id=&quot;&quot;&quot;, &quot;&lt;img src=&quot;&quot;&quot;
+				Case &quot;&lt;a href=&quot;&quot;&quot;, &quot;&lt;a id=&quot;&quot;&quot;, &quot;&lt;img src=&quot;&quot;&quot;, &quot;&lt;span style=&quot;&quot;&quot;
 					&apos;	Up to next quote, url-encode
 					lNextQuote = 0
 					lUrl = lPattern + Len(sPattern)
