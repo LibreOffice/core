@@ -68,21 +68,5 @@ Display *OpenX11Display(OString& rDisplay)
     return pDisp;
 }
 
-namespace vcl
-{
-
-bool IsWindowSystemAvailable()
-{
-    Display *pDisp;
-    OString aDisplay;
-
-    pDisp = OpenX11Display(aDisplay);
-    if (pDisp)
-        XCloseDisplay(pDisp);
-
-    return (pDisp != nullptr);
-}
-
-} // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
