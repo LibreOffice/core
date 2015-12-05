@@ -693,7 +693,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
         if (!aBmpRect.Intersection(Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
         {
-            DrawDeviceAlphaBitmapSlowPath(rBmp, rAlpha, aDstRect, aBmpRect, aOutSz, aOutPt);
+            DrawDeviceAlphaBitmapSlowPath(rBmp, rAlpha, aDstRect, aBmpRect, aOutSz, aOutPt,bHMirr,bVMirr);
         }
     }
 }
@@ -923,14 +923,11 @@ private:
 
 } // end anonymous namespace
 
-void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const AlphaMask& rAlpha, Rectangle aDstRect, Rectangle aBmpRect, Size& aOutSize, Point& aOutPoint)
+void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const AlphaMask& rAlpha, Rectangle aDstRect, Rectangle aBmpRect, Size& aOutSize, Point& aOutPoint, const bool bHMirr,const bool bVMirr)
 {
     assert(!is_double_buffered_window());
 
     VirtualDevice* pOldVDev = mpAlphaVDev;
-
-    const bool  bHMirr = aOutSize.Width() < 0;
-    const bool  bVMirr = aOutSize.Height() < 0;
 
     // The scaling in this code path produces really ugly results - it
     // does the most trivial scaling with no smoothing.
@@ -1487,6 +1484,7 @@ Bitmap OutputDevice::BlendBitmap(
     BitmapColor aDstCol;
     Bitmap      res;
     int         nX, nY;
+    int         destnX, destnY;
 
     if( GetBitCount() <= 8 )
     {
@@ -1552,11 +1550,21 @@ Bitmap OutputDevice::BlendBitmap(
                             Scanline    pPScan = pP->GetScanline( nMapY );
                             Scanline    pAScan = pA->GetScanline( nMapY );
 
+                            destnY=nY;
+                            if (bVMirr)
+                            {
+                                destnY=nDstHeight-nY-1;
+                            }
                             for( nX = 0; nX < nDstWidth; nX++ )
                             {
                                 const long nMapX = pMapX[ nX ];
                                 aDstCol = pB->GetPixel( nY, nX );
-                                pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
+                                destnX=nX;
+                                if (bHMirr)
+                                {
+                                    destnX=nDstWidth-nX-1;
+                                }
+                                pB->SetPixel( destnY, destnX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
                                                                      pAScan[ nMapX ] ) );
                             }
                         }
@@ -1570,12 +1578,23 @@ Bitmap OutputDevice::BlendBitmap(
                         const long  nMapY = pMapY[ nY ];
                         Scanline    pAScan = pA->GetScanline( nMapY );
 
+                        destnY=nY;
+                        if (bVMirr)
+                        {
+                            destnY=nDstHeight-nY-1;
+                        }
                         for( nX = 0; nX < nDstWidth; nX++ )
                         {
                             const long nMapX = pMapX[ nX ];
                             aDstCol = pB->GetPixel( nY, nX );
-                            pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
-                                                                 pAScan[ nMapX ] ) );
+
+                            destnX=nX;
+                            if (bHMirr)
+                            {
+                                destnX=nDstWidth-nX-1;
+                            }
+                            pB->SetPixel( destnY, destnX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
+                                                                pAScan[ nMapX ] ) );
                         }
                     }
                 }
