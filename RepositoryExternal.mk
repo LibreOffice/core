@@ -3747,8 +3747,9 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,postprocess_images) \
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
-	$(call gb_Package_get_target_for_build,instsetoo_native_setup_ure) \
-	$(call gb_Package_get_target_for_build,instsetoo_native_setup) \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,fundamental) \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,louno) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_ETC_FOLDER)/services/services.rdb \
 	$(call gb_UnoApi_get_target,offapi) \
