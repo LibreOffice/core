@@ -868,32 +868,27 @@ ImplEscherExSdr::~ImplEscherExSdr()
 
 bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
 {
-    do
+    SvxDrawPage* pSvxDrawPage;
+    if ( mpSdrPage != &rPage || !mXDrawPage.is() )
     {
-        SvxDrawPage* pSvxDrawPage;
-        if ( mpSdrPage != &rPage || !mXDrawPage.is() )
-        {
-            // eventually write SolverContainer of current page, deletes the Solver
-            ImplFlushSolverContainer();
+        // eventually write SolverContainer of current page, deletes the Solver
+        ImplFlushSolverContainer();
 
-            mpSdrPage = nullptr;
-            mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
-            mXShapes.set( mXDrawPage, UNO_QUERY );
-            if ( !mXShapes.is() )
-                break;
-            if ( !ImplInitPageValues() )    // ImplEESdrWriter
-                break;
-            mpSdrPage = &rPage;
+        mpSdrPage = nullptr;
+        mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
+        mXShapes.set( mXDrawPage, UNO_QUERY );
+        if ( !mXShapes.is() )
+            return false;
+        if ( !ImplInitPageValues() )    // ImplEESdrWriter
+            return false;
+        mpSdrPage = &rPage;
 
-            mpSolverContainer = new EscherSolverContainer;
-        }
-        else
-            pSvxDrawPage = SvxDrawPage::getImplementation(mXDrawPage);
+        mpSolverContainer = new EscherSolverContainer;
+    }
+    else
+        pSvxDrawPage = SvxDrawPage::getImplementation(mXDrawPage);
 
-        return pSvxDrawPage != nullptr;
-    } while ( false );
-
-    return false;
+    return pSvxDrawPage != nullptr;
 }
 
 bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
