@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_cea552b6",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2015-12-06T10:37:27Z",
+      "side": 1,
+      "message": "Probably should be\n const auto\u0026 rKV\n----------------------------\nI tried this, but the step \"rKV.second.getRangeData( nStart, aRange )\" does not seem to like it, gets compile errors : \n\n\"passing ‘const ScFlatBoolColSegments’ as ‘this’ argument discards qualifiers [-fpermissive]\"",
+      "range": {
+        "startLine": 756,
+        "startChar": 13,
+        "endLine": 756,
+        "endChar": 22
+      },
+      "revId": "e8b923fce530ef549593624f50688d82de70893a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
