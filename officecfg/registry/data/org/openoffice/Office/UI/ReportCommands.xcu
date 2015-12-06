@@ -279,41 +279,6 @@
           <value xml:lang="en-US">Report Controls</value>
         </prop>
       </node>
-      <node oor:name=".uno:ShapesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Shapes</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:BasicShapesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Basic Shapes</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:SymbolShapesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Symbol Shapes</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ArrowShapesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Arrow Shapes</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:FlowChartShapesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">FlowChart Shapes</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:CalloutShapesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Callout Shapes</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:StarShapesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Star Shapes</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SectionShrinkMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Section</value>
