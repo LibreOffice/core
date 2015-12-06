@@ -65,7 +65,7 @@ GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* 
  * lok_doc_view_open_document:
  * @pDocView: The #LOKDocView instance
  * @pPath: (transfer full): The path of the document that #LOKDocView widget should try to open
- * @pRenderingArguments: lok::Document::initializeForRendering() arguments.
+ * @pRenderingArguments: (nullable): lok::Document::initializeForRendering() arguments.
  * @cancellable:
  * @callback:
  * @userdata:
