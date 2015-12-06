@@ -2292,6 +2292,13 @@ lcl_SplitFieldCommand(const OUString& rCommand)
     std::vector<OUString> arguments;
     std::vector<OUString> switches;
     sal_Int32 nStartIndex(0);
+    // tdf#54584: Field may be prepended by a backslash - skip it
+    if ((rCommand.getLength() >= nStartIndex + 2) &&
+        (rCommand[nStartIndex] == '\\') &&
+        (rCommand[nStartIndex + 1] != '\\'))
+    {
+        ++nStartIndex;
+    }
 
     do
     {
