@@ -264,7 +264,9 @@ static OUString getAbsoluteURL(const char* pURL)
 static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::PropertyValue>& rPropertyValues)
 {
     std::vector<beans::PropertyValue> aArguments;
-    if (pJSON)
+
+    // A minimal valid JSON is "{}" string, otherwise read_json throws.
+    if (pJSON && strlen(pJSON) >= 2)
     {
         boost::property_tree::ptree aTree;
         std::stringstream aStream(pJSON);
