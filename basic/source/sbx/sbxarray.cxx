@@ -60,18 +60,16 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
     {
         eType = rArray.eType;
         Clear();
-        VarEntriesType* pSrc = rArray.mpVarEntries;
-        for( size_t i = 0; i < pSrc->size(); i++ )
+        for( const auto& rpSrcRef : *rArray.mpVarEntries )
         {
-            SbxVarEntry* pSrcRef = (*pSrc)[i];
-            SbxVariableRef pSrc_ = pSrcRef->mpVar;
+            SbxVariableRef pSrc_ = rpSrcRef->mpVar;
             if( !pSrc_ )
                 continue;
             SbxVarEntry* pDstRef = new SbxVarEntry;
-            pDstRef->mpVar = pSrcRef->mpVar;
+            pDstRef->mpVar = rpSrcRef->mpVar;
 
-            if (pSrcRef->maAlias)
-                pDstRef->maAlias.reset(*pSrcRef->maAlias);
+            if (rpSrcRef->maAlias)
+                pDstRef->maAlias.reset(*rpSrcRef->maAlias);
 
             if( eType != SbxVARIANT )
             {
@@ -666,15 +664,14 @@ bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
 sal_uInt32 SbxDimArray::Offset32( const sal_Int32* pIdx )
 {
     sal_uInt32 nPos = 0;
-    for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
-         it != m_vDimensions.end(); ++it )
+    for( const auto& rDimension : m_vDimensions )
     {
         sal_Int32 nIdx = *pIdx++;
-        if( nIdx < it->nLbound || nIdx > it->nUbound )
+        if( nIdx < rDimension.nLbound || nIdx > rDimension.nUbound )
         {
             nPos = (sal_uInt32)SBX_MAXINDEX32 + 1; break;
         }
-        nPos = nPos * it->nSize + nIdx - it->nLbound;
+        nPos = nPos * rDimension.nSize + nIdx - rDimension.nLbound;
     }
     if( m_vDimensions.empty() || nPos > SBX_MAXINDEX32 )
     {

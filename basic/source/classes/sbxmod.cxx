@@ -1293,10 +1293,9 @@ void SbModule::RunInit()
 void SbModule::AddVarName( const OUString& aName )
 {
     // see if the name is added already
-    std::vector< OUString >::iterator it_end = mModuleVariableNames.end();
-    for ( std::vector< OUString >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
+    for ( const auto& rModuleVariableName: mModuleVariableNames )
     {
-        if ( aName == *it )
+        if ( aName == rModuleVariableName )
             return;
     }
     mModuleVariableNames.push_back( aName );
@@ -1304,13 +1303,12 @@ void SbModule::AddVarName( const OUString& aName )
 
 void SbModule::RemoveVars()
 {
-    std::vector< OUString >::iterator it_end = mModuleVariableNames.end();
-    for ( std::vector< OUString >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
+    for ( const auto& rModuleVariableName: mModuleVariableNames )
     {
     // We don't want a Find being called in a derived class ( e.g.
     // SbUserform because it could trigger say an initialise event
     // which would cause basic to be re-run in the middle of the init ( and remember RemoveVars is called from compile and we don't want code to run as part of the compile )
-    SbxVariableRef p = SbModule::Find( *it, SbxCLASS_PROPERTY );
+    SbxVariableRef p = SbModule::Find( rModuleVariableName, SbxCLASS_PROPERTY );
     if( p.Is() )
         Remove (p);
     }
