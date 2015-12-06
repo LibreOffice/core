@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/processfactory.hxx>
 #include <svl/lngmisc.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <unotools/lingucfg.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
 class ThesaurusMenuController : public svt::PopupMenuControllerBase
@@ -41,56 +40,13 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    virtual void impl_setPopupMenu() override;
+    void fillPopupMenu();
     void getMeanings( std::vector< OUString >& rSynonyms, const OUString& rWord, const css::lang::Locale& rLocale, size_t nMaxSynonms );
     OUString getThesImplName( const css::lang::Locale& rLocale ) const;
     css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
     css::uno::Reference< css::linguistic2::XThesaurus > m_xThesaurus;
     OUString m_aLastWord;
 };
-
-namespace {
-
-OUString RetrieveLabelFromCommand( const OUString& rCmdURL, const OUString& rModuleName )
-{
-    if ( rCmdURL.isEmpty() || rModuleName.isEmpty() )
-        return OUString();
-
-    css::uno::Any a;
-    css::uno::Sequence< css::beans::PropertyValue > aPropSeq;
-    try
-    {
-        css::uno::Reference< css::container::XNameAccess > const xNameAccess(
-            css::frame::theUICommandDescription::get( comphelper::getProcessComponentContext() ), css::uno::UNO_QUERY_THROW );
-        a = xNameAccess->getByName( rModuleName );
-        css::uno::Reference< css::container::XNameAccess > xUICommandLabels;
-        a >>= xUICommandLabels;
-        a = xUICommandLabels->getByName( rCmdURL );
-        a >>= aPropSeq;
-    }
-    catch ( const css::uno::Exception& )
-    {
-        SAL_WARN( "fwk.uielement", "Failed to get label for command " << rCmdURL );
-    }
-
-    OUString aLabel;
-    for ( const auto& aProp : aPropSeq )
-    {
-        if ( aProp.Name == "Label" )
-        {
-            aProp.Value >>= aLabel;
-        }
-        else if ( aProp.Name == "PopupLabel" )
-        {
-            OUString aStr;
-            if ( ( aProp.Value >>= aStr ) && !aStr.isEmpty() )
-                return aStr;
-        }
-    }
-    return aLabel;
-}
-
-}
 
 ThesaurusMenuController::ThesaurusMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     svt::PopupMenuControllerBase( rxContext ),
@@ -109,10 +65,10 @@ void ThesaurusMenuController::statusChanged( const css::frame::FeatureStateEvent
     rEvent.State >>= m_aLastWord;
     m_xPopupMenu->clear();
     if ( rEvent.IsEnabled )
-        impl_setPopupMenu();
+        fillPopupMenu();
 }
 
-void ThesaurusMenuController::impl_setPopupMenu()
+void ThesaurusMenuController::fillPopupMenu()
 {
     OUString aText = m_aLastWord.getToken(0, '#');
     OUString aIsoLang = m_aLastWord.getToken(1, '#');
@@ -135,21 +91,22 @@ void ThesaurusMenuController::impl_setPopupMenu()
         if ( !aThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty() )
             aImage = Image( aSynonymsImageUrl );
 
+        sal_uInt16 nId = 1;
         for ( const auto& aSynonym : aSynonyms )
         {
-            const sal_uInt16 nId = pVCLMenu->GetItemCount() + 1;
             OUString aItemText( linguistic::GetThesaurusReplaceText( aSynonym ) );
             pVCLMenu->InsertItem( nId, aItemText );
             pVCLMenu->SetItemCommand( nId, ".uno:ThesaurusFromContext?WordReplace:string=" + aItemText );
 
             if ( !aSynonymsImageUrl.isEmpty() )
                 pVCLMenu->SetItemImage( nId, aImage );
+            nId++;
         }
 
         pVCLMenu->InsertSeparator();
         OUString aThesaurusDialogCmd( ".uno:ThesaurusDialog" );
-        pVCLMenu->InsertItem( 100, RetrieveLabelFromCommand( aThesaurusDialogCmd, m_aModuleName ) );
-        pVCLMenu->SetItemCommand( 100, aThesaurusDialogCmd );
+        pVCLMenu->InsertItem( nId, vcl::CommandInfoProvider::Instance().GetPopupLabelForCommand( aThesaurusDialogCmd, m_xFrame ) );
+        pVCLMenu->SetItemCommand( nId, aThesaurusDialogCmd );
     }
 }
 
