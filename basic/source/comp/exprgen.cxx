@@ -191,11 +191,8 @@ void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
 
     if( aVar.pvMorePar )
     {
-        SbiExprListVector* pvMorePar = aVar.pvMorePar;
-        SbiExprListVector::iterator it;
-        for( it = pvMorePar->begin() ; it != pvMorePar->end() ; ++it )
+        for( auto& pExprList: *aVar.pvMorePar )
         {
-            SbiExprList* pExprList = *it;
             pExprList->Gen();
             rGen.Gen( _ARRAYACCESS );
         }

@@ -111,9 +111,8 @@ SbiExprNode::~SbiExprNode()
         SbiExprListVector* pvMorePar = aVar.pvMorePar;
         if( pvMorePar )
         {
-            SbiExprListVector::iterator it;
-            for( it = pvMorePar->begin() ; it != pvMorePar->end() ; ++it )
-                delete *it;
+            for( const auto& pParam : *pvMorePar )
+                delete pParam;
             delete pvMorePar;
         }
     }

@@ -1199,10 +1199,8 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
         StringVector& rReqTypes = pModule->pClassData->maRequiredTypes;
         if( rReqTypes.size() > 0 )
         {
-            for( StringVector::iterator it = rReqTypes.begin() ; it != rReqTypes.end() ; ++it )
+            for( const auto& rStr : rReqTypes )
             {
-                OUString& rStr = *it;
-
                 // Is required type a class module?
                 ModuleInitDependencyMap::iterator itFind = rMap.find( rStr );
                 if( itFind != rMap.end() )
