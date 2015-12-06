@@ -427,10 +427,10 @@ namespace basic
             {
                 // handle errors
                 std::vector<BasicError>& aErrors = _out_rpBasicManager->GetErrors();
-                for(std::vector<BasicError>::const_iterator i = aErrors.begin(); i != aErrors.end(); ++i)
+                for(const auto& rError : aErrors)
                 {
                     // show message to user
-                    if ( ERRCODE_BUTTON_CANCEL == ErrorHandler::HandleError( i->GetErrorId() ) )
+                    if ( ERRCODE_BUTTON_CANCEL == ErrorHandler::HandleError( rError.GetErrorId() ) )
                     {
                         // user wants to break loading of BASIC-manager
                         delete _out_rpBasicManager;
