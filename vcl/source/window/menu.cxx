@@ -1346,7 +1346,8 @@ bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
         else if ( pData->eType != MenuItemType::SEPARATOR ) // separators handled above
         {
             // tdf#86850 Always display clipboard functions
-            if ( pData->nId == SID_CUT || pData->nId == SID_COPY || pData->nId == SID_PASTE || pData->nId == SID_MENU_PASTE_SPECIAL )
+            if ( pData->nId == SID_CUT || pData->nId == SID_COPY || pData->nId == SID_PASTE ||
+                 pData->aCommandStr == ".uno:Cut" || pData->aCommandStr == ".uno:Copy" || pData->aCommandStr == ".uno:Paste" )
                 bVisible = true;
             else
                 // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( true ) );
