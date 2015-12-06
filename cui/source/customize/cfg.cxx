@@ -2635,6 +2635,9 @@ IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     m_pContentsListBox->Clear();
 
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
+    m_pModifyTopLevelButton->Enable( pMenuData != nullptr );
+    m_pModifyCommandButton->Enable( pMenuData != nullptr );
+    m_pAddCommandsButton->Enable( pMenuData != nullptr );
 
     PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
     if ( pMenuData )
