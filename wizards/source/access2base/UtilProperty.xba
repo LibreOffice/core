@@ -24,6 +24,8 @@ REM ============================================================================
 &apos;		Jean-Pierre Ledure		Adapted to Access2Base coding conventions
 &apos;**********************************************************************
 
+Option Explicit
+
 REM =======================================================================================================================
 Public Function _MakePropertyValue(ByVal Optional psName As String, Optional pvValue As Variant) As com.sun.star.beans.PropertyValue
 &apos;   Create and return a new com.sun.star.beans.PropertyValue.
@@ -72,7 +74,7 @@ Public Function _FindProperty(pvPropertyValuesArray, ByVal psPropName As String)
 &apos; Find a particular named property from an array of PropertyValue&apos;s.
 &apos; Finds the PropertyValue and returns it, or returns Null if not found.
 
-Dim iPropIndex As Integer
+Dim iPropIndex As Integer, vProp As Variant
 	iPropIndex = _FindPropertyIndex(pvPropertyValuesArray, psPropName)
 	If iPropIndex &gt;= 0 Then
 		vProp = pvPropertyValuesArray(iPropIndex) &apos; access array subscript
