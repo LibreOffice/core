@@ -605,7 +605,12 @@ Const cstThisSub = &quot;Database.OutputTo&quot;
 	If IsMissing(pvOutputFormat) Then pvOutputFormat = &quot;&quot;
 	If Not Utils._CheckArgument(pvOutputFormat, 3, vbString) Then Goto Exit_Function
 	If pvOutputFormat &lt;&gt; &quot;&quot; Then
-		If Not Utils._CheckArgument(UCase(pvOutputFormat), 3, vbString, Array(UCase(acFormatHTML), &quot;HTML&quot;, &quot;&quot;)) _
+		If Not Utils._CheckArgument(UCase(pvOutputFormat), 3, vbString, Array( _
+							UCase(acFormatHTML), &quot;HTML&quot; _
+							, UCase(acFormatXLS), &quot;XLS&quot; _
+							, UCase(acFormatCALC), &quot;ODS&quot; _
+							, UCase(acFormatTXT), &quot;TXT&quot;, &quot;CSV&quot; _
+							, &quot;&quot;)) _
 				Then Goto Exit_Function				&apos;	A 2nd time to allow case unsensitivity
 	End If
 	If IsMissing(pvOutputFile) Then pvOutputFile = &quot;&quot;
@@ -637,7 +642,7 @@ Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutp
 	If pvOutputFormat = &quot;&quot; Then
 		sOutputFormat = _PromptFormat()			&apos;	Prompt user for format
 		If sOutputFormat = &quot;&quot; Then Goto Exit_Function
-		If Not Utils._CheckArgument(UCase(pvOutputFormat), 3, vbString, Array(UCase(acFormatHTML), &quot;HTML&quot;, &quot;&quot;)) _
+		If Not Utils._CheckArgument(UCase(sOutputFormat), 3, vbString, Array(UCase(acFormatHTML), &quot;HTML&quot;, &quot;&quot;)) _
 				Then Goto Exit_Function			&apos;	Today only value, later maybe Calc ?
 	Else
 		sOutputFormat = UCase(pvOutputFormat)
@@ -655,7 +660,7 @@ Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutp
 
 	&apos;Create file
 	bOutput = _OutputToHTML(oTable, sOutputFile, pvTemplateFile)
-	Set oTable = Nothing
+	oTable.Dispose()
 	
 	&apos;Launch application, if requested
 	If bOutput Then
