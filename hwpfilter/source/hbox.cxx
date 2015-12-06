@@ -405,12 +405,6 @@ Picture::~Picture()
 }
 
 
-int Picture::Type()
-{
-    return pictype;
-}
-
-
 // line(14)
 // hidden(15)
 Hidden::~Hidden()

@@ -380,11 +380,6 @@ struct TxtBox: public FBox
  * @returns Count of cell.
  */
     int NCell()   { return nCell; }
-/**
- * This is one of table, text-box, equalizer and button
- * @returns Type of this object.
- */
-    int Type()    { return type;  }
 
     virtual bool Read(HWPFile &hwpf) override;
 };
@@ -654,7 +649,6 @@ struct Picture: public FBox
     Picture();
     virtual ~Picture();
 
-    int   Type    ();
     virtual bool Read    (HWPFile &hwpf) override;
 };
 
