@@ -397,17 +397,16 @@ void lcl_printTimeOutput()
         std::sort( avFunctionItems.begin(), avFunctionItems.end(), compareFunctionNetTime );
 
         std::vector<FunctionItem*>::iterator itv;
-        for( itv = avFunctionItems.begin() ; itv != avFunctionItems.end() ; ++itv )
+        for( auto& rpFunctionItem :avFunctionItems )
         {
-            FunctionItem* pFunctionItem = *itv;
-            if( pFunctionItem != NULL )
+            if( rpFunctionItem != NULL )
             {
-                OUString aCompleteFunctionName = pFunctionItem->m_aCompleteFunctionName;
+                OUString aCompleteFunctionName = rpFunctionItem->m_aCompleteFunctionName;
                 OString aName = OUStringToOString( aCompleteFunctionName, RTL_TEXTENCODING_ASCII_US );
                 int nNameLen = aCompleteFunctionName.getLength();
 
-                double dFctTotalTime = pFunctionItem->m_dTotalTime;
-                double dFctNetTime = pFunctionItem->m_dNetTime;
+                double dFctTotalTime = rpFunctionItem->m_dTotalTime;
+                double dFctNetTime = rpFunctionItem->m_dNetTime;
                 double dFctTotalTimePercent = 100.0 * dFctTotalTime / dTotalTime;
                 double dFctNetTimePercent = 100.0 * dFctNetTime / dTotalTime;
                 int nSpaceCount = 30 - nNameLen;
