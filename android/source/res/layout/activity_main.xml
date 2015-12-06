@@ -20,9 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/toolbar_bottom"
+            android:layout_below="@+id/toolbar"
             android:orientation="vertical">
-
-            <include layout="@layout/toolbar"/>
 
             <RelativeLayout
                 android:id="@+id/gecko_layout"
