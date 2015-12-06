@@ -643,20 +643,26 @@ void UsageInfo::save()
     const OUString path = "~/.config/libreofficedev/4/user/stats/";
     ::osl::Directory::createPath(path);
 
-    OUString filename = "usage.txt";
-    OUString url = path + filename;
+    OUString url = path + "usage.txt";
     osl::File file( url );
 
-    if( file.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) == osl::File::E_None ){
+    sal_uInt64 written = 0;
+    if( file.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create  ) == osl::File::E_None )
+    {
         // TODO - do a real saving here, not only dump to the screen
-        std::cerr << "Usage information:" << std::endl;
+        OUString item = "Usage information:";
+        file.write(&item, item.getLength(), written);
         for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
         {
-            std::cerr << it->first << ';' << it->second << std::endl;
+            item = "\n" + it->first + ";";
+            file.write(&item, item.getLength(), written);
+            file.write(&it->second, sizeof(it->second), written);
         }
-        std::cerr << "Usage information end" << std::endl;
+
+        item = "Usage information end";
+        file.write(&item, item.getLength(), written);
         file.close();
-        }
+    }
 }
 
 class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
