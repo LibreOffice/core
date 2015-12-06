@@ -2293,6 +2293,7 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOK
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));
     LOKDocViewPrivate& pNewPriv = getPrivate(LOK_DOC_VIEW(pNewDocView));
     pNewPriv->m_nViewId = pDocument->pClass->createView(pDocument);
+    pNewPriv->m_aRenderingArguments = pOldPriv->m_aRenderingArguments;
 
     postDocumentLoad(pNewDocView);
     return pNewDocView;
