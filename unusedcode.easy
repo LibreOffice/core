@@ -17,7 +17,6 @@ OutputDevice::LogicToPixel(basegfx::B2DPolygon const&) const
 OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
 OutputDevice::LogicToPixel(vcl::Region const&, MapMode const&) const
 OutputDevice::PixelToLogic(vcl::Region const&, MapMode const&) const
-Picture::Type()
 Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
