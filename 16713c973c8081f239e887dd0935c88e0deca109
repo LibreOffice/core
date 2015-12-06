@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_2e821e01",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2015-12-06T12:29:51Z",
+      "side": 1,
+      "message": "These lines are to get the total number of rows(both filtered and unfiltered) inside a filter. HasAutofilter and ScDBData::GetArea seems quite fast in its implementation. GetArea especially seems to get the numbers cheaply(no counting). ScDBCollection::GetDBAtCursor iterates through all DBs to find the DB at the cursor. This may be costly if there are a lot of DBs. Do we have to improve this using the mdds::rectangle_set data structure instead ?",
+      "range": {
+        "startLine": 1472,
+        "startChar": 8,
+        "endLine": 1483,
+        "endChar": 28
+      },
+      "revId": "16713c973c8081f239e887dd0935c88e0deca109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ee8e5626",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2015-12-06T12:29:51Z",
+      "side": 1,
+      "message": "This does the actual counting and hence relatively expensive. I think this can be cached and looks straighforward.",
+      "range": {
+        "startLine": 1486,
+        "startChar": 12,
+        "endLine": 1486,
+        "endChar": 73
+      },
+      "revId": "16713c973c8081f239e887dd0935c88e0deca109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_10993d6f",
         "filename": "sc/source/ui/view/cellsh.cxx",
         "patchSetId": 1
