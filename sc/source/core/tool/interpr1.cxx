@@ -1207,6 +1207,48 @@ void ScInterpreter::ScBitArithmeticOps(bitOperations::bitArithmetic bitOp)
     }
 }
 
+void ScInterpreter::ScBitRShift() {
+    ScBitShiftOps(bitOperations::BITRSHIFT);
+}
+
+void ScInterpreter::ScBitLShift() {
+    ScBitShiftOps(bitOperations::BITLSHIFT);
+}
+
+void ScInterpreter::ScBitShiftOps(bitOperations::bitShift bitOp) {
+    if ( MustHaveParamCount( GetByte(), 2 ) )
+    {
+        double n = ::rtl::math::approxFloor( GetDouble() );
+        double val = ::rtl::math::approxFloor( GetDouble() );
+
+        if ( val < 0 )
+        {
+            PushIllegalArgument();
+        }
+        else
+        {
+            double result;
+            if (n < 0)
+            {
+                if (bitOp == bitOperations::BITLSHIFT)
+                    result = (sal_uInt64) val >> (sal_uInt64) -n;
+                else
+                    result = (sal_uInt64) val << (sal_uInt64) -n;
+            }
+            else if( n == 0)
+                result = val;
+            else
+            {
+                if (bitOp == bitOperations::BITLSHIFT)
+                    result = (sal_uInt64) val << (sal_uInt64) n;
+                else
+                    result = (sal_uInt64) val >> (sal_uInt64) n;
+
+            }
+            PushDouble( result );
+        }
+    }
+}
 
 void ScInterpreter::ScAnd()
 {

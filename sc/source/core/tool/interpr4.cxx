@@ -3769,6 +3769,8 @@ StackVar ScInterpreter::Interpret()
                 case ocBitAnd           : ScBitAnd();                   break;
                 case ocBitOr            : ScBitOr();                    break;
                 case ocBitXor           : ScBitXor();                   break;
+                case ocBitLShift        : ScBitLShift();                break;
+                case ocBitRShift        : ScBitRShift();                break;
                 case ocNone : nFuncFmtType = NUMBERFORMAT_UNDEFINED;    break;
                 default : PushError( errUnknownOpCode);                 break;
             }

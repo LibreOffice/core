@@ -400,10 +400,12 @@
 #define SC_OPCODE_BITAND            404
 #define SC_OPCODE_BITOR             405
 #define SC_OPCODE_BITXOR            406
+#define SC_OPCODE_BITLSHIFT         407
+#define SC_OPCODE_BITRSHIFT         408
 
-#define SC_OPCODE_STOP_2_PAR        407
+#define SC_OPCODE_STOP_2_PAR        409
 
-#define SC_OPCODE_LAST_OPCODE_ID    406      /* last OpCode */
+#define SC_OPCODE_LAST_OPCODE_ID    408      /* last OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999

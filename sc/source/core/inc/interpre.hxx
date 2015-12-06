@@ -149,6 +149,12 @@ public:
             BITOR,
             BITXOR
         };
+
+        enum bitShift
+        {
+            BITLSHIFT,
+            BITRSHIFT
+        };
     };
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
@@ -526,6 +532,9 @@ void ScBitAnd();
 void ScBitOr();
 void ScBitXor();
 void ScBitArithmeticOps( bitOperations::bitArithmetic );
+void ScBitLShift();
+void ScBitRShift();
+void ScBitShiftOps(bitOperations::bitShift);
 
 // If upon call rMissingField==sal_True then the database field parameter may be
 // missing (Xcl DCOUNT() syntax), or may be faked as missing by having the

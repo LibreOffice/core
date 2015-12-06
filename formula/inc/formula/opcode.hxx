@@ -397,6 +397,8 @@ enum OpCodeEnum
         ocBitAnd            = SC_OPCODE_BITAND,
         ocBitOr             = SC_OPCODE_BITOR,
         ocBitXor            = SC_OPCODE_BITXOR,
+        ocBitLShift         = SC_OPCODE_BITLSHIFT,
+        ocBitRShift         = SC_OPCODE_BITRSHIFT,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,

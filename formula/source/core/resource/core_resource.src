@@ -352,6 +352,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_BITAND { Text= "BITAND" ; };
     String SC_OPCODE_BITOR { Text= "BITOR" ; };
     String SC_OPCODE_BITXOR { Text= "BITXOR" ; };
+    String SC_OPCODE_BITLSHIFT { Text= "BITLSHIFT" ; };
+    String SC_OPCODE_BITRSHIFT { Text= "BITRSHIFT" ; };
 
     /* BEGIN defined ERROR.TYPE() values. */
     String SC_OPCODE_ERROR_NULL    { Text = "#NULL!"  ; };
@@ -692,6 +694,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_BITAND { Text = "BITAND" ; };
     String SC_OPCODE_BITOR { Text = "BITOR" ; };
     String SC_OPCODE_BITXOR { Text = "BITXOR" ; };
+    String SC_OPCODE_BITLSHIFT { Text= "BITLSHIFT" ; };
+    String SC_OPCODE_BITRSHIFT { Text= "BITRSHIFT" ; };
 
     /* BEGIN defined ERROR.TYPE() values. */
     String SC_OPCODE_ERROR_NULL    { Text = "#NULL!"  ; };
@@ -1927,6 +1931,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_BITXOR
     {
         Text [ en-US ] = "BITXOR";
+    };
+    String SC_OPCODE_BITLSHIFT
+    {
+        Text [ en-US ] = "BITLSHIFT";
+    };
+    String SC_OPCODE_BITRSHIFT
+    {
+        Text [ en-US ] = "BITRSHIFT";
     };
     /* BEGIN defined ERROR.TYPE() values. */
     /* ERROR.TYPE( #NULL! ) == 1 */

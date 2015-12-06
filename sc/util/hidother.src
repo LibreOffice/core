@@ -489,3 +489,5 @@ hidspecial HID_DAI_FUNC_ROT13       { HelpID = HID_DAI_FUNC_ROT13; };
 hidspecial HID_FUNC_BITAND          { HelpID = HID_FUNC_BITAND; };
 hidspecial HID_FUNC_BITOR           { HelpID = HID_FUNC_BITOR; };
 hidspecial HID_FUNC_BITXOR          { HelpID = HID_FUNC_BITXOR; };
+hidspecial HID_FUNC_BITLSHIFT       { HelpID = HID_FUNC_BITLSHIFT; };
+hidspecial HID_FUNC_BITRSHIFT       { HelpID = HID_FUNC_BITRSHIFT; };
