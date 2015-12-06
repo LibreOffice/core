@@ -2373,6 +2373,16 @@ DECLARE_RTFIMPORT_TEST(testTdf59454, "tdf59454.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf54584, "tdf54584.rtf")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    // \PAGE was ignored, so no fields were in document -> exception was thrown
+    CPPUNIT_ASSERT_NO_THROW_MESSAGE("No fields in document found: field \"\\PAGE\" was not properly read",
+        xFields->nextElement());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
