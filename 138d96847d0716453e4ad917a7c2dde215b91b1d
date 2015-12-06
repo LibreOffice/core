@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_2e7cde71",
+        "filename": "sc/source/ui/inc/hdrcont.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2015-12-06T10:32:43Z",
+      "side": 1,
+      "message": "ScViewData pointer(pViewData) is used in ScColBar/ScRowBar(inherited from ScHeaderControl) in many places, so is it good to make function calls pTabView-\u003eGetViewData() at all those places rather than just doing it once in the ScColBar/ScRowBar constructors and storing it as their private member ? \n\nOf course we don\u0027t need to pass ScViewData* to any of the constructors, since we are passing ScTabView* to them.",
+      "parentUuid": "dab17558_d325ffae",
+      "revId": "138d96847d0716453e4ad917a7c2dde215b91b1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_f32483b0",
         "filename": "sc/source/ui/view/hdrcont.cxx",
         "patchSetId": 4
