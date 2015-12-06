@@ -950,7 +950,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
         Rectangle aRect(0, 0, 5, 5);
         aRect = pDevice->PixelToLogic(aRect);
         pDevice->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-        pDevice->SetFillColor(TRGB_COLORDATA(0xC0,0xFF,0x00,0x00));
+        pDevice->SetFillColor(COL_LIGHTRED);
         pDevice->SetLineColor();
         pDevice->DrawRect(aRect);
         pDevice->Pop();
