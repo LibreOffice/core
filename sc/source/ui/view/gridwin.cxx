@@ -136,7 +136,6 @@
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <comphelper/string.hxx>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 

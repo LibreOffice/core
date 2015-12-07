@@ -14,8 +14,6 @@
 #include <vector>
 #include <osl/time.h>
 
-#define LOK_USE_UNSTABLE_API
-
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 

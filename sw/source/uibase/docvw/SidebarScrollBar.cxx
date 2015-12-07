@@ -9,7 +9,6 @@
 
 #include <SidebarScrollBar.hxx>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <SidebarWin.hxx>

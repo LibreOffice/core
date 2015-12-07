@@ -16,7 +16,6 @@
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 

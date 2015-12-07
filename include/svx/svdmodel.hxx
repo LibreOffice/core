@@ -38,7 +38,6 @@
 #include <svx/xtable.hxx>
 #include <svx/pageitem.hxx>
 #include <vcl/field.hxx>
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class OutputDevice;

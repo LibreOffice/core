@@ -29,7 +29,6 @@
 #include <sfx2/printer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <cmdid.h>
 #include <swtypes.hxx>

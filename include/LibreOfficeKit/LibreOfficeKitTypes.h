@@ -17,9 +17,9 @@ extern "C"
 {
 #endif
 
-#ifdef LOK_USE_UNSTABLE_API
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
-#endif // LOK_USE_UNSTABLE_API
+#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 
 #ifdef __cplusplus
 }

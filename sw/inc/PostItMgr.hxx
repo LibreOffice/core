@@ -34,7 +34,6 @@
 #include <SidebarWindowsTypes.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/vclptr.hxx>
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class OutputDevice;

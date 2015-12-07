@@ -15,7 +15,7 @@ extern "C"
 {
 #endif
 
-#ifdef LOK_USE_UNSTABLE_API
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 typedef enum
 {
   LOK_DOCTYPE_TEXT,
@@ -362,7 +362,7 @@ typedef enum
 }
 LibreOfficeKitSetGraphicSelectionType;
 
-#endif // LOK_USE_UNSTABLE_API
+#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 
 #ifdef __cplusplus
 }

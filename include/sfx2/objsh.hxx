@@ -53,7 +53,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class SbxValue;
