@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_aeaa8e17",
+        "filename": "sw/qa/python/check_cross_references.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-12-07T10:53:30Z",
+      "side": 1,
+      "message": "This needs to be called \"test...\" to be actually run.\nSee my comment from Nov 16 6:01 on https://gerrit.libreoffice.org/#/c/19960/",
+      "revId": "5c2323fa340e28d5124f7645c5b7a028bb42c5f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
