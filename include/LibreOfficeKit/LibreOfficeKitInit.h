@@ -220,6 +220,8 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     LokHookFunction2 *pSym2;
 
     dlhandle = lok_dlopen(install_path, &imp_lib);
+    if (!dlhandle)
+        return NULL;
 
     pSym2 = (LokHookFunction2 *) lok_dlsym(dlhandle, "libreofficekit_hook_2");
     if (!pSym2)
