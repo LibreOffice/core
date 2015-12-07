@@ -5608,23 +5608,23 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
         aTmp1.SetLine( NULL, SvxBoxInfoItemLine::HORI );
         aTmp1.SetLine( NULL, SvxBoxInfoItemLine::VERT );
         aTmp1.SetValid( SvxBoxInfoItemValidFlags::ALL, false );
-        aTmp1.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
+        aTmp1.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
         SvxBoxInfoItem aLeftInfo( aTmp1 );
         SvxBoxInfoItem aRightInfo( aTmp1 );
         SvxBoxInfoItem aTopInfo( aTmp1 );
         SvxBoxInfoItem aBottomInfo( aTmp1 );
 
         if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::TOP ) && !pLineOuter->GetTop() )
-            aTopInfo.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, true );
+            aTopInfo.SetValid( SvxBoxInfoItemValidFlags::BOTTOM );
 
         if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) && !pLineOuter->GetBottom() )
-            aBottomInfo.SetValid( SvxBoxInfoItemValidFlags::TOP, true );
+            aBottomInfo.SetValid( SvxBoxInfoItemValidFlags::TOP );
 
         if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::LEFT ) && !pLineOuter->GetLeft() )
-            aLeftInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT, true );
+            aLeftInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT );
 
         if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) &&  !pLineOuter->GetRight() )
-            aRightInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, true );
+            aRightInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT );
 
         const ScRangeList& rRangeListTopEnvelope = rMark.GetTopEnvelope();
         const ScRangeList& rRangeListBottomEnvelope = rMark.GetBottomEnvelope();
