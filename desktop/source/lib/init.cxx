@@ -904,11 +904,9 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
 
-    boost::shared_array<sal_uInt8> aAlphaBuffer;
-
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                aBuffer, aAlphaBuffer);
+                aBuffer);
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
@@ -1554,7 +1552,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
             aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                         Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
-                        aBuffer, nullptr);
+                        aBuffer);
             aDevice->DrawText(Point(0,0), aFontName);
 
             return pBuffer;
