@@ -316,7 +316,7 @@ void DesktopLOKTest::testPaintTile()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     int nCanvasWidth = 100;
     int nCanvasHeight = 300;
-    sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(basebmp::Format::ThirtyTwoBitTcMaskBGRX,
+    sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(basebmp::Format::ThirtyTwoBitTcMaskBGRA,
                                                                nCanvasWidth);
     std::vector<unsigned char> aBuffer(nStride * nCanvasHeight);
     int nTilePosX = 0;
