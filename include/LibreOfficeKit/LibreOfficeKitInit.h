@@ -155,6 +155,13 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     if (!install_path)
         return NULL;
 
+    struct stat dir_st;
+    if (stat(install_path, &dir_st) != 0)
+    {
+        fprintf(stderr, "installation path \"%s\" does not exist\n", install_path);
+        return NULL;
+    }
+
     // allocate large enough buffer
     partial_length = strlen(install_path);
     imp_lib = (char *) malloc(partial_length + sizeof(TARGET_LIB) + sizeof(TARGET_MERGED_LIB) + 2);
