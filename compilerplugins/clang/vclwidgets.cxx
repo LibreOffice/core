@@ -115,7 +115,11 @@ bool containsWindowSubclass(const Type* pType0) {
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
-            bool link = pTemplate->getQualifiedNameAsString() == "Link";
+            auto name = pTemplate->getQualifiedNameAsString();
+            if (name == "VclStatusListener") {
+                return false;
+            }
+            bool link = name == "Link";
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
