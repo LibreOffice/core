@@ -22,6 +22,30 @@
       "revId": "e8b923fce530ef549593624f50688d82de70893a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_891a246d",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-07T13:49:46Z",
+      "side": 1,
+      "message": "Odd.. I would had expected that getRangeData() was const, but it isn\u0027t.",
+      "parentUuid": "dab17558_cea552b6",
+      "range": {
+        "startLine": 756,
+        "startChar": 13,
+        "endLine": 756,
+        "endChar": 22
+      },
+      "revId": "e8b923fce530ef549593624f50688d82de70893a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
