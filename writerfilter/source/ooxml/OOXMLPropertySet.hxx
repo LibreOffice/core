@@ -62,12 +62,12 @@ public:
     OOXMLProperty(const OOXMLProperty & rSprm);
     virtual ~OOXMLProperty();
 
-    sal_uInt32 getId() const;
-    Value::Pointer_t getValue();
-    writerfilter::Reference<Properties>::Pointer_t getProps();
+    sal_uInt32 getId() const override;
+    Value::Pointer_t getValue() override;
+    writerfilter::Reference<Properties>::Pointer_t getProps() override;
 #ifdef DEBUG_WRITERFILTER
-    std::string getName() const;
-    std::string toString() const;
+    std::string getName() const override;
+    std::string toString() const override;
 #endif
     void resolve(Properties & rProperties);
 };
@@ -156,7 +156,7 @@ public:
     OOXMLPropertySet();
     virtual ~OOXMLPropertySet();
 
-    void resolve(Properties & rHandler);
+    void resolve(Properties & rHandler) override;
     void add(OOXMLProperty::Pointer_t pProperty);
     void add(OOXMLPropertySet::Pointer_t pPropertySet);
     OOXMLPropertySet * clone() const;
