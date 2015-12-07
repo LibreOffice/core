@@ -19,61 +19,39 @@
 
 /* not protected, do only include once! */
 
-#undef Rectangle
-#undef DELETE
-#undef OPTIONAL
-#undef PASSTHROUGH
-#undef STRICT
 #undef ABSOLUTE
-#undef RELATIVE
+#undef CompareString
+#undef CopyFile
+#undef DELETE
+#undef DrawText
+#undef FindWindow
+#undef Folder
+#undef GetCharWidth
+#undef GetClassName
+#undef GetGlyphOutline
+#undef GetKerningPairs
+#undef GetMetaFile
+#undef GetNumberFormat
+#undef GetObject
+#undef GetPrinter
+#undef GetTimeFormat
+#undef GetUserName
+#undef GradientStyle_RECT
 #undef IGNORE
 #undef IN
+#undef OPAQUE // so it doesn't conflict with enum values
+#undef OPTIONAL
 #undef OUT
-
-#undef Folder
-#undef GradientStyle_RECT
-
-// so it doesn't conflict with enum values
-#undef OPAQUE
-
+#undef PASSTHROUGH
+#undef RELATIVE
+#undef Rectangle
+#undef STRICT
+#undef SetPort
+#undef SetPrinter
 #undef WB_LEFT
 #undef WB_RIGHT
-
-#undef GetObject
-
-#undef SetPrinter
-
-#undef GetPrinter
-
-#undef DrawText
-
-#undef mciSetCommand
-
-#undef SetPort
-
-#undef CopyFile
-
-#undef GetUserName
-
-#undef GetClassName
-
-#undef GetCharWidth
-
-#undef GetMetaFile
-
-#undef GetNumberFormat
-
-#undef GetGlyphOutline
-
-#undef GetKerningPairs
-
-#undef FindWindow
-
 #undef Yield
-
-#undef GetTimeFormat
-
-#undef CompareString
+#undef mciSetCommand
 
 /* new StretchBlt() Modes (simpler names) */
 #ifndef STRETCH_ANDSCANS
