@@ -1659,7 +1659,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
             aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                         Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
-                        aBuffer, nullptr);
+                        aBuffer);
             aDevice->DrawText(Point(0,0), aFontName);
 
             return pBuffer;
