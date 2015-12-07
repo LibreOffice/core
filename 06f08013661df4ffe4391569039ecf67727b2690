@@ -33,6 +33,23 @@
       "revId": "06f08013661df4ffe4391569039ecf67727b2690",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6e5ee646",
+        "filename": "sd/uiconfig/simpress/ui/presentationdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-12-07T11:17:38Z",
+      "side": 1,
+      "message": "scren -\u003e screen, I assume?",
+      "revId": "06f08013661df4ffe4391569039ecf67727b2690",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
