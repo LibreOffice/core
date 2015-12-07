@@ -42,6 +42,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+
 namespace {
 class XMLMetaExportComponent : public SvXMLExport
 {
@@ -82,13 +83,14 @@ XMLMetaExportComponent::XMLMetaExportComponent(
 XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
-}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 XMLMetaExportComponent_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new XMLMetaExportComponent(context, implementationName, nFlags));
+}
 }
 
 void SAL_CALL XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
