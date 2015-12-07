@@ -43,9 +43,6 @@
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <tchar.h>
-#ifdef RGB
-#undef RGB
-#endif
 #include <officecfg/Office/Common.hxx>
 
 #ifdef _MSC_VER
