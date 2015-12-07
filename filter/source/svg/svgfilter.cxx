@@ -77,7 +77,7 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mxDefaultPage(),
     maFilterData(),
     maShapeSelection(),
-    mbExportShapeSelection(false),
+    mbExportSelection(false),
     maOldFieldHdl()
 {
 }

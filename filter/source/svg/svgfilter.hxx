@@ -240,7 +240,7 @@ private:
     Sequence< PropertyValue >           maFilterData;
     // #i124608# explicit ShapeSelection for export when export of the selection is wanted
     Reference< XShapes >                maShapeSelection;
-    bool                                mbExportShapeSelection;
+    bool                                mbExportSelection;
     XDrawPageSequence                   mSelectedPages;
     std::vector< Reference< XDrawPage > > mMasterPageTargets;
 
