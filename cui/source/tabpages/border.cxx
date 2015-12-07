@@ -1200,7 +1200,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
         m_pSynchronizeCB->Enable( m_pRightMF->IsEnabled() || m_pTopMF->IsEnabled() ||
                                m_pBottomMF->IsEnabled() || m_pLeftMF->IsEnabled() );
     }
-    UpdateRemoveAdjCellBorderCB( -1 );
+    UpdateRemoveAdjCellBorderCB( SAL_MAX_UINT16 );
 }
 
 
