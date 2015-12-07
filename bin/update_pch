@@ -762,6 +762,7 @@ def generate(includes, libname, filename, module):
 // Cleanup windows header macro pollution.
 #ifdef WNT
 #   include <postwin.h>
+#   undef RGB
 #endif
 """
             f.write(ado_define)
