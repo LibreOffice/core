@@ -177,13 +177,13 @@ public:
                                     DrawMode::Paint );
 
             xBitmap = createBitmapDevice( aSize, false,
-                                          Format::ThirtyTwoBitTcMaskBGRX );
+                                          Format::ThirtyTwoBitTcMaskBGRA );
             xBitmap->clear(Color(0x80808080));
         }
         { // mpOutput & mpBitmap
             const basegfx::B2ISize aSize(9, 9);
             xOutput = createBitmapDevice( aSize, false,
-                                          Format::ThirtyTwoBitTcMaskBGRX );
+                                          Format::ThirtyTwoBitTcMaskBGRA );
             xOutput->clear(Color(0xffffffff));
         }
 

@@ -70,7 +70,7 @@ void BitmapTest::testConvert()
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
 #if defined LINUX
-        // 24 bit Bitmap on SVP backend uses 32bit BGRX format
+        // 24 bit Bitmap on SVP backend uses 32bit BGRA format
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(32), pReadAccess->GetBitCount());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(40), pReadAccess->GetScanlineSize());
 #else

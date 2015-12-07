@@ -198,25 +198,6 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
                 nBitCount = 24;
                 pBuf->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
                 break;
-            case Format::ThirtyTwoBitTcMaskBGRX:
-            {
-                nBitCount = 32;
-                pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
-#ifdef OSL_BIGENDIAN
-                ColorMaskElement aRedMask(0x0000ff00);
-                ColorMaskElement aGreenMask(0x00ff0000);
-                ColorMaskElement aBlueMask(0xff000000);
-#else
-                ColorMaskElement aRedMask(0x00ff0000);
-                ColorMaskElement aGreenMask(0x0000ff00);
-                ColorMaskElement aBlueMask(0x000000ff);
-#endif
-                aBlueMask.CalcMaskShift();
-                aRedMask.CalcMaskShift();
-                aGreenMask.CalcMaskShift();
-                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-                break;
-            }
             case Format::ThirtyTwoBitTcMaskBGRA:
             {
                 nBitCount = 32;
@@ -457,7 +438,6 @@ sal_uInt32 SvpSalBitmap::getBitCountFromScanlineFormat( basebmp::Format nFormat 
         case Format::TwentyFourBitTcMask:
             nBitCount = 24;
             break;
-        case Format::ThirtyTwoBitTcMaskBGRX:
         case Format::ThirtyTwoBitTcMaskBGRA:
         case Format::ThirtyTwoBitTcMaskARGB:
         case Format::ThirtyTwoBitTcMaskABGR:

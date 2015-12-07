@@ -334,20 +334,6 @@ typedef PixelFormatTraitsTemplate_RGBMask<
 BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGBA32_8888::getter_type,
                                   PixelFormatTraits_RGBA32_8888::setter_type);
 
-// Added for Cairo needs, perhaps Android should get an XRGB and replace
-// some uses of ARGB with that instead ?
-
-typedef PixelFormatTraitsTemplate_RGBMask<
-    sal_uInt32,
-    0x00000000,
-    0x00FF0000,
-    0x0000FF00,
-    0x000000FF,
-    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_BGRX32_8888;
-BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGRX32_8888::getter_type,
-                                  PixelFormatTraits_BGRX32_8888::setter_type);
-
-
 } // namespace basebmp
 
 #endif /* INCLUDED_BASEBMP_INC_RGBMASKPIXELFORMATS_HXX */

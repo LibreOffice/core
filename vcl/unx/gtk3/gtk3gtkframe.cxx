@@ -1511,7 +1511,7 @@ void GtkSalFrame::AllocateFrame()
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
         m_aFrame = basebmp::createBitmapDevice(aFrameSize, true, SVP_CAIRO_FORMAT);
-        assert(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, aFrameSize.getX()) ==
+        assert(cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, aFrameSize.getX()) ==
                m_aFrame->getScanlineStride());
         m_aFrame->setDamageTracker(
             basebmp::IBitmapDeviceDamageTrackerSharedPtr(new DamageTracker(*this)) );
