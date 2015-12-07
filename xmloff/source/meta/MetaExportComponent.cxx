@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MetaExportComponent.hxx"
 #include "facreg.hxx"
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -30,6 +30,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -42,6 +43,35 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+class XMLMetaExportComponent : public SvXMLExport
+{
+    css::uno::Reference< css::document::XDocumentProperties > mxDocProps;
+
+public:
+    XMLMetaExportComponent(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        OUString const & implementationName, SvXMLExportFlags nFlags
+        );
+
+    virtual ~XMLMetaExportComponent();
+
+protected:
+    // export the events off all autotexts
+    virtual sal_uInt32 exportDoc(
+        enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) override;
+
+    // accept XDocumentProperties in addition to XModel
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+
+    // override
+    virtual void _ExportMeta() override;
+
+    // methods without content:
+    virtual void _ExportAutoStyles() override;
+    virtual void _ExportMasterStyles() override;
+    virtual void _ExportContent() override;
+};
+
 XMLMetaExportComponent::XMLMetaExportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLExportFlags nFlags )
@@ -51,6 +81,15 @@ XMLMetaExportComponent::XMLMetaExportComponent(
 
 XMLMetaExportComponent::~XMLMetaExportComponent()
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+XMLMetaExportComponent_get_implementation(
+    css::uno::XComponentContext *context,
+    OUString const & implementationName, SvXMLExportFlags nFlags,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLMetaExportComponent(context, implementationName, nFlags));
 }
 
 void SAL_CALL XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
@@ -179,25 +218,6 @@ void XMLMetaExportComponent::_ExportMeta()
 void XMLMetaExportComponent::_ExportAutoStyles() {}
 void XMLMetaExportComponent::_ExportMasterStyles() {}
 void XMLMetaExportComponent::_ExportContent() {}
-
-
-uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames()
-    throw()
-{
-    return uno::Sequence< OUString > { "com.sun.star.document.XMLOasisMetaExporter" };
-}
-
-OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw()
-{
-    return OUString( "XMLMetaExportComponent" );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
-{
-    return static_cast<cppu::OWeakObject*>(new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportComponent_getImplementationName(), SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
-}
 
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
     throw()
