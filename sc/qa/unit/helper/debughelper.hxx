@@ -21,6 +21,7 @@
 #include <prewin.h>
 #include <postwin.h>
 #undef NOMINMAX
+#undef RGB
 #endif
 
 #include <iostream>

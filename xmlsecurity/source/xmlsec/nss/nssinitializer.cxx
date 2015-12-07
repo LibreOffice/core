@@ -28,11 +28,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <cppuhelper/supportsservice.hxx>
-
-// RGB is leaked macro from wingdi.h which conflicts in Office/Common.hxx.
-#undef RGB
 #include <officecfg/Office/Common.hxx>
-
 #include <sal/types.h>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
