@@ -86,9 +86,10 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 XMLMetaExportComponent_get_implementation(
     css::uno::XComponentContext *context,
+    OUString const & implementationName, SvXMLExportFlags nFlags,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new XMLMetaExportComponent(context, OUString::implementationName, SvXMLExportFlags::nFlags));
+    return cppu::acquire(new XMLMetaExportComponent(context, implementationName, nFlags));
 }
 
 void SAL_CALL XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
