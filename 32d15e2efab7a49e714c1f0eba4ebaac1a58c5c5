@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_8e7eaaac",
+        "filename": "sw/qa/python/check_flies.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-12-07T11:04:21Z",
+      "side": 1,
+      "message": "The tests are never run, see comments on https://gerrit.libreoffice.org/#/c/19960/ -- tests methods need to start with \"test...\" to be picked up by the default testrunner.",
+      "revId": "32d15e2efab7a49e714c1f0eba4ebaac1a58c5c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
