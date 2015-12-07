@@ -17,7 +17,6 @@
 #ifdef WNT
 #include <postwin.h>
 #endif
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>

@@ -8,7 +8,6 @@
 
 #include <CoreText/CoreText.h>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
 #import "View.h"

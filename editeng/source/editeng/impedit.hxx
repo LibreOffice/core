@@ -54,7 +54,6 @@
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ref.hxx>
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 #include <boost/noncopyable.hpp>
