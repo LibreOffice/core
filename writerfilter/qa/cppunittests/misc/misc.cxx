@@ -160,6 +160,26 @@ void WriterfilterMiscTest::testFieldParameters()
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), boost::get<2>(result)[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("\\A"), boost::get<2>(result)[2]);
     CPPUNIT_ASSERT_EQUAL(OUString(), boost::get<2>(result)[3]);
+
+    for (OUString prefix : {L"#", L"$", L"%", L"&", L"'", L"(", L")", L"*", L"+", L",",
+                            L"-", L".", L"/", L":", L";", L"<", L">", L"?", L"@", L"[",
+                            L"]", L"^", L"_", L"`", L"{", L"|", L"}", L"~"})
+    {
+        OUString sTstString(prefix + OUString("PAGE"));
+        result = lcl_SplitFieldCommand(sTstString + OUString(" "));
+        CPPUNIT_ASSERT_EQUAL(sTstString, boost::get<0>(result));
+    }
+    result = lcl_SplitFieldCommand("\\PAGE ");
+    CPPUNIT_ASSERT_EQUAL(OUString("PAGE"), boost::get<0>(result));
+    result = lcl_SplitFieldCommand("\\ PAGE ");
+    CPPUNIT_ASSERT_EQUAL(OUString("\\ "), boost::get<0>(result));
+    CPPUNIT_ASSERT_EQUAL(OUString("PAGE"), boost::get<1>(result)[0]);
+    result = lcl_SplitFieldCommand("\\\\PAGE ");
+    CPPUNIT_ASSERT_EQUAL(OUString("\\PAGE"), boost::get<0>(result));
+    result = lcl_SplitFieldCommand("\"PAGE\" ");
+    CPPUNIT_ASSERT_EQUAL(OUString("PAGE"), boost::get<0>(result));
+    result = lcl_SplitFieldCommand("\"PAGE ");
+    CPPUNIT_ASSERT_EQUAL(OUString("PAGE "), boost::get<0>(result));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WriterfilterMiscTest);
