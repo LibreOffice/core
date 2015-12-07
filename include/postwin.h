@@ -44,6 +44,7 @@
 #undef OUT
 #undef PASSTHROUGH
 #undef RELATIVE
+#undef RGB
 #undef Rectangle
 #undef STRICT
 #undef SetPort
