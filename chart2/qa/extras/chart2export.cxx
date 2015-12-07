@@ -227,24 +227,27 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
 
 void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
-    struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =
+    struct { char const * pPrefix; char const * pURI; } aNamespaces[] =
     {
-        { BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main") },
-        { BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml") },
-        { BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart") },
-        { BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main") },
-        { BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006") },
-        { BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape") },
-        { BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup") },
-        { BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing") },
-        { BAD_CAST("office"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0") },
-        { BAD_CAST("table"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0") },
-        { BAD_CAST("text"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0") },
-        { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") }
+        { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
+        { "v", "urn:schemas-microsoft-com:vml" },
+        { "c", "http://schemas.openxmlformats.org/drawingml/2006/chart" },
+        { "a", "http://schemas.openxmlformats.org/drawingml/2006/main" },
+        { "mc", "http://schemas.openxmlformats.org/markup-compatibility/2006" },
+        { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
+        { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
+        { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
+        { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
+        { "table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" },
+        { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
+        { "xlink", "http://www.w3c.org/1999/xlink" }
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
-        xmlXPathRegisterNs(pXmlXPathCtx, aNamespaces[i].pPrefix, aNamespaces[i].pURI );
+        xmlXPathRegisterNs(
+            pXmlXPathCtx,
+            reinterpret_cast<xmlChar const *>(aNamespaces[i].pPrefix),
+            reinterpret_cast<xmlChar const *>(aNamespaces[i].pURI));
     }
 }
 
