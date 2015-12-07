@@ -534,7 +534,33 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                 xProps->setPropertyValue( "MediaType", aAny );
             }
 
-            const bool bCompressed = aMimeType.isEmpty() || aMimeType == "image/tiff" || aMimeType == "image/svg+xml";
+            // picture formats that actuall _do_ benefit from zip
+            // storage compression
+            // .svm pics gets compressed via ZBITMAP old-style stream
+            // option below
+            static const char* aCompressiblePics[] =
+            {
+                "image/svg+xml",
+                "image/x-wmf",
+                "image/tiff",
+                "image/x-eps",
+                "image/bmp",
+                "image/x-pict"
+            };
+
+            bool bCompressed = aMimeType.isEmpty();
+            if( !bCompressed )
+            {
+                for( size_t i = 0; i < SAL_N_ELEMENTS(aCompressiblePics); ++i )
+                {
+                    if( aMimeType.equalsIgnoreAsciiCaseAscii(aCompressiblePics[i]) )
+                    {
+                        bCompressed = true;
+                        break;
+                    }
+                }
+            }
+
             aAny <<= bCompressed;
             xProps->setPropertyValue( "Compressed", aAny );
 
