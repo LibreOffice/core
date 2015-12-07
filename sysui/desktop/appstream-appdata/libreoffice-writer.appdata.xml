@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
 <id>libreoffice-writer.desktop</id>
+<metadata_license>CC0-1.0</metadata_license>
 <project_license>MPL-2.0</project_license>
 <name>LibreOffice Writer</name>
-<summary>word processor part of the LibreOffice productivity suite</summary>
+<summary>Word processor part of the LibreOffice productivity suite</summary>
 <description>
 <p>
 Writer is the word processor inside LibreOffice productivity suite.
@@ -30,7 +31,6 @@ worrying about compatibility.
 <screenshot type="default">http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-02-Table-of-Contents-Getting-Started-Guide-4-2.png</screenshot>
 <screenshot>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-03-Technical-Doc-fdo83524.png</screenshot>
 </screenshots>
-<project_group>The Document Foundation</project_group>
 <developer_name>The Document Foundation</developer_name>
 <updatecontact>libreoffice_at_lists.freedesktop.org</updatecontact>
 </component>
