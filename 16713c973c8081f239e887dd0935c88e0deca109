@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_296e98c9",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-07T15:13:59Z",
+      "side": 1,
+      "message": "No, calling GetDBAtCursor() should be fine. We already do that at other places. Actually that could be addressed later in another change so that for a specific cursor position the current DB at cursor is determined only once and remembered/invalidated at the view, but that might be a little tricky.",
+      "parentUuid": "dab17558_2e821e01",
+      "range": {
+        "startLine": 1472,
+        "startChar": 8,
+        "endLine": 1483,
+        "endChar": 28
+      },
+      "revId": "16713c973c8081f239e887dd0935c88e0deca109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_ee8e5626",
         "filename": "sc/source/core/data/documen3.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2015-12-06T12:29:51Z",
       "side": 1,
       "message": "This does the actual counting and hence relatively expensive. I think this can be cached and looks straighforward.",
+      "range": {
+        "startLine": 1486,
+        "startChar": 12,
+        "endLine": 1486,
+        "endChar": 73
+      },
+      "revId": "16713c973c8081f239e887dd0935c88e0deca109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4965dcdf",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-07T15:13:59Z",
+      "side": 1,
+      "message": "Bear in mind that the current DB can change with every cursor movement and there can be more than one view with independent cursors and the DB range and filtered count can change with every action that moves/inserts/deletes rows/columns/cells that touches the range or whenever a filter is modified. Caching might not be *that* straightforward ;-)",
+      "parentUuid": "dab17558_ee8e5626",
       "range": {
         "startLine": 1486,
         "startChar": 12,
