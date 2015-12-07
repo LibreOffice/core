@@ -1419,7 +1419,22 @@ public:
     WW8_FC fcAtrdExtra;
     sal_uInt32 lcbAtrdExtra;
 
-    // 0x422 - 0x4D4 == ignore
+    // 0x422 - 0x431 == ignore
+
+    /// 0x432 smart-tag bookmark starts offset.
+    WW8_FC fcPlcfBkfFactoid;
+    /// 0x436 smart-tag bookmark ends length.
+    sal_uInt32 lcbPlcfBkfFactoid;
+
+    // 0x43a - 0x441 == ignore
+
+    /// 0x442 smart-tag bookmark ends offset.
+    WW8_FC fcPlcfBklFactoid;
+    /// 0x446 smart-tag bookmark ends length.
+    sal_uInt32 lcbPlcfBklFactoid;
+
+    // 0x44a - 0x4d4 == ignore
+
     WW8_FC fcHplxsdr;    //bizarrely, word xp seems to require this set to shows dates from AtrdExtra
     sal_uInt32 lcbHplxsdr;
 
