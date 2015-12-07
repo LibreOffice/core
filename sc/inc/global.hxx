@@ -535,8 +535,7 @@ public:
                                                 SfxObjectShell* pShell );
     SC_DLLPUBLIC static OUString            GetDocTabName( const OUString& rFileName,
                                                 const OUString& rTabName );
-    SC_DLLPUBLIC static sal_uLong               GetStandardFormat( SvNumberFormatter&,
-                                    sal_uLong nFormat, short nType );
+    SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( SvNumberFormatter&, sal_uInt32 nFormat, short nType );
 
     SC_DLLPUBLIC static sal_uInt16 GetStandardRowHeight();
     SC_DLLPUBLIC static double              nScreenPPTX;

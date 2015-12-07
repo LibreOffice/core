@@ -1911,7 +1911,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             bool bSetFormat = true;
             const short nOldFormatType = nFormatType;
             nFormatType = p->GetRetFormatType();
-            sal_Int32 nFormatIndex = p->GetRetFormatIndex();
+            sal_uInt32 nFormatIndex = p->GetRetFormatIndex();
 
             if (nFormatType == css::util::NumberFormat::TEXT)
             {
@@ -2447,10 +2447,10 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
 
     // Cell Text uses the Cell format while the URL uses
     // the default format for the type.
-    sal_uLong nCellFormat = pDocument->GetNumberFormat( aPos );
+    const sal_uInt32 nCellFormat = pDocument->GetNumberFormat( aPos );
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
 
-    sal_uLong nURLFormat = ScGlobal::GetStandardFormat( *pFormatter, nCellFormat, css::util::NumberFormat::NUMBER);
+    const sal_uInt32 nURLFormat = ScGlobal::GetStandardFormat( *pFormatter, nCellFormat, css::util::NumberFormat::NUMBER);
 
     if ( IsValue() )
     {

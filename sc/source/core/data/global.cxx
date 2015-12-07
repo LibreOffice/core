@@ -170,8 +170,8 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
     return bInvalidate;
 }
 
-sal_uLong ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
-        sal_uLong nFormat, short nType )
+sal_uInt32 ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
+        sal_uInt32 nFormat, short nType )
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry( nFormat );
     if ( pFormat )
@@ -860,7 +860,7 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
         SvMemoryStream  aStream2;
         pObj1->Store( aStream1 );
         pObj2->Store( aStream2 );
-        sal_uLong nSize = aStream1.Tell();
+        const sal_uInt64 nSize = aStream1.Tell();
         if ( aStream2.Tell() == nSize )
             if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (sal_uInt16) nSize ) )
                 return true;
@@ -1044,7 +1044,7 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
         const SvNumberformat* pHardFormat = rFormatter.GetEntry(
             static_cast<const SfxUInt32Item*>(pHardItem)->GetValue() );
 
-        sal_uLong nParentFmt = 0; // Pool default
+        sal_uInt32 nParentFmt = 0; // Pool default
         const SfxItemSet* pParent = rSet.GetParent();
         if ( pParent )
             nParentFmt = static_cast<const SfxUInt32Item&>(pParent->Get( ATTR_VALUE_FORMAT )).GetValue();
