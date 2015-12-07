@@ -31,7 +31,6 @@
 #include <vcl/print.hxx>
 #include <vcl/vclptr.hxx>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 namespace com { namespace sun { namespace star { namespace accessibility {

@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 

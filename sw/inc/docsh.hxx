@@ -29,7 +29,6 @@
 
 #include <svl/lstner.hxx>
 #include <svtools/embedhlp.hxx>
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 #include <sfx2/StyleManager.hxx>

@@ -57,7 +57,7 @@ public:
     /// Gives access to the underlying C pointer.
     inline LibreOfficeKitDocument *get() { return mpDoc; }
 
-#ifdef LOK_USE_UNSTABLE_API
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Get document type.
      *
@@ -388,7 +388,7 @@ public:
         return mpDoc->pClass->renderFont(mpDoc, pFontName, pFontWidth, pFontHeight);
     }
 
-#endif // LOK_USE_UNSTABLE_API
+#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
 /// The lok::Office class represents one started LibreOfficeKit instance.
@@ -435,7 +435,7 @@ public:
         return mpThis->pClass->getError(mpThis);
     }
 
-#ifdef LOK_USE_UNSTABLE_API
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Returns details of filter types.
      *
@@ -454,7 +454,7 @@ public:
     {
         return mpThis->pClass->getFilterTypes(mpThis);
     }
-#endif // LOK_USE_UNSTABLE_API
+#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
 /// Factory method to create a lok::Office instance.

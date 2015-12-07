@@ -29,7 +29,6 @@
 #include <sfx2/printer.hxx>
 #include <vcl/settings.hxx>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <svx/svdview.hxx>

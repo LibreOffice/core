@@ -11,7 +11,6 @@
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>

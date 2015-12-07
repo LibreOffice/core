@@ -17,8 +17,6 @@
 
 #include <osl/detail/android-bootstrap.h>
 
-#define LOK_USE_UNSTABLE_API
-
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
 /* LibreOfficeKit */

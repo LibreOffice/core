@@ -12,7 +12,7 @@
 
 #include <stddef.h>
 
-#ifdef LOK_USE_UNSTABLE_API
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 // the unstable API needs C99's bool
 #include <stdbool.h>
 #endif
@@ -55,7 +55,7 @@ struct _LibreOfficeKitClass
     LibreOfficeKitDocument* (*documentLoadWithOptions) (LibreOfficeKit* pThis,
                                                         const char* pURL,
                                                         const char* pOptions);
-#ifdef LOK_USE_UNSTABLE_API
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     void (*registerCallback) (LibreOfficeKit* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);
@@ -83,7 +83,7 @@ struct _LibreOfficeKitDocumentClass
                    const char* pFormat,
                    const char* pFilterOptions);
 
-#ifdef LOK_USE_UNSTABLE_API
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /// @see lok::Document::getDocumentType().
     int (*getDocumentType) (LibreOfficeKitDocument* pThis);
 
@@ -208,7 +208,7 @@ struct _LibreOfficeKitDocumentClass
                        const char* pFontName,
                        int* pFontWidth,
                        int* pFontHeight);
-#endif // LOK_USE_UNSTABLE_API
+#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
 #ifdef __cplusplus

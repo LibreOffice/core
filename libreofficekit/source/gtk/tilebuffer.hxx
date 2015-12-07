@@ -14,7 +14,6 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <map>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>

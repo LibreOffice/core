@@ -39,7 +39,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/vclptr.hxx>
 #include <sfx2/tabdlg.hxx>
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <functional>
 
