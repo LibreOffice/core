@@ -42,7 +42,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
+namespace {
 class XMLMetaExportComponent : public SvXMLExport
 {
     css::uno::Reference< css::document::XDocumentProperties > mxDocProps;
@@ -72,14 +72,6 @@ protected:
     virtual void _ExportContent() override;
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-XMLMetaExportComponent_get_implementation(
-    css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new XMLMetaExportComponent(context));
-}
-
 XMLMetaExportComponent::XMLMetaExportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLExportFlags nFlags )
@@ -89,6 +81,14 @@ XMLMetaExportComponent::XMLMetaExportComponent(
 
 XMLMetaExportComponent::~XMLMetaExportComponent()
 {
+}
+}
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+XMLMetaExportComponent_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLMetaExportComponent(context, implementationName, nFlags));
 }
 
 void SAL_CALL XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
