@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_6e2546c1",
+        "filename": "sc/source/ui/view/cellsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-07T11:34:04Z",
+      "side": 1,
+      "message": "Hum.. this may have been a misunderstanding. What I meant was, to check with IsBlockEmpty() when this function is called from GetDBState() as we only need to know whether there is any data in the marked block to en-/disable the menu entry, and when called from ExecuteDB() to use ShrinkToUsedDataArea() as only then we need to know the actual data range within the mark. IsBlockEmpty() in that case doesn\u0027t need to be executed.\n\nSo this function should get a parameter if it should check for data with IsBlockEmpty(), or if it should determine the data range with ShrinkToUsedDataArea(). Not both.",
+      "revId": "76805e84455b7cec07ca6e40f0bd6d7c2b540039",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
