@@ -308,7 +308,7 @@ namespace
         sal_Int32 nStride = rBuffer->getScanlineStride();
         cairo_format_t nFormat;
         if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
-            nFormat = CAIRO_FORMAT_RGB24;
+            nFormat = CAIRO_FORMAT_ARGB32;
         else
             nFormat = CAIRO_FORMAT_A1;
         return (cairo_format_stride_for_width(nFormat, size.getX()) == nStride);
@@ -1305,7 +1305,7 @@ cairo_surface_t* SvpSalGraphics::createCairoSurface(const basebmp::BitmapDeviceS
     basebmp::RawMemorySharedArray data = rBuffer->getBuffer();
     cairo_format_t nFormat;
     if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
-        nFormat = CAIRO_FORMAT_RGB24;
+        nFormat = CAIRO_FORMAT_ARGB32;
     else
         nFormat = CAIRO_FORMAT_A1;
     cairo_surface_t *target =

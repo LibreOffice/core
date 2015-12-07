@@ -41,7 +41,7 @@
 #ifdef ANDROID
 #   define SVP_CAIRO_FORMAT basebmp::Format::ThirtyTwoBitTcMaskRGBA
 #else
-#   define SVP_CAIRO_FORMAT basebmp::Format::ThirtyTwoBitTcMaskBGRX
+#   define SVP_CAIRO_FORMAT basebmp::Format::ThirtyTwoBitTcMaskBGRA
 #endif
 
 class GlyphCache;

@@ -894,33 +894,17 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-#elif defined(ANDROID)
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
-
-    boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
-
-    boost::shared_array<sal_uInt8> aAlphaBuffer;
-
-    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
-                Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                aBuffer, aAlphaBuffer);
-
-    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
-                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
 
+#if !defined(ANDROID)
     // Set background to transparent by default.
     pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+#endif
 
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
 
-    // Allocate a separate buffer for the alpha device.
-    sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(basebmp::Format::ThirtyTwoBitTcMaskBGRX,
-                                                               nCanvasWidth);
-    std::vector<sal_uInt8> aAlpha(nCanvasHeight * nStride);
-
-    boost::shared_array<sal_uInt8> aAlphaBuffer(aAlpha.data(), NoDelete<sal_uInt8>());
+    boost::shared_array<sal_uInt8> aAlphaBuffer;
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
@@ -941,21 +925,6 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
         pDevice->DrawRect(aRect);
         pDevice->Pop();
     }
-
-    // Overwrite pBuffer's alpha channel with the separate alpha buffer.
-    for (int nRow = 0; nRow < nCanvasHeight; ++nRow)
-    {
-        for (int nCol = 0; nCol < nCanvasWidth; ++nCol)
-        {
-            const int nOffset = (nRow * nStride) + nCol * 4;
-            // VCL's transparent is 0, RGBA's transparent is 0xff.
-            pBuffer[nOffset + 3] = 0xff - aAlpha[nOffset];
-            double fAlpha = pBuffer[nOffset + 3]/255.0;
-            for (int i = 0; i < 3; ++i)
-                pBuffer[nOffset + i] *= fAlpha;
-        }
-    }
-
 #endif
 
 #else
