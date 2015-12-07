@@ -43,7 +43,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-namespace {
 class XMLMetaExportComponent : public SvXMLExport
 {
     css::uno::Reference< css::document::XDocumentProperties > mxDocProps;
@@ -89,8 +88,7 @@ XMLMetaExportComponent_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new XMLMetaExportComponent(context, implementationName, nFlags));
-}
+    return cppu::acquire(new XMLMetaExportComponent(context, OUString::implementationName, SvXMLExportFlags::nFlags));
 }
 
 void SAL_CALL XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
