@@ -1867,6 +1867,20 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
     pImpl->PreDraw();
 
     rGraphics.GetOpenGLContext()->UseNoProgram();
+
+#if 0
+    HDC hDC = rGraphics.GetOpenGLContext()->getOpenGLWindow().hDC;
+    HBITMAP hbitmap = (HBITMAP)GetCurrentObject(hDC, OBJ_BITMAP);
+
+    SAL_ DEBUG("hdc=" << hDC << " hbitmap=" << hbitmap);
+    if (hbitmap != NULL) {
+        BITMAP bm;
+        GetObjectW(hbitmap, sizeof(bm), &bm);
+        SAL_ DEBUG(" size=" << bm.bmWidth << "x" << bm.bmHeight <<
+                  " bpp=" << bm.bmBitsPixel);
+    }
+#endif
+
     glUseProgram( mrWinFontEntry.mnGLyphyProgram );
     CHECK_GL_ERROR();
     demo_atlas_set_uniforms( mrWinFontEntry.mpGLyphyAtlas );
@@ -1875,7 +1889,7 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
 
     nLoc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_debug" );
     CHECK_GL_ERROR();
-    glUniform1f( nLoc, 0 ); // FIXME: Try to get the "debug" thing displayed first
+    glUniform1f( nLoc, 0 );
     CHECK_GL_ERROR();
 
     nLoc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_contrast" );
@@ -1902,6 +1916,23 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
     CHECK_GL_ERROR();
     glUniform1f( nLoc, 0 );
     CHECK_GL_ERROR();
+
+    glEnable(GL_BLEND);
+    CHECK_GL_ERROR();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    CHECK_GL_ERROR();
+
+#if 0
+    // glyphy-demo sets sRGB on initially, and there it has a perhaps beneficial effect,
+    // but doesn't help very much here, if at all
+    GLboolean available = false;
+    if ((glewIsSupported("GL_ARB_framebuffer_sRGB") || glewIsSupported("GL_EXT_framebuffer_sRGB")) &&
+        (glGetBooleanv(GL_FRAMEBUFFER_SRGB_CAPABLE_EXT, &available), available))
+    {
+        glEnable(GL_FRAMEBUFFER_SRGB);
+        CHECK_GL_ERROR();
+    }
+#endif
 
     // FIXME: This code snippet is mostly copied from the one in
     // UniscribeLayout::DrawTextImpl. Should be factored out.
