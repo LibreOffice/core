@@ -72,6 +72,7 @@
 // Cleanup windows header macro pollution.
 #ifdef WNT
 #   include <postwin.h>
+#   undef RGB
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
