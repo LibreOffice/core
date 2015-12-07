@@ -263,7 +263,7 @@ static OUString getAbsoluteURL(const char* pURL)
 static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::PropertyValue>& rPropertyValues)
 {
     std::vector<beans::PropertyValue> aArguments;
-    if (pJSON)
+    if (pJSON && pJSON[0] != '\0')
     {
         boost::property_tree::ptree aTree;
         std::stringstream aStream(pJSON);
