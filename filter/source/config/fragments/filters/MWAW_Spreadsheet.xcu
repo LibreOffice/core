@@ -7,7 +7,7 @@
  *
 -->
 
-<node oor:name="Great_Works_Calc" oor:op="replace">
+<node oor:name="MWAW_Spreadsheet" oor:op="replace">
     <prop oor:name="Flags">
         <value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value>
     </prop>
@@ -15,13 +15,13 @@
         <value>com.sun.star.comp.Calc.MWAWCalcImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">GreatWorks Spreadsheet</value>
+        <value xml:lang="en-US">Legacy Mac Spreadsheet/Database</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>
     </prop>
     <prop oor:name="Type">
-        <value>calc_Great_Works</value>
+        <value>MWAW_Spreadsheet</value>
     </prop>
     <prop oor:name="DocumentService">
         <value>com.sun.star.sheet.SpreadsheetDocument</value>
