@@ -5708,6 +5708,20 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 rSt.ReadUInt32( lcbAtrdExtra );
             }
 
+            // Factoid bookmarks
+            if (cfclcb > 134)
+            {
+                rSt.Seek(0x432);
+                rSt.ReadInt32(fcPlcfBkfFactoid);
+                rSt.ReadUInt32(lcbPlcfBkfFactoid);
+            }
+            if (cfclcb > 136)
+            {
+                rSt.Seek(0x442);
+                rSt.ReadInt32(fcPlcfBklFactoid);
+                rSt.ReadUInt32(lcbPlcfBklFactoid);
+            }
+
             if( 0 != rSt.GetError() )
                 nFibError = ERR_SWG_READ_ERROR;
 
