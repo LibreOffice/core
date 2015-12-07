@@ -36,6 +36,7 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #include <comip.h>
+#undef RGB
 #pragma warning(pop)
 #endif
 
