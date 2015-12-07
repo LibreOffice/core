@@ -64,7 +64,7 @@ Menu RID_POPUP_ROWHEADER
         {
             Identifier = FID_INS_ROWS_BEFORE ;
             HelpId = CMD_FID_INS_ROWS_BEFORE ;
-            Text [ en-US ] = "Insert Rows A~bove" ;
+            Text [ en-US ] = "~Insert Rows Above" ;
         };
         MenuItem
         {
