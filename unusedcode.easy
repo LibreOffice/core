@@ -1,6 +1,5 @@
 BigInt::BigInt(unsigned int)
 BitmapFilterStackBlur::filter(BitmapEx&)
-FontCharMap::GetDefaultMap(bool)
 NotifyEvent::NotifyEvent()
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
