@@ -808,7 +808,7 @@ bool SwTextFrame::CalcPreps()
                 }
                 else
                 {
-                    SwTwips nTmp  = LONG_MAX - (Frame().Top()+10000);
+                    SwTwips nTmp  = TWIPS_MAX/2 - (Frame().Top()+10000);
                     SwTwips nDiff = nTmp - Frame().Height();
                     Frame().Height( nTmp );
                     Prt().Height( Prt().Height() + nDiff );
