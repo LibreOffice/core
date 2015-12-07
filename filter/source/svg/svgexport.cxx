@@ -1283,6 +1283,8 @@ void SVGFilter::implEmbedBulletGlyphs()
     implEmbedBulletGlyph( 8226, sPathData );
     sPathData = "M -4,459 L 1135,459 1135,606 -4,606 -4,459 Z";
     implEmbedBulletGlyph( 8211, sPathData );
+    sPathData = "M 173,740 C 173,903 231,1043 346,1159 462,1274 601,1332 765,1332 928,1332 1067,1274 1183,1159 1299,1043 1357,903 1357,740 1357,577 1299,437 1183,322 1067,206 928,148 765,148 601,148 462,206 346,322 231,437 173,577 173,740 Z";
+    implEmbedBulletGlyph( 61548, sPathData );
 }
 
 
