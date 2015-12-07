@@ -893,7 +893,7 @@ bool SVGFilter::implExportDocument()
             }
 
             // #i124608# export a given object selection, so no MasterPage export at all
-            if (!mbExportSelection)
+            if (!mbExportShapeSelection)
                 implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.size() - 1 );
             implExportDrawPages( mSelectedPages, 0, nLastPage );
 
