@@ -33,7 +33,7 @@ To use LOK Tiled Rendering you will need the following before the LOK includes:
 
 (This must be define before ANY LOK header, i.e. including the Init header.)
 
-Currently only bitmap-buffer rendering is supported, with a 32-bit RGBA
+Currently only bitmap-buffer rendering is supported, with a 32-bit BGRA
 colourspace (further alternatives could feasibly be implemented as needed).
 Scanlines are ordered top-down (whereas LibreOffice will internally default
 to bottom-up).

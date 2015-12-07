@@ -30,7 +30,6 @@
 #include <vcl/cursor.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/languageoptions.hxx>
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class EditEngine;
