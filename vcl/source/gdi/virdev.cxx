@@ -450,9 +450,6 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
     const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset,
     sal_uInt8 *const pBuffer)
 {
-    if (pAlphaBuffer)
-        meAlphaFormat = DeviceFormat::GRAYSCALE;
-
     if (pBuffer) {
         MapMode mm = GetMapMode();
         mm.SetOrigin( rNewOffset );
@@ -460,7 +457,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
         mm.SetScaleY( rScale );
         SetMapMode( mm );
     }
-    return ImplSetOutputSizePixel( rNewSize, true, pBuffer, pAlphaBuffer );
+    return ImplSetOutputSizePixel(rNewSize, true, pBuffer);
 }
 
 void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
