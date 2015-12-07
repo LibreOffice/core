@@ -2274,15 +2274,12 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
     assert(rIndex == rCommand.getLength());
     if (bQuoted)
     {
+        // MS Word allows this, so just emit a debug message
         SAL_INFO("writerfilter.dmapper",
                     "field argument with unterminated quote");
-        return OUString();
     }
-    else
-    {
-        rHaveToken = !token.isEmpty();
-        return token.makeStringAndClear();
-    }
+    rHaveToken = !token.isEmpty();
+    return token.makeStringAndClear();
 }
 
 boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
@@ -2292,10 +2289,13 @@ lcl_SplitFieldCommand(const OUString& rCommand)
     std::vector<OUString> arguments;
     std::vector<OUString> switches;
     sal_Int32 nStartIndex(0);
-    // tdf#54584: Field may be prepended by a backslash - skip it
+    // tdf#54584: Field may be prepended by a backslash
+    // This is not an escapement, but already escaped literal "\"
+    // MS Word allows this, so just skip it
     if ((rCommand.getLength() >= nStartIndex + 2) &&
-        (rCommand[nStartIndex] == '\\') &&
-        (rCommand[nStartIndex + 1] != '\\'))
+        (rCommand[nStartIndex] == L'\\') &&
+        (rCommand[nStartIndex + 1] != L'\\') &&
+        (rCommand[nStartIndex + 1] != L' '))
     {
         ++nStartIndex;
     }
