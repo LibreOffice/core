@@ -518,13 +518,12 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	calc_MS_Works_Document \
 	calc_WPS_Lotus_Document \
 	calc_WPS_QPro_Document \
-	calc_Beagle_Works \
 	calc_ClarisWorks \
 	calc_Claris_Resolve \
-	calc_Great_Works \
 	calc_Mac_Works \
-	calc_Mac_Wingz \
 	calc_AppleNumbers \
+	MWAW_Database \
+	MWAW_Spreadsheet \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
@@ -561,11 +560,8 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	MS_Works_Calc \
 	WPS_Lotus_Calc \
 	WPS_QPro_Calc \
-	Beagle_Works_Calc \
 	ClarisWorks_Calc \
 	Claris_Resolve_Calc \
-	Great_Works_Calc \
-	Mac_Wingz_Calc \
 	Mac_Works_Calc \
 	AppleNumbers \
 ))
