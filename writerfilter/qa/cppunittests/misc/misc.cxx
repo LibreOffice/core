@@ -165,8 +165,8 @@ void WriterfilterMiscTest::testFieldParameters()
                         "-", ".", "/", ":", ";", "<", ">", "?", "@", "[",
                         "]", "^", "_", "`", "{", "|", "}", "~"})
     {
-        OUString test(OUString::createFromAscii(prefix) + OUString("PAGE"));
-        result = lcl_SplitFieldCommand(test + OUString(" "));
+        OUString test(OUString::createFromAscii(prefix) + "PAGE");
+        result = lcl_SplitFieldCommand(test + " ");
         CPPUNIT_ASSERT_EQUAL(test, boost::get<0>(result));
     }
     result = lcl_SplitFieldCommand("\\PAGE ");
