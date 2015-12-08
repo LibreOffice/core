@@ -1251,6 +1251,8 @@ private:
 
     std::vector<OUString>* m_pAtnNames;
 
+    std::unique_ptr<WW8SmartTagData> m_pSmartTagData;
+
     sw::util::AuthorInfos m_aAuthorInfos;
     OUString m_sBaseURL;
 
@@ -1637,6 +1639,8 @@ private:
 // to be replaced by calls in the appropriate extended SvxMSDffManager
 
     const OUString* GetAnnotationAuthor(sal_uInt16 nIdx);
+
+    void GetSmartTagInfo(sal_uInt16 nIndex);
 
     // interfaces for the toggle attributes
     void SetToggleAttr(sal_uInt8 nAttrId, bool bOn);
