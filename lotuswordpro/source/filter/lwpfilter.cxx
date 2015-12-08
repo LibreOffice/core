@@ -148,8 +148,8 @@ using namespace OpenStormBento;
 {
     SvStream * pDecompressed = NULL;
 
-    sal_uInt32 nTag;
     pStream->Seek(0x10);
+    sal_uInt32 nTag(0);
     pStream->ReadUInt32( nTag );
     if (nTag != 0x3750574c) // "LWP7"
     {
