@@ -28,6 +28,10 @@ $(eval $(call gb_Library_add_libs,libreofficekitgtk,\
     $(GTK3_LIBS) \
 ))
 
+$(eval $(call gb_Library_add_defs,libreofficekitgtk,\
+	-DLOK_PATH="\"$(LIBDIR)/libreoffice/$(LIBO_LIB_FOLDER)\"" \
+))
+
 ifeq ($(OS),$(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,libreofficekitgtk,\
     $(DLOPEN_LIBS) -lm \
