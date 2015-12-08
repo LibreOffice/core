@@ -774,7 +774,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_met_Export \
 	draw_png_Export \
 	draw_svg_Export \
-	draw_svm_Export \
 	draw_tif_Export \
 	draw_wmf_Export \
 ))
@@ -815,7 +814,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_met_Export \
 	impress_png_Export \
 	impress_svg_Export \
-	impress_svm_Export \
 	impress_tif_Export \
 	impress_wmf_Export \
 ))
