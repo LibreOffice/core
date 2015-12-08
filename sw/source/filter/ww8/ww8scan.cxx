@@ -5860,6 +5860,12 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 rSt.ReadInt32(fcPlcfBklFactoid);
                 rSt.ReadUInt32(lcbPlcfBklFactoid);
             }
+            if (cfclcb > 137)
+            {
+                rSt.Seek(0x44a);
+                rSt.ReadInt32(fcFactoidData);
+                rSt.ReadUInt32(lcbFactoidData);
+            }
 
             if( 0 != rSt.GetError() )
                 nFibError = ERR_SWG_READ_ERROR;
