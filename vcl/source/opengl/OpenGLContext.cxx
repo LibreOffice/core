@@ -20,7 +20,8 @@
 
 #if defined(MACOSX)
 #include <premac.h>
-#include "OpenGLWrapper.hxx"
+#include <AppKit/NSOpenGLView.h>
+#include <AppKit/NSOpenGL.h>
 #include <postmac.h>
 #endif
 
@@ -986,7 +987,7 @@ bool OpenGLContext::ImplInit()
 
     VCL_GL_INFO("OpenGLContext::ImplInit----start");
     NSOpenGLView* pView = getOpenGLView();
-    OpenGLWrapper::makeCurrent(pView);
+    [[pView openGLContext] makeCurrentContext];
 
     bool bRet = InitGLEW();
     InitGLEWDebugging();
@@ -1252,7 +1253,7 @@ void OpenGLContext::reset()
         m_aGLWin.hRC = 0;
     }
 #elif defined( MACOSX )
-    OpenGLWrapper::resetCurrent();
+    [NSOpenGLContext clearCurrentContext];
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
@@ -1408,7 +1409,7 @@ void OpenGLContext::makeCurrent()
     }
 #elif defined( MACOSX )
     NSOpenGLView* pView = getOpenGLView();
-    OpenGLWrapper::makeCurrent(pView);
+    [[pView openGLContext] makeCurrentContext];
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
@@ -1462,7 +1463,7 @@ void OpenGLContext::resetCurrent()
     wglMakeCurrent(NULL, NULL);
 #elif defined( MACOSX )
     (void) this; // loplugin:staticmethods
-    OpenGLWrapper::resetCurrent();
+    [NSOpenGLContext clearCurrentContext];
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
@@ -1479,7 +1480,7 @@ void OpenGLContext::swapBuffers()
     SwapBuffers(m_aGLWin.hDC);
 #elif defined( MACOSX )
     NSOpenGLView* pView = getOpenGLView();
-    OpenGLWrapper::swapBuffers(pView);
+    [[pView openGLContext] flushBuffer];
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
