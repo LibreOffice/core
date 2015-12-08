@@ -351,15 +351,7 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpSc
         nScaleFlag == BmpScaleFlag::BestQuality )
     {
         makeSomeOpenGLContextCurrent();
-        if( mpContext == nullptr )
-        {
-            VCL_GL_INFO( "Add ScaleOp to pending operations" );
-            maPendingOps.push_back( new ScaleOp( this, rScaleX, rScaleY, nScaleFlag ) );
-        }
-        else
-        {
-            ImplScale( rScaleX, rScaleY, nScaleFlag );
-        }
+        ImplScale( rScaleX, rScaleY, nScaleFlag );
         return true;
     }
 
