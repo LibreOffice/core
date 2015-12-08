@@ -1250,9 +1250,6 @@ private:
     SwMSDffManager* m_pMSDffManager;
 
     std::vector<OUString>* m_pAtnNames;
-    std::shared_ptr< std::map<sal_uInt32, int> > m_pAtnIndexes;
-    std::shared_ptr<WW8PLCFspecial> m_pAtnStarts;
-    std::shared_ptr<WW8PLCFspecial> m_pAtnEnds;
 
     sw::util::AuthorInfos m_aAuthorInfos;
     OUString m_sBaseURL;
