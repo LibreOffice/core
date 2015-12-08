@@ -1450,9 +1450,6 @@ public:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
 
 private:
-
-    static void InitSettings(ImplSVData* pSVData);
-
     DECL_STATIC_LINK_TYPED( Application, PostEventHandler, void*, void );
 };
 

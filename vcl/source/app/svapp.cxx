@@ -80,6 +80,10 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace {
+void InitSettings(ImplSVData* pSVData);
+}
+
 // keycodes handled internally by VCL
 class ImplReservedKey
 {
@@ -769,7 +773,9 @@ const AllSettings& Application::GetSettings()
     return *(pSVData->maAppData.mpSettings);
 }
 
-void Application::InitSettings(ImplSVData* pSVData)
+namespace {
+
+void InitSettings(ImplSVData* pSVData)
 {
     assert(!pSVData->maAppData.mpSettings && "initialization should not happen twice!");
 
@@ -779,6 +785,8 @@ void Application::InitSettings(ImplSVData* pSVData)
         pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
         pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
     }
+}
+
 }
 
 void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )

@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 
 class Scheduler;
-struct ImplSVData;
 struct ImplSchedulerData;
 
 enum class SchedulerPriority {
@@ -39,9 +38,6 @@ enum class SchedulerPriority {
 
 class VCL_DLLPUBLIC Scheduler
 {
-private:
-    static void InitSystemTimer(ImplSVData* pSVData);
-
 protected:
     ImplSchedulerData*  mpSchedulerData;    /// Pointer to element in scheduler list
     const sal_Char     *mpDebugName;        /// Useful for debugging
@@ -50,7 +46,6 @@ protected:
 
     // These should be constexpr static, when supported.
     static const sal_uInt64 ImmediateTimeoutMs = 1;
-    static const sal_uInt64 MaximumTimeoutMs = 1000 * 60; // 1 minute
 
     static void ImplStartTimer(sal_uInt64 nMS, bool bForce = false);
 

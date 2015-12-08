@@ -24,6 +24,11 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 
+namespace {
+const sal_uInt64 MaximumTimeoutMs = 1000 * 60; // 1 minute
+void InitSystemTimer(ImplSVData* pSVData);
+}
+
 void ImplSchedulerData::Invoke()
 {
     if (mbDelete || mbInScheduler )
@@ -135,19 +140,23 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce)
     }
 }
 
+namespace {
+
 /**
 * Initialize the platform specific timer on which all the
 * platform independent timers are built
 */
-void Scheduler::InitSystemTimer(ImplSVData* pSVData)
+void InitSystemTimer(ImplSVData* pSVData)
 {
     assert(pSVData != nullptr);
     if (!pSVData->mpSalTimer)
     {
         pSVData->mnTimerPeriod = MaximumTimeoutMs;
         pSVData->mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
-        pSVData->mpSalTimer->SetCallback(CallbackTaskScheduling);
+        pSVData->mpSalTimer->SetCallback(Scheduler::CallbackTaskScheduling);
     }
+}
+
 }
 
 void Scheduler::CallbackTaskScheduling(bool ignore)
