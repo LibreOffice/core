@@ -167,6 +167,7 @@ void ControllerItem::RequestUpdate()
     SfxPoolItem* pState = nullptr;
     const SfxItemState eState (GetBindings().QueryState(GetId(), pState));
     mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState, IsEnabled(eState));
+    delete pState;
 }
 
 void ControllerItem::NotifyFrameContextChange()
