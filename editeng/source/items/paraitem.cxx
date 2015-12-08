@@ -1273,6 +1273,13 @@ bool SvxPageModelItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId 
     return bRet;
 }
 
+bool SvxPageModelItem::operator==( const SfxPoolItem& rAttr ) const
+{
+    DBG_ASSERT( SfxStringItem::operator==(rAttr), "unequal types" );
+
+    return  bAuto == static_cast<const SvxPageModelItem&>( rAttr ).bAuto;
+}
+
 bool SvxPageModelItem::GetPresentation
 (
     SfxItemPresentation ePres,
