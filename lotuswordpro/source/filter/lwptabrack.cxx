@@ -61,6 +61,8 @@
 #include "lwpobjstrm.hxx"
 #include "lwpslvlist.hxx"
 
+#include <stdexcept>
+
 LwpTab::LwpTab()
 {
     m_nX = 0;
