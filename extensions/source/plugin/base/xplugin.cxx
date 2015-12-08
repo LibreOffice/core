@@ -548,9 +548,14 @@ void XPlugin_Impl::loadPlugin()
                 return;
 
 #elif defined WNT
-            PluginComm* pComm = new PluginComm_Impl( m_aDescription.Mimetype,
-                                                     m_aDescription.PluginName,
-                                                     (HWND)pEnvData->hWnd );
+            PluginComm* pComm;
+            try {
+                pComm = new PluginComm_Impl(
+                    m_aDescription.Mimetype, m_aDescription.PluginName,
+                    (HWND)pEnvData->hWnd);
+            } catch (PluginComm_Impl::CannotInitializeException &) {
+                return;
+            }
 #endif
 
             setPluginComm( pComm );

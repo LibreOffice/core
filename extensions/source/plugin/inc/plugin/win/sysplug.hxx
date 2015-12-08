@@ -86,6 +86,8 @@ class PluginComm_Impl :
 
     virtual long        doIt();
 public:
+    struct CannotInitializeException {};
+
                         PluginComm_Impl( const OUString& rMIME, const OUString& rName, HWND hWnd );
     virtual             ~PluginComm_Impl();
 
@@ -114,6 +116,7 @@ public:
     virtual NPError     NPP_SetValue( NPP instance, NPNVariable variable, void *ret_alue );
 
 private:
+    void                shutdown();
     BOOL                retrieveFunction( TCHAR const * pName, void** ppFunc ) const;
 
 private:
