@@ -212,12 +212,11 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
             case SID_STYLE_UPDATE_BY_EXAMPLE:
             {
-                SfxPoolItem* pItem = nullptr;
+                std::unique_ptr<SfxPoolItem> pItem;
                 pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
-                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
+                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
 
                 bool bPage = pFamilyItem && SFX_STYLE_FAMILY_PAGE == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
-                delete pItem;
 
                 if ( bProtected || bPage )
                     rSet.DisableItem( nSlotId );
@@ -229,11 +228,10 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             case SID_STYLE_HIDE:
             case SID_STYLE_SHOW:
             {
-                SfxPoolItem* pItem = nullptr;
+                std::unique_ptr<SfxPoolItem> pItem;
                 pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
-                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
+                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
                 bool bPage = pFamilyItem && SFX_STYLE_FAMILY_PAGE == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
-                delete pItem;
 
                 if ( bProtected && !bPage )
                     rSet.DisableItem( nSlotId );

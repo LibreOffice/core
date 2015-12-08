@@ -20,6 +20,9 @@
 #define INCLUDED_SFX2_BINDINGS_HXX
 
 #include <sal/config.h>
+
+#include <memory>
+
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
@@ -163,7 +166,7 @@ public:
     /**
      * @param rpState the caller has to delete the pointer
      */
-    SfxItemState     QueryState( sal_uInt16 nSID, SfxPoolItem* &rpState );
+    SfxItemState     QueryState( sal_uInt16 nSID, std::unique_ptr<SfxPoolItem> &rpState );
 
     const SfxPoolItem*  ExecuteSynchron( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr,

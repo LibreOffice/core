@@ -1879,7 +1879,7 @@ void SfxBindings::StartUpdate_Impl( bool bComplete )
 
 
 
-SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
+SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolItem> &rpState )
 {
     css::uno::Reference< css::frame::XDispatch >  xDisp;
     SfxStateCache *pCache = GetStateCache( nSlot );
@@ -1923,7 +1923,6 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                 }
 
                 SfxItemState eState = SfxItemState::SET;
-                SfxPoolItem *pItem=nullptr;
                 BindDispatch_Impl *pBind = new BindDispatch_Impl( xDisp, aURL, pCache, pSlot );
                 pBind->acquire();
                 xDisp->addStatusListener( pBind, aURL );
@@ -1940,33 +1939,32 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                     {
                         bool bTemp = false;
                         aAny >>= bTemp ;
-                        pItem = new SfxBoolItem( nSlot, bTemp );
+                        rpState.reset(new SfxBoolItem( nSlot, bTemp ));
                     }
                     else if ( pType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
                     {
                         sal_uInt16 nTemp = 0;
                         aAny >>= nTemp ;
-                        pItem = new SfxUInt16Item( nSlot, nTemp );
+                        rpState.reset(new SfxUInt16Item( nSlot, nTemp ));
                     }
                     else if ( pType == cppu::UnoType<sal_uInt32>::get() )
                     {
                         sal_uInt32 nTemp = 0;
                         aAny >>= nTemp ;
-                        pItem = new SfxUInt32Item( nSlot, nTemp );
+                        rpState.reset(new SfxUInt32Item( nSlot, nTemp ));
                     }
                     else if ( pType == cppu::UnoType<OUString>::get() )
                     {
                         OUString sTemp ;
                         aAny >>= sTemp ;
-                        pItem = new SfxStringItem( nSlot, sTemp );
+                        rpState.reset(new SfxStringItem( nSlot, sTemp ));
                     }
                     else
-                        pItem = new SfxVoidItem( nSlot );
+                        rpState.reset(new SfxVoidItem( nSlot ));
                 }
 
                 xDisp->removeStatusListener( pBind, aURL );
                 pBind->Release();
-                rpState = pItem;
                 if ( bDeleteCache )
                     DELETEZ( pCache );
                 return eState;
@@ -1983,11 +1981,11 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
     {
         DBG_ASSERT( pItem, "SfxItemState::SET but no item!" );
         if ( pItem )
-            rpState = pItem->Clone();
+            rpState.reset(pItem->Clone());
     }
     else if ( eState == SfxItemState::DEFAULT && pItem )
     {
-        rpState = pItem->Clone();
+        rpState.reset(pItem->Clone());
     }
 
     return eState;

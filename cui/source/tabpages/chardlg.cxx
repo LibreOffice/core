@@ -1468,7 +1468,7 @@ void SvxCharEffectsPage::Initialize()
     m_pFontColorLB->SetUpdateMode( false );
 
     {
-        SfxPoolItem* pDummy = nullptr;
+        std::unique_ptr<SfxPoolItem> pDummy;
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
         if ( !pFrame ||
              SfxItemState::DEFAULT > pFrame->GetBindings().QueryState( SID_ATTR_AUTO_COLOR_INVALID, pDummy ) )
@@ -1477,7 +1477,6 @@ void SvxCharEffectsPage::Initialize()
             m_pOverlineColorLB->InsertAutomaticEntryColor( Color( COL_AUTO ) );
             m_pFontColorLB->InsertAutomaticEntryColor( Color( COL_AUTO ) );
         }
-        delete pDummy;
     }
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {

@@ -368,12 +368,11 @@ bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
 bool ScViewUtil::IsFullScreen( SfxViewShell& rViewShell )
 {
     SfxBindings&    rBindings       = rViewShell.GetViewFrame()->GetBindings();
-    SfxPoolItem*    pItem           = nullptr;
+    std::unique_ptr<SfxPoolItem> pItem;
     bool            bIsFullScreen   = false;
 
     if (rBindings.QueryState( SID_WIN_FULLSCREEN, pItem ) >= SfxItemState::DEFAULT)
-        bIsFullScreen = static_cast< SfxBoolItem* >( pItem )->GetValue();
-    delete pItem;
+        bIsFullScreen = static_cast< SfxBoolItem* >( pItem.get() )->GetValue();
 
     return bIsFullScreen;
 }
