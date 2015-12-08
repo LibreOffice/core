@@ -97,52 +97,22 @@ rtl::Reference<OpenGLContext> OpenGLSalGraphicsImpl::GetOpenGLContext()
     return mpContext;
 }
 
-rtl::Reference<OpenGLContext> OpenGLSalGraphicsImpl::GetDefaultContext()
-{
-    return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
-}
-
 bool OpenGLSalGraphicsImpl::AcquireContext( bool bForceCreate )
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    mpContext = OpenGLContext::getVCLContext( false );
 
-    // We always prefer to bind our VirtualDevice / offscreen graphics
-    // to the current OpenGLContext - to avoid switching contexts.
-    if (mpContext.is() && OpenGLContext::hasCurrent() && !mpContext->isCurrent())
+    if( !mpContext.is() && mpWindowContext.is() )
     {
-        mpContext.clear();
-    }
-
-    if( mpContext.is() )
-    {
-        // Check whether the context was reset underneath us.
-        if( mpContext->isInitialized() )
-            return true;
-        mpContext.clear();
-    }
-
-    // We don't care what context we have - but not switching context
-    // is rather useful from a performance perspective.
-    OpenGLContext *pContext = pSVData->maGDIData.mpLastContext;
-    while( pContext )
-    {
-        // check if this context can be used by this SalGraphicsImpl instance
-        if( UseContext( pContext ) )
-            break;
-        pContext = pContext->mpPrevContext;
-    }
-
-    if( mpContext.is() )
-        mpContext = pContext;
-    else if( mpWindowContext.is() )
         mpContext = mpWindowContext;
+    }
     else if( bForceCreate && !IsOffscreen() )
     {
         mpWindowContext = CreateWinContext();
         mpContext = mpWindowContext;
     }
+
     if( !mpContext.is() )
-        mpContext = GetDefaultContext();
+        mpContext = OpenGLContext::getVCLContext( true );
 
     return mpContext.is();
 }
@@ -2060,7 +2030,7 @@ void OpenGLSalGraphicsImpl::doFlush()
     VCL_GL_INFO( "Texture height " << maOffscreenTex.GetHeight() << " vs. window height " << GetHeight() );
 
     OpenGLProgram *pProgram =
-        mpWindowContext->UseProgram( "textureVertexShader", "textureFragmentShader", "" );
+        mpWindowContext->UseProgram( "textureVertexShader", "textureFragmentShader", "// flush shader\n" ); // flush helps profiling
     if( !pProgram )
         VCL_GL_INFO( "Can't compile simple copying shader !" );
     else

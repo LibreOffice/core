@@ -40,6 +40,13 @@ public:
     static void hardDisable();
 };
 
+/// Create this to not only enter the zone, but set VCL context.
+class OpenGLVCLContextZone {
+    OpenGLZone aZone;
+public:
+    OpenGLVCLContextZone();
+};
+
 #endif // INCLUDED_VCL_INC_OPENGL_ZONE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
