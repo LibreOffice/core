@@ -943,6 +943,11 @@ void OpenGLZone::hardDisable()
     }
 }
 
+OpenGLVCLContextZone::OpenGLVCLContextZone()
+{
+    OpenGLContext::makeVCLCurrent();
+}
+
 bool OpenGLHelper::isVCLOpenGLEnabled()
 {
     /**

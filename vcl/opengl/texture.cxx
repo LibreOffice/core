@@ -28,6 +28,7 @@
 
 #include "opengl/framebuffer.hxx"
 #include "opengl/texture.hxx"
+#include "opengl/zone.hxx"
 
 // texture with allocated size
 ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) :
@@ -38,6 +39,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     mnOptStencil( 0 ),
     mnFreeSlots(-1)
 {
+    OpenGLVCLContextZone aContextZone;
+
     glGenTextures( 1, &mnTexture );
     CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, mnTexture );
@@ -71,6 +74,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     mnOptStencil( 0 ),
     mnFreeSlots(-1)
 {
+    OpenGLVCLContextZone aContextZone;
+
     // FIXME We need the window height here
     // nY = GetHeight() - nHeight - nY;
 
@@ -104,6 +109,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     mnOptStencil( 0 ),
     mnFreeSlots(-1)
 {
+    OpenGLVCLContextZone aContextZone;
+
     if( !mnTexture )
     {
         glGenTextures( 1, &mnTexture );
@@ -149,13 +156,18 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
     VCL_GL_INFO( "~OpenGLTexture " << mnTexture );
     if( mnTexture != 0 )
     {
+        OpenGLVCLContextZone aContextZone;
+
         // FIXME: this is really not optimal performance-wise.
 
         // Check we have been correctly un-bound from all framebuffers.
         ImplSVData* pSVData = ImplGetSVData();
         rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
         if( pContext.is() )
+        {
+            pContext->makeCurrent();
             pContext->UnbindTextureFromFramebuffers( mnTexture );
+        }
 
         if( mnOptStencil != 0 )
             glDeleteRenderbuffers( 1, &mnOptStencil );
@@ -427,6 +439,8 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
         SAL_WARN( "vcl.opengl", "Can't read invalid texture" );
         return;
     }
+
+    OpenGLVCLContextZone aContextZone;
 
     VCL_GL_INFO( "Reading texture " << Id() << " " << GetWidth() << "x" << GetHeight() );
 

@@ -102,8 +102,7 @@ static std::vector<std::unique_ptr<FixedTextureAtlasManager>> sTextureAtlases;
 }
 
 OpenGLSalBitmap::OpenGLSalBitmap()
-: mpContext(nullptr)
-, mbDirtyTexture(true)
+: mbDirtyTexture(true)
 , mnBits(0)
 , mnBytesPerRow(0)
 , mnWidth(0)
@@ -122,7 +121,7 @@ OpenGLSalBitmap::~OpenGLSalBitmap()
 bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
 {
     static const BitmapPalette aEmptyPalette;
-    OpenGLZone aZone;
+    OpenGLVCLContextZone aContextZone;
 
     Destroy();
     VCL_GL_INFO( "OpenGLSalBitmap::Create from FBO: ["
@@ -149,7 +148,7 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
 
 bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
-    OpenGLZone aZone;
+    OpenGLVCLContextZone aContextZone;
 
     Destroy();
     VCL_GL_INFO( "OpenGLSalBitmap::Create with size: " << rSize );
@@ -418,7 +417,6 @@ Size OpenGLSalBitmap::GetSize() const
 
 void OpenGLSalBitmap::ExecuteOperations()
 {
-    makeCurrent();
     while( !maPendingOps.empty() )
     {
         OpenGLSalBitmapOp* pOp = maPendingOps.front();
@@ -485,7 +483,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
         }
     }
 
-    makeCurrent();
+    OpenGLVCLContextZone aContextZone;
 
     lclInstantiateTexture(maTexture, mnBufWidth, mnBufHeight, nFormat, nType, pData);
 
@@ -513,11 +511,12 @@ bool OpenGLSalBitmap::ReadTexture()
     if( pData == nullptr )
         return false;
 
+    OpenGLVCLContextZone aContextZone;
+
     if (mnBits == 8 || mnBits == 16 || mnBits == 24 || mnBits == 32)
     {
         determineTextureFormat(mnBits, nFormat, nType);
 
-        makeCurrent();
         maTexture.Read(nFormat, nType, pData);
         mnBufWidth = mnWidth;
         mnBufHeight = mnHeight;
@@ -526,7 +525,7 @@ bool OpenGLSalBitmap::ReadTexture()
     else if (mnBits == 1)
     {   // convert buffers from 24-bit RGB to 1-bit Mask
         std::vector<sal_uInt8> aBuffer(mnWidth * mnHeight * 3);
-        makeCurrent();
+
         sal_uInt8* pBuffer = aBuffer.data();
         determineTextureFormat(24, nFormat, nType);
         maTexture.Read(nFormat, nType, pBuffer);
@@ -582,6 +581,9 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
 {
     OUString FragShader("areaHashCRC64TFragmentShader");
 
+    OpenGLZone aZone;
+    rtl::Reference< OpenGLContext > xContext = OpenGLContext::getVCLContext();
+
     static const OpenGLTexture aCRCTableTexture(512, 1, GL_RGBA, GL_UNSIGNED_BYTE,
             vcl_get_crc64_table());
 
@@ -590,7 +592,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     int nWidth = rInputTexture.GetWidth();
     int nHeight = rInputTexture.GetHeight();
 
-    OpenGLProgram* pProgram = mpContext->UseProgram("textureVertexShader", FragShader);
+    OpenGLProgram* pProgram = xContext->UseProgram("textureVertexShader", FragShader);
     if (pProgram == nullptr)
         return false;
 
@@ -598,7 +600,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     int nNewHeight = ceil( nHeight / 4.0 );
 
     OpenGLTexture aFirstPassTexture = OpenGLTexture(nNewWidth, nNewHeight);
-    OpenGLFramebuffer* pFramebuffer = mpContext->AcquireFramebuffer(aFirstPassTexture);
+    OpenGLFramebuffer* pFramebuffer = xContext->AcquireFramebuffer(aFirstPassTexture);
 
     pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
     pProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
@@ -618,7 +620,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     nWidth = aFirstPassTexture.GetWidth();
     nHeight = aFirstPassTexture.GetHeight();
 
-    pProgram = mpContext->UseProgram("textureVertexShader", FragShader);
+    pProgram = xContext->UseProgram("textureVertexShader", FragShader);
     if (pProgram == nullptr)
         return false;
 
@@ -626,7 +628,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     nNewHeight = ceil( nHeight / 4.0 );
 
     OpenGLTexture aSecondPassTexture = OpenGLTexture(nNewWidth, nNewHeight);
-    pFramebuffer = mpContext->AcquireFramebuffer(aSecondPassTexture);
+    pFramebuffer = xContext->AcquireFramebuffer(aSecondPassTexture);
 
     pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
     pProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
@@ -658,7 +660,7 @@ void OpenGLSalBitmap::updateChecksum() const
 
     OpenGLSalBitmap* pThis = const_cast<OpenGLSalBitmap*>(this);
 
-    if (!mpContext.is())
+    if (!mbDirtyTexture)
     {
         pThis->CreateTexture();
     }
@@ -682,25 +684,9 @@ rtl::Reference<OpenGLContext> OpenGLSalBitmap::GetBitmapContext()
     return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
 }
 
-void OpenGLSalBitmap::makeCurrent()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // TODO: make sure we can really use the last used context
-    OpenGLContext *pContext = pSVData->maGDIData.mpLastContext;
-    while( pContext && !pContext->isInitialized() )
-        pContext = pContext->mpPrevContext;
-    if( pContext )
-        mpContext = pContext;
-    else
-        mpContext = GetBitmapContext();
-    assert(mpContext.is() && "Couldn't get an OpenGL context");
-    mpContext->makeCurrent();
-}
-
 BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 {
-    OpenGLZone aZone;
+    OpenGLVCLContextZone aContextZone;
 
     if( nMode != BITMAP_INFO_ACCESS )
     {
@@ -811,7 +797,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 
 void OpenGLSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
-    OpenGLZone aZone;
+    OpenGLVCLContextZone aContextZone;
 
     if( nMode == BITMAP_WRITE_ACCESS )
     {
@@ -866,23 +852,22 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
 
 bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
-
     VCL_GL_INFO("::Replace");
 
     OpenGLZone aZone;
+    rtl::Reference< OpenGLContext > xContext = OpenGLContext::getVCLContext();
 
     OpenGLFramebuffer* pFramebuffer;
     OpenGLProgram* pProgram;
 
     GetTexture();
-    makeCurrent();
-    pProgram = mpContext->UseProgram( "textureVertexShader",
-                                      "replaceColorFragmentShader" );
+    pProgram = xContext->UseProgram( "textureVertexShader",
+                                     "replaceColorFragmentShader" );
     if( !pProgram )
         return false;
 
     OpenGLTexture aNewTex = OpenGLTexture( mnWidth, mnHeight );
-    pFramebuffer = mpContext->AcquireFramebuffer( aNewTex );
+    pFramebuffer = xContext->AcquireFramebuffer( aNewTex );
 
     pProgram->SetTexture( "sampler", maTexture );
     pProgram->SetColor( "search_color", rSearchColor );
