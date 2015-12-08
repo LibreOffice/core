@@ -56,6 +56,12 @@ public:
     SwPtrMsgPoolItem( sal_uInt16 nId, void * pObj )
         : SwMsgPoolItem( nId ), pObject( pObj )
     {}
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return pObject == static_cast<const SwPtrMsgPoolItem&>( rAttr ).pObject;
+    }
 };
 
 /*
@@ -67,6 +73,12 @@ class SwFormatChg: public SwMsgPoolItem
 public:
     SwFormat *pChangedFormat;
     SwFormatChg( SwFormat *pFormat );
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return pChangedFormat == static_cast<const SwFormatChg&>( rAttr ).pChangedFormat;
+    }
 };
 
 class SwInsText: public SwMsgPoolItem
@@ -76,6 +88,13 @@ public:
     sal_Int32 nLen;
 
     SwInsText( sal_Int32 nP, sal_Int32 nL );
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return nPos == static_cast<const SwInsText&>( rAttr ).nPos
+               && nLen == static_cast<const SwInsText&>( rAttr ).nLen;
+    }
 };
 
 class SwDelChr: public SwMsgPoolItem
@@ -84,6 +103,12 @@ public:
     sal_Int32 nPos;
 
     SwDelChr( sal_Int32 nP );
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return nPos == static_cast<const SwDelChr&>( rAttr ).nPos;
+    }
 };
 
 class SwDelText: public SwMsgPoolItem
@@ -93,6 +118,13 @@ public:
     sal_Int32 nLen;
 
     SwDelText( sal_Int32 nS, sal_Int32 nL );
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return nStart == static_cast<const SwDelText&>( rAttr ).nStart
+               && nLen == static_cast<const SwDelText&>( rAttr ).nLen;
+    }
 };
 
 class SwUpdateAttr : public SwMsgPoolItem
@@ -125,6 +157,14 @@ public:
     {
         return m_aWhichFormatAttr;
     }
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return m_nStart == static_cast<const SwUpdateAttr&>( rAttr ).m_nStart
+              && m_nEnd == static_cast<const SwUpdateAttr&>( rAttr ).m_nEnd
+              && m_nWhichAttr == static_cast<const SwUpdateAttr&>( rAttr ).m_nWhichAttr;
+    }
 };
 
 /** SwRefMarkFieldUpdate is sent when the referencemarks should be updated.
@@ -140,6 +180,12 @@ public:
         the current OutputDevice.
     */
     SwRefMarkFieldUpdate( OutputDevice* );
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return pOut == static_cast<const SwRefMarkFieldUpdate&>( rAttr ).pOut;
+    }
 };
 
 /** SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position
@@ -149,6 +195,12 @@ class SwDocPosUpdate : public SwMsgPoolItem
 public:
     const long nDocPos;
     SwDocPosUpdate( const long nDocPos );
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return nDocPos == static_cast<const SwDocPosUpdate&>( rAttr ).nDocPos;
+    }
 };
 
 /// SwTableFormulaUpdate is sent when the table has to be newly calculated or when a table itself is merged or splitted
@@ -175,6 +227,12 @@ public:
 
     /** Is sent if a table should be recalculated */
     SwTableFormulaUpdate( const SwTable* );
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return m_pTable == static_cast<const SwTableFormulaUpdate&>( rAttr ).m_pTable;
+    }
 };
 
 class SwAutoFormatGetDocNode: public SwMsgPoolItem
@@ -184,6 +242,12 @@ public:
     const SwNodes* pNodes;
 
     SwAutoFormatGetDocNode( const SwNodes* pNds );
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return pNodes == static_cast<const SwAutoFormatGetDocNode&>( rAttr ).pNodes;
+    }
 };
 
 /*
@@ -214,6 +278,11 @@ public:
 #else
     { m_pChgSet->ClearItem( nWhichL ); }
 #endif
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return pChgSet == static_cast<const SwAttrSetChg&>( rAttr ).pChgSet;
+    }
 };
 
 class SwCondCollCondChg: public SwMsgPoolItem
@@ -221,6 +290,11 @@ class SwCondCollCondChg: public SwMsgPoolItem
 public:
     SwFormat *pChangedFormat;
     SwCondCollCondChg( SwFormat *pFormat );
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return pChangedFormat == static_cast<const SwCondCollCondChg&>( rAttr ).pChangedFormat;
+    }
 };
 
 class SwVirtPageNumInfo: public SwMsgPoolItem
@@ -238,6 +312,12 @@ public:
     const SwFrame *GetFrame()               { return m_pFrame; }
     void  SetInfo( const SwPageFrame *pPg,
                    const SwFrame *pF )    { m_pFrame = pF, m_pPage = pPg; }
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return m_pPage == static_cast<const SwVirtPageNumInfo&>( rAttr ).m_pPage;
+    }
 };
 
 class SwFindNearestNode : public SwMsgPoolItem
@@ -248,6 +328,12 @@ public:
     void CheckNode( const SwNode& rNd );
 
     const SwNode* GetFoundNode() const { return m_pFound; }
+
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return m_pNode == static_cast<const SwFindNearestNode&>( rAttr ).m_pNode;
+    }
 };
 
 class SwStringMsgPoolItem : public SwMsgPoolItem
@@ -260,6 +346,11 @@ public:
     SwStringMsgPoolItem( sal_uInt16 nId, const OUString& rStr )
         : SwMsgPoolItem( nId ), m_sStr( rStr )
     {}
+    virtual bool operator==( const SfxPoolItem& rAttr ) const override
+    {
+        DBG_ASSERT( SwMsgPoolItem::operator==(rAttr), "unequal types" );
+        return m_sStr == static_cast<const SwStringMsgPoolItem&>( rAttr ).m_sStr;
+    }
 };
 #endif
 
