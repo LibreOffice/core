@@ -1012,6 +1012,7 @@ void GtkSalFrame::InitCommon()
     m_bSpanMonitorsWhenFullscreen = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
+    m_nLastScrollEventTime = GDK_CURRENT_TIME;
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
     m_hBackgroundPixmap = None;
@@ -2438,29 +2439,60 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     GdkEventScroll* pSEvent = reinterpret_cast<GdkEventScroll*>(pEvent);
 
-    //TODO: do something less feeble here
-    if (pSEvent->direction == GDK_SCROLL_SMOOTH)
-        return true;
-
-    static sal_uLong        nLines = 0;
-    if( ! nLines )
+    // gnome#726878 check for duplicate legacy scroll event
+    if (pSEvent->direction != GDK_SCROLL_SMOOTH &&
+        pThis->m_nLastScrollEventTime == pSEvent->time)
     {
-        char* pEnv = getenv( "SAL_WHEELLINES" );
-        nLines = pEnv ? atoi( pEnv ) : 3;
-        if( nLines > 10 )
-            nLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+        return true;
     }
 
-    bool bNeg = (pSEvent->direction == GDK_SCROLL_DOWN || pSEvent->direction == GDK_SCROLL_RIGHT );
     SalWheelMouseEvent aEvent;
-    aEvent.mnTime           = pSEvent->time;
-    aEvent.mnX              = (sal_uLong)pSEvent->x;
-    aEvent.mnY              = (sal_uLong)pSEvent->y;
-    aEvent.mnDelta          = bNeg ? -120 : 120;
-    aEvent.mnNotchDelta     = bNeg ? -1 : 1;
-    aEvent.mnScrollLines    = nLines;
-    aEvent.mnCode           = GetMouseModCode( pSEvent->state );
-    aEvent.mbHorz           = (pSEvent->direction == GDK_SCROLL_LEFT || pSEvent->direction == GDK_SCROLL_RIGHT);
+
+    aEvent.mnTime = pSEvent->time;
+    fprintf(stderr, "time is %ld\n", aEvent.mnTime);
+    aEvent.mnX = (sal_uLong)pSEvent->x;
+    aEvent.mnY = (sal_uLong)pSEvent->y;
+    aEvent.mnCode = GetMouseModCode( pSEvent->state );
+    aEvent.mnScrollLines = 3;
+
+    fprintf(stderr, "scroll\n");
+
+    switch (pSEvent->direction)
+    {
+        case GDK_SCROLL_SMOOTH:
+        {
+            double delta_x, delta_y;
+            gdk_event_get_scroll_deltas(pEvent, &delta_x, &delta_y);
+            fprintf(stderr, "%f %f\n", delta_x, delta_y);
+            //pick the bigger one I guess
+            aEvent.mbHorz = fabs(delta_x) > fabs(delta_y);
+            if (aEvent.mbHorz)
+                aEvent.mnDelta = -delta_x;
+            else
+                aEvent.mnDelta = -delta_y;
+            aEvent.mnScrollLines = 1;
+            pThis->m_nLastScrollEventTime = pSEvent->time;
+            break;
+        }
+        case GDK_SCROLL_UP:
+            aEvent.mnDelta = 120;
+            aEvent.mbHorz = false;
+            break;
+        case GDK_SCROLL_DOWN:
+            aEvent.mnDelta = -120;
+            aEvent.mbHorz = false;
+            break;
+        case GDK_SCROLL_LEFT:
+            aEvent.mbHorz = true;
+            aEvent.mnDelta = -120;
+            break;
+        case GDK_SCROLL_RIGHT:
+            aEvent.mnDelta = -120;
+            aEvent.mbHorz = true;
+            break;
+    };
+
+    aEvent.mnNotchDelta     = aEvent.mnDelta < 0 ? -1 : 1;
 
     // --- RTL --- (mirror mouse pos)
     if( AllSettings::GetLayoutRTL() )
