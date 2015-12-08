@@ -42,7 +42,8 @@ GType                          lok_doc_view_get_type               (void) G_GNUC
 
 /**
  * lok_doc_view_new:
- * @pPath: LibreOffice install path.
+ * @pPath: (nullable): LibreOffice install path. Pass null to set it to default
+ * path which in most cases would be $libdir/libreoffice/program
  * @cancellable: The cancellable object that you can use to cancel this
  * operation.
  * @error: The error that will be set if the object fails to initialize.
