@@ -5594,10 +5594,10 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
     if( pLineOuter && pLineOuter->IsRemoveAdjacentCellBorder() )
     {
         SvxBoxItem aTmp0( *pLineOuter );
-        aTmp0.SetLine( NULL, SvxBoxItemLine::TOP );
-        aTmp0.SetLine( NULL, SvxBoxItemLine::BOTTOM );
-        aTmp0.SetLine( NULL, SvxBoxItemLine::LEFT );
-        aTmp0.SetLine( NULL, SvxBoxItemLine::RIGHT );
+        aTmp0.SetLine( nullptr, SvxBoxItemLine::TOP );
+        aTmp0.SetLine( nullptr, SvxBoxItemLine::BOTTOM );
+        aTmp0.SetLine( nullptr, SvxBoxItemLine::LEFT );
+        aTmp0.SetLine( nullptr, SvxBoxItemLine::RIGHT );
         SvxBoxItem aLeft( aTmp0 );
         SvxBoxItem aRight( aTmp0 );
         SvxBoxItem aTop( aTmp0 );
@@ -5605,8 +5605,8 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
 
         SvxBoxInfoItem aTmp1( *pLineInner );
         aTmp1.SetTable( false );
-        aTmp1.SetLine( NULL, SvxBoxInfoItemLine::HORI );
-        aTmp1.SetLine( NULL, SvxBoxInfoItemLine::VERT );
+        aTmp1.SetLine( nullptr, SvxBoxInfoItemLine::HORI );
+        aTmp1.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
         aTmp1.SetValid( SvxBoxInfoItemValidFlags::ALL, false );
         aTmp1.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
         SvxBoxInfoItem aLeftInfo( aTmp1 );
