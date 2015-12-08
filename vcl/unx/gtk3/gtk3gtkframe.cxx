@@ -879,6 +879,8 @@ void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
 
 void GtkSalFrame::window_resize(long nWidth, long nHeight)
 {
+    m_nWidthRequest = nWidth;
+    m_nHeightRequest = nHeight;
     gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 }
 
@@ -1051,6 +1053,9 @@ void GtkSalFrame::InitCommon()
 
     m_bGraphics = false;
     m_pGraphics = nullptr;
+
+    m_nWidthRequest = 0;
+    m_nHeightRequest = 0;
 
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if( m_bDefaultPos || m_bDefaultSize )
@@ -1462,6 +1467,20 @@ void GtkSalFrame::setMinMaxSize()
                 aHints |= GDK_HINT_MAX_SIZE;
             }
         }
+        else
+        {
+            if (!m_bFullscreen && m_nWidthRequest && m_nHeightRequest)
+            {
+                aGeo.min_width = m_nWidthRequest;
+                aGeo.min_height = m_nHeightRequest;
+                aHints |= GDK_HINT_MIN_SIZE;
+
+                aGeo.max_width = m_nWidthRequest;
+                aGeo.max_height = m_nHeightRequest;
+                aHints |= GDK_HINT_MAX_SIZE;
+            }
+        }
+
         if( m_bFullscreen && m_aMaxSize.Width() && m_aMaxSize.Height() )
         {
             aGeo.max_width = m_aMaxSize.Width();
@@ -1493,7 +1512,7 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
         m_aMinSize = Size( nWidth, nHeight );
         if( m_pWindow )
         {
-            widget_set_size_request(nWidth, nHeight );
+            widget_set_size_request(nWidth, nHeight);
             setMinMaxSize();
         }
     }
