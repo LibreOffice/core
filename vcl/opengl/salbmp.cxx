@@ -380,7 +380,7 @@ Size OpenGLSalBitmap::GetSize() const
 
 void OpenGLSalBitmap::ExecuteOperations()
 {
-    makeCurrent();
+    makeSomeOpenGLContextCurrent();
     while( !maPendingOps.empty() )
     {
         OpenGLSalBitmapOp* pOp = maPendingOps.front();
@@ -459,7 +459,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
         }
     }
 
-    makeCurrent();
+    makeSomeOpenGLContextCurrent();
 
     lclInstantiateTexture(maTexture, mnBufWidth, mnBufHeight, nFormat, nType, pData);
 
@@ -505,7 +505,7 @@ bool OpenGLSalBitmap::ReadTexture()
                     break;
         }
 
-        makeCurrent();
+        makeSomeOpenGLContextCurrent();
         maTexture.Read(nFormat, nType, pData);
         mnBufWidth = mnWidth;
         mnBufHeight = mnHeight;
@@ -514,7 +514,7 @@ bool OpenGLSalBitmap::ReadTexture()
     else if (mnBits == 1)
     {   // convert buffers from 24-bit RGB to 1-bit Mask
         std::vector<sal_uInt8> aBuffer(mnWidth * mnHeight * 3);
-        makeCurrent();
+        makeSomeOpenGLContextCurrent();
         sal_uInt8* pBuffer = aBuffer.data();
         maTexture.Read(GL_RGB, GL_UNSIGNED_BYTE, pBuffer);
 
@@ -669,7 +669,7 @@ rtl::Reference<OpenGLContext> OpenGLSalBitmap::GetBitmapContext()
     return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
 }
 
-void OpenGLSalBitmap::makeCurrent()
+void OpenGLSalBitmap::makeSomeOpenGLContextCurrent()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -833,7 +833,7 @@ bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceC
     OpenGLProgram* pProgram;
 
     GetTexture();
-    makeCurrent();
+    makeSomeOpenGLContextCurrent();
     pProgram = mpContext->UseProgram( "textureVertexShader",
                                       "replaceColorFragmentShader" );
     if( !pProgram )

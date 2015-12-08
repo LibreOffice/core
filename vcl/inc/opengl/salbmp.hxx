@@ -50,7 +50,7 @@ private:
     int                                 mnBufHeight;
     std::deque< OpenGLSalBitmapOp* >    maPendingOps;
 
-    void makeCurrent();
+    void makeSomeOpenGLContextCurrent();
     virtual void updateChecksum() const override;
 
     bool calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType& rChecksum) const;

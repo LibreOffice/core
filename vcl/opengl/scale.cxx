@@ -279,7 +279,7 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
     VCL_GL_INFO( "::ImplScale" );
 
     maUserBuffer.reset();
-    makeCurrent();
+    makeSomeOpenGLContextCurrent();
 
     if( nScaleFlag == BmpScaleFlag::Fast )
     {
@@ -350,7 +350,7 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpSc
         nScaleFlag == BmpScaleFlag::Default ||
         nScaleFlag == BmpScaleFlag::BestQuality )
     {
-        makeCurrent();
+        makeSomeOpenGLContextCurrent();
         if( mpContext == nullptr )
         {
             VCL_GL_INFO( "Add ScaleOp to pending operations" );
