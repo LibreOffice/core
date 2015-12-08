@@ -608,7 +608,7 @@ Const cstThisSub = &quot;Database.OutputTo&quot;
 		If Not Utils._CheckArgument(UCase(pvOutputFormat), 3, vbString, Array( _
 							UCase(acFormatHTML), &quot;HTML&quot; _
 							, UCase(acFormatXLS), &quot;XLS&quot; _
-							, UCase(acFormatCALC), &quot;ODS&quot; _
+							, UCase(acFormatODS), &quot;ODS&quot; _
 							, UCase(acFormatTXT), &quot;TXT&quot;, &quot;CSV&quot; _
 							, &quot;&quot;)) _
 				Then Goto Exit_Function				&apos;	A 2nd time to allow case unsensitivity
@@ -640,7 +640,7 @@ Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutp
 	
 	&apos;Determine format and parameters
 	If pvOutputFormat = &quot;&quot; Then
-		sOutputFormat = _PromptFormat()			&apos;	Prompt user for format
+		sOutputFormat = _PromptFormat(Array(&quot;HTML&quot;, &quot;ODS&quot;, &quot;XLS&quot;, &quot;TXT&quot;))			&apos;	Prompt user for format
 		If sOutputFormat = &quot;&quot; Then Goto Exit_Function
 		If Not Utils._CheckArgument(UCase(sOutputFormat), 3, vbString, Array(UCase(acFormatHTML), &quot;HTML&quot;, &quot;&quot;)) _
 				Then Goto Exit_Function			&apos;	Today only value, later maybe Calc ?

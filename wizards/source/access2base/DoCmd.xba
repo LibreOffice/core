@@ -1214,7 +1214,7 @@ Public Function OutputTo(ByVal pvObjectType As Variant _
 							) As Boolean
 REM https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filter_Options
 &apos;Supported:	acFormatPDF, acFormatODT, acFormatDOC, acFormatHTML		for forms
-&apos;			acFormatHTML, acFormatXLS, acFormatCALC, acFormatTXT	for tables and queries
+&apos;			acFormatHTML, acFormatXLS, acFormatODS, acFormatTXT	for tables and queries
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;OutputTo&quot;
@@ -1230,7 +1230,7 @@ Const cstThisSub = &quot;OutputTo&quot;
 	If pvOutputFormat &lt;&gt; &quot;&quot; Then
 		If Not Utils._CheckArgument(UCase(pvOutputFormat), 3, vbString, Array( _
 			UCase(acFormatPDF), UCase(acFormatODT), UCase(acFormatDOC), UCase(acFormatHTML) _
-			, UCase(acFormatXLS), UCase(acFormatCALC), UCase(acFormatTXT) _
+			, UCase(acFormatXLS), UCase(acFormatODS), UCase(acFormatTXT) _
 			, &quot;PDF&quot;, &quot;ODT&quot;, &quot;DOC&quot;, &quot;HTML&quot;, &quot;XLS&quot;, &quot;ODS&quot;, &quot;TXT&quot;, &quot;CSV&quot;, &quot;&quot; _
 			)) Then Goto Exit_Function				&apos;	A 2nd time to allow case unsensitivity
 	End If
@@ -1280,7 +1280,7 @@ Dim vWindow As Variant, sOutputFile As String, ofForm As Object, i As Integer, b
 	&apos;Determine format and parameters
 Dim sOutputFormat As String, sFilter As String, oFilterData As Object, oExport As Object, sSuffix As String
 	If pvOutputFormat = &quot;&quot; Then
-		sOutputFormat = _PromptFormat()			&apos;	Prompt user for format
+		sOutputFormat = _PromptFormat(Array(&quot;PDF&quot;, &quot;ODT&quot;, &quot;DOC&quot;, &quot;HTML&quot;))			&apos;	Prompt user for format
 		If sOutputFormat = &quot;&quot; Then Goto Exit_Function
 	Else
 		sOutputFormat = UCase(pvOutputFormat)
@@ -1787,7 +1787,7 @@ Const cstSemiColon = &quot;;&quot;
 				sDirectory =  _getTempDirectoryURL()
 				If Right(sDirectory, 1) &lt;&gt; &quot;/&quot; Then sDirectory = sDirectory &amp; &quot;/&quot;
 				If pvOutputFormat = &quot;&quot; Then
-					sOutputFormat = _PromptFormat()			&apos;	Prompt user for format
+					sOutputFormat = _PromptFormat(Array(&quot;PDF&quot;, &quot;ODT&quot;, &quot;DOC&quot;, &quot;HTML&quot;))			&apos;	Prompt user for format
 					If sOutputFormat = &quot;&quot; Then Goto Exit_Function
 				Else
 					sOutputFormat = UCase(pvOutputFormat)
@@ -2143,7 +2143,7 @@ Trace_NotFound:
 End Function		&apos;	_OpenObject	V0.8.9
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _PromptFormat() As String
+Private Function _PromptFormat(ByVal pvList As Variant) As String
 &apos;	Return user selection in Format dialog
 
 Dim oDialog As Object, oDialogLib As Object, iOKCancel As Integer, oControl As Object
@@ -2172,10 +2172,19 @@ Dim oDialog As Object, oDialogLib As Object, iOKCancel As Integer, oControl As O
 	oControl.Label = _GetLabel(&quot;DLGFORMAT_CMDCANCEL_LABEL&quot;)
 	oControl.HelpText = _GetLabel(&quot;DLGFORMAT_CMDCANCEL_HELP&quot;)
 
+	Set oControl = oDialog.Model.getByName(&quot;cboFormat&quot;)
+	If UBound(pvList) &gt;= 0 Then
+		oControl.Text = pvList(0)
+		oControl.StringItemList = pvList
+	Else
+		oControl.Text = &quot;&quot;
+		oControl.StringItemList = Array()
+	End If
+	
 	iOKCancel = oDialog.Execute()
 	Select Case iOKCancel
 		Case 1					&apos;	OK
-				_PromptFormat = oDialog.Model.getByName(&quot;cboFormat&quot;).Text
+				_PromptFormat = oControl.Text
 		Case 0					&apos;	Cancel
 				_PromptFormat = &quot;&quot;
 		Case Else
