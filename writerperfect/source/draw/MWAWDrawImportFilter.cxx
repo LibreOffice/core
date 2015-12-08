@@ -55,99 +55,32 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
 
     if (confidence == MWAWDocument::MWAW_C_EXCELLENT)
     {
-        if (docKind == MWAWDocument::MWAW_K_DRAW || docKind == MWAWDocument::MWAW_K_PAINT)
+        switch (docKind)
         {
+        case MWAWDocument::MWAW_K_DRAW:
             switch (docType)
             {
-            case MWAWDocument::MWAW_T_BEAGLEWORKS:
-                rTypeName = "draw_Beagle_Works";
-                break;
             case MWAWDocument::MWAW_T_CLARISWORKS:
                 rTypeName = "draw_ClarisWorks";
                 break;
-            case MWAWDocument::MWAW_T_GREATWORKS:
-                rTypeName = "draw_Great_Works";
-                break;
-            case MWAWDocument::MWAW_T_MACDRAFT:
-                rTypeName = "draw_MacDraft";
-                break;
-            case MWAWDocument::MWAW_T_MACDRAW:
-                rTypeName = "draw_MacDraw";
-                break;
-            case MWAWDocument::MWAW_T_MACDRAWPRO:
-                rTypeName = "draw_MacDrawPro";
-                break;
-            case MWAWDocument::MWAW_T_MACPAINT:
-                rTypeName = "draw_MacPaint";
-                break;
-            case MWAWDocument::MWAW_T_MICROSOFTWORKS:
-                rTypeName = "draw_Mac_Works";
-                break;
-            case MWAWDocument::MWAW_T_PIXELPAINT:
-                rTypeName = "draw_PixelPaint";
-                break;
-            case MWAWDocument::MWAW_T_SUPERPAINT:
-                rTypeName = "draw_SuperPaint";
-                break;
-            case MWAWDocument::MWAW_T_RESERVED1: // also MWAWDocument::MWAW_T_CLARISDRAW
-                rTypeName = "draw_ClarisDraw";
-                break;
-
-            case MWAWDocument::MWAW_T_ACTA:
-            case MWAWDocument::MWAW_T_ADOBEILLUSTRATOR:
-            case MWAWDocument::MWAW_T_CLARISRESOLVE:
-            case MWAWDocument::MWAW_T_DBASE:
-            case MWAWDocument::MWAW_T_DOCMAKER:
-            case MWAWDocument::MWAW_T_EDOC:
-            case MWAWDocument::MWAW_T_FAMILYTREEMAKER:
-            case MWAWDocument::MWAW_T_FILEMAKER:
-            case MWAWDocument::MWAW_T_FOXBASE:
-            case MWAWDocument::MWAW_T_FRAMEMAKER:
-            case MWAWDocument::MWAW_T_FULLIMPACT:
-            case MWAWDocument::MWAW_T_FULLPAINT:
-            case MWAWDocument::MWAW_T_FULLWRITE:
-            case MWAWDocument::MWAW_T_INFOGENIE:
-            case MWAWDocument::MWAW_T_KALEIDAGRAPH:
-            case MWAWDocument::MWAW_T_HANMACWORDJ:
-            case MWAWDocument::MWAW_T_HANMACWORDK:
-            case MWAWDocument::MWAW_T_LIGHTWAYTEXT:
-            case MWAWDocument::MWAW_T_MACDOC:
-            case MWAWDocument::MWAW_T_MACWRITE:
-            case MWAWDocument::MWAW_T_MACWRITEPRO:
-            case MWAWDocument::MWAW_T_MARINERWRITE:
-            case MWAWDocument::MWAW_T_MINDWRITE:
-            case MWAWDocument::MWAW_T_MICROSOFTFILE:
-            case MWAWDocument::MWAW_T_MICROSOFTMULTIPLAN:
-            case MWAWDocument::MWAW_T_MICROSOFTWORD:
-            case MWAWDocument::MWAW_T_MORE:
-            case MWAWDocument::MWAW_T_NISUSWRITER:
-            case MWAWDocument::MWAW_T_OVERVUE:
-            case MWAWDocument::MWAW_T_PAGEMAKER:
-            case MWAWDocument::MWAW_T_RAGTIME:
-            case MWAWDocument::MWAW_T_READYSETGO:
-            case MWAWDocument::MWAW_T_SYMPOSIUM:
-            case MWAWDocument::MWAW_T_TEACHTEXT:
-            case MWAWDocument::MWAW_T_TEXEDIT:
-            case MWAWDocument::MWAW_T_TRAPEZE:
-            case MWAWDocument::MWAW_T_WINGZ:
-            case MWAWDocument::MWAW_T_WRITENOW:
-            case MWAWDocument::MWAW_T_WRITERPLUS:
-            case MWAWDocument::MWAW_T_XPRESS:
-            case MWAWDocument::MWAW_T_ZWRITE:
-            case MWAWDocument::MWAW_T_4DIMENSION:
-
-            case MWAWDocument::MWAW_T_RESERVED2:
-            case MWAWDocument::MWAW_T_RESERVED3:
-            case MWAWDocument::MWAW_T_RESERVED4:
-            case MWAWDocument::MWAW_T_RESERVED5:
-            case MWAWDocument::MWAW_T_RESERVED6:
-            case MWAWDocument::MWAW_T_RESERVED7:
-            case MWAWDocument::MWAW_T_RESERVED8:
-            case MWAWDocument::MWAW_T_RESERVED9:
-            case MWAWDocument::MWAW_T_UNKNOWN:
             default:
+                rTypeName = "MWAW_Drawing";
                 break;
             }
+            break;
+        case MWAWDocument::MWAW_K_PAINT:
+            switch (docType)
+            {
+            case MWAWDocument::MWAW_T_CLARISWORKS:
+                rTypeName = "draw_ClarisWorks";
+                break;
+            default:
+                rTypeName = "MWAW_Bitmap";
+                break;
+            }
+            break;
+        default:
+            break;
         }
     }
 
