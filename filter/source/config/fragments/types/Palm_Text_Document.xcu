@@ -7,7 +7,7 @@
  *
 -->
 
-<node oor:name="writer_TealDoc" oor:op="replace">
+<node oor:name="Palm_Text_Document" oor:op="replace">
     <prop oor:name="DetectService">
         <value>org.libreoffice.comp.Writer.EBookImportFilter</value>
     </prop>
@@ -21,9 +21,9 @@
         <value>true</value>
     </prop>
     <prop oor:name="PreferredFilter">
-        <value>TealDoc</value>
+        <value>Palm_Text_Document</value>
     </prop>
     <prop oor:name="UIName">
-        <value>TealDoc eBook</value>
+        <value>Palm Text Document</value>
     </prop>
 </node>

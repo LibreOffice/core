@@ -345,14 +345,12 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_OOXML_Template \
 	writer_layout_dump_xml \
 	writer_BroadBand_eBook \
-	writer_eReader_eBook \
 	writer_FictionBook_2 \
 	writer_PalmDoc \
 	writer_Plucker_eBook \
-	writer_TealDoc \
-	writer_zTXT \
 	writer_ApplePages \
 	MWAW_Text_Document \
+	Palm_Text_Document \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
@@ -391,14 +389,12 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	OOXML_Text_Template \
 	writer_layout_dump \
 	BroadBand_eBook \
-	eReader_eBook \
 	FictionBook_2 \
 	PalmDoc \
 	Plucker_eBook \
-	TealDoc \
-	zTXT \
 	ApplePages \
 	MWAW_Text_Document \
+	Palm_Text_Document \
 ))
 
 # fcfg_web

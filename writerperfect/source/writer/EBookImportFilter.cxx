@@ -28,30 +28,31 @@ using libebook::EBOOKDocument;
 
 bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdtGenerator &rGenerator, utl::MediaDescriptor &rDescriptor)
 {
-    EBOOKDocument::Type type = EBOOKDocument::TYPE_UNKNOWN;
-
     rtl::OUString aFilterName;
 
     rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= aFilterName;
     assert(!aFilterName.isEmpty());
 
-    if (aFilterName == "BroadBand eBook")
-        type = EBOOKDocument::TYPE_BBEB;
-    if (aFilterName == "FictionBook 2")
-        type = EBOOKDocument::TYPE_FICTIONBOOK2;
-    else if (aFilterName == "PalmDoc")
-        type = EBOOKDocument::TYPE_PALMDOC;
-    else if (aFilterName == "Plucker eBook")
-        type = EBOOKDocument::TYPE_PLUCKER;
-    else if (aFilterName == "eReader eBook")
-        type = EBOOKDocument::TYPE_PEANUTPRESS;
-    else if (aFilterName == "TealDoc")
-        type = EBOOKDocument::TYPE_TEALDOC;
-    else if (aFilterName == "zTXT")
-        type = EBOOKDocument::TYPE_ZTXT;
+    if (aFilterName == "Palm_Text_Document")
+    {
+        return EBOOKDocument::RESULT_OK == EBOOKDocument::parse(&rInput, &rGenerator);
+    }
+    else
+    {
+        EBOOKDocument::Type type = EBOOKDocument::TYPE_UNKNOWN;
 
-    if (EBOOKDocument::TYPE_UNKNOWN != type)
-        return EBOOKDocument::RESULT_OK == EBOOKDocument::parse(&rInput, &rGenerator, type);
+        if (aFilterName == "BroadBand eBook")
+            type = EBOOKDocument::TYPE_BBEB;
+        else if (aFilterName == "FictionBook 2")
+            type = EBOOKDocument::TYPE_FICTIONBOOK2;
+        else if (aFilterName == "PalmDoc")
+            type = EBOOKDocument::TYPE_PALMDOC;
+        else if (aFilterName == "Plucker eBook")
+            type = EBOOKDocument::TYPE_PLUCKER;
+
+        if (EBOOKDocument::TYPE_UNKNOWN != type)
+            return EBOOKDocument::RESULT_OK == EBOOKDocument::parse(&rInput, &rGenerator, type);
+    }
 
     return false;
 }
@@ -79,13 +80,9 @@ bool EBookImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUSt
             rTypeName = "writer_Plucker_eBook";
             break;
         case EBOOKDocument::TYPE_PEANUTPRESS :
-            rTypeName = "writer_eReader_eBook";
-            break;
         case EBOOKDocument::TYPE_TEALDOC :
-            rTypeName = "writer_TealDoc";
-            break;
         case EBOOKDocument::TYPE_ZTXT :
-            rTypeName = "writer_zTXT";
+            rTypeName = "Palm_Text_Document";
             break;
         default :
             SAL_WARN_IF(type != EBOOKDocument::TYPE_UNKNOWN, "writerperfect", "EBookImportFilter::doDetectFormat: document type " << type << " detected, but ignored");
