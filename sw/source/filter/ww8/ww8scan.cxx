@@ -6363,7 +6363,8 @@ void MSOPropertyBag::Read(SvStream& rStream)
 void WW8SmartTagData::Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 lcbFactoidData)
 {
     sal_uInt64 nOldPosition = rStream.Tell();
-    rStream.Seek(fcFactoidData);
+    if (!checkSeek(rStream, fcFactoidData))
+        return;
 
     m_aPropBagStore.Read(rStream);
     while (rStream.Tell() < fcFactoidData + lcbFactoidData)
