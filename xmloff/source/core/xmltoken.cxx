@@ -1934,6 +1934,7 @@ namespace xmloff { namespace token {
         TOKEN( "up",                              XML_UP ),
         TOKEN( "uplimit",                         XML_UPLIMIT ),
         TOKEN( "upright",                         XML_UPRIGHT ),
+        TOKEN( "use",                             XML_USE ),
         TOKEN( "url",                             XML_URL ),
         TOKEN( "use-caption",                     XML_USE_CAPTION ),
         TOKEN( "use-cell-protection",             XML_USE_CELL_PROTECTION ),
