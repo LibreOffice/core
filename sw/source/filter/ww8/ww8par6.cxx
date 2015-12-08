@@ -5033,7 +5033,8 @@ long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
         /* 2 (258) */   &SwWW8ImplReader::Read_Field,  // Feld
         /* 3 (259) */   &SwWW8ImplReader::Read_Book,   // Bookmark
         /* 4 (260) */   &SwWW8ImplReader::Read_And,     // Annotation
-        /* 5 (261) */   &SwWW8ImplReader::Read_AtnBook // Annotationmark
+        /* 5 (261) */   &SwWW8ImplReader::Read_AtnBook, // Annotationmark
+        /* 6 (262) */   &SwWW8ImplReader::Read_FactoidBook // Smart tag bookmark
     };
 
     if( pRes->nSprmId < 280 )
