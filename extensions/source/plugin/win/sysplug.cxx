@@ -98,11 +98,19 @@ PluginComm_Impl::PluginComm_Impl( const OUString& /*rMIME*/, const OUString& rNa
                 "### version failure!" );
 
     m_eCall = eNP_Initialize;
-    execute();
+    if (execute() != NPERR_NO_ERROR) {
+        shutdown();
+        throw CannotInitializeException();
+    }
 }
 
 
 PluginComm_Impl::~PluginComm_Impl()
+{
+    shutdown();
+}
+
+void PluginComm_Impl::shutdown()
 {
     if (_plDLL)
     {
