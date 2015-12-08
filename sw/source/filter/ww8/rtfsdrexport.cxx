@@ -606,8 +606,9 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
             aAttrIter.NextPos();
         }
         while (nAktPos < nEnd);
+        m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_PAR);
     }
-    m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_PAR).append('}');
+    m_rAttrOutput.RunText().append('}');
 
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
