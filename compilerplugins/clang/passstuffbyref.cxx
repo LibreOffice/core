@@ -103,7 +103,7 @@ bool PassStuffByRef::isFat(QualType type, std::string * name) {
     }
     *name = type.getUnqualifiedType().getCanonicalType().getAsString();
     if (*name == "class rtl::OUString" || *name == "class rtl::OString"
-        || name->compare("class com::sun::star::uno::Sequence") == 0)
+        || name->compare(0, 35, "class com::sun::star::uno::Sequence") == 0)
     {
         return true;
     }
