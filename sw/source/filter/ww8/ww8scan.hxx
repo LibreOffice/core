@@ -1465,8 +1465,12 @@ public:
     WW8_FC fcPlcfBklFactoid;
     /// 0x446 smart-tag bookmark ends length.
     sal_uInt32 lcbPlcfBklFactoid;
+    /// 0x44a smart tag data offset.
+    WW8_FC fcFactoidData;
+    /// 0x44e smart tag data length.
+    sal_uInt32 lcbFactoidData;
 
-    // 0x44a - 0x4d4 == ignore
+    // 0x452 - 0x4d4 == ignore
 
     WW8_FC fcHplxsdr;    //bizarrely, word xp seems to require this set to shows dates from AtrdExtra
     sal_uInt32 lcbHplxsdr;
