@@ -2994,7 +2994,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName((SwFlyFrameFormat&)*pFrameFormat, m_sName);
             }
-            else if( pEmbeddedObject || pStreamName )
+            else if (pEmbeddedObject)
             {
                 uno::Reference< embed::XEmbeddedObject > obj;
                 (*pEmbeddedObject) >>= obj;
