@@ -205,7 +205,7 @@ void ButtonDialog::ImplPosControls()
             nY += maCtrlSize.Height()+IMPL_SEP_BUTTON_Y;
     }
 
-    SetOutputSizePixel( aDlgSize );
+    SetMinOutputSizePixel(aDlgSize);
 
     mbFormat = false;
 }
