@@ -5978,6 +5978,15 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
     return pRet;
 }
 
+void SwWW8ImplReader::GetSmartTagInfo(sal_uInt16 /*nIndex*/)
+{
+    if (!m_pSmartTagData && m_pWwFib->lcbFactoidData)
+    {
+        m_pSmartTagData.reset(new WW8SmartTagData());
+        m_pSmartTagData->Read(*m_pTableStream, m_pWwFib->fcFactoidData, m_pWwFib->lcbFactoidData);
+    }
+}
+
 sal_uLong SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;

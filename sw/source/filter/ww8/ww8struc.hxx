@@ -1088,6 +1088,63 @@ namespace wwUtility
     inline sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return msfilter::util::BGRToRGB(nColour); }
 }
 
+/// [MS-OSHARED] FactoidType: one smart tag type.
+class MSOFactoidType
+{
+public:
+    MSOFactoidType();
+    void Read(SvStream& rStream);
+
+    sal_uInt32 m_nId;
+    OUString m_aUri;
+    OUString m_aTag;
+};
+
+/// [MS-OSHARED] PropertyBagStore: smart tag types and string store.
+class MSOPropertyBagStore
+{
+public:
+    void Read(SvStream& rStream);
+
+    std::vector<MSOFactoidType> m_aFactoidTypes;
+    std::vector<OUString> m_aStringTable;
+};
+
+/// [MS-OSHARED] Property: stores information about one smart-tag key/value.
+class MSOProperty
+{
+public:
+    MSOProperty();
+    void Read(SvStream& rStream);
+
+    /// Index into MSOPropertyBagStore::m_aStringTable.
+    sal_uInt32 m_nKey;
+    /// Index into MSOPropertyBagStore::m_aStringTable.
+    sal_uInt32 m_nValue;
+};
+
+/// [MS-OSHARED] PropertyBag: stores information about one smart tag.
+class MSOPropertyBag
+{
+public:
+    MSOPropertyBag();
+    void Read(SvStream& rStream);
+
+    /// Matches MSOFactoidType::m_nId in MSOPropertyBagStore::m_aFactoidTypes.
+    sal_uInt16 m_nId;
+    std::vector<MSOProperty> m_aProperties;
+};
+
+/// [MS-DOC] SmartTagData: stores information about all smart tags in the document.
+class WW8SmartTagData
+{
+public:
+    void Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 lcbFactoidData);
+
+    MSOPropertyBagStore m_aPropBagStore;
+    std::vector<MSOPropertyBag> m_aPropBags;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

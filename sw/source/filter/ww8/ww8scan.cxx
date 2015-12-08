@@ -6268,6 +6268,114 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale)
     return rtl_getTextEncodingFromWindowsCharset(static_cast<sal_uInt8>(chs));
 }
 
+MSOFactoidType::MSOFactoidType()
+    : m_nId(0)
+{
+}
+
+namespace MSOPBString
+{
+OUString Read(SvStream& rStream)
+{
+    OUString aRet;
+
+    sal_uInt16 nBuf(0);
+    rStream.ReadUInt16(nBuf);
+    sal_uInt16 nCch = nBuf & 0x7fff; // Bits 1..15.
+    bool bAnsiString = (nBuf & (1 << 15)) >> 15; // 16th bit.
+    if (bAnsiString)
+        aRet = OStringToOUString(read_uInt8s_ToOString(rStream, nCch), RTL_TEXTENCODING_ASCII_US);
+    else
+        aRet = read_uInt16s_ToOUString(rStream, nCch);
+
+    return aRet;
+}
+};
+
+void MSOFactoidType::Read(SvStream& rStream)
+{
+    sal_uInt32 cbFactoid(0);
+    rStream.ReadUInt32(cbFactoid);
+    rStream.ReadUInt32(m_nId);
+    m_aUri = MSOPBString::Read(rStream);
+    m_aTag = MSOPBString::Read(rStream);
+    MSOPBString::Read(rStream); // rgbDownloadURL
+}
+
+void MSOPropertyBagStore::Read(SvStream& rStream)
+{
+    sal_uInt32 cFactoidType(0);
+    rStream.ReadUInt32(cFactoidType);
+    for (sal_uInt32 i = 0; i < cFactoidType; ++i)
+    {
+        MSOFactoidType aFactoidType;
+        aFactoidType.Read(rStream);
+        m_aFactoidTypes.push_back(aFactoidType);
+    }
+    sal_uInt16 cbHdr(0);
+    rStream.ReadUInt16(cbHdr);
+    SAL_WARN_IF(cbHdr != 0xc, "sw.ww8", "MSOPropertyBagStore::Read: unexpected cbHdr");
+    sal_uInt16 nVer(0);
+    rStream.ReadUInt16(nVer);
+    SAL_WARN_IF(nVer != 0x0100, "sw.ww8", "MSOPropertyBagStore::Read: unexpected nVer");
+    rStream.SeekRel(4); // cfactoid
+    sal_uInt32 nCste(0);
+    rStream.ReadUInt32(nCste);
+
+    for (sal_uInt32 i = 0; i < nCste; ++i)
+    {
+        OUString aString = MSOPBString::Read(rStream);
+        m_aStringTable.push_back(aString);
+    }
+}
+
+MSOProperty::MSOProperty()
+    : m_nKey(0),
+    m_nValue(0)
+{
+}
+
+void MSOProperty::Read(SvStream& rStream)
+{
+    rStream.ReadUInt32(m_nKey);
+    rStream.ReadUInt32(m_nValue);
+}
+
+MSOPropertyBag::MSOPropertyBag()
+    : m_nId(0)
+{
+}
+
+void MSOPropertyBag::Read(SvStream& rStream)
+{
+    rStream.ReadUInt16(m_nId);
+    sal_uInt16 cProp(0);
+    rStream.ReadUInt16(cProp);
+    rStream.SeekRel(2); // cbUnknown
+    for (sal_uInt16 i = 0; i < cProp; ++i)
+    {
+        MSOProperty aProperty;
+        aProperty.Read(rStream);
+        m_aProperties.push_back(aProperty);
+    }
+}
+
+void WW8SmartTagData::Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 lcbFactoidData)
+{
+    sal_uInt64 nOldPosition = rStream.Tell();
+    rStream.Seek(fcFactoidData);
+
+    m_aPropBagStore.Read(rStream);
+    while (rStream.Tell() < fcFactoidData + lcbFactoidData)
+    {
+        MSOPropertyBag aPropertyBag;
+        aPropertyBag.Read(rStream);
+        m_aPropBags.push_back(aPropertyBag);
+    }
+
+    rStream.Seek(nOldPosition);
+}
+
 WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     : rFib(rFibPara), rSt(rStream), cstd(0), cbSTDBaseInFile(0), fStdStylenamesWritten(0)
     , stiMaxWhenSaved(0), istdMaxFixedWhenSaved(0), nVerBuiltInNamesWhenSaved(0)
