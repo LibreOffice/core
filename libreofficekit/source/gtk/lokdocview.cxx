@@ -311,6 +311,153 @@ isEmptyRectangle(const GdkRectangle& rRectangle)
     return rRectangle.x == 0 && rRectangle.y == 0 && rRectangle.width == 0 && rRectangle.height == 0;
 }
 
+/// if handled, returns TRUE else FALSE
+static bool
+handleTextSelectionOnButtonPress(GdkRectangle& aClick, LOKDocView* pDocView) {
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+
+    if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleStartRect, nullptr))
+    {
+        g_info("LOKDocView_Impl::signalButton: start of drag start handle");
+        priv->m_bInDragStartHandle = true;
+        return TRUE;
+    }
+    else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleMiddleRect, nullptr))
+    {
+        g_info("LOKDocView_Impl::signalButton: start of drag middle handle");
+        priv->m_bInDragMiddleHandle = true;
+        return TRUE;
+    }
+    else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleEndRect, nullptr))
+    {
+        g_info("LOKDocView_Impl::signalButton: start of drag end handle");
+        priv->m_bInDragEndHandle = true;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+/// if handled, returns TRUE else FALSE
+static bool
+handleGraphicSelectionOnButtonPress(GdkRectangle& aClick, LOKDocView* pDocView) {
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    GError* error = nullptr;
+
+    for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+    {
+        if (gdk_rectangle_intersect(&aClick, &priv->m_aGraphicHandleRects[i], nullptr))
+        {
+            g_info("LOKDocView_Impl::signalButton: start of drag graphic handle #%d", i);
+            priv->m_bInDragGraphicHandles[i] = true;
+
+            GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+            LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
+            pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
+            pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(priv->m_aGraphicHandleRects[i].x + priv->m_aGraphicHandleRects[i].width / 2, priv->m_fZoom);
+            pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(priv->m_aGraphicHandleRects[i].y + priv->m_aGraphicHandleRects[i].height / 2, priv->m_fZoom);
+            g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+
+            g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+            if (error != nullptr)
+            {
+                g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
+                g_clear_error(&error);
+            }
+            g_object_unref(task);
+
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+/// if handled, returns TRUE else FALSE
+static bool
+handleTextSelectionOnButtonRelease(LOKDocView* pDocView) {
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+
+    if (priv->m_bInDragStartHandle)
+    {
+        g_info("LOKDocView_Impl::signalButton: end of drag start handle");
+        priv->m_bInDragStartHandle = false;
+        return TRUE;
+    }
+    else if (priv->m_bInDragMiddleHandle)
+    {
+        g_info("LOKDocView_Impl::signalButton: end of drag middle handle");
+        priv->m_bInDragMiddleHandle = false;
+        return TRUE;
+    }
+    else if (priv->m_bInDragEndHandle)
+    {
+        g_info("LOKDocView_Impl::signalButton: end of drag end handle");
+        priv->m_bInDragEndHandle = false;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+/// if handled, returns TRUE else FALSE
+static bool
+handleGraphicSelectionOnButtonRelease(LOKDocView* pDocView, GdkEventButton* pEvent) {
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    GError* error = nullptr;
+
+    for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+    {
+        if (priv->m_bInDragGraphicHandles[i])
+        {
+            g_info("LOKDocView_Impl::signalButton: end of drag graphic handle #%d", i);
+            priv->m_bInDragGraphicHandles[i] = false;
+
+            GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+            LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
+            pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
+            pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
+            pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
+            g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+
+            g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+            if (error != nullptr)
+            {
+                g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
+                g_clear_error(&error);
+            }
+            g_object_unref(task);
+
+            return TRUE;
+        }
+    }
+
+    if (priv->m_bInDragGraphicSelection)
+    {
+        g_info("LOKDocView_Impl::signalButton: end of drag graphic selection");
+        priv->m_bInDragGraphicSelection = false;
+
+        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+        LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
+        pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
+        pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
+        pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+
+        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+        if (error != nullptr)
+        {
+            g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
+            g_clear_error(&error);
+        }
+        g_object_unref(task);
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 static void
 postKeyEventInThread(gpointer data)
 {
@@ -746,11 +893,17 @@ callback (gpointer pData)
     break;
     case LOK_CALLBACK_MOUSE_POINTER:
     {
-        // The gtk docs claim that most css cursors should be supported, however
-        // on my system at least this is not true and many cursors are unsupported.
-        // In this case pCursor = null, which results in the default cursor being set.
-        GdkCursor* pCursor = gdk_cursor_new_from_name(gtk_widget_get_display(GTK_WIDGET(pDocView)), pCallback->m_aPayload.c_str());
-        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(pDocView)), pCursor);
+        // We do not want the cursor to get changed in view-only mode
+        if (priv->m_bEdit)
+        {
+            // The gtk docs claim that most css cursors should be supported, however
+            // on my system at least this is not true and many cursors are unsupported.
+            // In this case pCursor = null, which results in the default cursor
+            // being set.
+            GdkCursor* pCursor = gdk_cursor_new_from_name(gtk_widget_get_display(GTK_WIDGET(pDocView)),
+                                                          pCallback->m_aPayload.c_str());
+            gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(pDocView)), pCursor);
+        }
     }
     break;
     case LOK_CALLBACK_GRAPHIC_SELECTION:
@@ -1175,140 +1328,21 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
            (int)pixelToTwip(pEvent->y, priv->m_fZoom));
     gtk_widget_grab_focus(GTK_WIDGET(pDocView));
 
-    if (pEvent->type == GDK_BUTTON_RELEASE)
+    switch (pEvent->type)
     {
-        if (priv->m_bInDragStartHandle)
-        {
-            g_info("LOKDocView_Impl::signalButton: end of drag start handle");
-            priv->m_bInDragStartHandle = false;
-            return FALSE;
-        }
-        else if (priv->m_bInDragMiddleHandle)
-        {
-            g_info("LOKDocView_Impl::signalButton: end of drag middle handle");
-            priv->m_bInDragMiddleHandle = false;
-            return FALSE;
-        }
-        else if (priv->m_bInDragEndHandle)
-        {
-            g_info("LOKDocView_Impl::signalButton: end of drag end handle");
-            priv->m_bInDragEndHandle = false;
-            return FALSE;
-        }
-
-        for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
-        {
-            if (priv->m_bInDragGraphicHandles[i])
-            {
-                g_info("LOKDocView_Impl::signalButton: end of drag graphic handle #%d", i);
-                priv->m_bInDragGraphicHandles[i] = false;
-
-                GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-                LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
-                pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
-                pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
-                pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
-                g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-
-                g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-                if (error != nullptr)
-                {
-                    g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
-                    g_clear_error(&error);
-                }
-                g_object_unref(task);
-
-                return FALSE;
-            }
-        }
-
-        if (priv->m_bInDragGraphicSelection)
-        {
-            g_info("LOKDocView_Impl::signalButton: end of drag graphic selection");
-            priv->m_bInDragGraphicSelection = false;
-
-            GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-            LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
-            pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
-            pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
-            pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
-            g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-
-            g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-            if (error != nullptr)
-            {
-                g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
-                g_clear_error(&error);
-            }
-            g_object_unref(task);
-
-            return FALSE;
-        }
-    }
-
-    if (priv->m_bEdit)
+    case GDK_BUTTON_PRESS:
     {
         GdkRectangle aClick;
         aClick.x = pEvent->x;
         aClick.y = pEvent->y;
         aClick.width = 1;
         aClick.height = 1;
-        if (pEvent->type == GDK_BUTTON_PRESS)
-        {
-            if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleStartRect, nullptr))
-            {
-                g_info("LOKDocView_Impl::signalButton: start of drag start handle");
-                priv->m_bInDragStartHandle = true;
-                return FALSE;
-            }
-            else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleMiddleRect, nullptr))
-            {
-                g_info("LOKDocView_Impl::signalButton: start of drag middle handle");
-                priv->m_bInDragMiddleHandle = true;
-                return FALSE;
-            }
-            else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleEndRect, nullptr))
-            {
-                g_info("LOKDocView_Impl::signalButton: start of drag end handle");
-                priv->m_bInDragEndHandle = true;
-                return FALSE;
-            }
 
-            for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
-            {
-                if (gdk_rectangle_intersect(&aClick, &priv->m_aGraphicHandleRects[i], nullptr))
-                {
-                    g_info("LOKDocView_Impl::signalButton: start of drag graphic handle #%d", i);
-                    priv->m_bInDragGraphicHandles[i] = true;
+        if (handleTextSelectionOnButtonPress(aClick, pDocView))
+            return FALSE;
+        if (handleGraphicSelectionOnButtonPress(aClick, pDocView))
+            return FALSE;
 
-                    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-                    LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
-                    pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
-                    pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(priv->m_aGraphicHandleRects[i].x + priv->m_aGraphicHandleRects[i].width / 2, priv->m_fZoom);
-                    pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(priv->m_aGraphicHandleRects[i].y + priv->m_aGraphicHandleRects[i].height / 2, priv->m_fZoom);
-                    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-
-                    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-                    if (error != nullptr)
-                    {
-                        g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
-                        g_clear_error(&error);
-                    }
-                    g_object_unref(task);
-
-                    return FALSE;
-                }
-            }
-        }
-    }
-
-    if (!priv->m_bEdit)
-        lok_doc_view_set_edit(pDocView, TRUE);
-
-    switch (pEvent->type)
-    {
-    case GDK_BUTTON_PRESS:
-    {
         int nCount = 1;
         if ((pEvent->time - priv->m_nLastButtonPressTime) < 250)
             nCount++;
@@ -1346,6 +1380,11 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
     }
     case GDK_BUTTON_RELEASE:
     {
+        if (handleTextSelectionOnButtonRelease(pDocView))
+            return FALSE;
+        if (handleGraphicSelectionOnButtonRelease(pDocView, pEvent))
+            return FALSE;
+
         int nCount = 1;
         if ((pEvent->time - priv->m_nLastButtonReleaseTime) < 250)
             nCount++;
@@ -1721,6 +1760,8 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
 {
     GTask* task = G_TASK(data);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     switch (pLOEvent->m_nType)
     {
@@ -1728,7 +1769,10 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
         openDocumentInThread(task);
         break;
     case LOK_POST_COMMAND:
-        postCommandInThread(task);
+        if (priv->m_bEdit)
+            postCommandInThread(task);
+        else
+            g_info ("LOK_POST_COMMAND: ignoring commands in view-only mode");
         break;
     case LOK_SET_EDIT:
         setEditInThread(task);
@@ -1740,6 +1784,7 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
         setPartmodeInThread(task);
         break;
     case LOK_POST_KEY:
+        // view-only/editable mode already checked during signal key signal emission
         postKeyEventInThread(task);
         break;
     case LOK_PAINT_TILE:
@@ -1749,7 +1794,10 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
         postMouseEventInThread(task);
         break;
     case LOK_SET_GRAPHIC_SELECTION:
-        setGraphicSelectionInThread(task);
+        if (priv->m_bEdit)
+            setGraphicSelectionInThread(task);
+        else
+            g_info ("LOK_SET_GRAPHIC_SELECTION: skipping graphical operation in view-only mode");
         break;
     case LOK_SET_CLIENT_ZOOM:
         setClientZoomInThread(task);
