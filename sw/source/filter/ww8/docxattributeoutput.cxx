@@ -126,6 +126,7 @@
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <algorithm>
 
@@ -4501,6 +4502,10 @@ bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLEN
 void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
 {
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(pPostponedMath)->GetOLEObj().GetOleRef());
+    if (embed::EmbedStates::LOADED == xObj->getCurrentState())
+    {   // must be running so there is a Component
+        xObj->changeState(embed::EmbedStates::RUNNING);
+    }
     uno::Reference< uno::XInterface > xInterface( xObj->getComponent(), uno::UNO_QUERY );
     if (!xInterface.is())
     {
