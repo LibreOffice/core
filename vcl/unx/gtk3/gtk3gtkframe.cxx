@@ -2449,13 +2449,10 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     SalWheelMouseEvent aEvent;
 
     aEvent.mnTime = pSEvent->time;
-    fprintf(stderr, "time is %ld\n", aEvent.mnTime);
     aEvent.mnX = (sal_uLong)pSEvent->x;
     aEvent.mnY = (sal_uLong)pSEvent->y;
     aEvent.mnCode = GetMouseModCode( pSEvent->state );
     aEvent.mnScrollLines = 3;
-
-    fprintf(stderr, "scroll\n");
 
     switch (pSEvent->direction)
     {
@@ -2463,7 +2460,6 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
         {
             double delta_x, delta_y;
             gdk_event_get_scroll_deltas(pEvent, &delta_x, &delta_y);
-            fprintf(stderr, "%f %f\n", delta_x, delta_y);
             //pick the bigger one I guess
             aEvent.mbHorz = fabs(delta_x) > fabs(delta_y);
             if (aEvent.mbHorz)
