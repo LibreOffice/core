@@ -246,26 +246,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         return true;
     }
 
-    if (   !startsWith(pVarDecl->getType().getAsString(), "std::vector<vcl::Window *>")
-        && !startsWith(pVarDecl->getType().getAsString(), "std::map<vcl::Window *, Size>")
-        && !startsWith(pVarDecl->getType().getAsString(), "std::map<vcl::Window *, class Size>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::vector<class Button *>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::vector<Button *>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::mem_fun1_t<")
-        && !startsWith(pVarDecl->getType().getAsString(), "::comphelper::mem_fun1_t<")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::pair<formula::RefButton *, formula::RefEdit *>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::pair<RefButton *, RefEdit *>")
-        && !startsWith(pVarDecl->getType().getAsString(), "std::list<SwSidebarWin *>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::map<OTableWindow *, sal_Int32>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::map<class OTableWindow *, sal_Int32>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::multimap<sal_Int32, OTableWindow *>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::std::multimap<sal_Int32, class OTableWindow *>")
-        && !startsWith(pVarDecl->getType().getAsString(), "::dbp::OMultiInstanceAutoRegistration< ::dbp::OUnoAutoPilot<")
-        && !startsWith(pVarDecl->getType().getAsString(), "SwSidebarWin_iterator")
-        && !startsWith(pVarDecl->getType().getAsString(), "functor_vector_type")
-        && !startsWith(pVarDecl->getType().getAsString(), "const functor_vector_type")
-        && containsWindowSubclass(pVarDecl->getType()))
-    {
+    if (containsWindowSubclass(pVarDecl->getType())) {
         report(
             DiagnosticsEngine::Warning,
             "OutputDevice subclass %0 should be wrapped in VclPtr",
