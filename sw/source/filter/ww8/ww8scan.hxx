@@ -364,7 +364,7 @@ public:
 enum ePLCFT{ CHP=0, PAP, SEP, /*HED, FNR, ENR,*/ PLCF_END };
 
 //Its hardcoded that eFTN be the first one: A very poor hack, needs to be fixed
-enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260, eATNBKN = 261 };
+enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260, eATNBKN = 261, eFACTOIDBKN = 262 };
 
 /*
     pure virtual:
@@ -787,6 +787,36 @@ public:
     bool getIsEnd() const;
 };
 
+/// Handles the import of PlcfBkfFactoid and PlcfBklFactoid: start / end position of factoids.
+class WW8PLCFx_FactoidBook : public WW8PLCFx
+{
+private:
+    /// Start and end positions.
+    WW8PLCFspecial* m_pBook[2];
+    /// Number of factoid marks
+    sal_Int32 m_nIMax;
+    bool m_bIsEnd;
+
+    WW8PLCFx_FactoidBook(const WW8PLCFx_FactoidBook&) = delete;
+    WW8PLCFx_FactoidBook& operator=(const WW8PLCFx_FactoidBook&) = delete;
+
+public:
+    WW8PLCFx_FactoidBook(SvStream* pTableSt,const WW8Fib& rFib);
+    virtual ~WW8PLCFx_FactoidBook();
+    virtual sal_uInt32 GetIdx() const override;
+    virtual void SetIdx(sal_uLong nI) override;
+    virtual sal_uLong GetIdx2() const override;
+    virtual void SetIdx2(sal_uLong nIdx) override;
+    virtual bool SeekPos(WW8_CP nCpPos) override;
+    virtual WW8_FC Where() override;
+    virtual long GetNoSprms(WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen) override;
+    virtual void advance() override;
+
+    /// Handle is the unique ID of a factoid mark.
+    long getHandle() const;
+    bool getIsEnd() const;
+};
+
 /*
     this is what we use outside:
 */
@@ -873,7 +903,7 @@ struct WW8PLCFxSaveAll;
 class WW8PLCFMan
 {
 public:
-    enum WW8PLCFManLimits {MAN_ANZ_PLCF = 11};
+    enum WW8PLCFManLimits {MAN_ANZ_PLCF = 12};
 
 private:
     wwSprmParser maSprmParser;
@@ -890,7 +920,7 @@ private:
 
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
     WW8PLCFxDesc *pChp, *pPap, *pSep, *pField, *pFootnote, *pEdn, *pBkm, *pPcd,
-        *pPcdA, *pAnd, *pAtnBkm;
+        *pPcdA, *pAnd, *pAtnBkm, *pFactoidBkm;
     WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables, *pSubdocs;
     sal_uInt8* pExtendedAtrds;
 
@@ -927,6 +957,7 @@ public:
     WW8PLCFx_SubDoc* GetAtn() const { return static_cast<WW8PLCFx_SubDoc*>(pAnd->pPLCFx); }
     WW8PLCFx_Book* GetBook() const { return static_cast<WW8PLCFx_Book*>(pBkm->pPLCFx); }
     WW8PLCFx_AtnBook* GetAtnBook() const { return static_cast<WW8PLCFx_AtnBook*>(pAtnBkm->pPLCFx); }
+    WW8PLCFx_FactoidBook* GetFactoidBook() const { return static_cast<WW8PLCFx_FactoidBook*>(pFactoidBkm->pPLCFx); }
     long GetCpOfs() const { return pChp->nCpOfs; }  // for Header/Footer...
 
     /* asks, if *current paragraph* has an Sprm of this type */
@@ -1002,6 +1033,8 @@ private:
     sal_uInt8*        pExtendedAtrds;   // Extended ATRDs
     WW8PLCFx_Book*    pBook;            // Bookmarks
     WW8PLCFx_AtnBook* pAtnBook;         // Annotationmarks
+    /// Smart tag bookmarks.
+    WW8PLCFx_FactoidBook* pFactoidBook;
 
     WW8PLCFpcd*         pPiecePLCF; // for FastSave ( Basis-PLCF without iterator )
     WW8PLCFpcd_Iter*    pPieceIter; // for FastSave ( iterator for previous )
