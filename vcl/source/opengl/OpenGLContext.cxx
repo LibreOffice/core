@@ -31,6 +31,7 @@
 #endif
 
 #include "svdata.hxx"
+#include "salgdi.hxx"
 
 #include <opengl/framebuffer.hxx>
 #include <opengl/program.hxx>
@@ -1432,6 +1433,43 @@ void OpenGLContext::makeCurrent()
 #endif
 
     registerAsCurrent();
+}
+
+rtl::Reference<OpenGLContext> OpenGLContext::getVCLContext(bool bMakeIfNecessary)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    OpenGLContext *pContext = pSVData->maGDIData.mpLastContext;
+    while( pContext )
+    {
+        // check if this context is usable
+        if( pContext->isInitialized() && pContext->isVCLOnly() )
+            break;
+        pContext = pContext->mpPrevContext;
+    }
+    rtl::Reference<OpenGLContext> xContext;
+    if( !pContext && bMakeIfNecessary )
+    {
+        // create our magic fallback window context.
+        xContext = ImplGetDefaultContextWindow()->GetGraphics()->GetOpenGLContext();
+        assert(xContext.is());
+    }
+    else
+        xContext = pContext;
+
+    if( xContext.is() )
+        xContext->makeCurrent();
+
+    return xContext;
+}
+
+/*
+ * We don't care what context we have, but we want one that is live,
+ * ie. not reset underneath us, and is setup for VCL usage - ideally
+ * not swapping context at all.
+ */
+void OpenGLContext::makeVCLCurrent()
+{
+    getVCLContext(true);
 }
 
 void OpenGLContext::registerAsCurrent()
