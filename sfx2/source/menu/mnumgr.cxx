@@ -134,17 +134,16 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     // build thesaurus sub menu if look-up string is available
 
     PopupMenu* pThesSubMenu = nullptr;
-    SfxPoolItem *pItem = nullptr;
+    std::unique_ptr<SfxPoolItem> pItem;
     pBindings->QueryState( SID_THES, pItem );
     OUString aThesLookUpStr;
-    SfxStringItem *pStrItem = dynamic_cast< SfxStringItem * >(pItem);
+    SfxStringItem *pStrItem = dynamic_cast< SfxStringItem * >(pItem.get());
     sal_Int32 nDelimPos = -1;
     if (pStrItem)
     {
         aThesLookUpStr = pStrItem->GetValue();
         nDelimPos = aThesLookUpStr.lastIndexOf( '#' );
     }
-    delete pItem;
     if ( !aThesLookUpStr.isEmpty() && nDelimPos != -1 )
     {
         // get synonym list for sub menu

@@ -326,10 +326,9 @@ bool SvxRubyDialog::Close()
 void SvxRubyDialog::Activate()
 {
     SfxModelessDialog::Activate();
-    SfxPoolItem* pState = nullptr;
+    std::unique_ptr<SfxPoolItem> pState;
     SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
-    bool bEnable = (eState < SfxItemState::DEFAULT) || !pState || !static_cast<SfxBoolItem*>(pState)->GetValue();
-    delete pState;
+    bool bEnable = (eState < SfxItemState::DEFAULT) || !pState || !static_cast<SfxBoolItem*>(pState.get())->GetValue();
     m_pStylistPB->Enable(bEnable);
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
@@ -598,14 +597,13 @@ IMPL_LINK_NOARG_TYPED(SvxRubyDialog, CloseHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxRubyDialog, StylistHdl_Impl, Button*, void)
 {
-    SfxPoolItem* pState = nullptr;
+    std::unique_ptr<SfxPoolItem> pState;
     SfxItemState eState = pBindings->QueryState(SID_STYLE_DESIGNER, pState);
-    if (eState <= SfxItemState::SET || !pState || !static_cast<SfxBoolItem*>(pState)->GetValue())
+    if (eState <= SfxItemState::SET || !pState || !static_cast<SfxBoolItem*>(pState.get())->GetValue())
     {
         pBindings->GetDispatcher()->Execute(SID_STYLE_DESIGNER,
                                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
     }
-    delete pState;
 }
 
 IMPL_LINK_TYPED(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)

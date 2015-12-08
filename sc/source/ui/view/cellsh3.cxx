@@ -729,11 +729,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     case FID_MERGE_TOGGLE:
                     {
                         bCenter = true;
-                        SfxPoolItem* pItem = nullptr;
+                        std::unique_ptr<SfxPoolItem> pItem;
                         if( rBindings.QueryState( nSlot, pItem ) >= SfxItemState::DEFAULT )
-                            bMerge = !static_cast< SfxBoolItem* >( pItem )->GetValue();
-
-                        delete pItem;
+                            bMerge = !static_cast< SfxBoolItem* >( pItem.get() )->GetValue();
                     }
                     break;
                 }

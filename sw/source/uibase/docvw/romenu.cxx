@@ -59,16 +59,16 @@ SwReadOnlyPopup::~SwReadOnlyPopup()
 
 void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis )
 {
-    SfxPoolItem *_pItem = nullptr;
+    std::unique_ptr<SfxPoolItem> _pItem;
     SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );
     if (eState >= SfxItemState::DEFAULT)
     {
         EnableItem( nMID );
         if (_pItem)
         {
-            CheckItem ( nMID, dynamic_cast< const SfxVoidItem *>( _pItem ) ==  nullptr &&
-                            dynamic_cast< const SfxBoolItem *>( _pItem ) !=  nullptr &&
-                            static_cast<SfxBoolItem*>(_pItem)->GetValue());
+            CheckItem ( nMID, dynamic_cast< const SfxVoidItem *>( _pItem.get() ) ==  nullptr &&
+                            dynamic_cast< const SfxBoolItem *>( _pItem.get() ) !=  nullptr &&
+                            static_cast<SfxBoolItem*>(_pItem.get())->GetValue());
             //remove full screen entry when not in full screen mode
             if( SID_WIN_FULLSCREEN == nSID && !IsItemChecked(SID_WIN_FULLSCREEN) )
                 EnableItem(nMID, false);
@@ -76,8 +76,6 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
     }
     else
         EnableItem( nMID, false );
-
-    delete _pItem;
 }
 
 SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
@@ -198,14 +196,12 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     Check( MN_READONLY_OPENURL,         SID_OPENDOC,        rDis );
     Check( MN_READONLY_OPENURLNEW,      SID_OPENDOC,        rDis );
 
-    SfxPoolItem* pState = nullptr;
+    std::unique_ptr<SfxPoolItem> pState;
 
     SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
     Check( MN_READONLY_COPY,            SID_COPY,           rDis );
     if(eState < SfxItemState::DEFAULT)
         EnableItem( MN_READONLY_COPY, false );
-    delete pState;
-    pState = nullptr;
 
     eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
     if (
@@ -215,7 +211,6 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     {
         EnableItem( MN_READONLY_EDITDOC, false );
     }
-    delete pState;
 
     if ( sURL.isEmpty() )
     {

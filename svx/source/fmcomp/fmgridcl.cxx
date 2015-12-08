@@ -761,15 +761,14 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
         // ask the bindings of the current view frame (which should be the one we're residing in) for the state
         if (pCurrentFrame)
         {
-            SfxPoolItem* pItem = nullptr;
+            std::unique_ptr<SfxPoolItem> pItem;
             eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
 
-            if (eState >= SfxItemState::DEFAULT && pItem )
+            if (eState >= SfxItemState::DEFAULT && pItem.get() != nullptr )
             {
-                bool bChecked = dynamic_cast<const SfxBoolItem*>( pItem) != nullptr && static_cast<SfxBoolItem*>(pItem)->GetValue();
+                bool bChecked = dynamic_cast<const SfxBoolItem*>( pItem.get()) != nullptr && static_cast<SfxBoolItem*>(pItem.get())->GetValue();
                 rMenu.CheckItem(SID_FM_SHOW_PROPERTY_BROWSER,bChecked);
             }
-            delete pItem;
         }
     }
 }

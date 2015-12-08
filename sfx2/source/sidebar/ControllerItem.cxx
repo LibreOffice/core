@@ -164,10 +164,9 @@ bool ControllerItem::IsEnabled (SfxItemState eState) const
 
 void ControllerItem::RequestUpdate()
 {
-    SfxPoolItem* pState = nullptr;
+    std::unique_ptr<SfxPoolItem> pState;
     const SfxItemState eState (GetBindings().QueryState(GetId(), pState));
-    mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState, IsEnabled(eState));
-    delete pState;
+    mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState.get(), IsEnabled(eState));
 }
 
 void ControllerItem::NotifyFrameContextChange()
