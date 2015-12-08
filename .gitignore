@@ -29,6 +29,8 @@
 
 # default location for external downloads
 /external/tarballs
+/external/android-ndk
+/external/android-sdk-linux
 
 # autoconf generated stuff
 /aclocal.m4
@@ -53,6 +55,7 @@
 /config_build_lang.mk
 /configure
 /lo.xcent
+/bin/bffvalidator.sh
 /Makefile
 /NEWS
 /TODO
@@ -78,6 +81,15 @@
 .kdev_include_paths
 .buckd
 .directory
+.cproject
+.project
+.settings
+.eclipsesettingfile
+eclipsesettingfile.xml
+.clang_complete
+.cxx_tags
+.yavide_proj
+.yavide_session
 
 # things below this point are targeted for elimination
 
@@ -133,10 +145,9 @@ DerivedData
 # doxygen output
 /docs
 
+# make dump-deps output
+/lo.png
+
 # gdb config
 /.gdbinit
 /.gdb_history
-
-# eclipse
-.project
-.cproject
