@@ -354,7 +354,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
             }
             else if (nAttrId == rEntry.pAttr->Which())
             {
-                if( nAttrId != RES_FLTR_BOOKMARK && nAttrId != RES_FLTR_ANNOTATIONMARK )
+                if( nAttrId != RES_FLTR_BOOKMARK && nAttrId != RES_FLTR_ANNOTATIONMARK && nAttrId != RES_FLTR_RDFMARK )
                 {
                     // query handle
                     bF = true;
@@ -363,7 +363,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
                 {
                     bF = true;
                 }
-                else if (nAttrId == RES_FLTR_ANNOTATIONMARK && nHand == static_cast<CntUInt16Item*>(rEntry.pAttr)->GetValue())
+                else if ((nAttrId == RES_FLTR_ANNOTATIONMARK || nAttrId == RES_FLTR_RDFMARK) && nHand == static_cast<CntUInt16Item*>(rEntry.pAttr)->GetValue())
                 {
                     bF = true;
                 }
@@ -606,6 +606,16 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         {
             if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true))
                 pDoc->getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
+            else
+                SAL_WARN("sw", "failed to make book region or point");
+        }
+        break;
+    case RES_FLTR_RDFMARK:
+        {
+            if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true))
+            {
+                // TODO handle RDF mark
+            }
             else
                 SAL_WARN("sw", "failed to make book region or point");
         }
