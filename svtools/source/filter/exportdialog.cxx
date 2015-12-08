@@ -54,7 +54,6 @@
 #define FORMAT_EPS      14
 #define FORMAT_MET      15
 #define FORMAT_SVG      16
-#define FORMAT_SVM      17
 
 #define UNIT_DEFAULT    -1
 #define UNIT_INCH       0
@@ -89,8 +88,6 @@ static sal_Int16 GetFilterFormat(const OUString& rExt)
         nFormat = FORMAT_MET;
     else if ( rExt == "SVG" )
         nFormat = FORMAT_SVG;
-    else if ( rExt == "SVM" )
-        nFormat = FORMAT_SVM;
     return nFormat;
 }
 
