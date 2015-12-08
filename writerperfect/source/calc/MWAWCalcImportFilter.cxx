@@ -57,7 +57,6 @@ bool MWAWCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
         switch (docKind)
         {
         case MWAWDocument::MWAW_K_DATABASE:
-        {
             switch (docType)
             {
             case MWAWDocument::MWAW_T_CLARISWORKS:
@@ -71,9 +70,7 @@ bool MWAWCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
                 break;
             }
             break;
-        }
         case MWAWDocument::MWAW_K_SPREADSHEET:
-        {
             switch (docType)
             {
             case MWAWDocument::MWAW_T_CLARISRESOLVE:
@@ -90,7 +87,6 @@ bool MWAWCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
                 break;
             }
             break;
-        }
         default:
             break;
         }
