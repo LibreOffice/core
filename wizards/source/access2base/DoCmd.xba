@@ -1212,9 +1212,11 @@ Public Function OutputTo(ByVal pvObjectType As Variant _
 							, ByVal Optional pvEncoding As Variant _
 							, ByVal Optional pvQuality As Variant _
 							) As Boolean
+REM https://wiki.openoffice.org/wiki/Framework/Article/Filter/FilterList_OOo_3_0
 REM https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filter_Options
+REM https://msdn.microsoft.com/en-us/library/ms709353%28v=vs.85%29.aspx
 &apos;Supported:	acFormatPDF, acFormatODT, acFormatDOC, acFormatHTML		for forms
-&apos;			acFormatHTML, acFormatXLS, acFormatODS, acFormatTXT	for tables and queries
+&apos;			acFormatHTML, acFormatODS, acFormatXLS, acFormatXLSX, acFormatTXT		for tables and queries
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;OutputTo&quot;
@@ -1230,8 +1232,8 @@ Const cstThisSub = &quot;OutputTo&quot;
 	If pvOutputFormat &lt;&gt; &quot;&quot; Then
 		If Not Utils._CheckArgument(UCase(pvOutputFormat), 3, vbString, Array( _
 			UCase(acFormatPDF), UCase(acFormatODT), UCase(acFormatDOC), UCase(acFormatHTML) _
-			, UCase(acFormatXLS), UCase(acFormatODS), UCase(acFormatTXT) _
-			, &quot;PDF&quot;, &quot;ODT&quot;, &quot;DOC&quot;, &quot;HTML&quot;, &quot;XLS&quot;, &quot;ODS&quot;, &quot;TXT&quot;, &quot;CSV&quot;, &quot;&quot; _
+			, UCase(acFormatODS), UCase(acFormatXLS), UCase(acFormatXLSX), UCase(acFormatTXT) _
+			, &quot;PDF&quot;, &quot;ODT&quot;, &quot;DOC&quot;, &quot;HTML&quot;, &quot;ODS&quot;, &quot;XLS&quot;, &quot;XLSX&quot;, &quot;TXT&quot;, &quot;CSV&quot;, &quot;&quot; _
 			)) Then Goto Exit_Function				&apos;	A 2nd time to allow case unsensitivity
 	End If
 	If IsMissing(pvOutputFile) Then pvOutputFile = &quot;&quot;
