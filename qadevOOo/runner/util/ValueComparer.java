@@ -239,13 +239,10 @@ public class ValueComparer {
             result = true;
 
         else if(XInterface.class.isAssignableFrom(op1.getClass()) && XInterface.class.isAssignableFrom(op2.getClass()))
-            {
-            // ignore
-            }
+            result = compareInterfaces((XInterface)op1, (XInterface)op2);
+
         else if(Enum.class.isAssignableFrom(op1.getClass()) && Enum.class.isAssignableFrom(op2.getClass()))
-            {
-            // ignore
-            }
+            result = compareEnums((Enum)op1, (Enum)op2);
 
         else if(op1.getClass() == String.class && op2.getClass() == String.class) // is it a String ?
             result = ((String)op1).equals(op2);
