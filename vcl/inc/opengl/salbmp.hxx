@@ -31,8 +31,6 @@
 
 #include <deque>
 
-// - SalBitmap  -
-
 struct  BitmapBuffer;
 class   BitmapPalette;
 
