@@ -7,23 +7,21 @@
  *
 -->
 
-<node oor:name="draw_Beagle_Works" oor:op="replace">
+<node oor:name="MWAW_Drawing" oor:op="replace">
     <prop oor:name="DetectService">
         <value>com.sun.star.comp.Draw.MWAWDrawImportFilter</value>
     </prop>
     <prop oor:name="Extensions">
-        <value>dummy</value>
+        <value>*</value>
     </prop>
-    <prop oor:name="MediaType">
-        <value></value>
-    </prop>
+    <prop oor:name="MediaType"/>
     <prop oor:name="Preferred">
         <value>true</value>
     </prop>
     <prop oor:name="PreferredFilter">
-        <value>Beagle_Works_Draw</value>
+        <value>MWAW_Drawing</value>
     </prop>
     <prop oor:name="UIName">
-        <value>BeagleWorks/WordPerfect Works Document</value>
+        <value>Legacy Mac Drawing</value>
     </prop>
 </node>

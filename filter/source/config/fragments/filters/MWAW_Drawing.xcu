@@ -7,7 +7,7 @@
  *
 -->
 
-<node oor:name="Great_Works_Draw" oor:op="replace">
+<node oor:name="MWAW_Drawing" oor:op="replace">
     <prop oor:name="Flags">
         <value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value>
     </prop>
@@ -15,13 +15,13 @@
         <value>com.sun.star.comp.Draw.MWAWDrawImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">GreatWorks Drawing</value>
+        <value xml:lang="en-US">Legacy Mac Drawing</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>
     </prop>
     <prop oor:name="Type">
-        <value>draw_Great_Works</value>
+        <value>MWAW_Drawing</value>
     </prop>
     <prop oor:name="DocumentService">
         <value>com.sun.star.drawing.DrawingDocument</value>
