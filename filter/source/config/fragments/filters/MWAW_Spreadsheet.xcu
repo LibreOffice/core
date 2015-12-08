@@ -15,7 +15,7 @@
         <value>com.sun.star.comp.Calc.MWAWCalcImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Legacy Mac Spreadsheet/Database</value>
+        <value xml:lang="en-US">Legacy Mac Spreadsheet</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>

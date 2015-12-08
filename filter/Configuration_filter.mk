@@ -564,6 +564,8 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	Claris_Resolve_Calc \
 	Mac_Works_Calc \
 	AppleNumbers \
+	MWAW_Database \
+	MWAW_Spreadsheet \
 ))
 
 # fcfg_draw
