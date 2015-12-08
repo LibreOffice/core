@@ -58,44 +58,12 @@ bool MWAWImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStr
         {
             switch (docType)
             {
-            case MWAWDocument::MWAW_T_ACTA:
-                rTypeName = "writer_Mac_Acta";
-                break;
-            case MWAWDocument::MWAW_T_BEAGLEWORKS:
-                rTypeName = "writer_Beagle_Works";
-                break;
             case MWAWDocument::MWAW_T_CLARISWORKS:
                 rTypeName = "writer_ClarisWorks";
                 break;
-            case MWAWDocument::MWAW_T_DOCMAKER:
-                rTypeName = "writer_DocMaker";
-                break;
-            case MWAWDocument::MWAW_T_EDOC:
-                rTypeName = "writer_eDoc_Document";
-                break;
-            case MWAWDocument::MWAW_T_FULLWRITE:
-                rTypeName = "writer_FullWrite_Professional";
-                break;
-            case MWAWDocument::MWAW_T_GREATWORKS:
-                rTypeName = "writer_Great_Works";
-                break;
-            case MWAWDocument::MWAW_T_HANMACWORDJ:
-                rTypeName = "writer_HanMac_Word_J";
-                break;
-            case MWAWDocument::MWAW_T_HANMACWORDK:
-                rTypeName = "writer_HanMac_Word_K";
-                break;
-            case MWAWDocument::MWAW_T_LIGHTWAYTEXT:
-                rTypeName = "writer_LightWayText";
-                break;
-            case MWAWDocument::MWAW_T_MACDOC:
-                rTypeName = "writer_MacDoc";
-                break;
             case MWAWDocument::MWAW_T_MACWRITE:
-                rTypeName = "writer_MacWrite";
-                break;
             case MWAWDocument::MWAW_T_MACWRITEPRO:
-                rTypeName = "writer_MacWritePro";
+                rTypeName = "writer_MacWrite";
                 break;
             case MWAWDocument::MWAW_T_MARINERWRITE:
                 rTypeName = "writer_Mariner_Write";
@@ -106,75 +74,11 @@ bool MWAWImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStr
             case MWAWDocument::MWAW_T_MICROSOFTWORKS:
                 rTypeName = "writer_Mac_Works";
                 break;
-            case MWAWDocument::MWAW_T_MINDWRITE:
-                rTypeName = "writer_MindWrite";
-                break;
-            case MWAWDocument::MWAW_T_MORE:
-                rTypeName = "writer_Mac_More";
-                break;
-            case MWAWDocument::MWAW_T_NISUSWRITER:
-                rTypeName = "writer_Nisus_Writer";
-                break;
-            case MWAWDocument::MWAW_T_RAGTIME:
-                rTypeName = "writer_Mac_RagTime";
-                break;
-            case MWAWDocument::MWAW_T_TEACHTEXT:
-                rTypeName = "writer_TeachText";
-                break;
-            case MWAWDocument::MWAW_T_TEXEDIT:
-                rTypeName = "writer_TexEdit";
-                break;
             case MWAWDocument::MWAW_T_WRITENOW:
                 rTypeName = "writer_WriteNow";
                 break;
-            case MWAWDocument::MWAW_T_WRITERPLUS:
-                rTypeName = "writer_WriterPlus";
-                break;
-            case MWAWDocument::MWAW_T_ZWRITE:
-                rTypeName = "writer_ZWrite";
-                break;
-            case MWAWDocument::MWAW_T_RESERVED3: // also MWAWDocument::MWAW_T_STYLE
-                rTypeName = "writer_MWStyle";
-                break;
-
-            case MWAWDocument::MWAW_T_ADOBEILLUSTRATOR:
-            case MWAWDocument::MWAW_T_CLARISRESOLVE:
-            case MWAWDocument::MWAW_T_DBASE:
-            case MWAWDocument::MWAW_T_FAMILYTREEMAKER:
-            case MWAWDocument::MWAW_T_FILEMAKER:
-            case MWAWDocument::MWAW_T_FOXBASE:
-            case MWAWDocument::MWAW_T_FULLIMPACT:
-            case MWAWDocument::MWAW_T_FULLPAINT:
-            case MWAWDocument::MWAW_T_FRAMEMAKER:
-            case MWAWDocument::MWAW_T_INFOGENIE:
-            case MWAWDocument::MWAW_T_KALEIDAGRAPH:
-            case MWAWDocument::MWAW_T_MACDRAFT:
-            case MWAWDocument::MWAW_T_MACDRAW:
-            case MWAWDocument::MWAW_T_MACDRAWPRO:
-            case MWAWDocument::MWAW_T_MACPAINT:
-            case MWAWDocument::MWAW_T_MICROSOFTFILE:
-            case MWAWDocument::MWAW_T_MICROSOFTMULTIPLAN:
-            case MWAWDocument::MWAW_T_OVERVUE:
-            case MWAWDocument::MWAW_T_PAGEMAKER:
-            case MWAWDocument::MWAW_T_PIXELPAINT:
-            case MWAWDocument::MWAW_T_READYSETGO:
-            case MWAWDocument::MWAW_T_SUPERPAINT:
-            case MWAWDocument::MWAW_T_SYMPOSIUM:
-            case MWAWDocument::MWAW_T_TRAPEZE:
-            case MWAWDocument::MWAW_T_WINGZ:
-            case MWAWDocument::MWAW_T_XPRESS:
-            case MWAWDocument::MWAW_T_4DIMENSION:
-
-            case MWAWDocument::MWAW_T_RESERVED1:
-            case MWAWDocument::MWAW_T_RESERVED2:
-            case MWAWDocument::MWAW_T_RESERVED4:
-            case MWAWDocument::MWAW_T_RESERVED5:
-            case MWAWDocument::MWAW_T_RESERVED6:
-            case MWAWDocument::MWAW_T_RESERVED7:
-            case MWAWDocument::MWAW_T_RESERVED8:
-            case MWAWDocument::MWAW_T_RESERVED9:
-            case MWAWDocument::MWAW_T_UNKNOWN:
             default:
+                rTypeName = "MWAW_Text_Document";
                 break;
             }
         }

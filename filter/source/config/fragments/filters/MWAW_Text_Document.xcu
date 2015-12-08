@@ -7,7 +7,7 @@
  *
 -->
 
-<node oor:name="Beagle_Works" oor:op="replace">
+<node oor:name="MWAW_Text_Document" oor:op="replace">
     <prop oor:name="Flags">
         <value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value>
     </prop>
@@ -15,13 +15,13 @@
         <value>com.sun.star.comp.Writer.MWAWImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">BeagleWorks/WordPerfect Works v1 Text Document</value>
+        <value xml:lang="en-US">Legacy Mac Text Document</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>
     </prop>
     <prop oor:name="Type">
-        <value>writer_Beagle_Works</value>
+        <value>MWAW_Text_Document</value>
     </prop>
     <prop oor:name="DocumentService">
         <value>com.sun.star.text.TextDocument</value>

@@ -7,23 +7,21 @@
  *
 -->
 
-<node oor:name="writer_MacDoc" oor:op="replace">
+<node oor:name="MWAW_Text_Document" oor:op="replace">
     <prop oor:name="DetectService">
         <value>com.sun.star.comp.Writer.MWAWImportFilter</value>
     </prop>
     <prop oor:name="Extensions">
-        <value>hqx zip</value>
+        <value>*</value>
     </prop>
-    <prop oor:name="MediaType">
-        <value></value>
-    </prop>
+    <prop oor:name="MediaType"/>
     <prop oor:name="Preferred">
         <value>true</value>
     </prop>
     <prop oor:name="PreferredFilter">
-        <value>MacDoc</value>
+        <value>MWAW_Text_Document</value>
     </prop>
     <prop oor:name="UIName">
-        <value>MacDoc</value>
+        <value>Legacy Mac Text Document</value>
     </prop>
 </node>
