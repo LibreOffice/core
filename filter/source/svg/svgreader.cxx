@@ -159,7 +159,8 @@ struct AnnotatingVisitor
     AnnotatingVisitor(StatePool&                                        rStatePool,
                       StateMap&                                         rStateMap,
                       const State&                                       rInitialState,
-                      const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler) :
+                      const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
+                      std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector) :
         mnCurrStateId(0),
         maCurrState(),
         maParentStates(),
@@ -167,7 +168,9 @@ struct AnnotatingVisitor
         mrStateMap(rStateMap),
         mxDocumentHandler(xDocumentHandler),
         maGradientVector(),
-        maGradientStopVector()
+        maGradientStopVector(),
+        maElementVector(),
+        mrUseElementVector(rUseElementVector)
     {
         maParentStates.push_back(rInitialState);
     }
@@ -265,6 +268,67 @@ struct AnnotatingVisitor
                 }
                 break;
             }
+            case XML_USE:
+            {
+                uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem("href"));
+                if(xNode.is())
+                {
+                    const OUString sValue(xNode->getNodeValue());
+                    ElementRefMapType::iterator aFound=maElementIdMap.end();
+                    if ( sValue.copy(0,1) == "#" )
+                        aFound = maElementIdMap.find(sValue.copy(1));
+                    else
+                        aFound = maElementIdMap.find(sValue);
+                    if( aFound != maElementIdMap.end() )
+                    {
+                        uno::Reference<xml::dom::XElement> xRefElem(
+                            maElementVector[aFound->second]->cloneNode(true), uno::UNO_QUERY);
+
+                        xRefElem->removeAttribute("id");
+                        uno::Reference<xml::dom::XNode> xAttrNode;
+
+                        const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                        OUString sAttributeValue;
+                        double x=0.0, y=0.0;
+                        for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                        {
+                            sAttributeValue = xAttributes->item(i)->getNodeValue();
+                            const sal_Int32 nAttribId(
+                                getTokenId(xAttributes->item(i)->getNodeName()));
+
+                            switch(nAttribId)
+                            {
+                                case XML_ID:
+                                    maElementVector.push_back(xElem);
+                                    maElementIdMap.insert(std::make_pair(sAttributeValue,
+                                        maElementVector.size() - 1));
+                                    break;
+                                case XML_X:
+                                    x = convLength(sAttributeValue,maCurrState,'h');
+                                    break;
+                                case XML_Y:
+                                    y = convLength(sAttributeValue,maCurrState,'v');
+                                    break;
+                                default:
+                                    OUString sAttributeName = xAttributes->item(i)->getNodeName();
+                                    xRefElem->setAttribute(sAttributeName, sAttributeValue);
+                                    break;
+                            }
+                        }
+                        std::stringstream ssAttrValue;
+                        ssAttrValue << xRefElem->getAttribute("transform");
+                        ssAttrValue << " translate(" << x << "," << y << ")";
+
+                        OUString attrValue(OUString::createFromAscii (ssAttrValue.str().c_str()));
+                        xRefElem->setAttribute("transform", attrValue);
+
+                        mrUseElementVector.push_back(xRefElem);
+
+                        visitElements((*this), xRefElem, STYLE_ANNOTATOR);
+                    }
+                }
+                break;
+            }
             case XML_STOP:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
@@ -289,6 +353,7 @@ struct AnnotatingVisitor
                 // scan for style info
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
+
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
                     sAttributeValue = xAttributes->item(i)->getNodeValue();
@@ -297,8 +362,17 @@ struct AnnotatingVisitor
                     if( XML_STYLE == nTokenId )
                         parseStyle(sAttributeValue);
                     else
-                        parseAttribute(nTokenId,
-                                       sAttributeValue);
+                    {
+                        if( XML_ID == nTokenId )
+                        {
+                            maElementVector.push_back(xElem);
+                            maElementIdMap.insert(std::make_pair(sAttributeValue,
+                                maElementVector.size() - 1));
+                        }
+                        else
+                            parseAttribute(nTokenId,
+                                sAttributeValue);
+                    }
                 }
 
                 // all attributes parsed, can calc total CTM now
@@ -1213,18 +1287,23 @@ struct AnnotatingVisitor
     uno::Reference<xml::sax::XDocumentHandler> mxDocumentHandler;
     std::vector< Gradient >                    maGradientVector;
     std::vector< GradientStop >                maGradientStopVector;
+    std::vector< uno::Reference<xml::dom::XElement> > maElementVector;
+    std::vector< uno::Reference<xml::dom::XElement> >& mrUseElementVector;
     ElementRefMapType                          maGradientIdMap;
     ElementRefMapType                          maStopIdMap;
+    ElementRefMapType                          maElementIdMap;
 };
 
 /// Annotate svg styles with unique references to state pool
 static void annotateStyles( StatePool&                                        rStatePool,
                             StateMap&                                         rStateMap,
                             const State&                                       rInitialState,
-                            const uno::Reference<xml::dom::XElement>&         rElem,
-                            const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
+                            uno::Reference<xml::dom::XElement>&         rElem,
+                            const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
+                            std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
 {
-    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl);
+
+    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl,rUseElementVector);
     visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
 }
 
@@ -1780,10 +1859,17 @@ struct ShapeWritingVisitor
 static void writeShapes( StatePool&                                        rStatePool,
                          StateMap&                                         rStateMap,
                          const uno::Reference<xml::dom::XElement>&         rElem,
-                         const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
+                         const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
+                         std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
 {
     ShapeWritingVisitor aVisitor(rStatePool,rStateMap,xDocHdl);
     visitElements(aVisitor, rElem, SHAPE_WRITER);
+
+    std::vector< uno::Reference<xml::dom::XElement> >::iterator it;
+    for ( it = rUseElementVector.begin() ; it != rUseElementVector.end(); ++it)
+    {
+        visitElements(aVisitor, *it, SHAPE_WRITER);
+    }
 }
 
 } // namespace
@@ -1900,6 +1986,7 @@ static void writeOfficeStyles(  StateMap&                                       
 {
     OfficeStylesWritingVisitor aVisitor( rStateMap, xDocHdl );
     visitElements( aVisitor, rElem, STYLE_WRITER );
+
 }
 
 #if OSL_DEBUG_LEVEL > 2
@@ -2104,8 +2191,10 @@ bool SVGReader::parseAndConvert()
 
     StatePool aStatePool;
     StateMap  aStateMap;
+    std::vector< uno::Reference<xml::dom::XElement> > maUseElementVector;
+
     annotateStyles(aStatePool,aStateMap,aInitialState,
-                   xDocElem,m_xDocumentHandler);
+                   xDocElem,m_xDocumentHandler,maUseElementVector);
 
 #if OSL_DEBUG_LEVEL > 2
     dumpTree(xDocElem);
@@ -2113,15 +2202,12 @@ bool SVGReader::parseAndConvert()
 
     m_xDocumentHandler->endElement( "office:automatic-styles" );
 
-
-
     xAttrs->Clear();
     m_xDocumentHandler->startElement( "office:styles", xUnoAttrs);
     writeOfficeStyles( aStateMap,
                        xDocElem,
                        m_xDocumentHandler);
     m_xDocumentHandler->endElement( "office:styles" );
-
 
 
     m_xDocumentHandler->startElement( "office:master-styles", xUnoAttrs );
@@ -2149,7 +2235,8 @@ bool SVGReader::parseAndConvert()
     writeShapes(aStatePool,
                 aStateMap,
                 xDocElem,
-                m_xDocumentHandler);
+                m_xDocumentHandler,
+                maUseElementVector);
 
     m_xDocumentHandler->endElement( "draw:page" );
     m_xDocumentHandler->endElement( "office:drawing" );
