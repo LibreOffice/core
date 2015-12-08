@@ -70,6 +70,7 @@ bool MWAWCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
                 rTypeName = "MWAW_Database";
                 break;
             }
+            break;
         }
         case MWAWDocument::MWAW_K_SPREADSHEET:
         {
@@ -88,6 +89,7 @@ bool MWAWCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
                 rTypeName = "MWAW_Spreadsheet";
                 break;
             }
+            break;
         }
         default:
             break;
