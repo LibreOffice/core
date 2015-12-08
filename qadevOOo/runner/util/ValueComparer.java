@@ -187,70 +187,46 @@ public class ValueComparer {
     }
 
     private static boolean compareObjects(Object op1, Object op2) throws Exception {
-        boolean result = false;
-
         if(op1 == op2)
-            result = true;
-
-        if ( (op1==null) || (op2 == null) ) {
-            result = (op1 == op2);
-            }
-
+            return true;
+        else if(op1==null || op2 == null)
+            return op1 == op2;
         else if(op1.getClass().isPrimitive() && op2.getClass().isPrimitive())
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Byte.class && op2.getClass() == Byte.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Type.class && op2.getClass() == Type.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Boolean.class && op2.getClass() == Boolean.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Short.class && op2.getClass() == Short.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(Throwable.class.isAssignableFrom(op1.getClass()) && Throwable.class.isAssignableFrom(op2.getClass()))
-            result = compareThrowable((Throwable)op1, (Throwable)op2);
-
+            return compareThrowable((Throwable)op1, (Throwable)op2);
         else if(op1.getClass() == Integer.class && op2.getClass() == Integer.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Character.class && op2.getClass() == Character.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Long.class && op2.getClass() == Long.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Void.class && op2.getClass() == Void.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Float.class && op2.getClass() == Float.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass() == Double.class && op2.getClass() == Double.class)
-            result = op1.equals(op2);
-
+            return op1.equals(op2);
         else if(op1.getClass().isArray() && op2.getClass().isArray())
-            result = compareArrays(op1, op2);
-
+            return compareArrays(op1, op2);
         else if(op1.getClass() == Void.class || op2.getClass() == void.class) // write nothing ?
-            result = true;
-
+            return true;
         else if(XInterface.class.isAssignableFrom(op1.getClass()) && XInterface.class.isAssignableFrom(op2.getClass()))
-            result = compareInterfaces((XInterface)op1, (XInterface)op2);
-
+            return compareInterfaces((XInterface)op1, (XInterface)op2);
         else if(Enum.class.isAssignableFrom(op1.getClass()) && Enum.class.isAssignableFrom(op2.getClass()))
-            result = compareEnums((Enum)op1, (Enum)op2);
-
+            return compareEnums((Enum)op1, (Enum)op2);
         else if(op1.getClass() == String.class && op2.getClass() == String.class) // is it a String ?
-            result = ((String)op1).equals(op2);
-
+            return ((String)op1).equals(op2);
         else // otherwise it must be a struct
-            result = compareStructs(op1, op2);
-
-        return result;
+            return compareStructs(op1, op2);
     }
 
 
