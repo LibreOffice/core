@@ -13,13 +13,13 @@
 #include <cstddef>
 
 #include <clang/AST/DeclBase.h>
+#include <clang/AST/Decl.h>
 #include <clang/AST/Type.h>
-
-#include "compat.hxx"
 
 namespace loplugin {
 
 class NamespaceCheck;
+class TerminalCheck;
 
 class TypeCheck {
 public:
@@ -27,25 +27,16 @@ public:
 
     explicit operator bool() const { return !type_.isNull(); }
 
-    TypeCheck Const() const {
-        return
-            (!type_.isNull() && type_.isConstQualified()
-             && !type_.isVolatileQualified())
-            ? *this : TypeCheck();
-    }
+    TypeCheck Const() const;
 
-    TypeCheck LvalueReference() const {
-        if (!type_.isNull()) {
-            auto const t = type_->getAs<LValueReferenceType>();
-            if (t != nullptr) {
-                return TypeCheck(t->getPointeeType());
-            }
-        }
-        return TypeCheck();
-    }
+    TerminalCheck Char() const;
+
+    TypeCheck LvalueReference() const;
 
     template<std::size_t N> inline NamespaceCheck Class(char const (& id)[N])
         const;
+
+    TypeCheck NotSubstTemplateTypeParmType() const;
 
 private:
     TypeCheck() = default;
@@ -53,47 +44,16 @@ private:
     clang::QualType const type_;
 };
 
-class TerminalCheck {
-public:
-    explicit operator bool() const { return satisfied_; }
-
-private:
-    friend NamespaceCheck;
-
-    explicit TerminalCheck(bool satisfied): satisfied_(satisfied) {}
-
-    bool const satisfied_;
-};
-
 class NamespaceCheck {
 public:
     explicit operator bool() const { return context_ != nullptr; }
 
-    TerminalCheck GlobalNamespace() const {
-        return TerminalCheck(
-            context_ != nullptr
-            && ((compat::isLookupContext(*context_)
-                 ? context_ : context_->getLookupParent())
-                ->isTranslationUnit()));
-    }
+    TerminalCheck GlobalNamespace() const;
 
-    template<std::size_t N> NamespaceCheck Namespace(char const (& id)[N]) const
-    {
-        if (context_) {
-            auto n = llvm::dyn_cast<clang::NamespaceDecl>(context_);
-            if (n != nullptr) {
-                auto const i = n->getIdentifier();
-                if (i != nullptr && i->isStr(id)) {
-                    return NamespaceCheck(n->getParent());
-                }
-            }
-        }
-        return NamespaceCheck();
-    }
+    template<std::size_t N> inline NamespaceCheck Namespace(
+        char const (& id)[N]) const;
 
-    TerminalCheck StdNamespace() const {
-        return TerminalCheck(context_ != nullptr && context_->isStdNamespace());
-    }
+    TerminalCheck StdNamespace() const;
 
 private:
     friend class TypeCheck;
@@ -104,11 +64,24 @@ private:
     clang::DeclContext const * const context_;
 };
 
+class TerminalCheck {
+public:
+    explicit operator bool() const { return satisfied_; }
+
+private:
+    friend TypeCheck;
+    friend NamespaceCheck;
+
+    explicit TerminalCheck(bool satisfied): satisfied_(satisfied) {}
+
+    bool const satisfied_;
+};
+
 template<std::size_t N> NamespaceCheck TypeCheck::Class(char const (& id)[N])
     const
 {
     if (!type_.isNull()) {
-        auto const t = type_->getAs<RecordType>();
+        auto const t = type_->getAs<clang::RecordType>();
         if (t != nullptr) {
             auto const d = t->getDecl();
             if (d->isClass()) {
@@ -116,6 +89,21 @@ template<std::size_t N> NamespaceCheck TypeCheck::Class(char const (& id)[N])
                 if (i != nullptr && i->isStr(id)) {
                     return NamespaceCheck(d->getDeclContext());
                 }
+            }
+        }
+    }
+    return NamespaceCheck();
+}
+
+template<std::size_t N> NamespaceCheck NamespaceCheck::Namespace(
+    char const (& id)[N]) const
+{
+    if (context_) {
+        auto n = llvm::dyn_cast<clang::NamespaceDecl>(context_);
+        if (n != nullptr) {
+            auto const i = n->getIdentifier();
+            if (i != nullptr && i->isStr(id)) {
+                return NamespaceCheck(n->getParent());
             }
         }
     }

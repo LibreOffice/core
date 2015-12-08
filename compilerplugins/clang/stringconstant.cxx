@@ -16,6 +16,7 @@
 
 #include "compat.hxx"
 #include "plugin.hxx"
+#include "typecheck.hxx"
 
 // Define a "string constant" to be a constant expression either of type "array
 // of N char" where each array element is a non-NUL ASCII character---except
@@ -36,11 +37,6 @@
 //   s.equals(OUString("bar"))  ->  s == "bar"
 
 namespace {
-
-bool isPlainChar(QualType type) {
-    return type->isSpecificBuiltinType(BuiltinType::Char_S)
-        || type->isSpecificBuiltinType(BuiltinType::Char_U);
-}
 
 SourceLocation getMemberLocation(Expr const * expr) {
     CallExpr const * e1 = dyn_cast<CallExpr>(expr);
@@ -227,30 +223,14 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     std::string qname(fdecl->getQualifiedNameAsString());
     for (unsigned i = 0; i != fdecl->getNumParams(); ++i) {
         auto t = fdecl->getParamDecl(i)->getType();
-        if (t->isLValueReferenceType()
-            && t->getAs<SubstTemplateTypeParmType>() == nullptr)
+        if (loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
+            .LvalueReference().Const().NotSubstTemplateTypeParmType()
+            .Class("OUString").Namespace("rtl").GlobalNamespace())
         {
-            t = t->getAs<LValueReferenceType>()->getPointeeType();
-            if (t.isConstQualified() && !t.isVolatileQualified()
-                && t->isClassType()
-                && t->getAs<SubstTemplateTypeParmType>() == nullptr)
+            if (!(isLhsOfAssignment(fdecl, i)
+                  || hasOverloads(fdecl, expr->getNumArgs())))
             {
-                auto td = compat::getAsTagDecl(*t);
-                auto id = td->getIdentifier();
-                if (id != nullptr && id->isStr("OUString")) {
-                    auto nd = dyn_cast<NamespaceDecl>(td->getParent());
-                    if (nd != nullptr) {
-                        id = nd->getIdentifier();
-                        if (id != nullptr && id->isStr("rtl")) {
-                            //TODO: check rtl is outermost namespace
-                            if (!(isLhsOfAssignment(fdecl, i)
-                                  || hasOverloads(fdecl, expr->getNumArgs())))
-                            {
-                                handleOUStringCtor(expr, i, qname, true);
-                            }
-                        }
-                    }
-                }
+                handleOUStringCtor(expr, i, qname, true);
             }
         }
     }
@@ -839,7 +819,8 @@ bool StringConstant::isStringConstant(
     assert(terminatingNul != nullptr);
     QualType t = expr->getType();
     if (!(t->isConstantArrayType() && t.isConstQualified()
-          && isPlainChar(t->getAsArrayTypeUnsafe()->getElementType())))
+          && (loplugin::TypeCheck(t->getAsArrayTypeUnsafe()->getElementType())
+              .Char())))
     {
         return false;
     }

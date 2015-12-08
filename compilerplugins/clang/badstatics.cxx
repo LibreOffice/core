@@ -12,11 +12,6 @@
 
 namespace {
 
-static bool startsWith(const std::string& s, const char* other)
-{
-    return s.compare(0, strlen(other), other) == 0;
-}
-
 class BadStatics
     : public clang::RecursiveASTVisitor<BadStatics>
     , public loplugin::Plugin
@@ -52,10 +47,10 @@ public:
         if (!pRecordType) {
             return std::make_pair(false, std::vector<FieldDecl const*>());
         }
-        auto const type(pCanonical.getAsString());
-        if (   type == "class Image"
-            || type == "class Bitmap"
-            || type == "class BitmapEx"
+        auto const type = loplugin::TypeCheck(rpType);
+        if (   type.Class("Image").GlobalNamespace()
+            || type.Class("Bitmap").GlobalNamespace()
+            || type.Class("BitmapEx").GlobalNamespace()
            )
         {
             return std::make_pair(true, chain);
@@ -64,12 +59,11 @@ public:
         if (!pDefinition) { // maybe no definition if it's a pointer/reference
             return std::make_pair(false, std::vector<FieldDecl const*>());
         }
-        if (   startsWith(type, "class vcl::DeleteOnDeinit")
-            || loplugin::TypeCheck(rpType).Class("weak_ptr").StdNamespace()
-                // not owning
-            || type == "class ImplWallpaper" // very odd static instance here
-            || type == "class Application" // numerous odd subclasses in vclmain::createApplication()
-            || type == "class DemoMtfApp" // one of these Application with own VclPtr
+        if (   type.Class("DeleteOnDeinit").Namespace("vcl").GlobalNamespace()
+            || type.Class("weak_ptr").StdNamespace() // not owning
+            || type.Class("ImplWallpaper").GlobalNamespace() // very odd static instance here
+            || type.Class("Application").GlobalNamespace() // numerous odd subclasses in vclmain::createApplication()
+            || type.Class("DemoMtfApp").GlobalNamespace() // one of these Application with own VclPtr
            )
         {
             return std::make_pair(false, std::vector<FieldDecl const*>());

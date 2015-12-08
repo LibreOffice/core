@@ -11,6 +11,7 @@
 #include <set>
 
 #include "plugin.hxx"
+#include "typecheck.hxx"
 
 // Find places where various things are passed by value.
 // It's not very efficient, because we generally end up copying it twice - once into the parameter and
@@ -38,7 +39,7 @@ public:
     bool VisitLambdaExpr(const LambdaExpr * expr);
 
 private:
-    bool isFat(QualType type, std::string * name);
+    bool isFat(QualType type);
 };
 
 bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
@@ -63,14 +64,13 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     unsigned n = functionDecl->getNumParams();
     for (unsigned i = 0; i != n; ++i) {
         const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
-        std::string name;
-        if (isFat(pvDecl->getType(), &name)) {
+        auto const t = pvDecl->getType();
+        if (isFat(t)) {
             report(
                 DiagnosticsEngine::Warning,
-                ("passing '%0' by value, rather pass by reference, e.g., '%0"
-                 " const &'"),
+                ("passing %0 by value, rather pass by const lvalue reference"),
                 pvDecl->getLocation())
-                << name << pvDecl->getSourceRange();
+                << t << pvDecl->getSourceRange();
         }
     }
     return true;
@@ -82,14 +82,14 @@ bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
     }
     for (auto i(expr->capture_begin()); i != expr->capture_end(); ++i) {
         if (i->getCaptureKind() == LambdaCaptureKind::LCK_ByCopy) {
-            std::string name;
-            if (isFat(i->getCapturedVar()->getType(), &name)) {
+            auto const t = i->getCapturedVar()->getType();
+            if (isFat(t)) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("%0 capture of '%1' variable by copy, rather use capture"
+                    ("%0 capture of %1 variable by copy, rather use capture"
                      " by reference---UNLESS THE LAMBDA OUTLIVES THE VARIABLE"),
                     i->getLocation())
-                    << (i->isImplicit() ? "implicit" : "explicit") << name
+                    << (i->isImplicit() ? "implicit" : "explicit") << t
                     << expr->getSourceRange();
             }
         }
@@ -97,13 +97,17 @@ bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
     return true;
 }
 
-bool PassStuffByRef::isFat(QualType type, std::string * name) {
+bool PassStuffByRef::isFat(QualType type) {
     if (!type->isRecordType()) {
         return false;
     }
-    *name = type.getUnqualifiedType().getCanonicalType().getAsString();
-    if (*name == "class rtl::OUString" || *name == "class rtl::OString"
-        || name->compare(0, 35, "class com::sun::star::uno::Sequence") == 0)
+    if ((loplugin::TypeCheck(type).Class("OUString").Namespace("rtl")
+         .GlobalNamespace())
+        || (loplugin::TypeCheck(type).Class("OString").Namespace("rtl")
+            .GlobalNamespace())
+        || (loplugin::TypeCheck(type).Class("Sequence").Namespace("uno")
+            .Namespace("star").Namespace("sun").Namespace("com")
+            .GlobalNamespace()))
     {
         return true;
     }

@@ -20,6 +20,7 @@
 #include <fstream>
 #include <regex>
 #include "plugin.hxx"
+#include "typecheck.hxx"
 #include "clang/Frontend/CompilerInstance.h"
 
 namespace {
@@ -43,11 +44,6 @@ clang::Expr const * ignoreParenImplicitComma(clang::Expr const * expr) {
         }
         return expr;
     }
-}
-
-bool isPlainChar(clang::QualType type) {
-    return type->isSpecificBuiltinType(clang::BuiltinType::Char_S)
-        || type->isSpecificBuiltinType(clang::BuiltinType::Char_U);
 }
 
 bool overridesXServiceInfo(clang::CXXMethodDecl const * decl) {
@@ -145,7 +141,8 @@ bool GetImplementationName::isStringConstant(
 {
     QualType t = expr->getType();
     if (!(t->isConstantArrayType() && t.isConstQualified()
-          && isPlainChar(t->getAsArrayTypeUnsafe()->getElementType())))
+          && (loplugin::TypeCheck(t->getAsArrayTypeUnsafe()->getElementType())
+              .Char())))
     {
         return false;
     }
