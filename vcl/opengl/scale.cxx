@@ -24,7 +24,6 @@
 #include "vcl/bitmap.hxx"
 
 #include "opengl/zone.hxx"
-#include "opengl/bmpop.hxx"
 #include "opengl/salbmp.hxx"
 #include "opengl/program.hxx"
 #include "opengl/texture.hxx"
@@ -36,21 +35,6 @@ using vcl::Lanczos3Kernel;
 using vcl::BicubicKernel;
 using vcl::BilinearKernel;
 using vcl::BoxKernel;
-
-class ScaleOp : public OpenGLSalBitmapOp
-{
-private:
-    OpenGLSalBitmap*    mpBitmap;
-    double              mfScaleX;
-    double              mfScaleY;
-    BmpScaleFlag        mnScaleFlag;
-
-public:
-    ScaleOp( OpenGLSalBitmap* pBitmap, const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
-
-    bool Execute() override;
-    void GetSize( Size& rSize ) const override;
-};
 
 bool OpenGLSalBitmap::ImplScaleFilter(
     const double& rScaleX,
@@ -308,31 +292,6 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
 
     SAL_WARN( "vcl.opengl", "Invalid flag for scaling operation" );
     return false;
-}
-
-ScaleOp::ScaleOp(
-    OpenGLSalBitmap* pBitmap,
-    const double& rScaleX,
-    const double& rScaleY,
-    BmpScaleFlag nScaleFlag )
-: mpBitmap( pBitmap )
-, mfScaleX( rScaleX )
-, mfScaleY( rScaleY )
-, mnScaleFlag( nScaleFlag )
-{
-}
-
-bool ScaleOp::Execute()
-{
-    VCL_GL_INFO( "::Execute" );
-    return mpBitmap->ImplScale( mfScaleX, mfScaleY, mnScaleFlag );
-}
-
-void ScaleOp::GetSize( Size& rSize ) const
-{
-    VCL_GL_INFO( "::GetSize" );
-    rSize.setWidth( rSize.Width() * mfScaleX );
-    rSize.setHeight( rSize.Height() * mfScaleY );
 }
 
 bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
