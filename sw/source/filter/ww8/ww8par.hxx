@@ -1701,6 +1701,7 @@ public:     // really private, but can only be done public
     long Read_Book(WW8PLCFManResult*);
     long Read_And(WW8PLCFManResult* pRes);
     long Read_AtnBook(WW8PLCFManResult*);
+    long Read_FactoidBook(WW8PLCFManResult*);
 
     // attributes
 

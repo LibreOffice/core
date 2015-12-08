@@ -242,6 +242,18 @@ long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
     return 0;
 }
 
+long SwWW8ImplReader::Read_FactoidBook(WW8PLCFManResult*)
+{
+    if (WW8PLCFx_FactoidBook* pFactoidBook = m_pPlcxMan->GetFactoidBook())
+    {
+        if (pFactoidBook->getIsEnd())
+            m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_RDFMARK, true, pFactoidBook->getHandle());
+        else
+            m_pReffedStck->NewAttr(*m_pPaM->GetPoint(), CntUInt16Item(RES_FLTR_RDFMARK, pFactoidBook->getHandle()));
+    }
+    return 0;
+}
+
 //    general help methods to separate parameters
 
 /// translate FieldParameter names into the system character set and
