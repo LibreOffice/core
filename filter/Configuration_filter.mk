@@ -324,32 +324,12 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_WordPerfect_Document \
 	writer_MS_Works_Document \
 	writer_MS_Write \
-	writer_Beagle_Works \
 	writer_ClarisWorks \
-	writer_DocMaker \
-	writer_eDoc_Document \
-	writer_FullWrite_Professional \
-	writer_Great_Works \
-	writer_HanMac_Word_J \
-	writer_HanMac_Word_K \
-	writer_LightWayText \
-	writer_Mac_Acta \
-	writer_Mac_More \
-	writer_Mac_RagTime \
 	writer_Mac_Word \
 	writer_Mac_Works \
-	writer_MacDoc \
 	writer_MacWrite \
-	writer_MacWritePro \
 	writer_Mariner_Write \
-	writer_MindWrite \
-	writer_MWStyle \
-	writer_Nisus_Writer \
-	writer_TeachText \
-	writer_TexEdit \
 	writer_WriteNow \
-	writer_WriterPlus \
-	writer_ZWrite \
 	writer_AbiWord_Document \
 	writer_T602_Document \
 	writer_LotusWordPro_Document \
@@ -372,6 +352,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_TealDoc \
 	writer_zTXT \
 	writer_ApplePages \
+	MWAW_Text_Document \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
@@ -388,32 +369,12 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	WordPerfect \
 	MS_Works \
 	MS_Write \
-	Beagle_Works \
 	ClarisWorks \
-	DocMaker \
-	eDoc_Document \
-	FullWrite_Professional \
-	Great_Works \
-	HanMac_Word_J \
-	HanMac_Word_K \
-	LightWayText \
-	Mac_Acta \
-	Mac_More \
-	Mac_RagTime \
 	Mac_Word \
 	Mac_Works \
-	MacDoc \
 	MacWrite \
-	MacWritePro \
 	Mariner_Write \
-	MWStyle \
-	MindWrite \
-	Nisus_Writer \
-	TeachText \
-	TexEdit \
 	WriteNow \
-	WriterPlus \
-	ZWrite \
 	AbiWord \
 	T602Document \
 	LotusWordPro \
@@ -437,6 +398,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	TealDoc \
 	zTXT \
 	ApplePages \
+	MWAW_Text_Document \
 ))
 
 # fcfg_web
