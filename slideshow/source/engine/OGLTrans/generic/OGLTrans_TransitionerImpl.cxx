@@ -532,6 +532,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
 
 void OGLTransitionerImpl::impl_prepareTransition()
 {
+    prepareEnvironment();
     if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
         mpTransition->prepare( maLeavingSlideGL, maEnteringSlideGL );
 }
@@ -1182,7 +1183,6 @@ void OGLTransitionerImpl::GLInitSlides()
 #endif
 
     mpContext->makeCurrent();
-    prepareEnvironment();
 
     const OGLFormat* pFormat = nullptr;
     if( !mbUseLeavingPixmap || !mbUseEnteringPixmap )

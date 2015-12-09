@@ -166,7 +166,7 @@ protected:
 
     void setScene(TransitionScene const& rScene);
 
-    static void displaySlide( double nTime, sal_Int32 glSlideTex, const Primitives_t& primitives, double SlideWidthScale, double SlideHeightScale );
+    void displaySlide( double nTime, sal_Int32 glSlideTex, const Primitives_t& primitives, double SlideWidthScale, double SlideHeightScale );
     void displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
     void applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale );
 
@@ -212,6 +212,18 @@ private:
     TransitionScene maScene;
     const TransitionSettings maSettings;
 
+    /** Uniform location for primitive transform
+     */
+    GLint m_nPrimitiveTransformLocation = -1;
+
+    /** Uniform location for scene transform
+     */
+    GLint m_nSceneTransformLocation = -1;
+
+    /** Uniform location for operations transform
+     */
+    GLint m_nOperationsTransformLocation = -1;
+
 protected:
     /** GLSL program object
      */
@@ -252,7 +264,7 @@ public:
     virtual ~SceneObject();
 
     virtual void prepare() {}
-    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const;
+    virtual void display(GLint sceneTransformLocation, GLint primitiveTransformLocation, double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const;
     virtual void finish() {}
 
     void pushPrimitive (const Primitive &p);
@@ -283,8 +295,8 @@ public:
 
     void swap(Primitive& rOther);
 
-    void applyOperations(double nTime, double SlideWidthScale, double SlideHeightScale) const;
-    void display(double nTime, double SlideWidthScale, double SlideHeightScale, int first) const;
+    void applyOperations(glm::mat4& matrix, double nTime, double SlideWidthScale, double SlideHeightScale) const;
+    void display(GLint primitiveTransformLocation, double nTime, double WidthScale, double HeightScale, int first) const;
 
     /** PushBack a vertex,normal, and tex coord. Each SlideLocation is where on the slide is mapped to this location ( from (0,0) to (1,1)  ). This will make sure the correct aspect ratio is used, and helps to make slides begin and end at the correct position. (0,0) is the top left of the slide, and (1,1) is the bottom right.
 
