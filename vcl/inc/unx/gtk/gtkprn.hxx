@@ -16,7 +16,7 @@
 
 struct GtkSalPrinter_Impl;
 
-class VCL_DLLPUBLIC GtkSalPrinter : public PspSalPrinter
+class GtkSalPrinter : public PspSalPrinter
 {
 public:
     GtkSalPrinter(SalInfoPrinter* i_pInfoPrinter);
