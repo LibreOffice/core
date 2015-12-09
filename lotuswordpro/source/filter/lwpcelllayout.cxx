@@ -599,7 +599,7 @@ void LwpCellLayout::RegisterStyle()
     if (pObj.is())
     {
         pObj->SetFoundry(m_pFoundry);
-        pObj->RegisterStyle();
+        pObj->DoRegisterStyle();
     }
 
     //register child layout style

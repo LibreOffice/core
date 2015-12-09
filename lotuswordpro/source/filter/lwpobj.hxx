@@ -67,6 +67,8 @@
 
 #include <sal/config.h>
 
+#include <stdexcept>
+
 #include <salhelper/simplereferenceobject.hxx>
 
 #include "lwpheader.hxx"
@@ -92,11 +94,22 @@ protected:
     LwpObjectStream* m_pObjStrm;
     LwpFoundry* m_pFoundry;
     LwpSvStream* m_pStrm;
+    bool m_bRegisteringStyle;
 protected:
     virtual void Read();
+    virtual void RegisterStyle();
 public:
     void QuickRead();
-    virtual void RegisterStyle();
+    //calls RegisterStyle but bails if DoRegisterStyle is called
+    //on the same object recursively
+    void DoRegisterStyle()
+    {
+        if (m_bRegisteringStyle)
+            throw std::runtime_error("recursion in styles");
+        m_bRegisteringStyle = true;
+        RegisterStyle();
+        m_bRegisteringStyle = false;
+    }
     virtual void Parse(IXFStream* pOutputStream);
     virtual void XFConvert(XFContentContainer* pCont);
 

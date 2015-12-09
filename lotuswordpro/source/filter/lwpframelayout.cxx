@@ -869,7 +869,7 @@ void  LwpFrameLayout::RegisterStyle()
     if (content.is())
     {
         content->SetFoundry(m_pFoundry);
-        content->RegisterStyle();
+        content->DoRegisterStyle();
     }
 
     //register child frame style
