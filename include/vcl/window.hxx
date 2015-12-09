@@ -1527,6 +1527,16 @@ public:
      */
     void reorderWithinParent(sal_uInt16 nNewPosition);
 
+    /**
+     * Sets an ID.
+     */
+    void set_id(const OUString& rID);
+
+    /**
+     * Get the ID of the window.
+     */
+    const OUString& get_id() const;
+
 
     //  Native Widget Rendering functions
 

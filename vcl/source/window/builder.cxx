@@ -1845,6 +1845,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
 
     if (pCurrentChild)
     {
+        pCurrentChild->set_id(OStringToOUString(rID, RTL_TEXTENCODING_UTF8));
         if (pCurrentChild == m_pParent.get() && m_bToplevelHasDeferredProperties)
             m_aDeferredProperties = rProps;
         else
