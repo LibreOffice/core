@@ -884,7 +884,7 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
 
         //Call the RegisterStyle first to register the styles in header paras, and then XFConvert()
         pStory->SetFoundry(m_pFoundry);
-        pStory->RegisterStyle();
+        pStory->DoRegisterStyle();
         //, 06/27/2005
         //register child layout style for framelayout,
         RegisterChildStyle();
@@ -1037,8 +1037,7 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
         pChangeMgr->SetHeadFootFribMap(true);
 
         pStory->SetFoundry(m_pFoundry);
-        pStory->RegisterStyle();
-        //, 06/27/2005
+        pStory->DoRegisterStyle();
         //register child layout style for framelayout,
         RegisterChildStyle();
         //End
