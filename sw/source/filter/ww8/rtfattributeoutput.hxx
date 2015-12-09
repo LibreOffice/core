@@ -82,6 +82,7 @@ public:
     {
         return m_aStyles;
     }
+    OStringBuffer& StylesEnd();
 
     /// Output text (without markup).
     virtual void RawText(const OUString& rText, rtl_TextEncoding eCharSet) override;

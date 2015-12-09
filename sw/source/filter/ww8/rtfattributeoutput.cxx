@@ -424,6 +424,11 @@ OStringBuffer& RtfAttributeOutput::RunText()
     return m_aRunText.getLastBuffer();
 }
 
+OStringBuffer& RtfAttributeOutput::StylesEnd()
+{
+    return m_aStylesEnd;
+}
+
 void RtfAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding eCharSet)
 {
     m_aRunText->append(msfilter::rtfutil::OutString(rText, eCharSet));
@@ -3466,7 +3471,8 @@ void RtfAttributeOutput::PostitField(const SwField* pField)
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNDATE " ");
     m_aRunText->append((sal_Int32)sw::ms::DateTime2DTTM(rPField.GetDateTime()));
     m_aRunText->append('}');
-    m_aRunText->append(OUStringToOString(OUString(rPField.GetText()), m_rExport.eCurrentEncoding));
+    if (const OutlinerParaObject* pObject = rPField.GetTextObject())
+        m_rExport.SdrExporter().WriteOutliner(*pObject, TXT_ATN);
     m_aRunText->append('}');
 }
 
