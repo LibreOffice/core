@@ -164,7 +164,7 @@ void LwpFnCellLayout::RegisterStyle()
     if (pObj.is())
     {
         pObj->SetFoundry(m_pFoundry);
-        pObj->RegisterStyle();
+        pObj->DoRegisterStyle();
     }
 }
 
@@ -241,7 +241,7 @@ void LwpEnSuperTableLayout::RegisterStyle()
     if (pTableLayout != NULL)
     {
         pTableLayout->SetFoundry(m_pFoundry);
-        pTableLayout->RegisterStyle();
+        pTableLayout->DoRegisterStyle();
     }
 }
 
