@@ -401,15 +401,16 @@ void LwpPara::RegisterStyle()
             case PP_LOCAL_INDENT:
             {
                 noIndent = false;
-                if (!rParaStyle.GetIndent())
-                    OverrideIndent(NULL,static_cast<LwpParaIndentProperty*>(pProps)->GetIndent(),pOverStyle);
-
-                else
+                LwpIndentOverride *pIndent = static_cast<LwpParaIndentProperty*>(pProps)->GetIndent();
+                if (pIndent)
                 {
-                    OverrideIndent(m_pIndentOverride,static_cast<LwpParaIndentProperty*>(pProps)->GetIndent(),pOverStyle);
+                    if (!rParaStyle.GetIndent())
+                        OverrideIndent(nullptr, pIndent, pOverStyle);
+                    else
+                        OverrideIndent(m_pIndentOverride, pIndent, pOverStyle);
                 }
-            }
                 break;
+            }
             case PP_LOCAL_SPACING:
             {
                 noSpacing = false;
