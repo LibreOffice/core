@@ -2424,8 +2424,16 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
 
 void    SwContentTree::ShowTree()
 {
-    m_aUpdTimer.Start();
     SvTreeListBox::Show();
+}
+
+void SwContentTree::Paint( vcl::RenderContext& rRenderContext,
+                           const Rectangle& rRect )
+{
+    // Start the update timer on the first paint; avoids
+    // flicker on the first reveal.
+    m_aUpdTimer.Start();
+    SvTreeListBox::Paint( rRenderContext, rRect );
 }
 
 // folded together will not be glidled
