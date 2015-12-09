@@ -217,7 +217,7 @@ protected:
     virtual sal_Int32 ImplGetAccessibleChildCount() const
         throw (::com::sun::star::uno::RuntimeException);
 
-    AccessibleElementInfo GetInfo() const { return m_aAccInfo;}
+    const AccessibleElementInfo& GetInfo() const { return m_aAccInfo;}
     void SetInfo( const AccessibleElementInfo & rNewInfo );
     AccessibleUniqueId GetId() const { return m_aAccInfo.m_aOID;}
 
