@@ -231,6 +231,13 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                 theCol1 = oldCol1;
                 theCol2 = oldCol2;
             }
+            else if (oldCol2 == MAXCOL && oldCol1 < MAXCOL)
+            {
+                // End was sticky, but start may have been moved. Only on range.
+                theCol2 = oldCol2;
+            }
+            // Else, if (bCut2 && theCol2 == MAXCOL) then end becomes sticky,
+            // but currently there's nothing to do.
         }
         if ( nDy && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2))
@@ -256,6 +263,13 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                 theRow1 = oldRow1;
                 theRow2 = oldRow2;
             }
+            else if (oldRow2 == MAXROW && oldRow1 < MAXROW)
+            {
+                // End was sticky, but start may have been moved. Only on range.
+                theRow2 = oldRow2;
+            }
+            // Else, if (bCut2 && theRow2 == MAXROW) then end becomes sticky,
+            // but currently there's nothing to do.
         }
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )

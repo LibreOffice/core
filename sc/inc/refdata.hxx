@@ -180,6 +180,16 @@ struct ScComplexRefData
     ScComplexRefData& Extend( const ScSingleRefData & rRef, const ScAddress & rPos );
     ScComplexRefData& Extend( const ScComplexRefData & rRef, const ScAddress & rPos );
 
+    /** Increment or decrement end column unless or until sticky.
+        @see ScRange::IncEndColSticky()
+        @return TRUE if changed. */
+    bool IncEndColSticky( SCCOL nDelta, const ScAddress& rPos );
+
+    /** Increment or decrement end row unless or until sticky.
+        @see ScRange::IncEndRowSticky()
+        @return TRUE if changed. */
+    bool IncEndRowSticky( SCROW nDelta, const ScAddress& rPos );
+
 #if DEBUG_FORMULA_COMPILER
     void Dump( int nIndent = 0 ) const;
 #endif

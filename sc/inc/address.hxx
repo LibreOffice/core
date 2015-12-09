@@ -542,6 +542,21 @@ public:
 
     ScRange Intersection( const ScRange& rOther ) const;
 
+    /// If maximum end column should not be adapted during reference update.
+    inline bool IsEndColSticky() const;
+    /// If maximum end row should not be adapted during reference update.
+    inline bool IsEndRowSticky() const;
+
+    /** Increment or decrement end column unless sticky or until it becomes
+        sticky. Checks if the range encompasses at least two columns so should
+        be called before adjusting the start column. */
+    void IncEndColSticky( SCsCOL nDelta );
+
+    /** Increment or decrement end row unless sticky or until it becomes
+        sticky. Checks if the range encompasses at least two rows so should
+        be called before adjusting the start row. */
+    void IncEndRowSticky( SCsROW nDelta );
+
     inline bool operator==( const ScRange& rRange ) const;
     inline bool operator!=( const ScRange& rRange ) const;
     inline bool operator<( const ScRange& rRange ) const;
@@ -560,6 +575,18 @@ inline void ScRange::GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
 {
     aStart.GetVars( nCol1, nRow1, nTab1 );
     aEnd.GetVars( nCol2, nRow2, nTab2 );
+}
+
+inline bool ScRange::IsEndColSticky() const
+{
+    // Only in an actual column range, i.e. not if both columns are MAXCOL.
+    return aEnd.Col() == MAXCOL && aStart.Col() < aEnd.Col();
+}
+
+inline bool ScRange::IsEndRowSticky() const
+{
+    // Only in an actual row range, i.e. not if both rows are MAXROW.
+    return aEnd.Row() == MAXROW && aStart.Row() < aEnd.Row();
 }
 
 inline bool ScRange::operator==( const ScRange& rRange ) const

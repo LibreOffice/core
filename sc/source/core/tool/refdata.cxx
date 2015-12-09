@@ -478,6 +478,64 @@ void ScComplexRefData::PutInOrder( const ScAddress& rPos )
     ScSingleRefData::PutInOrder( Ref1, Ref2, rPos);
 }
 
+bool ScComplexRefData::IncEndColSticky( SCCOL nDelta, const ScAddress& rPos )
+{
+    SCCOL nCol1 = Ref1.IsColRel() ? Ref1.Col() + rPos.Col() : Ref1.Col();
+    SCCOL nCol2 = Ref2.IsColRel() ? Ref2.Col() + rPos.Col() : Ref2.Col();
+    if (nCol1 >= nCol2)
+    {
+        // Less than two columns => not sticky.
+        Ref2.IncCol( nDelta);
+        return true;
+    }
+
+    if (nCol2 == MAXCOL)
+        // already sticky
+        return false;
+
+    if (nCol2 < MAXCOL)
+    {
+        SCCOL nCol = ::std::min( static_cast<SCCOL>(nCol2 + nDelta), MAXCOL);
+        if (Ref2.IsColRel())
+            Ref2.SetRelCol( nCol - rPos.Col());
+        else
+            Ref2.SetAbsCol( nCol);
+    }
+    else
+        Ref2.IncCol( nDelta);   // was greater than MAXCOL, caller should know..
+
+    return true;
+}
+
+bool ScComplexRefData::IncEndRowSticky( SCROW nDelta, const ScAddress& rPos )
+{
+    SCROW nRow1 = Ref1.IsRowRel() ? Ref1.Row() + rPos.Row() : Ref1.Row();
+    SCROW nRow2 = Ref2.IsRowRel() ? Ref2.Row() + rPos.Row() : Ref2.Row();
+    if (nRow1 >= nRow2)
+    {
+        // Less than two rows => not sticky.
+        Ref2.IncRow( nDelta);
+        return true;
+    }
+
+    if (nRow2 == MAXROW)
+        // already sticky
+        return false;
+
+    if (nRow2 < MAXROW)
+    {
+        SCROW nRow = ::std::min( static_cast<SCROW>(nRow2 + nDelta), MAXROW);
+        if (Ref2.IsRowRel())
+            Ref2.SetRelRow( nRow - rPos.Row());
+        else
+            Ref2.SetAbsRow( nRow);
+    }
+    else
+        Ref2.IncRow( nDelta);   // was greater than MAXROW, caller should know..
+
+    return true;
+}
+
 #if DEBUG_FORMULA_COMPILER
 void ScComplexRefData::Dump( int nIndent ) const
 {
