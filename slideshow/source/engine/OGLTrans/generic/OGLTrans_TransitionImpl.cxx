@@ -1768,40 +1768,105 @@ void createHexagon(Primitive& aHexagon, const int x, const int y, const int NX, 
     }
 }
 
+namespace
+{
+
+class GlitterTransition : public PermTextureTransition
+{
+public:
+    GlitterTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : PermTextureTransition(rScene, rSettings)
+    {
+    }
+
+private:
+    virtual GLuint makeShader() const override;
+    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
+    virtual void finish( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
+
+    GLuint maBuffer = 0;
+};
+
+GLuint GlitterTransition::makeShader() const
+{
+    return OpenGLHelper::LoadShaders( "glitterVertexShader", "glitterFragmentShader" );
+}
+
+struct ThreeFloats
+{
+    GLfloat x, y, z;
+};
+
+void GlitterTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
+{
+    CHECK_GL_ERROR();
+    PermTextureTransition::prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
+    CHECK_GL_ERROR();
+
+    GLint nNumTilesLocation = glGetUniformLocation(m_nProgramObject, "numTiles");
+    if (nNumTilesLocation != -1) {
+        glUniform2iv(nNumTilesLocation, 1, glm::value_ptr(glm::ivec2(41, 41 * 4 / 3)));
+        CHECK_GL_ERROR();
+    }
+
+    glGenBuffers(1, &maBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, maBuffer);
+
+    // Upload the center of each hexagon.
+    const Primitive& primitive = getScene().getLeavingSlide()[0];
+    int nbVertices = primitive.getVerticesSize() / sizeof(Vertex);
+    std::vector<ThreeFloats> vertices;
+    for (int i = 2; i < nbVertices; i += 18) {
+        const glm::vec3& center = primitive.getVertex(i);
+        for (int j = 0; j < 18; ++j)
+            vertices.push_back({center.x, center.y, center.z});
+    }
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+
+    GLint location = glGetAttribLocation(m_nProgramObject, "center");
+    if (location != -1) {
+        glEnableVertexAttribArray(location);
+        glVertexAttribPointer( location, 3, GL_FLOAT, false, 0, NULL );
+        CHECK_GL_ERROR();
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void GlitterTransition::finish( double, double, double, double, double )
+{
+    CHECK_GL_ERROR();
+    glDeleteBuffers(1, &maBuffer);
+    CHECK_GL_ERROR();
+}
+
+std::shared_ptr<OGLTransitionImpl>
+makeGlitterTransition(const Primitives_t& rLeavingSlidePrimitives,
+                      const Primitives_t& rEnteringSlidePrimitives,
+                      const TransitionSettings& rSettings = TransitionSettings())
+{
+    return std::make_shared<GlitterTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+                                               rSettings);
+}
+
+}
+
 std::shared_ptr<OGLTransitionImpl> makeGlitter()
 {
     const int NX = 80;
     const int NY = NX * 4 / 3;
 
-    Primitives_t aLeavingSlide;
-    Primitives_t aEnteringSlide;
+    Primitives_t aSlide;
+    Primitives_t aEmptySlide;
+    Primitive aHexagon;
 
     for (int y = 0; y < NY+2; y+=2)
-    {
         for (int x = 0; x < NX+2; x+=2)
-        {
-            Primitive aHexagon;
             createHexagon(aHexagon, x, y, NX, NY);
 
-            glm::vec3 aCenter = aHexagon.getVertex(2);
+    aSlide.push_back(aHexagon);
 
-            float fRandom = comphelper::rng::uniform_real_distribution(-0.25, std::nextafter(0.2, DBL_MAX));
-
-            double fDelta = 0.6 + fRandom;
-            double fHorizontal = fdiv(x, NX + 2) * fDelta;
-
-            double fStart = fHorizontal;
-            double fEnd   = fHorizontal + (1.0 - fDelta);
-
-            aHexagon.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), aCenter, 180 , true, fStart, fEnd));
-            aLeavingSlide.push_back(aHexagon);
-
-            aHexagon.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), aCenter, 180 , false, fStart, fEnd));
-            aEnteringSlide.push_back(aHexagon);
-        }
-    }
-
-    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
+    return makeGlitterTransition(aSlide, aEmptySlide);
 }
 
 namespace
