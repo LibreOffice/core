@@ -25,8 +25,10 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -70,6 +72,7 @@
 #include "ww8par.hxx"
 #include "ww8scan.hxx"
 #include <oox/token/properties.hxx>
+#include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -462,7 +465,87 @@ static void lcl_ConvertProgID(OUString const& rProgID,
     }
 }
 
-OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString const& rProgID)
+static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
+    uno::Reference<uno::XComponentContext> const& xContext,
+    uno::Reference<embed::XEmbeddedObject> const& xObj,
+    char const*& o_rpProgID,
+    OUString & o_rMediaType, OUString & o_rRelationType, OUString & o_rSuffix)
+{
+    static struct {
+        struct {
+            sal_uInt32 n1;
+            sal_uInt16 n2, n3;
+            sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
+        } const ClassId;
+        char const*const pFilterName;
+        char const*const pMediaType;
+        char const*const pProgID;
+        char const*const pSuffix;
+    } s_Mapping[] = {
+        { {SO3_SW_CLASSID_60}, "MS Word 2007 XML", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word.Document.12", "docx" },
+        { {SO3_SC_CLASSID_60}, "Calc MS Excel 2007 XML", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.Sheet.12", "xlsx" },
+        { {SO3_SIMPRESS_CLASSID_60}, "Impress MS PowerPoint 2007 XML", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "PowerPoint.Show.12", "pptx" },
+        // FIXME: Draw does not appear to have a MSO format export filter?
+//            { {SO3_SDRAW_CLASSID}, "", "", "", "" },
+        { {SO3_SCH_CLASSID_60}, "unused", "", "", "" },
+        { {SO3_SM_CLASSID_60}, "unused", "", "", "" },
+    };
+
+    const char * pFilterName(nullptr);
+    SvGlobalName const classId(xObj->getClassID());
+    for (size_t i = 0; i < SAL_N_ELEMENTS(s_Mapping); ++i)
+    {
+        auto const& rId(s_Mapping[i].ClassId);
+        SvGlobalName const temp(rId.n1, rId.n2, rId.n3, rId.b8, rId.b9, rId.b10, rId.b11, rId.b12, rId.b13, rId.b14, rId.b15);
+        if (temp == classId)
+        {
+            assert(SvGlobalName(SO3_SCH_CLASSID_60) != classId); // chart should be written elsewhere!
+            assert(SvGlobalName(SO3_SM_CLASSID_60) != classId); // formula should be written elsewhere!
+            pFilterName = s_Mapping[i].pFilterName;
+            o_rMediaType = OUString::createFromAscii(s_Mapping[i].pMediaType);
+            o_rpProgID = s_Mapping[i].pProgID;
+            o_rSuffix = OUString::createFromAscii(s_Mapping[i].pSuffix);
+            o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+            break;
+        }
+    }
+
+    if (!pFilterName)
+    {
+        SAL_WARN("sw.ww8", "DocxExport::WriteOLEObject: unknown ClassId " << classId.GetHexName());
+        return nullptr;
+    }
+
+    if (embed::EmbedStates::LOADED == xObj->getCurrentState())
+    {
+        xObj->changeState(embed::EmbedStates::RUNNING);
+    }
+    // use a temp stream - while it would work to store directly to a
+    // fragment stream, an error during export means we'd have to delete it
+    uno::Reference<io::XStream> const xTempStream(
+        xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.comp.MemoryStream", xContext),
+        uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> args(2);
+    args[0].Name = "OutputStream";
+    args[0].Value <<= xTempStream->getOutputStream();
+    args[1].Name = "FilterName";
+    args[1].Value <<= OUString::createFromAscii(pFilterName);
+    uno::Reference<frame::XStorable> xStorable(xObj->getComponent(), uno::UNO_QUERY);
+    try
+    {
+        xStorable->storeToURL("private:stream", args);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("sw.ww8", "DocxExport::WriteOLEObject: exception: \"" << e.Message << "\"");
+        return nullptr;
+    }
+    xTempStream->getOutputStream()->closeOutput();
+    return xTempStream->getInputStream();
+}
+
+OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
 {
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
     comphelper::EmbeddedObjectContainer* aContainer = rObject.GetObject().GetContainer();
@@ -470,17 +553,46 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString const& rProgID)
 
     OUString sMediaType;
     OUString sRelationType;
-    OUString sFileExtension;
-    lcl_ConvertProgID(rProgID, sMediaType, sRelationType, sFileExtension);
+    OUString sSuffix;
+    const char * pProgID(nullptr);
 
-    OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + "." + sFileExtension;
+    if (xInStream.is())
+    {
+        lcl_ConvertProgID(io_rProgID, sMediaType, sRelationType, sSuffix);
+    }
+    else // the object is ODF - either the whole document is
+    {    // ODF, or the OLE was edited so it was converted to ODF
+        uno::Reference<uno::XComponentContext> const xContext(
+            GetFilter().getComponentContext());
+        xInStream = lcl_StoreOwnAsOOXML(xContext, xObj,
+                pProgID, sMediaType, sRelationType, sSuffix);
+    }
+
+    if (!xInStream.is())
+    {
+        return OString();
+    }
+
+    assert(!sMediaType.isEmpty());
+    assert(!sRelationType.isEmpty());
+    assert(!sSuffix.isEmpty());
+    OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + "." + sSuffix;
     uno::Reference<io::XOutputStream> const xOutStream =
         GetFilter().openFragmentStream("word/" + sFileName, sMediaType);
-    OUString sId;
-    if( lcl_CopyStream( xInStream, xOutStream ) )
+    assert(xOutStream.is()); // no reason why that could fail
 
+    bool const isExported = lcl_CopyStream(xInStream, xOutStream);
+
+    OUString sId;
+    if (isExported)
+    {
         sId = m_pFilter->addRelation( GetFS()->getOutputStream(),
                 sRelationType, sFileName );
+        if (pProgID)
+        {
+            io_rProgID = OUString::createFromAscii(pProgID);
+        }
+    }
 
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
