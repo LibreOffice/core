@@ -175,7 +175,7 @@ class OGLTransitionerImpl : private cppu::BaseMutex, private boost::noncopyable,
 {
 public:
     OGLTransitionerImpl();
-    void setTransition( std::shared_ptr<OGLTransitionImpl> pOGLTransition );
+    bool setTransition( std::shared_ptr<OGLTransitionImpl> pOGLTransition );
     bool initialize( const Reference< presentation::XSlideShowView >& xView,
             const Reference< rendering::XBitmap >& xLeavingSlide,
             const Reference< rendering::XBitmap >& xEnteringSlide );
@@ -224,7 +224,7 @@ private:
     */
     void GLInitSlides();
 
-    void impl_prepareTransition();
+    bool impl_prepareTransition();
     void impl_finishTransition();
 
 private:
@@ -529,10 +529,11 @@ void OGLTransitionerImpl::impl_prepareSlides()
 #endif
 }
 
-void OGLTransitionerImpl::impl_prepareTransition()
+bool OGLTransitionerImpl::impl_prepareTransition()
 {
     if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
-        mpTransition->prepare( maLeavingSlideGL, maEnteringSlideGL );
+        return mpTransition->prepare( maLeavingSlideGL, maEnteringSlideGL );
+    return false;
 }
 
 void OGLTransitionerImpl::impl_finishTransition()
@@ -541,15 +542,21 @@ void OGLTransitionerImpl::impl_finishTransition()
         mpTransition->finish();
 }
 
-void OGLTransitionerImpl::setTransition( std::shared_ptr<OGLTransitionImpl> pTransition )
+bool OGLTransitionerImpl::setTransition( std::shared_ptr<OGLTransitionImpl> pTransition )
 {
     if ( mpTransition ) // already initialized
-        return;
+        return true;
 
     mpTransition = pTransition;
 
+    bool succeeded = impl_prepareTransition();
+    if (!succeeded) {
+        mpTransition = nullptr;
+        return false;
+    }
+
     impl_prepareSlides();
-    impl_prepareTransition();
+    return true;
 }
 
 void OGLTransitionerImpl::createTexture( GLuint* texID,
@@ -1138,7 +1145,7 @@ void OGLTransitionerImpl::GLInitSlides()
 {
     osl::MutexGuard const guard( m_aMutex );
 
-    if (isDisposed() || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
+    if (isDisposed() || !mpTransition || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
         return;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1187,7 +1194,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 #endif
     osl::MutexGuard const guard( m_aMutex );
 
-    if (isDisposed() || !mbValidOpenGLContext || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
+    if (isDisposed() || !mbValidOpenGLContext || !mpTransition || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
         return;
 
     mpContext->makeCurrent();
@@ -1197,14 +1204,11 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR();
 
-    if(mpTransition)
-    {
-        const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
-        mpTransition->display( nTime, maLeavingSlideGL, maEnteringSlideGL,
-                              maSlideSize.Width, maSlideSize.Height,
-                              static_cast<double>(rGLWindow.Width),
-                              static_cast<double>(rGLWindow.Height) );
-    }
+    const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
+    mpTransition->display( nTime, maLeavingSlideGL, maEnteringSlideGL,
+                          maSlideSize.Width, maSlideSize.Height,
+                          static_cast<double>(rGLWindow.Width),
+                          static_cast<double>(rGLWindow.Height) );
 
     mpContext->swapBuffers();
 
@@ -1502,10 +1506,8 @@ public:
             pTransition = makeNewsflash();
         }
 
-        if ( !pTransition )
+        if ( !pTransition || !xRes->setTransition(pTransition) )
             return uno::Reference< presentation::XTransition >();
-
-        xRes->setTransition( pTransition );
 
         return uno::Reference<presentation::XTransition>(xRes.get());
     }
