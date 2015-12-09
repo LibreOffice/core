@@ -212,6 +212,10 @@ private:
     TransitionScene maScene;
     const TransitionSettings maSettings;
 
+    /** Calculates the projection and model/view matrices, and upload them.
+     */
+    void uploadModelViewProjectionMatrices();
+
     /** Uniform location for primitive transform
      */
     GLint m_nPrimitiveTransformLocation = -1;

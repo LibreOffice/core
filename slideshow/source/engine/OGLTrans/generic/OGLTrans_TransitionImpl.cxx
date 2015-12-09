@@ -74,6 +74,43 @@ void OGLTransitionImpl::setScene(TransitionScene const& rScene)
     maScene = rScene;
 }
 
+void OGLTransitionImpl::uploadModelViewProjectionMatrices()
+{
+    double EyePos(10.0);
+    double RealF(1.0);
+    double RealN(-1.0);
+    double RealL(-1.0);
+    double RealR(1.0);
+    double RealB(-1.0);
+    double RealT(1.0);
+    double ClipN(EyePos+5.0*RealN);
+    double ClipF(EyePos+15.0*RealF);
+    double ClipL(RealL*8.0);
+    double ClipR(RealR*8.0);
+    double ClipB(RealB*8.0);
+    double ClipT(RealT*8.0);
+
+    glm::mat4 projection = glm::frustum<float>(ClipL, ClipR, ClipB, ClipT, ClipN, ClipF);
+    //This scaling is to take the plane with BottomLeftCorner(-1,-1,0) and TopRightCorner(1,1,0) and map it to the screen after the perspective division.
+    glm::vec3 scale(1.0 / (((RealR * 2.0 * ClipN) / (EyePos * (ClipR - ClipL))) - ((ClipR + ClipL) / (ClipR - ClipL))),
+                    1.0 / (((RealT * 2.0 * ClipN) / (EyePos * (ClipT - ClipB))) - ((ClipT + ClipB) / (ClipT - ClipB))),
+                    1.0);
+    projection = glm::scale(projection, scale);
+    glm::mat4 modelview = glm::translate(glm::mat4(), glm::vec3(0, 0, -EyePos));
+
+    GLint location = glGetUniformLocation( m_nProgramObject, "u_projectionMatrix" );
+    if( location != -1 ) {
+        glUniformMatrix4fv(location, 1, false, glm::value_ptr(projection));
+        CHECK_GL_ERROR();
+    }
+
+    location = glGetUniformLocation( m_nProgramObject, "u_modelViewMatrix" );
+    if( location != -1 ) {
+        glUniformMatrix4fv(location, 1, false, glm::value_ptr(modelview));
+        CHECK_GL_ERROR();
+    }
+}
+
 void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
 {
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
@@ -99,6 +136,8 @@ void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
             glUniform1i( location, 2 );  // texture unit 2
             CHECK_GL_ERROR();
         }
+
+        uploadModelViewProjectionMatrices();
 
         m_nPrimitiveTransformLocation = glGetUniformLocation( m_nProgramObject, "u_primitiveTransformMatrix" );
         m_nSceneTransformLocation = glGetUniformLocation( m_nProgramObject, "u_sceneTransformMatrix" );

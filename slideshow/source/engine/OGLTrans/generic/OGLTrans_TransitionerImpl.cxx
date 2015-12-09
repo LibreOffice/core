@@ -207,7 +207,6 @@ protected:
             bool useMipmap,
             uno::Sequence<sal_Int8>& data,
             const OGLFormat* pFormat );
-    static void prepareEnvironment();
     const OGLFormat* chooseFormats();
 
 private:
@@ -532,7 +531,6 @@ void OGLTransitionerImpl::impl_prepareSlides()
 
 void OGLTransitionerImpl::impl_prepareTransition()
 {
-    prepareEnvironment();
     if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
         mpTransition->prepare( maLeavingSlideGL, maEnteringSlideGL );
 }
@@ -1011,41 +1009,6 @@ void OGLTransitionerImpl::impl_createTexture(
             glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy );
         }
     }
-    CHECK_GL_ERROR();
-}
-
-void OGLTransitionerImpl::prepareEnvironment()
-{
-    double EyePos(10.0);
-    double RealF(1.0);
-    double RealN(-1.0);
-    double RealL(-1.0);
-    double RealR(1.0);
-    double RealB(-1.0);
-    double RealT(1.0);
-    double ClipN(EyePos+5.0*RealN);
-    double ClipF(EyePos+15.0*RealF);
-    double ClipL(RealL*8.0);
-    double ClipR(RealR*8.0);
-    double ClipB(RealB*8.0);
-    double ClipT(RealT*8.0);
-
-    CHECK_GL_ERROR();
-    glMatrixMode(GL_PROJECTION);
-    glm::mat4 projection = glm::frustum<float>(ClipL, ClipR, ClipB, ClipT, ClipN, ClipF);
-    //This scaling is to take the plane with BottomLeftCorner(-1,-1,0) and TopRightCorner(1,1,0) and map it to the screen after the perspective division.
-    glm::vec3 scale(1.0 / (((RealR * 2.0 * ClipN) / (EyePos * (ClipR - ClipL))) - ((ClipR + ClipL) / (ClipR - ClipL))),
-                    1.0 / (((RealT * 2.0 * ClipN) / (EyePos * (ClipT - ClipB))) - ((ClipT + ClipB) / (ClipT - ClipB))),
-                    1.0);
-    projection = glm::scale(projection, scale);
-    CHECK_GL_ERROR();
-    glLoadMatrixf(glm::value_ptr(projection));
-
-    CHECK_GL_ERROR();
-    glMatrixMode(GL_MODELVIEW);
-    glm::mat4 modelview = glm::translate(glm::mat4(), glm::vec3(0, 0, -EyePos));
-    CHECK_GL_ERROR();
-    glLoadMatrixf(glm::value_ptr(modelview));
     CHECK_GL_ERROR();
 }
 
