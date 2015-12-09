@@ -234,6 +234,7 @@ public:
     OString             maHelpId;
     OUString            maHelpText;
     OUString            maQuickHelpText;
+    OUString            maID;
     InputContext        maInputContext;
     css::uno::Reference< css::awt::XWindowPeer > mxWindowPeer;
     css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
