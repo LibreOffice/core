@@ -25,11 +25,10 @@
 #include <cstdio>
 
 #include "salglyphid.hxx"
-#include "vcl/dllapi.h"
 
 namespace vcl { struct _TrueTypeFont; } ///< SFT's idea of a TTF font
 
-class VCL_DLLPUBLIC FontSubsetInfo
+class FontSubsetInfo
 {
 public:
     explicit    FontSubsetInfo();
