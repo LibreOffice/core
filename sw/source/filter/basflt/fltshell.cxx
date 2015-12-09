@@ -969,6 +969,54 @@ SfxPoolItem* SwFltBookmark::Clone(SfxItemPool*) const
     return new SwFltBookmark(*this);
 }
 
+SwFltRDFMark::SwFltRDFMark()
+    : SfxPoolItem(RES_FLTR_RDFMARK),
+      m_nHandle(0)
+{
+}
+
+SwFltRDFMark::SwFltRDFMark(const SwFltRDFMark& rMark)
+    : SfxPoolItem(RES_FLTR_RDFMARK),
+      m_nHandle(rMark.m_nHandle),
+      m_aAttributes(rMark.m_aAttributes)
+{
+}
+
+bool SwFltRDFMark::operator==(const SfxPoolItem& rItem) const
+{
+    if (!SfxPoolItem::operator==(rItem))
+        return false;
+
+    const SwFltRDFMark& rMark = static_cast<const SwFltRDFMark&>(rItem);
+
+    return m_nHandle == rMark.m_nHandle && m_aAttributes == rMark.m_aAttributes;
+}
+
+SfxPoolItem* SwFltRDFMark::Clone(SfxItemPool*) const
+{
+    return new SwFltRDFMark(*this);
+}
+
+void SwFltRDFMark::SetHandle(long nHandle)
+{
+    m_nHandle = nHandle;
+}
+
+long SwFltRDFMark::GetHandle() const
+{
+    return m_nHandle;
+}
+
+void SwFltRDFMark::SetAttributes(const std::vector< std::pair<OUString, OUString> >& rAttributes)
+{
+    m_aAttributes = rAttributes;
+}
+
+const std::vector< std::pair<OUString, OUString> >& SwFltRDFMark::GetAttributes() const
+{
+    return m_aAttributes;
+}
+
 // methods of SwFltTOX follow
 SwFltTOX::SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols)
     : SfxPoolItem(RES_FLTR_TOX), pTOXBase(pBase), nCols( _nCols ),
