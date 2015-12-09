@@ -88,6 +88,7 @@
 using namespace sd;
 #define ViewShellBase
 #include "sdslots.hxx"
+#include <sfx2/bindings.hxx>
 
 using ::sd::framework::FrameworkHelper;
 using namespace com::sun::star::uno;
@@ -605,6 +606,10 @@ SvBorder ViewShellBase::GetBorder (bool )
 void ViewShellBase::Execute (SfxRequest& rRequest)
 {
     sal_uInt16 nSlotId = rRequest.GetSlot();
+
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    rBindings.Invalidate( SID_INSERT_DRAW );
+    rBindings.Update( SID_INSERT_DRAW );
 
     switch (nSlotId)
     {
