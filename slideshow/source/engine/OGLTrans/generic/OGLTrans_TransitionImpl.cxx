@@ -465,18 +465,8 @@ void SimpleTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
-    glActiveTexture( GL_TEXTURE2 );
-    glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
-    glActiveTexture( GL_TEXTURE0 );
-
-    GLint location = -1;
-    if( m_nProgramObject )
-        location = glGetUniformLocation( m_nProgramObject, "slideTexture" );
-    if( location != -1 )
-        glUniform1f( location, 2 );
+    CHECK_GL_ERROR();
     displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
-    if( location != -1 )
-        glUniform1f( location, 0 );
     displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
     CHECK_GL_ERROR();
 }
