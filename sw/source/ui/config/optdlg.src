@@ -36,42 +36,132 @@ String ST_SCRIPT_WESTERN
     Text [ en-US ] = "Western";
 };
 
-StringArray STR_PRINTOPTUI
+String STR_PRINTOPTUI_PRODUCTNAME
 {
-    ItemList [en-US] =
-    {
-        < "%PRODUCTNAME %s"; >;
-        < "Contents"; >;
-        < "Page ba~ckground"; >;
-        < "P~ictures and other graphic objects"; >;
-        < "Hidden te~xt"; >;
-        < "~Text placeholders"; >;
-        < "Form control~s"; >;
-        < "Color"; >;
-        < "Print text in blac~k"; >;
-        < "Pages"; >;
-        < "Print ~automatically inserted blank pages"; >;
-        < "~Use only paper tray from printer preferences"; >;
-        < "Print"; >;
-        < "None (document only)"; >;
-        < "Comments only"; >;
-        < "Place at end of document"; >;
-        < "Place at end of page"; >;
-        < "~Comments"; >;
-        < "Page sides";>;
-        < "All pages"; >;
-        < "Back sides / left pages"; >;
-        < "Front sides / right pages"; >;
-        < "Include"; >;
-        < "Broch~ure"; >;
-        < "Left-to-right script"; >;
-        < "Right-to-left script"; >;
-        < "Range and copies"; >;
-        < "~All pages"; >;
-        < "Pa~ges"; >;
-        < "~Selection"; >;
-        < "Place in margins"; >;
-    };
+    Text [ en-US ] = "%PRODUCTNAME %s";
 };
+String STR_PRINTOPTUI_CONTENTS
+{
+    Text [ en-US ] = "Contents";
+};
+String STR_PRINTOPTUI_PAGE_BACKGROUND
+{
+    Text [ en-US ] = "Page ba~ckground";
+};
+String STR_PRINTOPTUI_PICTURES
+{
+    Text [ en-US ] = "P~ictures and other graphic objects";
+};
+String STR_PRINTOPTUI_HIDDEN
+{
+    Text [ en-US ] = "Hidden te~xt";
+};
+String STR_PRINTOPTUI_TEXT_PLACEHOLDERS
+{
+    Text [ en-US ] = "~Text placeholders";
+};
+String STR_PRINTOPTUI_FORM_CONTROLS
+{
+    Text [ en-US ] = "Form control~s";
+};
+String STR_PRINTOPTUI_COLOR
+{
+    Text [ en-US ] = "Color";
+};
+String STR_PRINTOPTUI_PRINT_BLACK
+{
+    Text [ en-US ] = "Print text in blac~k";
+};
+String STR_PRINTOPTUI_PAGES_TEXT
+{
+    Text [ en-US ] = "Pages";
+};
+String STR_PRINTOPTUI_PRINT_BLANK
+{
+    Text [ en-US ] = "Print ~automatically inserted blank pages";
+};
+String STR_PRINTOPTUI_ONLY_PAPER
+{
+    Text [ en-US ] = "~Use only paper tray from printer preferences";
+};
+String STR_PRINTOPTUI_PRINT
+{
+    Text [ en-US ] = "Print";
+};
+String STR_PRINTOPTUI_NONE
+{
+    Text [ en-US ] = "None (document only)";
+};
+String STR_PRINTOPTUI_COMMENTS_ONLY
+{
+    Text [ en-US ] = "Comments only";
+};
+String STR_PRINTOPTUI_PLACE_END
+{
+    Text [ en-US ] = "Place at end of document";
+};
+String STR_PRINTOPTUI_PLACE_PAGE
+{
+    Text [ en-US ] = "Place at end of page";
+};
+String STR_PRINTOPTUI_COMMENTS
+{
+    Text [ en-US ] = "~Comments";
+};
+String STR_PRINTOPTUI_PAGE_SIDES
+{
+    Text [ en-US ] = "Page sides";
+};
+String STR_PRINTOPTUI_ALL_PAGES
+{
+    Text [ en-US ] = "All pages";
+};
+String STR_PRINTOPTUI_BACK_PAGES
+{
+    Text [ en-US ] = "Back sides / left pages";
+};
+String STR_PRINTOPTUI_FONT_PAGES
+{
+    Text [ en-US ] = "Front sides / right pages";
+};
+String STR_PRINTOPTUI_INCLUDE
+{
+    Text [ en-US ] = "Include";
+};
+String STR_PRINTOPTUI_BROCHURE
+{
+    Text [ en-US ] = "Broch~ure";
+};
+String STR_PRINTOPTUI_LEFT_SCRIPT
+{
+    Text [ en-US ] = "Left-to-right script";
+};
+String STR_PRINTOPTUI_RIGHT_SCRIPT
+{
+    Text [ en-US ] = "Right-to-left script";
+};
+String STR_PRINTOPTUI_RANGE_COPIES
+{
+    Text [ en-US ] = "Range and copies";
+};
+String STR_PRINTOPTUI_ALLPAGES
+{
+    Text [ en-US ] = "~All pages";
+};
+String STR_PRINTOPTUI_SOMEPAGES
+{
+    Text [ en-US ] = "Pa~ges";
+};
+String STR_PRINTOPTUI_SELECTION
+{
+    Text [ en-US ] = "~Selection";
+};
+String STR_PRINTOPTUI_PLACE_MARGINS
+{
+    Text [ en-US ] = "Place in margins";
+};
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
