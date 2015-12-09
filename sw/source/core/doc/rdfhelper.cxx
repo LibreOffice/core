@@ -48,4 +48,8 @@ std::map<OUString, OUString> SwRDFHelper::getTextNodeStatements(const OUString& 
     return aRet;
 }
 
+void SwRDFHelper::addTextNodeStatement(const OUString& /*rType*/, const OUString& /*rPath*/, SwTextNode& /*rTextNode*/, const OUString& /*rKey*/, const OUString& /*rValue*/)
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
