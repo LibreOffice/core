@@ -48,8 +48,25 @@ std::map<OUString, OUString> SwRDFHelper::getTextNodeStatements(const OUString& 
     return aRet;
 }
 
-void SwRDFHelper::addTextNodeStatement(const OUString& /*rType*/, const OUString& /*rPath*/, SwTextNode& /*rTextNode*/, const OUString& /*rKey*/, const OUString& /*rValue*/)
+void SwRDFHelper::addTextNodeStatement(const OUString& rType, const OUString& rPath, SwTextNode& rTextNode, const OUString& rKey, const OUString& rValue)
 {
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
+    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(rTextNode.GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+    uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
+    uno::Reference<rdf::XURI> xGraphName;
+    if (aGraphNames.hasElements())
+        xGraphName = aGraphNames[0];
+    else
+    {
+        uno::Sequence< uno::Reference<rdf::XURI> > xTypes = { xType };
+        xGraphName = xDocumentMetadataAccess->addMetadataFile(rPath, xTypes);
+    }
+    uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
+    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(*rTextNode.GetDoc(), &rTextNode), uno::UNO_QUERY);
+    uno::Reference<rdf::XURI> xKey = rdf::URI::create(xComponentContext, rKey);
+    uno::Reference<rdf::XURI> xValue = rdf::URI::create(xComponentContext, rValue);
+    xGraph->addStatement(xSubject, xKey, xValue);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
