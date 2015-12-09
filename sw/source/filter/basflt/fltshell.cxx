@@ -64,6 +64,7 @@
 #include <fltshell.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>
+#include <rdfhelper.hxx>
 
 using namespace com::sun::star;
 
@@ -78,6 +79,14 @@ static SwContentNode* GetContentNode(SwDoc* pDoc, SwNodeIndex& rIdx, bool bNext)
         OSL_ENSURE(pCNd, "no ContentNode found");
     }
     return pCNd;
+}
+
+static OUString lcl_getTypePath(const OUString& rType)
+{
+    OUString aRet;
+    if (rType == "urn:tscp:names:baf:1.1")
+        aRet = "tscp/baf.rdf";
+    return aRet;
 }
 
 // Stack entry for all text attributes
@@ -614,7 +623,25 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         {
             if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true))
             {
-                // TODO handle RDF mark
+                SwFltRDFMark* pMark = static_cast<SwFltRDFMark*>(rEntry.pAttr);
+                if (aRegion.GetNode().IsTextNode())
+                {
+                    SwTextNode& rTextNode = *aRegion.GetNode().GetTextNode();
+
+                    for (const std::pair<OUString, OUString>& rAttribute : pMark->GetAttributes())
+                    {
+                        sal_Int32 nIndex = rAttribute.first.indexOf('#');
+                        if (nIndex == -1)
+                            continue;
+
+                        OUString aTypeNS = rAttribute.first.copy(0, nIndex);
+                        OUString aMetadataFilePath = lcl_getTypePath(aTypeNS);
+                        if (aMetadataFilePath.isEmpty())
+                            continue;
+
+                        SwRDFHelper::addTextNodeStatement(aTypeNS, aMetadataFilePath, rTextNode, rAttribute.first, rAttribute.second);
+                    }
+                }
             }
             else
                 SAL_WARN("sw", "failed to make book region or point");

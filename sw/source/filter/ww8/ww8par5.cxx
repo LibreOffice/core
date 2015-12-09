@@ -253,7 +253,7 @@ long SwWW8ImplReader::Read_FactoidBook(WW8PLCFManResult*)
             SwFltRDFMark aMark;
             aMark.SetHandle(pFactoidBook->getHandle());
             GetSmartTagInfo(aMark);
-            m_pReffedStck->NewAttr(*m_pPaM->GetPoint(), CntUInt16Item(RES_FLTR_RDFMARK, pFactoidBook->getHandle()));
+            m_pReffedStck->NewAttr(*m_pPaM->GetPoint(), aMark);
         }
     }
     return 0;
