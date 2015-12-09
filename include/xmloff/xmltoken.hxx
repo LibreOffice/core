@@ -1930,6 +1930,7 @@ namespace xmloff { namespace token {
         XML_UPLIMIT,
         XML_UPRIGHT,
         XML_URL,
+        XML_USE,
         XML_USE_CAPTION,
         XML_USE_CELL_PROTECTION,
         XML_USE_CHART_OBJECTS,
