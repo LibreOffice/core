@@ -333,8 +333,6 @@ void IconChoiceDialog::ShowPage(sal_uInt16 nId)
 {
     sal_uInt16 nOldPageId = GetCurPageId();
     bool bInvalidate = nOldPageId != nId;
-    SetCurPageId(nId);
-    ActivatePageImpl();
     if (bInvalidate)
     {
         IconChoicePageData* pOldData = GetPageData(nOldPageId);
@@ -346,6 +344,8 @@ void IconChoiceDialog::ShowPage(sal_uInt16 nId)
 
         Invalidate();
     }
+    SetCurPageId(nId);
+    ActivatePageImpl();
     IconChoicePageData* pNewData = GetPageData(nId);
     if (pNewData && pNewData->pPage)
         ShowPageImpl(pNewData);
