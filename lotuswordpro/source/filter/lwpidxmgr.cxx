@@ -215,7 +215,7 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
             vObjIndexs[k]->offset = pObjStrm->QuickReaduInt32();
 
         for (k = 0; k < LeafCount; k++)
-            m_TempVec[k] = pObjStrm->QuickReaduInt32();
+            m_TempVec.at(k) = pObjStrm->QuickReaduInt32();
     }
 
     for( sal_uInt16 j=0; j<LeafCount; j++ )
