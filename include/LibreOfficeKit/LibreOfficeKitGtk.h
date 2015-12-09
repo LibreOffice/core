@@ -235,6 +235,35 @@ void                           lok_doc_view_highlight_all          (LOKDocView* 
                                                                     const gchar* pText);
 
 /**
+ * lok_doc_view_copy_selection:
+ * @pDocView: The #LOKDocView instance
+ * @pMimeType: suggests the return format, for example text/plain;charset=utf-8
+ * @pUsedMimeType: (out): output parameter to inform about the determined format
+ * (suggested or plain text).
+ *
+ * Returns: Selected text. The caller must free the returned buffer after use.
+ */
+gchar*                          lok_doc_view_copy_selection        (LOKDocView* pDocView,
+                                                                    const gchar* pMimeType,
+                                                                    gchar** pUsedMimeType);
+
+/**
+ * lok_doc_view_paste:
+ * @pDocView: The #LOKDocView instance
+ * @pMimeType: format of pData, for example text/plain;charset=utf-8
+ * @pData: the data to be pasted
+ * @nSize: length of data to be pasted
+ *
+ * Pastes the content at the current cursor position
+ *
+ * Returns: if pData was pasted successfully.
+ */
+gboolean                        lok_doc_view_paste                 (LOKDocView* pDocView,
+                                                                    const gchar* pMimeType,
+                                                                    const gchar* pData,
+                                                                    gsize nSize);
+
+/**
  * lok_doc_view_pixel_to_twip:
  * @pDocView: The #LOKDocView instance
  * @fInput: The value in pixels to convert to twips
