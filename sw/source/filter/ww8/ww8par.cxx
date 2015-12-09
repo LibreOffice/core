@@ -5978,13 +5978,47 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
     return pRet;
 }
 
-void SwWW8ImplReader::GetSmartTagInfo(sal_uInt16 /*nIndex*/)
+void SwWW8ImplReader::GetSmartTagInfo(SwFltRDFMark& rMark)
 {
     if (!m_pSmartTagData && m_pWwFib->lcbFactoidData)
     {
         m_pSmartTagData.reset(new WW8SmartTagData());
         m_pSmartTagData->Read(*m_pTableStream, m_pWwFib->fcFactoidData, m_pWwFib->lcbFactoidData);
     }
+
+    // Check if the handle is a valid smart tag bookmark index.
+    size_t nIndex = rMark.GetHandle();
+    if (nIndex >= m_pSmartTagData->m_aPropBags.size())
+        return;
+
+    // Check if the smart tag bookmark refers to a valid factoid type.
+    const MSOPropertyBag& rPropertyBag = m_pSmartTagData->m_aPropBags[rMark.GetHandle()];
+    auto itPropertyBag = m_pSmartTagData->m_aPropBagStore.m_aFactoidTypes.begin();
+    for (; itPropertyBag != m_pSmartTagData->m_aPropBagStore.m_aFactoidTypes.end(); ++itPropertyBag)
+        if (itPropertyBag->m_nId == rPropertyBag.m_nId)
+            break;
+    if (itPropertyBag == m_pSmartTagData->m_aPropBagStore.m_aFactoidTypes.end())
+        return;
+
+    // Check if the factoid is an RDF one.
+    const MSOFactoidType& rFactoidType = *itPropertyBag;
+    if (rFactoidType.m_aUri != "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+        return;
+
+    // Finally put the relevant attributes to the mark.
+    std::vector< std::pair<OUString, OUString> > aAttributes;
+    for (const MSOProperty& rProperty : rPropertyBag.m_aProperties)
+    {
+        OUString aKey;
+        OUString aValue;
+        if (rProperty.m_nKey < m_pSmartTagData->m_aPropBagStore.m_aStringTable.size())
+            aKey = m_pSmartTagData->m_aPropBagStore.m_aStringTable[rProperty.m_nKey];
+        if (rProperty.m_nValue < m_pSmartTagData->m_aPropBagStore.m_aStringTable.size())
+            aValue = m_pSmartTagData->m_aPropBagStore.m_aStringTable[rProperty.m_nValue];
+        if (!aKey.isEmpty() && !aValue.isEmpty())
+            aAttributes.push_back(std::make_pair(aKey, aValue));
+    }
+    rMark.SetAttributes(aAttributes);
 }
 
 sal_uLong SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)

@@ -1640,7 +1640,7 @@ private:
 
     const OUString* GetAnnotationAuthor(sal_uInt16 nIdx);
 
-    void GetSmartTagInfo(sal_uInt16 nIndex);
+    void GetSmartTagInfo(SwFltRDFMark& rMark);
 
     // interfaces for the toggle attributes
     void SetToggleAttr(sal_uInt8 nAttrId, bool bOn);
