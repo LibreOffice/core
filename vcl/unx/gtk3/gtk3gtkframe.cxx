@@ -2480,7 +2480,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
             break;
         case GDK_SCROLL_LEFT:
             aEvent.mbHorz = true;
-            aEvent.mnDelta = -120;
+            aEvent.mnDelta = 120;
             break;
         case GDK_SCROLL_RIGHT:
             aEvent.mnDelta = -120;
