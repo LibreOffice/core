@@ -302,12 +302,15 @@ namespace
 
     OString createFileName( const OUString& rVertexShaderName,
                             const OUString& rFragmentShaderName,
+                            const OUString& rGeometryShaderName,
                             const OString& rDigest )
     {
         OString aFileName;
         aFileName += getCacheFolder();
         aFileName += rtl::OUStringToOString( rVertexShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
         aFileName += rtl::OUStringToOString( rFragmentShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
+        if (!rGeometryShaderName.isEmpty())
+            aFileName += rtl::OUStringToOString( rGeometryShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
         aFileName += rDigest + ".bin";
         return aFileName;
     }
@@ -376,6 +379,7 @@ rtl::OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
 
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
                                 const OUString& rFragmentShaderName,
+                                const OUString& rGeometryShaderName,
                                 const OString& preamble,
                                 const OString& rDigest)
 {
@@ -383,18 +387,23 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
 
     gbInShaderCompile = true;
 
+    bool bHasGeometryShader = !rGeometryShaderName.isEmpty();
+
     // create the program object
     GLint ProgramID = glCreateProgram();
 
     // read shaders from file
     OString aVertexShaderSource = getShaderSource(rVertexShaderName);
     OString aFragmentShaderSource = getShaderSource(rFragmentShaderName);
+    OString aGeometryShaderSource;
+    if (bHasGeometryShader)
+        aGeometryShaderSource = getShaderSource(rGeometryShaderName);
 
     GLint bBinaryResult = GL_FALSE;
     if( GLEW_ARB_get_program_binary && !rDigest.isEmpty() )
     {
         OString aFileName =
-                createFileName(rVertexShaderName, rFragmentShaderName, rDigest);
+                createFileName(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, rDigest);
         bBinaryResult = loadProgramBinary(ProgramID, aFileName);
         VCL_GL_INFO("Load binary shader from '" << aFileName << "'" << bBinaryResult);
         CHECK_GL_ERROR();
@@ -403,10 +412,16 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     if( bBinaryResult != GL_FALSE )
         return ProgramID;
 
-    VCL_GL_INFO("Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName);
+    if (bHasGeometryShader)
+        VCL_GL_INFO("Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName << " geometry " << rGeometryShaderName);
+    else
+        VCL_GL_INFO("Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName);
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
     GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+    GLuint GeometryShaderID = 0;
+    if (bHasGeometryShader)
+        GeometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
 
     GLint Result = GL_FALSE;
 
@@ -436,9 +451,27 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
         return LogCompilerError(FragmentShaderID, "fragment",
                                 rFragmentShaderName, true);
 
+    if (bHasGeometryShader)
+    {
+        // Compile Geometry Shader
+        if( !preamble.isEmpty())
+            addPreamble( aGeometryShaderSource, preamble );
+        char const * GeometrySourcePointer = aGeometryShaderSource.getStr();
+        glShaderSource(GeometryShaderID, 1, &GeometrySourcePointer , nullptr);
+        glCompileShader(GeometryShaderID);
+
+        // Check Geometry Shader
+        glGetShaderiv(GeometryShaderID, GL_COMPILE_STATUS, &Result);
+        if (!Result)
+            return LogCompilerError(GeometryShaderID, "geometry",
+                                    rGeometryShaderName, true);
+    }
+
     // Link the program
     glAttachShader(ProgramID, VertexShaderID);
     glAttachShader(ProgramID, FragmentShaderID);
+    if (bHasGeometryShader)
+        glAttachShader(ProgramID, GeometryShaderID);
 
     if( GLEW_ARB_get_program_binary && !rDigest.isEmpty() )
     {
@@ -451,7 +484,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
             return LogCompilerError(ProgramID, "program", "<both>", false);
         }
         OString aFileName =
-                createFileName(rVertexShaderName, rFragmentShaderName, rDigest);
+                createFileName(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, rDigest);
         saveProgramBinary(ProgramID, aFileName);
     }
     else
@@ -461,6 +494,8 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
 
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
+    if (bHasGeometryShader)
+        glDeleteShader(GeometryShaderID);
 
     // Check the program
     glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
@@ -474,6 +509,27 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     gbInShaderCompile = false;
 
     return ProgramID;
+}
+
+GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
+                                const OUString& rFragmentShaderName,
+                                const OString& preamble,
+                                const OString& rDigest)
+{
+    return LoadShaders(rVertexShaderName, rFragmentShaderName, OUString(), preamble, rDigest);
+}
+
+GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
+                                const OUString& rFragmentShaderName,
+                                const OUString& rGeometryShaderName)
+{
+    return LoadShaders(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, OString(), OString());
+}
+
+GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
+                                const OUString& rFragmentShaderName)
+{
+    return LoadShaders(rVertexShaderName, rFragmentShaderName, OUString(), "", "");
 }
 
 void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer, const bool bFlip)
