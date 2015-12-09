@@ -27,6 +27,8 @@
 #include <map>
 #include <set>
 
+#include <wrtww8.hxx>
+
 class RtfExport;
 class RtfAttributeOutput;
 class SwFrameFormat;
@@ -68,6 +70,8 @@ public:
 
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?
     bool isTextBox(const SwFrameFormat& rFrameFormat);
+    /// Write editeng text, e.g. shape or comment.
+    void WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes eType);
 
 protected:
     /// Start the shape for which we just collected the information.
@@ -100,8 +104,6 @@ private:
 
     /// Add position and size to the OStringBuffer.
     void AddRectangleDimensions(OStringBuffer& rBuffer, const Rectangle& rRectangle);
-
-    void WriteOutliner(const OutlinerParaObject& rParaObj);
 
     /// Exports the pib property of the shape
     void impl_writeGraphic();

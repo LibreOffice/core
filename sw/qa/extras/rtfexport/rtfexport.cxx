@@ -952,6 +952,20 @@ DECLARE_RTFEXPORT_TEST(testTdf94043, "tdf94043.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), getProperty<sal_Int32>(xTextColumns, "SeparatorLineWidth"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf94377, "tdf94377.rtf")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xPropertySet(xFields->nextElement(), uno::UNO_QUERY);
+    auto xText = getProperty< uno::Reference<text::XText> >(xPropertySet, "TextRange");
+    // This failed, as:
+    // 1) multiple paragraphs were not exported, so the text was "Asdf10asdf12".
+    // 2) direct formatting of runs were not exported, so this was 12 (the document default).
+    CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraphOfText(1, xText, "Asdf10"), 1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getRun(getParagraphOfText(2, xText, "asdf12"), 1), "CharHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

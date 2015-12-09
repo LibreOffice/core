@@ -554,23 +554,25 @@ sal_Int32 RtfSdrExport::StartShape()
         if (pParaObj)
         {
             // this is reached only in case some text is attached to the shape
-            WriteOutliner(*pParaObj);
+            WriteOutliner(*pParaObj, TXT_HFTXTBOX);
         }
     }
 
     return m_nShapeType;
 }
 
-void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
+void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes eType)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
-    MSWord_SdrAttrIter aAttrIter(m_rExport, rEditObj, TXT_HFTXTBOX);
+    MSWord_SdrAttrIter aAttrIter(m_rExport, rEditObj, eType);
 
     sal_Int32 nPara = rEditObj.GetParagraphCount();
 
-    m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHPTXT).append(' ');
+    bool bShape = eType == TXT_HFTXTBOX;
+    if (bShape)
+        m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHPTXT).append(' ');
     for (sal_Int32 n = 0; n < nPara; ++n)
     {
         if (n)
@@ -584,6 +586,7 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
 
         aAttrIter.OutParaAttr(false);
         m_rAttrOutput.RunText().append(m_rAttrOutput.Styles().makeStringAndClear());
+        m_rAttrOutput.RunText().append(m_rAttrOutput.StylesEnd().makeStringAndClear());
 
         do
         {
@@ -591,7 +594,10 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
             aAttrIter.OutAttr(nAktPos);
-            m_rAttrOutput.RunText().append('{').append(m_rAttrOutput.Styles().makeStringAndClear()).append(SAL_NEWLINE_STRING);
+            m_rAttrOutput.RunText().append('{');
+            m_rAttrOutput.RunText().append(m_rAttrOutput.Styles().makeStringAndClear());
+            m_rAttrOutput.RunText().append(m_rAttrOutput.StylesEnd().makeStringAndClear());
+            m_rAttrOutput.RunText().append(SAL_NEWLINE_STRING);
             bool bTextAtr = aAttrIter.IsTextAttr(nAktPos);
             if (!bTextAtr)
             {
@@ -606,9 +612,11 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
             aAttrIter.NextPos();
         }
         while (nAktPos < nEnd);
-        m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_PAR);
+        if (bShape || n + 1 < nPara)
+            m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_PAR);
     }
-    m_rAttrOutput.RunText().append('}');
+    if (bShape)
+        m_rAttrOutput.RunText().append('}');
 
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
