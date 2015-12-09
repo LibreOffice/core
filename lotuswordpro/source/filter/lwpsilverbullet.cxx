@@ -94,6 +94,9 @@ void LwpSilverBullet::Read()
 
     sal_uInt16 nNumPos = m_pObjStrm->QuickReaduInt16();
 
+    if (nNumPos > SAL_N_ELEMENTS(m_pResetPositionFlags))
+        throw std::range_error("corrupt SilverBullet");
+
     for (sal_uInt16 nC = 0; nC < nNumPos; nC++)
         m_pResetPositionFlags[nC] = m_pObjStrm->QuickReaduInt8();
 
