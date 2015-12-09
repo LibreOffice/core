@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_5ff8ee7c",
+        "filename": "sw/inc/globals.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-09T22:04:35Z",
+      "side": 1,
+      "message": "Please remove the comments. They don\u0027t serve any useful purpose.",
+      "revId": "7fc3ae08a5ea6e90b36c30abc69d1547f7e35aec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_3ff52a83",
+        "filename": "sw/source/ui/config/optdlg.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-09T22:04:35Z",
+      "side": 1,
+      "message": "Again, please remove the comments.",
+      "revId": "7fc3ae08a5ea6e90b36c30abc69d1547f7e35aec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_3f3c0a2f",
+        "filename": "sw/source/ui/config/optdlg.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-09T22:04:35Z",
+      "side": 1,
+      "message": "I think STR_PRINTOPTUI_SOMEPAGES (as opposite to STR_PRINTOPTUI_ALLPAGES) or STR_PRINTOPTUI_SELECTED_PAGES (or something like it) would be a more descriptive name.",
+      "revId": "7fc3ae08a5ea6e90b36c30abc69d1547f7e35aec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
