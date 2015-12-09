@@ -269,7 +269,7 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
     if (!pLayoutNumerics)
     {
         // if current layout doesn't have format, go to based on layout
-        LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(m_BasedOnStyle.obj().get());
+        LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(GetBasedOnStyle().get());
         if (pCellLayout)
         {
             pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(pCellLayout->GetNumericsObject().obj().get());
@@ -654,7 +654,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
     else
     {
         // judge base on
-        LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(m_BasedOnStyle.obj().get());
+        LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(GetBasedOnStyle().get());
         if (pBase && pBase->IsProtected())
         {
             bProtected = true;
