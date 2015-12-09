@@ -1804,70 +1804,103 @@ std::shared_ptr<OGLTransitionImpl> makeGlitter()
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
+namespace
+{
+
+class HoneycombTransition : public PermTextureTransition
+{
+public:
+    HoneycombTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : PermTextureTransition(rScene, rSettings)
+    {
+    }
+
+private:
+    virtual GLuint makeShader() const override;
+    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+
+    GLint maHexagonSizeLocation = 0;
+    GLint maTimeLocation = 0;
+    GLint maSelectedTextureLocation = 0;
+};
+
+GLuint HoneycombTransition::makeShader() const
+{
+    return OpenGLHelper::LoadShaders( "honeycombVertexShader", "honeycombFragmentShader", "honeycombGeometryShader" );
+}
+
+void HoneycombTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
+{
+    CHECK_GL_ERROR();
+    PermTextureTransition::prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
+
+    CHECK_GL_ERROR();
+    maHexagonSizeLocation = glGetUniformLocation(m_nProgramObject, "hexagonSize");
+    maTimeLocation = glGetUniformLocation( m_nProgramObject, "time" );
+    maSelectedTextureLocation = glGetUniformLocation( m_nProgramObject, "selectedTexture" );
+    CHECK_GL_ERROR();
+
+    // We want to see the entering slide behind the leaving one.
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    CHECK_GL_ERROR();
+}
+
+void HoneycombTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
+                                              double SlideWidthScale, double SlideHeightScale )
+{
+    CHECK_GL_ERROR();
+    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
+    glUniform1f( maTimeLocation, nTime );
+
+    // The back (entering) slide needs to be drawn before the front (leaving) one in order for blending to work.
+
+    const float borderSize = 0.15;
+
+    CHECK_GL_ERROR();
+    glUniform1f(maSelectedTextureLocation, 0.0);
+    glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
+    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+    glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
+    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
+
+    glUniform1f(maSelectedTextureLocation, 1.0);
+    glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
+    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+    glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
+    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+}
+
+std::shared_ptr<OGLTransitionImpl>
+makeHoneycombTransition(const Primitives_t& rLeavingSlidePrimitives,
+                        const Primitives_t& rEnteringSlidePrimitives,
+                        const TransitionSettings& rSettings = TransitionSettings())
+{
+    // The center point should be adjustable by the user, but we have no way to do that in the UI
+    return std::make_shared<HoneycombTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+                                                 rSettings);
+}
+
+}
+
 std::shared_ptr<OGLTransitionImpl> makeHoneycomb()
 {
     const int NX = 21;
     const int NY = 21;
 
-    Primitives_t aLeavingSlide;
-    Primitives_t aEnteringSlide;
+    TransitionSettings aSettings;
+    aSettings.mnRequiredGLVersion = 3.2;
 
-    float fRandom = 0.0f;
-
-    int centerX = NX / 2;
-    int centerY = NY / 2;
-
+    Primitives_t aSlide;
+    Primitive aHexagon;
     for (int y = 0; y < NY+2; y+=2)
-    {
         for (int x = 0; x < NX+2; x+=2)
-        {
-            Primitive aHexagon;
-            createHexagon(aHexagon, x, y, NX, NY);
+            aHexagon.pushTriangle(glm::vec2(y % 4 ? fdiv(x, NX) : fdiv(x + 1, NX), fdiv(y, NY)), glm::vec2(1, 0), glm::vec2(0, 0));
+    aSlide.push_back(aHexagon);
 
-            fRandom = comphelper::rng::uniform_real_distribution(0.2, std::nextafter(0.7, DBL_MAX));
-
-            aHexagon.Operations.push_back(makeSRotate(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), 0 , false, -1, 0.1));
-            aHexagon.Operations.push_back(makeSRotate(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), 90 , true, 0.2, 1.0));
-            if (x <= 0 || y <= 0 || x >= NX || y >= NY)
-            {
-                aHexagon.Operations.push_back(makeSTranslate(glm::vec3 (0, 0, 100), false, 0.1, 1.0));
-            }
-            else if ((centerX - 1 <= x && x <= centerX + 1 && centerY - 1 <= y && y <= centerY + 1 ))
-            {
-                aHexagon.Operations.push_back(makeSTranslate(glm::vec3 (0, 0, 7), true, 0.0, 1.0));
-                aHexagon.Operations.push_back(makeSTranslate(glm::vec3 (0, 0, 100), false, 0.1, 1.0));
-            }
-            else
-            {
-                aHexagon.Operations.push_back(makeSTranslate(glm::vec3 (0, 0, 7), true, 0.0, 1.0));
-                aHexagon.Operations.push_back(makeSTranslate(glm::vec3 (0, 0, 100), false, fRandom, 1.0));
-            }
-
-            aLeavingSlide.push_back(aHexagon);
-
-            aHexagon.Operations.clear();
-
-            aHexagon.Operations.push_back(makeSRotate(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), -90 , false, -1, 0.0));
-            aHexagon.Operations.push_back(makeSRotate(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), 90 , true, 0.0, 0.8));
-
-            aHexagon.Operations.push_back(makeSTranslate(glm::vec3(-100, 0, -20), false, -1, 0));
-
-            if (x <= 0 || y <= 0 || x >= NX || y >= NY)
-            {
-                fRandom = comphelper::rng::uniform_real_distribution(0.85, std::nextafter(0.95, DBL_MAX));
-                aHexagon.Operations.push_back(makeSTranslate(glm::vec3(100, 0, 0), false, fRandom, 0.95));
-            }
-            else
-            {
-                fRandom = comphelper::rng::uniform_real_distribution(0.3, std::nextafter(0.8, DBL_MAX));
-                aHexagon.Operations.push_back(makeSTranslate(glm::vec3(100, 0, 0), false, fRandom, 0.9));
-            }
-            aHexagon.Operations.push_back(makeSTranslate(glm::vec3 (0, 0, 20), true, 0.1, 1.0));
-            aEnteringSlide.push_back(aHexagon);
-        }
-    }
-
-    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
+    return makeHoneycombTransition(aSlide, aSlide, aSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeNewsflash()
