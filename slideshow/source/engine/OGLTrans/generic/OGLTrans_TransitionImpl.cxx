@@ -286,8 +286,10 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
     for(size_t i(0); i != rOverallOperations.size(); ++i)
         rOverallOperations[i]->interpolate(matrix, nTime, SlideWidthScale, SlideHeightScale);
     CHECK_GL_ERROR();
-    glUniformMatrix4fv(m_nOperationsTransformLocation, 1, false, glm::value_ptr(matrix));
-    CHECK_GL_ERROR();
+    if (m_nOperationsTransformLocation != -1) {
+        glUniformMatrix4fv(m_nOperationsTransformLocation, 1, false, glm::value_ptr(matrix));
+        CHECK_GL_ERROR();
+    }
 }
 
 static void displayPrimitives(const Primitives_t& primitives, GLint primitiveTransformLocation, double nTime, double WidthScale, double HeightScale, std::vector<int>::const_iterator first)
@@ -305,8 +307,10 @@ OGLTransitionImpl::displaySlide(
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
     CHECK_GL_ERROR();
-    glUniformMatrix4fv(m_nSceneTransformLocation, 1, false, glm::value_ptr(glm::mat4()));
-    CHECK_GL_ERROR();
+    if (m_nSceneTransformLocation != -1) {
+        glUniformMatrix4fv(m_nSceneTransformLocation, 1, false, glm::value_ptr(glm::mat4()));
+        CHECK_GL_ERROR();
+    }
     displayPrimitives(primitives, m_nPrimitiveTransformLocation, nTime, SlideWidthScale, SlideHeightScale, m_nFirstIndices.cbegin());
     CHECK_GL_ERROR();
 }
@@ -326,8 +330,10 @@ void Primitive::display(GLint primitiveTransformLocation, double nTime, double W
     applyOperations( matrix, nTime, WidthScale, HeightScale );
 
     CHECK_GL_ERROR();
-    glUniformMatrix4fv(primitiveTransformLocation, 1, false, glm::value_ptr(matrix));
-    CHECK_GL_ERROR();
+    if (primitiveTransformLocation != -1) {
+        glUniformMatrix4fv(primitiveTransformLocation, 1, false, glm::value_ptr(matrix));
+        CHECK_GL_ERROR();
+    }
     glDrawArrays( GL_TRIANGLES, first, Vertices.size() );
 
     CHECK_GL_ERROR();
@@ -350,8 +356,10 @@ void SceneObject::display(GLint sceneTransformLocation, GLint primitiveTransform
     else
         matrix = glm::scale(matrix, glm::vec3(1, DispWidth/DispHeight, 1));
     CHECK_GL_ERROR();
-    glUniformMatrix4fv(sceneTransformLocation, 1, false, glm::value_ptr(matrix));
-    CHECK_GL_ERROR();
+    if (sceneTransformLocation != -1) {
+        glUniformMatrix4fv(sceneTransformLocation, 1, false, glm::value_ptr(matrix));
+        CHECK_GL_ERROR();
+    }
     displayPrimitives(maPrimitives, primitiveTransformLocation, nTime, 1, 1, maFirstIndices.cbegin());
     CHECK_GL_ERROR();
 }
