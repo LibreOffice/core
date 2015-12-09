@@ -78,7 +78,9 @@ LwpSuperTableLayout* LwpFribTable::GetSuperTable()
 
 void LwpFribTable::RegisterNewStyle()
 {
-    GetSuperTable()->RegisterNewStyle();
+    LwpSuperTableLayout* pSuper = GetSuperTable();
+    if (pSuper)
+        pSuper->RegisterNewStyle();
     XFParaStyle* pOldStyle = m_pPara->GetXFParaStyle();
     if(HasNextFrib())
     {
