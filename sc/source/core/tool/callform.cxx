@@ -26,7 +26,6 @@
 #include <osl/file.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <o3tl/make_unique.hxx>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <memory>
 
 #include "callform.hxx"
@@ -125,8 +124,8 @@ namespace {
 
 class ModuleCollection
 {
-    typedef boost::ptr_map<OUString, ModuleData> MapType;
-    MapType maData;
+    typedef std::map<OUString, std::unique_ptr<ModuleData>> MapType;
+    MapType m_Data;
 public:
     ModuleCollection() {}
 
@@ -137,8 +136,8 @@ public:
 
 const ModuleData* ModuleCollection::findByName(const OUString& rName) const
 {
-    MapType::const_iterator it = maData.find(rName);
-    return it == maData.end() ? nullptr : it->second;
+    MapType::const_iterator it = m_Data.find(rName);
+    return it == m_Data.end() ? nullptr : it->second.get();
 }
 
 void ModuleCollection::insert(ModuleData* pNew)
@@ -147,12 +146,12 @@ void ModuleCollection::insert(ModuleData* pNew)
         return;
 
     OUString aName = pNew->GetName();
-    maData.insert(aName, pNew);
+    m_Data.insert(std::make_pair(aName, std::unique_ptr<ModuleData>(pNew)));
 }
 
 void ModuleCollection::clear()
 {
-    maData.clear();
+    m_Data.clear();
 }
 
 ModuleCollection aModuleCollection;
