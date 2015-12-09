@@ -143,67 +143,65 @@ bool OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
     if (!m_nProgramObject)
         return false;
 
+    CHECK_GL_ERROR();
+    glUseProgram( m_nProgramObject );
+    CHECK_GL_ERROR();
+
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     for(size_t i(0); i != rSceneObjects.size(); ++i) {
         rSceneObjects[i]->prepare(m_nProgramObject);
     }
 
-    CHECK_GL_ERROR();
-    if( m_nProgramObject ) {
-        glUseProgram( m_nProgramObject );
+    GLint location = glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
+    if( location != -1 ) {
+        glUniform1i( location, 0 );  // texture unit 0
         CHECK_GL_ERROR();
-
-        GLint location = glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
-        if( location != -1 ) {
-            glUniform1i( location, 0 );  // texture unit 0
-            CHECK_GL_ERROR();
-        }
-
-        location = glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
-        if( location != -1 ) {
-            glUniform1i( location, 2 );  // texture unit 2
-            CHECK_GL_ERROR();
-        }
-
-        uploadModelViewProjectionMatrices();
-
-        m_nPrimitiveTransformLocation = glGetUniformLocation( m_nProgramObject, "u_primitiveTransformMatrix" );
-        m_nSceneTransformLocation = glGetUniformLocation( m_nProgramObject, "u_sceneTransformMatrix" );
-        m_nOperationsTransformLocation = glGetUniformLocation( m_nProgramObject, "u_operationsTransformMatrix" );
-
-        glGenVertexArrays(1, &m_nVertexArrayObject);
-        glBindVertexArray(m_nVertexArrayObject);
-
-        glGenBuffers(1, &m_nVertexBufferObject);
-        glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
-
-        // In practice both leaving and entering slides share the same primitives.
-        m_nFirstIndices = uploadPrimitives(getScene().getLeavingSlide());
-
-        // Attribute bindings
-        m_nPositionLocation = glGetAttribLocation(m_nProgramObject, "a_position");
-        if (m_nPositionLocation != -1) {
-            glEnableVertexAttribArray(m_nPositionLocation);
-            glVertexAttribPointer( m_nPositionLocation, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)) );
-            CHECK_GL_ERROR();
-        }
-
-        m_nNormalLocation = glGetAttribLocation(m_nProgramObject, "a_normal");
-        if (m_nNormalLocation != -1) {
-            glEnableVertexAttribArray(m_nNormalLocation);
-            glVertexAttribPointer( m_nNormalLocation, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, normal)) );
-            CHECK_GL_ERROR();
-        }
-
-        m_nTexCoordLocation = glGetAttribLocation(m_nProgramObject, "a_texCoord");
-        if (m_nTexCoordLocation != -1) {
-            glEnableVertexAttribArray(m_nTexCoordLocation);
-            glVertexAttribPointer( m_nTexCoordLocation, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texcoord)) );
-            CHECK_GL_ERROR();
-        }
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
+
+    location = glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
+    if( location != -1 ) {
+        glUniform1i( location, 2 );  // texture unit 2
+        CHECK_GL_ERROR();
+    }
+
+    uploadModelViewProjectionMatrices();
+
+    m_nPrimitiveTransformLocation = glGetUniformLocation( m_nProgramObject, "u_primitiveTransformMatrix" );
+    m_nSceneTransformLocation = glGetUniformLocation( m_nProgramObject, "u_sceneTransformMatrix" );
+    m_nOperationsTransformLocation = glGetUniformLocation( m_nProgramObject, "u_operationsTransformMatrix" );
+
+    glGenVertexArrays(1, &m_nVertexArrayObject);
+    glBindVertexArray(m_nVertexArrayObject);
+
+    glGenBuffers(1, &m_nVertexBufferObject);
+    glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
+
+    // In practice both leaving and entering slides share the same primitives.
+    m_nFirstIndices = uploadPrimitives(getScene().getLeavingSlide());
+
+    // Attribute bindings
+    m_nPositionLocation = glGetAttribLocation(m_nProgramObject, "a_position");
+    if (m_nPositionLocation != -1) {
+        glEnableVertexAttribArray(m_nPositionLocation);
+        glVertexAttribPointer( m_nPositionLocation, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)) );
+        CHECK_GL_ERROR();
+    }
+
+    m_nNormalLocation = glGetAttribLocation(m_nProgramObject, "a_normal");
+    if (m_nNormalLocation != -1) {
+        glEnableVertexAttribArray(m_nNormalLocation);
+        glVertexAttribPointer( m_nNormalLocation, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, normal)) );
+        CHECK_GL_ERROR();
+    }
+
+    m_nTexCoordLocation = glGetAttribLocation(m_nProgramObject, "a_texCoord");
+    if (m_nTexCoordLocation != -1) {
+        glEnableVertexAttribArray(m_nTexCoordLocation);
+        glVertexAttribPointer( m_nTexCoordLocation, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texcoord)) );
+        CHECK_GL_ERROR();
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     CHECK_GL_ERROR();
 
     prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
@@ -252,12 +250,9 @@ void OGLTransitionImpl::displaySlides_( double nTime, sal_Int32 glLeavingSlideTe
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
-    if( m_nProgramObject ) {
-        GLint location = glGetUniformLocation( m_nProgramObject, "time" );
-        if( location != -1 ) {
-            glUniform1f( location, nTime );
-        }
-    }
+    GLint location = glGetUniformLocation( m_nProgramObject, "time" );
+    if( location != -1 )
+        glUniform1f( location, nTime );
 
     glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
@@ -1418,20 +1413,18 @@ static void initPermTexture(GLuint *texID)
 void PermTextureTransition::prepareTransition( sal_Int32, sal_Int32 )
 {
     CHECK_GL_ERROR();
-    if( m_nProgramObject ) {
-        GLint location = glGetUniformLocation( m_nProgramObject, "permTexture" );
-        if( location != -1 ) {
-            glActiveTexture(GL_TEXTURE1);
-            CHECK_GL_ERROR();
-            if( !m_nHelperTexture )
-                initPermTexture( &m_nHelperTexture );
+    GLint location = glGetUniformLocation( m_nProgramObject, "permTexture" );
+    if( location != -1 ) {
+        glActiveTexture(GL_TEXTURE1);
+        CHECK_GL_ERROR();
+        if( !m_nHelperTexture )
+            initPermTexture( &m_nHelperTexture );
 
-            glActiveTexture(GL_TEXTURE0);
-            CHECK_GL_ERROR();
+        glActiveTexture(GL_TEXTURE0);
+        CHECK_GL_ERROR();
 
-            glUniform1i( location, 1 );  // texture unit 1
-            CHECK_GL_ERROR();
-        }
+        glUniform1i( location, 1 );  // texture unit 1
+        CHECK_GL_ERROR();
     }
     CHECK_GL_ERROR();
 }
@@ -1601,20 +1594,14 @@ void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32
     PermTextureTransition::prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
     CHECK_GL_ERROR();
 
-    if (m_nProgramObject)
-    {
-        mnTileInfoLocation = glGetAttribLocation(m_nProgramObject, "tileInfo");
-        CHECK_GL_ERROR();
+    mnTileInfoLocation = glGetAttribLocation(m_nProgramObject, "tileInfo");
+    CHECK_GL_ERROR();
 
-        glUseProgram(m_nProgramObject);
-        CHECK_GL_ERROR();
+    GLint nNumTilesLocation = glGetUniformLocation(m_nProgramObject, "numTiles");
+    CHECK_GL_ERROR();
 
-        GLint nNumTilesLocation = glGetUniformLocation(m_nProgramObject, "numTiles");
-        CHECK_GL_ERROR();
-
-        glUniform2iv(nNumTilesLocation, 1, glm::value_ptr(maNumTiles));
-        CHECK_GL_ERROR();
-    }
+    glUniform2iv(nNumTilesLocation, 1, glm::value_ptr(maNumTiles));
+    CHECK_GL_ERROR();
 
     glGenBuffers(1, &mnTileInfoBuffer);
     CHECK_GL_ERROR();
@@ -1712,17 +1699,11 @@ GLuint RippleTransition::makeShader() const
 
 void RippleTransition::prepareTransition( sal_Int32, sal_Int32 )
 {
-    if (m_nProgramObject)
-    {
-        glUseProgram(m_nProgramObject);
-        CHECK_GL_ERROR();
+    GLint nCenterLocation = glGetUniformLocation(m_nProgramObject, "center");
+    CHECK_GL_ERROR();
 
-        GLint nCenterLocation = glGetUniformLocation(m_nProgramObject, "center");
-        CHECK_GL_ERROR();
-
-        glUniform2fv(nCenterLocation, 1, glm::value_ptr(maCenter));
-        CHECK_GL_ERROR();
-    }
+    glUniform2fv(nCenterLocation, 1, glm::value_ptr(maCenter));
+    CHECK_GL_ERROR();
 }
 
 std::shared_ptr<OGLTransitionImpl>
