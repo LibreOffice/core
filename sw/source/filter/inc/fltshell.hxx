@@ -286,6 +286,25 @@ public:
     }
 };
 
+/// Stores RDF statements on a paragraph (key-value pairs where the subject is the paragraph).
+class SW_DLLPUBLIC SwFltRDFMark : public SfxPoolItem
+{
+    long m_nHandle;
+    std::vector< std::pair<OUString, OUString> > m_aAttributes;
+
+public:
+    SwFltRDFMark();
+    SwFltRDFMark(const SwFltRDFMark&);
+
+    virtual bool operator==(const SfxPoolItem&) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
+
+    void SetHandle(long nHandle);
+    long GetHandle() const;
+    void SetAttributes(const std::vector< std::pair<OUString, OUString> >& rAttributes);
+    const std::vector< std::pair<OUString, OUString> >& GetAttributes() const;
+};
+
 class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
 {
     SwTOXBase* pTOXBase;
