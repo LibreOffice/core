@@ -102,7 +102,7 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
         if (!pLayout)
             return;
         pLayout->SetFoundry(pFoundry);
-        pLayout->RegisterStyle();
+        pLayout->DoRegisterStyle();
 
         //register next frib text style
         sal_uInt8 nType = pLayout->GetRelativeType();

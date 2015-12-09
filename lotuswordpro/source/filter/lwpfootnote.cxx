@@ -174,7 +174,7 @@ void LwpFootnote::RegisterStyle()
         if(pContent)
         {
             pContent->SetFoundry(m_pFoundry);
-            pContent->RegisterStyle();
+            pContent->DoRegisterStyle();
         }
     }
 }
