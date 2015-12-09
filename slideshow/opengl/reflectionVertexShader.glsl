@@ -28,15 +28,21 @@
 
 #version 130
 
+uniform mat4 u_sceneTransformMatrix;
+uniform mat4 u_primitiveTransformMatrix;
+uniform mat4 u_operationsTransformMatrix;
+
 varying vec2 v_texturePosition;
 varying vec3 v_normal;
 varying float v_isShadow;
 
 void main( void )
 {
-    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+    mat4 modelViewMatrix = gl_ModelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
+    mat3 normalMatrix = mat3(transpose(inverse(modelViewMatrix)));
+    gl_Position = gl_ProjectionMatrix * modelViewMatrix * gl_Vertex;
     v_texturePosition = gl_MultiTexCoord0.xy;
-    v_normal = normalize(gl_NormalMatrix * gl_Normal);
+    v_normal = normalize(normalMatrix * gl_Normal);
     v_isShadow = float(gl_VertexID >= 6);
 }
 

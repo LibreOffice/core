@@ -99,6 +99,10 @@ void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
             glUniform1i( location, 2 );  // texture unit 2
             CHECK_GL_ERROR();
         }
+
+        m_nPrimitiveTransformLocation = glGetUniformLocation( m_nProgramObject, "u_primitiveTransformMatrix" );
+        m_nSceneTransformLocation = glGetUniformLocation( m_nProgramObject, "u_sceneTransformMatrix" );
+        m_nOperationsTransformLocation = glGetUniformLocation( m_nProgramObject, "u_operationsTransformMatrix" );
     }
     CHECK_GL_ERROR();
 
@@ -169,13 +173,9 @@ void OGLTransitionImpl::display( double nTime, sal_Int32 glLeavingSlideTex, sal_
     prepare( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
 
     CHECK_GL_ERROR();
-    glPushMatrix();
-    CHECK_GL_ERROR();
     displaySlides_( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
     CHECK_GL_ERROR();
     displayScene( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
-    CHECK_GL_ERROR();
-    glPopMatrix();
     CHECK_GL_ERROR();
 }
 
@@ -186,11 +186,11 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
     for(size_t i(0); i != rOverallOperations.size(); ++i)
         rOverallOperations[i]->interpolate(matrix, nTime, SlideWidthScale, SlideHeightScale);
     CHECK_GL_ERROR();
-    glMultMatrixf(glm::value_ptr(matrix));
+    glUniformMatrix4fv(m_nOperationsTransformLocation, 1, false, glm::value_ptr(matrix));
     CHECK_GL_ERROR();
 }
 
-static void display_primitives(const Primitives_t& primitives, double nTime, double WidthScale, double HeightScale)
+static void display_primitives(const Primitives_t& primitives, GLint primitiveTransformLocation, double nTime, double WidthScale, double HeightScale)
 {
     CHECK_GL_ERROR();
     GLuint buffer;
@@ -236,7 +236,7 @@ static void display_primitives(const Primitives_t& primitives, double nTime, dou
     glTexCoordPointer( 2, GL_FLOAT, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texcoord)) );
 
     for (const Primitive& primitive: primitives)
-        primitive.display(nTime, WidthScale, HeightScale, *first++);
+        primitive.display(primitiveTransformLocation, nTime, WidthScale, HeightScale, *first++);
 
     CHECK_GL_ERROR();
     glDeleteBuffers(1, &buffer);
@@ -251,7 +251,9 @@ OGLTransitionImpl::displaySlide(
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
     CHECK_GL_ERROR();
-    display_primitives(primitives, nTime, SlideWidthScale, SlideHeightScale);
+    glUniformMatrix4fv(m_nSceneTransformLocation, 1, false, glm::value_ptr(glm::mat4()));
+    CHECK_GL_ERROR();
+    display_primitives(primitives, m_nPrimitiveTransformLocation, nTime, SlideWidthScale, SlideHeightScale);
     CHECK_GL_ERROR();
 }
 
@@ -261,55 +263,43 @@ void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double Sl
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     glEnable(GL_TEXTURE_2D);
     for(size_t i(0); i != rSceneObjects.size(); ++i)
-        rSceneObjects[i]->display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
+        rSceneObjects[i]->display(m_nSceneTransformLocation, m_nPrimitiveTransformLocation, nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
     CHECK_GL_ERROR();
 }
 
-void Primitive::display(double nTime, double WidthScale, double HeightScale, int first) const
+void Primitive::display(GLint primitiveTransformLocation, double nTime, double WidthScale, double HeightScale, int first) const
 {
-    CHECK_GL_ERROR();
-    glPushMatrix();
+    glm::mat4 matrix;
+    applyOperations( matrix, nTime, WidthScale, HeightScale );
 
     CHECK_GL_ERROR();
-    applyOperations( nTime, WidthScale, HeightScale );
-
+    glUniformMatrix4fv(primitiveTransformLocation, 1, false, glm::value_ptr(matrix));
     CHECK_GL_ERROR();
     glDrawArrays( GL_TRIANGLES, first, Vertices.size() );
 
     CHECK_GL_ERROR();
-    glPopMatrix();
-    CHECK_GL_ERROR();
 }
 
-void Primitive::applyOperations(double nTime, double WidthScale, double HeightScale) const
+void Primitive::applyOperations(glm::mat4& matrix, double nTime, double WidthScale, double HeightScale) const
 {
-    glm::mat4 matrix;
     for(size_t i(0); i < Operations.size(); ++i)
         Operations[i]->interpolate(matrix, nTime, WidthScale, HeightScale);
     matrix = glm::scale(matrix, glm::vec3(WidthScale, HeightScale, 1));
-    CHECK_GL_ERROR();
-    // TODO: replace that with an uniform upload instead.
-    glMultMatrixf(glm::value_ptr(matrix));
-    CHECK_GL_ERROR();
 }
 
-void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight ) const
+void SceneObject::display(GLint sceneTransformLocation, GLint primitiveTransformLocation, double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight ) const
 {
     // fixme: allow various model spaces, now we make it so that
     // it is regular -1,-1 to 1,1, where the whole display fits in
-    CHECK_GL_ERROR();
-    glPushMatrix();
-    CHECK_GL_ERROR();
     glm::mat4 matrix;
     if (DispHeight > DispWidth)
         matrix = glm::scale(matrix, glm::vec3(DispHeight/DispWidth, 1, 1));
     else
         matrix = glm::scale(matrix, glm::vec3(1, DispWidth/DispHeight, 1));
-    glMultMatrixf(glm::value_ptr(matrix));
     CHECK_GL_ERROR();
-    display_primitives(maPrimitives, nTime, 1, 1);
+    glUniformMatrix4fv(sceneTransformLocation, 1, false, glm::value_ptr(matrix));
     CHECK_GL_ERROR();
-    glPopMatrix();
+    display_primitives(maPrimitives, primitiveTransformLocation, nTime, 1, 1);
     CHECK_GL_ERROR();
 }
 
@@ -336,18 +326,18 @@ public:
     Iris() = default;
 
     virtual void prepare() override;
-    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const override;
+    virtual void display(GLint sceneTransformLocation, GLint primitiveTransformLocation, double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const override;
     virtual void finish() override;
 
 private:
     GLuint maTexture = 0;
 };
 
-void Iris::display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const
+void Iris::display(GLint sceneTransformLocation, GLint primitiveTransformLocation, double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const
 {
     glBindTexture(GL_TEXTURE_2D, maTexture);
     CHECK_GL_ERROR();
-    SceneObject::display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
+    SceneObject::display(sceneTransformLocation, primitiveTransformLocation, nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
 }
 
 void Iris::prepare()
