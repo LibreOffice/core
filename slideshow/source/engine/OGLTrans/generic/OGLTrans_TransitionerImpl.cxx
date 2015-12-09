@@ -366,10 +366,12 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     aDeviceParams[1] >>= aVal;
 
     mpContext = OpenGLContext::Create();
-    mpContext->requestLegacyContext();
 
-    if( !mpContext->init( reinterpret_cast< vcl::Window* >( aVal ) ) )
-        return false;
+    if( !mpContext->init( reinterpret_cast< vcl::Window* >( aVal ) ) ) {
+        mpContext->requestLegacyContext();
+        if( !mpContext->init( reinterpret_cast< vcl::Window* >( aVal ) ) )
+            return false;
+    }
     SAL_INFO("slideshow", "created the context");
 
     CHECK_GL_ERROR();
