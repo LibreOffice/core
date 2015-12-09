@@ -250,8 +250,9 @@ long SwWW8ImplReader::Read_FactoidBook(WW8PLCFManResult*)
             m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_RDFMARK, true, pFactoidBook->getHandle());
         else
         {
-            // TODO make this non-void and put keys/values into the RDF mark.
-            GetSmartTagInfo(pFactoidBook->getHandle());
+            SwFltRDFMark aMark;
+            aMark.SetHandle(pFactoidBook->getHandle());
+            GetSmartTagInfo(aMark);
             m_pReffedStck->NewAttr(*m_pPaM->GetPoint(), CntUInt16Item(RES_FLTR_RDFMARK, pFactoidBook->getHandle()));
         }
     }
