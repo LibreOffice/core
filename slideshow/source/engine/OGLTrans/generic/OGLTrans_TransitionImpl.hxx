@@ -216,17 +216,19 @@ private:
      */
     void uploadModelViewProjectionMatrices();
 
-    /** Uniform location for primitive transform
+    /** Uniform locations for transform matrices
      */
     GLint m_nPrimitiveTransformLocation = -1;
-
-    /** Uniform location for scene transform
-     */
     GLint m_nSceneTransformLocation = -1;
-
-    /** Uniform location for operations transform
-     */
     GLint m_nOperationsTransformLocation = -1;
+
+    /** Per-vertex attribute locations
+     */
+    GLint m_nPositionLocation = -1;
+    GLint m_nNormalLocation = -1;
+    GLint m_nTexCoordLocation = -1;
+
+    GLuint m_nVertexBufferObject = -1;
 
 protected:
     /** GLSL program object

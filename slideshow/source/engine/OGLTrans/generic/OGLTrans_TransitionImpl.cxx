@@ -142,6 +142,31 @@ void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
         m_nPrimitiveTransformLocation = glGetUniformLocation( m_nProgramObject, "u_primitiveTransformMatrix" );
         m_nSceneTransformLocation = glGetUniformLocation( m_nProgramObject, "u_sceneTransformMatrix" );
         m_nOperationsTransformLocation = glGetUniformLocation( m_nProgramObject, "u_operationsTransformMatrix" );
+
+        glGenBuffers(1, &m_nVertexBufferObject);
+        glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
+
+        // Attribute bindings
+        m_nPositionLocation = glGetAttribLocation(m_nProgramObject, "a_position");
+        if (m_nPositionLocation != -1) {
+            glEnableVertexAttribArray(m_nPositionLocation);
+            glVertexAttribPointer( m_nPositionLocation, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)) );
+            CHECK_GL_ERROR();
+        }
+
+        m_nNormalLocation = glGetAttribLocation(m_nProgramObject, "a_normal");
+        if (m_nNormalLocation != -1) {
+            glEnableVertexAttribArray(m_nNormalLocation);
+            glVertexAttribPointer( m_nNormalLocation, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, normal)) );
+            CHECK_GL_ERROR();
+        }
+
+        m_nTexCoordLocation = glGetAttribLocation(m_nProgramObject, "a_texCoord");
+        if (m_nTexCoordLocation != -1) {
+            glEnableVertexAttribArray(m_nTexCoordLocation);
+            glVertexAttribPointer( m_nTexCoordLocation, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texcoord)) );
+            CHECK_GL_ERROR();
+        }
     }
     CHECK_GL_ERROR();
 
@@ -159,6 +184,8 @@ void OGLTransitionImpl::finish()
 
     CHECK_GL_ERROR();
     if( m_nProgramObject ) {
+        glDeleteBuffers(1, &m_nVertexBufferObject);
+        m_nVertexBufferObject = 0;
         glDeleteProgram( m_nProgramObject );
         m_nProgramObject = 0;
     }
@@ -231,12 +258,6 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
 
 static void display_primitives(const Primitives_t& primitives, GLint primitiveTransformLocation, double nTime, double WidthScale, double HeightScale)
 {
-    CHECK_GL_ERROR();
-    GLuint buffer;
-    glGenBuffers(1, &buffer);
-    CHECK_GL_ERROR();
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-
     int size = 0;
     for (const Primitive& primitive: primitives)
         size += primitive.getVerticesSize();
@@ -259,26 +280,8 @@ static void display_primitives(const Primitives_t& primitives, GLint primitiveTr
     CHECK_GL_ERROR();
     glUnmapBuffer(GL_ARRAY_BUFFER);
 
-    // State initialization
-    // TODO: move that elsewhere.
-    CHECK_GL_ERROR();
-    glEnableClientState( GL_VERTEX_ARRAY );
-    CHECK_GL_ERROR();
-    glVertexPointer( 3, GL_FLOAT, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)) );
-    CHECK_GL_ERROR();
-    glEnableClientState( GL_NORMAL_ARRAY );
-    CHECK_GL_ERROR();
-    glNormalPointer( GL_FLOAT , sizeof(Vertex) , reinterpret_cast<void*>(offsetof(Vertex, normal)) );
-    CHECK_GL_ERROR();
-    glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-    CHECK_GL_ERROR();
-    glTexCoordPointer( 2, GL_FLOAT, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texcoord)) );
-
     for (const Primitive& primitive: primitives)
         primitive.display(primitiveTransformLocation, nTime, WidthScale, HeightScale, *first++);
-
-    CHECK_GL_ERROR();
-    glDeleteBuffers(1, &buffer);
 }
 
 void

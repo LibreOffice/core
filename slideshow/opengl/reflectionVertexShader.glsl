@@ -28,6 +28,10 @@
 
 #version 130
 
+attribute vec3 a_position;
+attribute vec3 a_normal;
+attribute vec2 a_texCoord;
+
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_modelViewMatrix;
 uniform mat4 u_sceneTransformMatrix;
@@ -42,9 +46,9 @@ void main( void )
 {
     mat4 modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
     mat3 normalMatrix = mat3(transpose(inverse(modelViewMatrix)));
-    gl_Position = u_projectionMatrix * modelViewMatrix * gl_Vertex;
-    v_texturePosition = gl_MultiTexCoord0.xy;
-    v_normal = normalize(normalMatrix * gl_Normal);
+    gl_Position = u_projectionMatrix * modelViewMatrix * vec4(a_position, 1.0);
+    v_texturePosition = a_texCoord;
+    v_normal = normalize(normalMatrix * a_normal);
     v_isShadow = float(gl_VertexID >= 6);
 }
 
