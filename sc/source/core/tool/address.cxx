@@ -2125,13 +2125,67 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 
 bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 {
+    bool bColRange = (aStart.Col() < aEnd.Col());
+    bool bRowRange = (aStart.Row() < aEnd.Row());
     if (dy && aStart.Row() == 0 && aEnd.Row() == MAXROW)
         dy = 0;     // Entire column not to be moved.
     if (dx && aStart.Col() == 0 && aEnd.Col() == MAXCOL)
         dx = 0;     // Entire row not to be moved.
-    bool b = aStart.Move( dx, dy, dz, pDoc );
-    b &= aEnd.Move( dx, dy, dz, pDoc );
-    return b;
+    bool b1 = aStart.Move( dx, dy, dz, pDoc );
+    if (dx && aEnd.Col() == MAXCOL)
+        dx = 0;     // End column sticky.
+    if (dy && aEnd.Row() == MAXROW)
+        dy = 0;     // End row sticky.
+    SCTAB nOldTab = aEnd.Tab();
+    bool b2 = aEnd.Move( dx, dy, dz, pDoc );
+    if (!b2)
+    {
+        // End column or row of a range may have become sticky.
+        bColRange = (!dx || (bColRange && aEnd.Col() == MAXCOL));
+        bRowRange = (!dy || (bRowRange && aEnd.Row() == MAXROW));
+        b2 = bColRange && bRowRange && (aEnd.Tab() - nOldTab == dz);
+    }
+    return b1 && b2;
+}
+
+void ScRange::IncEndColSticky( SCsCOL nDelta )
+{
+    SCCOL nCol = aEnd.Col();
+    if (aStart.Col() >= nCol)
+    {
+        // Less than two columns => not sticky.
+        aEnd.IncCol( nDelta);
+        return;
+    }
+
+    if (nCol == MAXCOL)
+        // already sticky
+        return;
+
+    if (nCol < MAXCOL)
+        aEnd.SetCol( ::std::min( static_cast<SCCOL>(nCol + nDelta), MAXCOL));
+    else
+        aEnd.IncCol( nDelta);   // was greater than MAXCOL, caller should know..
+}
+
+void ScRange::IncEndRowSticky( SCsROW nDelta )
+{
+    SCROW nRow = aEnd.Row();
+    if (aStart.Row() >= nRow)
+    {
+        // Less than two rows => not sticky.
+        aEnd.IncRow( nDelta);
+        return;
+    }
+
+    if (nRow == MAXROW)
+        // already sticky
+        return;
+
+    if (nRow < MAXROW)
+        aEnd.SetRow( ::std::min( static_cast<SCROW>(nRow + nDelta), MAXROW));
+    else
+        aEnd.IncRow( nDelta);   // was greater than MAXROW, caller should know..
 }
 
 OUString ScAddress::GetColRowString( bool bAbsolute,

@@ -2599,22 +2599,30 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
                 // The reference range is truncated on the left.
                 SCCOL nOffset = rDeletedRange.aStart.Col() - rRefRange.aStart.Col();
                 SCCOL nDelta = rRefRange.aStart.Col() - rDeletedRange.aEnd.Col() - 1;
+                rRefRange.IncEndColSticky(nDelta+nOffset);
                 rRefRange.aStart.IncCol(nOffset);
-                rRefRange.aEnd.IncCol(nDelta+nOffset);
             }
         }
         else if (rDeletedRange.aEnd.Col() < rRefRange.aEnd.Col())
         {
+            if (rRefRange.IsEndColSticky())
+                // Sticky end not affected.
+                return false;
+
             // Reference is deleted in the middle. Move the last column
             // position to the left.
             SCCOL nDelta = rDeletedRange.aStart.Col() - rDeletedRange.aEnd.Col() - 1;
-            rRefRange.aEnd.IncCol(nDelta);
+            rRefRange.IncEndColSticky(nDelta);
         }
         else
         {
+            if (rRefRange.IsEndColSticky())
+                // Sticky end not affected.
+                return false;
+
             // The reference range is truncated on the right.
             SCCOL nDelta = rDeletedRange.aStart.Col() - rRefRange.aEnd.Col() - 1;
-            rRefRange.aEnd.IncCol(nDelta);
+            rRefRange.IncEndColSticky(nDelta);
         }
         return true;
     }
@@ -2642,22 +2650,30 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
                 // The reference range is truncated on the top.
                 SCCOL nOffset = rDeletedRange.aStart.Row() - rRefRange.aStart.Row();
                 SCCOL nDelta = rRefRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
+                rRefRange.IncEndRowSticky(nDelta+nOffset);
                 rRefRange.aStart.IncRow(nOffset);
-                rRefRange.aEnd.IncRow(nDelta+nOffset);
             }
         }
         else if (rDeletedRange.aEnd.Row() < rRefRange.aEnd.Row())
         {
+            if (rRefRange.IsEndRowSticky())
+                // Sticky end not affected.
+                return false;
+
             // Reference is deleted in the middle. Move the last row
             // position upward.
             SCCOL nDelta = rDeletedRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
-            rRefRange.aEnd.IncRow(nDelta);
+            rRefRange.IncEndRowSticky(nDelta);
         }
         else
         {
+            if (rRefRange.IsEndRowSticky())
+                // Sticky end not affected.
+                return false;
+
             // The reference range is truncated on the bottom.
             SCCOL nDelta = rDeletedRange.aStart.Row() - rRefRange.aEnd.Row() - 1;
-            rRefRange.aEnd.IncRow(nDelta);
+            rRefRange.IncEndRowSticky(nDelta);
         }
         return true;
     }
@@ -2695,9 +2711,13 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
                 return false;
         }
 
+        if (rRefRange.IsEndColSticky())
+            // Sticky end not affected.
+            return false;
+
         // Move the last column position to the right.
         SCCOL nDelta = rSelectedRange.aEnd.Col() - rSelectedRange.aStart.Col() + 1;
-        rRefRange.aEnd.IncCol(nDelta);
+        rRefRange.IncEndColSticky(nDelta);
         return true;
     }
     else if (rCxt.mnRowDelta > 0)
@@ -2724,9 +2744,13 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
                 return false;
         }
 
+        if (rRefRange.IsEndRowSticky())
+            // Sticky end not affected.
+            return false;
+
         // Move the last row position down.
         SCROW nDelta = rSelectedRange.aEnd.Row() - rSelectedRange.aStart.Row() + 1;
-        rRefRange.aEnd.IncRow(nDelta);
+        rRefRange.IncEndRowSticky(nDelta);
         return true;
     }
     return false;
@@ -2767,9 +2791,13 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
             // Selected range is not immediately adjacent. Bail out.
             return false;
 
+        if (rRefRange.IsEndColSticky())
+            // Sticky end not affected.
+            return false;
+
         // Move the last column position to the right.
         SCCOL nDelta = rSelectedRange.aEnd.Col() - rSelectedRange.aStart.Col() + 1;
-        rRefRange.aEnd.IncCol(nDelta);
+        rRefRange.IncEndColSticky(nDelta);
         return true;
     }
     else if (rCxt.mnRowDelta > 0)
@@ -2790,9 +2818,13 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
             // Selected range is not immediately adjacent. Bail out.
             return false;
 
+        if (rRefRange.IsEndRowSticky())
+            // Sticky end not affected.
+            return false;
+
         // Move the last row position down.
         SCROW nDelta = rSelectedRange.aEnd.Row() - rSelectedRange.aStart.Row() + 1;
-        rRefRange.aEnd.IncRow(nDelta);
+        rRefRange.IncEndRowSticky(nDelta);
         return true;
     }
 
@@ -3272,7 +3304,8 @@ void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, S
 namespace {
 
 bool adjustSingleRefInName(
-    ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt, const ScAddress& rPos )
+    ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt, const ScAddress& rPos,
+    ScComplexRefData* pEndOfComplex )
 {
     ScAddress aAbs = rRef.toAbs(rPos);
 
@@ -3292,8 +3325,16 @@ bool adjustSingleRefInName(
         // Adjust absolute column reference.
         if (rCxt.maRange.aStart.Col() <= rRef.Col() && rRef.Col() <= rCxt.maRange.aEnd.Col())
         {
-            rRef.IncCol(rCxt.mnColDelta);
-            bChanged = true;
+            if (pEndOfComplex)
+            {
+                if (pEndOfComplex->IncEndColSticky( rCxt.mnColDelta, rPos))
+                    bChanged = true;
+            }
+            else
+            {
+                rRef.IncCol(rCxt.mnColDelta);
+                bChanged = true;
+            }
         }
     }
 
@@ -3302,8 +3343,16 @@ bool adjustSingleRefInName(
         // Adjust absolute row reference.
         if (rCxt.maRange.aStart.Row() <= rRef.Row() && rRef.Row() <= rCxt.maRange.aEnd.Row())
         {
-            rRef.IncRow(rCxt.mnRowDelta);
-            bChanged = true;
+            if (pEndOfComplex)
+            {
+                if (pEndOfComplex->IncEndRowSticky( rCxt.mnRowDelta, rPos))
+                    bChanged = true;
+            }
+            else
+            {
+                rRef.IncRow(rCxt.mnRowDelta);
+                bChanged = true;
+            }
         }
     }
 
@@ -3330,20 +3379,21 @@ bool adjustDoubleRefInName(
         {
             // Selection intersects the referenced range. Only expand the
             // bottom position.
-            rRef.Ref2.IncRow(rCxt.mnRowDelta);
+            rRef.IncEndRowSticky(rCxt.mnRowDelta, rPos);
             return true;
         }
     }
 
     if ((rCxt.mnRowDelta && rRef.IsEntireCol()) || (rCxt.mnColDelta && rRef.IsEntireRow()))
     {
-        // References to entire col/row are not to be adjusted in the other axis.
         sc::RefUpdateContext aCxt( rCxt.mrDoc);
         // We only need a few parameters of RefUpdateContext.
         aCxt.maRange = rCxt.maRange;
         aCxt.mnColDelta = rCxt.mnColDelta;
         aCxt.mnRowDelta = rCxt.mnRowDelta;
         aCxt.mnTabDelta = rCxt.mnTabDelta;
+
+        // References to entire col/row are not to be adjusted in the other axis.
         if (aCxt.mnRowDelta && rRef.IsEntireCol())
             aCxt.mnRowDelta = 0;
         if (aCxt.mnColDelta && rRef.IsEntireRow())
@@ -3352,18 +3402,20 @@ bool adjustDoubleRefInName(
             // early bailout
             return bRefChanged;
 
-        if (adjustSingleRefInName(rRef.Ref1, aCxt, rPos))
+        // Ref2 before Ref1 for sticky ends.
+        if (adjustSingleRefInName(rRef.Ref2, aCxt, rPos, &rRef))
             bRefChanged = true;
 
-        if (adjustSingleRefInName(rRef.Ref2, aCxt, rPos))
+        if (adjustSingleRefInName(rRef.Ref1, aCxt, rPos, nullptr))
             bRefChanged = true;
     }
     else
     {
-        if (adjustSingleRefInName(rRef.Ref1, rCxt, rPos))
+        // Ref2 before Ref1 for sticky ends.
+        if (adjustSingleRefInName(rRef.Ref2, rCxt, rPos, &rRef))
             bRefChanged = true;
 
-        if (adjustSingleRefInName(rRef.Ref2, rCxt, rPos))
+        if (adjustSingleRefInName(rRef.Ref1, rCxt, rPos, nullptr))
             bRefChanged = true;
     }
 
@@ -3396,7 +3448,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
-                        if (adjustSingleRefInName(rRef, rCxt, rPos))
+                        if (adjustSingleRefInName(rRef, rCxt, rPos, nullptr))
                             aRes.mbReferenceModified = true;
                     }
                     break;
@@ -3449,19 +3501,23 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
                             if (aAbs.aStart.Row() < aDeleted.aStart.Row())
                             {
-                                if (aDeleted.aEnd.Row() < aAbs.aEnd.Row())
-                                    // Deleted in the middle.  Make the reference shorter.
-                                    rRef.Ref2.IncRow(rCxt.mnRowDelta);
-                                else
-                                    // Deleted at tail end.  Cut off the lower part.
-                                    rRef.Ref2.SetAbsRow(aDeleted.aStart.Row()-1);
+                                if (!aAbs.IsEndRowSticky())
+                                {
+                                    if (aDeleted.aEnd.Row() < aAbs.aEnd.Row())
+                                        // Deleted in the middle.  Make the reference shorter.
+                                        rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                                    else
+                                        // Deleted at tail end.  Cut off the lower part.
+                                        rRef.Ref2.SetAbsRow(aDeleted.aStart.Row()-1);
+                                }
                             }
                             else
                             {
                                 // Deleted at the top.  Cut the top off and shift up.
                                 rRef.Ref1.SetAbsRow(aDeleted.aEnd.Row()+1);
                                 rRef.Ref1.IncRow(rCxt.mnRowDelta);
-                                rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                                if (!aAbs.IsEndRowSticky())
+                                    rRef.Ref2.IncRow(rCxt.mnRowDelta);
                             }
 
                             aRes.mbReferenceModified = true;
