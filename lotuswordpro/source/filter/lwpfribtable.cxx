@@ -98,6 +98,8 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
 {
     XFContentContainer* pXFContentContainer = pCont;
     LwpSuperTableLayout* pSuper = GetSuperTable();
+    if (!pSuper)
+        return;
     sal_uInt8 nType = pSuper->GetRelativeType();
     LwpVirtualLayout* pContainer = pSuper->GetContainerLayout();
     if (!pContainer)
