@@ -263,9 +263,9 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_HARDSPACE:
         {
             OUString sHardSpace(sal_Unicode(0x00a0));
-            LwpHyperlinkMgr* pHyperlink =
-                    m_pPara->GetStory()->GetHyperlinkMgr();
-            if (pHyperlink->GetHyperlinkFlag())
+            LwpStory *pStory = m_pPara->GetStory();
+            LwpHyperlinkMgr* pHyperlink = pStory ? pStory->GetHyperlinkMgr() : nullptr;
+            if (pHyperlink && pHyperlink->GetHyperlinkFlag())
                 pFrib->ConvertHyperLink(m_pXFPara,pHyperlink,sHardSpace);
             else
                 pFrib->ConvertChars(m_pXFPara,sHardSpace);
