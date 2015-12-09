@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a4f10fd0",
+        "filename": "sw/source/ui/dbui/mmgreetingspage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-12-09T08:24:11Z",
+      "side": 1,
+      "message": "Is this necessary? The pointer is already scoped.",
+      "revId": "d8f9a07a8561fcbfdc5d9152a6884307fdf556f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_84ee8bea",
+        "filename": "sw/source/ui/dbui/mmgreetingspage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-12-09T08:24:11Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d8f9a07a8561fcbfdc5d9152a6884307fdf556f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
