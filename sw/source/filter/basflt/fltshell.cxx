@@ -372,7 +372,11 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
                 {
                     bF = true;
                 }
-                else if ((nAttrId == RES_FLTR_ANNOTATIONMARK || nAttrId == RES_FLTR_RDFMARK) && nHand == static_cast<CntUInt16Item*>(rEntry.pAttr)->GetValue())
+                else if (nAttrId == RES_FLTR_ANNOTATIONMARK && nHand == static_cast<CntUInt16Item*>(rEntry.pAttr)->GetValue())
+                {
+                    bF = true;
+                }
+                else if (nAttrId == RES_FLTR_RDFMARK && nHand == static_cast<SwFltRDFMark*>(rEntry.pAttr)->GetHandle())
                 {
                     bF = true;
                 }
