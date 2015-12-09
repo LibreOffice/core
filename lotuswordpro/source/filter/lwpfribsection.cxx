@@ -161,9 +161,8 @@ void LwpFribSection::ParseSection()
             m_pMasterPage->ParseSection(this);
         }
     }
-    else
+    else if (LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get()))
     {
-        LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
         rtl::Reference<LwpObject> xObj(m_Section.obj());
         if (xObj.is() && xObj->GetTag() == VO_INDEXSECTION)
         {
