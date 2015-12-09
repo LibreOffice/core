@@ -167,7 +167,8 @@ void LwpFribSection::ParseSection()
     else
     {
         LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
-        if (m_Section.obj()->GetTag() == VO_INDEXSECTION)
+        rtl::Reference<LwpObject> xObj(m_Section.obj());
+        if (xObj.is() && xObj->GetTag() == VO_INDEXSECTION)
         {
             //create a new section and add it to container
             XFIndex* pIndex = new XFIndex;
