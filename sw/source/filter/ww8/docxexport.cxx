@@ -474,11 +474,8 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString const& rProgID)
     lcl_ConvertProgID(rProgID, sMediaType, sRelationType, sFileExtension);
 
     OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + "." + sFileExtension;
-    uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream( OUStringBuffer()
-                                                                      .append( "word/" )
-                                                                      .append( sFileName )
-                                                                      .makeStringAndClear(),
-                                                                      sMediaType );
+    uno::Reference<io::XOutputStream> const xOutStream =
+        GetFilter().openFragmentStream("word/" + sFileName, sMediaType);
     OUString sId;
     if( lcl_CopyStream( xInStream, xOutStream ) )
 
