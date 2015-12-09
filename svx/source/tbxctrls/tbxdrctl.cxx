@@ -29,7 +29,6 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-
 #include "svx/tbxctl.hxx"
 #include "svx/tbxcolor.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -43,11 +42,13 @@ using namespace ::com::sun::star::frame;
 
 SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-
-    m_sToolboxName( "private:resource/toolbar/drawbar" )
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 
 {
+    if(nId==56 || nId==46 ) // if request from draw(56) or impress(46)
+        m_sToolboxName="private:resource/toolbar/toolbar";
+    else // if request from other components
+        m_sToolboxName="private:resource/toolbar/drawbar";
     rTbx.SetItemBits( nId, ToolBoxItemBits::CHECKABLE | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }

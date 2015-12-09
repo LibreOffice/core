@@ -63,6 +63,7 @@
  <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AnimationEffects"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDraw"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:PageSetup"/>
  <toolbar:toolbaritem xlink:href=".uno:SlideMasterPage"/>
