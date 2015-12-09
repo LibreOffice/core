@@ -486,7 +486,7 @@ void LwpHeadLayout::RegisterStyle()
                 OSL_FAIL("Layout points to itself");
                 break;
             }
-            pLayout->RegisterStyle();
+            pLayout->DoRegisterStyle();
         }
         LwpVirtualLayout *pNext = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
         if (pNext == pLayout)
