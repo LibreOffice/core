@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/frame/UnknownModuleException.hpp>
@@ -88,6 +88,7 @@
 using namespace sd;
 #define ViewShellBase
 #include "sdslots.hxx"
+#include <sfx2/bindings.hxx>
 
 using ::sd::framework::FrameworkHelper;
 using namespace com::sun::star::uno;
@@ -604,7 +605,12 @@ SvBorder ViewShellBase::GetBorder (bool )
 
 void ViewShellBase::Execute (SfxRequest& rRequest)
 {
+    std::cout << "Execute"<< nSlotId<<"\n";
     sal_uInt16 nSlotId = rRequest.GetSlot();
+
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    rBindings.Invalidate( SID_INSERT_DRAW );
+    rBindings.Update( SID_INSERT_DRAW );
 
     switch (nSlotId)
     {
@@ -672,6 +678,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
 void ViewShellBase::GetState (SfxItemSet& rSet)
 {
+    std::cout << "Getstate\n";
     mpImpl->GetSlotState(rSet);
 
     FuBullet::GetSlotState( rSet, nullptr, GetViewFrame() );

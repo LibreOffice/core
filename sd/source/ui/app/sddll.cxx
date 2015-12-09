@@ -87,6 +87,7 @@
 #include <svx/xmlsecctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
+#include <svx/tbxctl.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -244,6 +245,7 @@ void SdDLL::RegisterControllers()
     SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
+    SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
 }
 
 void SdDLL::Init()

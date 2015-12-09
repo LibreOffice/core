@@ -84,6 +84,7 @@
 #include <svx/xftshxy.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <svx/drawitem.hxx>
+#include <svl/aeitem.hxx>
 
 // #UndoRedo#
 #include <svl/slstitm.hxx>
@@ -103,6 +104,8 @@
 #include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP
+#define SvxDrawToolItem             SfxAllEnumItem
 #include "sdslots.hxx"
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
