@@ -73,6 +73,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126"/>
  <toolbar:toolbaritem xlink:href=".uno:GlueEditMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDraw"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>

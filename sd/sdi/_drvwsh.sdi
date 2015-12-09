@@ -2799,5 +2799,10 @@ interface DrawView
         ExecMethod = ExecGoToLastPage ;
         StateMethod = GetStateGoToLastPage ;
     ]
+    SID_INSERT_DRAW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 
 }
