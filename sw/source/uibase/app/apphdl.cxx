@@ -594,7 +594,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
     m_pMMConfig->Commit();
     delete m_pMMConfig;
     m_pMMConfig = nullptr;
-    // m_pWizard already deleted by closing the target view
+    delete m_pWizard;
     m_pWizard = nullptr;
     release();
 }
