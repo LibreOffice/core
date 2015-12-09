@@ -202,7 +202,7 @@ void LwpFoundry::RegisterAllLayouts()
     if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
-        pStyle->RegisterStyle();
+        pStyle->DoRegisterStyle();
     }
 
     //register content page layout list: Layout
@@ -210,7 +210,7 @@ void LwpFoundry::RegisterAllLayouts()
     if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
-        pStyle->RegisterStyle();
+        pStyle->DoRegisterStyle();
     }
 
     //Register page style layout list: PageStyle, such as "Default Page"
@@ -218,7 +218,7 @@ void LwpFoundry::RegisterAllLayouts()
     if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
-        pStyle->RegisterStyle();
+        pStyle->DoRegisterStyle();
     }
 
     //Register FrameStyle
@@ -226,7 +226,7 @@ void LwpFoundry::RegisterAllLayouts()
     if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
-        pStyle->RegisterStyle();
+        pStyle->DoRegisterStyle();
     }
 
 }
