@@ -230,6 +230,8 @@ private:
 
     GLuint m_nVertexArrayObject = -1;
 
+    std::vector<int> m_nFirstIndices;
+
 protected:
     /** GLSL program object
      */
@@ -273,7 +275,7 @@ public:
     SceneObject();
     virtual ~SceneObject();
 
-    virtual void prepare() {}
+    virtual void prepare(GLuint /* program */) {}
     virtual void display(GLint sceneTransformLocation, GLint primitiveTransformLocation, double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const;
     virtual void finish() {}
 
@@ -283,6 +285,7 @@ protected:
     /** All the surrounding scene primitives
     */
     Primitives_t maPrimitives;
+    std::vector<int> maFirstIndices;
 };
 
 struct Vertex
