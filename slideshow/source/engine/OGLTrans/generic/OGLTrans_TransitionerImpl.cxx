@@ -984,7 +984,7 @@ void OGLTransitionerImpl::impl_createTexture(
             maSlideBitmapLayout.ColorSpace->convertToIntegerColorSpace(
                 data,
                 getOGLColorSpace()));
-        buildMipmaps(     4,
+        buildMipmaps(     GL_RGBA,
                           maSlideSize.Width,
                           maSlideSize.Height,
                           GL_RGBA,
