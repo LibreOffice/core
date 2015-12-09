@@ -600,9 +600,7 @@ public:
 
     virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(vcl::Window* pParent) override;
     virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(vcl::Window* pParent) override;
-    virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg (vcl::Window* pParent,
-                                                SfxBindings* pBindings,
-                                                sal_uInt32 nResId) override;
+    virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg(vcl::Window* pParent, SfxBindings* pBindings) override;
     virtual AbstractFmSearchDialog*         CreateFmSearchDialog(vcl::Window* pParent,
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,

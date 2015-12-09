@@ -1231,22 +1231,11 @@ AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxPathSelectDial
 }
 
 AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl::Window* pParent,
-                                            SfxBindings* pBindings,
-                                            sal_uInt32 nResId)
+                                            SfxBindings* pBindings)
 {
-    SvxHpLinkDlg* pDlg=nullptr;
-    switch ( nResId )
-    {
-        case SID_HYPERLINK_DIALOG :
-            pDlg = VclPtr<SvxHpLinkDlg>::Create( pParent, pBindings );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSvxHpLinkDlg_Impl( pDlg );
-    return nullptr;
+    SvxHpLinkDlg* pDlg = VclPtr<SvxHpLinkDlg>::Create( pParent, pBindings );
+    fprintf(stderr, "CreateSvxHpLinkDlg\n");
+    return new AbstractSvxHpLinkDlg_Impl(pDlg);
 }
 
 AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::Window* pParent,
