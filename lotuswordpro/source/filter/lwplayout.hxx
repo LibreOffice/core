@@ -321,6 +321,8 @@ public:
 
 protected:
     void Read() override;
+private:
+    LwpObjectID m_BasedOnStyle;
 protected:
     enum
     {
@@ -329,8 +331,7 @@ protected:
     };
 
     LwpObjectID m_Content;
-    LwpObjectID m_BasedOnStyle;
-
+    rtl::Reference<LwpObject> GetBasedOnStyle();
     LwpObjectID     m_TabPiece;
     LwpLayoutStyle* m_pStyleStuff;
     LwpLayoutMisc*  m_pMiscStuff;

@@ -183,12 +183,12 @@ sal_uInt32 LwpObjectID::DiskSizeIndexed() const
 */
 rtl::Reference<LwpObject> LwpObjectID::obj(VO_TYPE tag) const
 {
-    LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
-    LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
-    if(IsNull())
+    if (IsNull())
     {
         return nullptr;
     }
+    LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
+    LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
     rtl::Reference<LwpObject> pObj = pObjMgr->QueryObject(*this);
     if( tag!=VO_INVALID &&  (pObj.is()) )
     {
