@@ -103,7 +103,7 @@ IMPL_LINK_NOARG_TYPED(SwGreetingsHandler, IndividualHdl_Impl, Button*, void)
 
 IMPL_LINK_TYPED(SwGreetingsHandler, GreetingHdl_Impl, Button*, pButton, void)
 {
-    VclPtr<SwCustomizeAddressBlockDialog> pDlg(
+    ScopedVclPtr<SwCustomizeAddressBlockDialog> pDlg(
             VclPtr<SwCustomizeAddressBlockDialog>::Create(pButton, m_pWizard->GetConfigItem(),
                         pButton == m_pMalePB ?
                         SwCustomizeAddressBlockDialog::GREETING_MALE :
@@ -119,6 +119,7 @@ IMPL_LINK_TYPED(SwGreetingsHandler, GreetingHdl_Impl, Button*, pButton, void)
         }
         UpdatePreview();
     }
+    pDlg.disposeAndClear();
 }
 
 void    SwGreetingsHandler::UpdatePreview()
@@ -129,7 +130,7 @@ void    SwGreetingsHandler::UpdatePreview()
 IMPL_LINK_TYPED(SwMailMergeGreetingsPage, AssignHdl_Impl, Button*, pButton, void)
 {
     const OUString sPreview(m_pFemaleLB->GetSelectEntry() + "\n" + m_pMaleLB->GetSelectEntry());
-    VclPtr<SwAssignFieldsDialog> pDlg(
+    ScopedVclPtr<SwAssignFieldsDialog> pDlg(
             VclPtr<SwAssignFieldsDialog>::Create(pButton, m_pWizard->GetConfigItem(), sPreview, false));
     if(RET_OK == pDlg->Execute())
     {
@@ -137,6 +138,7 @@ IMPL_LINK_TYPED(SwMailMergeGreetingsPage, AssignHdl_Impl, Button*, pButton, void
         m_pWizard->UpdateRoadmap();
         m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
+    pDlg.disposeAndClear();
 }
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl, Edit&, void)

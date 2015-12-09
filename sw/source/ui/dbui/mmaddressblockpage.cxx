@@ -163,7 +163,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*,
 {
     try
     {
-        VclPtrInstance< SwAddressListDialog > xAddrDialog(this);
+        ScopedVclPtrInstance< SwAddressListDialog > xAddrDialog(this);
         if(RET_OK == xAddrDialog->Execute())
         {
             SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -188,7 +188,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*,
 
 IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, pButton, void)
 {
-    VclPtr<SwSelectAddressBlockDialog> pDlg(
+    ScopedVclPtr<SwSelectAddressBlockDialog> pDlg(
                 VclPtr<SwSelectAddressBlockDialog>::Create(pButton, m_pWizard->GetConfigItem()));
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
     pDlg->SetAddressBlocks(rConfig.GetAddressBlocks(), m_pSettingsWIN->GetSelectedAddress());
@@ -207,7 +207,7 @@ IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, pButton,
         rConfig.SetCountrySettings(pDlg->IsIncludeCountry(), pDlg->GetCountry());
         InsertDataHdl_Impl(nullptr);
     }
-    pDlg.reset();
+    pDlg.disposeAndClear();
     GetWizard()->UpdateRoadmap();
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
 }

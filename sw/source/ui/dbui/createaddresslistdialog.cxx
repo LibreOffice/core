@@ -126,8 +126,8 @@ void SwAddressControl_Impl::dispose()
     for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
         aEditIter->disposeAndClear();
     m_aEdits.clear();
-    m_pScrollBar.clear();
-    m_pWindow.clear();
+    m_pScrollBar.disposeAndClear();
+    m_pWindow.disposeAndClear();
     Control::dispose();
 }
 

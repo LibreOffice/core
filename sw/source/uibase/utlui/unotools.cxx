@@ -83,7 +83,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
 
     // the controller is asynchronously set
     aLoadedIdle.SetIdleHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
-    aLoadedIdle.SetPriority(SchedulerPriority::LOWER);
+    aLoadedIdle.SetPriority(SchedulerPriority::HIGH);
 
     CreateControl();
 
@@ -159,6 +159,8 @@ void SwOneExampleFrame::CreateControl()
 
 void    SwOneExampleFrame::DisposeControl()
 {
+    aLoadedIdle.Stop();
+    aTopWindow.clear();
     _xCursor = nullptr;
     if(_xControl.is())
         _xControl->dispose();

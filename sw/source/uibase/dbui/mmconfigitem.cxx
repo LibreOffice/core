@@ -734,7 +734,8 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
 {}
 
 SwMailMergeConfigItem::~SwMailMergeConfigItem()
-{}
+{
+}
 
 void  SwMailMergeConfigItem::Commit()
 {
