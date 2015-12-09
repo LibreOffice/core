@@ -561,9 +561,8 @@ static void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
     char* pUsedFormat = nullptr;
-    char* pSelection = pDocument->pClass->getTextSelection(pDocument, "text/html", &pUsedFormat);
+    char* pSelection = lok_doc_view_copy_selection(pLOKDocView, "text/html", &pUsedFormat);
 
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(rWindow.m_pDocView), GDK_SELECTION_CLIPBOARD);
     std::string aUsedFormat(pUsedFormat);
@@ -580,7 +579,6 @@ static void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
 
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(rWindow.m_pDocView), GDK_SELECTION_CLIPBOARD);
 
@@ -604,7 +602,7 @@ static void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
         GtkSelectionData* pSelectionData = gtk_clipboard_wait_for_contents(pClipboard, *oTarget);
         gint nLength;
         const guchar* pData = gtk_selection_data_get_data_with_length(pSelectionData, &nLength);
-        bool bSuccess = pDocument->pClass->paste(pDocument, "text/html", reinterpret_cast<const char*>(pData), nLength);
+        bool bSuccess = lok_doc_view_paste(pLOKDocView, "text/html", reinterpret_cast<const char*>(pData), nLength);
         gtk_selection_data_free(pSelectionData);
         if (bSuccess)
             return;
@@ -612,7 +610,7 @@ static void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
 
     gchar* pText = gtk_clipboard_wait_for_text(pClipboard);
     if (pText)
-        pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", pText, strlen(pText));
+        lok_doc_view_paste(pLOKDocView, "text/plain;charset=utf-8", pText, strlen(pText));
 }
 
 /// Click handler for the search next button.
