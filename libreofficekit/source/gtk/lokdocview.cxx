@@ -344,7 +344,7 @@ doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highligh
     cairo_region_get_rectangle(cairoVisRegion, 0, &cairoVisRect);
     x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
     y = pixelToTwip (cairoVisRect.y, priv->m_fZoom);
-    
+
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/type", '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/value", '/'), pText);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
@@ -2667,6 +2667,37 @@ lok_doc_view_highlight_all (LOKDocView* pDocView,
                             const gchar* pText)
 {
     doSearch(pDocView, pText, false, true);
+}
+
+SAL_DLLPUBLIC_EXPORT gchar*
+lok_doc_view_copy_selection (LOKDocView* pDocView,
+                             const gchar* pMimeType,
+                             gchar** pUsedMimeType)
+{
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    return pDocument->pClass->getTextSelection(pDocument, pMimeType, pUsedMimeType);
+}
+
+SAL_DLLPUBLIC_EXPORT gboolean
+lok_doc_view_paste (LOKDocView* pDocView,
+                    const gchar* pMimeType,
+                    const gchar* pData,
+                    gsize nSize)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    LibreOfficeKitDocument* pDocument = priv->m_pDocument;
+    gboolean ret = 0;
+
+    if (!priv->m_bEdit)
+    {
+        g_info ("ignoring paste in view-only mode");
+        return ret;
+    }
+
+    if (pData)
+        ret = pDocument->pClass->paste(pDocument, pMimeType, pData, nSize);
+
+    return ret;
 }
 
 SAL_DLLPUBLIC_EXPORT float
