@@ -101,7 +101,6 @@ public class _XTabController extends MultiMethodTest {
     public void _getContainer() {
         requiredMethod( "setContainer()");
         oObj.getContainer();
-        tEnv.getObjRelation("CONTAINER");
         tRes.tested("getContainer()", Status.skipped(true) );
     }
 
