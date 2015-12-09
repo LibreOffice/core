@@ -822,7 +822,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     static SingletonDisplay getSingletonDisplay( const ScAddress& rAbs1, const ScAddress& rAbs2,
-            const ScComplexRefData& rRef )
+            const ScComplexRefData& rRef, bool bFromRangeName )
     {
         // If any part is error, display as such.
         if (!ValidCol(rAbs1.Col()) || rRef.Ref1.IsColDeleted() || !ValidRow(rAbs1.Row()) || rRef.Ref1.IsRowDeleted() ||
@@ -833,8 +833,20 @@ struct ConventionOOO_A1 : public Convention_A1
         if (rRef.IsEntireCol())
             return SINGLETON_COL;
 
+        // Same if not in named expression and both rows of entire columns are
+        // relative references.
+        if (!bFromRangeName && rAbs1.Row() == 0 && rAbs2.Row() == MAXROW &&
+                rRef.Ref1.IsRowRel() && rRef.Ref2.IsRowRel())
+            return SINGLETON_COL;
+
         // 1:1 or $1:$1 or 1:$1 or $1:1
         if (rRef.IsEntireRow())
+            return SINGLETON_ROW;
+
+        // Same if not in named expression and both columns of entire rows are
+        // relative references.
+        if (!bFromRangeName && rAbs1.Col() == 0 && rAbs2.Col() == MAXCOL &&
+                rRef.Ref1.IsColRel() && rRef.Ref2.IsColRel())
             return SINGLETON_ROW;
 
         return SINGLETON_NONE;
@@ -846,7 +858,7 @@ struct ConventionOOO_A1 : public Convention_A1
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef,
-                     bool /*bFromRangeName*/ ) const override
+                     bool bFromRangeName ) const override
     {
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
@@ -854,7 +866,8 @@ struct ConventionOOO_A1 : public Convention_A1
         if( !bSingleRef )
             aAbs2 = rRef.Ref2.toAbs(rPos);
 
-        SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE : getSingletonDisplay( aAbs1, aAbs2, rRef);
+        SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE :
+            getSingletonDisplay( aAbs1, aAbs2, rRef, bFromRangeName);
         MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, false, eSingleton);
         if (!bSingleRef)
         {
@@ -1001,7 +1014,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef,
-                     bool /*bFromRangeName*/ ) const override
+                     bool bFromRangeName ) const override
     {
         rBuffer.append('[');
         // In case absolute/relative positions weren't separately available:
@@ -1019,7 +1032,8 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         }
         else
         {
-            SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE : getSingletonDisplay( aAbs1, aAbs2, rRef);
+            SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE :
+                getSingletonDisplay( aAbs1, aAbs2, rRef, bFromRangeName);
             MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, true, eSingleton);
             if (!bSingleRef)
             {
