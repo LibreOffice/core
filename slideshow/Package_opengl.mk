@@ -15,6 +15,8 @@ $(eval $(call gb_Package_add_files,slideshow_opengl_shader,$(LIBO_ETC_FOLDER)/op
 		dissolveFragmentShader.glsl \
 		fadeBlackFragmentShader.glsl \
 		fadeFragmentShader.glsl \
+		glitterVertexShader.glsl \
+		glitterFragmentShader.glsl \
 		honeycombVertexShader.glsl \
 		honeycombGeometryShader.glsl \
 		honeycombFragmentShader.glsl \
