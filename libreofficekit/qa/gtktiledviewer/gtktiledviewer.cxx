@@ -452,7 +452,11 @@ static void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
 static void toggleFindAll(GtkWidget* pButton, gpointer /*pItem*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    GtkEntry* pEntry = GTK_ENTRY(rWindow.m_pFindbarEntry);
+    const char* pText = gtk_entry_get_text(pEntry);
+
     rWindow.m_bFindAll = !rWindow.m_bFindAll;
+    lok_doc_view_highlight_all(LOK_DOC_VIEW(rWindow.m_pDocView), pText);
 }
 
 /// Toggle the visibility of the findbar.
@@ -611,48 +615,24 @@ static void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
         pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", pText, strlen(pText));
 }
 
-/// Searches for the next or previous text of TiledWindow::m_pFindbarEntry.
-static void doSearch(GtkWidget* pButton, bool bBackwards)
+/// Click handler for the search next button.
+static void signalSearchNext(GtkWidget* pButton, gpointer /*pItem*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
     GtkEntry* pEntry = GTK_ENTRY(rWindow.m_pFindbarEntry);
     const char* pText = gtk_entry_get_text(pEntry);
-    boost::property_tree::ptree aTree;
-    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/type", '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/value", '/'), pText);
-    aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
-    aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/value", '/'), bBackwards);
-    if (rWindow.m_bFindAll)
-    {
-        aTree.put(boost::property_tree::ptree::path_type("SearchItem.Command/type", '/'), "unsigned short");
-        // SvxSearchCmd::FIND_ALL
-        aTree.put(boost::property_tree::ptree::path_type("SearchItem.Command/value", '/'), "1");
-    }
 
-    LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
-    GdkRectangle aArea;
-    getVisibleAreaTwips(rWindow.m_pDocView, &aArea);
-    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/type", '/'), "long");
-    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/value", '/'), aArea.x);
-    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/type", '/'), "long");
-    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/value", '/'), aArea.y);
-
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-
-    lok_doc_view_post_command(pLOKDocView, ".uno:ExecuteSearch", aStream.str().c_str(), false);
-}
-
-/// Click handler for the search next button.
-static void signalSearchNext(GtkWidget* pButton, gpointer /*pItem*/)
-{
-    doSearch(pButton, /*bBackwards=*/false);
+    lok_doc_view_find_next(LOK_DOC_VIEW(rWindow.m_pDocView), pText, rWindow.m_bFindAll);
 }
 
 /// Click handler for the search previous button.
 static void signalSearchPrev(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    doSearch(pButton, /*bBackwards=*/true);
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    GtkEntry* pEntry = GTK_ENTRY(rWindow.m_pFindbarEntry);
+    const char* pText = gtk_entry_get_text(pEntry);
+
+    lok_doc_view_find_prev(LOK_DOC_VIEW(rWindow.m_pDocView), pText, rWindow.m_bFindAll);
 }
 
 /// Handles the key-press-event of the search entry widget.
@@ -665,7 +645,7 @@ static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer 
         case GDK_KEY_Return:
         {
             // Search forward.
-            doSearch(pWidget, /*bBackwards=*/false);
+            signalSearchNext(pWidget, nullptr);
             return TRUE;
         }
         case GDK_KEY_Escape:

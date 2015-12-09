@@ -305,6 +305,67 @@ callbackTypeToString (int nType)
     return nullptr;
 }
 
+static void
+LOKPostCommand (LOKDocView* pDocView,
+                const gchar* pCommand,
+                const gchar* pArguments,
+                gboolean bNotifyWhenFinished)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+    LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND);
+    GError* error = nullptr;
+    pLOEvent->m_pCommand = pCommand;
+    pLOEvent->m_pArguments  = g_strdup(pArguments);
+    pLOEvent->m_bNotifyWhenFinished = bNotifyWhenFinished;
+
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    if (error != nullptr)
+    {
+        g_warning("Unable to call LOK_POST_COMMAND: %s", error->message);
+        g_clear_error(&error);
+    }
+    g_object_unref(task);
+}
+
+static void
+doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highlightAll)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    boost::property_tree::ptree aTree;
+    GtkWidget* drawingWidget = GTK_WIDGET(pDocView);
+    GdkWindow* drawingWindow = gtk_widget_get_window(drawingWidget);
+    cairo_region_t* cairoVisRegion = gdk_window_get_visible_region(drawingWindow);
+    cairo_rectangle_int_t cairoVisRect;
+    int x, y;
+
+    cairo_region_get_rectangle(cairoVisRegion, 0, &cairoVisRect);
+    x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
+    y = pixelToTwip (cairoVisRect.y, priv->m_fZoom);
+    
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/value", '/'), pText);
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/value", '/'), bBackwards);
+    if (highlightAll)
+    {
+        aTree.put(boost::property_tree::ptree::path_type("SearchItem.Command/type", '/'), "unsigned short");
+        // SvxSearchCmd::FIND_ALL
+        aTree.put(boost::property_tree::ptree::path_type("SearchItem.Command/value", '/'), "1");
+    }
+
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/type", '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/value", '/'), x);
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/type", '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/value", '/'), y);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    LOKPostCommand (pDocView, ".uno:ExecuteSearch", aStream.str().c_str(), false);
+}
+
 static bool
 isEmptyRectangle(const GdkRectangle& rRectangle)
 {
@@ -1769,10 +1830,7 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
         openDocumentInThread(task);
         break;
     case LOK_POST_COMMAND:
-        if (priv->m_bEdit)
-            postCommandInThread(task);
-        else
-            g_info ("LOK_POST_COMMAND: ignoring commands in view-only mode");
+        postCommandInThread(task);
         break;
     case LOK_SET_EDIT:
         setEditInThread(task);
@@ -2574,7 +2632,6 @@ lok_doc_view_get_edit (LOKDocView* pDocView)
     return priv->m_bEdit;
 }
 
-
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_post_command (LOKDocView* pDocView,
                            const gchar* pCommand,
@@ -2582,21 +2639,33 @@ lok_doc_view_post_command (LOKDocView* pDocView,
                            gboolean bNotifyWhenFinished)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-    LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND);
-    GError* error = nullptr;
-    pLOEvent->m_pCommand = pCommand;
-    pLOEvent->m_pArguments  = g_strdup(pArguments);
-    pLOEvent->m_bNotifyWhenFinished = bNotifyWhenFinished;
+    if (priv->m_bEdit)
+        LOKPostCommand(pDocView, pCommand, pArguments, bNotifyWhenFinished);
+    else
+        g_info ("LOK_POST_COMMAND: ignoring commands in view-only mode");
+}
 
-    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != nullptr)
-    {
-        g_warning("Unable to call LOK_POST_COMMAND: %s", error->message);
-        g_clear_error(&error);
-    }
-    g_object_unref(task);
+SAL_DLLPUBLIC_EXPORT void
+lok_doc_view_find_prev (LOKDocView* pDocView,
+                        const gchar* pText,
+                        gboolean bHighlightAll)
+{
+    doSearch(pDocView, pText, true, bHighlightAll);
+}
+
+SAL_DLLPUBLIC_EXPORT void
+lok_doc_view_find_next (LOKDocView* pDocView,
+                        const gchar* pText,
+                        gboolean bHighlightAll)
+{
+    doSearch(pDocView, pText, false, bHighlightAll);
+}
+
+SAL_DLLPUBLIC_EXPORT void
+lok_doc_view_highlight_all (LOKDocView* pDocView,
+                            const gchar* pText)
+{
+    doSearch(pDocView, pText, false, true);
 }
 
 SAL_DLLPUBLIC_EXPORT float
