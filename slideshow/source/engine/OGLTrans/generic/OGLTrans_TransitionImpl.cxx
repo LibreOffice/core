@@ -111,14 +111,40 @@ void OGLTransitionImpl::uploadModelViewProjectionMatrices()
     }
 }
 
-void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
+static std::vector<int> uploadPrimitives(const Primitives_t& primitives)
 {
-    const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
-    for(size_t i(0); i != rSceneObjects.size(); ++i) {
-        rSceneObjects[i]->prepare();
+    int size = 0;
+    for (const Primitive& primitive: primitives)
+        size += primitive.getVerticesSize();
+
+    CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
+    CHECK_GL_ERROR();
+    Vertex *buf = static_cast<Vertex*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+
+    std::vector<int> indices;
+    int last_pos = 0;
+    for (const Primitive& primitive: primitives) {
+        indices.push_back(last_pos);
+        int num = primitive.writeVertices(buf);
+        buf += num;
+        last_pos += num;
     }
 
+    CHECK_GL_ERROR();
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+    CHECK_GL_ERROR();
+    return indices;
+}
+
+void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
+{
     m_nProgramObject = makeShader();
+
+    const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
+    for(size_t i(0); i != rSceneObjects.size(); ++i) {
+        rSceneObjects[i]->prepare(m_nProgramObject);
+    }
 
     CHECK_GL_ERROR();
     if( m_nProgramObject ) {
@@ -149,6 +175,9 @@ void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
         glGenBuffers(1, &m_nVertexBufferObject);
         glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
 
+        // In practice both leaving and entering slides share the same primitives.
+        m_nFirstIndices = uploadPrimitives(getScene().getLeavingSlide());
+
         // Attribute bindings
         m_nPositionLocation = glGetAttribLocation(m_nProgramObject, "a_position");
         if (m_nPositionLocation != -1) {
@@ -170,6 +199,8 @@ void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
             glVertexAttribPointer( m_nTexCoordLocation, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texcoord)) );
             CHECK_GL_ERROR();
         }
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     CHECK_GL_ERROR();
 
@@ -240,6 +271,7 @@ void OGLTransitionImpl::display( double nTime, sal_Int32 glLeavingSlideTex, sal_
     const double SlideHeightScale = SlideHeight/DispHeight;
 
     CHECK_GL_ERROR();
+    glBindVertexArray(m_nVertexArrayObject);
     prepare( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
 
     CHECK_GL_ERROR();
@@ -260,30 +292,8 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
     CHECK_GL_ERROR();
 }
 
-static void display_primitives(const Primitives_t& primitives, GLint primitiveTransformLocation, double nTime, double WidthScale, double HeightScale)
+static void displayPrimitives(const Primitives_t& primitives, GLint primitiveTransformLocation, double nTime, double WidthScale, double HeightScale, std::vector<int>::const_iterator first)
 {
-    int size = 0;
-    for (const Primitive& primitive: primitives)
-        size += primitive.getVerticesSize();
-
-    CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STREAM_DRAW);
-    CHECK_GL_ERROR();
-    Vertex *buf = static_cast<Vertex*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
-
-    std::vector<int> first_elements;
-    int last_pos = 0;
-    for (const Primitive& primitive: primitives) {
-        first_elements.push_back(last_pos);
-        int num = primitive.writeVertices(buf);
-        buf += num;
-        last_pos += num;
-    }
-    auto first = first_elements.begin();
-
-    CHECK_GL_ERROR();
-    glUnmapBuffer(GL_ARRAY_BUFFER);
-
     for (const Primitive& primitive: primitives)
         primitive.display(primitiveTransformLocation, nTime, WidthScale, HeightScale, *first++);
 }
@@ -299,7 +309,7 @@ OGLTransitionImpl::displaySlide(
     CHECK_GL_ERROR();
     glUniformMatrix4fv(m_nSceneTransformLocation, 1, false, glm::value_ptr(glm::mat4()));
     CHECK_GL_ERROR();
-    display_primitives(primitives, m_nPrimitiveTransformLocation, nTime, SlideWidthScale, SlideHeightScale);
+    displayPrimitives(primitives, m_nPrimitiveTransformLocation, nTime, SlideWidthScale, SlideHeightScale, m_nFirstIndices.cbegin());
     CHECK_GL_ERROR();
 }
 
@@ -344,7 +354,7 @@ void SceneObject::display(GLint sceneTransformLocation, GLint primitiveTransform
     CHECK_GL_ERROR();
     glUniformMatrix4fv(sceneTransformLocation, 1, false, glm::value_ptr(matrix));
     CHECK_GL_ERROR();
-    display_primitives(maPrimitives, primitiveTransformLocation, nTime, 1, 1);
+    displayPrimitives(maPrimitives, primitiveTransformLocation, nTime, 1, 1, maFirstIndices.cbegin());
     CHECK_GL_ERROR();
 }
 
@@ -370,22 +380,26 @@ class Iris : public SceneObject
 public:
     Iris() = default;
 
-    virtual void prepare() override;
+    virtual void prepare(GLuint program) override;
     virtual void display(GLint sceneTransformLocation, GLint primitiveTransformLocation, double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const override;
     virtual void finish() override;
 
 private:
     GLuint maTexture = 0;
+    GLuint maBuffer = 0;
+    GLuint maVertexArray = 0;
 };
 
 void Iris::display(GLint sceneTransformLocation, GLint primitiveTransformLocation, double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const
 {
+    glBindVertexArray(maVertexArray);
+    CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, maTexture);
     CHECK_GL_ERROR();
     SceneObject::display(sceneTransformLocation, primitiveTransformLocation, nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
 }
 
-void Iris::prepare()
+void Iris::prepare(GLuint program)
 {
     CHECK_GL_ERROR();
     static const GLubyte img[3] = { 80, 80, 80 };
@@ -395,13 +409,48 @@ void Iris::prepare()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     CHECK_GL_ERROR();
+
+    glGenVertexArrays(1, &maVertexArray);
+    glBindVertexArray(maVertexArray);
+
+    glGenBuffers(1, &maBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, maBuffer);
+    maFirstIndices = uploadPrimitives(maPrimitives);
+
+    // Attribute bindings
+    GLint location = glGetAttribLocation(program, "a_position");
+    if (location != -1) {
+        glEnableVertexAttribArray(location);
+        glVertexAttribPointer( location, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)) );
+        CHECK_GL_ERROR();
+    }
+
+    location = glGetAttribLocation(program, "a_normal");
+    if (location != -1) {
+        glEnableVertexAttribArray(location);
+        glVertexAttribPointer( location, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, normal)) );
+        CHECK_GL_ERROR();
+    }
+
+    location = glGetAttribLocation(program, "a_texCoord");
+    if (location != -1) {
+        glEnableVertexAttribArray(location);
+        glVertexAttribPointer( location, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texcoord)) );
+        CHECK_GL_ERROR();
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Iris::finish()
 {
+    CHECK_GL_ERROR();
+    glDeleteBuffers(1, &maBuffer);
+    CHECK_GL_ERROR();
+    glDeleteVertexArrays(1, &maVertexArray);
     CHECK_GL_ERROR();
     glDeleteTextures(1, &maTexture);
     CHECK_GL_ERROR();
@@ -1529,7 +1578,7 @@ void VortexTransition::prepare( double, double, double, double, double )
     glVertexAttribPointer(mnTileInfoLocation, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
     CHECK_GL_ERROR();
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     CHECK_GL_ERROR();
 }
 
@@ -1592,7 +1641,7 @@ void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32
     glBufferData(GL_ARRAY_BUFFER, mvTileInfo.size()*sizeof(GLfloat), mvTileInfo.data(), GL_STATIC_DRAW);
     CHECK_GL_ERROR();
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     CHECK_GL_ERROR();
 }
 
