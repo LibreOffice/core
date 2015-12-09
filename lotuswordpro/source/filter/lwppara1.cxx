@@ -241,7 +241,7 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
                         {
                             if (
                                  (pFrib->GetNext() && pFrib->GetNext()->GetType() == FRIB_TAG_TEXT) ||
-                                 (pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels)
+                                 (pFrib->GetModifiers() && pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels)
                                )
                             {
                                 pParaNumbering->pSuffix = static_cast<LwpFribText*>(pFrib);
