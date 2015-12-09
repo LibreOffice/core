@@ -4752,7 +4752,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OUString sObjectName = aContainer->GetEmbeddedObjectName( xObj );
 
     // set some attributes according to the type of the embedded object
-    OUString sProgID, sMediaType, sRelationType, sFileExtension, sDrawAspect="Content";
+    OUString sProgID, sDrawAspect = "Content";
     for( sal_Int32 i=0; i < aObjectsInteropList.getLength(); ++i )
         if ( aObjectsInteropList[i].Name == sObjectName )
         {
@@ -4772,99 +4772,8 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
             }
     }
 
-    if( sProgID == "Excel.Sheet.12" )
-    {
-        sMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        sFileExtension = "xlsx";
-    }
-    else if(sProgID.startsWith("Excel.SheetBinaryMacroEnabled.12") )
-    {
-        sMediaType = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        sFileExtension = "xlsb";
-    }
-    else if( sProgID.startsWith("Excel.SheetMacroEnabled.12") )
-    {
-        sMediaType = "application/vnd.ms-excel.sheet.macroEnabled.12";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        sFileExtension = "xlsm";
-    }
-    else if( sProgID.startsWith("Excel.Sheet") )
-    {
-        sMediaType = "application/vnd.ms-excel";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-        sFileExtension = "xls";
-    }
-    else if( sProgID == "PowerPoint.Show.12" )
-    {
-        sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        sFileExtension = "pptx";
-    }
-    else if(sProgID == "PowerPoint.ShowMacroEnabled.12")
-    {
-        sMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        sFileExtension = "pptm";
-    }
-    else if( sProgID.startsWith("PowerPoint.Show") )
-    {
-        sMediaType = "application/vnd.ms-powerpoint";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-        sFileExtension = "ppt";
-    }
-    else if (sProgID.startsWith("PowerPoint.Slide.12"))
-    {
-        sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
-       sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-       sFileExtension = "sldx";
-    }
-    else if( sProgID == "PowerPoint.SlideMacroEnabled.12" )
-    {
-       sMediaType = "application/vnd.ms-powerpoint.slide.macroEnabled.12";
-       sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-       sFileExtension = "sldm";
-    }
-    else if( sProgID == "Word.DocumentMacroEnabled.12" )
-    {
-        sMediaType = "application/vnd.ms-word.document.macroEnabled.12";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        sFileExtension = "docm";
-    }
-    else if (sProgID == "Word.Document.12")
-    {
-        sMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        sFileExtension = "docx";
-    }
-    else if( sProgID == "Word.Document.8" )
-    {
-        sMediaType = "application/msword";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-        sFileExtension = "doc";
-    }
-    else if( sProgID == "Excel.Chart.8" )
-    {
-        sMediaType = "application/vnd.ms-excel";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-        sFileExtension = "xls";
-    }
-    else if (sProgID == "AcroExch.Document.11")
-    {
-        sMediaType = "application/pdf";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-        sFileExtension = "pdf";
-    }
-    else
-    {
-        sMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
-        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-        sFileExtension = "bin";
-    }
-
     // write embedded file
-    OString sId = m_rExport.WriteOLEObject( aObject, sMediaType, sRelationType, sFileExtension );
+    OString sId = m_rExport.WriteOLEObject(aObject, sProgID);
 
     if( sId.isEmpty() )
     {

@@ -170,7 +170,7 @@ public:
 
     /// Returns the relationd id
     OString OutputChart( css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr m_pSerializer );
-    OString WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaType, const OUString& sRelationType, const OUString& sFileExtension );
+    OString WriteOLEObject(SwOLEObj& rObject, OUString const& rProgID);
     static bool lcl_CopyStream( css::uno::Reference< css::io::XInputStream> xIn, css::uno::Reference< css::io::XOutputStream > xOut );
 
     /// Writes the shape using drawingML syntax.
