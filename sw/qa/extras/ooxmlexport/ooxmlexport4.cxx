@@ -744,6 +744,18 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeDOCX, "fdo80410.docx")
         "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/oleObject1.docx']",
         "ContentType",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.docx']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[6]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "Word.Document.12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testContentTypeXLSM, "fdo76098.docx")
