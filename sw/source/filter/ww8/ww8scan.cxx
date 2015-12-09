@@ -1713,6 +1713,7 @@ WW8ScannerBase::~WW8ScannerBase()
     delete pPLCFx_PCD;
     delete pPieceIter;
     delete pPiecePLCF;
+    delete pFactoidBook;
     delete pAtnBook;
     delete pBook;
     delete pFieldEdnPLCF;
