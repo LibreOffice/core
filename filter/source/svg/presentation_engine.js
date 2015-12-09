@@ -1215,6 +1215,9 @@ function MetaDocument()
     this.aSlideAnimationsMap = new Object();
     this.initSlideAnimationsMap();
 
+    // We initialize dummy slide - used as leaving slide for transition on the first slide
+    this.theMetaDummySlide = new MetaSlide( 'ooo:meta_dummy_slide', this );
+
     // We initialize the set of MetaSlide objects that handle the meta
     // information for each slide.
     for( var i = 0; i < this.nNumberOfSlides; ++i )
@@ -1316,7 +1319,11 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     this.slideElement = this.theDocument.getElementById( this.slideId );
     assert( this.slideElement,
             'MetaSlide: slide element <' + this.slideId + '> not found.' );
-    this.nSlideNumber = parseInt( this.slideId.substr(2) );
+
+    if( this.slideId !== 'dummy_slide' )
+        this.nSlideNumber = parseInt( this.slideId.substr(2) );
+    else
+        this.nSlideNumber= -1;
 
     // Each slide element is wrapped by a <g> element that is responsible for
     // the slide element visibility. In fact the visibility attribute has
@@ -12588,11 +12595,22 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
     if( this.isEnabled() && !bSkipSlideTransition  )
     {
         // create slide transition and add to activity queue
-        if ( ( nOldSlide !== undefined ) &&
-            ( ( nNewSlide > nOldSlide ) ||
-              ( ( nNewSlide == 0) && ( nOldSlide == (aMetaDoc.nNumberOfSlides - 1) ) ) ) )
+        if ( ( ( nOldSlide !== undefined ) &&
+               ( ( nNewSlide > nOldSlide ) ||
+               ( ( nNewSlide == 0) && ( nOldSlide == (aMetaDoc.nNumberOfSlides - 1) ) ) ) ) ||
+             (  ( nOldSlide === undefined ) &&  ( nNewSlide == 0) )  // for transition on first slide
+           )
         {
-            var aOldMetaSlide = aMetaDoc.aMetaSlideSet[nOldSlide];
+
+            var aOldMetaSlide = null;
+            if( nOldSlide === undefined ) // for transition on first slide
+            {
+                aOldMetaSlide = aMetaDoc.theMetaDummySlide;
+            }
+            else
+            {
+                aOldMetaSlide = aMetaDoc.aMetaSlideSet[nOldSlide];
+            }
             var aNewMetaSlide = aMetaDoc.aMetaSlideSet[nNewSlide];
 
             var aSlideTransitionHandler = aNewMetaSlide.aTransitionHandler;
