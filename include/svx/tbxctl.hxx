@@ -34,11 +34,14 @@ private:
     OUString     m_sToolboxName;
 
     void                toggleToolbox();
+    OUString            m_sModuleName;
 
 protected:
 
 public:
     SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual ~SvxTbxCtlDraw() {}
 
     SFX_DECL_TOOLBOX_CONTROL();
