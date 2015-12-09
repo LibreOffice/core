@@ -380,18 +380,22 @@ void LwpPara::RegisterStyle()
             {
             case PP_LOCAL_ALIGN:
             {
-                if (!rParaStyle.GetAlignment())
-                    OverrideAlignment(nullptr,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
-                else
+                LwpAlignmentOverride *pAlignment = static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment();
+                if (pAlignment)
                 {
-                    std::unique_ptr<LwpAlignmentOverride> const pAlign(
-                            rParaStyle.GetAlignment()->clone());
-                    OverrideAlignment(pAlign.get(),
-                            static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),
-                            pOverStyle);
+                    if (!rParaStyle.GetAlignment())
+                        OverrideAlignment(nullptr, pAlignment, pOverStyle);
+                    else
+                    {
+                        std::unique_ptr<LwpAlignmentOverride> const pAlign(
+                                rParaStyle.GetAlignment()->clone());
+                        OverrideAlignment(pAlign.get(),
+                                pAlignment,
+                                pOverStyle);
+                    }
                 }
-            }
                 break;
+            }
             case PP_LOCAL_INDENT:
             {
                 noIndent = false;
