@@ -366,11 +366,112 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
-OString DocxExport::WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaType, const OUString& sRelationType, const OUString& sFileExtension )
+
+static void lcl_ConvertProgID(OUString const& rProgID,
+    OUString & o_rMediaType, OUString & o_rRelationType, OUString & o_rFileExtension)
+{
+    if (rProgID == "Excel.Sheet.12")
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "xlsx";
+    }
+    else if (rProgID.startsWith("Excel.SheetBinaryMacroEnabled.12") )
+    {
+        o_rMediaType = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "xlsb";
+    }
+    else if (rProgID.startsWith("Excel.SheetMacroEnabled.12"))
+    {
+        o_rMediaType = "application/vnd.ms-excel.sheet.macroEnabled.12";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "xlsm";
+    }
+    else if (rProgID.startsWith("Excel.Sheet"))
+    {
+        o_rMediaType = "application/vnd.ms-excel";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "xls";
+    }
+    else if (rProgID == "PowerPoint.Show.12")
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "pptx";
+    }
+    else if (rProgID == "PowerPoint.ShowMacroEnabled.12")
+    {
+        o_rMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "pptm";
+    }
+    else if (rProgID.startsWith("PowerPoint.Show"))
+    {
+        o_rMediaType = "application/vnd.ms-powerpoint";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "ppt";
+    }
+    else if (rProgID.startsWith("PowerPoint.Slide.12"))
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
+       o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+       o_rFileExtension = "sldx";
+    }
+    else if (rProgID == "PowerPoint.SlideMacroEnabled.12")
+    {
+       o_rMediaType = "application/vnd.ms-powerpoint.slide.macroEnabled.12";
+       o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+       o_rFileExtension = "sldm";
+    }
+    else if (rProgID == "Word.DocumentMacroEnabled.12")
+    {
+        o_rMediaType = "application/vnd.ms-word.document.macroEnabled.12";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "docm";
+    }
+    else if (rProgID == "Word.Document.12")
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "docx";
+    }
+    else if (rProgID == "Word.Document.8")
+    {
+        o_rMediaType = "application/msword";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "doc";
+    }
+    else if (rProgID == "Excel.Chart.8")
+    {
+        o_rMediaType = "application/vnd.ms-excel";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "xls";
+    }
+    else if (rProgID == "AcroExch.Document.11")
+    {
+        o_rMediaType = "application/pdf";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "pdf";
+    }
+    else
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "bin";
+    }
+}
+
+OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString const& rProgID)
 {
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
     comphelper::EmbeddedObjectContainer* aContainer = rObject.GetObject().GetContainer();
     uno::Reference< io::XInputStream > xInStream = aContainer->GetObjectStream( xObj );
+
+    OUString sMediaType;
+    OUString sRelationType;
+    OUString sFileExtension;
+    lcl_ConvertProgID(rProgID, sMediaType, sRelationType, sFileExtension);
 
     OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + "." + sFileExtension;
     uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream( OUStringBuffer()
