@@ -143,6 +143,9 @@ void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
         m_nSceneTransformLocation = glGetUniformLocation( m_nProgramObject, "u_sceneTransformMatrix" );
         m_nOperationsTransformLocation = glGetUniformLocation( m_nProgramObject, "u_operationsTransformMatrix" );
 
+        glGenVertexArrays(1, &m_nVertexArrayObject);
+        glBindVertexArray(m_nVertexArrayObject);
+
         glGenBuffers(1, &m_nVertexBufferObject);
         glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
 
@@ -186,6 +189,8 @@ void OGLTransitionImpl::finish()
     if( m_nProgramObject ) {
         glDeleteBuffers(1, &m_nVertexBufferObject);
         m_nVertexBufferObject = 0;
+        glDeleteVertexArrays(1, &m_nVertexArrayObject);
+        m_nVertexArrayObject = 0;
         glDeleteProgram( m_nProgramObject );
         m_nProgramObject = 0;
     }
@@ -220,7 +225,6 @@ void OGLTransitionImpl::displaySlides_( double nTime, sal_Int32 glLeavingSlideTe
         }
     }
 
-    glEnable(GL_TEXTURE_2D);
     glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
     glActiveTexture( GL_TEXTURE0 );
@@ -301,9 +305,8 @@ OGLTransitionImpl::displaySlide(
 
 void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
 {
-    CHECK_GL_ERROR();
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
-    glEnable(GL_TEXTURE_2D);
+    CHECK_GL_ERROR();
     for(size_t i(0); i != rSceneObjects.size(); ++i)
         rSceneObjects[i]->display(m_nSceneTransformLocation, m_nPrimitiveTransformLocation, nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
     CHECK_GL_ERROR();
@@ -389,7 +392,7 @@ void Iris::prepare()
 
     glGenTextures(1, &maTexture);
     glBindTexture(GL_TEXTURE_2D, maTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -748,8 +751,6 @@ private:
 void RochadeTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
-
-    glEnable(GL_TEXTURE_2D);
 
     if( nTime > .5) {
         displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
@@ -1528,7 +1529,7 @@ void VortexTransition::prepare( double, double, double, double, double )
     glVertexAttribPointer(mnTileInfoLocation, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
     CHECK_GL_ERROR();
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
     CHECK_GL_ERROR();
 }
 
@@ -1591,7 +1592,7 @@ void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32
     glBufferData(GL_ARRAY_BUFFER, mvTileInfo.size()*sizeof(GLfloat), mvTileInfo.data(), GL_STATIC_DRAW);
     CHECK_GL_ERROR();
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
     CHECK_GL_ERROR();
 }
 
