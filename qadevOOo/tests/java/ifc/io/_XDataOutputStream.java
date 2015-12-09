@@ -69,29 +69,14 @@ public class _XDataOutputStream extends MultiMethodTest {
         for (int i = 0; i < data.size(); i++) {
             dataElem = data.get(i) ;
 
-            if (dataElem instanceof Boolean) {
-                ((Boolean)dataElem).booleanValue();
-            }
-            else if (dataElem instanceof Byte) {
-                ((Byte)dataElem).byteValue();
-            }
-            else if (dataElem instanceof Character) {
-                ((Character)dataElem).charValue();
-            }
-            else if (dataElem instanceof Short) {
-                ((Short)dataElem).shortValue();
-            }
-            else if (dataElem instanceof Integer) {
-                ((Integer)dataElem).intValue();
-            }
-            else if (dataElem instanceof Long) {
-                ((Long)dataElem).longValue();
-            }
-            else if (dataElem instanceof Float) {
-                ((Float)dataElem).floatValue();
-            }
-            else if (dataElem instanceof Double) {
-                ((Double)dataElem).doubleValue();
+            if (!(dataElem instanceof Boolean   ||
+                  dataElem instanceof Byte)     ||
+                  dataElem instanceof Character ||
+                  dataElem instanceof Short     ||
+                  dataElem instanceof Integer   ||
+                  dataElem instanceof Float     ||
+                  dataElem instanceof Double)   {
+                throw new RuntimeException("Object dataElem type not found.");
             }
         }
     }
