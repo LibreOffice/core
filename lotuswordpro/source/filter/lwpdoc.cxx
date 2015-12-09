@@ -634,8 +634,8 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  LwpDocument* LwpDocument::GetLastDivisionThatHasEndnote()
 {
     LwpDocument* pRoot = GetRootDocument();
-    LwpDocument *pLastDoc = pRoot->GetLastDivisionWithContents();
-    while(pLastDoc)
+    LwpDocument *pLastDoc = pRoot ? pRoot->GetLastDivisionWithContents() : nullptr;
+    while (pLastDoc)
     {
         if(pLastDoc->GetEnSuperTableLayout())
             return pLastDoc;
