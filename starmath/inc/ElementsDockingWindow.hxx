@@ -85,15 +85,12 @@ class SmElementsControl : public Control
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
 
-    typedef std::shared_ptr<SmElement>    SmElementPointer;
-    typedef std::vector< SmElementPointer > SmElementList;
-
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
     sal_uInt16    maCurrentSetId;
     SmElement*    mpCurrentElement;
 
-    SmElementList maElementList;
+    std::vector< std::unique_ptr<SmElement> > maElementList;
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
     VclPtr< ScrollBar > mxScroll;
