@@ -33,11 +33,44 @@
 #define STR_PAGE                    (RC_GLOBALS_BEGIN + 14)
 #define STR_PAGE_COUNT              (RC_GLOBALS_BEGIN + 15)
 #define STR_PAGE_COUNT_CUSTOM       (RC_GLOBALS_BEGIN + 16)
-#define STR_PRINTOPTUI              (RC_GLOBALS_BEGIN + 17)
 
 #define ST_SCRIPT_WESTERN           (RC_GLOBALS_BEGIN + 105)
 #define ST_SCRIPT_ASIAN             (RC_GLOBALS_BEGIN + 106)
 #define ST_SCRIPT_CTL               (RC_GLOBALS_BEGIN + 107)
+
+
+#define STR_PRINTOPTUI_PRODUCTNAME          (RC_GLOBALS_BEGIN + 120)      // index   0
+#define STR_PRINTOPTUI_CONTENTS             (RC_GLOBALS_BEGIN + 121)      // index   1
+#define STR_PRINTOPTUI_PAGE_BACKGROUND      (RC_GLOBALS_BEGIN + 122)      // index   2
+#define STR_PRINTOPTUI_PICTURES             (RC_GLOBALS_BEGIN + 123)      // index   3
+#define STR_PRINTOPTUI_HIDDEN               (RC_GLOBALS_BEGIN + 124)      // index   4
+#define STR_PRINTOPTUI_TEXT_PLACEHOLDERS    (RC_GLOBALS_BEGIN + 125)      // index   5
+#define STR_PRINTOPTUI_FORM_CONTROLS        (RC_GLOBALS_BEGIN + 126)      // index   6
+#define STR_PRINTOPTUI_COLOR                (RC_GLOBALS_BEGIN + 127)      // index   7
+#define STR_PRINTOPTUI_PRINT_BLACK          (RC_GLOBALS_BEGIN + 128)      // index   8
+#define STR_PRINTOPTUI_PAGES                (RC_GLOBALS_BEGIN + 129)      // index   9
+#define STR_PRINTOPTUI_PRINT_BLANK          (RC_GLOBALS_BEGIN + 130)      // index  10
+#define STR_PRINTOPTUI_ONLY_PAPER           (RC_GLOBALS_BEGIN + 131)      // index  11
+#define STR_PRINTOPTUI_PRINT                (RC_GLOBALS_BEGIN + 132)      // index  12
+#define STR_PRINTOPTUI_NONE                 (RC_GLOBALS_BEGIN + 133)      // index  13
+#define STR_PRINTOPTUI_COMMENTS_ONLY        (RC_GLOBALS_BEGIN + 134)      // index  14
+#define STR_PRINTOPTUI_PLACE_END            (RC_GLOBALS_BEGIN + 135)      // index  15
+#define STR_PRINTOPTUI_PLACE_PAGE           (RC_GLOBALS_BEGIN + 136)      // index  16
+#define STR_PRINTOPTUI_COMMENTS             (RC_GLOBALS_BEGIN + 137)      // index  17
+#define STR_PRINTOPTUI_PAGE_SIDES           (RC_GLOBALS_BEGIN + 138)      // index  18
+#define STR_PRINTOPTUI_ALL_PAGES            (RC_GLOBALS_BEGIN + 139)      // index  19
+#define STR_PRINTOPTUI_BACK_PAGES           (RC_GLOBALS_BEGIN + 140)      // index  20
+#define STR_PRINTOPTUI_FONT_PAGES           (RC_GLOBALS_BEGIN + 141)      // index  21
+#define STR_PRINTOPTUI_INCLUDE              (RC_GLOBALS_BEGIN + 142)      // index  22
+#define STR_PRINTOPTUI_BROCHURE             (RC_GLOBALS_BEGIN + 143)      // index  23
+#define STR_PRINTOPTUI_LEFT_SCRIPT          (RC_GLOBALS_BEGIN + 144)      // index  24
+#define STR_PRINTOPTUI_RIGHT_SCRIPT         (RC_GLOBALS_BEGIN + 145)      // index  25
+#define STR_PRINTOPTUI_RANGE_COPIES         (RC_GLOBALS_BEGIN + 146)      // index  26
+#define STR_PRINTOPTUI_ALLPAGES             (RC_GLOBALS_BEGIN + 147)      // index  27
+#define STR_PRINTOPTUI_PAGES1               (RC_GLOBALS_BEGIN + 148)      // index  28
+#define STR_PRINTOPTUI_SELECTION            (RC_GLOBALS_BEGIN + 149)      // index  29
+#define STR_PRINTOPTUI_PLACE_MARGINS        (RC_GLOBALS_BEGIN + 150)      // index  30
+
 
 //EventStrings
 
