@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/frame/UnknownModuleException.hpp>
@@ -88,6 +87,7 @@
 using namespace sd;
 #define ViewShellBase
 #include "sdslots.hxx"
+#include <sfx2/bindings.hxx>
 
 using ::sd::framework::FrameworkHelper;
 using namespace com::sun::star::uno;

@@ -29,10 +29,11 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-
 #include "svx/tbxctl.hxx"
 #include "svx/tbxcolor.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <iostream>
+#include <toolkit/helper/vclunohelper.hxx>
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxAllEnumItem);
 
@@ -43,14 +44,21 @@ using namespace ::com::sun::star::frame;
 
 SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-
-    m_sToolboxName( "private:resource/toolbar/drawbar" )
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 
 {
+    m_sToolboxName="private:resource/toolbar/drawbar";
     rTbx.SetItemBits( nId, ToolBoxItemBits::CHECKABLE | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
+
+void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
+    {
+        svt::ToolboxController::initialize(aArguments);
+
+        OUString module_name = svt::ToolboxController::getModuleName();
+        std::cout<<"module_name: "<<module_name;
+    }
 
 
 
