@@ -392,14 +392,6 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     mpContext->swapBuffers();
 
-    glEnable(GL_LIGHTING);
-    GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
-    GLfloat materialDiffuse[] = { 1.0 , 1.0 , 1.0 , 1.0};
-    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,materialDiffuse);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-
     glViewport(0, 0, aCanvasArea.Width, aCanvasArea.Height);
     CHECK_GL_ERROR();
 
