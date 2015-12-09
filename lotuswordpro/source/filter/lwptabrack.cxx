@@ -92,7 +92,7 @@ void LwpTabRack::Read()
 
     m_nNumTabs = m_pObjStrm->QuickReaduInt16();
     if (m_nNumTabs > MaxTabs)
-        throw std::out_of_range("corrupt LwpTabRack");
+        throw std::range_error("corrupt LwpTabRack");
     for (int i=0; i<m_nNumTabs; ++i)
     {
         m_aTabs[i].Read(m_pObjStrm);
