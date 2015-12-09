@@ -55,7 +55,8 @@ void BitmapTest::testConvert()
         //it would be nice to find and change the stride for quartz to be the same as everyone else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
 #else
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
+        if (!OpenGLHelper::isVCLOpenGLEnabled())
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
 #endif
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
