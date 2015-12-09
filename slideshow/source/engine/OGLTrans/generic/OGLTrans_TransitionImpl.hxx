@@ -140,7 +140,7 @@ public:
 
     /** Prepare transition.
       */
-    void prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex );
+    bool prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex );
     /** Display a step of the transition.
       */
     void display( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );

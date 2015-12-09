@@ -137,9 +137,11 @@ static std::vector<int> uploadPrimitives(const Primitives_t& primitives)
     return indices;
 }
 
-void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
+bool OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
 {
     m_nProgramObject = makeShader();
+    if (!m_nProgramObject)
+        return false;
 
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     for(size_t i(0); i != rSceneObjects.size(); ++i) {
@@ -205,6 +207,7 @@ void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
     CHECK_GL_ERROR();
 
     prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
+    return true;
 }
 
 void OGLTransitionImpl::finish()
