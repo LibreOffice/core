@@ -16,6 +16,24 @@
       "revId": "3b71d5a67faacdcdcbb8b912d7e544ca1a51dbcb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_0411fbac",
+        "filename": "sc/source/ui/dbgui/PivotLayoutTreeList.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-09T12:17:14Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure so I added cloning -- better be safe than sorry -- and indeed, if the item is not cloned, whatever this pOriginalItemValue points to is destructed earlier and a crash in ScPivotLayoutTreeList destructor happens.",
+      "parentUuid": "dab17558_33656be1",
+      "revId": "3b71d5a67faacdcdcbb8b912d7e544ca1a51dbcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
