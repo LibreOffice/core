@@ -331,20 +331,14 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
 
         return false;
     }
+
     bool bSuccess = ::opencl::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
-    if(!bSuccess)
+    if (!bSuccess)
         return false;
 
     delete msInstance;
-    msInstance = nullptr;
-
-    if (bOpenCLEnabled)
-    {
-        msInstance = new sc::opencl::FormulaGroupInterpreterOpenCL();
-        return msInstance != nullptr;
-    }
-
-    return false;
+    msInstance = new sc::opencl::FormulaGroupInterpreterOpenCL();
+    return true;
 }
 
 void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId)
