@@ -58,6 +58,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ww8import,\
     i18npool/util/i18npool \
     linguistic/source/lng \
     package/util/package2 \
+    package/source/xstor/xstor \
     sw/util/msword \
     sw/util/sw \
     sw/util/swd \
@@ -67,6 +68,9 @@ $(eval $(call gb_CppunitTest_use_components,sw_ww8import,\
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
+    ucb/source/ucp/tdoc/ucptdoc1 \
+    unotools/util/utl \
+    unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
 ))

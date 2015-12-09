@@ -144,6 +144,8 @@ using namespace nsHdFtFlags;
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <sfx2/DocumentMetadataAccess.hxx>
 
 //#define VT_EMPTY            0
 //#define VT_I4               3
@@ -4904,7 +4906,23 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     m_rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
     if (m_bNewDoc && m_pStg && !pGloss)
+    {
+        // Initialize RDF metadata, to be able to add statements during the import.
+        try
+        {
+            uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+            uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
+            const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xComponentContext, xStorage, m_sBaseURL));
+            uno::Reference<task::XInteractionHandler> xHandler;
+            xDocumentMetadataAccess->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
+        }
+        catch (const uno::Exception& rException)
+        {
+            SAL_WARN("sw.ww8", "SwWW8ImplReader::CoreLoad: failed to initialize RDF metadata: " << rException.Message);
+        }
         ReadDocInfo();
+    }
 
     ::ww8::WW8FibData * pFibData = new ::ww8::WW8FibData();
 
