@@ -219,7 +219,7 @@ namespace abp
               loop != m_aAllTypes.end(); ++loop )
         {
             ButtonItem aItem = (*loop);
-            if ( aItem.m_pItem->IsChecked() )
+            if ( aItem.m_pItem->IsChecked() && aItem.m_bVisible )
                 return aItem.m_eType;
         }
 
