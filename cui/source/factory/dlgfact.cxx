@@ -1234,7 +1234,6 @@ AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl::Wind
                                             SfxBindings* pBindings)
 {
     SvxHpLinkDlg* pDlg = VclPtr<SvxHpLinkDlg>::Create( pParent, pBindings );
-    fprintf(stderr, "CreateSvxHpLinkDlg\n");
     return new AbstractSvxHpLinkDlg_Impl(pDlg);
 }
 
