@@ -137,6 +137,7 @@ protected:
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     void            EditEntry( SvTreeListEntry* pEntry, EditEntryMode nMode );
