@@ -195,6 +195,44 @@ void                           lok_doc_view_post_command           (LOKDocView* 
                                                                     const gchar* pArguments,
                                                                     gboolean bNotifyWhenFinished);
 
+
+/**
+ * lok_doc_view_find_next:
+ * @pDocView: The #LOKDocView instance
+ * @pText: text to search for
+ * @bHighlightAll: Whether all the matches should be highlighted or not
+ *
+ * Highlights the next matching text in the view. `search-not-found` signal will
+ * be emitted when no search is found
+ */
+void                           lok_doc_view_find_next              (LOKDocView* pDocView,
+                                                                    const gchar* pText,
+                                                                    gboolean bHighlightAll);
+
+/**
+ * lok_doc_view_find_prev:
+ * @pDocView: The #LOKDocView instance
+ * @pText: text to search for
+ * @bHighlightAll: Whether all the matches should be highlighted or not
+ *
+ * Highlights the previous matching text in the view. `search-not-found` signal
+ * will be emitted when no search is found
+ */
+void                           lok_doc_view_find_prev              (LOKDocView* pDocView,
+                                                                    const gchar* pText,
+                                                                    gboolean bHighlightAll);
+
+/**
+ * lok_doc_view_highlight_all:
+ * @pDocView: The #LOKDocView instance
+ * @pText: text to search for
+ *
+ * Highlights all matching texts in the view. `search-not-found` signal
+ * will be emitted when no search is found
+ */
+void                           lok_doc_view_highlight_all          (LOKDocView* pDocView,
+                                                                    const gchar* pText);
+
 /**
  * lok_doc_view_pixel_to_twip:
  * @pDocView: The #LOKDocView instance
