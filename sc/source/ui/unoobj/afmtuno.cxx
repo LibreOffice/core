@@ -149,7 +149,7 @@ static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const OUStrin
     ScAutoFormat::const_iterator itBeg = rFormats.begin(), itEnd = rFormats.end();
     for (ScAutoFormat::const_iterator it = itBeg; it != itEnd; ++it)
     {
-        const ScAutoFormatData* pEntry = it->second;
+        const ScAutoFormatData *const pEntry = it->second.get();
         const OUString& aEntryName = pEntry->GetName();
         if ( aEntryName.equals(rName) )
         {
@@ -513,7 +513,7 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
     {
         ScAutoFormat::iterator it = pFormats->begin();
         std::advance(it, nFormatIndex);
-        ScAutoFormatData* pData = it->second;
+        ScAutoFormatData *const pData = it->second.get();
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         ScAutoFormatData* pNew = new ScAutoFormatData(*pData);

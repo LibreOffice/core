@@ -84,7 +84,7 @@ ScAutoFormatDlg::ScAutoFormatDlg(vcl::Window* pParent,
 
     Init();
     ScAutoFormat::iterator it = pFormat->begin();
-    m_pWndPreview->NotifyChange(it->second);
+    m_pWndPreview->NotifyChange(it->second.get());
 }
 
 ScAutoFormatDlg::~ScAutoFormatDlg()

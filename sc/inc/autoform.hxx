@@ -59,7 +59,9 @@
 #include "zforauto.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
+
+#include <memory>
+#include <map>
 
 /**
 A binary blob of writer-specific data. This data typically consists of types that are
@@ -313,8 +315,8 @@ struct DefaultFirstEntry {
 
 class SC_DLLPUBLIC ScAutoFormat
 {
-    typedef boost::ptr_map<OUString, ScAutoFormatData, DefaultFirstEntry> MapType;
-    MapType maData;
+    typedef std::map<OUString, std::unique_ptr<ScAutoFormatData>, DefaultFirstEntry> MapType;
+    MapType m_Data;
     bool mbSaveLater;
     ScAfVersions m_aVersions;
 
