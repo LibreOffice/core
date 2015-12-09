@@ -29,8 +29,6 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/settings.hxx>
 
-typedef tools::SvRef<SmDocShell> SmDocShellRef;
-
 SmElement::SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText) :
     mpNode(pNode),
     maText(aText),
