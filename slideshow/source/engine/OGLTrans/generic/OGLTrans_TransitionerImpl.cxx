@@ -574,8 +574,8 @@ void OGLTransitionerImpl::createTexture( GLuint* texID,
     glDeleteTextures( 1, texID );
     glGenTextures( 1, texID );
     glBindTexture( GL_TEXTURE_2D, *texID );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
     CHECK_GL_ERROR();
 
 #if defined( GLX_EXT_texture_from_pixmap )
