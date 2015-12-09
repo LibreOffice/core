@@ -36,10 +36,10 @@ struct SmCaretPos{
     int Index;
     /** True, if this is a valid caret position */
     bool IsValid() const { return pSelectedNode != nullptr; }
-    bool operator!=(SmCaretPos pos) const {
+    bool operator!=(const SmCaretPos &pos) const {
         return pos.pSelectedNode != pSelectedNode || Index != pos.Index;
     }
-    bool operator==(SmCaretPos pos) const {
+    bool operator==(const SmCaretPos &pos) const {
         return pos.pSelectedNode == pSelectedNode && Index == pos.Index;
     }
     /** Get the caret position after pNode, regardless of pNode
