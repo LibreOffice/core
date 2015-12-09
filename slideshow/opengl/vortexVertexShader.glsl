@@ -11,11 +11,23 @@
 
 #define M_PI 3.1415926535897932384626433832795
 
+attribute vec3 a_position;
+attribute vec3 a_normal;
+attribute vec2 a_texCoord;
+
+uniform mat4 u_projectionMatrix;
+uniform mat4 u_modelViewMatrix;
+uniform mat4 u_sceneTransformMatrix;
+uniform mat4 u_primitiveTransformMatrix;
+uniform mat4 u_operationsTransformMatrix;
+
+varying vec2 v_texturePosition;
+varying vec3 v_normal;
+
 uniform float time;
 uniform ivec2 numTiles;
 uniform sampler2D permTexture;
 attribute float tileInfo;
-varying vec2 v_texturePosition;
 varying float v_textureSelect;
 
 float snoise(vec2 p)
@@ -38,7 +50,8 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 void main( void )
 {
-    vec4 v = gl_Vertex;
+    vec4 v = vec4(a_position, 1.0);
+    vec4 normal = vec4(a_normal, 1.0);
 
     // Not sure it this is like what it should eventually be; just
     // experimenting to get at least something.
@@ -82,7 +95,9 @@ void main( void )
         float rotation = direction * (time - startTime) / (endTime - startTime);
 
         // Avoid z fighting
-        v = rotationMatrix(vec3(0, 1, 0), max(min(rotation, ALMOST_ONE), -ALMOST_ONE)*M_PI) * v;
+        mat4 matrix = rotationMatrix(vec3(0, 1, 0), max(min(rotation, ALMOST_ONE), -ALMOST_ONE)*M_PI);
+        v = matrix * v;
+        normal = matrix * normal;
 
         v_textureSelect = float(rotation > 0.5 || rotation < -0.5);
     }
@@ -91,14 +106,19 @@ void main( void )
         // At end location. Tile is 180 degrees rotated
 
         // Avoid z fighting
-        v = rotationMatrix(vec3(0, 1, 0), direction*ALMOST_ONE*M_PI) * v;
+        mat4 matrix = rotationMatrix(vec3(0, 1, 0), direction*ALMOST_ONE*M_PI);
+        v = matrix * v;
+        normal = matrix * normal;
 
         v_textureSelect = 1;
     }
 
-    gl_Position = gl_ModelViewProjectionMatrix * v;
+    mat4 modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
+    mat3 normalMatrix = mat3(transpose(inverse(modelViewMatrix)));
+    gl_Position = u_projectionMatrix * modelViewMatrix * v;
 
-    v_texturePosition = gl_MultiTexCoord0.xy;
+    v_texturePosition = a_texCoord;
+    v_normal = normalize(normalMatrix * vec3(normal));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
