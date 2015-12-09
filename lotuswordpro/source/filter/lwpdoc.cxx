@@ -224,7 +224,7 @@ void LwpDocument::RegisterStyle()
     rtl::Reference<LwpObject> pDocSock = GetSocket().obj();
     if(pDocSock.is())
     {
-        pDocSock->RegisterStyle();
+        pDocSock->DoRegisterStyle();
     }
 }
 /**
@@ -322,7 +322,7 @@ void LwpDocument::RegisterGraphicsStyles()
     if(pGraphic.is())
     {
         pGraphic->SetFoundry(m_pFoundry);
-        pGraphic->RegisterStyle();
+        pGraphic->DoRegisterStyle();
     }
 }
 /**
@@ -619,7 +619,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
     LwpDocument* pDivision = GetFirstDivision();
 
-    while (pDivision)
+    while (pDivision && pDivision != this)
     {
         LwpDocument* pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
         if(pContentDivision)
@@ -782,11 +782,11 @@ void LwpDocSock::RegisterStyle()
 {
     rtl::Reference<LwpObject> pDoc = GetNext().obj();
     if(pDoc.is())
-        pDoc->RegisterStyle();
+        pDoc->DoRegisterStyle();
 
     pDoc = GetChildHead().obj();
     if(pDoc.is())
-        pDoc->RegisterStyle();
+        pDoc->DoRegisterStyle();
 }
  /**
  * @descr    parse contents of documents plugged

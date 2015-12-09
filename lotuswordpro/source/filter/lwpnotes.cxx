@@ -92,7 +92,7 @@ void LwpFribNote::RegisterNewStyle()
         LwpFrib::RegisterStyle(m_pPara->GetFoundry());
         //register foonote style
         pLayout->SetFoundry(m_pPara->GetFoundry());
-        pLayout->RegisterStyle();
+        pLayout->DoRegisterStyle();
     }
 }
 
@@ -172,7 +172,7 @@ void LwpNoteLayout::RegisterStyle()
     if(pTextLayout)
     {
         pTextLayout->SetFoundry(GetFoundry());
-        pTextLayout->RegisterStyle();
+        pTextLayout->DoRegisterStyle();
     }
 }
 
@@ -284,7 +284,7 @@ void LwpNoteTextLayout::RegisterStyle()
     if(pContent.is())
     {
         pContent->SetFoundry(GetFoundry());
-        pContent->RegisterStyle();
+        pContent->DoRegisterStyle();
     }
 }
 
