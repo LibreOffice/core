@@ -43,7 +43,10 @@ public:
 
     static rtl::OString GetDigest(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const rtl::OString& preamble = "" );
 
-    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const rtl::OString& preamble = "", const rtl::OString& rDigest = "" );
+    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OUString& rGeometryShaderName, const rtl::OString& preamble, const rtl::OString& rDigest );
+    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const rtl::OString& preamble, const rtl::OString& rDigest );
+    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OUString& rGeometryShaderName);
+    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
 
     /**
      * The caller is responsible for allocate the memory for the RGBA buffer, before call
