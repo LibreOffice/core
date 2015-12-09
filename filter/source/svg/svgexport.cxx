@@ -1010,6 +1010,18 @@ bool SVGFilter::implGenerateMetaData()
             const OUString                aElemTextFieldId( aOOOElemTextField );
             std::vector< TextField* >     aFieldSet;
 
+            // dummy slide - used as leaving slide for transition on the first slide
+            if( mbPresentation )
+            {
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", NSPREFIX "meta_dummy_slide" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, "dummy-slide" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMaster, "dummy-master-page" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrBackgroundVisibility, "hidden" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMasterObjectsVisibility, "hidden" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrHasTransition, "false" );
+                SvXMLElementExport aMetaDummySlideElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+            }
+
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
                 const Reference< XDrawPage > &    xDrawPage = mSelectedPages[i];
@@ -1487,6 +1499,27 @@ bool SVGFilter::implExportMasterPages( const std::vector< Reference< XDrawPage >
     OUString aContainerTag = (!mbPresentation) ? OUString( "g" ) : OUString( "defs" );
     SvXMLElementExport aContainerElement( *mpSVGExport, XML_NAMESPACE_NONE, aContainerTag, true, true );
 
+    // dummy slide - used as leaving slide for transition on the first slide
+    if( mbPresentation )
+    {
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "dummy-master-page" );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, "dummy-master-page" );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Master_Slide" );
+        SvXMLElementExport aMasterSlideElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+        {
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "bg-dummy-master-page" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Background" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
+            SvXMLElementExport aBackgroundElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+        }
+        {
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "bo-dummy-master-page" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "BackgroundObjects" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
+            SvXMLElementExport aBackgroundObjectElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+        }
+    }
+
     bool bRet = false;
     for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
     {
@@ -1514,6 +1547,28 @@ bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPage
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
                 "SVGFilter::implExportDrawPages: nFirstPage > nLastPage" );
+
+    // dummy slide - used as leaving slide for transition on the first slide
+    if( mbPresentation )
+    {
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "DummySlide" );
+        SvXMLElementExport aDummySlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+        {
+           SvXMLElementExport aGElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+            {
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "dummy-slide" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Slide" );
+                OUString sClipPathAttrValue = "url(#" + msClipPathId + ")";
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
+                SvXMLElementExport aSlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+                {
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, "dummy-page" );
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Page" );
+                    SvXMLElementExport aPageElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+                }
+            }
+        }
+    }
 
     // We wrap all slide in a group element with class name "SlideGroup".
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "SlideGroup" );

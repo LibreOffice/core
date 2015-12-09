@@ -99,16 +99,16 @@ public:
         svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
 
         assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG ), 1);
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1] ), "class", "SlideGroup");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G ), "class", "Slide");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_G[1] ), "class", "TitleText");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT ), "class", "TextShape");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "underline");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2] ), "class", "SlideGroup");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G ), "class", "Slide");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[1] ), "class", "TitleText");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT ), "class", "TextShape");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "underline");
 
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT ), "class", "TextShape");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
-        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "line-through");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT ), "class", "TextShape");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "line-through");
     }
 
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
