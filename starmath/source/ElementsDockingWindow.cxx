@@ -24,6 +24,7 @@
 #include <view.hxx>
 #include <visitors.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -459,8 +460,7 @@ void SmElementsControl::DoScroll(long nDelta)
 
 void SmElementsControl::addSeparator()
 {
-    SmElementPointer pElement(new SmElementSeparator());
-    maElementList.push_back(pElement);
+    maElementList.push_back(o3tl::make_unique<SmElementSeparator>());
 }
 
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
@@ -480,8 +480,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
         maMaxElementDimensions.Height() = aSizePixel.Height();
     }
 
-    SmElementPointer pElement(new SmElement(pNode, aElementSource, aHelpText));
-    maElementList.push_back(pElement);
+    maElementList.push_back(o3tl::make_unique<SmElement>(pNode, aElementSource, aHelpText));
 }
 
 void SmElementsControl::setElementSetId(sal_uInt16 aSetId)
