@@ -399,8 +399,13 @@ void    LwpFontNameManager::Override(sal_uInt16 index, rtl::Reference<XFFont> co
     if(m_pFontNames[index-1].IsAltFaceNameOverridden())
         pFont->SetFontNameAsia(m_FontTbl.GetFaceName(m_pFontNames[index-1].GetAltFaceID()));
 }
+
 OUString LwpFontNameManager::GetNameByIndex(sal_uInt16 index)
+    //index: start from 1
 {
+    if (index > m_nCount || index < 1)
+        return OUString();
+
     sal_uInt16 nameindex = m_pFontNames[index-1].GetFaceID();
     return (m_FontTbl.GetFaceName(nameindex));
 }
