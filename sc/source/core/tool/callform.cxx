@@ -25,6 +25,8 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <o3tl/make_unique.hxx>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <memory>
 
 #include "callform.hxx"
@@ -398,34 +400,40 @@ bool LegacyFuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 
 }
 
 LegacyFuncCollection::LegacyFuncCollection() {}
-LegacyFuncCollection::LegacyFuncCollection(const LegacyFuncCollection& r) : maData(r.maData) {}
+LegacyFuncCollection::LegacyFuncCollection(const LegacyFuncCollection& r)
+{
+    for (auto const& it : r.m_Data)
+    {
+        m_Data.insert(std::make_pair(it.first, o3tl::make_unique<LegacyFuncData>(*it.second)));
+    }
+}
 
 const LegacyFuncData* LegacyFuncCollection::findByName(const OUString& rName) const
 {
-    MapType::const_iterator it = maData.find(rName);
-    return it == maData.end() ? nullptr : it->second;
+    MapType::const_iterator it = m_Data.find(rName);
+    return it == m_Data.end() ? nullptr : it->second.get();
 }
 
 LegacyFuncData* LegacyFuncCollection::findByName(const OUString& rName)
 {
-    MapType::iterator it = maData.find(rName);
-    return it == maData.end() ? nullptr : it->second;
+    MapType::iterator it = m_Data.find(rName);
+    return it == m_Data.end() ? nullptr : it->second.get();
 }
 
 void LegacyFuncCollection::insert(LegacyFuncData* pNew)
 {
     OUString aName = pNew->GetInternalName();
-    maData.insert(aName, pNew);
+    m_Data.insert(std::make_pair(aName, std::unique_ptr<LegacyFuncData>(pNew)));
 }
 
 LegacyFuncCollection::const_iterator LegacyFuncCollection::begin() const
 {
-    return maData.begin();
+    return m_Data.begin();
 }
 
 LegacyFuncCollection::const_iterator LegacyFuncCollection::end() const
 {
-    return maData.end();
+    return m_Data.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

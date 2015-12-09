@@ -451,7 +451,7 @@ ScFunctionList::ScFunctionList() :
     LegacyFuncCollection::const_iterator it = rLegacyFuncColl.begin(), itEnd = rLegacyFuncColl.end();
     for (; it != itEnd; ++it)
     {
-        const LegacyFuncData* pLegacyFuncData = it->second;
+        const LegacyFuncData *const pLegacyFuncData = it->second.get();
         pDesc = new ScFuncDesc;
         sal_uInt16 nArgs = pLegacyFuncData->GetParamCount() - 1;
         pLegacyFuncData->getParamDesc( aArgName, aArgDesc, 0 );

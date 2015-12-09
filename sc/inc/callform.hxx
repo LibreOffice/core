@@ -22,7 +22,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
+#include <map>
 
 #define MAXFUNCPARAM    16
 #define MAXARRSIZE      0xfffe
@@ -86,8 +87,9 @@ public:
 
 class LegacyFuncCollection
 {
-    typedef boost::ptr_map<OUString, LegacyFuncData> MapType;
-    MapType maData;
+    typedef std::map<OUString, std::unique_ptr<LegacyFuncData>> MapType;
+    MapType m_Data;
+
 public:
     typedef MapType::const_iterator const_iterator;
 
