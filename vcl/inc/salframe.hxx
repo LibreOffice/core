@@ -70,20 +70,20 @@ enum class SalFrameStyleFlags
     OWNERDRAWDECORATION = 0x00000040,
     // dialogs
     DIALOG              = 0x00000080,
-    // partial fullscreen: fullscreen on one monitor of a multimonitor display
-    PARTIAL_FULLSCREEN  = 0x00800000,
-    // plugged system child window
-    PLUG                = 0x10000000,
-    // system child window inside another SalFrame
-    SYSTEMCHILD         = 0x08000000,
-    // floating window
-    FLOAT               = 0x20000000,
-    // floating window that needs to be focusable
-    FLOAT_FOCUSABLE     = 0x04000000,
-    // toolwindows should be painted with a smaller decoration
-    TOOLWINDOW          = 0x40000000,
     // the window containing the intro bitmap, aka splashscreen
     INTRO               = 0x00000100,
+    // partial fullscreen: fullscreen on one monitor of a multimonitor display
+    PARTIAL_FULLSCREEN  = 0x00800000,
+    // floating window that needs to be focusable
+    FLOAT_FOCUSABLE     = 0x04000000,
+    // system child window inside another SalFrame
+    SYSTEMCHILD         = 0x08000000,
+    // plugged system child window
+    PLUG                = 0x10000000,
+    // floating window
+    FLOAT               = 0x20000000,
+    // toolwindows should be painted with a smaller decoration
+    TOOLWINDOW          = 0x40000000,
 };
 namespace o3tl {
     template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x7c8001ff> {};
