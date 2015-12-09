@@ -14,19 +14,27 @@ uniform sampler2D enteringSlideTexture;
 uniform float time;
 varying vec2 v_texturePosition;
 varying float v_textureSelect;
+varying vec3 v_normal;
 
 void main()
 {
+    vec3 lightVector = vec3(0.0, 0.0, 1.0);
+    float light = abs(dot(lightVector, v_normal));
+    vec4 fragment;
+
     if (v_textureSelect == 0)
     {
-        gl_FragColor = texture2D(leavingSlideTexture, v_texturePosition);
+        fragment = texture2D(leavingSlideTexture, v_texturePosition);
     }
     else
     {
         vec2 pos = v_texturePosition;
         pos.x = 1 - pos.x;
-        gl_FragColor = texture2D(enteringSlideTexture, pos);
+        fragment = texture2D(enteringSlideTexture, pos);
     }
+
+    vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
+    gl_FragColor = mix(black, fragment, light);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
