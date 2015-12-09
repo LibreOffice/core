@@ -3847,6 +3847,16 @@ bool Window::CompatNotify( NotifyEvent& rNEvt )
         return Notify( rNEvt );
 }
 
+void Window::set_id(const OUString& rID)
+{
+    mpWindowImpl->maID = rID;
+}
+
+const OUString& Window::get_id() const
+{
+    return mpWindowImpl->maID;
+}
+
 } /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
