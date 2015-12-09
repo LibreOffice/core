@@ -148,7 +148,7 @@ void Lwp9Reader::ParseDocument()
 
     //Register Styles
     RegisteArrowStyles();
-    doc->RegisterStyle();
+    doc->DoRegisterStyle();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pXFStyleManager->ToXml(m_pStream);
 
