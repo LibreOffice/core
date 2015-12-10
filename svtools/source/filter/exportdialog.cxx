@@ -52,7 +52,6 @@
 #define FORMAT_WMF      12
 #define FORMAT_EMF      13
 #define FORMAT_EPS      14
-#define FORMAT_MET      15
 #define FORMAT_SVG      16
 
 #define UNIT_DEFAULT    -1
@@ -84,8 +83,6 @@ static sal_Int16 GetFilterFormat(const OUString& rExt)
         nFormat = FORMAT_EMF;
     else if ( rExt == "EPS" )
         nFormat = FORMAT_EPS;
-    else if ( rExt == "MET" )
-        nFormat = FORMAT_MET;
     else if ( rExt == "SVG" )
         nFormat = FORMAT_SVG;
     return nFormat;

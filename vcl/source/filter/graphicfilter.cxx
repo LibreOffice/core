@@ -1823,7 +1823,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
 #ifndef DISABLE_EXPORT
 
 extern "C" bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool emeGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
@@ -2115,8 +2114,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 OUString tmpFilterName = aExternalFilterName;
                 if (tmpFilterName == "egi")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("egiGraphicExport"));
-                else if (tmpFilterName == "eme")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("emeGraphicExport"));
                 else if (tmpFilterName == "eps")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epsGraphicExport"));
                 else if (tmpFilterName == "eti")
@@ -2126,8 +2123,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 PFilterCall pFunc = NULL;
                 if (aFilterName == "egi")
                     pFunc = egiGraphicExport;
-                else if (aFilterName == "eme")
-                    pFunc = emeGraphicExport;
                 else if (aFilterName == "eps")
                     pFunc = epsGraphicExport;
                 else if (aFilterName == "eti")
