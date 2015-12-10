@@ -87,7 +87,7 @@ namespace sw
             virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) =0;
         public:
             bool IsLast() const { return !m_pLeft && !m_pRight; }
-   };
+    };
 }
 // SwClient
 class SW_DLLPUBLIC SwClient : ::sw::WriterListener

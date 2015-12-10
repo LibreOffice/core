@@ -232,13 +232,13 @@ class SwDrawVirtObj : public SdrVirtObj
          inserted into the drawing layer. */
         SwDrawContact&  mrDrawContact;
 
-   protected:
+    protected:
         /** AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
          not used but something own (top left of new SnapRect minus top left
          of original SnapRect) */
         virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
-   public:
+    public:
 
         SwDrawVirtObj( SdrObject&       _rNewObj,
                        SwDrawContact&   _rDrawContact );

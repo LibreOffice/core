@@ -2380,7 +2380,7 @@ DECLARE_RTFIMPORT_TEST(testTdf54584, "tdf54584.rtf")
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     // \PAGE was ignored, so no fields were in document -> exception was thrown
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("No fields in document found: field \"\\PAGE\" was not properly read",
-        xFields->nextElement());
+                                    xFields->nextElement());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
