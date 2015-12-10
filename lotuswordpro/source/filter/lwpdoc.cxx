@@ -294,7 +294,7 @@ void LwpDocument::RegisterStylesInPara()
         {
             //Register the child para
             pStory->SetFoundry(m_pFoundry);
-            pStory->RegisterStyle();
+            pStory->DoRegisterStyle();
             pStory = dynamic_cast<LwpStory*>(pStory->GetNext().obj(VO_STORY).get());
         }
     }

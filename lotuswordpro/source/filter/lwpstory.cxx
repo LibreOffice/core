@@ -134,7 +134,7 @@ void LwpStory::RegisterStyle()
     while(pPara)
     {
         pPara->SetFoundry(m_pFoundry);
-        pPara->RegisterStyle();
+        pPara->DoRegisterStyle();
         pPara = dynamic_cast<LwpPara*>(pPara->GetNext().obj().get());
     }
 }

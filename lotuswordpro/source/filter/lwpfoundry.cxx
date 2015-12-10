@@ -219,18 +219,21 @@ void LwpFoundry::RegisterAllLayouts()
 
 LwpBookMark* LwpFoundry::GetBookMark(LwpObjectID objMarker)
 {
-    LwpDLVListHeadHolder* pHeadHolder= static_cast
+    LwpDLVListHeadHolder* pHeadHolder= dynamic_cast
                     <LwpDLVListHeadHolder*>(m_BookMarkHead.obj().get());
+
+    if (!pHeadHolder)
+        return nullptr;
+
     LwpObjectID& rObjID = pHeadHolder->GetHeadID();
-    LwpBookMark* pBookMark;
-    pBookMark = static_cast<LwpBookMark*>(rObjID.obj().get());
+    LwpBookMark* pBookMark = dynamic_cast<LwpBookMark*>(rObjID.obj().get());
 
     while (pBookMark)
     {
         if (pBookMark->IsRightMarker(objMarker))
             return pBookMark;
         rObjID = pBookMark->GetNext();
-        pBookMark = static_cast<LwpBookMark*>(rObjID.obj().get());
+        pBookMark = dynamic_cast<LwpBookMark*>(rObjID.obj().get());
     }
     return nullptr;
 }
@@ -475,23 +478,22 @@ LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)
 {
     LwpListList* pList = nullptr;
     if(pLast)
-        pList = static_cast<LwpListList*>(pLast->GetNext().obj().get());
+        pList = dynamic_cast<LwpListList*>(pLast->GetNext().obj().get());
     else
     {
-        LwpDLVListHeadHolder* pHeadHolder= static_cast<LwpDLVListHeadHolder*>(m_Head.obj().get());
+        LwpDLVListHeadHolder* pHeadHolder= dynamic_cast<LwpDLVListHeadHolder*>(m_Head.obj().get());
         if(pHeadHolder)
         {
-            pList = static_cast<LwpListList*>(pHeadHolder->GetHeadID().obj().get());
+            pList = dynamic_cast<LwpListList*>(pHeadHolder->GetHeadID().obj().get());
         }
     }
 
     while(pList)
     {
-        LwpContent* pContent = static_cast<LwpContent*>(pList->GetObject().obj().get());
-        if(pContent && pContent->HasNonEmbeddedLayouts() &&
-            !pContent->IsStyleContent())
+        LwpContent* pContent = dynamic_cast<LwpContent*>(pList->GetObject().obj().get());
+        if (pContent && pContent->HasNonEmbeddedLayouts() && !pContent->IsStyleContent())
             return pList;
-        pList = static_cast<LwpListList*>(pList->GetNext().obj().get());
+        pList = dynamic_cast<LwpListList*>(pList->GetNext().obj().get());
     }
     return nullptr;
 }
