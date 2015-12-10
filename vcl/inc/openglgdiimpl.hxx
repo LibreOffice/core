@@ -158,7 +158,7 @@ public:
     void PostDraw();
 
 protected:
-    bool AcquireContext();
+    bool AcquireContext(bool bForceCreate = false);
     bool ReleaseContext();
 
     /// retrieve the default context for offscreen rendering
