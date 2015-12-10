@@ -903,7 +903,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleMode()
         return GetLayoutScale()->GetScaleMode();
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout*>(xBase.get())->GetScaleMode();
+        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleMode();
     else
         return (LwpLayoutScale::FIT_IN_FRAME | LwpLayoutScale::MAINTAIN_ASPECT_RATIO);
 }
@@ -915,7 +915,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleTile()
             ? 1 : 0;
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout*>(xBase.get())->GetScaleTile();
+        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleTile();
     else
         return 0;
 }
@@ -927,7 +927,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleCenter()
             ? 1 : 0;
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout*>(xBase.get())->GetScaleCenter();
+        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleCenter();
     else
         return 0;
 }
@@ -938,7 +938,7 @@ sal_uInt32 LwpMiddleLayout::GetScalePercentage()
         return GetLayoutScale()->GetScalePercentage()/10;//m_nScalePercentage 1000 = 100%
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout*>(xBase.get())->GetScalePercentage();
+        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScalePercentage();
     else
         return 100;
 }
@@ -949,7 +949,7 @@ double LwpMiddleLayout::GetScaleWidth()
         return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleWidth());
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout*>(xBase.get())->GetScaleWidth();
+        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleWidth();
     else
         return 0;
 }
@@ -960,7 +960,7 @@ double LwpMiddleLayout::GetScaleHeight()
         return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleHeight());
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout*>(xBase.get())->GetScaleHeight();
+        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleHeight();
     else
         return 0;
 }
