@@ -89,7 +89,7 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
         a_dstlist = XVaCreateNestedList(
                                         0,
                                         name,           value,
-                                        NULL );
+                                        nullptr );
     }
     else
     {
@@ -97,7 +97,7 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
                                         0,
                                         XNVaNestedList, a_srclist,
                                         name,           value,
-                                        NULL );
+                                        nullptr );
     }
 
     return a_dstlist != nullptr ? a_dstlist : a_srclist ;
@@ -212,7 +212,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                                                           XNStatusStartCallback, &aStatusStartCallback,
                                                           XNStatusDoneCallback,  &aStatusDoneCallback,
                                                           XNStatusDrawCallback,  &aStatusDrawCallback,
-                                                          NULL );
+                                                          nullptr );
 
                 break;
             }
@@ -249,7 +249,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                                                            XNPreeditDoneCallback,  &maPreeditDoneCallback,
                                                            XNPreeditDrawCallback,   &maPreeditDrawCallback,
                                                            XNPreeditCaretCallback, &maPreeditCaretCallback,
-                                                           NULL );
+                                                           nullptr );
 
                 break;
 
@@ -271,7 +271,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 mpPreeditAttributes = XVaCreateNestedList (
                                                            0,
                                                            XNSpotLocation, &aSpot,
-                                                           NULL );
+                                                           nullptr );
 
                 // XCreateIC() fails on Redflag Linux 2.0 if there is no
                 // fontset though the data itself is not evaluated nor is
@@ -304,7 +304,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                                            XNFocusWindow,       aFocusWindow,
                                            XNClientWindow,      aClientWindow,
                                            XNInputStyle,        mnPreeditStyle | mnStatusStyle,
-                                           NULL );
+                                           nullptr );
 
         if ( mnPreeditStyle != XIMPreeditNone )
         {
@@ -324,7 +324,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         }
         maContext = XCreateIC( pInputMethod->GetMethod(),
                                XNVaNestedList, mpAttributes,
-                               NULL );
+                               nullptr );
     }
 
     if ( maContext == nullptr )
@@ -359,7 +359,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
         XSetICValues( maContext,
                       XNDestroyCallback,      &maDestroyCallback,
-                      NULL );
+                      nullptr );
     }
 }
 
@@ -397,7 +397,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
 
                 maContext = XCreateIC( pInputMethod->GetMethod(),
                                        XNVaNestedList, mpAttributes,
-                                       NULL );
+                                       nullptr );
             }
             if( maClientData.pFrame != pFrame )
                 SetICFocus( pFrame );
@@ -432,7 +432,7 @@ SalI18N_InputContext::ExtendEventMask( ::Window aFocusWindow )
                               &aWindowAttributes );
         XGetICValues ( maContext,
                        XNFilterEvents, &nIMEventMask,
-                       NULL);
+                       nullptr);
         nIMEventMask |= aWindowAttributes.your_event_mask;
         XSelectInput ( pDisplay, aFocusWindow, nIMEventMask );
     }
@@ -564,8 +564,8 @@ SalI18N_InputContext::UpdateSpotLocation()
     aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
     aSpot.y = aPosEvent.mnY + aPosEvent.mnHeight;
 
-    XVaNestedList preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &aSpot, NULL);
-    XSetICValues(maContext, XNPreeditAttributes, preedit_attr, NULL);
+    XVaNestedList preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &aSpot, nullptr);
+    XSetICValues(maContext, XNPreeditAttributes, preedit_attr, nullptr);
     XFree(preedit_attr);
 
     I18NStatus::get().show( true, I18NStatus::contextmap );
@@ -592,7 +592,7 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
         XSetICValues( maContext,
                       XNFocusWindow,       aFocusWindow,
                       XNClientWindow,      aClientWindow,
-                      NULL );
+                      nullptr );
 
         if( maClientData.aInputEv.mpTextAttr )
         {

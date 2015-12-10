@@ -86,7 +86,7 @@ std::vector<_Span> toSpanArray( const mdds::flat_segment_tree<_Key,bool>& rTree 
     std::vector<_Span> aSpans;
 
     typename FstType::const_iterator it = rTree.begin(), itEnd = rTree.end();
-    buildSpan<_Key,_Span>(aSpans, it, itEnd, NULL);
+    buildSpan<_Key,_Span>(aSpans, it, itEnd, nullptr);
     return aSpans;
 }
 
@@ -105,7 +105,7 @@ std::vector<_Span> toSpanArrayWithValue( const mdds::flat_segment_tree<_Key,_Val
     std::vector<_Span> aSpans;
 
     typename FstType::const_iterator it = rTree.begin(), itEnd = rTree.end();
-    buildSpanWithValue<_Key,_Val,_Span>(aSpans, it, itEnd, NULL);
+    buildSpanWithValue<_Key,_Val,_Span>(aSpans, it, itEnd, nullptr);
     return aSpans;
 }
 

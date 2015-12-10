@@ -62,7 +62,7 @@ class CheckedIterator
 
         inline CheckedIterator()
                 :   m_eEndState ( E_UNKNOWN )
-                ,   m_pContainer( NULL      )
+                ,   m_pContainer( nullptr      )
         {
         }
 
@@ -81,7 +81,7 @@ class CheckedIterator
         inline CheckedIterator& operator++()
         {
             // Warn programmer if he forget to initailize object!
-            SAL_WARN_IF( m_pContainer==NULL, "fwk", "CheckedIterator::operator++(): Object not initialized!" );
+            SAL_WARN_IF( m_pContainer==nullptr, "fwk", "CheckedIterator::operator++(): Object not initialized!" );
             // Step to next element if any exist or set our end states.
             switch( m_eEndState )
             {

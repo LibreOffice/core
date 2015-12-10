@@ -70,7 +70,7 @@ public:
 template < typename ImplObject >
     ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< css::uno::XInterface >& rxWrapperIf, bool bThrow = true ) throw (css::uno::RuntimeException)
     {
-        ImplObject* pObj = NULL;
+        ImplObject* pObj = nullptr;
         css::uno::Reference< css::lang::XUnoTunnel >  xTunnel( rxWrapperIf, css::uno::UNO_QUERY );
         if ( xTunnel.is() )
             pObj = reinterpret_cast<ImplObject*>( xTunnel->getSomething(ImplObject::getUnoTunnelId()));

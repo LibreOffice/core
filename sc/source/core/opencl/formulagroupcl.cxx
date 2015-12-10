@@ -1119,7 +1119,7 @@ public:
             cl_int err;
             err = clReleaseMemObject(mpClmem2);
             SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
-            mpClmem2 = NULL;
+            mpClmem2 = nullptr;
         }
     }
 
@@ -1486,7 +1486,7 @@ public:
 
     virtual size_t Marshal( cl_kernel k, int argno, int w, cl_program mpProgram )
     {
-        assert(Base::mpClmem == NULL);
+        assert(Base::mpClmem == nullptr);
         // Obtain cl context
         ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
@@ -1494,7 +1494,7 @@ public:
         size_t nInput = mpDVR->GetArrayLength();
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         // create clmem buffer
-        if (mpDVR->GetArrays()[Base::mnIndex].mpNumericArray == NULL)
+        if (mpDVR->GetArrays()[Base::mnIndex].mpNumericArray == nullptr)
             throw Unhandled();
         double* pHostBuffer = const_cast<double*>(
             mpDVR->GetArrays()[Base::mnIndex].mpNumericArray);
@@ -1565,14 +1565,14 @@ public:
             double* resbuf = static_cast<double*>(clEnqueueMapBuffer(kEnv.mpkCmdQueue,
                 mpClmem2,
                 CL_TRUE, CL_MAP_READ, 0,
-                sizeof(double) * w, 0, NULL, NULL,
+                sizeof(double) * w, 0, nullptr, nullptr,
                 &err));
             if (err != CL_SUCCESS)
                 throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
             for (int i = 0; i < w; i++)
                 pAllBuffer[i] = resbuf[i];
-            err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem2, resbuf, 0, NULL, NULL);
+            err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem2, resbuf, 0, nullptr, nullptr);
             if (err != CL_SUCCESS)
                 throw OpenCLError("clEnqueueUnmapMemObject", err, __FILE__, __LINE__);
 
@@ -1619,13 +1619,13 @@ public:
             resbuf = static_cast<double*>(clEnqueueMapBuffer(kEnv.mpkCmdQueue,
                 mpClmem2,
                 CL_TRUE, CL_MAP_READ, 0,
-                sizeof(double) * w, 0, NULL, NULL,
+                sizeof(double) * w, 0, nullptr, nullptr,
                 &err));
             if (err != CL_SUCCESS)
                 throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
             for (int i = 0; i < w; i++)
                 pAllBuffer[i + w] = resbuf[i];
-            err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem2, resbuf, 0, NULL, NULL);
+            err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem2, resbuf, 0, nullptr, nullptr);
             // FIXME: Is it intentional to not throw an OpenCLError even if the clEnqueueUnmapMemObject() fails?
             if (CL_SUCCESS != err)
                 SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << ::opencl::errorString(err));
@@ -1633,7 +1633,7 @@ public:
             {
                 err = clReleaseMemObject(mpClmem2);
                 SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
-                mpClmem2 = NULL;
+                mpClmem2 = nullptr;
             }
             mpClmem2 = clCreateBuffer(kEnv.mpkContext,
                 (cl_mem_flags)CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
@@ -1656,7 +1656,7 @@ public:
             cl_int err;
             err = clReleaseMemObject(mpClmem2);
             SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
-            mpClmem2 = NULL;
+            mpClmem2 = nullptr;
         }
     }
 

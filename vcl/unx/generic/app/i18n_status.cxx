@@ -470,7 +470,7 @@ IMPL_LINK_TYPED( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn, void )
             XSetICValues( static_cast<X11SalFrame*>(I18NStatus::get().getParent())->getInputContext()->GetContext(),
                           XNUnicodeCharacterSubset,
                           rChoices[nIndex].pData,
-                          NULL);
+                          nullptr);
             // FIXME: get rid of X11SalFrame
             X11SalFrame* pParent = static_cast<X11SalFrame*>(I18NStatus::get().getParent());
             if( pParent && pParent->isMapped() )

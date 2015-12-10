@@ -275,7 +275,7 @@ public:
     /// Default constructor
     RegistryValueList()
         : m_length(0)
-        , m_pValueList(NULL)
+        , m_pValueList(nullptr)
         , m_valueType(RegValueType::NOT_DEFINED)
         {}
 

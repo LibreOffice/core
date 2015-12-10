@@ -107,7 +107,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 char* pWindow       = pMessage->GetString();
                 NPError aRet = NPN_GetURL( instance, pUrl, pWindow );
                 Respond( pMessage->m_nID,
-                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), NULL );
+                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), nullptr );
                 delete [] pUrl;
                 delete [] pWindow;
             }
@@ -122,7 +122,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 NPError aRet = NPN_GetURLNotify( instance, pUrl, pWindow,
                                                  *pNotifyData );
                 Respond( pMessage->m_nID,
-                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), NULL );
+                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), nullptr );
                 delete [] pUrl;
                 delete [] pWindow;
                 delete [] pNotifyData;
@@ -158,7 +158,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                         "nonexistent StreamID " << nFileID);
 
                 Respond( pMessage->m_nID,
-                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), NULL );
+                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), nullptr );
 
                 delete [] pUrl;
                 delete [] pReason;
@@ -183,7 +183,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                              "", 0,
                              &nDummy, sizeof(sal_uInt32),
                              &nDummy, sizeof(sal_uInt32),
-                             NULL );
+                             nullptr );
                 }
                 else
                 {
@@ -195,7 +195,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                              pStream->url, nLen,
                              &pStream->end, sizeof(sal_uInt32),
                              &pStream->lastmodified, sizeof(sal_uInt32),
-                             NULL );
+                             nullptr );
                 }
 
                 delete [] pTarget;
@@ -214,7 +214,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 void** pNData   = static_cast<void**>(pMessage->GetBytes());
                 NPError aRet =
                     NPN_PostURLNotify( instance, pUrl, pTarget, nLen, pBuf, *pFile, *pNData );
-                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), nullptr );
                 delete [] pUrl;
                 delete [] pTarget;
                 delete [] pBuf;
@@ -233,7 +233,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 NPBool* pFile   = static_cast<NPBool*>(pMessage->GetBytes());
                 NPError aRet =
                     NPN_PostURL( instance, pUrl, pWindow, nLen, pBuf, *pFile );
-                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), nullptr );
                 delete [] pUrl;
                 delete [] pWindow;
                 delete [] pBuf;
@@ -257,7 +257,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                     pRun = pRun->next;
                 }
                 NPError aRet = NPN_RequestRead( pStream, pFirst );
-                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), nullptr );
                 while( pFirst )
                 {
                     pRun = pFirst->next;
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                          &minor, sizeof( int ),
                          &net_major, sizeof( int ),
                          &net_minor, sizeof( int ),
-                         NULL );
+                         nullptr );
             }
             break;
             case eNPN_Write:
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 sal_Int32 nRet = NPN_Write( instance, pStream, nLen, pBuffer );
                 Respond( pMessage->m_nID,
                          reinterpret_cast<char*>(&nRet), sizeof( nRet ),
-                         NULL );
+                         nullptr );
                 delete [] static_cast<char*>(pBuffer);
                 delete instance;
             }
@@ -311,7 +311,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 const char* pAnswer = NPN_UserAgent( instance );
                 Respond( pMessage->m_nID,
                          const_cast<char*>(pAnswer), strlen( pAnswer ),
-                         NULL );
+                         nullptr );
             }
             break;
             default:
@@ -343,14 +343,14 @@ NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
     MediatorMessage* pMes =
         Transact( eNPP_Destroy,
                   POST_INSTANCE(),
-                  NULL );
+                  nullptr );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
     delete pMes;
 
     pMes = Transact( eNPP_DestroyPhase2,
                      POST_INSTANCE(),
-                     NULL );
+                     nullptr );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
@@ -383,7 +383,7 @@ NPError UnxPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPErro
                   POST_INSTANCE(),
                   &nFileID, sizeof( nFileID ),
                   &reason, sizeof( reason ),
-                  NULL );
+                  nullptr );
     m_aNPWrapStreams.erase( m_aNPWrapStreams.begin() + nFileID );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
@@ -397,7 +397,7 @@ NPError UnxPluginComm::NPP_Initialize()
 {
     MediatorMessage* pMes =
         Transact( eNPP_Initialize,
-                  NULL );
+                  nullptr );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
@@ -445,7 +445,7 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mo
                       pArgnBuf, nArgnLen,
                       pArgvBuf, nArgvLen,
                       saved->buf, static_cast<size_t>(saved->len),
-                      NULL );
+                      nullptr );
     else
         pMes =
             Transact( eNPP_New,
@@ -455,7 +455,7 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mo
                       pArgnBuf, nArgnLen,
                       pArgvBuf, nArgvLen,
                       "0000", size_t(4),
-                      NULL );
+                      nullptr );
     delete [] pArgnBuf;
     delete [] pArgvBuf;
     if( ! pMes )
@@ -482,7 +482,7 @@ NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
                   &stream->end, sizeof( stream->end ),
                   &stream->lastmodified, sizeof( stream->lastmodified ),
                   &seekable, sizeof( seekable ),
-                  NULL );
+                  nullptr );
 
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
@@ -505,7 +505,7 @@ NPError UnxPluginComm::NPP_SetWindow( NPP instance, NPWindow* window )
         Transact( eNPP_SetWindow,
                   POST_INSTANCE(),
                   window, sizeof( NPWindow ),
-                  NULL );
+                  nullptr );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
@@ -516,7 +516,7 @@ NPError UnxPluginComm::NPP_SetWindow( NPP instance, NPWindow* window )
 
 void UnxPluginComm::NPP_Shutdown()
 {
-    Send( eNPP_Shutdown, NULL );
+    Send( eNPP_Shutdown, nullptr );
 }
 
 void UnxPluginComm::NPP_StreamAsFile( NPP instance, NPStream* stream, const char* fname )
@@ -530,7 +530,7 @@ void UnxPluginComm::NPP_StreamAsFile( NPP instance, NPStream* stream, const char
           POST_INSTANCE(),
           &nFileID, sizeof( nFileID ),
           fname, strlen( fname ),
-          NULL );
+          nullptr );
 }
 
 void UnxPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reason, void* notifyData )
@@ -542,7 +542,7 @@ void UnxPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reaso
           url, strlen( url ),
           &reason, sizeof( reason ),
           &notifyData, sizeof( void* ),
-          NULL );
+          nullptr );
 }
 
 int32_t UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer )
@@ -558,7 +558,7 @@ int32_t UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32_t offset
                   &nFileID, sizeof( nFileID ),
                   &offset, sizeof( offset ),
                   buffer, static_cast<size_t>(len),
-                  NULL );
+                  nullptr );
     if( ! pMes )
         return 0;
 
@@ -579,7 +579,7 @@ int32_t UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
         Transact( eNPP_WriteReady,
                   POST_INSTANCE(),
                   &nFileID, sizeof( nFileID ),
-                  NULL );
+                  nullptr );
 
     if( ! pMes )
         return 0;

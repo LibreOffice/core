@@ -184,7 +184,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         gtk_cell_layout_pack_start(
                 GTK_CELL_LAYOUT(m_pLists[i]), pCell, TRUE);
         gtk_cell_layout_set_attributes(
-            GTK_CELL_LAYOUT (m_pLists[i]), pCell, "text", 0, NULL);
+            GTK_CELL_LAYOUT (m_pLists[i]), pCell, "text", 0, nullptr);
 
         m_pListLabels[i] = gtk_label_new( "" );
 

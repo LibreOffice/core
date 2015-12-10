@@ -397,8 +397,8 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
     point.y = mPosEvent.mnY + mPosEvent.mnHeight;
 
     XVaNestedList preedit_attr;
-    preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &point, NULL);
-    XSetICValues(ic, XNPreeditAttributes, preedit_attr, NULL);
+    preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &point, nullptr);
+    XSetICValues(ic, XNPreeditAttributes, preedit_attr, nullptr);
     XFree(preedit_attr);
 
     return;

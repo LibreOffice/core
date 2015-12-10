@@ -77,7 +77,7 @@ namespace connectivity
             void dispose_ChildImpl()
             {
                 ::osl::MutexGuard aGuard(m_pDerivedImplementation->rBHelper.rMutex);
-                m_xParent = NULL;
+                m_xParent = nullptr;
             }
             void relase_ChildImpl()
             {

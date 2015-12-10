@@ -79,7 +79,7 @@ namespace
             if ( !aMethod )
             {
                 SAL_WARN("avmedia", "Cannot load method " << pMap[ i ].symName);
-                *pMap[ i ].refValue = NULL;
+                *pMap[ i ].refValue = nullptr;
                 return false;
             }
             else

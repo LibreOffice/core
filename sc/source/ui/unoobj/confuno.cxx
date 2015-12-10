@@ -223,7 +223,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                             SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                             SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
                             SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
-                            NULL );
+                            nullptr );
                     pDocShell->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
                 }
             }

@@ -383,7 +383,7 @@ namespace
         {
             // TODO(P1): dynamic_cast usually called twice for
             // compatible formats
-            return getCompatibleBitmap(bmp).get() != NULL;
+            return getCompatibleBitmap(bmp).get() != nullptr;
         }
 
         std::shared_ptr<mask_bitmap_type> getCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const
@@ -403,7 +403,7 @@ namespace
         {
             // TODO(P1): dynamic_cast usually called twice for
             // compatible formats
-            return std::dynamic_pointer_cast<mask_bitmap_type>( bmp ).get() != NULL;
+            return std::dynamic_pointer_cast<mask_bitmap_type>( bmp ).get() != nullptr;
         }
 
         static std::shared_ptr<alphamask_bitmap_type> getCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp )

@@ -127,12 +127,12 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
     // synchronously fetch the frame
 #ifdef AVMEDIA_GST_0_10
-    g_signal_emit_by_name( pSink, "pull-preroll", &pBuf, NULL );
+    g_signal_emit_by_name( pSink, "pull-preroll", &pBuf, nullptr );
     if( pBuf )
         pCaps = GST_BUFFER_CAPS( pBuf );
 #else
     GstSample *pSample = nullptr;
-    g_signal_emit_by_name( pSink, "pull-preroll", &pSample, NULL );
+    g_signal_emit_by_name( pSink, "pull-preroll", &pSample, nullptr );
 
     if( pSample )
     {

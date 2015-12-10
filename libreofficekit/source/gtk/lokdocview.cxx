@@ -1007,7 +1007,7 @@ callback (gpointer pData)
                                     twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom),
                                     twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom));
 
-        g_signal_emit(pDocView, doc_view_signals[SIZE_CHANGED], 0, NULL);
+        g_signal_emit(pDocView, doc_view_signals[SIZE_CHANGED], 0, nullptr);
     }
     break;
     case LOK_CALLBACK_SET_PART:
@@ -1161,9 +1161,9 @@ paintTileFinish(LOKDocView* pDocView, GAsyncResult* res, GError **error)
 {
     GTask* task = G_TASK(res);
 
-    g_return_val_if_fail(LOK_IS_DOC_VIEW(pDocView), NULL);
-    g_return_val_if_fail(g_task_is_valid(res, pDocView), NULL);
-    g_return_val_if_fail(error == nullptr || *error == nullptr, NULL);
+    g_return_val_if_fail(LOK_IS_DOC_VIEW(pDocView), nullptr);
+    g_return_val_if_fail(g_task_is_valid(res, pDocView), nullptr);
+    g_return_val_if_fail(error == nullptr || *error == nullptr, nullptr);
 
     return g_task_propagate_pointer(task, error);
 }
@@ -1294,7 +1294,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     if (priv->m_bEdit && priv->m_bCursorVisible && !isEmptyRectangle(priv->m_aVisibleCursor) && priv->m_aTextSelectionRectangles.empty())
     {
         // Have a cursor, but no selection: we need the middle handle.
-        gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_middle.png", NULL);
+        gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_middle.png", nullptr);
         if (!priv->m_pHandleMiddle)
         {
             priv->m_pHandleMiddle = cairo_image_surface_create_from_png(handleMiddlePath);
@@ -1322,7 +1322,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (!isEmptyRectangle(priv->m_aTextSelectionStart))
         {
             // Have a start position: we need a start handle.
-            gchar* handleStartPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_start.png", NULL);
+            gchar* handleStartPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_start.png", nullptr);
             if (!priv->m_pHandleStart)
             {
                 priv->m_pHandleStart = cairo_image_surface_create_from_png(handleStartPath);
@@ -1334,7 +1334,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (!isEmptyRectangle(priv->m_aTextSelectionEnd))
         {
             // Have a start position: we need an end handle.
-            gchar* handleEndPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_end.png", NULL);
+            gchar* handleEndPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_end.png", nullptr);
             if (!priv->m_pHandleEnd)
             {
                 priv->m_pHandleEnd = cairo_image_surface_create_from_png(handleEndPath);
@@ -1347,7 +1347,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
 
     if (!isEmptyRectangle(priv->m_aGraphicSelection))
     {
-        gchar* handleGraphicPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_graphic.png", NULL);
+        gchar* handleGraphicPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_graphic.png", nullptr);
         if (!priv->m_pGraphicHandle)
         {
             priv->m_pGraphicHandle = cairo_image_surface_create_from_png(handleGraphicPath);
@@ -2386,14 +2386,14 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
 SAL_DLLPUBLIC_EXPORT GtkWidget*
 lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 {
-    return GTK_WIDGET (g_initable_new (LOK_TYPE_DOC_VIEW, cancellable, error, "lopath", pPath == nullptr ? LOK_PATH : pPath, NULL));
+    return GTK_WIDGET (g_initable_new (LOK_TYPE_DOC_VIEW, cancellable, error, "lopath", pPath == nullptr ? LOK_PATH : pPath, nullptr));
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOKDocView)
 {
     LOKDocViewPrivate& pOldPriv = getPrivate(pOldLOKDocView);
     GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/nullptr, /*error=*/nullptr,
-                                                       "lopath", pOldPriv->m_aLOPath, "lopointer", pOldPriv->m_pOffice, "docpointer", pOldPriv->m_pDocument, NULL));
+                                                       "lopath", pOldPriv->m_aLOPath, "lopointer", pOldPriv->m_pOffice, "docpointer", pOldPriv->m_pDocument, nullptr));
 
     // No documentLoad(), just a createView().
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));

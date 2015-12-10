@@ -1020,7 +1020,7 @@ template< typename T > T* SdrObject::CloneHelper() const
 {
     OSL_ASSERT( typeid( T ) == typeid( *this ));
     T* pObj = dynamic_cast< T* >( SdrObjFactory::MakeNewObject(GetObjInventor(),GetObjIdentifier(),nullptr));
-    if (pObj!=NULL)
+    if (pObj!=nullptr)
         *pObj=*static_cast< const T* >( this );
     return pObj;
 }

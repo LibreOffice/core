@@ -458,7 +458,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
              GST_MESSAGE_TYPE_NAME( message ), (int)mnWindowID );
         if( mpXOverlay )
             g_object_unref( G_OBJECT ( mpXOverlay ) );
-        g_object_set( GST_MESSAGE_SRC( message ), "force-aspect-ratio", FALSE, NULL );
+        g_object_set( GST_MESSAGE_SRC( message ), "force-aspect-ratio", FALSE, nullptr );
         mpXOverlay = GST_VIDEO_OVERLAY( GST_MESSAGE_SRC( message ) );
         g_object_ref( G_OBJECT ( mpXOverlay ) );
         if ( mnWindowID != 0 )
@@ -489,7 +489,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 if( mnWidth == 0 ) {
                     GList *pStreamInfo = nullptr;
 
-                    g_object_get( G_OBJECT( mpPlaybin ), "stream-info", &pStreamInfo, NULL );
+                    g_object_get( G_OBJECT( mpPlaybin ), "stream-info", &pStreamInfo, nullptr );
 
                     for ( ; pStreamInfo != nullptr; pStreamInfo = pStreamInfo->next) {
                         GObject *pInfo = G_OBJECT( pStreamInfo->data );
@@ -498,7 +498,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                             continue;
 
                         int nType;
-                        g_object_get( pInfo, "type", &nType, NULL );
+                        g_object_get( pInfo, "type", &nType, nullptr );
                         GEnumValue *pValue = g_enum_get_value( G_PARAM_SPEC_ENUM( g_object_class_find_property( G_OBJECT_GET_CLASS( pInfo ), "type" ) )->enum_class,
                                                                nType );
 
@@ -506,7 +506,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                             GstStructure *pStructure;
                             GstPad *pPad;
 
-                            g_object_get( pInfo, "object", &pPad, NULL );
+                            g_object_get( pInfo, "object", &pPad, nullptr );
                             pStructure = gst_caps_get_structure( GST_PAD_CAPS( pPad ), 0 );
                             if( pStructure ) {
                                 gst_structure_get_int( pStructure, "width", &mnWidth );
@@ -542,7 +542,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 if( gst_structure_get( gst_caps_get_structure( caps, 0 ),
                                        "width", G_TYPE_INT, &w,
                                        "height", G_TYPE_INT, &h,
-                                       NULL ) ) {
+                                       nullptr ) ) {
                     mnWidth = w;
                     mnHeight = h;
 
@@ -585,14 +585,14 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
         mpPlaybin = gst_element_factory_make( "playbin", nullptr );
         if( pSink != nullptr ) // used for getting preferred size etc.
         {
-            g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pSink, NULL );
+            g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pSink, nullptr );
             mbFakeVideo = true;
         }
         else
             mbFakeVideo = false;
 
         OString ascURL = OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 );
-        g_object_set( G_OBJECT( mpPlaybin ), "uri", ascURL.getStr() , NULL );
+        g_object_set( G_OBJECT( mpPlaybin ), "uri", ascURL.getStr() , nullptr );
 
         pBus = gst_element_get_bus( mpPlaybin );
         if (mbWatchID)
@@ -782,7 +782,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
             nVolume = 0.0;
         }
 
-        g_object_set( G_OBJECT( mpPlaybin ), "volume", nVolume, NULL );
+        g_object_set( G_OBJECT( mpPlaybin ), "volume", nVolume, nullptr );
 
         mbMuted = bSet;
     }
@@ -812,7 +812,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
     // change volume
      if( !mbMuted && mpPlaybin )
      {
-         g_object_set( G_OBJECT( mpPlaybin ), "volume", (gdouble) mnUnmutedVolume, NULL );
+         g_object_set( G_OBJECT( mpPlaybin ), "volume", (gdouble) mnUnmutedVolume, nullptr );
      }
 }
 
@@ -828,7 +828,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
     if( mpPlaybin ) {
         double nGstVolume = 0.0;
 
-        g_object_get( G_OBJECT( mpPlaybin ), "volume", &nGstVolume, NULL );
+        g_object_get( G_OBJECT( mpPlaybin ), "volume", &nGstVolume, nullptr );
 
         nVolumeDB = (sal_Int16) ( 20.0*log10 ( nGstVolume ) );
     }

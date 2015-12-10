@@ -267,7 +267,7 @@ namespace sfx2
                 nChildWindowId,
                 SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                 &aVisibility,
-                NULL
+                nullptr
             );
         }
     }

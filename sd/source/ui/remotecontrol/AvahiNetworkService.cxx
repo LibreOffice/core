@@ -104,7 +104,7 @@ static bool create_services(AvahiClient *c) {
         snprintf(r, sizeof(r), "random=%i", nRandom);
         int ret = avahi_entry_group_add_service(
             group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0),
-            avahiService->getName().c_str(), kREG_TYPE, nullptr, nullptr, 1599, "local", r, NULL
+            avahiService->getName().c_str(), kREG_TYPE, nullptr, nullptr, 1599, "local", r, nullptr
         );
         if (ret < 0) {
 

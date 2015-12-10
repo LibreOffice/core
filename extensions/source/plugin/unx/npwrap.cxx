@@ -438,7 +438,7 @@ int main( int argc, char **argv)
         // send that we are ready to go
         MediatorMessage* pMessage =
             pConnector->Transact( "init req", 8,
-                                  NULL );
+                                  nullptr );
         delete pMessage;
 
     #if OSL_DEBUG_LEVEL > 3

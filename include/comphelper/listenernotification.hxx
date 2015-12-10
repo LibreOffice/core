@@ -166,7 +166,7 @@ namespace comphelper
     public:
         OSimpleListenerContainer( ::osl::Mutex& _rMutex )
             :OListenerContainer( _rMutex )
-            ,m_pNotificationMethod( NULL )
+            ,m_pNotificationMethod( nullptr )
         {
         }
 
@@ -208,7 +208,7 @@ namespace comphelper
     {
         m_pNotificationMethod = _pNotify;
         bool bRet = OListenerContainer::impl_notify( _rEvent );
-        m_pNotificationMethod = NULL;
+        m_pNotificationMethod = nullptr;
         return bRet;
     }
 

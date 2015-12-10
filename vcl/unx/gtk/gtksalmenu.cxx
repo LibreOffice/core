@@ -610,7 +610,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
     {
         g_lo_menu_set_command_to_item_in_section( pMenu, nSection, nItemPos, aCommand );
 
-        gchar* aItemCommand = g_strconcat("win.", aCommand, NULL );
+        gchar* aItemCommand = g_strconcat("win.", aCommand, nullptr );
 
         if ( bIsSubmenu )
             g_lo_menu_set_submenu_action_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand );

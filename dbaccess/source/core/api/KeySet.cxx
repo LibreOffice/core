@@ -93,7 +93,7 @@ namespace
         }
         catch(const Exception&)
         {
-            r = NULL;
+            r = nullptr;
         }
         catch(...)
         {

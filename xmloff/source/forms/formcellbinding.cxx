@@ -71,7 +71,7 @@ namespace
             if ( xChild.is() )
                 return getTypedModelNode< TYPE >( xChild->getParent() );
             else
-                return NULL;
+                return nullptr;
         }
     }
 

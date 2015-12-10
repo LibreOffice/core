@@ -220,16 +220,16 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
 
     g_signal_connect_after( GTK_WIDGET( data ), "focus-out-event",
                             G_CALLBACK (ooo_window_wrapper_real_focus_gtk),
-                            NULL);
+                            nullptr);
 
     if( obj->role == ATK_ROLE_TOOL_TIP )
     {
         g_signal_connect_after( GTK_WIDGET( data ), "map-event",
                                 G_CALLBACK (ooo_tooltip_map),
-                                NULL);
+                                nullptr);
         g_signal_connect_after( GTK_WIDGET( data ), "unmap-event",
                                 G_CALLBACK (ooo_tooltip_unmap),
-                                NULL);
+                                nullptr);
     }
 }
 

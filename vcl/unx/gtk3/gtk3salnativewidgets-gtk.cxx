@@ -828,7 +828,7 @@ void GtkSalGraphics::PaintCheckOrRadio(GtkStyleContext *context,
     gint indicator_size;
     gtk_style_context_get_style(mpCheckButtonStyle,
                                 "indicator-size", &indicator_size,
-                                NULL);
+                                nullptr);
 
     gint x = (rControlRectangle.GetWidth() - indicator_size) / 2;
     gint y = (rControlRectangle.GetHeight() - indicator_size) / 2;
@@ -1103,7 +1103,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         gint initial_gap(0);
         gtk_style_context_get_style(mpNoteBookStyle,
                                 "initial-gap", &initial_gap,
-                                NULL);
+                                nullptr);
 
         nX += initial_gap/2;
         nWidth -= initial_gap;
@@ -1308,7 +1308,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                          "wide-separators",  &wide_separators,
                                          "separator-width",  &separator_width,
                                          "separator-height", &separator_height,
-                                         NULL);
+                                         nullptr);
 
             aEditRect = Rectangle( aEditRect.TopLeft(),
                                    Size( aEditRect.GetWidth(), wide_separators ? separator_height : 1 ) );
@@ -1320,7 +1320,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             arrow_scaling = 0;
             gtk_style_context_get_style (mpCheckMenuItemStyle,
                                          "arrow-scaling",  &arrow_scaling,
-                                         NULL);
+                                         nullptr);
 
             arrow_size = 11 * arrow_scaling;
             aEditRect = Rectangle( aEditRect.TopLeft(),
@@ -1594,7 +1594,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     GdkColor *link_color = nullptr;
     gtk_style_context_get_style(pStyle,
                                  "link-color", &link_color,
-                                 NULL);
+                                 nullptr);
     if (link_color) {
         aStyleSet.SetLinkColor(getColorFromColor(*link_color));
         gdk_color_free(link_color);
@@ -1603,7 +1603,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     link_color = nullptr;
     gtk_style_context_get_style(pStyle,
                                 "visited-link-color", &link_color,
-                                NULL);
+                                nullptr);
     if (link_color) {
         aStyleSet.SetVisitedLinkColor(getColorFromColor(*link_color));
         gdk_color_free(link_color);

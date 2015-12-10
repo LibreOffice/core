@@ -88,7 +88,7 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
                   &nFileID, sizeof( nFileID ),
                   POST_STRING( stream->url ),
                   &reason, sizeof( reason ),
-                  NULL );
+                  nullptr );
 
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
@@ -137,7 +137,7 @@ static NPError l_NPN_GetURL( NPP instance, const char* url, const char* window )
                   &nInstance, sizeof( nInstance ),
                   POST_STRING(url),
                   POST_STRING(window),
-                  NULL );
+                  nullptr );
     SAL_WARN_IF(!pMes, "extensions.plugin", "geturl: message unanswered");
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
@@ -165,7 +165,7 @@ static NPError l_NPN_GetURLNotify( NPP instance, const char* url, const char* ta
                   &notifyData, sizeof( void* ), // transmit the actual pointer
                   // since it is a pointer to private data fed back
                   // by NPP_URLNotify; this can be thought of as an ID
-                  NULL );
+                  nullptr );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
@@ -189,7 +189,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
                   &nInstance, sizeof( nInstance ),
                   POST_STRING(type),
                   POST_STRING(target),
-                  NULL );
+                  nullptr );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
@@ -226,7 +226,7 @@ static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* t
                   buf, len,
                   &file, sizeof( NPBool ),
                   &notifyData, sizeof( void* ), // send the real pointer
-                  NULL );
+                  nullptr );
 
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
@@ -250,7 +250,7 @@ static NPError l_NPN_PostURL( NPP instance, const char* url, const char* window,
                   &len, sizeof( len ),
                   buf, len,
                   &file, sizeof( NPBool ),
-                  NULL );
+                  nullptr );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
@@ -287,7 +287,7 @@ static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
                   &nFileID, sizeof( nFileID ),
                   &nRanges, sizeof( nRanges ),
                   pArray.get(), sizeof( sal_uInt32 ) * 2 * nRanges,
-                  NULL );
+                  nullptr );
 
     if( ! pMes )
     {
@@ -308,7 +308,7 @@ static void l_NPN_Status( NPP instance, const char* message )
     pConnector->Send( eNPN_Status,
                       &nInstance, sizeof( nInstance ),
                       POST_STRING( message ),
-                      NULL );
+                      nullptr );
 }
 
 static const char* l_NPN_UserAgent( NPP instance )
@@ -327,7 +327,7 @@ static const char* l_NPN_UserAgent( NPP instance )
     MediatorMessage* pMes = pConnector->
         Transact( eNPN_UserAgent,
                   &nInstance, sizeof( nInstance ),
-                  NULL );
+                  nullptr );
 
     if( ! pMes )
         return pAgent;
@@ -358,7 +358,7 @@ static int32_t l_NPN_Write( NPP instance, NPStream* stream, int32_t len, void* b
                   &nFileID, sizeof( nFileID ),
                   &len, sizeof( len ),
                   buffer, len,
-                  NULL );
+                  nullptr );
 
     if( ! pMes )
         return 0;
@@ -542,7 +542,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 aReason = aPluginFuncs.destroystream( instance, pStream, aReason );
                 Respond( pMessage->m_nID,
                          reinterpret_cast<char*>(&aReason), sizeof( aReason ),
-                         NULL );
+                         nullptr );
 
                 delete [] pStream->url;
                 delete pStream;
@@ -563,7 +563,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
 
                 // the other side will call eNPP_DestroyPhase2 after this
                 NPError aReason = NPERR_NO_ERROR;
-                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aReason), sizeof( aReason ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aReason), sizeof( aReason ), nullptr );
             }
             break;
             case eNPP_DestroyPhase2:
@@ -580,14 +580,14 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                     Respond( pMessage->m_nID,
                              reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                              pSave->buf, pSave->len,
-                             NULL );
+                             nullptr );
                     delete [] static_cast<char*>(pSave->buf);
                 }
                 else
                     Respond( pMessage->m_nID,
                              reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                              "0000", 4,
-                             NULL );
+                             nullptr );
 
                 #if ENABLE_GTK
                 if( pInst->pGtkWindow )
@@ -633,7 +633,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 Respond( pMessage->m_nID,
                          reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                          &nStype, sizeof( nStype ),
-                         NULL );
+                         nullptr );
                 delete [] pType;
                 delete [] pSeekable;
             }
@@ -695,7 +695,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
 
                 Respond( pMessage->m_nID,
                          reinterpret_cast<char*>(&aRet), sizeof( aRet ),
-                         NULL );
+                         nullptr );
                 delete [] pMode;
                 delete [] pArgc;
                 delete [] pType;
@@ -801,7 +801,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                     "pluginapp: NPP_SetWindow returns " << aRet);
                 Respond( pMessage->m_nID,
                          reinterpret_cast<char*>(&aRet), sizeof( aRet ),
-                         NULL );
+                         nullptr );
                 delete [] reinterpret_cast<char*>(pWindow);
             }
             break;
@@ -848,7 +848,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
 
                 Respond( pMessage->m_nID,
                          reinterpret_cast<char*>(&nRet), sizeof( nRet ),
-                         NULL );
+                         nullptr );
             }
             break;
             case eNPP_Write:
@@ -875,7 +875,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
 
                 Respond( pMessage->m_nID,
                          reinterpret_cast<char*>(&nRet), sizeof( nRet ),
-                         NULL );
+                         nullptr );
                 delete [] buffer;
             }
             break;
@@ -887,7 +887,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 char* pMIME = pNPP_GetMIMEDescription();
                 Respond( pMessage->m_nID,
                          POST_NONCONST_STRING( pMIME ),
-                         NULL );
+                         nullptr );
             }
             break;
             case eNPP_Initialize:
@@ -910,7 +910,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 SAL_INFO(
                     "extensions.plugin",
                     "pluginapp: NP_Initialize returns " << aRet);
-                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), nullptr );
             }
             break;
             case eNPP_Shutdown:

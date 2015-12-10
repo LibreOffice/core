@@ -94,7 +94,7 @@ namespace svxform
                 if ( xChild.is() )
                     return getTypedModelNode< INTERFACE_TYPE >( xChild->getParent() );
                 else
-                    return NULL;
+                    return nullptr;
             }
         }
 

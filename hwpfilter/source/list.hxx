@@ -89,7 +89,7 @@ public:
 template<class T>
 LinkedList<T>::LinkedList( T* pItem )
 {
-    if( pItem != NULL )
+    if( pItem != nullptr )
         maList.push_back( pItem );
 }
 
@@ -103,7 +103,7 @@ LinkedListIterator<T>::LinkedListIterator( LinkedList<T>* pList ) :
     mpList( pList ),
     mnPosition( 0 )
 {
-    ASSERT( pList != NULL );
+    ASSERT( pList != nullptr );
 }
 
 template<class T>
@@ -114,7 +114,7 @@ LinkedListIterator<T>::~LinkedListIterator()
 template<class T>
 void LinkedListIterator<T>::operator++( int )
 {
-    ASSERT( mpList != NULL );
+    ASSERT( mpList != nullptr );
 
     // bug-compatible with LinkedList.cxx: ignore parameter!
     mnPosition ++;
@@ -123,7 +123,7 @@ void LinkedListIterator<T>::operator++( int )
 template<class T>
 void LinkedListIterator<T>::operator--( int )
 {
-    ASSERT( mpList != NULL );
+    ASSERT( mpList != nullptr );
 
     // bug-compatible with LinkedList.cxx: ignore parameter!
     mnPosition --;
@@ -132,14 +132,14 @@ void LinkedListIterator<T>::operator--( int )
 template<class T>
 void LinkedListIterator<T>::operator++()
 {
-    ASSERT( mpList != NULL );
+    ASSERT( mpList != nullptr );
     mnPosition ++;
 }
 
 template<class T>
 void LinkedListIterator<T>::operator--()
 {
-    ASSERT( mpList != NULL );
+    ASSERT( mpList != nullptr );
     mnPosition --;
 }
 

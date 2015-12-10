@@ -35,12 +35,12 @@ namespace connectivity { namespace jdbc
     {
     public:
         GlobalRef()
-            :m_object( NULL )
+            :m_object( nullptr )
         {
         }
 
         GlobalRef( const GlobalRef& _source )
-            :m_object( NULL )
+            :m_object( nullptr )
         {
             *this = _source;
         }
@@ -62,17 +62,17 @@ namespace connectivity { namespace jdbc
 
         void reset()
         {
-            if ( m_object != NULL )
+            if ( m_object != nullptr )
             {
                 SDBThreadAttach t;
                 t.env().DeleteGlobalRef( m_object );
-                m_object = NULL;
+                m_object = nullptr;
             }
         }
 
         void set( JNIEnv& _environment, T _object )
         {
-            if ( m_object != NULL )
+            if ( m_object != nullptr )
                 _environment.DeleteGlobalRef( m_object );
             m_object = _object;
             if ( m_object )
@@ -91,7 +91,7 @@ namespace connectivity { namespace jdbc
 
         bool is() const
         {
-            return m_object != NULL;
+            return m_object != nullptr;
         }
 
     private:

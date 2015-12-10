@@ -233,7 +233,7 @@ namespace utl
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::reset( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode )
     {
-        m_xComponent.reset(_eMode == TakeOwnership ? new COMPONENT( _rxComponent ) : NULL);
+        m_xComponent.reset(_eMode == TakeOwnership ? new COMPONENT( _rxComponent ) : nullptr);
         m_xTypedComponent = _rxComponent;
     }
 

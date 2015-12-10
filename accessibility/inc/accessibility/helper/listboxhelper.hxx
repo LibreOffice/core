@@ -53,7 +53,7 @@ public:
 
     virtual Rectangle       GetDropDownPosSizePixel() const override
     {
-        Rectangle aTemp = m_aComboListBox.GetWindowExtentsRelative(NULL);
+        Rectangle aTemp = m_aComboListBox.GetWindowExtentsRelative(nullptr);
         Rectangle aRet = m_aComboListBox.GetDropDownPosSizePixel();
         aRet.Move(aTemp.TopLeft().X(),aTemp.TopLeft().Y());
         return aRet;

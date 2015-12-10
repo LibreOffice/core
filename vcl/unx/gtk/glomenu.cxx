@@ -199,7 +199,7 @@ g_lo_menu_get_attribute_value_from_item_in_section (GLOMenu            *menu,
 {
     GMenuModel *model = G_MENU_MODEL (g_lo_menu_get_section (menu, section));
 
-    g_return_val_if_fail (model != nullptr, NULL);
+    g_return_val_if_fail (model != nullptr, nullptr);
 
     GVariant *value = g_menu_model_get_item_attribute_value (model,
                                                              position,
@@ -253,7 +253,7 @@ g_lo_menu_get_label_from_item_in_section (GLOMenu *menu,
                                           gint     section,
                                           gint     position)
 {
-    g_return_val_if_fail (G_IS_LO_MENU (menu), NULL);
+    g_return_val_if_fail (G_IS_LO_MENU (menu), nullptr);
 
     GVariant *label_value = g_lo_menu_get_attribute_value_from_item_in_section (menu,
                                                                                 section,
@@ -348,7 +348,7 @@ g_lo_menu_get_accelerator_from_item_in_section (GLOMenu *menu,
                                                 gint     section,
                                                 gint     position)
 {
-    g_return_val_if_fail (G_IS_LO_MENU (menu), NULL);
+    g_return_val_if_fail (G_IS_LO_MENU (menu), nullptr);
 
     GVariant *accel_value = g_lo_menu_get_attribute_value_from_item_in_section (menu,
                                                                                 section,
@@ -399,7 +399,7 @@ g_lo_menu_get_command_from_item_in_section (GLOMenu *menu,
                                             gint     section,
                                             gint     position)
 {
-    g_return_val_if_fail (G_IS_LO_MENU (menu), NULL);
+    g_return_val_if_fail (G_IS_LO_MENU (menu), nullptr);
 
     GVariant *command_value = g_lo_menu_get_attribute_value_from_item_in_section (menu,
                                                                                   section,
@@ -478,7 +478,7 @@ GLOMenu *
 g_lo_menu_get_section (GLOMenu *menu,
                        gint section)
 {
-    g_return_val_if_fail (G_IS_LO_MENU (menu), NULL);
+    g_return_val_if_fail (G_IS_LO_MENU (menu), nullptr);
 
     return G_LO_MENU (G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
                       ->get_item_link (G_MENU_MODEL (menu), section, G_MENU_LINK_SECTION));
@@ -514,12 +514,12 @@ g_lo_menu_get_submenu_from_item_in_section (GLOMenu *menu,
                                             gint     section,
                                             gint     position)
 {
-    g_return_val_if_fail (G_IS_LO_MENU (menu), NULL);
-    g_return_val_if_fail (0 <= section && section < (gint) menu->items->len, NULL);
+    g_return_val_if_fail (G_IS_LO_MENU (menu), nullptr);
+    g_return_val_if_fail (0 <= section && section < (gint) menu->items->len, nullptr);
 
     GLOMenu *model = g_lo_menu_get_section (menu, section);
 
-    g_return_val_if_fail (model != nullptr, NULL);
+    g_return_val_if_fail (model != nullptr, nullptr);
 
     GLOMenu *submenu = nullptr;
 
