@@ -92,7 +92,7 @@ OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 
 rtl::Reference<OpenGLContext> OpenGLSalGraphicsImpl::GetOpenGLContext()
 {
-    if( !AcquireContext() )
+    if( !AcquireContext(true) )
         return nullptr;
     return mpContext;
 }
@@ -102,7 +102,7 @@ rtl::Reference<OpenGLContext> OpenGLSalGraphicsImpl::GetDefaultContext()
     return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
 }
 
-bool OpenGLSalGraphicsImpl::AcquireContext( )
+bool OpenGLSalGraphicsImpl::AcquireContext( bool bForceCreate )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -121,6 +121,8 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
         mpContext.clear();
     }
 
+    // We don't care what context we have - but not switching context
+    // is rather useful from a performance perspective.
     OpenGLContext *pContext = pSVData->maGDIData.mpLastContext;
     while( pContext )
     {
@@ -134,7 +136,12 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
         mpContext = pContext;
     else if( mpWindowContext.is() )
         mpContext = mpWindowContext;
-    else
+    else if( bForceCreate && !IsOffscreen() )
+    {
+        mpWindowContext = CreateWinContext();
+        mpContext = mpWindowContext;
+    }
+    if( !mpContext.is() )
         mpContext = GetDefaultContext();
 
     return mpContext.is();
@@ -175,11 +182,10 @@ void OpenGLSalGraphicsImpl::Init()
         VCL_GL_INFO("::Init - re-size offscreen texture");
     }
 
-    if( !IsOffscreen() )
+    if( mpWindowContext.is() )
     {
-        if( mpWindowContext.is() )
-            mpWindowContext->reset();
-        mpWindowContext = CreateWinContext();
+        mpWindowContext->reset();
+        mpWindowContext.clear();
     }
 }
 
@@ -192,8 +198,11 @@ void OpenGLSalGraphicsImpl::DeInit()
     // let it know. Other eg. VirtualDevice contexts which have
     // references on and rely on this context continuing to work will
     // get a shiny new context in AcquireContext:: next PreDraw.
-    if( mpContext.is() && !IsOffscreen() )
-        mpContext->reset();
+    if( mpWindowContext.is() )
+    {
+        mpWindowContext->reset();
+        mpWindowContext.clear();
+    }
     mpContext.clear();
 }
 
@@ -244,11 +253,6 @@ void OpenGLSalGraphicsImpl::PostDraw()
     }
 
     assert (maOffscreenTex);
-
-    if( IsOffscreen() )
-        assert( !mpWindowContext.is() );
-    else
-        assert( mpWindowContext.is() );
 
     // Always queue the flush.
     if( !IsOffscreen() )
@@ -2005,15 +2009,13 @@ void OpenGLSalGraphicsImpl::doFlush()
     if( IsOffscreen() )
         return;
 
-    assert( mpWindowContext.is() );
-
     if( !maOffscreenTex )
     {
         VCL_GL_INFO( "flushAndSwap - odd no texture !" );
         return;
     }
 
-    if (mnDrawCountAtFlush == mnDrawCount)
+    if( mnDrawCountAtFlush == mnDrawCount )
     {
         VCL_GL_INFO( "eliding redundant flushAndSwap, no drawing since last!" );
         return;
@@ -2024,6 +2026,14 @@ void OpenGLSalGraphicsImpl::doFlush()
     OpenGLZone aZone;
 
     VCL_GL_INFO( "flushAndSwap" );
+
+    if( !mpWindowContext.is() )
+    {
+        VCL_GL_INFO( "late creation of window context" );
+        mpWindowContext = CreateWinContext();
+    }
+
+    assert( mpWindowContext.is() );
 
     // Interesting ! -> this destroys a context [ somehow ] ...
     mpWindowContext->makeCurrent();
