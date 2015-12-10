@@ -43,6 +43,8 @@ sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &r
     get(m_pOKPB, "ok");
     get(m_pNextPB, "next");
     get(m_pEditPB, "edit");
+    Link<ListBox&, void> aDoubleLk = LINK(this, DropDownFieldDialog, DoubleClickHdl);
+    m_pListItemsLB->SetDoubleClickHdl( aDoubleLk );
 
     Link<Button*,void> aButtonLk = LINK(this, DropDownFieldDialog, ButtonHdl);
     m_pEditPB->SetClickHdl(aButtonLk);
@@ -109,6 +111,11 @@ void sw::DropDownFieldDialog::Apply()
 IMPL_LINK_TYPED(sw::DropDownFieldDialog, ButtonHdl, Button*, pButton, void)
 {
     EndDialog(m_pNextPB == pButton ? RET_OK : RET_YES );
+}
+
+IMPL_LINK_NOARG_TYPED(sw::DropDownFieldDialog, DoubleClickHdl, ListBox&, void)
+{
+    EndDialog(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
