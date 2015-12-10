@@ -2132,9 +2132,9 @@ bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
     if (dx && aStart.Col() == 0 && aEnd.Col() == MAXCOL)
         dx = 0;     // Entire row not to be moved.
     bool b1 = aStart.Move( dx, dy, dz, pDoc );
-    if (dx && aEnd.Col() == MAXCOL)
+    if (dx && bColRange && aEnd.Col() == MAXCOL)
         dx = 0;     // End column sticky.
-    if (dy && aEnd.Row() == MAXROW)
+    if (dy && bRowRange && aEnd.Row() == MAXROW)
         dy = 0;     // End row sticky.
     SCTAB nOldTab = aEnd.Tab();
     bool b2 = aEnd.Move( dx, dy, dz, pDoc );
