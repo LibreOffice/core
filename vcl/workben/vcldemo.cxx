@@ -887,6 +887,8 @@ public:
             css::uno::Sequence< OUString > aAllIcons = ImageTree_getAllImageNames();
             for (sal_Int32 i = 0; i < aAllIcons.getLength(); i++)
             {
+                if (aAllIcons[i].endsWithIgnoreAsciiCase("svg"))
+                    continue; // too slow to load.
                 maIconNames.push_back(aAllIcons[i]);
                 maIcons.push_back(BitmapEx(aAllIcons[i]));
             }
