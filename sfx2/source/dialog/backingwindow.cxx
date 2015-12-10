@@ -95,7 +95,6 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     mbIsSaveMode( false ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
-    mpAccExec( NULL ),
     maSelTemplates(cmpSelectionItems),
     maSelFolders(cmpSelectionItems)
 
@@ -445,7 +444,7 @@ bool BackingWindow::Notify( NotifyEvent& rNEvt )
         // try the 'normal' accelerators (so that eg. Ctrl+Q works)
         if( !mpAccExec )
         {
-            mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
+            mpAccExec.reset(svt::AcceleratorExecute::createAcceleratorHelper());
             mpAccExec->init( comphelper::getProcessComponentContext(), mxFrame);
         }
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();

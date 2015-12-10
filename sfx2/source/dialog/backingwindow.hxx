@@ -44,6 +44,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 
+#include <memory>
 #include <set>
 
 class ToolBox;
@@ -91,7 +92,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     bool mbIsSaveMode;
     bool mbInitControls;
     sal_Int32 mnHideExternalLinks;
-    svt::AcceleratorExecute* mpAccExec;
+    std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
 
     void setupButton(PushButton* pButton);
     void setupButton(MenuButton* pButton);
