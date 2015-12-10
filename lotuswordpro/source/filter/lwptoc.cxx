@@ -130,7 +130,7 @@ void LwpTocSuperLayout::RegisterStyle()
     LwpSuperTableLayout::RegisterStyle();
 
     // Get font info of default text style and set into tab style
-    const LwpObjectID *pDefaultTextStyle = m_pFoundry->GetDefaultTextStyle();
+    const LwpObjectID *pDefaultTextStyle = m_pFoundry ? m_pFoundry->GetDefaultTextStyle() : nullptr;
     XFParaStyle* pBaseStyle = pDefaultTextStyle ? static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(*pDefaultTextStyle)) : nullptr;
     XFTextStyle*pTextStyle = new XFTextStyle;
     if (pBaseStyle)
