@@ -166,7 +166,7 @@ void LwpDocument::Parse(IXFStream* pOutputStream)
     rtl::Reference<LwpObject> pDocSock = GetSocket().obj( VO_DOCSOCK );
     if(pDocSock.is())
     {
-        pDocSock->Parse(pOutputStream);
+        pDocSock->DoParse(pOutputStream);
     }
 }
 
@@ -412,7 +412,7 @@ void LwpDocument::ParseDocContent(IXFStream* pOutputStream)
         return;
     }
     pLayoutObj->SetFoundry(m_pFoundry);
-    pLayoutObj->Parse(pOutputStream);
+    pLayoutObj->DoParse(pOutputStream);
 }
 
 /**
@@ -795,11 +795,11 @@ void LwpDocSock::Parse(IXFStream* pOutputStream)
 {
     rtl::Reference<LwpObject> pDoc = GetChildHead().obj();
     if(pDoc.is())
-        pDoc->Parse(pOutputStream);
+        pDoc->DoParse(pOutputStream);
 
     pDoc = GetNext().obj();
     if(pDoc.is())
-        pDoc->Parse(pOutputStream);
+        pDoc->DoParse(pOutputStream);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

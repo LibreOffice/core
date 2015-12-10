@@ -127,7 +127,7 @@ void LwpPageLayout::Parse(IXFStream* pOutputStream)
     if(pStory.is())
     {
         pStory->SetFoundry(m_pFoundry);
-        pStory->Parse(pOutputStream);   //Do not parse the next story
+        pStory->DoParse(pOutputStream);   //Do not parse the next story
     }
 }
 
