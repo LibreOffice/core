@@ -125,17 +125,20 @@ void LwpContent::Read()
     pStrm->SkipExtra();
 }
 
-LwpVirtualLayout* LwpContent::GetLayout(LwpVirtualLayout* pStartLayout)
+rtl::Reference<LwpVirtualLayout> LwpContent::GetLayout(LwpVirtualLayout* pStartLayout)
 {
     return m_LayoutsWithMe.GetLayout(pStartLayout);
 }
 
 bool LwpContent::HasNonEmbeddedLayouts()
 {
-    LwpVirtualLayout* pLayout = NULL;
-    while( (pLayout = GetLayout(pLayout)) )
+    rtl::Reference<LwpVirtualLayout> xLayout;
+    while (true)
     {
-        if(!pLayout->NoContentReference())
+        xLayout = GetLayout(xLayout.get());
+        if (!xLayout.is())
+            break;
+        if (!xLayout->NoContentReference())
             return true;
     }
     return false;
@@ -143,10 +146,13 @@ bool LwpContent::HasNonEmbeddedLayouts()
 
 bool LwpContent::IsStyleContent()
 {
-    LwpVirtualLayout* pLayout = NULL;
-    while( (pLayout = GetLayout(pLayout)) )
+    rtl::Reference<LwpVirtualLayout> xLayout;
+    while (true)
     {
-        if(pLayout->IsStyleLayout())
+        xLayout = GetLayout(xLayout.get());
+        if (!xLayout.is())
+            break;
+        if (xLayout->IsStyleLayout())
             return true;
     }
     return false;
