@@ -123,19 +123,20 @@ void SwMailMergePrepareMergePage:: MoveHdl_Impl(Control* pCtrl)
     m_pNextPB->Enable(bValid && !bIsLast);
     m_pLastPB->Enable(bValid && !bIsLast);
     m_pExcludeCB->Check(rConfigItem.IsRecordExcluded( rConfigItem.GetResultSetPosition() ));
+
     //now the record has to be merged into the source document
     const SwDBData& rDBData = rConfigItem.GetCurrentDBData();
-    Sequence<Any> vSelection = { makeAny(rConfigItem.GetResultSetPosition()) };
-    auto aArgs(::comphelper::InitPropertySequence({
+    Sequence<Any> vSelection({ makeAny(rConfigItem.GetResultSetPosition()) });
+    svx::ODataAccessDescriptor aDescriptor(::comphelper::InitPropertySequence({
         {"Selection",        makeAny(vSelection)},
-        {"DataSourceName",  makeAny(rDBData.sDataSource)},
+        {"DataSourceName",   makeAny(rDBData.sDataSource)},
         {"Command",          makeAny(rDBData.sCommand)},
         {"CommandType",      makeAny(rDBData.nCommandType)},
         {"ActiveConnection", makeAny(rConfigItem.GetConnection().getTyped())},
         {"Filter",           makeAny(rConfigItem.GetFilter())},
         {"Cursor",           makeAny(rConfigItem.GetResultSet())}
     }));
-    svx::ODataAccessDescriptor aDescriptor(aArgs);
+
     SwWrtShell& rSh = m_pWizard->GetSwView()->GetWrtShell();
     SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
     rSh.GetDBManager()->MergeNew(aMergeDesc);
