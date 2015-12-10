@@ -231,9 +231,12 @@ void SessionListener::QuitSessionQuietly()
     }
 }
 
-void SAL_CALL SessionListener::disposing(const css::lang::EventObject&) throw (RuntimeException, std::exception)
+void SAL_CALL SessionListener::disposing(const css::lang::EventObject& Source) throw (RuntimeException, std::exception)
 {
     SAL_INFO("fwk.session", "SessionListener::disposing");
+    if (Source.Source == m_rSessionManager) {
+        m_rSessionManager.clear();
+    }
 }
 
 void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
