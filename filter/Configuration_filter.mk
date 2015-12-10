@@ -717,7 +717,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_gif_Export \
 	draw_html_Export \
 	draw_jpg_Export \
-	draw_met_Export \
 	draw_png_Export \
 	draw_svg_Export \
 	draw_tif_Export \
@@ -757,7 +756,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_gif_Export \
 	impress_html_Export \
 	impress_jpg_Export \
-	impress_met_Export \
 	impress_png_Export \
 	impress_svg_Export \
 	impress_tif_Export \
@@ -828,7 +826,6 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	gif_Import \
 	jpg_Export \
 	jpg_Import \
-	met_Export \
 	met_Import \
 	pbm_Import \
 	pcd_Import_Base \
