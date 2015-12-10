@@ -886,6 +886,10 @@
   <block-list:block block-list:abbreviated-name=":destello:" block-list:name="❇"/>
   <block-list:block block-list:abbreviated-name=":destellos:" block-list:name="✨"/>
   <block-list:block block-list:abbreviated-name=":diablo:" block-list:name="👿"/>
+  <block-list:block block-list:abbreviated-name=":diagrama1:" block-list:name="📈"/>
+  <block-list:block block-list:abbreviated-name=":diagrama2:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":diagrama3:" block-list:name="📊"/>
+  <block-list:block block-list:abbreviated-name=":diagrama:" block-list:name="💹"/>
   <block-list:block block-list:abbreviated-name=":diamantes2:" block-list:name="♢"/>
   <block-list:block block-list:abbreviated-name=":diamantes:" block-list:name="♦"/>
   <block-list:block block-list:abbreviated-name=":diario:" block-list:name="📰"/>
@@ -1018,10 +1022,6 @@
   <block-list:block block-list:abbreviated-name=":gotita:" block-list:name="💧"/>
   <block-list:block block-list:abbreviated-name=":grado:" block-list:name="°"/>
   <block-list:block block-list:abbreviated-name=":graduación:" block-list:name="🎓"/>
-  <block-list:block block-list:abbreviated-name=":gráfico1:" block-list:name="📈"/>
-  <block-list:block block-list:abbreviated-name=":gráfico2:" block-list:name="📉"/>
-  <block-list:block block-list:abbreviated-name=":gráfico3:" block-list:name="📊"/>
-  <block-list:block block-list:abbreviated-name=":gráfico:" block-list:name="💹"/>
   <block-list:block block-list:abbreviated-name=":grito:" block-list:name="😱"/>
   <block-list:block block-list:abbreviated-name=":grivna:" block-list:name="₴"/>
   <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
