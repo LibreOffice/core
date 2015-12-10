@@ -82,6 +82,8 @@ class VCLSession:
     virtual void SAL_CALL saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL cancelShutdown() throw( RuntimeException, std::exception ) override;
 
+    void SAL_CALL disposing() override;
+
     void callSaveRequested( bool bShutdown, bool bCancelable );
     void callShutdownCancelled();
     void callInteractionGranted( bool bGranted );
@@ -325,6 +327,22 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
 sal_Bool SAL_CALL VCLSession::cancelShutdown() throw( RuntimeException, std::exception )
 {
     return m_xSession && m_xSession->cancelShutdown();
+}
+
+void VCLSession::disposing() {
+    std::list<Listener> list;
+    {
+        osl::MutexGuard g(m_aMutex);
+        list.swap(m_aListeners);
+    }
+    css::lang::EventObject src(static_cast<OWeakObject *>(this));
+    for (auto const & i: list) {
+        try {
+            i.m_xListener->disposing(src);
+        } catch (css::uno::RuntimeException & e) {
+            SAL_WARN("vcl.app", "ignoring RuntimeException " << e.Message);
+        }
+    }
 }
 
 // service implementation
