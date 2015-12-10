@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_df305e0a",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000534
+      },
+      "writtenOn": "2015-12-10T09:42:59Z",
+      "side": 1,
+      "message": "Please, try to respect the style of the surrounding code, in this case, leave a space after every comma :)",
+      "revId": "1255f1e67fa5b613c4847fd553a079c4eb780090",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_5f258ec0",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1000534
+      },
+      "writtenOn": "2015-12-10T09:42:59Z",
+      "side": 1,
+      "message": "Be careful with these variable names; nDestX, nDestY would be preferred, following Hungarian notation. Check: https://wiki.openoffice.org/wiki/Writer/Code_Conventions#local_variables",
+      "revId": "1255f1e67fa5b613c4847fd553a079c4eb780090",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_3f224aba",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1000534
+      },
+      "writtenOn": "2015-12-10T09:42:59Z",
+      "side": 1,
+      "message": "Like before, try to follow the style of the surrounding code; in this case it\u0027s better:\n\ndestnY \u003d nY;\nif( bVMirr )\n{\n    destnY \u003d nDstHeight - nY - 1;\n}",
+      "revId": "1255f1e67fa5b613c4847fd553a079c4eb780090",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
