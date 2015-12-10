@@ -258,7 +258,7 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
 
     while(!rID.IsNull())
     {
-        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(rID.obj().get());
+        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout*>(rID.obj().get());
         if(!pLayout)
         {
             break;
