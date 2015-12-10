@@ -267,8 +267,8 @@ void LwpPageLayout::ParseBackColor(XFPageMaster* pm1)
 void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
 {
     //Get the footnoteoptions for the root document
-    LwpDocument* pDocument = m_pFoundry->GetDocument();
-    if(pDocument)
+    LwpDocument* pDocument = m_pFoundry ? m_pFoundry->GetDocument() : nullptr;
+    if (pDocument)
     {
         LwpObjectID* pFontnodeId = pDocument->GetValidFootnoteOpts();
 
