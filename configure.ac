@@ -6339,6 +6339,23 @@ if test "$CROSS_COMPILING" = TRUE; then
     cxx14_sized_deallocation=no
     AC_MSG_RESULT([$cxx14_sized_deallocation (assumed; cross compiling)])
 else
+    dnl At least Clang -fsanitize=address causes "multiple definition of
+    dnl `operator delete(void*, unsigned long)'" also defined in
+    dnl projects/compiler-rt/lib/asan/asan_new_delete.cc:
+    save_CXX=$CXX
+    if test "$COM_IS_CLANG" = TRUE; then
+        my_CXX=
+        for i in $CXX; do
+            case $i in
+            -fsanitize=address)
+                ;;
+            *)
+                my_CXX="$my_CXX $i"
+                ;;
+            esac
+        done
+        CXX=$my_CXX
+    fi
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_LANG_PUSH([C++])
@@ -6353,6 +6370,7 @@ else
         return 1;
         ]])], [cxx14_sized_deallocation=yes], [cxx14_sized_deallocation=no])
     AC_LANG_POP([C++])
+    CXX=$save_CXX
     CXXFLAGS=$save_CXXFLAGS
     AC_MSG_RESULT([$cxx14_sized_deallocation])
 fi
