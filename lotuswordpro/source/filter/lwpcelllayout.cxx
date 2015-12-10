@@ -696,8 +696,10 @@ LwpConnectedCellLayout::~LwpConnectedCellLayout()
  */
 void LwpConnectedCellLayout::SetCellMap()
 {
-    // this function is called from LwpTableLayout, so it can't be NULL
     LwpTableLayout * pTableLayout = GetTableLayout();
+    if (!pTableLayout)
+        return;
+
     sal_uInt16 nRowSpan = m_nRealrowspan;
 
     for (sal_uInt16 iLoop = 0; iLoop < nRowSpan; iLoop ++)
