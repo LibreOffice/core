@@ -237,7 +237,7 @@ BenError LtcBenContainer::SeekFromEnd(long Offset)
 */
 LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream)
 {
-    CBenPropertyName * pPropertyName;
+    CBenPropertyName * pPropertyName(nullptr);
     RegisterPropertyName(sPropertyName, &pPropertyName);        // Get property name object
 
     if (NULL == pPropertyName)
