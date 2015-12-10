@@ -115,9 +115,33 @@ public:
     bool IsAutoGrowWidth();
     bool IsInlineToMargin();
     virtual sal_uInt8 GetContentOrientation(){ return TEXT_ORIENT_LRTB;}
-    virtual bool HonorProtection();
-    virtual bool IsProtected();
-    bool HasProtection();
+    bool GetHonorProtection()
+    {
+        if (m_bGettingHonorProtection)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingHonorProtection = true;
+        bool bRet = HonorProtection();
+        m_bGettingHonorProtection = false;
+        return bRet;
+    }
+    bool GetIsProtected()
+    {
+        if (m_bGettingIsProtected)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingIsProtected = true;
+        bool bRet = IsProtected();
+        m_bGettingIsProtected = false;
+        return bRet;
+    }
+    bool GetHasProtection()
+    {
+        if (m_bGettingHasProtection)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingHasProtection = true;
+        bool bRet = HasProtection();
+        m_bGettingHasProtection = false;
+        return bRet;
+    }
     OUString GetStyleName(){ return m_StyleName;}
     bool IsComplex();
     virtual bool IsAnchorPage(){ return false;}
@@ -141,9 +165,9 @@ public:
     virtual sal_Int32 GetPageNumber(sal_uInt16 /*nLayoutNumber*/ = 0){ return -1;}
     bool IsMinimumHeight();
     virtual bool IsForWaterMark(){ return false;}
-    virtual LwpPara* GetLastParaOfPreviousStory() { return NULL; }
-    LwpVirtualLayout* GetParentLayout();
-    virtual LwpVirtualLayout* GetContainerLayout(){ return NULL;}
+    virtual LwpPara* GetLastParaOfPreviousStory() { return nullptr; }
+    rtl::Reference<LwpVirtualLayout> GetParentLayout();
+    virtual rtl::Reference<LwpVirtualLayout> GetContainerLayout() { return rtl::Reference<LwpVirtualLayout>(); }
     void RegisterChildStyle();
     bool NoContentReference();
     bool IsStyleLayout();
@@ -167,7 +191,13 @@ public:
     //End by
 protected:
     void Read() SAL_OVERRIDE;
+    bool HasProtection();
+    virtual bool HonorProtection();
+    virtual bool IsProtected();
 protected:
+    bool m_bGettingHonorProtection;
+    bool m_bGettingHasProtection;
+    bool m_bGettingIsProtected;
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
     sal_uInt32 m_nAttributes3;
@@ -229,8 +259,7 @@ public:
 public:
     void Read(LwpObjectStream* pStrm);
     LwpObjectID& GetOnlyLayout() { return m_OnlyLayout;}
-    LwpDLVListHeadTail& GetLayouts() { return m_Layouts;}
-    LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
+    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout* pStartLayout);
 protected:
     LwpObjectID m_OnlyLayout; //LwpVirtualLayout
     LwpDLVListHeadTail m_Layouts;
@@ -242,7 +271,7 @@ public:
     LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpHeadLayout(){}
     void RegisterStyle() SAL_OVERRIDE;
-    LwpVirtualLayout* FindEnSuperTableLayout();
+    rtl::Reference<LwpVirtualLayout> FindEnSuperTableLayout();
 protected:
     void Read() SAL_OVERRIDE;
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_HEAD_LAYOUT;}
@@ -298,7 +327,7 @@ public:
     virtual sal_uInt8 GetContentOrientation() SAL_OVERRIDE;
     virtual bool HonorProtection() SAL_OVERRIDE;
     virtual bool IsProtected() SAL_OVERRIDE;
-    LwpVirtualLayout* GetWaterMarkLayout();
+    rtl::Reference<LwpVirtualLayout> GetWaterMarkLayout();
     XFBGImage* GetXFBGImage();
     bool GetUsePrinterSettings();
 
@@ -395,7 +424,7 @@ public:
     virtual bool IsUseOnAllOddPages() SAL_OVERRIDE;
     virtual bool IsUseOnPage() SAL_OVERRIDE;
     LwpObjectID& GetPosition(){ return m_Positon;}
-    virtual LwpVirtualLayout* GetContainerLayout() SAL_OVERRIDE;
+    virtual rtl::Reference<LwpVirtualLayout> GetContainerLayout() SAL_OVERRIDE;
 };
 
 class LwpPlacableLayout : public LwpLayout
