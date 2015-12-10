@@ -578,7 +578,10 @@ void LwpTableLayout::RegisterColumns()
     LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
     while (pColumnLayout)
     {
-        m_pColumns[pColumnLayout->GetColumnID()] = pColumnLayout;
+        auto nColId = pColumnLayout->GetColumnID();
+        if (nColId >= nCols)
+            throw std::range_error("corrupt LwpTableLayout");
+        m_pColumns[nColId] = pColumnLayout;
         if (!pColumnLayout->IsJustifiable())
         {
             pWidthCalculated[pColumnLayout->GetColumnID()] = sal_True;
