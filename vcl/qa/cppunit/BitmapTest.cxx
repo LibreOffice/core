@@ -70,7 +70,7 @@ void BitmapTest::testConvert()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), aBitmap.GetBitCount());
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
-#if defined LINUX
+#if defined LINUX || defined FREEBSD
         // 24 bit Bitmap on SVP backend uses 32bit BGRA format
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(32), pReadAccess->GetBitCount());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(40), pReadAccess->GetScanlineSize());
