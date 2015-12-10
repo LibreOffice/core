@@ -694,7 +694,6 @@ LwpConnectedCellLayout::~LwpConnectedCellLayout()
  */
 void LwpConnectedCellLayout::SetCellMap()
 {
-    // this function is called from LwpTableLayout, so it can't be NULL
     LwpTableLayout * pTableLayout = GetTableLayout();
     if (!pTableLayout)
         return;
