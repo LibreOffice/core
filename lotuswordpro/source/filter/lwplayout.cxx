@@ -1044,10 +1044,10 @@ sal_Int32 LwpMiddleLayout::DetermineWidth()
     {
         assert(false);
     }
-    else
+    else if (LwpLayoutGeometry* pGeo = GetGeometry())
     {
         m_nAttributes3 |= STYLE3_WIDTHVALID;
-        return GetGeometry()->GetWidth();
+        return pGeo->GetWidth();
     }
     return 0;
 }
