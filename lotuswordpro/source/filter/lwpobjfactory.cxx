@@ -701,7 +701,12 @@ rtl::Reference<LwpObject> LwpObjectFactory::QueryObject(const LwpObjectID &objID
             return nullptr;
         }
 
+        if (std::find(m_aObjsIDInCreation.begin(), m_aObjsIDInCreation.end(), objID) != m_aObjsIDInCreation.end())
+            throw std::runtime_error("recursion in object creation");
+
+        m_aObjsIDInCreation.push_back(objID);
         obj = CreateObject(objHdr.GetTag(), objHdr);
+        m_aObjsIDInCreation.pop_back();
     }
     return obj;
 }
