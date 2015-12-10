@@ -1227,10 +1227,6 @@ void SbModule::Run( SbMethod* pMeth )
                     ::basic::vba::lockControllersOfAllDocuments( xModel, false );
                     ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, true );
                 }
-
-#ifdef DBG_TRACE_BASIC
-                dbg_DeInitTrace();
-#endif
             }
         }
         else

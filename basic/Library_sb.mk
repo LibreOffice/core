@@ -134,11 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/sbx/sbxvar \
 ))
 
-# Uncomment the following line if DBG_TRACE_PROFILING is active in source/inc/sbtrace.hxx
-# $(eval $(call gb_Library_use_libraries,sb,\
-	canvastools \
-))
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,sb,\
 	oleaut32 \
