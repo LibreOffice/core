@@ -730,6 +730,7 @@ UniscribeLayout::UniscribeLayout(HDC hDC, const ImplWinFontData& rWinFontData,
 {
     static bool bUseGLyphy = std::getenv("SAL_USE_GLYPHY") != NULL;
     mbUseGLyphy = bUseGLyphy;
+    ScriptGetProperties(&mppScriptProperties, &mnMaxScript);
 }
 
 UniscribeLayout::~UniscribeLayout()
@@ -909,7 +910,12 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     // adjust char positions by substring offset
     for( nItem = 0; nItem <= mnItemCount; ++nItem )
+    {
         mpScriptItems[ nItem ].iCharPos += mnSubStringMin;
+        if ((rArgs.mnFlags & SalLayoutFlags::Vertical) && !mppScriptProperties[mpScriptItems[ nItem ].a.eScript]->fComplex) {
+            mpScriptItems[ nItem ].a.fNoGlyphIndex = TRUE;
+        }
+    }
     // default visual item ordering
     mpVisualItems = new VisualItem[ mnItemCount ];
     for( nItem = 0; nItem < mnItemCount; ++nItem )

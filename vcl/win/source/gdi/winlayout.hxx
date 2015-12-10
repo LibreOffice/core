@@ -107,6 +107,9 @@ private:
     SCRIPT_ITEM*    mpScriptItems;      // in logical order
     VisualItem*     mpVisualItems;      // in visual order
     int             mnItemCount;        // number of visual items
+    // used for determining if a script requires glyph Shaping
+    const           SCRIPT_PROPERTIES **mppScriptProperties;
+    int             mnMaxScript;
 
     // string specific info
     // everything is in logical order
