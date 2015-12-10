@@ -81,7 +81,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
     //if (static_cast<LwpStory*>(pPara->GetStoryID()->obj())
     //  ->GetCurrentLayout()->GetNumCols() == 1)
     //New code
-    LwpStory* pStory = static_cast<LwpStory*>(pPara->GetStoryID().obj().get());
+    LwpStory* pStory = dynamic_cast<LwpStory*>(pPara->GetStoryID().obj().get());
     LwpPageLayout* pCurLayout = pStory ? pStory->GetCurrentLayout() : nullptr;
     if( pCurLayout && (pCurLayout->GetNumCols() == 1) )
 
