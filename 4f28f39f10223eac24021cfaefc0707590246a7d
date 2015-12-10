@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_3f5889fa",
+        "filename": "lotuswordpro/source/filter/lwpcelllayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-10T11:57:49Z",
+      "side": 1,
+      "message": "I think the comment should be removed now...",
+      "revId": "4f28f39f10223eac24021cfaefc0707590246a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
