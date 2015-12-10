@@ -126,7 +126,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
     XFParaStyle* pBaseStyle =  pPara->GetXFParaStyle();
     if (pBaseStyle == nullptr) return;
 
-    LwpPageLayout* pLayout = static_cast<LwpPageLayout*>(m_Layout.obj().get());
+    LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(m_Layout.obj().get());
     if(pLayout)
     {
         m_pMasterPage = new LwpMasterPage(pPara, pLayout);
