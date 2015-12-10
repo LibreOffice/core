@@ -23,7 +23,9 @@
 
 #include <osl/module.hxx>
 #include <tools/solarmutex.hxx>
+#ifdef ENABLE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
+#endif
 
 #include "generic/geninst.h"
 
@@ -55,7 +57,9 @@ void SalYieldMutex::release()
     {
         if ( mnCount == 1 )
         {
+#ifdef ENABLE_OPENGL
             OpenGLContext::prepareForYield();
+#endif
             mnThreadId = 0;
         }
         mnCount--;

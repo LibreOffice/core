@@ -568,7 +568,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
 	$(if $(ENABLE_GSTREAMER_0_10),avmediagst_0_10) \
 	$(if $(ENABLE_DIRECTX),avmediawin) \
-	$(if $(ENABLE_GLTF),avmediaogl) \
+	$(if $(ENABLE_OPENGL$),(if $(ENABLE_GLTF),avmediaogl)) \
 	cached1 \
 	collator_data \
 	comphelper \

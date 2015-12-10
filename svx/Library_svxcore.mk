@@ -314,7 +314,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdomeas \
     svx/source/svdraw/svdomedia \
     svx/source/svdraw/svdoole2 \
-    svx/source/svdraw/svdoopengl \
     svx/source/svdraw/svdopage \
     svx/source/svdraw/svdopath \
     svx/source/svdraw/svdorect \
@@ -411,7 +410,11 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/XPropertyEntry \
     svx/source/xoutdev/xtablend \
 ))
-
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_add_exception_objects,svxcore,\
+    svx/source/svdraw/svdoopengl \
+))
+endif
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/fmcomp/dbaexchange \
     svx/source/fmcomp/fmgridcl \

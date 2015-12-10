@@ -135,6 +135,7 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
         cairo_clip(cr);
     }
 }
+#ifdef CAIRO_VERSION
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 namespace
 {
@@ -158,7 +159,7 @@ namespace
     }
 }
 #endif
-
+#endif
 #endif
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
@@ -656,7 +657,7 @@ bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
 {
     return false;
 }
-
+#ifdef CAIRO_VERSION
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, bool bClosePath)
 {
@@ -719,12 +720,14 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
     }
 }
 #endif
+#endif
 
 bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
 {
     bool bRet = false;
     (void)rPolyPoly; (void)fTransparency;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+#ifdef CAIRO_VERSION
+#if defined CAIRO_VERSION && CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     if (m_bUseLineColor || !m_bUseFillColor)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygon case");
@@ -767,6 +770,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
                                                 extents.y + extents.height));
     }
     bRet = true;
+#endif
 #endif
     return bRet;
 }

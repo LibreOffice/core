@@ -20,7 +20,9 @@
 #include "PlottingPositionHelper.hxx"
 #include "CommonConverters.hxx"
 #include "ViewDefines.hxx"
+#ifdef ENABLE_OPENGL
 #include "Linear3DTransformation.hxx"
+#endif
 #include "VPolarTransformation.hxx"
 #include "AbstractShapeFactory.hxx"
 #include "PropertyMapper.hxx"
@@ -166,8 +168,9 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
             aMatrix.translate(0.0, 0.0, -MinZ*fScaleZ);
 
         aMatrix = m_aMatrixScreenToScene*aMatrix;
-
+#ifdef ENABLE_OPENGL
         m_xTransformationLogicToScene = new Linear3DTransformation(B3DHomMatrixToHomogenMatrix( aMatrix ),m_bSwapXAndY);
+#endif
     }
     return m_xTransformationLogicToScene;
 }
