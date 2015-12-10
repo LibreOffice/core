@@ -765,9 +765,7 @@ IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
                 break;
         }
         m_pPosBox->SelectEntryPos(pOpt->GetPos());
-        m_pPosBox->Enable( pOpt->GetObjType() != GRAPHIC_CAP &&
-                pOpt->GetObjType() != OLE_CAP &&
-                m_pPosBox->IsEnabled() );
+        m_pPosBox->Enable( m_pPosBox->IsEnabled() );
         m_pPosBox->SelectEntryPos(pOpt->GetPos());
 
         sal_Int32 nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;
