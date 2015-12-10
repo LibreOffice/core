@@ -69,6 +69,7 @@ void ValueSet::ImplInit()
     mnUserItemHeight    = 0;
     mnFirstLine         = 0;
     mnSelItemId         = 0;
+    mnSavedItemId       = 0;
     mnHighItemId        = 0;
     mnCols              = 0;
     mnCurCol            = 0;
