@@ -1148,7 +1148,7 @@ void LwpDropcapLayout::Parse(IXFStream* pOutputStream)
     if(pPara.is())
     {
         pPara->SetFoundry(m_pFoundry);
-        pPara->Parse(pOutputStream);
+        pPara->DoParse(pOutputStream);
     }
 }
 
