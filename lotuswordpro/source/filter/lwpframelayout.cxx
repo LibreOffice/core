@@ -912,10 +912,13 @@ bool LwpFrameLayout::IsForWaterMark()
 {
     if(m_nBuoyancy >=LAY_BUOYLAYER)
     {
-        if(!m_Content.IsNull() && (m_Content.obj()->GetTag()==VO_GRAPHIC) )
-        {
+        if (m_Content.IsNull())
+            return false;
+        rtl::Reference<LwpObject> content = m_Content.obj();
+        if (!content.is())
+            return false;
+        if (content->GetTag() == VO_GRAPHIC)
             return true;
-        }
     }
     return false;
 }
