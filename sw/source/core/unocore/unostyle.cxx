@@ -398,16 +398,14 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc&, OUString*, sal_Int32);
 template<>
 sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
-    const sal_uInt16 nBaseCount = nPoolChrHtmlRange + nPoolCollTextRange;
+    const sal_uInt16 nBaseCount = nPoolChrHtmlRange + nPoolChrNormalRange;
     nIndex -= nBaseCount;
     sal_Int32 nCount = 0;
     for(auto pFormat : *rDoc.GetCharFormats())
     {
-        if(pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat())
-            continue;
-        if(!IsPoolUserFormat(pFormat->GetPoolFormatId()))
-            continue;
-        if(nIndex == nCount)
+        if(!(pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat())
+                && IsPoolUserFormat(pFormat->GetPoolFormatId())
+                && nIndex == nCount)
         {
             // the default character format needs to be set to "Default!"
             if(rDoc.GetDfltCharFormat() == pFormat)
@@ -529,7 +527,7 @@ sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>(const sal_uInt16 nIndex)
     if(nIndex < nPoolChrNormalRange)
         return nIndex + RES_POOLCHR_NORMAL_BEGIN;
     else if(nIndex < (nPoolChrHtmlRange+nPoolChrNormalRange))
-        return nIndex + RES_POOLCHR_HTML_BEGIN + nPoolChrNormalRange;
+        return nIndex + RES_POOLCHR_HTML_BEGIN - nPoolChrNormalRange;
     throw lang::IndexOutOfBoundsException();
 }
 
@@ -540,15 +538,15 @@ sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>(const sal_uInt16 nIndex)
     if(nIndex < nPoolCollListsStackedStart)
         return nIndex + RES_POOLCOLL_TEXT_BEGIN;
     else if(nIndex < nPoolCollExtraStackedStart)
-        return nIndex + RES_POOLCOLL_LISTS_BEGIN + nPoolCollListsStackedStart;
+        return nIndex + RES_POOLCOLL_LISTS_BEGIN - nPoolCollListsStackedStart;
     else if(nIndex < nPoolCollRegisterStackedStart)
-        return nIndex + RES_POOLCOLL_EXTRA_BEGIN + nPoolCollExtraStackedStart;
+        return nIndex + RES_POOLCOLL_EXTRA_BEGIN - nPoolCollExtraStackedStart;
     else if(nIndex < nPoolCollDocStackedStart)
-        return nIndex + RES_POOLCOLL_REGISTER_BEGIN + nPoolCollRegisterStackedStart;
+        return nIndex + RES_POOLCOLL_REGISTER_BEGIN - nPoolCollRegisterStackedStart;
     else if(nIndex < nPoolCollHtmlStackedStart)
-        return nIndex + RES_POOLCOLL_DOC_BEGIN + nPoolCollDocStackedStart;
+        return nIndex + RES_POOLCOLL_DOC_BEGIN - nPoolCollDocStackedStart;
     else if(nIndex < nPoolCollHtmlStackedStart + nPoolCollTextRange)
-        return nIndex + RES_POOLCOLL_HTML_BEGIN + nPoolCollHtmlStackedStart;
+        return nIndex + RES_POOLCOLL_HTML_BEGIN - nPoolCollHtmlStackedStart;
     throw lang::IndexOutOfBoundsException();
 }
 
@@ -575,7 +573,6 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     } catch(...) {}
     if (sStyleName.isEmpty())
         GetCountOrName(&sStyleName, nIndex);
-
     if(sStyleName.isEmpty())
         throw lang::IndexOutOfBoundsException();
     return getByName(sStyleName);
