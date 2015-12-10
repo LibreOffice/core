@@ -33,13 +33,7 @@
 #include <impvect.hxx>
 
 #include "octree.hxx"
-#include <ResampleKernel.hxx>
-
-using vcl::Kernel;
-using vcl::Lanczos3Kernel;
-using vcl::BicubicKernel;
-using vcl::BilinearKernel;
-using vcl::BoxKernel;
+#include "BitmapScaleConvolution.hxx"
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10UL)|((sal_uLong)(_def_cG)<<5UL)|(sal_uLong)(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
@@ -976,30 +970,26 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         case BmpScaleFlag::Lanczos :
         case BmpScaleFlag::BestQuality:
         {
-            const Lanczos3Kernel kernel;
-
-            bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
+            bRetval = aScaleConvolution.filter(*this);
             break;
         }
         case BmpScaleFlag::BiCubic :
         {
-            const BicubicKernel kernel;
-
-            bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
+            bRetval = aScaleConvolution.filter(*this);
             break;
         }
         case BmpScaleFlag::BiLinear :
         {
-            const BilinearKernel kernel;
-
-            bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
+            bRetval = aScaleConvolution.filter(*this);
             break;
         }
         case BmpScaleFlag::Box :
         {
-            const BoxKernel kernel;
-
-            bRetval = ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::Box);
+            bRetval = aScaleConvolution.filter(*this);
             break;
         }
     }
@@ -1335,362 +1325,6 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
     }
 
     return bRet;
-}
-
-namespace
-{
-    void ImplCalculateContributions(
-        const sal_uInt32 aSourceSize,
-        const sal_uInt32 aDestinationSize,
-        sal_uInt32& aNumberOfContributions,
-        double*& pWeights,
-        sal_uInt32*& pPixels,
-        sal_uInt32*& pCount,
-        const Kernel& aKernel)
-    {
-        const double fSamplingRadius(aKernel.GetWidth());
-        const double fScale(aDestinationSize / static_cast< double >(aSourceSize));
-        const double fScaledRadius((fScale < 1.0) ? fSamplingRadius / fScale : fSamplingRadius);
-        const double fFilterFactor((fScale < 1.0) ? fScale : 1.0);
-
-        aNumberOfContributions = (static_cast< sal_uInt32 >(fabs(ceil(fScaledRadius))) * 2) + 1;
-        const sal_uInt32 nAllocSize(aDestinationSize * aNumberOfContributions);
-        pWeights = new double[nAllocSize];
-        pPixels = new sal_uInt32[nAllocSize];
-        pCount = new sal_uInt32[aDestinationSize];
-
-        for(sal_uInt32 i(0); i < aDestinationSize; i++)
-        {
-            const sal_uInt32 aIndex(i * aNumberOfContributions);
-            const double aCenter(i / fScale);
-            const sal_Int32 aLeft(static_cast< sal_Int32 >(floor(aCenter - fScaledRadius)));
-            const sal_Int32 aRight(static_cast< sal_Int32 >(ceil(aCenter + fScaledRadius)));
-            sal_uInt32 aCurrentCount(0);
-
-            for(sal_Int32 j(aLeft); j <= aRight; j++)
-            {
-                const double aWeight(aKernel.Calculate(fFilterFactor * (aCenter - static_cast< double>(j))));
-
-                // Reduce calculations with ignoring weights of 0.0
-                if(fabs(aWeight) < 0.0001)
-                {
-                    continue;
-                }
-
-                // Handling on edges
-                const sal_uInt32 aPixelIndex(MinMax(j, 0, aSourceSize - 1));
-                const sal_uInt32 nIndex(aIndex + aCurrentCount);
-
-                pWeights[nIndex] = aWeight;
-                pPixels[nIndex] = aPixelIndex;
-
-                aCurrentCount++;
-            }
-
-            pCount[i] = aCurrentCount;
-        }
-    }
-
-    bool ImplScaleConvolutionHor(
-        Bitmap& rSource,
-        Bitmap& rTarget,
-        const double& rScaleX,
-        const Kernel& aKernel)
-    {
-        // Do horizontal filtering
-        OSL_ENSURE(rScaleX > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
-        const sal_uInt32 nWidth(rSource.GetSizePixel().Width());
-        const sal_uInt32 nNewWidth(FRound(nWidth * rScaleX));
-
-        if(nWidth == nNewWidth)
-        {
-            return true;
-        }
-
-        BitmapReadAccess* pReadAcc = rSource.AcquireReadAccess();
-
-        if(pReadAcc)
-        {
-            double* pWeights = nullptr;
-            sal_uInt32* pPixels = nullptr;
-            sal_uInt32* pCount = nullptr;
-            sal_uInt32 aNumberOfContributions(0);
-
-            const sal_uInt32 nHeight(rSource.GetSizePixel().Height());
-            ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
-            rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
-            BitmapWriteAccess* pWriteAcc = rTarget.AcquireWriteAccess();
-            bool bResult(nullptr != pWriteAcc);
-
-            if(bResult)
-            {
-                for(sal_uInt32 y(0); y < nHeight; y++)
-                {
-                    for(sal_uInt32 x(0); x < nNewWidth; x++)
-                    {
-                        const sal_uInt32 aBaseIndex(x * aNumberOfContributions);
-                        double aSum(0.0);
-                        double aValueRed(0.0);
-                        double aValueGreen(0.0);
-                        double aValueBlue(0.0);
-
-                        for(sal_uInt32 j(0); j < pCount[x]; j++)
-                        {
-                            const sal_uInt32 aIndex(aBaseIndex + j);
-                            const double aWeight(pWeights[aIndex]);
-                            BitmapColor aColor;
-
-                            aSum += aWeight;
-
-                            if(pReadAcc->HasPalette())
-                            {
-                                aColor = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(y, pPixels[aIndex]));
-                            }
-                            else
-                            {
-                                aColor = pReadAcc->GetPixel(y, pPixels[aIndex]);
-                            }
-
-                            aValueRed += aWeight * aColor.GetRed();
-                            aValueGreen += aWeight * aColor.GetGreen();
-                            aValueBlue += aWeight * aColor.GetBlue();
-                        }
-
-                        const BitmapColor aResultColor(
-                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
-                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
-                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
-
-                        pWriteAcc->SetPixel(y, x, aResultColor);
-                    }
-                }
-
-                Bitmap::ReleaseAccess(pWriteAcc);
-            }
-
-            Bitmap::ReleaseAccess(pReadAcc);
-            delete[] pWeights;
-            delete[] pCount;
-            delete[] pPixels;
-
-            if(bResult)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    bool ImplScaleConvolutionVer(
-        Bitmap& rSource,
-        Bitmap& rTarget,
-        const double& rScaleY,
-        const Kernel& aKernel)
-    {
-        // Do vertical filtering
-        OSL_ENSURE(rScaleY > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
-        const sal_uInt32 nHeight(rSource.GetSizePixel().Height());
-        const sal_uInt32 nNewHeight(FRound(nHeight * rScaleY));
-
-        if(nHeight == nNewHeight)
-        {
-            return true;
-        }
-
-        BitmapReadAccess* pReadAcc = rSource.AcquireReadAccess();
-
-        if(pReadAcc)
-        {
-            double* pWeights = nullptr;
-            sal_uInt32* pPixels = nullptr;
-            sal_uInt32* pCount = nullptr;
-            sal_uInt32 aNumberOfContributions(0);
-
-            const sal_uInt32 nWidth(rSource.GetSizePixel().Width());
-            ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
-            rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
-            BitmapWriteAccess* pWriteAcc = rTarget.AcquireWriteAccess();
-            bool bResult(nullptr != pWriteAcc);
-
-            if(pWriteAcc)
-            {
-                for(sal_uInt32 x(0); x < nWidth; x++)
-                {
-                    for(sal_uInt32 y(0); y < nNewHeight; y++)
-                    {
-                        const sal_uInt32 aBaseIndex(y * aNumberOfContributions);
-                        double aSum(0.0);
-                        double aValueRed(0.0);
-                        double aValueGreen(0.0);
-                        double aValueBlue(0.0);
-
-                        for(sal_uInt32 j(0); j < pCount[y]; j++)
-                        {
-                            const sal_uInt32 aIndex(aBaseIndex + j);
-                            const double aWeight(pWeights[aIndex]);
-                            BitmapColor aColor;
-
-                            aSum += aWeight;
-
-                            if(pReadAcc->HasPalette())
-                            {
-                                aColor = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(pPixels[aIndex], x));
-                            }
-                            else
-                            {
-                                aColor = pReadAcc->GetPixel(pPixels[aIndex], x);
-                            }
-
-                            aValueRed += aWeight * aColor.GetRed();
-                            aValueGreen += aWeight * aColor.GetGreen();
-                            aValueBlue += aWeight * aColor.GetBlue();
-                        }
-
-                        const BitmapColor aResultColor(
-                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
-                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
-                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
-
-                        if(pWriteAcc->HasPalette())
-                        {
-                            pWriteAcc->SetPixelIndex(y, x, static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(aResultColor)));
-                        }
-                        else
-                        {
-                            pWriteAcc->SetPixel(y, x, aResultColor);
-                        }
-                    }
-                }
-            }
-
-            Bitmap::ReleaseAccess(pWriteAcc);
-            Bitmap::ReleaseAccess(pReadAcc);
-
-            delete[] pWeights;
-            delete[] pCount;
-            delete[] pPixels;
-
-            if(bResult)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
-
-// #i121233# Added BmpScaleFlag::Lanczos, BmpScaleFlag::BiCubic, BmpScaleFlag::BiLinear and
-// BmpScaleFlag::Box derived from the original commit from Tomas Vajngerl (see
-// bugzilla task for details) Thanks!
-bool Bitmap::ImplScaleConvolution(
-    const double& rScaleX,
-    const double& rScaleY,
-    const Kernel& aKernel)
-{
-    const bool bMirrorHor(rScaleX < 0.0);
-    const bool bMirrorVer(rScaleY < 0.0);
-    const double fScaleX(bMirrorHor ? -rScaleX : rScaleX);
-    const double fScaleY(bMirrorVer ? -rScaleY : rScaleY);
-    const sal_uInt32 nWidth(GetSizePixel().Width());
-    const sal_uInt32 nHeight(GetSizePixel().Height());
-    const sal_uInt32 nNewWidth(FRound(nWidth * fScaleX));
-    const sal_uInt32 nNewHeight(FRound(nHeight * fScaleY));
-    const bool bScaleHor(nWidth != nNewWidth);
-    const bool bScaleVer(nHeight != nNewHeight);
-    const bool bMirror(bMirrorHor || bMirrorVer);
-
-    if(!bMirror && !bScaleHor && !bScaleVer)
-    {
-        return true;
-    }
-
-    bool bResult(true);
-    BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
-    bool bMirrorAfter(false);
-
-    if(bMirror)
-    {
-        if(bMirrorHor)
-        {
-            nMirrorFlags |= BmpMirrorFlags::Horizontal;
-        }
-
-        if(bMirrorVer)
-        {
-            nMirrorFlags |= BmpMirrorFlags::Vertical;
-        }
-
-        const sal_uInt32 nStartSize(nWidth * nHeight);
-        const sal_uInt32 nEndSize(nNewWidth * nNewHeight);
-
-        bMirrorAfter = nStartSize > nEndSize;
-
-        if(!bMirrorAfter)
-        {
-            bResult = Mirror(nMirrorFlags);
-        }
-    }
-
-    Bitmap aResult;
-
-    if(bResult)
-    {
-        const sal_uInt32 nInBetweenSizeHorFirst(nHeight * nNewWidth);
-        const sal_uInt32 nInBetweenSizeVerFirst(nNewHeight * nWidth);
-        Bitmap aSource(*this);
-
-        if(nInBetweenSizeHorFirst < nInBetweenSizeVerFirst)
-        {
-            if(bScaleHor)
-            {
-                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
-            }
-
-            if(bResult && bScaleVer)
-            {
-                if(bScaleHor)
-                {
-                    // copy partial result, independent of color depth
-                    aSource = aResult;
-                }
-
-                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
-            }
-        }
-        else
-        {
-            if(bScaleVer)
-            {
-                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
-            }
-
-            if(bResult && bScaleHor)
-            {
-                if(bScaleVer)
-                {
-                    // copy partial result, independent of color depth
-                    aSource = aResult;
-                }
-
-                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
-            }
-        }
-    }
-
-    if(bResult && bMirrorAfter)
-    {
-        bResult = aResult.Mirror(nMirrorFlags);
-    }
-
-    if(bResult)
-    {
-        ImplAdaptBitCount(aResult);
-        *this = aResult;
-    }
-
-    return bResult;
 }
 
 bool Bitmap::Dither( BmpDitherFlags nDitherFlags )
