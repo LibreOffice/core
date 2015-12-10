@@ -233,7 +233,9 @@ void LwpDocument::RegisterStyle()
 void LwpDocument::RegisterTextStyles()
 {
     //Register all text styles: para styles, character styles
-    LwpDLVListHeadHolder* pParaStyleHolder = dynamic_cast<LwpDLVListHeadHolder*>(m_pFoundry->GetTextStyleHead().obj().get());
+    LwpDLVListHeadHolder* pParaStyleHolder = m_pFoundry
+        ? dynamic_cast<LwpDLVListHeadHolder*>(m_pFoundry->GetTextStyleHead().obj().get())
+        : nullptr;
     if(pParaStyleHolder)
     {
         LwpTextStyle* pParaStyle = dynamic_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID().obj().get());
@@ -252,12 +254,15 @@ void LwpDocument::RegisterTextStyles()
  */
 void LwpDocument::RegisterLayoutStyles()
 {
-    //Register all layout styles, before register all styles in para
-    m_pFoundry->RegisterAllLayouts();
+    if (m_pFoundry)
+    {
+        //Register all layout styles, before register all styles in para
+        m_pFoundry->RegisterAllLayouts();
+    }
 
     //set initial pagelayout in story for parsing pagelayout
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj( VO_DIVISIONINFO).get());
-    if(pDivInfo)
+    if (pDivInfo)
     {
         LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID().obj(VO_PAGELAYOUT).get());
         if(pPageLayout)
@@ -279,8 +284,10 @@ void LwpDocument::RegisterLayoutStyles()
 void LwpDocument::RegisterStylesInPara()
 {
     //Register all automatic styles in para
-    LwpHeadContent* pContent = dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager().GetContentList().obj().get());
-    if(pContent)
+    LwpHeadContent* pContent = m_pFoundry
+        ? dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager().GetContentList().obj().get())
+        : nullptr;
+    if (pContent)
     {
         LwpStory* pStory = dynamic_cast<LwpStory*>(pContent->GetChildHead().obj(VO_STORY).get());
         while(pStory)
@@ -297,19 +304,20 @@ void LwpDocument::RegisterStylesInPara()
  */
 void LwpDocument::RegisterBulletStyles()
 {
+    if (!m_pFoundry)
+        return;
     //Register bullet styles
     LwpDLVListHeadHolder* mBulletHead = dynamic_cast<LwpDLVListHeadHolder*>
         (m_pFoundry->GetBulletManagerID().obj(VO_HEADHOLDER).get());
-    if( mBulletHead )
+    if (!mBulletHead)
+        return;
+    LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
+                        (mBulletHead->GetHeadID().obj().get());
+    while(pBullet)
     {
-        LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
-                            (mBulletHead->GetHeadID().obj().get());
-        while(pBullet)
-        {
-            pBullet->SetFoundry(m_pFoundry);
-            pBullet->RegisterStyle();
-            pBullet = dynamic_cast<LwpSilverBullet*> (pBullet->GetNext().obj().get());
-        }
+        pBullet->SetFoundry(m_pFoundry);
+        pBullet->RegisterStyle();
+        pBullet = dynamic_cast<LwpSilverBullet*> (pBullet->GetNext().obj().get());
     }
 }
 /**
@@ -317,13 +325,14 @@ void LwpDocument::RegisterBulletStyles()
  */
 void LwpDocument::RegisterGraphicsStyles()
 {
+    if (!m_pFoundry)
+        return;
     //Register all graphics styles, the first object should register the next;
     rtl::Reference<LwpObject> pGraphic = m_pFoundry->GetGraphicListHead().obj(VO_GRAPHIC);
-    if(pGraphic.is())
-    {
-        pGraphic->SetFoundry(m_pFoundry);
-        pGraphic->DoRegisterStyle();
-    }
+    if (!pGraphic.is())
+        return;
+    pGraphic->SetFoundry(m_pFoundry);
+    pGraphic->DoRegisterStyle();
 }
 /**
  * @descr  Register line number styles
