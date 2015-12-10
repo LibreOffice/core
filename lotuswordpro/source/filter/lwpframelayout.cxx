@@ -1235,6 +1235,8 @@ void LwpRubyLayout::ConvertContentText()
 void LwpRubyLayout::RegisterStyle()
 {
     LwpRubyMarker* pMarker = GetMarker();
+    if (!pMarker)
+        throw std::runtime_error("missing Ruby Marker");
 
     XFRubyStyle* pRubyStyle = new XFRubyStyle;
 
