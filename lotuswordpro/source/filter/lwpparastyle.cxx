@@ -663,6 +663,9 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
 
 void LwpParaStyle::RegisterStyle()
 {
+    if (!m_pFoundry)
+        throw std::runtime_error("missing Foundry");
+
     XFParaStyle* pStyle = new XFParaStyle();
 
     //Set name
