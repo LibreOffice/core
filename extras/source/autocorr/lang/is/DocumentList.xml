@@ -78,6 +78,7 @@
   <block-list:block block-list:abbreviated-name=":alfa:" block-list:name="α"/>
   <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
   <block-list:block block-list:abbreviated-name=":ananas:" block-list:name="🍍"/>
+  <block-list:block block-list:abbreviated-name=":angistarfullur:" block-list:name="😧"/>
   <block-list:block block-list:abbreviated-name=":ankh fleygrún:" block-list:name="☥"/>
   <block-list:block block-list:abbreviated-name=":api2:" block-list:name="🐵"/>
   <block-list:block block-list:abbreviated-name=":api:" block-list:name="🐒"/>
@@ -89,6 +90,7 @@
   <block-list:block block-list:abbreviated-name=":athugasemd:" block-list:name="♩"/>
   <block-list:block block-list:abbreviated-name=":atóm:" block-list:name="⚛"/>
   <block-list:block block-list:abbreviated-name=":áttundapartsnóta:" block-list:name="𝅘𝅥𝅮"/>
+  <block-list:block block-list:abbreviated-name=":áttundapartsþögn:" block-list:name="𝄾"/>
   <block-list:block block-list:abbreviated-name=":augu:" block-list:name="👀"/>
   <block-list:block block-list:abbreviated-name=":AV2:" block-list:name="⇔"/>
   <block-list:block block-list:abbreviated-name=":AV:" block-list:name="↔"/>
@@ -179,6 +181,7 @@
   <block-list:block block-list:abbreviated-name=":brúðkaup:" block-list:name="💒"/>
   <block-list:block block-list:abbreviated-name=":brúður:" block-list:name="👰"/>
   <block-list:block block-list:abbreviated-name=":budda:" block-list:name="👛"/>
+  <block-list:block block-list:abbreviated-name=":búðingur:" block-list:name="🍮"/>
   <block-list:block block-list:abbreviated-name=":býfluga:" block-list:name="🐝"/>
   <block-list:block block-list:abbreviated-name=":byggingavinna:" block-list:name="🚧"/>
   <block-list:block block-list:abbreviated-name=":byrjandi:" block-list:name="🔰"/>
@@ -215,6 +218,7 @@
   <block-list:block block-list:abbreviated-name=":drykkjarvatn:" block-list:name="🚰"/>
   <block-list:block block-list:abbreviated-name=":duftker:" block-list:name="⚱"/>
   <block-list:block block-list:abbreviated-name=":dúkkur:" block-list:name="🎎"/>
+  <block-list:block block-list:abbreviated-name=":durtur:" block-list:name="👺"/>
   <block-list:block block-list:abbreviated-name=":dvd:" block-list:name="📀"/>
   <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
   <block-list:block block-list:abbreviated-name=":_e:" block-list:name="ₑ"/>
@@ -230,8 +234,8 @@
   <block-list:block block-list:abbreviated-name=":ekki:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":ekki gott:" block-list:name="🙅"/>
   <block-list:block block-list:abbreviated-name=":ekki henda rusli:" block-list:name="🚯"/>
+  <block-list:block block-list:abbreviated-name=":ekki hluti af:" block-list:name="∉"/>
   <block-list:block block-list:abbreviated-name=":ekki hlutmengi:" block-list:name="⊄"/>
-  <block-list:block block-list:abbreviated-name=":ekki í:" block-list:name="∉"/>
   <block-list:block block-list:abbreviated-name=":ekki jafnt:" block-list:name="≠"/>
   <block-list:block block-list:abbreviated-name=":ekki yfirmengi:" block-list:name="⊅"/>
   <block-list:block block-list:abbreviated-name=":eldfjall:" block-list:name="🌋"/>
@@ -241,6 +245,7 @@
   <block-list:block block-list:abbreviated-name=":eldri maður:" block-list:name="👴"/>
   <block-list:block block-list:abbreviated-name=":eldsneytisdæla:" block-list:name="⛽"/>
   <block-list:block block-list:abbreviated-name=":eldur:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":endir sönnunar:" block-list:name="∎"/>
   <block-list:block block-list:abbreviated-name=":endurunninn pappír:" block-list:name="♼"/>
   <block-list:block block-list:abbreviated-name=":endurvinnsla2:" block-list:name="♻"/>
   <block-list:block block-list:abbreviated-name=":endurvinnsla:" block-list:name="♲"/>
@@ -294,6 +299,8 @@
   <block-list:block block-list:abbreviated-name=":fjall:" block-list:name="⛰"/>
   <block-list:block block-list:abbreviated-name=":fjölskylda:" block-list:name="👪"/>
   <block-list:block block-list:abbreviated-name=":fjórðapartsnóta:" block-list:name="𝅘𝅥"/>
+  <block-list:block block-list:abbreviated-name=":fjórðapartsþögn:" block-list:name="𝄽"/>
+  <block-list:block block-list:abbreviated-name=":fjórða rót:" block-list:name="∜"/>
   <block-list:block block-list:abbreviated-name=":flagg2:" block-list:name="⚑"/>
   <block-list:block block-list:abbreviated-name=":flagg3:" block-list:name="🏁"/>
   <block-list:block block-list:abbreviated-name=":flagg:" block-list:name="⚐"/>
@@ -342,6 +349,7 @@
   <block-list:block block-list:abbreviated-name=":gleðiköttur:" block-list:name="😹"/>
   <block-list:block block-list:abbreviated-name=":gleraugu:" block-list:name="👓"/>
   <block-list:block block-list:abbreviated-name=":glottandi:" block-list:name="😀"/>
+  <block-list:block block-list:abbreviated-name=":glottandi köttur:" block-list:name="😼"/>
   <block-list:block block-list:abbreviated-name=":glott:" block-list:name="😁"/>
   <block-list:block block-list:abbreviated-name=":G-lykill:" block-list:name="𝄞"/>
   <block-list:block block-list:abbreviated-name=":golf:" block-list:name="⛳"/>
@@ -373,6 +381,7 @@
   <block-list:block block-list:abbreviated-name=":hakreitur:" block-list:name="☐"/>
   <block-list:block block-list:abbreviated-name=":halastjarna:" block-list:name="☄"/>
   <block-list:block block-list:abbreviated-name=":hálfnóta:" block-list:name="𝅗𝅥"/>
+  <block-list:block block-list:abbreviated-name=":hálfnótuþögn:" block-list:name="𝄼"/>
   <block-list:block block-list:abbreviated-name=":hálka:" block-list:name="⛐"/>
   <block-list:block block-list:abbreviated-name=":hálsbindi:" block-list:name="👔"/>
   <block-list:block block-list:abbreviated-name=":hamar:" block-list:name="🔨"/>
@@ -391,6 +400,7 @@
   <block-list:block block-list:abbreviated-name=":hattur2:" block-list:name="👲"/>
   <block-list:block block-list:abbreviated-name=":hattur:" block-list:name="👒"/>
   <block-list:block block-list:abbreviated-name=":hauskúpa:" block-list:name="💀"/>
+  <block-list:block block-list:abbreviated-name=":hawairós:" block-list:name="🌺"/>
   <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
   <block-list:block block-list:abbreviated-name=":_h:" block-list:name="ₕ"/>
   <block-list:block block-list:abbreviated-name=":^H:" block-list:name="ᴴ"/>
@@ -400,6 +410,7 @@
   <block-list:block block-list:abbreviated-name=":heildi5:" block-list:name="∰"/>
   <block-list:block block-list:abbreviated-name=":heildi:" block-list:name="∫"/>
   <block-list:block block-list:abbreviated-name=":heilnóta:" block-list:name="𝅝"/>
+  <block-list:block block-list:abbreviated-name=":heilnótuþögn:" block-list:name="𝄻"/>
   <block-list:block block-list:abbreviated-name=":heitar uppsprettur:" block-list:name="♨"/>
   <block-list:block block-list:abbreviated-name=":hermesarsproti:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":hermesarstafur:" block-list:name="⚚"/>
@@ -425,6 +436,7 @@
   <block-list:block block-list:abbreviated-name=":hlébarði:" block-list:name="🐆"/>
   <block-list:block block-list:abbreviated-name=":hljóð:" block-list:name="🔉"/>
   <block-list:block block-list:abbreviated-name=":hljóðnemi:" block-list:name="🎤"/>
+  <block-list:block block-list:abbreviated-name=":hluti af:" block-list:name="∈"/>
   <block-list:block block-list:abbreviated-name=":hluti:" block-list:name="§"/>
   <block-list:block block-list:abbreviated-name=":hlutlaust andlit:" block-list:name="😐"/>
   <block-list:block block-list:abbreviated-name=":hlutmengi:" block-list:name="⊂"/>
@@ -457,6 +469,7 @@
   <block-list:block block-list:abbreviated-name=":hringsnúandi hjörtu:" block-list:name="💞"/>
   <block-list:block block-list:abbreviated-name=":hringur2:" block-list:name="●"/>
   <block-list:block block-list:abbreviated-name=":hringur:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":hrísgrjónaathöfn:" block-list:name="🎑"/>
   <block-list:block block-list:abbreviated-name=":hrísgrjón:" block-list:name="🍚"/>
   <block-list:block block-list:abbreviated-name=":hrískaka:" block-list:name="🍘"/>
   <block-list:block block-list:abbreviated-name=":hrískúla:" block-list:name="🍙"/>
@@ -485,10 +498,11 @@
   <block-list:block block-list:abbreviated-name=":^i:" block-list:name="ⁱ"/>
   <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
   <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
-  <block-list:block block-list:abbreviated-name=":í:" block-list:name="∈"/>
   <block-list:block block-list:abbreviated-name=":í lagi2:" block-list:name="🙆"/>
   <block-list:block block-list:abbreviated-name=":í lagi:" block-list:name="👌"/>
   <block-list:block block-list:abbreviated-name=":í mark:" block-list:name="🎯"/>
+  <block-list:block block-list:abbreviated-name=":inniheldur:" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=":inniheldur ekki:" block-list:name="∌"/>
   <block-list:block block-list:abbreviated-name=":já:" block-list:name="👍"/>
   <block-list:block block-list:abbreviated-name=":Japan:" block-list:name="🗾"/>
   <block-list:block block-list:abbreviated-name=":jarðarber:" block-list:name="🍓"/>
@@ -561,10 +575,12 @@
   <block-list:block block-list:abbreviated-name=":koss:" block-list:name="💏"/>
   <block-list:block block-list:abbreviated-name=":köttur2:" block-list:name="🐱"/>
   <block-list:block block-list:abbreviated-name=":köttur:" block-list:name="🐈"/>
+  <block-list:block block-list:abbreviated-name=":köttur með hjartaaugu:" block-list:name="😻"/>
   <block-list:block block-list:abbreviated-name=":Krabbi:" block-list:name="♋"/>
   <block-list:block block-list:abbreviated-name=":kreditkort:" block-list:name="💳"/>
   <block-list:block block-list:abbreviated-name=":krókódíll:" block-list:name="🐊"/>
   <block-list:block block-list:abbreviated-name=":krystalskúla:" block-list:name="🔮"/>
+  <block-list:block block-list:abbreviated-name=":kúla úr pappírsskrauti:" block-list:name="🎊"/>
   <block-list:block block-list:abbreviated-name=":kvaðratrót:" block-list:name="√"/>
   <block-list:block block-list:abbreviated-name=":kvenkyns:" block-list:name="♀"/>
   <block-list:block block-list:abbreviated-name=":kvikmyndavél:" block-list:name="🎥"/>
@@ -602,11 +618,14 @@
   <block-list:block block-list:abbreviated-name=":list:" block-list:name="🎨"/>
   <block-list:block block-list:abbreviated-name=":lítill ferningur2:" block-list:name="▪"/>
   <block-list:block block-list:abbreviated-name=":lítill ferningur:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":lítill hluti af:" block-list:name="∊"/>
+  <block-list:block block-list:abbreviated-name=":lítill inniheldur:" block-list:name="∍"/>
   <block-list:block block-list:abbreviated-name=":lítil stjarna2:" block-list:name="⭑"/>
   <block-list:block block-list:abbreviated-name=":lítil stjarna:" block-list:name="⭒"/>
   <block-list:block block-list:abbreviated-name=":Ljón:" block-list:name="♌"/>
   <block-list:block block-list:abbreviated-name=":ljósker:" block-list:name="🏮"/>
   <block-list:block block-list:abbreviated-name=":ljóst hár:" block-list:name="👱"/>
+  <block-list:block block-list:abbreviated-name=":loftlest:" block-list:name="🚟"/>
   <block-list:block block-list:abbreviated-name=":lögga:" block-list:name="👮"/>
   <block-list:block block-list:abbreviated-name=":lögreglubíll2:" block-list:name="🚔"/>
   <block-list:block block-list:abbreviated-name=":lögreglubíll:" block-list:name="🚓"/>
@@ -686,6 +705,7 @@
   <block-list:block block-list:abbreviated-name=":nótnaskrift:" block-list:name="🎼"/>
   <block-list:block block-list:abbreviated-name=":nótt:" block-list:name="🌃"/>
   <block-list:block block-list:abbreviated-name=":NS2:" block-list:name="⇕"/>
+  <block-list:block block-list:abbreviated-name=":nsamsíða:" block-list:name="∦"/>
   <block-list:block block-list:abbreviated-name=":NS:" block-list:name="↕"/>
   <block-list:block block-list:abbreviated-name=":nu:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":Nu:" block-list:name="Ν"/>
@@ -700,6 +720,7 @@
   <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
   <block-list:block block-list:abbreviated-name=":ódrykkjarhæft vatn:" block-list:name="🚱"/>
   <block-list:block block-list:abbreviated-name=":óendanleiki:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":ófreskja:" block-list:name="👹"/>
   <block-list:block block-list:abbreviated-name=":ofsareiður:" block-list:name="😡"/>
   <block-list:block block-list:abbreviated-name=":og:" block-list:name="∧"/>
   <block-list:block block-list:abbreviated-name=":ómega:" block-list:name="ω"/>
@@ -712,6 +733,7 @@
   <block-list:block block-list:abbreviated-name=":óskemmt:" block-list:name="😒"/>
   <block-list:block block-list:abbreviated-name=":óskilafarangur:" block-list:name="🛅"/>
   <block-list:block block-list:abbreviated-name=":öskur:" block-list:name="😱"/>
+  <block-list:block block-list:abbreviated-name=":öskurköttur:" block-list:name="🙀"/>
   <block-list:block block-list:abbreviated-name=":pakki:" block-list:name="📦"/>
   <block-list:block block-list:abbreviated-name=":pálmi:" block-list:name="🌴"/>
   <block-list:block block-list:abbreviated-name=":pandabjörn:" block-list:name="🐼"/>
@@ -869,6 +891,8 @@
   <block-list:block block-list:abbreviated-name=":skrifstofa:" block-list:name="🏢"/>
   <block-list:block block-list:abbreviated-name=":skrúflykill:" block-list:name="🔧"/>
   <block-list:block block-list:abbreviated-name=":skrun:" block-list:name="📜"/>
+  <block-list:block block-list:abbreviated-name=":skúffaður:" block-list:name="🙎"/>
+  <block-list:block block-list:abbreviated-name=":skúffaður köttur:" block-list:name="😾"/>
   <block-list:block block-list:abbreviated-name=":skurðflötur:" block-list:name="∩"/>
   <block-list:block block-list:abbreviated-name=":ský2:" block-list:name="⛅"/>
   <block-list:block block-list:abbreviated-name=":ský3:" block-list:name="⛈"/>
@@ -967,6 +991,7 @@
   <block-list:block block-list:abbreviated-name=":svört drottning:" block-list:name="♛"/>
   <block-list:block block-list:abbreviated-name=":syfjaður:" block-list:name="😪"/>
   <block-list:block block-list:abbreviated-name=":talblaðra:" block-list:name="💬"/>
+  <block-list:block block-list:abbreviated-name=":tanabata bænatré:" block-list:name="🎋"/>
   <block-list:block block-list:abbreviated-name=":tangerína:" block-list:name="🍊"/>
   <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
   <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
@@ -1019,6 +1044,8 @@
   <block-list:block block-list:abbreviated-name=":túrban:" block-list:name="👳"/>
   <block-list:block block-list:abbreviated-name=":turn:" block-list:name="🗼"/>
   <block-list:block block-list:abbreviated-name=":Tvíburi:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":tvíhækkun:" block-list:name="𝄪"/>
+  <block-list:block block-list:abbreviated-name=":tvílækkun:" block-list:name="𝄫"/>
   <block-list:block block-list:abbreviated-name=":tvö hjörtu:" block-list:name="💕"/>
   <block-list:block block-list:abbreviated-name=":tyrknesk líra:" block-list:name="₺"/>
   <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
