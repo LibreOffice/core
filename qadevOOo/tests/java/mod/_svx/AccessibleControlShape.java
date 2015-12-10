@@ -91,7 +91,9 @@ public class AccessibleControlShape extends TestCase {
                         Size size = oShape.getSize();
                         size.Width += 100;
                         oShape.setSize(size);
-                    } catch(com.sun.star.beans.PropertyVetoException e) {}
+                    } catch(com.sun.star.beans.PropertyVetoException e) {
+                        System.out.println("caught exception: " + e);
+                    }
                 }
             });
 

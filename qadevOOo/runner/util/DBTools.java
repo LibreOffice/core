@@ -161,7 +161,9 @@ public class DBTools {
             dbContext = UnoRuntime.queryInterface
                 (XNamingService.class, cont) ;
 
-        } catch (com.sun.star.uno.Exception e) {}
+        } catch (com.sun.star.uno.Exception e) {
+            System.out.println("caught exception: " + e);
+        }
     }
 
     /**

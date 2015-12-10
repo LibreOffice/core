@@ -92,7 +92,9 @@ public class _XGoalSeek extends MultiMethodTest {
             xSheet.getCellByPosition(3, 4).setValue(0.8);
             xSheet.getCellByPosition(3, 5).setFormula("= (D5 ^ 2 - 1) / (D5 - 1)");
         }
-        catch(Exception e) {}
+        catch(Exception e) {
+            System.out.println("caught exception: " + e);
+        }
         goal = oObj.seekGoal(aFormula, aValue, "2");
         log.println("Goal Result: " + goal.Result + "   Divergence: " + goal.Divergence);
         result &= goal.Divergence < divergence;

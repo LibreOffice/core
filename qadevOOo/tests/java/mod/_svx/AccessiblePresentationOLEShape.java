@@ -116,7 +116,9 @@ public class AccessiblePresentationOLEShape extends TestCase {
                         Size size = fShape.getSize();
                         size.Width += 100;
                         fShape.setSize(size);
-                    } catch(com.sun.star.beans.PropertyVetoException e) {}
+                    } catch(com.sun.star.beans.PropertyVetoException e) {
+                        System.out.println("caught exception: " + e);
+                    }
                 }
             });
 

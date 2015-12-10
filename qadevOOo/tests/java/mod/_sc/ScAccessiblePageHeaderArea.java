@@ -150,9 +150,11 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
-                        try {
-                            pressZoom.doAccessibleAction(0);
-                        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
+                    try {
+                        pressZoom.doAccessibleAction(0);
+                    } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {
+                        System.out.println("caught exception: " + ibe);
+                    }
                 }
             });
 

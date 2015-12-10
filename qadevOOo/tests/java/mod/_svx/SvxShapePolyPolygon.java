@@ -224,13 +224,17 @@ public class SvxShapePolyPolygon extends TestCase {
         try {
             aStyle = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            System.out.println("caught exception: " + e);
+        }
         tEnv.addObjRelation("Style1",aStyle);
         oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oShape);
         try {
             aStyle = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            System.out.println("caught exception: " + e);
+        }
         tEnv.addObjRelation("Style2",aStyle);
 
         // adding relation for XText

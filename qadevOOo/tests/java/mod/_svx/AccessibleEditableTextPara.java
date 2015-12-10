@@ -85,11 +85,13 @@ public class AccessibleEditableTextPara extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
                     try {
-                    int l = "AccessibleEditablePara".length();
-                    edText.deleteText(0, l);
-                    edText.setText("Event");
-                    edText.setText("AccessibleEditablePara");
-                    }catch(com.sun.star.lang.IndexOutOfBoundsException e) {}
+                        int l = "AccessibleEditablePara".length();
+                        edText.deleteText(0, l);
+                        edText.setText("Event");
+                        edText.setText("AccessibleEditablePara");
+                    } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+                        System.out.println("caught exception: " + e);
+                    }
                 }
             });
 

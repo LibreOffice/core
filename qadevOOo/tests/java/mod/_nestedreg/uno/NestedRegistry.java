@@ -69,7 +69,9 @@ public class NestedRegistry extends TestCase {
             reg1.destroy();
             reg2.destroy();
         }
-        catch (com.sun.star.registry.InvalidRegistryException e) {}
+        catch (com.sun.star.registry.InvalidRegistryException e) {
+            System.out.println("caught exception: " + e);
+        }
     }
 
     /**
