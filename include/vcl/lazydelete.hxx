@@ -239,7 +239,7 @@ namespace vcl
     class DeleteOnDeinit : public DeleteOnDeinitBase
     {
         T* m_pT;
-        virtual void doCleanup() override { delete m_pT; m_pT = NULL; }
+        virtual void doCleanup() override { delete m_pT; m_pT = nullptr; }
     public:
         DeleteOnDeinit( T* i_pT ) : m_pT( i_pT ) { addDeinitContainer( this ); }
         virtual ~DeleteOnDeinit() {}
@@ -253,8 +253,8 @@ namespace vcl
 
         // set contents, deleting old contents
         // ownership is transferred !
-        void reset( T* i_pNew = NULL )
-            { OSL_ASSERT( i_pNew != m_pT || i_pNew == NULL ); T* pOld = m_pT; m_pT = i_pNew; delete pOld; }
+        void reset( T* i_pNew = nullptr )
+            { OSL_ASSERT( i_pNew != m_pT || i_pNew == nullptr ); T* pOld = m_pT; m_pT = i_pNew; delete pOld; }
     };
 
     /** Similar to DeleteOnDeinit, the DeleteUnoReferenceOnDeinit
@@ -272,7 +272,7 @@ namespace vcl
     class DeleteUnoReferenceOnDeinit : public vcl::DeleteOnDeinitBase
     {
         css::uno::Reference<I> m_xI;
-        virtual void doCleanup() override { set(NULL); }
+        virtual void doCleanup() override { set(nullptr); }
     public:
         DeleteUnoReferenceOnDeinit(const css::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
             addDeinitContainer( this ); }

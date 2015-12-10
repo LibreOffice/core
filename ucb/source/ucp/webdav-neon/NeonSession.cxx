@@ -511,7 +511,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
     {
         // If there is a proxy server in between, it shall never use
         // cached data. We always want 'up-to-date' data.
-        ne_buffer_concat( headers, "Pragma: no-cache", EOL, NULL );
+        ne_buffer_concat( headers, "Pragma: no-cache", EOL, nullptr );
         // alternative, but understoud by HTTP 1.1 servers only:
         // ne_buffer_concat( headers, "Cache-Control: max-age=0", EOL, NULL );
 
@@ -531,7 +531,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
                         = OUStringToOString( (*it).second.aContentType,
                                                   RTL_TEXTENCODING_UTF8 );
                     ne_buffer_concat( headers, "Content-Type: ",
-                                      aType.getStr(), EOL, NULL );
+                                      aType.getStr(), EOL, nullptr );
                 }
             }
 
@@ -544,7 +544,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
                         = OUStringToOString( (*it).second.aReferer,
                                                   RTL_TEXTENCODING_UTF8 );
                     ne_buffer_concat( headers, "Referer: ",
-                                      aReferer.getStr(), EOL, NULL );
+                                      aReferer.getStr(), EOL, nullptr );
                 }
             }
         }
@@ -564,7 +564,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
                 = OUStringToOString( (*it1).second,
                                           RTL_TEXTENCODING_UTF8 );
             ne_buffer_concat( headers, aHeader.getStr(), ": ",
-                              aValue.getStr(), EOL, NULL );
+                              aValue.getStr(), EOL, nullptr );
 
             ++it1;
         }

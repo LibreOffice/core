@@ -125,7 +125,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,
                             SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS,
-                            NULL );
+                            nullptr );
 
         ::utl::MiscCfg aMisc;
         SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;

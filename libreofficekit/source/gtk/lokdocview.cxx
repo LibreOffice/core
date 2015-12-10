@@ -1114,7 +1114,7 @@ callback (gpointer pData)
                                     twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom),
                                     twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom));
 
-        g_signal_emit(pDocView, doc_view_signals[SIZE_CHANGED], 0, NULL);
+        g_signal_emit(pDocView, doc_view_signals[SIZE_CHANGED], 0, nullptr);
     }
     break;
     case LOK_CALLBACK_SET_PART:
@@ -1278,9 +1278,9 @@ paintTileFinish(LOKDocView* pDocView, GAsyncResult* res, GError **error)
 {
     GTask* task = G_TASK(res);
 
-    g_return_val_if_fail(LOK_IS_DOC_VIEW(pDocView), NULL);
-    g_return_val_if_fail(g_task_is_valid(res, pDocView), NULL);
-    g_return_val_if_fail(error == nullptr || *error == nullptr, NULL);
+    g_return_val_if_fail(LOK_IS_DOC_VIEW(pDocView), nullptr);
+    g_return_val_if_fail(g_task_is_valid(res, pDocView), nullptr);
+    g_return_val_if_fail(error == nullptr || *error == nullptr, nullptr);
 
     return g_task_propagate_pointer(task, error);
 }

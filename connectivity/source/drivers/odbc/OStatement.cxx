@@ -425,7 +425,7 @@ template < typename T, SQLINTEGER BufferLength > T OStatement_Base::getStmtOptio
 {
     T result (dflt);
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLGetStmtAttr(m_aStatementHandle, fOption, &result, BufferLength, NULL);
+    N3SQLGetStmtAttr(m_aStatementHandle, fOption, &result, BufferLength, nullptr);
     return result;
 }
 template < typename T, SQLINTEGER BufferLength > SQLRETURN OStatement_Base::setStmtOption (SQLINTEGER fOption, T value) const

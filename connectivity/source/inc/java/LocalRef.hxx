@@ -38,7 +38,7 @@ namespace connectivity { namespace jdbc
     public:
         explicit LocalRef( JNIEnv& environment )
             :m_environment( environment )
-            ,m_object( NULL )
+            ,m_object( nullptr )
         {
         }
 
@@ -56,7 +56,7 @@ namespace connectivity { namespace jdbc
         T release()
         {
             T t = m_object;
-            m_object = NULL;
+            m_object = nullptr;
             return t;
         }
 
@@ -64,16 +64,16 @@ namespace connectivity { namespace jdbc
 
         void reset()
         {
-            if ( m_object != NULL )
+            if ( m_object != nullptr )
             {
                 m_environment.DeleteLocalRef( m_object );
-                m_object = NULL;
+                m_object = nullptr;
             }
         }
 
         JNIEnv& env() const { return m_environment; }
         T       get() const { return m_object; }
-        bool    is()  const { return m_object != NULL; }
+        bool    is()  const { return m_object != nullptr; }
 
     private:
         LocalRef(LocalRef &) = delete;

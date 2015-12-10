@@ -568,10 +568,10 @@ void GtkData::initNWF()
 
     GtkSettings *gtks = gtk_settings_get_default ();
     gint val;
-    g_object_get (gtks, "gtk-auto-mnemonics", &val, NULL);
+    g_object_get (gtks, "gtk-auto-mnemonics", &val, nullptr);
     if (val) pSVData->maNWFData.mbAutoAccel = true;
     else pSVData->maNWFData.mbAutoAccel = false;
-    g_object_get (gtks, "gtk-enable-mnemonics", &val, NULL);
+    g_object_get (gtks, "gtk-enable-mnemonics", &val, nullptr);
     if (val) pSVData->maNWFData.mbEnableAccel = true;
     else pSVData->maNWFData.mbEnableAccel = false;
 }
@@ -1246,7 +1246,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 
             gtk_widget_style_get( widget,
                                   "horizontal-padding", &horizontal_padding,
-                                  NULL );
+                                  nullptr );
 
             // Use arrow-scaling property if available (2.15+), avoid warning otherwise
             if ( gtk_widget_class_find_style_property( GTK_WIDGET_GET_CLASS( widget ),
@@ -1254,7 +1254,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
             {
                 gtk_widget_style_get( widget,
                                       "arrow-scaling", &arrow_scaling,
-                                      NULL );
+                                      nullptr );
             }
 
             child = GTK_BIN( widget )->child;
@@ -1663,7 +1663,7 @@ bool GtkSalGraphics::NWPaintGTKButtonReal(
     {
         gtk_widget_style_get (GTK_WIDGET (gWidgetData[m_nXScreen].gToolbarWidget),
                 "internal-padding", &internal_padding,
-                NULL);
+                nullptr);
         x += internal_padding/2;
         w -= internal_padding;
         stateType = GTK_STATE_PRELIGHT;
@@ -3161,7 +3161,7 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
                                       "wide-separators",  &wide_separators,
                                       "separator-width",  &separator_width,
                                       "separator-height", &separator_height,
-                                      NULL);
+                                      nullptr);
 
                 if (wide_separators)
                 {
@@ -3643,7 +3643,7 @@ bool GtkSalGraphics::NWPaintGTKSlider(
                               "slider-width", &slider_width,
                               "slider-length", &slider_length,
                               "trough-border", &trough_border,
-                              NULL);
+                              nullptr);
 
         GtkStateType eState = (nState & ControlState::ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
         if( nPart == PART_TRACK_HORZ_AREA )
@@ -3974,7 +3974,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         "content-area-spacing", &aDialogStyle.content_area_spacing,
         "button-spacing", &aDialogStyle.button_spacing,
         "action-area-border", &aDialogStyle.action_area_border,
-        NULL);
+        nullptr);
     aStyleSet.SetDialogStyle(aDialogStyle);
 
     FrameStyle aFrameStyle(aStyleSet.GetFrameStyle());
@@ -4008,14 +4008,14 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // hyperlink colors
     GdkColor *link_color = nullptr;
-    gtk_widget_style_get (m_pWindow, "link-color", &link_color, NULL);
+    gtk_widget_style_get (m_pWindow, "link-color", &link_color, nullptr);
     if (link_color)
     {
         aStyleSet.SetLinkColor(getColor(*link_color));
         gdk_color_free (link_color);
         link_color = nullptr;
     }
-    gtk_widget_style_get (m_pWindow, "visited-link-color", &link_color, NULL);
+    gtk_widget_style_get (m_pWindow, "visited-link-color", &link_color, nullptr);
     if (link_color)
     {
         aStyleSet.SetVisitedLinkColor(getColor(*link_color));
@@ -4649,12 +4649,12 @@ static void NWEnsureGTKTreeView( SalX11Screen nScreen )
 
         // Columns will be used for tree header rendering
         GtkCellRenderer* renderer=gtk_cell_renderer_text_new();
-        GtkTreeViewColumn* column=gtk_tree_view_column_new_with_attributes("",renderer,"text",0,NULL);
+        GtkTreeViewColumn* column=gtk_tree_view_column_new_with_attributes("",renderer,"text",0,nullptr);
         gtk_tree_view_column_set_widget(column,gtk_label_new(""));
         gtk_tree_view_append_column(GTK_TREE_VIEW(gWidgetData[nScreen].gTreeView), column);
 
         // Add one more column so that some engines like clearlooks did render separators between columns
-        column=gtk_tree_view_column_new_with_attributes("",renderer,"text",0,NULL);
+        column=gtk_tree_view_column_new_with_attributes("",renderer,"text",0,nullptr);
         gtk_tree_view_append_column(GTK_TREE_VIEW(gWidgetData[nScreen].gTreeView), column);
 
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gTreeView, nScreen );

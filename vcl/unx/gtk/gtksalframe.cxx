@@ -530,7 +530,7 @@ static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
         return;
 
     gchar *strval = nullptr;
-    g_object_get(action, "name", &strval, NULL);
+    g_object_get(action, "name", &strval, nullptr);
     if (!strval)
         return;
 
@@ -1222,7 +1222,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     else
     {
         m_pWindow = gtk_widget_new( GTK_TYPE_WINDOW, "type", eWinType,
-                                    "visible", FALSE, NULL );
+                                    "visible", FALSE, nullptr );
     }
     g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
     g_object_set_data( G_OBJECT( m_pWindow ), "libo-version", const_cast<char *>(LIBO_VERSION_DOTTED));

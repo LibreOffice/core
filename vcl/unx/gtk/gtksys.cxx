@@ -280,7 +280,7 @@ int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMes
                       "title", aTitle.getStr(),
                       "message-type", (int)GTK_MESSAGE_WARNING,
                       "text", aMessage.getStr(),
-                      NULL));
+                      nullptr));
     int nButton = 0;
     std::list< OUString >::const_iterator it;
     for (it = rButtonNames.begin(); it != rButtonNames.end(); ++it)

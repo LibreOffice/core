@@ -34,7 +34,7 @@ public:
         if (pViewShell)
             SetWindow( pViewShell->CreateRefDialog( pBindings, this, pInfo, pParentP, WindowID ) );
         else
-            SetWindow( NULL );
+            SetWindow( nullptr );
 
         if (pViewShell && !GetWindow())
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );

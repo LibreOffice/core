@@ -521,7 +521,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 // name, so I do not really have a big problem with this ....
                 SfxBoolItem aGrabFocusIndicatorItem( SID_FM_TOGGLECONTROLFOCUS, true );
                 GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( nSlot, SfxCallMode::ASYNCHRON,
-                                          &aGrabFocusIndicatorItem, NULL );
+                                          &aGrabFocusIndicatorItem, nullptr );
             }
 
             rReq.Done();
@@ -816,7 +816,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             // initially open the filter navigator, the whole form based filter is pretty useless without it
             SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, true );
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SfxCallMode::ASYNCHRON,
-                &aIdentifierItem, NULL );
+                &aIdentifierItem, nullptr );
         }   break;
     }
 }

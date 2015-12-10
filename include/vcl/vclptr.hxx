@@ -184,7 +184,7 @@ public:
 
     inline explicit operator bool () const
     {
-        return m_rInnerRef.get() != NULL;
+        return m_rInnerRef.get() != nullptr;
     }
 
     inline void clear()

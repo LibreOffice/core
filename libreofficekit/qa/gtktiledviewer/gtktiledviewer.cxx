@@ -1156,7 +1156,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_item_set_tooltip_text(pSave, "Save");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pSave, -1);
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), gtk_separator_tool_item_new(), -1);
-    g_signal_connect(G_OBJECT(pSave), "clicked", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(pSave), "clicked", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, pSave, ".uno:Save");
 
     // Copy and paste.
@@ -1164,12 +1164,12 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pCopyButton), "edit-copy-symbolic");
     gtk_tool_item_set_tooltip_text(pCopyButton, "Copy");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pCopyButton, -1);
-    g_signal_connect(G_OBJECT(pCopyButton), "clicked", G_CALLBACK(doCopy), NULL);
+    g_signal_connect(G_OBJECT(pCopyButton), "clicked", G_CALLBACK(doCopy), nullptr);
     GtkToolItem* pPasteButton = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pPasteButton), "edit-paste-symbolic");
     gtk_tool_item_set_tooltip_text(pPasteButton, "Paste");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pPasteButton, -1);
-    g_signal_connect(G_OBJECT(pPasteButton), "clicked", G_CALLBACK(doPaste), NULL);
+    g_signal_connect(G_OBJECT(pPasteButton), "clicked", G_CALLBACK(doPaste), nullptr);
     gtk_toolbar_insert( GTK_TOOLBAR(pUpperToolbar), gtk_separator_tool_item_new(), -1);
 
     // Undo and redo.
@@ -1177,13 +1177,13 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pUndo), "edit-undo-symbolic");
     gtk_tool_item_set_tooltip_text(pUndo, "Undo");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pUndo, -1);
-    g_signal_connect(G_OBJECT(pUndo), "clicked", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(pUndo), "clicked", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, pUndo, ".uno:Undo");
     GtkToolItem* pRedo = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pRedo), "edit-redo-symbolic");
     gtk_tool_item_set_tooltip_text(pRedo, "Redo");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pRedo, -1);
-    g_signal_connect(G_OBJECT(pRedo), "clicked", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(pRedo), "clicked", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, pRedo, ".uno:Redo");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), gtk_separator_tool_item_new(), -1);
 
@@ -1192,7 +1192,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindButton), "edit-find-symbolic");
     gtk_tool_item_set_tooltip_text(pFindButton, "Find");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pFindButton, -1);
-    g_signal_connect(G_OBJECT(pFindButton), "clicked", G_CALLBACK(toggleFindbar), NULL);
+    g_signal_connect(G_OBJECT(pFindButton), "clicked", G_CALLBACK(toggleFindbar), nullptr);
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), gtk_separator_tool_item_new(), -1);
 
     // Misc upper toolbar.
@@ -1200,19 +1200,19 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomIn), "zoom-in-symbolic");
     gtk_tool_item_set_tooltip_text(pZoomIn, "Zoom In");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pZoomIn, -1);
-    g_signal_connect(G_OBJECT(pZoomIn), "clicked", G_CALLBACK(changeZoom), NULL);
+    g_signal_connect(G_OBJECT(pZoomIn), "clicked", G_CALLBACK(changeZoom), nullptr);
 
     GtkToolItem* pZoom1 = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pZoom1), "zoom-original-symbolic");
     gtk_tool_item_set_tooltip_text(pZoom1, "Normal Size");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pZoom1, -1);
-    g_signal_connect(G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), NULL);
+    g_signal_connect(G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), nullptr);
 
     GtkToolItem* pZoomOut = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomOut), "zoom-out-symbolic");
     gtk_tool_item_set_tooltip_text(pZoomOut, "Zoom Out");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pZoomOut, -1);
-    g_signal_connect(G_OBJECT(pZoomOut), "clicked", G_CALLBACK(changeZoom), NULL);
+    g_signal_connect(G_OBJECT(pZoomOut), "clicked", G_CALLBACK(changeZoom), nullptr);
 
     GtkToolItem* pPartSelectorToolItem = gtk_tool_item_new();
     GtkWidget* pComboBox = gtk_combo_box_text_new();
@@ -1231,7 +1231,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pEnableEditing), "insert-text-symbolic");
     gtk_tool_item_set_tooltip_text(pEnableEditing, "Edit");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pEnableEditing, -1);
-    g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
+    g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), nullptr);
 
     static bool bViewCallback = getenv("LOK_VIEW_CALLBACK");
     if (bViewCallback)
@@ -1253,25 +1253,25 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pBold), "format-text-bold-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pBold, "Bold");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pBold, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pBold), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pBold, ".uno:Bold");
     rWindow.m_pItalic = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (rWindow.m_pItalic), "format-text-italic-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pItalic, "Italic");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pItalic, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pItalic), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pItalic, ".uno:Italic");
     rWindow.m_pUnderline = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (rWindow.m_pUnderline), "format-text-underline-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pUnderline, "Underline");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pUnderline, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pUnderline), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pUnderline, ".uno:Underline");
     rWindow.m_pStrikethrough = gtk_toggle_tool_button_new ();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pStrikethrough), "format-text-strikethrough-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pStrikethrough, "Strikethrough");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pStrikethrough, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pStrikethrough, ".uno:Strikeout");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), gtk_separator_tool_item_new(), -1);
 
@@ -1280,13 +1280,13 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pSuperscript), "go-up-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pSuperscript, "Superscript");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pSuperscript, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pSuperscript), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pSuperscript), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pSuperscript, ".uno:SuperScript");
     rWindow.m_pSubscript = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pSubscript), "go-down-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pSubscript, "Subscript");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pSubscript, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pSubscript), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pSubscript), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pSubscript, ".uno:SubScript");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), gtk_separator_tool_item_new(), -1);
 
@@ -1295,25 +1295,25 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pLeftpara), "format-justify-left-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pLeftpara, "Align Left");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pLeftpara, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pLeftpara), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pLeftpara), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:LeftPara");
     rWindow.m_pCenterpara = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pCenterpara), "format-justify-center-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pCenterpara, "Center Horizontally");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pCenterpara, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pCenterpara), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pCenterpara), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:CenterPara");
     rWindow.m_pRightpara = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pRightpara), "format-justify-right-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pRightpara, "Align Right");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pRightpara, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pRightpara), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pRightpara), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:RightPara");
     rWindow.m_pJustifypara = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pJustifypara), "format-justify-fill-symbolic");
     gtk_tool_item_set_tooltip_text(rWindow.m_pJustifypara, "Justified");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pJustifypara, -1);
-    g_signal_connect(G_OBJECT(rWindow.m_pJustifypara), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(rWindow.m_pJustifypara), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pJustifypara, ".uno:JustifyPara");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), gtk_separator_tool_item_new(), -1);
 
@@ -1322,14 +1322,14 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pInsertAnnotation), "changes-allow-symbolic");
     gtk_tool_item_set_tooltip_text(pInsertAnnotation, "Insert Comment");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), pInsertAnnotation, -1);
-    g_signal_connect(G_OBJECT(pInsertAnnotation), "clicked", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(pInsertAnnotation), "clicked", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, pInsertAnnotation, ".uno:InsertAnnotation");
 
     GtkToolItem* pDeleteComment = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pDeleteComment), "changes-prevent-symbolic");
     gtk_tool_item_set_tooltip_text(pDeleteComment, "Delete Comment");
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), pDeleteComment, -1);
-    g_signal_connect(G_OBJECT(pDeleteComment), "clicked", G_CALLBACK(toggleToolItem), NULL);
+    g_signal_connect(G_OBJECT(pDeleteComment), "clicked", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, pDeleteComment, ".uno:DeleteComment");
 
     // Formula bar
@@ -1347,7 +1347,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     GtkToolItem* pFindbarClose = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarClose), "window-close-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarClose, -1);
-    g_signal_connect(G_OBJECT(pFindbarClose), "clicked", G_CALLBACK(toggleFindbar), NULL);
+    g_signal_connect(G_OBJECT(pFindbarClose), "clicked", G_CALLBACK(toggleFindbar), nullptr);
 
     GtkToolItem* pEntryContainer = gtk_tool_item_new();
     rWindow.m_pFindbarEntry = gtk_entry_new();
@@ -1358,17 +1358,17 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     GtkToolItem* pFindbarNext = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarNext), "go-down-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarNext, -1);
-    g_signal_connect(G_OBJECT(pFindbarNext), "clicked", G_CALLBACK(signalSearchNext), NULL);
+    g_signal_connect(G_OBJECT(pFindbarNext), "clicked", G_CALLBACK(signalSearchNext), nullptr);
 
     GtkToolItem* pFindbarPrev = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarPrev), "go-up-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarPrev, -1);
-    g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), NULL);
+    g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), nullptr);
 
     GtkToolItem* pFindAll = gtk_toggle_tool_button_new();
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(pFindAll), "Highlight All");
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindAll, -1);
-    g_signal_connect(G_OBJECT(pFindAll), "toggled", G_CALLBACK(toggleFindAll), NULL);
+    g_signal_connect(G_OBJECT(pFindAll), "toggled", G_CALLBACK(toggleFindAll), nullptr);
 
     GtkToolItem* pFindbarLabelContainer = gtk_tool_item_new();
     rWindow.m_pFindbarLabel = gtk_label_new("");

@@ -499,7 +499,7 @@ ESource * findSource( const char *id )
 {
     ESourceList *pSourceList = nullptr;
 
-    g_return_val_if_fail (id != nullptr, NULL);
+    g_return_val_if_fail (id != nullptr, nullptr);
 
     if (!e_book_get_addressbooks (&pSourceList, nullptr))
         pSourceList = nullptr;

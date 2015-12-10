@@ -348,7 +348,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 
         if ( maMethod != nullptr )
         {
-            if (   XGetIMValues(maMethod, XNQueryInputStyle, &mpStyles, NULL)
+            if (   XGetIMValues(maMethod, XNQueryInputStyle, &mpStyles, nullptr)
                 != nullptr)
                 mbUseable = False;
             #if OSL_DEBUG_LEVEL > 1
@@ -370,7 +370,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
     maDestroyCallback.callback    = static_cast<XIMProc>(IM_IMDestroyCallback);
     maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
     if (mbUseable && maMethod != nullptr)
-        XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, NULL);
+        XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, nullptr);
 
     return mbUseable;
 }

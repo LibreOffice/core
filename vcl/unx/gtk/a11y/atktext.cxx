@@ -218,7 +218,7 @@ text_wrapper_get_text (AtkText *text,
 {
     gchar * ret = nullptr;
 
-    g_return_val_if_fail( (end_offset == -1) || (end_offset >= start_offset), NULL );
+    g_return_val_if_fail( (end_offset == -1) || (end_offset >= start_offset), nullptr );
 
     /* at-spi expects the delete event to be send before the deletion happened
      * so we save the deleted string object in the UNO event notification and

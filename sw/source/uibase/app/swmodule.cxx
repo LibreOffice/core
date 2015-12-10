@@ -145,7 +145,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
     : SfxModule( ResMgr::CreateResMgr( "sw" ), false, pWebFact,
-                     pFact, pGlobalFact, NULL ),
+                     pFact, pGlobalFact, nullptr ),
     m_pModuleConfig(nullptr),
     m_pUsrPref(nullptr),
     m_pWebUsrPref(nullptr),

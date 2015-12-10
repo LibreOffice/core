@@ -157,9 +157,9 @@ namespace comphelper
 
     template <class TYPE>
     inline OSequenceIterator<TYPE>::OSequenceIterator(const css::uno::Sequence< TYPE >& _rSeq)
-        :m_pElements(NULL)
+        :m_pElements(nullptr)
         ,m_nLen(0)
-        ,m_pCurrent(NULL)
+        ,m_pCurrent(nullptr)
     {
         construct(_rSeq);
     }
@@ -167,9 +167,9 @@ namespace comphelper
 
     template <class TYPE>
     inline OSequenceIterator<TYPE>::OSequenceIterator(const css::uno::Any& _rSequenceAny)
-        :m_pElements(NULL)
+        :m_pElements(nullptr)
         ,m_nLen(0)
-        ,m_pCurrent(NULL)
+        ,m_pCurrent(nullptr)
     {
         css::uno::Sequence< TYPE > aContainer;
         bool bSuccess = _rSequenceAny >>= aContainer;

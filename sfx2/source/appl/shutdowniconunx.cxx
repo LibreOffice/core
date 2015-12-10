@@ -198,7 +198,7 @@ add_image_menu_item( GtkMenuShell *pMenuShell,
     gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( pMenuItem ), pImage );
 
     gtk_menu_shell_append( pMenuShell, pMenuItem );
-    g_signal_connect( pMenuItem, "activate", activate_cb, NULL);
+    g_signal_connect( pMenuItem, "activate", activate_cb, nullptr);
 
     return pMenuItem;
 }
@@ -341,13 +341,13 @@ void plugin_init_sys_tray()
     pTrayIcon = gtk_status_icon_new_from_icon_name ("libreoffice-main");
 
     g_object_set (pTrayIcon, "title", aLabel.getStr(),
-                  "tooltip_text", aLabel.getStr(), NULL);
+                  "tooltip_text", aLabel.getStr(), nullptr);
 
     GtkWidget *pMenu = gtk_menu_new();
     g_signal_connect(pTrayIcon,  "button-press-event",
                      G_CALLBACK(display_menu_cb), pMenu);
     g_signal_connect (pMenu, "deactivate",
-                      G_CALLBACK (menu_deactivate_cb), NULL);
+                      G_CALLBACK (menu_deactivate_cb), nullptr);
 
     // disable shutdown
     pShutdownIcon->SetVeto( true );
@@ -362,7 +362,7 @@ void plugin_init_sys_tray()
     if (pFile)
     {
         if ((pMonitor = g_file_monitor_file(pFile, G_FILE_MONITOR_NONE, nullptr, nullptr)))
-            g_signal_connect(pMonitor, "changed", reinterpret_cast<GCallback>(notify_file_changed), NULL);
+            g_signal_connect(pMonitor, "changed", reinterpret_cast<GCallback>(notify_file_changed), nullptr);
         g_object_unref(pFile);
     }
 #endif

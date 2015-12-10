@@ -1417,7 +1417,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         gint initial_gap(0);
         gtk_style_context_get_style(mpNotebookStyle,
                                 "initial-gap", &initial_gap,
-                                NULL);
+                                nullptr);
 
         margin.left = margin.right = initial_gap/2;
 #endif
@@ -1635,7 +1635,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                          "wide-separators",  &wide_separators,
                                          "separator-width",  &separator_width,
                                          "separator-height", &separator_height,
-                                         NULL);
+                                         nullptr);
 
             aEditRect = Rectangle( aEditRect.TopLeft(),
                                    Size( aEditRect.GetWidth(), wide_separators ? separator_height : 1 ) );

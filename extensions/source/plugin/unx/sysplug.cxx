@@ -116,7 +116,7 @@ UnxPluginComm::UnxPluginComm(
         MediatorMessage* pMessage = GetNextMessage( true );
         Respond( pMessage->m_nID,
                  const_cast<char*>("init ack"),8,
-                 NULL );
+                 nullptr );
         delete pMessage;
         NPP_Initialize();
     }

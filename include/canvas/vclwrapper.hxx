@@ -76,7 +76,7 @@ namespace canvas
                 if( rOrig.mpWrappee )
                     mpWrappee = new Wrappee( *rOrig.mpWrappee );
                 else
-                    mpWrappee = NULL;
+                    mpWrappee = nullptr;
             }
 
             // This object has value semantics, thus, forward copy

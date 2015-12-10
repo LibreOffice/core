@@ -778,7 +778,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
 AtkObject *
 atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAccessible, bool create )
 {
-    g_return_val_if_fail( rxAccessible.get() != nullptr, NULL );
+    g_return_val_if_fail( rxAccessible.get() != nullptr, nullptr );
 
     AtkObject *obj = ooo_wrapper_registry_get(rxAccessible);
     if( obj )
@@ -797,14 +797,14 @@ AtkObject *
 atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
                         AtkObject* parent )
 {
-    g_return_val_if_fail( rxAccessible.get() != nullptr, NULL );
+    g_return_val_if_fail( rxAccessible.get() != nullptr, nullptr );
 
     AtkObjectWrapper *pWrap = nullptr;
 
     try {
         uno::Reference< accessibility::XAccessibleContext > xContext(rxAccessible->getAccessibleContext());
 
-        g_return_val_if_fail( xContext.get() != nullptr, NULL );
+        g_return_val_if_fail( xContext.get() != nullptr, nullptr );
 
         GType nType = ensureTypeFor( xContext.get() );
         gpointer obj = g_object_new( nType, nullptr);
@@ -867,7 +867,7 @@ void atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, g
     AtkObject *atk_obj = ATK_OBJECT( wrapper );
 
     atk_object_set_parent( child, atk_obj );
-    g_signal_emit_by_name( atk_obj, "children_changed::add", index, child, NULL );
+    g_signal_emit_by_name( atk_obj, "children_changed::add", index, child, nullptr );
 }
 
 /*****************************************************************************/
@@ -881,7 +881,7 @@ void atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child
     wrapper->child_about_to_be_removed = child;
     wrapper->index_of_child_about_to_be_removed = index;
 
-    g_signal_emit_by_name( ATK_OBJECT( wrapper ), "children_changed::remove", index, child, NULL );
+    g_signal_emit_by_name( ATK_OBJECT( wrapper ), "children_changed::remove", index, child, nullptr );
 
     wrapper->index_of_child_about_to_be_removed = -1;
     wrapper->child_about_to_be_removed = nullptr;
