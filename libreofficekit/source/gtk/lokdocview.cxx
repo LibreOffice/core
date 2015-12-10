@@ -185,6 +185,7 @@ enum
     SEARCH_RESULT_COUNT,
     COMMAND_RESULT,
     FORMULA_CHANGED,
+    TEXT_SELECTION,
 
     LAST_SIGNAL
 };
@@ -924,8 +925,9 @@ callback (gpointer pData)
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         priv->m_aTextSelectionRectangles = payloadToRectangles(pDocView, pCallback->m_aPayload.c_str());
+        gboolean bIsTextSelected = !priv->m_aTextSelectionRectangles.empty();
         // In case the selection is empty, then we get no LOK_CALLBACK_TEXT_SELECTION_START/END events.
-        if (priv->m_aTextSelectionRectangles.empty())
+        if (!bIsTextSelected)
         {
             memset(&priv->m_aTextSelectionStart, 0, sizeof(priv->m_aTextSelectionStart));
             memset(&priv->m_aHandleStartRect, 0, sizeof(priv->m_aHandleStartRect));
@@ -934,6 +936,8 @@ callback (gpointer pData)
         }
         else
             memset(&priv->m_aHandleMiddleRect, 0, sizeof(priv->m_aHandleMiddleRect));
+
+        g_signal_emit(pDocView, doc_view_signals[TEXT_SELECTION], 0, bIsTextSelected);
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
@@ -2381,6 +2385,21 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
+
+    /**
+     * LOKDocView::text-selection:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @bIsTextSelected: whether text selected is non-null
+     */
+    doc_view_signals[TEXT_SELECTION] =
+        g_signal_new("text-selection",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_VOID__BOOLEAN,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_BOOLEAN);
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget*
