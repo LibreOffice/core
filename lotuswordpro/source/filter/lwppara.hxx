@@ -346,6 +346,8 @@ inline OUString LwpPara::GetBulletStyleName() const
 }
 inline void LwpPara::AddXFContent(XFContent* pCont)
 {
+    if (!m_pXFContainer)
+        throw std::runtime_error("paragraph lacks container");
     m_pXFContainer->Add(pCont);
 }
 inline void LwpPara::SetXFContainer(XFContentContainer* pCont)
