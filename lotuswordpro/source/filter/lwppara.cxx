@@ -669,7 +669,7 @@ void LwpPara::RegisterStyle()
                         if (!pPrePara)
                         {
                             LwpStory* pStory = pPara->GetStory();
-                            pPrePara = pStory->GetLastParaOfPreviousStory();
+                            pPrePara = pStory ? pStory->GetLastParaOfPreviousStory() : nullptr;
 
                             if (!pPrePara)
                             {
