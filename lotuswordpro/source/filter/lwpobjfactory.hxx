@@ -72,6 +72,7 @@
 #include "lwpidxmgr.hxx"
 
 #include <unordered_map>
+#include <vector>
 
 /**
  * @brief   object factory used for lwp object creation and maintenance
@@ -85,9 +86,9 @@ public:
 
 //For object Factory and object manager
 private:
-//  static LwpObjectFactory *m_pMgr;
     sal_uInt32 m_nNumObjs;
     LwpSvStream* m_pSvStream;
+    std::vector<LwpObjectID> m_aObjsIDInCreation;
     struct hashFunc
     {
             size_t operator()( const LwpObjectID& rName ) const
