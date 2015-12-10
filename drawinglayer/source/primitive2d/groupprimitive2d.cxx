@@ -30,7 +30,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        GroupPrimitive2D::GroupPrimitive2D( const Primitive2DSequence& rChildren )
+        GroupPrimitive2D::GroupPrimitive2D( const Primitive2DContainer& rChildren )
         :   BasePrimitive2D(),
             maChildren(rChildren)
         {
@@ -46,14 +46,14 @@ namespace drawinglayer
             {
                 const GroupPrimitive2D& rCompare = static_cast< const GroupPrimitive2D& >(rPrimitive);
 
-                return (arePrimitive2DSequencesEqual(getChildren(), rCompare.getChildren()));
+                return getChildren() == rCompare.getChildren();
             }
 
             return false;
         }
 
         /// default: just return children, so all renderers not supporting group will use it's content
-        Primitive2DSequence GroupPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer GroupPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             return getChildren();
         }

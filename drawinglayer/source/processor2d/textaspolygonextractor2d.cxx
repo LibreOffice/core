@@ -161,7 +161,7 @@ namespace drawinglayer
                 {
                     const primitive2d::ModifiedColorPrimitive2D& rModifiedColorCandidate(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
 
-                    if(rModifiedColorCandidate.getChildren().hasElements())
+                    if(!rModifiedColorCandidate.getChildren().empty())
                     {
                         maBColorModifierStack.push(rModifiedColorCandidate.getColorModifier());
                         process(rModifiedColorCandidate.getChildren());

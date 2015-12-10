@@ -42,7 +42,7 @@ namespace drawinglayer
         {
         private:
             const TextSimplePortionPrimitive2D&     mrSource;
-            Primitive2DSequence                     mxResult;
+            Primitive2DContainer                       mxResult;
             TextLayouterDevice                      maTextLayouter;
             basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose maDecTrans;
 
@@ -50,7 +50,7 @@ namespace drawinglayer
             bool                                    mbNoDXArray : 1;
 
             /// create a portion from nIndex to nLength and append to rTempResult
-            void breakupPortion(Primitive2DVector& rTempResult, sal_Int32 nIndex, sal_Int32 nLength, bool bWordLineMode);
+            void breakupPortion(Primitive2DContainer& rTempResult, sal_Int32 nIndex, sal_Int32 nLength, bool bWordLineMode);
 
             /// breakup complete primitive
             void breakup(BreakupUnit aBreakupUnit);
@@ -70,7 +70,7 @@ namespace drawinglayer
             virtual ~TextBreakupHelper();
 
             /// get result
-            const Primitive2DSequence& getResult(BreakupUnit aBreakupUnit = BreakupUnit_character) const;
+            const Primitive2DContainer& getResult(BreakupUnit aBreakupUnit = BreakupUnit_character) const;
         };
 
     } // end of namespace primitive2d

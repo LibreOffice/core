@@ -296,9 +296,9 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
     }
 
     // get primitives
-    const drawinglayer::primitive2d::Primitive2DSequence xSequence(GetViewContact().getViewIndependentPrimitive2DSequence());
+    const drawinglayer::primitive2d::Primitive2DContainer xSequence(GetViewContact().getViewIndependentPrimitive2DSequence());
 
-    if(xSequence.hasElements())
+    if(!xSequence.empty())
     {
         // create an extractor with neutral ViewInformation
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;

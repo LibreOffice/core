@@ -69,7 +69,7 @@ namespace drawinglayer
         public:
             /// constructor
             CropPrimitive2D(
-                const Primitive2DSequence& rChildren,
+                const Primitive2DContainer& rChildren,
                 const basegfx::B2DHomMatrix& rTransformation,
                 double fCropLeft,
                 double fCropTop,
@@ -87,7 +87,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// local decomposition
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

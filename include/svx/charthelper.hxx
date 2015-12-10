@@ -41,7 +41,7 @@ public:
     // as sequence of primitives. Return range of primitives (chart size) in rRange;
     // it will be used to embed the chart to the SdrObject transformation. This
     // allows to define possible distances between chart and SDrObject bounds here
-    static drawinglayer::primitive2d::Primitive2DSequence tryToGetChartContentAsPrimitive2DSequence(
+    static drawinglayer::primitive2d::Primitive2DContainer tryToGetChartContentAsPrimitive2DSequence(
         const css::uno::Reference< css::frame::XModel >& rXModel,
         basegfx::B2DRange& rRange);
 

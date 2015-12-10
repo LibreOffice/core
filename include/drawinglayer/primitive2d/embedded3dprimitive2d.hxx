@@ -67,7 +67,7 @@ namespace drawinglayer
             basegfx::B3DRange                                   maScene3DRange;
 
             /// the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
-            Primitive2DSequence                                 maShadowPrimitives;
+            Primitive2DContainer                                   maShadowPrimitives;
 
             /// #i96669# add simple range buffering for this primitive
             basegfx::B2DRange                                   maB2DRange;
@@ -83,7 +83,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor

@@ -37,7 +37,7 @@ namespace drawinglayer
     namespace tools
     {
         BitmapEx convertToBitmapEx(
-            const drawinglayer::primitive2d::Primitive2DSequence& rSeq,
+            const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
             const geometry::ViewInformation2D& rViewInformation2D,
             sal_uInt32 nDiscreteWidth,
             sal_uInt32 nDiscreteHeight,
@@ -48,12 +48,12 @@ namespace drawinglayer
             static bool bDoSaveForVisualControl(false);
 #endif
 
-            if(rSeq.hasElements() && nDiscreteWidth && nDiscreteHeight)
+            if(!rSeq.empty() && nDiscreteWidth && nDiscreteHeight)
             {
                 // get destination size in pixels
                 const MapMode aMapModePixel(MAP_PIXEL);
                 const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
-                drawinglayer::primitive2d::Primitive2DSequence aSequence(rSeq);
+                drawinglayer::primitive2d::Primitive2DContainer aSequence(rSeq);
 
                 if(nViewVisibleArea > nMaxQuadratPixels)
                 {
@@ -67,7 +67,7 @@ namespace drawinglayer
                             basegfx::tools::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
                             rSeq));
 
-                    aSequence = drawinglayer::primitive2d::Primitive2DSequence(&aEmbed, 1);
+                    aSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
                 }
 
                 const Point aEmptyPoint;
@@ -120,7 +120,7 @@ namespace drawinglayer
                             basegfx::BColorModifierSharedPtr(
                                 new basegfx::BColorModifier_replace(
                                     basegfx::BColor(0.0, 0.0, 0.0)))));
-                    const primitive2d::Primitive2DSequence xSeq(&xRef, 1);
+                    const primitive2d::Primitive2DContainer xSeq { xRef };
 
                     // render
                     pContentProcessor->process(xSeq);

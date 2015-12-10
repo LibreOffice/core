@@ -34,18 +34,18 @@ namespace sdr
         {
         protected:
             // the sequence of primitives to show
-            const drawinglayer::primitive2d::Primitive2DSequence    maSequence;
+            const drawinglayer::primitive2d::Primitive2DContainer    maSequence;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
-            explicit OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DSequence& rSequence);
+            explicit OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DContainer& rSequence);
 
             virtual ~OverlayPrimitive2DSequenceObject();
 
             // data read access
-            const drawinglayer::primitive2d::Primitive2DSequence& getSequence() const { return maSequence; }
+            const drawinglayer::primitive2d::Primitive2DContainer& getSequence() const { return maSequence; }
         };
     } // end of namespace overlay
 } // end of namespace sdr

@@ -64,14 +64,14 @@ void ScOverlayDashedBorder::stripeDefinitionHasChanged()
     objectChange();
 }
 
-Primitive2DSequence ScOverlayDashedBorder::createOverlayObjectPrimitive2DSequence()
+drawinglayer::primitive2d::Primitive2DContainer ScOverlayDashedBorder::createOverlayObjectPrimitive2DSequence()
 {
     using ::basegfx::B2DPolygon;
     using ::basegfx::B2DPolyPolygon;
 
     OverlayManager* pMgr = getOverlayManager();
     if (!pMgr)
-        return Primitive2DSequence();
+        return drawinglayer::primitive2d::Primitive2DContainer();
 
     basegfx::BColor aColorA = pMgr->getStripeColorA().getBColor();
     basegfx::BColor aColorB = pMgr->getStripeColorB().getBColor();
@@ -84,7 +84,7 @@ Primitive2DSequence ScOverlayDashedBorder::createOverlayObjectPrimitive2DSequenc
         new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
             aPolygon, aColorA, aColorB, pMgr->getStripeLengthPixel()));
 
-    return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+    return drawinglayer::primitive2d::Primitive2DContainer { aReference };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

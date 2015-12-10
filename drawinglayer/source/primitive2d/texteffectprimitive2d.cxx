@@ -32,9 +32,9 @@ namespace drawinglayer
     {
         static double fDiscreteSize(1.1);
 
-        Primitive2DSequence TextEffectPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer TextEffectPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             // get the distance of one discrete units from target display. Use between 1.0 and sqrt(2) to
             // have good results on rotated objects, too
@@ -66,7 +66,7 @@ namespace drawinglayer
                         TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT == getTextEffectStyle2D()
                         || TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT == getTextEffectStyle2D());
                     basegfx::B2DHomMatrix aTransform(aBackTransform);
-                    aRetval.realloc(2);
+                    aRetval.resize(2);
 
                     if(bEmbossed)
                     {
@@ -95,7 +95,7 @@ namespace drawinglayer
                         aRetval[0] = Primitive2DReference(
                             new TransformPrimitive2D(
                                 aTransform,
-                                Primitive2DSequence(&xModifiedColor, 1)));
+                                Primitive2DContainer { xModifiedColor }));
 
                         // add original, too
                         const basegfx::BColorModifierSharedPtr aBColorModifierToWhite(
@@ -121,7 +121,7 @@ namespace drawinglayer
                         aRetval[0] = Primitive2DReference(
                             new TransformPrimitive2D(
                                 aTransform,
-                                Primitive2DSequence(&xModifiedColor, 1)));
+                                Primitive2DContainer { xModifiedColor }));
 
                         // add original, too
                         aRetval[1] = Primitive2DReference(new GroupPrimitive2D(getTextContent()));
@@ -133,7 +133,7 @@ namespace drawinglayer
                 {
                     // create transform primitives in all directions
                     basegfx::B2DHomMatrix aTransform;
-                    aRetval.realloc(9);
+                    aRetval.resize(9);
 
                     aTransform.set(0, 2, aDistance.getX());
                     aTransform.set(1, 2, 0.0);
@@ -184,7 +184,7 @@ namespace drawinglayer
         }
 
         TextEffectPrimitive2D::TextEffectPrimitive2D(
-            const Primitive2DSequence& rTextContent,
+            const Primitive2DContainer& rTextContent,
             const basegfx::B2DPoint& rRotationCenter,
             double fDirection,
             TextEffectStyle2D eTextEffectStyle2D)
@@ -218,26 +218,26 @@ namespace drawinglayer
             // then will ask 9 times at nearly the same content. This may even be refined here using the
             // TextEffectStyle information, e.g. for TEXTEFFECTSTYLE2D_RELIEF the grow needs only to
             // be in two directions
-            basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getTextContent(), rViewInformation));
+            basegfx::B2DRange aRetval(getTextContent().getB2DRange(rViewInformation));
             aRetval.grow(fDiscreteSize);
 
             return aRetval;
         }
 
-        Primitive2DSequence TextEffectPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer TextEffectPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getBuffered2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().empty())
             {
                 if(maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< TextEffectPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                    const_cast< TextEffectPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
                 }
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< TextEffectPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <comphelper/sequence.hxx>
 
 
 
@@ -64,10 +65,10 @@ namespace sdr
             return true;
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            drawinglayer::primitive2d::Primitive2DSequence xMasterPageSequence;
+            drawinglayer::primitive2d::Primitive2DContainer xRetval;
+            drawinglayer::primitive2d::Primitive2DContainer xMasterPageSequence;
             const sdr::MasterPageDescriptor& rDescriptor = GetMasterPageDescriptor();
 
             // used range (retval) is fixed here, it's the MasterPage fill range
@@ -109,16 +110,16 @@ namespace sdr
             rDisplayInfo.SetProcessLayers(aRememberedLayers);
             rDisplayInfo.SetSubContentActive(false);
 
-            if(xMasterPageSequence.hasElements())
+            if(!xMasterPageSequence.empty())
             {
                 // get range of MasterPage sub hierarchy
                 const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                const basegfx::B2DRange aSubHierarchyRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xMasterPageSequence, rViewInformation2D));
+                const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
 
                 if(aPageFillRange.isInside(aSubHierarchyRange))
                 {
                     // completely inside, just render MasterPage content. Add to target
-                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, xMasterPageSequence);
+                    xRetval.append(xMasterPageSequence);
                 }
                 else if(aPageFillRange.overlaps(aSubHierarchyRange))
                 {
@@ -129,7 +130,7 @@ namespace sdr
                     // need to create a clip primitive, add clipped list to target
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MaskPrimitive2D(
                         basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aCommonArea)), xMasterPageSequence));
-                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReference);
+                    xRetval.push_back(xReference);
                 }
             }
 

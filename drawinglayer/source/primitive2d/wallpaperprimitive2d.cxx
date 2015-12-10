@@ -33,9 +33,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence WallpaperBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer WallpaperBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(!getLocalObjectRange().isEmpty() && !getBitmapEx().IsEmpty())
             {
@@ -59,7 +59,7 @@ namespace drawinglayer
                                 getBitmapEx(),
                                 aObjectTransform));
 
-                        aRetval = Primitive2DSequence(&xReference, 1);
+                        aRetval = Primitive2DContainer { xReference };
                     }
                     else
                     {
@@ -157,7 +157,7 @@ namespace drawinglayer
                                 new BitmapPrimitive2D(
                                     getBitmapEx(),
                                     aObjectTransform));
-                            aRetval = Primitive2DSequence(&xReference, 1);
+                            aRetval = Primitive2DContainer { xReference };
 
                             // clip when not completely inside object range
                             bNeedsClipping = !getLocalObjectRange().isInside(aTargetRange);
@@ -194,7 +194,7 @@ namespace drawinglayer
                                 new drawinglayer::primitive2d::FillGraphicPrimitive2D(
                                     aObjectTransform,
                                     aFillGraphicAttribute));
-                            aRetval = Primitive2DSequence(&xFillBitmap, 1);
+                            aRetval = Primitive2DContainer { xFillBitmap };
 
                             // always embed tiled fill to clipping
                             bNeedsClipping = true;
@@ -209,7 +209,7 @@ namespace drawinglayer
                                 new drawinglayer::primitive2d::MaskPrimitive2D(
                                     aPolyPolygon,
                                     aRetval));
-                            aRetval = Primitive2DSequence(&xClippedFill, 1);
+                            aRetval = Primitive2DContainer { xClippedFill };
                         }
                     }
                 }

@@ -95,7 +95,7 @@ namespace drawinglayer
                     const geometry::ViewInformation2D& rViewInformation) const;
 
             /// create local decomposition
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor

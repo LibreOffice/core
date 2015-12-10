@@ -52,9 +52,9 @@ private:
     // PrimitiveSequence of the ViewContact. This contains all necessary information
     // for the graphical visualisation and needs to be supported by all VCs which
     // can be visualized.
-    drawinglayer::primitive2d::Primitive2DSequence  mxPrimitive2DSequence;
+    drawinglayer::primitive2d::Primitive2DContainer  mxPrimitive2DSequence;
 
-    // the PrimitiveAnimation if Primitive2DSequence contains animations
+    // the PrimitiveAnimation if Primitive2DContainer contains animations
     sdr::animation::PrimitiveAnimation*             mpPrimitiveAnimation;
 
     // bitfield
@@ -75,10 +75,10 @@ protected:
     // from the ViewContact using ViewContact::getViewIndependentPrimitive2DSequence(), takes care of
     // visibility, handles glue and ghosted.
     // This method will not handle included hierarchies and not check geometric visibility.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
-    // method for flushing Primitive2DSequence for VOC implementations
-    void flushPrimitive2DSequence() { mxPrimitive2DSequence.realloc(0); }
+    // method for flushing Primitive2DContainer for VOC implementations
+    void flushPrimitive2DSequence() { mxPrimitive2DSequence.clear(); }
 
 public:
     // basic constructor.
@@ -110,7 +110,7 @@ public:
     // access to the local primitive. This will ensure that the local primitive is
     // current in comparing the local one with a fresh created incarnation
     // This method will not handle included hierarchies and not check visibility.
-    drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+    drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
     // test this VOC for visibility concerning model-view stuff like e.g. Layer
     virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
@@ -120,10 +120,10 @@ public:
 
     // process this primitive: Eventually also recursively travel an existing hierarchy,
     // e.g. for group objects, scenes or pages. This method will test geometrical visibility.
-    virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
+    virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
 
     // just process the sub-hierarchy, used as tooling from getPrimitive2DSequenceHierarchy
-    drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const;
+    drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const;
 };
 
 }}

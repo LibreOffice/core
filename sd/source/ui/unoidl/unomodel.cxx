@@ -1555,7 +1555,7 @@ public:
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+    virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo) override;
 };
@@ -1783,7 +1783,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObjec
     return eElement;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ImplRenderPaintProc::createRedirectedPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DContainer ImplRenderPaintProc::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {
@@ -1791,7 +1791,7 @@ drawinglayer::primitive2d::Primitive2DSequence ImplRenderPaintProc::createRedire
 
     if(pObject)
     {
-        drawinglayer::primitive2d::Primitive2DSequence xRetval;
+        drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
         if(pObject->GetPage())
         {
@@ -1804,12 +1804,12 @@ drawinglayer::primitive2d::Primitive2DSequence ImplRenderPaintProc::createRedire
 
                     xRetval = sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
 
-                    if(xRetval.hasElements() && bTagUsed)
+                    if(!xRetval.empty() && bTagUsed)
                     {
                         // embed Primitive2DSequence in a structure tag element for
                         // exactly this purpose (StructureTagPrimitive2D)
                         const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::StructureTagPrimitive2D(eElement, xRetval));
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                        xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
                     }
                 }
             }

@@ -47,6 +47,7 @@
 
 
 
+class TransparencePrimitive2D;
 using namespace com::sun::star;
 
 
@@ -118,14 +119,14 @@ namespace drawinglayer
             {
                 // create simpleTransparencePrimitive, add created fill primitive
                 const Primitive2DReference xRefA(pNewFillPrimitive);
-                const Primitive2DSequence aContent(&xRefA, 1L);
+                const Primitive2DContainer aContent { xRefA };
                 return Primitive2DReference(new UnifiedTransparencePrimitive2D(aContent, rFill.getTransparence()));
             }
             else if(!rFillGradient.isDefault())
             {
                 // create sequence with created fill primitive
                 const Primitive2DReference xRefA(pNewFillPrimitive);
-                const Primitive2DSequence aContent(&xRefA, 1L);
+                const Primitive2DContainer aContent { xRefA };
 
                 // create FillGradientPrimitive2D for transparence and add to new sequence
                 // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
@@ -135,7 +136,7 @@ namespace drawinglayer
                         aRange,
                         rDefinitionRange,
                         rFillGradient));
-                const Primitive2DSequence aAlpha(&xRefB, 1L);
+                const Primitive2DContainer aAlpha { xRefB };
 
                 // create TransparencePrimitive2D using alpha and content
                 return Primitive2DReference(new TransparencePrimitive2D(aContent, aAlpha));
@@ -175,7 +176,7 @@ namespace drawinglayer
             {
                 // create simpleTransparencePrimitive, add created fill primitive
                 const Primitive2DReference xRefA(pNewLinePrimitive);
-                const Primitive2DSequence aContent(&xRefA, 1L);
+                const Primitive2DContainer aContent { xRefA };
                 return Primitive2DReference(new UnifiedTransparencePrimitive2D(aContent, rLine.getTransparence()));
             }
             else
@@ -349,7 +350,7 @@ namespace drawinglayer
                 {
                     // create content sequence
                     const Primitive2DReference xRefA(pNew);
-                    const Primitive2DSequence aContent(&xRefA, 1L);
+                    const Primitive2DContainer aContent { xRefA };
 
                     // create and add animated switch primitive
                     return Primitive2DReference(new AnimatedBlinkPrimitive2D(aAnimationList, aContent, true));
@@ -433,11 +434,11 @@ namespace drawinglayer
 
                     if(0.0 != aAnimationList.getDuration())
                     {
-                        // create a new Primitive2DSequence containing the animated text in it's scaled only state.
+                        // create a new Primitive2DContainer containing the animated text in it's scaled only state.
                         // use the decomposition to force to simple text primitives, those will no longer
                         // need the outliner for formatting (alternatively it is also possible to just add
                         // pNew to aNewPrimitiveSequence)
-                        Primitive2DSequence aAnimSequence(pNew->get2DDecomposition(aViewInformation2D));
+                        Primitive2DContainer aAnimSequence(pNew->get2DDecomposition(aViewInformation2D));
                         delete pNew;
 
                         // create a new animatedInterpolatePrimitive and add it
@@ -445,7 +446,7 @@ namespace drawinglayer
                         aMatrixStack.push_back(aLeft);
                         aMatrixStack.push_back(aRight);
                         const Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D(aMatrixStack, aAnimationList, aAnimSequence, true));
-                        const Primitive2DSequence aContent(&xRefA, 1L);
+                        const Primitive2DContainer aContent { xRefA };
 
                         // scrolling needs an encapsulating clipping primitive
                         const basegfx::B2DRange aClipRange(aClipTopLeft, aClipBottomRight);
@@ -467,7 +468,7 @@ namespace drawinglayer
                 // encapsulate with TextHierarchyEditPrimitive2D to allow renderers
                 // to suppress actively edited content if needed
                 const Primitive2DReference xRefA(pNew);
-                const Primitive2DSequence aContent(&xRefA, 1L);
+                const Primitive2DContainer aContent { xRefA };
 
                 // create and add TextHierarchyEditPrimitive2D primitive
                 return Primitive2DReference(new TextHierarchyEditPrimitive2D(aContent));
@@ -479,13 +480,13 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence createEmbeddedShadowPrimitive(
-            const Primitive2DSequence& rContent,
+        Primitive2DContainer createEmbeddedShadowPrimitive(
+            const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow)
         {
-            if(rContent.hasElements())
+            if(!rContent.empty())
             {
-                Primitive2DSequence aRetval(2);
+                Primitive2DContainer aRetval(2);
                 basegfx::B2DHomMatrix aShadowOffset;
 
                 // prepare shadow offset
@@ -502,7 +503,7 @@ namespace drawinglayer
                 if(0.0 != rShadow.getTransparence())
                 {
                     // create SimpleTransparencePrimitive2D
-                    const Primitive2DSequence aTempContent(&aRetval[0], 1);
+                    const Primitive2DContainer aTempContent { aRetval[0] };
 
                     aRetval[0] = Primitive2DReference(
                         new UnifiedTransparencePrimitive2D(

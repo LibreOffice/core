@@ -37,7 +37,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         CropPrimitive2D::CropPrimitive2D(
-            const Primitive2DSequence& rChildren,
+            const Primitive2DContainer& rChildren,
             const basegfx::B2DHomMatrix& rTransformation,
             double fCropLeft,
             double fCropTop,
@@ -68,11 +68,11 @@ namespace drawinglayer
             return false;
         }
 
-        Primitive2DSequence CropPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer CropPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
 
-            if(getChildren().hasElements())
+            if(!getChildren().empty())
             {
                 // get original object scale in unit coordinates (no mirroring)
                 const basegfx::B2DVector aObjectScale(basegfx::absolute(getTransformation() * basegfx::B2DVector(1.0, 1.0)));
@@ -130,7 +130,7 @@ namespace drawinglayer
                         {
                             // the new range is completely inside the old range (unit range),
                             // so no masking is needed
-                            xRetval = Primitive2DSequence(&xTransformPrimitive, 1);
+                            xRetval = Primitive2DContainer { xTransformPrimitive };
                         }
                         else
                         {
@@ -142,9 +142,9 @@ namespace drawinglayer
                             const Primitive2DReference xMask(
                                 new MaskPrimitive2D(
                                     aMaskPolyPolygon,
-                                    Primitive2DSequence(&xTransformPrimitive, 1)));
+                                    Primitive2DContainer { xTransformPrimitive }));
 
-                            xRetval = Primitive2DSequence(&xMask, 1);
+                            xRetval = Primitive2DContainer { xMask };
                         }
                     }
                 }

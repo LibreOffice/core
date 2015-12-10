@@ -31,6 +31,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svtools/embedhlp.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
 
@@ -41,13 +42,13 @@ const SdrOle2Obj& ViewObjectContactOfSdrOle2Obj::getSdrOle2Object() const
     return static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).GetOle2Obj();
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
     const DisplayInfo& /*rDisplayInfo*/) const
 {
     // override this method to do some things the old SdrOle2Obj::DoPaintObject did.
     // In the future, some of these may be solved different, but ATM try to stay compatible
     // with the old behaviour
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrOle2Obj& rSdrOle2 = getSdrOle2Object();
     sal_Int32 nState(-1);
 
@@ -132,7 +133,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrOle2Obj::cr
                     Color(COL_BLACK).getBColor(),
                     aFillHatch));
 
-                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReference);
+                xRetval.push_back(xReference);
             }
         }
 

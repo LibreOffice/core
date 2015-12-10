@@ -161,9 +161,9 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
             return basegfx::B2DPolyPolygon( clipPolygon );
         }
 
-        Primitive2DSequence BorderLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer BorderLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
 
             if(!getStart().equal(getEnd()) && ( isInsideUsed() || isOutsideUsed() ) )
             {
@@ -181,7 +181,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                     const basegfx::B2DPoint aTmpStart(getStart() - (fExt * aVector));
                     const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
 
-                    xRetval.realloc(2);
+                    xRetval.resize(2);
 
                     double fLeftWidth = getLeftWidth();
                     bool bLeftHairline = lcl_UseHairline(fLeftWidth, getStart(), getEnd(), rViewInformation);
@@ -239,7 +239,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                         aPolygon.append( getStart() );
                         aPolygon.append( getEnd() );
 
-                        xRetval.realloc(1);
+                        xRetval.resize(1);
                         xRetval[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(
                             aPolygon,
                             aColor));
@@ -276,7 +276,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                         }
 
                         sal_uInt32 n = aDashed.count();
-                        xRetval.realloc(n);
+                        xRetval.resize(n);
                         for (sal_uInt32 i = 0; i < n; ++i)
                         {
                             basegfx::B2DPolygon aDash = aDashed.getB2DPolygon(i);

@@ -35,16 +35,16 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrCustomShapePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DContainer SdrCustomShapePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            Primitive2DSequence aRetval(getSubPrimitives());
+            Primitive2DContainer aRetval(getSubPrimitives());
 
             // add text
             if(!getSdrSTAttribute().getText().isDefault())
             {
                 const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTextBox(),
@@ -56,7 +56,7 @@ namespace drawinglayer
             }
 
             // add shadow
-            if(aRetval.hasElements() && !getSdrSTAttribute().getShadow().isDefault())
+            if(!aRetval.empty() && !getSdrSTAttribute().getShadow().isDefault())
             {
                 // #i105323# add generic shadow only for 2D shapes. For
                 // 3D shapes shadow will be set at the individual created
@@ -79,7 +79,7 @@ namespace drawinglayer
 
         SdrCustomShapePrimitive2D::SdrCustomShapePrimitive2D(
             const attribute::SdrShadowTextAttribute& rSdrSTAttribute,
-            const Primitive2DSequence& rSubPrimitives,
+            const Primitive2DContainer& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap,
             bool b3DShape,

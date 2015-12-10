@@ -49,8 +49,8 @@ namespace drawinglayer
         {
         private:
             /// result holding vector (2D) and target vector for stacking (inited to &maPrimitive2DSequence)
-            primitive2d::Primitive2DVector                  maPrimitive2DSequence;
-            primitive2d::Primitive2DVector*                 mpPrimitive2DSequence;
+            primitive2d::Primitive2DContainer                  maPrimitive2DSequence;
+            primitive2d::Primitive2DContainer*                 mpPrimitive2DSequence;
 
             /// object transformation for scene for 2d definition
             basegfx::B2DHomMatrix                           maObjectTransformation;
@@ -97,7 +97,7 @@ namespace drawinglayer
             virtual ~Shadow3DExtractingProcessor();
 
             /// data read access
-            const primitive2d::Primitive2DSequence getPrimitive2DSequence() const;
+            const primitive2d::Primitive2DContainer& getPrimitive2DSequence() const;
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const basegfx::B3DHomMatrix& getWorldToEye() const { return maWorldToEye; }
             const basegfx::B3DHomMatrix& getEyeToView() const { return maEyeToView; }

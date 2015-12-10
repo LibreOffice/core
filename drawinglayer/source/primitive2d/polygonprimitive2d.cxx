@@ -92,7 +92,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonMarkerPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer PolygonMarkerPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // calculate logic DashLength
             const basegfx::B2DVector aDashVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(getDiscreteDashLength(), 0.0));
@@ -110,7 +110,7 @@ namespace drawinglayer
                 basegfx::tools::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * fLogicDashLength);
 
                 // prepare return value
-                Primitive2DSequence aRetval(2);
+                Primitive2DContainer aRetval(2);
 
                 aRetval[0] = Primitive2DReference(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyA, getRGBColorA()));
                 aRetval[1] = Primitive2DReference(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyB, getRGBColorB()));
@@ -120,7 +120,7 @@ namespace drawinglayer
             else
             {
                 const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(getB2DPolygon(), getRGBColorA()));
-                return Primitive2DSequence(&xRef, 1L);
+                return Primitive2DContainer { xRef };
             }
         }
 
@@ -175,12 +175,12 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence PolygonMarkerPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer PolygonMarkerPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             bool bNeedNewDecomposition(false);
 
-            if(getBuffered2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().empty())
             {
                 if(rViewInformation.getInverseObjectToViewTransformation() != maLastInverseObjectToViewTransformation)
                 {
@@ -191,10 +191,10 @@ namespace drawinglayer
             if(bNeedNewDecomposition)
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< PolygonMarkerPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                const_cast< PolygonMarkerPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember last used InverseObjectToViewTransformation
                 PolygonMarkerPrimitive2D* pThat = const_cast< PolygonMarkerPrimitive2D* >(this);
@@ -223,7 +223,7 @@ namespace drawinglayer
 
     namespace primitive2d
     {
-        Primitive2DSequence PolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer PolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getB2DPolygon().count())
             {
@@ -265,7 +265,7 @@ namespace drawinglayer
                     }
 
                     // prepare return value
-                    Primitive2DSequence aRetval(aAreaPolyPolygon.count());
+                    Primitive2DContainer aRetval(aAreaPolyPolygon.count());
 
                     // create primitive
                     for(sal_uInt32 b(0L); b < aAreaPolyPolygon.count(); b++)
@@ -292,12 +292,12 @@ namespace drawinglayer
                             aHairLinePolyPolygon,
                             getLineAttribute().getColor()));
 
-                    return Primitive2DSequence(&xRef, 1);
+                    return Primitive2DContainer { xRef };
                 }
             }
             else
             {
-                return Primitive2DSequence();
+                return Primitive2DContainer();
             }
         }
 
@@ -408,9 +408,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonWavePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer PolygonWavePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(getB2DPolygon().count())
             {
@@ -422,13 +422,13 @@ namespace drawinglayer
                     // create waveline curve
                     const basegfx::B2DPolygon aWaveline(basegfx::tools::createWaveline(getB2DPolygon(), getWaveWidth(), getWaveHeight()));
                     const Primitive2DReference xRef(new PolygonStrokePrimitive2D(aWaveline, getLineAttribute(), getStrokeAttribute()));
-                    aRetval = Primitive2DSequence(&xRef, 1);
+                    aRetval = Primitive2DContainer { xRef };
                 }
                 else
                 {
                     // flat waveline, decompose to simple line primitive
                     const Primitive2DReference xRef(new PolygonStrokePrimitive2D(getB2DPolygon(), getLineAttribute(), getStrokeAttribute()));
-                    aRetval = Primitive2DSequence(&xRef, 1);
+                    aRetval = Primitive2DContainer { xRef };
                 }
             }
 
@@ -521,7 +521,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonStrokeArrowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer PolygonStrokeArrowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // copy local polygon, it may be changed
             basegfx::B2DPolygon aLocalPolygon(getB2DPolygon());
@@ -569,7 +569,7 @@ namespace drawinglayer
             }
 
             // prepare return value
-            Primitive2DSequence aRetval(1L + (aArrowA.count() ? 1L : 0L) + (aArrowB.count() ? 1L : 0L));
+            Primitive2DContainer aRetval(1L + (aArrowA.count() ? 1L : 0L) + (aArrowB.count() ? 1L : 0L));
             sal_uInt32 nInd(0L);
 
             // add shaft

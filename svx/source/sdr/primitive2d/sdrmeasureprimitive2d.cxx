@@ -82,9 +82,9 @@ namespace drawinglayer
                 aLineStartEnd);
         }
 
-        Primitive2DSequence SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DContainer SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
             css::uno::Reference<SdrBlockTextPrimitive2D> xBlockText;
             basegfx::B2DRange aTextRange;
             const basegfx::B2DVector aLine(getEnd() - getStart());
@@ -271,12 +271,12 @@ namespace drawinglayer
                     const basegfx::B2DPoint aMainLeftLeft(aMainLeft.getX() - fLenLeft, aMainLeft.getY());
                     const basegfx::B2DPoint aMainRightRight(aMainRight.getX() + fLenRight, aMainRight.getY());
 
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainRight, aMainRightRight, true, false));
+                    aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
+                    aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainRight, aMainRightRight, true, false));
 
                     if(!bMainLineSplitted || MEASURETEXTPOSITION_CENTERED != eHorizontal)
                     {
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, false, false));
+                        aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, false, false));
                     }
                 }
                 else
@@ -287,12 +287,12 @@ namespace drawinglayer
                         const basegfx::B2DPoint aMainInnerLeft(aMainLeft.getX() + fHalfLength, aMainLeft.getY());
                         const basegfx::B2DPoint aMainInnerRight(aMainRight.getX() - fHalfLength, aMainRight.getY());
 
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainInnerRight, aMainRight, false, true));
+                        aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
+                        aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainInnerRight, aMainRight, false, true));
                     }
                     else
                     {
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, true, true));
+                        aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, true, true));
                     }
                 }
 
@@ -305,13 +305,13 @@ namespace drawinglayer
                 const basegfx::B2DPoint aLeftUp(0.0, fTopEdge);
                 const basegfx::B2DPoint aLeftDown(0.0, fBottomLeft);
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aLeftDown, aLeftUp, false, false));
+                aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aLeftDown, aLeftUp, false, false));
 
                 // right help line
                 const basegfx::B2DPoint aRightUp(fDistance, fTopEdge);
                 const basegfx::B2DPoint aRightDown(fDistance, fBottomRight);
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(rLineAttribute, aObjectMatrix, aRightDown, aRightUp, false, false));
+                aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aRightDown, aRightUp, false, false));
 
                 // text horizontal position
                 if(MEASURETEXTPOSITION_NEGATIVE == eHorizontal)
@@ -397,7 +397,7 @@ namespace drawinglayer
                 // embed line geometry to invisible (100% transparent) line group for HitTest
                 const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(aRetval));
 
-                aRetval = Primitive2DSequence(&xHiddenLines, 1);
+                aRetval = Primitive2DContainer { xHiddenLines };
             }
 
             if(xBlockText.is())
@@ -423,7 +423,7 @@ namespace drawinglayer
                 xBlockText.clear();
 
                 // add to local primitives
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(pNewBlockText));
+                aRetval.push_back(Primitive2DReference(pNewBlockText));
             }
 
             // add shadow

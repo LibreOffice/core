@@ -54,8 +54,8 @@ namespace svgio
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
             void decomposePathNode(
-                const drawinglayer::primitive2d::Primitive2DSequence& rPathContent,
-                drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+                const drawinglayer::primitive2d::Primitive2DContainer& rPathContent,
+                drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                 const basegfx::B2DPoint& rTextStart) const;
             bool isValid() const;
 

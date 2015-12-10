@@ -31,9 +31,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence TextLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer TextLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
 
             if(TEXT_LINE_NONE != getTextLine())
             {
@@ -219,7 +219,7 @@ namespace drawinglayer
                 }
 
                 // add primitive
-                appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, aNewPrimitive);
+                xRetval.push_back(aNewPrimitive);
 
                 if(bDoubleLine)
                 {
@@ -245,9 +245,8 @@ namespace drawinglayer
                     aTransform.translate(aTranslate.getX(), aTranslate.getY());
 
                     // add transform primitive
-                    const Primitive2DSequence aContent(&aNewPrimitive, 1);
-                    appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
-                        Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
+                    const Primitive2DContainer aContent { aNewPrimitive };
+                    xRetval.push_back( Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
                 }
             }
 

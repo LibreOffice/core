@@ -84,7 +84,7 @@ namespace sdr
              *
              * @note ONLY based on model data
              */
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 
         public:
             /// basic constructor, used from SdrObject.
@@ -95,10 +95,10 @@ namespace sdr
             virtual ~VCOfSwFlyDrawObj();
         };
 
-        drawinglayer::primitive2d::Primitive2DSequence VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
         {
             // currently gets not visualized, return empty sequence
-            return drawinglayer::primitive2d::Primitive2DSequence();
+            return drawinglayer::primitive2d::Primitive2DContainer();
         }
 
         VCOfSwFlyDrawObj::~VCOfSwFlyDrawObj()
@@ -154,7 +154,7 @@ namespace drawinglayer
 
         protected:
             /// method which is to be used to implement the local decomposition of a 2D primitive
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             SwVirtFlyDrawObjPrimitive(
@@ -171,7 +171,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
             // override to allow callbacks to wrap_DoPaintObject
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             // data read access
             const SwVirtFlyDrawObj& getSwVirtFlyDrawObj() const { return mrSwVirtFlyDrawObj; }
@@ -187,9 +187,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SwVirtFlyDrawObjPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer SwVirtFlyDrawObjPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(!getOuterRange().isEmpty())
             {
@@ -204,7 +204,7 @@ namespace drawinglayer
                         true,
                         getOuterRange()));
 
-                aRetval = Primitive2DSequence(&aHitTestReference, 1);
+                aRetval = Primitive2DContainer { aHitTestReference };
             }
 
             return aRetval;
@@ -228,7 +228,7 @@ namespace drawinglayer
             return getOuterRange();
         }
 
-        Primitive2DSequence SwVirtFlyDrawObjPrimitive::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer SwVirtFlyDrawObjPrimitive::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // This is the callback to keep the FlyFrame painting in SW alive as long as it
             // is not changed to primitives. This is the method which will be called by the processors
@@ -263,7 +263,7 @@ namespace sdr
              *
              * @note ONLY based on model data
              */
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 
         public:
             /// basic constructor, used from SdrObject.
@@ -286,9 +286,9 @@ namespace sdr
 {
     namespace contact
     {
-        drawinglayer::primitive2d::Primitive2DSequence VCOfSwVirtFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer VCOfSwVirtFlyDrawObj::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SdrObject& rReferencedObject = GetSwVirtFlyDrawObj().GetReferencedObj();
 
             if(dynamic_cast<const SwFlyDrawObj*>( &rReferencedObject) !=  nullptr)
@@ -304,7 +304,7 @@ namespace sdr
                             GetSwVirtFlyDrawObj(),
                             aOuterRange));
 
-                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xPrimitive, 1);
+                    xRetval = drawinglayer::primitive2d::Primitive2DContainer { xPrimitive };
                 }
             }
 

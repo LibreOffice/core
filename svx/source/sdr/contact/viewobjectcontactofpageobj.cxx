@@ -57,7 +57,7 @@ public:
     virtual void Invoke() override;
 
     // get primitive visualization
-    drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceForPage(const DisplayInfo& rDisplayInfo);
+    drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceForPage(const DisplayInfo& rDisplayInfo);
 
     // Own reaction on changes which will be forwarded to the OC of the owner-VOC
     virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const override;
@@ -117,9 +117,9 @@ void PagePrimitiveExtractor::Invoke()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence PagePrimitiveExtractor::createPrimitive2DSequenceForPage(const DisplayInfo& /*rDisplayInfo*/)
+drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPrimitive2DSequenceForPage(const DisplayInfo& /*rDisplayInfo*/)
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPage* pStartPage = GetStartPage();
 
     if(pStartPage)
@@ -149,7 +149,7 @@ drawinglayer::primitive2d::Primitive2DSequence PagePrimitiveExtractor::createPri
         // get page's VOC
         ViewObjectContact& rDrawPageVOContact = pStartPage->GetViewContact().GetViewObjectContact(*this);
 
-        // get whole Primitive2DSequence
+        // get whole Primitive2DContainer
         xRetval = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
     }
 
@@ -187,9 +187,9 @@ bool PagePrimitiveExtractor::isDrawModeHighContrast() const { return mrViewObjec
 SdrPageView* PagePrimitiveExtractor::TryToGetSdrPageView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrPageView(); }
 OutputDevice* PagePrimitiveExtractor::TryToGetOutputDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetOutputDevice(); }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPageObj& rPageObject((static_cast< ViewContactOfPageObj& >(GetViewContact())).GetPageObj());
     const SdrPage* pPage = rPageObject.GetReferencedPage();
     const svtools::ColorConfig aColorConfig;
@@ -215,7 +215,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::creat
     if(mpExtractor && pPage)
     {
         // get displayed page's geometry
-           drawinglayer::primitive2d::Primitive2DSequence xPageContent;
+           drawinglayer::primitive2d::Primitive2DContainer xPageContent;
         const Size aPageSize(pPage->GetSize());
         const double fPageWidth(aPageSize.getWidth());
         const double fPageHeight(aPageSize.getHeight());
@@ -228,7 +228,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::creat
         if(bInCreatePrimitive2D)
         {
             // Recursion is possible. Create a replacement primitive
-            xPageContent.realloc(2);
+            xPageContent.resize(2);
             const Color aDocColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
             const Color aBorderColor(aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor);
             const basegfx::B2DRange aPageBound(0.0, 0.0, fPageWidth, fPageHeight);
@@ -265,12 +265,12 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::creat
         }
 
         // prepare retval
-        if(xPageContent.hasElements())
+        if(!xPageContent.empty())
         {
             const uno::Reference< drawing::XDrawPage > xDrawPage(GetXDrawPageForSdrPage(const_cast< SdrPage*>(pPage)));
             const drawinglayer::primitive2d::Primitive2DReference xPagePreview(new drawinglayer::primitive2d::PagePreviewPrimitive2D(
                 xDrawPage, aPageObjectTransform, fPageWidth, fPageHeight, xPageContent, true));
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xPagePreview, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xPagePreview };
         }
     }
     else if(bCreateGrayFrame)
@@ -281,7 +281,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::creat
             drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                 false,
                 aPageObjectTransform));
-        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xFrameHit, 1);
+        xRetval = drawinglayer::primitive2d::Primitive2DContainer { xFrameHit };
     }
 
     // add a gray outline frame, except not when printing
@@ -294,7 +294,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::creat
         const drawinglayer::primitive2d::Primitive2DReference xGrayFrame(
             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOwnOutline, aFrameColor.getBColor()));
 
-        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xGrayFrame);
+        xRetval.push_back(xGrayFrame);
     }
 
     return xRetval;

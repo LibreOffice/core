@@ -59,7 +59,7 @@ sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
     return 0L;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
 {
     // create displacement transformation if we have content
     basegfx::B2DHomMatrix aObjectMatrix;
@@ -71,11 +71,11 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfVirtObj::createViewI
         aObjectMatrix.set(1, 2, aAnchor.Y());
     }
 
-    // use method from referenced object to get the Primitive2DSequence
-    const drawinglayer::primitive2d::Primitive2DSequence xSequenceVirtual(
+    // use method from referenced object to get the Primitive2DContainer
+    const drawinglayer::primitive2d::Primitive2DContainer xSequenceVirtual(
         GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DSequence());
 
-    if(xSequenceVirtual.hasElements())
+    if(!xSequenceVirtual.empty())
     {
         // create transform primitive
         const drawinglayer::primitive2d::Primitive2DReference xReference(
@@ -83,7 +83,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfVirtObj::createViewI
                 aObjectMatrix,
                 xSequenceVirtual));
 
-        return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        return drawinglayer::primitive2d::Primitive2DContainer { xReference };
     }
     else
     {
@@ -92,7 +92,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfVirtObj::createViewI
             drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                 false, aObjectMatrix));
 
-        return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        return drawinglayer::primitive2d::Primitive2DContainer { xReference };
     }
 }
 

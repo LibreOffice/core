@@ -121,24 +121,24 @@ namespace drawinglayer
 
         protected:
             /// local helpers
-            Primitive2DSequence createSingleGradientEntryFill() const;
+            Primitive2DContainer createSingleGradientEntryFill() const;
             virtual void createAtom(
-                Primitive2DVector& rTargetColor,
-                Primitive2DVector& rTargetOpacity,
+                Primitive2DContainer& rTargetColor,
+                Primitive2DContainer& rTargetOpacity,
                 const SvgGradientEntry& rFrom,
                 const SvgGradientEntry& rTo,
                 sal_Int32 nOffset) const = 0;
             double createRun(
-                Primitive2DVector& rTargetColor,
-                Primitive2DVector& rTargetOpacity,
+                Primitive2DContainer& rTargetColor,
+                Primitive2DContainer& rTargetOpacity,
                 double fPos,
                 double fMax,
                 const SvgGradientEntryVector& rEntries,
                 sal_Int32 nOffset) const;
             virtual void checkPreconditions();
-            Primitive2DSequence createResult(
-                const Primitive2DVector& rTargetColor,
-                const Primitive2DVector& rTargetOpacity,
+            Primitive2DContainer createResult(
+                const Primitive2DContainer& rTargetColor,
+                const Primitive2DContainer& rTargetOpacity,
                 const basegfx::B2DHomMatrix& rUnitGradientToObject,
                 bool bInvert = false) const;
             bool getCreatesContent() const { return mbCreatesContent; }
@@ -189,15 +189,15 @@ namespace drawinglayer
         protected:
             /// local helpers
             virtual void createAtom(
-                Primitive2DVector& rTargetColor,
-                Primitive2DVector& rTargetOpacity,
+                Primitive2DContainer& rTargetColor,
+                Primitive2DContainer& rTargetOpacity,
                 const SvgGradientEntry& rFrom,
                 const SvgGradientEntry& rTo,
                 sal_Int32 nOffset) const override;
             virtual void checkPreconditions() override;
 
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -258,15 +258,15 @@ namespace drawinglayer
         protected:
             /// local helpers
             virtual void createAtom(
-                Primitive2DVector& rTargetColor,
-                Primitive2DVector& rTargetOpacity,
+                Primitive2DContainer& rTargetColor,
+                Primitive2DContainer& rTargetOpacity,
                 const SvgGradientEntry& rFrom,
                 const SvgGradientEntry& rTo,
                 sal_Int32 nOffset) const override;
             virtual void checkPreconditions() override;
 
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -321,7 +321,7 @@ namespace drawinglayer
         protected:
 
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -383,7 +383,7 @@ namespace drawinglayer
         protected:
 
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor

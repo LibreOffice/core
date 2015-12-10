@@ -34,9 +34,10 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence MediaPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer MediaPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence xRetval(1);
+            Primitive2DContainer xRetval;
+            xRetval.resize(1);
 
             // create background object
             basegfx::B2DPolygon aBackgroundPolygon(basegfx::tools::createUnitPolygon());
@@ -51,7 +52,7 @@ namespace drawinglayer
             {
                 const GraphicObject aGraphicObject(maSnapshot);
                 const GraphicAttr aGraphicAttr;
-                xRetval.realloc(2);
+                xRetval.resize(2);
                 xRetval[0] = xRefBackground;
                 xRetval[1] = Primitive2DReference(new GraphicPrimitive2D(getTransform(), aGraphicObject, aGraphicAttr));
             }
@@ -74,7 +75,7 @@ namespace drawinglayer
                     // invisible content for HitTest and BoundRect
                     const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(xRetval));
 
-                    xRetval = Primitive2DSequence(&xHiddenLines, 1);
+                    xRetval = Primitive2DContainer { xHiddenLines, };
                 }
                 else
                 {
@@ -86,7 +87,7 @@ namespace drawinglayer
 
                     // add transform primitive
                     const Primitive2DReference aScaled(new TransformPrimitive2D(aTransform, xRetval));
-                    xRetval = Primitive2DSequence(&aScaled, 1L);
+                    xRetval = Primitive2DContainer { aScaled };
                 }
             }
 

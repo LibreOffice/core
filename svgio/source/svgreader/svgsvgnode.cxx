@@ -294,9 +294,9 @@ namespace svgio
         }
 
 // ToDo: Consider attribute overflow in method decomposeSvgNode
-        void SvgSvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgSvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence aSequence;
+            drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
             // #i125258# check now if we need to init some style settings locally. Do not do this
             // in the constructor, there is not yet informatikon e.g. about existing CssStyles.
@@ -306,7 +306,7 @@ namespace svgio
             // decompose children
             SvgNode::decomposeSvgNode(aSequence, bReferenced);
 
-            if(aSequence.hasElements())
+            if(!aSequence.empty())
             {
                 if(getParent())
                 {
@@ -355,9 +355,8 @@ namespace svgio
                             // I use content itself as fallback to set missing values for viewport
                             // Any better idea for such ill structures svg documents?
                             const basegfx::B2DRange aChildRange(
-                                        drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                                            aSequence,
-                                        drawinglayer::geometry::ViewInformation2D()));
+                                        aSequence.getB2DRange(
+                                            drawinglayer::geometry::ViewInformation2D()));
                             fWReference = aChildRange.getWidth();
                         }
                         // referenced values are already in 'user unit'
@@ -383,8 +382,7 @@ namespace svgio
                             // I use content itself as fallback to set missing values for viewport
                             // Any better idea for such ill structures svg documents?
                             const basegfx::B2DRange aChildRange(
-                                        drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                                            aSequence,
+                                    aSequence.getB2DRange(
                                         drawinglayer::geometry::ViewInformation2D()));
                             fHReference = aChildRange.getHeight();
                         }
@@ -412,7 +410,7 @@ namespace svgio
                             if(aTarget.equal(*getViewBox()))
                             {
                                 // no mapping needed, append
-                                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSequence);
+                                rTarget.append(aSequence);
                             }
                             else
                             {
@@ -435,7 +433,7 @@ namespace svgio
                                 if(rRatio.isMeetOrSlice())
                                 {
                                     // embed in transformation
-                                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xRef);
+                                    rTarget.push_back(xRef);
                                 }
                                 else
                                 {
@@ -443,9 +441,9 @@ namespace svgio
                                     const drawinglayer::primitive2d::Primitive2DReference xMask(
                                         new drawinglayer::primitive2d::MaskPrimitive2D(
                                             basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aTarget)),
-                                            drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1)));
+                                            drawinglayer::primitive2d::Primitive2DContainer { xRef }));
 
-                                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xMask);
+                                    rTarget.push_back(xMask);
                                 }
                             }
                         }
@@ -463,7 +461,7 @@ namespace svgio
                                         basegfx::tools::createTranslateB2DHomMatrix(fX, fY),
                                         aSequence));
 
-                                aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
+                                aSequence = drawinglayer::primitive2d::Primitive2DContainer { xRef, };
                             }
 
                             // embed in MaskPrimitive2D to clip
@@ -475,7 +473,7 @@ namespace svgio
                                     aSequence));
 
                             // append
-                            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xMask);
+                            rTarget.push_back(xMask);
                         }
                     }
                 }
@@ -543,7 +541,7 @@ namespace svgio
                                         aViewBoxMapping,
                                         aSequence));
 
-                                aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                                aSequence = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
                             }
                         }
                         else // no viewbox
@@ -561,9 +559,8 @@ namespace svgio
                             else
                             {
                                 const basegfx::B2DRange aChildRange(
-                                    drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                                        aSequence,
-                                     drawinglayer::geometry::ViewInformation2D()));
+                                     aSequence.getB2DRange(
+                                         drawinglayer::geometry::ViewInformation2D()));
                                 const double fChildWidth(aChildRange.getWidth());
                                 const double fChildHeight(aChildRange.getHeight());
                                 fW = bWidthIsAbsolute ? getWidth().solveNonPercentage(*this) : fChildWidth;
@@ -585,8 +582,7 @@ namespace svgio
                             // different from Svg we have the possibility with primitives to get
                             // a correct bounding box for the geometry. Get it for evtl. taking action
                             const basegfx::B2DRange aContentRange(
-                                drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                                    aSequence,
+                                aSequence.getB2DRange(
                                     drawinglayer::geometry::ViewInformation2D()));
 
                             if(aSvgCanvasRange.isInside(aContentRange))
@@ -603,9 +599,9 @@ namespace svgio
                                         basegfx::BColor(0.0, 0.0, 0.0)));
                                 const drawinglayer::primitive2d::Primitive2DReference xHidden(
                                     new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
-                                        drawinglayer::primitive2d::Primitive2DSequence(&xLine, 1)));
+                                        drawinglayer::primitive2d::Primitive2DContainer { xLine }));
 
-                                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aSequence, xHidden);
+                                aSequence.push_back(xHidden);
                             }
                             else if(aSvgCanvasRange.overlaps(aContentRange))
                             {
@@ -621,16 +617,16 @@ namespace svgio
                                                 aSvgCanvasRange)),
                                         aSequence));
 
-                                aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
+                                aSequence = drawinglayer::primitive2d::Primitive2DContainer { xMask };
                             }
                             else
                             {
                                 // not inside, no overlap. Empty Svg
-                                aSequence.realloc(0);
+                                aSequence.clear();
                             }
                         }
 
-                        if(aSequence.hasElements())
+                        if(!aSequence.empty())
                         {
                             // embed in transform primitive to scale to 1/100th mm
                             // where 1 inch == 25.4 mm to get from Svg coordinates (px) to
@@ -646,10 +642,10 @@ namespace svgio
                                     aTransform,
                                     aSequence));
 
-                            aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                            aSequence = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
 
                             // append to result
-                            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSequence);
+                            rTarget.append(aSequence);
                         }
                     }
                 }

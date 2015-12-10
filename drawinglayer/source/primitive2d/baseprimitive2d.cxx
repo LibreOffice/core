@@ -21,6 +21,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <comphelper/sequence.hxx>
 
 
 
@@ -48,18 +49,18 @@ namespace drawinglayer
 
         basegfx::B2DRange BasePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            return getB2DRangeFromPrimitive2DSequence(get2DDecomposition(rViewInformation), rViewInformation);
+            return get2DDecomposition(rViewInformation).getB2DRange(rViewInformation);
         }
 
-        Primitive2DSequence BasePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer BasePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return Primitive2DSequence();
+            return Primitive2DContainer();
         }
 
         Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
         {
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
-            return get2DDecomposition(aViewInformation);
+            return comphelper::containerToSequence(get2DDecomposition(aViewInformation));
         }
 
         css::geometry::RealRectangle2D SAL_CALL BasePrimitive2D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
@@ -76,9 +77,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence BufferedDecompositionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer BufferedDecompositionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return Primitive2DSequence();
+            return Primitive2DContainer();
         }
 
         BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
@@ -87,13 +88,13 @@ namespace drawinglayer
         {
         }
 
-        Primitive2DSequence BufferedDecompositionPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer BufferedDecompositionPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
-                const Primitive2DSequence aNewSequence(create2DDecomposition(rViewInformation));
+                const Primitive2DContainer aNewSequence(create2DDecomposition(rViewInformation));
                 const_cast< BufferedDecompositionPrimitive2D* >(this)->setBuffered2DDecomposition(aNewSequence);
             }
 
@@ -110,7 +111,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         // convert helper stl vector of primitives to Primitive2DSequence
-        Primitive2DSequence Primitive2DVectorToPrimitive2DSequence(const Primitive2DVector& rSource, bool bInvert)
+        Primitive2DSequence Primitive2DContainerToPrimitive2DSequence(const Primitive2DContainer& rSource, bool bInvert)
         {
             const sal_uInt32 nSize(rSource.size());
             Primitive2DSequence aRetval;
@@ -125,7 +126,26 @@ namespace drawinglayer
             // all entries taken over to Uno References as owners. To avoid
             // errors with users of this mechanism to delete pointers to BasePrimitive2D
             // itself, clear given vector
-            const_cast< Primitive2DVector& >(rSource).clear();
+            const_cast< Primitive2DContainer& >(rSource).clear();
+
+            return aRetval;
+        }
+        Primitive2DContainer Primitive2DContainer::maybeInvert(bool bInvert) const
+        {
+            const sal_uInt32 nSize(size());
+            Primitive2DContainer aRetval;
+
+            aRetval.resize(nSize);
+
+            for(sal_uInt32 a(0); a < nSize; a++)
+            {
+                aRetval[bInvert ? nSize - 1 - a : a] = (*this)[a];
+            }
+
+            // all entries taken over to Uno References as owners. To avoid
+            // errors with users of this mechanism to delete pointers to BasePrimitive2D
+            // itself, clear given vector
+            const_cast< Primitive2DContainer& >(*this).clear();
 
             return aRetval;
         }
@@ -157,13 +177,29 @@ namespace drawinglayer
         }
 
         // get B2DRange from a given Primitive2DSequence
-        basegfx::B2DRange getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation)
+        basegfx::B2DRange Primitive2DContainer::getB2DRange(const geometry::ViewInformation2D& aViewInformation) const
         {
             basegfx::B2DRange aRetval;
 
-            if(rCandidate.hasElements())
+            if(!empty())
             {
-                const sal_Int32 nCount(rCandidate.getLength());
+                const sal_Int32 nCount(this->size());
+
+                for(sal_Int32 a(0L); a < nCount; a++)
+                {
+                    aRetval.expand(getB2DRangeFromPrimitive2DReference((*this)[a], aViewInformation));
+                }
+            }
+
+            return aRetval;
+        }
+        basegfx::B2DRange getB2DRangeFromPrimitive2DSequence(const Primitive2DContainer& rCandidate, const geometry::ViewInformation2D& aViewInformation)
+        {
+            basegfx::B2DRange aRetval;
+
+            if(!rCandidate.empty())
+            {
+                const sal_Int32 nCount(rCandidate.size());
 
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
@@ -237,6 +273,38 @@ namespace drawinglayer
             return true;
         }
 
+        bool Primitive2DContainer::operator==(const Primitive2DContainer& rB) const
+        {
+            const bool bAHasElements(!empty());
+
+            if(bAHasElements != !rB.empty())
+            {
+                return false;
+            }
+
+            if(!bAHasElements)
+            {
+                return true;
+            }
+
+            const size_t nCount(size());
+
+            if(nCount != rB.size())
+            {
+                return false;
+            }
+
+            for(size_t a(0L); a < nCount; a++)
+            {
+                if(!arePrimitive2DReferencesEqual((*this)[a], rB[a]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         // concatenate sequence
         void appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource)
         {
@@ -269,6 +337,30 @@ namespace drawinglayer
                     rDest = rSource;
                 }
             }
+        }
+
+        void appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DContainer& rSource)
+        {
+            appendPrimitive2DSequenceToPrimitive2DSequence(rDest, comphelper::containerToSequence(rSource));
+        }
+
+        void Primitive2DContainer::append(const Primitive2DContainer& rSource)
+        {
+            insert(end(), rSource.begin(), rSource.end());
+        }
+/*
+        void Primitive2DContainer::append(Primitive2DContainer&& rSource)
+        {
+            resize(size() + rSource.size());
+            memcpy(data() + size(),
+                   rSource.data(),
+                   rSource.size() * sizeof(Primitive2DReference));
+            memset(reinterpret_cast<void*>(rSource.data()), 0, rSource.size() * sizeof(Primitive2DReference));
+        }
+*/
+        void Primitive2DContainer::append(const Primitive2DSequence& rSource)
+        {
+            std::copy(rSource.begin(), rSource.end(), std::back_inserter(*this));
         }
 
         // concatenate single Primitive2D

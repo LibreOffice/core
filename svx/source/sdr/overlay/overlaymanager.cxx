@@ -60,9 +60,9 @@ namespace sdr
 
                         if(rCandidate.isVisible())
                         {
-                            const drawinglayer::primitive2d::Primitive2DSequence& rSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
+                            const drawinglayer::primitive2d::Primitive2DContainer& rSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
 
-                            if(rSequence.hasElements())
+                            if(!rSequence.empty())
                             {
                                 if(rRange.overlaps(rCandidate.getBaseRange()))
                                 {

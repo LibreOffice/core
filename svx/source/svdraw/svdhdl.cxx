@@ -2545,7 +2545,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
         aHilightColor));
 
     // combine these
-    drawinglayer::primitive2d::Primitive2DSequence aCombination(2);
+    drawinglayer::primitive2d::Primitive2DContainer aCombination(2);
     aCombination[0] = aGraphic;
     aCombination[1] = aGraphicOutline;
 
@@ -2558,10 +2558,10 @@ void SdrCropViewHdl::CreateB2dIAObject()
     // embed to UnifiedTransparencePrimitive2D
     const drawinglayer::primitive2d::Primitive2DReference aTransparenceMaskedGraphic(
         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-            drawinglayer::primitive2d::Primitive2DSequence(&aMaskedGraphic, 1),
+            drawinglayer::primitive2d::Primitive2DContainer { aMaskedGraphic },
             0.8));
 
-    const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aTransparenceMaskedGraphic, 1);
+    const drawinglayer::primitive2d::Primitive2DContainer aSequence { aTransparenceMaskedGraphic };
 
     for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
     {

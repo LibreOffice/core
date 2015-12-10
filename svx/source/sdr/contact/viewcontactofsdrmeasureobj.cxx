@@ -44,7 +44,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrMeasureObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMeasureObj::createViewIndependentPrimitive2DSequence() const
         {
             const SfxItemSet& rItemSet = GetMeasureObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineShadowTextAttribute aAttribute(
@@ -124,7 +124,7 @@ namespace sdr
                     fLeftDelta, fRightDelta, bBelow,
                     bTextRotation, bTextAutoAngle));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            return drawinglayer::primitive2d::Primitive2DContainer { xReference };
         }
     } // end of namespace contact
 } // end of namespace sdr

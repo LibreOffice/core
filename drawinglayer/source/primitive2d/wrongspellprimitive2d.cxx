@@ -29,7 +29,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence WrongSpellPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer WrongSpellPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // ATM this decompose is view-independent, what the original VCL-Display is not. To mimic
             // the old behaviour here if wanted it is necessary to add get2DDecomposition and implement
@@ -68,7 +68,7 @@ namespace drawinglayer
 
             // create the waveline primitive
             Primitive2DReference xPrimitive(new PolygonWavePrimitive2D(aPolygon, aLineAttribute, fWaveWidth, 0.5 * fWaveWidth));
-            Primitive2DSequence xRetval(&xPrimitive, 1);
+            Primitive2DContainer xRetval { xPrimitive };
 
             return xRetval;
         }

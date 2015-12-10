@@ -377,7 +377,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
                     std::max(6, nPixSiz - 2), // grow
                     0.0, // shrink
                     0.0));
-            const drawinglayer::primitive2d::Primitive2DSequence aSequence(&xReference, 1);
+            const drawinglayer::primitive2d::Primitive2DContainer aSequence { xReference };
 
             rTargetDevice.EnableMapMode(false);
             xProcessor->process(aSequence);

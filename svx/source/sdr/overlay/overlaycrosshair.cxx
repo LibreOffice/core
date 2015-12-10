@@ -28,9 +28,9 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayCrosshairStriped::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayCrosshairStriped::createOverlayObjectPrimitive2DSequence()
         {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
             if(getOverlayManager())
             {
@@ -45,7 +45,7 @@ namespace sdr
                         aRGBColorB,
                         fStripeLengthPixel));
 
-                aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+                aRetval = drawinglayer::primitive2d::Primitive2DContainer { aReference };
             }
 
             return aRetval;

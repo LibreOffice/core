@@ -92,11 +92,11 @@ void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel,
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
     const uno::Reference< ::frame::XModel >& rXModel,
     basegfx::B2DRange& rRange)
 {
-    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
     if (!rXModel.is())
         return aRetval;
@@ -129,9 +129,7 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
                                 xShape,
                                 aParams));
 
-                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
-                            aRetval,
-                            aNew);
+                    aRetval.append(aNew);
                 }
             }
         }
@@ -141,11 +139,11 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
         OSL_ENSURE(false, "Unexpected exception!");
     }
 
-    if(aRetval.hasElements())
+    if(!aRetval.empty())
     {
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
-        rRange = drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(aRetval, aViewInformation2D);
+        rRange = aRetval.getB2DRange(aViewInformation2D);
     }
 
     return aRetval;

@@ -35,9 +35,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GridPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer GridPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(!rViewInformation.getViewport().isEmpty() && getWidth() > 0.0 && getHeight() > 0.0)
             {
@@ -234,7 +234,7 @@ namespace drawinglayer
                     const sal_uInt32 nRetvalCount((nCountPoint ? 1 : 0) + (nCountCross ? 1 : 0));
                     sal_uInt32 nInsertCounter(0);
 
-                    aRetval.realloc(nRetvalCount);
+                    aRetval.resize(nRetvalCount);
 
                     // add PointArrayPrimitive2D if point markers were added
                     if(nCountPoint)
@@ -319,20 +319,20 @@ namespace drawinglayer
             return aUnitRange;
         }
 
-        Primitive2DSequence GridPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer GridPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getBuffered2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().empty())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< GridPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                    const_cast< GridPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
                 }
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< GridPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

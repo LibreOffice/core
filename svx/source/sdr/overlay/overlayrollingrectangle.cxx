@@ -32,9 +32,9 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayRollingRectangleStriped::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayRollingRectangleStriped::createOverlayObjectPrimitive2DSequence()
         {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
             if(getOverlayManager() && (getShowBounds() || getExtendedLines()))
             {
@@ -48,7 +48,7 @@ namespace sdr
                     // view-independent part, create directly
                     const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRollingRectangle));
 
-                    aRetval.realloc(2);
+                    aRetval.resize(2);
                     aRetval[0] = new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
                         basegfx::B2DPolyPolygon(aPolygon),
                         aRGBColorA,
@@ -77,7 +77,7 @@ namespace sdr
                             aRGBColorB,
                             fStripeLengthPixel));
 
-                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aReference);
+                    aRetval.push_back(aReference);
                 }
             }
 

@@ -44,7 +44,7 @@ private:
     ShadowState                 maShadowState;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence create2DDecomposition(
+    virtual drawinglayer::primitive2d::Primitive2DContainer create2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
@@ -68,11 +68,11 @@ public:
     DeclPrimitive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence ShadowPrimitive::create2DDecomposition(
+drawinglayer::primitive2d::Primitive2DContainer ShadowPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // get logic sizes in object coordinate system
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     basegfx::B2DRange aRange(getBasePosition());
 
     switch(maShadowState)
@@ -95,7 +95,7 @@ drawinglayer::primitive2d::Primitive2DSequence ShadowPrimitive::create2DDecompos
                     aRange,
                     aFillGradientAttribute));
 
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             break;
         }
         case SS_VIEW:
@@ -116,7 +116,7 @@ drawinglayer::primitive2d::Primitive2DSequence ShadowPrimitive::create2DDecompos
                     aRange,
                     aFillGradientAttribute));
 
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             break;
         }
         case SS_EDIT:
@@ -137,7 +137,7 @@ drawinglayer::primitive2d::Primitive2DSequence ShadowPrimitive::create2DDecompos
                     aRange,
                     aFillGradientAttribute));
 
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             break;
         }
         default:
@@ -216,13 +216,13 @@ ShadowOverlayObject::~ShadowOverlayObject()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ShadowOverlayObject::createOverlayObjectPrimitive2DSequence()
+drawinglayer::primitive2d::Primitive2DContainer ShadowOverlayObject::createOverlayObjectPrimitive2DSequence()
 {
     const drawinglayer::primitive2d::Primitive2DReference aReference(
         new ShadowPrimitive( getBasePosition(),
                              GetSecondPosition(),
                              GetShadowState() ) );
-    return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+    return drawinglayer::primitive2d::Primitive2DContainer { aReference };
 }
 
 void ShadowOverlayObject::SetShadowState(ShadowState aState)

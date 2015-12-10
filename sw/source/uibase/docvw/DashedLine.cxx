@@ -46,7 +46,7 @@ void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     aPolygon.append(aStart);
     aPolygon.append(aEnd);
 
-    drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
@@ -77,7 +77,7 @@ void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         aStrokePattern.push_back(3);
         aStrokePattern.push_back(3);
 
-        aSeq.realloc(2);
+        aSeq.resize(2);
     }
 
     // Compute the dashed line primitive
@@ -87,7 +87,7 @@ void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
                 drawinglayer::attribute::LineAttribute(m_pColorFn().getBColor()),
                 drawinglayer::attribute::StrokeAttribute(aStrokePattern));
 
-    aSeq[aSeq.getLength() - 1] = drawinglayer::primitive2d::Primitive2DReference(pLine);
+    aSeq[aSeq.size() - 1] = drawinglayer::primitive2d::Primitive2DReference(pLine);
 
     pProcessor->process(aSeq);
 }

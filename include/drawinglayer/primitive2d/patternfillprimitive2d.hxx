@@ -43,23 +43,23 @@ namespace drawinglayer
         {
         private:
             const basegfx::B2DPolyPolygon       maMask;
-            const Primitive2DSequence           maChildren;
+            const Primitive2DContainer             maChildren;
             const basegfx::B2DRange             maReferenceRange;
 
         protected:
             /// create local decomposition
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
             PatternFillPrimitive2D(
                 const basegfx::B2DPolyPolygon& rMask,
-                const Primitive2DSequence& rChildren,
+                const Primitive2DContainer& rChildren,
                 const basegfx::B2DRange& rReferenceRange);
 
             /// data read access
             const basegfx::B2DPolyPolygon& getMask() const { return maMask; }
-            const Primitive2DSequence& getChildren() const { return maChildren; }
+            const Primitive2DContainer& getChildren() const { return maChildren; }
             const basegfx::B2DRange& getReferenceRange() const { return maReferenceRange; }
 
             /// compare operator

@@ -33,6 +33,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdhdl.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace sdr { namespace contact {
 
@@ -137,9 +138,9 @@ SdrObject* ViewContactOfSdrObj::TryToGetSdrObject() const
 // primitive stuff
 
 // add Gluepoints (if available)
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::createGluePointPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::createGluePointPrimitive2DSequence() const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrGluePointList* pGluePointList = GetSdrObject().GetGluePointList();
 
     if(pGluePointList)
@@ -165,7 +166,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::createGluePo
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                         new drawinglayer::primitive2d::MarkerArrayPrimitive2D(
                                 aGluepointVector, SdrHdl::createGluePointBitmap()));
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xReference };
             }
         }
     }
@@ -173,9 +174,9 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::createGluePo
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DContainer& rSource) const
 {
-    if(rSource.hasElements() &&
+    if(!rSource.empty() &&
         (!GetSdrObject().GetName().isEmpty() ||
          !GetSdrObject().GetTitle().isEmpty() ||
          !GetSdrObject().GetDescription().isEmpty()))
@@ -187,7 +188,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::embedToObjec
                 GetSdrObject().GetTitle(),
                 GetSdrObject().GetDescription()));
 
-        return drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
+        return drawinglayer::primitive2d::Primitive2DContainer { xRef };
     }
 
     return rSource;

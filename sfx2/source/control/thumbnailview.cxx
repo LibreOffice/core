@@ -837,7 +837,7 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
     size_t nItemCount = mItemList.size();
 
     // Draw background
-    drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
             new PolyPolygonColorPrimitive2D(
                     B2DPolyPolygon( ::tools::Polygon(Rectangle(Point(), GetOutputSizePixel()), 0, 0).getB2DPolygon()),
