@@ -154,7 +154,7 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
 
         if(pProcessor2D)
         {
-            const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aLineStartEndPrimitive, 1);
+            const drawinglayer::primitive2d::Primitive2DContainer aSequence { aLineStartEndPrimitive };
 
             pProcessor2D->process(aSequence);
             pProcessor2D.reset();

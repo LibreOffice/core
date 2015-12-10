@@ -35,12 +35,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PagePreviewPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer PagePreviewPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence xRetval;
-            Primitive2DSequence aContent(getPageContent());
+            Primitive2DContainer xRetval;
+            Primitive2DContainer aContent(getPageContent());
 
-            if(aContent.hasElements()
+            if(!aContent.empty()
                 && basegfx::fTools::more(getContentWidth(), 0.0)
                 && basegfx::fTools::more(getContentHeight(), 0.0))
             {
@@ -53,7 +53,7 @@ namespace drawinglayer
                 {
                     // check if content overlaps with target size and needs to be embedded with a
                     // clipping primitive
-                    const basegfx::B2DRange aRealContentRange(getB2DRangeFromPrimitive2DSequence(aContent, rViewInformation));
+                    const basegfx::B2DRange aRealContentRange(aContent.getB2DRange(rViewInformation));
                     const basegfx::B2DRange aAllowedContentRange(0.0, 0.0, getContentWidth(), getContentHeight());
 
                     if(!aAllowedContentRange.isInside(aRealContentRange))
@@ -62,7 +62,7 @@ namespace drawinglayer
                             new MaskPrimitive2D(
                                 basegfx::B2DPolyPolygon(
                                     basegfx::tools::createPolygonFromRect(aAllowedContentRange)), aContent));
-                        aContent = Primitive2DSequence(&xReferenceA, 1);
+                        aContent = Primitive2DContainer { xReferenceA };
                     }
 
                     // create a mapping from content to object.
@@ -112,7 +112,7 @@ namespace drawinglayer
 
                     // embed in necessary transformation to map from SdrPage to SdrPageObject
                     const Primitive2DReference xReferenceB(new TransformPrimitive2D(aPageTrans, aContent));
-                    xRetval = Primitive2DSequence(&xReferenceB, 1);
+                    xRetval = Primitive2DContainer { xReferenceB };
                 }
             }
 
@@ -124,7 +124,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             double fContentWidth,
             double fContentHeight,
-            const Primitive2DSequence& rPageContent,
+            const Primitive2DContainer& rPageContent,
             bool bKeepAspectRatio)
         :   BufferedDecompositionPrimitive2D(),
             mxDrawPage(rxDrawPage),

@@ -34,9 +34,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrOleContentPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DContainer SdrOleContentPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
             const SdrOle2Obj* pSource = (mpSdrOle2Obj.is() ? static_cast< SdrOle2Obj* >(mpSdrOle2Obj.get()) : nullptr);
             bool bScaleContent(false);
             Graphic aGraphic;
@@ -99,7 +99,7 @@ namespace drawinglayer
                                 aInnerObjectMatrix,
                                 aGraphicObject,
                                 aGraphicAttr));
-                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aGraphicPrimitive);
+                        aRetval.push_back(aGraphicPrimitive);
                     }
                 }
                 else
@@ -110,7 +110,7 @@ namespace drawinglayer
                             getObjectTransform(),
                             aGraphicObject,
                             aGraphicAttr));
-                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aGraphicPrimitive);
+                    aRetval.push_back(aGraphicPrimitive);
                 }
 
                 // a standard gray outline is created for scaled content
@@ -126,7 +126,7 @@ namespace drawinglayer
                         aOutline.transform(getObjectTransform());
                         const drawinglayer::primitive2d::Primitive2DReference xOutline(
                             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aVclColor.getBColor()));
-                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xOutline);
+                        aRetval.push_back(xOutline);
                     }
                 }
             }

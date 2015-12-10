@@ -100,9 +100,9 @@ namespace sdr
             return aTextRange;
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObjCustomShape::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObjCustomShape::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SfxItemSet& rItemSet = GetCustomShapeObj().GetMergedItemSet();
 
             // #i98072# Get shadow and text; eventually suppress the text if it's
@@ -112,10 +112,10 @@ namespace sdr
                     rItemSet,
                     GetCustomShapeObj().getText(0),
                     GetCustomShapeObj().IsTextPath()));
-            drawinglayer::primitive2d::Primitive2DSequence xGroup;
+            drawinglayer::primitive2d::Primitive2DContainer xGroup;
             bool bHasText(!aAttribute.getText().isDefault());
 
-            // create Primitive2DSequence from sub-geometry
+            // create Primitive2DContainer from sub-geometry
             const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
             bool b3DShape(false);
 
@@ -139,12 +139,12 @@ namespace sdr
                         b3DShape = true;
                     }
 
-                    const drawinglayer::primitive2d::Primitive2DSequence xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DSequence());
-                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xGroup, xNew);
+                    const drawinglayer::primitive2d::Primitive2DContainer xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DSequence());
+                    xGroup.insert(xGroup.end(), xNew.begin(), xNew.end());
                 }
             }
 
-            if(bHasText || xGroup.hasElements())
+            if(bHasText || !xGroup.empty())
             {
                 // prepare text box geometry
                 basegfx::B2DHomMatrix aTextBoxMatrix;
@@ -228,7 +228,7 @@ namespace sdr
                         bWordWrap,
                         b3DShape,
                         false));        // #SJ# New parameter to force to clipped BlockText for SC
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             }
 
             return xRetval;

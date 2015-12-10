@@ -57,7 +57,7 @@ public:
     // scaling (e.g. for EmptyPresObj's), the correct graphic and other stuff. It is used from
     // createViewIndependentPrimitive2DSequence with false, and with evtl. HighContrast true
     // from the VOC which knows that
-    drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceWithParameters() const;
+    drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceWithParameters() const;
 
     // #i123539# get rid of buffered chart content (if there) on change
     virtual void ActionChanged() override;
@@ -67,7 +67,7 @@ public:
 protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data, just wraps to call createPrimitive2DSequenceWithParameters(false)
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 };
 
 }}

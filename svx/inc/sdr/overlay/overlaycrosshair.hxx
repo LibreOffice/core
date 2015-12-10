@@ -32,7 +32,7 @@ namespace sdr
         {
         protected:
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
             explicit OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos);

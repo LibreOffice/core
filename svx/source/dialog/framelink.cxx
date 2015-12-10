@@ -1405,11 +1405,11 @@ basegfx::B2DPoint lcl_PointToB2DPoint( const Point& rPoint )
     return basegfx::B2DPoint(rPoint.getX(), rPoint.getY());
 }
 
-drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
+drawinglayer::primitive2d::Primitive2DContainer CreateClippedBorderPrimitives (
         const Point& rStart, const Point& rEnd, const Style& rBorder,
         const Rectangle& rClipRect )
 {
-    drawinglayer::primitive2d::Primitive2DSequence aSequence( 1 );
+    drawinglayer::primitive2d::Primitive2DContainer aSequence( 1 );
     basegfx::B2DPolygon aPolygon;
     aPolygon.append( lcl_PointToB2DPoint( rClipRect.TopLeft( ) ) );
     aPolygon.append( lcl_PointToB2DPoint( rClipRect.TopRight( ) ) );
@@ -1432,13 +1432,13 @@ drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
     return aSequence;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const DiagStyle& /*rLFromTR*/, const Style& rLFromT, const Style& /*rLFromL*/, const Style& rLFromB, const DiagStyle& /*rLFromBR*/,
         const DiagStyle& /*rRFromTL*/, const Style& rRFromT, const Style& /*rRFromR*/, const Style& rRFromB, const DiagStyle& /*rRFromBL*/,
         const Color* /*pForceColor*/, const long& nRotateT, const long& nRotateB )
 {
-    drawinglayer::primitive2d::Primitive2DSequence aSequence( 1 );
+    drawinglayer::primitive2d::Primitive2DContainer aSequence( 1 );
 
     basegfx::B2DPoint aStart( rLPos.getX(), rLPos.getY() );
     basegfx::B2DPoint aEnd( rRPos.getX(), rRPos.getY() );
@@ -1460,7 +1460,7 @@ drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
     return aSequence;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
         const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,

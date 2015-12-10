@@ -45,7 +45,7 @@ namespace drawinglayer
         public:
             /// constructor
             ObjectInfoPrimitive2D(
-                const Primitive2DSequence& rChildren,
+                const Primitive2DContainer& rChildren,
                 const OUString& rName,
                 const OUString& rTitle,
                 const OUString& rDesc);

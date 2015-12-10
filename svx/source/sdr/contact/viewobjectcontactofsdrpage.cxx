@@ -111,13 +111,13 @@ bool ViewObjectContactOfPageBackground::isPrimitiveVisible(const DisplayInfo& rD
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageBackground::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageBackground::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
 {
     // Initialize background. Dependent of IsPageVisible, use ApplicationBackgroundColor or ApplicationDocumentColor. Most
     // old renderers for export (html, pdf, gallery, ...) set the page to not visible (SetPageVisible(false)). They expect the
     // given OutputDevice to be initialized with the ApplicationDocumentColor then.
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     if(pPageView)
     {
@@ -140,7 +140,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageBackground
         }
 
         // init background with InitColor
-        xRetval.realloc(1);
+        xRetval.resize(1);
         const basegfx::BColor aRGBColor(aInitColor.getBColor());
         xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor, aInitColor.GetTransparency() / 255.0));
     }
@@ -206,10 +206,10 @@ bool ViewObjectContactOfPageFill::isPrimitiveVisible(const DisplayInfo& rDisplay
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageFill::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageFill::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
 {
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     if(pPageView)
     {
@@ -230,7 +230,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageFill::crea
         }
 
         // create and add primitive
-        xRetval.realloc(1);
+        xRetval.resize(1);
         const basegfx::BColor aRGBColor(aPageFillColor.getBColor());
         xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
     }
@@ -367,9 +367,9 @@ ViewObjectContactOfPageHierarchy::~ViewObjectContactOfPageHierarchy()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     // process local sub-hierarchy
     const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
@@ -378,18 +378,18 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageHierarchy:
     {
         xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
 
-        if(xRetval.hasElements())
+        if(!xRetval.empty())
         {
             // get ranges
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
+            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
             const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
             // check geometrical visibility
             if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
             {
                 // not visible, release
-                xRetval.realloc(0);
+                xRetval.clear();
             }
         }
     }
@@ -441,10 +441,10 @@ bool ViewObjectContactOfPageGrid::isPrimitiveVisible(const DisplayInfo& rDisplay
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
 {
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     if(pPageView)
     {
@@ -466,7 +466,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageGrid::crea
         const sal_uInt32 nSubdivisionsX(aFine.getWidth() ? aRaw.getWidth() / aFine.getWidth() : 0L);
         const sal_uInt32 nSubdivisionsY(aFine.getHeight() ? aRaw.getHeight() / aFine.getHeight() : 0L);
 
-        xRetval.realloc(1);
+        xRetval.resize(1);
         xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::GridPrimitive2D(
             aGridMatrix, fWidthX, fWidthY, 10.0, 3.0, nSubdivisionsX, nSubdivisionsY, aRGBGridColor,
             drawinglayer::primitive2d::createDefaultCross_3x3(aRGBGridColor)));
@@ -519,9 +519,9 @@ bool ViewObjectContactOfPageHelplines::isPrimitiveVisible(const DisplayInfo& rDi
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageHelplines::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
 
     if(pPageView)
@@ -533,7 +533,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageHelplines:
         {
             const basegfx::BColor aRGBColorA(1.0, 1.0, 1.0);
             const basegfx::BColor aRGBColorB(0.0, 0.0, 0.0);
-            xRetval.realloc(nCount);
+            xRetval.resize(nCount);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -581,9 +581,9 @@ ViewObjectContactOfSdrPage::~ViewObjectContactOfSdrPage()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     // process local sub-hierarchy
     const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
@@ -603,18 +603,18 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrPage::getPr
         // create object hierarchy
         xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
 
-        if(xRetval.hasElements())
+        if(!xRetval.empty())
         {
             // get ranges
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
+            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
             const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
             // check geometrical visibility
             if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
             {
                 // not visible, release
-                xRetval.realloc(0);
+                xRetval.clear();
             }
         }
 

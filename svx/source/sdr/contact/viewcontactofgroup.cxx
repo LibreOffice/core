@@ -53,9 +53,9 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfGroup::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGroup::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const sal_uInt32 nObjectCount(GetObjectCount());
 
             if(nObjectCount)
@@ -64,9 +64,9 @@ namespace sdr
                 for(sal_uInt32 a(0); a < nObjectCount; a++)
                 {
                     const ViewContact& rCandidate(GetViewContact(a));
-                    const drawinglayer::primitive2d::Primitive2DSequence aCandSeq(rCandidate.getViewIndependentPrimitive2DSequence());
+                    const drawinglayer::primitive2d::Primitive2DContainer aCandSeq(rCandidate.getViewIndependentPrimitive2DSequence());
 
-                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, aCandSeq);
+                    xRetval.insert(xRetval.end(), aCandSeq.begin(), aCandSeq.end());
                 }
             }
             else
@@ -85,7 +85,7 @@ namespace sdr
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                         false, aCurrentRange));
 
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             }
 
             return xRetval;

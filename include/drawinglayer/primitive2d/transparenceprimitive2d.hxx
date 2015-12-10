@@ -51,7 +51,7 @@ namespace drawinglayer
         {
         private:
             /// The transparence-Mask who's RGB-Values are interpreted as Luminance
-            Primitive2DSequence                     maTransparence;
+            Primitive2DContainer                     maTransparence;
 
         public:
             /** constructor
@@ -66,11 +66,11 @@ namespace drawinglayer
                 using the common RGB_to_luminance definitions
              */
             TransparencePrimitive2D(
-                const Primitive2DSequence& rChildren,
-                const Primitive2DSequence& rTransparence);
+                const Primitive2DContainer& rChildren,
+                const Primitive2DContainer& rTransparence);
 
             /// data read access
-            const Primitive2DSequence& getTransparence() const { return maTransparence; }
+            const Primitive2DContainer& getTransparence() const { return maTransparence; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

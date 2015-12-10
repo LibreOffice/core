@@ -88,7 +88,7 @@ namespace svgio
             }
         }
 
-        void SvgGNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgGNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
             if(SVGTokenDefs == getType())
             {
@@ -106,12 +106,12 @@ namespace svgio
 
                     if(fOpacity > 0.0 && Display_none != getDisplay())
                     {
-                        drawinglayer::primitive2d::Primitive2DSequence aContent;
+                        drawinglayer::primitive2d::Primitive2DContainer aContent;
 
                         // decompose children
                         SvgNode::decomposeSvgNode(aContent, bReferenced);
 
-                        if(aContent.hasElements())
+                        if(!aContent.empty())
                         {
                             pStyle->add_postProcess(rTarget, aContent, getTransform());
                         }

@@ -56,7 +56,7 @@ class AnimatedExtractingProcessor2D : public drawinglayer::processor2d::BaseProc
 {
 protected:
     // the found animated primitives
-    drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
+    drawinglayer::primitive2d::Primitive2DContainer  maPrimitive2DSequence;
 
     // bitfield
     // text animation allowed?
@@ -77,7 +77,7 @@ public:
     virtual ~AnimatedExtractingProcessor2D();
 
     // data access
-    const drawinglayer::primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
+    const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
     bool isTextAnimationAllowed() const { return mbTextAnimationAllowed; }
     bool isGraphicAnimationAllowed() const { return mbGraphicAnimationAllowed; }
 };
@@ -113,7 +113,7 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
                 || (rSwitchPrimitive.isGraphicAnimation() && isGraphicAnimationAllowed()))
             {
                 const drawinglayer::primitive2d::Primitive2DReference xReference(const_cast< drawinglayer::primitive2d::BasePrimitive2D* >(&rCandidate));
-                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, xReference);
+                maPrimitive2DSequence.push_back(xReference);
             }
             break;
         }
@@ -216,12 +216,12 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         {
             // if range is not computed (new or LazyInvalidate objects), force it
             const DisplayInfo aDisplayInfo;
-            const drawinglayer::primitive2d::Primitive2DSequence xSequence(getPrimitive2DSequence(aDisplayInfo));
+            const drawinglayer::primitive2d::Primitive2DContainer xSequence(getPrimitive2DSequence(aDisplayInfo));
 
-            if(xSequence.hasElements())
+            if(!xSequence.empty())
             {
                 const_cast< ViewObjectContact* >(this)->maObjectRange =
-                    drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xSequence, rViewInfo2D);
+                    xSequence.getB2DRange(rViewInfo2D);
             }
         }
     }
@@ -301,7 +301,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
     }
 
     // check for animated primitives
-    if(mxPrimitive2DSequence.hasElements())
+    if(!mxPrimitive2DSequence.empty())
     {
         const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
         const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
@@ -312,7 +312,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
                 bTextAnimationAllowed, bGraphicAnimationAllowed);
             aAnimatedExtractor.process(mxPrimitive2DSequence);
 
-            if(aAnimatedExtractor.getPrimitive2DSequence().hasElements())
+            if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
             {
                 // derived primitiveList is animated, setup new PrimitiveAnimation
                 mpPrimitiveAnimation =  new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence());
@@ -321,21 +321,21 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
     // get the view-independent Primitive from the viewContact
-    drawinglayer::primitive2d::Primitive2DSequence xRetval(GetViewContact().getViewIndependentPrimitive2DSequence());
+    drawinglayer::primitive2d::Primitive2DContainer xRetval(GetViewContact().getViewIndependentPrimitive2DSequence());
 
-    if(xRetval.hasElements())
+    if(!xRetval.empty())
     {
         // handle GluePoint
         if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())
         {
-            const drawinglayer::primitive2d::Primitive2DSequence xGlue(GetViewContact().createGluePointPrimitive2DSequence());
+            const drawinglayer::primitive2d::Primitive2DContainer xGlue(GetViewContact().createGluePointPrimitive2DSequence());
 
-            if(xGlue.hasElements())
+            if(!xGlue.empty())
             {
-                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, xGlue);
+                xRetval.append(xGlue);
             }
         }
 
@@ -352,16 +352,16 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::createPrimitiv
                     xRetval,
                     aBColorModifier));
 
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
         }
     }
 
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xNewPrimitiveSequence;
+    drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
 
     // take care of redirectors and create new list
     ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
@@ -376,7 +376,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2D
     }
 
     // local up-to-date checks. New list different from local one?
-    if(!drawinglayer::primitive2d::arePrimitive2DSequencesEqual(mxPrimitive2DSequence, xNewPrimitiveSequence))
+    if(mxPrimitive2DSequence != xNewPrimitiveSequence)
     {
         // has changed, copy content
         const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = xNewPrimitiveSequence;
@@ -387,10 +387,10 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2D
         // always update object range when PrimitiveSequence changes
         const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
         const_cast< ViewObjectContact* >(this)->maObjectRange =
-            drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(mxPrimitive2DSequence, rViewInformation2D);
+            mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
     }
 
-    // return current Primitive2DSequence
+    // return current Primitive2DContainer
     return mxPrimitive2DSequence;
 }
 
@@ -406,20 +406,20 @@ bool ViewObjectContact::isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) cons
     return (GetObjectContact().DoVisualizeEnteredGroup() && !GetObjectContact().isOutputToPrinter() && rDisplayInfo.IsGhostedDrawModeActive());
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     // check model-view visibility
     if(isPrimitiveVisible(rDisplayInfo))
     {
         xRetval = getPrimitive2DSequence(rDisplayInfo);
 
-        if(xRetval.hasElements())
+        if(!xRetval.empty())
         {
             // get ranges
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
+            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
             const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
             // check geometrical visibility
@@ -427,7 +427,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2D
             if(!bVisible)
             {
                 // not visible, release
-                xRetval.realloc(0);
+                xRetval.clear();
             }
         }
     }
@@ -435,16 +435,16 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2D
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const
 {
     const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
-    drawinglayer::primitive2d::Primitive2DSequence xSeqRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xSeqRetval;
 
     for(sal_uInt32 a(0); a < nSubHierarchyCount; a++)
     {
         const ViewObjectContact& rCandidate(GetViewContact().GetViewContact(a).GetViewObjectContact(GetObjectContact()));
 
-        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xSeqRetval, rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo));
+        xSeqRetval.append(rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo));
     }
 
     return xSeqRetval;

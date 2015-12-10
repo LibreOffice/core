@@ -35,22 +35,22 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrConnectorPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DContainer SdrConnectorPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             // add line
             if(getSdrLSTAttribute().getLine().isDefault())
             {
                 // create invisible line for HitTest/BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(getUnitPolygon())));
             }
             else
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createPolygonLinePrimitive(
                         getUnitPolygon(),
                         getSdrLSTAttribute().getLine(),
@@ -60,7 +60,7 @@ namespace drawinglayer
             // add text
             if(!getSdrLSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(getUnitPolygon()),
                         basegfx::B2DHomMatrix(),

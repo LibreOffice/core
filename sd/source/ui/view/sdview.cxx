@@ -179,7 +179,7 @@ public:
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.
-    virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+    virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo) override;
 };
@@ -192,12 +192,12 @@ ViewRedirector::~ViewRedirector()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     if(pObject && pObject->GetPage())
     {
@@ -290,7 +290,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             aPolygon,
                             aLine,
                             aStroke));
-                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
+                        xRetval.push_back(xRef);
                     }
 
                     // now paint the placeholder description, but only when masterpage
@@ -437,7 +437,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                     aFontAttribute,
                                     aLocale,
                                     aFontColor));
-                            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
+                            xRetval.push_back(xRef);
                         }
                     }
                 }
@@ -446,8 +446,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
         if(bDoCreateGeometry)
         {
-            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
-                xRetval,
+            xRetval.append(
                 sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
                     rOriginal,
                     rDisplayInfo));

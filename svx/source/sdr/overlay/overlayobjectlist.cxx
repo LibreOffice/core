@@ -102,9 +102,9 @@ namespace sdr
 
                         if(pCandidate->isHittable())
                         {
-                            const drawinglayer::primitive2d::Primitive2DSequence& rSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
+                            const drawinglayer::primitive2d::Primitive2DContainer& rSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
 
-                            if(rSequence.hasElements())
+                            if(!rSequence.empty())
                             {
                                 aHitTestProcessor2D.process(rSequence);
 

@@ -66,7 +66,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence TextCharacterStrikeoutPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer TextCharacterStrikeoutPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // strikeout with character
             const OUString aSingleCharString(getStrikeoutChar());
@@ -108,7 +108,7 @@ namespace drawinglayer
                     getLocale(),
                     getFontColor()));
 
-            return Primitive2DSequence(&xReference, 1);
+            return Primitive2DContainer { xReference };
         }
 
         TextCharacterStrikeoutPrimitive2D::TextCharacterStrikeoutPrimitive2D(
@@ -151,7 +151,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence TextGeometryStrikeoutPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer TextGeometryStrikeoutPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             OSL_ENSURE(TEXT_STRIKEOUT_SLASH != getTextStrikeout() && TEXT_STRIKEOUT_X != getTextStrikeout(),
                 "Wrong TEXT_STRIKEOUT type; a TextCharacterStrikeoutPrimitive2D should be used (!)");
@@ -205,7 +205,7 @@ namespace drawinglayer
 
             // add primitive
             const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLineJoin::NONE);
-            Primitive2DSequence xRetval(1);
+            Primitive2DContainer xRetval(1);
             xRetval[0] = Primitive2DReference(new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute));
 
             if(bDoubleLine)
@@ -227,7 +227,7 @@ namespace drawinglayer
                 aTransform.translate(aTranslate.getX(), aTranslate.getY());
 
                 // add transform primitive
-                appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+                xRetval.push_back(
                     Primitive2DReference(
                         new TransformPrimitive2D(
                             aTransform,

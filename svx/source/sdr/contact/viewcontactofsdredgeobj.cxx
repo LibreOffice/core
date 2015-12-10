@@ -39,7 +39,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence() const
         {
             basegfx::B2DPolygon aEdgeTrack = GetEdgeObj().getEdgeTrack();
             Point aGridOff = GetEdgeObj().GetGridOffset();
@@ -66,7 +66,7 @@ namespace sdr
                     aAttribute,
                     aEdgeTrack));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            return drawinglayer::primitive2d::Primitive2DContainer { xReference };
         }
     } // end of namespace contact
 } // end of namespace sdr

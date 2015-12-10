@@ -45,7 +45,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            explicit TextHierarchyLinePrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyLinePrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
@@ -68,7 +68,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            explicit TextHierarchyBulletPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyBulletPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
@@ -91,7 +91,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            explicit TextHierarchyParagraphPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyParagraphPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
@@ -114,7 +114,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            explicit TextHierarchyBlockPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyBlockPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
@@ -159,7 +159,7 @@ namespace drawinglayer
         public:
             /// constructor
             TextHierarchyFieldPrimitive2D(
-                const Primitive2DSequence& rChildren,
+                const Primitive2DContainer& rChildren,
                 const FieldType& rFieldType,
                 const OUString& rString);
 
@@ -197,7 +197,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            explicit TextHierarchyEditPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyEditPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

@@ -31,19 +31,19 @@ namespace drawinglayer
     namespace primitive2d
     {
         HiddenGeometryPrimitive2D::HiddenGeometryPrimitive2D(
-            const Primitive2DSequence& rChildren)
+            const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }
 
         basegfx::B2DRange HiddenGeometryPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            return getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation);
+            return getChildren().getB2DRange(rViewInformation);
         }
 
-        Primitive2DSequence HiddenGeometryPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer HiddenGeometryPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return Primitive2DSequence();
+            return Primitive2DContainer();
         }
 
         // provide unique ID

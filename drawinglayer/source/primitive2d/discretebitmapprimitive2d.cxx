@@ -27,12 +27,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence DiscreteBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer DiscreteBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use getViewTransformation() and getObjectTransformation() from
             // ObjectAndViewTransformationDependentPrimitive2D to create a BitmapPrimitive2D
             // with the correct mapping
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
 
             if(!getBitmapEx().IsEmpty())
             {
@@ -67,7 +67,7 @@ namespace drawinglayer
 
                 // create BitmapPrimitive2D with now object-local coordinate data
                 const Primitive2DReference xRef(new BitmapPrimitive2D(getBitmapEx(), aObjectTransform));
-                xRetval = Primitive2DSequence(&xRef, 1);
+                xRetval = Primitive2DContainer { xRef };
             }
 
             return xRetval;

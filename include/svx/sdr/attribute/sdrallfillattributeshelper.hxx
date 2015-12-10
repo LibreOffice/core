@@ -40,7 +40,7 @@ namespace drawinglayer
             basegfx::B2DRange                                                   maLastDefineRange;
             std::shared_ptr< drawinglayer::attribute::SdrFillAttribute >      maFillAttribute;
             std::shared_ptr< drawinglayer::attribute::FillGradientAttribute > maFillGradientAttribute;
-            drawinglayer::primitive2d::Primitive2DSequence                      maPrimitives;
+            drawinglayer::primitive2d::Primitive2DContainer                      maPrimitives;
 
             void createPrimitive2DSequence(
                 const basegfx::B2DRange& rPaintRange,
@@ -59,7 +59,7 @@ namespace drawinglayer
 
             const drawinglayer::attribute::SdrFillAttribute& getFillAttribute() const;
             const drawinglayer::attribute::FillGradientAttribute& getFillGradientAttribute() const;
-            const drawinglayer::primitive2d::Primitive2DSequence& getPrimitive2DSequence(
+            const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence(
                 const basegfx::B2DRange& rPaintRange,
                 const basegfx::B2DRange& rDefineRange) const;
 

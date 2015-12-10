@@ -163,9 +163,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence DiscreteShadowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer DiscreteShadowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
 
             if(!getDiscreteShadow().getBitmapEx().IsEmpty())
             {
@@ -178,7 +178,7 @@ namespace drawinglayer
                 const double fBigLenX((fBorderX * 2.0) + fSingleX);
                 const double fBigLenY((fBorderY * 2.0) + fSingleY);
 
-                xRetval.realloc(8);
+                xRetval.resize(8);
 
                 // TopLeft
                 xRetval[0] = Primitive2DReference(
@@ -266,7 +266,7 @@ namespace drawinglayer
                         getTransform(),
                         xRetval));
 
-                xRetval = Primitive2DSequence(&xTransformed, 1);
+                xRetval = Primitive2DContainer { xTransformed };
             }
 
             return xRetval;

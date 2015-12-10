@@ -35,7 +35,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         SdrOle2Primitive2D::SdrOle2Primitive2D(
-            const Primitive2DSequence& rOLEContent,
+            const Primitive2DContainer& rOLEContent,
             const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
         :   BasePrimitive2D(),
@@ -57,7 +57,7 @@ namespace drawinglayer
                 // sequence content, thus i need to use the arePrimitive2DSequencesEqual helper
                 // here instead of the operator== which lead to always returning false and thus
                 // always re-decompositions of the subcontent.
-                if(arePrimitive2DSequencesEqual(getOLEContent(), rCompare.getOLEContent())
+                if(getOLEContent() == rCompare.getOLEContent()
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
                 {
@@ -68,14 +68,14 @@ namespace drawinglayer
             return false;
         }
 
-        Primitive2DSequence SdrOle2Primitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DContainer SdrOle2Primitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::create2DDecomposition
             // should happen. For the moment we only need the OLE itself
             // Added complete primitive preparation using getSdrLFSTAttribute() now. To not do stuff which is not needed now, it
             // may be suppressed by using a static bool. The paint version only supported text.
             static bool bBehaveCompatibleToPaintVersion(false);
-            Primitive2DSequence  aRetval;
+            Primitive2DContainer  aRetval;
 
             // create unit outline polygon
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
@@ -87,7 +87,7 @@ namespace drawinglayer
                 basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getFill(),
@@ -117,7 +117,7 @@ namespace drawinglayer
                     basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
 
                     aExpandedUnitOutline.transform(getTransform());
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                         createPolygonLinePrimitive(
                             aExpandedUnitOutline,
                             getSdrLFSTAttribute().getLine(),
@@ -128,7 +128,7 @@ namespace drawinglayer
                     basegfx::B2DPolygon aTransformed(aUnitOutline);
 
                     aTransformed.transform(getTransform());
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                         createPolygonLinePrimitive(
                             aTransformed,
                             getSdrLFSTAttribute().getLine(),
@@ -138,7 +138,7 @@ namespace drawinglayer
             else
             {
                 // if initially no line is defined, create one for HitTest and BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(aUnitOutline),
@@ -146,13 +146,13 @@ namespace drawinglayer
             }
 
             // add graphic content
-            appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, getOLEContent());
+            aRetval.append(getOLEContent());
 
             // add text, no need to suppress to stay compatible since text was
             // always supported by the old paints, too
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),

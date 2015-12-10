@@ -65,11 +65,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SvgGradientHelper::createSingleGradientEntryFill() const
+        Primitive2DContainer SvgGradientHelper::createSingleGradientEntryFill() const
         {
             const SvgGradientEntryVector& rEntries = getGradientEntries();
             const sal_uInt32 nCount(rEntries.size());
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
 
             if(nCount)
             {
@@ -85,7 +85,7 @@ namespace drawinglayer
 
                     if(fOpacity < 1.0)
                     {
-                        const Primitive2DSequence aContent(&xRef, 1);
+                        const Primitive2DContainer aContent { xRef };
 
                         xRef = Primitive2DReference(
                             new UnifiedTransparencePrimitive2D(
@@ -93,7 +93,7 @@ namespace drawinglayer
                                 1.0 - fOpacity));
                     }
 
-                    xRetval = Primitive2DSequence(&xRef, 1);
+                    xRetval = Primitive2DContainer { xRef };
                 }
             }
             else
@@ -184,8 +184,8 @@ namespace drawinglayer
         }
 
         double SvgGradientHelper::createRun(
-            Primitive2DVector& rTargetColor,
-            Primitive2DVector& rTargetOpacity,
+            Primitive2DContainer& rTargetColor,
+            Primitive2DContainer& rTargetOpacity,
             double fPos,
             double fMax,
             const SvgGradientEntryVector& rEntries,
@@ -238,21 +238,21 @@ namespace drawinglayer
             return fPos;
         }
 
-        Primitive2DSequence SvgGradientHelper::createResult(
-            const Primitive2DVector& rTargetColor,
-            const Primitive2DVector& rTargetOpacity,
+        Primitive2DContainer SvgGradientHelper::createResult(
+            const Primitive2DContainer& rTargetColor,
+            const Primitive2DContainer& rTargetOpacity,
             const basegfx::B2DHomMatrix& rUnitGradientToObject,
             bool bInvert) const
         {
-            Primitive2DSequence xRetval;
-            const Primitive2DSequence aTargetColorEntries(Primitive2DVectorToPrimitive2DSequence(rTargetColor, bInvert));
-            const Primitive2DSequence aTargetOpacityEntries(Primitive2DVectorToPrimitive2DSequence(rTargetOpacity, bInvert));
+            Primitive2DContainer xRetval;
+            const Primitive2DContainer aTargetColorEntries(rTargetColor.maybeInvert(bInvert));
+            const Primitive2DContainer aTargetOpacityEntries(rTargetOpacity.maybeInvert(bInvert));
 
-            if(aTargetColorEntries.hasElements())
+            if(!aTargetColorEntries.empty())
             {
                 Primitive2DReference xRefContent;
 
-                if(aTargetOpacityEntries.hasElements())
+                if(!aTargetOpacityEntries.empty())
                 {
                     const Primitive2DReference xRefOpacity = new TransparencePrimitive2D(
                         aTargetColorEntries,
@@ -260,7 +260,7 @@ namespace drawinglayer
 
                     xRefContent = new TransformPrimitive2D(
                         rUnitGradientToObject,
-                        Primitive2DSequence(&xRefOpacity, 1));
+                        Primitive2DContainer { xRefOpacity });
                 }
                 else
                 {
@@ -271,9 +271,9 @@ namespace drawinglayer
 
                 xRefContent = new MaskPrimitive2D(
                     getPolyPolygon(),
-                    Primitive2DSequence(&xRefContent, 1));
+                    Primitive2DContainer { xRefContent });
 
-                xRetval = Primitive2DSequence(&xRefContent, 1);
+                xRetval = Primitive2DContainer { xRefContent };
             }
 
             return xRetval;
@@ -343,8 +343,8 @@ namespace drawinglayer
         }
 
         void SvgLinearGradientPrimitive2D::createAtom(
-            Primitive2DVector& rTargetColor,
-            Primitive2DVector& rTargetOpacity,
+            Primitive2DContainer& rTargetColor,
+            Primitive2DContainer& rTargetOpacity,
             const SvgGradientEntry& rFrom,
             const SvgGradientEntry& rTo,
             sal_Int32 nOffset) const
@@ -376,9 +376,9 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence SvgLinearGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer SvgLinearGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
 
             if(!getPreconditionsChecked())
             {
@@ -454,8 +454,8 @@ namespace drawinglayer
                 const basegfx::B2DRange aUnitRange(aUnitPoly.getB2DRange());
 
                 // prepare result vectors
-                Primitive2DVector aTargetColor;
-                Primitive2DVector aTargetOpacity;
+                Primitive2DContainer aTargetColor;
+                Primitive2DContainer aTargetOpacity;
 
                 if(basegfx::fTools::more(aUnitRange.getWidth(), 0.0))
                 {
@@ -476,17 +476,17 @@ namespace drawinglayer
                         // else the start and end pads are already created and fPos == aUnitRange.getMaxX().
                         // Its possible to express the repeated linear gradient by adding the
                         // transformed central run. Create it this way
-                        Primitive2DSequence aTargetColorEntries(Primitive2DVectorToPrimitive2DSequence(aTargetColor));
-                        Primitive2DSequence aTargetOpacityEntries(Primitive2DVectorToPrimitive2DSequence(aTargetOpacity));
+                        Primitive2DContainer aTargetColorEntries(aTargetColor.maybeInvert());
+                        Primitive2DContainer aTargetOpacityEntries(aTargetOpacity.maybeInvert());
                         aTargetColor.clear();
                         aTargetOpacity.clear();
 
-                        if(aTargetColorEntries.hasElements())
+                        if(!aTargetColorEntries.empty())
                         {
                             // add original central run as group primitive
                             aTargetColor.push_back(new GroupPrimitive2D(aTargetColorEntries));
 
-                            if(aTargetOpacityEntries.hasElements())
+                            if(!aTargetOpacityEntries.empty())
                             {
                                 aTargetOpacity.push_back(new GroupPrimitive2D(aTargetOpacityEntries));
                             }
@@ -515,7 +515,7 @@ namespace drawinglayer
 
                                 aTargetColor.push_back(new TransformPrimitive2D(aTransform, aTargetColorEntries));
 
-                                if(aTargetOpacityEntries.hasElements())
+                                if(!aTargetOpacityEntries.empty())
                                 {
                                     aTargetOpacity.push_back(new TransformPrimitive2D(aTransform, aTargetOpacityEntries));
                                 }
@@ -542,7 +542,7 @@ namespace drawinglayer
 
                                 aTargetColor.push_back(new TransformPrimitive2D(aTransform, aTargetColorEntries));
 
-                                if(aTargetOpacityEntries.hasElements())
+                                if(!aTargetOpacityEntries.empty())
                                 {
                                     aTargetOpacity.push_back(new TransformPrimitive2D(aTransform, aTargetOpacityEntries));
                                 }
@@ -627,8 +627,8 @@ namespace drawinglayer
         }
 
         void SvgRadialGradientPrimitive2D::createAtom(
-            Primitive2DVector& rTargetColor,
-            Primitive2DVector& rTargetOpacity,
+            Primitive2DContainer& rTargetColor,
+            Primitive2DContainer& rTargetOpacity,
             const SvgGradientEntry& rFrom,
             const SvgGradientEntry& rTo,
             sal_Int32 nOffset) const
@@ -720,9 +720,9 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence SvgRadialGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer SvgRadialGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
 
             if(!getPreconditionsChecked())
             {
@@ -800,8 +800,8 @@ namespace drawinglayer
                 fMax = std::max(fMax, basegfx::B2DVector(aUnitRange.getMaxX(), aUnitRange.getMinY()).getLength());
 
                 // prepare result vectors
-                Primitive2DVector aTargetColor;
-                Primitive2DVector aTargetOpacity;
+                Primitive2DContainer aTargetColor;
+                Primitive2DContainer aTargetOpacity;
 
                 if(0.0 < fMax)
                 {
@@ -924,9 +924,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SvgLinearAtomPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer SvgLinearAtomPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
             const double fDelta(getOffsetB() - getOffsetA());
 
             if(!basegfx::fTools::equalZero(fDelta))
@@ -951,7 +951,7 @@ namespace drawinglayer
                 const double fUnitStep(1.0 / nSteps);
 
                 // prepare result set (known size)
-                xRetval.realloc(nSteps);
+                xRetval.resize(nSteps);
 
                 for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
                 {
@@ -1011,9 +1011,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SvgRadialAtomPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer SvgRadialAtomPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
             const double fDeltaScale(getScaleB() - getScaleA());
 
             if(!basegfx::fTools::equalZero(fDeltaScale))
@@ -1029,7 +1029,7 @@ namespace drawinglayer
                 const double fUnitStep(1.0 / nSteps);
 
                 // prepare result set (known size)
-                xRetval.realloc(nSteps);
+                xRetval.resize(nSteps);
 
                 for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
                 {

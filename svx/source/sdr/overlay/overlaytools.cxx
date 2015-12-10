@@ -54,9 +54,9 @@ OverlayStaticRectanglePrimitive::OverlayStaticRectanglePrimitive(
     , mfRotation(fRotation)
 {}
 
-Primitive2DSequence OverlayStaticRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+Primitive2DContainer OverlayStaticRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    Primitive2DSequence aPrimitive2DSequence;
+    Primitive2DContainer aPrimitive2DSequence;
     const double fHalfWidth = maSize.getX() * getDiscreteUnit() / 2.0;
     const double fHalfHeight = maSize.getY() * getDiscreteUnit() / 2.0;
 
@@ -83,7 +83,7 @@ Primitive2DSequence OverlayStaticRectanglePrimitive::create2DDecomposition(const
         const Primitive2DReference aFill(
             new PolyPolygonColorPrimitive2D(aPolyPolygon, maFillColor));
 
-        aPrimitive2DSequence = Primitive2DSequence(2);
+        aPrimitive2DSequence = Primitive2DContainer(2);
         aPrimitive2DSequence[0] = aFill;
         aPrimitive2DSequence[1] = aStroke;
 
@@ -95,7 +95,7 @@ Primitive2DSequence OverlayStaticRectanglePrimitive::create2DDecomposition(const
                     aPrimitive2DSequence,
                     mfTransparence));
 
-            aPrimitive2DSequence = Primitive2DSequence(&aFillTransparent, 1);
+            aPrimitive2DSequence = Primitive2DContainer { aFillTransparent };
         }
     }
 
@@ -143,9 +143,9 @@ namespace drawinglayer
             mfRotation(fRotation)
         {}
 
-        Primitive2DSequence OverlayBitmapExPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer OverlayBitmapExPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
             const Size aBitmapSize(getBitmapEx().GetSizePixel());
 
             if(aBitmapSize.Width() && aBitmapSize.Height() && basegfx::fTools::more(getDiscreteUnit(), 0.0))
@@ -184,7 +184,7 @@ namespace drawinglayer
                 aTransform.translate(getBasePosition().getX(), getBasePosition().getY());
 
                 const Primitive2DReference aPrimitive(new BitmapPrimitive2D(getBitmapEx(), aTransform));
-                aRetval = Primitive2DSequence(&aPrimitive, 1);
+                aRetval = Primitive2DContainer { aPrimitive };
             }
 
             return aRetval;
@@ -230,14 +230,14 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayCrosshairPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer OverlayCrosshairPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(!getViewport().isEmpty())
             {
-                aRetval.realloc(2);
+                aRetval.resize(2);
                 basegfx::B2DPolygon aPolygon;
 
                 aPolygon.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
@@ -307,9 +307,9 @@ namespace drawinglayer
             mfRotation(fRotation)
         {}
 
-        Primitive2DSequence OverlayRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer OverlayRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
             basegfx::B2DRange aInnerRange(getObjectRange());
 
             if(!aInnerRange.isEmpty() && basegfx::fTools::more(getDiscreteUnit(), 0.0) && getTransparence() <= 1.0)
@@ -369,7 +369,7 @@ namespace drawinglayer
                             aEmptyColor,
                             aFillHatchAttribute));
 
-                    aRetval = Primitive2DSequence(&aHatch, 1);
+                    aRetval = Primitive2DContainer { aHatch };
                 }
                 else
                 {
@@ -379,7 +379,7 @@ namespace drawinglayer
                             aPolyPolygon,
                             getColor()));
 
-                    aRetval = Primitive2DSequence(&aFill, 1);
+                    aRetval = Primitive2DContainer { aFill };
 
                     // embed filled to transparency (if used)
                     if(getTransparence() > 0.0)
@@ -389,7 +389,7 @@ namespace drawinglayer
                                 aRetval,
                                 getTransparence()));
 
-                        aRetval = Primitive2DSequence(&aFillTransparent, 1);
+                        aRetval = Primitive2DContainer { aFillTransparent };
                     }
                 }
             }
@@ -439,10 +439,10 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayHelplineStripedPrimitive::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer OverlayHelplineStripedPrimitive::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // use the prepared Viewport information accessible using getViewport()
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(!getViewport().isEmpty())
             {
@@ -450,7 +450,7 @@ namespace drawinglayer
                 {
                     case HELPLINESTYLE_VERTICAL :
                     {
-                        aRetval.realloc(1);
+                        aRetval.resize(1);
                         basegfx::B2DPolygon aLine;
 
                         aLine.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMinY()));
@@ -467,7 +467,7 @@ namespace drawinglayer
 
                     case HELPLINESTYLE_HORIZONTAL :
                     {
-                        aRetval.realloc(1);
+                        aRetval.resize(1);
                         basegfx::B2DPolygon aLine;
 
                         aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
@@ -485,7 +485,7 @@ namespace drawinglayer
                     default: // case HELPLINESTYLE_POINT :
                     {
                         const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
-                        aRetval.realloc(2);
+                        aRetval.resize(2);
                         basegfx::B2DPolygon aLineA, aLineB;
 
                         aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() - fDiscreteUnit));
@@ -555,15 +555,15 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayRollingRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer OverlayRollingRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(!getViewport().isEmpty())
             {
                 basegfx::B2DPolygon aLine;
-                aRetval.realloc(8);
+                aRetval.resize(8);
 
                 // Left lines
                 aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getRollingRectangle().getMinY()));

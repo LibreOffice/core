@@ -62,10 +62,10 @@ namespace drawinglayer
             }
 
             // return if there are shadow primitives
-            return maShadowPrimitives.hasElements();
+            return !maShadowPrimitives.empty();
         }
 
-        Primitive2DSequence Embedded3DPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer Embedded3DPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // use info to create a yellow 2d rectangle, similar to empty 3d scenes and/or groups
             const basegfx::B2DRange aLocal2DRange(getB2DRange(rViewInformation));
@@ -73,7 +73,7 @@ namespace drawinglayer
             const basegfx::BColor aYellow(1.0, 1.0, 0.0);
             const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aOutline, aYellow));
 
-            return Primitive2DSequence(&xRef, 1L);
+            return Primitive2DContainer { xRef };
         }
 
         Embedded3DPrimitive2D::Embedded3DPrimitive2D(
@@ -132,7 +132,7 @@ namespace drawinglayer
                 // taken into account
                 if(impGetShadow3D(rViewInformation))
                 {
-                    const basegfx::B2DRange aShadow2DRange(getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
+                    const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rViewInformation));
 
                     if(!aShadow2DRange.isEmpty())
                     {

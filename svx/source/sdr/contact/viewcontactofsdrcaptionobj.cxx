@@ -51,9 +51,9 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrCaptionObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCaptionObj::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SdrCaptionObj& rCaptionObj(GetCaptionObj());
             const SfxItemSet& rItemSet = rCaptionObj.GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
@@ -102,7 +102,7 @@ namespace sdr
                     fCornerRadiusX,
                     fCornerRadiusY));
 
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
 
             if(!aAttribute.isDefault() && rCaptionObj.GetSpecialTextBoxShadow())
             {
@@ -189,7 +189,7 @@ namespace sdr
                 {
                     // if we really got a special shadow, create a two-element retval with the shadow
                     // behind the standard object's geometry
-                    xRetval.realloc(2);
+                    xRetval.resize(2);
 
                     xRetval[0] = xSpecialShadow;
                     xRetval[1] = xReference;

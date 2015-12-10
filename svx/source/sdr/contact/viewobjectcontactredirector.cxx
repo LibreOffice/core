@@ -33,7 +33,7 @@ ViewObjectContactRedirector::~ViewObjectContactRedirector()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {

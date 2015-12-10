@@ -47,15 +47,15 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence OverlayObjectCell::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayObjectCell::createOverlayObjectPrimitive2DSequence()
         {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            drawinglayer::primitive2d::Primitive2DContainer aRetval;
             const sal_uInt32 nCount(maRectangles.size());
 
             if(nCount)
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
-                aRetval.realloc(nCount);
+                aRetval.resize(nCount);
 
                 // create primitives for all ranges
                 for(sal_uInt32 a(0); a < nCount; a++)
@@ -78,7 +78,7 @@ namespace sdr
                             aRetval,
                             0.5));
 
-                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparence, 1);
+                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
                 }
                 else // CELL_OVERLAY_INVERT
                 {
@@ -87,7 +87,7 @@ namespace sdr
                         new drawinglayer::primitive2d::InvertPrimitive2D(
                             aRetval));
 
-                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aInvert, 1);
+                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aInvert };
                 }
             }
 

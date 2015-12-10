@@ -89,7 +89,7 @@ class Impl3DMirrorConstructOverlay
     basegfx::B2DPolyPolygon*                        mpPolygons;
 
     // the overlay geometry from selected objects
-    drawinglayer::primitive2d::Primitive2DSequence  maFullOverlay;
+    drawinglayer::primitive2d::Primitive2DContainer    maFullOverlay;
 
     // Copy assignment is forbidden and not implemented.
     Impl3DMirrorConstructOverlay (const Impl3DMirrorConstructOverlay &) = delete;
@@ -132,8 +132,8 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
                         sdr::contact::ViewContact& rVC = pObject->GetViewContact();
                         sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rOC);
 
-                        const drawinglayer::primitive2d::Primitive2DSequence aNewSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo));
-                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maFullOverlay, aNewSequence);
+                        const drawinglayer::primitive2d::Primitive2DContainer aNewSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo));
+                        maFullOverlay.append(aNewSequence);
                     }
                 }
             }
@@ -187,21 +187,21 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
 
             if(mrView.IsSolidDragging())
             {
-                if(maFullOverlay.hasElements())
+                if(!maFullOverlay.empty())
                 {
-                    drawinglayer::primitive2d::Primitive2DSequence aContent(maFullOverlay);
+                    drawinglayer::primitive2d::Primitive2DContainer aContent(maFullOverlay);
 
                     if(!aMatrixTransform.isIdentity())
                     {
                         // embed in transformation group
                         drawinglayer::primitive2d::Primitive2DReference aTransformPrimitive2D(new drawinglayer::primitive2d::TransformPrimitive2D(aMatrixTransform, aContent));
-                        aContent = drawinglayer::primitive2d::Primitive2DSequence(&aTransformPrimitive2D, 1);
+                        aContent = drawinglayer::primitive2d::Primitive2DContainer { aTransformPrimitive2D };
                     }
 
                     // if we have full overlay from selected objects, embed with 50% transparence, the
                     // transformation is added to the OverlayPrimitive2DSequenceObject
                     drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aContent, 0.5));
-                    aContent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparencePrimitive2D, 1);
+                    aContent = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparencePrimitive2D };
 
                     sdr::overlay::OverlayPrimitive2DSequenceObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent);
 

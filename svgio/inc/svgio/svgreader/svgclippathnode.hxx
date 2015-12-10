@@ -45,11 +45,11 @@ namespace svgio
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
-            virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const override;
+            virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// apply contained clipPath to given geometry #i124852# transform may be needed
             void apply(
-                drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+                drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                 const basegfx::B2DHomMatrix* pTransform) const;
 
             /// clipPathUnits content

@@ -196,7 +196,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
 
         if(pProcessor2D)
         {
-            drawinglayer::primitive2d::Primitive2DSequence aSequence(2);
+            drawinglayer::primitive2d::Primitive2DContainer aSequence(2);
 
             aSequence[0] = aGradientPrimitive;
             aSequence[1] = aBlackRectanglePrimitive;

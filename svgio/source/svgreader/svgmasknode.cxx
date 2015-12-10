@@ -165,14 +165,14 @@ namespace svgio
             }
         }
 
-        void SvgMaskNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgMaskNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
+            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
 
             // decompose children
             SvgNode::decomposeSvgNode(aNewTarget, bReferenced);
 
-            if(aNewTarget.hasElements())
+            if(!aNewTarget.empty())
             {
                 if(getTransform())
                 {
@@ -182,32 +182,31 @@ namespace svgio
                             *getTransform(),
                             aNewTarget));
 
-                    aNewTarget = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
+                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
                 }
 
                 // append to current target
-                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
+                rTarget.append(aNewTarget);
             }
         }
 
         void SvgMaskNode::apply(
-            drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+            drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(rTarget.hasElements() && Display_none != getDisplay())
+            if(!rTarget.empty() && Display_none != getDisplay())
             {
-                drawinglayer::primitive2d::Primitive2DSequence aMaskTarget;
+                drawinglayer::primitive2d::Primitive2DContainer aMaskTarget;
 
                 // get mask definition as primitives
                 decomposeSvgNode(aMaskTarget, true);
 
-                if(aMaskTarget.hasElements())
+                if(!aMaskTarget.empty())
                 {
                     // get range of content to be masked
                     const basegfx::B2DRange aContentRange(
-                        drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                            rTarget,
-                            drawinglayer::geometry::ViewInformation2D()));
+                            rTarget.getB2DRange(
+                                drawinglayer::geometry::ViewInformation2D()));
                     const double fContentWidth(aContentRange.getWidth());
                     const double fContentHeight(aContentRange.getHeight());
 
@@ -252,7 +251,7 @@ namespace svgio
                                         aContentRange.getMinimum()),
                                     aMaskTarget));
 
-                            aMaskTarget = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                            aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
                         }
                         else // userSpaceOnUse
                         {
@@ -264,7 +263,7 @@ namespace svgio
                                         *pTransform,
                                         aMaskTarget));
 
-                                aMaskTarget = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                                aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
                             }
                         }
 
@@ -277,7 +276,7 @@ namespace svgio
                                     basegfx::BColorModifierSharedPtr(
                                         new basegfx::BColorModifier_luminance_to_alpha())));
 
-                            aMaskTarget = drawinglayer::primitive2d::Primitive2DSequence(&xInverseMask, 1);
+                            aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xInverseMask };
                         }
 
                         // prepare new content
@@ -295,24 +294,24 @@ namespace svgio
                                 basegfx::B2DPolyPolygon(
                                     basegfx::tools::createPolygonFromRect(
                                         aOffscreenBufferRange)),
-                                drawinglayer::primitive2d::Primitive2DSequence(&xNewContent, 1));
+                                drawinglayer::primitive2d::Primitive2DContainer { xNewContent });
                         }
 
                         // redefine target. Use TransparencePrimitive2D with created mask
                         // geometry
-                        rTarget = drawinglayer::primitive2d::Primitive2DSequence(&xNewContent, 1);
+                        rTarget = drawinglayer::primitive2d::Primitive2DContainer { xNewContent };
                     }
                     else
                     {
                         // content is geometrically empty
-                        rTarget.realloc(0);
+                        rTarget.clear();
                     }
                 }
                 else
                 {
                     // An empty clipping path will completely clip away the element that had
                     // the clip-path property applied. (Svg spec)
-                    rTarget.realloc(0);
+                    rTarget.clear();
                 }
             }
         }

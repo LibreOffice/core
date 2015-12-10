@@ -304,7 +304,7 @@ void TemplateAbstractView::Paint(vcl::RenderContext& rRenderContext, const Recta
                     Point(rRect.BottomRight().X(),
                           mnHeaderHeight));
 
-    drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
             new PolyPolygonColorPrimitive2D(B2DPolyPolygon(::tools::Polygon(aRect).getB2DPolygon()),
                                             maFillColor.getBColor()));

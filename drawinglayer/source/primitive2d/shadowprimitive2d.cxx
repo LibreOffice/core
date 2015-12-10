@@ -39,7 +39,7 @@ namespace drawinglayer
         ShadowPrimitive2D::ShadowPrimitive2D(
             const basegfx::B2DHomMatrix& rShadowTransform,
             const basegfx::BColor& rShadowColor,
-            const Primitive2DSequence& rChildren)
+            const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor)
@@ -61,16 +61,16 @@ namespace drawinglayer
 
         basegfx::B2DRange ShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
+            basegfx::B2DRange aRetval(getChildren().getB2DRange(rViewInformation));
             aRetval.transform(getShadowTransform());
             return aRetval;
         }
 
-        Primitive2DSequence ShadowPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer ShadowPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
-            if(getChildren().hasElements())
+            if(!getChildren().empty())
             {
                 // create a modifiedColorPrimitive containing the shadow color and the content
                 const basegfx::BColorModifierSharedPtr aBColorModifier(
@@ -80,11 +80,11 @@ namespace drawinglayer
                     new ModifiedColorPrimitive2D(
                         getChildren(),
                         aBColorModifier));
-                const Primitive2DSequence aSequenceB(&xRefA, 1L);
+                const Primitive2DContainer aSequenceB { xRefA };
 
                 // build transformed primitiveVector with shadow offset and add to target
                 const Primitive2DReference xRefB(new TransformPrimitive2D(getShadowTransform(), aSequenceB));
-                aRetval = Primitive2DSequence(&xRefB, 1L);
+                aRetval = Primitive2DContainer { xRefB };
             }
 
             return aRetval;

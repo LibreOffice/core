@@ -34,7 +34,7 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayRectangle::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayRectangle::createOverlayObjectPrimitive2DSequence()
         {
             const basegfx::B2DRange aHatchRange(getBasePosition(), maSecondPosition);
             basegfx::BColor aColor(getBaseColor().getBColor());
@@ -60,7 +60,7 @@ namespace sdr
                     getDiscreteShrink(),
                     getRotation()));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+            return drawinglayer::primitive2d::Primitive2DContainer { aReference };
         }
 
         OverlayRectangle::OverlayRectangle(

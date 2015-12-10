@@ -81,11 +81,11 @@ namespace sdr
             flushViewIndependentPrimitive2DSequence();
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfGraphic::createVIP2DSForPresObj(
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGraphic::createVIP2DSForPresObj(
             const basegfx::B2DHomMatrix& rObjectMatrix,
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             GraphicObject aEmptyGraphicObject;
             GraphicAttr aEmptyGraphicAttr;
 
@@ -95,7 +95,7 @@ namespace sdr
                 rAttribute,
                 aEmptyGraphicObject,
                 aEmptyGraphicAttr));
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReferenceA, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReferenceA };
 
             // SdrGrafPrimitive2D with content (which is the preview graphic) scaled to smaller size and
             // without attributes
@@ -139,17 +139,17 @@ namespace sdr
                     rGraphicObject,
                     aLocalGrafInfo));
 
-                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReferenceB);
+                xRetval.push_back(xReferenceB);
             }
 
             return xRetval;
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfGraphic::createVIP2DSForDraft(
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGraphic::createVIP2DSForDraft(
             const basegfx::B2DHomMatrix& rObjectMatrix,
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             GraphicObject aEmptyGraphicObject;
             GraphicAttr aEmptyGraphicAttr;
 
@@ -159,7 +159,7 @@ namespace sdr
                 rAttribute,
                 aEmptyGraphicObject,
                 aEmptyGraphicAttr));
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReferenceA, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReferenceA };
 
             if(rAttribute.getLine().isDefault())
             {
@@ -169,7 +169,7 @@ namespace sdr
                 basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                 aOutline.transform(rObjectMatrix);
 
-                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+                xRetval.push_back(
                     drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                             aOutline,
@@ -219,7 +219,7 @@ namespace sdr
                     const basegfx::B2DHomMatrix aBitmapMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                         fWidth, fHeight, fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
-                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+                    xRetval.push_back(
                         drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::BitmapPrimitive2D(
                                 BitmapEx(aDraftBitmap),
@@ -284,18 +284,17 @@ namespace sdr
                     // layout the text to more simple TextPrimitives from drawinglayer
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
-                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
-                        xRetval,
-                        xBlockTextPrimitive->get2DDecomposition(aViewInformation2D));
+                    drawinglayer::primitive2d::Primitive2DContainer aDecomposition(xBlockTextPrimitive->get2DDecomposition(aViewInformation2D));
+                    xRetval.insert(xRetval.end(), aDecomposition.begin(), aDecomposition.end());
                 }
             }
 
             return xRetval;
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfGraphic::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGraphic::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SfxItemSet& rItemSet = GetGrafObject().GetMergedItemSet();
 
             // create and fill GraphicAttr
@@ -397,11 +396,11 @@ namespace sdr
                         rGraphicObject,
                         aLocalGrafInfo));
 
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             }
 
             // always append an invisible outline for the cases where no visible content exists
-            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+            xRetval.push_back(
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                     false, aObjectMatrix));
 

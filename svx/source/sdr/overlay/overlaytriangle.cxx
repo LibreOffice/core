@@ -33,7 +33,7 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayTriangle::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayTriangle::createOverlayObjectPrimitive2DSequence()
         {
             basegfx::B2DPolygon aPolygon;
 
@@ -47,7 +47,7 @@ namespace sdr
                     basegfx::B2DPolyPolygon(aPolygon),
                     getBaseColor().getBColor()));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+            return drawinglayer::primitive2d::Primitive2DContainer { aReference };
         }
 
         OverlayTriangle::OverlayTriangle(

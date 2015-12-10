@@ -32,10 +32,10 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&
+        Primitive2DContainer GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&
             ) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(255L == getGraphicAttr().GetTransparency())
             {
@@ -110,7 +110,7 @@ namespace drawinglayer
                 aTransformedGraphic,
                 aTransform);
 
-            if(!aRetval.getLength())
+            if(!aRetval.size())
             {
                 // content is invisible, done
                 return aRetval;
@@ -131,7 +131,7 @@ namespace drawinglayer
                     basegfx::clamp(aSuppressGraphicAttr.GetGamma(), 0.0, 10.0),
                     aSuppressGraphicAttr.IsInvert());
 
-                if(!aRetval.getLength())
+                if(!aRetval.size())
                 {
                     // content is invisible, done
                     return aRetval;
@@ -150,7 +150,7 @@ namespace drawinglayer
                             aRetval,
                             fTransparency));
 
-                    aRetval = Primitive2DSequence(&aUnifiedTransparence, 1);
+                    aRetval = Primitive2DContainer { aUnifiedTransparence };
                 }
             }
 
@@ -179,7 +179,7 @@ namespace drawinglayer
                         getGraphicAttr().GetRightCrop() * aCropScaleFactor.getX(),
                         getGraphicAttr().GetBottomCrop() * aCropScaleFactor.getY()));
 
-                aRetval = Primitive2DSequence(&xPrimitive, 1);
+                aRetval = Primitive2DContainer { xPrimitive };
             }
 
             return aRetval;

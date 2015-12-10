@@ -57,7 +57,7 @@ namespace drawinglayer
         {
         }
 
-        void TextBreakupHelper::breakupPortion(Primitive2DVector& rTempResult, sal_Int32 nIndex, sal_Int32 nLength, bool bWordLineMode)
+        void TextBreakupHelper::breakupPortion(Primitive2DContainer& rTempResult, sal_Int32 nIndex, sal_Int32 nLength, bool bWordLineMode)
         {
             if(nLength && !(nIndex == mrSource.getTextPosition() && nLength == mrSource.getTextLength()))
             {
@@ -189,7 +189,7 @@ namespace drawinglayer
         {
             if(mrSource.getTextLength())
             {
-                Primitive2DVector aTempResult;
+                Primitive2DContainer aTempResult;
                 static css::uno::Reference< css::i18n::XBreakIterator > xBreakIterator;
 
                 if(!xBreakIterator.is())
@@ -281,13 +281,13 @@ namespace drawinglayer
                     }
                 }
 
-                mxResult = Primitive2DVectorToPrimitive2DSequence(aTempResult);
+                mxResult = aTempResult;
             }
         }
 
-        const Primitive2DSequence& TextBreakupHelper::getResult(BreakupUnit aBreakupUnit) const
+        const Primitive2DContainer& TextBreakupHelper::getResult(BreakupUnit aBreakupUnit) const
         {
-            if(!mxResult.hasElements())
+            if(mxResult.empty())
             {
                 const_cast< TextBreakupHelper* >(this)->breakup(aBreakupUnit);
             }

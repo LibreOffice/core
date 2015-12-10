@@ -588,7 +588,7 @@ namespace
         }
     }
 
-    drawinglayer::primitive2d::Primitive2DSequence impAddPathTextOutlines(
+    drawinglayer::primitive2d::Primitive2DContainer impAddPathTextOutlines(
         const std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rSource,
         const drawinglayer::attribute::SdrFormTextOutlineAttribute& rOutlineAttribute)
     {
@@ -623,7 +623,7 @@ namespace
                         if(rOutlineAttribute.getTransparence())
                         {
                             // create UnifiedTransparencePrimitive2D
-                            drawinglayer::primitive2d::Primitive2DSequence aStrokePrimitiveSequence(nStrokeCount);
+                            drawinglayer::primitive2d::Primitive2DContainer aStrokePrimitiveSequence(nStrokeCount);
 
                             for(sal_uInt32 b(0L); b < nStrokeCount; b++)
                             {
@@ -650,7 +650,7 @@ namespace
 
         if(nNewCount)
         {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval(nNewCount);
+            drawinglayer::primitive2d::Primitive2DContainer aRetval(nNewCount);
 
             for(sal_uInt32 a(0L); a < nNewCount; a++)
             {
@@ -661,7 +661,7 @@ namespace
         }
         else
         {
-            return drawinglayer::primitive2d::Primitive2DSequence();
+            return drawinglayer::primitive2d::Primitive2DContainer();
         }
     }
 } // end of anonymous namespace
@@ -670,12 +670,12 @@ namespace
 // primitive decomposition
 
 void SdrTextObj::impDecomposePathTextPrimitive(
-    drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const drawinglayer::primitive2d::SdrPathTextPrimitive2D& rSdrPathTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence aRetvalA;
-    drawinglayer::primitive2d::Primitive2DSequence aRetvalB;
+    drawinglayer::primitive2d::Primitive2DContainer aRetvalA;
+    drawinglayer::primitive2d::Primitive2DContainer aRetvalB;
 
     // prepare outliner
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
@@ -744,7 +744,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
             if(nShadowCount)
             {
                 // add shadow primitives to decomposition
-                aRetvalA.realloc(nShadowCount);
+                aRetvalA.resize(nShadowCount);
 
                 for(a = 0L; a < nShadowCount; a++)
                 {
@@ -755,19 +755,19 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 if(rFormTextAttribute.getFormTextOutline()
                     && !rFormTextAttribute.getShadowOutline().isDefault())
                 {
-                    const drawinglayer::primitive2d::Primitive2DSequence aOutlines(
+                    const drawinglayer::primitive2d::Primitive2DContainer aOutlines(
                         impAddPathTextOutlines(
                             aShadowDecomposition,
                             rFormTextAttribute.getShadowOutline()));
 
-                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(aRetvalA, aOutlines);
+                    aRetvalA.append(aOutlines);
                 }
             }
 
             if(nRegularCount)
             {
                 // add normal primitives to decomposition
-                aRetvalB.realloc(nRegularCount);
+                aRetvalB.resize(nRegularCount);
 
                 for(a = 0L; a < nRegularCount; a++)
                 {
@@ -778,12 +778,12 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 if(rFormTextAttribute.getFormTextOutline()
                     && !rFormTextAttribute.getOutline().isDefault())
                 {
-                    const drawinglayer::primitive2d::Primitive2DSequence aOutlines(
+                    const drawinglayer::primitive2d::Primitive2DContainer aOutlines(
                         impAddPathTextOutlines(
                             aRegularDecomposition,
                             rFormTextAttribute.getOutline()));
 
-                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(aRetvalB, aOutlines);
+                    aRetvalB.append(aOutlines);
                 }
             }
         }
@@ -795,8 +795,8 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     rOutliner.setVisualizedPage(nullptr);
 
     // concatenate all results
-    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalA);
-    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalB);
+    rTarget.append(aRetvalA);
+    rTarget.append(aRetvalB);
 }
 
 

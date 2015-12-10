@@ -36,9 +36,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence MarkerArrayPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer MarkerArrayPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence xRetval;
+            Primitive2DContainer xRetval;
             const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
             const sal_uInt32 nMarkerCount(rPositions.size());
 
@@ -57,7 +57,7 @@ namespace drawinglayer
                     aLogicHalfSize *= 0.5;
 
                     // number of primitives is known; realloc accordingly
-                    xRetval.realloc(nMarkerCount);
+                    xRetval.resize(nMarkerCount);
 
                     for(sal_uInt32 a(0); a < nMarkerCount; a++)
                     {
