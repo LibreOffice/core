@@ -212,6 +212,7 @@ private:
     long            mnUserItemWidth;
     long            mnUserItemHeight;
     sal_uInt16      mnSelItemId;
+    sal_uInt16      mnSavedItemId;
     sal_uInt16      mnHighItemId;
     sal_uInt16      mnCols;
     sal_uInt16      mnCurCol;
@@ -349,6 +350,8 @@ public:
     {
         return mnSelItemId;
     }
+    void                SaveValue() { mnSavedItemId = GetSelectItemId(); }
+    sal_Int32           GetSavedValue() const { return mnSavedItemId; }
     bool IsItemSelected( sal_uInt16 nItemId ) const
     {
         return !mbNoSelection && (nItemId == mnSelItemId);

@@ -598,6 +598,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
             aBgdColor = pBgdAttr->GetColor();
             sal_uInt16 nCol = GetItemId_Impl(*m_pBackgroundColorSet, aBgdColor);
             m_pBackgroundColorSet->SelectItem( nCol );
+            m_pBackgroundColorSet->SaveValue();
             m_pPreviewWin1->NotifyChange( aBgdColor );
         }
     }
@@ -682,7 +683,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             {
                 // Brush-treatment:
                 if ( rOldItem.GetColor() != aBgdColor ||
-                     (SfxItemState::DEFAULT >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
+                     (SfxItemState::DEFAULT >= eOldItemState && m_pBackgroundColorSet->GetSavedValue() != m_pBackgroundColorSet->GetSelectItemId()))
                 {
                     bModified = true;
                     rCoreSet->Put( SvxBrushItem( aBgdColor, nWhich ) );
@@ -1423,6 +1424,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         {
             m_pBackgroundColorSet->SelectItem( nCol );
         }
+        m_pBackgroundColorSet->SaveValue();
 
         m_pPreviewWin1->NotifyChange( aBgdColor );
 
