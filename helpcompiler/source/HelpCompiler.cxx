@@ -334,7 +334,7 @@ void myparser::traverse( xmlNodePtr parentNode )
 
             std::string hid;
 
-            if (branch.compare(0, 3, "hid") != 0)
+            if (branch.compare(0, 3, "hid") == 0)
             {
                 size_t index = branch.find('/');
                 if (index != std::string::npos)
