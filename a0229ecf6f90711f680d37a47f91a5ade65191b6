@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_1f6dc604",
+        "filename": "sw/source/ui/config/optdlg.src",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-10T09:19:16Z",
+      "side": 1,
+      "message": "I\u0027m afraid you understood my comment in a wrong way... STR_PRINTOPTUI_ALLPAGES was a reasonably good name for this string; what I proposed was to change STR_PRINTOPTUI_PAGES1 to STR_PRINTOPTUI_SOMEPAGES or something similar (as it is label for the text field where user can write pages/page ranges to print).",
+      "revId": "a0229ecf6f90711f680d37a47f91a5ade65191b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
