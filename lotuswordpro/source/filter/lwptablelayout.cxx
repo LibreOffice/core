@@ -584,7 +584,7 @@ void LwpTableLayout::RegisterColumns()
         m_pColumns[nColId] = pColumnLayout;
         if (!pColumnLayout->IsJustifiable())
         {
-            pWidthCalculated[pColumnLayout->GetColumnID()] = sal_True;
+            pWidthCalculated[nColId] = sal_True;
             dTableWidth -= pColumnLayout->GetWidth();
             nJustifiableColumn --;
         }
@@ -594,7 +594,7 @@ void LwpTableLayout::RegisterColumns()
     }
 
     // if all columns are not justifiable, the rightmost column will be changed to justifiable
-    if(nJustifiableColumn == 0)
+    if (nJustifiableColumn == 0 && nCols != 0)
     {
         nJustifiableColumn ++;
         if (m_pColumns[nCols - 1])
