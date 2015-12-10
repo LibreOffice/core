@@ -170,8 +170,13 @@ bool LwpFormulaInfo::ReadExpression()
     /* Read the compiled expression length */
     m_pObjStrm->SeekRel(2);
 
-    while ((TokenType = m_pObjStrm->QuickReaduInt16()) != TK_END)
+    bool bError = false;
+    while ((TokenType = m_pObjStrm->QuickReaduInt16(&bError)) != TK_END)
     {
+
+        if (bError)
+            throw std::runtime_error("error reading expression");
+
         // Get the disk length of this token
         DiskLength = m_pObjStrm->QuickReaduInt16();
 
@@ -221,18 +226,28 @@ bool LwpFormulaInfo::ReadExpression()
             case TK_NOT:
                 m_pObjStrm->SeekRel(DiskLength); // extensible for future
 
+                if (m_aStack.size() >= 2)
                 {//binary operator
                     LwpFormulaOp* pOp = new LwpFormulaOp(TokenType);
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     m_aStack.push_back(pOp);
                 }
+                else
+                {
+                    readSucceeded = false;
+                }
                 break;
             case TK_UNARY_MINUS:
+                if (!m_aStack.empty())
                 {
                     LwpFormulaUnaryOp* pOp = new LwpFormulaUnaryOp(TokenType);
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     m_aStack.push_back(pOp);
+                }
+                else
+                {
+                    readSucceeded = false;
                 }
                 break;
             default:
