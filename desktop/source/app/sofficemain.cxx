@@ -56,7 +56,10 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     /* Run test for OpenGL support in own process to avoid crash with broken
      * OpenGL drivers. Start process as early as possible.
      */
-    bool bSuccess = fire_glxtest_process();
+    bool bSuccess = true;
+#if ENABLE_OPENGL
+    bSuccess = fire_glxtest_process();
+#endif
     SAL_WARN_IF(!bSuccess, "desktop.opengl", "problems with glxtest");
 #endif
 

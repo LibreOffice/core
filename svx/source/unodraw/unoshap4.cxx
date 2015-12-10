@@ -1025,12 +1025,18 @@ SvxDummyShapeContainer::~SvxDummyShapeContainer() throw()
 
 void SvxOpenGLObject::setRenderer(IOpenGLRenderer* pRenderer)
 {
+#ifdef ENABLE_OPENGL
     static_cast<SdrOpenGLObj*>(GetSdrObject())->setRenderer(pRenderer);
+#endif
 }
 
 IOpenGLRenderer* SvxOpenGLObject::getRenderer()
 {
+#ifdef ENABLE_OPENGL
     return static_cast<SdrOpenGLObj*>(GetSdrObject())->getRenderer();
+#else
+    return nullptr;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

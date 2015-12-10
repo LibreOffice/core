@@ -10303,8 +10303,8 @@ elif test $_os = WINNT; then
 else
     if test "$with_x" != "no"; then
         ENABLE_OPENGL=TRUE
+        ENABLE_OPENGL_CANVAS=TRUE
     fi
-    ENABLE_OPENGL_CANVAS=TRUE
 
     dnl ===================================================================
     dnl Check for system Mesa
