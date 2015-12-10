@@ -540,7 +540,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
     LwpDocument* pDivision = GetLastDivision();
 
-    while(pDivision)
+    while (pDivision && pDivision != this)
     {
         LwpDocument* pContentDivision = pDivision->GetLastDivisionWithContents();
         if(pContentDivision)
