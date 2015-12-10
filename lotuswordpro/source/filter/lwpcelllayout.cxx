@@ -121,8 +121,9 @@ LwpTable * LwpCellLayout::GetTable()
  */
 void LwpCellLayout::SetCellMap()
 {
-    // this function is called from LwpTableLayout, so it can't be NULL
-    GetTableLayout()->SetWordProCellMap(crowid, ccolid, this);
+    LwpTableLayout * pTableLayout = GetTableLayout();
+    if (pTableLayout)
+        pTableLayout->SetWordProCellMap(crowid, ccolid, this);
 }
 /**
  * @short  Get actual width of this cell layout
