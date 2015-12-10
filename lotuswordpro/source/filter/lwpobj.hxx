@@ -63,6 +63,8 @@
 
 #include <sal/config.h>
 
+#include <stdexcept>
+
 #include <salhelper/simplereferenceobject.hxx>
 
 #include "lwpheader.hxx"
