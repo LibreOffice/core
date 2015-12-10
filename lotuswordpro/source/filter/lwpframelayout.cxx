@@ -190,7 +190,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
     LwpVirtualLayout* pParent = m_pLayout->GetParentLayout();
     if (!pParent)
         throw std::runtime_error("missing Parent Layout");
-    if(pParent->IsPage()&& pParent->GetParentLayout()->IsPage())
+    if (pParent->IsPage() && pParent->GetParentLayout() && pParent->GetParentLayout()->IsPage())
     {
         //for mirror page, problems exist if the parent layout is header or footer layout,
         pParent = pParent->GetParentLayout();
