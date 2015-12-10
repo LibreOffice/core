@@ -113,23 +113,25 @@ void ImplDeInitSVData()
         delete pSVData->mpPaperNames, pSVData->mpPaperNames = nullptr;
 }
 
+/// Returns either the application window, or the default GL context window
 vcl::Window* ImplGetDefaultWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpAppWin )
         return pSVData->maWinData.mpAppWin;
+    else
+        return ImplGetDefaultContextWindow();
+}
 
-    // First test if we already have a default window.
-    // Don't only place a single if..else inside solar mutex lockframe
-    // because then we might have to wait for the solar mutex what is not necessary
-    // if we already have a default window.
+/// returns the default window created to hold the persistent VCL GL context.
+vcl::Window *ImplGetDefaultContextWindow()
+{
+    ImplSVData* pSVData = ImplGetSVData();
 
+    // Double check locking on mpDefaultWin.
     if ( !pSVData->mpDefaultWin )
     {
-        Application::GetSolarMutex().acquire();
-
-        // Test again because the thread who released the solar mutex could have called
-        // the same method
+        SolarMutexGuard aGuard;
 
         if ( !pSVData->mpDefaultWin && !pSVData->mbDeInit )
         {
@@ -142,7 +144,6 @@ vcl::Window* ImplGetDefaultWindow()
             if( pContext.is() )
                 pContext->acquire();
         }
-        Application::GetSolarMutex().release();
     }
 
     return pSVData->mpDefaultWin;
