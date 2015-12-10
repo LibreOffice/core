@@ -132,12 +132,13 @@ private:
 
     void                    ReadGsubTable( HDC ) const;
 
-    typedef std::unordered_set<sal_UCS4> UcsHashSet;
+    typedef std::unordered_map<sal_UCS4,sal_UCS4> UcsHashSet;
     mutable UcsHashSet      maGsubTable;
     mutable bool            mbGsubRead;
 public:
     bool                    HasGSUBstitutions( HDC ) const;
     bool                    IsGSUBstituted( sal_UCS4 ) const;
+    sal_UCS4                GetGSUBstitution( sal_UCS4 ) const;
 };
 
 /** Class that creates (and destroys) a compatible Device Context.

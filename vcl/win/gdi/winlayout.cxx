@@ -743,6 +743,7 @@ UniscribeLayout::UniscribeLayout(HDC hDC, const ImplWinFontData& rWinFontData,
 {
     static bool bUseGLyphy = std::getenv("SAL_USE_GLYPHY") != NULL;
     mbUseGLyphy = bUseGLyphy;
+    ScriptGetProperties(&mppScriptProperties, &mnMaxScript);
 }
 
 UniscribeLayout::~UniscribeLayout()
@@ -837,7 +838,6 @@ OUString VisAttrArrayToString(SCRIPT_VISATTR *pVisAttrs, int n)
 
 bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    msTheString = rArgs.mrStr;
 
     // for a base layout only the context glyphs have to be dropped
     // => when the whole string is involved there is no extra context
@@ -922,7 +922,12 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     // adjust char positions by substring offset
     for( nItem = 0; nItem <= mnItemCount; ++nItem )
+    {
         mpScriptItems[ nItem ].iCharPos += mnSubStringMin;
+        if ((rArgs.mnFlags & SalLayoutFlags::Vertical) && !mppScriptProperties[mpScriptItems[ nItem ].a.eScript]->fComplex) {
+            mpScriptItems[ nItem ].a.fNoGlyphIndex = TRUE;
+        }
+    }
     // default visual item ordering
     mpVisualItems = new VisualItem[ mnItemCount ];
     for( nItem = 0; nItem < mnItemCount; ++nItem )
@@ -1479,6 +1484,9 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     Point aRelativePos( nXOffset + aGOffset.du, -aGOffset.dv );
     rPos = GetDrawPosition( aRelativePos );
 
+    // Unicode to glyph index mapping.
+    FontCharMapPtr pCharMap = mrWinFontData.GetFontCharMap() ;
+
     // fill the result arrays
     int nCount = 0;
     while( nCount < nLen )
@@ -1540,8 +1548,20 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
         // update return values
         if( (mnLayoutFlags & SalLayoutFlags::Vertical) &&
+            pVI->mpScriptItem->a.fNoGlyphIndex &&
             nCharPos != -1 )
-            aGlyphId |= GetVerticalFlags( msTheString[nCharPos] );
+        {
+            if( mrWinFontData.HasGSUBstitutions( mhDC )
+                &&  mrWinFontData.IsGSUBstituted( aGlyphId ) )
+            {
+                aGlyphId = mrWinFontData.GetGSUBstitution( aGlyphId )
+                    | GF_ROTL | GF_GSUB;
+            }
+            else
+            {
+                aGlyphId = pCharMap->GetGlyphIndex( aGlyphId ) | GetVerticalFlags( aGlyphId ) ;
+            }
+        }
         *(pGlyphs++) = aGlyphId;
         if( pGlyphAdvances )
             *(pGlyphAdvances++) = nGlyphWidth;
