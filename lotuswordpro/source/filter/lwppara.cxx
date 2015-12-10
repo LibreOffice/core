@@ -271,6 +271,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
 
     //Create an XFPara for this VO_PARA
     XFParagraph *pPara = new XFParagraph;
+    rtl::Reference<XFContentContainer> xHolder(pPara);
     pPara->SetStyleName(m_StyleName);
 
     if(!m_SectionStyleName.isEmpty())
