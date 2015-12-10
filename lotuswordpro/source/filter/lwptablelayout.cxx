@@ -1122,44 +1122,50 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
             pTableRange = pTableRange->GetNext();
         }
 
-        if (pTableRange)
+        if (!pTableRange)
+            return;
+
+        LwpCellRange* pRange = static_cast<LwpCellRange*>(pTableRange->GetCellRangeID().obj().get());
+        if (!pRange)
+            return;
+
+        LwpFolder* pFolder = static_cast<LwpFolder*>(pRange->GetFolderID().obj().get());
+        if (!pFolder)
+            return;
+
+        LwpObjectID aRowListID = pFolder->GetChildHeadID();
+        LwpRowList* pRowList = static_cast<LwpRowList*>(aRowListID.obj().get());
+
+        //loop the rowlist
+        while( nullptr!=pRowList)
         {
-            LwpCellRange* pRange = static_cast<LwpCellRange*>(pTableRange->GetCellRangeID().obj().get());
-            LwpFolder* pFolder = static_cast<LwpFolder*>(pRange->GetFolderID().obj().get());
-            LwpObjectID aRowListID = pFolder->GetChildHeadID();
-            LwpRowList* pRowList = static_cast<LwpRowList*>(aRowListID.obj().get());
-
-            //loop the rowlist
-            while( nullptr!=pRowList)
+            sal_uInt16 nRowID =  pRowList->GetRowID();
             {
-                sal_uInt16 nRowID =  pRowList->GetRowID();
+                LwpCellList* pCellList = static_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
+                //loop the cellList
+                while( nullptr!=pCellList)
                 {
-                    LwpCellList* pCellList = static_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
-                    //loop the cellList
-                    while( nullptr!=pCellList)
-                    {
-                        {//put cell
-                            sal_uInt16 nColID = pCellList->GetColumnID();
+                    {//put cell
+                        sal_uInt16 nColID = pCellList->GetColumnID();
 
-                            XFCell* pCell = GetCellsMap(nRowID,static_cast<sal_uInt8>(nColID));
-                            if (pCell)
-                            {
-                                pCellList->Convert(pCell, this);
+                        XFCell* pCell = GetCellsMap(nRowID,static_cast<sal_uInt8>(nColID));
+                        if (pCell)
+                        {
+                            pCellList->Convert(pCell, this);
 
-                                //process paragraph
-                                PostProcessParagraph(pCell, nRowID, nColID);
-                            }
-                            else
-                            {
-                                //Hidden cell would not be in cellsmap
-                                assert(false);
-                            }
+                            //process paragraph
+                            PostProcessParagraph(pCell, nRowID, nColID);
                         }
-                        pCellList = static_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
+                        else
+                        {
+                            //Hidden cell would not be in cellsmap
+                            assert(false);
+                        }
                     }
+                    pCellList = static_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
                 }
-                pRowList = static_cast<LwpRowList*>(pRowList->GetNextID().obj().get());
             }
+            pRowList = static_cast<LwpRowList*>(pRowList->GetNextID().obj().get());
         }
 
     }catch (...) {
