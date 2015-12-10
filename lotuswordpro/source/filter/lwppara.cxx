@@ -418,18 +418,20 @@ void LwpPara::RegisterStyle()
             case PP_LOCAL_SPACING:
             {
                 noSpacing = false;
-                if (!rParaStyle.GetSpacing())
-                    OverrideSpacing(NULL,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
-                else
+                LwpSpacingOverride *pSpacing = static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing();
+                if (pSpacing)
                 {
-                    boost::scoped_ptr<LwpSpacingOverride> const
-                        pSpacing(rParaStyle.GetSpacing()->clone());
-                    OverrideSpacing(pSpacing.get(),
-                            static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),
-                            pOverStyle);
+                    if (!rParaStyle.GetSpacing())
+                        OverrideSpacing(nullptr, pSpacing, pOverStyle);
+                    else
+                    {
+                        std::unique_ptr<LwpSpacingOverride> const
+                            pNewSpacing(rParaStyle.GetSpacing()->clone());
+                        OverrideSpacing(pNewSpacing.get(), pSpacing, pOverStyle);
+                    }
                 }
-            }
                 break;
+            }
             case PP_LOCAL_BORDER:
             {
                 OverrideParaBorder(pProps, pOverStyle);
