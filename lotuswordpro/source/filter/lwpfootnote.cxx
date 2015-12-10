@@ -206,7 +206,7 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
     LwpEnSuperTableLayout* pEnSuperLayout = FindFootnoteTableLayout();
     if(pEnSuperLayout)
     {
-        LwpTableLayout* pTableLayout = static_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
+        LwpTableLayout* pTableLayout = dynamic_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
         if(pTableLayout)
         {
             LwpRowLayout* pRowLayout = pTableLayout->GetRowLayout(m_nRow);
@@ -372,7 +372,7 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
 
     while ((pContent = pFoundry->EnumContents(pContent)) != NULL)
         if (pContent->IsTable() && (strClassName.equals(pContent->GetClassName())) &&
-            pContent->IsActive() && pContent->GetLayout(NULL))
+            pContent->IsActive() && pContent->GetLayout(nullptr).is())
         {
             // Found it!
             return static_cast<LwpEnSuperTableLayout *>(
@@ -390,7 +390,7 @@ LwpContent* LwpFootnote::FindFootnoteContent()
     LwpContent* pContent = dynamic_cast<LwpContent*>(m_Content.obj().get());
     //if the content has layout, the content has footnote contents;
     //or looking for the celllayout and return the footnote contents.
-    if(pContent && pContent->GetLayout(NULL))
+    if (pContent && pContent->GetLayout(nullptr).is())
         return pContent;
 
     LwpCellLayout* pCellLayout = GetCellLayout();
