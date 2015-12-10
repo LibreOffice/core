@@ -8,11 +8,10 @@
  */
 
 #include <vcl/CommandImageResolver.hxx>
-
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/miscopt.hxx>
-#include <officecfg/Office/Common.hxx>
 
 using css::uno::Sequence;
 
@@ -124,11 +123,11 @@ bool CommandImageResolver::hasImage(const OUString& rCommandURL)
 
 ImageList* CommandImageResolver::getImageList(sal_Int16 nImageType)
 {
-    const OUString& rIconTheme = officecfg::Office::Common::Misc::SymbolStyle::get();
+    const OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    if (rIconTheme != m_sIconTheme)
+    if (sIconTheme != m_sIconTheme)
     {
-        m_sIconTheme = rIconTheme;
+        m_sIconTheme = sIconTheme;
         for (sal_Int32 n = 0; n < ImageType_COUNT; ++n)
         {
             delete m_pImageList[n];
