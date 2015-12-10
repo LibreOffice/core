@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_7f021140",
+        "filename": "lotuswordpro/source/filter/lwpdoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-12-10T15:34:04Z",
+      "side": 1,
+      "message": "this seems unrelated, but i\u0027m not going to -1 based on it :)",
+      "revId": "412063118eaf5f06aa2923959235c6974d644113",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
