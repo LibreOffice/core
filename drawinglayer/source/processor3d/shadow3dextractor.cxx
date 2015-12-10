@@ -53,8 +53,8 @@ namespace drawinglayer
                     const primitive3d::ShadowPrimitive3D& rPrimitive = static_cast< const primitive3d::ShadowPrimitive3D& >(rCandidate);
 
                     // set new target
-                    primitive2d::Primitive2DVector aNewSubList;
-                    primitive2d::Primitive2DVector* pLastTargetSequence = mpPrimitive2DSequence;
+                    primitive2d::Primitive2DContainer aNewSubList;
+                    primitive2d::Primitive2DContainer* pLastTargetSequence = mpPrimitive2DSequence;
                     mpPrimitive2DSequence = &aNewSubList;
 
                     // activate convert
@@ -78,13 +78,13 @@ namespace drawinglayer
                     primitive2d::BasePrimitive2D* pNew = new primitive2d::ShadowPrimitive2D(
                         rPrimitive.getShadowTransform(),
                         rPrimitive.getShadowColor(),
-                        primitive2d::Primitive2DVectorToPrimitive2DSequence(aNewSubList));
+                        aNewSubList);
 
                     if(basegfx::fTools::more(rPrimitive.getShadowTransparence(), 0.0))
                     {
                         // create simpleTransparencePrimitive, add created primitives
                         const primitive2d::Primitive2DReference xRef(pNew);
-                        const primitive2d::Primitive2DSequence aNewTransPrimitiveVector(&xRef, 1);
+                        const primitive2d::Primitive2DContainer aNewTransPrimitiveVector { xRef };
 
                         pNew = new primitive2d::UnifiedTransparencePrimitive2D(
                             aNewTransPrimitiveVector,
@@ -253,10 +253,6 @@ namespace drawinglayer
         {
             OSL_ENSURE(0 == maPrimitive2DSequence.size(),
                 "OOps, someone used Shadow3DExtractingProcessor, but did not fetch the results (!)");
-            for(size_t a(0); a < maPrimitive2DSequence.size(); a++)
-            {
-                delete maPrimitive2DSequence[a];
-            }
         }
 
         basegfx::B2DPolygon Shadow3DExtractingProcessor::impDoShadowProjection(const basegfx::B3DPolygon& rSource)
@@ -300,9 +296,9 @@ namespace drawinglayer
             return aRetval;
         }
 
-        const primitive2d::Primitive2DSequence Shadow3DExtractingProcessor::getPrimitive2DSequence() const
+        const primitive2d::Primitive2DContainer& Shadow3DExtractingProcessor::getPrimitive2DSequence() const
         {
-            return Primitive2DVectorToPrimitive2DSequence(maPrimitive2DSequence);
+            return maPrimitive2DSequence;
         }
 
     } // end of namespace processor3d

@@ -33,7 +33,7 @@ typedef css::uno::Sequence<sal_Int8> SvgDataArray;
 // using default parameters and graphic::XPrimitive2DRenderer
 
 BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
-    const css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
+    const std::vector< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels = 500000);
 
@@ -49,7 +49,7 @@ private:
 
     // on demand created content
     basegfx::B2DRange       maRange;
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >
+    std::vector< css::uno::Reference< css::graphic::XPrimitive2D > >
                             maSequence;
     BitmapEx                maReplacement;
 
@@ -71,7 +71,7 @@ public:
 
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;
-    const css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >& getPrimitive2DSequence() const;
+    const std::vector< css::uno::Reference< css::graphic::XPrimitive2D > >& getPrimitive2DSequence() const;
     const BitmapEx& getReplacement() const;
 };
 

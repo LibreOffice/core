@@ -59,11 +59,11 @@ namespace sw
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayRanges::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayRanges::createOverlayObjectPrimitive2DSequence()
         {
             const sal_uInt32 nCount(getRanges().size());
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
-            aRetval.realloc(nCount);
+            drawinglayer::primitive2d::Primitive2DContainer aRetval;
+            aRetval.resize(nCount);
             for ( sal_uInt32 a = 0; a < nCount; ++a )
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
@@ -91,13 +91,13 @@ namespace sw
                     aPolyPolygon,
                     aRGBColor));
 
-                aRetval.realloc(2);
+                aRetval.resize(2);
                 aRetval[0] = aUnifiedTransparence;
                 aRetval[1] = aOutline;
             }
             else
             {
-                aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparence, 1);
+                aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
             }
 
             return aRetval;

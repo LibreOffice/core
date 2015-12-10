@@ -54,9 +54,9 @@ namespace sw
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayRangesOutline::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayRangesOutline::createOverlayObjectPrimitive2DSequence()
         {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            drawinglayer::primitive2d::Primitive2DContainer aRetval;
             const sal_uInt32 nCount(getRanges().size());
 
             if( nCount )
@@ -68,7 +68,7 @@ namespace sw
                     aPolyPolygon,
                     aRGBColor));
 
-                aRetval.realloc(1);
+                aRetval.resize(1);
                 aRetval[0] = aOutline;
             }
 

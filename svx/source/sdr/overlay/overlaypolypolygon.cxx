@@ -30,9 +30,9 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayPolyPolygonStripedAndFilled::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayPolyPolygonStripedAndFilled::createOverlayObjectPrimitive2DSequence()
         {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
             if(getOverlayManager())
             {
@@ -46,7 +46,7 @@ namespace sdr
                         aRGBColorB,
                         fStripeLengthPixel));
 
-                aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aStriped, 1);
+                aRetval = drawinglayer::primitive2d::Primitive2DContainer { aStriped };
 
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
                 const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
@@ -60,7 +60,7 @@ namespace sdr
                         3.0,
                         false));
 
-                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aFilled);
+                aRetval.push_back(aFilled);
             }
 
             return aRetval;

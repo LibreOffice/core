@@ -96,9 +96,9 @@ SdrDragEntryPolyPolygon::~SdrDragEntryPolyPolygon()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPolyPolygon::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
 {
-    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
     if(maOriginalPolyPolygon.count())
     {
@@ -116,7 +116,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPolyPolygon::createPr
             aColB.invert();
         }
 
-        aRetval.realloc(2);
+        aRetval.resize(2);
         aRetval[0] = new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
             aCopy,
             aColA,
@@ -182,7 +182,7 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrimitive2DSequenceInCurrentState(SdrDragMethod&)
+drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPrimitive2DSequenceInCurrentState(SdrDragMethod&)
 {
     const SdrObject* pSource = &maOriginal;
 
@@ -192,7 +192,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrim
         pSource = mpClone;
     }
 
-    // get VOC and Primitive2DSequence
+    // get VOC and Primitive2DContainer
     sdr::contact::ViewContact& rVC = pSource->GetViewContact();
     sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(mrObjectContact);
     sdr::contact::DisplayInfo aDisplayInfo;
@@ -207,7 +207,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrim
 
 
 SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
-    const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
+    const drawinglayer::primitive2d::Primitive2DContainer& rSequence,
     bool bAddToTransparent)
 :   SdrDragEntry(),
     maPrimitive2DSequence(rSequence)
@@ -220,14 +220,14 @@ SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
 {
     drawinglayer::primitive2d::Primitive2DReference aTransformPrimitive2D(
         new drawinglayer::primitive2d::TransformPrimitive2D(
             rDragMethod.getCurrentTransformation(),
             maPrimitive2DSequence));
 
-    return drawinglayer::primitive2d::Primitive2DSequence(&aTransformPrimitive2D, 1);
+    return drawinglayer::primitive2d::Primitive2DContainer { aTransformPrimitive2D };
 }
 
 
@@ -244,9 +244,9 @@ SdrDragEntryPointGlueDrag::~SdrDragEntryPointGlueDrag()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
 {
-    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
     if(!maPositions.empty())
     {
@@ -286,14 +286,14 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::create
                 new drawinglayer::primitive2d::MarkerArrayPrimitive2D(aTransformedPositions,
                     drawinglayer::primitive2d::createDefaultCross_3x3(aColor)));
 
-            aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aMarkerArrayPrimitive2D, 1);
+            aRetval = drawinglayer::primitive2d::Primitive2DContainer { aMarkerArrayPrimitive2D };
         }
         else
         {
             drawinglayer::primitive2d::Primitive2DReference aMarkerArrayPrimitive2D(
                 new drawinglayer::primitive2d::MarkerArrayPrimitive2D(aTransformedPositions,
                                                                       SdrHdl::createGluePointBitmap()));
-            aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aMarkerArrayPrimitive2D, 1);
+            aRetval = drawinglayer::primitive2d::Primitive2DContainer { aMarkerArrayPrimitive2D };
         }
     }
 
@@ -764,8 +764,8 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         }
 
         // collect primitives for visualisation
-        drawinglayer::primitive2d::Primitive2DSequence aResult;
-        drawinglayer::primitive2d::Primitive2DSequence aResultTransparent;
+        drawinglayer::primitive2d::Primitive2DContainer aResult;
+        drawinglayer::primitive2d::Primitive2DContainer aResultTransparent;
 
         for(a = 0; a < maSdrDragEntries.size(); a++)
         {
@@ -773,17 +773,17 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
             if(pCandidate)
             {
-                const drawinglayer::primitive2d::Primitive2DSequence aCandidateResult(pCandidate->createPrimitive2DSequenceInCurrentState(*this));
+                const drawinglayer::primitive2d::Primitive2DContainer aCandidateResult(pCandidate->createPrimitive2DSequenceInCurrentState(*this));
 
-                if(aCandidateResult.hasElements())
+                if(!aCandidateResult.empty())
                 {
                     if(pCandidate->getAddToTransparent())
                     {
-                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(aResultTransparent, aCandidateResult);
+                        aResultTransparent.append(aCandidateResult);
                     }
                     else
                     {
-                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(aResult, aCandidateResult);
+                        aResult.append(aCandidateResult);
                     }
                 }
             }
@@ -791,26 +791,26 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
         if(DoAddConnectorOverlays())
         {
-            const drawinglayer::primitive2d::Primitive2DSequence aConnectorOverlays(AddConnectorOverlays());
+            const drawinglayer::primitive2d::Primitive2DContainer aConnectorOverlays(AddConnectorOverlays());
 
-            if(aConnectorOverlays.hasElements())
+            if(!aConnectorOverlays.empty())
             {
                 // add connector overlays to transparent part
-                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(aResultTransparent, aConnectorOverlays);
+                aResultTransparent.append(aConnectorOverlays);
             }
         }
 
-        if(aResult.hasElements())
+        if(!aResult.empty())
         {
             sdr::overlay::OverlayObject* pNewOverlayObject = new sdr::overlay::OverlayPrimitive2DSequenceObject(aResult);
             rOverlayManager.add(*pNewOverlayObject);
             addToOverlayObjectList(*pNewOverlayObject);
         }
 
-        if(aResultTransparent.hasElements())
+        if(!aResultTransparent.empty())
         {
             drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aResultTransparent, 0.5));
-            aResultTransparent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparencePrimitive2D, 1);
+            aResultTransparent = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparencePrimitive2D };
 
             sdr::overlay::OverlayObject* pNewOverlayObject = new sdr::overlay::OverlayPrimitive2DSequenceObject(aResultTransparent);
             rOverlayManager.add(*pNewOverlayObject);
@@ -882,9 +882,9 @@ bool SdrDragMethod::DoAddConnectorOverlays()
     return true;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverlays()
+drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverlays()
 {
-    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+    drawinglayer::primitive2d::Primitive2DContainer aRetval;
     const bool bDetail(getSdrDragView().IsDetailedEdgeDragging() && getMoveOnly());
     const SdrMarkList& rMarkedNodes = getSdrDragView().GetEdgesOfMarkedNodes();
 
@@ -929,8 +929,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
                                     rItemSet,
                                     aLine.getWidth()));
 
-                            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
-                                aRetval, drawinglayer::primitive2d::createPolygonLinePrimitive(
+                            aRetval.push_back(drawinglayer::primitive2d::createPolygonLinePrimitive(
                                     aEdgePolygon,
                                     aLine,
                                     aLineStartEnd));
@@ -952,7 +951,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
                         drawinglayer::primitive2d::Primitive2DReference aPolyPolygonMarkerPrimitive2D(
                             new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
                                 aEdgePolygon, aColA, aColB, fStripeLength));
-                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aPolyPolygonMarkerPrimitive2D);
+                        aRetval.push_back(aPolyPolygonMarkerPrimitive2D);
                     }
                 }
             }
@@ -1488,7 +1487,7 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
 
 void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool /*bModify*/)
 {
-    // for SdrDragMove, use current Primitive2DSequence of SdrObject visualization
+    // for SdrDragMove, use current Primitive2DContainer of SdrObject visualization
     // in given ObjectContact directly
     sdr::contact::ViewContact& rVC = rOriginal.GetViewContact();
     sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rObjectContact);

@@ -159,7 +159,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     bool bRtl = AllSettings::GetLayoutRTL();
 
-    drawinglayer::primitive2d::Primitive2DSequence aSeq(3);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(3);
     B2DRectangle aBRect(double(aRect.Left()), double(aRect.Top()),
                         double(aRect.Right()), double(aRect.Bottom()));
     B2DPolygon aPolygon = createPolygonFromRect(aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT);
@@ -195,11 +195,11 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         aTriangleColor = Color(COL_WHITE).getBColor();
 
-    aSeq.realloc(aSeq.getLength() + 1);
-    aSeq[aSeq.getLength() - 1].set( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+    aSeq.resize(aSeq.size() + 1);
+    aSeq[aSeq.size() - 1].set( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aTriangle), aTriangleColor));
 
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aGhostedSeq(1);
+    drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);
     double nFadeRate = double(m_nFadeRate) / 100.0;
     const basegfx::BColorModifierSharedPtr aBColorModifier(
                 new basegfx::BColorModifier_interpolate(Color(COL_WHITE).getBColor(),

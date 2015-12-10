@@ -37,9 +37,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence FillHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer FillHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(!getFillHatch().isDefault())
             {
@@ -105,7 +105,7 @@ namespace drawinglayer
 
                 // prepare return value
                 const bool bFillBackground(getFillHatch().isFillBackground());
-                aRetval.realloc(bFillBackground ? aMatrices.size() + 1L : aMatrices.size());
+                aRetval.resize(bFillBackground ? aMatrices.size() + 1L : aMatrices.size());
 
                 // evtl. create filled background
                 if(bFillBackground)
@@ -185,7 +185,7 @@ namespace drawinglayer
             return getOutputRange();
         }
 
-        Primitive2DSequence FillHatchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer FillHatchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());

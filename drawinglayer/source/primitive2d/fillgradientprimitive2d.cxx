@@ -150,13 +150,14 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence FillGradientPrimitive2D::createOverlappingFill(
+        Primitive2DContainer FillGradientPrimitive2D::createOverlappingFill(
             const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
             const basegfx::BColor& rOuterColor,
             const basegfx::B2DPolygon& rUnitPolygon) const
         {
             // prepare return value
-            Primitive2DSequence aRetval(rEntries.size() + 1);
+            Primitive2DContainer aRetval;
+            aRetval.resize(rEntries.size() + 1);
 
             // create solid fill with outmost color
             aRetval[0] = Primitive2DReference(
@@ -183,13 +184,14 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence FillGradientPrimitive2D::createNonOverlappingFill(
+        Primitive2DContainer FillGradientPrimitive2D::createNonOverlappingFill(
             const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
             const basegfx::BColor& rOuterColor,
             const basegfx::B2DPolygon& rUnitPolygon) const
         {
             // prepare return value
-            Primitive2DSequence aRetval(rEntries.size() + 1);
+            Primitive2DContainer aRetval;
+            aRetval.resize(rEntries.size() + 1);
 
             // get outmost visible range from object
             basegfx::B2DRange aOutmostRange(getOutputRange());
@@ -245,7 +247,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence FillGradientPrimitive2D::createFill(bool bOverlapping) const
+        Primitive2DContainer FillGradientPrimitive2D::createFill(bool bOverlapping) const
         {
             // prepare shape of the Unit Polygon
             basegfx::B2DPolygon aUnitPolygon;
@@ -282,7 +284,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence FillGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer FillGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // default creates overlapping fill which works with AntiAliasing and without.
             // The non-overlapping version does not create single filled polygons, but
@@ -299,7 +301,7 @@ namespace drawinglayer
             }
             else
             {
-                return Primitive2DSequence();
+                return Primitive2DContainer();
             }
         }
 

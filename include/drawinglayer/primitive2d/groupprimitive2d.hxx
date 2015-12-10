@@ -67,20 +67,20 @@ namespace drawinglayer
         {
         private:
             /// the children. Declared private since this shall never be changed at all after construction
-            Primitive2DSequence                             maChildren;
+            Primitive2DContainer                             maChildren;
 
         public:
             /// constructor
-            explicit GroupPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit GroupPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// data read access
-            const Primitive2DSequence& getChildren() const { return maChildren; }
+            const Primitive2DContainer& getChildren() const { return maChildren; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
             /// local decomposition. Implementation will just return children
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

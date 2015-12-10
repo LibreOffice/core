@@ -36,9 +36,9 @@ namespace sdr
         {
             double fRetval(0.0);
 
-            if(maAnimatedPrimitives.hasElements())
+            if(!maAnimatedPrimitives.empty())
             {
-                const sal_Int32 nCount(maAnimatedPrimitives.getLength());
+                const sal_Int32 nCount(maAnimatedPrimitives.size());
 
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
@@ -107,7 +107,7 @@ namespace sdr
             }
         }
 
-        PrimitiveAnimation::PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DSequence& rAnimatedPrimitives)
+        PrimitiveAnimation::PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DContainer& rAnimatedPrimitives)
         :   Event(0L),
             mrVOContact(rVOContact),
             maAnimatedPrimitives(rAnimatedPrimitives)

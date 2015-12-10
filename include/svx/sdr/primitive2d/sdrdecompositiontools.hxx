@@ -71,8 +71,8 @@ namespace drawinglayer
             bool bWordWrap,
             bool bClipOnBounds);
 
-        Primitive2DSequence SVX_DLLPUBLIC createEmbeddedShadowPrimitive(
-            const Primitive2DSequence& rContent,
+        Primitive2DContainer SVX_DLLPUBLIC createEmbeddedShadowPrimitive(
+            const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow);
 
     } // end of namespace primitive2d

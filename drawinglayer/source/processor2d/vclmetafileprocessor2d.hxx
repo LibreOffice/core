@@ -74,7 +74,7 @@ namespace drawinglayer
         private:
             /// local helper(s)
             Rectangle impDumpToMetaFile(
-                const primitive2d::Primitive2DSequence& rContent,
+                const primitive2d::Primitive2DContainer& rContent,
                 GDIMetaFile& o_rContentMetafile);
             void impConvertFillGradientAttributeToVCLGradient(
                 Gradient& o_rVCLGradient,

@@ -28,6 +28,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
 
@@ -76,7 +77,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
         if(pSource)
         {
             const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
-            aRetval = rSource.getViewIndependentPrimitive2DSequence();
+            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DSequence());
         }
     }
 
@@ -97,7 +98,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
         {
             const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
 
-            aRetval = rSource.getViewIndependentPrimitive2DSequence();
+            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DSequence());
         }
     }
 

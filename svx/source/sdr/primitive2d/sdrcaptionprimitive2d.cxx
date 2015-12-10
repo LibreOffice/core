@@ -34,9 +34,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrCaptionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DContainer SdrCaptionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             // create unit outline polygon
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
@@ -48,7 +48,7 @@ namespace drawinglayer
             if(getSdrLFSTAttribute().getFill().isDefault())
             {
                 // create invisible fill for HitTest
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
                         true,
                         basegfx::B2DPolyPolygon(aUnitOutline),
@@ -59,7 +59,7 @@ namespace drawinglayer
                 basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getFill(),
@@ -70,13 +70,13 @@ namespace drawinglayer
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
                 // create invisible line for HitTest/BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform()));
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(getTail()),
@@ -87,7 +87,7 @@ namespace drawinglayer
                 basegfx::B2DPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createPolygonLinePrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getLine(),
@@ -95,7 +95,7 @@ namespace drawinglayer
 
                 aTransformed = getTail();
                 aTransformed.transform(getTransform());
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createPolygonLinePrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getLine(),
@@ -105,7 +105,7 @@ namespace drawinglayer
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),

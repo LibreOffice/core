@@ -65,7 +65,7 @@ namespace sdr
             return nPolyCount;
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrPathObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPathObj::createViewIndependentPrimitive2DSequence() const
         {
             const SfxItemSet& rItemSet = GetPathObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
@@ -167,7 +167,7 @@ namespace sdr
                     aAttribute,
                     aUnitPolyPolygon));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            return drawinglayer::primitive2d::Primitive2DContainer { xReference };
         }
     } // end of namespace contact
 } // end of namespace sdr

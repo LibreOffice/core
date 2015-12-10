@@ -597,27 +597,27 @@ public:
 
     // text primitive decomposition helpers
     void impDecomposeContourTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DContainer& rTarget,
         const drawinglayer::primitive2d::SdrContourTextPrimitive2D& rSdrContourTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposePathTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DContainer& rTarget,
         const drawinglayer::primitive2d::SdrPathTextPrimitive2D& rSdrPathTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposeBlockTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DContainer& rTarget,
         const drawinglayer::primitive2d::SdrBlockTextPrimitive2D& rSdrBlockTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposeAutoFitTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DContainer& rTarget,
         const drawinglayer::primitive2d::SdrAutoFitTextPrimitive2D& rSdrAutofitTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposeStretchTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DContainer& rTarget,
         const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposeChainedTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DContainer& rTarget,
         const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutliner) const;

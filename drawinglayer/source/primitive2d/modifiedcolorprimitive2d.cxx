@@ -31,7 +31,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         ModifiedColorPrimitive2D::ModifiedColorPrimitive2D(
-            const Primitive2DSequence& rChildren,
+            const Primitive2DContainer& rChildren,
             const basegfx::BColorModifierSharedPtr& rColorModifier)
         :   GroupPrimitive2D(rChildren),
             maColorModifier(rColorModifier)

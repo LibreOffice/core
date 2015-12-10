@@ -53,7 +53,7 @@ namespace drawinglayer
             /// constructor
             StructureTagPrimitive2D(
                 const vcl::PDFWriter::StructElement& rStructureElement,
-                const Primitive2DSequence& rChildren);
+                const Primitive2DContainer& rChildren);
 
             /// data read access
             const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }

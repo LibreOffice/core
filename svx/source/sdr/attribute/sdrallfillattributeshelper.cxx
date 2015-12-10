@@ -43,7 +43,7 @@ namespace drawinglayer
 
             if(isUsed())
             {
-                maPrimitives.realloc(1);
+                maPrimitives.resize(1);
                 maPrimitives[0] = drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
                     basegfx::B2DPolyPolygon(
                         basegfx::tools::createPolygonFromRect(
@@ -135,16 +135,16 @@ namespace drawinglayer
             return *maFillGradientAttribute.get();
         }
 
-        const drawinglayer::primitive2d::Primitive2DSequence& SdrAllFillAttributesHelper::getPrimitive2DSequence(
+        const drawinglayer::primitive2d::Primitive2DContainer& SdrAllFillAttributesHelper::getPrimitive2DSequence(
             const basegfx::B2DRange& rPaintRange,
             const basegfx::B2DRange& rDefineRange) const
         {
-            if(maPrimitives.getLength() && (maLastPaintRange != rPaintRange || maLastDefineRange != rDefineRange))
+            if(maPrimitives.size() && (maLastPaintRange != rPaintRange || maLastDefineRange != rDefineRange))
             {
-                const_cast< SdrAllFillAttributesHelper* >(this)->maPrimitives.realloc(0);
+                const_cast< SdrAllFillAttributesHelper* >(this)->maPrimitives.clear();
             }
 
-            if(!maPrimitives.getLength())
+            if(!maPrimitives.size())
             {
                 const_cast< SdrAllFillAttributesHelper* >(this)->createPrimitive2DSequence(rPaintRange, rDefineRange);
             }

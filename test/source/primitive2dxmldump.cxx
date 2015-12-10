@@ -60,7 +60,7 @@ void Primitive2dXmlDump::filterAllActionTypes()
 }
 
 xmlDocPtr Primitive2dXmlDump::dumpAndParse(
-    const drawinglayer::primitive2d::Primitive2DSequence& rPrimitive2DSequence,
+    const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
     const OUString& rTempStreamName)
 {
     std::unique_ptr<SvStream> pStream;
@@ -87,10 +87,10 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(
 }
 
 void Primitive2dXmlDump::decomposeAndWrite(
-    const drawinglayer::primitive2d::Primitive2DSequence& rPrimitive2DSequence,
+    const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
     XmlWriter& rWriter)
 {
-    for (int i = 0; i < rPrimitive2DSequence.getLength(); i++)
+    for (size_t i = 0; i < rPrimitive2DSequence.size(); i++)
     {
         drawinglayer::primitive2d::Primitive2DReference xPrimitive2DReference = rPrimitive2DSequence[i];
         const BasePrimitive2D* pBasePrimitive = dynamic_cast<const BasePrimitive2D* >(xPrimitive2DReference.get());

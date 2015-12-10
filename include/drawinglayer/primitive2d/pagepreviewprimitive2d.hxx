@@ -50,7 +50,7 @@ namespace drawinglayer
             const css::uno::Reference< css::drawing::XDrawPage > mxDrawPage;
 
             /// the PageContent
-            Primitive2DSequence                         maPageContent;
+            Primitive2DContainer                           maPageContent;
 
             /// the own geometry
             basegfx::B2DHomMatrix                       maTransform;
@@ -65,7 +65,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition. Implementation will just return children
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -74,12 +74,12 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rTransform,
                 double fContentWidth,
                 double fContentHeight,
-                const Primitive2DSequence& rPageContent,
+                const Primitive2DContainer& rPageContent,
                 bool bKeepAspectRatio);
 
             /// data read access
             const css::uno::Reference< css::drawing::XDrawPage >& getXDrawPage() const { return mxDrawPage; }
-            const Primitive2DSequence& getPageContent() const { return maPageContent; }
+            const Primitive2DContainer& getPageContent() const { return maPageContent; }
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             double getContentWidth() const { return mfContentWidth; }
             double getContentHeight() const { return mfContentHeight; }

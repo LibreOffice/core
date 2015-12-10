@@ -35,7 +35,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence HelplinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer HelplinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             std::vector< BasePrimitive2D* > aTempPrimitiveTarget;
 
@@ -130,7 +130,7 @@ namespace drawinglayer
             }
 
             // prepare return value
-            Primitive2DSequence aRetval(aTempPrimitiveTarget.size());
+            Primitive2DContainer aRetval(aTempPrimitiveTarget.size());
 
             for(size_t a(0); a < aTempPrimitiveTarget.size(); a++)
             {
@@ -177,20 +177,20 @@ namespace drawinglayer
             return false;
         }
 
-        Primitive2DSequence HelplinePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer HelplinePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getBuffered2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().empty())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< HelplinePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                    const_cast< HelplinePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
                 }
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< HelplinePrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

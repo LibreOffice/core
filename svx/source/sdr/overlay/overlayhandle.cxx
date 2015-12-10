@@ -33,7 +33,7 @@ namespace sdr { namespace overlay {
 using namespace drawinglayer;
 using namespace basegfx;
 
-primitive2d::Primitive2DSequence OverlayHandle::createOverlayObjectPrimitive2DSequence()
+primitive2d::Primitive2DContainer OverlayHandle::createOverlayObjectPrimitive2DSequence()
 {
     basegfx::BColor aStrokeColor = maStrokeColor.getBColor();
     basegfx::BColor aFillColor = getBaseColor().getBColor();
@@ -41,7 +41,7 @@ primitive2d::Primitive2DSequence OverlayHandle::createOverlayObjectPrimitive2DSe
     const primitive2d::Primitive2DReference aReference(
         new primitive2d::OverlayStaticRectanglePrimitive(maBasePosition, maSize, aStrokeColor, aFillColor, 0.3f, 0.0f));
 
-    return primitive2d::Primitive2DSequence(&aReference, 1);
+    return primitive2d::Primitive2DContainer { aReference };
 }
 
 OverlayHandle::OverlayHandle(const B2DPoint& rBasePos,

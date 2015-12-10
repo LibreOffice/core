@@ -38,7 +38,7 @@ namespace sdr
         {
             const basegfx::B2DRange aPreviousRange(maBaseRange);
             maBaseRange.reset();
-            setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DSequence());
+            setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer());
 
             if(getOverlayManager() && !aPreviousRange.isEmpty())
             {
@@ -54,13 +54,13 @@ namespace sdr
         }
 
         // OverlayObject implementations.
-        drawinglayer::primitive2d::Primitive2DSequence OverlayObject::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayObject::createOverlayObjectPrimitive2DSequence()
         {
             // Default implementation has to assert a missing implementation. It cannot
             // be useful to have overlay object derivations which have no visualisation
             // at all
             OSL_FAIL("OverlayObject derivation without visualisation definition (missing createOverlayObjectPrimitive2DSequence implementation) (!)");
-            return drawinglayer::primitive2d::Primitive2DSequence();
+            return drawinglayer::primitive2d::Primitive2DContainer();
         }
 
         sal_uInt32 OverlayObject::impCheckBlinkTimeValueRange(sal_uInt64 nBlinkTime)
@@ -105,9 +105,9 @@ namespace sdr
             OSL_ENSURE(nullptr == getOverlayManager(), "OverlayObject is destructed which is still registered at OverlayManager (!)");
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence OverlayObject::getOverlayObjectPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer OverlayObject::getOverlayObjectPrimitive2DSequence() const
         {
-            if(!getPrimitive2DSequence().hasElements())
+            if(getPrimitive2DSequence().empty())
             {
                 // no existing sequence; create one
                 const_cast< OverlayObject* >(this)->setPrimitive2DSequence(
@@ -121,14 +121,14 @@ namespace sdr
         {
             if(getOverlayManager() && maBaseRange.isEmpty())
             {
-                const drawinglayer::primitive2d::Primitive2DSequence& rSequence = getOverlayObjectPrimitive2DSequence();
+                const drawinglayer::primitive2d::Primitive2DContainer& rSequence = getOverlayObjectPrimitive2DSequence();
 
-                if(rSequence.hasElements())
+                if(!rSequence.empty())
                 {
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D(getOverlayManager()->getCurrentViewInformation2D());
 
                     const_cast< sdr::overlay::OverlayObject* >(this)->maBaseRange =
-                        drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(rSequence, aViewInformation2D);
+                        rSequence.getB2DRange(aViewInformation2D);
                 }
             }
 

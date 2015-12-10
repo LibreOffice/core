@@ -485,7 +485,7 @@ namespace svgio
             }
         }
 
-        void SvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
             if(Display_none == getDisplay())
             {
@@ -537,12 +537,12 @@ namespace svgio
                         // - all non-terminal nodes (might contain visible nodes down the hierarchy)
                         if( !rGrandChildren.empty() || ( pChildStyles && (Visibility_visible == pChildStyles->getVisibility())) )
                         {
-                            drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
+                            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
                             pCandidate->decomposeSvgNode(aNewTarget, bReferenced);
 
-                            if(aNewTarget.hasElements())
+                            if(!aNewTarget.empty())
                             {
-                                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
+                                rTarget.append(aNewTarget);
                             }
                         }
                      }
@@ -552,7 +552,7 @@ namespace svgio
                      }
                 }
 
-                if(rTarget.hasElements())
+                if(!rTarget.empty())
                 {
                     const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
                     if(pStyles)
@@ -590,7 +590,7 @@ namespace svgio
                                     rTitle,
                                     rDesc));
 
-                            rTarget = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
+                            rTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
                         }
                     }
                 }

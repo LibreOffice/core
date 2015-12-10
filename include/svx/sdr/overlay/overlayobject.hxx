@@ -64,21 +64,21 @@ namespace sdr
             // OverlayManager, do not change Yourself.
             OverlayManager*                                 mpOverlayManager;
 
-            // Primitive2DSequence of the OverlayObject
-            drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
+            // Primitive2DContainer of the OverlayObject
+            drawinglayer::primitive2d::Primitive2DContainer  maPrimitive2DSequence;
 
         protected:
             // access methods to maPrimitive2DSequence. The usage of this methods may allow
             // later thread-safe stuff to be added if needed. Only to be used by getPrimitive2DSequence()
             // implementations for buffering the last decomposition.
-            const drawinglayer::primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
-            void setPrimitive2DSequence(const drawinglayer::primitive2d::Primitive2DSequence& rNew) { maPrimitive2DSequence = rNew; }
+            const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
+            void setPrimitive2DSequence(const drawinglayer::primitive2d::Primitive2DContainer& rNew) { maPrimitive2DSequence = rNew; }
 
-            // the creation method for Primitive2DSequence. Called when getPrimitive2DSequence()
+            // the creation method for Primitive2DContainer. Called when getPrimitive2DSequence()
             // sees that maPrimitive2DSequence is empty. Needs to be supported by all
             // OverlayObject implementations. Default implementation will assert
             // a missing implementation
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+            virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence();
 
             // #i53216# check blink time value range (currently 25 < mnBlinkTime < 10000)
             static sal_uInt32 impCheckBlinkTimeValueRange(sal_uInt64 nBlinkTime);
@@ -123,10 +123,10 @@ namespace sdr
             // get OverlayManager
             OverlayManager* getOverlayManager() const { return mpOverlayManager; }
 
-            // the access method for Primitive2DSequence. Will use createPrimitive2DSequence and
+            // the access method for Primitive2DContainer. Will use createPrimitive2DSequence and
             // setPrimitive2DSequence if needed. Overriding may be used to allow disposal of last
             // created primitives to react on changed circumstances and to re-create primitives
-            virtual drawinglayer::primitive2d::Primitive2DSequence getOverlayObjectPrimitive2DSequence() const;
+            virtual drawinglayer::primitive2d::Primitive2DContainer getOverlayObjectPrimitive2DSequence() const;
 
             // access to visibility state
             bool isVisible() const { return mbIsVisible; }

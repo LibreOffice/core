@@ -167,9 +167,9 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence TextSimplePortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer TextSimplePortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             if(getTextLength())
             {
@@ -185,7 +185,7 @@ namespace drawinglayer
                 if(nCount)
                 {
                     // alloc space for the primitives
-                    aRetval.realloc(nCount);
+                    aRetval.resize(nCount);
 
                     // color-filled polypolygons
                     for(sal_uInt32 a(0L); a < nCount; a++)
@@ -210,7 +210,7 @@ namespace drawinglayer
                             fRotate,
                             TEXTEFFECTSTYLE2D_OUTLINE));
 
-                        aRetval = Primitive2DSequence(&aNewTextEffect, 1);
+                        aRetval = Primitive2DContainer { aNewTextEffect };
                     }
                 }
             }

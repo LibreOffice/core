@@ -94,7 +94,7 @@ namespace drawinglayer
                         a2DHairline.transform(getObjectTransformation());
                         const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
                         const primitive2d::Primitive2DReference xRef(new primitive2d::PolygonHairlinePrimitive2D(a2DHairline, aModifiedColor));
-                        primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, xRef);
+                        maPrimitive2DSequence.push_back(xRef);
                     }
                     break;
                 }
@@ -109,7 +109,7 @@ namespace drawinglayer
                         a2DFill.transform(getObjectTransformation());
                         const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(rPrimitive.getMaterial().getColor()));
                         const primitive2d::Primitive2DReference xRef(new primitive2d::PolyPolygonColorPrimitive2D(a2DFill, aModifiedColor));
-                        primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, xRef);
+                        maPrimitive2DSequence.push_back(xRef);
                     }
                     break;
                 }

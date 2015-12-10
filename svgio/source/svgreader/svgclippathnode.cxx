@@ -98,14 +98,14 @@ namespace svgio
             }
         }
 
-        void SvgClipPathNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgClipPathNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
+            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
 
             // decompose children
             SvgNode::decomposeSvgNode(aNewTarget, bReferenced);
 
-            if(aNewTarget.hasElements())
+            if(!aNewTarget.empty())
             {
                 if(getTransform())
                 {
@@ -115,30 +115,30 @@ namespace svgio
                             *getTransform(),
                             aNewTarget));
 
-                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xRef);
+                    rTarget.push_back(xRef);
                 }
                 else
                 {
                     // append to current target
-                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
+                    rTarget.append(aNewTarget);
                 }
             }
         }
 
         void SvgClipPathNode::apply(
-            drawinglayer::primitive2d::Primitive2DSequence& rContent,
+            drawinglayer::primitive2d::Primitive2DContainer& rContent,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(rContent.hasElements() && Display_none != getDisplay())
+            if(!rContent.empty() && Display_none != getDisplay())
             {
                 const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                drawinglayer::primitive2d::Primitive2DSequence aClipTarget;
+                drawinglayer::primitive2d::Primitive2DContainer aClipTarget;
                 basegfx::B2DPolyPolygon aClipPolyPolygon;
 
                 // get clipPath definition as primitives
                 decomposeSvgNode(aClipTarget, true);
 
-                if(aClipTarget.hasElements())
+                if(!aClipTarget.empty())
                 {
                     // extract filled polygons as base for a mask PolyPolygon
                     drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, true);
@@ -164,10 +164,7 @@ namespace svgio
                     if(objectBoundingBox == getClipPathUnits())
                     {
                         // clip is object-relative, transform using content transformation
-                        const basegfx::B2DRange aContentRange(
-                            drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                                rContent,
-                                aViewInformation2D));
+                        const basegfx::B2DRange aContentRange(rContent.getB2DRange(aViewInformation2D));
 
                         aClipPolyPolygon.transform(
                             basegfx::tools::createScaleTranslateB2DHomMatrix(
@@ -194,8 +191,7 @@ namespace svgio
                         // if the content is completely inside or outside of it; get ranges
                         const basegfx::B2DRange aClipRange(aClipPolyPolygon.getB2DRange());
                         const basegfx::B2DRange aContentRange(
-                            drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                                rContent,
+                            rContent.getB2DRange(
                                 aViewInformation2D));
 
                         if(aClipRange.isInside(aContentRange))
@@ -243,13 +239,13 @@ namespace svgio
                                 aClipPolyPolygon,
                                 rContent));
 
-                        rContent = drawinglayer::primitive2d::Primitive2DSequence(&xEmbedTransparence, 1);
+                        rContent = drawinglayer::primitive2d::Primitive2DContainer { xEmbedTransparence };
                     }
                     else
                     {
                         if(!bAddContent)
                         {
-                            rContent.realloc(0);
+                            rContent.clear();
                         }
                     }
                 }
@@ -257,7 +253,7 @@ namespace svgio
                 {
                     // An empty clipping path will completely clip away the element that had
                     // the clip-path property applied. (Svg spec)
-                    rContent.realloc(0);
+                    rContent.clear();
                 }
             }
         }

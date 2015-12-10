@@ -44,7 +44,7 @@ namespace sdr
             double                                  mfShearX;
             double                                  mfRotation;
 
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
             OverlayBitmapEx(

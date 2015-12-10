@@ -68,7 +68,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfE3dScene::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfE3dScene::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
             // handle ghosted, else the whole 3d group will be encapsulated to a ghosted primitive set (see below)
             const bool bHandleGhostedDisplay(GetObjectContact().DoVisualizeEnteredGroup() && !GetObjectContact().isOutputToPrinter() && rDisplayInfo.IsGhostedDrawModeActive());
@@ -86,9 +86,9 @@ namespace sdr
             // added when sub-groups in 3d will be added one day.
             const ViewContactOfE3dScene& rViewContact = dynamic_cast< ViewContactOfE3dScene& >(GetViewContact());
             const SetOfByte& rVisibleLayers = rDisplayInfo.GetProcessLayers();
-            drawinglayer::primitive2d::Primitive2DSequence xRetval(rViewContact.createScenePrimitive2DSequence(&rVisibleLayers));
+            drawinglayer::primitive2d::Primitive2DContainer xRetval(rViewContact.createScenePrimitive2DSequence(&rVisibleLayers));
 
-            if(xRetval.hasElements())
+            if(!xRetval.empty())
             {
                 // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
                 xRetval = rViewContact.embedToObjectSpecificInformation(xRetval);
@@ -96,11 +96,11 @@ namespace sdr
                 // handle GluePoint
                 if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())
                 {
-                    const drawinglayer::primitive2d::Primitive2DSequence xGlue(GetViewContact().createGluePointPrimitive2DSequence());
+                    const drawinglayer::primitive2d::Primitive2DContainer xGlue(GetViewContact().createGluePointPrimitive2DSequence());
 
-                    if(xGlue.hasElements())
+                    if(!xGlue.empty())
                     {
-                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, xGlue);
+                        xRetval.append(xGlue);
                     }
                 }
 
@@ -117,7 +117,7 @@ namespace sdr
                             xRetval,
                             aBColorModifier));
 
-                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                    xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
                 }
             }
 
@@ -130,7 +130,7 @@ namespace sdr
             return xRetval;
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfE3dScene::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfE3dScene::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
         {
             // To get the VOCs for the contained 3D objects created to get the correct
             // Draw hierarchy and ActionChanged() working properly, travel the DrawHierarchy

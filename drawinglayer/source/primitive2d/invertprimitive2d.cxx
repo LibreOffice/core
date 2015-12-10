@@ -31,7 +31,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         InvertPrimitive2D::InvertPrimitive2D(
-            const Primitive2DSequence& rChildren)
+            const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }

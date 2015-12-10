@@ -35,9 +35,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrRectanglePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DContainer SdrRectanglePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
             // create unit outline polygon
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
@@ -51,7 +51,7 @@ namespace drawinglayer
                 basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getFill(),
@@ -61,7 +61,7 @@ namespace drawinglayer
             {
                 // if no fill and it's a text frame, create a fill for HitTest and
                 // BoundRect fallback
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
                         true,
                         basegfx::B2DPolyPolygon(aUnitOutline),
@@ -74,7 +74,7 @@ namespace drawinglayer
                 basegfx::B2DPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createPolygonLinePrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getLine(),
@@ -84,7 +84,7 @@ namespace drawinglayer
             {
                 // if initially no line is defined and it's not a text frame, create
                 // a line for HitTest and BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(aUnitOutline),
@@ -94,7 +94,7 @@ namespace drawinglayer
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),

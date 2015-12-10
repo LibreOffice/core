@@ -873,13 +873,13 @@ void SdrObject::RecalcBoundRect()
     // central new method which will calculate the BoundRect using primitive geometry
     if(aOutRect.IsEmpty())
     {
-        const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(GetViewContact().getViewIndependentPrimitive2DSequence());
+        const drawinglayer::primitive2d::Primitive2DContainer xPrimitives(GetViewContact().getViewIndependentPrimitive2DSequence());
 
-        if(xPrimitives.hasElements())
+        if(!xPrimitives.empty())
         {
             // use neutral ViewInformation and get the range of the primitives
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-            const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
+            const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
 
             if(!aRange.isEmpty())
             {
@@ -1143,9 +1143,9 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
         // get sequence from clone
         const sdr::contact::ViewContact& rVC(pClone->GetViewContact());
-        const drawinglayer::primitive2d::Primitive2DSequence xSequence(rVC.getViewIndependentPrimitive2DSequence());
+        const drawinglayer::primitive2d::Primitive2DContainer xSequence(rVC.getViewIndependentPrimitive2DSequence());
 
-        if(xSequence.hasElements())
+        if(!xSequence.empty())
         {
             // use neutral ViewInformation
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
@@ -2375,14 +2375,14 @@ SdrObject* SdrObject::GetConnectedNode(bool /*bTail1*/) const
 
 
 void extractLineContourFromPrimitive2DSequence(
-    const drawinglayer::primitive2d::Primitive2DSequence& rxSequence,
+    const drawinglayer::primitive2d::Primitive2DContainer& rxSequence,
     basegfx::B2DPolygonVector& rExtractedHairlines,
     basegfx::B2DPolyPolygonVector& rExtractedLineFills)
 {
     rExtractedHairlines.clear();
     rExtractedLineFills.clear();
 
-    if(rxSequence.hasElements())
+    if(!rxSequence.empty())
     {
         // use neutral ViewInformation
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
@@ -2409,9 +2409,9 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
     {
         basegfx::B2DPolyPolygon aMergedLineFillPolyPolygon;
         basegfx::B2DPolyPolygon aMergedHairlinePolyPolygon;
-        const drawinglayer::primitive2d::Primitive2DSequence xSequence(pRet->GetViewContact().getViewIndependentPrimitive2DSequence());
+        const drawinglayer::primitive2d::Primitive2DContainer xSequence(pRet->GetViewContact().getViewIndependentPrimitive2DSequence());
 
-        if(xSequence.hasElements())
+        if(!xSequence.empty())
         {
             basegfx::B2DPolygonVector aExtractedHairlines;
             basegfx::B2DPolyPolygonVector aExtractedLineFills;

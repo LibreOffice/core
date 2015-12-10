@@ -29,7 +29,7 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayBitmapEx::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayBitmapEx::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DReference aReference(
                 new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
@@ -42,12 +42,12 @@ namespace sdr
 
             if(basegfx::fTools::more(mfAlpha, 0.0))
             {
-                const drawinglayer::primitive2d::Primitive2DSequence aNewTransPrimitiveVector(&aReference, 1L);
+                const drawinglayer::primitive2d::Primitive2DContainer aNewTransPrimitiveVector { aReference };
                 aReference = drawinglayer::primitive2d::Primitive2DReference(
                                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aNewTransPrimitiveVector, mfAlpha));
             }
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+            return drawinglayer::primitive2d::Primitive2DContainer { aReference };
         }
 
         OverlayBitmapEx::OverlayBitmapEx(

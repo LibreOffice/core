@@ -32,7 +32,7 @@ namespace drawinglayer
     {
         MaskPrimitive2D::MaskPrimitive2D(
             const basegfx::B2DPolyPolygon& rMask,
-            const Primitive2DSequence& rChildren)
+            const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren),
             maMask(rMask)
         {

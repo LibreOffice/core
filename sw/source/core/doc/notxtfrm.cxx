@@ -706,11 +706,11 @@ static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInAr
 
 bool paintUsingPrimitivesHelper(
     vcl::RenderContext& rOutputDevice,
-    const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
+    const drawinglayer::primitive2d::Primitive2DContainer& rSequence,
     const basegfx::B2DRange& rSourceRange,
     const basegfx::B2DRange& rTargetRange)
 {
-    if(rSequence.hasElements() && !basegfx::fTools::equalZero(rSourceRange.getWidth()) && !basegfx::fTools::equalZero(rSourceRange.getHeight()))
+    if(!rSequence.empty() && !basegfx::fTools::equalZero(rSourceRange.getWidth()) && !basegfx::fTools::equalZero(rSourceRange.getHeight()))
     {
         if(!basegfx::fTools::equalZero(rTargetRange.getWidth()) && !basegfx::fTools::equalZero(rTargetRange.getHeight()))
         {
@@ -768,7 +768,7 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
             aTargetRange.getRange(),
             aTargetRange.getMinimum()));
 
-    drawinglayer::primitive2d::Primitive2DSequence aContent(1);
+    drawinglayer::primitive2d::Primitive2DContainer aContent(1);
     bool bDone(false);
 
     // #i125171# The mechanism to get lossless jpegs into pdf is based on having the original
@@ -1000,12 +1000,12 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             {
                 basegfx::B2DRange aSourceRange;
 
-                const drawinglayer::primitive2d::Primitive2DSequence aSequence(
+                const drawinglayer::primitive2d::Primitive2DContainer aSequence(
                     ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
                         aXModel,
                         aSourceRange));
 
-                if(aSequence.hasElements() && !aSourceRange.isEmpty())
+                if(!aSequence.empty() && !aSourceRange.isEmpty())
                 {
                     const basegfx::B2DRange aTargetRange(
                         aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),

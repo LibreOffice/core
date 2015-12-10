@@ -49,6 +49,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -799,12 +800,12 @@ namespace sdr { namespace contact {
         typedef ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D  BufferedDecompositionPrimitive2D;
 
     protected:
-        virtual ::drawinglayer::primitive2d::Primitive2DSequence
+        virtual ::drawinglayer::primitive2d::Primitive2DContainer
             get2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const override;
 
-        virtual ::drawinglayer::primitive2d::Primitive2DSequence
+        virtual ::drawinglayer::primitive2d::Primitive2DContainer
             create2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const override;
@@ -1547,7 +1548,7 @@ namespace sdr { namespace contact {
     }
 
 
-    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    ::drawinglayer::primitive2d::Primitive2DContainer LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 1
         ::basegfx::B2DVector aScale, aTranslate;
@@ -1560,7 +1561,7 @@ namespace sdr { namespace contact {
     }
 
 
-    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    ::drawinglayer::primitive2d::Primitive2DContainer LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 1
         ::basegfx::B2DVector aScale, aTranslate;
@@ -1597,7 +1598,7 @@ namespace sdr { namespace contact {
         const drawinglayer::primitive2d::Primitive2DReference xRetval( new ::drawinglayer::primitive2d::ControlPrimitive2D(
             m_aTransformation, xControlModel, rControl.getControl() ) );
 
-        return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
+        return drawinglayer::primitive2d::Primitive2DContainer { xRetval };
     }
 
 
@@ -1684,26 +1685,26 @@ namespace sdr { namespace contact {
     }
 
 
-    drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+    drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
     {
         if ( m_pImpl->isDisposed() )
             // our control already died.
             // TODO: Is it worth re-creating the control? Finally, this is a pathological situation, it means some instance
             // disposed the control though it doesn't own it. So, /me thinks we should not bother here.
-            return drawinglayer::primitive2d::Primitive2DSequence();
+            return drawinglayer::primitive2d::Primitive2DContainer();
 
         if ( GetObjectContact().getViewInformation2D().getViewTransformation().isIdentity() )
             // remove this when #i115754# is fixed
-            return drawinglayer::primitive2d::Primitive2DSequence();
+            return drawinglayer::primitive2d::Primitive2DContainer();
 
         // ignore existing controls which are in alive mode and manually switched to "invisible"
         // #102090# / 2009-06-05 / frank.schoenheit@sun.com
         const ControlHolder& rControl( m_pImpl->getExistentControl() );
         if ( rControl.is() && !rControl.isDesignMode() && !rControl.isVisible() )
-            return drawinglayer::primitive2d::Primitive2DSequence();
+            return drawinglayer::primitive2d::Primitive2DContainer();
 
         ::drawinglayer::primitive2d::Primitive2DReference xPrimitive( new LazyControlCreationPrimitive2D( m_pImpl ) );
-        return ::drawinglayer::primitive2d::Primitive2DSequence( &xPrimitive, 1 );
+        return ::drawinglayer::primitive2d::Primitive2DContainer { xPrimitive };
     }
 
 
@@ -1765,7 +1766,7 @@ namespace sdr { namespace contact {
         // graphical invalidate at all views
         ActionChanged();
 
-        // #i93318# flush Primitive2DSequence to force recreation with updated XControlModel
+        // #i93318# flush Primitive2DContainer to force recreation with updated XControlModel
         // since e.g. background color has changed and existing decompositions are possibly no
         // longer valid. Unfortunately this is not detected from ControlPrimitive2D::operator==
         // since it only has a uno reference to the XControlModel
@@ -1783,10 +1784,10 @@ namespace sdr { namespace contact {
     }
 
 
-    drawinglayer::primitive2d::Primitive2DSequence UnoControlPrintOrPreviewContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const
+    drawinglayer::primitive2d::Primitive2DContainer UnoControlPrintOrPreviewContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const
     {
         if ( !m_pImpl->isPrintableControl() )
-            return drawinglayer::primitive2d::Primitive2DSequence();
+            return drawinglayer::primitive2d::Primitive2DContainer();
         return ViewObjectContactOfUnoControl::createPrimitive2DSequence( rDisplayInfo );
     }
 

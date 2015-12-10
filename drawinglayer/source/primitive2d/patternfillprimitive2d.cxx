@@ -36,11 +36,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PatternFillPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer PatternFillPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
 
-            if(getChildren().hasElements())
+            if(!getChildren().empty())
             {
                 if(!getReferenceRange().isEmpty() && getReferenceRange().getWidth() > 0.0 && getReferenceRange().getHeight() > 0.0)
                 {
@@ -56,8 +56,8 @@ namespace drawinglayer
 
                         // check if content needs to be clipped
                         const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-                        const basegfx::B2DRange aContentRange(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
-                        Primitive2DSequence aContent(getChildren());
+                        const basegfx::B2DRange aContentRange(getChildren().getB2DRange(rViewInformation));
+                        Primitive2DContainer aContent(getChildren());
 
                         if(!aUnitRange.isInside(aContentRange))
                         {
@@ -66,11 +66,11 @@ namespace drawinglayer
                                     basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aUnitRange)),
                                     aContent));
 
-                            aContent = Primitive2DSequence(&xRef, 1);
+                            aContent = Primitive2DContainer { xRef };
                         }
 
                         // resize result
-                        aRetval.realloc(aMatrices.size());
+                        aRetval.resize(aMatrices.size());
 
                         // create one primitive for each matrix
                         for(size_t a(0); a < aMatrices.size(); a++)
@@ -92,7 +92,7 @@ namespace drawinglayer
                                     aMaskTransform,
                                     aRetval));
 
-                            aRetval = Primitive2DSequence(&xRef, 1);
+                            aRetval = Primitive2DContainer { xRef };
                         }
 
                         // embed result in mask
@@ -102,7 +102,7 @@ namespace drawinglayer
                                     getMask(),
                                     aRetval));
 
-                            aRetval = Primitive2DSequence(&xRef, 1);
+                            aRetval = Primitive2DContainer { xRef };
                         }
 
                     }
@@ -114,7 +114,7 @@ namespace drawinglayer
 
         PatternFillPrimitive2D::PatternFillPrimitive2D(
             const basegfx::B2DPolyPolygon& rMask,
-            const Primitive2DSequence& rChildren,
+            const Primitive2DContainer& rChildren,
             const basegfx::B2DRange& rReferenceRange)
         :   BufferedDecompositionPrimitive2D(),
             maMask(rMask),

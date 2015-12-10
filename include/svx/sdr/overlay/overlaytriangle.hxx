@@ -34,7 +34,7 @@ namespace sdr
             basegfx::B2DPoint                       maThirdPosition;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
             OverlayTriangle(

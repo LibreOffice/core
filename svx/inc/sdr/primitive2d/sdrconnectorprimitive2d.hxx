@@ -41,7 +41,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:
             SdrConnectorPrimitive2D(

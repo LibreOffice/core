@@ -33,7 +33,7 @@ namespace drawinglayer
     {
         TransformPrimitive2D::TransformPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
-            const Primitive2DSequence& rChildren)
+            const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren),
             maTransformation(rTransformation)
         {
@@ -53,7 +53,7 @@ namespace drawinglayer
 
         basegfx::B2DRange TransformPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
+            basegfx::B2DRange aRetval(getChildren().getB2DRange(rViewInformation));
             aRetval.transform(getTransformation());
             return aRetval;
         }

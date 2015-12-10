@@ -40,7 +40,7 @@ namespace sdr
             sdr::MasterPageDescriptor& GetMasterPageDescriptor() const;
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
-            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr

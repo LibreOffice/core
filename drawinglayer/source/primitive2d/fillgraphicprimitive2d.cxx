@@ -39,9 +39,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence FillGraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DContainer FillGraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DContainer aRetval;
             const attribute::FillGraphicAttribute& rAttribute = getFillGraphic();
 
             if(!rAttribute.isDefault())
@@ -66,10 +66,10 @@ namespace drawinglayer
 
                             // get matrices and realloc retval
                             aTiling.appendTransformations(aMatrices);
-                            aRetval.realloc(aMatrices.size());
+                            aRetval.resize(aMatrices.size());
 
                             // prepare content primitive
-                            const Primitive2DSequence xSeq = create2DDecompositionOfGraphic(
+                            const Primitive2DContainer xSeq = create2DDecompositionOfGraphic(
                                 rGraphic,
                                 basegfx::B2DHomMatrix());
 

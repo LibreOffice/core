@@ -30,7 +30,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextHierarchyLinePrimitive2D::TextHierarchyLinePrimitive2D(const Primitive2DSequence& rChildren)
+        TextHierarchyLinePrimitive2D::TextHierarchyLinePrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }
@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextHierarchyParagraphPrimitive2D::TextHierarchyParagraphPrimitive2D(const Primitive2DSequence& rChildren)
+        TextHierarchyParagraphPrimitive2D::TextHierarchyParagraphPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }
@@ -64,7 +64,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextHierarchyBulletPrimitive2D::TextHierarchyBulletPrimitive2D(const Primitive2DSequence& rChildren)
+        TextHierarchyBulletPrimitive2D::TextHierarchyBulletPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }
@@ -81,7 +81,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(const Primitive2DSequence& rChildren)
+        TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }
@@ -99,7 +99,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         TextHierarchyFieldPrimitive2D::TextHierarchyFieldPrimitive2D(
-            const Primitive2DSequence& rChildren,
+            const Primitive2DContainer& rChildren,
             const FieldType& rFieldType,
             const OUString& rString)
         :   GroupPrimitive2D(rChildren),
@@ -132,7 +132,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(const Primitive2DSequence& rChildren)
+        TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }

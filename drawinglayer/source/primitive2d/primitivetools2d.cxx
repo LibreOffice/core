@@ -27,7 +27,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence DiscreteMetricDependentPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer DiscreteMetricDependentPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -35,13 +35,13 @@ namespace drawinglayer
             const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
             const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
 
-            if(getBuffered2DDecomposition().hasElements() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
+            if(!getBuffered2DDecomposition().empty() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< DiscreteMetricDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                const_cast< DiscreteMetricDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember new valid DiscreteUnit
                 const_cast< DiscreteMetricDependentPrimitive2D* >(this)->updateDiscreteUnit(fDiscreteUnit);
@@ -59,20 +59,20 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence ViewportDependentPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer ViewportDependentPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // get the current Viewport
             const basegfx::B2DRange& rViewport = rViewInformation.getViewport();
 
-            if(getBuffered2DDecomposition().hasElements() && !rViewport.equal(getViewport()))
+            if(!getBuffered2DDecomposition().empty() && !rViewport.equal(getViewport()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ViewportDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                const_cast< ViewportDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember new valid DiscreteUnit
                 const_cast< ViewportDependentPrimitive2D* >(this)->maViewport = rViewport;
@@ -90,20 +90,20 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence ViewTransformationDependentPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer ViewTransformationDependentPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // get the current ViewTransformation
             const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
 
-            if(getBuffered2DDecomposition().hasElements() && rViewTransformation != getViewTransformation())
+            if(!getBuffered2DDecomposition().empty() && rViewTransformation != getViewTransformation())
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                const_cast< ViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember new valid ViewTransformation
                 const_cast< ViewTransformationDependentPrimitive2D* >(this)->maViewTransformation = rViewTransformation;
@@ -121,29 +121,29 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence ObjectAndViewTransformationDependentPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer ObjectAndViewTransformationDependentPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // get the current ViewTransfromation
             const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
 
-            if(getBuffered2DDecomposition().hasElements() && rViewTransformation != getViewTransformation())
+            if(!getBuffered2DDecomposition().empty() && rViewTransformation != getViewTransformation())
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ObjectAndViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                const_cast< ObjectAndViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
             }
 
             // get the current ObjectTransformation
             const basegfx::B2DHomMatrix& rObjectTransformation = rViewInformation.getObjectTransformation();
 
-            if(getBuffered2DDecomposition().hasElements() && rObjectTransformation != getObjectTransformation())
+            if(!getBuffered2DDecomposition().empty() && rObjectTransformation != getObjectTransformation())
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ObjectAndViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                const_cast< ObjectAndViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember new valid ViewTransformation, and ObjectTransformation
                 const_cast< ObjectAndViewTransformationDependentPrimitive2D* >(this)->maViewTransformation = rViewTransformation;

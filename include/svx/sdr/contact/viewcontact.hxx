@@ -46,10 +46,10 @@ private:
     // Registering and de-registering is done in the VOC constructors/destructors.
     std::vector< ViewObjectContact* >               maViewObjectContactVector;
 
-    // Primitive2DSequence of the ViewContact. This contains all necessary information
+    // Primitive2DContainer of the ViewContact. This contains all necessary information
     // for the graphical visualisation and needs to be supported by all VCs which
     // can be visualized.
-    drawinglayer::primitive2d::Primitive2DSequence  mxViewIndependentPrimitive2DSequence;
+    drawinglayer::primitive2d::Primitive2DContainer    mxViewIndependentPrimitive2DSequence;
 
     // A new ViewObjectContact was created and shall be remembered.
     void AddViewObjectContact(ViewObjectContact& rVOContact);
@@ -77,10 +77,10 @@ protected:
     // visualisation method and will also be used for BoundRect computations in the long run.
     // This means it's always an error when the default implementation is called and thus gets
     // asserted there
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const;
 
-    // method for flushing View Independent Primitive2DSequence for VOC implementations
-    void flushViewIndependentPrimitive2DSequence() { mxViewIndependentPrimitive2DSequence.realloc(0); }
+    // method for flushing View Independent Primitive2DContainer for VOC implementations
+    void flushViewIndependentPrimitive2DSequence() { mxViewIndependentPrimitive2DSequence.clear(); }
 
     // basic constructor. Since this is a base class only, it shall
     // never be called directly
@@ -122,15 +122,15 @@ public:
 
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
-    drawinglayer::primitive2d::Primitive2DSequence getViewIndependentPrimitive2DSequence() const;
+    drawinglayer::primitive2d::Primitive2DContainer getViewIndependentPrimitive2DSequence() const;
 
     // add Gluepoints (if available)
-    virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createGluePointPrimitive2DSequence() const;
 
     // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
     // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
     // for 3D scenes
-    virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const;
+    virtual drawinglayer::primitive2d::Primitive2DContainer embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DContainer& rSource) const;
 
     virtual basegfx::B2DRange getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const;
 

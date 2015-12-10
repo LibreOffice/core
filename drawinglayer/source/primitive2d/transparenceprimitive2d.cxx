@@ -31,8 +31,8 @@ namespace drawinglayer
     namespace primitive2d
     {
         TransparencePrimitive2D::TransparencePrimitive2D(
-            const Primitive2DSequence& rChildren,
-            const Primitive2DSequence& rTransparence)
+            const Primitive2DContainer& rChildren,
+            const Primitive2DContainer& rTransparence)
         :   GroupPrimitive2D(rChildren),
             maTransparence(rTransparence)
         {

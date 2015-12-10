@@ -237,7 +237,7 @@ namespace drawinglayer
             return xRetval;
         }
 
-        Primitive2DSequence ControlPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer ControlPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // try to create a bitmap decomposition. If that fails for some reason,
             // at least create a replacement decomposition.
@@ -248,7 +248,7 @@ namespace drawinglayer
                 xReference = createPlaceholderDecomposition(rViewInformation);
             }
 
-            return Primitive2DSequence(&xReference, 1L);
+            return Primitive2DContainer { xReference };
         }
 
         ControlPrimitive2D::ControlPrimitive2D(
@@ -329,23 +329,23 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence ControlPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer ControlPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // this primitive is view-dependent related to the scaling. If scaling has changed,
             // destroy existing decomposition. To detect change, use size of unit size in view coordinates
             ::osl::MutexGuard aGuard( m_aMutex );
             const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
-            if(getBuffered2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().empty())
             {
                 if(!maLastViewScaling.equal(aNewScaling))
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< ControlPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                    const_cast< ControlPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
                 }
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 // remember ViewTransformation
                 const_cast< ControlPrimitive2D* >(this)->maLastViewScaling = aNewScaling;

@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <comphelper/sequence.hxx>
 
 
 
@@ -42,11 +43,11 @@ namespace drawinglayer
         {
         }
 
-        void BaseProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
+        void BaseProcessor2D::process(const primitive2d::Primitive2DContainer& rSource)
         {
-            if(rSource.hasElements())
+            if(!rSource.empty())
             {
-                const sal_Int32 nCount(rSource.getLength());
+                const sal_Int32 nCount(rSource.size());
 
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
@@ -67,7 +68,7 @@ namespace drawinglayer
                         {
                             // unknown implementation, use UNO API call instead and process recursively
                             const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
-                            process(xReference->getDecomposition(rViewParameters));
+                            process(comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(xReference->getDecomposition(rViewParameters)));
                         }
                     }
                 }

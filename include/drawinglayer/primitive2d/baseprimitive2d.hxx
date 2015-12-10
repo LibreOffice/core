@@ -52,6 +52,24 @@ namespace drawinglayer { namespace primitive2d {
     typedef cppu::WeakComponentImplHelper1< css::graphic::XPrimitive2D > BasePrimitive2DImplBase;
     typedef css::uno::Reference< css::graphic::XPrimitive2D > Primitive2DReference;
     typedef css::uno::Sequence< Primitive2DReference > Primitive2DSequence;
+
+
+    class DRAWINGLAYER_DLLPUBLIC SAL_WARN_UNUSED Primitive2DContainer : public std::vector< Primitive2DReference >
+    {
+    public:
+        explicit Primitive2DContainer() {}
+        explicit Primitive2DContainer( size_type count ) : std::vector< Primitive2DReference >(count) {}
+        Primitive2DContainer( const Primitive2DContainer& other ) : std::vector< Primitive2DReference >(other) {}
+        Primitive2DContainer( const std::vector< Primitive2DReference >& other ) : std::vector< Primitive2DReference >(other) {}
+        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : std::vector< Primitive2DReference >(init) {}
+
+        void append(const Primitive2DContainer& rSource);
+        void append(const Primitive2DSequence& rSource);
+        bool operator==(const Primitive2DContainer& rB) const;
+        bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
+        basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
+        Primitive2DContainer maybeInvert(bool bInvert = false) const;
+    };
 }}
 
 
@@ -163,7 +181,7 @@ namespace drawinglayer
             virtual sal_uInt32 getPrimitive2DID() const = 0;
 
             /// The default implementation will return an empty sequence
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
 
             // Methods from XPrimitive2D
@@ -223,20 +241,20 @@ namespace drawinglayer
         {
         private:
             /// a sequence used for buffering the last create2DDecomposition() result
-            Primitive2DSequence                             maBuffered2DDecomposition;
+            Primitive2DContainer                             maBuffered2DDecomposition;
 
         protected:
             /** access methods to maBuffered2DDecomposition. The usage of this methods may allow
                 later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
                 implementations for buffering the last decomposition.
              */
-            const Primitive2DSequence& getBuffered2DDecomposition() const { return maBuffered2DDecomposition; }
-            void setBuffered2DDecomposition(const Primitive2DSequence& rNew) { maBuffered2DDecomposition = rNew; }
+            const Primitive2DContainer& getBuffered2DDecomposition() const { return maBuffered2DDecomposition; }
+            void setBuffered2DDecomposition(const Primitive2DContainer& rNew) { maBuffered2DDecomposition = rNew; }
 
             /** method which is to be used to implement the local decomposition of a 2D primitive. The default
                 implementation will just return an empty decomposition
              */
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             // constructor/destructor
@@ -248,7 +266,7 @@ namespace drawinglayer
                 overridden and the ViewInformation2D for the last decomposition need to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -261,8 +279,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /// support to handle a sequence of primitives as stl vector and convert it during creation
-        typedef ::std::vector< BasePrimitive2D* > Primitive2DVector;
-        Primitive2DSequence DRAWINGLAYER_DLLPUBLIC Primitive2DVectorToPrimitive2DSequence(const Primitive2DVector& rSource, bool bInvert = false);
+        Primitive2DSequence DRAWINGLAYER_DLLPUBLIC Primitive2DVectorToPrimitive2DSequence(const Primitive2DContainer& rSource, bool bInvert = false);
 
         /// get B2DRange from a given Primitive2DReference
         basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
@@ -280,6 +297,7 @@ namespace drawinglayer
 
         /// concatenate sequence
         void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource);
+        void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DContainer& rSource);
 
         /// concatenate single Primitive2D
         void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource);

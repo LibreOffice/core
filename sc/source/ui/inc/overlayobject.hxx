@@ -33,7 +33,7 @@ public:
     virtual void stripeDefinitionHasChanged() override;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
 private:
     ::basegfx::B2DRange maRange;
