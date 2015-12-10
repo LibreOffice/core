@@ -4279,7 +4279,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // tdf34555: ortho was always reset before being used in EndSdrDrag
         // Now, it is reset only if not in Crop mode.
-        if (pSdrView->GetDragMode() != SDRDRAG_CROP)
+        if (pSdrView->GetDragMode() != SDRDRAG_CROP && !rMEvt.IsShift())
             pSdrView->SetOrtho(false);
 
         if ( pSdrView->MouseButtonUp( rMEvt,this ) )
