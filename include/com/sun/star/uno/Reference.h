@@ -408,7 +408,7 @@ public:
         @return UNacquired interface pointer
     */
     inline interface_type * SAL_CALL operator -> () const {
-        assert(_pInterface != 0);
+        assert(_pInterface != NULL);
         return castFromXInterface(_pInterface);
     }
 

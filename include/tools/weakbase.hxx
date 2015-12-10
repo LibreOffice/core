@@ -137,7 +137,7 @@ inline WeakReference<reference_type>& WeakReference<reference_type>::operator= (
 template< class reference_type >
 inline WeakBase< reference_type >::WeakBase()
 {
-    mpWeakConnection = 0;
+    mpWeakConnection = nullptr;
 }
 
 template< class reference_type >
@@ -147,7 +147,7 @@ inline WeakBase< reference_type >::~WeakBase()
     {
         mpWeakConnection->mpReference = 0;
         mpWeakConnection->release();
-        mpWeakConnection = 0;
+        mpWeakConnection = nullptr;
     }
 }
 

@@ -688,26 +688,26 @@ public:
     T * operator->()
     {
         T * pImpl = dynamic_page_cast<T>(m_xPage.get());
-        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::operator*(): Null pointer");
+        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
         return pImpl;
     }
     T const * operator->() const
     {
         T const * pImpl = dynamic_page_cast<T>(m_xPage.get());
-        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::operator*(): Null pointer");
+        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
         return pImpl;
     }
 
     T & operator*()
     {
         T * pImpl = dynamic_page_cast<T>(m_xPage.get());
-        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::operator*(): Null pointer");
+        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
         return (*pImpl);
     }
     T const & operator*() const
     {
         T const * pImpl = dynamic_page_cast<T>(m_xPage.get());
-        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::operator*(): Null pointer");
+        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
         return (*pImpl);
     }
 
@@ -719,7 +719,7 @@ public:
         pHead->guard(nAddr);
 
         T * pImpl = dynamic_page_cast<T>(pHead);
-        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::guard(): Null pointer");
+        OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::guard(): Null pointer");
         pImpl->guard();
 
         return store_E_None;

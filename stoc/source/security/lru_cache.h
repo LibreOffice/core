@@ -95,7 +95,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
 {
     m_key2element.clear();
     delete [] m_block;
-    m_block = 0;
+    m_block = NULL;
     m_size = size;
 
     if (0 < m_size)

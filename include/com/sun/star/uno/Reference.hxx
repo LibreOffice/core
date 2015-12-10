@@ -113,7 +113,7 @@ inline Reference< interface_type >::~Reference()
 template< class interface_type >
 inline Reference< interface_type >::Reference()
 {
-    _pInterface = 0;
+    _pInterface = NULL;
 }
 
 template< class interface_type >
@@ -221,7 +221,7 @@ inline void Reference< interface_type >::clear()
     if (_pInterface)
     {
         XInterface * const pOld = _pInterface;
-        _pInterface = 0;
+        _pInterface = NULL;
         pOld->release();
     }
 }
@@ -236,7 +236,7 @@ inline bool Reference< interface_type >::set(
     _pInterface = castToXInterface(pInterface);
     if (pOld)
         pOld->release();
-    return (0 != pInterface);
+    return (NULL != pInterface);
 }
 
 template< class interface_type >
@@ -247,7 +247,7 @@ inline bool Reference< interface_type >::set(
     _pInterface = castToXInterface(pInterface);
     if (pOld)
         pOld->release();
-    return (0 != pInterface);
+    return (NULL != pInterface);
 }
 
 template< class interface_type >

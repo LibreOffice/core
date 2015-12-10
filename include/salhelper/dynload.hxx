@@ -108,7 +108,7 @@ public:
     /// Default constructor
     ODynamicLoader()
     {
-        m_pLoader = 0;
+        m_pLoader = NULL;
     }
 
     /** Constructor, loads the library if necessary otherwise the refernece count will

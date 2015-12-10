@@ -473,7 +473,7 @@ template< typename ItemWrpT, typename ControlWrpT >
 void ItemControlConnection< ItemWrpT, ControlWrpT >::Reset( const SfxItemSet& rItemSet )
 {
     const ItemType* pItem = maItemWrp.GetUniqueItem( rItemSet );
-    mxCtrlWrp->SetControlDontKnow( pItem == 0 );
+    mxCtrlWrp->SetControlDontKnow( pItem == nullptr );
     if( pItem )
         mxCtrlWrp->SetControlValue( maItemWrp.GetItemValue( *pItem ) );
 }

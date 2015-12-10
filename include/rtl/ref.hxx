@@ -153,7 +153,7 @@ public:
         if (m_pBody)
         {
             reference_type * const pOld = m_pBody;
-            m_pBody = 0;
+            m_pBody = NULL;
             pOld->release();
         }
         return *this;
@@ -174,7 +174,7 @@ public:
      */
     inline reference_type * SAL_CALL operator->() const
     {
-        assert(m_pBody != 0);
+        assert(m_pBody != NULL);
         return m_pBody;
     }
 
@@ -183,7 +183,7 @@ public:
     */
     inline reference_type & SAL_CALL operator*() const
     {
-        assert(m_pBody != 0);
+        assert(m_pBody != NULL);
         return *m_pBody;
     }
 
@@ -192,7 +192,7 @@ public:
      */
     inline bool SAL_CALL is() const
     {
-        return (m_pBody != 0);
+        return (m_pBody != NULL);
     }
 
 

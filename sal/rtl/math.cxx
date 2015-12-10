@@ -296,7 +296,7 @@ inline void doubleToString(StringT ** pResult,
     {
         pBuf = static_cast< typename T::Char * >(
             rtl_allocateMemory(nBuf * sizeof (typename T::Char)));
-        OSL_ENSURE(pBuf != 0, "Out of memory");
+        OSL_ENSURE(pBuf != nullptr, "Out of memory");
     }
     else
         pBuf = aBuf;
@@ -787,7 +787,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
 
     if (pStatus != nullptr)
         *pStatus = eStatus;
-    if (pParsedEnd != 0)
+    if (pParsedEnd != nullptr)
         *pParsedEnd = p == p0 ? pBegin : p;
 
     return fVal;

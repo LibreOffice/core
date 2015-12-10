@@ -44,6 +44,12 @@ public:
 
     bool VisitGNUNullExpr(GNUNullExpr const * expr);
 
+    bool VisitBinaryOperator(BinaryOperator const * expr);
+
+    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr);
+
+    // bool shouldVisitTemplateInstantiations() const { return true; }
+
 private:
     bool isInLokIncludeFile(SourceLocation spellingLocation) const;
 
@@ -108,6 +114,68 @@ bool Nullptr::VisitGNUNullExpr(GNUNullExpr const * expr) {
         return true;
     }
     handleNull(expr, nullptr, Expr::NPCK_GNUNull);
+    return true;
+}
+
+bool Nullptr::VisitBinaryOperator(BinaryOperator const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    Expr const * e;
+    switch (expr->getOpcode()) {
+    case BO_EQ:
+    case BO_NE:
+        if (expr->getRHS()->getType()->isPointerType()) {
+            e = expr->getLHS();
+            break;
+        }
+        // fall through
+    case BO_Assign:
+        if (expr->getLHS()->getType()->isPointerType()) {
+            e = expr->getRHS();
+            break;
+        }
+        // fall through
+    default:
+        return true;
+    }
+    //TODO: detect NPCK_ZeroExpression where appropriate
+    auto const lit = dyn_cast<IntegerLiteral>(e->IgnoreParenImpCasts());
+    if (lit == nullptr || lit->getValue().getBoolValue()) {
+        return true;
+    }
+    handleNull(e, nullptr, Expr::NPCK_ZeroLiteral);
+    return true;
+}
+
+bool Nullptr::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    Expr const * e;
+    switch (expr->getOperator()) {
+    case OO_EqualEqual:
+    case OO_ExclaimEqual:
+        if (expr->getArg(1)->getType()->isPointerType()) {
+            e = expr->getArg(0);
+            break;
+        }
+        // fall through
+    case OO_Equal:
+        if (expr->getArg(0)->getType()->isPointerType()) {
+            e = expr->getArg(1);
+            break;
+        }
+        // fall through
+    default:
+        return true;
+    }
+    //TODO: detect NPCK_ZeroExpression where appropriate
+    auto const lit = dyn_cast<IntegerLiteral>(e->IgnoreParenImpCasts());
+    if (lit == nullptr || lit->getValue().getBoolValue()) {
+        return true;
+    }
+    handleNull(e, nullptr, Expr::NPCK_ZeroLiteral);
     return true;
 }
 

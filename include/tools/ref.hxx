@@ -36,24 +36,24 @@ public:
 
     SvRef(SvRef const & rObj): pObj(rObj.pObj)
     {
-        if (pObj != 0) pObj->AddNextRef();
+        if (pObj != nullptr) pObj->AddNextRef();
     }
 
     SvRef(T * pObjP): pObj(pObjP)
     {
-        if (pObj != 0) pObj->AddFirstRef();
+        if (pObj != nullptr) pObj->AddFirstRef();
     }
 
     ~SvRef()
     {
-        if (pObj != 0) pObj->ReleaseRef();
+        if (pObj != nullptr) pObj->ReleaseRef();
     }
 
     void Clear()
     {
-        if (pObj != 0) {
+        if (pObj != nullptr) {
             T * pRefObj = pObj;
-            pObj = 0;
+            pObj = nullptr;
             pRefObj->ReleaseRef();
         }
     }
@@ -65,21 +65,21 @@ public:
         }
         T * pRefObj = pObj;
         pObj = rObj.pObj;
-        if (pRefObj != 0) {
+        if (pRefObj != nullptr) {
             pRefObj->ReleaseRef();
         }
         return *this;
     }
 
-    bool Is()         const { return pObj != 0; }
+    bool Is()         const { return pObj != nullptr; }
 
     T * get()         const { return pObj; }
 
     T * operator &()  const { return pObj; }
 
-    T * operator ->() const { assert(pObj != 0); return pObj; }
+    T * operator ->() const { assert(pObj != nullptr); return pObj; }
 
-    T & operator *()  const { assert(pObj != 0); return *pObj; }
+    T & operator *()  const { assert(pObj != nullptr); return *pObj; }
 
     operator T *()    const { return pObj; }
 
@@ -157,7 +157,7 @@ class SvCompatWeakHdl : public SvRefBase
     SvCompatWeakHdl( T* pObj ) : _pObj( pObj ) {}
 
 public:
-    void  ResetWeakBase( ) { _pObj = 0; }
+    void  ResetWeakBase( ) { _pObj = nullptr; }
     T*    GetObj()        { return _pObj; }
 };
 

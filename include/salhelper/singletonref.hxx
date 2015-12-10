@@ -128,7 +128,7 @@ class SingletonRef
             if (m_nRef == 0)
             {
                 delete m_pInstance;
-                m_pInstance = 0;
+                m_pInstance = NULL;
             }
             // <- GLOBAL SAFE
         }

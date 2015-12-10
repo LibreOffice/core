@@ -256,14 +256,14 @@ namespace myImplHelpers
 
         //If we've used it once, don't reuse it
         if (pRet && (maUsedStyles.end() != maUsedStyles.find(pRet)))
-            pRet = 0;
+            pRet = nullptr;
 
         if (!pRet)
         {
             pRet = maHelper.GetStyle(rName);
             //If we've used it once, don't reuse it
             if (pRet && (maUsedStyles.end() != maUsedStyles.find(pRet)))
-                pRet = 0;
+                pRet = nullptr;
         }
 
         bool bStyExist = pRet != nullptr;

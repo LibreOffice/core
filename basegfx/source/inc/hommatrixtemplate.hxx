@@ -200,7 +200,7 @@ namespace basegfx
                     if(!bNecessary)
                     {
                         delete mpLine;
-                        mpLine = 0L;
+                        mpLine = nullptr;
                     }
                 }
             }

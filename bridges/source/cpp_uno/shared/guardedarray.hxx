@@ -30,7 +30,7 @@ public:
 
     T * get() const { return pointer; }
 
-    T * release() { T * p = pointer; pointer = 0; return p; }
+    T * release() { T * p = pointer; pointer = nullptr; return p; }
 
 private:
     GuardedArray(GuardedArray &) = delete;
