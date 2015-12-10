@@ -79,7 +79,7 @@ enum class INetProtocol
     LAST = Cmis
 };
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED INetURLObject
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetURLObject
 {
 public:
     // Get- and Set-Methods:

@@ -25,7 +25,7 @@
 
 #define UNIQUEINDEX_ENTRY_NOTFOUND   CONTAINER_ENTRY_NOTFOUND
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED UniqueIndexImpl
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC UniqueIndexImpl
 {
 private:
     std::map<sal_uInt32, void*> maMap;

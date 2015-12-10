@@ -61,7 +61,7 @@ namespace svx
 
     /** class encapsulating the css::sdb::DataAccessDescriptor service.
     */
-    class SVX_DLLPUBLIC SAL_WARN_UNUSED ODataAccessDescriptor
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC ODataAccessDescriptor
     {
     protected:
         ODADescriptorImpl*      m_pImpl;

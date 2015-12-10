@@ -41,7 +41,7 @@ class ListBox;
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFillToolBoxControl : public SfxToolBoxControl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFillToolBoxControl : public SfxToolBoxControl
 {
 private:
     std::unique_ptr< XFillStyleItem >    mpStyleItem;

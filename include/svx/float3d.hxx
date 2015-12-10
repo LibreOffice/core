@@ -53,7 +53,7 @@ class SvxConvertTo3DItem;
 
 struct Svx3DWinImpl;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DWin : public SfxDockingWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DWin : public SfxDockingWindow
 {
     friend class        Svx3DChildWindow;
     friend class        Svx3DCtrlItem;

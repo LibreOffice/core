@@ -32,7 +32,7 @@ namespace svx
 /**
 */
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FormatPaintBrushToolBoxControl : public SfxToolBoxControl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FormatPaintBrushToolBoxControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();

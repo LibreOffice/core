@@ -39,7 +39,7 @@ class SvtFontOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtFontOptions : public utl::detail::Options
 {
     public:
         /*-****************************************************************************************************

@@ -27,7 +27,7 @@ class SvStream;
 
 // This class uses the platform defined type 'long' as valid values but do all
 // calculations using sal_Int64 with checks for 'long' overflows.
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction
 {
     struct Impl;
 

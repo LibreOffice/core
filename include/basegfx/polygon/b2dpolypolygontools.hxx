@@ -106,7 +106,7 @@ namespace basegfx
         /** Helper class to transport PointIndices to a PolyPolygon,
             with an operator< for convenient sorting in a std::set usage
          */
-        class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED PointIndex
+        class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC PointIndex
         {
         private:
             sal_uInt32 mnPolygonIndex;

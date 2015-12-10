@@ -32,7 +32,7 @@ class SdrObjList;
 |* SvxXConnectionPreview
 |*
 \************************************************************************/
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxXConnectionPreview : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXConnectionPreview : public Control
 {
  friend class SvxConnectionPage;
 

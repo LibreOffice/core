@@ -32,7 +32,7 @@
 
 namespace tools {
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Time
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Time
 {
 private:
     sal_Int64       nTime;

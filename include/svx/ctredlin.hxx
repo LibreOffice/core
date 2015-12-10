@@ -42,7 +42,7 @@ enum class SvxRedlinDateMode
 };
 
 /// Struct for sorting data.
-class SVX_DLLPUBLIC SAL_WARN_UNUSED RedlinData
+class SAL_WARN_UNUSED SVX_DLLPUBLIC RedlinData
 {
 public:
                     RedlinData();
@@ -83,7 +83,7 @@ public:
     SvLBoxItem*     Create() const override;
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxRedlinTable : public SvSimpleTable
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable : public SvSimpleTable
 {
     using SvTabListBox::InsertEntry;
 
@@ -166,7 +166,7 @@ public:
 };
 
 /// Tabpage with the filter text entries etc.
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxTPFilter: public TabPage
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter: public TabPage
 {
 private:
 
@@ -272,7 +272,7 @@ public:
 };
 
 /// Tabpage with the redlining entries.
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxTPView : public TabPage
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPView : public TabPage
 {
 private:
 
@@ -330,7 +330,7 @@ public:
 
 
 //  Redlining - Control (Accept- Changes)
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxAcceptChgCtr
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxAcceptChgCtr
     : public TabControl
     , public VclBuilderContainer
 {

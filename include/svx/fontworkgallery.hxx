@@ -60,7 +60,7 @@ public:
     sal_Int32 getScale() const;
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FontWorkGalleryDialog : public ModalDialog
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 {
     VclPtr<ValueSet>    mpCtlFavorites;
     VclPtr<OKButton>    mpOKButton;

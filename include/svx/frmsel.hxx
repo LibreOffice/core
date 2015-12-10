@@ -80,7 +80,7 @@ enum FrameBorderState
 
 
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FrameSelector : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameSelector : public Control
 {
 public:
     FrameSelector(vcl::Window* pParent);

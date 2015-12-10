@@ -69,7 +69,7 @@ namespace o3tl
 class SvxRectCtlAccessibleContext;
 class SvxPixelCtlAccessible;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxRectCtl : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public Control
 {
 private:
     SVX_DLLPRIVATE void             InitSettings(vcl::RenderContext& rRenderContext);
@@ -146,7 +146,7 @@ public:
 |* Preview control for the display of bitmaps
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBitmapCtl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapCtl
 {
 protected:
     sal_uInt16      nLines;
@@ -169,7 +169,7 @@ public:
 |* Control for editing bitmaps
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxPixelCtl : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPixelCtl : public Control
 {
 private:
     using OutputDevice::SetLineColor;
@@ -232,7 +232,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED ColorLB : public ColorListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorLB : public ColorListBox
 {
 
 public:
@@ -247,7 +247,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED HatchingLB : public ListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC HatchingLB : public ListBox
 {
     XHatchListRef mpList;
 public:
@@ -261,7 +261,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED GradientLB : public ListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC GradientLB : public ListBox
 {
     XGradientListRef mpList;
 public:
@@ -277,7 +277,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED BitmapLB : public ListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
     explicit BitmapLB(vcl::Window* pParent, WinBits aWB);
@@ -295,7 +295,7 @@ private:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FillAttrLB : public ColorListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FillAttrLB : public ColorListBox
 {
 private:
     BitmapEx        maBitmapEx;
@@ -310,7 +310,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FillTypeLB : public ListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FillTypeLB : public ListBox
 {
 
 public:
@@ -322,7 +322,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED LineLB : public ListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC LineLB : public ListBox
 {
 private:
     /// bitfield
@@ -343,7 +343,7 @@ public:
 
 /************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED LineEndLB : public ListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC LineEndLB : public ListBox
 {
 
 public:
@@ -401,7 +401,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxXLinePreview : public SvxPreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXLinePreview : public SvxPreviewBase
 {
 private:
     SdrPathObj*                                     mpLineObjA;
@@ -434,7 +434,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxXRectPreview : public SvxPreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview : public SvxPreviewBase
 {
 private:
     SdrObject*                                      mpRectangleObject;
@@ -456,7 +456,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxXShadowPreview : public SvxPreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview : public SvxPreviewBase
 {
 private:
     Point maShadowOffset;

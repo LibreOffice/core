@@ -58,7 +58,7 @@ struct ArrayImpl;
     whether to mirror the double frame styles, and whether to swap diagonal
     frame borders.
  */
-class SVX_DLLPUBLIC SAL_WARN_UNUSED Array
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Array
 {
 public:
     /** Constructs an empty array. */

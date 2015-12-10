@@ -26,7 +26,7 @@
 
 class SvStream;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxB3DVectorItem : public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxB3DVectorItem : public SfxPoolItem
 {
     basegfx::B3DVector  aVal;
 

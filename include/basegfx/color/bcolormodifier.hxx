@@ -56,7 +56,7 @@ namespace basegfx
         All usages should handle instances of BColorModifier encapsulated
         into these shared pointers.
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier
     {
     private:
         BColorModifier(const BColorModifier&) = delete;
@@ -89,7 +89,7 @@ namespace basegfx
 {
     /** convert color to gray
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_gray : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gray : public BColorModifier
     {
     private:
     protected:
@@ -117,7 +117,7 @@ namespace basegfx
 
         returns a color where red green and blue are inverted using 1.0 - n
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_invert : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_invert : public BColorModifier
     {
     private:
     protected:
@@ -149,7 +149,7 @@ namespace basegfx
         This derivation is used for the svg importer and does exactly what SVG
         defines for this needed case.
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_luminance_to_alpha : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_luminance_to_alpha : public BColorModifier
     {
     private:
     protected:
@@ -179,7 +179,7 @@ namespace basegfx
         given color, replacing everything. Useful e.g. for unified shadow
         creation
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_replace : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_replace : public BColorModifier
     {
     private:
         ::basegfx::BColor           maBColor;
@@ -216,7 +216,7 @@ namespace basegfx
 
         col * (1 - f) + aSourceColor * f
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_interpolate : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_interpolate : public BColorModifier
     {
     private:
         ::basegfx::BColor           maBColor;
@@ -254,7 +254,7 @@ namespace basegfx
         returns black when the luminance of the given color is less than
         the given treshhold value in the range [0.0 .. 1.0], else white
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_black_and_white : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_black_and_white : public BColorModifier
     {
     private:
         double                      mfValue;
@@ -291,7 +291,7 @@ namespace basegfx
 
         col(r,g,b) = clamp(pow(col(r,g,b), 1.0 / gamma), 0.0, 1.0)
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_gamma : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gamma : public BColorModifier
     {
     private:
         double                      mfValue;
@@ -329,7 +329,7 @@ namespace basegfx
         - be able to cover a bigger change range utilizing the combination
         - allow execution by a small, common, precalculated table
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_RGBLuminanceContrast : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_RGBLuminanceContrast : public BColorModifier
     {
     private:
         double                      mfRed;

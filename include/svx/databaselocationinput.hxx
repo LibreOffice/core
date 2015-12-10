@@ -45,7 +45,7 @@ namespace svx
 
         This helper class controls such two UI elements.
     */
-    class SVX_DLLPUBLIC SAL_WARN_UNUSED DatabaseLocationInputController
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC DatabaseLocationInputController
     {
     public:
         DatabaseLocationInputController(

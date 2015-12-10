@@ -35,7 +35,7 @@ class E3dObject;
 
 enum class SvxPreviewObjectType { SPHERE, CUBE };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DPreviewControl : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DPreviewControl : public Control
 {
 protected:
     FmFormModel*            mpModel;
@@ -63,7 +63,7 @@ public:
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DLightControl : public Svx3DPreviewControl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
 {
     // Callback for interactive changes
     Link<Svx3DLightControl*,void>  maChangeCallback;
@@ -135,7 +135,7 @@ public:
     basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxLightCtl3D : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLightCtl3D : public Control
 {
 private:
     // local controls

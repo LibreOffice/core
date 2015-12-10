@@ -163,7 +163,7 @@ enum FMSEARCH_MODE { SM_BRUTE, SM_ALLOWSCHEDULE, SM_USETHREAD };
 
 typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchEngine
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
 {
     friend class FmSearchThread;
 

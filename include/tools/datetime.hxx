@@ -26,7 +26,7 @@
 
 #include <iomanip>
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED DateTime : public Date, public tools::Time
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC DateTime : public Date, public tools::Time
 {
 public:
     enum DateTimeInitSystem

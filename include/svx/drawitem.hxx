@@ -25,7 +25,7 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxColorListItem: public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxColorListItem: public SfxPoolItem
 {
     XColorListRef     pColorList;
 
@@ -50,7 +50,7 @@ public:
     XColorListRef           GetColorList() const { return pColorList; }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxGradientListItem : public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxGradientListItem : public SfxPoolItem
 {
     XGradientListRef  pGradientList;
 
@@ -75,7 +75,7 @@ public:
     XGradientListRef        GetGradientList() const { return pGradientList; }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxHatchListItem : public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxHatchListItem : public SfxPoolItem
 {
     XHatchListRef     pHatchList;
 
@@ -99,7 +99,7 @@ public:
     XHatchListRef           GetHatchList() const { return pHatchList; }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBitmapListItem : public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapListItem : public SfxPoolItem
 {
     XBitmapListRef    pBitmapList;
 
@@ -124,7 +124,7 @@ public:
     XBitmapListRef          GetBitmapList() const { return pBitmapList; }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxDashListItem : public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDashListItem : public SfxPoolItem
 {
     XDashListRef      pDashList;
 
@@ -149,7 +149,7 @@ public:
     XDashListRef            GetDashList() const { return pDashList; }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxLineEndListItem : public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineEndListItem : public SfxPoolItem
 {
     XLineEndListRef   pLineEndList;
 

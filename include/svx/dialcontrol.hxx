@@ -75,7 +75,7 @@ private:
     -   Shows the value entered/modified in the numeric field.
     -   Enables/disables/shows/hides the field according to own state changes.
  */
-class SVX_DLLPUBLIC SAL_WARN_UNUSED DialControl : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControl : public Control
 {
 public:
     explicit            DialControl( vcl::Window* pParent, WinBits nBits );
@@ -163,7 +163,7 @@ private:
 };
 
 /** Wrapper for usage of a DialControl in item connections. */
-class SVX_DLLPUBLIC SAL_WARN_UNUSED DialControlWrapper : public sfx::SingleControlWrapper< DialControl, sal_Int32 >
+class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControlWrapper : public sfx::SingleControlWrapper< DialControl, sal_Int32 >
 {
 public:
     explicit            DialControlWrapper( DialControl& rDial );

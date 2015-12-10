@@ -81,7 +81,7 @@ class SAL_WARN_UNUSED E3dRotateUndoAction : public E3dUndoAction
 |* Undo for 3D attributes (implemented using Set3DAttributes())
 |*
 \************************************************************************/
-class SVX_DLLPUBLIC SAL_WARN_UNUSED E3dAttributesUndoAction : public SdrUndoAction
+class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
 {
     using SdrUndoAction::Repeat;
 

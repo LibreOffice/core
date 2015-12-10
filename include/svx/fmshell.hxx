@@ -55,7 +55,7 @@ namespace svx
 }
 
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FmDesignModeChangedHint : public SfxHint
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
 {
     bool m_bDesignMode;
 

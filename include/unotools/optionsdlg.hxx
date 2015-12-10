@@ -25,7 +25,7 @@
 
 class SvtOptionsDlgOptions_Impl;
 
-class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtOptionsDialogOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtOptionsDialogOptions : public utl::detail::Options
 {
 private:
     SvtOptionsDlgOptions_Impl* m_pImp;

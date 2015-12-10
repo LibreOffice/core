@@ -40,7 +40,7 @@ namespace basegfx
 
         @see B3DTuple
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColor : public B3DTuple
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColor : public B3DTuple
     {
     public:
         /** Create a Color with red, green and blue components from [0.0 to 1.0]

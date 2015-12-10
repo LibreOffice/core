@@ -33,7 +33,7 @@
 
 class Graphic;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxContourDlgChildWindow : public SfxChildWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
 {
 public:
     SvxContourDlgChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
@@ -43,7 +43,7 @@ public:
 
 class SvxSuperContourDlg;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxContourDlg : public SfxFloatingWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxContourDlg : public SfxFloatingWindow
 {
     using Window::Update;
 

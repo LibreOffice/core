@@ -45,7 +45,7 @@ class SvtModuleOptions_Impl;
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions : public utl::detail::Options
 {
     public:
 

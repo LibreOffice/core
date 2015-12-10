@@ -30,7 +30,7 @@ class SvStream;
 
 class Fraction;
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED BigInt
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC BigInt
 {
 private:
     long            nVal;

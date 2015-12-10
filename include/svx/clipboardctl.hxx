@@ -30,7 +30,7 @@
 class PopupMenu;
 class SvxClipboardFormatItem;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxClipBoardControl : public SfxToolBoxControl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
 {
     SfxPoolItem*            pClipboardFmtItem;
     PopupMenu*              pPopup;

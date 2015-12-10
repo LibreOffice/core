@@ -31,7 +31,7 @@
 
 class SdrGrafObj;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED CompressGraphicsDialog : public ModalDialog
+class SAL_WARN_UNUSED SVX_DLLPUBLIC CompressGraphicsDialog : public ModalDialog
 {
 private:
     VclPtr<FixedText>       m_pLabelGraphicType;

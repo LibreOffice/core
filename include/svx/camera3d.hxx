@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED Camera3D : public Viewport3D
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Camera3D : public Viewport3D
 {
  protected:
     basegfx::B3DPoint   aResetPos;

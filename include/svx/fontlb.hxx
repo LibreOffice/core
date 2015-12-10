@@ -59,7 +59,7 @@ public:
 
 
 /** A list box supporting formatted string entries. */
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontListBox : public SvTabListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontListBox : public SvTabListBox
 {
 private:
     vcl::Font                   maStdFont;      /// Used for entries without specific font.

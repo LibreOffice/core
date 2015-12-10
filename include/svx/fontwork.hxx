@@ -73,7 +73,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontWorkChildWindow : public SfxChildWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 {
  public:
     SvxFontWorkChildWindow(vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
@@ -86,7 +86,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontWorkChildWindow : public SfxChildWind
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontWorkDialog : public SfxDockingWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 {
 #define CONTROLLER_COUNT 11
 

@@ -162,7 +162,7 @@ enum SvxChartRegress
 
 #define CHREGRESS_COUNT (CHREGRESS_UNKNOWN + 1)
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartStyleItem : public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
 {
 public:
     SvxChartStyleItem(SvxChartStyle eStyle /*= CHSTYLE_2D_LINE*/,
@@ -176,7 +176,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartRegressItem : public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
 {
 public:
     SvxChartRegressItem(SvxChartRegress eRegress /*= CHREGRESS_LINEAR*/,
@@ -192,7 +192,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const override;
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartDataDescrItem : public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
 {
 public:
     SvxChartDataDescrItem(SvStream& rIn,
@@ -204,7 +204,7 @@ public:
     sal_uInt16 GetValueCount() const override { return CHDESCR_COUNT; }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartTextOrderItem : public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem
 {
 public:
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= CHTXTORDER_SIDEBYSIDE*/,
@@ -223,7 +223,7 @@ public:
         { return (SvxChartTextOrder)SfxEnumItem::GetValue(); }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartTextOrientItem : public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartTextOrientItem : public SfxEnumItem
 {
 public:
     SvxChartTextOrientItem(SvStream& rIn,
@@ -235,7 +235,7 @@ public:
     sal_uInt16 GetValueCount() const override { return CHTXTORDER_COUNT; }
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartKindErrorItem : public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartKindErrorItem : public SfxEnumItem
 {
 public:
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = CHERROR_NONE*/,
@@ -253,7 +253,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const override;
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartIndicateItem : public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartIndicateItem : public SfxEnumItem
 {
 public:
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= CHINDICATE_NONE*/,
@@ -271,7 +271,7 @@ public:
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const override;
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxDoubleItem : public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
 {
     double fVal;
 

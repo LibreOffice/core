@@ -70,7 +70,7 @@ namespace basegfx
 
 namespace tools {
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Polygon
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Polygon
 {
 private:
     ImplPolygon*        mpImplPolygon;
@@ -185,7 +185,7 @@ public:
 };
 
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED PolyPolygon
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC PolyPolygon
 {
 private:
     ImplPolyPolygon*    mpImplPolyPolygon;

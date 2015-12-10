@@ -71,7 +71,7 @@ inline bool Pair::operator != ( const Pair& rPair ) const
 
 // Point
 
-class SAL_DLLPUBLIC_EXPORT SAL_WARN_UNUSED Point : public Pair
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_EXPORT Point : public Pair
 {
 public:
                         Point() {}
@@ -293,7 +293,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 #define RECT_MAX    LONG_MAX
 #define RECT_MIN    LONG_MIN
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Rectangle
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle
 {
 public:
                         Rectangle();

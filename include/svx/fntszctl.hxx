@@ -29,7 +29,7 @@ class FontSizeMenu;
 
 // class SvxFontSizeMenuControl ------------------------------------------
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontSizeMenuControl : public SfxMenuControl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontSizeMenuControl : public SfxMenuControl
 {
 private:
     FontSizeMenu*   pMenu;

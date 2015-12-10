@@ -104,7 +104,7 @@ enum RefMode
                                 |
                                 |<- middle of the frame border
  */
-class SVX_DLLPUBLIC SAL_WARN_UNUSED Style
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Style
 {
 public:
     /** Constructs an invisible frame style. */

@@ -50,7 +50,7 @@ enum class UserOptToken
 
 // class SvtUserOptions --------------------------------------------------
 
-class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtUserOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtUserOptions : public utl::detail::Options
 {
 public:
     SvtUserOptions ();

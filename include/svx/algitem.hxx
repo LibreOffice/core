@@ -27,7 +27,7 @@
 
 class SvStream;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxOrientationItem: public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -67,7 +67,7 @@ public:
     void                    SetFromRotation( sal_Int32 nRotation, bool bStacked );
 };
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxMarginItem: public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
 {
     sal_Int16       nLeftMargin;
     sal_Int16       nTopMargin;

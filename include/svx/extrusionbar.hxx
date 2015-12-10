@@ -35,7 +35,7 @@ namespace svx
 
 SVX_DLLPUBLIC bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded );
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED ExtrusionBar : public SfxShell
+class SAL_WARN_UNUSED SVX_DLLPUBLIC ExtrusionBar : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_EXTRUSION_BAR)

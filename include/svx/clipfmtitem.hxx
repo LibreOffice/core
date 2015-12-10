@@ -26,7 +26,7 @@
 
 struct SvxClipboardFormatItem_Impl;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxClipboardFormatItem : public SfxPoolItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipboardFormatItem : public SfxPoolItem
 {
     SvxClipboardFormatItem_Impl* pImpl;
 protected:

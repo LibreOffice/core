@@ -30,7 +30,7 @@
 class SfxItemSet;
 class FontPrevWin_Impl;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontPrevWindow : public vcl::Window
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontPrevWindow : public vcl::Window
 {
     using OutputDevice::SetFont;
 private:

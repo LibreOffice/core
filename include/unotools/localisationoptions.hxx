@@ -38,7 +38,7 @@ class SvtLocalisationOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtLocalisationOptions : public utl::detail::Options
 {
     public:
         /*-****************************************************************************************************

@@ -56,7 +56,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBmpMaskChildWindow : public SfxChildWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMaskChildWindow : public SfxChildWindow
 {
  public:
                             SvxBmpMaskChildWindow( vcl::Window*,
@@ -76,7 +76,7 @@ class MaskData;
 class MaskSet;
 class ColorWindow;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBmpMask : public SfxDockingWindow
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
 {
     friend class MaskData;
     friend class MaskSet;

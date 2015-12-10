@@ -36,7 +36,7 @@ namespace svx
 
     //= OComponentTransferable
 
-    class SVX_DLLPUBLIC SAL_WARN_UNUSED OComponentTransferable : public TransferableHelper
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC OComponentTransferable : public TransferableHelper
     {
     protected:
         ODataAccessDescriptor   m_aDescriptor;

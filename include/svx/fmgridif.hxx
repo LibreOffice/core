@@ -200,7 +200,7 @@ typedef ::cppu::ImplHelper10<   css::form::XBoundComponent,
                             >   FmXGridControl_BASE;
 
 class FmXGridPeer;
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FmXGridControl  :public UnoControl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FmXGridControl  :public UnoControl
                         ,public FmXGridControl_BASE
 {
     FmXModifyMultiplexer        m_aModifyListeners;
@@ -311,7 +311,7 @@ protected:
 // FmXGridPeer -> Peer for the Gridcontrol
 
 class FmGridControl;
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FmXGridPeer:
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FmXGridPeer:
     public cppu::ImplInheritanceHelper<
         VCLXWindow,
         css::form::XGridPeer,
