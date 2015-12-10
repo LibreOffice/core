@@ -1320,6 +1320,7 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
         appicon = g_strdup ("libreoffice-main");
 
     gtk_window_set_icon_name (GTK_WINDOW (m_pWindow), appicon);
+    g_free (appicon);
 }
 
 void GtkSalFrame::SetMenu( SalMenu* pSalMenu )
