@@ -439,7 +439,7 @@ SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
                     |       \                       /       |
                  rLFromB      \                   /      rRFromB
  */
-SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DVector CreateBorderPrimitives(
     const Point&        rLPos,          /// Reference point for left end of the processed frame border.
     const Point&        rRPos,          /// Reference point for right end of the processed frame border.
     const Style&        rBorder,        /// Style of the processed frame border.
@@ -461,7 +461,7 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimiti
     const long&         rRotationB = 9000  /// Angle of the bottom slanted frames in 100th of degree
 );
 
-SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DVector CreateBorderPrimitives(
     const Point&        rLPos,          /// Reference point for left end of the processed frame border.
     const Point&        rRPos,          /// Reference point for right end of the processed frame border.
     const Style&        rBorder,        /// Style of the processed frame border.
@@ -479,7 +479,7 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimiti
     const long&         rRotationB = 9000  /// Angle of the bottom slanted frame in 100th of degrees
 );
 
-SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DVector CreateClippedBorderPrimitives (
         const Point& rStart, const Point& rEnd, const Style& rBorder,
         const Rectangle& rClipRect );
 

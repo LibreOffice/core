@@ -97,7 +97,7 @@ namespace drawinglayer
             virtual ~Shadow3DExtractingProcessor();
 
             /// data read access
-            const primitive2d::Primitive2DSequence getPrimitive2DSequence() const;
+            const primitive2d::Primitive2DVector& getPrimitive2DSequence() const;
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const basegfx::B3DHomMatrix& getWorldToEye() const { return maWorldToEye; }
             const basegfx::B3DHomMatrix& getEyeToView() const { return maEyeToView; }

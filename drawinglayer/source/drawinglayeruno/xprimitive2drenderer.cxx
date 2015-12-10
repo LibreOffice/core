@@ -161,8 +161,8 @@ namespace drawinglayer
                     const primitive2d::Primitive2DReference xEmbedRef(
                         new primitive2d::TransformPrimitive2D(
                             aEmbedding,
-                            Primitive2DSequence));
-                    const primitive2d::Primitive2DSequence xEmbedSeq(&xEmbedRef, 1);
+                            primitive2d::Primitive2DVector()));
+                    const primitive2d::Primitive2DVector xEmbedSeq { xEmbedRef };
 
                     BitmapEx aBitmapEx(
                         tools::convertToBitmapEx(

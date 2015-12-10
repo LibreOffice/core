@@ -15,6 +15,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
@@ -32,6 +33,7 @@ using namespace css::io;
 using namespace css::graphic;
 using drawinglayer::primitive2d::arePrimitive2DSequencesEqual;
 using drawinglayer::primitive2d::Primitive2DSequence;
+using drawinglayer::primitive2d::Primitive2DVector;
 
 class Test : public test::BootstrapFixture, public XmlTestTools
 {
@@ -84,7 +86,7 @@ void Test::tearDown()
 void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
 {
     Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(rPrimitive);
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DVector>(rPrimitive));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -126,7 +128,7 @@ void Test::testTdf87309()
     CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf87309.getLength());
 
     Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(aSequenceTdf87309);
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DVector>(aSequenceTdf87309));
 
     CPPUNIT_ASSERT (pDocument);
 

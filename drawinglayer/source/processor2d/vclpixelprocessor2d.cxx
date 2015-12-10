@@ -867,9 +867,9 @@ namespace drawinglayer
                     // Detect if a single PolyPolygonColorPrimitive2D is contained; in that case,
                     // use the faster OutputDevice::DrawTransparent method
                     const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DSequence rContent = rUniTransparenceCandidate.getChildren();
+                    const primitive2d::Primitive2DVector rContent = rUniTransparenceCandidate.getChildren();
 
-                    if(rContent.hasElements())
+                    if(!rContent.empty())
                     {
                         if(0.0 == rUniTransparenceCandidate.getTransparence())
                         {
@@ -884,7 +884,7 @@ namespace drawinglayer
                             // natively), so i am now enabling this shortcut
                             static bool bAllowUsingDrawTransparent(true);
 
-                            if(bAllowUsingDrawTransparent && 1 == rContent.getLength())
+                            if(bAllowUsingDrawTransparent && 1 == rContent.size())
                             {
                                 const primitive2d::Primitive2DReference xReference(rContent[0]);
                                 const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());

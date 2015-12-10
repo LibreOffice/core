@@ -93,10 +93,10 @@ namespace drawinglayer
         // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
         // for slideshow. This uses TextHierarchyBlockPrimitive2D to mark a text block.
         // ATM there is only one text block per SdrObject, this may get more in the future
-        Primitive2DSequence SdrTextPrimitive2D::encapsulateWithTextHierarchyBlockPrimitive2D(const Primitive2DSequence& rCandidate)
+        Primitive2DVector SdrTextPrimitive2D::encapsulateWithTextHierarchyBlockPrimitive2D(const Primitive2DVector& rCandidate)
         {
             Primitive2DReference xReference(new TextHierarchyBlockPrimitive2D(rCandidate));
-            Primitive2DSequence xRetval(&xReference, 1);
+            Primitive2DVector xRetval { xReference };
 
             return xRetval;
         }
@@ -143,7 +143,7 @@ namespace drawinglayer
             return false;
         }
 
-        Primitive2DSequence SdrTextPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DVector SdrTextPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             uno::Reference< drawing::XDrawPage > xCurrentlyVisualizingPage;
             bool bCurrentlyVisualizingPageIsSet(false);
@@ -152,7 +152,7 @@ namespace drawinglayer
             sal_Int16 nCurrentlyValidPageNumber(0);
             sal_Int16 nCurrentlyValidPageCount(0);
 
-            if(getBuffered2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().empty())
             {
                 bool bDoDelete(false);
 
@@ -206,11 +206,11 @@ namespace drawinglayer
 
                 if(bDoDelete)
                 {
-                    const_cast< SdrTextPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                    const_cast< SdrTextPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DVector());
                 }
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 if(!bCurrentlyVisualizingPageIsSet && mbContainsPageField)
                 {
@@ -251,9 +251,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrContourTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DVector SdrContourTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
             getSdrText()->GetObject().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
@@ -304,9 +304,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrPathTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DVector SdrPathTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
             getSdrText()->GetObject().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
@@ -360,9 +360,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrBlockTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DVector SdrBlockTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
             getSdrText()->GetObject().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
@@ -437,9 +437,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-         Primitive2DSequence SdrAutoFitTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+         Primitive2DVector SdrAutoFitTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
          {
-             Primitive2DSequence aRetval;
+             Primitive2DVector aRetval;
              getSdrText()->GetObject().impDecomposeAutoFitTextPrimitive(aRetval, *this, aViewInformation);
 
              return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
@@ -493,9 +493,9 @@ namespace drawinglayer
           maTextRangeTransform(rTextRangeTransform)
         { }
 
-        Primitive2DSequence SdrChainedTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DVector SdrChainedTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
             getSdrText()->GetObject().impDecomposeChainedTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
@@ -528,9 +528,9 @@ namespace drawinglayer
  {
      namespace primitive2d
      {
-        Primitive2DSequence SdrStretchTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DVector SdrStretchTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
             getSdrText()->GetObject().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);

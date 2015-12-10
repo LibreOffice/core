@@ -92,9 +92,9 @@ namespace sdr
             return aOverlayType;
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence OverlaySelection::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DVector OverlaySelection::createOverlayObjectPrimitive2DSequence()
         {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            drawinglayer::primitive2d::Primitive2DVector aRetval;
             const sal_uInt32 nCount(getRanges().size());
 
             if(nCount)
@@ -102,7 +102,7 @@ namespace sdr
                 // create range primitives
                 const bool bInvert(OVERLAY_INVERT == maLastOverlayType);
                 basegfx::BColor aRGBColor(getBaseColor().getBColor());
-                aRetval.realloc(nCount);
+                aRetval.resize(nCount);
 
                 if(bInvert)
                 {
@@ -125,7 +125,7 @@ namespace sdr
                     const drawinglayer::primitive2d::Primitive2DReference aInvert(
                         new drawinglayer::primitive2d::InvertPrimitive2D(
                             aRetval));
-                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aInvert, 1);
+                    aRetval = drawinglayer::primitive2d::Primitive2DVector { aInvert };
                 }
                 else if(OVERLAY_TRANSPARENT == maLastOverlayType)
                 {
@@ -145,14 +145,14 @@ namespace sdr
                                 aRGBColor));
 
                         // add both to result
-                        aRetval.realloc(2);
+                        aRetval.resize(2);
                         aRetval[0] = aUnifiedTransparence;
                         aRetval[1] = aSelectionOutline;
                     }
                     else
                     {
                         // just add transparent part
-                        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparence, 1);
+                        aRetval = drawinglayer::primitive2d::Primitive2DVector { aUnifiedTransparence };
                     }
                 }
             }
@@ -184,24 +184,24 @@ namespace sdr
             }
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence OverlaySelection::getOverlayObjectPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DVector OverlaySelection::getOverlayObjectPrimitive2DSequence() const
         {
             // get current values
                const OverlayType aNewOverlayType(impCheckPossibleOverlayType(meOverlayType));
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
             const sal_uInt16 nNewTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent());
 
-            if(getPrimitive2DSequence().hasElements())
+            if(!getPrimitive2DSequence().empty())
             {
                 if(aNewOverlayType != maLastOverlayType
                     || nNewTransparence != mnLastTransparence)
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< OverlaySelection* >(this)->setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DSequence());
+                    const_cast< OverlaySelection* >(this)->setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DVector());
                 }
             }
 
-            if(!getPrimitive2DSequence().hasElements())
+            if(getPrimitive2DSequence().empty())
             {
                 // remember new values
                 const_cast< OverlaySelection* >(this)->maLastOverlayType = aNewOverlayType;

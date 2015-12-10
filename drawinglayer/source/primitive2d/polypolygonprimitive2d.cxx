@@ -42,14 +42,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonHairlinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector PolyPolygonHairlinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
             const sal_uInt32 nCount(aPolyPolygon.count());
 
             if(nCount)
             {
-                Primitive2DSequence aRetval(nCount);
+                Primitive2DVector aRetval(nCount);
 
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
@@ -60,7 +60,7 @@ namespace drawinglayer
             }
             else
             {
-                return Primitive2DSequence();
+                return Primitive2DVector();
             }
         }
 
@@ -102,14 +102,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonMarkerPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector PolyPolygonMarkerPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
             const sal_uInt32 nCount(aPolyPolygon.count());
 
             if(nCount)
             {
-                Primitive2DSequence aRetval(nCount);
+                Primitive2DVector aRetval(nCount);
 
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
@@ -125,7 +125,7 @@ namespace drawinglayer
             }
             else
             {
-                return Primitive2DSequence();
+                return Primitive2DVector();
             }
         }
 
@@ -175,14 +175,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector PolyPolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
             const sal_uInt32 nCount(aPolyPolygon.count());
 
             if(nCount)
             {
-                Primitive2DSequence aRetval(nCount);
+                Primitive2DVector aRetval(nCount);
 
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
@@ -195,7 +195,7 @@ namespace drawinglayer
             }
             else
             {
-                return Primitive2DSequence();
+                return Primitive2DVector();
             }
         }
 
@@ -300,7 +300,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector PolyPolygonGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(!getFillGradient().isDefault())
             {
@@ -311,17 +311,17 @@ namespace drawinglayer
                     getDefinitionRange(),
                     getFillGradient());
                 const Primitive2DReference xSubRef(pNewGradient);
-                const Primitive2DSequence aSubSequence(&xSubRef, 1L);
+                const Primitive2DVector aSubSequence { xSubRef };
 
                 // create mask primitive
                 MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
                 const Primitive2DReference xRef(pNewMask);
 
-                return Primitive2DSequence(&xRef, 1);
+                return Primitive2DVector { xRef };
             }
             else
             {
-                return Primitive2DSequence();
+                return Primitive2DVector();
             }
         }
 
@@ -372,7 +372,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector PolyPolygonHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(!getFillHatch().isDefault())
             {
@@ -384,17 +384,17 @@ namespace drawinglayer
                     getBackgroundColor(),
                     getFillHatch());
                 const Primitive2DReference xSubRef(pNewHatch);
-                const Primitive2DSequence aSubSequence(&xSubRef, 1L);
+                const Primitive2DVector aSubSequence { xSubRef };
 
                 // create mask primitive
                 MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
                 const Primitive2DReference xRef(pNewMask);
 
-                return Primitive2DSequence(&xRef, 1);
+                return Primitive2DVector { xRef };
             }
             else
             {
-                return Primitive2DSequence();
+                return Primitive2DVector();
             }
         }
 
@@ -450,7 +450,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonGraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector PolyPolygonGraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(!getFillGraphic().isDefault())
             {
@@ -521,14 +521,14 @@ namespace drawinglayer
                         const Primitive2DReference xRef(
                             new MaskPrimitive2D(
                                 getB2DPolyPolygon(),
-                                Primitive2DSequence(&xSubRef, 1)));
+                                Primitive2DVector { xSubRef }));
 
-                        return Primitive2DSequence(&xRef, 1);
+                        return Primitive2DVector { xRef };
                     }
                 }
             }
 
-            return Primitive2DSequence();
+            return Primitive2DVector();
         }
 
         PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(
@@ -578,9 +578,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonSelectionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector PolyPolygonSelectionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
 
             if(getTransparence() < 1.0 && getB2DPolyPolygon().count())
             {
@@ -592,7 +592,7 @@ namespace drawinglayer
                             getB2DPolyPolygon(),
                             getColor()));
 
-                    aRetval = Primitive2DSequence(&aFill, 1);
+                    aRetval = Primitive2DVector { aFill };
                 }
 
                 if(getDiscreteGrow() > 0.0)
@@ -605,18 +605,18 @@ namespace drawinglayer
                             getB2DPolyPolygon(),
                             aLineAttribute));
 
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aFatLine);
+                    aRetval.push_back(aFatLine);
                 }
 
                 // embed filled to transparency (if used)
-                if(aRetval.getLength() && getTransparence() > 0.0)
+                if(!aRetval.empty() && getTransparence() > 0.0)
                 {
                     const Primitive2DReference aTrans(
                         new UnifiedTransparencePrimitive2D(
                             aRetval,
                             getTransparence()));
 
-                    aRetval = Primitive2DSequence(&aTrans, 1);
+                    aRetval = Primitive2DVector { aTrans };
                 }
             }
 

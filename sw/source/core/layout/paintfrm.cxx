@@ -210,22 +210,14 @@ public:
 
 class BorderLines
 {
-    typedef ::std::vector<
-        ::rtl::Reference<BorderLinePrimitive2D> > Lines_t;
-    Lines_t m_Lines;
+    drawinglayer::primitive2d::Primitive2DVector m_Lines;
 public:
-    void AddBorderLine(::rtl::Reference<BorderLinePrimitive2D> const& xLine, SwPaintProperties& properties);
-    drawinglayer::primitive2d::Primitive2DSequence GetBorderLines_Clear()
+    void AddBorderLine(css::uno::Reference<BorderLinePrimitive2D> const& xLine, SwPaintProperties& properties);
+    drawinglayer::primitive2d::Primitive2DVector GetBorderLines_Clear()
     {
-        ::std::vector<
-            ::drawinglayer::primitive2d::Primitive2DReference> lines;
-        for (Lines_t::const_iterator it = m_Lines.begin(); it != m_Lines.end();
-                ++it)
-        {
-            lines.push_back(it->get());
-        }
-        m_Lines.clear();
-        return comphelper::containerToSequence(lines);
+        drawinglayer::primitive2d::Primitive2DVector lines;
+        lines.swap(m_Lines);
+        return lines;
     }
 };
 
@@ -510,7 +502,7 @@ static sal_uInt8 lcl_TryMergeLines(
  * @param[in]   rEnd        ending point of merged primitive
  * @return      merged primitive
 **/
-static ::rtl::Reference<BorderLinePrimitive2D>
+static css::uno::Reference<BorderLinePrimitive2D>
 lcl_MergeBorderLines(
     BorderLinePrimitive2D const& rLine, BorderLinePrimitive2D const& rOther,
     basegfx::B2DPoint const& rStart, basegfx::B2DPoint const& rEnd)
@@ -538,7 +530,7 @@ lcl_MergeBorderLines(
  * @return      merged borderline including the two input primitive, if they can be merged
  *              0, otherwise
 **/
-static ::rtl::Reference<BorderLinePrimitive2D>
+static css::uno::Reference<BorderLinePrimitive2D>
 lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
                        BorderLinePrimitive2D const& rOther,
                        SwPaintProperties& properties)
@@ -610,13 +602,13 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
 }
 
 void BorderLines::AddBorderLine(
-        rtl::Reference<BorderLinePrimitive2D> const& xLine, SwPaintProperties& properties)
+        css::uno::Reference<BorderLinePrimitive2D> const& xLine, SwPaintProperties& properties)
 {
-    for (Lines_t::reverse_iterator it = m_Lines.rbegin(); it != m_Lines.rend();
+    for (drawinglayer::primitive2d::Primitive2DVector::reverse_iterator it = m_Lines.rbegin(); it != m_Lines.rend();
          ++it)
     {
-        ::rtl::Reference<BorderLinePrimitive2D> const xMerged =
-            lcl_TryMergeBorderLine(**it, *xLine, properties);
+        css::uno::Reference<BorderLinePrimitive2D> const xMerged(
+            lcl_TryMergeBorderLine(*static_cast<BorderLinePrimitive2D*>((*it).get()), *xLine.get(), properties));
         if (xMerged.is())
         {
             *it = xMerged; // replace existing line with merged
@@ -1915,15 +1907,15 @@ bool DrawFillAttributes(
                 rOriginalLayoutRect.Right(),
                 rOriginalLayoutRect.Bottom());
 
-            const drawinglayer::primitive2d::Primitive2DSequence& rSequence = rFillAttributes->getPrimitive2DSequence(
+            const drawinglayer::primitive2d::Primitive2DVector& rSequence = rFillAttributes->getPrimitive2DSequence(
                 aPaintRange,
                 aDefineRange);
 
-            if(rSequence.getLength())
+            if(rSequence.size())
             {
-                drawinglayer::primitive2d::Primitive2DSequence const*
+                drawinglayer::primitive2d::Primitive2DVector const*
                     pPrimitives(&rSequence);
-                drawinglayer::primitive2d::Primitive2DSequence primitives;
+                drawinglayer::primitive2d::Primitive2DVector primitives;
                 // tdf#86578 the awful lcl_SubtractFlys hack
                 if (rPaintRegion.size() > 1 || rPaintRegion[0] != rPaintRegion.GetOrigin())
                 {
@@ -1934,12 +1926,12 @@ bool DrawFillAttributes(
                     }
                     basegfx::B2DPolyPolygon const maskRegion( tempRegion.getB2DPolyPolygon());
 
-                    primitives.realloc(1);
+                    primitives.resize(1);
                     primitives[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
                             maskRegion, rSequence);
                     pPrimitives = &primitives;
                 }
-                assert(pPrimitives && pPrimitives->getLength());
+                assert(pPrimitives && pPrimitives->size());
 
                 const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
                     basegfx::B2DHomMatrix(),
@@ -3138,7 +3130,7 @@ namespace
             virtual ~SwViewObjectContactRedirector()
             {}
 
-            virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+            virtual drawinglayer::primitive2d::Primitive2DVector createRedirectedPrimitive2DSequence(
                                     const sdr::contact::ViewObjectContact& rOriginal,
                                     const sdr::contact::DisplayInfo& rDisplayInfo) override
             {
@@ -3152,7 +3144,7 @@ namespace
 
                 if ( !bPaint )
                 {
-                    return drawinglayer::primitive2d::Primitive2DSequence();
+                    return drawinglayer::primitive2d::Primitive2DVector();
                 }
 
                 return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
@@ -3697,11 +3689,11 @@ void SwLayoutFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
     }
 }
 
-static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorPrimitive(
+static drawinglayer::primitive2d::Primitive2DVector lcl_CreateDashedIndicatorPrimitive(
         const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
         basegfx::BColor aColor )
 {
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
+    drawinglayer::primitive2d::Primitive2DVector aSeq( 1 );
 
     std::vector< double > aStrokePattern;
     basegfx::B2DPolygon aLinePolygon;
@@ -3737,7 +3729,7 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorP
         aStrokePattern.push_back( 40 );
         aStrokePattern.push_back( 40 );
 
-        aSeq.realloc( 2 );
+        aSeq.resize( 2 );
     }
 
     // Compute the dashed line primitive
@@ -3747,7 +3739,7 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorP
                 drawinglayer::attribute::LineAttribute( aColor ),
                 drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
-    aSeq[ aSeq.getLength( ) - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+    aSeq[ aSeq.size( ) - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pLine );
 
     return aSeq;
 }
@@ -3829,9 +3821,9 @@ void SwColumnFrame::PaintBreak( ) const
 
                     basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
 
-                    drawinglayer::primitive2d::Primitive2DSequence aSeq =
+                    drawinglayer::primitive2d::Primitive2DVector aSeq =
                         lcl_CreateDashedIndicatorPrimitive( aStart, aEnd, aLineColor );
-                    aSeq.realloc( aSeq.getLength( ) + 1 );
+                    aSeq.resize( aSeq.size( ) + 1 );
 
                     // Add the text above
                     OUString aBreakText = SW_RESSTR(STR_COLUMN_BREAK);
@@ -3866,7 +3858,7 @@ void SwColumnFrame::PaintBreak( ) const
                                 aFontAttr,
                                 lang::Locale(),
                                 aLineColor );
-                    aSeq[ aSeq.getLength() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pText );
+                    aSeq[ aSeq.size() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pText );
 
                     ProcessPrimitives( aSeq );
                 }
@@ -4912,7 +4904,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
     Color const aLeftColor = rBorder.GetColorOut(isLeftOrTopBorder);
     Color const aRightColor = rBorder.GetColorIn(isLeftOrTopBorder);
 
-    ::rtl::Reference<BorderLinePrimitive2D> const xLine =
+    css::uno::Reference<BorderLinePrimitive2D> const xLine =
         new BorderLinePrimitive2D(
             aStart, aEnd, nLeftWidth, rBorder.GetDistance(), nRightWidth,
             nExtentLeftStart, nExtentLeftEnd,
@@ -5405,7 +5397,7 @@ drawinglayer::processor2d::BaseProcessor2D * SwFrame::CreateProcessor2D( ) const
                     aNewViewInfos );
 }
 
-void SwFrame::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const
+void SwFrame::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DVector& rSequence ) const
 {
     drawinglayer::processor2d::BaseProcessor2D * pProcessor2D = CreateProcessor2D();
 
@@ -6896,10 +6888,10 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
     }
 }
 
-static drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimitives(
+static drawinglayer::primitive2d::Primitive2DVector lcl_CreatePageAreaDelimiterPrimitives(
         const SwRect& rRect )
 {
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );
+    drawinglayer::primitive2d::Primitive2DVector aSeq( 4 );
 
     basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
     double nLineLength = 200.0; // in Twips
@@ -6930,10 +6922,10 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimite
     return aSeq;
 }
 
-static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateRectangleDelimiterPrimitives (
+static drawinglayer::primitive2d::Primitive2DVector lcl_CreateRectangleDelimiterPrimitives (
         const SwRect& rRect )
 {
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
+    drawinglayer::primitive2d::Primitive2DVector aSeq( 1 );
     basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
 
     basegfx::B2DPolygon aPolygon;
@@ -6951,10 +6943,10 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateRectangleDelimit
     return aSeq;
 }
 
-static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateColumnAreaDelimiterPrimitives(
+static drawinglayer::primitive2d::Primitive2DVector lcl_CreateColumnAreaDelimiterPrimitives(
         const SwRect& rRect )
 {
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );
+    drawinglayer::primitive2d::Primitive2DVector aSeq( 4 );
 
     basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
     double nLineLength = 100.0; // in Twips

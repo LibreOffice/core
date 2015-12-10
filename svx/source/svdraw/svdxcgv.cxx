@@ -485,7 +485,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
             {
                 // collect sub-primitives as group objects, thus no expensive append
                 // to existing sequence is needed
-                drawinglayer::primitive2d::Primitive2DSequence xPrimitives(nCount);
+                drawinglayer::primitive2d::Primitive2DVector xPrimitives(nCount);
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {

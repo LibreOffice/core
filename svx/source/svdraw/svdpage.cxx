@@ -1808,7 +1808,7 @@ StandardCheckVisisbilityRedirector::~StandardCheckVisisbilityRedirector()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence StandardCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DVector StandardCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {
@@ -1824,7 +1824,7 @@ drawinglayer::primitive2d::Primitive2DSequence StandardCheckVisisbilityRedirecto
             }
         }
 
-        return drawinglayer::primitive2d::Primitive2DSequence();
+        return drawinglayer::primitive2d::Primitive2DVector();
     }
     else
     {

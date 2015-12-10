@@ -113,7 +113,7 @@ namespace sdr { namespace contact {
     }
 
 
-    drawinglayer::primitive2d::Primitive2DSequence ViewContactOfUnoControl::createViewIndependentPrimitive2DSequence() const
+    drawinglayer::primitive2d::Primitive2DVector ViewContactOfUnoControl::createViewIndependentPrimitive2DSequence() const
     {
         // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
         // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
@@ -147,7 +147,7 @@ namespace sdr { namespace contact {
                     aTransform,
                     xControlModel));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
+            return drawinglayer::primitive2d::Primitive2DVector { xRetval };
         }
         else
         {
@@ -156,7 +156,7 @@ namespace sdr { namespace contact {
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                     false, aTransform));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
+            return drawinglayer::primitive2d::Primitive2DVector { xRetval };
         }
     }
 

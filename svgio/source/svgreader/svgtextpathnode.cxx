@@ -377,11 +377,11 @@ namespace svgio
         }
 
         void SvgTextPathNode::decomposePathNode(
-            const drawinglayer::primitive2d::Primitive2DSequence& rPathContent,
-            drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+            const drawinglayer::primitive2d::Primitive2DVector& rPathContent,
+            drawinglayer::primitive2d::Primitive2DVector& rTarget,
             const basegfx::B2DPoint& rTextStart) const
         {
-            if(rPathContent.hasElements())
+            if(!rPathContent.empty())
             {
                 const SvgPathNode* pSvgPathNode = dynamic_cast< const SvgPathNode* >(getDocument().findSvgNodeById(maXLink));
 
@@ -431,7 +431,7 @@ namespace svgio
 
                             if(fPosition >= 0.0)
                             {
-                                const sal_Int32 nLength(rPathContent.getLength());
+                                const sal_Int32 nLength(rPathContent.size());
                                 sal_Int32 nCurrent(0);
 
                                 while(fPosition < fBasegfxPathLength && nCurrent < nLength)
@@ -453,10 +453,10 @@ namespace svgio
                                             fPosition,
                                             rTextStart);
 
-                                        const drawinglayer::primitive2d::Primitive2DSequence aResult(
+                                        const drawinglayer::primitive2d::Primitive2DVector aResult(
                                             aPathTextBreakupHelper.getResult());
 
-                                        if(aResult.hasElements())
+                                        if(!aResult.empty())
                                         {
                                             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aResult);
                                         }

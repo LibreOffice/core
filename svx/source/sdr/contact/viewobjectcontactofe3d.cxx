@@ -24,6 +24,7 @@
 #include <sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <drawinglayer/primitive2d/embedded3dprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace sdr
 {
@@ -63,7 +64,7 @@ namespace sdr
             return xRetval;
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfE3d::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive2d::Primitive2DVector ViewObjectContactOfE3d::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
             const ViewContactOfE3d& rViewContact = static_cast< const ViewContactOfE3d& >(GetViewContact());
 
@@ -82,7 +83,7 @@ namespace sdr
                 const_cast< ViewObjectContactOfE3d* >(this)->mxPrimitive3DSequence = xNewPrimitive3DSeq;
             }
 
-            // return current Primitive2DSequence
+            // return current Primitive2DVector
             return mxPrimitive3DSequence;
         }
     } // end of namespace contact

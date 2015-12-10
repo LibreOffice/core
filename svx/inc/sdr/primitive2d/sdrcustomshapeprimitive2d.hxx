@@ -37,7 +37,7 @@ namespace drawinglayer
         {
         private:
             attribute::SdrShadowTextAttribute           maSdrSTAttribute;
-            Primitive2DSequence                         maSubPrimitives;
+            Primitive2DVector                         maSubPrimitives;
             basegfx::B2DHomMatrix                       maTextBox;
 
             // bitfield
@@ -54,12 +54,12 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:
             SdrCustomShapePrimitive2D(
                 const attribute::SdrShadowTextAttribute& rSdrSTAttribute,
-                const Primitive2DSequence& rSubPrimitives,
+                const Primitive2DVector& rSubPrimitives,
                 const basegfx::B2DHomMatrix& rTextBox,
                 bool bWordWrap,
                 bool b3DShape,
@@ -67,7 +67,7 @@ namespace drawinglayer
 
             // data access
             const attribute::SdrShadowTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }
-            const Primitive2DSequence& getSubPrimitives() const { return maSubPrimitives; }
+            const Primitive2DVector& getSubPrimitives() const { return maSubPrimitives; }
             const basegfx::B2DHomMatrix& getTextBox() const { return maTextBox; }
             bool getWordWrap() const { return mbWordWrap; }
             bool get3DShape() const { return mb3DShape; }

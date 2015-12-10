@@ -42,7 +42,7 @@ namespace drawinglayer
         {
         private:
             const TextSimplePortionPrimitive2D&     mrSource;
-            Primitive2DSequence                     mxResult;
+            Primitive2DVector                       mxResult;
             TextLayouterDevice                      maTextLayouter;
             basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose maDecTrans;
 
@@ -70,7 +70,7 @@ namespace drawinglayer
             virtual ~TextBreakupHelper();
 
             /// get result
-            const Primitive2DSequence& getResult(BreakupUnit aBreakupUnit = BreakupUnit_character) const;
+            const Primitive2DVector& getResult(BreakupUnit aBreakupUnit = BreakupUnit_character) const;
         };
 
     } // end of namespace primitive2d

@@ -98,14 +98,14 @@ namespace svgio
             }
         }
 
-        void SvgClipPathNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgClipPathNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DVector& rTarget, bool bReferenced) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
+            drawinglayer::primitive2d::Primitive2DVector aNewTarget;
 
             // decompose children
             SvgNode::decomposeSvgNode(aNewTarget, bReferenced);
 
-            if(aNewTarget.hasElements())
+            if(!aNewTarget.empty())
             {
                 if(getTransform())
                 {
@@ -115,7 +115,7 @@ namespace svgio
                             *getTransform(),
                             aNewTarget));
 
-                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xRef);
+                    rTarget.push_back(xRef);
                 }
                 else
                 {
@@ -126,19 +126,19 @@ namespace svgio
         }
 
         void SvgClipPathNode::apply(
-            drawinglayer::primitive2d::Primitive2DSequence& rContent,
+            drawinglayer::primitive2d::Primitive2DVector& rContent,
             const basegfx::B2DHomMatrix* pTransform) const
         {
-            if(rContent.hasElements() && Display_none != getDisplay())
+            if(!rContent.empty() && Display_none != getDisplay())
             {
                 const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                drawinglayer::primitive2d::Primitive2DSequence aClipTarget;
+                drawinglayer::primitive2d::Primitive2DVector aClipTarget;
                 basegfx::B2DPolyPolygon aClipPolyPolygon;
 
                 // get clipPath definition as primitives
                 decomposeSvgNode(aClipTarget, true);
 
-                if(aClipTarget.hasElements())
+                if(!aClipTarget.empty())
                 {
                     // extract filled polygons as base for a mask PolyPolygon
                     drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, true);
@@ -243,13 +243,13 @@ namespace svgio
                                 aClipPolyPolygon,
                                 rContent));
 
-                        rContent = drawinglayer::primitive2d::Primitive2DSequence(&xEmbedTransparence, 1);
+                        rContent = drawinglayer::primitive2d::Primitive2DVector { xEmbedTransparence };
                     }
                     else
                     {
                         if(!bAddContent)
                         {
-                            rContent.realloc(0);
+                            rContent.clear();
                         }
                     }
                 }
@@ -257,7 +257,7 @@ namespace svgio
                 {
                     // An empty clipping path will completely clip away the element that had
                     // the clip-path property applied. (Svg spec)
-                    rContent.realloc(0);
+                    rContent.clear();
                 }
             }
         }

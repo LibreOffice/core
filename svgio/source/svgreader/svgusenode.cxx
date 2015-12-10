@@ -138,7 +138,7 @@ namespace svgio
             }
         }
 
-        void SvgUseNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced*/) const
+        void SvgUseNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DVector& rTarget, bool /*bReferenced*/) const
         {
             // try to access link to content
             const SvgNode* mpXLink = getDocument().findSvgNodeById(maXLink);
@@ -146,7 +146,7 @@ namespace svgio
             if(mpXLink && Display_none != mpXLink->getDisplay())
             {
                 // decompose children
-                drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
+                drawinglayer::primitive2d::Primitive2DVector aNewTarget;
 
                 // todo: in case mpXLink is a SVGTokenSvg or SVGTokenSymbol the
                 // SVG docs want the getWidth() and getHeight() from this node
@@ -155,7 +155,7 @@ namespace svgio
                 mpXLink->decomposeSvgNode(aNewTarget, true);
                 const_cast< SvgNode* >(mpXLink)->setAlternativeParent();
 
-                if(aNewTarget.hasElements())
+                if(!aNewTarget.empty())
                 {
                     basegfx::B2DHomMatrix aTransform;
 
@@ -178,7 +178,7 @@ namespace svgio
                                 aTransform,
                                 aNewTarget));
 
-                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xRef);
+                        rTarget.push_back(xRef);
                     }
                     else
                     {

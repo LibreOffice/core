@@ -57,7 +57,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -107,7 +107,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -162,7 +162,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -263,7 +263,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructors. The one without definition range will use output range as definition range
@@ -319,7 +319,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructors. The one without definition range will use output range as definition range
@@ -375,7 +375,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructors. The one without definition range will use output range as definition range
@@ -435,7 +435,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor

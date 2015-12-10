@@ -31,7 +31,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         HiddenGeometryPrimitive2D::HiddenGeometryPrimitive2D(
-            const Primitive2DSequence& rChildren)
+            const Primitive2DVector& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
         }
@@ -41,9 +41,9 @@ namespace drawinglayer
             return getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation);
         }
 
-        Primitive2DSequence HiddenGeometryPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector HiddenGeometryPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return Primitive2DSequence();
+            return Primitive2DVector();
         }
 
         // provide unique ID

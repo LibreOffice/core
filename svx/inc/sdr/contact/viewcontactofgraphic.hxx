@@ -35,10 +35,10 @@ namespace sdr
         {
         private:
             // helpers for constructing various primitive visualisations in various states
-            drawinglayer::primitive2d::Primitive2DSequence createVIP2DSForPresObj(
+            drawinglayer::primitive2d::Primitive2DVector createVIP2DSForPresObj(
                 const basegfx::B2DHomMatrix& rObjectMatrix,
                 const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const;
-            drawinglayer::primitive2d::Primitive2DSequence createVIP2DSForDraft(
+            drawinglayer::primitive2d::Primitive2DVector createVIP2DSForDraft(
                 const basegfx::B2DHomMatrix& rObjectMatrix,
                 const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const;
 
@@ -72,7 +72,7 @@ namespace sdr
         protected:
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
+            virtual drawinglayer::primitive2d::Primitive2DVector createViewIndependentPrimitive2DSequence() const override;
         };
     } // end of namespace contact
 } // end of namespace sdr

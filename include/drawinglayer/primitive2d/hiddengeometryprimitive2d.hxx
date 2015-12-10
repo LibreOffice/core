@@ -41,7 +41,7 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC HiddenGeometryPrimitive2D : public GroupPrimitive2D
         {
         public:
-            explicit HiddenGeometryPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit HiddenGeometryPrimitive2D(const Primitive2DVector& rChildren);
 
             // despite returning an empty decomposition since it's no visualisation data,
             // range calculation is intended to use hidden geometry, so
@@ -49,7 +49,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// local decomposition. Implementation will return empty Primitive2DSequence
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()

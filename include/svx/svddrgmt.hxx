@@ -41,7 +41,7 @@ public:
     SdrDragEntry();
     virtual ~SdrDragEntry();
 
-    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) = 0;
+    virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) = 0;
 
     // data read access
     bool getAddToTransparent() const { return mbAddToTransparent; }
@@ -58,7 +58,7 @@ public:
     SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon);
     virtual ~SdrDragEntryPolyPolygon();
 
-    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
+    virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
 
 
@@ -81,7 +81,7 @@ public:
     const SdrObject& getOriginal() const { return maOriginal; }
     SdrObject* getClone() { return mpClone; }
 
-    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
+    virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
 
 
@@ -89,15 +89,15 @@ public:
 class SdrDragEntryPrimitive2DSequence : public SdrDragEntry
 {
 private:
-    drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
+    drawinglayer::primitive2d::Primitive2DVector  maPrimitive2DSequence;
 
 public:
     SdrDragEntryPrimitive2DSequence(
-        const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
+        const drawinglayer::primitive2d::Primitive2DVector& rSequence,
         bool bAddToTransparent);
     virtual ~SdrDragEntryPrimitive2DSequence();
 
-    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
+    virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
 
 
@@ -112,7 +112,7 @@ public:
     SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag);
     virtual ~SdrDragEntryPointGlueDrag();
 
-    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
+    virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
 
 
@@ -177,7 +177,7 @@ protected:
     bool               IsDraggingGluePoints() const    { return getSdrDragView().IsDraggingGluePoints(); }
 
     bool DoAddConnectorOverlays();
-    drawinglayer::primitive2d::Primitive2DSequence AddConnectorOverlays();
+    drawinglayer::primitive2d::Primitive2DVector AddConnectorOverlays();
 
 public:
 

@@ -428,10 +428,10 @@ namespace
             }
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequence(const PropertyHolder& rPropertyHolder)
+        drawinglayer::primitive2d::Primitive2DVector getPrimitive2DSequence(const PropertyHolder& rPropertyHolder)
         {
             const sal_uInt32 nCount(aTargets.size());
-            drawinglayer::primitive2d::Primitive2DSequence xRetval(nCount);
+            drawinglayer::primitive2d::Primitive2DVector xRetval(nCount);
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
@@ -444,7 +444,7 @@ namespace
             // the buffer to not delete them in the destructor.
             aTargets.clear();
 
-            if(xRetval.hasElements() && rPropertyHolder.getClipPolyPolygonActive())
+            if(!xRetval.empty() && rPropertyHolder.getClipPolyPolygonActive())
             {
                 const basegfx::B2DPolyPolygon& rClipPolyPolygon = rPropertyHolder.getClipPolyPolygon();
 
@@ -455,7 +455,7 @@ namespace
                             rClipPolyPolygon,
                             xRetval));
 
-                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
+                    xRetval = drawinglayer::primitive2d::Primitive2DVector { xMask };
                 }
             }
 
@@ -538,7 +538,7 @@ namespace drawinglayer
         {
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(
+            virtual Primitive2DVector create2DDecomposition(
                 const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
@@ -551,7 +551,7 @@ namespace drawinglayer
             }
         };
 
-        Primitive2DSequence NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
+        Primitive2DVector NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
             const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(!getFillGradient().isDefault())
@@ -560,7 +560,7 @@ namespace drawinglayer
             }
             else
             {
-                return Primitive2DSequence();
+                return Primitive2DVector();
             }
         }
     } // end of namespace primitive2d
@@ -990,7 +990,7 @@ namespace
         // MaskPrimitive2D accordingly.
         if(rPropertyHolders.Current().getClipPolyPolygonActive() && rTargetHolders.size() > 1)
         {
-            drawinglayer::primitive2d::Primitive2DSequence aSubContent;
+            drawinglayer::primitive2d::Primitive2DVector aSubContent;
 
             if(rPropertyHolders.Current().getClipPolyPolygon().count()
                 && rTargetHolders.Current().size())
@@ -1001,7 +1001,7 @@ namespace
 
             rTargetHolders.Pop();
 
-            if(aSubContent.hasElements())
+            if(!aSubContent.empty())
             {
                 rTargetHolders.Current().append(
                     new drawinglayer::primitive2d::GroupPrimitive2D(
@@ -1036,7 +1036,7 @@ namespace
         // check if currently active
         if(rPropertyHolders.Current().isRasterOpActive() && rTargetHolders.size() > 1)
         {
-            drawinglayer::primitive2d::Primitive2DSequence aSubContent;
+            drawinglayer::primitive2d::Primitive2DVector aSubContent;
 
             if(rTargetHolders.Current().size())
             {
@@ -1045,7 +1045,7 @@ namespace
 
             rTargetHolders.Pop();
 
-            if(aSubContent.hasElements())
+            if(!aSubContent.empty())
             {
                 if(rPropertyHolders.Current().isRasterOpForceBlack())
                 {
@@ -1120,7 +1120,7 @@ namespace
             if(!rPropertyHolder.getTransformation().isIdentity())
             {
                 const drawinglayer::primitive2d::Primitive2DReference xPrim(pRetval);
-                const drawinglayer::primitive2d::Primitive2DSequence xSeq(&xPrim, 1);
+                const drawinglayer::primitive2d::Primitive2DVector xSeq { xPrim };
 
                 pRetval = new drawinglayer::primitive2d::TransformPrimitive2D(
                     rPropertyHolder.getTransformation(),
@@ -1196,7 +1196,7 @@ namespace
             rTarget.append(
                 new drawinglayer::primitive2d::TransformPrimitive2D(
                     rProperty.getTransformation(),
-                    drawinglayer::primitive2d::Primitive2DSequence(&xPrim, 1)));
+                    drawinglayer::primitive2d::Primitive2DVector { xPrim }));
         }
     }
 
@@ -1425,7 +1425,7 @@ namespace
                 aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
 
                 // prepare Primitive2DSequence, put text in foreground
-                drawinglayer::primitive2d::Primitive2DSequence aSequence(2);
+                drawinglayer::primitive2d::Primitive2DVector aSequence(2);
                 aSequence[1] = drawinglayer::primitive2d::Primitive2DReference(pResult);
 
                 // prepare filled polygon
@@ -1457,7 +1457,7 @@ namespace
                 rTarget.append(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         rProperty.getTransformation(),
-                        drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1)));
+                        drawinglayer::primitive2d::Primitive2DVector { aReference }));
             }
         }
     }
@@ -1575,7 +1575,7 @@ namespace
                     else
                     {
                         // when a transformation is set, embed to it
-                        drawinglayer::primitive2d::Primitive2DSequence xTargets(aTargetVector.size());
+                        drawinglayer::primitive2d::Primitive2DVector xTargets(aTargetVector.size());
 
                         for(size_t a(0); a < aTargetVector.size(); a++)
                         {
@@ -2116,7 +2116,7 @@ namespace
                         if(aGDIMetaFile.GetActionSize())
                         {
                             // create sub-content
-                            drawinglayer::primitive2d::Primitive2DSequence xSubContent;
+                            drawinglayer::primitive2d::Primitive2DVector xSubContent;
                             {
                                 rTargetHolders.Push();
 
@@ -2132,7 +2132,7 @@ namespace
                                 rTargetHolders.Pop();
                             }
 
-                            if(xSubContent.hasElements())
+                            if(!xSubContent.empty())
                             {
                                 // add with transformation
                                 rTargetHolders.Current().append(
@@ -2299,7 +2299,7 @@ namespace
                             {
                                 // really a gradient
                                 aRange.transform(rPropertyHolders.Current().getTransformation());
-                                drawinglayer::primitive2d::Primitive2DSequence xGradient(1);
+                                drawinglayer::primitive2d::Primitive2DVector xGradient(1);
 
                                 if(rPropertyHolders.Current().isRasterOpInvert())
                                 {
@@ -2356,7 +2356,7 @@ namespace
                         rTargetHolders.Current().append(
                             new drawinglayer::primitive2d::MaskPrimitive2D(
                                 aOutline,
-                                drawinglayer::primitive2d::Primitive2DSequence(&aFillHatch, 1)));
+                                drawinglayer::primitive2d::Primitive2DVector { aFillHatch }));
                     }
 
                     break;
@@ -2859,13 +2859,13 @@ namespace
 
                             // create primitives there and get them
                             createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
-                            const drawinglayer::primitive2d::Primitive2DSequence aSubContent(
+                            const drawinglayer::primitive2d::Primitive2DVector aSubContent(
                                 rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current()));
 
                             // back to old target
                             rTargetHolders.Pop();
 
-                            if(aSubContent.hasElements())
+                            if(!aSubContent.empty())
                             {
                                 rTargetHolders.Current().append(
                                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
@@ -2967,7 +2967,7 @@ namespace
                         {
                             // create the sub-content with no embedding specific to the
                             // sub-metafile, this seems not to be used.
-                            drawinglayer::primitive2d::Primitive2DSequence xSubContent;
+                            drawinglayer::primitive2d::Primitive2DVector xSubContent;
                             {
                                 rTargetHolders.Push();
                                 // #i# for sub-Mteafile contents, do start with new, default render state
@@ -2978,7 +2978,7 @@ namespace
                                 rTargetHolders.Pop();
                             }
 
-                            if(xSubContent.hasElements())
+                            if(!xSubContent.empty())
                             {
                                 // prepare sub-content transform
                                 basegfx::B2DHomMatrix aSubTransform;
@@ -3011,7 +3011,7 @@ namespace
                                             aSubTransform,
                                             xSubContent));
 
-                                    xSubContent = drawinglayer::primitive2d::Primitive2DSequence(&aEmbeddedTransform, 1);
+                                    xSubContent = drawinglayer::primitive2d::Primitive2DVector { aEmbeddedTransform };
                                 }
 
                                 // check if gradient is a real gradient
@@ -3042,7 +3042,7 @@ namespace
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::TransparencePrimitive2D(
                                             xSubContent,
-                                            drawinglayer::primitive2d::Primitive2DSequence(&xTransparence, 1)));
+                                            drawinglayer::primitive2d::Primitive2DVector { xTransparence }));
                                 }
                             }
                         }
@@ -3176,7 +3176,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence MetafilePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DVector MetafilePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // prepare target and porperties; each will have one default entry
             TargetHolders aTargetHolders;
@@ -3190,7 +3190,7 @@ namespace drawinglayer
 
             // get the content. There should be only one target, as in the start condition,
             // but iterating will be the right thing to do when some push/pop is not closed
-            Primitive2DSequence xRetval;
+            Primitive2DVector xRetval;
 
             while(aTargetHolders.size() > 1)
             {
@@ -3202,7 +3202,7 @@ namespace drawinglayer
             appendPrimitive2DSequenceToPrimitive2DSequence(xRetval,
                 aTargetHolders.Current().getPrimitive2DSequence(aPropertyHolders.Current()));
 
-            if(xRetval.hasElements())
+            if(!xRetval.empty())
             {
                 // get target size
                 const Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
@@ -3222,7 +3222,7 @@ namespace drawinglayer
                         aAdaptedTransform,
                         xRetval));
 
-                xRetval = Primitive2DSequence(&aEmbeddedTransform, 1);
+                xRetval = Primitive2DVector { aEmbeddedTransform };
             }
 
             return xRetval;

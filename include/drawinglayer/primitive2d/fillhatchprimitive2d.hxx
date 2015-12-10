@@ -66,7 +66,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructors. The one without definition range will use output range as definition range
@@ -93,7 +93,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// Override standard getDecomposition to be view-dependent here
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

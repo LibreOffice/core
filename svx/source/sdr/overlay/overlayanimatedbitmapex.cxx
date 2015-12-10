@@ -29,7 +29,7 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayAnimatedBitmapEx::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DVector OverlayAnimatedBitmapEx::createOverlayObjectPrimitive2DSequence()
         {
             if(mbOverlayState)
             {
@@ -42,7 +42,7 @@ namespace sdr
                         getShearX(),
                         getRotation()));
 
-                return drawinglayer::primitive2d::Primitive2DSequence(&aPrimitive, 1);
+                return drawinglayer::primitive2d::Primitive2DVector { aPrimitive };
             }
             else
             {
@@ -55,7 +55,7 @@ namespace sdr
                         getShearX(),
                         getRotation()));
 
-                return drawinglayer::primitive2d::Primitive2DSequence(&aPrimitive, 1);
+                return drawinglayer::primitive2d::Primitive2DVector { aPrimitive };
             }
         }
 

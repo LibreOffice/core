@@ -37,7 +37,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         UnifiedTransparencePrimitive2D::UnifiedTransparencePrimitive2D(
-            const Primitive2DSequence& rChildren,
+            const Primitive2DVector& rChildren,
             double fTransparence)
         :   GroupPrimitive2D(rChildren),
             mfTransparence(fTransparence)
@@ -63,7 +63,7 @@ namespace drawinglayer
             return getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation);
         }
 
-        Primitive2DSequence UnifiedTransparencePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DVector UnifiedTransparencePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(0.0 == getTransparence())
             {
@@ -91,19 +91,19 @@ namespace drawinglayer
                 const basegfx::B2DRange aPolygonRange(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
                 const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aPolygonRange));
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
-                Primitive2DSequence aTransparenceContent(2);
+                Primitive2DVector aTransparenceContent(2);
 
                 aTransparenceContent[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aGray));
                 aTransparenceContent[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aGray));
 
                 // create sub-transparence group with a gray-colored rectangular fill polygon
                 const Primitive2DReference xRefB(new TransparencePrimitive2D(getChildren(), aTransparenceContent));
-                return Primitive2DSequence(&xRefB, 1L);
+                return Primitive2DVector { xRefB };
             }
             else
             {
                 // completely transparent or invalid definition, add nothing
-                return Primitive2DSequence();
+                return Primitive2DVector();
             }
         }
 

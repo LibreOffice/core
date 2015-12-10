@@ -32,7 +32,7 @@ namespace drawinglayer
     {
         StructureTagPrimitive2D::StructureTagPrimitive2D(
             const vcl::PDFWriter::StructElement& rStructureElement,
-            const Primitive2DSequence& rChildren)
+            const Primitive2DVector& rChildren)
         :   GroupPrimitive2D(rChildren),
             maStructureElement(rStructureElement)
         {

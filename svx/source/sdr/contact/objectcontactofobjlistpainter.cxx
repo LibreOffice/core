@@ -103,7 +103,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
             updateViewInformation2D(aNewViewInformation2D);
 
             // collect primitive data in a sequence; this will already use the updated ViewInformation2D
-            drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence;
+            drawinglayer::primitive2d::Primitive2DVector xPrimitiveSequence;
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -114,7 +114,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
             }
 
             // if there is something to show, use a vclProcessor to render it
-            if(xPrimitiveSequence.hasElements())
+            if(!xPrimitiveSequence.empty())
             {
                 std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     *pTargetDevice,

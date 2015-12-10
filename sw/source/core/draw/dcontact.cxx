@@ -1995,7 +1995,7 @@ namespace sdr
              *
              * This method will not handle included hierarchies and not check geometric visibility.
              */
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             VOCOfDrawVirtObj(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -2038,7 +2038,7 @@ namespace sdr
     namespace contact
     {
         /// recursively collect primitive data from given VOC with given offset
-        void impAddPrimitivesFromGroup(const ViewObjectContact& rVOC, const basegfx::B2DHomMatrix& rOffsetMatrix, const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DSequence& rxTarget)
+        void impAddPrimitivesFromGroup(const ViewObjectContact& rVOC, const basegfx::B2DHomMatrix& rOffsetMatrix, const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DVector& rxTarget)
         {
             const sal_uInt32 nSubHierarchyCount(rVOC.GetViewContact().GetObjectCount());
 
@@ -2056,9 +2056,9 @@ namespace sdr
                     // single object, add primitives; check model-view visibility
                     if(rCandidate.isPrimitiveVisible(rDisplayInfo))
                     {
-                        drawinglayer::primitive2d::Primitive2DSequence aNewSequence(rCandidate.getPrimitive2DSequence(rDisplayInfo));
+                        drawinglayer::primitive2d::Primitive2DVector aNewSequence(rCandidate.getPrimitive2DSequence(rDisplayInfo));
 
-                        if(aNewSequence.hasElements())
+                        if(!aNewSequence.empty())
                         {
                             // get ranges
                             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(rCandidate.GetObjectContact().getViewInformation2D());
@@ -2072,11 +2072,11 @@ namespace sdr
                             if(!aViewRange.overlaps(aObjectRange))
                             {
                                 // not visible, release
-                                aNewSequence.realloc(0);
+                                aNewSequence.clear();
                             }
                         }
 
-                        if(aNewSequence.hasElements())
+                        if(!aNewSequence.empty())
                         {
                             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rxTarget, aNewSequence);
                         }
@@ -2085,11 +2085,11 @@ namespace sdr
             }
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive2d::Primitive2DVector VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
             const VCOfDrawVirtObj& rVC = static_cast< const VCOfDrawVirtObj& >(GetViewContact());
             const SdrObject& rReferencedObject = rVC.GetSwDrawVirtObj().GetReferencedObj();
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DVector xRetval;
 
             // create offset transformation
             basegfx::B2DHomMatrix aOffsetMatrix;
@@ -2119,11 +2119,11 @@ namespace sdr
                 xRetval = rReferencedObject.GetViewContact().getViewIndependentPrimitive2DSequence();
             }
 
-            if(xRetval.hasElements())
+            if(!xRetval.empty())
             {
                 // create transform primitive
                 const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::TransformPrimitive2D(aOffsetMatrix, xRetval));
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                xRetval = drawinglayer::primitive2d::Primitive2DVector { xReference };
             }
 
             return xRetval;

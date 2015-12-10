@@ -864,7 +864,7 @@ namespace drawinglayer
         // mask group. Force output to VDev and create mask from given mask
         void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate)
         {
-            if(rMaskCandidate.getChildren().hasElements())
+            if(!rMaskCandidate.getChildren().empty())
             {
                 basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
 
@@ -917,7 +917,7 @@ namespace drawinglayer
         // modified color group. Force output to unified color.
         void VclProcessor2D::RenderModifiedColorPrimitive2D(const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate)
         {
-            if(rModifiedCandidate.getChildren().hasElements())
+            if(!rModifiedCandidate.getChildren().empty())
             {
                 maBColorModifierStack.push(rModifiedCandidate.getColorModifier());
                 process(rModifiedCandidate.getChildren());
@@ -930,7 +930,7 @@ namespace drawinglayer
         {
             static bool bForceToDecomposition(false);
 
-            if(rTransCandidate.getChildren().hasElements())
+            if(!rTransCandidate.getChildren().empty())
             {
                 if(bForceToDecomposition)
                 {
@@ -974,7 +974,7 @@ namespace drawinglayer
         // sub-transparence group. Draw to VDev first.
         void VclProcessor2D::RenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate)
         {
-            if(rTransCandidate.getChildren().hasElements())
+            if(!rTransCandidate.getChildren().empty())
             {
                 basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rTransCandidate.getChildren(), getViewInformation2D()));
                 aRange.transform(maCurrentTransformation);

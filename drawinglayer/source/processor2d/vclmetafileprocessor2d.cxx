@@ -237,7 +237,7 @@ namespace drawinglayer
     namespace processor2d
     {
         Rectangle VclMetafileProcessor2D::impDumpToMetaFile(
-            const primitive2d::Primitive2DSequence& rContent,
+            const primitive2d::Primitive2DVector& rContent,
             GDIMetaFile& o_rContentMetafile)
         {
             // Prepare VDev, MetaFile and connections
@@ -1006,7 +1006,7 @@ namespace drawinglayer
                     }
 
                     // process recursively
-                    const primitive2d::Primitive2DSequence rContent = rFieldPrimitive.get2DDecomposition(getViewInformation2D());
+                    const primitive2d::Primitive2DVector rContent = rFieldPrimitive.get2DDecomposition(getViewInformation2D());
                     process(rContent);
 
                     // for the end comment the type is not relevant yet, they are all the same. Just add.
@@ -1476,7 +1476,7 @@ namespace drawinglayer
                                 aLocalPolyPolygon,
                                 rHatchCandidate.getBackgroundColor()));
 
-                        process(primitive2d::Primitive2DSequence(&xBackground, 1));
+                        process(primitive2d::Primitive2DVector { xBackground });
                     }
 
                     SvtGraphicFill* pSvtGraphicFill = nullptr;
@@ -1752,7 +1752,7 @@ namespace drawinglayer
                     // mask group. Special handling for MetaFiles.
                     const primitive2d::MaskPrimitive2D& rMaskCandidate = static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate);
 
-                    if(rMaskCandidate.getChildren().hasElements())
+                    if(!rMaskCandidate.getChildren().empty())
                     {
                         basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
 
@@ -1820,9 +1820,9 @@ namespace drawinglayer
                     // - uses DrawTransparent for single PolyPoylgons directly. Can be detected by
                     //   checking the content for single PolyPolygonColorPrimitive2D
                     const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DSequence rContent = rUniTransparenceCandidate.getChildren();
+                    const primitive2d::Primitive2DVector rContent = rUniTransparenceCandidate.getChildren();
 
-                    if(rContent.hasElements())
+                    if(!rContent.empty())
                     {
                         if(0.0 == rUniTransparenceCandidate.getTransparence())
                         {
@@ -1836,7 +1836,7 @@ namespace drawinglayer
                             const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = nullptr;
                             static bool bForceToMetafile(false);
 
-                            if(!bForceToMetafile && 1 == rContent.getLength())
+                            if(!bForceToMetafile && 1 == rContent.size())
                             {
                                 const primitive2d::Primitive2DReference xReference(rContent[0]);
                                 pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
@@ -1960,17 +1960,17 @@ namespace drawinglayer
                     // If that detection goes wrong, I have to create an transparence-blended bitmap. Eventually
                     // do that in stripes, else RenderTransparencePrimitive2D may just be used
                     const primitive2d::TransparencePrimitive2D& rTransparenceCandidate = static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DSequence rContent = rTransparenceCandidate.getChildren();
-                    const primitive2d::Primitive2DSequence rTransparence = rTransparenceCandidate.getTransparence();
+                    const primitive2d::Primitive2DVector& rContent = rTransparenceCandidate.getChildren();
+                    const primitive2d::Primitive2DVector& rTransparence = rTransparenceCandidate.getTransparence();
 
-                    if(rContent.hasElements() && rTransparence.hasElements())
+                    if(!rContent.empty() && !rTransparence.empty())
                     {
                         // try to identify a single FillGradientPrimitive2D in the
                         // transparence part of the primitive
                         const primitive2d::FillGradientPrimitive2D* pFiGradient = nullptr;
                         static bool bForceToBigTransparentVDev(false);
 
-                        if(!bForceToBigTransparentVDev && 1 == rTransparence.getLength())
+                        if(!bForceToBigTransparentVDev && 1 == rTransparence.size())
                         {
                             const primitive2d::Primitive2DReference xReference(rTransparence[0]);
                             pFiGradient = dynamic_cast< const primitive2d::FillGradientPrimitive2D* >(xReference.get());

@@ -35,12 +35,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PagePreviewPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DVector PagePreviewPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence xRetval;
-            Primitive2DSequence aContent(getPageContent());
+            Primitive2DVector xRetval;
+            Primitive2DVector aContent(getPageContent());
 
-            if(aContent.hasElements()
+            if(!aContent.empty()
                 && basegfx::fTools::more(getContentWidth(), 0.0)
                 && basegfx::fTools::more(getContentHeight(), 0.0))
             {
@@ -62,7 +62,7 @@ namespace drawinglayer
                             new MaskPrimitive2D(
                                 basegfx::B2DPolyPolygon(
                                     basegfx::tools::createPolygonFromRect(aAllowedContentRange)), aContent));
-                        aContent = Primitive2DSequence(&xReferenceA, 1);
+                        aContent = Primitive2DVector { xReferenceA };
                     }
 
                     // create a mapping from content to object.
@@ -112,7 +112,7 @@ namespace drawinglayer
 
                     // embed in necessary transformation to map from SdrPage to SdrPageObject
                     const Primitive2DReference xReferenceB(new TransformPrimitive2D(aPageTrans, aContent));
-                    xRetval = Primitive2DSequence(&xReferenceB, 1);
+                    xRetval = Primitive2DVector { xReferenceB };
                 }
             }
 
@@ -124,7 +124,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             double fContentWidth,
             double fContentHeight,
-            const Primitive2DSequence& rPageContent,
+            const Primitive2DVector& rPageContent,
             bool bKeepAspectRatio)
         :   BufferedDecompositionPrimitive2D(),
             mxDrawPage(rxDrawPage),

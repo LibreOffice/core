@@ -281,13 +281,13 @@ namespace drawinglayer
                     }
                 }
 
-                mxResult = Primitive2DVectorToPrimitive2DSequence(aTempResult);
+                mxResult = aTempResult;
             }
         }
 
-        const Primitive2DSequence& TextBreakupHelper::getResult(BreakupUnit aBreakupUnit) const
+        const Primitive2DVector& TextBreakupHelper::getResult(BreakupUnit aBreakupUnit) const
         {
-            if(!mxResult.hasElements())
+            if(mxResult.empty())
             {
                 const_cast< TextBreakupHelper* >(this)->breakup(aBreakupUnit);
             }

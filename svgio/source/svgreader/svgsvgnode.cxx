@@ -294,9 +294,9 @@ namespace svgio
         }
 
 // ToDo: Consider attribute overflow in method decomposeSvgNode
-        void SvgSvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgSvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DVector& rTarget, bool bReferenced) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence aSequence;
+            drawinglayer::primitive2d::Primitive2DVector aSequence;
 
             // #i125258# check now if we need to init some style settings locally. Do not do this
             // in the constructor, there is not yet informatikon e.g. about existing CssStyles.
@@ -306,7 +306,7 @@ namespace svgio
             // decompose children
             SvgNode::decomposeSvgNode(aSequence, bReferenced);
 
-            if(aSequence.hasElements())
+            if(!aSequence.empty())
             {
                 if(getParent())
                 {
@@ -435,7 +435,7 @@ namespace svgio
                                 if(rRatio.isMeetOrSlice())
                                 {
                                     // embed in transformation
-                                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xRef);
+                                    rTarget.push_back(xRef);
                                 }
                                 else
                                 {
@@ -443,9 +443,9 @@ namespace svgio
                                     const drawinglayer::primitive2d::Primitive2DReference xMask(
                                         new drawinglayer::primitive2d::MaskPrimitive2D(
                                             basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aTarget)),
-                                            drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1)));
+                                            drawinglayer::primitive2d::Primitive2DVector { xRef }));
 
-                                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xMask);
+                                    rTarget.push_back(xMask);
                                 }
                             }
                         }
@@ -463,7 +463,7 @@ namespace svgio
                                         basegfx::tools::createTranslateB2DHomMatrix(fX, fY),
                                         aSequence));
 
-                                aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
+                                aSequence = drawinglayer::primitive2d::Primitive2DVector { xRef, };
                             }
 
                             // embed in MaskPrimitive2D to clip
@@ -475,7 +475,7 @@ namespace svgio
                                     aSequence));
 
                             // append
-                            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xMask);
+                            rTarget.push_back(xMask);
                         }
                     }
                 }
@@ -543,7 +543,7 @@ namespace svgio
                                         aViewBoxMapping,
                                         aSequence));
 
-                                aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                                aSequence = drawinglayer::primitive2d::Primitive2DVector { xTransform };
                             }
                         }
                         else // no viewbox
@@ -603,9 +603,9 @@ namespace svgio
                                         basegfx::BColor(0.0, 0.0, 0.0)));
                                 const drawinglayer::primitive2d::Primitive2DReference xHidden(
                                     new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
-                                        drawinglayer::primitive2d::Primitive2DSequence(&xLine, 1)));
+                                        drawinglayer::primitive2d::Primitive2DVector { xLine }));
 
-                                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aSequence, xHidden);
+                                aSequence.push_back(xHidden);
                             }
                             else if(aSvgCanvasRange.overlaps(aContentRange))
                             {
@@ -621,16 +621,16 @@ namespace svgio
                                                 aSvgCanvasRange)),
                                         aSequence));
 
-                                aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
+                                aSequence = drawinglayer::primitive2d::Primitive2DVector { xMask };
                             }
                             else
                             {
                                 // not inside, no overlap. Empty Svg
-                                aSequence.realloc(0);
+                                aSequence.clear();
                             }
                         }
 
-                        if(aSequence.hasElements())
+                        if(!aSequence.empty())
                         {
                             // embed in transform primitive to scale to 1/100th mm
                             // where 1 inch == 25.4 mm to get from Svg coordinates (px) to
@@ -646,7 +646,7 @@ namespace svgio
                                     aTransform,
                                     aSequence));
 
-                            aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                            aSequence = drawinglayer::primitive2d::Primitive2DVector { xTransform };
 
                             // append to result
                             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSequence);

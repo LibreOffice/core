@@ -55,9 +55,9 @@ namespace {
     public:
         ViewRedirector();
         virtual ~ViewRedirector();
-        virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+        virtual drawinglayer::primitive2d::Primitive2DVector createRedirectedPrimitive2DSequence(
             const sdr::contact::ViewObjectContact& rOriginal,
-                const sdr::contact::DisplayInfo& rDisplayInfo) override;
+            const sdr::contact::DisplayInfo& rDisplayInfo) override;
     };
 }
 
@@ -515,7 +515,7 @@ ViewRedirector::~ViewRedirector()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DVector ViewRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {
@@ -534,11 +534,11 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
     if ( ! bDoCreateGeometry
         && (pObject->GetObjInventor() != SdrInventor || pObject->GetObjIdentifier() != OBJ_PAGE))
     {
-        return drawinglayer::primitive2d::Primitive2DSequence();
+        return drawinglayer::primitive2d::Primitive2DVector();
     }
 
     if (pObject->IsEmptyPresObj())
-        return drawinglayer::primitive2d::Primitive2DSequence();
+        return drawinglayer::primitive2d::Primitive2DVector();
 
     return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
         rOriginal,

@@ -72,7 +72,7 @@ namespace drawinglayer
             geometry::ViewInformation3D                         maViewInformation3D;
 
             /// the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
-            Primitive2DSequence                                 maShadowPrimitives;
+            Primitive2DVector                                   maShadowPrimitives;
 
             /// bitfield
             /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
@@ -100,7 +100,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// public helpers
@@ -108,8 +108,8 @@ namespace drawinglayer
                 the 3D content is not converted to a bitmap visualisation but to projected 2D geometry. This
                 helper is useful e.g. for Contour extraction or HitTests.
               */
-            Primitive2DSequence getGeometry2D() const;
-            Primitive2DSequence getShadow2D(const geometry::ViewInformation2D& rViewInformation) const;
+            Primitive2DVector getGeometry2D() const;
+            Primitive2DVector getShadow2D(const geometry::ViewInformation2D& rViewInformation) const;
 
             /** Fast HitTest which uses the last buffered BitmapEx from the last
                 rendered area if available. The return value describes if the check
@@ -147,7 +147,7 @@ namespace drawinglayer
             DeclPrimitive2DIDBlock()
 
             /// get local decomposition. Override since this decomposition is view-dependent
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

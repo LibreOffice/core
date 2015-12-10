@@ -79,7 +79,7 @@ basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
         aObjectRange.getMinX(), aObjectRange.getMinY());
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
+drawinglayer::primitive2d::Primitive2DVector ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
 {
     // get object transformation
     const basegfx::B2DHomMatrix aObjectMatrix(createObjectTransform());
@@ -108,14 +108,14 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPr
         {
             // try to get chart primitives and chart range directly from xChartModel
             basegfx::B2DRange aChartContentRange;
-            const drawinglayer::primitive2d::Primitive2DSequence aChartSequence(
+            const drawinglayer::primitive2d::Primitive2DVector aChartSequence(
                 ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
                     GetOle2Obj().getXModel(),
                     aChartContentRange));
             const double fWidth(aChartContentRange.getWidth());
             const double fHeight(aChartContentRange.getHeight());
 
-            if(aChartSequence.hasElements()
+            if(!aChartSequence.empty()
                 && basegfx::fTools::more(fWidth, 0.0)
                 && basegfx::fTools::more(fHeight, 0.0))
             {
@@ -159,11 +159,11 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPr
     // SdrOle2Primitive2D to create needed invisible elements for HitTest and/or BoundRect
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::SdrOle2Primitive2D(
-            drawinglayer::primitive2d::Primitive2DSequence(&xContent, 1),
+            drawinglayer::primitive2d::Primitive2DVector { xContent },
             aObjectMatrix,
             aAttribute));
 
-    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+    return drawinglayer::primitive2d::Primitive2DVector { xReference };
 }
 
 basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const
@@ -185,12 +185,12 @@ basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometr
 
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::SdrOle2Primitive2D(
-            drawinglayer::primitive2d::Primitive2DSequence(&xContent, 1),
+            drawinglayer::primitive2d::Primitive2DVector { xContent },
             aObjectMatrix,
             aAttribute));
 
-    drawinglayer::primitive2d::Primitive2DSequence xSeq =
-        drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+    drawinglayer::primitive2d::Primitive2DVector xSeq =
+drawinglayer::primitive2d::Primitive2DVector { xReference } ;
 
     return drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xSeq, rViewInfo2D);
 }
@@ -207,7 +207,7 @@ void ViewContactOfSdrOle2Obj::ActionChanged()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DVector ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const
 {
     return createPrimitive2DSequenceWithParameters();
 }

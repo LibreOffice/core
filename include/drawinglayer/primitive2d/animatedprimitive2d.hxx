@@ -71,7 +71,7 @@ namespace drawinglayer
             /// constructor
             AnimatedSwitchPrimitive2D(
                 const animation::AnimationEntry& rAnimationEntry,
-                const Primitive2DSequence& rChildren,
+                const Primitive2DVector& rChildren,
                 bool bIsTextAnimation);
 
             /// destructor - needed due to mpAnimationEntry
@@ -92,7 +92,7 @@ namespace drawinglayer
                 depends on the point in time, so the default implementation is
                 not useful here, it needs to be handled locally
              */
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -116,11 +116,11 @@ namespace drawinglayer
             /// constructor
             AnimatedBlinkPrimitive2D(
                 const animation::AnimationEntry& rAnimationEntry,
-                const Primitive2DSequence& rChildren,
+                const Primitive2DVector& rChildren,
                 bool bIsTextAnimation);
 
             /// create local decomposition
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
@@ -153,11 +153,11 @@ namespace drawinglayer
             AnimatedInterpolatePrimitive2D(
                 const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
                 const animation::AnimationEntry& rAnimationEntry,
-                const Primitive2DSequence& rChildren,
+                const Primitive2DVector& rChildren,
                 bool bIsTextAnimation);
 
             /// create local decomposition
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

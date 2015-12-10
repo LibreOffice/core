@@ -28,12 +28,12 @@ namespace sdr
 {
     namespace overlay
     {
-        drawinglayer::primitive2d::Primitive2DSequence OverlayPrimitive2DSequenceObject::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DVector OverlayPrimitive2DSequenceObject::createOverlayObjectPrimitive2DSequence()
         {
             return getSequence();
         }
 
-        OverlayPrimitive2DSequenceObject::OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DSequence& rSequence)
+        OverlayPrimitive2DSequenceObject::OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DVector& rSequence)
         :   OverlayObjectWithBasePosition(basegfx::B2DPoint(), Color(COL_BLACK)),
             maSequence(rSequence)
         {

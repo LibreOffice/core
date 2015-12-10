@@ -67,10 +67,10 @@ const sdr::contact::ViewContactOfE3dScene* tryToFindVCOfE3DScene(
 
 namespace sdr { namespace contact {
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3d::impCreateWithGivenPrimitive3DSequence(
+drawinglayer::primitive2d::Primitive2DVector ViewContactOfE3d::impCreateWithGivenPrimitive3DSequence(
     const drawinglayer::primitive3d::Primitive3DSequence& rxContent3D) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DVector xRetval;
 
     if(rxContent3D.hasElements())
     {
@@ -119,7 +119,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3d::impCreateWithGi
                     fShadowSlant,
                     rAllContentRange));
 
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DVector { xReference };
         }
     }
 
@@ -146,7 +146,7 @@ drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3d::getVIP3DSWithou
         const_cast< ViewContactOfE3d* >(this)->mxViewIndependentPrimitive3DSequence = xNew;
     }
 
-    // return current Primitive2DSequence
+    // return current Primitive2DVector
     return mxViewIndependentPrimitive3DSequence;
 }
 
@@ -171,11 +171,11 @@ drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3d::getViewIndepend
         }
     }
 
-    // return current Primitive2DSequence
+    // return current Primitive2DVector
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3d::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DVector ViewContactOfE3d::createViewIndependentPrimitive2DSequence() const
 {
     // also need to create a 2D embedding when the view-independent part is requested,
     // see view-dependent part in ViewObjectContactOfE3d::createPrimitive2DSequence

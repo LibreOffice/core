@@ -46,9 +46,9 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive2d::Primitive2DVector ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::primitive2d::Primitive2DVector xRetval;
 
             // check model-view visibility
             if(isPrimitiveVisible(rDisplayInfo))
@@ -70,7 +70,7 @@ namespace sdr
                     // create object hierarchy
                     xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
 
-                    if(xRetval.hasElements())
+                    if(!xRetval.empty())
                     {
                         // get ranges
                         const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
@@ -81,7 +81,7 @@ namespace sdr
                         if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
                         {
                             // not visible, release
-                            xRetval.realloc(0);
+                            xRetval.clear();
                         }
                     }
 

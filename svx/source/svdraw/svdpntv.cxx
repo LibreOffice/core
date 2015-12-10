@@ -145,7 +145,7 @@ BitmapEx convertMetafileToBitmapEx(
                     rTargetRange.getMinimum()),
                 rMtf));
         aBitmapEx = convertPrimitive2DSequenceToBitmapEx(
-            drawinglayer::primitive2d::Primitive2DSequence(&aMtf, 1),
+            drawinglayer::primitive2d::Primitive2DVector { aMtf },
             rTargetRange,
             nMaximumQuadraticPixels);
     }

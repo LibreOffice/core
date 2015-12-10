@@ -72,12 +72,12 @@ public:
     // primitive stuff
 
     // add Gluepoints (if available)
-    virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DVector createGluePointPrimitive2DSequence() const override;
 
     // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
     // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
     // for 3D scenes
-    virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const override;
+    virtual drawinglayer::primitive2d::Primitive2DVector embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DVector& rSource) const override;
 };
 
 }}

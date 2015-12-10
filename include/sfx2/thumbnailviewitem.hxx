@@ -121,7 +121,7 @@ public:
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
-    void addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DSequence& rSeq);
+    void addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DVector& rSeq);
 
     static drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
         createBorderLine (const basegfx::B2DPolygon &rPolygon);

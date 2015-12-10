@@ -295,9 +295,9 @@ void SdrGrafObj::onGraphicChanged()
     if (!rSvgDataPtr.get())
         return;
 
-    const drawinglayer::primitive2d::Primitive2DSequence aSequence(rSvgDataPtr->getPrimitive2DSequence());
+    const drawinglayer::primitive2d::Primitive2DVector aSequence(rSvgDataPtr->getPrimitive2DSequence());
 
-    if (!aSequence.hasElements())
+    if (aSequence.empty())
         return;
 
     drawinglayer::geometry::ViewInformation2D aViewInformation2D;

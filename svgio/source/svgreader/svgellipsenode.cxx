@@ -127,7 +127,7 @@ namespace svgio
             }
         }
 
-        void SvgEllipseNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced*/) const
+        void SvgEllipseNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DVector& rTarget, bool /*bReferenced*/) const
         {
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
@@ -145,11 +145,11 @@ namespace svgio
                                 getCy().isSet() ? getCy().solve(*this, ycoordinate) : 0.0),
                             fRx, fRy));
 
-                    drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
+                    drawinglayer::primitive2d::Primitive2DVector aNewTarget;
 
                     pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
 
-                    if(aNewTarget.hasElements())
+                    if(!aNewTarget.empty())
                     {
                         pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
                     }

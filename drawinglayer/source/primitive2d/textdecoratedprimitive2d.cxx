@@ -155,16 +155,16 @@ namespace drawinglayer
             // TODO: Handle Font Emphasis Above/Below
         }
 
-        Primitive2DSequence TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getWordLineMode())
             {
                 // support for single word mode; split to single word primitives
                 // using TextBreakupHelper
                 const TextBreakupHelper aTextBreakupHelper(*this);
-                const Primitive2DSequence aBroken(aTextBreakupHelper.getResult(BreakupUnit_word));
+                const Primitive2DVector aBroken(aTextBreakupHelper.getResult(BreakupUnit_word));
 
-                if(aBroken.hasElements())
+                if(!aBroken.empty())
                 {
                     // was indeed split to several words, use as result
                     return aBroken;
@@ -177,7 +177,7 @@ namespace drawinglayer
             }
             std::vector< Primitive2DReference > aNewPrimitives;
             basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(getTextTransform());
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
 
             // create basic geometry such as SimpleTextPrimitive, Overline, Underline,
             // Strikeout, etc...
@@ -189,7 +189,7 @@ namespace drawinglayer
                 getFontAttribute().getSymbol(),
                 getFontAttribute().getVertical(),
                 getFontAttribute().getItalic(),
-        getFontAttribute().getMonospaced(),
+                getFontAttribute().getMonospaced(),
                 false,             // no outline anymore, handled locally
                 getFontAttribute().getRTL(),
                 getFontAttribute().getBiDiStrong());
@@ -202,7 +202,7 @@ namespace drawinglayer
 
             if(nMemberCount)
             {
-                aRetval.realloc(nMemberCount);
+                aRetval.resize(nMemberCount);
 
                 for(sal_uInt32 a(0); a < nMemberCount; a++)
                 {
@@ -211,7 +211,7 @@ namespace drawinglayer
             }
 
             // Handle Shadow, Outline and TextRelief
-            if(aRetval.hasElements())
+            if(!aRetval.empty())
             {
                 // outline AND shadow depend on NO TextRelief (see dialog)
                 const bool bHasTextRelief(TEXT_RELIEF_NONE != getTextRelief());
@@ -279,7 +279,7 @@ namespace drawinglayer
                             aDecTrans.getTranslate(),
                             aDecTrans.getRotate(),
                             aTextEffectStyle2D));
-                        aRetval = Primitive2DSequence(&aNewTextEffect, 1);
+                        aRetval = Primitive2DVector { aNewTextEffect };
                     }
                     else if(bHasOutline)
                     {
@@ -290,15 +290,15 @@ namespace drawinglayer
                             aDecTrans.getTranslate(),
                             aDecTrans.getRotate(),
                             TEXTEFFECTSTYLE2D_OUTLINE));
-                        aRetval = Primitive2DSequence(&aNewTextEffect, 1);
+                        aRetval = Primitive2DVector { aNewTextEffect };
                     }
 
                     if(aShadow.is())
                     {
                         // put shadow in front if there is one to paint timely before
                         // but placed behind content
-                        const Primitive2DSequence aContent(aRetval);
-                        aRetval = Primitive2DSequence(&aShadow, 1);
+                        const Primitive2DVector aContent(aRetval);
+                        aRetval = Primitive2DVector { aShadow };
                         appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, aContent);
                     }
                 }

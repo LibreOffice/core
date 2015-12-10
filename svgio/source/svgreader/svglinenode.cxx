@@ -121,7 +121,7 @@ namespace svgio
             }
         }
 
-        void SvgLineNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced*/) const
+        void SvgLineNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DVector& rTarget, bool /*bReferenced*/) const
         {
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
@@ -141,11 +141,11 @@ namespace svgio
                     aPath.append(X);
                     aPath.append(Y);
 
-                    drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
+                    drawinglayer::primitive2d::Primitive2DVector aNewTarget;
 
                     pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
 
-                    if(aNewTarget.hasElements())
+                    if(!aNewTarget.empty())
                     {
                         pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
                     }

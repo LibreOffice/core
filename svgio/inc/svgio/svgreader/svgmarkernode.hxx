@@ -38,7 +38,7 @@ namespace svgio
 
         private:
             /// buffered decomposition
-            drawinglayer::primitive2d::Primitive2DSequence aPrimitives;
+            drawinglayer::primitive2d::Primitive2DVector aPrimitives;
 
             /// use styles
             SvgStyleAttributes      maSvgStyleAttributes;
@@ -66,7 +66,7 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
 
             /// get marker primitives buffered, uses decomposeSvgNode internally
-            const drawinglayer::primitive2d::Primitive2DSequence& getMarkerPrimitives() const;
+            const drawinglayer::primitive2d::Primitive2DVector& getMarkerPrimitives() const;
 
             /// InfoProvider support for % values
             virtual const basegfx::B2DRange getCurrentViewPort() const override;

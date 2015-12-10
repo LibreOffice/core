@@ -50,7 +50,7 @@ namespace sdr
         class SVX_DLLPUBLIC ViewObjectContactOfPageBackground : public ViewObjectContactOfPageSubObject
         {
         protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfPageBackground(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -84,7 +84,7 @@ namespace sdr
         class SVX_DLLPUBLIC ViewObjectContactOfPageFill : public ViewObjectContactOfPageSubObject
         {
         protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfPageFill(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -150,7 +150,7 @@ namespace sdr
             ViewObjectContactOfPageHierarchy(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageHierarchy();
 
-            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
+            virtual drawinglayer::primitive2d::Primitive2DVector getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -162,7 +162,7 @@ namespace sdr
         class SVX_DLLPUBLIC ViewObjectContactOfPageGrid : public ViewObjectContactOfPageSubObject
         {
         protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfPageGrid(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -180,7 +180,7 @@ namespace sdr
         class SVX_DLLPUBLIC ViewObjectContactOfPageHelplines : public ViewObjectContactOfPageSubObject
         {
         protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+            virtual drawinglayer::primitive2d::Primitive2DVector createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
             ViewObjectContactOfPageHelplines(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -201,7 +201,7 @@ namespace sdr
             ViewObjectContactOfSdrPage(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfSdrPage();
 
-            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
+            virtual drawinglayer::primitive2d::Primitive2DVector getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr

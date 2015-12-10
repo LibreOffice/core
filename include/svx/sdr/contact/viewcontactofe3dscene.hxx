@@ -66,7 +66,7 @@ public:
 
     // scene primitive creators. If pLayerVisibility is given, a visibility test with the LayerID and the
     // given SetOfByte is done.
-    drawinglayer::primitive2d::Primitive2DSequence createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const;
+    drawinglayer::primitive2d::Primitive2DVector createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const;
 
     // helpers to get the sequence of all contained 3D primitives and its range,
     // regardless of layer or visibility constraints and using a neutral ViewInformation3D
@@ -94,7 +94,7 @@ protected:
 
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DVector createViewIndependentPrimitive2DSequence() const override;
 };
 
 }}

@@ -26,7 +26,7 @@ public:
 protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
-    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DVector createViewIndependentPrimitive2DSequence() const override;
 };
 
 } // namespace contact

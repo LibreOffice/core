@@ -51,7 +51,7 @@ namespace drawinglayer
         {
         private:
             /// the text (or other) content
-            Primitive2DSequence                             maTextContent;
+            Primitive2DVector                               maTextContent;
 
             /// the style to apply, the direction and the rotation center
             const basegfx::B2DPoint                         maRotationCenter;
@@ -65,18 +65,18 @@ namespace drawinglayer
 
         protected:
             /// create local decomposition
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// construcor
             TextEffectPrimitive2D(
-                const Primitive2DSequence& rTextContent,
+                const Primitive2DVector& rTextContent,
                 const basegfx::B2DPoint& rRotationCenter,
                 double fDirection,
                 TextEffectStyle2D eTextEffectStyle2D);
 
             /// data read access
-            const Primitive2DSequence& getTextContent() const { return maTextContent; }
+            const Primitive2DVector& getTextContent() const { return maTextContent; }
             const basegfx::B2DPoint& getRotationCenter() const { return maRotationCenter; }
             double getDirection() const { return mfDirection; }
             TextEffectStyle2D getTextEffectStyle2D() const { return meTextEffectStyle2D; }
@@ -94,7 +94,7 @@ namespace drawinglayer
             DeclPrimitive2DIDBlock()
 
             /// Override standard getDecomposition to be view-dependent here
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

@@ -393,7 +393,7 @@ public:
                           const editeng::SvxBorderStyle = css::table::BorderLineStyle::SOLID ) const;
 
     drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
-    void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const;
+    void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DVector& rSequence ) const;
 
     // FIXME: EasyHack (refactoring): rename method name in all files
     // retouch, not in the area of the given Rect!

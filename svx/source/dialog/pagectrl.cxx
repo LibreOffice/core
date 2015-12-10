@@ -365,7 +365,7 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
             rDefineRange.Bottom());
 
         // prepare primitive sequence
-        drawinglayer::primitive2d::Primitive2DSequence aSequence;
+        drawinglayer::primitive2d::Primitive2DVector aSequence;
 
         // create fill geometry if there is something to fill
         if (rFillAttributes.get() && rFillAttributes->isUsed())
@@ -380,11 +380,11 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
                 new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                     basegfx::tools::createPolygonFromRect(aPaintRange), GetLineColor().getBColor()));
 
-            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aSequence, xOutline);
+            aSequence.push_back(xOutline);
         }
 
         // draw that if we have something to draw
-        if (aSequence.getLength())
+        if (!aSequence.empty())
         {
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
                             basegfx::B2DHomMatrix(), GetViewTransformation(), aPaintRange, nullptr,

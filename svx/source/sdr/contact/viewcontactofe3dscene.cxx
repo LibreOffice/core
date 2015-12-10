@@ -268,10 +268,10 @@ void ViewContactOfE3dScene::createSdrLightingAttribute()
     maSdrLightingAttribute = drawinglayer::primitive2d::createNewSdrLightingAttribute(rItemSet);
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createScenePrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DVector ViewContactOfE3dScene::createScenePrimitive2DSequence(
     const SetOfByte* pLayerVisibility) const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DVector xRetval;
     const sal_uInt32 nChildrenCount(GetObjectCount());
 
     if(nChildrenCount)
@@ -321,21 +321,21 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createScen
                     getObjectTransformation(),
                     getViewInformation3D(aContentRange)));
 
-            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DVector{ xReference };
         }
     }
 
     // always append an invisible outline for the cases where no visible content exists
-    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+    xRetval.push_back(
         drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
             false, getObjectTransformation()));
 
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DVector ViewContactOfE3dScene::createViewIndependentPrimitive2DSequence() const
 {
-    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    drawinglayer::primitive2d::Primitive2DVector xRetval;
 
     if(GetObjectCount())
     {

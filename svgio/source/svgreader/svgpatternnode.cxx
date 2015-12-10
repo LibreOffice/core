@@ -264,14 +264,14 @@ namespace svgio
             }
         }
 
-        const drawinglayer::primitive2d::Primitive2DSequence& SvgPatternNode::getPatternPrimitives() const
+        const drawinglayer::primitive2d::Primitive2DVector& SvgPatternNode::getPatternPrimitives() const
         {
-            if(!aPrimitives.hasElements() && Display_none != getDisplay())
+            if(aPrimitives.empty() && Display_none != getDisplay())
             {
                 decomposeSvgNode(const_cast< SvgPatternNode* >(this)->aPrimitives, true);
             }
 
-            if(!aPrimitives.hasElements() && !maXLink.isEmpty())
+            if(aPrimitives.empty() && !maXLink.isEmpty())
             {
                 const_cast< SvgPatternNode* >(this)->tryToFindLink();
 

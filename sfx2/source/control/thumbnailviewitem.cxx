@@ -262,7 +262,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                const ThumbnailItemAttributes *pAttrs)
 {
     BColor aFillColor = pAttrs->aFillColor;
-    drawinglayer::primitive2d::Primitive2DSequence aSeq(4);
+    drawinglayer::primitive2d::Primitive2DVector aSeq(4);
     double fTransparence = 0.0;
 
     // Draw background
@@ -314,7 +314,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     pProcessor->process(aSeq);
 }
 
-void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DSequence& rSeq)
+void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DVector& rSeq)
 {
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;
 
@@ -326,8 +326,8 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
     aTextEngine.SetText(rText);
 
-    sal_Int32 nPrimitives = rSeq.getLength();
-    rSeq.realloc(nPrimitives + aTextEngine.GetLineCount(0));
+    sal_Int32 nPrimitives = rSeq.size();
+    rSeq.resize(nPrimitives + aTextEngine.GetLineCount(0));
 
     // Create the text primitives
     sal_uInt16 nLineStart = 0;

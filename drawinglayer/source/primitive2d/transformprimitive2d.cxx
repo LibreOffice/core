@@ -33,7 +33,7 @@ namespace drawinglayer
     {
         TransformPrimitive2D::TransformPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
-            const Primitive2DSequence& rChildren)
+            const Primitive2DVector& rChildren)
         :   GroupPrimitive2D(rChildren),
             maTransformation(rTransformation)
         {

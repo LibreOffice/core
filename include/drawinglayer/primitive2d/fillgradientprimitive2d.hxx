@@ -69,21 +69,21 @@ namespace drawinglayer
             void generateMatricesAndColors(
                 std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
                 basegfx::BColor& rOuterColor) const;
-            Primitive2DSequence createOverlappingFill(
+            Primitive2DVector createOverlappingFill(
                 const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
                 const basegfx::BColor& rOuterColor,
                 const basegfx::B2DPolygon& rUnitPolygon) const;
-            Primitive2DSequence createNonOverlappingFill(
+            Primitive2DVector createNonOverlappingFill(
                 const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
                 const basegfx::BColor& rOuterColor,
                 const basegfx::B2DPolygon& rUnitPolygon) const;
 
         protected:
             /// local helper
-            Primitive2DSequence createFill(bool bOverlapping) const;
+            Primitive2DVector createFill(bool bOverlapping) const;
 
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DVector create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructors. The one without definition range will use output range as definition range

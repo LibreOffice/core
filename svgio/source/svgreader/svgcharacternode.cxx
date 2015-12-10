@@ -501,7 +501,7 @@ namespace svgio
         }
 
         void SvgCharacterNode::decomposeTextWithStyle(
-            drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+            drawinglayer::primitive2d::Primitive2DVector& rTarget,
             SvgTextPosition& rSvgTextPosition,
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
@@ -514,7 +514,7 @@ namespace svgio
             {
                 if(!rSvgTextPosition.isRotated())
                 {
-                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xRef);
+                    rTarget.push_back(xRef);
                 }
                 else
                 {
@@ -525,10 +525,10 @@ namespace svgio
                     if(pCandidate)
                     {
                         const localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
-                        const drawinglayer::primitive2d::Primitive2DSequence aResult(
+                        const drawinglayer::primitive2d::Primitive2DVector aResult(
                             alocalTextBreakupHelper.getResult());
 
-                        if(aResult.hasElements())
+                        if(!aResult.empty())
                         {
                             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aResult);
                         }
@@ -566,7 +566,7 @@ namespace svgio
             maText += rText;
         }
 
-        void SvgCharacterNode::decomposeText(drawinglayer::primitive2d::Primitive2DSequence& rTarget, SvgTextPosition& rSvgTextPosition) const
+        void SvgCharacterNode::decomposeText(drawinglayer::primitive2d::Primitive2DVector& rTarget, SvgTextPosition& rSvgTextPosition) const
         {
             if(!getText().isEmpty())
             {

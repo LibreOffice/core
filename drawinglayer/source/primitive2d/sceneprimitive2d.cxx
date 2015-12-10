@@ -78,7 +78,7 @@ namespace drawinglayer
             }
 
             // return if there are shadow primitives
-            return maShadowPrimitives.hasElements();
+            return !maShadowPrimitives.empty();
         }
 
         void ScenePrimitive2D::calculateDiscreteSizes(
@@ -128,9 +128,9 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence ScenePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DVector ScenePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
 
             // create 2D shadows from contained 3D primitives. This creates the shadow primitives on demand and tells if
             // there are some or not. Do this at start, the shadow might still be visible even when the scene is not
@@ -298,7 +298,7 @@ namespace drawinglayer
 
                     // create bitmap primitive and add
                     const Primitive2DReference xRef(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef);
+                    aRetval.push_back(xRef);
 
                     // test: Allow to add an outline in the debugger when tests are needed
                     static bool bAddOutlineToCreated3DSceneRepresentation(false);
@@ -308,7 +308,7 @@ namespace drawinglayer
                         basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                         aOutline.transform(aNew2DTransform);
                         const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
-                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef2);
+                        aRetval.push_back(xRef2);
                     }
                 }
             }
@@ -316,9 +316,9 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence ScenePrimitive2D::getGeometry2D() const
+        Primitive2DVector ScenePrimitive2D::getGeometry2D() const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
 
             // create 2D projected geometry from 3D geometry
             if(getChildren3D().hasElements())
@@ -338,9 +338,9 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence ScenePrimitive2D::getShadow2D(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DVector ScenePrimitive2D::getShadow2D(const geometry::ViewInformation2D& rViewInformation) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
 
             // create 2D shadows from contained 3D primitives
             if(impGetShadow3D(rViewInformation))
@@ -457,7 +457,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence ScenePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DVector ScenePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -467,7 +467,7 @@ namespace drawinglayer
             bool bNeedNewDecomposition(false);
             bool bDiscreteSizesAreCalculated(false);
 
-            if(getBuffered2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().empty())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
                 calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
@@ -495,10 +495,10 @@ namespace drawinglayer
             if(bNeedNewDecomposition)
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ScenePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
+                const_cast< ScenePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DVector());
             }
 
-            if(!getBuffered2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().empty())
             {
                 if(!bDiscreteSizesAreCalculated)
                 {

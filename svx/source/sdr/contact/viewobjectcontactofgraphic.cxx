@@ -251,7 +251,7 @@ namespace sdr
             return static_cast<ViewContactOfGraphic& >(GetViewContact()).GetGrafObject();
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfGraphic::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive2d::Primitive2DVector ViewObjectContactOfGraphic::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
             SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
@@ -283,9 +283,9 @@ namespace sdr
             }
 
             // get return value by calling parent
-            drawinglayer::primitive2d::Primitive2DSequence xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
+            drawinglayer::primitive2d::Primitive2DVector xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
 
-            if(xRetval.hasElements())
+            if(!xRetval.empty())
             {
                 // #i103255# suppress when graphic needs draft visualisation and output
                 // is for PDF export/Printer
@@ -297,7 +297,7 @@ namespace sdr
 
                     if(rObjectContact.isOutputToPDFFile() || rObjectContact.isOutputToPrinter())
                     {
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence();
+                        xRetval = drawinglayer::primitive2d::Primitive2DVector();
                     }
                 }
             }

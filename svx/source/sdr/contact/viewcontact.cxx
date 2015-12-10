@@ -225,7 +225,7 @@ SdrObject* ViewContact::TryToGetSdrObject() const
 
 // primitive stuff
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContact::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DVector ViewContact::createViewIndependentPrimitive2DSequence() const
 {
     // This is the default implementation and should never be called (see header). If this is called,
     // someone implemented a ViewContact (VC) visualisation object without defining the visualisation by
@@ -238,15 +238,15 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContact::createViewIndependen
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
 
-    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+    return drawinglayer::primitive2d::Primitive2DVector { xReference };
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContact::getViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DVector ViewContact::getViewIndependentPrimitive2DSequence() const
 {
     // local up-to-date checks. Create new list and compare.
-    drawinglayer::primitive2d::Primitive2DSequence xNew(createViewIndependentPrimitive2DSequence());
+    drawinglayer::primitive2d::Primitive2DVector xNew(createViewIndependentPrimitive2DSequence());
 
-    if(xNew.hasElements())
+    if(!xNew.empty())
     {
         // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
         xNew = embedToObjectSpecificInformation(xNew);
@@ -258,18 +258,18 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContact::getViewIndependentPr
         const_cast< ViewContact* >(this)->mxViewIndependentPrimitive2DSequence = xNew;
     }
 
-    // return current Primitive2DSequence
+    // return current Primitive2DVector
     return mxViewIndependentPrimitive2DSequence;
 }
 
 // add Gluepoints (if available)
-drawinglayer::primitive2d::Primitive2DSequence ViewContact::createGluePointPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DVector ViewContact::createGluePointPrimitive2DSequence() const
 {
     // default returns empty reference
-    return drawinglayer::primitive2d::Primitive2DSequence();
+    return drawinglayer::primitive2d::Primitive2DVector();
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContact::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const
+drawinglayer::primitive2d::Primitive2DVector ViewContact::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DVector& rSource) const
 {
     // nothing to do for default
     return rSource;

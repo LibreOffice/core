@@ -92,11 +92,11 @@ void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel,
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DVector ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
     const uno::Reference< ::frame::XModel >& rXModel,
     basegfx::B2DRange& rRange)
 {
-    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+    drawinglayer::primitive2d::Primitive2DVector aRetval;
 
     if (!rXModel.is())
         return aRetval;
@@ -141,7 +141,7 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
         OSL_ENSURE(false, "Unexpected exception!");
     }
 
-    if(aRetval.hasElements())
+    if(!aRetval.empty())
     {
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 

@@ -42,7 +42,7 @@ namespace sdr
             bool                                    mbShowBounds : 1;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
+            virtual drawinglayer::primitive2d::Primitive2DVector createOverlayObjectPrimitive2DSequence() override;
 
         public:
             OverlayRollingRectangleStriped(

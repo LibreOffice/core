@@ -31,7 +31,7 @@ namespace svgio
         {
         private:
             /// buffered decomposition
-            drawinglayer::primitive2d::Primitive2DSequence aPrimitives;
+            drawinglayer::primitive2d::Primitive2DVector aPrimitives;
 
             /// use styles
             SvgStyleAttributes      maSvgStyleAttributes;
@@ -69,7 +69,7 @@ namespace svgio
             void getValuesRelative(double& rfX, double& rfY, double& rfW, double& rfH, const basegfx::B2DRange& rGeoRange, SvgNode& rUser) const;
 
             /// get pattern primitives buffered, uses decomposeSvgNode internally
-            const drawinglayer::primitive2d::Primitive2DSequence& getPatternPrimitives() const;
+            const drawinglayer::primitive2d::Primitive2DVector& getPatternPrimitives() const;
 
             /// InfoProvider support for % values
             virtual const basegfx::B2DRange getCurrentViewPort() const override;

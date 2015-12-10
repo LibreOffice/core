@@ -61,10 +61,10 @@ using namespace com::sun::star;
 
 namespace
 {
-    drawinglayer::primitive2d::Primitive2DSequence impConvertVectorToPrimitive2DSequence(const std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rPrimitiveVector)
+    drawinglayer::primitive2d::Primitive2DVector impConvertVectorToPrimitive2DSequence(const std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rPrimitiveVector)
     {
         const sal_Int32 nCount(rPrimitiveVector.size());
-        drawinglayer::primitive2d::Primitive2DSequence aRetval(nCount);
+        drawinglayer::primitive2d::Primitive2DVector aRetval(nCount);
 
         for(sal_Int32 a(0L); a < nCount; a++)
         {
@@ -161,7 +161,7 @@ namespace
             mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequence();
+        drawinglayer::primitive2d::Primitive2DVector getPrimitive2DSequence();
     };
 
     bool impTextBreakupHandler::impIsUnderlineAbove(const vcl::Font& rFont)
@@ -382,7 +382,7 @@ namespace
             {
                 // embed in TextHierarchyBulletPrimitive2D
                 const drawinglayer::primitive2d::Primitive2DReference aNewReference(pNewPrimitive);
-                const drawinglayer::primitive2d::Primitive2DSequence aNewSequence(&aNewReference, 1);
+                const drawinglayer::primitive2d::Primitive2DVector aNewSequence { aNewReference } ;
                 pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
             }
 
@@ -467,11 +467,11 @@ namespace
             const SvxPageField* pPageField = dynamic_cast< const SvxPageField* >(rInfo.mpFieldData);
 
             // embed current primitive to a sequence
-            drawinglayer::primitive2d::Primitive2DSequence aSequence;
+            drawinglayer::primitive2d::Primitive2DVector aSequence;
 
             if(pPrimitive)
             {
-                aSequence.realloc(1);
+                aSequence.resize(1);
                 aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(pPrimitive);
             }
 
@@ -498,7 +498,7 @@ namespace
         // empty line primitives (contrary to paragraphs, see below).
         if(!maTextPortionPrimitives.empty())
         {
-            drawinglayer::primitive2d::Primitive2DSequence aLineSequence(impConvertVectorToPrimitive2DSequence(maTextPortionPrimitives));
+            drawinglayer::primitive2d::Primitive2DVector aLineSequence(impConvertVectorToPrimitive2DSequence(maTextPortionPrimitives));
             maTextPortionPrimitives.clear();
             maLinePrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(aLineSequence));
         }
@@ -509,7 +509,7 @@ namespace
         // ALWAYS create a paragraph primitive, even when no content was added. This is done to
         // have the correct paragraph count even with empty paragraphs. Those paragraphs will
         // have an empty sub-PrimitiveSequence.
-        drawinglayer::primitive2d::Primitive2DSequence aParagraphSequence(impConvertVectorToPrimitive2DSequence(maLinePrimitives));
+        drawinglayer::primitive2d::Primitive2DVector aParagraphSequence(impConvertVectorToPrimitive2DSequence(maLinePrimitives));
         maLinePrimitives.clear();
         maParagraphPrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(aParagraphSequence));
     }
@@ -555,7 +555,7 @@ namespace
             aGraphicAttr));
 
         // embed in TextHierarchyBulletPrimitive2D
-        const drawinglayer::primitive2d::Primitive2DSequence aNewSequence(&aNewReference, 1);
+        const drawinglayer::primitive2d::Primitive2DVector aNewSequence { aNewReference };
         drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
 
         // add to output
@@ -649,7 +649,7 @@ namespace
         }
     }
 
-    drawinglayer::primitive2d::Primitive2DSequence impTextBreakupHandler::getPrimitive2DSequence()
+    drawinglayer::primitive2d::Primitive2DVector impTextBreakupHandler::getPrimitive2DSequence()
     {
         if(!maTextPortionPrimitives.empty())
         {
@@ -671,7 +671,7 @@ namespace
 // primitive decompositions
 
 void SdrTextObj::impDecomposeContourTextPrimitive(
-    drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+    drawinglayer::primitive2d::Primitive2DVector& rTarget,
     const drawinglayer::primitive2d::SdrContourTextPrimitive2D& rSdrContourTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
@@ -721,7 +721,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 }
 
 void SdrTextObj::impDecomposeAutoFitTextPrimitive(
-    drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+    drawinglayer::primitive2d::Primitive2DVector& rTarget,
     const drawinglayer::primitive2d::SdrAutoFitTextPrimitive2D& rSdrAutofitTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
@@ -855,7 +855,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
 }
 
 void SdrTextObj::impDecomposeBlockTextPrimitive(
-    drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+    drawinglayer::primitive2d::Primitive2DVector& rTarget,
     const drawinglayer::primitive2d::SdrBlockTextPrimitive2D& rSdrBlockTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
@@ -1097,7 +1097,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 }
 
 void SdrTextObj::impDecomposeStretchTextPrimitive(
-    drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+    drawinglayer::primitive2d::Primitive2DVector& rTarget,
     const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
@@ -1455,7 +1455,7 @@ void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutlin
 }
 
 void SdrTextObj::impDecomposeChainedTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DVector& rTarget,
         const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {

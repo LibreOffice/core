@@ -49,7 +49,7 @@ protected:
     bool                    mbVisible;
 
     // geometry creation for OverlayObject
-    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() override;
+    virtual drawinglayer::primitive2d::Primitive2DVector createOverlayObjectPrimitive2DSequence() override;
 
 public:
     OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible );
@@ -212,9 +212,9 @@ OverlayTableEdge::~OverlayTableEdge()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayObjectPrimitive2DSequence()
+drawinglayer::primitive2d::Primitive2DVector OverlayTableEdge::createOverlayObjectPrimitive2DSequence()
 {
-    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+    drawinglayer::primitive2d::Primitive2DVector aRetval;
 
     if(maPolyPolygon.count())
     {
@@ -228,16 +228,16 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
         if(mbVisible)
         {
             // visible, just return as sequence
-            aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+            aRetval = drawinglayer::primitive2d::Primitive2DVector { aReference };
         }
         else
         {
             // embed in HiddenGeometryPrimitive2D to support HitTest of this invisible
             // overlay object
-            const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aReference, 1);
+            const drawinglayer::primitive2d::Primitive2DVector aSequence { aReference };
             const drawinglayer::primitive2d::Primitive2DReference aNewReference(
                 new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(aSequence));
-            aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aNewReference, 1);
+            aRetval = drawinglayer::primitive2d::Primitive2DVector { aNewReference };
         }
     }
 

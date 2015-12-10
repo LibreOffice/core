@@ -165,7 +165,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 
     if(pProcessor2D)
     {
-        const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aLinePrimitive, 1);
+        const drawinglayer::primitive2d::Primitive2DVector aSequence { aLinePrimitive };
 
         pProcessor2D->process(aSequence);
         pProcessor2D.reset();

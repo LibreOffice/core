@@ -34,9 +34,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrPathPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DVector SdrPathPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
 
             // add fill
             if(!getSdrLFSTAttribute().getFill().isDefault()
@@ -47,7 +47,7 @@ namespace drawinglayer
                 basegfx::B2DPolyPolygon aTransformed(getUnitPolyPolygon());
 
                 aTransformed.transform(getTransform());
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getFill(),
@@ -58,7 +58,7 @@ namespace drawinglayer
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
                 // if initially no line is defined, create one for HitTest and BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createHiddenGeometryPrimitives2D(
                         false,
                         getUnitPolyPolygon(),
@@ -66,7 +66,7 @@ namespace drawinglayer
             }
             else
             {
-                Primitive2DSequence aTemp(getUnitPolyPolygon().count());
+                Primitive2DVector aTemp(getUnitPolyPolygon().count());
 
                 for(sal_uInt32 a(0); a < getUnitPolyPolygon().count(); a++)
                 {
@@ -85,7 +85,7 @@ namespace drawinglayer
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                aRetval.push_back(
                     createTextPrimitive(
                         getUnitPolyPolygon(),
                         getTransform(),

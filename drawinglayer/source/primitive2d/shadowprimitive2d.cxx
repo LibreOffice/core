@@ -39,7 +39,7 @@ namespace drawinglayer
         ShadowPrimitive2D::ShadowPrimitive2D(
             const basegfx::B2DHomMatrix& rShadowTransform,
             const basegfx::BColor& rShadowColor,
-            const Primitive2DSequence& rChildren)
+            const Primitive2DVector& rChildren)
         :   GroupPrimitive2D(rChildren),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor)
@@ -66,11 +66,11 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence ShadowPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DVector ShadowPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval;
+            Primitive2DVector aRetval;
 
-            if(getChildren().hasElements())
+            if(!getChildren().empty())
             {
                 // create a modifiedColorPrimitive containing the shadow color and the content
                 const basegfx::BColorModifierSharedPtr aBColorModifier(
@@ -80,11 +80,11 @@ namespace drawinglayer
                     new ModifiedColorPrimitive2D(
                         getChildren(),
                         aBColorModifier));
-                const Primitive2DSequence aSequenceB(&xRefA, 1L);
+                const Primitive2DVector aSequenceB { xRefA };
 
                 // build transformed primitiveVector with shadow offset and add to target
                 const Primitive2DReference xRefB(new TransformPrimitive2D(getShadowTransform(), aSequenceB));
-                aRetval = Primitive2DSequence(&xRefB, 1L);
+                aRetval = Primitive2DVector { xRefB };
             }
 
             return aRetval;

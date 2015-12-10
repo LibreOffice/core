@@ -243,9 +243,9 @@ namespace sdr
                 uno::Sequence<beans::PropertyValue>());
             updateViewInformation2D(aNewViewInformation2D);
 
-            drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence;
+            drawinglayer::primitive2d::Primitive2DVector xPrimitiveSequence;
 #if HAVE_FEATURE_DESKTOP || defined( ANDROID )
-            // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
+            // get whole Primitive2DVector; this will already make use of updated ViewInformation2D
             // and may use the MapMode from the Target OutDev in the DisplayInfo
             xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
 #else
@@ -276,7 +276,7 @@ namespace sdr
             }
 
             if (bGetHierarchy)
-                // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
+                // get whole Primitive2DVector; this will already make use of updated ViewInformation2D
                 // and may use the MapMode from the Target OutDev in the DisplayInfo
                 xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
 #endif
@@ -286,7 +286,7 @@ namespace sdr
             // createProcessor2DFromOutputDevice and takes into account things like the
             // Target is a MetaFile, a VDev or something else. The Canvas renderer is triggered
             // currently using the shown boolean. Canvas is not yet the default.
-            if(xPrimitiveSequence.hasElements())
+            if(!xPrimitiveSequence.empty())
             {
                 // prepare OutputDevice (historical stuff, maybe soon removed)
                 rDisplayInfo.ClearGhostedDrawMode(); // reset, else the VCL-paint with the processor will not do the right thing

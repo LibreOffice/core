@@ -59,7 +59,7 @@ namespace drawinglayer
         public:
             /// constructor
             ModifiedColorPrimitive2D(
-                const Primitive2DSequence& rChildren,
+                const Primitive2DVector& rChildren,
                 const basegfx::BColorModifierSharedPtr& rColorModifier);
 
             /// data read access

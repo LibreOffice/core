@@ -66,7 +66,7 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
         nSeqSize += 3;
 
     BColor aFillColor = pAttrs->aFillColor;
-    drawinglayer::primitive2d::Primitive2DSequence aSeq(nSeqSize);
+    drawinglayer::primitive2d::Primitive2DVector aSeq(nSeqSize);
     double fTransparence = 0.0;
 
     // Draw background
