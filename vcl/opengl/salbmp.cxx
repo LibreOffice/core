@@ -38,7 +38,45 @@
 namespace
 {
 
-bool isValidBitCount( sal_uInt16 nBitCount )
+inline bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nType)
+{
+    switch(nBits)
+    {
+    case 8:
+        nFormat = GL_LUMINANCE;
+        nType = GL_UNSIGNED_BYTE;
+        return true;
+    case 16:
+#ifdef WNT
+        nFormat = GL_BGR;
+#else
+        nFormat = GL_RGB;
+#endif
+        nType = GL_UNSIGNED_SHORT_5_6_5;
+        return true;
+    case 24:
+#ifdef WNT
+        nFormat = GL_BGR;
+#else
+        nFormat = GL_RGB;
+#endif
+        nType = GL_UNSIGNED_BYTE;
+        return true;
+    case 32:
+#ifdef WNT
+        nFormat = GL_BGRA;
+#else
+        nFormat = GL_RGBA;
+#endif
+        nType = GL_UNSIGNED_BYTE;
+        return true;
+    default:
+        break;
+    }
+    return false;
+}
+
+inline bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
 }
@@ -404,18 +442,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
             // no conversion needed for truecolor
             pData = maUserBuffer.get();
 
-            switch( mnBits )
-            {
-            case 16:    nFormat = GL_RGB;
-                        nType = GL_UNSIGNED_SHORT_5_6_5;
-                        break;
-            case 24:    nFormat = GL_RGB;
-                        nType = GL_UNSIGNED_BYTE;
-                        break;
-            case 32:    nFormat = GL_RGBA;
-                        nType = GL_UNSIGNED_BYTE;
-                        break;
-            }
+            determineTextureFormat(mnBits, nFormat, nType);
         }
         else if( mnBits == 8 && maPalette.IsGreyPalette() )
         {
@@ -431,8 +458,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
             // convert to 24 bits RGB using palette
             pData = new sal_uInt8[mnBufHeight * mnBufWidth * 3];
             bAllocated = true;
-            nFormat = GL_RGB;
-            nType = GL_UNSIGNED_BYTE;
+            determineTextureFormat(24, nFormat, nType);
 
             std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(mnBits, maPalette));
 
@@ -479,6 +505,9 @@ bool OpenGLSalBitmap::ReadTexture()
 {
     sal_uInt8* pData = maUserBuffer.get();
 
+    GLenum nFormat = GL_RGBA;
+    GLenum nType = GL_UNSIGNED_BYTE;
+
     VCL_GL_INFO( "::ReadTexture " << mnWidth << "x" << mnHeight << " bits: " << mnBits);
 
     if( pData == nullptr )
@@ -486,24 +515,7 @@ bool OpenGLSalBitmap::ReadTexture()
 
     if (mnBits == 8 || mnBits == 16 || mnBits == 24 || mnBits == 32)
     {
-        GLenum nFormat = GL_RGBA;
-        GLenum nType = GL_UNSIGNED_BYTE;
-
-        switch( mnBits )
-        {
-        case 8:     nFormat = GL_LUMINANCE;
-                    nType = GL_UNSIGNED_BYTE;
-                    break;
-        case 16:    nFormat = GL_RGB;
-                    nType = GL_UNSIGNED_SHORT_5_6_5;
-                    break;
-        case 24:    nFormat = GL_RGB;
-                    nType = GL_UNSIGNED_BYTE;
-                    break;
-        case 32:    nFormat = GL_RGBA;
-                    nType = GL_UNSIGNED_BYTE;
-                    break;
-        }
+        determineTextureFormat(mnBits, nFormat, nType);
 
         makeCurrent();
         maTexture.Read(nFormat, nType, pData);
@@ -516,7 +528,8 @@ bool OpenGLSalBitmap::ReadTexture()
         std::vector<sal_uInt8> aBuffer(mnWidth * mnHeight * 3);
         makeCurrent();
         sal_uInt8* pBuffer = aBuffer.data();
-        maTexture.Read(GL_RGB, GL_UNSIGNED_BYTE, pBuffer);
+        determineTextureFormat(24, nFormat, nType);
+        maTexture.Read(nFormat, nType, pBuffer);
 
         int nShift = 7;
         size_t nIndex = 0;
@@ -724,6 +737,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
     pBuffer->mnScanlineSize = mnBytesPerRow;
     pBuffer->mpBits = maUserBuffer.get();
     pBuffer->mnBitCount = mnBits;
+
     switch (mnBits)
     {
         case 1:
@@ -737,21 +751,48 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             break;
         case 16:
         {
-            pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
-            ColorMaskElement aRedMask(0xf800);
+#ifdef WNT
+            pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_LSB_MASK;
+            ColorMaskElement aRedMask(0x00007c00);
             aRedMask.CalcMaskShift();
-            ColorMaskElement aGreenMask(0x07e0);
+            ColorMaskElement aGreenMask(0x000003e0);
             aGreenMask.CalcMaskShift();
-            ColorMaskElement aBlueMask(0x001f);
+            ColorMaskElement aBlueMask(0x0000001f);
+            aBlueMask.CalcMaskShift();
+            pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
+#else
+            pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
+            ColorMaskElement aRedMask(0x0000f800);
+            aRedMask.CalcMaskShift();
+            ColorMaskElement aGreenMask(0x000007e0);
+            aGreenMask.CalcMaskShift();
+            ColorMaskElement aBlueMask(0x0000001f);
             aBlueMask.CalcMaskShift();
             pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
+#endif
             break;
         }
         case 24:
+        {
+#ifdef WNT
+            pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
+#else
             pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_RGB;
+#endif
             break;
+        }
         case 32:
         {
+#ifdef WNT
+            pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_BGRA;
+            ColorMaskElement aRedMask(0x00ff0000);
+            aRedMask.CalcMaskShift();
+            ColorMaskElement aGreenMask(0x0000ff00);
+            aGreenMask.CalcMaskShift();
+            ColorMaskElement aBlueMask(0x000000ff);
+            aBlueMask.CalcMaskShift();
+            pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
+#else
             pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_RGBA;
             ColorMaskElement aRedMask(0xff000000);
             aRedMask.CalcMaskShift();
@@ -760,6 +801,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             ColorMaskElement aBlueMask(0x0000ff00);
             aBlueMask.CalcMaskShift();
             pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
+#endif
             break;
         }
     }
