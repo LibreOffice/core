@@ -1469,6 +1469,11 @@ AC_ARG_ENABLE(openssl,
          use only if you are hacking on it.]),
 ,enable_openssl=yes)
 
+AC_ARG_WITH(prebuilt-openssl,
+    AS_HELP_STRING([--with-prebuilt-openssl],
+        [Don't build OpenSSL but use prebuilt binaries. Only for use on Windows, when you can't build it,
+         thanks to the Cygwin fork() problem when running the Perl disaster in OpenSSL's build system.]))
+
 AC_ARG_ENABLE(library-bin-tar,
     AS_HELP_STRING([--enable-library-bin-tar],
         [Enable the building and reused of tarball of binary build for some 'external' libraries.
@@ -8924,6 +8929,10 @@ if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([nssutil3])
     libo_MINGW_CHECK_DLL([smime3])
     libo_MINGW_CHECK_DLL([ssl3])
+fi
+
+if test $_os = WINNT -a -z "$ENABLE_RELEASE_BUILD" -a "$with_prebuilt_openssl" = yes; then
+    BUILD_TYPE="$BUILD_TYPE PREBUILT_OPENSSL"
 fi
 
 dnl ===================================================================
