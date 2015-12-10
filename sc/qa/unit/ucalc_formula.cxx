@@ -803,11 +803,14 @@ void Test::testFormulaHashAndTag()
     };
 
     bool bSwInterpreter = officecfg::Office::Common::Misc::UseSwInterpreter::get();
+    bool bOpenCL = officecfg::Office::Common::Misc::UseOpenCL::get();
 
     for (bool bForceSwInterpreter : { false, true })
     {
         std::shared_ptr< comphelper::ConfigurationChanges > xBatch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Misc::UseSwInterpreter::set(bForceSwInterpreter, xBatch);
+        if (bForceSwInterpreter)
+            officecfg::Office::Common::Misc::UseOpenCL::set(false, xBatch);
         xBatch->commit();
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aVectorTests); ++i)
@@ -828,6 +831,7 @@ void Test::testFormulaHashAndTag()
 
     std::shared_ptr< comphelper::ConfigurationChanges > xBatch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::UseSwInterpreter::set(bSwInterpreter, xBatch);
+    officecfg::Office::Common::Misc::UseOpenCL::set(bOpenCL, xBatch);
     xBatch->commit();
 
     m_pDoc->DeleteTab(0);
