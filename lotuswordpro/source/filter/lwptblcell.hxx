@@ -152,7 +152,7 @@ public:
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     LwpObjectID GetCellRangeID(){return cpCellRange;}
     LwpObjectID GetTableID(){ return cqTable;}
-    LwpTableRange* GetNext() { return static_cast<LwpTableRange*>(LwpDLVList::GetNext().obj().get());}
+    LwpTableRange* GetNext() { return dynamic_cast<LwpTableRange*>(LwpDLVList::GetNext().obj().get());}
 protected:
     LwpObjectID cqTable;
     LwpObjectID cpCellRange;

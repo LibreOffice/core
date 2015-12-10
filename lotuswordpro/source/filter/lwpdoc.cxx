@@ -70,7 +70,8 @@
 
 LwpDocument::LwpDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
-    , m_pOwnedFoundry(NULL)
+    , m_pOwnedFoundry(nullptr)
+    , m_bGettingFirstDivisionWithContentsThatIsNotOLE(false)
     , m_nFlags(0)
     , m_nPersistentFlags(0)
     , m_pLnOpts(NULL)
@@ -233,7 +234,9 @@ void LwpDocument::RegisterStyle()
 void LwpDocument::RegisterTextStyles()
 {
     //Register all text styles: para styles, character styles
-    LwpDLVListHeadHolder* pParaStyleHolder = dynamic_cast<LwpDLVListHeadHolder*>(m_pFoundry->GetTextStyleHead().obj().get());
+    LwpDLVListHeadHolder* pParaStyleHolder = m_pFoundry
+        ? dynamic_cast<LwpDLVListHeadHolder*>(m_pFoundry->GetTextStyleHead().obj().get())
+        : nullptr;
     if(pParaStyleHolder)
     {
         LwpTextStyle* pParaStyle = dynamic_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID().obj().get());
@@ -252,12 +255,15 @@ void LwpDocument::RegisterTextStyles()
  */
 void LwpDocument::RegisterLayoutStyles()
 {
-    //Register all layout styles, before register all styles in para
-    m_pFoundry->RegisterAllLayouts();
+    if (m_pFoundry)
+    {
+        //Register all layout styles, before register all styles in para
+        m_pFoundry->RegisterAllLayouts();
+    }
 
     //set initial pagelayout in story for parsing pagelayout
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj( VO_DIVISIONINFO).get());
-    if(pDivInfo)
+    if (pDivInfo)
     {
         LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID().obj(VO_PAGELAYOUT).get());
         if(pPageLayout)
@@ -279,16 +285,18 @@ void LwpDocument::RegisterLayoutStyles()
 void LwpDocument::RegisterStylesInPara()
 {
     //Register all automatic styles in para
-    LwpHeadContent* pContent = dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager().GetContentList().obj().get());
-    if(pContent)
+    rtl::Reference<LwpHeadContent> xContent(m_pFoundry
+        ? dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager().GetContentList().obj().get())
+        : nullptr);
+    if (xContent.is())
     {
-        LwpStory* pStory = dynamic_cast<LwpStory*>(pContent->GetChildHead().obj(VO_STORY).get());
-        while(pStory)
+        rtl::Reference<LwpStory> xStory(dynamic_cast<LwpStory*>(xContent->GetChildHead().obj(VO_STORY).get()));
+        while (xStory.is())
         {
             //Register the child para
-            pStory->SetFoundry(m_pFoundry);
-            pStory->RegisterStyle();
-            pStory = dynamic_cast<LwpStory*>(pStory->GetNext().obj(VO_STORY).get());
+            xStory->SetFoundry(m_pFoundry);
+            xStory->DoRegisterStyle();
+            xStory.set(dynamic_cast<LwpStory*>(xStory->GetNext().obj(VO_STORY).get()));
         }
     }
 }
@@ -297,19 +305,20 @@ void LwpDocument::RegisterStylesInPara()
  */
 void LwpDocument::RegisterBulletStyles()
 {
+    if (!m_pFoundry)
+        return;
     //Register bullet styles
     LwpDLVListHeadHolder* mBulletHead = dynamic_cast<LwpDLVListHeadHolder*>
         (m_pFoundry->GetBulletManagerID().obj(VO_HEADHOLDER).get());
-    if( mBulletHead )
+    if (!mBulletHead)
+        return;
+    LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
+                        (mBulletHead->GetHeadID().obj().get());
+    while(pBullet)
     {
-        LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
-                            (mBulletHead->GetHeadID().obj().get());
-        while(pBullet)
-        {
-            pBullet->SetFoundry(m_pFoundry);
-            pBullet->RegisterStyle();
-            pBullet = dynamic_cast<LwpSilverBullet*> (pBullet->GetNext().obj().get());
-        }
+        pBullet->SetFoundry(m_pFoundry);
+        pBullet->RegisterStyle();
+        pBullet = dynamic_cast<LwpSilverBullet*> (pBullet->GetNext().obj().get());
     }
 }
 /**
@@ -317,13 +326,14 @@ void LwpDocument::RegisterBulletStyles()
  */
 void LwpDocument::RegisterGraphicsStyles()
 {
+    if (!m_pFoundry)
+        return;
     //Register all graphics styles, the first object should register the next;
     rtl::Reference<LwpObject> pGraphic = m_pFoundry->GetGraphicListHead().obj(VO_GRAPHIC);
-    if(pGraphic.is())
-    {
-        pGraphic->SetFoundry(m_pFoundry);
-        pGraphic->DoRegisterStyle();
-    }
+    if (!pGraphic.is())
+        return;
+    pGraphic->SetFoundry(m_pFoundry);
+    pGraphic->DoRegisterStyle();
 }
 /**
  * @descr  Register line number styles
@@ -610,7 +620,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
   /**
  * @descr    Get first division with contents that is not ole, copy from lwp-source code
  */
- LwpDocument* LwpDocument::GetFirstDivisionWithContentsThatIsNotOLE()
+ LwpDocument* LwpDocument::ImplGetFirstDivisionWithContentsThatIsNotOLE()
 {
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID().obj().get());
     if(pDivInfo && pDivInfo->HasContents()
@@ -619,7 +629,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
     LwpDocument* pDivision = GetFirstDivision();
 
-    while (pDivision && pDivision != this)
+    while (pDivision)
     {
         LwpDocument* pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
         if(pContentDivision)
@@ -637,7 +647,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     LwpDocument *pLastDoc = pRoot ? pRoot->GetLastDivisionWithContents() : nullptr;
     while (pLastDoc)
     {
-        if(pLastDoc->GetEnSuperTableLayout())
+        if (pLastDoc->GetEnSuperTableLayout().is())
             return pLastDoc;
         pLastDoc = pLastDoc->GetPreviousDivisionWithContents();
     }
@@ -647,14 +657,14 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  /**
  * @descr    Get endnote supertable layout, every division has only one endnote supertable layout.
  */
- LwpVirtualLayout* LwpDocument::GetEnSuperTableLayout()
+rtl::Reference<LwpVirtualLayout> LwpDocument::GetEnSuperTableLayout()
 {
     LwpHeadLayout* pHeadLayout = dynamic_cast<LwpHeadLayout*>(GetFoundry()->GetLayout().obj().get());
     if(pHeadLayout)
     {
         return pHeadLayout->FindEnSuperTableLayout();
     }
-    return NULL;
+    return rtl::Reference<LwpVirtualLayout>();
 }
 
 /**

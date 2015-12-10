@@ -670,10 +670,15 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
             break;
         }
     }
-    if(newObj.is())
+    if (newObj.is())
     {
         newObj->QuickRead();
-        m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
+        auto result = m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
+        if (!result.second)
+        {
+            SAL_WARN("lwp", "clearing duplicate object");
+            newObj.clear();
+        }
     }
 
     return newObj;
@@ -706,7 +711,12 @@ rtl::Reference<LwpObject> LwpObjectFactory::QueryObject(const LwpObjectID &objID
             return NULL;
         }
 
+        if (std::find(m_aObjsIDInCreation.begin(), m_aObjsIDInCreation.end(), objID) != m_aObjsIDInCreation.end())
+            throw std::runtime_error("recursion in object creation");
+
+        m_aObjsIDInCreation.push_back(objID);
         obj = CreateObject(objHdr.GetTag(), objHdr);
+        m_aObjsIDInCreation.pop_back();
     }
     return obj;
 }

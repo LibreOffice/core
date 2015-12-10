@@ -104,11 +104,13 @@ void XFTable::AddRow(XFRow *pRow)
     m_aRows[row] = pRow;
 }
 
-void    XFTable::AddHeaderRow(XFRow *pRow)
+void XFTable::AddHeaderRow(XFRow *pRow)
 {
-    if( !pRow )
+    if( !pRow)
         return;
-    m_aHeaderRows.Add(pRow);
+    if (!m_aHeaderRows.is())
+        return;
+    m_aHeaderRows->Add(pRow);
 }
 
 OUString XFTable::GetTableName()
@@ -207,10 +209,10 @@ void    XFTable::ToXml(IXFStream *pStrm)
         }
     }
 
-    if( m_aHeaderRows.GetCount()>0 )
+    if (m_aHeaderRows.is() && m_aHeaderRows->GetCount()>0)
     {
         pStrm->StartElement( "table:table-header-rows" );
-        m_aHeaderRows.ToXml(pStrm);
+        m_aHeaderRows->ToXml(pStrm);
         pStrm->EndElement( "table:table-header-rows" );
     }
     //output rows:
