@@ -2045,7 +2045,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         return;
     }
 
-            //      dobble click started ?
+            //      double click started ?
 
     // StopMarking can be called from DrawMouseButtonDown
 
@@ -2455,7 +2455,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         OUString aName, aUrl, aTarget;
         if ( GetEditUrl( rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget ) )
         {
-            nMouseStatus = SC_GM_NONE;              // Ignore dobble-click
+            nMouseStatus = SC_GM_NONE;              // Ignore double-click
 
             // ScGlobal::OpenURL() only understands Calc A1 style syntax.
             // Convert it to Calc A1 before calling OpenURL().

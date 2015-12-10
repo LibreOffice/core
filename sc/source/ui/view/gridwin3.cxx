@@ -53,7 +53,7 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         Point aLogicPos = PixelToLogic(rMEvt.GetPosPixel());
         if ( pDraw->IsDetectiveHit( aLogicPos ) )
         {
-            // nothing on detectiv arrows (dobble click is evaluated on ButtonUp)
+            // nothing on detective arrows (double click is evaluated on ButtonUp)
             bRet = true;
         }
         else
