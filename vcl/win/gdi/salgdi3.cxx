@@ -1121,6 +1121,14 @@ bool ImplWinFontData::IsGSUBstituted( sal_UCS4 cChar ) const
     return( maGsubTable.find( cChar ) != maGsubTable.end() );
 }
 
+sal_UCS4 ImplWinFontData::GetGSUBstitution( sal_UCS4 cChar ) const
+{
+    auto aIter = maGsubTable.find( cChar );
+    if ( aIter == maGsubTable.end() )
+        return 0;
+    return  aIter->second;
+}
+
 FontCharMapPtr ImplWinFontData::GetFontCharMap() const
 {
     if( !mpUnicodeMap )
@@ -1173,8 +1181,11 @@ void ImplWinFontData::ReadGsubTable( HDC hDC ) const
 
     for( const sal_Unicode* pPair = aGSUBCandidates; *pPair; pPair += 2 )
         for( sal_Unicode cChar = pPair[0]; cChar < pPair[1]; ++cChar )
-            if( ::MapChar( pTTFont, cChar, false ) != ::MapChar( pTTFont, cChar, true ) )
-                maGsubTable.insert( cChar ); // insert GSUBbed unicodes
+        {
+            sal_UCS4 cVChar = ::MapChar( pTTFont, cChar, true );
+            if( ::MapChar( pTTFont, cChar, false ) != cVChar )
+                maGsubTable[ cChar ] = cVChar; // insert GSUBbed unicodes
+        }
 
     CloseTTFont( pTTFont );
 }
