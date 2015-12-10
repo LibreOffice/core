@@ -101,7 +101,7 @@ void LwpFribNote::RegisterNewStyle()
  */
 void LwpFribNote::XFConvert(XFContentContainer* pCont)
 {
-    LwpNoteLayout* pLayout =static_cast<LwpNoteLayout*>(m_Layout.obj().get());
+    LwpNoteLayout* pLayout = dynamic_cast<LwpNoteLayout*>(m_Layout.obj().get());
     if(pLayout)
     {
         XFAnnotation* pXFNote = new XFAnnotation;
@@ -217,10 +217,10 @@ OUString LwpNoteLayout::GetAuthor()
     LwpNoteHeaderLayout* pTextLayout = static_cast<LwpNoteHeaderLayout*>(FindChildByType(LWP_NOTEHEADER_LAYOUT));
     if(pTextLayout)
     {
-        LwpStory* pStory = static_cast<LwpStory*>(pTextLayout->GetContent().obj().get());
+        LwpStory* pStory = dynamic_cast<LwpStory*>(pTextLayout->GetContent().obj().get());
         if(pStory)
         {
-            LwpPara* pFirst = static_cast<LwpPara*>(pStory->GetFirstPara().obj().get());
+            LwpPara* pFirst = dynamic_cast<LwpPara*>(pStory->GetFirstPara().obj().get());
             if(pFirst)
                 return pFirst->GetContentText(true);
         }
