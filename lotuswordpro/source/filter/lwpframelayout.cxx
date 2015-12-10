@@ -189,8 +189,10 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
 */
  void LwpFrame::XFConvert(XFContentContainer* pCont)
  {
-     //parse the frame which anchor to page
+    // parse the frame which anchor to page
     LwpVirtualLayout* pParent = m_pLayout->GetParentLayout();
+    if (!pParent)
+        throw std::runtime_error("missing Parent Layout");
     if(pParent->IsPage()&& pParent->GetParentLayout()->IsPage())
     {
         //for mirror page, problems exist if the parent layout is header or footer layout,
