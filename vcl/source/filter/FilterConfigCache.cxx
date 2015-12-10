@@ -238,7 +238,6 @@ const char* FilterConfigCache::InternalFilterListForSvxLight[] =
     "sgv","1","SVSGV",
     "sgf","1","SVSGF",
     "met","1","ime",
-    "met","2","eme",
     "png","1","SVIPNG",
     "png","2","SVEPNG",
     "pct","1","ipt",
