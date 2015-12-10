@@ -59,7 +59,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="edit">
-                        <property name="label" translatable="yes">_Edit individual document...</property>
+                        <property name="label" translatable="yes">_Edit individual documents...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
