@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_ff3601b3",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2015-12-10T12:12:13Z",
+      "side": 1,
+      "message": "what happens if the config directory is in another place (this is actually the case on windows at least). Use GetUserConfigPath()",
+      "revId": "fa9825d0acb5b9cb8e1293356fa7b10f03fd18a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_7fc4d191",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2015-12-10T12:12:13Z",
+      "side": 1,
+      "message": "it should be written with .utf8() function, see OUString header\n\nthere are no check is all bytes are actually written, I have not compiled it but I am surprised that you do not have a warning with the last parameter, since it normally is a pointer.",
+      "revId": "fa9825d0acb5b9cb8e1293356fa7b10f03fd18a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
