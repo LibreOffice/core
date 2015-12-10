@@ -33,6 +33,7 @@
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <hash_map>
+
 #include <sys/param.h>
 
 #include <rtl/strbuf.hxx>
@@ -119,11 +120,7 @@ public:
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW( () )
-#if __FreeBSD_version < 602103
-    : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
-#else
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
-#endif
 {
 }
 //__________________________________________________________________________________________________
@@ -158,11 +155,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-#if __FreeBSD_version < 602103 /* #i22253# */
-        rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
-#else
-        rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
-#endif
+        rtti = static_cast<type_info *>(dlsym( m_hApp, symName.getStr() ));
 
         if (rtti)
         {
@@ -194,7 +187,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                     type_info * base_rtti = getRTTI(
                         (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
                     rtti = new __si_class_type_info(
-                        strdup( rttiName ), (__class_type_info *)base_rtti );
+                        strdup( rttiName ), static_cast<__class_type_info *>(base_rtti) );
                 }
                 else
                 {
