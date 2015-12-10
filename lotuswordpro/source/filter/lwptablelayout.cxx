@@ -1106,7 +1106,7 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
 
         LwpDLVListHeadHolder* pHolder = static_cast<LwpDLVListHeadHolder*>(pFoundry->GetNumberManager().GetTableRangeID().obj().get());
 
-        LwpTableRange* pTableRange = static_cast<LwpTableRange*>(pHolder->GetHeadID().obj().get());
+        LwpTableRange* pTableRange = pHolder ? static_cast<LwpTableRange*>(pHolder->GetHeadID().obj().get()) : nullptr;
 
         //Look up the table
         while (nullptr!=pTableRange)
