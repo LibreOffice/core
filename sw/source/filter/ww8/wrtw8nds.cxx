@@ -2162,6 +2162,12 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
         // position of this range
         AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
         AppendAnnotationMarks( rNode, nAktPos, nNextAttr - nAktPos );
+
+        // At the moment smarttags are only written for paragraphs, at the
+        // begining of the paragraph.
+        if (nAktPos == 0)
+            AppendSmartTags(rNode);
+
         bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
         nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nAktPos);
 

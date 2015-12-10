@@ -108,6 +108,7 @@ class WW8_WrMagicTable;
 class WW8_WrPlcFootnoteEdn;
 class WW8_WrPlcPn;
 class WW8_WrPlcAnnotations;
+class WW8_WrtFactoids;
 class MSWordSections;
 class WW8_WrPlcTextBoxes;
 class WW8_WrPct;            // administration
@@ -488,6 +489,7 @@ public:
     MSWordAttrIter* m_pChpIter;
     MSWordStyles* m_pStyles;
     WW8_WrPlcAnnotations* m_pAtn;
+    std::unique_ptr<WW8_WrtFactoids> m_pFactoids;
     WW8_WrPlcTextBoxes *m_pTextBxs, *m_pHFTextBxs;
 
     struct LinkedTextboxInfo        //help analyze textbox flow links
@@ -678,6 +680,8 @@ public:
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) = 0;
 
     virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
+
+    virtual void AppendSmartTags(const SwTextNode& /*rTextNode*/) { }
 
     //For i120928,add this interface to export graphic of bullet
     virtual void ExportGrfBullet(const SwTextNode& rNd) = 0;
@@ -1035,6 +1039,8 @@ public:
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) override;
 
     virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
+
+    virtual void AppendSmartTags(const SwTextNode& rTextNode) override;
 
     virtual void ExportGrfBullet(const SwTextNode& rNd) override;
     void OutGrfBullets(const ww8::Frame &rFrame);

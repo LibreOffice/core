@@ -117,6 +117,7 @@
 #include "WW8FibData.hxx"
 #include "numrule.hxx"
 #include "fmtclds.hxx"
+#include "rdfhelper.hxx"
 
 using namespace css;
 using namespace sw::util;
@@ -311,6 +312,69 @@ void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
         }
         ++aItr;
     }
+}
+
+/// Handles export of smart tags.
+class WW8_WrtFactoids: private boost::noncopyable
+{
+    std::vector<WW8_CP> m_aStartCPs;
+    std::vector<WW8_CP> m_aEndCPs;
+
+public:
+    WW8_WrtFactoids();
+    ~WW8_WrtFactoids();
+    void Append(WW8_CP nStartCp, WW8_CP nEndCp);
+    void Write(WW8Export& rWrt);
+}
+;
+WW8_WrtFactoids::WW8_WrtFactoids()
+{
+}
+
+WW8_WrtFactoids::~WW8_WrtFactoids()
+{
+}
+
+void WW8_WrtFactoids::Append(WW8_CP nStartCp, WW8_CP nEndCp)
+{
+    m_aStartCPs.push_back(nStartCp);
+    m_aEndCPs.push_back(nEndCp);
+}
+
+void WW8_WrtFactoids::Write(WW8Export& rExport)
+{
+    if (m_aStartCPs.empty())
+        return;
+
+    SvStream& rStream = *rExport.pTableStrm;
+
+    rExport.pFib->fcPlcfBkfFactoid = rStream.Tell();
+    for (const WW8_CP& rCP : m_aStartCPs)
+        rStream.WriteInt32(rCP);
+    rStream.WriteInt32(rExport.pFib->ccpText + rExport.pFib->ccpTxbx);
+
+    // Write FBKFD.
+    for (size_t i = 0; i < m_aStartCPs.size(); ++i)
+    {
+        rStream.WriteInt16(i); // ibkl
+        rStream.WriteInt16(0); // bkc
+        rStream.WriteInt16(1); // cDepth, 1 as start and end is the same.
+    }
+
+    rExport.pFib->lcbPlcfBkfFactoid = rStream.Tell() - rExport.pFib->fcPlcfBkfFactoid;
+
+    rExport.pFib->fcPlcfBklFactoid = rStream.Tell();
+    for (const WW8_CP& rCP : m_aEndCPs)
+        rStream.WriteInt32(rCP);
+    rStream.WriteInt32(rExport.pFib->ccpText + rExport.pFib->ccpTxbx);
+
+    // Write FBKLD.
+    for (size_t i = 0; i < m_aEndCPs.size(); ++i)
+    {
+        rStream.WriteInt16(i); // ibkf
+        rStream.WriteInt16(0); // cDepth, 0 as does not overlap with any other smart tag.
+    }
+    rExport.pFib->lcbPlcfBklFactoid = rStream.Tell() - rExport.pFib->fcPlcfBklFactoid;
 }
 
 #define ANZ_DEFAULT_STYLES 16
@@ -1373,6 +1437,16 @@ void WW8Export::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos
                 m_pAtn->AddRangeStartPosition(pMark->GetName(), Fc2Cp(Strm().Tell()));
             }
         }
+    }
+}
+
+void WW8Export::AppendSmartTags(const SwTextNode& rTextNode)
+{
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements("urn:tscp:names:baf:1.1", rTextNode);
+    if (!aStatements.empty())
+    {
+        WW8_CP nCP = Fc2Cp(Strm().Tell());
+        m_pFactoids->Append(nCP, nCP);
     }
 }
 
@@ -2736,6 +2810,7 @@ void WW8Export::WriteFkpPlcUsw()
 
     m_pBkmks->Write( *this );                 // Bookmarks - sttbfBkmk/
                                             // plcfBkmkf/plcfBkmkl
+    m_pFactoids->Write(*this);
 
     WriteNumbering();
 
@@ -3095,6 +3170,7 @@ void WW8Export::ExportDocument_Impl()
     pFootnote = new WW8_WrPlcFootnoteEdn( TXT_FTN );                      // Footnotes
     pEdn = new WW8_WrPlcFootnoteEdn( TXT_EDN );                      // Endnotes
     m_pAtn = new WW8_WrPlcAnnotations;                                 // PostIts
+    m_pFactoids.reset(new WW8_WrtFactoids); // Smart tags.
     m_pTextBxs = new WW8_WrPlcTextBoxes( TXT_TXTBOX );
     m_pHFTextBxs = new WW8_WrPlcTextBoxes( TXT_HFTXTBOX );
 
@@ -3358,6 +3434,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_pChpIter(nullptr)
     , m_pStyles(nullptr)
     , m_pAtn(nullptr)
+    , m_pFactoids(nullptr)
     , m_pTextBxs(nullptr)
     , m_pHFTextBxs(nullptr)
     , m_pParentFrame(nullptr)
