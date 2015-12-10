@@ -366,11 +366,14 @@ sal_uInt16 LwpRowLayout::GetCurMaxSpannedRows(sal_uInt8 nStartCol,sal_uInt8 nEnd
  */
 void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
+    LwpTableLayout* pTableLayout = GetParentTableLayout();
+    if (!pTableLayout)
+        return;
+
     XFRow* pRow = new XFRow;
     pRow->SetStyleName(m_StyleName);
 
-    XFCell * pCell = NULL;
-    LwpTableLayout* pTableLayout = GetParentTableLayout();
+    XFCell * pCell = nullptr;
     LwpTable* pTable = pTableLayout->GetTable();
     sal_uInt8 nCellStartCol,nCellEndCol;
 
