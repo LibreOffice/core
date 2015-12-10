@@ -34,6 +34,8 @@
 #include "vcl/bmpacc.hxx"
 #include "outdata.hxx"
 #include "salgdiimpl.hxx"
+#include "opengl/win/gdiimpl.hxx"
+
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 {
@@ -71,7 +73,35 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 
 void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
-    mpImpl->drawBitmap( rPosAry, rSalBitmap );
+    if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+        dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr)
+    {
+        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSalBitmap);
+        BitmapBuffer* pRead = rConstBitmap.AcquireBuffer(BITMAP_READ_ACCESS);
+
+        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        pWinSalBitmap->Create(rConstBitmap.GetSize(), rConstBitmap.GetBitCount(), BitmapPalette());
+        BitmapBuffer* pWrite = pWinSalBitmap->AcquireBuffer(BITMAP_WRITE_ACCESS);
+
+        sal_uInt8* pSource(pRead->mpBits);
+        sal_uInt8* pDestination(pWrite->mpBits);
+
+        for (long y = 0; y < pRead->mnHeight; y++)
+        {
+            memcpy(pDestination, pSource, pRead->mnScanlineSize);
+            pSource += pRead->mnScanlineSize;
+            pDestination += pWrite->mnScanlineSize;
+        }
+        pWinSalBitmap->ReleaseBuffer(pWrite, BITMAP_WRITE_ACCESS);
+
+        rConstBitmap.ReleaseBuffer(pRead, BITMAP_READ_ACCESS);
+
+        mpImpl->drawBitmap(rPosAry, *pWinSalBitmap.get());
+    }
+    else
+    {
+        mpImpl->drawBitmap(rPosAry, rSalBitmap);
+    }
 }
 
 void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
