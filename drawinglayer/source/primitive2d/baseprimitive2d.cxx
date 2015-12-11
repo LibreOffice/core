@@ -111,25 +111,6 @@ namespace drawinglayer
     namespace primitive2d
     {
         // convert helper stl vector of primitives to Primitive2DSequence
-        Primitive2DSequence Primitive2DContainerToPrimitive2DSequence(const Primitive2DContainer& rSource, bool bInvert)
-        {
-            const sal_uInt32 nSize(rSource.size());
-            Primitive2DSequence aRetval;
-
-            aRetval.realloc(nSize);
-
-            for(sal_uInt32 a(0); a < nSize; a++)
-            {
-                aRetval[bInvert ? nSize - 1 - a : a] = rSource[a];
-            }
-
-            // all entries taken over to Uno References as owners. To avoid
-            // errors with users of this mechanism to delete pointers to BasePrimitive2D
-            // itself, clear given vector
-            const_cast< Primitive2DContainer& >(rSource).clear();
-
-            return aRetval;
-        }
         Primitive2DContainer Primitive2DContainer::maybeInvert(bool bInvert) const
         {
             const sal_uInt32 nSize(size());
@@ -188,22 +169,6 @@ namespace drawinglayer
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
                     aRetval.expand(getB2DRangeFromPrimitive2DReference((*this)[a], aViewInformation));
-                }
-            }
-
-            return aRetval;
-        }
-        basegfx::B2DRange getB2DRangeFromPrimitive2DSequence(const Primitive2DContainer& rCandidate, const geometry::ViewInformation2D& aViewInformation)
-        {
-            basegfx::B2DRange aRetval;
-
-            if(!rCandidate.empty())
-            {
-                const sal_Int32 nCount(rCandidate.size());
-
-                for(sal_Int32 a(0L); a < nCount; a++)
-                {
-                    aRetval.expand(getB2DRangeFromPrimitive2DReference(rCandidate[a], aViewInformation));
                 }
             }
 

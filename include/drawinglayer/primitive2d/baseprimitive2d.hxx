@@ -284,9 +284,6 @@ namespace drawinglayer
         /// get B2DRange from a given Primitive2DReference
         basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
 
-        /// get B2DRange from a given Primitive2DSequence
-        basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation);
-
         /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
             and using compare operator
          */
