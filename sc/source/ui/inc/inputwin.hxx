@@ -30,15 +30,16 @@
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>
 
-class ScEditEngineDefaulter;
+class Accelerator;
 class EditView;
-struct ESelection;
-class ScInputHandler;
 class ScAccessibleEditLineTextData;
-struct EENotify;
+class ScEditEngineDefaulter;
+class ScInputBarGroup;
+class ScInputHandler;
 class ScRangeList;
 class ScTabViewShell;
-class Accelerator;
+struct EENotify;
+struct ESelection;
 
 class ScTextWndBase : public vcl::Window
 {
@@ -60,14 +61,14 @@ public:
 class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
 {
 public:
-                    ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh );
+    ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh);
     virtual         ~ScTextWnd();
     virtual void    dispose() override;
 
     virtual void            SetTextString( const OUString& rString ) override;
     virtual const OUString& GetTextString() const override;
 
-    bool                     IsInputActive() override;
+    bool                    IsInputActive() override;
     virtual EditView*       GetEditView() override;
 
                         // for function autopilots
@@ -78,7 +79,7 @@ public:
 
     virtual void            TextGrabFocus() override;
 
-    virtual void             DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void            DataChanged(const DataChangedEvent& rDCEvt) override;
 
     virtual void            SetFormulaMode( bool bSet ) override;
 
@@ -87,11 +88,22 @@ public:
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
 
-    DECL_LINK_TYPED( NotifyHdl, LinkParamNone*, void );
+    virtual void            Resize() override;
+
+    long GetPixelHeightForLines(long nLines);
+    long GetEditEngTxtHeight();
+
+    long GetNumLines() { return mnLines; }
+    void SetNumLines(long nLines);
+    long GetLastNumExpandedLines() { return mnLastExpandedLines; }
+
+    void DoScroll();
+
+    DECL_LINK_TYPED(NotifyHdl, EENotify&, void);
+    DECL_LINK_TYPED(ModifyHdl, LinkParamNone*, void);
 
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
-    virtual void    Resize() override;
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -107,6 +119,10 @@ protected:
 
     void            ImplInitSettings();
     void            UpdateAutoCorrFlag();
+
+    void SetScrollBarRange();
+
+    void InitEditEngine();
 
     ScTabViewShell* GetViewShell() { return mpViewShell;}
 
@@ -127,6 +143,11 @@ protected:
 
 private:
     ScTabViewShell* mpViewShell;
+    ScInputBarGroup& mrGroupBar;
+    long mnLines;
+    long mnLastExpandedLines;
+    long mnBorderHeight;
+    bool mbInvalidate;
 };
 
 class ScPosWnd : public ComboBox, public SfxListener        // Display position
@@ -162,40 +183,6 @@ private:
     void            ReleaseFocus_Impl();
 };
 
-class ScInputBarGroup;
-
-class ScMultiTextWnd : public ScTextWnd
-{
-public:
-    ScMultiTextWnd( ScInputBarGroup* pParent, ScTabViewShell* pViewSh );
-    virtual ~ScMultiTextWnd();
-    virtual void StartEditEngine() override;
-    virtual void StopEditEngine( bool bAll ) override;
-    virtual void Resize() override;
-    virtual EditView*  GetEditView() override;
-    long GetPixelHeightForLines( long nLines );
-    long GetEditEngTxtHeight();
-
-    void DoScroll();
-    virtual void SetTextString( const OUString& rString ) override;
-    void SetNumLines( long nLines );
-    long GetNumLines() { return mnLines; }
-    long GetLastNumExpandedLines() { return mnLastExpandedLines; }
-protected:
-    void SetScrollBarRange();
-    void InitEditEngine();
-
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
-    DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
-    DECL_LINK_TYPED( ModifyHdl, LinkParamNone*, void );
-private:
-    ScInputBarGroup& mrGroupBar;
-    long mnLines;
-    long mnLastExpandedLines;
-    long mnBorderHeight;
-    bool mbInvalidate;
-};
-
 class ScInputBarGroup : public ScTextWndBase
 {
 
@@ -220,15 +207,17 @@ public:
     void            DecrementVerticalSize();
     long            GetNumLines() { return maTextWnd->GetNumLines(); }
     long            GetVertOffset() { return  mnVertOffset; }
+
 private:
     void            TriggerToolboxLayout();
-    VclPtr<ScMultiTextWnd>  maTextWnd;
-    VclPtr<ImageButton>     maButton;
-    VclPtr<ScrollBar>       maScrollbar;
+
+    VclPtr<ScTextWnd> maTextWnd;
+    VclPtr<ImageButton> maButton;
+    VclPtr<ScrollBar> maScrollbar;
     long            mnVertOffset;
+
     DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_LINK_TYPED( Impl_ScrollHdl, ScrollBar*, void );
-
 };
 
 class ScInputWindow : public ToolBox                        // Parent toolbox

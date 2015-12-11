@@ -878,7 +878,7 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     : ScTextWndBase(pParent, WinBits(WB_HIDE | WB_TABSTOP)),
-      maTextWnd(VclPtr<ScMultiTextWnd>::Create(this, pViewSh)),
+      maTextWnd(VclPtr<ScTextWnd>::Create(this, pViewSh)),
       maButton(VclPtr<ImageButton>::Create(this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE)),
       maScrollbar(VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG)),
       mnVertOffset(0)
@@ -1125,23 +1125,7 @@ void ScInputBarGroup::TextGrabFocus()
     maTextWnd->TextGrabFocus();
 }
 
-ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )
-    : ScTextWnd( pParen, pViewSh ),
-      mrGroupBar(* pParen ),
-      mnLines( 1 ),
-      mnLastExpandedLines( INPUTWIN_MULTILINES ),
-      mbInvalidate( false )
-{
-    Size aBorder;
-    aBorder = CalcWindowSize(aBorder);
-    mnBorderHeight = aBorder.Height();
-}
-
-ScMultiTextWnd::~ScMultiTextWnd()
-{
-}
-
-void ScMultiTextWnd::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     EditView* pView = GetEditView();
     if (pView)
@@ -1155,20 +1139,20 @@ void ScMultiTextWnd::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
     }
 }
 
-EditView* ScMultiTextWnd::GetEditView()
+EditView* ScTextWnd::GetEditView()
 {
     if ( !pEditView )
         InitEditEngine();
     return pEditView;
 }
 
-long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
+long ScTextWnd::GetPixelHeightForLines(long nLines)
 {
     // add padding ( for the borders of the window )
     return ( nLines * LogicToPixel( Size( 0, GetTextHeight() ) ).Height() ) + mnBorderHeight;
 }
 
-void ScMultiTextWnd::SetNumLines( long nLines )
+void ScTextWnd::SetNumLines(long nLines)
 {
     mnLines = nLines;
     if ( nLines > 1 )
@@ -1178,7 +1162,7 @@ void ScMultiTextWnd::SetNumLines( long nLines )
     }
 }
 
-void ScMultiTextWnd::Resize()
+void ScTextWnd::Resize()
 {
     // Only Height is recalculated here, Width is applied from
     // parent/container window
@@ -1187,7 +1171,7 @@ void ScMultiTextWnd::Resize()
     aTextBoxSize.Height() = GetPixelHeightForLines( mnLines );
     SetSizePixel( aTextBoxSize );
 
-    if(pEditView)
+    if (pEditView)
     {
         Size aOutputSize = GetOutputSizePixel();
         Rectangle aOutputArea = PixelToLogic( Rectangle( Point(), aOutputSize ));
@@ -1206,29 +1190,12 @@ void ScMultiTextWnd::Resize()
     SetScrollBarRange();
 }
 
-IMPL_LINK_NOARG_TYPED(ScMultiTextWnd, ModifyHdl, LinkParamNone*, void)
-{
-    ScTextWnd::NotifyHdl(nullptr);
-}
-
-IMPL_LINK_TYPED(ScMultiTextWnd, NotifyHdl, EENotify&, rNotify, void)
-{
-    // need to process EE_NOTIFY_TEXTVIEWSCROLLED here
-    // sometimes we don't seem to get EE_NOTIFY_TEXTVIEWSCROLLED e.g. when
-    // we insert text at the beginning of the text so the cursor never moves
-    // down to generate a scroll event
-
-    if ( rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED
-         || rNotify.eNotificationType == EE_NOTIFY_TEXTHEIGHTCHANGED )
-        SetScrollBarRange();
-}
-
-long ScMultiTextWnd::GetEditEngTxtHeight()
+long ScTextWnd::GetEditEngTxtHeight()
 {
     return pEditView ? pEditView->GetEditEngine()->GetTextHeight() : 0;
 }
 
-void ScMultiTextWnd::SetScrollBarRange()
+void ScTextWnd::SetScrollBarRange()
 {
     if ( pEditView )
     {
@@ -1239,8 +1206,7 @@ void ScMultiTextWnd::SetScrollBarRange()
     }
 }
 
-void
-ScMultiTextWnd::DoScroll()
+void ScTextWnd::DoScroll()
 {
     if ( pEditView )
     {
@@ -1253,7 +1219,7 @@ ScMultiTextWnd::DoScroll()
     }
 }
 
-void ScMultiTextWnd::StartEditEngine()
+void ScTextWnd::StartEditEngine()
 {
     // Don't activate if we're a modal dialog ourselves (Doc-modal dialog)
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
@@ -1316,7 +1282,7 @@ static void lcl_ModifyRTLVisArea( EditView* pEditView )
     pEditView->SetVisArea(aVisArea);
 }
 
-void ScMultiTextWnd::InitEditEngine()
+void ScTextWnd::InitEditEngine()
 {
     ScFieldEditEngine* pNew;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -1380,8 +1346,8 @@ void ScMultiTextWnd::InitEditEngine()
     if ( bIsRTL )
         lcl_ModifyRTLVisArea( pEditView );
 
-    pEditEngine->SetModifyHdl(LINK(this, ScMultiTextWnd, ModifyHdl));
-    pEditEngine->SetNotifyHdl(LINK(this, ScMultiTextWnd, NotifyHdl));
+    pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, ModifyHdl));
+    pEditEngine->SetNotifyHdl(LINK(this, ScTextWnd, NotifyHdl));
 
     if (!maAccTextDatas.empty())
         maAccTextDatas.back()->StartEdit();
@@ -1397,27 +1363,7 @@ void ScMultiTextWnd::InitEditEngine()
     }
 }
 
-void ScMultiTextWnd::StopEditEngine( bool bAll )
-{
-    if ( pEditEngine )
-        pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    ScTextWnd::StopEditEngine( bAll );
-}
-
-void ScMultiTextWnd::SetTextString( const OUString& rNewString )
-{
-    // Ideally it would be best to create on demand the EditEngine/EditView here, but... for
-    // the initialisation scenario where a cell is first clicked on we end up with the text in the
-    // inputbar window scrolled to the bottom if we do that here ( because the tableview and topview
-    // are synced I guess ).
-    // should fix that I suppose :-/ need to look a bit further into that
-    mbInvalidate = true; // ensure next Paint ( that uses editengine ) call will call Invalidate first
-    ScTextWnd::SetTextString( rNewString );
-    SetScrollBarRange();
-    DoScroll();
-}
-
-ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
+ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase(pParent, WinBits(WB_HIDE | WB_BORDER)),
         DragSourceHelper(this),
         pEditEngine  (nullptr),
@@ -1425,7 +1371,11 @@ ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
         bIsInsertMode(true),
         bFormulaMode (false),
         bInputMode   (false),
-        mpViewShell(pViewSh)
+        mpViewShell(pViewSh),
+        mrGroupBar(*pParent),
+        mnLines(1),
+        mnLastExpandedLines(INPUTWIN_MULTILINES),
+        mbInvalidate(false)
 {
     EnableRTL(false); // EditEngine can't be used with VCL EnableRTL
 
@@ -1457,6 +1407,10 @@ ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
     SetMapMode(MAP_TWIP);
     SetPointer(PointerStyle::Text);
     SetFont(aTextFont);
+
+    Size aBorder;
+    aBorder = CalcWindowSize(aBorder);
+    mnBorderHeight = aBorder.Height();
 }
 
 ScTextWnd::~ScTextWnd()
@@ -1475,43 +1429,6 @@ void ScTextWnd::dispose()
     pEditEngine = nullptr;
 
     ScTextWndBase::dispose();
-}
-
-void ScTextWnd::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
-{
-    if (pEditView)
-    {
-        Size aSize(GetOutputSizePixel());
-        long nDiff = aSize.Height() - rRenderContext.LogicToPixel(Size(0, rRenderContext.GetTextHeight())).Height();
-        pEditView->SetOutputArea(rRenderContext.PixelToLogic(Rectangle(Point(0, (nDiff > 0) ? nDiff / 2 : 1), aSize)));
-
-        pEditView->Paint(rRect, &rRenderContext);
-    }
-    else
-    {
-        Size aSize = GetOutputSizePixel();
-        SetFont(aTextFont);
-
-        long nDiff = aSize.Height() - rRenderContext.LogicToPixel(Size(0, rRenderContext.GetTextHeight())).Height();
-
-//      if (nDiff<2) nDiff=2;       // At least 1 pixel
-
-        long nStartPos = 0;
-        if (bIsRTL)
-        {
-            //  right-align
-            nStartPos += aSize.Width() - rRenderContext.LogicToPixel(Size(rRenderContext.GetTextWidth(aString), 0)).Width();
-
-            //  LayoutMode isn't changed as long as ModifyRTLDefaults doesn't include SvxFrameDirectionItem
-        }
-        rRenderContext.DrawText(rRenderContext.PixelToLogic(Point(nStartPos, nDiff / 2)), aString);
-    }
-    rRenderContext.Pop();
-}
-
-void ScTextWnd::Resize()
-{
-    Invalidate();
 }
 
 void ScTextWnd::MouseMove( const MouseEvent& rMEvt )
@@ -1690,100 +1607,19 @@ void ScTextWnd::UpdateAutoCorrFlag()
     }
 }
 
-void ScTextWnd::StartEditEngine()
+IMPL_LINK_TYPED(ScTextWnd, NotifyHdl, EENotify&, rNotify, void)
 {
-    // Don't activate if we're a modal ourselves (Doc modal Dialog)
-    SfxObjectShell* pObjSh = SfxObjectShell::Current();
-    if ( pObjSh && pObjSh->IsInModalMode() )
-        return;
+    // need to process EE_NOTIFY_TEXTVIEWSCROLLED here
+    // sometimes we don't seem to get EE_NOTIFY_TEXTVIEWSCROLLED e.g. when
+    // we insert text at the beginning of the text so the cursor never moves
+    // down to generate a scroll event
 
-    if ( !pEditView || !pEditEngine )
-    {
-        ScFieldEditEngine* pNew;
-        ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-        if ( pViewSh )
-        {
-            ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
-            pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
-        }
-        else
-            pNew = new ScFieldEditEngine(nullptr, EditEngine::CreatePool(), nullptr, true);
-        pNew->SetExecuteURL( false );
-        pEditEngine = pNew;
-
-        pEditEngine->SetUpdateMode( false );
-        pEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
-        pEditEngine->SetWordDelimiters(
-                        ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
-
-        UpdateAutoCorrFlag();
-
-        {
-            SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
-            EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
-            lcl_ExtendEditFontAttribs( *pSet );
-
-            // turn off script spacing to match DrawText output
-            pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
-            if ( bIsRTL )
-                lcl_ModifyRTLDefaults( *pSet );
-            pEditEngine->SetDefaults( pSet );
-        }
-
-        // If the Cell contains URLFields, they need to be taken over into the entry row,
-        // or else the position is not correct anymore
-        bool bFilled = false;
-        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
-        if ( pHdl ) //! Check if it's the right InputHdl?
-            bFilled = pHdl->GetTextAndFields( *pEditEngine );
-
-        pEditEngine->SetUpdateMode( true );
-
-        //  aString is the truth...
-        if (bFilled && pEditEngine->GetText() == aString)
-            Invalidate(); // Repaint for (filled) Fields
-        else
-            pEditEngine->SetText(aString); // At least the right text then
-
-        pEditView = new EditView( pEditEngine, this );
-        pEditView->SetInsertMode(bIsInsertMode);
-
-        // The text from the Clipboard is taken over as ASCII in a single row
-        EVControlBits n = pEditView->GetControlWord();
-        pEditView->SetControlWord( n | EVControlBits::SINGLELINEPASTE );
-
-        pEditEngine->InsertView( pEditView, EE_APPEND );
-
-        Resize();
-
-        if ( bIsRTL )
-            lcl_ModifyRTLVisArea( pEditView );
-
-        pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
-
-        if (!maAccTextDatas.empty())
-            maAccTextDatas.back()->StartEdit();
-
-        //  as long as EditEngine and DrawText sometimes differ for CTL text,
-        //  repaint now to have the EditEngine's version visible
-//        SfxObjectShell* pObjSh = SfxObjectShell::Current();
-        if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
-        {
-            ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();    // any document
-            SvtScriptType nScript = rDoc.GetStringScriptType( aString );
-            if ( nScript & SvtScriptType::COMPLEX )
-                Invalidate();
-        }
-    }
-
-    SC_MOD()->SetInputMode( SC_INPUT_TOP );
-
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if (pViewFrm)
-        pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+    if ( rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED
+         || rNotify.eNotificationType == EE_NOTIFY_TEXTHEIGHTCHANGED )
+        SetScrollBarRange();
 }
 
-IMPL_LINK_NOARG_TYPED(ScTextWnd, NotifyHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG_TYPED(ScTextWnd, ModifyHdl, LinkParamNone*, void)
 {
     if (pEditView && !bInputMode)
     {
@@ -1799,6 +1635,9 @@ IMPL_LINK_NOARG_TYPED(ScTextWnd, NotifyHdl, LinkParamNone*, void)
 
 void ScTextWnd::StopEditEngine( bool bAll )
 {
+    if (pEditEngine)
+        pEditEngine->SetNotifyHdl(Link<EENotify&, void>());
+
     if (pEditView)
     {
         if (!maAccTextDatas.empty())
@@ -1848,6 +1687,13 @@ static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString&
 
 void ScTextWnd::SetTextString( const OUString& rNewString )
 {
+    // Ideally it would be best to create on demand the EditEngine/EditView here, but... for
+    // the initialisation scenario where a cell is first clicked on we end up with the text in the
+    // inputbar window scrolled to the bottom if we do that here ( because the tableview and topview
+    // are synced I guess ).
+    // should fix that I suppose :-/ need to look a bit further into that
+    mbInvalidate = true; // ensure next Paint ( that uses editengine ) call will call Invalidate first
+
     if ( rNewString != aString )
     {
         bInputMode = true;
@@ -1920,6 +1766,9 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
 
         bInputMode = false;
     }
+
+    SetScrollBarRange();
+    DoScroll();
 }
 
 const OUString& ScTextWnd::GetTextString() const
@@ -1930,11 +1779,6 @@ const OUString& ScTextWnd::GetTextString() const
 bool ScTextWnd::IsInputActive()
 {
     return HasFocus();
-}
-
-EditView* ScTextWnd::GetEditView()
-{
-    return pEditView;
 }
 
 void ScTextWnd::MakeDialogEditView()

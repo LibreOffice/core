@@ -104,7 +104,6 @@ merge ScRefHandlerCaller with ScTPValidationValue
 merge ScRefHandlerHelper with ScValidationDlg
 merge ScSimpleEditSourceHelper with ScEditEngineTextObj
 merge ScTabView with ScViewFunc
-merge ScTextWnd with ScMultiTextWnd
 merge ScVbaControlContainer with ScVbaButtonContainer
 merge ScVbaObjectContainer with ScVbaControlContainer
 merge ScViewFunc with ScDBFunc
