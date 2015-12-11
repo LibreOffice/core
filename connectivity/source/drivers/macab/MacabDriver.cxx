@@ -87,7 +87,7 @@ namespace
     template< typename FUNCTION >
     void lcl_getFunctionFromModuleOrUnload( oslModule& _rModule, const sal_Char* _pAsciiSymbolName, FUNCTION& _rFunction )
     {
-        _rFunction = NULL;
+        _rFunction = nullptr;
         if ( _rModule )
         {
 
