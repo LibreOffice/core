@@ -175,7 +175,7 @@ struct AnnotatingVisitor
     void operator()( const uno::Reference<xml::dom::XElement>& xElem)
     {
         const sal_Int32 nTagId(getTokenId(xElem->getTagName()));
-        if (nTagId != XML_TEXT)
+        if (nTagId != XML_TEXT || nTagId != XML_TSPAN)
             return;
 
         maCurrState = maParentStates.back();
@@ -476,7 +476,7 @@ struct AnnotatingVisitor
         rtl::Reference<SvXMLAttributeList> xAttrs( new SvXMLAttributeList() );
         uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
 
-        if (XML_TEXT == nTagId) {
+        if (XML_TEXT == nTagId || XML_TSPAN == nTagId) {
             rState.mbIsText = true;
             basegfx::B2DTuple aScale, aTranslate;
             double fRotate, fShearX;
@@ -587,7 +587,7 @@ struct AnnotatingVisitor
         }
 
         // serialize to automatic-style section
-        if( nTagId == XML_TEXT )
+        if( nTagId == XML_TEXT || nTagId == XML_TSPAN)
         {
             // write paragraph style attributes
             xAttrs->Clear();
@@ -633,7 +633,7 @@ struct AnnotatingVisitor
         // text or shape? if the former, no use in processing any
         // graphic attributes except stroke color, ODF can do ~nothing
         // with text shapes
-        if( nTagId == XML_TEXT )
+        if( nTagId == XML_TEXT || nTagId == XML_TSPAN )
         {
             //xAttrs->AddAttribute( "draw:auto-grow-height", "true");
             xAttrs->AddAttribute( "draw:auto-grow-width", "true");
@@ -1546,6 +1546,7 @@ struct ShapeWritingVisitor
                     writeBinaryData(xAttrs, xUnoAttrs, xElem, basegfx::B2DRange(x,y,x+width,y+height), sLinkValue);
                 break;
             }
+            case XML_TSPAN:
             case XML_TEXT:
             {
                 // collect text from all TEXT_NODE children into sText
