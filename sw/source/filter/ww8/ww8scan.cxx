@@ -44,6 +44,7 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <svtools/miscopt.hxx>
 
 #ifdef DEBUGSPRMREADER
 #include <stdio.h>
@@ -6240,7 +6241,22 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, fcAtrdExtra );
         Set_UInt32( pData, lcbAtrdExtra );
 
-        pData += 0x4DA - 0x422;
+        SvtMiscOptions aMiscOptions;
+        if (aMiscOptions.IsExperimentalMode())
+        {
+            pData += 0x432 - 0x422;
+            Set_UInt32(pData, fcPlcfBkfFactoid);
+            Set_UInt32(pData, lcbPlcfBkfFactoid);
+
+            pData += 0x442 - 0x43A;
+            Set_UInt32(pData, fcPlcfBklFactoid);
+            Set_UInt32(pData, lcbPlcfBklFactoid);
+
+            pData += 0x4DA - 0x44A;
+        }
+        else
+            pData += 0x4DA - 0x422;
+
         Set_UInt32( pData, fcHplxsdr );
         Set_UInt32( pData, 0);
     }
