@@ -22,6 +22,7 @@
 
 #include "scdllapi.h"
 
+#include <memory>
 #include <vector>
 
 /**
@@ -46,6 +47,7 @@ private:
 public:
     ScUserListData(const OUString& rStr);
     ScUserListData(const ScUserListData& rData);
+    ~ScUserListData();
 
     const OUString& GetString() const { return aStr; }
     void SetString(const OUString& rStr);
@@ -61,7 +63,7 @@ public:
  */
 class SC_DLLPUBLIC ScUserList
 {
-    typedef std::vector<ScUserListData> DataType;
+    typedef std::vector< std::unique_ptr<ScUserListData> > DataType;
     DataType maData;
 public:
     typedef DataType::iterator iterator;
@@ -83,9 +85,8 @@ public:
     iterator begin();
     const_iterator begin() const;
     void clear();
-    void reserve(size_t nSize) { maData.reserve(nSize); }
     size_t size() const;
-    void push_back(const ScUserListData& r) { maData.push_back(r); }
+    void push_back(const ScUserListData* p);
     void erase(iterator itr);
 };
 
