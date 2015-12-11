@@ -24,7 +24,6 @@
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
-#include <vcl/lstbox.h>
 #include <vcl/lstbox.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>

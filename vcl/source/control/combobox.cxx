@@ -27,7 +27,7 @@
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 #include <vcl/decoview.hxx>
-#include <vcl/lstbox.h>
+#include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

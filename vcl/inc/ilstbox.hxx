@@ -27,7 +27,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/lstbox.h>
+#include <vcl/lstbox.hxx>
 #include <vcl/timer.hxx>
 
 #include "vcl/quickselectionengine.hxx"

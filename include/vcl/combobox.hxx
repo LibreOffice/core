@@ -22,7 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
-#include <vcl/lstbox.h>
+#include <vcl/lstbox.hxx>
 
 #define COMBOBOX_APPEND             (SAL_MAX_INT32)
 #define COMBOBOX_ENTRY_NOTFOUND     (SAL_MAX_INT32)

@@ -104,7 +104,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lstbox.h>
 #include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>

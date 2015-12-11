@@ -151,7 +151,6 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/lstbox.h>
 #include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
