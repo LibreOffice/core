@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_e52af07d",
+        "filename": "solenv/gbuild/Executable.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-12-11T20:58:29Z",
+      "side": 1,
+      "message": "this is awful, and might break stuff if somebody ever uses it with an executable we actually ship",
+      "revId": "f2876214d9566b61301f04c3e65cbbd21b25d07f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
