@@ -200,6 +200,10 @@ public:
         return mbRequestLegacyContext;
     }
 
+    /// VCL promiscuously re-uses its own contexts:
+    void setVCLOnly() { mbVCLOnly = true; }
+    bool isVCLOnly() { return mbVCLOnly; }
+
     bool supportMultiSampling() const;
 
     static SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
@@ -225,6 +229,7 @@ private:
     int  mnRefCount;
     bool mbRequestLegacyContext;
     bool mbUseDoubleBufferedRendering;
+    bool mbVCLOnly;
 
     int mnFramebufferCount;
     OpenGLFramebuffer* mpCurrentFramebuffer;
