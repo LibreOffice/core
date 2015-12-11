@@ -23,7 +23,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <vcl/spin.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/gradient.hxx>
@@ -41,6 +40,7 @@
 #include <window.h>
 #include <toolbox.h>
 #include <salframe.hxx>
+#include <spin.hxx>
 #if defined WNT
 #include <svsys.h>
 #endif
