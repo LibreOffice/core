@@ -1918,6 +1918,7 @@ namespace xmloff { namespace token {
         TOKEN( "true",                            XML_TRUE ),
         TOKEN( "truncate-on-overflow",            XML_TRUNCATE_ON_OVERFLOW ),
         TOKEN( "try-staggering-first",            XML_TRY_STAGGERING_FIRST ),
+        TOKEN( "tspan",                           XML_TSPAN ),
         TOKEN( "ttb",                             XML_TTB ),
         TOKEN( "type",                            XML_TYPE ),
         TOKEN( "dot-dash",                        XML_DOT_DASH ),
