@@ -551,6 +551,11 @@ public:
      */
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ,
             ScRange& rErrorRange, ScDocument* pDocument = nullptr );
+
+    /** Same as Move() but with sticky end col/row anchors. */
+    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool MoveSticky( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ,
+            ScRange& rErrorRange, ScDocument* pDocument = nullptr );
+
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 

@@ -2969,7 +2969,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         if (rCxt.maRange.In(aAbs))
                         {
                             ScRange aErrorRange( ScAddress::UNINITIALIZED );
-                            if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
+                            if (!aAbs.MoveSticky(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
                                 aAbs = aErrorRange;
                             aRes.mbReferenceModified = true;
                         }
