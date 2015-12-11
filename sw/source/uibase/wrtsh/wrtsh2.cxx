@@ -63,10 +63,10 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#include <xmloff/odffields.hxx>
 #include <memory>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 void SwWrtShell::Insert(SwField &rField)
 {
@@ -472,7 +472,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
         return;
 
     // We are doing tiledRendering, let the client handles the URL loading.
-    if (rVSh.isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
     {
         rVSh.libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
         return;

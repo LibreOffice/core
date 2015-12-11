@@ -889,7 +889,7 @@ void SwPostItMgr::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallbac
         if (!pPostIt)
             continue;
 
-        pPostIt->GetOutlinerView()->setTiledRendering(mpWrtShell->isTiledRendering());
+        pPostIt->GetOutlinerView()->setTiledRendering(comphelper::LibreOfficeKit::isActive());
         pPostIt->GetOutlinerView()->registerLibreOfficeKitCallback(pCallback, pData);
     }
 }
