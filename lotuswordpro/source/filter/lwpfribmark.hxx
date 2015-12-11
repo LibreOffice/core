@@ -91,7 +91,7 @@ public:
     explicit LwpFribBookMark( LwpPara* pPara );
     virtual ~LwpFribBookMark(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
-    LwpObjectID GetMarkerID(){return m_objMarker;}
+    const LwpObjectID& GetMarkerID(){return m_objMarker;}
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);

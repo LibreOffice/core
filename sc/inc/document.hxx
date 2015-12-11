@@ -1849,7 +1849,7 @@ public:
     ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings; }
     SC_DLLPUBLIC void               SetChangeViewSettings(const ScChangeViewSettings& rNew);
 
-    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharacters();
+    const rtl::Reference<SvxForbiddenCharactersTable>& GetForbiddenCharacters();
     void            SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharactersTable>& rNew);
 
     sal_uInt8           GetAsianCompression() const;        // CharacterCompressionType values
@@ -2110,7 +2110,7 @@ public:
 
     inline void     SetVbaEventProcessor( const css::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
                         { mxVbaEvents = rxVbaEvents; }
-    inline css::uno::Reference< css::script::vba::XVBAEventProcessor >
+    const css::uno::Reference< css::script::vba::XVBAEventProcessor >&
                     GetVbaEventProcessor() const { return mxVbaEvents; }
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */

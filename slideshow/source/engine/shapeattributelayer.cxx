@@ -236,7 +236,7 @@ namespace slideshow
             return true;
         }
 
-        ShapeAttributeLayerSharedPtr  ShapeAttributeLayer::getChildLayer() const
+        const ShapeAttributeLayerSharedPtr&  ShapeAttributeLayer::getChildLayer() const
         {
             return mpChild;
         }

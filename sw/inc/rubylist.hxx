@@ -33,7 +33,7 @@ public:
     SwRubyListEntry() : m_aRubyAttr( OUString() ) {}
     ~SwRubyListEntry();
 
-    OUString GetText() const                    { return m_sText; }
+    const OUString& GetText() const                    { return m_sText; }
     void SetText( const OUString& rStr )        { m_sText = rStr; }
 
     const SwFormatRuby& GetRubyAttr() const        { return m_aRubyAttr; }

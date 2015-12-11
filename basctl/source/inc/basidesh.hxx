@@ -156,7 +156,7 @@ public:
     BaseWindow*      GetCurWindow() const    { return pCurWin; }
     ScriptDocument const& GetCurDocument() const { return m_aCurDocument; }
     OUString const&  GetCurLibName() const { return m_aCurLibName; }
-    std::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
+    const std::shared_ptr<LocalizationMgr>& GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
     TabBar&             GetTabBar()             { return *pTabBar; }
     WindowTable&        GetWindowTable()        { return aWindowTable; }

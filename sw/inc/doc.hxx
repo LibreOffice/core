@@ -589,7 +589,7 @@ public:
 
     bool getDocReadOnly() const { return mbReadOnly; }
     void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
-    const OUString getDocAccTitle() const { return msDocAccTitle; }
+    const OUString& getDocAccTitle() const { return msDocAccTitle; }
 
     // INextInterface here
     DECL_LINK_TYPED(CalcFieldValueHdl, EditFieldInfo*, void);
@@ -975,7 +975,7 @@ public:
     void SetUpdateTOX( bool bFlag = true )     { mbUpdateTOX = bFlag; }
     bool IsUpdateTOX() const                   { return mbUpdateTOX; }
 
-    OUString        GetTOIAutoMarkURL() const {return msTOIAutoMarkURL;}
+    const OUString& GetTOIAutoMarkURL() const {return msTOIAutoMarkURL;}
     void            SetTOIAutoMarkURL(const OUString& rSet) {msTOIAutoMarkURL = rSet;}
 
     bool IsInReading() const                    { return mbInReading; }
@@ -1357,7 +1357,7 @@ public:
     /** in case during copying of embedded object a new shell is created,
      it should be set here and cleaned later */
     void SetTmpDocShell( SfxObjectShellLock rLock )    { mxTmpDocShell = rLock; }
-    SfxObjectShellLock GetTmpDocShell()    { return mxTmpDocShell; }
+    const SfxObjectShellLock& GetTmpDocShell()    { return mxTmpDocShell; }
 
     // For Autotexts? (text modules) They have only one SVPersist at their disposal.
     SfxObjectShell* GetPersist() const;
@@ -1596,7 +1596,7 @@ public:
     // access methods for XForms model(s)
 
     // access container for XForms model; will be NULL if !isXForms()
-    css::uno::Reference<css::container::XNameContainer>
+    const css::uno::Reference<css::container::XNameContainer>&
         getXForms() const { return mxXForms;}
 
     css::uno::Reference< css::linguistic2::XProofreadingIterator > GetGCIterator() const;
@@ -1616,7 +1616,7 @@ public:
 
     css::uno::Reference< css::script::vba::XVBAEventProcessor > GetVbaEventProcessor();
     void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer >& xCache ) { m_xTemplateToProjectCache = xCache; };
-    css::uno::Reference< css::container::XNameContainer > GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
+    const css::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();

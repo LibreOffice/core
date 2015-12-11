@@ -72,7 +72,7 @@ namespace dbaui
         void            SetTypeSelectHandler( const Link<OGeneralPage&,void>& _rHandler ) { m_aTypeSelectHandler = _rHandler; }
 
         /// get the currently selected datasource type
-        OUString     GetSelectedType() const { return m_eCurrentSelection; }
+        const OUString&  GetSelectedType() const { return m_eCurrentSelection; }
 
     protected:
         // SfxTabPage overridables

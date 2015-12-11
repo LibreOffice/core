@@ -307,7 +307,7 @@ public:
     {
     }
 
-    basegfx::B1DRange getLayerPriority() const
+    const basegfx::B1DRange& getLayerPriority() const
     {
         return maLayerPrioRange;
     }

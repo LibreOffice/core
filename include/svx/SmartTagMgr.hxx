@@ -215,7 +215,7 @@ public:
 
     /** Returns the name of the application this instance has been created by.
     */
-    const OUString GetApplicationName() const { return maApplicationName; }
+    const OUString& GetApplicationName() const { return maApplicationName; }
 
     // css::lang::XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;

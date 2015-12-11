@@ -107,7 +107,7 @@ namespace drawinglayer
                 const attribute::StrokeAttribute& rStrokeAttribute);
 
             /// data read access
-            basegfx::B3DPolygon getB3DPolygon() const { return maPolygon; }
+            const basegfx::B3DPolygon& getB3DPolygon() const { return maPolygon; }
             const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 

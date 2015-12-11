@@ -144,9 +144,9 @@ namespace dbaui
         OUString             GetTableName() const { return m_pData->GetTableName(); }
         OUString             GetWinName() const { return m_pData->GetWinName(); }
         OUString             GetComposedName() const { return m_pData->GetComposedName(); }
-        VclPtr<OTableWindowListBox>  GetListBox() const { return m_xListBox; }
-        TTableWindowData::value_type GetData() const { return m_pData; }
-        VclPtr<OTableWindowTitle>    GetTitleCtrl() { return m_xTitle; }
+        const VclPtr<OTableWindowListBox>&  GetListBox() const { return m_xListBox; }
+        const TTableWindowData::value_type& GetData() const { return m_pData; }
+        const VclPtr<OTableWindowTitle>&    GetTitleCtrl() { return m_xTitle; }
 
         /** returns the name which should be used when displaying join or relations
             @return

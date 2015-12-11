@@ -31,7 +31,7 @@ class UserInformation
 public:
     UserInformation();
 
-    css::lang::Locale      getUserLanguage() const { return m_aUserLocale; }
+    const css::lang::Locale& getUserLanguage() const { return m_aUserLocale; }
 };
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_USERINFORMATION_HXX

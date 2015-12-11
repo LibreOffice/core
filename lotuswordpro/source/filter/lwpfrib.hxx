@@ -105,7 +105,7 @@ protected:
     OUString m_StyleName;
 public:
     bool m_ModFlag;
-    OUString GetStyleName(){return m_StyleName;}
+    const OUString& GetStyleName(){return m_StyleName;}
     void SetModifiers(ModifierInfo* pModifiers);
     ModifierInfo* GetModifiers(){return m_pModifiers;}
     virtual void RegisterStyle(LwpFoundry* pFoundry);

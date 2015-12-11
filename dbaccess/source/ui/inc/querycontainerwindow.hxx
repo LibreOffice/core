@@ -61,7 +61,7 @@ namespace dbaui
             // called when the beamer has been disposed
         void    disposingPreview();
 
-        css::uno::Reference< css::frame::XFrame2 >
+        const css::uno::Reference< css::frame::XFrame2 >&
                 getPreviewFrame() const { return m_xBeamer; }
 
         OQueryDesignView*   getDesignView() { return m_pViewSwitch->getDesignView(); }

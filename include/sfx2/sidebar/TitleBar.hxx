@@ -36,7 +36,7 @@ public:
     virtual void dispose() override;
 
     void SetTitle (const OUString& rsTitle);
-    const OUString GetTitle() {return msTitle; }
+    const OUString& GetTitle() {return msTitle; }
 
     void SetIcon (const Image& rIcon);
 

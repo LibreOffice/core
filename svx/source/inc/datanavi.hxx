@@ -301,7 +301,7 @@ namespace svxform
         inline css::uno::Reference<css::beans::XPropertySet>
                                     GetBindingForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
         inline OUString             GetServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
-        inline XFormsUIHelper1_ref  GetXFormsHelper() const { return m_xUIHelper; }
+        const XFormsUIHelper1_ref&  GetXFormsHelper() const { return m_xUIHelper; }
     };
 
 
@@ -489,7 +489,7 @@ namespace svxform
         virtual ~AddConditionDialog();
         virtual void dispose() override;
 
-        XFormsUIHelper1_ref GetUIHelper() const { return m_xUIHelper; }
+        const XFormsUIHelper1_ref& GetUIHelper() const { return m_xUIHelper; }
         OUString GetCondition() const { return m_pConditionED->GetText(); }
         void SetCondition(const OUString& _rCondition)
         {

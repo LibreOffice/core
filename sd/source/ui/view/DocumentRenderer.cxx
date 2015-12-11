@@ -349,7 +349,7 @@ namespace {
             return maProperties;
         }
 
-        std::vector<sal_Int32> GetSlidesPerPage() const
+        const std::vector<sal_Int32>& GetSlidesPerPage() const
         {
             return maSlidesPerPage;
         }

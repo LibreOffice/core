@@ -124,7 +124,7 @@ public:
     void                UpdateAsynchron();
     void                RemoveGraphicUpdater();
 
-    OUString getReferer() const { return rGrafObj.aReferer; }
+    const OUString& getReferer() const { return rGrafObj.aReferer; }
 };
 
 class SdrGraphicUpdater : public ::osl::Thread

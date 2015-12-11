@@ -42,7 +42,7 @@ public:
 
     bool isOptional() const { return optional; }
 
-    OUString getDocumentation() const { return documentation; }
+    const OUString& getDocumentation() const { return documentation; }
 
 private:
     AstType const * interface;

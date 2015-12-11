@@ -244,7 +244,7 @@ SvStream& ReadPptExOleObjAtom( SvStream& rIn, PptExOleObjAtom& rAtom )
     return rIn;
 }
 
-Size PptDocumentAtom::GetPageSize(const Size& rSiz)
+const Size& PptDocumentAtom::GetPageSize(const Size& rSiz)
 {
     return rSiz;
 }

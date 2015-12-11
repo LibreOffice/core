@@ -53,7 +53,7 @@ namespace sfx2
         /** Return the border that is painted around the inner window as
             decoration.
         */
-        SvBorder        GetDecorationBorder() const  { return m_aBorder; }
+        const SvBorder&  GetDecorationBorder() const  { return m_aBorder; }
 
     protected:
         // Window overridables

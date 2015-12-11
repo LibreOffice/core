@@ -55,7 +55,7 @@ public:
     void SetBackgroundColor( const Color& rColor )      { aBckgrColor = rColor; bGraphicDirty = true; }
 
     Bitmap                  GetBitmap() const;
-    Color                   GetBackgroundColor() const  { return aBckgrColor; }
+    const Color&            GetBackgroundColor() const  { return aBckgrColor; }
 };
 
 #endif

@@ -404,7 +404,7 @@ namespace dbaui
         DECL_LINK_TYPED(OnAsyncCloseTask, void*, void);
 
     public:
-        css::uno::Reference< css::uno::XComponentContext >  getORB() const { return m_xContext; }
+        const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext; }
         ODataView*  getView() const { return m_pView; }
         void        setView( const VclPtr<ODataView>& i_rView );
         void        clearView();

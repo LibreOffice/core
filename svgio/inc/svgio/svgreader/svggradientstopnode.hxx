@@ -46,7 +46,7 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
 
             /// offset content
-            const SvgNumber getOffset() const { return maOffset; }
+            const SvgNumber& getOffset() const { return maOffset; }
             void setOffset(const SvgNumber& rOffset = SvgNumber()) { maOffset = rOffset; }
         };
     } // end of namespace svgreader

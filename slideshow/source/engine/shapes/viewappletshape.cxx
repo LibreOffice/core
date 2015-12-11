@@ -114,7 +114,7 @@ namespace slideshow
         }
 
 
-        ViewLayerSharedPtr ViewAppletShape::getViewLayer() const
+        const ViewLayerSharedPtr& ViewAppletShape::getViewLayer() const
         {
             return mpViewLayer;
         }

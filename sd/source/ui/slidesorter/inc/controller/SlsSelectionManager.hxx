@@ -103,7 +103,7 @@ public:
     */
     void SetInsertionPosition (const sal_Int32 nInsertionPosition);
 
-    std::shared_ptr<SelectionObserver> GetSelectionObserver() const { return mpSelectionObserver;}
+    const std::shared_ptr<SelectionObserver>& GetSelectionObserver() const { return mpSelectionObserver;}
 
 private:
     SlideSorter& mrSlideSorter;

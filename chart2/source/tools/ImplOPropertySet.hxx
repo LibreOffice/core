@@ -65,7 +65,7 @@ public:
                                    const css::uno::Any & rValue );
 
     bool SetStyle( const css::uno::Reference< css::style::XStyle > & xStyle );
-    css::uno::Reference< css::style::XStyle >
+    const css::uno::Reference< css::style::XStyle >&
         GetStyle() const { return m_xStyle;}
 
     typedef

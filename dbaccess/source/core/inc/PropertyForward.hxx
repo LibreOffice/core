@@ -62,7 +62,7 @@ namespace dbaccess
 
         inline void setName( const OUString& _sName ) { m_sName = _sName; }
         void setDefinition( const css::uno::Reference< css::beans::XPropertySet >& _xDest);
-        inline css::uno::Reference< css::beans::XPropertySet > getDefinition() const { return m_xDest; }
+        const css::uno::Reference< css::beans::XPropertySet >& getDefinition() const { return m_xDest; }
     };
 
 }   // namespace dbaccess

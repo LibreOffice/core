@@ -133,8 +133,8 @@ public:
                                  const OUString& rPar2,
                                  SwField * _pField = nullptr);
 
-    OUString        GetCurFieldPar1() const { return aCurPar1; }
-    OUString        GetCurFieldPar2() const { return aCurPar2; }
+    const OUString& GetCurFieldPar1() const { return aCurPar1; }
+    const OUString& GetCurFieldPar2() const { return aCurPar2; }
 
     // determine a field
     SwField*        GetCurField();
@@ -143,8 +143,8 @@ public:
 
     bool            ChooseMacro(const OUString &rSelMacro = OUString());
     void            SetMacroPath(const OUString& rPath);
-    inline OUString GetMacroPath() const         { return sMacroPath; }
-    inline OUString GetMacroName() const         { return sMacroName; }
+    const OUString& GetMacroPath() const         { return sMacroPath; }
+    const OUString& GetMacroName() const         { return sMacroName; }
 
     // previous and next of the same type
     bool GoNextPrev( bool bNext = true, SwFieldType* pTyp = nullptr );

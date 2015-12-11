@@ -126,7 +126,7 @@ namespace svxform {
         css::uno::Reference< css::uno::XInterface >   m_xControl;
         // attribute access
     public:
-        css::uno::Reference< css::uno::XInterface >  getControl() const{ return m_xControl; }
+        const css::uno::Reference< css::uno::XInterface >&  getControl() const{ return m_xControl; }
     public:
         ControlTextWrapper(const css::uno::Reference< css::uno::XInterface >& _xControl) { m_xControl = _xControl; }
         virtual ~ControlTextWrapper() { }

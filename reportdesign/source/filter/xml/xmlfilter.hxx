@@ -120,7 +120,7 @@ public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
-    inline Reference<XReportDefinition> getReportDefinition() const {
+    const Reference<XReportDefinition>& getReportDefinition() const {
         return m_xReportDefinition;
     }
     void FinishStyles();
@@ -144,16 +144,16 @@ public:
     const SvXMLTokenMap& GetColumnTokenMap() const;
     const SvXMLTokenMap& GetCellElemTokenMap() const;
 
-    inline rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper()      const   {
+    const rtl::Reference< XMLPropertySetMapper >& GetCellStylesPropertySetMapper()      const   {
         return m_xCellStylesPropertySetMapper;
     }
-    inline rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper()    const   {
+    const rtl::Reference< XMLPropertySetMapper >& GetColumnStylesPropertySetMapper()    const   {
         return m_xColumnStylesPropertySetMapper;
     }
-    inline rtl::Reference < XMLPropertySetMapper > GetRowStylesPropertySetMapper()       const   {
+    const rtl::Reference< XMLPropertySetMapper >& GetRowStylesPropertySetMapper()       const   {
         return m_xRowStylesPropertySetMapper;
     }
-    static OUString convertFormula(const OUString& _sFormula);
+    static const OUString& convertFormula(const OUString& _sFormula);
     /** inserts a new function
     *
     * \param _xFunction

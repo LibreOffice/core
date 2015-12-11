@@ -53,7 +53,7 @@ class CommandLineArgs: private boost::noncopyable
         CommandLineArgs();
         explicit CommandLineArgs( Supplier& supplier );
 
-        boost::optional< OUString > getCwdUrl() const { return m_cwdUrl; }
+        const boost::optional< OUString >& getCwdUrl() const { return m_cwdUrl; }
 
         // Access to bool parameters
         bool                IsMinimized() const { return m_minimized;}
@@ -91,7 +91,7 @@ class CommandLineArgs: private boost::noncopyable
         bool                WantsToLoadDocument() const { return m_bDocumentArgs;}
         bool                IsTextCat() const { return m_textcat;}
 
-        OUString            GetUnknown() const { return m_unknown;}
+        const OUString&     GetUnknown() const { return m_unknown;}
 
         // Access to string parameters
         bool                    HasSplashPipe() const { return m_splashpipe;}
@@ -104,13 +104,13 @@ class CommandLineArgs: private boost::noncopyable
         std::vector< OUString > GetForceNewList() const;
         std::vector< OUString > GetPrintList() const;
         std::vector< OUString > GetPrintToList() const;
-        OUString       GetPrinterName() const { return m_printername;}
-        OUString       GetLanguage() const { return m_language;}
+        const OUString&         GetPrinterName() const { return m_printername;}
+        const OUString&         GetLanguage() const { return m_language;}
         std::vector< OUString > const & GetInFilter() const { return m_infilter;}
         std::vector< OUString > GetConversionList() const;
-        OUString       GetConversionParams() const { return m_conversionparams;}
-        OUString       GetConversionOut() const;
-        OUString       GetPidfileName() const { return m_pidfile;}
+        const OUString&         GetConversionParams() const { return m_conversionparams;}
+        OUString                GetConversionOut() const;
+        const OUString&         GetPidfileName() const { return m_pidfile;}
 
         // Special analyzed states (does not match directly to a command line parameter!)
         bool IsEmpty() const { return m_bEmpty;}

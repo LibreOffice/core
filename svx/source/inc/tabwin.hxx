@@ -94,7 +94,7 @@ public:
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 
     const OUString&      GetDatabaseName() const { return m_aDatabaseName; }
-    ::dbtools::SharedConnection GetConnection() const { return m_aConnection; }
+    const ::dbtools::SharedConnection& GetConnection() const { return m_aConnection; }
     const OUString&      GetObjectName() const { return m_aObjectName; }
     sal_Int32                   GetObjectType() const { return m_nObjectType; }
 

@@ -166,7 +166,7 @@ public:
     SAL_DLLPRIVATE void         AbortActualize() { bAbortActualize = true; }
 
     SAL_DLLPRIVATE Gallery*     GetParent() const { return pParent; }
-    SAL_DLLPRIVATE tools::SvRef<SotStorage> GetSvDrawStorage() const;
+    SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
 
 public:
 

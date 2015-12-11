@@ -43,7 +43,7 @@ namespace dbaccess
             : m_aRow(_rRow)
         {}
 
-        inline ORowSetRow getRow() const { return m_aRow; }
+        const ORowSetRow& getRow() const { return m_aRow; }
         inline void clearRow() { m_aRow = nullptr; }
         inline void setRow(const ORowSetRow& _rRow) { m_aRow = _rRow; }
     };

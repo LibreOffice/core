@@ -124,7 +124,7 @@ namespace slideshow
                 @attention
                 This method is only supposed to be called from Shape objects
              */
-            ShapeAttributeLayerSharedPtr getChildLayer() const;
+            const ShapeAttributeLayerSharedPtr& getChildLayer() const;
 
             /** Set the additive mode for possible child attributes
 

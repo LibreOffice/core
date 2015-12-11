@@ -40,7 +40,7 @@ SmElement::SmElement(SmNodePointer pNode, const OUString& aText, const OUString&
 SmElement::~SmElement()
 {}
 
-SmNodePointer SmElement::getNode()
+const SmNodePointer& SmElement::getNode()
 {
     return mpNode;
 }

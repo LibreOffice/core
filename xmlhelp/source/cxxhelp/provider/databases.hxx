@@ -76,9 +76,9 @@ namespace chelp {
 
         ~StaticModuleInformation() { }
 
-        OUString get_title() const { return m_aTitle; }
-        OUString get_id() const { return m_aStartId; }
-        OUString get_program() const { return m_aProgramSwitch; }
+        const OUString& get_title() const { return m_aTitle; }
+        const OUString& get_id() const { return m_aStartId; }
+        const OUString& get_program() const { return m_aProgramSwitch; }
         int get_order() const { return m_nOrder; }
     };  // end class StaticModuleInformation
 
@@ -226,8 +226,8 @@ namespace chelp {
 
         void replaceName( OUString& oustring ) const;
 
-        OUString getProductName() const { return m_vReplacement[0]; }
-        OUString getProductVersion() const { return m_vReplacement[1]; }
+        const OUString& getProductName() const { return m_vReplacement[0]; }
+        const OUString& getProductVersion() const { return m_vReplacement[1]; }
 
         OUString expandURL( const OUString& aURL );
 

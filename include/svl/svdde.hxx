@@ -309,7 +309,7 @@ protected:
     OUString Formats();
     OUString SysItems();
     OUString Status();
-    OUString SysTopicGet( const OUString& );
+    const OUString& SysTopicGet( const OUString& );
     bool    SysTopicExecute( const OUString* );
 
     const DdeTopic* GetSysTopic() const { return pSysTopic; }

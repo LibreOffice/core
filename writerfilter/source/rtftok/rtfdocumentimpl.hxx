@@ -369,7 +369,7 @@ public:
     void setAuthorInitials(OUString& rAuthorInitials);
     void setIgnoreFirst(OUString& rIgnoreFirst);
     void seek(sal_Size nPos);
-    css::uno::Reference<css::lang::XMultiServiceFactory> getModelFactory()
+    const css::uno::Reference<css::lang::XMultiServiceFactory>& getModelFactory()
     {
         return m_xModelFactory;
     }

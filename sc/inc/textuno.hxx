@@ -133,7 +133,7 @@ public:
     ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
     sal_uInt16                  GetPart() const         { return nPart; }
-    rtl::Reference<ScHeaderFooterContentObj> GetContentObj() const { return rContentObj; }
+    const rtl::Reference<ScHeaderFooterContentObj>& GetContentObj() const { return rContentObj; }
 
     const EditTextObject* GetTextObject() const { return mpTextObj.get(); }
 

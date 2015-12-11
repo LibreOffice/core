@@ -104,8 +104,8 @@ namespace dbaui
         {
         }
 
-        inline ::svt::PWindowEventFilter getEventFilter() const   { return m_pEventFilter; }
-        inline ::svt::PWindowOperator    getOperator() const      { return m_pOperator; }
+        const ::svt::PWindowEventFilter& getEventFilter() const   { return m_pEventFilter; }
+        const ::svt::PWindowOperator&    getOperator() const      { return m_pOperator; }
 
     private:
         ::svt::PWindowEventFilter   m_pEventFilter;

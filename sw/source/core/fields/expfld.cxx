@@ -1316,7 +1316,7 @@ void SwInputField::SetHelp(const OUString & rStr)
     aHelp = rStr;
 }
 
-OUString SwInputField::GetHelp() const
+const OUString& SwInputField::GetHelp() const
 {
     return aHelp;
 }
@@ -1326,7 +1326,7 @@ void SwInputField::SetToolTip(const OUString & rStr)
     aToolTip = rStr;
 }
 
-OUString SwInputField::GetToolTip() const
+const OUString& SwInputField::GetToolTip() const
 {
     return aToolTip;
 }

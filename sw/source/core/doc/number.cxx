@@ -1070,7 +1070,7 @@ namespace numfunc
         public:
             static SwDefBulletConfig& getInstance();
 
-            inline OUString GetFontname() const
+            const OUString& GetFontname() const
             {
                 return msFontname;
             }

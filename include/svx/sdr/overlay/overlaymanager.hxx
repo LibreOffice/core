@@ -117,11 +117,11 @@ namespace sdr
             virtual void invalidateRange(const basegfx::B2DRange& rRange);
 
             // stripe support ColA
-            Color getStripeColorA() const { return maStripeColorA; }
+            const Color& getStripeColorA() const { return maStripeColorA; }
             void setStripeColorA(Color aNew= Color(COL_BLACK));
 
             // stripe support ColB
-            Color getStripeColorB() const { return maStripeColorB; }
+            const Color& getStripeColorB() const { return maStripeColorB; }
             void setStripeColorB(Color aNew = Color(COL_WHITE));
 
             // stripe support StripeLengthPixel

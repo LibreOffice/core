@@ -67,7 +67,7 @@ public:
                           const ::uno::Reference< ::uno::XComponentContext >& rxContext )
             throw( DAVException );
 
-    ::uno::Reference< ::uno::XComponentContext > getComponentContext() {  return m_xContext; }
+    const ::uno::Reference< ::uno::XComponentContext >& getComponentContext() {  return m_xContext; }
 private:
     typedef std::map< OUString, DAVSession * > Map;
 

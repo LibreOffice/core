@@ -77,7 +77,7 @@ public:
     SvViewDataItem& GetItem(size_t nPos);
 
     void SetPaintRectangle(Rectangle aRectangle);
-    Rectangle GetPaintRectangle() const;
+    const Rectangle& GetPaintRectangle() const;
 
 };
 

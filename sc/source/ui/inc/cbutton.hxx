@@ -42,10 +42,10 @@ public:
     void    SetOptSizePixel();
 
     void    SetPosPixel( const Point& rNewPos )  { aBtnPos = rNewPos; }
-    Point   GetPosPixel() const                  { return aBtnPos; }
+    const Point& GetPosPixel() const             { return aBtnPos; }
 
     void    SetSizePixel( const Size& rNewSize ) { aBtnSize = rNewSize; }
-    Size    GetSizePixel() const                 { return aBtnSize; }
+    const Size&  GetSizePixel() const            { return aBtnSize; }
 
 private:
     void    ImpDrawArrow( const Rectangle&  rRect );

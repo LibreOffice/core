@@ -233,7 +233,7 @@ namespace drawinglayer
             XFormTextStyle getFormTextStyle() const { return meFormTextStyle; }
             XFormTextAdjust getFormTextAdjust() const { return meFormTextAdjust; }
             XFormTextShadow getFormTextShadow() const { return meFormTextShadow; }
-            Color getFormTextShdwColor() const { return maFormTextShdwColor; }
+            const Color& getFormTextShdwColor() const { return maFormTextShdwColor; }
             const SdrFormTextOutlineAttribute& getOutline() const { return maOutline; }
             const SdrFormTextOutlineAttribute& getShadowOutline() const { return maShadowOutline; }
             bool getFormTextMirror() const { return mbFormTextMirror; }

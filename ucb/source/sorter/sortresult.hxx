@@ -165,7 +165,7 @@ public:
 
     const SortedEntryList&      GetS2OList() const { return maS2O; }
     const SimpleList&           GetO2SList() const { return maO2S; }
-    css::uno::Reference < css::sdbc::XResultSet >    GetResultSet() const { return mxOriginal; }
+    const css::uno::Reference < css::sdbc::XResultSet >& GetResultSet() const { return mxOriginal; }
     SortInfo*                   GetSortInfo() const { return mpSortInfo; }
     sal_IntPtr                  GetCount() const { return mnCount; }
 

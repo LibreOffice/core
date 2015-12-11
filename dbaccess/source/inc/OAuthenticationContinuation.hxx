@@ -58,8 +58,8 @@ public:
     void SAL_CALL setRememberAccount( css::ucb::RememberAuthentication Remember ) throw(css::uno::RuntimeException, std::exception) override;
 
     void            setCanChangeUserName( bool bVal )  { m_bCanSetUserName = bVal; }
-    OUString getUser() const             { return m_sUser; }
-    OUString getPassword() const         { return m_sPassword; }
+    const OUString& getUser() const             { return m_sUser; }
+    const OUString& getPassword() const         { return m_sPassword; }
     bool        getRememberPassword() const { return m_bRemberPassword; }
 };
 

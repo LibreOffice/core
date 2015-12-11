@@ -56,7 +56,7 @@ public:
     void createTempFile(const ::rtl::OString& sPath);
     void close();
 
-    ::rtl::OString  getName() { return m_name; }
+    const ::rtl::OString& getName() { return m_name; }
 
     bool write(void const * buffer, sal_uInt64 size);
 
@@ -98,7 +98,7 @@ public:
 
     virtual ~CannotDumpException() throw ();
 
-    OUString getMessage() const { return message_; }
+    const OUString& getMessage() const { return message_; }
 
 private:
     OUString message_;

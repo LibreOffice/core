@@ -80,7 +80,7 @@ namespace slideshow
 
 
             /// Return subset node for this shape
-            DocTreeNode                 getSubsetNode       () const;
+            const DocTreeNode&          getSubsetNode       () const;
 
             /// Get subset shape for given node, if any
             AttributableShapeSharedPtr  getSubsetShape      ( const DocTreeNode& rTreeNode ) const;

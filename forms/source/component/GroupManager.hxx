@@ -145,7 +145,7 @@ public:
     explicit OGroup(const OUString& rGroupName);
     virtual ~OGroup();
 
-    OUString GetGroupName() const { return m_aGroupName; }
+    const OUString& GetGroupName() const { return m_aGroupName; }
     css::uno::Sequence< css::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;
 
     void InsertComponent( const css::uno::Reference< css::beans::XPropertySet>& rxElement );

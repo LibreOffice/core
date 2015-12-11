@@ -45,7 +45,7 @@ public:
     virtual void Activate() override;
 
     void SetAttributes( SdrObject* pObj );
-    OUString GetShapeType() const;
+    const OUString& GetShapeType() const;
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
 

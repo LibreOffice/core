@@ -176,7 +176,7 @@ public:
     {
         return pDisplay_->GetDisplay();
     }
-    SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
+    const SalX11Screen&     GetScreenNumber() const { return m_nXScreen; }
     ::Window                GetWindow() const { return mhWindow; }
     ::Window                GetShellWindow() const { return mhShellWindow; }
     ::Window                GetForeignParent() const { return mhForeignParent; }

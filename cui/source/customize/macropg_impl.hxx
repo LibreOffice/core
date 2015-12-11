@@ -52,7 +52,7 @@ public:
     virtual ~AssignComponentDialog();
     virtual void dispose() override;
 
-    OUString getURL() const
+    const OUString& getURL() const
         { return maURL; }
 };
 

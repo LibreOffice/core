@@ -100,13 +100,13 @@ public:
     SAL_DLLPRIVATE double          getIterateInterval() const { return mfIterateInterval; }
     void                           setIterateInterval( double fIterateInterval );
 
-    SAL_DLLPRIVATE css::uno::Any  getTarget() const { return maTarget; }
+    SAL_DLLPRIVATE const css::uno::Any& getTarget() const { return maTarget; }
     void                          setTarget( const css::uno::Any& rTarget );
 
     SAL_DLLPRIVATE bool             hasAfterEffect() const { return mbHasAfterEffect; }
     SAL_DLLPRIVATE void            setHasAfterEffect( bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
 
-    SAL_DLLPRIVATE css::uno::Any   getDimColor() const { return maDimColor; }
+    SAL_DLLPRIVATE const css::uno::Any& getDimColor() const { return maDimColor; }
     SAL_DLLPRIVATE void            setDimColor( const css::uno::Any& rDimColor ) { maDimColor = rDimColor; }
 
     SAL_DLLPRIVATE bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
@@ -317,7 +317,7 @@ public:
 
     SAL_DLLPRIVATE sal_Int32 getSequenceType() const { return mnSequenceType; }
 
-    SAL_DLLPRIVATE css::uno::Reference< css::drawing::XShape > getTriggerShape() const { return mxEventSource; }
+    SAL_DLLPRIVATE const css::uno::Reference< css::drawing::XShape >& getTriggerShape() const { return mxEventSource; }
     SAL_DLLPRIVATE void setTriggerShape( const css::uno::Reference< css::drawing::XShape >& xTrigger ) { mxEventSource = xTrigger; }
 
     SAL_DLLPRIVATE virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const;

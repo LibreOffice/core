@@ -963,7 +963,7 @@ bool DdeService::MakeTopic( const OUString& )
     return false;
 }
 
-OUString DdeService::SysTopicGet( const OUString& )
+const OUString& DdeService::SysTopicGet( const OUString& )
 {
     return OUString();
 }

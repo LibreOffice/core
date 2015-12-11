@@ -109,7 +109,7 @@ public:
     virtual         ~UnoTreeListItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     void            SetImage( const Image& rImage );
-    OUString        GetGraphicURL() const { return maGraphicURL;}
+    const OUString& GetGraphicURL() const { return maGraphicURL;}
     void            SetGraphicURL( const OUString& rGraphicURL );
     virtual void    Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                           const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;

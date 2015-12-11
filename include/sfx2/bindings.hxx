@@ -186,7 +186,7 @@ public:
     void             Release( SfxControllerItem& rBinding );
     SfxDispatcher*   GetDispatcher() const
                      { return pDispatcher; }
-    css::uno::Reference< css::frame::XDispatchRecorder > GetRecorder() const;
+    const css::uno::Reference< css::frame::XDispatchRecorder >& GetRecorder() const;
     css::uno::Reference < css::frame::XDispatch >
                     GetDispatch( const SfxSlot*, const css::util::URL& aURL, bool bMasterCommand );
     SAL_DLLPRIVATE void ContextChanged_Impl();

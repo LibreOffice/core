@@ -139,7 +139,7 @@ private:
     OUString msDocAccTitle;
 public:
     SAL_DLLPRIVATE void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
-    SAL_DLLPRIVATE const OUString getDocAccTitle() const { return msDocAccTitle; }
+    SAL_DLLPRIVATE const OUString& getDocAccTitle() const { return msDocAccTitle; }
 private:
     bool bReadOnly;
 public:

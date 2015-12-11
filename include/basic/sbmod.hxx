@@ -131,7 +131,7 @@ public:
     css::uno::Reference< css::script::XInvocation > GetUnoModule();
     bool     createCOMWrapperForIface( css::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
-    SbxArrayRef GetMethods() { return pMethods;}
+    const SbxArrayRef& GetMethods() { return pMethods;}
     static OUString GetKeywordCase( const OUString& sKeyword );
 };
 

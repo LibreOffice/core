@@ -74,7 +74,7 @@ public:
     void                parseStream( StorageBase& rStorage, const OUString& rStreamName )
                             throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
 
-    css::uno::Reference< css::xml::sax::XFastTokenHandler >
+    const css::uno::Reference< css::xml::sax::XFastTokenHandler >&
                getTokenHandler() const { return mxTokenHandler; }
 
 private:

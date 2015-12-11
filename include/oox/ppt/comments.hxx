@@ -77,11 +77,11 @@ class Comment
         {
             text = _text;
         }
-        OUString get_text()
+        const OUString& get_text()
         {
             return text;
         }
-        css::util::DateTime getDateTime()
+        const css::util::DateTime& getDateTime()
         {
             return aDateTime;
         }

@@ -49,7 +49,7 @@ public:
     PanelTitleBar* GetTitleBar() const;
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional;}
     void SetUIElement (const css::uno::Reference<css::ui::XUIElement>& rxElement);
-    css::uno::Reference<css::ui::XSidebarPanel> GetPanelComponent() const { return mxPanelComponent;}
+    const css::uno::Reference<css::ui::XSidebarPanel>& GetPanelComponent() const { return mxPanelComponent;}
     css::uno::Reference<css::awt::XWindow> GetElementWindow();
     void SetExpanded (const bool bIsExpanded);
     bool IsExpanded() const { return mbIsExpanded;}

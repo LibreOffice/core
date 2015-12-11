@@ -68,7 +68,7 @@ public:
     explicit TblStylePrHandler( DomainMapper & rDMapper );
     virtual ~TblStylePrHandler( );
 
-    inline PropertyMapPtr       getProperties() { return m_pProperties; };
+    const PropertyMapPtr&       getProperties() { return m_pProperties; };
     inline TblStyleType         getType() { return m_nType; };
     OUString getTypeString();
     void appendInteropGrabBag(const OUString& aKey, const OUString& aValue);

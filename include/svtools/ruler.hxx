@@ -694,8 +694,8 @@ private:
 
 protected:
     long            GetRulerVirHeight() const { return mnVirHeight;}
-    MapMode         GetCurrentMapMode() const { return maMapMode; }
-    RulerUnitData   GetCurrentRulerUnit() const;
+    const MapMode&  GetCurrentMapMode() const { return maMapMode; }
+    const RulerUnitData& GetCurrentRulerUnit() const;
 
 public:
             Ruler( vcl::Window* pParent, WinBits nWinStyle = WB_STDRULER );
@@ -726,7 +726,7 @@ public:
     long            GetPageOffset() const;
     void            SetBorderPos( long nOff = 0 );
     long            GetBorderOffset() const { return mnBorderOff; }
-    Rectangle       GetExtraRect() const { return maExtraRect; }
+    const Rectangle& GetExtraRect() const { return maExtraRect; }
 
     void            SetUnit( FieldUnit eNewUnit );
     FieldUnit       GetUnit() const { return meUnit; }
@@ -750,7 +750,7 @@ public:
     long            GetClickPos() const { return mnDragPos; }
     RulerType       GetClickType() const { return meDragType; }
 
-    RulerSelection  GetHoverSelection() const { return maHoverSelection; }
+    const RulerSelection& GetHoverSelection() const { return maHoverSelection; }
 
     using Window::GetType;
     RulerType       GetType( const Point& rPos, sal_uInt16* pAryPos = nullptr );

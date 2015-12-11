@@ -451,7 +451,7 @@ public:
                             );
 
     void setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell);
-    OUString getEmbeddedName() const;
+    const OUString& getEmbeddedName() const;
 
     static void StoreEmbeddedDataSource(const css::uno::Reference<css::frame::XStorable>& xStorable,
                                         const css::uno::Reference<css::embed::XStorage>& xStorage,

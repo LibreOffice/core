@@ -104,7 +104,7 @@ public:
 
     ~AttachThread();
 
-    rtl::ByteSequence getTid() throw () { return tid_;}
+    const rtl::ByteSequence& getTid() throw () { return tid_;}
 
 private:
     AttachThread(const AttachThread&) = delete;

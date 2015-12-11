@@ -59,7 +59,7 @@ public:
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessibleControlShape( );
 
-    css::uno::Reference< css::beans::XPropertySet > SAL_CALL  GetControlModel( ) { return m_xControlModel;} ;
+    const css::uno::Reference< css::beans::XPropertySet >& SAL_CALL  GetControlModel( ) { return m_xControlModel;} ;
     AccessibleControlShape* SAL_CALL GetLabeledByControlShape();
 protected:
     //---  XAccessible  ----------------------------------------

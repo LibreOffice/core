@@ -154,7 +154,7 @@ public:
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix) override;
     virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
 
-    ::basegfx::B3DHomMatrix getUnitCartesianToScene() const { return m_aUnitCartesianToScene;}
+    const ::basegfx::B3DHomMatrix& getUnitCartesianToScene() const { return m_aUnitCartesianToScene;}
 
     virtual css::uno::Reference< css::chart2::XTransformation >
                   getTransformationScaledLogicToScene() const override;

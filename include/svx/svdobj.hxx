@@ -369,7 +369,7 @@ public:
     const double* GetRelativeHeight() const;
     sal_Int16 GetRelativeHeightRelation() const;
     // evil calc grid/shape drawlayer syncing
-    Point GetGridOffset() const { return aGridOffset; }
+    const Point& GetGridOffset() const { return aGridOffset; }
     void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
 protected:
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
@@ -875,7 +875,7 @@ public:
 
     // access to the UNO representation of the shape
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape();
-    css::uno::WeakReference< css::uno::XInterface > getWeakUnoShape() const { return maWeakUnoShape; }
+    const css::uno::WeakReference< css::uno::XInterface >& getWeakUnoShape() const { return maWeakUnoShape; }
 
     static SdrObject* getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt );
 
@@ -929,7 +929,7 @@ public:
     // the following methods are used to control it;
     // usually this data makes no sense after the import is finished, since the object
     // might be resized
-    Rectangle GetBLIPSizeRectangle() const { return maBLIPSizeRectangle;}
+    const Rectangle& GetBLIPSizeRectangle() const { return maBLIPSizeRectangle;}
     void SetBLIPSizeRectangle( const Rectangle& aRect );
 
     /// @see mbDoNotInsertIntoPageAutomatically

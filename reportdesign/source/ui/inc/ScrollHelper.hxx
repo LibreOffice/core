@@ -81,7 +81,7 @@ namespace rptui
 
         inline Point            getThumbPos() const { return Point(m_aHScroll->GetThumbPos(),m_aVScroll->GetThumbPos())/*m_aScrollOffset*/; }
         void                    setTotalSize(sal_Int32 _nWidth, sal_Int32 _nHeight);
-        inline Size             getTotalSize() const { return m_aTotalPixelSize; }
+        const Size&             getTotalSize() const { return m_aTotalPixelSize; }
         inline ScrollBar&       GetHScroll() { return *m_aHScroll.get(); }
         inline ScrollBar&       GetVScroll() { return *m_aVScroll.get(); }
 

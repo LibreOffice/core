@@ -431,7 +431,7 @@ public:
     sal_uInt32                  GetModifyPasswordHash() const;
     bool                        SetModifyPasswordHash( sal_uInt32 nHash );
 
-    css::uno::Sequence< css::beans::PropertyValue > GetModifyPasswordInfo() const;
+    const css::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
     bool                        SetModifyPasswordInfo( const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );

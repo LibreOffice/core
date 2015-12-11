@@ -85,7 +85,7 @@ public:
     sal_Int32 FindNextStringPiece( sal_Int32 _nStart = -1 );
 
     OUString GetResult() const;
-    OUString GetFieldName()const { return aFieldName; }
+    const OUString& GetFieldName()const { return aFieldName; }
 };
 
 SwVbaReadFieldParams::SwVbaReadFieldParams( const OUString& _rData )

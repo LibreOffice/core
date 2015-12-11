@@ -177,7 +177,7 @@ namespace connectivity
                   css::uno::RuntimeException,
                   std::exception);
 
-            ::rtl::OUString getConnectionURL()  const   {return m_sConnectionURL;}
+            const OUString& getConnectionURL()  const   {return m_sConnectionURL;}
             bool            isEmbedded()        const   {return m_bIsEmbedded;}
             isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
             isc_tr_handle&  getTransaction()

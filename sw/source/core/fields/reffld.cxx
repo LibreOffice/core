@@ -941,7 +941,7 @@ public:
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField, bool bField );
 
-    OUString GetName() { return aName; }
+    const OUString& GetName() { return aName; }
 };
 
 /// Get a sorted list of the field IDs from a document.

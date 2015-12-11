@@ -51,7 +51,7 @@ public:
     {}
     ~CachedOutputStream() {}
 
-    css::uno::Reference< css::io::XOutputStream > getOutputStream() const
+    const css::uno::Reference< css::io::XOutputStream >& getOutputStream() const
     {
         return mxOutputStream;
     }

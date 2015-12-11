@@ -116,7 +116,7 @@ namespace rptui
         inline OSectionWindow*      getSectionWindow() const { return m_pParent; }
         inline OSectionView&        getSectionView() const { return *m_pView; }
         inline OReportPage*         getPage() const { return m_pPage; }
-        inline css::uno::Reference< css::report::XSection > getSection() const { return m_xSection; }
+        const css::uno::Reference< css::report::XSection >& getSection() const { return m_xSection; }
 
         DlgEdMode       GetMode() const { return m_eMode; }
         void            SetMode( DlgEdMode m_eMode );

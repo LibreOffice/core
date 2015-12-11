@@ -68,7 +68,7 @@ namespace dbaui
         virtual ~OSaveAsDlg();
         virtual void dispose() override;
 
-        OUString getName() const;
+        const OUString& getName() const;
         OUString getCatalog() const;
         OUString getSchema() const;
     private:

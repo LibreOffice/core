@@ -1184,7 +1184,7 @@ public:
 
     void                SetProtection( const css::uno::Sequence< sal_Int8 >& rPass )
                             { aProtectPass = rPass; }
-    css::uno::Sequence< sal_Int8 >   GetProtection() const
+    const css::uno::Sequence< sal_Int8 >& GetProtection() const
                                     { return aProtectPass; }
     bool IsProtected() const { return aProtectPass.getLength() != 0; }
 

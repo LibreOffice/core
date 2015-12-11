@@ -94,11 +94,11 @@ namespace ftp {
 
         ~FTPURL();
 
-        OUString host() const { return m_aHost; }
+        const OUString& host() const { return m_aHost; }
 
-        OUString port() const { return m_aPort; }
+        const OUString& port() const { return m_aPort; }
 
-        OUString username() const { return m_aUsername; }
+        const OUString& username() const { return m_aUsername; }
 
         /** This returns the URL, but cleaned from
          *  unnessary ellipses.

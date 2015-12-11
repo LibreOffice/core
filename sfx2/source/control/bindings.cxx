@@ -2085,7 +2085,7 @@ bool SfxBindings::ExecuteCommand_Impl( const OUString& rCommand )
     return false;
 }
 
-css::uno::Reference< css::frame::XDispatchRecorder > SfxBindings::GetRecorder() const
+const css::uno::Reference< css::frame::XDispatchRecorder >& SfxBindings::GetRecorder() const
 {
     return pImp->xRecorder;
 }

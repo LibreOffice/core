@@ -410,7 +410,7 @@ namespace connectivity
         css::util::DateTime            getDateTime()   const;
         css::uno::Sequence<sal_Int8>   getSequence()   const;
         // only use for anys
-        css::uno::Any                  getAny()        const { return *static_cast<css::uno::Any*>(m_aValue.m_pValue); }
+        const css::uno::Any&           getAny()        const { return *static_cast<css::uno::Any*>(m_aValue.m_pValue); }
         css::uno::Any                  makeAny()       const;
 
         /**
