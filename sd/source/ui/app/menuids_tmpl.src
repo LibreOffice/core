@@ -89,7 +89,7 @@
     {\
         Identifier = SID_PAGESETUP ; \
         HelpId = CMD_SID_PAGESETUP ; \
-        Text [ en-US ] = "Format ~Slide..." ; \
+        Text [ en-US ] = "~Slide Properties..." ; \
     };
 
 #define MN_INSERT_SLIDE \
@@ -142,14 +142,21 @@
     {\
         Identifier = SID_DISPLAY_MASTER_BACKGROUND ; \
         HelpId = CMD_SID_DISPLAY_MASTER_BACKGROUND ; \
-        Text [ en-US ] = "Display Background of Master" ; \
+        Text [ en-US ] = "Display Master Background" ; \
     };
 #define MN_DISPLAY_MASTER_OBJECTS \
     MenuItem\
     {\
         Identifier = SID_DISPLAY_MASTER_OBJECTS ; \
         HelpId = CMD_SID_DISPLAY_MASTER_OBJECTS ; \
-        Text [ en-US ] = "Display Objects from Master" ; \
+        Text [ en-US ] = "Display Master Objects" ; \
+    };
+#define MN_MASTER_ELEMENTS \
+    MenuItem\
+    {\
+        Identifier = SID_MASTER_LAYOUTS ; \
+        HelpId = CMD_SID_MASTER_LAYOUTS ; \
+        Text [ en-US ] = "Master Elements" ; \
     };
 
 #define MN_PAGE_MENU \
@@ -175,33 +182,29 @@
     };
 
 #define MN_SLIDE_MENU \
-    MN_SELECT_BACKGROUND\
-    MN_INSERT_GRAPHIC\
     MN_FORMAT_SLIDE\
+    MN_SELECT_BACKGROUND\
+    MN_SAVE_BACKGROUND\
     MenuItem\
     {\
         Identifier = DUMMY + 8 ; \
         Command = ".uno:PageMenu" ; \
-        Text [ en-US ] = "Slid~e" ; \
+        Text [ en-US ] = "Slid~e Features" ; \
         SubMenu = Menu\
         {\
             ItemList = \
             {\
-                MN_INSERT_SLIDE\
-                MN_DUPLICATE_SLIDE\
-                MN_DELETE_SLIDE\
-                SEPARATOR\
-                MN_RENAME_SLIDE\
                 MN_HIDE_SLIDE\
                 MN_SHOW_SLIDE\
                 SEPARATOR\
-                MN_PRESENTATION_LAYOUT\
                 MN_DISPLAY_MASTER_BACKGROUND\
                 MN_DISPLAY_MASTER_OBJECTS\
+                MN_MASTER_ELEMENTS\
+                SEPARATOR\
+                MN_PRESENTATION_LAYOUT\
             };\
         };\
-    }; \
-    MN_SAVE_BACKGROUND
+    };
 
  // Layer
 #define MN_RENAME_LAYER \
@@ -575,22 +578,6 @@
         Text [ en-US ] = "~Ungroup" ; \
     };
 
-#define MN_COMBINE \
-    MenuItem\
-    {\
-        Identifier = SID_COMBINE ; \
-        HelpId = CMD_SID_COMBINE ; \
-        Text [ en-US ] = "Comb~ine" ; \
-    };
-
-#define MN_DISMANTLE \
-    MenuItem\
-    {\
-        Identifier = SID_DISMANTLE ; \
-        HelpId = CMD_SID_DISMANTLE ; \
-        Text [ en-US ] = "~Split" ; \
-    };
-
 #define MN_ENTER_GROUP \
     MenuItem\
     {\
@@ -915,22 +902,6 @@
                 MN_HORIZONTAL\
             };\
         };\
-    };
-
-#define MN_CONNECT \
-    MenuItem\
-    {\
-        Identifier = SID_CONNECT ; \
-        HelpId = CMD_SID_CONNECT ; \
-        Text [ en-US ] = "C~onnect" ; \
-    };
-
-#define MN_BREAK \
-    MenuItem\
-    {\
-        Identifier = SID_BREAK ; \
-        HelpId = CMD_SID_BREAK ; \
-        Text [ en-US ] = "~Break" ; \
     };
 
 #define MN_STYLEDT \
