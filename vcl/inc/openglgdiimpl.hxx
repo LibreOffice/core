@@ -171,7 +171,7 @@ protected:
     virtual rtl::Reference<OpenGLContext> CreateWinContext() = 0;
 
     /// check whether the given context can be used for off-screen rendering
-    bool UseContext( const rtl::Reference<OpenGLContext> &pContext )
+    static bool UseContext( const rtl::Reference<OpenGLContext> &pContext )
     {
         return pContext->isInitialized() &&  // not released by the OS etc.
                IsForeignContext( pContext ); // a genuine VCL context.
