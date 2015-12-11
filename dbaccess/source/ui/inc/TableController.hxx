@@ -87,7 +87,7 @@ namespace dbaui
     public:
         OTableController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
-        css::uno::Reference< css::beans::XPropertySet >       getTable() { return m_xTable;}
+        const css::uno::Reference< css::beans::XPropertySet >&  getTable() { return m_xTable;}
 
         bool     isAddAllowed()     const;
         bool     isDropAllowed()    const;
@@ -109,7 +109,7 @@ namespace dbaui
         inline TOTypeInfoSP                 getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
         TOTypeInfoSP                        getTypeInfoByType(sal_Int32 _nDataType) const;
 
-        inline TOTypeInfoSP                 getTypeInfoFallBack() const { return m_pTypeInfo; }
+        const TOTypeInfoSP&                 getTypeInfoFallBack() const { return m_pTypeInfo; }
 
         virtual bool                        Construct(vcl::Window* pParent) override;
         // XEventListener

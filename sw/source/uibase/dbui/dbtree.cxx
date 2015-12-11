@@ -81,7 +81,7 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
     bool                        HasContext();
     SwWrtShell*                 GetWrtShell() { return m_pWrtShell;}
     void                        SetWrtShell(SwWrtShell& rSh) { m_pWrtShell = &rSh;}
-    Reference<XDatabaseContext>    GetContext() const {return m_xDatabaseContext;}
+    const Reference<XDatabaseContext>& GetContext() const {return m_xDatabaseContext;}
     Reference<XConnection>      GetConnection(const OUString& rSourceName);
 };
 

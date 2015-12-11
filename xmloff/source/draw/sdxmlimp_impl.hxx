@@ -260,7 +260,7 @@ public:
     sal_Int32 GetNewMasterPageCount() const { return mnNewMasterPageCount; }
     void IncrementNewMasterPageCount() { mnNewMasterPageCount++; }
 
-    css::uno::Reference< css::container::XNameAccess > getPageLayouts() const { return mxPageLayouts; }
+    const css::uno::Reference< css::container::XNameAccess >& getPageLayouts() const { return mxPageLayouts; }
 
     bool IsDraw() const { return mbIsDraw; }
     bool IsImpress() const { return !mbIsDraw; }

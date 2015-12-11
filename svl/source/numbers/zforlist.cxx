@@ -516,7 +516,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     ImpGenerateAdditionalFormats( nCLOffset, aNumberFormatCode, true );
 }
 
-css::uno::Reference<css::uno::XComponentContext> SvNumberFormatter::GetComponentContext() const
+const css::uno::Reference<css::uno::XComponentContext>& SvNumberFormatter::GetComponentContext() const
 {
     return m_xContext;
 }

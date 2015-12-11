@@ -52,8 +52,8 @@ public:
     virtual ~SvxGalleryItem();
 
     sal_Int8 GetType() const { return m_nType; }
-    const rtl::OUString GetURL() const { return m_aURL; }
-    const css::uno::Reference< css::graphic::XGraphic > GetGraphic() const { return m_xGraphic; }
+    const rtl::OUString& GetURL() const { return m_aURL; }
+    const css::uno::Reference< css::graphic::XGraphic >& GetGraphic() const { return m_xGraphic; }
 
     // pure virtual methods from SfxPoolItem
     virtual bool         operator==( const SfxPoolItem& ) const override;

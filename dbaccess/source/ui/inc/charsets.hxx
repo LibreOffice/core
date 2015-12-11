@@ -73,8 +73,8 @@ namespace dbaui
     public:
         CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource);
 
-        OUString     getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
-        OUString     getDisplayName() const      { return m_sDisplayName; }
+        OUString        getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
+        const OUString& getDisplayName() const      { return m_sDisplayName; }
 
     protected:
         CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const OUString& _rDisplayName);

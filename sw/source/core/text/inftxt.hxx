@@ -344,7 +344,7 @@ public:
         { return ( m_pKanaComp && m_nKanaIdx < m_pKanaComp->size() )
                    ? (*m_pKanaComp)[m_nKanaIdx] : 0; }
 
-    std::shared_ptr<vcl::TextLayoutCache> GetCachedVclData() const
+    const std::shared_ptr<vcl::TextLayoutCache>& GetCachedVclData() const
     {
         return m_pCachedVclData;
     }

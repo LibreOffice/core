@@ -107,7 +107,7 @@ public:
      */
     void    SetMasterPage(const OUString& master);
 
-    OUString GetMasterPage();
+    const OUString& GetMasterPage();
 
     /**
      * @descr   set the paragraph default font.
@@ -119,7 +119,7 @@ public:
     /**
      * @descr   get the font object.
      */
-    rtl::Reference<XFFont> GetFont(){ return m_pFont; }
+    const rtl::Reference<XFFont>& GetFont(){ return m_pFont; }
 
     /**
      * @descr   Set the indent of the paragraph.This is the indent for
@@ -281,7 +281,7 @@ inline void XFParaStyle::ClearTabStyles()
     m_aTabs.Reset();
 }
 
-inline  OUString XFParaStyle::GetMasterPage()
+inline const OUString& XFParaStyle::GetMasterPage()
 {
     return m_strMasterPage;
 }

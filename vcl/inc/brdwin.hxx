@@ -163,7 +163,7 @@ public:
     void                    SetMenuBarMode( bool bHide );
 
     void                    SetNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
-    VclPtr<NotebookBar>     GetNotebookBar() const { return mpNotebookBar; }
+    const VclPtr<NotebookBar>& GetNotebookBar() const { return mpNotebookBar; }
 
     void                    SetMinOutputSize( long nWidth, long nHeight )
                                 { mnMinWidth = nWidth; mnMinHeight = nHeight; }

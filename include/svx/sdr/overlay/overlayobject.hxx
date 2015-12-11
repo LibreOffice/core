@@ -144,7 +144,7 @@ namespace sdr
             const basegfx::B2DRange& getBaseRange() const;
 
             // access to baseColor
-            Color getBaseColor() const { return maBaseColor; }
+            const Color& getBaseColor() const { return maBaseColor; }
             void setBaseColor(Color aNew);
 
             // execute event from base class sdr::animation::Event. Default

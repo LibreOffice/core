@@ -124,7 +124,7 @@ public:
         return *this;
     }
 
-    OUString GetUserName() const
+    const OUString& GetUserName() const
     {
         return m_aName;
     }

@@ -201,7 +201,7 @@ public:
                     {
                         return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 );
                     }
-    SalX11Screen    ImplGetScreen() const { return mnXScreen; }
+    const SalX11Screen& ImplGetScreen() const { return mnXScreen; }
 
     bool            ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
 

@@ -35,7 +35,7 @@ namespace dbtools
     public:
         OParameterContinuation() { }
 
-        css::uno::Sequence< css::beans::PropertyValue >   getValues() const { return m_aValues; }
+        const css::uno::Sequence< css::beans::PropertyValue >&   getValues() const { return m_aValues; }
 
         // XInteractionSupplyParameters
         virtual void SAL_CALL setParameters( const css::uno::Sequence< css::beans::PropertyValue >& _rValues ) throw(css::uno::RuntimeException, std::exception) override;

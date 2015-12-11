@@ -122,7 +122,7 @@ namespace slideshow
 
             /** Query subset this object represents
              */
-            DocTreeNode getSubset() const;
+            const DocTreeNode& getSubset() const;
 
         private:
             // default copy/assignment are okay

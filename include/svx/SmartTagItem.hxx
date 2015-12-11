@@ -77,8 +77,8 @@ public:
     const css::uno::Reference<css::text::XTextRange>& GetTextRange() const { return mxRange; }
     const css::uno::Reference<css::frame::XController>& GetController() const { return mxController; }
     const css::lang::Locale& GetLocale() const { return maLocale; }
-    const OUString GetApplicationName() const { return maApplicationName; }
-    const OUString GetRangeText() const { return maRangeText; }
+    const OUString& GetApplicationName() const { return maApplicationName; }
+    const OUString& GetRangeText() const { return maRangeText; }
 };
 
 #endif // INCLUDED_SVX_SMARTTAGITEM_HXX

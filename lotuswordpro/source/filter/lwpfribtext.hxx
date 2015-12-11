@@ -74,7 +74,7 @@ private:
     OUString m_Content;
     bool m_bNoUnicode;
 public:
-    OUString GetText(){return m_Content;}
+    const OUString& GetText(){return m_Content;}
 };
 
 class LwpFribHardSpace : public LwpFrib
@@ -192,7 +192,7 @@ public:
 private:
     OUString m_Content;
 public:
-    OUString GetText(){return m_Content;}
+    const OUString& GetText(){return m_Content;}
 };
 
 class LwpFribPageNumber : public LwpFrib

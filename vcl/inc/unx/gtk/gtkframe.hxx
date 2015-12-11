@@ -381,7 +381,7 @@ public:
     GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }
     GdkNativeWindow getForeignTopLevelWindow() const { return m_aForeignTopLevelWindow; }
     Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
-    SalX11Screen getXScreenNumber() const { return m_nXScreen; }
+    const SalX11Screen& getXScreenNumber() const { return m_nXScreen; }
     int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }
     void updateScreenNumber();
 

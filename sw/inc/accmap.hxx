@@ -298,7 +298,7 @@ private:
 public:
     virtual bool IsDocumentSelAll() override;
 
-    css::uno::WeakReference < css::accessibility::XAccessible >
+    const css::uno::WeakReference < css::accessibility::XAccessible >&
         GetCursorContext() const { return mxCursorContext; }
 
     //Para Container for InvalidateCursorPosition

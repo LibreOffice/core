@@ -84,7 +84,7 @@ public:
                                   ExplicitValueProvider * pExplicitValueProvider = nullptr );
 
     bool handleKeyEvent( const css::awt::KeyEvent & rEvent );
-    ObjectHierarchy::tOID getCurrentSelection() const { return m_aCurrentOID;}
+    const ObjectHierarchy::tOID& getCurrentSelection() const { return m_aCurrentOID;}
 
 private:
     void setCurrentSelection( const ObjectHierarchy::tOID& rOID );

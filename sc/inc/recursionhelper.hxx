@@ -83,7 +83,7 @@ public:
     void IncIteration();
     void EndIteration();
 
-    ScFormulaRecursionList::iterator GetLastIterationStart() { return aLastIterationStart; }
+    const ScFormulaRecursionList::iterator& GetLastIterationStart() { return aLastIterationStart; }
     ScFormulaRecursionList::iterator GetIterationStart();
     ScFormulaRecursionList::iterator GetIterationEnd();
     /** Any return, recursion or iteration, iteration is always coupled with

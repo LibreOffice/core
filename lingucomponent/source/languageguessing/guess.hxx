@@ -48,8 +48,8 @@ class Guess{
 
         ~Guess();
 
-        string GetLanguage() { return language_str;}
-        string GetCountry() { return country_str;}
+        const string& GetLanguage() { return language_str;}
+        const string& GetCountry() { return country_str;}
 
     protected:
         string language_str;

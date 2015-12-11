@@ -42,7 +42,7 @@ public:
 
     SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
-    std::vector<SdrOutliner*> GetActiveOutliners() const
+    const std::vector<SdrOutliner*>& GetActiveOutliners() const
     {
         return maActiveOutliners;
     }

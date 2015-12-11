@@ -177,7 +177,7 @@ public:
     bool IsNewModel() const { return m_bNewModel; }
 
     /// Return the table style name of this table.
-    OUString GetTableStyleName() const { return maTableStyleName; }
+    const OUString& GetTableStyleName() const { return maTableStyleName; }
 
     /// Set the new table style name for this table.
     void SetTableStyleName(const OUString& rName) { maTableStyleName = rName; }

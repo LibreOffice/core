@@ -93,7 +93,7 @@ public:
 
     // OLE object has got a separate PersistName member now;
     // !!! use ::SetPersistName( ... ) only, if you know what you do !!!
-    OUString      GetPersistName() const;
+    const OUString& GetPersistName() const;
     void        SetPersistName( const OUString& rPersistName );
 
     // One can add an application name to a SdrOle2Obj, which can be queried for

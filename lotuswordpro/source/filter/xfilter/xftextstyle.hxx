@@ -84,7 +84,7 @@ public:
      */
     void    SetFont(rtl::Reference<XFFont> const & font);
 
-    rtl::Reference<XFFont> GetFont(){ return m_pFont; }
+    const rtl::Reference<XFFont>& GetFont(){ return m_pFont; }
 
     virtual enumXFStyle GetStyleFamily() override;
 

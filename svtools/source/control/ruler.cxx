@@ -2810,7 +2810,7 @@ bool Ruler::GetTextRTL()
     return mpData->bTextRTL;
 }
 
-RulerUnitData Ruler::GetCurrentRulerUnit() const
+const RulerUnitData& Ruler::GetCurrentRulerUnit() const
 {
     return aImplRulerUnitTab[mnUnitIndex];
 }

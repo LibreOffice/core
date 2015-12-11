@@ -94,13 +94,13 @@ public:
     OUString GetLongName( sal_uInt16 ) const;         /// Return longname for index
     OUString GetPackageName( sal_uInt16 ) const;      /// Return packagename for index
 
-    OUString GetFileName() const {return aFile;}      /// Return physical file name
+    const OUString& GetFileName() const {return aFile;}      /// Return physical file name
     void SetName( const OUString& rName )             /// Logic name
         { aName = rName; bInfoChanged = true; }
-    OUString GetName()
+    const OUString& GetName()
         { return aName; }
 
-    OUString            GetBaseURL() const { return sBaseURL;}
+    const OUString&     GetBaseURL() const { return sBaseURL;}
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
 
     virtual sal_uLong Delete( sal_uInt16 ) = 0;

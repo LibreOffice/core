@@ -85,13 +85,13 @@ namespace dbaui
         const OConnectionLineDataVec& GetConnLineDataList() const { return m_vConnLineData; }
         OConnectionLineDataVec& GetConnLineDataList() { return m_vConnLineData; }
 
-        inline TTableWindowData::value_type getReferencingTable() const { return m_pReferencingTable; }
-        inline TTableWindowData::value_type getReferencedTable()  const { return m_pReferencedTable;  }
+        const TTableWindowData::value_type& getReferencingTable() const { return m_pReferencingTable; }
+        const TTableWindowData::value_type& getReferencedTable()  const { return m_pReferencedTable;  }
 
         inline void setReferencingTable(const TTableWindowData::value_type& _pTable) { m_pReferencingTable = _pTable; }
         inline void setReferencedTable(const TTableWindowData::value_type& _pTable)  { m_pReferencedTable  = _pTable; }
 
-        OUString GetConnName() const { return m_aConnName; }
+        const OUString& GetConnName() const { return m_aConnName; }
 
         /** Update create a new connection
 

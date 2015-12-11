@@ -79,7 +79,7 @@ public:
     void        WriteBool( const OUString& rKey, bool bValue );
     void        WriteInt32( const OUString& rKey, sal_Int32 nValue );
 
-    css::uno::Sequence< css::beans::PropertyValue > GetFilterData() const { return aFilterData;}
+    const css::uno::Sequence< css::beans::PropertyValue >& GetFilterData() const { return aFilterData;}
 
     // GetStatusIndicator is returning the "StatusIndicator" property of the FilterData sequence
     css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator() const;

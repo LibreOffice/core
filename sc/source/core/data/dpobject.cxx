@@ -682,7 +682,7 @@ public:
         maRanges.Join(rRange);
     }
 
-    ScRangeList getRanges() const { return maRanges; }
+    const ScRangeList& getRanges() const { return maRanges; }
 };
 
 }

@@ -914,7 +914,7 @@ public:
     // new format codes are appended.
     void ReplaceSystemCL( LanguageType eOldLanguage );
 
-    css::uno::Reference<css::uno::XComponentContext> GetComponentContext() const;
+    const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
 
     //! The following method is not to be used from outside but must be
     //! public for the InputScanner.

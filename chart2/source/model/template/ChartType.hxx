@@ -62,7 +62,7 @@ public:
 protected:
     explicit ChartType( const ChartType & rOther );
 
-    css::uno::Reference< css::uno::XComponentContext >
+    const css::uno::Reference< css::uno::XComponentContext >&
         GetComponentContext() const { return m_xContext;}
 
     // ____ XChartType ____

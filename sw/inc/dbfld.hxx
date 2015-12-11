@@ -46,7 +46,7 @@ public:
     inline void     AddRef() { nRefCnt++; }
     void            ReleaseRef();
 
-    OUString        GetColumnName() const {return sColumn;}
+    const OUString&     GetColumnName() const {return sColumn;}
     const SwDBData& GetDBData() const {return aDBData;}
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;

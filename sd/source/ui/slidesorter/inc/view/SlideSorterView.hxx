@@ -188,7 +188,7 @@ public:
     void UpdateOrientation();
 
     std::shared_ptr<PageObjectPainter> GetPageObjectPainter();
-    std::shared_ptr<LayeredDevice> GetLayeredDevice() const { return mpLayeredDevice;}
+    const std::shared_ptr<LayeredDevice>& GetLayeredDevice() const { return mpLayeredDevice;}
 
     class DrawLock
     {

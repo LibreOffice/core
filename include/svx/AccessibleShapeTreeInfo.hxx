@@ -73,8 +73,8 @@ public:
 
     /** Deprecated.  Don't use this method.
     */
-    css::uno::Reference<
-        css::accessibility::XAccessibleComponent>
+    const css::uno::Reference<
+        css::accessibility::XAccessibleComponent>&
         GetDocumentWindow() const { return mxDocumentWindow;}
 
     /** Set a new broadcaster that sends events indicating shape changes.
@@ -91,8 +91,8 @@ public:
             The returned reference may be empty if the broadcaster has not
             been set or has been set to an empty reference.
     */
-    css::uno::Reference<
-        css::document::XEventBroadcaster>
+    const css::uno::Reference<
+        css::document::XEventBroadcaster>&
         GetModelBroadcaster() const { return mxModelBroadcaster;}
 
     /** Set the view that will be used to construct SvxTextEditSources which
@@ -122,8 +122,8 @@ public:
         @return
             The reference to the currently set controller may be empty.
     */
-    css::uno::Reference<
-        css::frame::XController>
+    const css::uno::Reference<
+        css::frame::XController>&
         GetController() const { return mxController;}
 
     /** Set the window that is used to construct SvxTextEditSources which in

@@ -44,8 +44,8 @@ namespace connectivity
 
             static bool isReadOnly() { return false; }
 
-            OUString getTableName() const { return m_Name; }
-            OUString getSchema() const { return m_SchemaName; }
+            const OUString& getTableName() const { return m_Name; }
+            const OUString& getSchema() const { return m_SchemaName; }
 
             // OTableHelper overridables
             virtual sdbcx::OCollection* createColumns( const TStringVector& _rNames ) override;

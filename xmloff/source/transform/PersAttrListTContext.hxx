@@ -102,7 +102,7 @@ public:
         ::xmloff::token::XMLTokenEnum eAToken,
         const OUString & rValue );
 
-    css::uno::Reference< css::xml::sax::XAttributeList >
+    const css::uno::Reference< css::xml::sax::XAttributeList >&
         GetAttrList() const { return m_xAttrList; }
 
 };

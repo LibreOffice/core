@@ -102,8 +102,8 @@ public:
     sal_Int32               GetShadingValue() const     { return nShadingValue; }
     const Graphic*          GetGraphic(OUString const & referer = OUString()/*TODO*/) const;
     const GraphicObject*    GetGraphicObject(OUString const & referer = OUString()/*TODO*/) const;
-    OUString                GetGraphicLink() const      { return maStrLink; }
-    OUString                GetGraphicFilter() const    { return maStrFilter; }
+    const OUString&         GetGraphicLink() const      { return maStrLink; }
+    const OUString&         GetGraphicFilter() const    { return maStrFilter; }
 
     void                SetShadingValue( const sal_Int32 nNew );
 

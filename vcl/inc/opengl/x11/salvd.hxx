@@ -43,7 +43,7 @@ public:
     virtual long GetHeight() const override { return mnHeight; }
 
     SalDisplay *            GetDisplay() const { return mpDisplay; }
-    SalX11Screen            GetXScreenNumber() const { return mnXScreen; }
+    const SalX11Screen&     GetXScreenNumber() const { return mnXScreen; }
 
     virtual SalGraphics*    AcquireGraphics() override;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;

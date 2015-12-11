@@ -85,16 +85,16 @@ namespace basegfx
         double getControlPolygonLength() const;
 
         // data interface
-        B2DPoint getStartPoint() const { return maStartPoint; }
+        const B2DPoint& getStartPoint() const { return maStartPoint; }
         void setStartPoint(const B2DPoint& rValue) { maStartPoint = rValue; }
 
-        B2DPoint getEndPoint() const { return maEndPoint; }
+        const B2DPoint& getEndPoint() const { return maEndPoint; }
         void setEndPoint(const B2DPoint& rValue) { maEndPoint = rValue; }
 
-        B2DPoint getControlPointA() const { return maControlPointA; }
+        const B2DPoint& getControlPointA() const { return maControlPointA; }
         void setControlPointA(const B2DPoint& rValue) { maControlPointA = rValue; }
 
-        B2DPoint getControlPointB() const { return maControlPointB; }
+        const B2DPoint& getControlPointB() const { return maControlPointB; }
         void setControlPointB(const B2DPoint& rValue) { maControlPointB = rValue; }
 
         /** get the tangent in point t

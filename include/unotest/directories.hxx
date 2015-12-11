@@ -27,8 +27,8 @@ private:
 public:
     Directories();
 
-    OUString getSrcRootURL()       { return m_aSrcRootURL; }
-    OUString getSrcRootPath()      { return m_aSrcRootPath; }
+    const OUString& getSrcRootURL()       { return m_aSrcRootURL; }
+    const OUString& getSrcRootPath()      { return m_aSrcRootPath; }
 
     // return a URL to a given c-str path from the source directory
     OUString getURLFromSrc( const char *pPath );

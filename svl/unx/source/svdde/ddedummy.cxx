@@ -220,7 +220,7 @@ OUString DdeService::Status()
     return OUString();
 }
 
-OUString DdeService::SysTopicGet(const OUString& rString)
+const OUString& DdeService::SysTopicGet(const OUString& rString)
 {
     return rString;
 }

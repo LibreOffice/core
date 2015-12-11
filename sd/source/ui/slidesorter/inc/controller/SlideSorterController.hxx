@@ -213,7 +213,7 @@ public:
 
     /** Return an Animator object.
     */
-    std::shared_ptr<Animator> GetAnimator() const { return mpAnimator;}
+    const std::shared_ptr<Animator>& GetAnimator() const { return mpAnimator;}
 
     VisibleAreaManager& GetVisibleAreaManager() const;
 

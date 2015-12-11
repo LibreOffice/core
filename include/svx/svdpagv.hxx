@@ -258,11 +258,11 @@ public:
     // #103834# Set background color for svx at SdrPageViews
     void SetApplicationBackgroundColor(Color aBackgroundColor);
 
-    Color GetApplicationBackgroundColor() const { return maBackgroundColor;}
+    const Color& GetApplicationBackgroundColor() const { return maBackgroundColor;}
 
     // #103911# Set/Get document color for svx at SdrPageViews
     void SetApplicationDocumentColor(Color aDocumentColor);
-    Color GetApplicationDocumentColor() const { return maDocumentColor;}
+    const Color& GetApplicationDocumentColor() const { return maDocumentColor;}
 };
 
 

@@ -214,9 +214,9 @@ public:
     void SetScrollSpeed(float scrollSpeed);
     void SetScrollDistance(float scrollDistance);
     void SetSceneEdge(float minCoordX, float maxCoordX);
-    glm::mat4 GetProjectionMatrix();
-    glm::mat4 GetViewMatrix();
-    glm::mat4 GetGlobalScaleMatrix();
+    const glm::mat4& GetProjectionMatrix();
+    const glm::mat4& GetViewMatrix();
+    const glm::mat4& GetGlobalScaleMatrix();
     glm::mat4 GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection);
     glm::mat4 GetDiffOfTwoCameras(const glm::vec3& rEndPos, const glm::vec3& rEndDirection);
     void AddMatrixDiff(const glm::mat4& aMat);

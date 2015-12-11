@@ -79,7 +79,7 @@ RecoveryCore::~RecoveryCore()
 }
 
 
-css::uno::Reference< css::uno::XComponentContext > RecoveryCore::getComponentContext()
+const css::uno::Reference< css::uno::XComponentContext >& RecoveryCore::getComponentContext()
 {
     return m_xContext;
 }
@@ -1314,7 +1314,7 @@ bool BrokenRecoveryDialog::isExecutionNeeded()
 }
 
 
-OUString BrokenRecoveryDialog::getSaveDirURL()
+const OUString& BrokenRecoveryDialog::getSaveDirURL()
 {
     return m_sSavePath;
 }

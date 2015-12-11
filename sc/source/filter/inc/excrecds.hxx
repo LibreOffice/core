@@ -340,7 +340,7 @@ class XclExpAutofilterinfo : public XclExpUInt16Record
 public:
     explicit            XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nScCol );
 
-    inline const ScAddress GetStartPos() const { return maStartPos; }
+    inline const ScAddress& GetStartPos() const { return maStartPos; }
     inline SCCOL        GetColCount() const { return static_cast< SCCOL >( GetValue() ); }
 
 private:

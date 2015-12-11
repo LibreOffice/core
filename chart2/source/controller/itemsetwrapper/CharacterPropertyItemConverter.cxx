@@ -552,7 +552,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
     return bChanged;
 }
 
-uno::Reference<beans::XPropertySet> CharacterPropertyItemConverter::GetRefSizePropertySet() const
+const uno::Reference<beans::XPropertySet>& CharacterPropertyItemConverter::GetRefSizePropertySet() const
 {
     return m_xRefSizePropSet;
 }

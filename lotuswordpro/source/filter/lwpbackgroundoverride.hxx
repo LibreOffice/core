@@ -82,7 +82,7 @@ public:
         pStrm->SkipExtra();
     }
 
-    LwpColor GetBackColor(){ return m_aStuff.m_aFillColor; }
+    const LwpColor& GetBackColor(){ return m_aStuff.m_aFillColor; }
     LwpBackgroundStuff& GetBGStuff() { return m_aStuff; }
 
 protected:

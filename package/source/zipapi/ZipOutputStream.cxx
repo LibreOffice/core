@@ -189,7 +189,7 @@ void ZipOutputStream::finish()
     m_aZipList.clear();
 }
 
-css::uno::Reference< css::io::XOutputStream > ZipOutputStream::getStream()
+const css::uno::Reference< css::io::XOutputStream >& ZipOutputStream::getStream()
 {
     return m_xStream;
 }

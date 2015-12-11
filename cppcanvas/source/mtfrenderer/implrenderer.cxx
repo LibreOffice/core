@@ -2698,7 +2698,7 @@ namespace cppcanvas
                                                                   rSubset ) );
                 }
 
-                ::basegfx::B2DRange getBounds() const
+                const ::basegfx::B2DRange& getBounds() const
                 {
                     return maBounds;
                 }

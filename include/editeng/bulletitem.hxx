@@ -69,13 +69,13 @@ public:
 
     OUString            GetFullText() const;
     sal_Unicode         GetSymbol() const { return cSymbol; }
-    OUString            GetPrevText() const { return aPrevText; }
-    OUString            GetFollowText() const { return aFollowText; }
+    const OUString&     GetPrevText() const { return aPrevText; }
+    const OUString&     GetFollowText() const { return aFollowText; }
 
     sal_uInt16          GetStart() const { return nStart; }
     long                GetWidth() const { return nWidth; }
     SvxBulletStyle      GetStyle() const { return nStyle; }
-    vcl::Font           GetFont() const { return aFont; }
+    const vcl::Font&    GetFont() const { return aFont; }
     sal_uInt16          GetScale() const { return nScale; }
 
     const GraphicObject& GetGraphicObject() const;

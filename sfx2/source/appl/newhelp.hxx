@@ -151,7 +151,7 @@ public:
 
     void                SetDoubleClickHdl( const Link<ComboBox&,void>& rLink );
     void                SetFactory( const OUString& rFactory );
-    inline OUString     GetFactory() const { return sFactory; }
+    const OUString&     GetFactory() const { return sFactory; }
     OUString            GetSelectEntry() const;
     inline void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
     inline bool         HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
@@ -470,7 +470,7 @@ public:
     virtual void            GetFocus() override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    inline css::uno::Reference < css::frame::XFrame2 >
+    const css::uno::Reference < css::frame::XFrame2 >&
                             getFrame() const { return xFrame; }
 
     inline void             SetSelectHdl( const Link<ToolBox *, void>& rLink ) { aToolBox->SetSelectHdl( rLink ); }
@@ -478,7 +478,7 @@ public:
     void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
     inline ToolBox&         GetToolBox() { return *aToolBox.get(); }
-     void                   CloseFrame();
+    void                    CloseFrame();
     void                    DoSearch();
 };
 

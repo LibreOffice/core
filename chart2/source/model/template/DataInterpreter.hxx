@@ -35,7 +35,7 @@ public:
     explicit DataInterpreter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~DataInterpreter();
 
-    css::uno::Reference< css::uno::XComponentContext >
+    const css::uno::Reference< css::uno::XComponentContext >&
         GetComponentContext() const { return m_xContext;}
 
     /// XServiceInfo declarations

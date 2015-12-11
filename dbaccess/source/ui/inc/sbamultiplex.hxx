@@ -341,7 +341,7 @@ namespace dbaui
     private:
         css::frame::FeatureStateEvent  m_aLastKnownStatus;
     public:                                                                                 \
-        inline css::frame::FeatureStateEvent getLastEvent( ) const { return m_aLastKnownStatus; }
+        const css::frame::FeatureStateEvent& getLastEvent( ) const { return m_aLastKnownStatus; }
     END_DECLARE_LISTENER_MULTIPLEXER()
 
     // css::form::XLoadListener

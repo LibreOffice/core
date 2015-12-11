@@ -107,9 +107,9 @@ public:
         getAllProviders() throw ( css::uno::RuntimeException );
 
     bool isPkgProvider() { return m_bIsPkgMSP; }
-    css::uno::Reference< css::script::provider::XScriptProvider > getPkgProvider() { return m_xMSPPkg; }
+    const css::uno::Reference< css::script::provider::XScriptProvider >& getPkgProvider() { return m_xMSPPkg; }
     // returns context string for this provider, eg
-    OUString getContextString() { return m_sCtxString; }
+    const OUString& getContextString() { return m_sCtxString; }
 
 private:
     static OUString parseLocationName( const OUString& location );

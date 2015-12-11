@@ -67,7 +67,7 @@ private:
     css::uno::Sequence< OUString >
                                 maPropertyNames;
 
-    inline css::uno::Sequence< OUString > GetPropertyNames() const
+    const css::uno::Sequence< OUString >& GetPropertyNames() const
         { return maPropertyNames; }
     bool RetrieveOptions();
 

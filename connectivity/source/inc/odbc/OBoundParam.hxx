@@ -87,7 +87,7 @@ namespace connectivity
             // getInputStream
             // Gets the input stream for the bound parameter
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> getInputStream ()
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& getInputStream ()
             {
                 return paramInputStream;
             }

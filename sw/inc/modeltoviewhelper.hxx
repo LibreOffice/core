@@ -162,7 +162,7 @@ public:
     */
     ModelPosition ConvertToModelPosition( sal_Int32 nViewPos ) const;
 
-    OUString getViewText() const { return m_aRetText; }
+    const OUString& getViewText() const { return m_aRetText; }
     Positions const& getFieldPositions() const { return m_FieldPositions; }
     Positions const& getFootnotePositions() const { return m_FootnotePositions;}
 };

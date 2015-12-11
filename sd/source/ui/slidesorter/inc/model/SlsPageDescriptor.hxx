@@ -72,7 +72,7 @@ public:
 
     /** Return the page that is represented by the descriptor as XDrawPage reference.
     */
-    css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage() const { return mxPage;}
+    const css::uno::Reference<css::drawing::XDrawPage>& GetXDrawPage() const { return mxPage;}
 
     /** Returns the index of the page as it is displayed in the view as page
         number.  The value may differ from the index returned by the

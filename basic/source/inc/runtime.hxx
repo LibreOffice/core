@@ -175,7 +175,7 @@ public:
 
     void    Stop();
     SbError GetErr()                { return nErr; }
-    OUString  GetErrorMsg()           { return aErrorMsg; }
+    const OUString& GetErrorMsg()           { return aErrorMsg; }
     sal_Int32 GetErl()             { return nErl; }
     void    EnableReschedule( bool bEnable ) { bReschedule = bEnable; }
     bool    IsReschedule() { return bReschedule; }

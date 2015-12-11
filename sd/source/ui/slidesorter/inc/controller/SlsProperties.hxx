@@ -81,22 +81,22 @@ public:
 
     /** Return the background color.
     */
-    Color GetBackgroundColor() const { return maBackgroundColor;}
+    const Color& GetBackgroundColor() const { return maBackgroundColor;}
     void SetBackgroundColor (const Color& rColor);
 
     /** Return the text color.
     */
-    Color GetTextColor() const { return maTextColor;}
+    const Color& GetTextColor() const { return maTextColor;}
     void SetTextColor (const Color& rColor);
 
     /** Return the color in which selections are to be painted.
     */
-    Color GetSelectionColor() const { return maSelectionColor;}
+    const Color& GetSelectionColor() const { return maSelectionColor;}
     void SetSelectionColor (const Color& rColor);
 
     /** Return the color used for highlighting e.g. the current slide.
     */
-    Color GetHighlightColor() const { return maHighlightColor;}
+    const Color& GetHighlightColor() const { return maHighlightColor;}
     void SetHighlightColor (const Color& rColor);
 
     /** The UI can be set to be read only independently from the model status.

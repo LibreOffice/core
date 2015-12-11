@@ -150,7 +150,7 @@ namespace dbaccess
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
         static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-        css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const { return m_xMetaData; }
+        const css::uno::Reference< css::sdbc::XDatabaseMetaData>& getMetaData() const { return m_xMetaData; }
 
         // XColumnsSupplier
         virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) throw (css::uno::RuntimeException, std::exception) override;

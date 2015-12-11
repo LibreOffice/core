@@ -138,10 +138,10 @@ public:
 
         css::uno::Sequence< OUString>           getDataSources();
 
-        OUString                    getActiveDataSource() {return aDataSourceURL;}
+        const OUString&             getActiveDataSource() {return aDataSourceURL;}
         void                        setActiveDataSource(const OUString& rURL);
 
-        OUString                    getActiveDataTable() { return aActiveDataTable;}
+        const OUString&             getActiveDataTable() { return aActiveDataTable;}
         void                        setActiveDataTable(const OUString& rTable);
 
         void                        setFilter(const OUString& rQuery);

@@ -109,7 +109,7 @@ namespace slideshow
             maClipPoly = rClipPoly;
         }
 
-        css::uno::Reference< css::rendering::XBitmap >    SlideBitmap::getXBitmap()
+        const css::uno::Reference< css::rendering::XBitmap >&  SlideBitmap::getXBitmap()
         {
         return mxBitmap;
         }

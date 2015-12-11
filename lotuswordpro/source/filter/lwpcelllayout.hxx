@@ -99,7 +99,7 @@ public:
     LwpTableLayout * GetTableLayout();
     virtual void SetCellMap();
     double GetActualWidth();
-    OUString GetNumfmtName(){return m_NumfmtName;}
+    const OUString& GetNumfmtName(){return m_NumfmtName;}
 protected:
     void Read() override;
     LwpTable * GetTable();

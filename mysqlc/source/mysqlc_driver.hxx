@@ -100,7 +100,7 @@ namespace connectivity
             sal_Int32 SAL_CALL getMajorVersion()                            throw(RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Int32 SAL_CALL getMinorVersion()                            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
-            inline Reference< css::lang::XMultiServiceFactory > getFactory() const { return m_xFactory; }
+            const Reference< css::lang::XMultiServiceFactory >& getFactory() const { return m_xFactory; }
 
             static rtl_TextEncoding getDefaultEncoding() { return RTL_TEXTENCODING_UTF8; }
 

@@ -721,7 +721,7 @@ namespace
             }
         }
 
-        uno::Reference< animations::XAnimationNode > getMainSequence() const
+        const uno::Reference< animations::XAnimationNode >& getMainSequence() const
         {
             return maMainSequence;
         }

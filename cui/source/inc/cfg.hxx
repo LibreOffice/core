@@ -125,20 +125,20 @@ public:
     bool IsReadOnly( ) { return bReadOnly; }
     bool IsDocConfig( ) { return bDocConfig; }
 
-    css::uno::Reference
-        < css::ui::XUIConfigurationManager >
+    const css::uno::Reference
+        < css::ui::XUIConfigurationManager >&
             GetConfigManager() { return m_xCfgMgr; };
 
-    css::uno::Reference
-        < css::ui::XUIConfigurationManager >
+    const css::uno::Reference
+        < css::ui::XUIConfigurationManager >&
             GetParentConfigManager() { return m_xParentCfgMgr; };
 
-    css::uno::Reference
-        < css::ui::XImageManager >
+    const css::uno::Reference
+        < css::ui::XImageManager >&
             GetImageManager() { return m_xImgMgr; };
 
-    css::uno::Reference
-        < css::ui::XImageManager >
+    const css::uno::Reference
+        < css::ui::XImageManager >&
             GetParentImageManager() { return m_xParentImgMgr; };
 
     css::uno::Reference
@@ -307,7 +307,7 @@ public:
     void    SetBackupGraphic( css::uno::Reference< css::graphic::XGraphic > graphic )
                 { xBackupGraphic = graphic; }
 
-    css::uno::Reference< css::graphic::XGraphic > GetBackupGraphic()
+    const css::uno::Reference< css::graphic::XGraphic >& GetBackupGraphic()
                 { return xBackupGraphic; }
 
     bool    IsIconModified() { return xBackupGraphic.is(); }

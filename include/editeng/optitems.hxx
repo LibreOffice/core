@@ -49,7 +49,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
-    css::uno::Reference< css::linguistic2::XSpellChecker1 >
+    const css::uno::Reference< css::linguistic2::XSpellChecker1 >&
             GetXSpellChecker() const { return xSpellCheck; }
 
 private:

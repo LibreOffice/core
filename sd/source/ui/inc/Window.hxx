@@ -106,9 +106,9 @@ public:
 
     long GetZoom() const;
 
-    Point GetWinViewPos() const { return maWinPos;}
-    Point GetViewOrigin() const { return maViewOrigin;}
-    Size GetViewSize() const { return maViewSize;}
+    const Point& GetWinViewPos() const { return maWinPos;}
+    const Point& GetViewOrigin() const { return maViewOrigin;}
+    const Size& GetViewSize() const { return maViewSize;}
     void SetWinViewPos(const Point& rPnt);
     void SetViewOrigin(const Point& rPnt);
     void SetViewSize(const Size& rSize);

@@ -304,7 +304,7 @@ public:
     bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
     bool                    IsFloating( sal_uInt16 nId );
     void                    SetActiveChild_Impl( vcl::Window *pChild );
-    VclPtr<vcl::Window>     GetActiveChild_Impl() const { return pActiveChild; }
+    const VclPtr<vcl::Window>& GetActiveChild_Impl() const { return pActiveChild; }
 
     // Methods for StatusBar
     void                    ResetStatusBar_Impl();

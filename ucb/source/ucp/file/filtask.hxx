@@ -119,7 +119,7 @@ namespace fileaccess
                 return m_xInteractionHandler;
             }
 
-            css::uno::Reference< css::ucb::XCommandEnvironment > SAL_CALL
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& SAL_CALL
             getCommandEnvironment()
             {
                 return m_xCommandEnvironment;

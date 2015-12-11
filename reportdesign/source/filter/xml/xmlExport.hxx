@@ -167,9 +167,9 @@ public:
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
-    inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
+    const Reference<XReportDefinition>& getReportDefinition() const { return m_xReportDefinition; }
 
-    rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
+    const rtl::Reference < XMLPropertySetMapper >& GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
 };
 
 /** Exports only settings

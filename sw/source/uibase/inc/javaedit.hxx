@@ -73,9 +73,9 @@ public:
     virtual ~SwJavaEditDialog();
     virtual void dispose() override;
 
-    OUString GetScriptText() const { return aText; }
+    const OUString& GetScriptText() const { return aText; }
 
-    OUString GetScriptType() const { return aType; }
+    const OUString& GetScriptType() const { return aType; }
 
     bool IsUrl() const { return bIsUrl; }
     bool IsNew() const { return bNew; }

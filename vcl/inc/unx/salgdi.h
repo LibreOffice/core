@@ -94,7 +94,7 @@ public:
     using SalGraphics::GetPixel;
     inline  Pixel                   GetPixel( SalColor nSalColor ) const;
 
-    SalX11Screen                    GetScreenNumber() const { return m_nXScreen; }
+    const SalX11Screen&             GetScreenNumber() const { return m_nXScreen; }
 
     // override all pure virtual methods
     virtual void                    GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;

@@ -443,7 +443,7 @@ public:
 
     void            UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY );
 
-    Size            GetScrSize() const              { return aScrSize; }
+    const Size&     GetScrSize() const              { return aScrSize; }
 
     void            RecalcPixPos();
     Point           GetPixPos( ScSplitPos eWhich ) const

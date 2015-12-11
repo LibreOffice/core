@@ -72,7 +72,7 @@ public:
     void createBufferFile();
     void setParallelDeflateException(const ::css::uno::Any &rAny) { m_aParallelDeflateException = rAny; }
     css::uno::Reference< css::io::XInputStream > getData() const;
-    ::css::uno::Any getParallelDeflateException() const { return m_aParallelDeflateException; }
+    const css::uno::Any& getParallelDeflateException() const { return m_aParallelDeflateException; }
     void closeBufferFile();
     void deleteBufferFile();
 

@@ -61,7 +61,7 @@ public:
 
     BitmapEx CreateAnnotationBitmap(bool);
 
-    css::uno::Reference< css::office::XAnnotation > GetAnnotation() const { return mxAnnotation; }
+    const css::uno::Reference< css::office::XAnnotation >& GetAnnotation() const { return mxAnnotation; }
 
     void OpenPopup( bool bEdit );
     void ClosePopup();

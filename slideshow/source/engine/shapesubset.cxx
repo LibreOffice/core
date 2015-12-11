@@ -119,7 +119,7 @@ namespace slideshow
             return maTreeNode.isEmpty();
         }
 
-        DocTreeNode ShapeSubset::getSubset() const
+        const DocTreeNode& ShapeSubset::getSubset() const
         {
             return maTreeNode;
         }

@@ -95,7 +95,7 @@ namespace dbaui
 
             @return the connection data
         */
-        inline TTableConnectionData::value_type getData() const { return m_pConnData; }
+        const TTableConnectionData::value_type& getData() const { return m_pConnData; }
 
         void lateInit();
 

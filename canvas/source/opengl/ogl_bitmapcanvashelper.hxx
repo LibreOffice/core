@@ -49,7 +49,7 @@ namespace oglcanvas
         // BitmapCanvasHelper functionality
         // ================================
 
-        css::geometry::IntegerSize2D getSize() { return maSize; }
+        const css::geometry::IntegerSize2D& getSize() { return maSize; }
 
         css::uno::Reference< css::rendering::XBitmapCanvas > queryBitmapCanvas();
 

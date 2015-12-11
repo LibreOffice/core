@@ -376,7 +376,7 @@ public:
 
     //===== Misc ========================================================
 
-    css::uno::Reference< css::drawing::XShape >
+    const css::uno::Reference< css::drawing::XShape >&
         GetXShape() { return mxShape; }
 
     /** set the index _nIndex at the accessible shape

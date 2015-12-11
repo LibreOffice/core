@@ -972,7 +972,7 @@ public:
                         convertAndInsert( const EmbeddedControl& rControl, sal_Int32& rnCtrlIndex );
 
     /** Returns the XIndexContainer interface of the UNO control form, if existing. */
-    css::uno::Reference< css::container::XIndexContainer >
+    const css::uno::Reference< css::container::XIndexContainer >&
                         getXForm() const { return mxFormIC; }
 
 private:

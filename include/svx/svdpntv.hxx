@@ -390,7 +390,7 @@ public:
     /// Draw Help line in fron of the objects or beging them
     bool IsHlplFront() const { return mbHlplFront  ; }
 
-    Color GetGridColor() const { return maGridColor;}
+    const Color& GetGridColor() const { return maGridColor;}
     void SetPageVisible(bool bOn = true) { mbPageVisible=bOn; InvalidateAllWin(); }
     void SetPageShadowVisible(bool bOn = true) { mbPageShadowVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { mbPageBorderVisible=bOn; InvalidateAllWin(); }

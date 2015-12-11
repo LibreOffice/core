@@ -69,7 +69,7 @@ public:
 
     // get the result of this expression as node/node list/...
     css::uno::Reference<css::xml::dom::XNode> getNode() const;
-    const NodeVector_t getNodeList() const { return maNodes;}
+    const NodeVector_t& getNodeList() const { return maNodes;}
     css::uno::Reference<css::xml::dom::XNodeList> getXNodeList() const;
 
 };

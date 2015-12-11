@@ -59,7 +59,7 @@ public:
                             virtual ~VCLXDevice();
 
     void                    SetOutputDevice( const VclPtr<OutputDevice> &pOutDev ) { mpOutputDevice = pOutDev; }
-    VclPtr<OutputDevice>    GetOutputDevice() const { return mpOutputDevice; }
+    const VclPtr<OutputDevice>& GetOutputDevice() const { return mpOutputDevice; }
 
     void                    SetCreatedWithToolkit( bool bCreatedWithToolkit );
 

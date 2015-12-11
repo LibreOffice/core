@@ -37,7 +37,7 @@ public:
     virtual ~NumberFormatterWrapper();
 
     SvNumberFormatter* getSvNumberFormatter() const { return m_pNumberFormatter;}
-    css::uno::Reference< css::util::XNumberFormatsSupplier >
+    const css::uno::Reference< css::util::XNumberFormatsSupplier >&
                 getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
 
     OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;

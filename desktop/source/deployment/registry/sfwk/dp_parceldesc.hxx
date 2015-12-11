@@ -45,7 +45,7 @@ private:
     sal_Int32 skipIndex;
 public:
     ParcelDescDocHandler():m_bIsParsed( false ), skipIndex( 0 ){}
-    OUString getParcelLanguage() { return m_sLang; }
+    const OUString& getParcelLanguage() { return m_sLang; }
     bool isParsed() { return m_bIsParsed; }
     // XDocumentHandler
     virtual void SAL_CALL startDocument()

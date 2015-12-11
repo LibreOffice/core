@@ -80,7 +80,7 @@ public:
     OLEHandler(DomainMapper& rDomainMapper);
     virtual ~OLEHandler();
 
-    css::uno::Reference<css::drawing::XShape> getShape() { return m_xShape; };
+    const css::uno::Reference<css::drawing::XShape>& getShape() { return m_xShape; };
 
     bool isOLEObject() { return m_xInputStream.is(); }
 
@@ -94,8 +94,8 @@ public:
 
     OUString copyOLEOStream(css::uno::Reference<css::text::XTextDocument> const& xTextDocument);
 
-    css::awt::Size getSize() const { return m_aShapeSize; }
-    css::uno::Reference<css::graphic::XGraphic> getReplacement() const { return m_xReplacement; }
+    const css::awt::Size& getSize() const { return m_aShapeSize; }
+    const css::uno::Reference<css::graphic::XGraphic>& getReplacement() const { return m_xReplacement; }
 
 };
 typedef std::shared_ptr< OLEHandler >  OLEHandlerPtr;

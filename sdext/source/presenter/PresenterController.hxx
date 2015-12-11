@@ -105,15 +105,15 @@ public:
         GetViewBackground (const OUString& rsViewURL) const;
     PresenterTheme::SharedFontDescriptor
         GetViewFont (const OUString& rsViewURL) const;
-    std::shared_ptr<PresenterTheme> GetTheme() const;
-    ::rtl::Reference<PresenterWindowManager> GetWindowManager() const;
-    css::uno::Reference<css::presentation::XSlideShowController>
+    const std::shared_ptr<PresenterTheme>& GetTheme() const;
+    const ::rtl::Reference<PresenterWindowManager>& GetWindowManager() const;
+    const css::uno::Reference<css::presentation::XSlideShowController>&
         GetSlideShowController() const;
-    rtl::Reference<PresenterPaneContainer> GetPaneContainer() const;
-    ::rtl::Reference<PresenterPaneBorderPainter> GetPaneBorderPainter() const;
-    std::shared_ptr<PresenterCanvasHelper> GetCanvasHelper() const;
-    css::uno::Reference<css::drawing::XPresenterHelper> GetPresenterHelper() const;
-    std::shared_ptr<PresenterPaintManager> GetPaintManager() const;
+    const rtl::Reference<PresenterPaneContainer>& GetPaneContainer() const;
+    const ::rtl::Reference<PresenterPaneBorderPainter>& GetPaneBorderPainter() const;
+    const std::shared_ptr<PresenterCanvasHelper>& GetCanvasHelper() const;
+    const css::uno::Reference<css::drawing::XPresenterHelper>& GetPresenterHelper() const;
+    const std::shared_ptr<PresenterPaintManager>& GetPaintManager() const;
     double GetSlideAspectRatio() const;
     void ShowView (const OUString& rsViewURL);
     void HideView (const OUString& rsViewURL);
@@ -122,9 +122,9 @@ public:
     css::uno::Reference<css::frame::XDispatch> GetDispatch (
         const css::util::URL& rURL) const;
     css::util::URL CreateURLFromString (const OUString& rsURL) const;
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
+    const css::uno::Reference<css::drawing::framework::XConfigurationController>&
         GetConfigurationController() const;
-    css::uno::Reference<css::drawing::XDrawPage> GetCurrentSlide() const;
+    const css::uno::Reference<css::drawing::XDrawPage>& GetCurrentSlide() const;
     static bool HasTransition (css::uno::Reference<css::drawing::XDrawPage>& rxPage);
     static bool HasCustomAnimation (css::uno::Reference<css::drawing::XDrawPage>& rxPage);
     void SetAccessibilityActiveState (const bool bIsActive);
