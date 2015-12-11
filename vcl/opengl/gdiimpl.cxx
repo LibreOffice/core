@@ -49,7 +49,7 @@ public:
     {
         SetPriority( SchedulerPriority::HIGHEST );
     }
-    ~OpenGLFlushIdle()
+    virtual ~OpenGLFlushIdle()
     {
     }
     virtual void Invoke() override
