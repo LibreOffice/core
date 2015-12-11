@@ -12,5 +12,4 @@
 #define STATIC_LINKING 0
 
 #define ENABLE_RUNTIME_OPTIMIZATIONS 0
-
 #endif

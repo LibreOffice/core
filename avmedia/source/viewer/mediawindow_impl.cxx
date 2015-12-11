@@ -39,8 +39,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <vcl/sysdata.hxx>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
-
+#endif
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {
@@ -486,10 +487,12 @@ void MediaWindowImpl::onURLChanged()
 #if HAVE_FEATURE_GLTF
     else if (m_sMimeType == AVMEDIA_MIMETYPE_JSON)
     {
+#if HAVE_FEATURE_OPENGL
         SystemWindowData aWinData = OpenGLContext::generateWinData(this, false);
         mpChildWindow.disposeAndClear();
         mpChildWindow.reset(VclPtr<MediaChildWindow>::Create(this,&aWinData));
         mbEventTransparent = false;
+#endif
     }
 #endif
     if (!mpChildWindow)
