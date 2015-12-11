@@ -94,11 +94,11 @@ namespace /* private */ {
 
         void set_timestamp(const string_t& character)
         {
-            time_t t;
+            long t;
             if (sscanf(character.c_str(), "%ld", &t) != 1)
                 timestamp_ = -1;
             else
-                timestamp_ = t;
+                timestamp_ = static_cast<time_t>(t);
         }
 
         void set_is_private(const string_t& /*character*/)
