@@ -22,7 +22,7 @@ namespace rng
 // variable: If it is set, use a fixed seed.
 
 // note that uniform_int_distribution is inclusive of b, i.e. [a,b] while
-// uniform_real_distribution is exclusive of b, i.e. [a,b), std::nextafter may be your friend there
+// uniform_real_distribution is exclusive of b, i.e. [a,b), [std/boost]::nextafter may be your friend there
 
 /// uniform distribution in [a,b)
 COMPHELPER_DLLPUBLIC double uniform_real_distribution(double a = 0.0, double b = 1.0);

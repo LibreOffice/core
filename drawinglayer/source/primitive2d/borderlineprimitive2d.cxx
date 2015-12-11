@@ -30,7 +30,7 @@
 #include <cmath>
 #include <numeric>
 
-#if defined(ANDROID)
+#if defined(ANDROID) || ( defined(__APPLE__) && (defined(__POWERPC__) || defined(__ppc__)) )
 namespace std
 {
 template<typename T>

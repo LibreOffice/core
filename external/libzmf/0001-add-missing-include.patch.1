@@ -18,7 +18,7 @@ index ded93c7..7e024b3 100644
  
 +#include <cmath>
 +
-+#if defined(__ANDROID__)
++#if defined(__ANDROID__) || ( defined(__APPLE__) && (defined(__POWERPC__) || defined(__ppc__)) )
 +namespace std
 +{
 +template<typename T>

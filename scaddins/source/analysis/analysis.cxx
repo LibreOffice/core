@@ -34,6 +34,7 @@
 #include <tools/rcid.h>
 #include <algorithm>
 #include <cmath>
+#include <boost/math/special_functions/next.hpp>
 
 #define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
 #define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"
@@ -697,7 +698,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) throw(
     if( fMin > fMax )
         throw lang::IllegalArgumentException();
 
-    double fRet = floor(comphelper::rng::uniform_real_distribution(fMin, nextafter(fMax+1, -DBL_MAX)));
+    double fRet = floor(comphelper::rng::uniform_real_distribution(fMin, boost::math::nextafter(fMax+1, -DBL_MAX)));
     RETURN_FINITE( fRet );
 }
 
