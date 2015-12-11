@@ -1913,6 +1913,7 @@ namespace xmloff { namespace token {
         XML_TRUE,
         XML_TRUNCATE_ON_OVERFLOW,
         XML_TRY_STAGGERING_FIRST,
+        XML_TSPAN,
         XML_TTB,
         XML_TYPE,
         XML_DOT_DASH,
