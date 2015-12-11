@@ -974,6 +974,23 @@ SalSession* AquaSalInstance::CreateSalSession()
     return nullptr;
 }
 
+OUString AquaSalInstance::getOSVersion()
+{
+    OUString aVersion = "Mac OS X ";
+    OUString aVers = `sw_vers -productVersion 2>/dev/null`;
+
+    if ( aVers.isEmpty() )
+        aVersion += "(unknown)";
+    else
+    {
+        // 10.2.4
+        sal_Int32 nTooDetailed = aVers.indexOf( '.', 2);
+        aVersion += aVers.copy(0, nTooDetailed);
+    }
+
+    return aVersion;
+}
+
 class MacImeStatus : public SalI18NImeStatus
 {
 public:
