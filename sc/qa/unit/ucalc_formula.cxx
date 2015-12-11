@@ -1584,7 +1584,7 @@ void Test::testFormulaRefUpdateRange()
 
     // Insert 2 rows in the middle to shift bottom reference down and make it
     // sticky.
-    m_pDoc->InsertRow( ScRange( aPos, ScAddress(MAXCOL,aPos.Row()+1,1)));
+    m_pDoc->InsertRow( ScRange( 0, aPos.Row(), 1, MAXCOL, aPos.Row()+1, 1));
 
     // A3:A18 must not result in #REF! anywhere.
     bool bCheck = true;
@@ -1681,9 +1681,9 @@ void Test::testFormulaRefUpdateRange()
     aPos.IncRow();
 
     // Insert 4 rows in the middle.
-    m_pDoc->InsertRow( ScRange( aPos, ScAddress(MAXCOL,aPos.Row()+3,1)));
+    m_pDoc->InsertRow( ScRange( 0, aPos.Row(), 1, MAXCOL, aPos.Row()+3, 1));
     // Delete 2 rows in the middle.
-    m_pDoc->DeleteRow( ScRange( aPos, ScAddress(MAXCOL,aPos.Row()+1,1)));
+    m_pDoc->DeleteRow( ScRange( 0, aPos.Row(), 1, MAXCOL, aPos.Row()+1, 1));
 
     // References in A2:A17 must still be the same.
     bCheck = true;
