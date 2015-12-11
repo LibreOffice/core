@@ -727,7 +727,7 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, long nMin, long 
                 ImplVDrawLine(rRenderContext, n1,     nVirBottom, n2,     nVirBottom);
                 ImplVDrawLine(rRenderContext, n2 - 1, nVirTop,    n2 - 1, nVirBottom);
 
-                rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+                rRenderContext.SetLineColor(rStyleSettings.GetDeactiveColor());
                 ImplVDrawLine(rRenderContext, n2, nVirTop, n2, nVirBottom);
 
                 if (mpData->pBorders[i].nStyle & RULER_BORDER_VARIABLE)
@@ -799,8 +799,8 @@ void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Poly
     if (nStyle & RULER_STYLE_INVISIBLE)
         return;
 
-    rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
-    rRenderContext.SetFillColor(bIsHit ? rStyleSettings.GetDarkShadowColor() : rStyleSettings.GetWorkspaceColor());
+    rRenderContext.SetLineColor(rStyleSettings.GetDeactiveColor());
+    rRenderContext.SetFillColor(bIsHit ? rStyleSettings.GetDeactiveColor() : rStyleSettings.GetWorkspaceColor());
     rRenderContext.DrawPolygon(rPoly);
 }
 
@@ -1013,7 +1013,7 @@ void Ruler::ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, s
     if (nStyle & RULER_STYLE_DONTKNOW)
         rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetFaceColor());
     else
-        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetDarkShadowColor());
+        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetDeactiveColor());
 
     if (mpData->bTextRTL)
         nStyle |= RULER_TAB_RTL;
@@ -1057,7 +1057,7 @@ void Ruler::ApplySettings(vcl::RenderContext& rRenderContext)
 
     ApplyControlFont(rRenderContext, aFont);
 
-    ApplyControlForeground(*this, rStyleSettings.GetDarkShadowColor());
+    ApplyControlForeground(*this, rStyleSettings.GetDeactiveColor());
     SetTextFillColor();
 
     Color aColor;
@@ -1082,7 +1082,7 @@ void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 
     if (bForeground || bFont)
     {
-        ApplyControlForeground(*this, rStyleSettings.GetDarkShadowColor());
+        ApplyControlForeground(*this, rStyleSettings.GetDeactiveColor());
         SetTextFillColor();
     }
 
@@ -1245,7 +1245,7 @@ void Ruler::ImplFormat(vcl::RenderContext& rRenderContext)
     }
 
     // top/bottom border
-    maVirDev->SetLineColor(rStyleSettings.GetShadowColor());
+    maVirDev->SetLineColor(rStyleSettings.GetDeactiveColor());
     ImplVDrawLine(*maVirDev.get(), nVirLeft, nVirTop + 1, nM1,     nVirTop + 1); //top left line
     ImplVDrawLine(*maVirDev.get(), nM2,      nVirTop + 1, nP2 - 1, nVirTop + 1); //top right line
 
@@ -1264,7 +1264,7 @@ void Ruler::ImplFormat(vcl::RenderContext& rRenderContext)
         maVirDev->SetFillColor(rStyleSettings.GetWindowColor());
         ImplVDrawRect(*maVirDev.get(), nM1 + 1, nVirTop, nM2 - 1, nVirBottom); //center rectangle
     }
-    maVirDev->SetLineColor(rStyleSettings.GetShadowColor());
+    maVirDev->SetLineColor(rStyleSettings.GetDeactiveColor());
     if (nM1 > nVirLeft)
     {
         ImplVDrawLine(*maVirDev.get(), nM1, nVirTop + 1, nM1, nVirBottom); //right line of the left rectangle
