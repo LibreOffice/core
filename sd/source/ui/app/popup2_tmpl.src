@@ -103,11 +103,6 @@
         MN_TRANSFORM
         MN_LINE
         MN_AREA
-        MN_TEXTATTR
-        SEPARATOR
-        MN_EDIT_POINTS
-        SEPARATOR
-        MN_CHAR_PARAGRAPH
         SEPARATOR
         MN_OBJECT_ALIGN
         MN_POSITION
@@ -265,10 +260,6 @@
         MN_LINE
         MN_AREA
         SEPARATOR
-        MN_EDIT_POINTS
-        SEPARATOR
-        MN_CHAR_PARAGRAPH
-        SEPARATOR
         MN_OBJECT_ALIGN
         MN_POSITION
         MN_DISTRIBUTE
@@ -296,6 +287,7 @@
     {
         MN_TRANSFORM
         MN_LINE
+        MN_EDIT_POINTS
         SEPARATOR
         MN_OBJECT_ALIGN
         MN_POSITION
@@ -399,8 +391,8 @@
 {
     ItemList =
     {
-        MN_LINE
         MN_TRANSFORM
+        MN_LINE
         MN_EDIT_POINTS
         MN_CLOSE_OBJECT
         SEPARATOR
@@ -464,13 +456,9 @@
 {
     ItemList =
     {
-        MN_SET_DEFAULT
-        SEPARATOR
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
-        MN_TRANSFORM
-        SEPARATOR
-        MN_CHAR_PARAGRAPH
         SEPARATOR
         MN_POSITION
         MN_OBJECT_ALIGN
@@ -481,11 +469,7 @@
         MN_GROUP
         MN_UNGROUP
         MN_LEAVE_GROUP
-        MN_COMBINE
         MNSUB_FORMEN
-        MN_DISMANTLE
-        MN_CONNECT
-        MN_BREAK
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_ACTION
@@ -502,13 +486,13 @@
 {
     ItemList =
     {
+        MN_CROP
+        MN_ORIGINAL_SIZE
+        SEPARATOR
         MenuItem { ITEM_EXTERNAL_EDIT };
         MenuItem { ITEM_CHANGE_PICTURE };
         MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_SAVE_GRAPHIC };
-        SEPARATOR
-        MN_CROP
-        MN_ORIGINAL_SIZE
         SEPARATOR
         MN_TRANSFORM
         MN_LINE

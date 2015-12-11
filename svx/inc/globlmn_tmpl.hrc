@@ -280,6 +280,34 @@
         Text [ en-US ] = "~Bullets and Numbering..." ; \
             };
 
+#define MN_COMBINE \
+    MenuItem\
+    {\
+        Identifier = SID_COMBINE ; \
+        HelpId = CMD_SID_COMBINE ; \
+        Text [ en-US ] = "Comb~ine" ; \
+    };
+#define MN_DISMANTLE \
+    MenuItem\
+    {\
+        Identifier = SID_DISMANTLE ; \
+        HelpId = CMD_SID_DISMANTLE ; \
+        Text [ en-US ] = "~Split" ; \
+    };
+#define MN_CONNECT \
+    MenuItem\
+    {\
+        Identifier = SID_CONNECT ; \
+        HelpId = CMD_SID_CONNECT ; \
+        Text [ en-US ] = "C~onnect" ; \
+    };
+#define MN_BREAK \
+    MenuItem\
+    {\
+        Identifier = SID_BREAK ; \
+        HelpId = CMD_SID_BREAK ; \
+        Text [ en-US ] = "~Break" ; \
+    };
 #define ITEM_POLY_MERGE \
     MenuItem\
     {\
@@ -326,6 +354,14 @@
         {\
             ItemList = \
             {\
+                MN_COMBINE \
+                MN_DISMANTLE \
+                MN_CONNECT \
+                MN_BREAK \
+                MenuItem \
+                { \
+                    Separator = TRUE; \
+                }; \
                 ITEM_POLY_MERGE \
                 ITEM_POLY_SUBSTRACT \
                 ITEM_POLY_INTERSECT \

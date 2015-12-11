@@ -93,6 +93,7 @@
 #define CMD_SID_SAVE_BACKGROUND                     ".uno:SaveBackground"
 #define CMD_SID_DISPLAY_MASTER_BACKGROUND           ".uno:DisplayMasterBackground"
 #define CMD_SID_DISPLAY_MASTER_OBJECTS              ".uno:DisplayMasterObjects"
+#define CMD_SID_MASTER_LAYOUTS                      ".uno:MasterLayouts"
 #define CMD_SID_TABLE_DISTRIBUTE_COLUMNS            ".uno:DistributeColumns"
 #define CMD_SID_TABLE_DISTRIBUTE_ROWS               ".uno:DistributeRows"
 #define CMD_SID_TP_APPLY_TO_ALL_SLIDES              ".uno:TaskPaneApplyToAllSlides"
