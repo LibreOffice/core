@@ -3243,9 +3243,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:FormatObjectMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Object and Shape</value>
+        </prop>
+      </node>
       <node oor:name=".uno:FormatImageFiltersMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Filters</value>
+          <value xml:lang="en-US">~Filter</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatTextMenu" oor:op="replace">

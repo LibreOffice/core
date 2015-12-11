@@ -24,6 +24,16 @@
           <value xml:lang="en-US">S~lide</value>
         </prop>
       </node>
+      <node oor:name=".uno:SlideNavigateMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Navigate</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SlideMoveMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Move</value>
+        </prop>
+      </node>
       <node oor:name=".uno:RenamePage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Rename Page/Slide</value>
@@ -361,7 +371,7 @@
       </node>
       <node oor:name=".uno:CustomAnimation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Custom Animation...</value>
+          <value xml:lang="en-US">Custom Animation</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -374,7 +384,7 @@
       </node>
       <node oor:name=".uno:SlideChangeWindow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Slide Transition...</value>
+          <value xml:lang="en-US">Slide Transition</value>
         </prop>
       </node>
       <node oor:name=".uno:ConnectorAttributes" oor:op="replace">
@@ -765,7 +775,7 @@
       </node>
       <node oor:name=".uno:ShowRuler" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Ruler</value>
+          <value xml:lang="en-US">~Rulers</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertLayer" oor:op="replace">
@@ -775,7 +785,7 @@
       </node>
       <node oor:name=".uno:ModifyPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Slide ~Layout...</value>
+          <value xml:lang="en-US">Slide ~Layout</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -904,7 +914,10 @@
       </node>
       <node oor:name=".uno:ToggleTabBarVisibility" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Toggle Tab bar visibility</value>
+          <value xml:lang="en-US">Toggle Tab Bar Visibility</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Modes Tab Bar</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1356,7 +1369,7 @@
       </node>
       <node oor:name=".uno:SaveGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Save Images...</value>
+          <value xml:lang="en-US">~Save...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
             <value>1</value>
@@ -1369,7 +1382,7 @@
       </node>
       <node oor:name=".uno:ChangePicture" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Replace Image...</value>
+          <value xml:lang="en-US">~Replace...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
             <value>1</value>
@@ -1377,7 +1390,7 @@
       </node>
       <node oor:name=".uno:CompressGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Co~mpress Image...</value>
+          <value xml:lang="en-US">Co~mpress...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
             <value>1</value>
@@ -1395,12 +1408,12 @@
       </node>
       <node oor:name=".uno:DisplayMasterBackground" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Display Background of Master</value>
+          <value xml:lang="en-US">Display Master Background</value>
         </prop>
       </node>
       <node oor:name=".uno:DisplayMasterObjects" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Display Objects from Master</value>
+          <value xml:lang="en-US">Display Master Objects</value>
         </prop>
       </node>
       <node oor:name=".uno:EditStyle" oor:op="replace">
@@ -1896,10 +1909,10 @@
       </node>
       <node oor:name=".uno:FirstPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">First Page</value>
+          <value xml:lang="en-US">Go to First Page/Slide</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Go to the first page</value>
+          <value xml:lang="en-US">To First Page/Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1907,10 +1920,10 @@
       </node>
       <node oor:name=".uno:PreviousPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Previous Page</value>
+          <value xml:lang="en-US">Go to Previous Page/Slide</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Go to the previous page</value>
+          <value xml:lang="en-US">To Previous Page/Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1918,10 +1931,10 @@
       </node>
       <node oor:name=".uno:NextPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Next Page</value>
+          <value xml:lang="en-US">Go to Next Page/Slide</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Go to the next page</value>
+          <value xml:lang="en-US">To Next Page/Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1929,10 +1942,10 @@
       </node>
       <node oor:name=".uno:LastPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Last Page</value>
+          <value xml:lang="en-US">Go to Last Page</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Go to the last page</value>
+          <value xml:lang="en-US">To Last Page/Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1940,10 +1953,10 @@
       </node>
       <node oor:name=".uno:MovePageFirst" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Page First</value>
+          <value xml:lang="en-US">Move Page/Slide to Start</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Move the selected pages to the first position</value>
+          <value xml:lang="en-US">Page/Slide to Start</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1951,10 +1964,10 @@
       </node>
       <node oor:name=".uno:MovePageUp" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Page Up</value>
+          <value xml:lang="en-US">Move Page/Slide Up</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Move the selected pages up</value>
+          <value xml:lang="en-US">Page/Slide Up</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1962,10 +1975,10 @@
       </node>
       <node oor:name=".uno:MovePageDown" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Page Down</value>
+          <value xml:lang="en-US">Move Page/Slide Down</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Move the selected pages down</value>
+          <value xml:lang="en-US">Page/Slide Down</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1973,10 +1986,10 @@
       </node>
       <node oor:name=".uno:MovePageLast" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Page Last</value>
+          <value xml:lang="en-US">Move Page/Slide to End</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Move the selected pages to the last position</value>
+          <value xml:lang="en-US">Page/Slide to End</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
