@@ -2100,30 +2100,53 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
     return r.makeStringAndClear();
 }
 
-bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
+bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScAddress& rErrorPos, ScDocument* pDoc )
 {
     SCsTAB nMaxTab = pDoc ? pDoc->GetTableCount() : MAXTAB;
     dx = Col() + dx;
     dy = Row() + dy;
     dz = Tab() + dz;
     bool bValid = true;
+    rErrorPos.SetCol(dx);
     if( dx < 0 )
-        dx = 0, bValid = false;
+    {
+        dx = 0;
+        bValid = false;
+    }
     else if( dx > MAXCOL )
-        dx = MAXCOL, bValid =false;
+    {
+        dx = MAXCOL;
+        bValid =false;
+    }
+    rErrorPos.SetRow(dy);
     if( dy < 0 )
-        dy = 0, bValid = false;
+    {
+        dy = 0;
+        bValid = false;
+    }
     else if( dy > MAXROW )
-        dy = MAXROW, bValid =false;
+    {
+        dy = MAXROW;
+        bValid =false;
+    }
+    rErrorPos.SetTab(dz);
     if( dz < 0 )
-        dz = 0, bValid = false;
+    {
+        dz = 0;
+        bValid = false;
+    }
     else if( dz > nMaxTab )
-        dz = nMaxTab, bValid =false;
+    {
+        // Always set MAXTAB+1 so further checks without ScDocument detect invalid.
+        rErrorPos.SetTab(MAXTAB+1);
+        dz = nMaxTab;
+        bValid =false;
+    }
     Set( dx, dy, dz );
     return bValid;
 }
 
-bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
+bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange, ScDocument* pDoc )
 {
     bool bColRange = (aStart.Col() < aEnd.Col());
     bool bRowRange = (aStart.Row() < aEnd.Row());
@@ -2131,18 +2154,22 @@ bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
         dy = 0;     // Entire column not to be moved.
     if (dx && aStart.Col() == 0 && aEnd.Col() == MAXCOL)
         dx = 0;     // Entire row not to be moved.
-    bool b1 = aStart.Move( dx, dy, dz, pDoc );
+    bool b1 = aStart.Move( dx, dy, dz, rErrorRange.aStart, pDoc );
     if (dx && bColRange && aEnd.Col() == MAXCOL)
         dx = 0;     // End column sticky.
     if (dy && bRowRange && aEnd.Row() == MAXROW)
         dy = 0;     // End row sticky.
     SCTAB nOldTab = aEnd.Tab();
-    bool b2 = aEnd.Move( dx, dy, dz, pDoc );
+    bool b2 = aEnd.Move( dx, dy, dz, rErrorRange.aEnd, pDoc );
     if (!b2)
     {
         // End column or row of a range may have become sticky.
         bColRange = (!dx || (bColRange && aEnd.Col() == MAXCOL));
+        if (dx && bColRange)
+            rErrorRange.aEnd.SetCol(MAXCOL);
         bRowRange = (!dy || (bRowRange && aEnd.Row() == MAXROW));
+        if (dy && bRowRange)
+            rErrorRange.aEnd.SetRow(MAXROW);
         b2 = bColRange && bRowRange && (aEnd.Tab() - nOldTab == dz);
     }
     return b1 && b2;

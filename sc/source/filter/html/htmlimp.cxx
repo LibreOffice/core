@@ -178,10 +178,14 @@ void ScHTMLImport::WriteToDocument(
 
     ScHTMLTable* pTable = nullptr;
     ScHTMLTableId nTableId = SC_HTML_GLOBAL_TABLE;
+    ScRange aErrorRange( ScAddress::UNINITIALIZED );
     while( (pTable = pGlobTable->FindNestedTable( ++nTableId )) != nullptr )
     {
         pTable->GetDocRange( aNewRange );
-        aNewRange.Move( nColDiff, nRowDiff, nTabDiff );
+        if (!aNewRange.Move( nColDiff, nRowDiff, nTabDiff, aErrorRange ))
+        {
+            assert(!"can't move");
+        }
         // insert table number as name
         InsertRangeName( mpDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
         // insert table id as name

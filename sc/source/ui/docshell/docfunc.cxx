@@ -1635,11 +1635,21 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     // If insertion is for full cols/rows and after the current
     // selection, then shift the range accordingly
-    if ( eCmd == INS_INSROWS_AFTER ) {
-        aTargetRange.Move(0, rRange.aEnd.Row() - rRange.aStart.Row() + 1, 0);
+    if ( eCmd == INS_INSROWS_AFTER )
+    {
+        ScRange aErrorRange( ScAddress::UNINITIALIZED );
+        if (!aTargetRange.Move(0, rRange.aEnd.Row() - rRange.aStart.Row() + 1, 0, aErrorRange))
+        {
+            assert(!"can't move");
+        }
     }
-    if ( eCmd == INS_INSCOLS_AFTER ) {
-        aTargetRange.Move(rRange.aEnd.Col() - rRange.aStart.Col() + 1, 0, 0);
+    if ( eCmd == INS_INSCOLS_AFTER )
+    {
+        ScRange aErrorRange( ScAddress::UNINITIALIZED );
+        if (!aTargetRange.Move(rRange.aEnd.Col() - rRange.aStart.Col() + 1, 0, 0, aErrorRange))
+        {
+            assert(!"can't move");
+        }
     }
 
     SCCOL nStartCol = aTargetRange.aStart.Col();

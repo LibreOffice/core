@@ -2296,7 +2296,12 @@ ScHTMLPos ScHTMLTable::GetDocPos( const ScHTMLPos& rCellPos ) const
 void ScHTMLTable::GetDocRange( ScRange& rRange ) const
 {
     rRange.aStart = rRange.aEnd = maDocBasePos.MakeAddr();
-    rRange.aEnd.Move( static_cast< SCsCOL >( GetDocSize( tdCol ) ) - 1, static_cast< SCsROW >( GetDocSize( tdRow ) ) - 1, 0 );
+    ScAddress aErrorPos( ScAddress::UNINITIALIZED );
+    if (!rRange.aEnd.Move( static_cast< SCsCOL >( GetDocSize( tdCol ) ) - 1,
+                static_cast< SCsROW >( GetDocSize( tdRow ) ) - 1, 0, aErrorPos))
+    {
+        assert(!"can't move");
+    }
 }
 
 void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos ) const
@@ -2479,7 +2484,11 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
 
     // insert the new range into the cell lists
     ScRange aNewRange( maCurrCell.MakeAddr() );
-    aNewRange.aEnd.Move( rSpanSize.mnCols - 1, rSpanSize.mnRows - 1, 0 );
+    ScAddress aErrorPos( ScAddress::UNINITIALIZED );
+    if (!aNewRange.aEnd.Move( rSpanSize.mnCols - 1, rSpanSize.mnRows - 1, 0, aErrorPos))
+    {
+        assert(!"can't move");
+    }
     if( rSpanSize.mnRows > 1 )
     {
         maVMergedCells.Append( aNewRange );

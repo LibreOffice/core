@@ -305,9 +305,15 @@ public:
                                   const ScDocument* pDocument = nullptr,
                                   const Details& rDetails = detailsOOOa1) const;
 
-    // The document for the maximum defined sheet number
-    SC_DLLPUBLIC bool Move( SCsCOL nDeltaX, SCsROW nDeltaY, SCsTAB nDeltaZ,
-                            ScDocument* pDocument = nullptr );
+    /**
+        @param  rErrorPos
+                If FALSE is returned, the positions contain <0 or >MAX...
+                values if shifted out of bounds.
+        @param  pDocument
+                The document for the maximum defined sheet number.
+     */
+    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCsCOL nDeltaX, SCsROW nDeltaY, SCsTAB nDeltaZ,
+            ScAddress& rErrorPos, ScDocument* pDocument = nullptr );
 
     inline bool operator==( const ScAddress& rAddress ) const;
     inline bool operator!=( const ScAddress& rAddress ) const;
@@ -535,8 +541,16 @@ public:
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
                          SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
     SC_DLLPUBLIC void PutInOrder();
-    // The document for the maximum defined sheet number
-    SC_DLLPUBLIC bool Move( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ, ScDocument* pDocument = nullptr );
+
+    /**
+        @param  rErrorRange
+                If FALSE is returned, the positions contain <0 or >MAX...
+                values if shifted out of bounds.
+        @param  pDocument
+                The document for the maximum defined sheet number.
+     */
+    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ,
+            ScRange& rErrorRange, ScDocument* pDocument = nullptr );
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 
