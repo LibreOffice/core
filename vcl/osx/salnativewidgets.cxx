@@ -36,6 +36,10 @@
 
 #include <cuidraw.hxx>
 
+#ifndef NSAppKitVersionNumber10_7
+#define NSAppKitVersionNumber10_7 1138
+#endif
+
 #if !HAVE_FEATURE_MACOSX_SANDBOX
 
 @interface NSWindow(CoreUIRendererPrivate)
@@ -126,29 +130,131 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
     switch( nPart )
     {
         case ControlPart::ButtonUp:
-            rResultRect.Bottom() = rResultRect.Top();
+            if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
+            {
+                if( GetSalData()->mbIsScrollbarDoubleMax )
+                    rResultRect.Top() = rControlRect.Bottom() - 2*BUTTON_HEIGHT;
+                rResultRect.Bottom() = rResultRect.Top() + BUTTON_HEIGHT;
+            }
+            else
+            {
+                rResultRect.Bottom() = rResultRect.Top();
+            }
             break;
 
         case ControlPart::ButtonDown:
-            rResultRect.Top() = rResultRect.Bottom();
+            if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
+            {
+                rResultRect.Top() = rControlRect.Bottom() - BUTTON_HEIGHT;
+            }
+            else
+            {
+                rResultRect.Top() = rResultRect.Bottom();
+            }
             break;
 
         case ControlPart::ButtonLeft:
-            rResultRect.Right() = rResultRect.Left();
+            if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
+            {
+                if( GetSalData()->mbIsScrollbarDoubleMax )
+                    rResultRect.Left() = rControlRect.Right() - 2*BUTTON_WIDTH;
+                rResultRect.Right() = rResultRect.Left() + BUTTON_WIDTH;
+            }
+            else
+            {
+                rResultRect.Right() = rResultRect.Left();
+            }
             break;
 
         case ControlPart::ButtonRight:
-            rResultRect.Left() = rResultRect.Right();
+            if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
+            {
+                rResultRect.Left() = rControlRect.Right() - BUTTON_WIDTH;
+            }
+            else
+            {
+                rResultRect.Left() = rResultRect.Right();
+            }
             break;
 
         case ControlPart::TrackHorzArea:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
+            rResultRect.Right() -= BUTTON_WIDTH + 1;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Right() -= BUTTON_WIDTH;
+            else
+                rResultRect.Left() += BUTTON_WIDTH + 1;
+            break;
+
         case ControlPart::TrackVertArea:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
+            rResultRect.Bottom() -= BUTTON_HEIGHT + 1;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Bottom() -= BUTTON_HEIGHT;
+            else
+                rResultRect.Top() += BUTTON_HEIGHT + 1;
+            break;
         case ControlPart::ThumbHorz:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+            {
+                rResultRect.Left() += 8;
+                rResultRect.Right() += 6;
+            }
+            else
+            {
+                rResultRect.Left() += 4;
+                rResultRect.Right() += 4;
+            }
+            break;
         case ControlPart::ThumbVert:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+            {
+                rResultRect.Top() += 8;
+                rResultRect.Bottom() += 8;
+            }
+            else
+            {
+                rResultRect.Top() += 4;
+                rResultRect.Bottom() += 4;
+            }
+            break;
         case ControlPart::TrackHorzLeft:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Right() += 8;
+            else
+                rResultRect.Right() += 4;
+            break;
         case ControlPart::TrackHorzRight:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Left() += 6;
+            else
+                rResultRect.Left() += 4;
+            break;
         case ControlPart::TrackVertUpper:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Bottom() += 8;
+            else
+                rResultRect.Bottom() += 4;
+            break;
         case ControlPart::TrackVertLower:
+            if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
+                break;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Top() += 8;
+            else
+                rResultRect.Top() += 4;
             break;
         default:
             bRetVal = false;
@@ -293,8 +399,29 @@ bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
         Rectangle aRect;
         bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion, aRect );
         rIsInside = bValid && aRect.IsInside( rPos );
+        if( NSAppKitVersionNumber < NSAppKitVersionNumber10_7 &&
+            GetSalData()->mbIsScrollbarDoubleMax )
+        {
+            // in double max mode the actual trough is a little smaller than the track
+            // there is some visual filler that is not sensitive
+            if( bValid && rIsInside )
+            {
+                if( nPart == ControlPart::TrackHorzArea )
+                {
+                    // the left 4 pixels are not hit sensitive
+                    if( rPos.X() - aRect.Left() < 4 )
+                        rIsInside = false;
+                }
+                else if( nPart == ControlPart::TrackVertArea )
+                {
+                    // the top 4 pixels are not hit sensitive
+                    if( rPos.Y() - aRect.Top() < 4 )
+                        rIsInside = false;
+                }
+            }
+        }
         return bValid;
-    }  //  ControlType::Scrollbar
+    }
 
     return false;
 }
