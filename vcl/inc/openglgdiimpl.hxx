@@ -72,9 +72,6 @@ protected:
     OpenGLFramebuffer* mpFramebuffer;
     OpenGLProgram* mpProgram;
 
-    /// Is it someone else's context we shouldn't be fiddling with ?
-    static bool IsForeignContext(const rtl::Reference<OpenGLContext> &xContext);
-
     /// This idle handler is used to swap buffers after rendering.
     OpenGLFlushIdle *mpFlush;
 
@@ -174,7 +171,7 @@ protected:
     bool UseContext( const rtl::Reference<OpenGLContext> &pContext )
     {
         return pContext->isInitialized() &&  // not released by the OS etc.
-               IsForeignContext( pContext ); // a genuine VCL context.
+               pContext->isVCLOnly();
     }
 
 public:

@@ -29,6 +29,7 @@ void WinOpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics*
 rtl::Reference<OpenGLContext> WinOpenGLSalGraphicsImpl::CreateWinContext()
 {
     rtl::Reference<OpenGLContext> pContext = OpenGLContext::Create();
+    pContext->setVCLOnly();
     pContext->init( mrParent.mhLocalDC, mrParent.mhWnd );
     return pContext;
 }
