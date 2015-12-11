@@ -64,12 +64,9 @@ class SpinfieldControl : public SpinField
         virtual void Down() override;
         virtual void First() override;
         virtual void Last() override;
-        virtual void KeyInput( const ::KeyEvent& rKEvt ) override;
         virtual void Modify() override;
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
-        virtual void StateChanged( StateChangedType nType ) override;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
 
     private:
@@ -121,13 +118,6 @@ void SpinfieldControl::Last()
         m_pSpinfieldToolbarController->Last();
 }
 
-void SpinfieldControl::KeyInput( const ::KeyEvent& rKEvt )
-{
-    SpinField::KeyInput( rKEvt );
-    if ( m_pSpinfieldToolbarController )
-        m_pSpinfieldToolbarController->KeyInput( rKEvt );
-}
-
 void SpinfieldControl::Modify()
 {
     SpinField::Modify();
@@ -147,20 +137,6 @@ void SpinfieldControl::LoseFocus()
     SpinField::GetFocus();
     if ( m_pSpinfieldToolbarController )
         m_pSpinfieldToolbarController->GetFocus();
-}
-
-void SpinfieldControl::StateChanged( StateChangedType nType )
-{
-    SpinField::StateChanged( nType );
-    if ( m_pSpinfieldToolbarController )
-        m_pSpinfieldToolbarController->StateChanged( nType );
-}
-
-void SpinfieldControl::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SpinField::DataChanged( rDCEvt );
-    if ( m_pSpinfieldToolbarController )
-        m_pSpinfieldToolbarController->DataChanged( rDCEvt );
 }
 
 bool SpinfieldControl::PreNotify( NotifyEvent& rNEvt )
@@ -288,21 +264,9 @@ void SpinfieldToolbarController::Modify()
     notifyTextChanged( m_pSpinfieldControl->GetText() );
 }
 
-void SpinfieldToolbarController::KeyInput( const ::KeyEvent& /*rKEvt*/ )
-{
-}
-
 void SpinfieldToolbarController::GetFocus()
 {
     notifyFocusGet();
-}
-
-void SpinfieldToolbarController::StateChanged( StateChangedType /*nType*/ )
-{
-}
-
-void SpinfieldToolbarController::DataChanged( const DataChangedEvent& /*rDCEvt*/ )
-{
 }
 
 bool SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )

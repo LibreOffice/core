@@ -57,7 +57,6 @@ class ListBoxControl : public ListBox
         virtual void dispose() override;
 
         virtual void Select() override;
-        virtual void DoubleClick() override;
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -90,13 +89,6 @@ void ListBoxControl::Select()
         m_pListBoxListener->Select();
 }
 
-void ListBoxControl::DoubleClick()
-{
-    ListBox::DoubleClick();
-    if ( m_pListBoxListener )
-        m_pListBoxListener->DoubleClick();
-}
-
 void ListBoxControl::GetFocus()
 {
     ListBox::GetFocus();
@@ -115,7 +107,7 @@ bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
     if ( m_pListBoxListener )
-        bRet = m_pListBoxListener->PreNotify( rNEvt );
+        bRet = false;
     if ( !bRet )
         bRet = ListBox::PreNotify( rNEvt );
 
@@ -184,10 +176,6 @@ void DropdownToolbarController::Select()
     }
 }
 
-void DropdownToolbarController::DoubleClick()
-{
-}
-
 void DropdownToolbarController::GetFocus()
 {
     notifyFocusGet();
@@ -196,11 +184,6 @@ void DropdownToolbarController::GetFocus()
 void DropdownToolbarController::LoseFocus()
 {
     notifyFocusLost();
-}
-
-bool DropdownToolbarController::PreNotify( NotifyEvent& /*rNEvt*/ )
-{
-    return false;
 }
 
 void DropdownToolbarController::executeControlCommand( const css::frame::ControlCommand& rControlCommand )

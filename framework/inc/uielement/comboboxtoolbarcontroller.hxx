@@ -50,9 +50,7 @@ class ComboboxToolbarController : public ComplexToolbarController
 
         // called from ComboBoxControl
         void Select();
-        void DoubleClick();
         void Modify();
-        void KeyInput( const KeyEvent& rKEvt );
         void GetFocus();
         void LoseFocus();
         bool PreNotify( NotifyEvent& rNEvt );

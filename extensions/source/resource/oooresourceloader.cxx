@@ -46,7 +46,7 @@ namespace extensions { namespace resource
 
         /** returns the RESOURCE_TYPE associated with this instance
         */
-        static RESOURCE_TYPE getResourceType();
+        static RESOURCE_TYPE getResourceType() { return RSC_STRING; }
         /** reads a single resource from the given resource manager
             @param  _resourceManager
                 the resource manager to read from
@@ -63,11 +63,6 @@ namespace extensions { namespace resource
 
     StringResourceAccess::StringResourceAccess()
     {
-    }
-
-    RESOURCE_TYPE StringResourceAccess::getResourceType()
-    {
-        return RSC_STRING;
     }
 
     Any StringResourceAccess::getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId )

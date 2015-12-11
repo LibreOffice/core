@@ -52,10 +52,8 @@ class DropdownToolbarController : public ComplexToolbarController
 
         // called from ListBoxControl
         void Select();
-        void DoubleClick();
         void GetFocus();
         void LoseFocus();
-        bool PreNotify( NotifyEvent& rNEvt );
 
     protected:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;

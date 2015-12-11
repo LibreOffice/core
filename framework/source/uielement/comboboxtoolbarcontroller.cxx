@@ -58,9 +58,7 @@ class ComboBoxControl : public ComboBox
         virtual void dispose() override;
 
         virtual void Select() override;
-        virtual void DoubleClick() override;
         virtual void Modify() override;
-        virtual void KeyInput( const ::KeyEvent& rKEvt ) override;
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -93,25 +91,11 @@ void ComboBoxControl::Select()
         m_pComboboxToolbarController->Select();
 }
 
-void ComboBoxControl::DoubleClick()
-{
-    ComboBox::DoubleClick();
-    if ( m_pComboboxToolbarController )
-        m_pComboboxToolbarController->DoubleClick();
-}
-
 void ComboBoxControl::Modify()
 {
     ComboBox::Modify();
     if ( m_pComboboxToolbarController )
         m_pComboboxToolbarController->Modify();
-}
-
-void ComboBoxControl::KeyInput( const ::KeyEvent& rKEvt )
-{
-    ComboBox::KeyInput( rKEvt );
-    if ( m_pComboboxToolbarController )
-        m_pComboboxToolbarController->KeyInput( rKEvt );
 }
 
 void ComboBoxControl::GetFocus()
@@ -200,17 +184,9 @@ void ComboboxToolbarController::Select()
     }
 }
 
-void ComboboxToolbarController::DoubleClick()
-{
-}
-
 void ComboboxToolbarController::Modify()
 {
     notifyTextChanged( m_pComboBox->GetText() );
-}
-
-void ComboboxToolbarController::KeyInput( const ::KeyEvent& )
-{
 }
 
 void ComboboxToolbarController::GetFocus()

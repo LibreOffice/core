@@ -55,11 +55,8 @@ class SpinfieldToolbarController : public ComplexToolbarController
         void Down();
         void First();
         void Last();
-        void KeyInput( const KeyEvent& rKEvt );
         void Modify();
         void GetFocus();
-        void StateChanged( StateChangedType nType );
-        void DataChanged( const DataChangedEvent& rDCEvt );
         bool PreNotify( NotifyEvent& rNEvt );
 
     protected:

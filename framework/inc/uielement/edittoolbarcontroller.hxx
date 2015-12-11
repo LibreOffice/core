@@ -51,7 +51,6 @@ class EditToolbarController : public ComplexToolbarController
 
         // called from EditControl
         void Modify();
-        void KeyInput( const KeyEvent& rKEvt );
         void GetFocus();
         void LoseFocus();
         bool PreNotify( NotifyEvent& rNEvt );

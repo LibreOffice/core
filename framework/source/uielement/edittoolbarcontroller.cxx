@@ -56,7 +56,6 @@ class EditControl : public Edit
         virtual void dispose() override;
 
         virtual void Modify() override;
-        virtual void KeyInput( const ::KeyEvent& rKEvt ) override;
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -87,13 +86,6 @@ void EditControl::Modify()
     Edit::Modify();
     if ( m_pEditToolbarController )
         m_pEditToolbarController->Modify();
-}
-
-void EditControl::KeyInput( const ::KeyEvent& rKEvt )
-{
-    Edit::KeyInput( rKEvt );
-    if ( m_pEditToolbarController )
-        m_pEditToolbarController->KeyInput( rKEvt );
 }
 
 void EditControl::GetFocus()
@@ -173,10 +165,6 @@ Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModif
 void EditToolbarController::Modify()
 {
     notifyTextChanged( m_pEditControl->GetText() );
-}
-
-void EditToolbarController::KeyInput( const ::KeyEvent& /*rKEvt*/ )
-{
 }
 
 void EditToolbarController::GetFocus()

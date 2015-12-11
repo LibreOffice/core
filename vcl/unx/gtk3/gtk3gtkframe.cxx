@@ -1367,18 +1367,12 @@ void GtkSalFrame::SetDefaultSize()
         gtk_window_maximize( GTK_WINDOW(m_pWindow) );
 }
 
-static void initClientId()
-{
-    // No session management support for gtk3+ - this is now legacy.
-}
-
 void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
 {
     if( m_pWindow )
     {
         if( bVisible )
         {
-            initClientId();
             getDisplay()->startupNotificationCompleted();
 
             if( m_bDefaultPos )
