@@ -104,7 +104,6 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/cmdevt.hxx>
-#include <vcl/combobox.h>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>

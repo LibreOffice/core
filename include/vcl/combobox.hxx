@@ -21,11 +21,14 @@
 #define INCLUDED_VCL_COMBOBOX_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/combobox.h>
 #include <vcl/edit.hxx>
+#include <vcl/lstbox.h>
+
+#define COMBOBOX_APPEND             (SAL_MAX_INT32)
+#define COMBOBOX_ENTRY_NOTFOUND     (SAL_MAX_INT32)
+#define COMBOBOX_MAX_ENTRIES        (SAL_MAX_INT32 - 1)
 
 class UserDrawEvent;
-
 class ImplListBoxFloatingWindow;
 class ImplListBox;
 class ImplBtn;

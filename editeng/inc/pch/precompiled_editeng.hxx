@@ -94,7 +94,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/combobox.h>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>

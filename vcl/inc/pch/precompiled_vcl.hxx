@@ -133,7 +133,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/combobox.h>
+#include <vcl/combobox.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
