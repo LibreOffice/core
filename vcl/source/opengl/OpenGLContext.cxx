@@ -62,6 +62,7 @@ OpenGLContext::OpenGLContext():
     mnRefCount(0),
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
+    mbVCLOnly(false),
     mnFramebufferCount(0),
     mpCurrentFramebuffer(nullptr),
     mpFirstFramebuffer(nullptr),

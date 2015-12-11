@@ -53,6 +53,7 @@ rtl::Reference<OpenGLContext> X11OpenGLSalGraphicsImpl::CreateWinContext()
 
     Window aWin = pProvider->GetX11Window();
     rtl::Reference<OpenGLContext> pContext = OpenGLContext::Create();
+    pContext->setVCLOnly();
     pContext->init( mrParent.GetXDisplay(), aWin,
                     mrParent.m_nXScreen.getXScreen() );
     return pContext;
