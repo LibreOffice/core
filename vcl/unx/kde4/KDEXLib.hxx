@@ -25,9 +25,9 @@
 
 #include <fixx11h.h>
 
-#include <qhash.h>
-#include <qsocketnotifier.h>
-#include <qtimer.h>
+#include <QtCore/QHash>
+#include <QtCore/QSocketNotifier>
+#include <QtCore/QTimer>
 
 #include <unx/salinst.h>
 

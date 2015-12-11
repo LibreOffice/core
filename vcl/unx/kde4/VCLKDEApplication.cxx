@@ -19,8 +19,8 @@
 
 #include "VCLKDEApplication.hxx"
 
-#include <QClipboard>
-#include <QEvent>
+#include <QtGui/QClipboard>
+#include <QtCore/QEvent>
 
 #include "KDESalDisplay.hxx"
 

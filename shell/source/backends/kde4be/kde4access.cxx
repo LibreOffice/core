@@ -19,11 +19,11 @@
 
 #include "sal/config.h"
 
-#include "QFont"
-#include "QString"
-#include "kemailsettings.h"
-#include "kglobalsettings.h"
-#include "kprotocolmanager.h"
+#include <QtGui/QFont>
+#include <QtCore/QString>
+#include <kemailsettings.h>
+#include <kglobalsettings.h>
+#include <kprotocolmanager.h>
 
 #include "com/sun/star/uno/Any.hxx"
 #include "cppu/unotype.hxx"

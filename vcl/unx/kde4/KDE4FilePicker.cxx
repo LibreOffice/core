@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "KDE4FilePicker.hxx"
+
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/interfacecontainer.h>
@@ -36,7 +38,6 @@
 
 #include "osl/file.h"
 
-#include "KDE4FilePicker.hxx"
 #include "FPServiceInfo.hxx"
 #include "VCLKDEApplication.hxx"
 
@@ -49,10 +50,10 @@
 #include <kservicetypetrader.h>
 #include <kmessagebox.h>
 
-#include <qclipboard.h>
-#include <QWidget>
-#include <QCheckBox>
-#include <QGridLayout>
+#include <QtGui/QClipboard>
+#include <QtGui/QWidget>
+#include <QtGui/QCheckBox>
+#include <QtGui/QGridLayout>
 
 #undef Region
 
@@ -82,7 +83,7 @@ using namespace ::com::sun::star::uno;
 
 // helper functions
 
-#include <QDebug>
+#include <QtCore/QDebug>
 
 namespace
 {

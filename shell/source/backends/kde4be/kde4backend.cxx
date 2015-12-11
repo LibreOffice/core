@@ -19,7 +19,7 @@
 
 #include "sal/config.h"
 
-#include "kapplication.h"
+#include <kapplication.h>
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/Optional.hpp"

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <QStyle>
-#include <QStyleOption>
-#include <QPainter>
-#include <QFrame>
-#include <QLabel>
+#include <QtGui/QStyle>
+#include <QtGui/QStyleOption>
+#include <QtGui/QPainter>
+#include <QtGui/QFrame>
+#include <QtGui/QLabel>
 
 #include <kapplication.h>
 #include <kdebug.h>

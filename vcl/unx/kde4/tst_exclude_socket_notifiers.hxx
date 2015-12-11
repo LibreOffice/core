@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include <qcoreapplication.h>
-#include <qeventloop.h>
-#include <qsocketnotifier.h>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QEventLoop>
+#include <QtCore/QSocketNotifier>
 #include <unistd.h>
 
 namespace

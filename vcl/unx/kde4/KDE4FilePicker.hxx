@@ -32,9 +32,9 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <QObject>
-#include <QString>
-#include <QHash>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QHash>
 
 class KFileDialog;
 class QWidget;

@@ -21,8 +21,8 @@
 
 #pragma once
 
-#include <qcoreapplication.h>
-#include <qeventloop.h>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QEventLoop>
 
 namespace
 {

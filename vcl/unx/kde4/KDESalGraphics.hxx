@@ -25,7 +25,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 
-#include <QImage>
+#include <QtGui/QImage>
 
 /** handles graphics drawings requests and performs the needed drawing operations */
 class KDESalGraphics : public X11SalGraphics

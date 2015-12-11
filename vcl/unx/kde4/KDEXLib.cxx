@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "VCLKDEApplication.hxx"
+#include "config_kde4.h"
 
+#include "KDEXLib.hxx"
+#include "VCLKDEApplication.hxx"
 #include "KDESalInstance.hxx"
 
 #include <kapplication.h>
@@ -26,21 +28,17 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kstartupinfo.h>
-#include <qabstracteventdispatcher.h>
-#include <qclipboard.h>
-#include <qthread.h>
 
-#include "KDEXLib.hxx"
+#include <QtCore/QAbstractEventDispatcher>
+#include <QtGui/QClipboard>
+#include <QtCore/QThread>
 
-#include <unx/i18n_im.hxx>
-#include <unx/i18n_xkb.hxx>
-
-#include <unx/saldata.hxx>
-#include <osl/process.h>
+#include "unx/i18n_im.hxx"
+#include "unx/i18n_xkb.hxx"
+#include "unx/saldata.hxx"
+#include "osl/process.h"
 
 #include "KDESalDisplay.hxx"
-
-#include <config_kde4.h>
 
 #if KDE_HAVE_GLIB
 #include "KDE4FilePicker.hxx"
@@ -428,7 +426,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
 #endif
 }
 
-#include <qframe.h>
+#include <QtGui/QFrame>
 
 int KDEXLib::getFrameWidth()
 {
