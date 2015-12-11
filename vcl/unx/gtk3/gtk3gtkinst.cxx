@@ -456,7 +456,7 @@ void VclGtkClipboard::OwnerChanged(GtkClipboard* clipboard, GdkEvent* /*event*/)
 void VclGtkClipboard::ClipboardClear(GtkClipboard * /*clipboard*/)
 {
     for (auto &a : m_aGtkTargets)
-        free(a.target);
+        g_free(a.target);
     m_aGtkTargets.clear();
 }
 
@@ -518,6 +518,7 @@ VclGtkClipboard::~VclGtkClipboard()
     GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
     g_object_unref(m_pOwner);
+    ClipboardClear(nullptr);
 }
 
 void VclGtkClipboard::setContents(
@@ -577,6 +578,8 @@ void VclGtkClipboard::setContents(
             //if there was a previous gtk_clipboard_set_with_data call then
             //ClipboardClearFunc will be called now
             GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+            if(G_OBJECT(m_pOwner) == gtk_clipboard_get_owner(clipboard))
+                gtk_clipboard_clear(clipboard);
             //use with_owner with m_pOwner so we can distinguish in handle_owner_change
             //if we have gained or lost ownership of the clipboard
             gtk_clipboard_set_with_owner(clipboard, aGtkTargets.data(), aGtkTargets.size(),
