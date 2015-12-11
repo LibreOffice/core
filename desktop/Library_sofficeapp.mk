@@ -127,11 +127,11 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 		desktop/source/lib/lokandroid) \
 ))
 else
-ifeq ($(GUIBASE),unx)
+#ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 ))
-endif
+#endif
 endif
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)

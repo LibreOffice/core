@@ -50,7 +50,9 @@
 #include "DateHelper.hxx"
 #include "defines.hxx"
 #include <unonames.hxx>
+#ifdef ENABLE_OPENGL
 #include <GL3DBarChart.hxx>
+#endif
 
 #include <editeng/frmdiritem.hxx>
 #include <rtl/uuid.h>
@@ -69,8 +71,9 @@
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
 #include <vcl/openglwin.hxx>
+#ifdef ENABLE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
-
+#endif
 #include <drawinglayer/XShapeDumper.hxx>
 
 #include <time.h>
@@ -1104,8 +1107,10 @@ GL2DRenderer::GL2DRenderer(ChartView* pView):
 GL2DRenderer::~GL2DRenderer()
 {
     SolarMutexGuard g;
+#ifdef ENABLE_OPENGL
     if(!mbContextDestroyed && mpWindow)
         mpWindow->setRenderer(NULL);
+#endif
     mpWindow.reset();
 }
 
@@ -1147,12 +1152,16 @@ void GL2DRenderer::updateOpenGLWindow()
     {
         if(mpWindow)
         {
+#ifdef ENABLE_OPENGL
             mpWindow->setRenderer(NULL);
+#endif
         }
 
         if(pWindow)
         {
+#ifdef ENABLE_OPENGL
             pWindow->setRenderer(this);
+#endif
         }
     }
     mpWindow = pWindow;
@@ -2610,8 +2619,11 @@ void ChartView::impl_refreshAddIn()
 bool ChartView::isReal3DChart()
 {
     uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
-
+#ifdef ENABLE_OPENGL
     return ChartHelper::isGL3DDiagram(xDiagram);
+#else
+    return false;
+#endif
 }
 
 static const char* envChartDummyFactory = getenv("CHART_DUMMY_FACTORY");
@@ -2655,6 +2667,7 @@ void ChartView::createShapes()
     pShapeFactory->setPageSize(mxRootShape, aPageSize);
     pShapeFactory->clearPage(mxRootShape);
 
+#ifdef ENABLE_OPENGL
 #if HAVE_FEATURE_DESKTOP
     if(isReal3DChart())
     {
@@ -2670,6 +2683,7 @@ void ChartView::createShapes()
         if(pWindow && !envChartDummyFactory)
             pWindow->Show(false);
     }
+#endif
 #endif
 
     createShapes2D(aPageSize);
@@ -2692,6 +2706,7 @@ void ChartView::render()
     if(!isReal3DChart())
     {
         AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+#ifdef ENABLE_OPENGL
         OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
         if(pWindow)
             pWindow->setRenderer(mp2DRenderer.get());
@@ -2701,6 +2716,7 @@ void ChartView::render()
             pShapeFactory->render(mxRootShape, pWindow != mp2DRenderer->getOpenGLWindow());
             pShapeFactory->postRender(pWindow);
         }
+#endif
     }
 }
 
@@ -3388,6 +3404,7 @@ void ChartView::createShapes3D()
 
     uno::Reference< XChartType > xChartType( aChartTypeList[0] );
 
+#ifdef ENABLE_OPENGL
     if (!m_pGL3DPlotter)
     {
         m_pGL3DPlotter.reset(new GL3DBarChart(xChartType, pWindow));
@@ -3398,7 +3415,7 @@ void ChartView::createShapes3D()
         if (pChart)
             pChart->setOpenGLWindow(pWindow);
     }
-
+#endif
     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
     OSL_ASSERT( xDataSeriesContainer.is());
     if( !xDataSeriesContainer.is() )
@@ -3417,9 +3434,11 @@ void ChartView::createShapes3D()
 
     boost::scoped_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
 
+#ifdef ENABLE_OPENGL
     m_pGL3DPlotter->create3DShapes(aDataSeries, *pCatProvider);
 
     m_pGL3DPlotter->render();
+#endif
 }
 
 void ChartView::updateOpenGLWindow()

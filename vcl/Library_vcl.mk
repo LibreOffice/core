@@ -125,18 +125,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-	vcl/opengl/DeviceInfo \
-	vcl/opengl/gdiimpl \
-	vcl/opengl/salbmp \
-	vcl/opengl/scale \
-	vcl/opengl/framebuffer \
-	vcl/opengl/program \
-	vcl/opengl/texture \
-	vcl/opengl/FixedTextureAtlas \
-    vcl/source/opengl/OpenGLContext \
-    vcl/source/opengl/OpenGLHelper \
     vcl/source/window/cairo_cairo \
-    vcl/source/window/openglwin \
     vcl/source/window/settings \
     vcl/source/window/paint \
     vcl/source/window/resource \
@@ -619,6 +608,29 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	fontconfig \
 	freetype \
 ))
+else
+ $(eval $(call gb_Library_add_exception_objects,vcl,\
+	vcl/opengl/DeviceInfo \
+	vcl/opengl/gdiimpl \
+	vcl/opengl/salbmp \
+	vcl/opengl/scale \
+	vcl/opengl/framebuffer \
+	vcl/opengl/program \
+	vcl/opengl/texture \
+	vcl/opengl/FixedTextureAtlas \
+    vcl/source/opengl/OpenGLContext \
+    vcl/source/opengl/OpenGLHelper \
+    vcl/source/window/openglwin \
+ ))
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,vcl,\
+	-lm \
+	-ldl \
+	-lpthread \
+    -lGL \
+    -lX11 \
+))
+endif
 endif
 
 ifeq ($(OS),ANDROID)
@@ -723,13 +735,13 @@ $(eval $(call gb_Library_add_libs,vcl,\
 	-lm \
 	-ldl \
 	-lpthread \
-    -lGL \
-    -lX11 \
 ))
-
+ifeq ($(ENABLE_HEADLESS),TRUE)
+else
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/x11/X11DeviceInfo \
 ))
+endif
 endif
 
 # Runtime dependency for unit-tests

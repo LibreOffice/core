@@ -79,10 +79,11 @@ SalGraphics::~SalGraphics()
 
 rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
 {
+#ifdef ENABLE_OPENGL
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(GetImpl());
     if (pImpl)
         return pImpl->GetOpenGLContext();
-
+#endif
     return NULL;
 }
 
