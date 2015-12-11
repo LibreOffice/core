@@ -1826,7 +1826,7 @@ void GlitterTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int3
     GLint location = glGetAttribLocation(m_nProgramObject, "center");
     if (location != -1) {
         glEnableVertexAttribArray(location);
-        glVertexAttribPointer( location, 3, GL_FLOAT, false, 0, NULL );
+        glVertexAttribPointer( location, 3, GL_FLOAT, false, 0, nullptr );
         CHECK_GL_ERROR();
     }
 
