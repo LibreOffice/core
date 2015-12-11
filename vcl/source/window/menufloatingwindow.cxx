@@ -1113,9 +1113,9 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 pMenu->GetItemList()->SearchItem(nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem) : NULL;
             bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
             Menu *men = pMenu;
-            while (!men->IsMenuBar())
+            while (men && !men->IsMenuBar())
                 men = men->pStartedFrom;
-            if ( pData && (static_cast<MenuBarWindow*>(men->pWindow.get()))->GetMBWMenuKey () && accel )
+            if ( men && pData && (static_cast<MenuBarWindow*>(men->pWindow.get()))->GetMBWMenuKey () && accel )
             {
                 if ( pData->pSubMenu || nDuplicates > 1 )
                 {
