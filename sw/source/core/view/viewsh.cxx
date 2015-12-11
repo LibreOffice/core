@@ -132,11 +132,6 @@ void SwViewShell::setTiledRendering(bool bTiledRendering)
     getIDocumentDrawModelAccess().GetDrawModel()->setTiledRendering(bTiledRendering);
 }
 
-bool SwViewShell::isTiledRendering() const
-{
-    return getIDocumentDrawModelAccess().GetDrawModel()->isTiledRendering();
-}
-
 void SwViewShell::setOutputToWindow(bool bOutputToWindow)
 {
     mbOutputToWindow = bOutputToWindow;
@@ -193,7 +188,7 @@ void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
             MakeDrawView();
 
         // Prefer window; if not available, get mpOut (e.g. printer)
-        const bool bWindow = GetWin() && !isTiledRendering() && !isOutputToWindow();
+        const bool bWindow = GetWin() && !comphelper::LibreOfficeKit::isActive() && !isOutputToWindow();
         mpPrePostOutDev = bWindow ? GetWin(): GetOut();
 
         // #i74769# use SdrPaintWindow now direct
@@ -422,7 +417,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                             if ( bPaintsFromSystem )
                                 PaintDesktop(*GetOut(), aRect);
-                            if (!isTiledRendering())
+                            if (!comphelper::LibreOfficeKit::isActive())
                                 pCurrentLayout->Paint( *mpOut, aRect );
                             else
                                 pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
@@ -565,7 +560,7 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
                     ::RepaintPagePreview( &rSh, rRect );
                 // In case of tiled rendering, invalidation is wanted even if
                 // the rectangle is outside the visual area.
-                else if ( rSh.VisArea().IsOver( rRect ) || rSh.isTiledRendering() )
+                else if ( rSh.VisArea().IsOver( rRect ) || comphelper::LibreOfficeKit::isActive() )
                     rSh.GetWin()->Invalidate( rRect.SVRect() );
             }
         }
@@ -576,7 +571,7 @@ const SwRect& SwViewShell::VisArea() const
 {
     // when using the tiled rendering, consider the entire document as our
     // visible area
-    return isTiledRendering()? GetLayout()->Frame(): maVisArea;
+    return comphelper::LibreOfficeKit::isActive()? GetLayout()->Frame(): maVisArea;
 }
 
 void SwViewShell::MakeVisible( const SwRect &rRect )
@@ -1027,7 +1022,7 @@ void SwViewShell::SizeChgNotify()
                 OUString sDisplay = rNum.GetNumStr( nVirtNum );
                 PageNumNotify( this, pCnt->GetPhyPageNum(), nVirtNum, sDisplay );
 
-                if (isTiledRendering())
+                if (comphelper::LibreOfficeKit::isActive())
                 {
                     Size aDocSize = GetDocSize();
                     std::stringstream ss;
@@ -1190,7 +1185,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 
     // When tiled rendering, the map mode of the window is disabled, avoid
     // enabling it here.
-    if (!isTiledRendering())
+    if (!comphelper::LibreOfficeKit::isActive())
     {
         Point aPt( VisArea().Pos() );
         aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
@@ -1868,7 +1863,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // TODO clean up SwViewShell's approach to output devices (the many of
     // them - mpBufferedOut, mpOut, mpWin, ...)
     OutputDevice *pSaveOut = mpOut;
-    bool bTiledRendering = isTiledRendering();
+    bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
     setTiledRendering(true);
     mbInLibreOfficeKitCallback = true;
     mpOut = &rDevice;

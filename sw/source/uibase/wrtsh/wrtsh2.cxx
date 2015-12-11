@@ -63,7 +63,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#include <xmloff/odffields.hxx>
 #include <memory>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

@@ -576,8 +576,6 @@ public:
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
     /// Set if we are doing tiled rendering.
     void setTiledRendering(bool bTiledRendering);
-    /// Are we doing tiled rendering?
-    bool isTiledRendering() const;
 
     void setOutputToWindow(bool bOutputToWindow);
     bool isOutputToWindow() const;
