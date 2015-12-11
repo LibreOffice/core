@@ -22,12 +22,15 @@ $(eval $(call gb_Executable_set_include,pdfunzip,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,pdfunzip,\
+    basegfx \
+    comphelper \
+    cppu \
+    cppuhelper \
     sal \
+    vcl \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,pdfunzip,\
-    pdfimport_s \
-))
+$(eval $(call gb_Executable_use_library_objects,pdfunzip,pdfimport))
 
 $(eval $(call gb_Executable_add_exception_objects,pdfunzip,\
     sdext/source/pdfimport/test/pdfunzip \

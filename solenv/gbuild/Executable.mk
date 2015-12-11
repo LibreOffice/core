@@ -126,6 +126,7 @@ $(eval $(foreach method,\
 	use_internal_api \
 	use_internal_bootstrap_api \
 	use_internal_comprehensive_api \
+	use_library_objects \
 	use_libraries \
 	use_static_libraries \
 	use_external \

@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Executable_xpdfimport \
     Library_pdfimport \
     Package_pdfimport_xpdfimport \
-    StaticLibrary_pdfimport_s \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sdext,\

@@ -33,9 +33,7 @@ $(eval $(call gb_Executable_use_libraries,pdf2xml,\
     sal \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,pdf2xml,\
-    pdfimport_s \
-))
+$(eval $(call gb_Executable_use_library_objects,pdf2xml,pdfimport))
 
 $(eval $(call gb_Executable_add_exception_objects,pdf2xml,\
     sdext/source/pdfimport/test/pdf2xml \
