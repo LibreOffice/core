@@ -10991,7 +10991,7 @@ dnl ===================================================================
 TDE_CFLAGS=""
 TDE_LIBS=""
 if test "$_os" != "OpenBSD"; then
-    MOC="moc"
+    TDE_MOC="moc"
 fi
 if test "$test_tde" = "yes" -a "$ENABLE_TDE" = "TRUE"; then
     dnl Search paths for TQt and TDE
@@ -11111,7 +11111,7 @@ your TDE installation by exporting TDEDIR before running "configure".])
 fi
 AC_SUBST(TDE_CFLAGS)
 AC_SUBST(TDE_LIBS)
-AC_SUBST(MOC)
+AC_SUBST(TDE_MOC)
 
 dnl ===================================================================
 dnl KDE4 Integration
@@ -11121,108 +11121,108 @@ KDE4_CFLAGS=""
 KDE4_LIBS=""
 QMAKE4="qmake"
 MOC4="moc"
-KDE_GLIB_CFLAGS=""
-KDE_GLIB_LIBS=""
-KDE_HAVE_GLIB=""
+KDE4_GLIB_CFLAGS=""
+KDE4_GLIB_LIBS=""
+KDE4_HAVE_GLIB=""
 if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE"; then
-    qt_incdirs="$QT4INC /usr/include/qt4 /usr/include $x_includes"
-    qt_libdirs="$QT4LIB /usr/lib/qt4 /usr/lib $x_libraries"
+    qt4_incdirs="$QT4INC /usr/include/qt4 /usr/include $x_includes"
+    qt4_libdirs="$QT4LIB /usr/lib/qt4 /usr/lib $x_libraries"
 
-    kde_incdirs="/usr/include /usr/include/kde4 $x_includes"
-    kde_libdirs="/usr/lib /usr/lib/kde4 /usr/lib/kde4/devel $x_libraries"
+    kde4_incdirs="/usr/include /usr/include/kde4 $x_includes"
+    kde4_libdirs="/usr/lib /usr/lib/kde4 /usr/lib/kde4/devel $x_libraries"
 
     if test -n "$supports_multilib"; then
-        qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
-        kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4 /usr/lib64/kde4/devel"
+        qt4_libdirs="$qt4_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
+        kde4_libdirs="$kde4_libdirs /usr/lib64 /usr/lib64/kde4 /usr/lib64/kde4/devel"
     fi
 
     if test -n "$QTDIR"; then
-        qt_incdirs="$QTDIR/include $qt_incdirs"
+        qt4_incdirs="$QTDIR/include $qt4_incdirs"
         if test -z "$supports_multilib"; then
-            qt_libdirs="$QTDIR/lib $qt_libdirs"
+            qt4_libdirs="$QTDIR/lib $qt4_libdirs"
         else
-            qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
+            qt4_libdirs="$QTDIR/lib64 $QTDIR/lib $qt4_libdirs"
         fi
     fi
     if test -n "$QT4DIR"; then
-        qt_incdirs="$QT4DIR/include $qt_incdirs"
+        qt4_incdirs="$QT4DIR/include $qt4_incdirs"
         if test -z "$supports_multilib"; then
-            qt_libdirs="$QT4DIR/lib $qt_libdirs"
+            qt4_libdirs="$QT4DIR/lib $qt4_libdirs"
         else
-            qt_libdirs="$QT4DIR/lib64 $QT4DIR/lib $qt_libdirs"
+            qt4_libdirs="$QT4DIR/lib64 $QT4DIR/lib $qt4_libdirs"
         fi
     fi
 
     if test -n "$KDEDIR"; then
-        kde_incdirs="$KDEDIR/include $kde_incdirs"
+        kde4_incdirs="$KDEDIR/include $kde4_incdirs"
         if test -z "$supports_multilib"; then
-            kde_libdirs="$KDEDIR/lib $kde_libdirs"
+            kde4_libdirs="$KDEDIR/lib $kde4_libdirs"
         else
-            kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
+            kde4_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde4_libdirs"
         fi
     fi
     if test -n "$KDE4DIR"; then
-        kde_incdirs="$KDE4DIR/include $KDE4DIR/include/kde4 $kde_incdirs"
+        kde4_incdirs="$KDE4DIR/include $KDE4DIR/include/kde4 $kde4_incdirs"
         if test -z "$supports_multilib"; then
-            kde_libdirs="$KDE4DIR/lib $kde_libdirs"
+            kde4_libdirs="$KDE4DIR/lib $kde4_libdirs"
         else
-            kde_libdirs="$KDE4DIR/lib64 $KDE4DIR/lib $kde_libdirs"
+            kde4_libdirs="$KDE4DIR/lib64 $KDE4DIR/lib $kde4_libdirs"
         fi
     fi
 
-    qt_test_include="Qt/qobject.h"
-    qt_test_library="libQtNetwork.so"
-    kde_test_include="kwindowsystem.h"
-    kde_test_library="libsolid.so"
+    qt4_test_include="Qt/qobject.h"
+    qt4_test_library="libQtNetwork.so"
+    kde4_test_include="kwindowsystem.h"
+    kde4_test_library="libsolid.so"
 
     AC_MSG_CHECKING([for Qt4 headers])
-    qt_header_dir="no"
-    for inc_dir in $qt_incdirs; do
-        if test -r "$inc_dir/$qt_test_include"; then
-            qt_header_dir="$inc_dir"
+    qt4_header_dir="no"
+    for inc_dir in $qt4_incdirs; do
+        if test -r "$inc_dir/$qt4_test_include"; then
+            qt4_header_dir="$inc_dir"
             break
         fi
     done
 
-    AC_MSG_RESULT([$qt_header_dir])
-    if test "x$qt_header_dir" = "xno"; then
+    AC_MSG_RESULT([$qt4_header_dir])
+    if test "x$qt4_header_dir" = "xno"; then
         AC_MSG_ERROR([Qt4 headers not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
     fi
 
     dnl Check for qmake
-    AC_PATH_PROG( QMAKEQT4, qmake-qt4, no, [`dirname $qt_header_dir`/bin:$QT4DIR/bin:$PATH] )
+    AC_PATH_PROG( QMAKEQT4, qmake-qt4, no, [`dirname $qt4_header_dir`/bin:$QT4DIR/bin:$PATH] )
     QMAKE4="$QMAKEQT4"
     if test "$QMAKE4" = "no"; then
-        AC_PATH_PROG( QMAKE4, qmake, no, [`dirname $qt_header_dir`/bin:$QT4DIR/bin:$PATH] )
+        AC_PATH_PROG( QMAKE4, qmake, no, [`dirname $qt4_header_dir`/bin:$QT4DIR/bin:$PATH] )
         if test "$QMAKE4" = "no"; then
             AC_MSG_ERROR([Qmake not found.  Please specify
 the root of your Qt installation by exporting QT4DIR before running "configure".])
         fi
     fi
 
-    qt_libdirs="`$QMAKE4 -query QT_INSTALL_LIBS` $qt_libdirs"
+    qt4_libdirs="`$QMAKE4 -query QT_INSTALL_LIBS` $qt4_libdirs"
     AC_MSG_CHECKING([for Qt4 libraries])
-    qt_lib_dir="no"
-    for lib_dir in $qt_libdirs; do
-        if test -r "$lib_dir/$qt_test_library"; then
-            qt_lib_dir="$lib_dir"
-            PKG_CONFIG_PATH="$qt_lib_dir"/pkgconfig:$PKG_CONFIG_PATH
+    qt4_lib_dir="no"
+    for lib_dir in $qt4_libdirs; do
+        if test -r "$lib_dir/$qt4_test_library"; then
+            qt4_lib_dir="$lib_dir"
+            PKG_CONFIG_PATH="$qt4_lib_dir"/pkgconfig:$PKG_CONFIG_PATH
             break
         fi
     done
 
-    AC_MSG_RESULT([$qt_lib_dir])
+    AC_MSG_RESULT([$qt4_lib_dir])
 
-    if test "x$qt_lib_dir" = "xno"; then
+    if test "x$qt4_lib_dir" = "xno"; then
         AC_MSG_ERROR([Qt4 libraries not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
     fi
 
     dnl Check for Meta Object Compiler
 
-    AC_PATH_PROG( MOCQT4, moc-qt4, no, [`dirname $qt_lib_dir`/bin:$QT4DIR/bin:$PATH] )
+    AC_PATH_PROG( MOCQT4, moc-qt4, no, [`dirname $qt4_lib_dir`/bin:$QT4DIR/bin:$PATH] )
     MOC4="$MOCQT4"
     if test "$MOC4" = "no"; then
-        AC_PATH_PROG( MOC4, moc, no, [`dirname $qt_lib_dir`/bin:$QT4DIR/bin:$PATH] )
+        AC_PATH_PROG( MOC4, moc, no, [`dirname $qt4_lib_dir`/bin:$QT4DIR/bin:$PATH] )
         if test "$MOC4" = "no"; then
             AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
 the root of your Qt installation by exporting QT4DIR before running "configure".])
@@ -11231,42 +11231,42 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
 
     dnl Check for KDE4 headers
     AC_MSG_CHECKING([for KDE4 headers])
-    kde_incdir="no"
-    for kde_check in $kde_incdirs; do
-        if test -r "$kde_check/$kde_test_include"; then
-            kde_incdir="$kde_check"
+    kde4_incdir="no"
+    for kde4_check in $kde4_incdirs; do
+        if test -r "$kde4_check/$kde4_test_include"; then
+            kde4_incdir="$kde4_check"
             break
         fi
     done
-    AC_MSG_RESULT([$kde_incdir])
-    if test "x$kde_incdir" = "xno"; then
+    AC_MSG_RESULT([$kde4_incdir])
+    if test "x$kde4_incdir" = "xno"; then
         AC_MSG_ERROR([KDE4 headers not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
     fi
     if test "$kde_incdir" = "/usr/include"; then kde_incdir=; fi
 
     dnl Check for KDE4 libraries
     AC_MSG_CHECKING([for KDE4 libraries])
-    kde_libdir="no"
-    for kde_check in $kde_libdirs; do
-        if test -r "$kde_check/$kde_test_library"; then
-            kde_libdir="$kde_check"
+    kde4_libdir="no"
+    for kde4_check in $kde4_libdirs; do
+        if test -r "$kde4_check/$kde4_test_library"; then
+            kde4_libdir="$kde4_check"
             break
         fi
     done
 
-    AC_MSG_RESULT([$kde_libdir])
-    if test "x$kde_libdir" = "xno"; then
+    AC_MSG_RESULT([$kde4_libdir])
+    if test "x$kde4_libdir" = "xno"; then
         AC_MSG_ERROR([KDE4 libraries not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
     fi
 
     PKG_CHECK_MODULES([QT4],[QtNetwork QtGui])
-    if ! test -z "$kde_incdir"; then
-    	KDE4_CFLAGS="-I$kde_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+    if ! test -z "$kde4_incdir"; then
+    	KDE4_CFLAGS="-I$kde4_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     else
     	KDE4_CFLAGS="$QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     fi
 
-    KDE4_LIBS="-L$kde_libdir -lkio -lkfile -lkdeui -lkdecore -L$qt_lib_dir $QT4_LIBS"
+    KDE4_LIBS="-L$kde4_libdir -lkio -lkfile -lkdeui -lkdecore -L$qt4_lib_dir $QT4_LIBS"
     KDE4_CFLAGS=$(printf '%s' "$KDE4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "$KDE4_LIBS"
     KDE4_LIBS="$filteredlibs"
@@ -11287,14 +11287,14 @@ int main(int argc, char **argv) {
     AC_LANG_POP([C++])
 
     # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
-    # Sets also KDE_GLIB_CFLAGS/KDE_GLIB_LIBS if successful.
-    PKG_CHECK_MODULES(KDE_GLIB,[glib-2.0 >= 2.4],
+    # Sets also KDE4_GLIB_CFLAGS/KDE4_GLIB_LIBS if successful.
+    PKG_CHECK_MODULES(KDE4_GLIB,[glib-2.0 >= 2.4],
         [
-            KDE_HAVE_GLIB=1
-            AC_DEFINE(KDE_HAVE_GLIB,1)
-            KDE_GLIB_CFLAGS=$(printf '%s' "$KDE_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-            FilterLibs "${KDE_GLIB_LIBS}"
-            KDE_GLIB_LIBS="${filteredlibs}"
+            KDE4_HAVE_GLIB=1
+            AC_DEFINE(KDE4_HAVE_GLIB,1)
+            KDE4_GLIB_CFLAGS=$(printf '%s' "$KDE4_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+            FilterLibs "${KDE4_GLIB_LIBS}"
+            KDE4_GLIB_LIBS="${filteredlibs}"
 
             qt4_fix_warning=
 
@@ -11391,9 +11391,9 @@ fi
 AC_SUBST(KDE4_CFLAGS)
 AC_SUBST(KDE4_LIBS)
 AC_SUBST(MOC4)
-AC_SUBST(KDE_GLIB_CFLAGS)
-AC_SUBST(KDE_GLIB_LIBS)
-AC_SUBST(KDE_HAVE_GLIB)
+AC_SUBST(KDE4_GLIB_CFLAGS)
+AC_SUBST(KDE4_GLIB_LIBS)
+AC_SUBST(KDE4_HAVE_GLIB)
 
 dnl ===================================================================
 dnl Test whether to include Evolution 2 support

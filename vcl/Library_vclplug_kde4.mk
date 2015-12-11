@@ -64,13 +64,13 @@ $(eval $(call gb_Library_add_libs,vclplug_kde4,\
 	-lICE \
 ))
 
-ifneq ($(KDE_HAVE_GLIB),)
+ifneq ($(KDE4_HAVE_GLIB),)
 $(eval $(call gb_Library_add_defs,vclplug_kde4,\
-    $(KDE_GLIB_CFLAGS) \
+    $(KDE4_GLIB_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_libs,vclplug_kde4,\
-    $(KDE_GLIB_LIBS) \
+    $(KDE4_GLIB_LIBS) \
 ))
 endif
 
