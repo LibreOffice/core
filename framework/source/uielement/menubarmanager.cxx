@@ -549,13 +549,14 @@ void MenuBarManager::RemoveListener()
             }
 
             pItemHandler->xMenuItemDispatch.clear();
+
+            // Remove popup menu from menu structure (regardless whether an
+            // xPopupMenu proxy has been set up for it; calling SetPopupMenu for
+            // a non-popup child will effectively do nothing:
+            m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, nullptr );
+
             if ( pItemHandler->xPopupMenu.is() )
             {
-                {
-                    // Remove popup menu from menu structure
-                    m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, nullptr );
-                }
-
                 Reference< css::lang::XEventListener > xEventListener( pItemHandler->xPopupMenuController, UNO_QUERY );
                 if ( xEventListener.is() )
                 {
