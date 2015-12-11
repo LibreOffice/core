@@ -5604,7 +5604,7 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
                       nX), Size( nLineWidth, nWidth ) )
             : SwRect( Point( nX, Frame().Pos().Y() + rInf.GetTopDist() ),
                             Size( nWidth, rInf.GetLineWidth()));
-    if ( aLineRect.HasArea() )
+    if ( aLineRect.HasArea() && rInf.GetLineStyle() != css::table::BorderLineStyle::NONE)
         PaintBorderLine( rRect, aLineRect , pPage, &rInf.GetLineColor(),
                 rInf.GetLineStyle() );
 }
