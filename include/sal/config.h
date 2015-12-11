@@ -114,5 +114,4 @@
 
 #endif // INCLUDED_SAL_CONFIG_H
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
