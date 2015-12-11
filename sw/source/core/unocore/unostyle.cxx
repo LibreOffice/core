@@ -459,7 +459,7 @@ sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>(const SwDoc& rDoc, OUString
             *pString = pFormat->GetName();
             break;
         }
-        nCount++;
+        ++nCount;
     }
     return nCount + nPoolFrameRange;
 }
