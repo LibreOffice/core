@@ -2056,7 +2056,7 @@ void OpenGLSalGraphicsImpl::doFlush()
         VCL_GL_INFO( "bound bits etc." );
 
         GLfloat aTexCoord[8];
-        maOffscreenTex.GetCoord( aTexCoord, aPosAry, false );
+        maOffscreenTex.GetCoord( aTexCoord, aPosAry );
         pProgram->SetTextureCoord( aTexCoord );
 
         long nX1( aPosAry.mnDestX );
