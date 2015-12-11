@@ -803,6 +803,8 @@ void LineListBox::InsertEntry(
 
 sal_Int32 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 {
+    if(nStyle == css::table::BorderLineStyle::NONE && !m_sNone.isEmpty())
+        return 0;
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
         ImpLineListData* pData = (*pLineList)[ i ];
         if ( pData )
