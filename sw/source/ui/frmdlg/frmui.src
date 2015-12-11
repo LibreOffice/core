@@ -19,25 +19,6 @@
 #include "frmui.hrc"
 
 /*-----------------------------------------------------------------------
-    Description: V-Align
- -----------------------------------------------------------------------*/
-String STR_TOP
-{
-    Text [ en-US ] = "~Top" ;
-};
-String STR_BOTTOM
-{
-    Text [ en-US ] = "~Bottom" ;
-};
-String STR_CENTER_VERT
-{
-    Text [ en-US ] = "C~enter" ;
-};
-String STR_CENTER_HORI
-{
-    Text [ en-US ] = "~Center" ;
-};
-/*-----------------------------------------------------------------------
     Description: V-Rel
  -----------------------------------------------------------------------*/
 String STR_TOPPRT

@@ -40,6 +40,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/sidebar/CommandInfoProvider.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
@@ -739,21 +740,25 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( nWhich );
                     else
                     {
-                        sal_uInt16 nId = 0;
+                        // These slots need different labels depending on whether they are anchored in a character
+                        // or on a paragraph/page etc.
+                        OUString sNewLabel;
                         if (eFrmType & FrmTypeFlags::FLY_INCNT)
                         {
                             switch (nWhich)
                             {
                                 case SID_OBJECT_ALIGN_UP     :
                                 case FN_FRAME_ALIGN_VERT_TOP:
-                                    nId = STR_TOP_BASE; break;
+                                    sNewLabel = SW_RES(STR_TOP_BASE);
+                                    break;
                                 case SID_OBJECT_ALIGN_MIDDLE :
                                 case FN_FRAME_ALIGN_VERT_CENTER:
-                                    nId = STR_CENTER_BASE;  break;
+                                    sNewLabel = SW_RES(STR_CENTER_BASE);
+                                    break;
                                 case SID_OBJECT_ALIGN_DOWN :
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
                                     if(!bHtmlMode)
-                                        nId = STR_BOTTOM_BASE;
+                                        sNewLabel = SW_RES(STR_BOTTOM_BASE);
                                     else
                                         rSet.DisableItem( nWhich );
                                 break;
@@ -782,17 +787,20 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             {
                                 case SID_OBJECT_ALIGN_UP :
                                 case FN_FRAME_ALIGN_VERT_TOP:
-                                    nId = STR_TOP; break;
+                                    sNewLabel = sfx2::sidebar::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignTop", GetFrame()->GetFrame().GetFrameInterface());
+                                    break;
                                 case SID_OBJECT_ALIGN_MIDDLE:
                                 case FN_FRAME_ALIGN_VERT_CENTER:
-                                    nId = STR_CENTER_VERT; break;
+                                    sNewLabel = sfx2::sidebar::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignVerticalCenter", GetFrame()->GetFrame().GetFrameInterface());
+                                    break;
                                 case SID_OBJECT_ALIGN_DOWN:
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                                    nId = STR_BOTTOM; break;
+                                    sNewLabel = sfx2::sidebar::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignBottom", GetFrame()->GetFrame().GetFrameInterface());
+                                    break;
                             }
                         }
-                        if ( nId )
-                            rSet.Put( SfxStringItem( nWhich, SW_RES(nId) ));
+                        if ( !sNewLabel.isEmpty() )
+                            rSet.Put( SfxStringItem( nWhich, sNewLabel ));
                     }
                 break;
                 case SID_HYPERLINK_GETLINK:
