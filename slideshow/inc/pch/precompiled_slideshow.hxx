@@ -125,7 +125,6 @@
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/graph.h>
 #include <vcl/graph.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>

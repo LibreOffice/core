@@ -140,7 +140,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/graph.h>
 #include <vcl/graph.hxx>
 #include <vcl/group.hxx>
 #include <vcl/hatch.hxx>

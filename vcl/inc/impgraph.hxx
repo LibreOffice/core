@@ -24,7 +24,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/graph.h>
+#include <vcl/graph.hxx>
 #include <vcl/svgdata.hxx>
 
 // - ImpSwapInfo -

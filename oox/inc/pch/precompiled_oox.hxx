@@ -86,7 +86,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/graph.h>
 #include <vcl/graph.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/svgdata.hxx>

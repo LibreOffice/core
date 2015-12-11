@@ -23,25 +23,54 @@
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
+#include <rtl/ustring.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/graph.h>
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/svgdata.hxx>
 
+
+enum GraphicType
+{
+    GRAPHIC_NONE,
+    GRAPHIC_BITMAP,
+    GRAPHIC_GDIMETAFILE,
+    GRAPHIC_DEFAULT
+};
+
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
-
-
-// - Graphic -
-
-
-class   ImpGraphic;
-class   OutputDevice;
 namespace vcl { class Font; }
-class   GfxLink;
+
+class GfxLink;
+class ImpGraphic;
+class OutputDevice;
+class ReaderData;
+
+class VCL_DLLPUBLIC GraphicReader
+{
+protected:
+
+    OUString        maUpperName;
+    ReaderData*     mpReaderData;
+
+                    GraphicReader() :
+                        mpReaderData( NULL ) {}
+
+public:
+
+    virtual         ~GraphicReader();
+
+    const OUString&   GetUpperFilterName() const { return maUpperName; }
+
+    // TODO: when incompatible changes are possible again
+    // the preview size hint should be redone
+    void            DisablePreviewMode();
+    void            SetPreviewSize( const Size& );
+    Size            GetPreviewSize() const;
+};
 
 class VCL_DLLPUBLIC GraphicConversionParameters
 {
