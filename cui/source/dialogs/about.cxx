@@ -296,7 +296,6 @@ OUString AboutDialog::GetVersionString()
 
     sVersion += "\n";
     sVersion += Application::GetHWOSConfInfo();
-    sVersion += "\n";
 
     if (EXTRA_BUILDID[0] != '\0')
     {
