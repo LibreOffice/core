@@ -877,27 +877,27 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
-    :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
-        aMultiTextWnd        ( VclPtr<ScMultiTextWnd>::Create(this, pViewSh) ),
-        aButton              ( VclPtr<ImageButton>::Create(this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE) ),
-        aScrollBar           ( VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG) ),
-        nVertOffset          ( 0 )
+    : ScTextWndBase(pParent, WinBits(WB_HIDE | WB_TABSTOP)),
+      maTextWnd(VclPtr<ScMultiTextWnd>::Create(this, pViewSh)),
+      maButton(VclPtr<ImageButton>::Create(this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE)),
+      maScrollbar(VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG)),
+      mnVertOffset(0)
 {
-    aMultiTextWnd->Show();
-    aMultiTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
-    aMultiTextWnd->SetHelpId(HID_INSWIN_INPUT);
+    maTextWnd->Show();
+    maTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+    maTextWnd->SetHelpId(HID_INSWIN_INPUT);
 
-    Size aSize(GetSettings().GetStyleSettings().GetScrollBarSize(), aMultiTextWnd->GetPixelHeightForLines(1));
+    Size aSize(GetSettings().GetStyleSettings().GetScrollBarSize(), maTextWnd->GetPixelHeightForLines(1));
 
-    aButton->SetClickHdl(LINK(this, ScInputBarGroup, ClickHdl));
-    aButton->SetSizePixel(aSize);
-    aButton->Enable();
-    aButton->SetSymbol(SymbolType::SPIN_DOWN);
-    aButton->SetQuickHelpText(ScResId(SCSTR_QHELP_EXPAND_FORMULA));
-    aButton->Show();
+    maButton->SetClickHdl(LINK(this, ScInputBarGroup, ClickHdl));
+    maButton->SetSizePixel(aSize);
+    maButton->Enable();
+    maButton->SetSymbol(SymbolType::SPIN_DOWN);
+    maButton->SetQuickHelpText(ScResId(SCSTR_QHELP_EXPAND_FORMULA));
+    maButton->Show();
 
-    aScrollBar->SetSizePixel(aSize);
-    aScrollBar->SetScrollHdl(LINK(this, ScInputBarGroup, Impl_ScrollHdl));
+    maScrollbar->SetSizePixel(aSize);
+    maScrollbar->SetScrollHdl(LINK(this, ScInputBarGroup, Impl_ScrollHdl));
 }
 
 ScInputBarGroup::~ScInputBarGroup()
@@ -907,30 +907,30 @@ ScInputBarGroup::~ScInputBarGroup()
 
 void ScInputBarGroup::dispose()
 {
-    aMultiTextWnd.disposeAndClear();
-    aButton.disposeAndClear();
-    aScrollBar.disposeAndClear();
+    maTextWnd.disposeAndClear();
+    maButton.disposeAndClear();
+    maScrollbar.disposeAndClear();
     ScTextWndBase::dispose();
 }
 
 void ScInputBarGroup::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    aMultiTextWnd->InsertAccessibleTextData( rTextData );
+    maTextWnd->InsertAccessibleTextData( rTextData );
 }
 
 void ScInputBarGroup::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    aMultiTextWnd->RemoveAccessibleTextData( rTextData );
+    maTextWnd->RemoveAccessibleTextData( rTextData );
 }
 
 const OUString& ScInputBarGroup::GetTextString() const
 {
-    return aMultiTextWnd->GetTextString();
+    return maTextWnd->GetTextString();
 }
 
 void ScInputBarGroup::SetTextString( const OUString& rString )
 {
-    aMultiTextWnd->SetTextString(rString);
+    maTextWnd->SetTextString(rString);
 }
 
 void ScInputBarGroup::Resize()
@@ -951,89 +951,89 @@ void ScInputBarGroup::Resize()
     Size aSize  = GetSizePixel();
     aSize.Width() = std::max(long(nWidth - nLeft - LEFT_OFFSET), long(0));
 
-    aScrollBar->SetPosPixel(Point( aSize.Width() - aButton->GetSizePixel().Width(), aButton->GetSizePixel().Height() ) );
+    maScrollbar->SetPosPixel(Point( aSize.Width() - maButton->GetSizePixel().Width(), maButton->GetSizePixel().Height() ) );
 
     Size aTmpSize( aSize );
-    aTmpSize.Width() = aTmpSize.Width() - aButton->GetSizePixel().Width() - BUTTON_OFFSET;
-    aMultiTextWnd->SetSizePixel(aTmpSize);
+    aTmpSize.Width() = aTmpSize.Width() - maButton->GetSizePixel().Width() - BUTTON_OFFSET;
+    maTextWnd->SetSizePixel(aTmpSize);
 
-    aMultiTextWnd->Resize();
+    maTextWnd->Resize();
 
-    aSize.Height() = aMultiTextWnd->GetSizePixel().Height();
+    aSize.Height() = maTextWnd->GetSizePixel().Height();
 
     SetSizePixel(aSize);
 
-    if (aMultiTextWnd->GetNumLines() > 1)
+    if (maTextWnd->GetNumLines() > 1)
     {
-        aButton->SetSymbol( SymbolType::SPIN_UP  );
-        aButton->SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
-        Size scrollSize = aButton->GetSizePixel();
-        scrollSize.Height() = aMultiTextWnd->GetSizePixel().Height() - aButton->GetSizePixel().Height();
-        aScrollBar->SetSizePixel( scrollSize );
+        maButton->SetSymbol( SymbolType::SPIN_UP  );
+        maButton->SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
+        Size scrollSize = maButton->GetSizePixel();
+        scrollSize.Height() = maTextWnd->GetSizePixel().Height() - maButton->GetSizePixel().Height();
+        maScrollbar->SetSizePixel( scrollSize );
 
-        Size aOutSz = aMultiTextWnd->GetOutputSize();
+        Size aOutSz = maTextWnd->GetOutputSize();
 
-        aScrollBar->SetVisibleSize( aOutSz.Height() );
-        aScrollBar->SetPageSize( aOutSz.Height() );
-        aScrollBar->SetLineSize( aMultiTextWnd->GetTextHeight() );
-        aScrollBar->SetRange( Range( 0, aMultiTextWnd->GetEditEngTxtHeight() ) );
+        maScrollbar->SetVisibleSize( aOutSz.Height() );
+        maScrollbar->SetPageSize( aOutSz.Height() );
+        maScrollbar->SetLineSize( maTextWnd->GetTextHeight() );
+        maScrollbar->SetRange( Range( 0, maTextWnd->GetEditEngTxtHeight() ) );
 
-        aScrollBar->Resize();
-        aScrollBar->Show();
+        maScrollbar->Resize();
+        maScrollbar->Show();
     }
     else
     {
-        aButton->SetSymbol( SymbolType::SPIN_DOWN  );
-        aButton->SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
-        aScrollBar->Hide();
+        maButton->SetSymbol( SymbolType::SPIN_DOWN  );
+        maButton->SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
+        maScrollbar->Hide();
     }
 
-    aButton->SetPosPixel(Point(aSize.Width() - aButton->GetSizePixel().Width(), 0));
+    maButton->SetPosPixel(Point(aSize.Width() - maButton->GetSizePixel().Width(), 0));
 
     Invalidate();
 }
 
 void ScInputBarGroup::StopEditEngine( bool bAll )
 {
-    aMultiTextWnd->StopEditEngine( bAll );
+    maTextWnd->StopEditEngine( bAll );
 }
 
 void ScInputBarGroup::StartEditEngine()
 {
-    aMultiTextWnd->StartEditEngine();
+    maTextWnd->StartEditEngine();
 }
 
 void ScInputBarGroup::MakeDialogEditView()
 {
-    aMultiTextWnd->MakeDialogEditView();
+    maTextWnd->MakeDialogEditView();
 }
 
 EditView* ScInputBarGroup::GetEditView()
 {
-    return aMultiTextWnd->GetEditView();
+    return maTextWnd->GetEditView();
 }
 
 bool ScInputBarGroup::IsInputActive()
 {
-    return aMultiTextWnd->IsInputActive();
+    return maTextWnd->IsInputActive();
 }
 
 void ScInputBarGroup::SetFormulaMode(bool bSet)
 {
-    aMultiTextWnd->SetFormulaMode(bSet);
+    maTextWnd->SetFormulaMode(bSet);
 }
 
 void ScInputBarGroup::IncrementVerticalSize()
 {
-    aMultiTextWnd->SetNumLines( aMultiTextWnd->GetNumLines() + 1 );
+    maTextWnd->SetNumLines( maTextWnd->GetNumLines() + 1 );
     TriggerToolboxLayout();
 }
 
 void ScInputBarGroup::DecrementVerticalSize()
 {
-    if ( aMultiTextWnd->GetNumLines() > 1 )
+    if ( maTextWnd->GetNumLines() > 1 )
     {
-        aMultiTextWnd->SetNumLines( aMultiTextWnd->GetNumLines() - 1 );
+        maTextWnd->SetNumLines( maTextWnd->GetNumLines() - 1 );
         TriggerToolboxLayout();
     }
 }
@@ -1049,19 +1049,19 @@ IMPL_LINK_NOARG_TYPED(ScInputBarGroup, ClickHdl, Button*, void)
         OSL_FAIL("The parent window pointer pParent is null");
         return;
     }
-    if (aMultiTextWnd->GetNumLines() > 1)
+    if (maTextWnd->GetNumLines() > 1)
     {
-        aMultiTextWnd->SetNumLines(1);
+        maTextWnd->SetNumLines(1);
     }
     else
     {
-        aMultiTextWnd->SetNumLines(aMultiTextWnd->GetLastNumExpandedLines());
+        maTextWnd->SetNumLines(maTextWnd->GetLastNumExpandedLines());
     }
     TriggerToolboxLayout();
 
     // Restore focus to input line(s) if necessary
     if (  SC_MOD()->GetInputHdl()->IsTopMode() )
-        aMultiTextWnd->GrabFocus();
+        maTextWnd->GrabFocus();
 }
 
 void ScInputBarGroup::TriggerToolboxLayout()
@@ -1073,8 +1073,8 @@ void ScInputBarGroup::TriggerToolboxLayout()
     // Capture the vertical position of this window in the toolbar, when we increase
     // the size of the toolbar to accommodate expanded line input we need to take this
     // into account
-    if ( !nVertOffset )
-        nVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();
+    if ( !mnVertOffset )
+        mnVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();
 
     if ( pViewFrm )
     {
@@ -1089,7 +1089,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
         if ( xLayoutManager.is() )
         {
-            if ( aMultiTextWnd->GetNumLines() > 1)
+            if ( maTextWnd->GetNumLines() > 1)
                 rParent.SetToolbarLayoutMode( TBX_LAYOUT_LOCKVERT );
             else
                 rParent.SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
@@ -1117,12 +1117,12 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
 IMPL_LINK_NOARG_TYPED(ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, void)
 {
-    aMultiTextWnd->DoScroll();
+    maTextWnd->DoScroll();
 }
 
 void ScInputBarGroup::TextGrabFocus()
 {
-    aMultiTextWnd->TextGrabFocus();
+    maTextWnd->TextGrabFocus();
 }
 
 ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )

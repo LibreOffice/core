@@ -215,17 +215,17 @@ public:
     void            SetFormulaMode( bool bSet ) override;
     void            MakeDialogEditView() override;
     bool            IsInputActive() override;
-    ScrollBar&      GetScrollBar() { return *aScrollBar.get(); }
+    ScrollBar&      GetScrollBar() { return *maScrollbar.get(); }
     void            IncrementVerticalSize();
     void            DecrementVerticalSize();
-    long            GetNumLines() { return aMultiTextWnd->GetNumLines(); }
-    long            GetVertOffset() { return  nVertOffset; }
+    long            GetNumLines() { return maTextWnd->GetNumLines(); }
+    long            GetVertOffset() { return  mnVertOffset; }
 private:
     void            TriggerToolboxLayout();
-    VclPtr<ScMultiTextWnd>  aMultiTextWnd;
-    VclPtr<ImageButton>     aButton;
-    VclPtr<ScrollBar>       aScrollBar;
-    long            nVertOffset;
+    VclPtr<ScMultiTextWnd>  maTextWnd;
+    VclPtr<ImageButton>     maButton;
+    VclPtr<ScrollBar>       maScrollbar;
+    long            mnVertOffset;
     DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_LINK_TYPED( Impl_ScrollHdl, ScrollBar*, void );
 
