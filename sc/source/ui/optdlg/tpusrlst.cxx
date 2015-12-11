@@ -344,7 +344,7 @@ void ScTpUserLists::AddNewList( const OUString& rEntriesStr )
 
     MakeListStr( theEntriesStr );
 
-    pUserLists->push_back(ScUserListData(rEntriesStr));
+    pUserLists->push_back(new ScUserListData(theEntriesStr));
 }
 
 void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
