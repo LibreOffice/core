@@ -305,6 +305,30 @@ DECLARE_OOXMLEXPORT_TEST(testChartDupe, "chart-dupe.docx")
     uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
     // This was 2, on second import we got a duplicated chart copy.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEmbeddedObjects->getCount());
+
+    xmlDocPtr pXmlDocCT = parseExport("[Content_Types].xml");
+
+    if (!pXmlDocCT)
+       return; // initial import
+
+    assertXPath(pXmlDocCT,
+        "/ContentType:Types/ContentType:Override[@PartName='/word/charts/chart1.xml']",
+        "ContentType",
+        "application/vnd.openxmlformats-officedocument.drawingml.chart+xml");
+    assertXPath(pXmlDocCT, "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/Microsoft_Excel_Worksheet1.xlsx']", "ContentType", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/charts/_rels/chart1.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='../embeddings/Microsoft_Excel_Worksheet1.xlsx']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocChart1 = parseExport("word/charts/chart1.xml");
+    assertXPath(pXmlDocChart1,
+        "/c:chartSpace/c:externalData",
+        "id",
+        "rId1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPositionAndRotation, "position-and-rotation.docx")
