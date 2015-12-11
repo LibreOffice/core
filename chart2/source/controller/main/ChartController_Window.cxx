@@ -1252,7 +1252,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     // handle accelerators
     if( ! m_apAccelExecute.get() && m_xFrame.is() && m_xCC.is() )
     {
-        m_apAccelExecute.reset( ::svt::AcceleratorExecute::createAcceleratorHelper());
+        m_apAccelExecute = ::svt::AcceleratorExecute::createAcceleratorHelper();
         OSL_ASSERT( m_apAccelExecute.get());
         if( m_apAccelExecute.get() )
             m_apAccelExecute->init( m_xCC, m_xFrame );

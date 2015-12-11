@@ -47,7 +47,7 @@ namespace dbaui
         ,m_xController( &_rController )
         ,m_aSeparator( VclPtr<FixedLine>::Create(this) )
     {
-        m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
+        m_pAccel = ::svt::AcceleratorExecute::createAcceleratorHelper();
         m_aSeparator->Show();
     }
 

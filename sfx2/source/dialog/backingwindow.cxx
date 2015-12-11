@@ -442,7 +442,7 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
         // try the 'normal' accelerators (so that eg. Ctrl+Q works)
         if (!mpAccExec)
         {
-            mpAccExec.reset(svt::AcceleratorExecute::createAcceleratorHelper());
+            mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
             mpAccExec->init( comphelper::getProcessComponentContext(), mxFrame);
         }
 

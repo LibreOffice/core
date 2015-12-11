@@ -22,6 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 
+#include <memory>
 #include <vector>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -114,7 +115,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                          environment will be recognized ... The helper stop its
                          work immediately then!
          */
-        static AcceleratorExecute* createAcceleratorHelper();
+        static std::unique_ptr<AcceleratorExecute> createAcceleratorHelper();
 
 
         /** @short  fight against inlining ... */

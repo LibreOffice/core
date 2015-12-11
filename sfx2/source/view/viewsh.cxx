@@ -1619,8 +1619,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 {
     if (!pImp->m_xAccExec.get())
     {
-        pImp->m_xAccExec.reset(
-            ::svt::AcceleratorExecute::createAcceleratorHelper() );
+        pImp->m_xAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
         pImp->m_xAccExec->init(::comphelper::getProcessComponentContext(),
             pFrame->GetFrame().GetFrameInterface());
     }

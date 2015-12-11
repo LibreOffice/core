@@ -93,10 +93,9 @@ AcceleratorExecute::~AcceleratorExecute()
 }
 
 
-AcceleratorExecute* AcceleratorExecute::createAcceleratorHelper()
+std::unique_ptr<AcceleratorExecute> AcceleratorExecute::createAcceleratorHelper()
 {
-    AcceleratorExecute* pNew = new AcceleratorExecute();
-    return pNew;
+    return std::unique_ptr<AcceleratorExecute>(new AcceleratorExecute);
 }
 
 
