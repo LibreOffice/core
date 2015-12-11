@@ -58,13 +58,17 @@ namespace drawinglayer { namespace primitive2d {
     {
     public:
         explicit Primitive2DContainer() {}
-        explicit Primitive2DContainer( size_type count ) : std::vector< Primitive2DReference >(count) {}
-        Primitive2DContainer( const Primitive2DContainer& other ) : std::vector< Primitive2DReference >(other) {}
-        Primitive2DContainer( const std::vector< Primitive2DReference >& other ) : std::vector< Primitive2DReference >(other) {}
-        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : std::vector< Primitive2DReference >(init) {}
+        explicit Primitive2DContainer( size_type count ) : vector(count) {}
+        Primitive2DContainer( const Primitive2DContainer& other ) : vector(other) {}
+        Primitive2DContainer( const Primitive2DContainer&& other ) : vector(other) {}
+        Primitive2DContainer( const vector< Primitive2DReference >& other ) : vector(other) {}
+        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : vector(init) {}
 
         void append(const Primitive2DContainer& rSource);
         void append(const Primitive2DSequence& rSource);
+        void append(Primitive2DContainer&& rSource);
+        Primitive2DContainer& operator=(const Primitive2DContainer& r) { vector::operator=(r); return *this; }
+        Primitive2DContainer& operator=(const Primitive2DContainer&& r) { vector::operator=(r); return *this; }
         bool operator==(const Primitive2DContainer& rB) const;
         bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
         basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
