@@ -55,10 +55,6 @@ $(eval $(call gb_Library_use_externals,jvmfwk,\
 ))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_cxxflags,jvmfwk,\
-    $(gb_OBJCXXFLAGS) \
-))
-
 $(eval $(call gb_Library_add_objcxxobjects,jvmfwk,\
     jvmfwk/plugins/sunmajor/pluginlib/util_cocoa \
 ))

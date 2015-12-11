@@ -22,24 +22,54 @@ bool JvmfwkUtil_isLoadableJVM( OUString const & aURL )
         if ( pString )
         {
             NSURL *pURL = nil;
-
-            // Ignore all but Oracle's JDK as loading Apple's Java and Oracle's
-            // JRE will cause OS X's JavaVM framework to display a dialog and
-            // invoke exit() when loaded via JNI on OS X 10.10
             NSURL *pTmpURL = [NSURL URLWithString:pString];
             if ( pTmpURL )
+            {
+              #if MACOSX_SDK_VERSION >= 1060
                 pTmpURL = [pTmpURL filePathURL];
-            if ( pTmpURL )
-                pTmpURL = [pTmpURL URLByStandardizingPath];
-            if ( pTmpURL )
-                pTmpURL = [pTmpURL URLByResolvingSymlinksInPath];
+              #else
+                pTmpURL = [ NSURL URLWithString:(NSString*)( CFURLCopyFileSystemPath( (CFURLRef)pTmpURL, kCFURLPOSIXPathStyle ) ) ];
+              #endif
+            }
             if ( pTmpURL )
             {
+              #if MACOSX_SDK_VERSION < 1060
+                pTmpURL = [ NSURL URLWithString:[[pTmpURL path] stringByStandardizingPath] ];
+              #else
+                pTmpURL = [pTmpURL URLByStandardizingPath];
+              #endif
+            }
+            if ( pTmpURL )
+            {
+              #if MACOSX_SDK_VERSION < 1060
+                pTmpURL = [ NSURL URLWithString:[[pTmpURL path] stringByResolvingSymlinksInPath] ];
+              #else
+                pTmpURL = [pTmpURL URLByResolvingSymlinksInPath];
+              #endif
+            }
+            if ( pTmpURL )
+            {
+              #if MACOSX_SDK_VERSION >= 1080
                 NSURL *pJVMsDirURL = [NSURL URLWithString:@"file:///Library/Java/JavaVirtualMachines/"];
+              #else
+                NSURL *pJVMsDirURL = [NSURL URLWithString:@"file:///System/Library/Frameworks/JavaVM.framework/Versions/"];
+              #endif
                 if ( pJVMsDirURL )
-                    pJVMsDirURL= [pJVMsDirURL filePathURL];
+                {
+                  #if MACOSX_SDK_VERSION >= 1060
+                    pJVMsDirURL = [pJVMsDirURL filePathURL];
+                  #else
+                    pJVMsDirURL = [ NSURL URLWithString:(NSString*)( CFURLCopyFileSystemPath( (CFURLRef)pJVMsDirURL, kCFURLPOSIXPathStyle ) ) ];
+                  #endif
+                }
                 if ( pJVMsDirURL )
+                {
+                  #if MACOSX_SDK_VERSION < 1060
+                    pJVMsDirURL = [ NSURL URLWithString:[[pJVMsDirURL path] stringByStandardizingPath] ];
+                  #else
                     pJVMsDirURL = [pJVMsDirURL URLByStandardizingPath];
+                  #endif
+                }
                 // The JVM directory must not contain softlinks or the JavaVM
                 // framework bug will occur so don't resolve softlinks in the
                 // JVM directory
@@ -56,14 +86,16 @@ bool JvmfwkUtil_isLoadableJVM( OUString const & aURL )
                 }
             }
 
+#if MACOSX_SDK_VERSION >= 1080
             while ( pURL )
             {
                 // Check if this is a valid bundle
-                NSNumber *pDir = nil;
-                NSURL *pContentsURL = [pURL URLByAppendingPathComponent:@"Contents"];
-                if ( pContentsURL && [pContentsURL getResourceValue:&pDir forKey:NSURLIsDirectoryKey error:nil] && pDir && [pDir boolValue] )
+                NSURL *pContentsURL = nil;
+                pContentsURL = [pURL URLByAppendingPathComponent:@"Contents"]; //[NSURL URLWithString:[[pURL path] stringByAppendingPathComponent:@"Contents"]];
+                BOOL isDir = NO;
+                if ( pContentsURL && [[NSFileManager defaultManager] fileExistsAtPath:[pContentsURL path] isDirectory:&isDir] && isDir )
                 {
-                    NSBundle *pBundle = [NSBundle bundleWithURL:pURL];
+                    NSBundle *pBundle = [NSBundle bundleWithURL:pURL]; //[NSBundle bundleWithPath:[pURL path]];
                     if ( pBundle )
                     {
                         // Make sure that this bundle's Info.plist has the
@@ -110,18 +142,22 @@ bool JvmfwkUtil_isLoadableJVM( OUString const & aURL )
                 }
 
                 NSURL *pOldURL = pURL;
-                pURL = [pURL URLByDeletingLastPathComponent];
+                pURL = [pURL URLByDeletingLastPathComponent]; //[NSURL URLWithString:[[pURL path] stringByDeletingLastPathComponent]];
                 if ( pURL )
                 {
-                    pURL = [pURL URLByStandardizingPath];
+                    pURL = [pURL URLByStandardizingPath]; //[NSURL URLWithString:[[pURL path] stringByStandardizingPath]];
                     if ( pURL )
                     {
-                        pURL = [pURL URLByResolvingSymlinksInPath];
+                        pURL = [pURL URLByResolvingSymlinksInPath]; //[NSURL URLWithString:[[pURL path] stringByResolvingSymlinksInPath]];
                         if ( pURL && [pURL isEqual:pOldURL] )
                             pURL = nil;
                     }
                 }
             }
+#else // i.e. MACOSX_SDK_VERSION < 1080
+            if ( pURL )
+                bRet = true;
+#endif
         }
 
         [pPool release];

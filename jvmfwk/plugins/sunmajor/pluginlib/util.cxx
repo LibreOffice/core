@@ -1190,10 +1190,16 @@ void addJavaInfosDirScan(
     std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
 #ifdef MACOSX
+#if MACOSX_SDK_VERSION >= 1080
     // Ignore all but Oracle's JDK as loading Apple's Java and Oracle's JRE
     // will cause OS X's JavaVM framework to display a dialog and invoke
     // exit() when loaded via JNI on OS X 10.10
     Directory aDir("file:///Library/Java/JavaVirtualMachines");
+#else
+    // For Java versions 6 and below, Apple supplies their own version of Java,
+    // so it's under /System and not /Library
+    Directory aDir("file:///System/Library/Frameworks/JavaVM.framework/Versions");
+#endif
     if (aDir.open() == File::E_None)
     {
         DirectoryItem aItem;
@@ -1205,9 +1211,15 @@ void addJavaInfosDirScan(
                 OUString aItemURL( aStatus.getFileURL() );
                 if (aItemURL.getLength())
                 {
+                #if MACOSX_SDK_VERSION >= 1080
                     aItemURL += "/Contents/Home";
+                #else
+                    aItemURL += "/Home";
+                #endif
                     if (DirectoryItem::get(aItemURL, aItem) == File::E_None)
-                        getAndAddJREInfoByPath(aItemURL, allInfos, addedInfos);
+                    {
+                        /* bool success = */ getAndAddJREInfoByPath(aItemURL, allInfos, addedInfos);
+                    }
                 }
             }
         }

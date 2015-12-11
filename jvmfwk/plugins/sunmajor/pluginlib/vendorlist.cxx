@@ -34,14 +34,13 @@ namespace jfw_plugin
    by "\xXX\xXX"
  */
 BEGIN_VENDOR_MAP()
-// For OS X, don't bother with implementations that aren't relevant (or have never existed)
 #ifdef MACOSX
     VENDOR_MAP_ENTRY("Apple Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("Apple Computer, Inc.", OtherInfo)
 #endif
     VENDOR_MAP_ENTRY("Sun Microsystems Inc.", SunInfo)
     VENDOR_MAP_ENTRY("Oracle Corporation", SunInfo)
-#ifndef MACOSX
+#ifndef MACOSX // For OS X, don't bother with implementations that aren't relevant (or have never existed)
     VENDOR_MAP_ENTRY("IBM Corporation", OtherInfo)
     VENDOR_MAP_ENTRY("Blackdown Java-Linux Team", OtherInfo)
     VENDOR_MAP_ENTRY("BEA Systems, Inc.", OtherInfo)
