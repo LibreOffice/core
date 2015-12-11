@@ -1425,6 +1425,7 @@ static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const S
 {
     bool bChanged = false;
 
+    ScRange aErrorRange( ScAddress::UNINITIALIZED );
     ::std::vector< ScRangeList >::iterator aIt = rRangesVector.begin();
     for( ;aIt!=rRangesVector.end(); ++aIt )
     {
@@ -1437,7 +1438,10 @@ static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const S
                 SCsCOL nDiffX = rDestPos.Col() - (SCsCOL)rSourceRange.aStart.Col();
                 SCsROW nDiffY = rDestPos.Row() - (SCsROW)rSourceRange.aStart.Row();
                 SCsTAB nDiffZ = rDestPos.Tab() - (SCsTAB)rSourceRange.aStart.Tab();
-                pRange->Move( nDiffX, nDiffY, nDiffZ );
+                if (!pRange->Move( nDiffX, nDiffY, nDiffZ, aErrorRange))
+                {
+                    assert(!"can't move range");
+                }
                 bChanged = true;
             }
         }

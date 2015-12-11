@@ -207,15 +207,24 @@ void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos 
     else
         mnCol = rAddr.Col();
 
+    if (!ValidCol(rAddr.Col()))
+        SetColDeleted(true);
+
     if (Flags.bRowRel)
         mnRow = rAddr.Row() - rPos.Row();
     else
         mnRow = rAddr.Row();
 
+    if (!ValidRow(rAddr.Row()))
+        SetRowDeleted(true);
+
     if (Flags.bTabRel)
         mnTab = rAddr.Tab() - rPos.Tab();
     else
         mnTab = rAddr.Tab();
+
+    if (!ValidTab( rAddr.Tab(), MAXTAB))
+        SetTabDeleted(true);
 }
 
 SCROW ScSingleRefData::Row() const

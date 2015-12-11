@@ -246,11 +246,15 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
 
     // Re-start area listeners on the new range.
     {
+        ScRange aErrorRange( ScAddress::UNINITIALIZED );
         std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
         for (; it != itEnd; ++it)
         {
             ScRange aNewRange = it->maArea;
-            aNewRange.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
+            if (!aNewRange.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab(), aErrorRange))
+            {
+                assert(!"can't move AreaListener");
+            }
             pBASM->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
         }
     }

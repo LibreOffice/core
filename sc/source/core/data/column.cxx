@@ -2066,11 +2066,15 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
 
         if (pTop->UpdatePosOnShift(*mpCxt))
         {
+            ScAddress aErrorPos( ScAddress::UNINITIALIZED );
             // Update the positions of all formula cells.
             for (++pp; pp != ppEnd; ++pp) // skip the top cell.
             {
                 ScFormulaCell* pFC = *pp;
-                pFC->aPos.Move(mpCxt->mnColDelta, mpCxt->mnRowDelta, mpCxt->mnTabDelta);
+                if (!pFC->aPos.Move(mpCxt->mnColDelta, mpCxt->mnRowDelta, mpCxt->mnTabDelta, aErrorPos))
+                {
+                    assert(!"can't move formula cell");
+                }
             }
 
             if (pCode->IsRecalcModeOnRefMove())

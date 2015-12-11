@@ -2861,7 +2861,13 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
     ScAddress aNewPos = rOldPos;
     bool bCellShifted = rCxt.maRange.In(rOldPos);
     if (bCellShifted)
-        aNewPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+    {
+        ScAddress aErrorPos( ScAddress::UNINITIALIZED );
+        if (!aNewPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
+        {
+            assert(!"can't move");
+        }
+    }
 
     TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
     for (size_t j=0; j<2; ++j)
@@ -2903,7 +2909,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
                         if (rCxt.maRange.In(aAbs))
                         {
-                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            ScAddress aErrorPos( ScAddress::UNINITIALIZED );
+                            if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
+                                aAbs = aErrorPos;
                             aRes.mbReferenceModified = true;
                         }
 
@@ -2960,7 +2968,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
                         if (rCxt.maRange.In(aAbs))
                         {
-                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            ScRange aErrorRange( ScAddress::UNINITIALIZED );
+                            if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
+                                aAbs = aErrorRange;
                             aRes.mbReferenceModified = true;
                         }
                         else if (rCxt.maRange.Intersects(aAbs))
@@ -3031,7 +3041,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
     // When moving, the range is the destination range. We need to use the old
     // range prior to the move for hit analysis.
     ScRange aOldRange = rCxt.maRange;
-    aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+    ScRange aErrorMoveRange( ScAddress::UNINITIALIZED );
+    if (!aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta, aErrorMoveRange))
+    {
+        assert(!"can't move");
+    }
 
     bool b3DFlag = rOldPos.Tab() != rNewPos.Tab() || rCxt.mnTabDelta;
 
@@ -3054,7 +3068,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         ScAddress aAbs = rRef.toAbs(rOldPos);
                         if (aOldRange.In(aAbs))
                         {
-                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            ScAddress aErrorPos( ScAddress::UNINITIALIZED );
+                            if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
+                                aAbs = aErrorPos;
                             aRes.mbReferenceModified = true;
                         }
 
@@ -3069,7 +3085,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         ScRange aAbs = rRef.toAbs(rOldPos);
                         if (aOldRange.In(aAbs))
                         {
-                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            ScRange aErrorRange( ScAddress::UNINITIALIZED );
+                            if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
+                                aAbs = aErrorRange;
                             aRes.mbReferenceModified = true;
                         }
 
@@ -3112,7 +3130,11 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
     sc::RefUpdateResult aRes;
 
     ScRange aOldRange = rCxt.maRange;
-    aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+    ScRange aErrorMoveRange( ScAddress::UNINITIALIZED );
+    if (!aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta, aErrorMoveRange))
+    {
+        assert(!"can't move");
+    }
 
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
@@ -3127,7 +3149,9 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
                 ScAddress aAbs = rRef.toAbs(rPos);
                 if (aOldRange.In(aAbs))
                 {
-                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                    ScAddress aErrorPos( ScAddress::UNINITIALIZED );
+                    if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
+                        aAbs = aErrorPos;
                     rRef.SetAddress(aAbs, rPos);
                     if (rCxt.mnTabDelta)
                         rRef.SetFlag3D(aAbs.Tab()!=rPos.Tab());
@@ -3141,7 +3165,9 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
                 ScRange aAbs = rRef.toAbs(rPos);
                 if (aOldRange.In(aAbs))
                 {
-                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                    ScRange aErrorRange( ScAddress::UNINITIALIZED );
+                    if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
+                        aAbs = aErrorRange;
                     rRef.SetRange(aAbs, rPos);
                     if (rCxt.mnTabDelta)
                         rRef.Ref1.SetFlag3D(aAbs.aStart.Tab()!=rPos.Tab());
@@ -3562,7 +3588,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 {
     // When moving, the range is the destination range.
     ScRange aOldRange = rCxt.maRange;
-    aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+    ScRange aErrorMoveRange( ScAddress::UNINITIALIZED );
+    if (!aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta, aErrorMoveRange))
+    {
+        assert(!"can't move");
+    }
 
     // In a named expression, we'll move the reference only when the reference
     // is entirely absolute.
@@ -3591,7 +3621,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                         ScAddress aAbs = rRef.toAbs(rPos);
                         if (aOldRange.In(aAbs))
                         {
-                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            ScAddress aErrorPos( ScAddress::UNINITIALIZED );
+                            if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
+                                aAbs = aErrorPos;
                             aRes.mbReferenceModified = true;
                         }
 
@@ -3608,7 +3640,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                         ScRange aAbs = rRef.toAbs(rPos);
                         if (aOldRange.In(aAbs))
                         {
-                            aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                            ScRange aErrorRange( ScAddress::UNINITIALIZED );
+                            if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
+                                aAbs = aErrorRange;
                             aRes.mbReferenceModified = true;
                         }
 
@@ -4141,8 +4175,14 @@ void checkBounds(
 
     ScRange aCheckRange = rCxt.maRange;
     if (rCxt.meMode == URM_MOVE)
+    {
         // Check bounds against the old range prior to the move.
-        aCheckRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+        ScRange aErrorRange( ScAddress::UNINITIALIZED );
+        if (!aCheckRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta, aErrorRange))
+        {
+            assert(!"can't move");
+        }
+    }
 
     checkBounds(rPos, nGroupLen, aCheckRange, rRef, rBounds);
 }
