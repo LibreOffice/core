@@ -1077,6 +1077,17 @@ function getSafeIndex( nIndex, nMin, nMax )
         return nIndex;
 }
 
+/** getRandomInt
+ *
+ * @param nMax
+ * @returns {number}
+ *   an integer in [0,nMax[
+ */
+function getRandomInt( nMax )
+{
+    return Math.floor( Math.random() * nMax );
+}
+
 function isTextFieldElement( aElement )
 {
     var sClassName = aElement.getAttribute( 'class' );
@@ -3627,7 +3638,7 @@ SVGPathElement.prototype.changeOrientation = function()
     var aMovePathSeg = this.createSVGPathSegMovetoAbs( nCurrentX, nCurrentY );
     aPathSegList.insertItemBefore( aMovePathSeg, 0 );
 
-}
+};
 
 /** matrixTransform and changeOrientation
  *  We implement these methods for each path segment type still present
@@ -4120,11 +4131,13 @@ BOXWIPE_TRANSITION          = 2;
 FOURBOXWIPE_TRANSITION      = 3;
 ELLIPSEWIPE_TRANSITION      = 4; // 17
 CLOCKWIPE_TRANSITION        = 5; // 22
-PINWHEELWIPE_TRANSITION     = 6;  // 23
+PINWHEELWIPE_TRANSITION     = 6; // 23
 PUSHWIPE_TRANSITION         = 7; // 35
 SLIDEWIPE_TRANSITION        = 8; // 36
 FADE_TRANSITION             = 9; // 37
-CHECKERBOARDWIPE_TRANSITION = 10; // 39
+RANDOMBARWIPE_TRANSITION    = 10 // 38
+CHECKERBOARDWIPE_TRANSITION = 11; // 39
+DISSOLVE_TRANSITION         = 12; // 40
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -4136,12 +4149,14 @@ aTransitionTypeInMap = {
     'pushWipe'          : PUSHWIPE_TRANSITION,
     'slideWipe'         : SLIDEWIPE_TRANSITION,
     'fade'              : FADE_TRANSITION,
-    'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION
+    'randomBarWipe'     : RANDOMBARWIPE_TRANSITION,
+    'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
+    'dissolve'          : DISSOLVE_TRANSITION
 };
 
 aTransitionTypeOutMap = [ '', 'barWipe', 'boxWipe', 'fourBoxWipe', 'ellipseWipe',
                           'clockWipe', 'pinWheelWipe', 'pushWipe', 'slideWipe',
-                          'fade', 'checkerBoardWipe' ];
+                          'fade', 'randomBarWipe', 'checkerBoardWipe', 'dissolve' ];
 
 
 // Transition Subtypes
@@ -4175,6 +4190,7 @@ ONEBLADE_TRANS_SUBTYPE              = 26; // 107
 ACROSS_TRANS_SUBTYPE                = 27;
 
 aTransitionSubtypeInMap = {
+    'default'           : DEFAULT_TRANS_SUBTYPE,
     'leftToRight'       : LEFTTORIGHT_TRANS_SUBTYPE,
     'topToBottom'       : TOPTOBOTTOM_TRANS_SUBTYPE,
     'cornersIn'         : CORNERSIN_TRANS_SUBTYPE,
@@ -4444,6 +4460,29 @@ aTransitionInfoTable[FADE_TRANSITION][FADEOVERCOLOR_TRANS_SUBTYPE] =
     'scaleIsotropically' : false
 };
 
+
+aTransitionInfoTable[RANDOMBARWIPE_TRANSITION] = {};
+aTransitionInfoTable[RANDOMBARWIPE_TRANSITION][VERTICAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[RANDOMBARWIPE_TRANSITION][HORIZONTAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
 aTransitionInfoTable[CHECKERBOARDWIPE_TRANSITION] = {};
 aTransitionInfoTable[CHECKERBOARDWIPE_TRANSITION][DOWN_TRANS_SUBTYPE] =
 {
@@ -4464,6 +4503,18 @@ aTransitionInfoTable[CHECKERBOARDWIPE_TRANSITION][ACROSS_TRANS_SUBTYPE] =
     'reverseMethod' : REVERSEMETHOD_FLIP_X,
     'outInvertsSweep' : true,
     'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[DISSOLVE_TRANSITION] = {};
+aTransitionInfoTable[DISSOLVE_TRANSITION][DEFAULT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : true
 };
 
 
@@ -5615,7 +5666,7 @@ function AnimationBaseNode( aAnimElem, aParentNode, aNodeContext )
     this.sClassName = 'AnimationBaseNode';
     this.bIsContainer = false;
     this.aTargetElement = null;
-    this.bIsTargetTextElement = false
+    this.bIsTargetTextElement = false;
     this.aAnimatedElement = null;
     this.aActivity = null;
 
@@ -6974,7 +7025,9 @@ AnimationTransitionFilterNode.prototype.parseElement = function()
     // subtype attribute
     this.eTransitionSubType = undefined;
     var sSubTypeAttr = aAnimElem.getAttributeNS( NSS['smil'], 'subtype' );
-    if( sSubTypeAttr && aTransitionSubtypeInMap[ sSubTypeAttr ] )
+    if( sSubTypeAttr === null )
+        sSubTypeAttr = 'default';
+    if( sSubTypeAttr && ( aTransitionSubtypeInMap[ sSubTypeAttr ] !== undefined  ) )
     {
         this.eTransitionSubType = aTransitionSubtypeInMap[ sSubTypeAttr ];
     }
@@ -8016,8 +8069,12 @@ function createClipPolyPolygon( nType, nSubtype )
                     return null;
             }
             return new PinWheelWipePath( nBlades );
+        case RANDOMBARWIPE_TRANSITION:
+            return new RandomWipePath( 128, true /* bars */ );
         case CHECKERBOARDWIPE_TRANSITION:
             return new CheckerBoardWipePath( 10 );
+        case DISSOLVE_TRANSITION:
+            return new RandomWipePath( 16 * 16, false /* dissolve */ );
     }
 }
 
@@ -8028,6 +8085,14 @@ function createUnitSquarePath()
 {
     var aPath = document.createElementNS( NSS['svg'], 'path' );
     var sD = 'M 0 0 L 1 0 L 1 1 L 0 1 L 0 0';
+    aPath.setAttribute( 'd', sD );
+    return aPath;
+}
+
+function createEmptyPath()
+{
+    var aPath = document.createElementNS( NSS['svg'], 'path' );
+    var sD = 'M 0 0 L 0 0';
     aPath.setAttribute( 'd', sD );
     return aPath;
 }
@@ -8325,6 +8390,100 @@ CheckerBoardWipePath.prototype.perform = function( nT )
     }
 
     return aPolyPath;
+};
+
+
+
+/** Class RandomWipePath
+ *
+ *  @param nElements
+ *     The number of bars or cells to be used.
+ *  @param bRandomBars
+ *     true: generates a horizontal random bar wipe
+ *     false: generates a dissolve wipe
+ */
+function RandomWipePath( nElements, bRandomBars )
+{
+    this.nElements = nElements;
+    this.aBasePath = createUnitSquarePath();
+    this.aPositionArray = new Array( nElements );
+    this.aClipPath = createEmptyPath();
+    this.nAlreadyAppendedElements = 0;
+
+    if( bRandomBars ) // random bar wipe
+    {
+        var fEdgeLength = 1.0 / nElements;
+        var nPos;
+        for( nPos = 0; nPos < nElements; ++nPos )
+        {
+            this.aPositionArray[nPos] = { x: 0.0, y: pruneScaleValue( nPos * fEdgeLength ) }
+        }
+        var aTransform = SVGIdentityMatrix.scaleNonUniform( 1.0, pruneScaleValue( fEdgeLength ) );
+    }
+    else // dissolve wipe
+    {
+        var nSqrtElements = Math.round( Math.sqrt( nElements ) );
+        var fEdgeLength = 1.0 / nSqrtElements;
+        var nPos;
+        for( nPos = 0; nPos < nElements; ++nPos )
+        {
+            this.aPositionArray[nPos] = {
+                x: pruneScaleValue( ( nPos % nSqrtElements ) * fEdgeLength ),
+                y: pruneScaleValue( ( nPos / nSqrtElements ) * fEdgeLength ) }
+        }
+        var aTransform = SVGIdentityMatrix.scale( pruneScaleValue( fEdgeLength ) );
+    }
+    this.aBasePath.matrixTransform( aTransform );
+
+    var nPos1, nPos2;
+    var tmp;
+    for( nPos1 = nElements - 1; nPos1 > 0; --nPos1 )
+    {
+        nPos2 = getRandomInt( nPos1 + 1 );
+        tmp = this.aPositionArray[nPos1];
+        this.aPositionArray[nPos1] = this.aPositionArray[nPos2];
+        this.aPositionArray[nPos2] = tmp;
+    }
+}
+
+/** perform
+ *
+ *  @param nT
+ *      A parameter in [0,1] representing the width of the generated bars or squares.
+ *  @return {SVGPathElement}
+ *      A svg <path> element representing a multi bars or a multi squared cells.
+ */
+RandomWipePath.prototype.perform = function( nT )
+{
+    var aPolyPath = createEmptyPath();
+    var aPoint;
+    var aPath;
+    var aTransform;
+    var nElements = Math.round( nT * this.nElements );
+    if( nElements === 0 )
+    {
+        return aPolyPath;
+    }
+    // check if we need to reset the clip path
+    if( this.nAlreadyAppendedElements >= nElements )
+    {
+        this.nAlreadyAppendedElements = 0;
+        this.aClipPath = createEmptyPath();
+    }
+    var nPos;
+    for( nPos = this.nAlreadyAppendedElements; nPos < nElements; ++nPos )
+    {
+        aPoint = this.aPositionArray[nPos];
+        aPath = this.aBasePath.cloneNode( true );
+        aTransform = SVGIdentityMatrix.translate( aPoint.x, aPoint.y );
+        aPath.matrixTransform( aTransform );
+        aPolyPath.appendPath( aPath );
+    }
+
+    this.nAlreadyAppendedElements = nElements;
+    this.aClipPath.appendPath( aPolyPath );
+
+    return this.aClipPath.cloneNode( true );
 };
 
 
@@ -9603,7 +9762,9 @@ SlideTransition.prototype.parseElement = function()
     // subtype attribute
     this.eTransitionSubType = undefined;
     var sSubTypeAttr = aAnimElem.getAttributeNS( NSS['smil'], 'subtype' );
-    if( sSubTypeAttr && aTransitionSubtypeInMap[ sSubTypeAttr ] )
+    if( sSubTypeAttr === null )
+        sSubTypeAttr = 'default';
+    if( sSubTypeAttr && ( aTransitionSubtypeInMap[ sSubTypeAttr ] !== undefined ) )
     {
         this.eTransitionSubType = aTransitionSubtypeInMap[ sSubTypeAttr ];
         this.bIsValid = true;
