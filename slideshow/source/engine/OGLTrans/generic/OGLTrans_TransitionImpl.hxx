@@ -228,18 +228,18 @@ private:
     GLint m_nNormalLocation = -1;
     GLint m_nTexCoordLocation = -1;
 
-    GLuint m_nVertexArrayObject = -1;
+    GLuint m_nVertexArrayObject = 0u;
 
     std::vector<int> m_nFirstIndices;
 
 protected:
     /** GLSL program object
      */
-    GLuint m_nProgramObject = 0;
+    GLuint m_nProgramObject = 0u;
 
     /** VBO in which to put primitive data
      */
-    GLuint m_nVertexBufferObject = -1;
+    GLuint m_nVertexBufferObject = 0u;
 };
 
 
