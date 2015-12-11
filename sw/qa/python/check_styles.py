@@ -56,6 +56,7 @@ class CheckStyle(unittest.TestCase):
         for sStylename in xFamily.ElementNames:
             self.assertTrue(xFamily.hasByName(sStylename))
             self.assertEqual(xFamily[sStylename].ImplementationName, "SwXStyle")
+            self.assertFalse(xFamily[sStylename].isUserDefined())
         vExpectedNames.sort()
         vNames = list(xFamily.ElementNames)
         vNames.sort()
@@ -66,6 +67,7 @@ class CheckStyle(unittest.TestCase):
             xStyle = xFamily.getByIndex(nIndex)
             self.assertEqual(xStyle.ImplementationName, "SwXStyle")
             self.assertIn(xStyle.Name, vExpectedNames)
+            self.assertFalse(xStyle.isUserDefined())
     def test_CharacterFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xCharStyles = xDoc.StyleFamilies["CharacterStyles"]
