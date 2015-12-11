@@ -114,7 +114,7 @@ endif
 
 else ifeq ($(CPUNAME),POWERPC)
 
-ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD MACOSX,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_powerpc
 bridge_noopt_objects := uno2cpp
 bridge_exception_objects := cpp2uno except
@@ -126,7 +126,7 @@ endif
 
 else ifeq ($(CPUNAME),POWERPC64)
 
-ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD MACOSX,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_powerpc64
 bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except

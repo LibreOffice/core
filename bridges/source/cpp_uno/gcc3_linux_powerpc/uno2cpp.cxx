@@ -18,7 +18,11 @@
  */
 
 
+#if defined(MACOSX)
+#include <sys/malloc.h>
+#else
 #include <malloc.h>
+#endif
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include <uno/data.h>
@@ -88,6 +92,16 @@ static void callVirtualMethod(
 
      // this grows the current stack to the appropriate size
      // and sets the outgoing stack pointer p to the right place
+   #if defined(MACOSX)
+     __asm__ __volatile__ (
+          "rlwinm %0,%0,3,3,28\n\t"
+          "addi %0,%0,22\n\t"
+          "rlwinm %0,%0,0,4,28\n\t"
+          "lwz r0,0(r1)\n\t"
+          "subf r1,%0,r1\n\t"
+          "stw r0,0(r1)\n\t"
+          : : "r" (nStackLongs) : "0" );
+   #else
      __asm__ __volatile__ (
           "rlwinm %0,%0,3,3,28\n\t"
           "addi %0,%0,22\n\t"
@@ -96,8 +110,13 @@ static void callVirtualMethod(
           "subf 1,%0,1\n\t"
           "stw 0,0(1)\n\t"
           : : "r" (nStackLongs) : "0" );
+   #endif
 
+   #if defined(MACOSX)
+     __asm__ __volatile__ ( "addi %0,r1,8" : "=r" (p) : );
+   #else
      __asm__ __volatile__ ( "addi %0,1,8" : "=r" (p) : );
+   #endif
 
      // never called
      // if (! pAdjustedThisPtr ) dummy_can_throw_anything("xxx"); // address something
@@ -237,6 +256,16 @@ static void callVirtualMethod(
     /* Set up the machine registers and invoke the function */
 
     __asm__ __volatile__ (
+      #if defined(MACOSX)
+        "lwz    r3,  0(%0)\n\t"
+        "lwz    r4,  4(%0)\n\t"
+        "lwz    r5,  8(%0)\n\t"
+        "lwz    r6,  12(%0)\n\t"
+        "lwz    r7,  16(%0)\n\t"
+        "lwz    r8,  20(%0)\n\t"
+        "lwz    r9,  24(%0)\n\t"
+        "lwz    r10, 28(%0)\n\t"
+      #else
         "lwz    3,  0(%0)\n\t"
         "lwz    4,  4(%0)\n\t"
         "lwz    5,  8(%0)\n\t"
@@ -245,7 +274,18 @@ static void callVirtualMethod(
         "lwz    8,  20(%0)\n\t"
         "lwz    9,  24(%0)\n\t"
         "lwz    10, 28(%0)\n\t"
+      #endif
 #ifndef __NO_FPRS__
+      #if defined(MACOSX)
+        "lfd    f1,  0(%1)\n\t"
+        "lfd    f2,  8(%1)\n\t"
+        "lfd    f3,  16(%1)\n\t"
+        "lfd    f4,  24(%1)\n\t"
+        "lfd    f5,  32(%1)\n\t"
+        "lfd    f6,  40(%1)\n\t"
+        "lfd    f7,  48(%1)\n\t"
+        "lfd    f8,  56(%1)\n\t"
+      #else
         "lfd    1,  0(%1)\n\t"
         "lfd    2,  8(%1)\n\t"
         "lfd    3,  16(%1)\n\t"
@@ -254,6 +294,7 @@ static void callVirtualMethod(
         "lfd    6,  40(%1)\n\t"
         "lfd    7,  48(%1)\n\t"
         "lfd    8,  56(%1)\n\t"
+      #endif
             : : "r" (gpr), "r" (fpr)
 #else
             : : "r" (gpr)
@@ -274,10 +315,19 @@ static void callVirtualMethod(
     (*ptr)(r3, r4, r5, r6, r7, r8, r9, r10);
 
     __asm__ __volatile__ (
+      #if defined(MACOSX)
+       "mr     %0,     r3\n\t"
+       "mr     %1,     r4\n\t"
+      #else
        "mr     %0,     3\n\t"
        "mr     %1,     4\n\t"
+      #endif
 #ifndef __NO_FPRS__
+      #if defined(MACOSX)
+       "fmr    %2,     f1\n\t"
+      #else
        "fmr    %2,     1\n\t"
+      #endif
        : "=r" (iret), "=r" (iret2), "=f" (dret)
 #else
        : "=r" (iret), "=r" (iret2)

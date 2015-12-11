@@ -526,47 +526,89 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
 
                 case typelib_TypeClass_BOOLEAN:
                 case typelib_TypeClass_BYTE:
+                #if defined(MACOSX)
+                  __asm__( "lbz r3,%0\n\t" : :
+               "m"(nRegReturn[0]) );
+                #else
                   __asm__( "lbz 3,%0\n\t" : :
                "m"(nRegReturn[0]) );
+                #endif
                   break;
 
                 case typelib_TypeClass_CHAR:
                 case typelib_TypeClass_SHORT:
                 case typelib_TypeClass_UNSIGNED_SHORT:
+                #if defined(MACOSX)
+                  __asm__( "lhz r3,%0\n\t" : :
+               "m"(nRegReturn[0]) );
+                #else
                   __asm__( "lhz 3,%0\n\t" : :
                "m"(nRegReturn[0]) );
+                #endif
                   break;
 
         case typelib_TypeClass_FLOAT:
 #ifndef __NO_FPRS__
+                #if defined(MACOSX)
+                  __asm__( "lfs f1,%0\n\t" : :
+                           "m" (*((float*)nRegReturn)) );
+                #else
                   __asm__( "lfs 1,%0\n\t" : :
                            "m" (*((float*)nRegReturn)) );
+                #endif
  #else
+                #if defined(MACOSX)
+                  __asm__( "lwz r3,%0\n\t" : :
+                           "m"(nRegReturn[0]) );
+                #else
                   __asm__( "lwz 3,%0\n\t" : :
                            "m"(nRegReturn[0]) );
+                #endif
 #endif
           break;
 
         case typelib_TypeClass_DOUBLE:
 #ifndef __NO_FPRS__
+        #if defined(MACOSX)
+          __asm__( "lfd f1,%0\n\t" : :
+                           "m" (*((double*)nRegReturn)) );
+        #else
           __asm__( "lfd 1,%0\n\t" : :
                            "m" (*((double*)nRegReturn)) );
+        #endif
 #else
+        #if defined(MACOSX)
+          __asm__( "lwz r3,%0\n\t" : :
+                           "m"(nRegReturn[0]) );
+          __asm__( "lwz r4,%0\n\t" : :
+                           "m"(nRegReturn[1]) );
+        #else
           __asm__( "lwz 3,%0\n\t" : :
                            "m"(nRegReturn[0]) );
           __asm__( "lwz 4,%0\n\t" : :
                            "m"(nRegReturn[1]) );
+        #endif
 #endif
           break;
 
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
+        #if defined(MACOSX)
+          __asm__( "lwz r4,%0\n\t" : :
+                           "m"(nRegReturn[1]) );  // fall through
+        #else
           __asm__( "lwz 4,%0\n\t" : :
                            "m"(nRegReturn[1]) );  // fall through
+        #endif
 
         default:
+        #if defined(MACOSX)
+          __asm__( "lwz r3,%0\n\t" : :
+                           "m"(nRegReturn[0]) );
+        #else
           __asm__( "lwz 3,%0\n\t" : :
                            "m"(nRegReturn[0]) );
+        #endif
           break;
     }
 }
