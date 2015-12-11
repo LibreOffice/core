@@ -1921,7 +1921,7 @@ void HoneycombTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlide
 
     // The back (entering) slide needs to be drawn before the front (leaving) one in order for blending to work.
 
-    const float borderSize = 0.15;
+    const float borderSize = 0.15f;
 
     CHECK_GL_ERROR();
     glUniform1f(maSelectedTextureLocation, 0.0);
@@ -1956,7 +1956,7 @@ std::shared_ptr<OGLTransitionImpl> makeHoneycomb()
     const int NY = 21;
 
     TransitionSettings aSettings;
-    aSettings.mnRequiredGLVersion = 3.2;
+    aSettings.mnRequiredGLVersion = 3.2f;
 
     Primitives_t aSlide;
     Primitive aHexagon;
