@@ -104,8 +104,8 @@ class GlyphMetric
 public:
                             GlyphMetric() : mnAdvanceWidth(0) {}
 
-    Point                   GetOffset() const   { return maOffset; }
-    Size                    GetSize() const     { return maSize; }
+    const Point&            GetOffset() const   { return maOffset; }
+    const Size&             GetSize() const     { return maSize; }
     long                    GetCharWidth() const { return mnAdvanceWidth; }
 
 protected:
@@ -155,7 +155,7 @@ public:
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     void                    SetFontOptions(const std::shared_ptr<FontConfigFontOptions>&);
-    std::shared_ptr<FontConfigFontOptions> GetFontOptions() const;
+    const std::shared_ptr<FontConfigFontOptions>& GetFontOptions() const;
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 

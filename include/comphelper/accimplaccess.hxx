@@ -66,7 +66,7 @@ namespace comphelper
 
     protected:
         /// retrieves the parent previously set via <method>setAccessibleParent</method>
-        css::uno::Reference< css::accessibility::XAccessible >
+        const css::uno::Reference< css::accessibility::XAccessible >&
                 implGetForeignControlledParent( ) const;
 
         /** retrieves the set of currently set states which are controlled by a foreign instance

@@ -362,12 +362,12 @@ public:
 
     //SfxListener
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    OUString            GetStyleName() const { return m_sStyleName;}
+    const OUString&     GetStyleName() const { return m_sStyleName;}
     SfxStyleFamily      GetFamily() const {return m_rEntry.m_eFamily;}
 
     bool                IsDescriptor() const {return m_bIsDescriptor;}
     bool                IsConditional() const { return m_bIsConditional;}
-    OUString            GetParentStyleName() const { return m_sParentStyleName;}
+    const OUString&     GetParentStyleName() const { return m_sParentStyleName;}
     void                SetDoc(SwDoc* pDc, SfxStyleSheetBasePool*   pPool)
                             {
                                 m_bIsDescriptor = false; m_pDoc = pDc;

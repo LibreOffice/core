@@ -70,7 +70,7 @@ public:
     void        setHorzOverflowToken( sal_Int32 nToken ){ mnHorzOverflowToken = nToken; };
 
     void                        setTextBody( const oox::drawingml::TextBodyPtr& pTextBody ){ mpTextBody = pTextBody; };
-    oox::drawingml::TextBodyPtr getTextBody(){ return mpTextBody; };
+    const oox::drawingml::TextBodyPtr& getTextBody(){ return mpTextBody; };
 
     void pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase,
             const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle,

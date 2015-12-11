@@ -106,9 +106,9 @@ protected:
 
     EventQueue& getEventQueue() const { return mrEventQueue; }
 
-    AnimatableShapeSharedPtr getShape() const { return mpShape; }
+    const AnimatableShapeSharedPtr& getShape() const { return mpShape; }
 
-    ShapeAttributeLayerSharedPtr getShapeAttributeLayer() const
+    const ShapeAttributeLayerSharedPtr& getShapeAttributeLayer() const
         { return mpAttributeLayer; }
 
     bool isRepeatCountValid() const { return bool(maRepeats); }

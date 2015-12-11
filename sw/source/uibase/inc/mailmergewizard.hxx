@@ -67,7 +67,7 @@ public:
     SwMailMergeConfigItem&      GetConfigItem() { return m_rConfigItem;}
 
     void                    SetReloadDocument(const OUString& rURL) {sDocumentURL = rURL;}
-    OUString                GetReloadDocument() const {return sDocumentURL;}
+    const OUString&         GetReloadDocument() const {return sDocumentURL;}
 
     //next step requires loading of document
     void                    SetDocumentLoad(bool bSet) {m_bDocumentLoad = bSet;}

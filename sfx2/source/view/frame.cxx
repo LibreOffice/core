@@ -702,7 +702,7 @@ css::uno::Reference< css::frame::XController > SfxFrame::GetController() const
         return css::uno::Reference< css::frame::XController > ();
 }
 
-css::uno::Reference< css::frame::XFrame >  SfxFrame::GetFrameInterface() const
+const css::uno::Reference< css::frame::XFrame >&  SfxFrame::GetFrameInterface() const
 {
     return pImp->xFrame;
 }

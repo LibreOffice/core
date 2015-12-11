@@ -220,10 +220,10 @@ namespace connectivity
         // The TableRangeMap contains all tables associated with the range name found first.
         const OSQLTables& getTables() const;
 
-        ::rtl::Reference<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
-        ::rtl::Reference<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
-        ::rtl::Reference<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
-        ::rtl::Reference<OSQLColumns> getParameters()   const { return m_aParameters; }
+        const ::rtl::Reference<OSQLColumns>& getSelectColumns() const { return m_aSelectColumns;}
+        const ::rtl::Reference<OSQLColumns>& getGroupColumns() const { return m_aGroupColumns;}
+        const ::rtl::Reference<OSQLColumns>& getOrderColumns() const { return m_aOrderColumns;}
+        const ::rtl::Reference<OSQLColumns>& getParameters()   const { return m_aParameters; }
 
         /** return the columname and the table range
             @param  _pColumnRef

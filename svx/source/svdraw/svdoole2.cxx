@@ -127,8 +127,8 @@ public:
         m_aScaleHeight = aScaleHeight;
     }
 
-    Fraction GetScaleWidth() const { return m_aScaleWidth; }
-    Fraction GetScaleHeight() const { return m_aScaleHeight; }
+    const Fraction& GetScaleWidth() const { return m_aScaleWidth; }
+    const Fraction& GetScaleHeight() const { return m_aScaleHeight; }
 
     void setWindow(const uno::Reference< awt::XWindow >& _xWindow);
 
@@ -1558,7 +1558,7 @@ void SdrOle2Obj::AbandonObject()
 }
 
 
-OUString SdrOle2Obj::GetPersistName() const
+const OUString& SdrOle2Obj::GetPersistName() const
 {
     return mpImpl->aPersistName;
 }

@@ -66,7 +66,7 @@ public:
 #else
     bool        isLoaded() const { return false; }
 #endif
-    OUString    getLibraryName() const { return m_sLibPath; }
+    const OUString& getLibraryName() const { return m_sLibPath; }
 
     void        getDatasourceNames(StringBag& _rNames);
 

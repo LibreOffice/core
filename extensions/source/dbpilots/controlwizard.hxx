@@ -107,7 +107,7 @@ namespace dbp
         bool    travelNext() { return OControlWizard_Base::travelNext(); }
 
     public:
-        css::uno::Reference< css::uno::XComponentContext >
+        const css::uno::Reference< css::uno::XComponentContext >&
             getComponentContext() const { return m_xContext; }
 
         const OControlWizardContext&    getContext() const { return m_aContext; }

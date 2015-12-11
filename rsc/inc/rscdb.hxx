@@ -266,7 +266,7 @@ public:
                           {
                               nSourceCharSet = aCharSet;
                           }
-    OString           GetSearchPath() const { return aSearchPath; }
+    const OString&    GetSearchPath() const { return aSearchPath; }
     void              SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
     void              InsertType( RscTop * pType )
                           {

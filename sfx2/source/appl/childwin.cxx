@@ -688,7 +688,7 @@ bool SfxChildWindow::QueryClose()
     return bAllow;
 }
 
-css::uno::Reference< css::frame::XFrame >  SfxChildWindow::GetFrame()
+const css::uno::Reference< css::frame::XFrame >&  SfxChildWindow::GetFrame()
 {
     return pImp->xFrame;
 }

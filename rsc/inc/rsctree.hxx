@@ -86,7 +86,7 @@ public:
     StringNode(const OString& rStr) { m_aName = rStr; }
 
     StringNode*     Search( const char * ) const;
-    OString    GetName() const { return m_aName; }
+    const OString&  GetName() const { return m_aName; }
 };
 
 #endif // INCLUDED_RSC_INC_RSCTREE_HXX

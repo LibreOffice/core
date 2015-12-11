@@ -261,7 +261,7 @@ public:
 
                     // Query values - immediately
 
-    Size            GetPageSize() const { return aPageSize; }
+    const Size&     GetPageSize() const { return aPageSize; }
     Size            GetDataSize() const;
     void            GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr );
     long            GetFirstPageNo() const  { return aTableParam.nFirstPageNo; }
@@ -277,8 +277,8 @@ public:
     sal_uInt16      GetRightMargin() const{return nRightMargin;}
     sal_uInt16      GetTopMargin() const{return nTopMargin;}
     sal_uInt16      GetBottomMargin() const{return nBottomMargin;}
-    ScPrintHFParam  GetHeader(){return aHdr;}
-    ScPrintHFParam  GetFooter(){return aFtr;}
+    const ScPrintHFParam& GetHeader(){return aHdr;}
+    const ScPrintHFParam& GetFooter(){return aFtr;}
 
     bool HasPrintRange() const { return mbHasPrintRange;}
 

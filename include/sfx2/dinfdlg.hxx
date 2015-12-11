@@ -106,30 +106,30 @@ public:
     void        setAutoloadEnabled(bool i_val) { m_isAutoloadEnabled = i_val; }
     sal_Int32   getAutoloadDelay() const { return m_AutoloadDelay; }
     void        setAutoloadDelay(sal_Int32 i_val) { m_AutoloadDelay = i_val; }
-    OUString    getAutoloadURL() const { return m_AutoloadURL; }
+    const OUString& getAutoloadURL() const { return m_AutoloadURL; }
     void        setAutoloadURL(const OUString& i_val) { m_AutoloadURL = i_val; }
-    OUString    getDefaultTarget() const { return m_DefaultTarget; }
+    const OUString& getDefaultTarget() const { return m_DefaultTarget; }
     void        setDefaultTarget(const OUString& i_val) { m_DefaultTarget = i_val; }
-    OUString    getTemplateName() const { return m_TemplateName; }
-    OUString    getAuthor() const { return m_Author; }
+    const OUString& getTemplateName() const { return m_TemplateName; }
+    const OUString& getAuthor() const { return m_Author; }
     void        setAuthor(const OUString& i_val) { m_Author = i_val; }
 
-    css::util::DateTime
+    const css::util::DateTime&
                 getCreationDate() const { return m_CreationDate; }
     void        setCreationDate(const css::util::DateTime& i_val) {
                     m_CreationDate = i_val;
                 }
-    OUString getModifiedBy() const { return m_ModifiedBy; }
+    const OUString& getModifiedBy() const { return m_ModifiedBy; }
     void        setModifiedBy(const OUString& i_val) { m_ModifiedBy = i_val; }
 
-    css::util::DateTime
+    const css::util::DateTime&
                 getModificationDate() const { return m_ModificationDate; }
     void        setModificationDate(const css::util::DateTime& i_val) {
                     m_ModificationDate = i_val;
                 }
-    OUString getPrintedBy() const { return m_PrintedBy; }
+    const OUString& getPrintedBy() const { return m_PrintedBy; }
     void        setPrintedBy(const OUString& i_val) { m_PrintedBy = i_val; }
-    css::util::DateTime
+    const css::util::DateTime&
                 getPrintDate() const { return m_PrintDate; }
     void        setPrintDate(const css::util::DateTime& i_val) {
                     m_PrintDate = i_val;
@@ -138,13 +138,13 @@ public:
     void        setEditingCycles(sal_Int16 i_val) { m_EditingCycles = i_val; }
     sal_Int32   getEditingDuration() const { return m_EditingDuration; }
     void        setEditingDuration(sal_Int32 i_val) { m_EditingDuration = i_val; }
-    OUString getDescription() const { return m_Description; }
+    const OUString& getDescription() const { return m_Description; }
     void        setDescription(const OUString& i_val) { m_Description = i_val; }
-    OUString getKeywords() const { return m_Keywords; }
+    const OUString& getKeywords() const { return m_Keywords; }
     void        setKeywords(const OUString& i_val) { m_Keywords = i_val; }
-    OUString getSubject() const { return m_Subject; }
+    const OUString& getSubject() const { return m_Subject; }
     void        setSubject(const OUString& i_val) { m_Subject = i_val; }
-    OUString getTitle() const { return m_Title; }
+    const OUString& getTitle() const { return m_Title; }
     void        setTitle(const OUString& i_val) { m_Title = i_val; }
 
     /// reset user-specific data (author, modified-by, ...)
@@ -165,7 +165,7 @@ public:
     void        AddCustomProperty(  const OUString& sName,
                                     const css::uno::Any& rValue );
 
-    css::uno::Sequence< css::document::CmisProperty >
+    const css::uno::Sequence< css::document::CmisProperty >&
                         GetCmisProperties() const { return m_aCmisProperties;}
 
     void        SetCmisProperties(const css::uno::Sequence< css::document::CmisProperty >& cmisProps );

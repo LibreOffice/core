@@ -30,7 +30,7 @@ public:
     ~PlaceWareTempFile();
 
     static OUString createTempFileURL();
-    OUString   getFileURL() { return maURL;}
+    const OUString& getFileURL() { return maURL;}
 
 private:
     OUString   maURL;

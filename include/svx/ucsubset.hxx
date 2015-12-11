@@ -45,7 +45,7 @@ public:
 
     sal_UCS4        GetRangeMin() const { return mnRangeMin;}
     sal_UCS4        GetRangeMax() const { return mnRangeMax;}
-    const OUString  GetName()     const { return maRangeName;}
+    const OUString& GetName()     const { return maRangeName;}
 
 private:
     sal_UCS4        mnRangeMin;

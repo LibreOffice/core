@@ -110,7 +110,7 @@ public:
     virtual ~FmNavNameChangedHint();
 
     FmEntryData*    GetEntryData() const { return pEntryData; }
-    OUString          GetNewName() const { return aNewName; }
+    const OUString& GetNewName() const { return aNewName; }
 };
 
 
@@ -163,7 +163,7 @@ public:
 
     const Image&    GetNormalImage() const { return m_aNormalImage; }
 
-    OUString          GetText() const { return aText; }
+    const OUString& GetText() const { return aText; }
     FmEntryData*    GetParent() const { return pParent; }
     FmEntryDataList* GetChildList() const { return pChildList; }
 

@@ -18,7 +18,7 @@ class Xst : public TBBase
 public:
     Xst(){}
     bool Read(SvStream &rS) override;
-    OUString getString() { return sString; }
+    const OUString& getString() const { return sString; }
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* fp ) override;
 #endif

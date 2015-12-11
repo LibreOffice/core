@@ -185,7 +185,7 @@ public:
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
-    inline tools::SvRef<SotStorage> GetRootStorage() const { return mrData.mxRootStrg; }
+    const tools::SvRef<SotStorage>& GetRootStorage() const { return mrData.mxRootStrg; }
     /** Returns true, if the document contains a VBA storage. */
     bool                HasVbaStorage() const;
 

@@ -54,7 +54,7 @@ public:
     inline sal_Int32 BreakStart() const { return nBreakStart; }
     inline sal_Int32 BreakPos() const {return nBreakPos; }
     inline sal_Int32 FieldDiff() const {return nFieldDiff; }
-    inline css::uno::Reference< css::linguistic2::XHyphenatedWord > HyphWord() const
+    const css::uno::Reference< css::linguistic2::XHyphenatedWord >& HyphWord() const
         { return xHyphWord; }
 };
 

@@ -277,10 +277,10 @@ public:
                                 ~SfxDocTplService_Impl();
 
     bool                        init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
-    Content                     getContent() const { return maRootContent; }
+    const Content&              getContent() const { return maRootContent; }
 
     void                        setLocale( const lang::Locale & rLocale );
-    lang::Locale                      getLocale();
+    lang::Locale                getLocale();
 
     bool                        storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,

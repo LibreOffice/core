@@ -60,7 +60,7 @@ namespace connectivity
         // setting the new information before scanning
         void prepareScan(const OUString & rNewStatement, const IParseContext* pContext, bool bInternational);
         const OUString& getErrorMessage() const {return m_sErrorMessage;}
-        OString getStatement() const { return m_sStatement; }
+        const OString& getStatement() const { return m_sStatement; }
 
         static sal_Int32 SQLlex();
         // set this as scanner for flex

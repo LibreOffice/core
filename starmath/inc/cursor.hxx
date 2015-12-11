@@ -98,7 +98,7 @@ public:
     }
 
     /** Get position */
-    SmCaretPos GetPosition() const { return mpPosition->CaretPos; }
+    const SmCaretPos& GetPosition() const { return mpPosition->CaretPos; }
 
     /** True, if the cursor has a selection */
     bool HasSelection() { return mpAnchor != mpPosition; }

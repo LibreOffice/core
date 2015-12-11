@@ -101,7 +101,7 @@ IMPL_LINK_TYPED( ScNamePasteDlg, ButtonHdl, Button *, pButton, void )
     }
 }
 
-std::vector<OUString> ScNamePasteDlg::GetSelectedNames() const
+const std::vector<OUString>& ScNamePasteDlg::GetSelectedNames() const
 {
     return maSelectedNames;
 }

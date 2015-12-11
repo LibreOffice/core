@@ -117,7 +117,7 @@ public:
      * Does not take ownership of pFlt but pFlt needs to be around as long as the SfxMedium instance.
      */
     void                SetFilter(const std::shared_ptr<const SfxFilter>& pFilter);
-    std::shared_ptr<const SfxFilter>    GetFilter() const;
+    const std::shared_ptr<const SfxFilter>& GetFilter() const;
     std::shared_ptr<const SfxFilter>    GetOrigFilter() const;
     const OUString&     GetOrigURL() const;
 

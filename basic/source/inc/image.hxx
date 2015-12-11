@@ -90,7 +90,7 @@ public:
     OUString    GetString( short nId ) const;
     const SbxObject* FindType (const OUString& aTypeName) const;
 
-    SbxArrayRef GetEnums()          { return rEnums; }
+    const SbxArrayRef& GetEnums()          { return rEnums; }
 
     void        SetFlag( SbiImageFlags n ) { nFlags |= n;      }
     bool        IsFlag( SbiImageFlags n ) const { return bool(nFlags & n); }

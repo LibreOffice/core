@@ -328,7 +328,7 @@ void VDataSeries::releaseShapes()
     m_nPolygonIndex = 0;
 }
 
-uno::Reference<css::chart2::XDataSeries> VDataSeries::getModel() const
+const uno::Reference<css::chart2::XDataSeries>& VDataSeries::getModel() const
 {
     return m_xDataSeries;
 }

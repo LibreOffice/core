@@ -376,7 +376,7 @@ OUString SAL_CALL MeanValueRegressionCurve::getImplementationName()
     return getImplementationName_Static();
 }
 
-OUString MeanValueRegressionCurve::getImplementationName_Static()
+const OUString& MeanValueRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_MeanValue;
 }
@@ -423,7 +423,7 @@ OUString SAL_CALL LinearRegressionCurve::getImplementationName()
     return getImplementationName_Static();
 }
 
-OUString LinearRegressionCurve::getImplementationName_Static()
+const OUString& LinearRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Linear;
 }
@@ -470,7 +470,7 @@ OUString SAL_CALL LogarithmicRegressionCurve::getImplementationName()
     return getImplementationName_Static();
 }
 
-OUString LogarithmicRegressionCurve::getImplementationName_Static()
+const OUString& LogarithmicRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Logarithmic;
 }
@@ -517,7 +517,7 @@ OUString SAL_CALL ExponentialRegressionCurve::getImplementationName()
     return getImplementationName_Static();
 }
 
-OUString ExponentialRegressionCurve::getImplementationName_Static()
+const OUString& ExponentialRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Exponential;
 }
@@ -564,7 +564,7 @@ OUString SAL_CALL PotentialRegressionCurve::getImplementationName()
     return getImplementationName_Static();
 }
 
-OUString PotentialRegressionCurve::getImplementationName_Static()
+const OUString& PotentialRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Potential;
 }
@@ -611,7 +611,7 @@ OUString SAL_CALL PolynomialRegressionCurve::getImplementationName()
     return getImplementationName_Static();
 }
 
-OUString PolynomialRegressionCurve::getImplementationName_Static()
+const OUString& PolynomialRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_Polynomial;
 }
@@ -658,7 +658,7 @@ OUString SAL_CALL MovingAverageRegressionCurve::getImplementationName()
     return getImplementationName_Static();
 }
 
-OUString MovingAverageRegressionCurve::getImplementationName_Static()
+const OUString& MovingAverageRegressionCurve::getImplementationName_Static()
 {
     return lcl_aImplementationName_MovingAverage;
 }

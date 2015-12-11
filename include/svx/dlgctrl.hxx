@@ -98,7 +98,7 @@ protected:
     void MarkToResetSettings(bool bUpdateForeground, bool bUpdateBackground);
 
     RECT_POINT          GetRPFromPoint( Point, bool bRTL = false ) const;
-    Point               GetPointFromRP( RECT_POINT ) const;
+    const Point&        GetPointFromRP( RECT_POINT ) const;
     void                SetFocusRect();
     Point               SetActualRPWithoutInvalidate( RECT_POINT eNewRP );  // returns the last point
 

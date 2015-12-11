@@ -94,11 +94,11 @@ namespace dbaui
         void SetFunctionType( sal_Int32 eTyp ) { m_eFunctionType = eTyp; }
         void SetColumnId(sal_uInt16 _nColumnId) { m_nColumnId = _nColumnId; }
 
-        OUString GetField() const { return m_aFieldName;}
-        OUString GetFieldAlias() const { return m_aFieldAlias;}
-        OUString GetTable() const { return m_aTableName;}
-        OUString GetAlias() const { return m_aAliasName;}
-        OUString GetFunction() const { return m_aFunctionName;}
+        const OUString& GetField() const { return m_aFieldName;}
+        const OUString& GetFieldAlias() const { return m_aFieldAlias;}
+        const OUString& GetTable() const { return m_aTableName;}
+        const OUString& GetAlias() const { return m_aAliasName;}
+        const OUString& GetFunction() const { return m_aFunctionName;}
         sal_Int32 GetDataType() const { return m_eDataType; }
         ETableFieldType GetFieldType() const { return m_eFieldType; }
         EOrderDir GetOrderDir() const { return m_eOrderDir; }

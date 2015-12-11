@@ -272,7 +272,7 @@ public:
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
     SwFrameFormat*               GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
-    css::uno::Reference< css::uno::XAggregation >                 GetAggregationInterface() {return xShapeAgg;}
+    const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() {return xShapeAgg;}
 
     // helper
     static void AddExistingShapeToFormat( SdrObject& _rObj );

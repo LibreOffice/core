@@ -105,8 +105,8 @@ namespace dbaui
         void setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable);
         void setNoneVisbleRow(sal_Int32 _nRows);
 
-        css::lang::Locale      getLocale() const           { return m_aLocale;}
-        OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
+        const css::lang::Locale&      getLocale() const           { return m_aLocale;}
+        const OUString&               getDecimalSeparator() const { return m_sDecimalSep;}
 
         SqlParseError   InsertField( const OTableFieldDescRef& rInfo, bool bActivate = true);
         bool            HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;

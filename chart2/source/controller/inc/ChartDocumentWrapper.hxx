@@ -73,13 +73,13 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     void setAddIn( const css::uno::Reference< css::util::XRefreshable >& xAddIn );
-    css::uno::Reference< css::util::XRefreshable > getAddIn() const { return m_xAddIn;}
+    const css::uno::Reference< css::util::XRefreshable >& getAddIn() const { return m_xAddIn;}
 
     void setUpdateAddIn( bool bUpdateAddIn );
     bool getUpdateAddIn() const { return m_bUpdateAddIn;}
 
     void setBaseDiagram( const OUString& rBaseDiagram );
-    OUString getBaseDiagram() const { return m_aBaseDiagram;}
+    const OUString& getBaseDiagram() const { return m_aBaseDiagram;}
 
     css::uno::Reference< css::drawing::XShapes > getAdditionalShapes() const;
 

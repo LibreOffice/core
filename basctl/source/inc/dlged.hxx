@@ -161,7 +161,7 @@ public:
 
     void            SetDialog (const css::uno::Reference<css::container::XNameContainer>& xUnoControlDialogModel);
     void            ResetDialog ();
-    css::uno::Reference< css::container::XNameContainer > GetDialog() const
+    const css::uno::Reference< css::container::XNameContainer >& GetDialog() const
                         {return m_xUnoControlDialogModel;}
 
     css::uno::Reference< css::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();

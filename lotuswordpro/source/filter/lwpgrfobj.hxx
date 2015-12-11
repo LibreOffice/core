@@ -124,7 +124,7 @@ public:
     void GetGrafOrgSize(double& rWidth, double& rHeight) override;
 
     sal_Int16 IsLinked(){ return m_bIsLinked;}
-    OUString GetLinkedFilePath(){ return m_LinkedFilePath;}
+    const OUString& GetLinkedFilePath(){ return m_LinkedFilePath;}
 };
 
 #endif

@@ -166,7 +166,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) override;
 
 public:
-    OUString GetName() const { return m_StyleName; }
+    const OUString& GetName() const { return m_StyleName; }
     void SetName(const OUString& rNewName) { m_StyleName = rNewName; }
 
     bool GetLandscape() const { return m_IsLandscape; }

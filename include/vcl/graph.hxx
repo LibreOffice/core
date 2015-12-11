@@ -99,7 +99,7 @@ public:
     }
 
     // data read access
-    const Size      getSizePixel() const { return maSizePixel; }
+    const Size&     getSizePixel() const { return maSizePixel; }
     bool            getUnlimitedSize() const { return mbUnlimitedSize; }
     bool            getAntiAliase() const { return mbAntiAliase; }
     bool            getSnapHorVerLines() const { return mbSnapHorVerLines; }

@@ -40,7 +40,7 @@ namespace sd{
             :name(aname), port(aport){}
         virtual ~ZeroconfService(){}
 
-        std::string getName() const {return name;}
+        const std::string& getName() const {return name;}
         void setName(const char * n) {name = n;}
 
         // Clean up the service when closing

@@ -57,7 +57,7 @@ public:
     void                    SetStyle( sal_uInt16 nStyle ) { _nStyle = nStyle; }
 
     const OUString&         GetBitmapURL() const { return _aURL; }
-    Color                   GetColor() const { return _nColor; }
+    const Color&            GetColor() const { return _nColor; }
     sal_uInt16              GetStyle() const { return _nStyle; }
 };
 

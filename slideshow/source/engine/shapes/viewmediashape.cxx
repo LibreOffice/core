@@ -113,7 +113,7 @@ namespace slideshow
         }
 
 
-        ViewLayerSharedPtr ViewMediaShape::getViewLayer() const
+        const ViewLayerSharedPtr& ViewMediaShape::getViewLayer() const
         {
             return mpViewLayer;
         }

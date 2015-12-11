@@ -164,8 +164,8 @@ namespace rptui
                                     ,const OUString& _sColorEntry
                                     ,sal_uInt16 _nPosition = USHRT_MAX);
 
-        inline Size     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
-        inline Size     getGridSizeFine() const { return m_aGridSizeFine; }
+        const Size&     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
+        const Size&     getGridSizeFine() const { return m_aGridSizeFine; }
         inline bool     isGridSnap() const { return m_bGridSnap; }
         void            setGridSnap(bool bOn);
         void            setDragStripes(bool bOn);

@@ -69,7 +69,7 @@ public:
         @return
             The returned preview may be empty.
     */
-    Image GetPreview (MasterPageContainer::PreviewSize ePreviewSize) const;
+    const Image& GetPreview (MasterPageContainer::PreviewSize ePreviewSize) const;
 
     /** Use the PreviewProvider to get access to a preview of the master
         page.

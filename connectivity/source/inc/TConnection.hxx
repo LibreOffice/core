@@ -60,7 +60,7 @@ namespace connectivity
         OMetaConnection();
 
         inline rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
-        inline OUString  getURL() const  { return m_sURL; }
+        const OUString&         getURL() const  { return m_sURL; }
         inline void             setURL(const OUString& _rsUrl) { m_sURL = _rsUrl; }
         void                    throwGenericSQLException( sal_uInt16 _nErrorResourceId,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xContext  );
         const SharedResources& getResources() const { return m_aResources;}

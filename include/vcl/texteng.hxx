@@ -314,7 +314,7 @@ public:
     static bool         DoesKeyChangeText( const KeyEvent& rKeyEvent );
     static bool         IsSimpleCharInput( const KeyEvent& rKeyEvent );
 
-    Color               GetTextColor() const { return maTextColor; }
+    const Color&        GetTextColor() const { return maTextColor; }
 };
 
 #endif // INCLUDED_VCL_TEXTENG_HXX

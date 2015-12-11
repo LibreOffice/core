@@ -125,7 +125,7 @@ class TableManager
             mpCellProps = pProps;
         }
 
-        TablePropertyMapPtr getCellProps()
+        const TablePropertyMapPtr& getCellProps()
         {
             return mpCellProps;
         }
@@ -140,7 +140,7 @@ class TableManager
             mpRowProps = pProps;
         }
 
-        TablePropertyMapPtr getRowProps()
+        const TablePropertyMapPtr& getRowProps()
         {
             return mpRowProps;
         }
@@ -283,7 +283,7 @@ protected:
         mState.resetTableProps();
     }
 
-    css::uno::Reference<css::text::XTextRange> getHandle()
+    const css::uno::Reference<css::text::XTextRange>& getHandle()
     {
         return mCurHandle;
     }

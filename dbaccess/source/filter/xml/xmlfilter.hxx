@@ -124,7 +124,7 @@ public:
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
-    inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
+    const Reference<XPropertySet>& getDataSource() const { return m_xDataSource; }
 
     inline const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
 

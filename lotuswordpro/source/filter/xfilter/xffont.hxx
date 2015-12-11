@@ -216,7 +216,7 @@ public:
     enumXFTransform GetTransform();
 
     sal_Int16 GetFontSize();
-    XFColor GetColor();
+    const XFColor& GetColor();
 
     void    ToXml(IXFStream *pStrm);
 
@@ -415,7 +415,7 @@ inline sal_Int16 XFFont::GetFontSize()
     return m_nFontSize;
 }
 
-inline XFColor XFFont::GetColor()
+inline const XFColor& XFFont::GetColor()
 {
     return m_aColor;
 }

@@ -102,7 +102,7 @@ public:
     void AddPersonaSetting( OUString& );
     void ClearSearchResults();
     void SetAppliedPersonaSetting( OUString& );
-    OUString GetAppliedPersonaSetting() const;
+    const OUString& GetAppliedPersonaSetting() const;
 
 private:
     /// Handle the Search button

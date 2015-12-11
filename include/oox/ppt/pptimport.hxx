@@ -49,9 +49,9 @@ public:
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() override;
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
-    SlidePersistPtr                                         getActualSlidePersist() const { return mpActualSlidePersist; };
+    const SlidePersistPtr&                                  getActualSlidePersist() const { return mpActualSlidePersist; };
     void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
-    std::map< OUString, oox::drawingml::ThemePtr >&    getThemes(){ return maThemes; };
+    std::map< OUString, oox::drawingml::ThemePtr >&         getThemes(){ return maThemes; };
     std::vector< SlidePersistPtr >&                         getDrawPages(){ return maDrawPages; };
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };

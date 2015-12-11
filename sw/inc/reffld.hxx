@@ -103,7 +103,7 @@ public:
 
     virtual OUString GetFieldName() const override;
 
-    OUString GetSetRefName() const { return sSetRefName; }
+    const OUString& GetSetRefName() const { return sSetRefName; }
 
     // #i81002#
     /** The <SwTextField> instance, which represents the text attribute for the

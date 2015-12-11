@@ -86,7 +86,7 @@ namespace dbaui
         virtual ~OParameterDialog();
         virtual void dispose() override;
 
-        css::uno::Sequence< css::beans::PropertyValue >
+        const css::uno::Sequence< css::beans::PropertyValue >&
                     getValues() const { return m_aFinalValues; }
 
     protected:

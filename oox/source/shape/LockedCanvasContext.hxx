@@ -27,7 +27,7 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const ::oox::AttributeList& rAttribs) override;
 
-    oox::drawingml::ShapePtr getShape()
+    const oox::drawingml::ShapePtr& getShape()
     {
         return mpShape;
     }

@@ -32,7 +32,7 @@ public:
     SCTAB GetInitTabCount() const           { return nInitTabCount; }
     void   SetInitTabCount( SCTAB nTabs) { nInitTabCount = nTabs; }
     void   SetInitTabPrefix(const OUString& aPrefix) { aInitTabPrefix = aPrefix; }
-    OUString GetInitTabPrefix() const { return aInitTabPrefix; }
+    const OUString& GetInitTabPrefix() const { return aInitTabPrefix; }
 
     ScDefaultsOptions&  operator=  ( const ScDefaultsOptions& rCpy );
     bool                operator== ( const ScDefaultsOptions& rOpt ) const;

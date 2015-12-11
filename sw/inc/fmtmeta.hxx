@@ -212,7 +212,7 @@ public:
     ::std::vector< css::uno::Reference<css::text::XTextField> > getMetaFields();
     /// Copy document properties from rSource to m_xDocumentProperties.
     void copyDocumentProperties(const SwDoc& rSource);
-    css::uno::Reference<css::document::XDocumentProperties> getDocumentProperties();
+    const css::uno::Reference<css::document::XDocumentProperties>& getDocumentProperties();
 };
 
 } // namespace sw

@@ -72,7 +72,7 @@ public:
 
     OUString getAbsolutePathRepresentation();
 
-    OUString getLocale() const { return locale_;}
+    const OUString& getLocale() const { return locale_;}
 
     bool isUpdate() const { return update_;}
 

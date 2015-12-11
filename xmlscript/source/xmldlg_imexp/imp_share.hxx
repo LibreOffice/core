@@ -176,7 +176,7 @@ public:
 
     virtual ~DialogImport();
 
-    inline css::uno::Reference< css::frame::XModel > getDocOwner() { return _xDoc; }
+    const css::uno::Reference< css::frame::XModel >& getDocOwner() { return _xDoc; }
 
     // XRoot
     virtual void SAL_CALL startDocument(
@@ -394,7 +394,7 @@ public:
           _aId( id )
         { OSL_ASSERT( _xControlModel.is() ); }
 
-    inline css::uno::Reference< css::beans::XPropertySet > getControlModel() const
+    const css::uno::Reference< css::beans::XPropertySet >& getControlModel() const
         { return _xControlModel; }
 
     void importScollableSettings( css::uno::Reference< css::xml::input::XAttributes > const & xAttributes );

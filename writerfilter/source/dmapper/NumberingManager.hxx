@@ -84,8 +84,8 @@ public:
     void SetParaStyle( const std::shared_ptr< StyleSheetEntry >& pStyle );
 
     // Getters
-    OUString GetBulletChar( ) { return m_sBulletChar; };
-    std::shared_ptr< StyleSheetEntry > GetParaStyle( ) { return m_pParaStyle; };
+    const OUString& GetBulletChar( ) { return m_sBulletChar; };
+    const std::shared_ptr< StyleSheetEntry >& GetParaStyle( ) { return m_pParaStyle; };
     bool isOutlineNumbering() const { return m_outline; }
 
     // UNO mapping functions
@@ -115,7 +115,7 @@ public:
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() { return m_nId;}
     void SetShape(css::uno::Reference<css::drawing::XShape> const& xShape);
-    css::uno::Reference<css::drawing::XShape> GetShape() { return m_xShape; }
+    const css::uno::Reference<css::drawing::XShape>& GetShape() { return m_xShape; }
 private:
     sal_Int32 m_nId;
     css::uno::Reference<css::drawing::XShape> m_xShape;
@@ -157,12 +157,12 @@ public:
     ListLevel::Pointer    GetLevel( sal_uInt16 nLvl );
     void                  AddLevel( );
 
-    ListLevel::Pointer    GetCurrentLevel( ) { return m_pCurrentLevel; };
+    const ListLevel::Pointer&  GetCurrentLevel( ) { return m_pCurrentLevel; };
 
     virtual css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues();
 
     void                  SetNumStyleLink(const OUString& sValue) { m_sNumStyleLink = sValue; };
-    OUString              GetNumStyleLink() { return m_sNumStyleLink; };
+    const OUString&       GetNumStyleLink() { return m_sNumStyleLink; };
 };
 
 class ListDef : public AbstractListDef
@@ -182,7 +182,7 @@ public:
 
     // Accessors
     void SetAbstractDefinition( AbstractListDef::Pointer pAbstract ) { m_pAbstractDef = pAbstract; };
-    AbstractListDef::Pointer GetAbstractDefinition( ) { return m_pAbstractDef; };
+    const AbstractListDef::Pointer& GetAbstractDefinition( ) { return m_pAbstractDef; };
 
     // Mapping functions
     static OUString GetStyleName( sal_Int32 nId );
@@ -191,7 +191,7 @@ public:
 
     void CreateNumberingRules(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> const& xFactory);
 
-    css::uno::Reference<css::container::XIndexReplace> GetNumberingRules() { return m_xNumRules; }
+    const css::uno::Reference<css::container::XIndexReplace>& GetNumberingRules() { return m_xNumRules; }
 
 };
 

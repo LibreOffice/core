@@ -126,7 +126,7 @@ namespace basegfx
             explicit Triangulator(const B2DPolyPolygon& rCandidate);
             ~Triangulator();
 
-            const B2DPolygon getResult() const { return maResult; }
+            const B2DPolygon& getResult() const { return maResult; }
         };
 
         void Triangulator::handleClosingEdge(const B2DPoint& rStart, const B2DPoint& rEnd)

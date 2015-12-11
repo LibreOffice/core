@@ -926,7 +926,7 @@ public:
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }
     svl::SharedString GetStringResult() const;
     double                      GetNumResult() const        { return xResult->GetDouble(); }
-    formula::FormulaTokenRef    GetResultToken() const      { return xResult; }
+    const formula::FormulaTokenRef& GetResultToken() const      { return xResult; }
     short                       GetRetFormatType() const    { return nRetFmtType; }
     sal_uLong                   GetRetFormatIndex() const   { return nRetFmtIndex; }
 };

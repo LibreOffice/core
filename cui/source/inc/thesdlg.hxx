@@ -139,7 +139,7 @@ public:
     virtual void dispose() override;
 
     bool                    WordFound() const { return m_bWordFound; }
-    OUString                getErrStr() const { return m_aErrStr; }
+    const OUString&         getErrStr() const { return m_aErrStr; }
 
     // Handler
     DECL_LINK_TYPED( ReplaceBtnHdl_Impl, Button *, void );

@@ -287,7 +287,7 @@ public:
         m_xStartingRange = xRange;
     }
 
-    css::uno::Reference<css::text::XTextRange> GetStartingRange() const { return m_xStartingRange; }
+    const css::uno::Reference<css::text::XTextRange>& GetStartingRange() const { return m_xStartingRange; }
 
     css::uno::Reference<css::beans::XPropertySet> GetPageStyle(const css::uno::Reference<css::container::XNameContainer>& xStyles,
                                                                const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory,
@@ -428,10 +428,10 @@ public:
     sal_Int8    GetDropCapLength() const { return m_nDropCapLength;}
     void        SetDropCapLength(sal_Int8 nSet) { m_nDropCapLength = nSet;}
 
-    css::uno::Reference<css::text::XTextRange> GetStartingRange() const { return m_xStartingRange; }
+    const css::uno::Reference<css::text::XTextRange>& GetStartingRange() const { return m_xStartingRange; }
     void SetStartingRange(css::uno::Reference<css::text::XTextRange> const& xSet) { m_xStartingRange = xSet; }
 
-    css::uno::Reference<css::text::XTextRange> GetEndingRange() const { return m_xEndingRange; }
+    const css::uno::Reference<css::text::XTextRange>& GetEndingRange() const { return m_xEndingRange; }
     void SetEndingRange(css::uno::Reference<css::text::XTextRange> const& xSet) { m_xEndingRange = xSet; }
 
     void                    SetParaStyleName( const OUString& rSet ) { m_sParaStyleName = rSet;}

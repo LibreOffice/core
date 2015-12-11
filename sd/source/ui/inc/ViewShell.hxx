@@ -242,9 +242,9 @@ public:
     */
     virtual SdPage* getCurrentPage() const = 0;
 
-    rtl::Reference<FuPoor> GetOldFunction() const { return mxOldFunction; }
+    const rtl::Reference<FuPoor>& GetOldFunction() const { return mxOldFunction; }
     bool HasOldFunction() const { return mxOldFunction.is(); }
-    rtl::Reference<FuPoor> GetCurrentFunction() const { return mxCurrentFunction; }
+    const rtl::Reference<FuPoor>& GetCurrentFunction() const { return mxCurrentFunction; }
     bool HasCurrentFunction( sal_uInt16 nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
     bool HasCurrentFunction() { return mxCurrentFunction.is(); }
 

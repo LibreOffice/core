@@ -346,7 +346,7 @@ public:
     inline OUString const & getCachePath() const { return m_cachePath; }
     inline bool transientMode() const { return m_cachePath.isEmpty(); }
 
-    inline OUString getContext() const {return m_context; }
+    const OUString& getContext() const {return m_context; }
 
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt )

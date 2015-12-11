@@ -152,7 +152,7 @@ public:
 
     std::vector< PDFExtOutDevBookmarkEntry >& GetBookmarks() { return maBookmarks;}
 
-    Graphic GetCurrentGraphic() const;
+    const Graphic& GetCurrentGraphic() const;
 
     /** Start a new group of render output
 

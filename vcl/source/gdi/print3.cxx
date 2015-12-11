@@ -192,7 +192,7 @@ public:
     {}
     ~ImplPrinterControllerData() { mpProgress.disposeAndClear(); }
 
-    Size getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
+    const Size& getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {
         if( mbPapersizeFromSetup )
             return maDefaultPageSize;

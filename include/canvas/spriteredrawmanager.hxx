@@ -124,7 +124,7 @@ namespace canvas
             const Sprite::Reference&    getSprite() const { return mpSprite; }
 
             // #i61843# need to return by value here, to be used safely from bind
-            ::basegfx::B2DRange         getUpdateArea() const { return maTrueUpdateArea; }
+            const ::basegfx::B2DRange&  getUpdateArea() const { return maTrueUpdateArea; }
             bool                        needsUpdate() const { return mbNeedsUpdate; }
             bool                        isPureMove() const { return mbIsPureMove; }
 
@@ -177,7 +177,7 @@ namespace canvas
             {
             }
 
-            Sprite::Reference getSprite() const { return mpAffectedSprite; }
+            const Sprite::Reference& getSprite() const { return mpAffectedSprite; }
 
             ChangeType          meChangeType;
             Sprite::Reference   mpAffectedSprite;

@@ -194,7 +194,7 @@ public:
     OUString                 GetDisplayDirectory() const;
     ErrCode                  GetGraphic( Graphic& rGraphic ) const;
 
-    css::uno::Reference < css::ui::dialogs::XFilePicker2 > GetFilePicker() const;
+    const css::uno::Reference < css::ui::dialogs::XFilePicker2 >& GetFilePicker() const;
 
     // XFilePickerListener methods
     void SAL_CALL   FileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent );

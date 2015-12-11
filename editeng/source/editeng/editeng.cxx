@@ -1526,7 +1526,7 @@ void EditEngine::SetImportHdl( const Link<ImportInfo&,void>& rLink )
     pImpEditEngine->aImportHdl = rLink;
 }
 
-Link<ImportInfo&,void> EditEngine::GetImportHdl() const
+const Link<ImportInfo&,void>& EditEngine::GetImportHdl() const
 {
     return pImpEditEngine->aImportHdl;
 }
@@ -2101,7 +2101,7 @@ void EditEngine::SetWordDelimiters( const OUString& rDelimiters )
         pImpEditEngine->aWordDelimiters += OUStringLiteral1<CH_FEATURE>();
 }
 
-OUString EditEngine::GetWordDelimiters() const
+const OUString& EditEngine::GetWordDelimiters() const
 {
     return pImpEditEngine->aWordDelimiters;
 }

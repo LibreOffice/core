@@ -59,7 +59,7 @@ public:
 
     static OUString    GetName( sal_Int32 nWID );
 
-    const css::uno::Sequence< OUString >
+    const css::uno::Sequence< OUString >&
             GetActiveDics() const   { return pData->aActiveDics; }
 };
 

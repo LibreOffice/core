@@ -68,9 +68,9 @@ public:
     typedef ::std::vector< ::std::vector< css::uno::Any > > tVecVecAny; //inner index is hierarchical level
 
     void setComplexRowLabels( const tVecVecAny& rNewRowLabels );
-    tVecVecAny getComplexRowLabels() const;
+    const tVecVecAny& getComplexRowLabels() const;
     void setComplexColumnLabels( const tVecVecAny& rNewColumnLabels );
-    tVecVecAny getComplexColumnLabels() const;
+    const tVecVecAny& getComplexColumnLabels() const;
 
     void dump() const;
 

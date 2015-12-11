@@ -77,7 +77,7 @@ public:
 
     virtual void    Clear() override;
 
-    css::uno::Reference<css::xml::sax::XAttributeList>   GetAttributeList() const;
+    const css::uno::Reference<css::xml::sax::XAttributeList>& GetAttributeList() const;
 
     friend class XFSaxStream;
 private:
@@ -86,7 +86,7 @@ private:
 
 };
 
-inline css::uno::Reference<css::xml::sax::XAttributeList>    XFSaxAttrList::GetAttributeList() const
+inline const css::uno::Reference<css::xml::sax::XAttributeList>&  XFSaxAttrList::GetAttributeList() const
 {
     return m_xAttrList;
 }

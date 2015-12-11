@@ -248,11 +248,11 @@ public:
     void            StartExecuteDrag();
     void            DragFinished();
 
-    static Color    GetWaterCanTextColor() { return m_aWaterCanTextColor; }
+    static const Color& GetWaterCanTextColor() { return m_aWaterCanTextColor; }
 
     static void     SetWaterCanTextColor(const Color& rCol ) { m_aWaterCanTextColor = rCol; }
 
-    static Color    GetWaterCanTextBackColor()
+    static const Color& GetWaterCanTextBackColor()
                                             { return m_aWaterCanTextBackColor; }
     static void     SetWaterCanTextBackColor(const Color& rCol )
                                             { m_aWaterCanTextBackColor = rCol; }

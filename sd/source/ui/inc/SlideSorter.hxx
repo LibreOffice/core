@@ -120,21 +120,21 @@ public:
 
     /** Return the control of the vertical scroll bar.
     */
-    VclPtr<ScrollBar> GetVerticalScrollBar() const { return mpVerticalScrollBar;}
+    const VclPtr<ScrollBar>& GetVerticalScrollBar() const { return mpVerticalScrollBar;}
 
     /** Return the control of the horizontal scroll bar.
     */
-    VclPtr<ScrollBar> GetHorizontalScrollBar() const { return mpHorizontalScrollBar;}
+    const VclPtr<ScrollBar>& GetHorizontalScrollBar() const { return mpHorizontalScrollBar;}
 
     /** Return the scroll bar filler that paints the little square that is
         enclosed by the two scroll bars.
     */
-    VclPtr<ScrollBarBox> GetScrollBarFiller (void) const { return mpScrollBarBox;}
+    const VclPtr<ScrollBarBox>& GetScrollBarFiller (void) const { return mpScrollBarBox;}
 
     /** Return the content window.  This is a sibling and is geometrically
         enclosed by the scroll bars.
     */
-    VclPtr<sd::Window> GetContentWindow() const { return mpContentWindow;}
+    const VclPtr<sd::Window>& GetContentWindow() const { return mpContentWindow;}
 
     model::SlideSorterModel& GetModel() const;
 

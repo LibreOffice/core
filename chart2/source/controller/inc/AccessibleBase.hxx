@@ -214,7 +214,7 @@ protected:
 
     const AccessibleElementInfo& GetInfo() const { return m_aAccInfo;}
     void SetInfo( const AccessibleElementInfo & rNewInfo );
-    AccessibleUniqueId GetId() const { return m_aAccInfo.m_aOID;}
+    const AccessibleUniqueId& GetId() const { return m_aAccInfo.m_aOID;}
 
     // ________ WeakComponentImplHelper (XComponent::dispose) ________
     virtual void SAL_CALL disposing() override;

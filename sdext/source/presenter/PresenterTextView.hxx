@@ -66,7 +66,7 @@ public:
     void SetCaretMotionBroadcaster (
         const ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster);
 
-    css::awt::Rectangle GetBounds() const;
+    const css::awt::Rectangle& GetBounds() const;
 
 private:
     sal_Int32 mnParagraphIndex;
@@ -109,7 +109,7 @@ public:
     void SetCharacterOffset (const sal_Int32 nCharacterOffset);
     sal_Int32 GetCharacterCount() const;
     sal_Unicode GetCharacter (const sal_Int32 nGlobalCharacterIndex) const;
-    OUString GetText() const;
+    const OUString& GetText() const;
     css::accessibility::TextSegment GetTextSegment (
         const sal_Int32 nOffset,
         const sal_Int32 nGlobalCharacterIndex,
@@ -247,7 +247,7 @@ public:
 
     void Paint (const css::awt::Rectangle& rUpdateBox);
 
-    SharedPresenterTextCaret GetCaret() const;
+    const SharedPresenterTextCaret& GetCaret() const;
 
     sal_Int32 GetParagraphCount() const;
     SharedPresenterTextParagraph GetParagraph (const sal_Int32 nParagraphIndex) const;

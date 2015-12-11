@@ -64,7 +64,7 @@ public:
 
     void InvalidateFootnote();
 
-    OUString   GetNumStr() const { return m_aNumber; }
+    const OUString& GetNumStr() const { return m_aNumber; }
     sal_uInt16 GetNumber() const { return m_nNumber; }
     bool       IsEndNote() const { return m_bEndNote;}
 

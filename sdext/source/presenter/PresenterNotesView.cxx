@@ -673,7 +673,7 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
     }
 }
 
-std::shared_ptr<PresenterTextView> PresenterNotesView::GetTextView() const
+const std::shared_ptr<PresenterTextView>& PresenterNotesView::GetTextView() const
 {
     return mpTextView;
 }

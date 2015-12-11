@@ -655,9 +655,9 @@ public:
                                  sal_uInt16 nSeriesIdx );
 
     /** Returns formatting information of the trend line, created in Convert(). */
-    inline XclExpChDataFormatRef GetDataFormat() const { return mxDataFmt; }
+    const XclExpChDataFormatRef& GetDataFormat() const { return mxDataFmt; }
     /** Returns formatting of the equation text box, created in Convert(). */
-    inline XclExpChTextRef GetDataLabel() const { return mxLabel; }
+    const XclExpChTextRef& GetDataLabel() const { return mxLabel; }
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;

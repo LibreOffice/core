@@ -65,8 +65,8 @@ public:
     virtual ~SvxNewDictionaryDialog();
     virtual void dispose() override;
 
-    css::uno::Reference<
-        css::linguistic2::XDictionary >
+    const css::uno::Reference<
+        css::linguistic2::XDictionary >&
                 GetNewDictionary() { return xNewDic; }
 };
 

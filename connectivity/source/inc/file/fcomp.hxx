@@ -66,7 +66,7 @@ namespace connectivity
             bool isClean() const {return m_aCodeList.empty();}
             bool hasCode() const {return !isClean();}
             void  setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols) { m_orgColumns = rCols; }
-            const css::uno::Reference< css::container::XNameAccess> getOrigColumns() const { return m_orgColumns; }
+            const css::uno::Reference< css::container::XNameAccess>& getOrigColumns() const { return m_orgColumns; }
         protected:
             OOperand* execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             OOperand* execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

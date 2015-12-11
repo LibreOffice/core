@@ -87,7 +87,7 @@ public:
     inline void         ReleaseToolBox() { m_pToolBox = nullptr; }
     void                NameChanged();
     void                SetChild( const css::uno::Reference< css::accessibility::XAccessible >& _xChild );
-    css::uno::Reference< css::accessibility::XAccessible >
+    const css::uno::Reference< css::accessibility::XAccessible >&
                         GetChild() const { return m_xChild; }
     void                NotifyChildEvent( const css::uno::Reference< css::accessibility::XAccessible >& _xChild, bool _bShow );
 

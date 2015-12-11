@@ -722,7 +722,7 @@ namespace slideshow
             ENSURE_OR_THROW( mpViewLayer, "ViewShape::ViewShape(): Invalid View" );
         }
 
-        ViewLayerSharedPtr ViewShape::getViewLayer() const
+        const ViewLayerSharedPtr& ViewShape::getViewLayer() const
         {
             return mpViewLayer;
         }

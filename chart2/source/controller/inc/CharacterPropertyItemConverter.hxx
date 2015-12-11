@@ -51,7 +51,7 @@ protected:
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
         throw (css::uno::Exception) override;
 
-    css::uno::Reference<css::beans::XPropertySet> GetRefSizePropertySet() const;
+    const css::uno::Reference<css::beans::XPropertySet>& GetRefSizePropertySet() const;
 
 private:
     OUString m_aRefSizePropertyName;

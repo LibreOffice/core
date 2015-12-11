@@ -102,7 +102,7 @@ public:
     const BufferNode* isAncestor(const BufferNode* pDescendant) const;
     bool isPrevious(const BufferNode* pFollowing) const;
     const BufferNode* getNextNodeByTreeOrder() const;
-    css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > getXMLElement() const { return m_xXMLElement;}
+    const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& getXMLElement() const { return m_xXMLElement;}
     void setXMLElement(const css::uno::Reference<
         css::xml::wrapper::XXMLElementWrapper >& xXMLElement);
     void notifyBranch();

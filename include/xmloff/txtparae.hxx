@@ -208,29 +208,29 @@ protected:
     const SvXMLAutoStylePoolP& GetAutoStylePool() const { return rAutoStylePool; }
 
 public:
-    rtl::Reference < SvXMLExportPropertyMapper > GetParaPropMapper() const
+    const rtl::Reference < SvXMLExportPropertyMapper >& GetParaPropMapper() const
     {
         return xParaPropMapper;
     }
 
-    rtl::Reference < SvXMLExportPropertyMapper > GetTextPropMapper() const
+    const rtl::Reference < SvXMLExportPropertyMapper >& GetTextPropMapper() const
     {
         return xTextPropMapper;
     }
 
-    rtl::Reference < SvXMLExportPropertyMapper > GetFramePropMapper() const
+    const rtl::Reference < SvXMLExportPropertyMapper >& GetFramePropMapper() const
     {
         return xFramePropMapper;
     }
-    rtl::Reference < SvXMLExportPropertyMapper > GetAutoFramePropMapper() const
+    const rtl::Reference < SvXMLExportPropertyMapper >& GetAutoFramePropMapper() const
     {
         return xAutoFramePropMapper;
     }
-    rtl::Reference < SvXMLExportPropertyMapper > GetSectionPropMapper() const
+    const rtl::Reference < SvXMLExportPropertyMapper >& GetSectionPropMapper() const
     {
         return xSectionPropMapper;
     }
-    rtl::Reference < SvXMLExportPropertyMapper > GetRubyPropMapper() const
+    const rtl::Reference < SvXMLExportPropertyMapper >& GetRubyPropMapper() const
     {
         return xRubyPropMapper;
     }
@@ -565,7 +565,7 @@ public:
     bool IsBlockMode() const { return bBlock; }
 
 
-    rtl::Reference < SvXMLExportPropertyMapper > GetParagraphPropertyMapper() const
+    const rtl::Reference < SvXMLExportPropertyMapper >& GetParagraphPropertyMapper() const
     {
         return xParaPropMapper;
     }

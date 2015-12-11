@@ -100,8 +100,8 @@ public:
     // Tools
     bool supportsOptions( const css::uno::Reference< css::deployment::XPackage > &xPackage ) const;
     static PackageState getPackageState( const css::uno::Reference< css::deployment::XPackage > &xPackage );
-    css::uno::Reference< css::uno::XComponentContext > getContext() const { return m_xContext; }
-    css::uno::Reference< css::deployment::XExtensionManager > getExtensionManager() const { return m_xExtensionManager; }
+    const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_xContext; }
+    const css::uno::Reference< css::deployment::XExtensionManager >& getExtensionManager() const { return m_xExtensionManager; }
     bool isReadOnly( const css::uno::Reference< css::deployment::XPackage > &xPackage ) const;
 
 

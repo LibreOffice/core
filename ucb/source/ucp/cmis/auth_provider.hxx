@@ -36,7 +36,7 @@ namespace cmis
 
             static void setXEnv( const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv ) { sm_xEnv = xEnv; }
 
-            static css::uno::Reference< css::ucb::XCommandEnvironment> getXEnv( ) { return sm_xEnv; }
+            static const css::uno::Reference< css::ucb::XCommandEnvironment>& getXEnv( ) { return sm_xEnv; }
     };
 }
 

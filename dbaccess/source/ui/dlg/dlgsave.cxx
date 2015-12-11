@@ -339,7 +339,7 @@ void OSaveAsDlg::implInit()
     m_pImpl->m_pTitle->GrabFocus();
 }
 
-OUString OSaveAsDlg::getName() const
+const OUString& OSaveAsDlg::getName() const
 {
     return m_pImpl->m_aName;
 }

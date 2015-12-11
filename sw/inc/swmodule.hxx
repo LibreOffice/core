@@ -229,7 +229,7 @@ public:
     static void  CheckSpellChanges( bool bOnlineSpelling,
                     bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags );
 
-    inline css::uno::Reference< css::linguistic2::XLinguServiceEventListener >
+    inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >&
             GetLngSvcEvtListener();
     void    CreateLngSvcEvtListener();
 
@@ -240,7 +240,7 @@ public:
             GetLanguageGuesser();
 };
 
-inline css::uno::Reference< css::linguistic2::XLinguServiceEventListener >
+inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >&
         SwModule::GetLngSvcEvtListener()
 {
     return m_xLinguServiceEventListener;

@@ -324,7 +324,7 @@ public:
 
     ::Window         GetDrawable( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aRefWindow; }
     Display        *GetDisplay() const { return pDisp_; }
-    SalX11Screen    GetDefaultXScreen() const { return m_nXDefaultScreen; }
+    const SalX11Screen& GetDefaultXScreen() const { return m_nXDefaultScreen; }
     const Size&     GetScreenSize( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     void            SetServerVendor() { meServerVendor = sal_GetServerVendor(pDisp_); }

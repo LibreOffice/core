@@ -76,7 +76,7 @@ namespace connectivity
             virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
             virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) = 0;
 
-            ::rtl::Reference<OSQLColumns> getTableColumns() const {return m_aColumns;}
+            const ::rtl::Reference<OSQLColumns>& getTableColumns() const {return m_aColumns;}
             virtual bool InsertRow(OValueRefVector& rRow, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual bool DeleteRow(const OSQLColumns& _rCols);
             virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
@@ -87,7 +87,7 @@ namespace connectivity
 
             OUString SAL_CALL getName() throw(std::exception) override { return m_Name; }
 
-            OUString getSchema() { return m_SchemaName; }
+            const OUString& getSchema() { return m_SchemaName; }
             bool isReadOnly() const { return !m_bWriteable; }
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
             // com::sun::star::lang::XUnoTunnel

@@ -152,7 +152,7 @@ public:
     void SetVBAEnabled( bool bEnabled );
     bool isVBAEnabled();
 
-    SbxObjectRef getRTL() { return pRtl; }
+    const SbxObjectRef& getRTL() { return pRtl; }
     bool IsDocBasic() { return bDocBasic; }
     SbxVariable* VBAFind( const OUString& rName, SbxClassType t );
     bool GetUNOConstant( const OUString& rName, css::uno::Any& aOut );

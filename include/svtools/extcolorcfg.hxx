@@ -49,8 +49,8 @@ public:
     ,m_nDefaultColor(_nDefaultColor)
     {}
 
-    inline OUString        getName()         const { return m_sName; }
-    inline OUString        getDisplayName()  const { return m_sDisplayName; }
+    inline const OUString& getName()         const { return m_sName; }
+    inline const OUString& getDisplayName()  const { return m_sDisplayName; }
     inline sal_Int32       getColor()        const { return m_nColor; }
     inline sal_Int32       getDefaultColor() const { return m_nDefaultColor; }
 

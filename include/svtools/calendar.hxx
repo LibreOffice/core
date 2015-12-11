@@ -276,7 +276,7 @@ public:
 
     void            SetCurDate( const Date& rNewDate );
     void            SetFirstDate( const Date& rNewFirstDate );
-    Date            GetFirstDate() const { return maFirstDate; }
+    const Date&     GetFirstDate() const { return maFirstDate; }
     Date            GetLastDate() const { return GetFirstDate() + mnDayCount; }
     Date            GetFirstMonth() const;
     Date            GetLastMonth() const;

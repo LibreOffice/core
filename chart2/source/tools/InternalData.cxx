@@ -481,7 +481,7 @@ void InternalData::setComplexRowLabels( const vector< vector< uno::Any > >& rNew
         enlargeData( 0, nNewRowCount );
 }
 
-InternalData::tVecVecAny InternalData::getComplexRowLabels() const
+const InternalData::tVecVecAny& InternalData::getComplexRowLabels() const
 {
     return m_aRowLabels;
 }
@@ -496,7 +496,7 @@ void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& r
         enlargeData( nNewColumnCount, 0 );
 }
 
-InternalData::tVecVecAny InternalData::getComplexColumnLabels() const
+const InternalData::tVecVecAny& InternalData::getComplexColumnLabels() const
 {
     return m_aColumnLabels;
 }

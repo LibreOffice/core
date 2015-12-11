@@ -145,7 +145,7 @@ public:
 
    // std::unique_ptr<ResourceManager> GetResourceManager() { return mpResourceManager;}
 
-    Context GetCurrentContext() const { return maCurrentContext;}
+    const Context& GetCurrentContext() const { return maCurrentContext;}
     bool IsDocumentReadOnly (void) const { return mbIsDocumentReadOnly;}
 
     void SwitchToDeck ( const ::rtl::OUString& rsDeckId);

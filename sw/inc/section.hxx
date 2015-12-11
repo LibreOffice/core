@@ -90,7 +90,7 @@ public:
     SwSectionData & operator=(SwSectionData const&);
     bool operator==(SwSectionData const&) const;
 
-    OUString GetSectionName() const         { return m_sSectionName; }
+    const OUString& GetSectionName() const         { return m_sSectionName; }
     void SetSectionName(OUString const& rName){ m_sSectionName = rName; }
     SectionType GetType() const             { return m_eType; }
     void SetType(SectionType const eNew)    { m_eType = eNew; }
@@ -111,16 +111,16 @@ public:
     void SetCondHidden(bool const bFlag = true) { m_bCondHiddenFlag = bFlag; }
     bool IsCondHidden() const { return m_bCondHiddenFlag; }
 
-    OUString GetCondition() const           { return m_sCondition; }
+    const OUString& GetCondition() const           { return m_sCondition; }
     void SetCondition(OUString const& rNew) { m_sCondition = rNew; }
 
-    OUString GetLinkFileName() const        { return m_sLinkFileName; }
+    const OUString& GetLinkFileName() const        { return m_sLinkFileName; }
     void SetLinkFileName(OUString const& rNew)
     {
         m_sLinkFileName = rNew;
     }
 
-    OUString GetLinkFilePassword() const        { return m_sLinkFilePassword; }
+    const OUString& GetLinkFilePassword() const        { return m_sLinkFilePassword; }
     void SetLinkFilePassword(OUString const& rS){ m_sLinkFilePassword = rS; }
 
     css::uno::Sequence<sal_Int8> const& GetPassword() const

@@ -50,7 +50,7 @@ public:
         css::awt::Size aPageSize,
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
-    css::awt::Size getPageSize() const { return m_aPageSize;}
+    const css::awt::Size& getPageSize() const { return m_aPageSize;}
 
     /** Retrieves the state auto-resize from all objects that support this
         feature.  If all objects return the same state, AUTO_RESIZE_YES or

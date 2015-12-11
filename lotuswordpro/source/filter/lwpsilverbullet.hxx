@@ -101,17 +101,13 @@ public:
 
     OUString GetBulletFontName();
 
-    inline OUString GetBulletStyleName() const;
+    const OUString& GetBulletStyleName() const;
 
     OUString GetBulletChar();
 
     static OUString GetPrefix() { return OUString(); }
 
     static OUString GetSuffix() { return OUString(); }
-
-    ;
-
-    ;
 
     bool HasName();
 
@@ -152,7 +148,7 @@ private:
         CUMULATIVE      = 0x10
     };
 };
-inline OUString LwpSilverBullet::GetBulletStyleName() const
+inline const OUString& LwpSilverBullet::GetBulletStyleName() const
 {
     return m_strStyleName;
 }

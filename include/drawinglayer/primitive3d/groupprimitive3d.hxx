@@ -59,7 +59,7 @@ namespace drawinglayer
             explicit GroupPrimitive3D(const Primitive3DContainer& rChildren);
 
             /// data read access
-            Primitive3DContainer getChildren() const { return maChildren; }
+            const Primitive3DContainer& getChildren() const { return maChildren; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive3D& rPrimitive ) const override;

@@ -49,7 +49,7 @@ public:
     virtual ~UnknownAuthDialog();
     virtual void dispose() override;
 
-    css::uno::Reference< css::security::XCertificate > getCert()
+    const css::uno::Reference< css::security::XCertificate >& getCert()
     {
         return m_rXCert;
     }

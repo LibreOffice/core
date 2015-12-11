@@ -141,7 +141,7 @@ public:
                 ScDPGroupTableData( const std::shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument );
     virtual     ~ScDPGroupTableData();
 
-    std::shared_ptr<ScDPTableData> GetSourceTableData() { return pSourceData;}
+    const std::shared_ptr<ScDPTableData>& GetSourceTableData() const { return pSourceData;}
 
     void        AddGroupDimension( const ScDPGroupDimension& rGroup );
     void        SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup );

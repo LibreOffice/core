@@ -622,7 +622,7 @@ bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
     return false;
 }
 
-uno::Sequence< beans::PropertyValue > SfxObjectShell::GetModifyPasswordInfo() const
+const uno::Sequence< beans::PropertyValue >& SfxObjectShell::GetModifyPasswordInfo() const
 {
     return pImp->m_aModifyPasswordInfo;
 }

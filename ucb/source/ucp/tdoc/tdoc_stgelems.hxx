@@ -53,7 +53,7 @@ public:
 
     bool isParentARootStorage() const
     { return m_bParentIsRootStorage; }
-    css::uno::Reference< css::embed::XStorage >
+    const css::uno::Reference< css::embed::XStorage >&
     getParentStorage() const
     { return m_xParentStorage; }
     void setParentStorage( const css::uno::Reference< css::embed::XStorage > & xStg )

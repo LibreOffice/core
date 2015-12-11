@@ -188,7 +188,7 @@ protected:
         css::beans::XPropertySet> & xPropertySet) override;
 
     // various accessor methods:
-    inline OUString GetName()    { return sName; }
+    const OUString& GetName()       { return sName; }
     inline bool IsStringValue()     { return aValueHelper.IsStringValue();}
 };
 

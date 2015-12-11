@@ -180,7 +180,7 @@ protected:
     const SvXMLExport& GetExport() const  { return mrExport; }
 private:
 
-    SAL_DLLPRIVATE rtl::Reference< SvXMLExportPropertyMapper > GetPropertySetMapper() const { return mxPropertySetMapper; }
+    SAL_DLLPRIVATE const rtl::Reference< SvXMLExportPropertyMapper >& GetPropertySetMapper() const { return mxPropertySetMapper; }
 
     const OUString                         msZIndex;
     const OUString                         msPrintable;
@@ -291,7 +291,7 @@ public:
     void setAnimationsExporter( rtl::Reference< XMLAnimationsExporter > xAnimExport ) { mxAnimationsExporter = xAnimExport; }
 
     /** returns the last set XMLAnimationExport */
-    rtl::Reference< XMLAnimationsExporter > getAnimationsExporter() const { return mxAnimationsExporter; }
+    const rtl::Reference< XMLAnimationsExporter >& getAnimationsExporter() const { return mxAnimationsExporter; }
 
     /// returns the export property mapper for external chaining
     static SvXMLExportPropertyMapper* CreateShapePropMapper( SvXMLExport& rExport );

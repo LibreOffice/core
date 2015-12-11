@@ -232,7 +232,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
 
 
         /** @short  TODO */
-        css::uno::Reference< css::uno::XComponentContext > getComponentContext();
+        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext();
 
 
         /** @short  TODO */
@@ -583,7 +583,7 @@ class BrokenRecoveryDialog : public ModalDialog
 
 
         /** @short TODO */
-        OUString getSaveDirURL();
+        const OUString& getSaveDirURL();
 
 
     // helper

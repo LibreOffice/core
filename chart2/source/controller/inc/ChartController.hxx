@@ -396,7 +396,7 @@ private:
             void        addListener( ChartController* pController );
             void        removeListener(  ChartController* pController );
             void        tryTermination();
-            css::uno::Reference< css::frame::XModel >
+            const css::uno::Reference< css::frame::XModel >&
                         getModel() const { return m_xModel;}
 
         private:

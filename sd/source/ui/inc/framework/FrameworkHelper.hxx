@@ -294,7 +294,7 @@ public:
                 const css::uno::Reference<
                     css::drawing::framework::XResourceId>& rxAnchor);
 
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
+    const css::uno::Reference<css::drawing::framework::XConfigurationController>&
         GetConfigurationController() const { return mxConfigurationController;}
 
 private:

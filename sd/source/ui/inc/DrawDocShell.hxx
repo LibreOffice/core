@@ -108,7 +108,7 @@ public:
 
     sd::ViewShell* GetViewShell() { return mpViewShell; }
     ::sd::FrameView* GetFrameView();
-    rtl::Reference<FuPoor> GetDocShellFunction() const { return mxDocShellFunction; }
+    const rtl::Reference<FuPoor>& GetDocShellFunction() const { return mxDocShellFunction; }
     void SetDocShellFunction( const rtl::Reference<FuPoor>& xFunction );
 
     SdDrawDocument*         GetDoc() { return mpDoc;}

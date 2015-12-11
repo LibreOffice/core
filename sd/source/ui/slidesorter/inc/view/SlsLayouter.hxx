@@ -216,9 +216,9 @@ public:
     sal_Int32 GetRow() const { return mnRow; }
     sal_Int32 GetColumn() const { return mnColumn; }
     sal_Int32 GetIndex() const { return mnIndex; }
-    Point GetLocation() const { return maLocation; }
-    Point GetLeadingOffset() const { return maLeadingOffset; }
-    Point GetTrailingOffset() const { return maTrailingOffset; }
+    const Point& GetLocation() const { return maLocation; }
+    const Point& GetLeadingOffset() const { return maLeadingOffset; }
+    const Point& GetTrailingOffset() const { return maTrailingOffset; }
     bool IsAtRunStart() const { return mbIsAtRunStart; }
     bool IsAtRunEnd() const { return mbIsAtRunEnd; }
     bool IsExtraSpaceNeeded() const { return mbIsExtraSpaceNeeded; }

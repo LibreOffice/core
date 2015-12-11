@@ -84,7 +84,7 @@ public:
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpObjectID GetNextID(){return GetNext();}
     sal_uInt8 GetColumnID(){return cColumn;}
-    LwpObjectID GetValueID(){return cValue;}
+    const LwpObjectID& GetValueID(){return cValue;}
 
     virtual void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr);
 protected:
@@ -146,8 +146,8 @@ public:
     LwpTableRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
-    LwpObjectID GetCellRangeID(){return cpCellRange;}
-    LwpObjectID GetTableID(){ return cqTable;}
+    const LwpObjectID& GetCellRangeID(){return cpCellRange;}
+    const LwpObjectID& GetTableID(){ return cqTable;}
     LwpTableRange* GetNext() { return dynamic_cast<LwpTableRange*>(LwpDLVList::GetNext().obj().get());}
 protected:
     LwpObjectID cqTable;
@@ -166,7 +166,7 @@ public:
     LwpCellRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
-    LwpObjectID GetFolderID(){return cpFolder;}
+    const LwpObjectID& GetFolderID(){return cpFolder;}
 protected:
     LwpObjectID cpFolder;
     void Read() override;

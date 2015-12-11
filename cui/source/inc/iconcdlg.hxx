@@ -102,7 +102,7 @@ public:
 
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet );
-    OUString            GetUserData() { return aUserString; }
+    const OUString&     GetUserData() { return aUserString; }
     virtual bool        QueryClose();
 
     void                StateChanged( StateChangedType nType ) override;

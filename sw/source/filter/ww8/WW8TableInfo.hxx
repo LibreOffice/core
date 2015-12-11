@@ -138,7 +138,7 @@ public:
     long right() const { return m_aRect.Right(); }
     long width() const { return m_aRect.Width(); }
     long height() const { return m_aRect.Height(); }
-    SwRect getRect() const { return m_aRect; }
+    const SwRect& getRect() const { return m_aRect; }
     WW8TableNodeInfo * getTableNodeInfo() const
     { return m_pNodeInfo; }
     unsigned long getFormatFrameWidth() const
@@ -250,9 +250,9 @@ public:
     void setWidths(WidthsPtr pGridCols);
     void setRowSpans(RowSpansPtr pRowSpans);
 
-    TableBoxVectorPtr getTableBoxVector() const { return m_pTableBoxVector;}
-    WidthsPtr getWidths() const { return m_pWidths;}
-    RowSpansPtr getRowSpans() const { return m_pRowSpans;}
+    const TableBoxVectorPtr& getTableBoxVector() const { return m_pTableBoxVector;}
+    const WidthsPtr& getWidths() const { return m_pWidths;}
+    const RowSpansPtr& getRowSpans() const { return m_pRowSpans;}
 };
 
 class WW8TableCellGrid

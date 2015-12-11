@@ -840,7 +840,7 @@ void MetaFieldManager::copyDocumentProperties(const SwDoc& rSource)
     m_xDocumentProperties.set(xCloneable->createClone(), uno::UNO_QUERY);
 }
 
-uno::Reference<document::XDocumentProperties> MetaFieldManager::getDocumentProperties()
+const uno::Reference<document::XDocumentProperties>& MetaFieldManager::getDocumentProperties()
 {
     return m_xDocumentProperties;
 }

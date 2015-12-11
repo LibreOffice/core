@@ -22,7 +22,7 @@ private:
     bool m_isLearnmoreTag, m_hasResults;
 public:
     PersonasDocHandler(){ m_isLearnmoreTag = false; m_hasResults = false; }
-    std::vector<OUString> getLearnmoreURLs() { return m_vLearnmoreURLs; }
+    const std::vector<OUString>& getLearnmoreURLs() { return m_vLearnmoreURLs; }
     bool hasResults() { return m_hasResults; }
 
     // XDocumentHandler

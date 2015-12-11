@@ -54,7 +54,7 @@ namespace dbaui
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     // attribute access
     public:
-        css::uno::Reference< css::awt::XControl >             getGridControl() const  { return m_xGrid; }
+        const css::uno::Reference< css::awt::XControl >&  getGridControl() const  { return m_xGrid; }
         SbaGridControl*         getVclControl() const;
 
     public:
@@ -79,7 +79,7 @@ namespace dbaui
         void    showStatus( const OUString& _rStatus );
         void    hideStatus();
 
-        css::uno::Reference< css::awt::XControlContainer >     getContainer() { return m_xMe; }
+        const css::uno::Reference< css::awt::XControlContainer >& getContainer() { return m_xMe; }
 
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;

@@ -74,7 +74,7 @@ namespace pcr
 
         // XPropertyControl
         ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) { return m_nControlType; }
-        css::uno::Reference< css::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (css::uno::RuntimeException) { return m_xContext; }
+        const css::uno::Reference< css::inspection::XPropertyControlContext >& SAL_CALL getControlContext() throw (css::uno::RuntimeException) { return m_xContext; }
         void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) throw (css::uno::RuntimeException);
         bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException) { return m_bModified; }
         void SAL_CALL notifyModifiedValue(  ) throw (css::uno::RuntimeException);

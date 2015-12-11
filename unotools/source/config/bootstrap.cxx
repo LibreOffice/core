@@ -109,7 +109,7 @@ namespace utl
         OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
         static bool getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault);
 
-        OUString getImplName() const { return m_aImplName; }
+        const OUString& getImplName() const { return m_aImplName; }
 
     private: // implementation
         bool initBaseInstallationData(rtl::Bootstrap& _rData);

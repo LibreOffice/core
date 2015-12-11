@@ -750,11 +750,11 @@ public:
 
     void            ParagraphInsertedHdl();
     void            SetParaInsertedHdl(const Link<Outliner*,void>& rLink){aParaInsertedHdl=rLink;}
-    Link<Outliner*,void> GetParaInsertedHdl() const { return aParaInsertedHdl; }
+    const Link<Outliner*,void>& GetParaInsertedHdl() const { return aParaInsertedHdl; }
 
     void            ParagraphRemovingHdl();
     void            SetParaRemovingHdl(const Link<Outliner*,void>& rLink){aParaRemovingHdl=rLink;}
-    Link<Outliner*,void> GetParaRemovingHdl() const { return aParaRemovingHdl; }
+    const Link<Outliner*,void>& GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
     NonOverflowingText *GetNonOverflowingText() const;
     OverflowingText *GetOverflowingText() const;
@@ -766,7 +766,7 @@ public:
 
     void            DepthChangedHdl();
     void            SetDepthChangedHdl(const Link<Outliner*,void>& rLink){aDepthChangedHdl=rLink;}
-    Link<Outliner*,void> GetDepthChangedHdl() const { return aDepthChangedHdl; }
+    const Link<Outliner*,void>& GetDepthChangedHdl() const { return aDepthChangedHdl; }
     sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(nDepthChangedHdlPrevDepth); }
     ParaFlag        GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
@@ -778,7 +778,7 @@ public:
     sal_Int32       GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
 
     void            SetCalcFieldValueHdl(const Link<EditFieldInfo*,void>& rLink ) { aCalcFieldValueHdl= rLink; }
-    Link<EditFieldInfo*,void> GetCalcFieldValueHdl() const { return aCalcFieldValueHdl; }
+    const Link<EditFieldInfo*,void>& GetCalcFieldValueHdl() const { return aCalcFieldValueHdl; }
 
     void            SetDrawPortionHdl(const Link<DrawPortionInfo*,void>& rLink){aDrawPortionHdl=rLink;}
 
@@ -875,9 +875,9 @@ public:
     void            SetControlWord( EEControlBits nWord );
     EEControlBits   GetControlWord() const;
 
-    Link<Outliner*,void> GetBeginMovingHdl() const { return aBeginMovingHdl; }
+    const Link<Outliner*,void>& GetBeginMovingHdl() const { return aBeginMovingHdl; }
     void            SetBeginMovingHdl(const Link<Outliner*,void>& rLink) {aBeginMovingHdl=rLink;}
-    Link<Outliner*,void> GetEndMovingHdl() const {return aEndMovingHdl;}
+    const Link<Outliner*,void>& GetEndMovingHdl() const {return aEndMovingHdl;}
     void            SetEndMovingHdl( const Link<Outliner*,void>& rLink){aEndMovingHdl=rLink;}
 
     sal_uLong           GetLineCount( sal_Int32 nParagraph ) const;

@@ -159,7 +159,7 @@ public:
     FieldContext(css::uno::Reference<css::text::XTextRange> const& xStart);
     ~FieldContext();
 
-    css::uno::Reference<css::text::XTextRange> GetStartRange() const { return m_xStartRange; }
+    const css::uno::Reference<css::text::XTextRange>& GetStartRange() const { return m_xStartRange; }
 
     void                    AppendCommand(const OUString& rPart);
     const OUString&  GetCommand() const {return m_sCommand; }
@@ -173,28 +173,28 @@ public:
     void                    SetFieldLocked() { m_bFieldLocked = true; }
     bool                    IsFieldLocked() { return m_bFieldLocked; }
 
-    css::uno::Reference<css::beans::XPropertySet> GetCustomField() const { return m_xCustomField; }
+    const css::uno::Reference<css::beans::XPropertySet>& GetCustomField() const { return m_xCustomField; }
     void SetCustomField(css::uno::Reference<css::beans::XPropertySet> const& xCustomField) { m_xCustomField = xCustomField; }
-    css::uno::Reference<css::text::XTextField> GetTextField() const { return m_xTextField;}
+    const css::uno::Reference<css::text::XTextField>& GetTextField() const { return m_xTextField;}
     void SetTextField(css::uno::Reference<css::text::XTextField> const& xTextField) { m_xTextField = xTextField;}
-    css::uno::Reference<css::text::XFormField> GetFormField() const { return m_xFormField;}
+    const css::uno::Reference<css::text::XFormField>& GetFormField() const { return m_xFormField;}
     void SetFormField(css::uno::Reference<css::text::XFormField> const& xFormField) { m_xFormField = xFormField;}
 
     void SetTOC(css::uno::Reference<css::beans::XPropertySet> const& xTOC) { m_xTOC = xTOC; }
-    css::uno::Reference<css::beans::XPropertySet> GetTOC() { return m_xTOC; }
+    const css::uno::Reference<css::beans::XPropertySet>& GetTOC() { return m_xTOC; }
 
     void SetTC(css::uno::Reference<css::beans::XPropertySet> const& xTC) { m_xTC = xTC; }
-    css::uno::Reference<css::beans::XPropertySet> GetTC() { return m_xTC; }
+    const css::uno::Reference<css::beans::XPropertySet>& GetTC() { return m_xTC; }
 
     void    SetHyperlinkURL( const OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
 
     void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
-    FFDataHandler::Pointer_t getFFDataHandler() const { return m_pFFDataHandler; }
+    const FFDataHandler::Pointer_t& getFFDataHandler() const { return m_pFFDataHandler; }
 
     void setFormControlHelper(FormControlHelper::Pointer_t pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }
-    FormControlHelper::Pointer_t getFormControlHelper() const { return m_pFormControlHelper; }
-    PropertyMapPtr getProperties() { return m_pProperties; }
+    const FormControlHelper::Pointer_t& getFormControlHelper() const { return m_pFormControlHelper; }
+    const PropertyMapPtr& getProperties() { return m_pProperties; }
 
     ::std::vector<OUString> GetCommandParts() const;
 };
@@ -483,11 +483,11 @@ public:
 
     css::uno::Reference<css::container::XNameContainer> GetPageStyles();
     css::uno::Reference<css::text::XText> GetBodyText();
-    css::uno::Reference<css::lang::XMultiServiceFactory> GetTextFactory() const
+    const css::uno::Reference<css::lang::XMultiServiceFactory>& GetTextFactory() const
     {
         return m_xTextFactory;
     }
-    css::uno::Reference<css::text::XTextDocument> GetTextDocument() const
+    const css::uno::Reference<css::text::XTextDocument>& GetTextDocument() const
     {
         return m_xTextDocument;
     }
@@ -561,7 +561,7 @@ public:
     void    PopProperties(ContextType eId);
 
     ContextType GetTopContextType() const { return m_aContextStack.top(); }
-    PropertyMapPtr GetTopContext()
+    const PropertyMapPtr& GetTopContext()
     {
         return m_pTopContext;
     }
@@ -607,7 +607,7 @@ public:
     css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
 
     void        SetCurrentParaStyleId(const OUString& sStringValue) {m_sCurrentParaStyleId = sStringValue;}
-    OUString    GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
+    const OUString& GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
 
     css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}

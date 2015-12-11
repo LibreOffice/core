@@ -43,9 +43,9 @@ public:
   BootstrapFixtureBase();
   virtual ~BootstrapFixtureBase();
 
-  css::uno::Reference<css::uno::XComponentContext>
+  const css::uno::Reference<css::uno::XComponentContext>&
               getComponentContext() { return m_xContext; }
-  css::uno::Reference<css::lang::XMultiServiceFactory>
+  const css::uno::Reference<css::lang::XMultiServiceFactory>&
               getMultiServiceFactory() { return m_xSFactory; }
 
   virtual void setUp() override;

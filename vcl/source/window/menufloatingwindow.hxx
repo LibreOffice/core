@@ -101,7 +101,7 @@ public:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     void SetFocusId( const VclPtr<vcl::Window>& xId ) { xSaveFocusId = xId; }
-    VclPtr<vcl::Window> GetFocusId() const      { return xSaveFocusId; }
+    const VclPtr<vcl::Window>& GetFocusId() const      { return xSaveFocusId; }
 
     void EnableScrollMenu( bool b );
     bool IsScrollMenu() const        { return bScrollMenu; }

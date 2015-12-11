@@ -59,31 +59,31 @@ public:
                     oox::drawingml::ShapePtr pShapesPtr, const ::oox::drawingml::TextListStylePtr & );
     ~SlidePersist();
 
-    css::uno::Reference< css::drawing::XDrawPage >    getPage() const { return mxPage; };
+    const css::uno::Reference< css::drawing::XDrawPage >& getPage() const { return mxPage; };
 
 #if OSL_DEBUG_LEVEL > 0
     static css::uno::WeakReference< css::drawing::XDrawPage > mxDebugPage;
 #endif
 
     void setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; }
-    SlidePersistPtr getMasterPersist() const { return mpMasterPagePtr; }
+    const SlidePersistPtr& getMasterPersist() const { return mpMasterPagePtr; }
 
     void setPath( const OUString& rPath ) { maPath = rPath; }
-    const OUString getPath() const { return maPath; }
+    const OUString& getPath() const { return maPath; }
 
     void setLayoutPath( const OUString& rLayoutPath ) { maLayoutPath = rLayoutPath; }
-    const OUString getLayoutPath() const { return maLayoutPath; }
+    const OUString& getLayoutPath() const { return maLayoutPath; }
 
     void setTheme( const oox::drawingml::ThemePtr& rThemePtr ){ mpThemePtr = rThemePtr; }
-    oox::drawingml::ThemePtr getTheme() const { return mpThemePtr; }
+    const oox::drawingml::ThemePtr& getTheme() const { return mpThemePtr; }
 
-    oox::drawingml::ClrSchemePtr getClrScheme() const { return mpClrSchemePtr; }
+    const oox::drawingml::ClrSchemePtr& getClrScheme() const { return mpClrSchemePtr; }
 
     void setClrMap( const oox::drawingml::ClrMapPtr pClrMapPtr ){ mpClrMapPtr = pClrMapPtr; }
-    oox::drawingml::ClrMapPtr getClrMap() const { return mpClrMapPtr; }
+    const oox::drawingml::ClrMapPtr& getClrMap() const { return mpClrMapPtr; }
 
     void setBackgroundProperties( const oox::drawingml::FillPropertiesPtr& rFillPropertiesPtr ){ mpBackgroundPropertiesPtr = rFillPropertiesPtr; }
-    const oox::drawingml::FillPropertiesPtr getBackgroundProperties() const { return mpBackgroundPropertiesPtr; }
+    const oox::drawingml::FillPropertiesPtr& getBackgroundProperties() const { return mpBackgroundPropertiesPtr; }
 
     bool isMasterPage() const { return mbMaster; }
     bool isNotesPage() const { return mbNotes; }
@@ -92,13 +92,13 @@ public:
     short getLayoutFromValueToken();
 
 
-    oox::drawingml::TextListStylePtr getDefaultTextStyle() const { return maDefaultTextStylePtr; }
-    oox::drawingml::TextListStylePtr getTitleTextStyle() const { return maTitleTextStylePtr; }
-    oox::drawingml::TextListStylePtr getBodyTextStyle() const { return maBodyTextStylePtr; }
-    oox::drawingml::TextListStylePtr getNotesTextStyle() const { return maNotesTextStylePtr; }
-    oox::drawingml::TextListStylePtr getOtherTextStyle() const { return maOtherTextStylePtr; }
+    const oox::drawingml::TextListStylePtr& getDefaultTextStyle() const { return maDefaultTextStylePtr; }
+    const oox::drawingml::TextListStylePtr& getTitleTextStyle() const { return maTitleTextStylePtr; }
+    const oox::drawingml::TextListStylePtr& getBodyTextStyle() const { return maBodyTextStylePtr; }
+    const oox::drawingml::TextListStylePtr& getNotesTextStyle() const { return maNotesTextStylePtr; }
+    const oox::drawingml::TextListStylePtr& getOtherTextStyle() const { return maOtherTextStylePtr; }
 
-    oox::drawingml::ShapePtr getShapes() { return maShapesPtr; }
+    const oox::drawingml::ShapePtr& getShapes() { return maShapesPtr; }
     void hideShapesAsMasterShapes();
     ::std::list< std::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
     oox::ppt::HeaderFooter& getHeaderFooter(){ return maHeaderFooter; };

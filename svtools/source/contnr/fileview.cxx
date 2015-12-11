@@ -200,7 +200,7 @@ public:
     void            EnableAutoResize() { mbAutoResize = true; }
     void            EnableDelete( bool bEnable ) { mbEnableDelete = bEnable; }
 
-    Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
+    const Reference< XCommandEnvironment >& GetCommandEnvironment() const { return mxCmdEnv; }
 
     DECL_LINK_TYPED(ResetQuickSearch_Impl, Timer *, void);
 

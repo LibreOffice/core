@@ -88,10 +88,10 @@ public:
     // thread:
     void terminate(bool final);
 
-    com::sun::star::uno::Reference< com::sun::star::connection::XConnection >
+    const com::sun::star::uno::Reference< com::sun::star::connection::XConnection >&
     getConnection() const { return connection_;}
 
-    com::sun::star::uno::Reference< com::sun::star::bridge::XInstanceProvider >
+    const com::sun::star::uno::Reference< com::sun::star::bridge::XInstanceProvider >&
     getProvider() const { return provider_;}
 
     com::sun::star::uno::Mapping & getCppToBinaryMapping() { return cppToBinaryMapping_;}

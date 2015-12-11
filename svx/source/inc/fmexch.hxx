@@ -183,10 +183,10 @@ namespace svxform
             // Aufrufer sicherstellen)
 
         const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
+        const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >&
                                     hiddenControls() const { return m_aHiddenControlModels; }
 
-        css::uno::Reference< css::form::XForms >
+        const css::uno::Reference< css::form::XForms >&
                                 getFormsRoot() const { return m_xFormsRoot; }
     };
 

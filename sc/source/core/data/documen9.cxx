@@ -639,7 +639,7 @@ void ScDocument::SetImportingXML( bool bVal )
     SetLoadingMedium(bVal);
 }
 
-rtl::Reference<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
+const rtl::Reference<SvxForbiddenCharactersTable>& ScDocument::GetForbiddenCharacters()
 {
     return xForbiddenCharacters;
 }

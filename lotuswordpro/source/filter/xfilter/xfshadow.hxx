@@ -101,7 +101,7 @@ public:
     /**
      * @descr   return shadow color.
      */
-    XFColor GetColor();
+    const XFColor& GetColor();
 
     OUString   ToString();
 
@@ -140,7 +140,7 @@ inline void XFShadow::SetColor(const XFColor& color)
     m_aColor = color;
 }
 
-inline XFColor XFShadow::GetColor()
+inline const XFColor& XFShadow::GetColor()
 {
     return m_aColor;
 }

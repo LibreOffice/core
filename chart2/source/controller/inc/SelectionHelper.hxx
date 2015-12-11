@@ -38,7 +38,7 @@ public: //methods
 
     OUString getSelectedCID();
     css::uno::Reference< css::drawing::XShape > getSelectedAdditionalShape();
-    ObjectIdentifier getSelectedOID() const { return m_aSelectedOID;}
+    const ObjectIdentifier& getSelectedOID() const { return m_aSelectedOID;}
 
     bool isResizeableObjectSelected();
     bool isRotateableObjectSelected( const css::uno::Reference< css::frame::XModel >& xChartModel );

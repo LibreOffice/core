@@ -257,11 +257,11 @@ public:
     LwpRubyMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     virtual ~LwpRubyMarker(){}
     void Read() override;
-    OUString GetRubyText(){return m_strRubyText;}
+    const OUString& GetRubyText(){return m_strRubyText;}
     void SetRubyText(const OUString& sText){m_strRubyText = sText;}
-    OUString GetTextStyleName(){return m_TextStyle;}
+    const OUString& GetTextStyleName(){return m_TextStyle;}
     void SetTextStyleName(const OUString& sName){m_TextStyle = sName;}
-    OUString GetRubyStyleName(){return m_RubyStyle;}
+    const OUString& GetRubyStyleName(){return m_RubyStyle;}
     void SetRubyStyleName(const OUString& sName){m_RubyStyle = sName;}
 private:
     LwpObjectID m_objLayout;

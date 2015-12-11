@@ -36,7 +36,7 @@ public:
     SwASCWriter( const OUString& rFilterName );
     virtual ~SwASCWriter();
 
-    OUString GetLineEnd() const { return m_sLineEnd; }
+    const OUString& GetLineEnd() const { return m_sLineEnd; }
 };
 
 #endif  //  _ INCLUDED_SW_SOURCE_FILTER_ASCII_WRTASC_HXX

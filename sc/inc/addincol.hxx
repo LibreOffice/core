@@ -115,9 +115,9 @@ public:
     long                    GetArgumentCount() const    { return nArgCount; }
     const ScAddInArgDesc*   GetArguments() const        { return pArgDescs; }
     long                    GetCallerPos() const        { return nCallerPos; }
-    const OUString&  GetDescription() const      { return aDescription; }
+    const OUString&         GetDescription() const      { return aDescription; }
     sal_uInt16              GetCategory() const         { return nCategory; }
-    const OString      GetHelpId() const           { return sHelpId; }
+    const OString&          GetHelpId() const           { return sHelpId; }
 
     const ::std::vector< LocalizedName >&  GetCompNames() const;
     bool                    GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const;
@@ -220,8 +220,8 @@ public:
     bool                HasVarRes() const       { return ( xVarRes.is() ); }
     double              GetValue() const        { return fValue; }
     const OUString&     GetString() const       { return aString; }
-    ScMatrixRef         GetMatrix() const       { return xMatrix;}
-    css::uno::Reference<css::sheet::XVolatileResult>
+    const ScMatrixRef&  GetMatrix() const       { return xMatrix;}
+    const css::uno::Reference<css::sheet::XVolatileResult>&
                         GetVarRes() const       { return xVarRes; }
 };
 

@@ -90,7 +90,7 @@ public:
         importShape() call.
     */
     bool isImportDone() const;
-    PolyPolygonVector getPolygons();
+    const PolyPolygonVector& getPolygons();
 
     double getImportedShapesCount() { return mnAscendingPrio; }
 private:

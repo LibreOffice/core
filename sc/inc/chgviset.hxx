@@ -96,13 +96,13 @@ public:
     bool                HasAuthor() const {return bIsAuthor;}
     void                SetHasAuthor(bool bFlag) {bIsAuthor=bFlag;}
 
-    OUString            GetTheAuthorToShow()const {return aAuthorToShow;}
+    const OUString&     GetTheAuthorToShow()const {return aAuthorToShow;}
     void                SetTheAuthorToShow(const OUString& aString){aAuthorToShow=aString;}
 
     bool                HasComment() const {return bIsComment;}
     void                SetHasComment(bool bFlag) {bIsComment=bFlag;}
 
-    OUString            GetTheComment()const {return aComment;}
+    const OUString&     GetTheComment()const {return aComment;}
     void                SetTheComment(const OUString& aString);
 
     bool                IsValidComment(const OUString* pCommentStr) const;

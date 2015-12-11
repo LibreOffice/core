@@ -666,7 +666,7 @@ sal_Int64 SfxInPlaceClient::GetObjectMiscStatus() const
 }
 
 
-uno::Reference < embed::XEmbeddedObject > SfxInPlaceClient::GetObject() const
+const uno::Reference < embed::XEmbeddedObject >& SfxInPlaceClient::GetObject() const
 {
     return m_pImp->m_xObject;
 }
@@ -738,7 +738,7 @@ bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
 }
 
 
-Rectangle SfxInPlaceClient::GetObjArea() const
+const Rectangle& SfxInPlaceClient::GetObjArea() const
 {
     return m_pImp->m_aObjArea;
 }

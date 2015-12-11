@@ -135,7 +135,7 @@ class OParameterContinuation : public OInteraction< XInteractionSupplyParameters
 public:
     OParameterContinuation() { }
 
-    Sequence< PropertyValue >   getValues() const { return m_aValues; }
+    const Sequence< PropertyValue >&  getValues() const { return m_aValues; }
 
 // XInteractionSupplyParameters
     virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException, std::exception) override;

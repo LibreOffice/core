@@ -471,7 +471,7 @@ void SessionManagerClient::open(SalSession * pSession)
     }
 }
 
-OString SessionManagerClient::getSessionID()
+const OString& SessionManagerClient::getSessionID()
 {
     return m_aClientID;
 }

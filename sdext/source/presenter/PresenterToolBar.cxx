@@ -72,8 +72,8 @@ namespace {
             const PresenterTheme::SharedFontDescriptor& rpFont);
 
         void SetText (const OUString& rsText);
-        OUString GetText() const;
-        PresenterTheme::SharedFontDescriptor GetFont() const;
+        const OUString& GetText() const;
+        const PresenterTheme::SharedFontDescriptor& GetFont() const;
 
         void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
@@ -489,12 +489,12 @@ geometry::RealSize2D PresenterToolBar::GetMinimalSize()
     return maMinimalSize;
 }
 
-::rtl::Reference<PresenterController> PresenterToolBar::GetPresenterController() const
+const ::rtl::Reference<PresenterController>& PresenterToolBar::GetPresenterController() const
 {
     return mpPresenterController;
 }
 
-Reference<XComponentContext> PresenterToolBar::GetComponentContext() const
+const Reference<XComponentContext>& PresenterToolBar::GetComponentContext() const
 {
     return mxComponentContext;
 }
@@ -1143,7 +1143,7 @@ void SAL_CALL PresenterToolBarView::disposing()
 
 }
 
-::rtl::Reference<PresenterToolBar> PresenterToolBarView::GetPresenterToolBar() const
+const ::rtl::Reference<PresenterToolBar>& PresenterToolBarView::GetPresenterToolBar() const
 {
     return mpToolBar;
 }
@@ -1720,12 +1720,12 @@ void Text::SetText (const OUString& rsText)
     msText = rsText;
 }
 
-OUString Text::GetText() const
+const OUString& Text::GetText() const
 {
     return msText;
 }
 
-PresenterTheme::SharedFontDescriptor Text::GetFont() const
+const PresenterTheme::SharedFontDescriptor& Text::GetFont() const
 {
     return mpFont;
 }

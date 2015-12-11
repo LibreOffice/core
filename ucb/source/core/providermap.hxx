@@ -44,7 +44,7 @@ public:
         const css::uno::Reference< css::ucb::XContentProvider >& xProvider )
     : m_xProvider( xProvider ) {}
 
-    css::uno::Reference< css::ucb::XContentProvider > getProvider() const
+    const css::uno::Reference< css::ucb::XContentProvider >& getProvider() const
     { return m_xProvider; }
     inline css::uno::Reference< css::ucb::XContentProvider > getResolvedProvider() const;
 };

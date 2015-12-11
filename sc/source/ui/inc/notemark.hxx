@@ -60,7 +60,7 @@ public:
     void        Draw();
     void        InvalidateWin();
 
-    ScAddress   GetDocPos() const       { return aDocPos; }
+    const ScAddress& GetDocPos() const       { return aDocPos; }
     bool        IsByKeyboard() const    { return bByKeyboard; }
     void        SetGridOff( const Point& rOff ) { aGridOff = rOff; }
 };

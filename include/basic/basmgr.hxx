@@ -147,9 +147,9 @@ public:
     static void     LegacyDeleteBasicManager( BasicManager*& _rpManager );
 
     void            SetStorageName( const OUString& rName )   { maStorageName = rName; }
-    OUString        GetStorageName() const                  { return maStorageName; }
+    const OUString& GetStorageName() const                  { return maStorageName; }
     void            SetName( const OUString& rName )          { aName = rName; }
-    OUString        GetName() const                         { return aName; }
+    const OUString& GetName() const                         { return aName; }
 
 
     sal_uInt16      GetLibCount() const;

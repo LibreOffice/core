@@ -1217,7 +1217,7 @@ class BinaryOutput
 public:
     explicit BinaryOutput( Reference< XComponentContext > xContext );
 
-    Reference< io::XOutputStream > getOutputStream() const
+    const Reference< io::XOutputStream >& getOutputStream() const
         { return m_xOutputStream; }
 
     Sequence< ::sal_Int8 > closeAndGetData();

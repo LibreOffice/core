@@ -207,7 +207,7 @@ public:
     virtual ~ChartExport() {}
 
     sal_Int32           GetChartID( );
-    css::uno::Reference< css::frame::XModel > getModel(){ return mxChartModel; }
+    const css::uno::Reference< css::frame::XModel >& getModel(){ return mxChartModel; }
 
     void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nChartCount );
 

@@ -65,7 +65,7 @@ namespace logging
         inline  rtl_TextEncoding
                 getTextEncoding() const { return m_eEncoding; }
 
-        inline  css::uno::Reference< css::logging::XLogFormatter >
+        const css::uno::Reference< css::logging::XLogFormatter >&
                 getFormatter() const { return m_xFormatter; }
         inline  void
                 setFormatter( const css::uno::Reference< css::logging::XLogFormatter >& _rxFormatter )

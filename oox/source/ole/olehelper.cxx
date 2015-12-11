@@ -359,8 +359,8 @@ public:
             sResult = maGUID.copy(1, maGUID.getLength() - 2 );
         return sResult;
     }
-    OUString getFullName() { return maFullName; }
-    OUString getTypeName() { return maTypeName; }
+    const OUString& getFullName() { return maFullName; }
+    const OUString& getTypeName() { return maTypeName; }
     bool isValid() { return mpModel != nullptr; }
     void exportName( const Reference< XOutputStream >& rxOut );
     void exportCompObj( const Reference< XOutputStream >& rxOut );

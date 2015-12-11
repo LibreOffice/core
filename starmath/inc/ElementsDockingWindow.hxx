@@ -40,13 +40,13 @@ public:
     SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText);
     virtual ~SmElement();
 
-    SmNodePointer getNode();
-    OUString      getText()
+    const SmNodePointer& getNode();
+    const OUString& getText()
     {
         return maText;
     }
 
-    OUString getHelpText()
+    const OUString& getHelpText()
     {
         return maHelpText;
     }

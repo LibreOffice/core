@@ -49,7 +49,7 @@ public:
     StructRefInfo( css::uno::Any& aAny, css::uno::Type const & rType, sal_Int32 nPos ) : maAny( aAny ), maType( rType ), mnPos( nPos ) {}
 
     sal_Int32 getPos() const { return mnPos; }
-    css::uno::Type getType() const { return maType; }
+    const css::uno::Type& getType() const { return maType; }
     OUString getTypeName() const;
     css::uno::Any& getRootAnyRef() { return maAny; };
 
@@ -82,7 +82,7 @@ class SbUnoStructRefObject: public SbxObject
     OUString getDbgObjectName();
 public:
     StructRefInfo getStructMember( const OUString& rMember );
-    StructRefInfo getStructInfo() { return maMemberInfo; }
+    const StructRefInfo& getStructInfo() { return maMemberInfo; }
     SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo );
     virtual ~SbUnoStructRefObject();
 
@@ -133,8 +133,8 @@ public:
 
     // give out value
     css::uno::Any getUnoAny();
-    css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess()    { return mxUnoAccess; }
-    css::uno::Reference< css::script::XInvocation > getInvocation()         { return mxInvocation; }
+    const css::uno::Reference< css::beans::XIntrospectionAccess >& getIntrospectionAccess()    { return mxUnoAccess; }
+    const css::uno::Reference< css::script::XInvocation >& getInvocation()         { return mxInvocation; }
 
     void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 
@@ -276,7 +276,7 @@ public:
     virtual ~SbUnoServiceCtor();
     virtual SbxInfo* GetInfo() override;
 
-    css::uno::Reference< css::reflection::XServiceConstructorDescription > getServiceCtorDesc()
+    const css::uno::Reference< css::reflection::XServiceConstructorDescription >& getServiceCtorDesc()
         { return m_xServiceCtorDesc; }
 };
 

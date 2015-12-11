@@ -109,7 +109,7 @@ public:
             const OUString& aMessage,
             std::vector< OUString > const & rArguments );
 
-    css::uno::Reference< css::uno::XComponentContext >
+    const css::uno::Reference< css::uno::XComponentContext >&
     getORB() const
     { return m_xContext; }
 private:
@@ -131,10 +131,10 @@ private:
     vcl::Window *
     getParentProperty();
 
-    css::uno::Reference< css::awt::XWindow>
+    const css::uno::Reference< css::awt::XWindow>&
     getParentXWindow() const;
 
-    OUString
+    const OUString&
     getContextProperty();
 
     css::uno::Reference< css::task::XInteractionHandler2 >

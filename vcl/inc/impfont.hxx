@@ -76,7 +76,7 @@ public:
 
     // device dependent functions
     int                 GetQuality() const                              { return mnQuality; }
-    OUString            GetMapNames() const                             { return maMapNames; }
+    const OUString&     GetMapNames() const                             { return maMapNames; }
 
     void                SetQuality( int nQuality )                      { mnQuality = nQuality; }
     void                IncreaseQualityBy( int nQualityAmount )         { mnQuality += nQualityAmount; }

@@ -250,7 +250,7 @@ public:
     inline void SetWidth( sal_uInt16 nWidth, bool bRelWidth );
 
     const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
-    std::shared_ptr<SvxBoxItem> GetBoxItem() const { return m_pBoxItem; }
+    const std::shared_ptr<SvxBoxItem>& GetBoxItem() const { return m_pBoxItem; }
 
     inline bool GetNumFormat( sal_uInt32& rNumFormat ) const;
     inline bool GetValue( double& rValue ) const;

@@ -54,7 +54,7 @@ namespace vclcanvas
         css::uno::Any getSurfaceHandle() const;
 
         void dumpScreenContent() const;
-        BackBufferSharedPtr getBackBuffer() const { return mpBackBuffer; }
+        const BackBufferSharedPtr& getBackBuffer() const { return mpBackBuffer; }
 
         void notifySizeUpdate( const css::awt::Rectangle& rBounds );
 
