@@ -380,7 +380,17 @@ inline Reference< interface_type > Reference< interface_type >::query(
 }
 
 
-
+#if defined LIBO_INTERNAL_ONLY
+template< class interface_type >
+inline interface_type* Reference< interface_type >::getAndClearNoRelease()
+{
+    if (!_pInterface)
+        return nullptr;
+    interface_type* pTmp = castFromXInterface(_pInterface);
+    _pInterface = nullptr;
+    return pTmp;
+}
+#endif
 
 inline bool BaseReference::operator == ( XInterface * pInterface ) const
 {

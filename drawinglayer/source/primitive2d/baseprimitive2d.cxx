@@ -348,16 +348,17 @@ namespace drawinglayer
         {
             insert(end(), rSource.begin(), rSource.end());
         }
-/*
+
         void Primitive2DContainer::append(Primitive2DContainer&& rSource)
         {
-            resize(size() + rSource.size());
-            memcpy(data() + size(),
-                   rSource.data(),
-                   rSource.size() * sizeof(Primitive2DReference));
-            memset(reinterpret_cast<void*>(rSource.data()), 0, rSource.size() * sizeof(Primitive2DReference));
+            size_t n = size();
+            resize(n + rSource.size());
+            for (size_t i = 0; i<rSource.size(); ++i)
+            {
+                (*this)[n + i].set( rSource[i].getAndClearNoRelease(), css::uno::UNO_REF_NO_ACQUIRE );
+            }
         }
-*/
+
         void Primitive2DContainer::append(const Primitive2DSequence& rSource)
         {
             std::copy(rSource.begin(), rSource.end(), std::back_inserter(*this));

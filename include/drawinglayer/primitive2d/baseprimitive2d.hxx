@@ -54,17 +54,22 @@ namespace drawinglayer { namespace primitive2d {
     typedef css::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 
 
-    class DRAWINGLAYER_DLLPUBLIC SAL_WARN_UNUSED Primitive2DContainer : public std::vector< Primitive2DReference >
+    typedef std::vector< Primitive2DReference > Primitive2DContainer_Base;
+    class DRAWINGLAYER_DLLPUBLIC SAL_WARN_UNUSED Primitive2DContainer : public Primitive2DContainer_Base
     {
     public:
         explicit Primitive2DContainer() {}
-        explicit Primitive2DContainer( size_type count ) : std::vector< Primitive2DReference >(count) {}
-        Primitive2DContainer( const Primitive2DContainer& other ) : std::vector< Primitive2DReference >(other) {}
-        Primitive2DContainer( const std::vector< Primitive2DReference >& other ) : std::vector< Primitive2DReference >(other) {}
-        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : std::vector< Primitive2DReference >(init) {}
+        explicit Primitive2DContainer( size_type count ) : Primitive2DContainer_Base(count) {}
+        Primitive2DContainer( const Primitive2DContainer& other ) : Primitive2DContainer_Base(other) {}
+        Primitive2DContainer( const Primitive2DContainer&& other ) : Primitive2DContainer_Base(other) {}
+        Primitive2DContainer( const std::vector< Primitive2DReference >& other ) : Primitive2DContainer_Base(other) {}
+        Primitive2DContainer( std::initializer_list<Primitive2DReference> init ) : Primitive2DContainer_Base(init) {}
 
         void append(const Primitive2DContainer& rSource);
         void append(const Primitive2DSequence& rSource);
+        void append(Primitive2DContainer&& rSource);
+        Primitive2DContainer& operator=(const Primitive2DContainer& r) { Primitive2DContainer_Base::operator=(r); return *this; }
+        Primitive2DContainer& operator=(const Primitive2DContainer&& r) { Primitive2DContainer_Base::operator=(r); return *this; }
         bool operator==(const Primitive2DContainer& rB) const;
         bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
         basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
