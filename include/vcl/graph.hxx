@@ -57,7 +57,7 @@ protected:
     ReaderData*     mpReaderData;
 
                     GraphicReader() :
-                        mpReaderData( NULL ) {}
+                        mpReaderData( nullptr ) {}
 
 public:
 
