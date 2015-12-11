@@ -36,9 +36,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_static_libraries,sdext_pdfimport,\
-    pdfimport_s \
-))
+$(eval $(call gb_CppunitTest_use_library_objects,sdext_pdfimport,pdfimport))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sdext_pdfimport,\
     sdext/source/pdfimport/test/tests \
