@@ -252,7 +252,7 @@ public:
                                     ScDocument* pDoc);
     virtual                     ~XclObjAny();
 
-    css::uno::Reference< css::drawing::XShape >
+    const css::uno::Reference< css::drawing::XShape >&
                                 GetShape() const { return mxShape; }
 
     virtual void                Save( XclExpStream& rStrm ) override;

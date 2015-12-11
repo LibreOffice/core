@@ -123,7 +123,7 @@ public:
     SvLinkSource*   GetObj() const  { return xObj; }
 
     void            SetLinkSourceName( const OUString & rName );
-    OUString        GetLinkSourceName() const { return aLinkName;}
+    const OUString& GetLinkSourceName() const { return aLinkName;}
 
     enum UpdateResult {
         SUCCESS = 0,

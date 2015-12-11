@@ -137,10 +137,10 @@ public:
     virtual css::uno::Reference< css::resource::XStringResourceResolver >
         SAL_CALL getStringResource(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    OUString getName()
+    const OUString& getName()
         { return m_aName; }
 
-    css::uno::Reference< css::resource::XStringResourcePersistence >
+    const css::uno::Reference< css::resource::XStringResourcePersistence >&
         getStringResourcePersistence()
     {
         return m_xStringResourcePersistence;

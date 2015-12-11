@@ -670,7 +670,7 @@ void ScDrawTransferObj::SetDragWasInternal()
     bDragWasInternal = true;
 }
 
-OUString ScDrawTransferObj::GetShellID() const
+const OUString& ScDrawTransferObj::GetShellID() const
 {
     return maShellID;
 }

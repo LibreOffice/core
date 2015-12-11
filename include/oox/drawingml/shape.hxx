@@ -94,7 +94,7 @@ public:
     GraphicProperties&       getGraphicProperties() { return *mpGraphicPropertiesPtr; }
     const GraphicProperties& getGraphicProperties() const { return *mpGraphicPropertiesPtr; }
 
-    CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
+    CustomShapePropertiesPtr&       getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
     Shape3DProperties&              get3DProperties() { return *mp3DPropertiesPtr; }
     const Shape3DProperties&        get3DProperties() const { return *mp3DPropertiesPtr; }
@@ -118,9 +118,9 @@ public:
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
     void                            setName( const OUString& rName ) { msName = rName; }
-    OUString                        getName( ) { return msName; }
+    const OUString&                 getName( ) { return msName; }
     void                            setId( const OUString& rId ) { msId = rId; }
-    OUString                        getId() { return msId; }
+    const OUString&                 getId() { return msId; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
@@ -137,9 +137,9 @@ public:
     void                            setTableType();
 
     void                setTextBody(const TextBodyPtr & pTextBody);
-    TextBodyPtr         getTextBody() { return mpTextBody;}
+    const TextBodyPtr&   getTextBody() { return mpTextBody;}
     void                setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle );
-    TextListStylePtr    getMasterTextListStyle() const { return mpMasterTextListStyle; }
+    const TextListStylePtr&  getMasterTextListStyle() const { return mpMasterTextListStyle; }
 
     ShapeStyleRefMap&        getShapeStyleRefs() { return maShapeStyleRefs; }
     const ShapeStyleRefMap&  getShapeStyleRefs() const { return maShapeStyleRefs; }

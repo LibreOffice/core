@@ -35,7 +35,7 @@ public:
 
     void            init( const css::uno::Reference< css::frame::XModel >& xModel );
     ObjectType      getObjectType() const { return m_eObjectType;}
-    OUString   getLocalizedName() const { return m_aLocalizedName;}
+    const OUString& getLocalizedName() const { return m_aLocalizedName;}
 
     bool HasGeometryProperties() const { return m_bHasGeometryProperties;}
     bool HasStatisticProperties() const { return m_bHasStatisticProperties;}
@@ -55,7 +55,7 @@ public:
     bool IsCrossingAxisIsCategoryAxis() const { return m_bIsCrossingAxisIsCategoryAxis;}
     const css::uno::Sequence< OUString >& GetCategories() const { return m_aCategories;}
 
-    css::uno::Reference< css::chart2::XChartDocument >
+    const css::uno::Reference< css::chart2::XChartDocument >&
         getDocument() const { return m_xChartDocument;}
 
     bool IsComplexCategoriesAxis() const { return m_bComplexCategoriesAxis;}

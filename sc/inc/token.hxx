@@ -330,7 +330,7 @@ public:
                                             xUpperLeft->GetType() :
                                             static_cast<formula::StackVar>(formula::svUnknown);
                                     }
-    inline formula::FormulaConstTokenRef     GetUpperLeftToken() const   { return xUpperLeft; }
+    const formula::FormulaConstTokenRef& GetUpperLeftToken() const { return xUpperLeft; }
     void Assign( const ScMatrixCellResultToken & r );
 };
 

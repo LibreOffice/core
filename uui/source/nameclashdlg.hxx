@@ -49,7 +49,7 @@ public:
                      bool bAllowOverwrite );
     virtual ~NameClashDialog();
     virtual void dispose() override;
-    OUString getNewName() const { return maNewName; }
+    const OUString& getNewName() const { return maNewName; }
 };
 
 #endif // UUI_COOKIEDG_HXX

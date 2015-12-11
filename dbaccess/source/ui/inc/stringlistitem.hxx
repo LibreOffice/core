@@ -42,7 +42,7 @@ public:
     virtual bool             operator==(const SfxPoolItem& _rItem) const override;
     virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = nullptr) const override;
 
-    css::uno::Sequence< OUString >  getList() const { return m_aList; }
+    const css::uno::Sequence< OUString >& getList() const { return m_aList; }
 };
 
 }   // namespace dbaui

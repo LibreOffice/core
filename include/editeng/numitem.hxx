@@ -173,7 +173,7 @@ public:
     void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = nSet;}
     sal_uInt16          GetBulletRelSize() const { return nBulletRelSize;}
     void            SetBulletColor(Color nSet){nBulletColor = nSet;}
-    Color           GetBulletColor()const {return nBulletColor;}
+    const Color&    GetBulletColor()const {return nBulletColor;}
 
     void            SetIncludeUpperLevels( sal_uInt8 nSet ) { nInclUpperLevels = nSet;}
     sal_uInt8           GetIncludeUpperLevels()const  { return nInclUpperLevels;}

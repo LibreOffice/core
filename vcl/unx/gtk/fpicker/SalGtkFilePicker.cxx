@@ -336,8 +336,8 @@ public:
     {
     }
 
-    OUString     getTitle() const { return m_sTitle; }
-    OUString     getFilter() const { return m_sFilter; }
+    const OUString& getTitle() const { return m_sTitle; }
+    const OUString& getFilter() const { return m_sFilter; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
     bool        hasSubFilters( ) const;

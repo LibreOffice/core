@@ -118,7 +118,7 @@ public:
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError(size_t i);
     static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
-    std::set< OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
+    const std::set< OUString >&   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
 

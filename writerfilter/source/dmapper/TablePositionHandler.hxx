@@ -63,19 +63,19 @@ public:
         return m_nBottomFromText;
     }
 
-    OUString getVertAnchor()
+    const OUString& getVertAnchor()
     {
         return m_aVertAnchor;
     }
-    OUString getYSpec()
+    const OUString& getYSpec()
     {
         return m_aYSpec;
     }
-    OUString getHorzAnchor()
+    const OUString& getHorzAnchor()
     {
         return m_aHorzAnchor;
     }
-    OUString getXSpec()
+    const OUString& getXSpec()
     {
         return m_aXSpec;
     }

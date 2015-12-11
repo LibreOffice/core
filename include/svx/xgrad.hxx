@@ -63,9 +63,9 @@ public:
     void SetSteps(sal_uInt16 nSteps)                    { nStepCount = nSteps; }
 
     css::awt::GradientStyle GetGradientStyle() const         { return eStyle; }
-    Color          GetStartColor() const            { return aStartColor; }
-    Color          GetEndColor() const              { return aEndColor; }
-    long           GetAngle() const                 { return nAngle; }
+    const Color&       GetStartColor() const            { return aStartColor; }
+    const Color&       GetEndColor() const              { return aEndColor; }
+    long               GetAngle() const                 { return nAngle; }
     sal_uInt16         GetBorder() const                { return nBorder; }
     sal_uInt16         GetXOffset() const               { return nOfsX; }
     sal_uInt16         GetYOffset() const               { return nOfsY; }

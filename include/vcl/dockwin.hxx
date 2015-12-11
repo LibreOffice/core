@@ -135,7 +135,7 @@ public:
     void            ToggleFloatingMode();
 
     void            SetDragArea( const Rectangle& rRect );
-    Rectangle       GetDragArea() const { return maDragArea;}
+    const Rectangle& GetDragArea() const { return maDragArea;}
 
     void            Lock();
     void            Unlock();

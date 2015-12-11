@@ -225,7 +225,7 @@ namespace slideshow
             }
 
             //Retrieve all registered polygons.
-            PolyPolygonVector getPolygons()
+            const PolyPolygonVector& getPolygons()
             {
                 return maPolygons;
             }

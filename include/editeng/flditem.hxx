@@ -320,7 +320,7 @@ public:
                                 SvxFileType eType = SVXFILETYPE_VAR,
                                 SvxFileFormat eFormat = SVXFILEFORMAT_FULLPATH );
 
-    OUString           GetFile() const { return aFile; }
+    const OUString&         GetFile() const { return aFile; }
     void                    SetFile( const OUString& rString ) { aFile = rString; }
 
     SvxFileType             GetType() const { return eType; }

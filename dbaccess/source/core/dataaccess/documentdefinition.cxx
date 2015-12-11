@@ -332,8 +332,8 @@ namespace dbaccess
     public:
         ODocumentSaveContinuation() { }
 
-        inline Reference<XContent>  getContent() const { return m_xParentContainer; }
-        inline OUString      getName() const { return m_sName; }
+        const Reference<XContent>& getContent() const { return m_xParentContainer; }
+        const OUString&       getName() const { return m_sName; }
 
         // XInteractionDocumentSave
         virtual void SAL_CALL setName( const OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException, std::exception) override;

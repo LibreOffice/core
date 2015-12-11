@@ -586,9 +586,9 @@ public:
     virtual void            Last() override;
 
     void                    SetFirst( const Date& rNewFirst )   { maFirst = rNewFirst; }
-    Date                    GetFirst() const                    { return maFirst; }
+    const Date&             GetFirst() const                    { return maFirst; }
     void                    SetLast( const Date& rNewLast )     { maLast = rNewLast; }
-    Date                    GetLast() const                     { return maLast; }
+    const Date&             GetLast() const                     { return maLast; }
     virtual void            dispose() override;
 };
 
@@ -617,9 +617,9 @@ public:
     virtual void            Last() override;
 
     void                    SetFirst( const tools::Time& rNewFirst )   { maFirst = rNewFirst; }
-    tools::Time             GetFirst() const                    { return maFirst; }
+    const tools::Time&      GetFirst() const                    { return maFirst; }
     void                    SetLast( const tools::Time& rNewLast )     { maLast = rNewLast; }
-    tools::Time             GetLast() const                     { return maLast; }
+    const tools::Time&      GetLast() const                     { return maLast; }
 
     void                    SetExtFormat( ExtTimeFieldFormat eFormat );
     virtual void            dispose() override;

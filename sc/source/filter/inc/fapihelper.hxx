@@ -132,7 +132,7 @@ public:
     inline bool         Is() const { return mxPropSet.is(); }
 
     /** Returns the contained XPropertySet interface. */
-    inline css::uno::Reference< css::beans::XPropertySet > GetApiPropertySet() const { return mxPropSet; }
+    const css::uno::Reference< css::beans::XPropertySet >& GetApiPropertySet() const { return mxPropSet; }
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
     OUString     GetServiceName() const;

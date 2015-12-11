@@ -102,7 +102,7 @@ namespace dbaui
 
         const Reference< XDataSource >&             getDataSource() const { return m_xDataSource; }
         const Reference< XPropertySet >&            getDataSourceProps() const { return m_xDataSourceProps; }
-        const Reference< XOfficeDatabaseDocument >  getDatabaseDocument() const { return m_xDocument; }
+        const Reference< XOfficeDatabaseDocument >&  getDatabaseDocument() const { return m_xDocument; }
 
         bool is() const { return m_xDataSource.is(); }
 

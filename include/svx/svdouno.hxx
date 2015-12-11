@@ -88,7 +88,7 @@ public:
 
     virtual void SetContextWritingMode( const sal_Int16 _nContextWritingMode ) override;
 
-    css::uno::Reference< css::awt::XControlModel > GetUnoControlModel() const {return xUnoControlModel;}
+    const css::uno::Reference< css::awt::XControlModel >& GetUnoControlModel() const {return xUnoControlModel;}
     css::uno::Reference< css::awt::XControl > GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const;
 
     /** Retrieves a temporary XControl instance for a given output device

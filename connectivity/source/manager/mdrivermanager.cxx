@@ -137,17 +137,17 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     };
 
     /// an STL functor which extracts a SdbcDriver from a DriverAccess
-    struct ExtractDriverFromAccess : public ::std::unary_function< DriverAccess, Reference<XDriver> >
+    struct ExtractDriverFromAccess : public ::std::unary_function< DriverAccess, const Reference<XDriver>& >
     {
-        Reference<XDriver> operator()( const DriverAccess& _rAccess ) const
+        const Reference<XDriver>& operator()( const DriverAccess& _rAccess ) const
         {
             return _rAccess.xDriver;
         }
     };
 
-    struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, Reference<XDriver> >
+    struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, const Reference<XDriver>& >
     {
-        Reference<XDriver> operator()( const DriverCollection::value_type& _rElement ) const
+        const Reference<XDriver>& operator()( const DriverCollection::value_type& _rElement ) const
         {
             return _rElement.second;
         }

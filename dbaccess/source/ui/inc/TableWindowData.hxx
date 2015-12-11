@@ -66,11 +66,11 @@ namespace dbaui
         bool init(const css::uno::Reference< css::sdbc::XConnection  >& _xConnection
                  ,bool _bAllowQueries);
 
-        inline OUString GetComposedName()    const { return m_sComposedName; }
-        inline OUString GetTableName()       const { return m_aTableName; }
-        inline OUString GetWinName()         const { return m_aWinName; }
-        inline Point GetPosition()                  const { return m_aPosition; }
-        inline Size GetSize()                       const { return m_aSize; }
+        const OUString& GetComposedName()    const { return m_sComposedName; }
+        const OUString& GetTableName()       const { return m_aTableName; }
+        const OUString& GetWinName()         const { return m_aWinName; }
+        const Point& GetPosition()                  const { return m_aPosition; }
+        const Size& GetSize()                       const { return m_aSize; }
         inline bool IsShowAll()                     const { return m_bShowAll; }
         inline bool isQuery()                       const { return m_bIsQuery; }
         inline bool isValid()                       const { return m_bIsValid; } // it is either a table or query but it is known

@@ -191,7 +191,7 @@ public:
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
-    inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
+    const Reference<XPropertySet>& getDataSource() const { return m_xDataSource; }
 };
 
 } // dbaxml

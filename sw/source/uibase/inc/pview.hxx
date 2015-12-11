@@ -253,7 +253,7 @@ public:
 
     bool HandleWheelCommands( const CommandEvent& );
 
-    OUString GetPrevSwViewData() const       { return sSwViewData; }
+    const OUString& GetPrevSwViewData() const       { return sSwViewData; }
     void SetNewCursorPos( const OUString& rStr ) { sNewCursorPos = rStr; }
     const OUString& GetNewCursorPos() const           { return sNewCursorPos; }
 

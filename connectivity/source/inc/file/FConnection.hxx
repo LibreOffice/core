@@ -120,7 +120,7 @@ namespace connectivity
 
             // no interface methods
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet > getDir() const;
-            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>  getContent() const { return m_xContent; }
+            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>&  getContent() const { return m_xContent; }
             // create a catalog or return the catalog already created
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
 

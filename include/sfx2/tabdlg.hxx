@@ -250,7 +250,7 @@ public:
     virtual sfxpg           DeactivatePage( SfxItemSet* pSet );
     void                    SetUserData(const OUString& rString)
                               { aUserString = rString; }
-    OUString                GetUserData() { return aUserString; }
+    const OUString&         GetUserData() { return aUserString; }
     virtual void            FillUserData();
     virtual bool            IsReadOnly() const;
     virtual void PageCreated (const SfxAllItemSet& aSet);

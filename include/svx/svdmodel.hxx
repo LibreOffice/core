@@ -536,7 +536,7 @@ public:
 
     // Accessor methods for Palettes, Lists and Tables
     // FIXME: this badly needs re-factoring...
-    XPropertyListRef GetPropertyList( XPropertyListType t ) const { return maProperties[ t ]; }
+    const XPropertyListRef& GetPropertyList( XPropertyListType t ) const { return maProperties[ t ]; }
     void             SetPropertyList( XPropertyListRef p ) { maProperties[ p->Type() ] = p; }
 
     // friendlier helpers

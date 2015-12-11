@@ -1154,7 +1154,7 @@ bool Window::IsControlFont() const
     return (mpWindowImpl->mpControlFont != nullptr);
 }
 
-Color Window::GetControlForeground() const
+const Color& Window::GetControlForeground() const
 {
     return mpWindowImpl->maControlForeground;
 }
@@ -1164,7 +1164,7 @@ bool Window::IsControlForeground() const
     return mpWindowImpl->mbControlForeground;
 }
 
-Color Window::GetControlBackground() const
+const Color& Window::GetControlBackground() const
 {
     return mpWindowImpl->maControlBackground;
 }
@@ -2018,7 +2018,7 @@ void Window::remove_mnemonic_label(FixedText *pLabel)
     pLabel->set_mnemonic_widget(nullptr);
 }
 
-std::vector<VclPtr<FixedText> > Window::list_mnemonic_labels() const
+const std::vector<VclPtr<FixedText> >& Window::list_mnemonic_labels() const
 {
     return mpWindowImpl->m_aMnemonicLabels;
 }

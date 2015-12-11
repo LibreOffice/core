@@ -142,7 +142,7 @@ namespace slideshow
             ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewBackgroundShape::ViewBackgroundShape(): Invalid ViewLayer canvas" );
         }
 
-        ViewLayerSharedPtr ViewBackgroundShape::getViewLayer() const
+        const ViewLayerSharedPtr& ViewBackgroundShape::getViewLayer() const
         {
             return mpViewLayer;
         }

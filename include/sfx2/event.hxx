@@ -50,7 +50,7 @@ public:
     sal_uInt16              GetEventId() const
                         { return nEventId; }
 
-    OUString     GetEventName() const
+    const OUString&     GetEventName() const
                         { return aEventName; }
 
     SfxObjectShell*     GetObjShell() const
@@ -73,7 +73,7 @@ public:
                         , xViewController( xController )
                         {}
 
-    css::uno::Reference< css::frame::XController2 > GetController() const
+    const css::uno::Reference< css::frame::XController2 >& GetController() const
                         { return xViewController; }
 };
 

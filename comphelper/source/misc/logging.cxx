@@ -62,9 +62,9 @@ namespace comphelper
             impl_createLogger_nothrow();
         }
 
-        inline bool isValid() const { return m_xLogger.is(); }
-        inline const Reference< XLogger >& getLogger() const { return m_xLogger; }
-        inline Reference< XComponentContext > getContext() const { return m_aContext; }
+        bool isValid() const { return m_xLogger.is(); }
+        const Reference< XLogger >& getLogger() const { return m_xLogger; }
+        const Reference< XComponentContext >& getContext() const { return m_aContext; }
 
     private:
         void    impl_createLogger_nothrow();

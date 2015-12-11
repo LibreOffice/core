@@ -47,15 +47,15 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    OUString                GetMethod() const
+    const OUString&         GetMethod() const
                                 { return aMethodName; }
     void                    SetMethod( const OUString& r )
                                 { aMethodName = r; }
-    OUString                GetModule() const
+    const OUString&         GetModule() const
                                 { return aModuleName; }
     void                    SetModule( const OUString& r )
                                 { aModuleName = r; }
-    OUString                GetLib() const
+    const OUString&         GetLib() const
                                 { return aLibName; }
     void                    SetLib( const OUString& r )
                                 { aLibName = r; }

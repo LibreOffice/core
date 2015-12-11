@@ -69,7 +69,7 @@ public:
     virtual ~FmFilterData(){}
 
     void    SetText( const OUString& rText ){ m_aText = rText; }
-    OUString  GetText() const { return m_aText; }
+    const OUString& GetText() const { return m_aText; }
     FmParentData* GetParent() const {return m_pParent;}
 
     virtual Image GetImage() const;

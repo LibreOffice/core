@@ -38,7 +38,7 @@ public:
 
     virtual ~GrabBagStack();
 
-    OUString getCurrentName() { return mCurrentElement.maElementName;}
+    const OUString& getCurrentName() { return mCurrentElement.maElementName;}
 
     css::beans::PropertyValue getRootProperty();
 

@@ -47,7 +47,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    XColorListRef           GetColorList() const { return pColorList; }
+    const XColorListRef&     GetColorList() const { return pColorList; }
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxGradientListItem : public SfxPoolItem
@@ -72,7 +72,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    XGradientListRef        GetGradientList() const { return pGradientList; }
+    const XGradientListRef& GetGradientList() const { return pGradientList; }
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxHatchListItem : public SfxPoolItem
@@ -96,7 +96,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    XHatchListRef           GetHatchList() const { return pHatchList; }
+    const XHatchListRef&    GetHatchList() const { return pHatchList; }
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapListItem : public SfxPoolItem
@@ -121,7 +121,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    XBitmapListRef          GetBitmapList() const { return pBitmapList; }
+    const XBitmapListRef&   GetBitmapList() const { return pBitmapList; }
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDashListItem : public SfxPoolItem
@@ -146,7 +146,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    XDashListRef            GetDashList() const { return pDashList; }
+    const XDashListRef&     GetDashList() const { return pDashList; }
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineEndListItem : public SfxPoolItem
@@ -171,7 +171,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    XLineEndListRef         GetLineEndList() const { return pLineEndList; }
+    const XLineEndListRef&  GetLineEndList() const { return pLineEndList; }
 };
 
 #endif

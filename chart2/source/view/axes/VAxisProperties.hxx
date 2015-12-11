@@ -160,7 +160,7 @@ private:
     TickmarkProperties  makeTickmarkProperties( sal_Int32 nDepth ) const;
     //@todo get this from somewhere; maybe for each subincrement
     //so far the model does not offer different settings for each tick depth
-    VLineProperties      makeLinePropertiesForDepth( sal_Int32 /*nDepth*/ ) const { return m_aLineProperties; }
+    const VLineProperties&  makeLinePropertiesForDepth( sal_Int32 /*nDepth*/ ) const { return m_aLineProperties; }
 };
 
 } //namespace chart

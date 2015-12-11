@@ -277,7 +277,7 @@ namespace slideshow
                 maCurrentSubsets.push_back( maSubset );
         }
 
-        DocTreeNode DrawShapeSubsetting::getSubsetNode() const
+        const DocTreeNode& DrawShapeSubsetting::getSubsetNode() const
         {
             return maSubset;
         }

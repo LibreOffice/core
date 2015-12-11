@@ -39,7 +39,7 @@ public:
 
     virtual OUString getTemplateName() const override;
 
-    css::uno::Any  getValue() const { return value_;}
+    const css::uno::Any&  getValue() const { return value_;}
     css::uno::Any *getValuePtr(int layer)
     {
         setLayer(layer);

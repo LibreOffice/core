@@ -161,7 +161,7 @@ class SwSidebarWin : public vcl::Window
         void SetChangeTracking( const SwPostItHelper::SwLayoutStatus aStatus,
                                 const Color& aColor);
         SwPostItHelper::SwLayoutStatus GetLayoutStatus() { return mLayoutStatus; }
-        Color GetChangeColor() { return mChangeColor; }
+        const Color& GetChangeColor() { return mChangeColor; }
 
         virtual bool IsProtected()
         {

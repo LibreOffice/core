@@ -62,7 +62,7 @@ namespace dbaui
         Rectangle           GetSourceTextPos() const;
         Rectangle           GetDestTextPos() const;
 
-        OConnectionLineDataRef  GetData() const { return m_pData; }
+        const OConnectionLineDataRef& GetData() const { return m_pData; }
 
         Point               getMidPoint() const;
     };

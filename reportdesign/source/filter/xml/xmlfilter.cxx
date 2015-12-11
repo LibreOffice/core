@@ -960,7 +960,7 @@ void ORptFilter::FinishStyles()
         GetStyles()->FinishStyles( true );
 }
 
-OUString ORptFilter::convertFormula(const OUString& _sFormula)
+const OUString& ORptFilter::convertFormula(const OUString& _sFormula)
 {
     return _sFormula;
 }

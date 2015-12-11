@@ -79,14 +79,14 @@ public:
     static bool                         IsOLE(css::uno::Reference< css::drawing::XShape >& rShape)
                                             { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
-    ScAddress                           GetCurrentCellPos() const { return maCurrentCellPos; };
+    const ScAddress&                    GetCurrentCellPos() const { return maCurrentCellPos; };
     void                                AddColStyle(const sal_Int32 nRepeat, const OUString& rCellStyleName);
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
-    OUString                            GetCurrentSheetName() const { return sCurrentSheetName; }
+    const OUString&                     GetCurrentSheetName() const { return sCurrentSheetName; }
     SCTAB                               GetCurrentSheet() const { return (maCurrentCellPos.Tab() >= 0) ? maCurrentCellPos.Tab() : 0; }
     SCCOL                               GetCurrentColCount() const { return std::min<sal_Int32>(nCurrentColCount, MAXCOL); }
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
-    css::uno::Reference< css::sheet::XSpreadsheet >
+    const css::uno::Reference< css::sheet::XSpreadsheet >&
                                         GetCurrentXSheet() const { return xCurrentSheet; }
     css::uno::Reference< css::drawing::XDrawPage >
                                         GetCurrentXDrawPage();

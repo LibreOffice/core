@@ -40,7 +40,7 @@ public:
     virtual ~ZipPackageBuffer();
 
     inline void realloc ( sal_Int32 nSize ) { m_aBuffer.realloc ( nSize ); }
-    inline const css::uno::Sequence < sal_Int8> getSequence () const { return m_aBuffer; }
+    const css::uno::Sequence < sal_Int8>& getSequence () const { return m_aBuffer; }
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )

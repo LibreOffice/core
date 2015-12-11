@@ -56,10 +56,10 @@ public:
 
     const SwTextRuby* GetTextRuby() const         { return pTextAttr; }
 
-    OUString GetText() const                    { return sRubyText; }
+    const OUString& GetText() const                    { return sRubyText; }
     void SetText( const OUString& rText )        { sRubyText = rText; }
 
-    OUString GetCharFormatName() const             { return sCharFormatName; }
+    const OUString& GetCharFormatName() const             { return sCharFormatName; }
     void SetCharFormatName( const OUString& rNm )  { sCharFormatName = rNm; }
 
     sal_uInt16 GetCharFormatId() const                 { return nCharFormatId; }

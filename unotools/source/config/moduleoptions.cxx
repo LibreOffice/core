@@ -187,11 +187,11 @@ struct FactoryInfo
         // That's why we can't make our member public. We must use get/set/init methods
         // to control access on it!
         bool            getInstalled        () const { return bInstalled;         };
-        OUString     getFactory          () const { return sFactory;           };
-        OUString     getTemplateFile     () const { return sTemplateFile;      };
-        OUString     getDefaultFilter    () const { return sDefaultFilter;     };
+        const OUString& getFactory          () const { return sFactory;           };
+        const OUString& getTemplateFile     () const { return sTemplateFile;      };
+        const OUString& getDefaultFilter    () const { return sDefaultFilter;     };
         bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
-        sal_Int32           getIcon             () const { return nIcon;              };
+        sal_Int32       getIcon             () const { return nIcon;              };
 
         // If you call set-methods - we check for changes of values and mark it.
         // But if you wish to set it without that... you must initialize it!

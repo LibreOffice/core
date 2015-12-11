@@ -74,7 +74,7 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
             virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getORB() const { return m_xORB; }
         };
     }
 

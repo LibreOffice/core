@@ -167,7 +167,7 @@ protected:
     /** Returns the XPropertySet that was given in the CTOR and is used to apply
         items in ApplyItemSet().
      */
-    css::uno::Reference< css::beans::XPropertySet >  GetPropertySet() const { return m_xPropertySet;}
+    const css::uno::Reference< css::beans::XPropertySet >&  GetPropertySet() const { return m_xPropertySet;}
 
     // ____ ::utl::OEventListenerAdapter ____
     virtual void _disposing( const css::lang::EventObject& rSource ) override;

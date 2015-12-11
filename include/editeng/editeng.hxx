@@ -377,7 +377,7 @@ public:
     Link<EENotify&,void>  GetNotifyHdl() const;
 
     void            SetImportHdl( const Link<ImportInfo&,void>& rLink );
-    Link<ImportInfo&,void> GetImportHdl() const;
+    const Link<ImportInfo&,void>& GetImportHdl() const;
 
     // Do not evaluate font formatting => For Outliner
     bool            IsFlatMode() const;
@@ -410,7 +410,7 @@ public:
     SfxStyleSheet* GetStyleSheet( sal_Int32 nPara );
 
     void            SetWordDelimiters( const OUString& rDelimiters );
-    OUString        GetWordDelimiters() const;
+    const OUString& GetWordDelimiters() const;
 
     void            EraseVirtualDevice();
 

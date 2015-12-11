@@ -43,7 +43,7 @@ public:
                           Val * pTheValue):
         m_aRegexp(rTheRegexp), m_pValue(pTheValue) {}
 
-    OUString getRegexp() const { return m_aRegexp; }
+    const OUString& getRegexp() const { return m_aRegexp; }
 
     Val const & getValue() const { return *m_pValue; }
 

@@ -39,8 +39,8 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static()
         throw (css::uno::RuntimeException);
 
-    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > getFactory(){return m_xFactory;}
-    OUString getProfilePath() {return m_sProfilePath;}
+    const css::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getFactory(){return m_xFactory;}
+    const OUString& getProfilePath() {return m_sProfilePath;}
 private:
 
     MorkDriver(const MorkDriver&) = delete;

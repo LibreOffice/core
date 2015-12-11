@@ -129,10 +129,10 @@ public:
     void XFConvert(XFContentContainer* pCont) override;
     void ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
-    OUString GetDefaultRowStyleName(){return m_DefaultRowStyleName;}
+    const OUString& GetDefaultRowStyleName(){return m_DefaultRowStyleName;}
     void SetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol,XFCell* pXFCell);
     XFCell* GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol);
-    std::map<sal_uInt16,LwpRowLayout*> GetRowsMap(){return m_RowsMap;}
+   const  std::map<sal_uInt16,LwpRowLayout*>& GetRowsMap(){return m_RowsMap;}
     LwpRowLayout* GetRowLayout(sal_uInt16 nRow);
 private:
     void ConvertDefaultRow(XFTable* pXFTable,sal_uInt8 nStartCol,

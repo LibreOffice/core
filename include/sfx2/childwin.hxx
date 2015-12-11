@@ -199,7 +199,7 @@ public:
     bool                WantsFocus() const;
 
     virtual bool        QueryClose();
-    css::uno::Reference< css::frame::XFrame >           GetFrame();
+    const css::uno::Reference< css::frame::XFrame >&   GetFrame();
     void                SetFrame( const css::uno::Reference< css::frame::XFrame > & );
 
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);

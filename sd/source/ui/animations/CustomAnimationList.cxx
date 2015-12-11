@@ -355,7 +355,7 @@ public:
     explicit CustomAnimationListEntry( CustomAnimationEffectPtr pEffect );
     virtual ~CustomAnimationListEntry();
 
-    CustomAnimationEffectPtr getEffect() const { return mpEffect; }
+    const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
 private:
     CustomAnimationEffectPtr mpEffect;

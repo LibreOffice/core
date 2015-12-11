@@ -63,7 +63,7 @@ public:
     void     SetTextNoPrefix(const OUString& _rText);
 
     inline void      SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
-    inline OUString  GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
+    const OUString&  GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
     inline void      SetTypeCollection(::dbaccess::ODsnTypeCollection* _pTypeCollection) { m_pTypeCollection = _pTypeCollection; }
 };
 

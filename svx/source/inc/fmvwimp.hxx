@@ -121,7 +121,7 @@ protected:
     void setController(
             const css::uno::Reference< css::form::XForm >& xForm,
             const css::uno::Reference< css::form::runtime::XFormController >& _rxParentController );
-    css::uno::Reference< css::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
+    const css::uno::Reference< css::awt::XControlContainer >&  getControlContainer() const { return m_xControlContainer; }
     void updateTabOrder( const css::uno::Reference< css::form::XForm >& _rxForm );
     void dispose();
     vcl::Window* getWindow() const {return m_pWindow;}

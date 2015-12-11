@@ -69,7 +69,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getComponentContext() const { return m_xContext; }
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
         };
     }
 

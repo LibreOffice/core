@@ -1210,7 +1210,7 @@ public:
     void            InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
                                                                                     // current StreamPosition changes
     void            SetEditAs( const OUString& rEditAs );
-    rtl::OUString   GetEditAs() { return mEditAs; }
+    const OUString& GetEditAs() { return mEditAs; }
     SvStream&       GetStream() const   { return *mpOutStrm; }
     sal_uLong       GetStreamPos() const    { return mpOutStrm->Tell(); }
 

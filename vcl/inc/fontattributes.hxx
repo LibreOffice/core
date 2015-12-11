@@ -64,7 +64,7 @@ public:
 
     // Device dependent functions
     int                 GetQuality() const                          { return mnQuality; }
-    OUString            GetMapNames() const                         { return maMapNames; }
+    const OUString&     GetMapNames() const                         { return maMapNames; }
 
     bool                IsBuiltInFont() const                       { return mbDevice; }
     bool                CanEmbed() const                            { return mbEmbeddable; }

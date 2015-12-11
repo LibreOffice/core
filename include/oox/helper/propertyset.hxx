@@ -71,7 +71,7 @@ public:
     bool         is() const { return mxPropSet.is(); }
 
     /** Returns the contained XPropertySet interface. */
-    css::uno::Reference< css::beans::XPropertySet >
+    const css::uno::Reference< css::beans::XPropertySet >&
                         getXPropertySet() const { return mxPropSet; }
 
     /** Returns true, if the specified property is supported by the property set. */

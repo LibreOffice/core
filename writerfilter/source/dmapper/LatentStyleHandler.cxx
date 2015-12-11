@@ -68,7 +68,7 @@ void LatentStyleHandler::lcl_sprm(Sprm& /*rSprm*/)
 {
 }
 
-std::vector<beans::PropertyValue> LatentStyleHandler::getAttributes() const
+const std::vector<beans::PropertyValue>& LatentStyleHandler::getAttributes() const
 {
     return m_aAttributes;
 }

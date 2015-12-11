@@ -149,7 +149,7 @@ namespace dbaui
         sal_Int32                           m_nNamePropHandle;
 
     public:
-        css::uno::Reference< css::sdbc::XRowSet >  getAttachedForm() const { return m_xMainForm; }
+        const css::uno::Reference< css::sdbc::XRowSet >& getAttachedForm() const { return m_xMainForm; }
 
     public:
         SbaXFormAdapter();

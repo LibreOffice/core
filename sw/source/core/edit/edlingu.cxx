@@ -132,8 +132,8 @@ public:
 
     bool                                SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCheck);
     void                                ToSentenceStart();
-    const svx::SpellPortions          GetLastPortions() const { return aLastPortions;}
-    SpellContentPositions               GetLastPositions() const {return aLastPositions;}
+    const svx::SpellPortions&           GetLastPortions() const { return aLastPortions;}
+    const SpellContentPositions&        GetLastPositions() const {return aLastPositions;}
     void                                ContinueAfterThisSentence() { bMoveToEndOfSentence = true; }
 };
 

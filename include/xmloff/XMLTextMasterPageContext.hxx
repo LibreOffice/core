@@ -53,7 +53,7 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
 
     SAL_DLLPRIVATE css::uno::Reference< css::style::XStyle > Create();
 protected:
-    css::uno::Reference< css::style::XStyle > GetStyle() { return xStyle; }
+    const css::uno::Reference< css::style::XStyle >& GetStyle() { return xStyle; }
 public:
 
 

@@ -51,9 +51,9 @@ public:
 
     SvXMLStyleContext* CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
-    rtl::Reference< SvXMLImportPropertyMapper > GetCellImportPropertySetMapper() const { return mxCellImportPropertySetMapper; }
-    rtl::Reference< SvXMLImportPropertyMapper > GetRowImportPropertySetMapper() const { return mxRowImportPropertySetMapper; }
-    rtl::Reference< SvXMLImportPropertyMapper > GetColumnImportPropertySetMapper() const { return mxColumnImportPropertySetMapper; }
+    const rtl::Reference< SvXMLImportPropertyMapper >& GetCellImportPropertySetMapper() const { return mxCellImportPropertySetMapper; }
+    const rtl::Reference< SvXMLImportPropertyMapper >& GetRowImportPropertySetMapper() const { return mxRowImportPropertySetMapper; }
+    const rtl::Reference< SvXMLImportPropertyMapper >& GetColumnImportPropertySetMapper() const { return mxColumnImportPropertySetMapper; }
 
     void addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate );
     void finishStyles();

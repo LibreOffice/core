@@ -72,7 +72,7 @@ public:
 
     void            SetWelcomeScreen( bool b )          { bWelcomeScreen = b; SetModified(); }
     bool            IsWelcomeScreen() const                 { return bWelcomeScreen; }
-    OUString        GetSystem() const                       { return aSystem; }
+    const OUString& GetSystem() const                       { return aSystem; }
 
     const OUString& GetHelpStyleSheet()const{return sHelpStyleSheet;}
     void            SetHelpStyleSheet(const OUString& rStyleSheet){sHelpStyleSheet = rStyleSheet; SetModified();}

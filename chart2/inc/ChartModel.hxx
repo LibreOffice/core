@@ -571,7 +571,7 @@ public:
     css::uno::Reference< css::util::XNumberFormatsSupplier >
         getNumberFormatsSupplier();
 
-    css::uno::Reference< css::uno::XInterface > getChartView() { return xChartView;}
+    const css::uno::Reference< css::uno::XInterface >& getChartView() { return xChartView;}
 
     bool isTimeBased() const { return mbTimeBased;}
     void setTimeBased(bool bTimeBased);

@@ -138,7 +138,7 @@ public:
     LanguageType    GetLanguage() const {return m_eLanguage;}
     void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}
 
-    OUString        GetSortAlgorithm() const {return m_sSortAlgorithm;}
+    const OUString& GetSortAlgorithm() const {return m_sSortAlgorithm;}
     void            SetSortAlgorithm(const OUString& rSet) {m_sSortAlgorithm = rSet;}
 
 };

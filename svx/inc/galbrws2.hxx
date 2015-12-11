@@ -160,7 +160,7 @@ public:
     bool                KeyInput( const KeyEvent& rEvt, vcl::Window* pWindow );
 
     static css::uno::Reference< css::frame::XFrame > GetFrame();
-    css::uno::Reference< css::util::XURLTransformer > GetURLTransformer() const { return m_xTransformer; }
+    const css::uno::Reference< css::util::XURLTransformer >& GetURLTransformer() const { return m_xTransformer; }
 
     void Execute( sal_uInt16 nId );
     void Dispatch( sal_uInt16 nId,

@@ -361,11 +361,11 @@ public:
 protected:
     using OComponentHelper::disposing;
 
-    const css::uno::Reference< css::uno::XComponentContext > impl_getComponentContext() { return m_xComponentContext;}
+    const css::uno::Reference< css::uno::XComponentContext >& impl_getComponentContext() { return m_xComponentContext;}
 
-    const css::uno::Reference< css::awt::XWindow > impl_getPeerWindow() { return m_xPeerWindow;}
+    const css::uno::Reference< css::awt::XWindow >& impl_getPeerWindow() { return m_xPeerWindow;}
 
-    const css::uno::Reference< css::awt::XGraphics > impl_getGraphicsPeer() { return m_xGraphicsPeer;}
+    const css::uno::Reference< css::awt::XGraphics >& impl_getGraphicsPeer() { return m_xGraphicsPeer;}
 
     const sal_Int32& impl_getWidth() { return m_nWidth;}
 
@@ -381,7 +381,7 @@ protected:
 
     virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent );
 
-    css::uno::Reference< css::uno::XInterface > impl_getDelegator() { return m_xDelegator;}
+    const css::uno::Reference< css::uno::XInterface >& impl_getDelegator() { return m_xDelegator;}
 
 private:
 

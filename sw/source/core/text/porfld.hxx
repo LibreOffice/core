@@ -64,7 +64,7 @@ public:
     // #i89179# - made public
     inline const SwFont *GetFont() const { return pFnt; }
 
-    inline OUString GetExp() const { return aExpand; }
+    const OUString& GetExp() const { return aExpand; }
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;

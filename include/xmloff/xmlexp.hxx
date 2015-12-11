@@ -455,9 +455,9 @@ public:
     inline bool HasFormExport();
 
     // get XPropertySet with export information
-    inline css::uno::Reference< css::beans::XPropertySet > getExportInfo() const { return mxExportInfo; }
+    const css::uno::Reference< css::beans::XPropertySet >& getExportInfo() const { return mxExportInfo; }
 
-    css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator() { return mxStatusIndicator; }
+    const css::uno::Reference< css::task::XStatusIndicator >& GetStatusIndicator() { return mxStatusIndicator; }
 
     /// get Event export, with handlers for script types "None" and
     /// "StarBasic" already registered; other handlers may be registered, too.
@@ -530,7 +530,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    css::uno::Reference< css::uno::XComponentContext > getComponentContext() { return m_xContext;}
+    const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const

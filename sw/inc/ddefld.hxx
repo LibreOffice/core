@@ -45,7 +45,7 @@ public:
                     SfxLinkUpdateMode = SfxLinkUpdateMode::ONCALL );
     virtual ~SwDDEFieldType();
 
-    OUString GetExpansion() const               { return aExpansion; }
+    const OUString& GetExpansion() const               { return aExpansion; }
     void SetExpansion( const OUString& rStr )   { aExpansion = rStr;
                                                   bCRLFFlag = false; }
 

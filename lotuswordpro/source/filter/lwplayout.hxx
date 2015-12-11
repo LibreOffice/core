@@ -162,7 +162,7 @@ public:
         m_bGettingExtMarginsValue = false;
         return fRet;
     }
-    OUString GetStyleName(){ return m_StyleName;}
+    const OUString& GetStyleName(){ return m_StyleName;}
     bool IsComplex();
     virtual bool IsAnchorPage(){ return false;}
     virtual bool IsAnchorFrame(){ return false;}
@@ -478,7 +478,7 @@ public:
      * @descr:   Get font style for setting position of frame
      *
      */
-    rtl::Reference<XFFont> GetFont() { return m_pFont; }
+    const rtl::Reference<XFFont>& GetFont() { return m_pFont; }
     void SetFont(rtl::Reference<XFFont> const & pFont);
     enum WrapType
     {

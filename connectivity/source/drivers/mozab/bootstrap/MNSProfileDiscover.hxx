@@ -49,8 +49,8 @@ namespace connectivity
         public:
             ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
                           const OUString &aProfilePath);
-            OUString getProfileName(){ return profileName;}
-            OUString getProfilePath() ;
+            const OUString& getProfileName(){ return profileName;}
+            const OUString& getProfilePath();
         protected:
             MozillaProductType product;
             OUString profileName;

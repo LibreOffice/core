@@ -96,7 +96,7 @@ void SvViewDataEntry::SetPaintRectangle(Rectangle aRectangle)
     maPaintRectangle = aRectangle;
 }
 
-Rectangle SvViewDataEntry::GetPaintRectangle() const
+const Rectangle& SvViewDataEntry::GetPaintRectangle() const
 {
     return maPaintRectangle;
 }

@@ -108,8 +108,8 @@ public:
 
     SwForm*             GetForm(CurTOXType eType);
 
-    CurTOXType          GetCurrentTOXType() const { return eCurrentTOXType;}
-    void                SetCurrentTOXType(CurTOXType    eSet)
+    const CurTOXType&   GetCurrentTOXType() const { return eCurrentTOXType;}
+    void                SetCurrentTOXType(const CurTOXType& eSet)
                                 {
                                     eCurrentTOXType = eSet;
                                 }

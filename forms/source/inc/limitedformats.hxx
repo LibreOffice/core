@@ -77,7 +77,7 @@ namespace frm
         void        setFormatKeyPropertyValue( const css::uno::Any& _rNewValue );
         // setFormatKeyPropertyValue should only be called with a value got from convertFormatKeyPropertyValue!
 
-        css::uno::Reference< css::util::XNumberFormatsSupplier >
+        const css::uno::Reference< css::util::XNumberFormatsSupplier >&
                     getFormatsSupplier() const { return s_xStandardFormats; }
 
     private:

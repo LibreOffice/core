@@ -242,8 +242,8 @@ public:
     bool IsMatrix (const ScAddress& aCell,
         css::table::CellRangeAddress& aCellAddress, bool& bIsFirst) const;
 
-    rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
-    rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
+    const rtl::Reference < XMLPropertySetMapper >& GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
+    const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
 
     void SetSourceStream( const css::uno::Reference<css::io::XInputStream>& xNewStream );
 

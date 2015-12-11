@@ -39,7 +39,7 @@ namespace dbaui
         virtual bool IsModified() const override { return IsValueChangedFromSaved(); }
 
         short GetPos() const { return m_nPos; }
-        OUString GetHelp() const { return m_strHelpText; }
+        const OUString& GetHelp() const { return m_strHelpText; }
     };
 
     class OPropEditCtrl :   public Edit
@@ -54,7 +54,7 @@ namespace dbaui
         virtual bool IsModified() const override { return IsValueChangedFromSaved(); }
 
         short GetPos() const { return m_nPos; }
-        OUString GetHelp() const { return m_strHelpText; }
+        const OUString& GetHelp() const { return m_strHelpText; }
     };
 
     class OPropNumericEditCtrl : public NumericField
@@ -68,7 +68,7 @@ namespace dbaui
         virtual bool IsModified() const override { return IsValueChangedFromSaved(); }
 
         short GetPos() const { return m_nPos; }
-        OUString GetHelp() const { return m_strHelpText; }
+        const OUString& GetHelp() const { return m_strHelpText; }
 
         void SetSpecialReadOnly(bool _bReadOnly);
     };
@@ -84,7 +84,7 @@ namespace dbaui
         bool IsModified() const { return IsValueChangedFromSaved(); }
 
         short GetPos() const { return m_nPos; }
-        OUString GetHelp() const { return m_strHelpText; }
+        const OUString& GetHelp() const { return m_strHelpText; }
     };
 
 }

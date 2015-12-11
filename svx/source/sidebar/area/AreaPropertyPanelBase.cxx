@@ -1257,7 +1257,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransparentHdl_Impl, Edit&, v
     setFillTransparence(aLinearItem);
 }
 
-XGradient AreaPropertyPanelBase::GetGradient (const css::awt::GradientStyle eStyle) const
+const XGradient& AreaPropertyPanelBase::GetGradient (const css::awt::GradientStyle eStyle) const
 {
     switch (eStyle)
     {

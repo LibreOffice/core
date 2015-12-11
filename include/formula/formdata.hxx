@@ -43,7 +43,7 @@ public:
     inline sal_uInt16       GetEdFocus() const  { return nEdFocus; }
     inline const OUString&  GetUndoStr() const  { return aUndoStr; }
     inline bool             GetMatrixFlag()const{ return bMatrix;}
-    inline OString     GetUniqueId()const  { return aUniqueId;}
+    const OString&          GetUniqueId()const  { return aUniqueId;}
     inline const Selection& GetSelection()const { return aSelection;}
 
     inline void             SetMode( sal_uInt16 nNew )                  { nMode = nNew; }

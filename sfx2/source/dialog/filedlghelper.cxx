@@ -2537,7 +2537,7 @@ void FileDialogHelper::SetCurrentFilter( const OUString& rFilter )
     mpImp->setFilter( sFilter );
 }
 
-uno::Reference < XFilePicker2 > FileDialogHelper::GetFilePicker() const
+const uno::Reference < XFilePicker2 >& FileDialogHelper::GetFilePicker() const
 {
     return mpImp->mxFileDlg;
 }

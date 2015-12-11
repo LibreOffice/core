@@ -995,9 +995,9 @@ public:
     bool                HasConnectorLines() const;
 
     /** Returns the legend object. */
-    inline XclImpChLegendRef GetLegend() const { return mxLegend; }
+    const XclImpChLegendRef& GetLegend() const { return mxLegend; }
     /** Returns the default series data format. */
-    inline XclImpChDataFormatRef GetGroupFormat() const { return mxGroupFmt; }
+    const XclImpChDataFormatRef& GetGroupFormat() const { return mxGroupFmt; }
     /** Returns series title, if the chart type group contains only one single series. */
     OUString            GetSingleSeriesTitle() const;
 
@@ -1213,7 +1213,7 @@ public:
     inline sal_Int32    GetApiAxesSetIndex() const { return maData.GetApiAxesSetIndex(); }
 
     /** Returns the outer plot area position, if existing. */
-    inline XclImpChFramePosRef GetPlotAreaFramePos() const { return mxFramePos; }
+    const XclImpChFramePosRef& GetPlotAreaFramePos() const { return mxFramePos; }
     /** Returns the specified chart type group. */
     XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the first chart type group. */

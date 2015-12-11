@@ -161,7 +161,7 @@ public:
     LwpNumberingOverride* GetParaNumbering();
 
     inline LwpSilverBullet* GetSilverBullet();
-    OUString GetBulletChar() const;
+    const OUString& GetBulletChar() const;
     sal_uInt32 GetBulletFontID() const;
     sal_uInt16 GetLevel() const;
     bool GetBulletFlag() const;
@@ -171,7 +171,7 @@ public:
     double GetBelowSpacing();
     LwpParaProperty* GetProperty(sal_uInt32 nPropType);
     void GatherDropcapInfo();
-    OUString GetBulletStyleName() const;
+    const OUString& GetBulletStyleName() const;
     void SetBelowSpacing(double value);
     void SetBulletFlag(bool bFlag);
     void SetIndent(LwpIndentOverride* pIndentOverride);
@@ -289,7 +289,7 @@ inline LwpSilverBullet* LwpPara::GetSilverBullet()
 {
     return m_pSilverBullet;
 }
-inline OUString LwpPara::GetBulletChar() const
+inline const OUString& LwpPara::GetBulletChar() const
 {
     return m_Content;
 }
@@ -317,7 +317,7 @@ inline XFContentContainer* LwpPara::GetXFContainer()
 {
     return m_pXFContainer;
 }
-inline OUString LwpPara::GetBulletStyleName() const
+inline const OUString& LwpPara::GetBulletStyleName() const
 {
     return m_aBulletStyleName;
 }

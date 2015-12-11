@@ -81,8 +81,8 @@ public:
     void ParseSection(LwpFrib* pFrib);
     XFSection* CreateXFSection();
 
-    OUString GetStyleName(){ return m_StyleName;}
-    OUString GetFillerPageStyleName(){ return m_FillerPageStyleName;}
+    const OUString& GetStyleName(){ return m_StyleName;}
+    const OUString& GetFillerPageStyleName(){ return m_FillerPageStyleName;}
     bool IsNextPageType();
 
 private:

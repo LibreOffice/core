@@ -542,8 +542,8 @@ public:
     void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos=ULONG_MAX);
     size_t Count();
 
-    OUString getName() { return aName; }
-    OUString getParent() { return aParent; }
+    const OUString& getName() { return aName; }
+    const OUString& getParent() { return aParent; }
     StyleTree_Impl *operator[](size_t idx) const { return pChildren[idx]; }
 };
 

@@ -79,7 +79,7 @@ namespace rptxml
 
         void addCell(const css::uno::Reference< css::report::XReportComponent>& _xElement);
 
-        inline css::uno::Reference< css::report::XSection > getSection() const { return m_xSection; }
+        const css::uno::Reference< css::report::XSection >& getSection() const { return m_xSection; }
     };
 
 } // namespace rptxml

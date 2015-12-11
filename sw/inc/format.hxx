@@ -109,7 +109,7 @@ public:
     inline SwFormat* DerivedFrom() const { return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
     inline bool IsDefault() const { return DerivedFrom() == nullptr; }
 
-    inline OUString GetName() const                  { return m_aFormatName; }
+    const OUString& GetName() const                  { return m_aFormatName; }
     inline bool HasName(const OUString &rName) const { return m_aFormatName == rName; }
     void SetName( const OUString& rNewName, bool bBroadcast=false );
 

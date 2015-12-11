@@ -334,7 +334,7 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
     }
 }
 
-css::uno::Reference<css::rendering::XBitmap>
+const css::uno::Reference<css::rendering::XBitmap>&
     PresenterBitmapContainer::BitmapDescriptor::GetNormalBitmap() const
 {
     return mxNormalBitmap;

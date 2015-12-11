@@ -202,7 +202,7 @@ void SelectPersonaDialog::SetAppliedPersonaSetting( OUString& rPersonaSetting )
     m_aAppliedPersona = rPersonaSetting;
 }
 
-OUString SelectPersonaDialog::GetAppliedPersonaSetting() const
+const OUString& SelectPersonaDialog::GetAppliedPersonaSetting() const
 {
     return m_aAppliedPersona;
 }

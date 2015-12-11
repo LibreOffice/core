@@ -114,7 +114,7 @@ public:
         @return
             The returned anchor may be NULL.
     */
-    model::SharedPageDescriptor GetSelectionAnchor() const { return mpSelectionAnchor;}
+    const model::SharedPageDescriptor& GetSelectionAnchor() const { return mpSelectionAnchor;}
 
     typedef ::std::vector<SdPage*> PageSelection;
 

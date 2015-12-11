@@ -242,7 +242,7 @@ public:
     void SetOperation(ScConditionMode eMode);
     bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
     void            SetIgnoreBlank(bool bSet);
-    ScAddress       GetSrcPos() const           { return aSrcPos; }
+    const ScAddress& GetSrcPos() const           { return aSrcPos; }
 
     ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
 

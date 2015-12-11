@@ -131,14 +131,14 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         bool                IsReadOnly      ( SvtSecurityOptions::EOption eOption                   ) const;
 
-        Sequence< OUString >    GetSecureURLs   (                                                       ) const { return m_seqSecureURLs;}
-        void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList          );
+        const Sequence< OUString >& GetSecureURLs(                                                       ) const { return m_seqSecureURLs;}
+        void                    SetSecureURLs    (   const   Sequence< OUString >&   seqURLList          );
         inline sal_Int32        GetMacroSecurityLevel   (                                               ) const;
         void                    SetMacroSecurityLevel   ( sal_Int32 _nLevel                             );
 
         inline bool         IsMacroDisabled         (                                               ) const;
 
-        Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const { return m_seqTrustedAuthors;}
+        const Sequence< SvtSecurityOptions::Certificate >& GetTrustedAuthors(                                                                                       ) const { return m_seqTrustedAuthors;}
         void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           );
 
         bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const;

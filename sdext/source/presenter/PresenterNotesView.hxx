@@ -85,7 +85,7 @@ public:
 
     void ChangeFontSize (const sal_Int32 nSizeChange);
 
-    std::shared_ptr<PresenterTextView> GetTextView() const;
+    const std::shared_ptr<PresenterTextView>& GetTextView() const;
 
     // lang::XEventListener
 
