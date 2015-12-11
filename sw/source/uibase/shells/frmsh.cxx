@@ -735,64 +735,21 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_TOP:
                 case FN_FRAME_ALIGN_VERT_CENTER:
                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                    if ( bProtect || (bHtmlMode && eFrameType & FrameTypeFlags::FLY_ATCNT))
+                    if ( bProtect || (bHtmlMode && (eFrameType & FrameTypeFlags::FLY_ATCNT ||
+                                                    eFrameType & FrameTypeFlags::FLY_INCNT)))
                         rSet.DisableItem( nWhich );
-                    else
+                    else if (nWhich != FN_FRAME_ALIGN_VERT_TOP && nWhich != SID_OBJECT_ALIGN_UP && aMgr.GetAnchor() == FLY_AT_FLY)
                     {
-                        sal_uInt16 nId = 0;
-                        if (eFrameType & FrameTypeFlags::FLY_INCNT)
+                        const SwFrameFormat* pFormat = rSh.IsFlyInFly();
+                        if (pFormat)
                         {
-                            switch (nWhich)
+                            const SwFormatFrameSize& rFrameSz = pFormat->GetFrameSize();
+                            if (rFrameSz.GetHeightSizeType() != ATT_FIX_SIZE)
                             {
-                                case SID_OBJECT_ALIGN_UP     :
-                                case FN_FRAME_ALIGN_VERT_TOP:
-                                    nId = STR_TOP_BASE; break;
-                                case SID_OBJECT_ALIGN_MIDDLE :
-                                case FN_FRAME_ALIGN_VERT_CENTER:
-                                    nId = STR_CENTER_BASE;  break;
-                                case SID_OBJECT_ALIGN_DOWN :
-                                case FN_FRAME_ALIGN_VERT_BOTTOM:
-                                    if(!bHtmlMode)
-                                        nId = STR_BOTTOM_BASE;
-                                    else
-                                        rSet.DisableItem( nWhich );
+                                rSet.DisableItem( nWhich );
                                 break;
                             }
                         }
-                        else
-                        {
-                            if (nWhich != FN_FRAME_ALIGN_VERT_TOP &&
-                                    nWhich != SID_OBJECT_ALIGN_UP )
-                            {
-                                if (aMgr.GetAnchor() == FLY_AT_FLY)
-                                {
-                                    const SwFrameFormat* pFormat = rSh.IsFlyInFly();
-                                    if (pFormat)
-                                    {
-                                        const SwFormatFrameSize& rFrameSz = pFormat->GetFrameSize();
-                                        if (rFrameSz.GetHeightSizeType() != ATT_FIX_SIZE)
-                                        {
-                                            rSet.DisableItem( nWhich );
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            switch (nWhich)
-                            {
-                                case SID_OBJECT_ALIGN_UP :
-                                case FN_FRAME_ALIGN_VERT_TOP:
-                                    nId = STR_TOP; break;
-                                case SID_OBJECT_ALIGN_MIDDLE:
-                                case FN_FRAME_ALIGN_VERT_CENTER:
-                                    nId = STR_CENTER_VERT; break;
-                                case SID_OBJECT_ALIGN_DOWN:
-                                case FN_FRAME_ALIGN_VERT_BOTTOM:
-                                    nId = STR_BOTTOM; break;
-                            }
-                        }
-                        if ( nId )
-                            rSet.Put( SfxStringItem( nWhich, SW_RES(nId) ));
                     }
                 break;
                 case SID_HYPERLINK_GETLINK:
