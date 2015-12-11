@@ -1189,7 +1189,7 @@ OUString Application::GetHWOSConfInfo()
     ImplSVData* pSVData = ImplGetSVData();
     OUStringBuffer aDetails;
 
-    aDetails.append( "Threads " );
+    aDetails.append( "CPU Threads: " );
     aDetails.append( (sal_Int32)
         std::thread::hardware_concurrency() );
     aDetails.append( "; " );
@@ -1200,11 +1200,11 @@ OUString Application::GetHWOSConfInfo()
     else
         aVersion = "-";
 
-    aDetails.append( "Ver: " );
+    aDetails.append( "OS Version: " );
     aDetails.append( aVersion );
     aDetails.append( "; " );
 
-    aDetails.append( "Render: " );
+    aDetails.append( "UI Render: " );
     if ( OpenGLWrapper::isVCLOpenGLEnabled() )
         aDetails.append( "GL" );
     else
