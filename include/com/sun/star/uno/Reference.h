@@ -569,6 +569,14 @@ public:
         @return interface reference of demanded type (may be null)
     */
     inline static SAL_WARN_UNUSED_RESULT Reference< interface_type > SAL_CALL query( XInterface * pInterface );
+
+#if defined LIBO_INTERNAL_ONLY
+    /** Returns pointer to interface and clears it __without__ calling release() on  it
+
+        @return interface pointer
+    */
+    inline interface_type* getAndClearNoRelease();
+#endif
 };
 
 /// @cond INTERNAL
