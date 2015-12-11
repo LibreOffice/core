@@ -545,7 +545,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
     if (pCursor)
         pCursor->Hide();
 
-    ImplClearBackground(rRenderContext, rRectangle, 0, GetOutputSizePixel().Width());
+    ImplClearBackground(rRenderContext, rRectangle, 0, GetOutputSizePixel().Width()-1);
 
     bool bPaintPlaceholderText = aText.isEmpty() && !maPlaceholderText.isEmpty();
 
