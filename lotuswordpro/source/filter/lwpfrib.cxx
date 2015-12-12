@@ -257,7 +257,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
         {
             pStyle = new XFTextStyle();
             *pStyle = *pNamedStyle;
-            LwpCharacterStyle* pCharStyle = static_cast<LwpCharacterStyle*>(m_pModifiers->CharStyleID.obj().get());
+            LwpCharacterStyle* pCharStyle = dynamic_cast<LwpCharacterStyle*>(m_pModifiers->CharStyleID.obj().get());
 
             pStyle->SetStyleName("");
             pFont = pFoundry->GetFontManger().CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
