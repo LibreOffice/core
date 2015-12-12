@@ -337,12 +337,26 @@ struct AnnotatingVisitor
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 maGradientStopVector.push_back(GradientStop());
                 maGradientVector.back().maStops.push_back(maGradientStopVector.size()-1);
+
+                // first parse 'color' as 'stop-color' might depend on it
+                // if 'stop-color''s value is "currentColor" and parsed previously
+                uno::Reference<xml::dom::XNode> xNodeColor(xAttributes->getNamedItem("color"));
+                if(xNodeColor.is())
+                    parseGradientStop( maGradientStopVector.back(),
+                        maGradientStopVector.size()-1,
+                        XML_STOP_COLOR,
+                        xNodeColor->getNodeValue() );
+
+                //now, parse the rest of attributes
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
-                    parseGradientStop( maGradientStopVector.back(),
-                                       maGradientStopVector.size()-1,
-                                       getTokenId(xAttributes->item(i)->getNodeName()),
-                                       xAttributes->item(i)->getNodeValue() );
+                    const sal_Int32 nTokenId(
+                        getTokenId(xAttributes->item(i)->getNodeName()));
+                    if ( nTokenId != XML_COLOR )
+                        parseGradientStop( maGradientStopVector.back(),
+                                           maGradientStopVector.size()-1,
+                                           nTokenId,
+                                           xAttributes->item(i)->getNodeValue() );
                 }
                 break;
             }
@@ -353,29 +367,34 @@ struct AnnotatingVisitor
                 maCurrState.maTransform.identity();
                 maCurrState.maViewBox.reset();
 
-                // scan for style info
+                // first parse 'color' and 'style' as 'fill' and 'stroke' might depend on them
+                // if their values are "currentColor" and parsed previously
+                uno::Reference<xml::dom::XNode> xNodeColor(xAttributes->getNamedItem("color"));
+                if(xNodeColor.is())
+                    parseAttribute(XML_COLOR, xNodeColor->getNodeValue());
+
+                uno::Reference<xml::dom::XNode> xNodeStyle(xAttributes->getNamedItem("style"));
+                if(xNodeStyle.is())
+                    parseStyle(xNodeStyle->getNodeValue());
+
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
 
+                //now, parse the rest of attributes
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
                     sAttributeValue = xAttributes->item(i)->getNodeValue();
                     const sal_Int32 nTokenId(
                         getTokenId(xAttributes->item(i)->getNodeName()));
-                    if( XML_STYLE == nTokenId )
-                        parseStyle(sAttributeValue);
-                    else
+                    if( XML_ID == nTokenId )
                     {
-                        if( XML_ID == nTokenId )
-                        {
-                            maElementVector.push_back(xElem);
-                            maElementIdMap.insert(std::make_pair(sAttributeValue,
-                                maElementVector.size() - 1));
-                        }
-                        else
-                            parseAttribute(nTokenId,
-                                sAttributeValue);
+                        maElementVector.push_back(xElem);
+                        maElementIdMap.insert(std::make_pair(sAttributeValue,
+                            maElementVector.size() - 1));
                     }
+                    else if ( nTokenId != XML_COLOR || nTokenId != XML_STYLE )
+                        parseAttribute(nTokenId,
+                            sAttributeValue);
                 }
 
                 // all attributes parsed, can calc total CTM now
