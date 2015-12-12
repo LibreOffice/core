@@ -621,13 +621,6 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
 
 } /* namespace vcl */
 
-NotifyEvent::NotifyEvent()
-{
-    mpWindow    = nullptr;
-    mpData      = nullptr;
-    mnEventType = MouseNotifyEvent::NONE;
-    mnRetValue  = 0;
-}
 
 NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
                           const void* pEvent, long nRet )

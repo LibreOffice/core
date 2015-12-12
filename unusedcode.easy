@@ -1,5 +1,4 @@
 BigInt::BigInt(unsigned int)
-NotifyEvent::NotifyEvent()
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
 OpenGLContext::requestSingleBufferedRendering()
