@@ -65,9 +65,9 @@ else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,chartopengl,\
 	OpenGL \
 ))
-else ifeq ($(OS),LINUX)
+else ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,chartopengl,\
-	-ldl \
+	$(DLOPEN_LIBS) \
 	-lGL \
 	-lX11 \
 ))
