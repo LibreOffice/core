@@ -90,6 +90,10 @@ void    XFCell::Add(XFContent *pContent)
         assert(false);
         return;
     }
+    if (!pContent)
+    {
+        throw std::runtime_error("no content");
+    }
     if( pContent->GetContentType() == enumXFContentTable )
     {
         XFTable *pTable = static_cast<XFTable*>(pContent);
