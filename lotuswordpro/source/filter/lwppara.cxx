@@ -283,7 +283,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         m_pXFContainer = pSection;
     }
 
-    if (m_bHasBullet &&  m_pSilverBullet)
+    if (m_bHasBullet && m_pSilverBullet)
     {
         XFContentContainer* pListItem = AddBulletList(m_pXFContainer);
         if (pListItem)
@@ -291,7 +291,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
             pListItem->Add(pPara);
         }
     }
-    else
+    else if (m_pXFContainer)
     {
         LwpBulletStyleMgr* pBulletStyleMgr = this->GetBulletStyleMgr();
         if (pBulletStyleMgr)
