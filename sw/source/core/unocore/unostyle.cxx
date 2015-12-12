@@ -755,114 +755,52 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
 class SwStyleProperties_Impl
 {
     const PropertyEntryVector_t aPropertyEntries;
-    uno::Any**                  pAnyArr;
-    sal_uInt32                  nArrLen;
-
+    std::map<OUString, uno::Any> m_vPropertyValues;
 public:
-    explicit SwStyleProperties_Impl(const SfxItemPropertyMap& rMap);
-    ~SwStyleProperties_Impl();
+    explicit SwStyleProperties_Impl(const SfxItemPropertyMap& rMap)
+        : aPropertyEntries(rMap.getPropertyEntries())
+    { }
+    ~SwStyleProperties_Impl()
+    { }
 
-    bool    SetProperty(const OUString& rName, const uno::Any& rVal);
-    bool    GetProperty(const OUString& rName, uno::Any*& rpAny);
-    bool    ClearProperty( const OUString& rPropertyName );
-    void    ClearAllProperties( );
-    static void GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny );
-
-    const PropertyEntryVector_t& GetPropertyVector() const {return aPropertyEntries; }
-
+    bool AllowsKey(const OUString& rName)
+    {
+        return aPropertyEntries.end() != std::find_if(aPropertyEntries.begin(), aPropertyEntries.end(),
+            [rName] (const SfxItemPropertyNamedEntry& rEntry) {return rName == rEntry.sName;} );
+    }
+    bool SetProperty(const OUString& rName, const uno::Any& rValue)
+    {
+        if(!AllowsKey(rName))
+            return false;
+        m_vPropertyValues[rName] = rValue;
+        return true;
+    }
+    bool GetProperty(const OUString& rName, const uno::Any*& pAny)
+    {
+        if(!AllowsKey(rName))
+        {
+            pAny = nullptr;
+            return false;
+        }
+        pAny = &m_vPropertyValues[rName];
+        return true;
+    }
+    bool ClearProperty( const OUString& rName )
+    {
+        if(!AllowsKey(rName))
+            return false;
+        m_vPropertyValues[rName] = uno::Any();
+        return true;
+    }
+    void ClearAllProperties( )
+            { m_vPropertyValues.clear(); }
+    static void GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny )
+    {
+        rAny = rxPropertySet->getPropertyValue( rPropertyName );
+    }
+    const PropertyEntryVector_t& GetPropertyVector() const
+            { return aPropertyEntries; }
 };
-
-SwStyleProperties_Impl::SwStyleProperties_Impl(const SfxItemPropertyMap& rMap) :
-    aPropertyEntries( rMap.getPropertyEntries() ),
-    nArrLen(0)
-{
-    nArrLen = aPropertyEntries.size();
-
-    pAnyArr = new uno::Any* [nArrLen];
-    for ( sal_uInt32 i =0 ; i < nArrLen; i++ )
-        pAnyArr[i] = nullptr;
-}
-
-SwStyleProperties_Impl::~SwStyleProperties_Impl()
-{
-    for ( sal_uInt32 i =0 ; i < nArrLen; i++ )
-        delete pAnyArr[i];
-    delete[] pAnyArr;
-}
-
-bool SwStyleProperties_Impl::SetProperty(const OUString& rName, const uno::Any& rVal)
-{
-    sal_uInt32 nPos = 0;
-    bool bRet = false;
-    PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
-    while( aIt != aPropertyEntries.end() )
-    {
-        if(rName == aIt->sName)
-        {
-            delete pAnyArr[nPos];
-            pAnyArr[nPos] = new uno::Any(rVal);
-            bRet = true;
-            break;
-        }
-        ++nPos;
-        ++aIt;
-    }
-    return bRet;
-}
-
-bool SwStyleProperties_Impl::ClearProperty( const OUString& rName )
-{
-    bool bRet = false;
-    sal_uInt32 nPos = 0;
-    PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
-    while( aIt != aPropertyEntries.end() )
-    {
-        if( rName == aIt->sName )
-        {
-            delete pAnyArr[nPos];
-            pAnyArr[ nPos ] = nullptr;
-            bRet = true;
-            break;
-        }
-        ++nPos;
-        ++aIt;
-    }
-    return bRet;
-}
-
-void SwStyleProperties_Impl::ClearAllProperties( )
-{
-    for ( sal_uInt32 i = 0; i < nArrLen; i++ )
-    {
-        delete pAnyArr[i];
-        pAnyArr[ i ] = nullptr;
-    }
-}
-
-bool SwStyleProperties_Impl::GetProperty(const OUString& rName, uno::Any*& rpAny )
-{
-    bool bRet = false;
-    sal_uInt32 nPos = 0;
-    PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
-    while( aIt != aPropertyEntries.end() )
-    {
-        if( rName == aIt->sName )
-        {
-            rpAny = pAnyArr[nPos];
-            bRet = true;
-            break;
-        }
-        ++nPos;
-        ++aIt;
-    }
-
-    return bRet;
-}
-
-void SwStyleProperties_Impl::GetProperty( const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any & rAny )
-{
-    rAny = rxPropertySet->getPropertyValue( rPropertyName );
-}
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
 {
@@ -1287,9 +1225,9 @@ void    SwXStyle::ApplyDescriptorProperties()
     PropertyEntryVector_t::const_iterator aIt = rPropertyVector.begin();
     while(aIt != rPropertyVector.end())
     {
-        uno::Any* pAny(nullptr);
+        const uno::Any* pAny(nullptr);
         m_pPropertiesImpl->GetProperty(aIt->sName, pAny);
-        if (pAny)
+        if(pAny->hasValue())
             setPropertyValue(aIt->sName, *pAny);
         ++aIt;
     }
@@ -2423,9 +2361,9 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
         }
         else if(m_bIsDescriptor)
         {
-            uno::Any *pAny = nullptr;
-            m_pPropertiesImpl->GetProperty ( pNames[nProp], pAny );
-            if( !pAny )
+            const uno::Any* pAny = nullptr;
+            m_pPropertiesImpl->GetProperty(pNames[nProp], pAny);
+            if(!pAny->hasValue())
             {
                 bool bExcept = false;
                 switch( m_eFamily )
@@ -3667,10 +3605,9 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
         }
         else if(IsDescriptor())
         {
-            uno::Any* pAny = nullptr;
+            const uno::Any* pAny = nullptr;
             GetPropImpl()->GetProperty(rPropName, pAny);
-
-            if ( !pAny )
+            if (!pAny->hasValue())
             {
                 SwStyleProperties_Impl::GetProperty(rPropName, mxStyleData, pRet[nProp]);
             }
