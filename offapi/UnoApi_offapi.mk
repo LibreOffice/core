@@ -270,9 +270,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/packages/manifest
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/packages/zip,\
 	ZipFileAccess \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/plugin,\
-	PluginManager \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/presentation,\
 	SlideShow \
 	TransitionFactory \
@@ -2898,11 +2895,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/mozilla,\
 	XMenuProxy \
 	XMenuProxyListener \
 	XMozillaBootstrap \
-	XPluginInstance \
-	XPluginInstanceNotifySink \
-	XPluginInstancePeer \
-	XPluginInstanceSyncPeer \
-	XPluginWindowPeer \
 	XProfileDiscover \
 	XProfileManager \
 	XProxyRunner \
@@ -2931,15 +2923,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/packages/zip,\
 	ZipEntry \
 	ZipException \
 	ZipIOException \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/plugin,\
-	PluginDescription \
-	PluginException \
-	PluginMode \
-	PluginVariable \
-	XPlugin \
-	XPluginContext \
-	XPluginManager \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/presentation,\
 	AnimationEffect \
