@@ -282,6 +282,7 @@ public:
                                 GetController();
 
     bool                        TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, css::ui::ContextMenuExecuteEvent aEvent );
+    bool                        TryContextMenuInterception( Menu& rMenu, const OUString& rMenuIdentifier, css::ui::ContextMenuExecuteEvent aEvent );
 
     void                        ExecPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.

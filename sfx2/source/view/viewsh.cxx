@@ -1958,6 +1958,65 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
     return true;
 }
 
+bool SfxViewShell::TryContextMenuInterception( Menu& rMenu, const OUString& rMenuIdentifier, css::ui::ContextMenuExecuteEvent aEvent )
+{
+    bool bModified = false;
+
+    // create container from menu
+    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu( &rMenu, &rMenuIdentifier );
+
+    // get selection from controller
+    aEvent.Selection = css::uno::Reference< css::view::XSelectionSupplier >( GetController(), css::uno::UNO_QUERY );
+
+    // call interceptors
+    ::cppu::OInterfaceIteratorHelper aIt( pImp->aInterceptorContainer );
+    while( aIt.hasMoreElements() )
+    {
+        try
+        {
+            css::ui::ContextMenuInterceptorAction eAction;
+            {
+                SolarMutexReleaser rel;
+                eAction = static_cast< css::ui::XContextMenuInterceptor* >( aIt.next() )->notifyContextMenuExecute( aEvent );
+            }
+            switch ( eAction )
+            {
+                case css::ui::ContextMenuInterceptorAction_CANCELLED:
+                    // interceptor does not want execution
+                    return false;
+                case css::ui::ContextMenuInterceptorAction_EXECUTE_MODIFIED:
+                    // interceptor wants his modified menu to be executed
+                    bModified = true;
+                    break;
+                case css::ui::ContextMenuInterceptorAction_CONTINUE_MODIFIED:
+                    // interceptor has modified menu, but allows for calling other interceptors
+                    bModified = true;
+                    continue;
+                case css::ui::ContextMenuInterceptorAction_IGNORED:
+                    // interceptor is indifferent
+                    continue;
+                default:
+                    SAL_WARN( "sfx.view", "Wrong return value of ContextMenuInterceptor!" );
+                    continue;
+            }
+        }
+        catch (...)
+        {
+            aIt.remove();
+        }
+
+        break;
+    }
+
+    if ( bModified )
+    {
+        rMenu.Clear();
+        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer( &rMenu, aEvent.ActionTriggerContainer );
+    }
+
+    return true;
+}
+
 void SfxViewShell::TakeOwnership_Impl()
 {
     // currently there is only one reason to take Ownership: a hidden frame is printed

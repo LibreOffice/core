@@ -77,6 +77,7 @@ struct SfxInterface_Impl
 {
     SfxObjectUIArr_Impl     aObjectBars;    // registered ObjectBars
     SfxObjectUIArr_Impl     aChildWindows;  // registered ChildWindows
+    OUString                aPopupName;     // registered xml-based PopupMenu
     ResId                   aPopupRes;      // registered PopupMenu
     ResId                   aStatBarRes;    // registered StatusBar
     SfxModule*              pModule;
@@ -368,6 +369,11 @@ void SfxInterface::RegisterPopupMenu( const ResId& rResId )
     pImpData->aPopupRes = rResId;
 }
 
+void SfxInterface::RegisterPopupMenu( const OUString& rResourceName )
+{
+    pImpData->aPopupName = rResourceName;
+}
+
 void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, sal_uInt32 nResId)
 {
     RegisterObjectBar(nPos, nResId, 0UL);
@@ -502,6 +508,11 @@ sal_uInt16 SfxInterface::GetChildWindowCount() const
 const ResId& SfxInterface::GetPopupMenuResId() const
 {
     return pImpData->aPopupRes;
+}
+
+const OUString& SfxInterface::GetPopupMenuName() const
+{
+    return pImpData->aPopupName;
 }
 
 const ResId& SfxInterface::GetStatusBarResId() const
