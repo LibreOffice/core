@@ -13,6 +13,10 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/swreport,\
 	sw/uiconfig/swreport/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/swreport,\
+	sw/uiconfig/swreport/popupmenu/table \
+))
+
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/swreport,\
 	sw/uiconfig/swreport/statusbar/statusbar \
 ))

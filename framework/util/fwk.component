@@ -212,4 +212,8 @@
       constructor="com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.framework.ResourceMenuController"
+      constructor="com_sun_star_comp_framework_ResourceMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
 </component>

@@ -13,6 +13,10 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/swriter,\
 	sw/uiconfig/swriter/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/swriter,\
+	sw/uiconfig/swriter/popupmenu/table \
+))
+
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/statusbar/statusbar \
 ))
