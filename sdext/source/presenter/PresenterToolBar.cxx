@@ -1665,7 +1665,7 @@ void Label::SetText (const OUString& rsText)
     const bool bRequestLayout (mpMode->maText.GetText().getLength() != rsText.getLength());
 
     mpMode->maText.SetText(rsText);
-    // Just use the character count for determing whether a layout is
+    // Just use the character count for determining whether a layout is
     // necessary.  This is an optimization to avoid layouts every time a new
     // time value is set on some labels.
     if (bRequestLayout)

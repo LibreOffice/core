@@ -2821,7 +2821,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         (as they generally are) by character properties then those properties
         win.
 
-        The fontsize that is used in MS for determing the defaults is always
+        The fontsize that is used in MS for determining the defaults is always
         the CJK fontsize even if the text is not in that language, in OOo the
         largest fontsize used in the field is the one we should take, but
         whatever we do, word will actually render using the fontsize set for

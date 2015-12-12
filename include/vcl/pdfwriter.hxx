@@ -1102,7 +1102,7 @@ The following structure describes the permissions used in PDF security
     For pagination artifacts that are not part of the logical structure
     of the document (like header, footer or page number) the special
     StructElement NonStructElement exists. To place content
-    outside of the struture tree simply call
+    outside of the structure tree simply call
     BeginStructureElement( NonStructElement ) then draw your
     content and then call EndStructureElement(). All children
     of a NonStructElement will not be part of the structure.
@@ -1257,7 +1257,7 @@ The following structure describes the permissions used in PDF security
     will be cast to the type described by the type member.
 
     @param rControlType
-    a descendant of AnyWidget determing the control's properties
+    a descendant of AnyWidget determining the control's properties
 
     @param nPageNr
     the page number to apply the effect to; -1 denotes the current page

@@ -864,7 +864,7 @@ struct WW8PLCFxDesc
                           // also a character run that ends on the same location
                           // as the paragraph mark is adjusted to end just before
                           // the paragraph mark so as to handle their close
-                          // first. The value being used to determing where the
+                          // first. The value being used to determining where the
                           // properties end is in nEndPos, but the original
                           // unadjusted end character position is important as
                           // it can be used as the beginning cp of the next set

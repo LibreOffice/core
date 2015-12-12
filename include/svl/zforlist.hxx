@@ -622,7 +622,7 @@ public:
     /** Set TwoDigitYearStart, how the input string scanner handles a two digit year.
         Default from VCL: 1930, 30-99 19xx, 00-29 20xx
 
-        <p> Historically (prior to src513e) it was a two digit number determing
+        <p> Historically (prior to src513e) it was a two digit number determining
         until which number the string scanner recognizes a year to be 20xx,
         default <= 29 is used by SFX/OfaMiscCfg.
         The name Year2000 is kept although the actual functionality is now a
