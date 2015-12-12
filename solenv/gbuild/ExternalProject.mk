@@ -20,7 +20,7 @@
 # tarball need to be delivered.)
 #
 # An ExternalProject always uses one UnpackedTarball with the same name.
-# The dependency strucure ensures that any change on a dependency
+# The dependency structure ensures that any change on a dependency
 # of the ExternalProject will cause the UnpackedTarball to be unpacked
 # again, so the ExternalProject always does a clean build and is not at
 # the mercy of the external's build system's dubious incremental builds.
