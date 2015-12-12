@@ -687,7 +687,6 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
 
             //because of the different feature between Word Pro and SODC, I simulate the vertical base offset
             //between anchor and frame origin using the font height.
-            //LwpPara* pPara = static_cast<LwpPara*>(m_pLayout->GetPosition()->obj());
             rtl::Reference<XFFont> pFont = m_pLayout->GetFont();
             if(pFont.is())
             {
@@ -1096,11 +1095,11 @@ void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
         m_pFrame->Parse(pXFFrame, nStart);
 
         //add child frame into group
-        LwpVirtualLayout* pLayout = static_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
+        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
         while(pLayout)
         {
             pLayout->XFConvert(pXFFrame);
-            pLayout = static_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
+            pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
         }
 
         pCont ->Add(pXFFrame);
@@ -1179,12 +1178,12 @@ void LwpDropcapLayout::RegisterStyle(LwpFoundry* pFoundry)
     {
         pStory->SetDropcapFlag(true);
         pStory->SetFoundry(pFoundry);
-        LwpPara* pPara = static_cast<LwpPara*>(pStory->GetFirstPara().obj().get());
+        LwpPara* pPara = dynamic_cast<LwpPara*>(pStory->GetFirstPara().obj().get());
         while(pPara)
         {
             pPara->SetFoundry(pFoundry);
             pPara->RegisterStyle();
-            pPara = static_cast<LwpPara*>(pPara->GetNext().obj().get());
+            pPara = dynamic_cast<LwpPara*>(pPara->GetNext().obj().get());
         }
     }
 }

@@ -1107,9 +1107,9 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
 
     try{
 
-        LwpDLVListHeadHolder* pHolder = static_cast<LwpDLVListHeadHolder*>(pFoundry->GetNumberManager().GetTableRangeID().obj().get());
+        LwpDLVListHeadHolder* pHolder = dynamic_cast<LwpDLVListHeadHolder*>(pFoundry->GetNumberManager().GetTableRangeID().obj().get());
 
-        LwpTableRange* pTableRange = pHolder ? static_cast<LwpTableRange*>(pHolder->GetHeadID().obj().get()) : nullptr;
+        LwpTableRange* pTableRange = pHolder ? dynamic_cast<LwpTableRange*>(pHolder->GetHeadID().obj().get()) : nullptr;
 
         //Look up the table
         while (nullptr!=pTableRange)
@@ -1125,23 +1125,23 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
         if (!pTableRange)
             return;
 
-        LwpCellRange* pRange = static_cast<LwpCellRange*>(pTableRange->GetCellRangeID().obj().get());
+        LwpCellRange* pRange = dynamic_cast<LwpCellRange*>(pTableRange->GetCellRangeID().obj().get());
         if (!pRange)
             return;
 
-        LwpFolder* pFolder = static_cast<LwpFolder*>(pRange->GetFolderID().obj().get());
+        LwpFolder* pFolder = dynamic_cast<LwpFolder*>(pRange->GetFolderID().obj().get());
         if (!pFolder)
             return;
 
         LwpObjectID aRowListID = pFolder->GetChildHeadID();
-        LwpRowList* pRowList = static_cast<LwpRowList*>(aRowListID.obj().get());
+        LwpRowList* pRowList = dynamic_cast<LwpRowList*>(aRowListID.obj().get());
 
         //loop the rowlist
         while( nullptr!=pRowList)
         {
             sal_uInt16 nRowID =  pRowList->GetRowID();
             {
-                LwpCellList* pCellList = static_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
+                LwpCellList* pCellList = dynamic_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
                 //loop the cellList
                 while( nullptr!=pCellList)
                 {
@@ -1162,10 +1162,10 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
                             assert(false);
                         }
                     }
-                    pCellList = static_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
+                    pCellList = dynamic_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
                 }
             }
-            pRowList = static_cast<LwpRowList*>(pRowList->GetNextID().obj().get());
+            pRowList = dynamic_cast<LwpRowList*>(pRowList->GetNextID().obj().get());
         }
 
     }catch (...) {

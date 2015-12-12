@@ -335,7 +335,7 @@ void LwpFormulaInfo::Read()
 {
     LwpCellList::Read();
     {
-        LwpRowList* pRowList = static_cast<LwpRowList*>(cParent.obj().get());
+        LwpRowList* pRowList = dynamic_cast<LwpRowList*>(cParent.obj().get());
         if (pRowList)
         {
             m_nFormulaRow = pRowList->GetRowID();
