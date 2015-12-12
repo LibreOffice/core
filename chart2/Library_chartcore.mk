@@ -253,9 +253,14 @@ else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,chartcore,\
 	OpenGL \
 ))
-else ifeq ($(OS),LINUX)
+else ifeq ($(OS),FREEBSD)
 $(eval $(call gb_Library_add_libs,chartcore,\
-	-ldl \
+	-lGL \
+	-lX11 \
+))
+else ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+$(eval $(call gb_Library_add_libs,chartcore,\
+	$(DLOPEN_LIBS) ^
 	-lGL \
 	-lX11 \
 ))
