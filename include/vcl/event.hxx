@@ -407,7 +407,6 @@ private:
     long                    mnRetValue;
 
 public:
-                            NotifyEvent();
                             NotifyEvent( MouseNotifyEvent nEventType,
                                          vcl::Window* pWindow,
                                          const void* pEvent = nullptr,
