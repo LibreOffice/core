@@ -98,7 +98,7 @@ void LwpFribNote::RegisterNewStyle()
  */
 void LwpFribNote::XFConvert(XFContentContainer* pCont)
 {
-    LwpNoteLayout* pLayout =static_cast<LwpNoteLayout*>(m_Layout.obj().get());
+    LwpNoteLayout* pLayout = dynamic_cast<LwpNoteLayout*>(m_Layout.obj().get());
     if(pLayout)
     {
         XFAnnotation* pXFNote = new XFAnnotation;
