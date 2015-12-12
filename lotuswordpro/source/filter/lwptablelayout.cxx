@@ -611,7 +611,7 @@ void LwpTableLayout::RegisterColumns()
     }
 
     // justifiable columns will share the remain width averagely
-    dDefaultColumn = dTableWidth/nJustifiableColumn;
+    dDefaultColumn = nJustifiableColumn ? dTableWidth/nJustifiableColumn : 0;
 
     // register default column style
     XFColStyle *pColStyle = new XFColStyle();
