@@ -1010,6 +1010,23 @@ Error_Function:
 End Function		&apos;	DFunction		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _FilterOptionsDefault() As String
+&apos;	Return the default FilterOptions string for table/query export to csv
+
+Dim sFieldSeparator as string
+Const cstComma = &quot;,&quot;
+Const cstTextDelimitor = &quot;&quot;&quot;&quot;
+Const cstCharacterSet = 76			&apos;	Unicode (UTF-8)
+
+	If _DecimalPoint() = &quot;,&quot; Then sFieldSeparator = &quot;;&quot; Else sFieldSeparator = cstComma
+	_FilteroptionsDefault = Trim(Str(Asc(sFieldSeparator))) _
+								&amp; cstComma &amp; Trim(Str(Asc(cstTextDelimitor))) _
+								&amp; cstComma &amp; Trim(Str(cstCharacterSet)) _
+								&amp; cstComma &amp; &quot;1&quot;
+
+End Function		&apos;	_FilterOptionsDefault	V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _hasRecordset(ByVal psName As String) As Boolean
 &apos;	Return True if psName if in the collection of Recordsets
 
@@ -1282,6 +1299,7 @@ End Function	&apos;	_OutputStringToHTML V1.4.0
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _OutputToCalc(poData As Object, ByVal psOutputFile As String, psFilter As String) As Boolean
 &apos;	https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Database_Import
+&apos;	https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filter_Options
 
 Dim oCalcDoc As Object, oSheet As Object, vWin As Variant
 Dim vImportDesc() As Variant, iSource As Integer
@@ -1332,6 +1350,7 @@ Dim oRange As Object, i As Integer, iCol As Integer, oColumns As Object
 	
 	oCalcDoc.storeAsUrl(psOutputFile, Array( _
 			_MakePropertyValue(&quot;FilterName&quot;, psFilter) _
+			, _MakePropertyValue(&quot;FilterOptions&quot;, _FilterOptionsDefault()) _
 			, _MakePropertyValue(&quot;Overwrite&quot;, True) _
 			))
 	oCalcDoc.close(False)
