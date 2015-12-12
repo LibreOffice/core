@@ -9208,41 +9208,6 @@ module com {
      ::com::sun::star::mozilla::MozillaProductType getProductType();
      string getProfileName();
     };
-    published interface XPluginInstance {
-     interface ::com::sun::star::uno::XInterface;
-     void start();
-     void stop();
-     void destroy();
-     void createWindow([in] any PlatformParentData, [in] boolean embedded);
-     void newStream([in] string MIMEDesc, [in] string theURL, [in] string filter, [in] ::com::sun::star::io::XInputStream stream, [in] any sessionData);
-     void newURL([in] string MIMEDesc, [in] string theURL, [in] string filter, [in] any sessionData);
-     void getHttpServerURL([out] string aHost, [out] unsigned short aPort, [out] string aPrefix);
-    };
-    published interface XPluginInstanceNotifySink {
-     interface ::com::sun::star::uno::XInterface;
-     void notifyURL([in] string theURL);
-    };
-    published interface XPluginInstancePeer {
-     interface ::com::sun::star::uno::XInterface;
-     boolean setWindowSize([in] long width, [in] long height);
-     void showStatusMessage([in] string message);
-     void enableScripting([in] ::com::sun::star::uno::XInterface document, [in] ::com::sun::star::lang::XMultiServiceFactory servicemanager);
-     void newStream([in] string MIMEDesc, [in] string target, [in] ::com::sun::star::io::XActiveDataSource data);
-     void getURL([in] string aURL, [in] string target, [in] string alternativeHost, [in] string referrer, [in] ::com::sun::star::mozilla::XPluginInstanceNotifySink sink);
-     void postURL([in] string aURL, [in] ::com::sun::star::io::XInputStream postData, [in] string target, [in] string alternativeHost, [in] string referrer, [in] ::com::sun::star::io::XInputStream postHeaders, [in] ::com::sun::star::mozilla::XPluginInstanceNotifySink sink);
-    };
-    published interface XPluginInstanceSyncPeer {
-     interface ::com::sun::star::uno::XInterface;
-     void openNewBrowserWindow([out] ::com::sun::star::mozilla::XPluginInstance aInstance, [out] any aLinkage, [out] boolean embedded);
-    };
-    published interface XPluginWindowPeer {
-     interface ::com::sun::star::uno::XInterface;
-     void setChildWindow([in] any SystemWindowData);
-    };
-    /** @deprecated */ published interface XRemoteServiceManagerProvider {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::lang::XMultiServiceFactory getServiceManager([in] any sessionData);
-    };
    };
    module packages {
     published service Package {
@@ -9412,50 +9377,6 @@ module com {
     module zip {
      published exception ZipIOException: ::com::sun::star::io::IOException {
      };
-    };
-   };
-   module plugin {
-    published struct PluginDescription {
-     string PluginName;
-     string Mimetype;
-     string Extension;
-     string Description;
-    };
-    published exception PluginException: ::com::sun::star::uno::Exception {
-     short ErrorCode;
-    };
-    published interface XPlugin;
-    published interface XPluginContext;
-    published interface XPluginManager {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::plugin::XPluginContext createPluginContext();
-     sequence< ::com::sun::star::plugin::PluginDescription > getPluginDescriptions();
-     ::com::sun::star::plugin::XPlugin createPlugin([in] ::com::sun::star::plugin::XPluginContext acontext, [in] short mode, [in] sequence< string > argn, [in] sequence< string > argv, [in] ::com::sun::star::plugin::PluginDescription plugintype) raises (::com::sun::star::plugin::PluginException);
-     ::com::sun::star::plugin::XPlugin createPluginFromURL([in] ::com::sun::star::plugin::XPluginContext acontext, [in] short mode, [in] sequence< string > argn, [in] sequence< string > argv, [in] ::com::sun::star::awt::XToolkit toolkit, [in] ::com::sun::star::awt::XWindowPeer parent, [in] string url);
-    };
-    published service PluginManager: ::com::sun::star::plugin::XPluginManager;
-    published constants PluginMode {
-     const short EMBED = 1;
-     const short FULL = 2;
-    };
-    published enum PluginVariable {
-     VxDisplay = 0,
-     VxtAppContext = 1
-    };
-    published interface XPlugin {
-     interface ::com::sun::star::uno::XInterface;
-     boolean provideNewStream([in] string mimetype, [in] ::com::sun::star::io::XActiveDataSource aSource, [in] string url, [in] long length, [in] long lastmodified, [in] boolean isfile) raises (::com::sun::star::plugin::PluginException);
-    };
-    published interface XPluginContext {
-     interface ::com::sun::star::uno::XInterface;
-     string getValue([in] ::com::sun::star::plugin::XPlugin xPlugin, [in] ::com::sun::star::plugin::PluginVariable aVariable) raises (::com::sun::star::plugin::PluginException);
-     void getURLNotify([in] ::com::sun::star::plugin::XPlugin plugin, [in] string url, [in] string target, [in] ::com::sun::star::lang::XEventListener listener) raises (::com::sun::star::plugin::PluginException);
-     void getURL([in] ::com::sun::star::plugin::XPlugin plugin, [in] string url, [in] string target) raises (::com::sun::star::plugin::PluginException);
-     void postURLNotify([in] ::com::sun::star::plugin::XPlugin plugin, [in] string url, [in] string target, [in] sequence< byte > buf, [in] boolean file, [in] ::com::sun::star::lang::XEventListener listener) raises (::com::sun::star::plugin::PluginException);
-     void postURL([in] ::com::sun::star::plugin::XPlugin plugin, [in] string url, [in] string target, [in] sequence< byte > buf, [in] boolean file) raises (::com::sun::star::plugin::PluginException);
-     void newStream([in] ::com::sun::star::plugin::XPlugin plugin, [in] string mimetype, [in] string target, [in] ::com::sun::star::io::XActiveDataSource aSource) raises (::com::sun::star::plugin::PluginException);
-     void displayStatusText([in] ::com::sun::star::plugin::XPlugin plugin, [in] string message) raises (::com::sun::star::plugin::PluginException);
-     string getUserAgent([in] ::com::sun::star::plugin::XPlugin plugin) raises (::com::sun::star::plugin::PluginException);
     };
    };
    module presentation {
