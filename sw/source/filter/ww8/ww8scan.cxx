@@ -6347,8 +6347,8 @@ void MSOPropertyBagStore::Read(SvStream& rStream)
 }
 
 MSOProperty::MSOProperty()
-    : m_nKey(0),
-    m_nValue(0)
+    : m_nKey(0)
+    , m_nValue(0)
 {
 }
 
@@ -6369,6 +6369,13 @@ void MSOPropertyBag::Read(SvStream& rStream)
     sal_uInt16 cProp(0);
     rStream.ReadUInt16(cProp);
     rStream.SeekRel(2); // cbUnknown
+    //each MSOProperty is 8 bytes in size
+    size_t nMaxPossibleRecords = rStream.remainingSize() / 8;
+    if (cProp > nMaxPossibleRecords)
+    {
+        SAL_WARN("sw.ww8", cProp << " records claimed, but max possible is " << nMaxPossibleRecords);
+        cProp = nMaxPossibleRecords;
+    }
     for (sal_uInt16 i = 0; i < cProp; ++i)
     {
         MSOProperty aProperty;
