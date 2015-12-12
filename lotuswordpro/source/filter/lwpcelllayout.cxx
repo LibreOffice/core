@@ -762,7 +762,11 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
         }
     }
 
-    if ( (nRow + nRowSpan) == pTableLayout->GetTable()->GetRow() )
+    LwpTable* pTable = pTableLayout->GetTable();
+    if (!pTable)
+        throw std::runtime_error("missing table");
+
+    if ( (nRow + nRowSpan) == pTable->GetRow())
     {
         bNoBottomBorder = false;
     }
