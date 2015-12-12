@@ -4940,7 +4940,29 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
 
     ScLineFlags aFlags;
 
-    if (rMark.IsMarked())
+    if( rMark.IsMultiMarked() )
+    {
+        ScRangeList aRangeList;
+        rMark.FillRangeListWithMarks( &aRangeList, false );
+        size_t nRangeCount = aRangeList.size();
+        bool bMultipleRows = false, bMultipleCols = false;
+        for( size_t nRangeIdx = 0; nRangeIdx < nRangeCount; ++nRangeIdx )
+        {
+            const ScRange* pRange = aRangeList[ nRangeIdx ];
+            bMultipleRows = ( bMultipleRows || ( pRange->aStart.Row() != pRange->aEnd.Row() ) );
+            bMultipleCols = ( bMultipleCols || ( pRange->aStart.Col() != pRange->aEnd.Col() ) );
+            SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+            for (; itr != itrEnd && *itr < nMax; ++itr)
+                if (maTabs[*itr])
+                    maTabs[*itr]->MergeBlockFrame( &rLineOuter, &rLineInner, aFlags,
+                                          pRange->aStart.Col(), pRange->aStart.Row(),
+                                          pRange->aEnd.Col(),   pRange->aEnd.Row() );
+        }
+        rLineInner.EnableHor( bMultipleRows );
+        rLineInner.EnableVer( bMultipleCols );
+    }
+    else if( rMark.IsMarked() )
     {
         ScRange aRange;
         rMark.GetMarkArea(aRange);
