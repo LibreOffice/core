@@ -841,16 +841,7 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
     const ScMarkData& rMark = GetViewData().GetMarkData();
 
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
-    {
-        if ( rMark.IsMultiMarked() )
-        {
-            ScMarkData aNewMark( rMark );   // use local copy for MarkToSimple
-            aNewMark.MarkToSimple();        // simple block is needed for GetSelectionFrame
-            pDoc->GetSelectionFrame( aNewMark, rLineOuter, rLineInner );
-        }
-        else
-            pDoc->GetSelectionFrame( rMark, rLineOuter, rLineInner );
-    }
+        pDoc->GetSelectionFrame( rMark, rLineOuter, rLineInner );
     else
     {
         const ScPatternAttr* pAttrs =
