@@ -71,17 +71,15 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
             nSrcWidth, nSrcHeight, nFlags );
 }
 
-void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
+namespace
 {
-    if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
-        dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr)
-    {
-        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSalBitmap);
-        BitmapBuffer* pRead = rConstBitmap.AcquireBuffer(BITMAP_READ_ACCESS);
 
-        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
-        pWinSalBitmap->Create(rConstBitmap.GetSize(), rConstBitmap.GetBitCount(), BitmapPalette());
-        BitmapBuffer* pWrite = pWinSalBitmap->AcquireBuffer(BITMAP_WRITE_ACCESS);
+void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
+{
+        BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BITMAP_READ_ACCESS);
+
+        rWinSalBitmap.Create(rSalBitmap.GetSize(), rSalBitmap.GetBitCount(), BitmapPalette());
+        BitmapBuffer* pWrite = rWinSalBitmap.AcquireBuffer(BITMAP_WRITE_ACCESS);
 
         sal_uInt8* pSource(pRead->mpBits);
         sal_uInt8* pDestination(pWrite->mpBits);
@@ -92,10 +90,21 @@ void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSal
             pSource += pRead->mnScanlineSize;
             pDestination += pWrite->mnScanlineSize;
         }
-        pWinSalBitmap->ReleaseBuffer(pWrite, BITMAP_WRITE_ACCESS);
+        rWinSalBitmap.ReleaseBuffer(pWrite, BITMAP_WRITE_ACCESS);
 
-        rConstBitmap.ReleaseBuffer(pRead, BITMAP_READ_ACCESS);
+        rSalBitmap.ReleaseBuffer(pRead, BITMAP_READ_ACCESS);
+}
 
+} // end anonymous namespace
+
+void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
+{
+    if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+        dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr)
+    {
+        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSalBitmap);
+        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
         mpImpl->drawBitmap(rPosAry, *pWinSalBitmap.get());
     }
     else
@@ -108,7 +117,24 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
-    mpImpl->drawBitmap( rPosAry, rSSalBitmap, rSTransparentBitmap );
+    if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+        dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr)
+    {
+        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSSalBitmap);
+        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
+
+
+        std::unique_ptr<WinSalBitmap> pWinTransparentSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstTransparentBitmap = const_cast<SalBitmap&>(rSTransparentBitmap);
+        convertToWinSalBitmap(rConstTransparentBitmap, *pWinTransparentSalBitmap);
+
+        mpImpl->drawBitmap(rPosAry, *pWinSalBitmap, *pWinTransparentSalBitmap);
+    }
+    else
+    {
+        mpImpl->drawBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap);
+    }
 }
 
 bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
