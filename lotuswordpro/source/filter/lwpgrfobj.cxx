@@ -199,7 +199,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
             pCont->Add(iter->get());
         }
     }
-    else if (this->IsGrafFormatValid())
+    else if (this->IsGrafFormatValid() && !m_vXFDrawObjects.empty())
     {
         XFImage* pImage = static_cast<XFImage*>(m_vXFDrawObjects.front().get());
 
