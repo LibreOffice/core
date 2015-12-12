@@ -1016,12 +1016,11 @@ Private Function _FilterOptionsDefault() As String
 Dim sFieldSeparator as string
 Const cstComma = &quot;,&quot;
 Const cstTextDelimitor = &quot;&quot;&quot;&quot;
-Const cstCharacterSet = 76			&apos;	Unicode (UTF-8)
 
 	If _DecimalPoint() = &quot;,&quot; Then sFieldSeparator = &quot;;&quot; Else sFieldSeparator = cstComma
 	_FilteroptionsDefault = Trim(Str(Asc(sFieldSeparator))) _
 								&amp; cstComma &amp; Trim(Str(Asc(cstTextDelimitor))) _
-								&amp; cstComma &amp; Trim(Str(cstCharacterSet)) _
+								&amp; cstComma &amp; Trim(Str(acUTF8Encoding)) _
 								&amp; cstComma &amp; &quot;1&quot;
 
 End Function		&apos;	_FilterOptionsDefault	V1.4.0

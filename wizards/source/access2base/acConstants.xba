@@ -279,7 +279,7 @@ Global Const acOutputForm = 2
 
 REM AcEncoding
 REM -----------------------------------------------------------------
-Global Const acUTF8Encoding = 65001
+Global Const acUTF8Encoding = 76
 
 REM AcFormat
 REM -----------------------------------------------------------------
