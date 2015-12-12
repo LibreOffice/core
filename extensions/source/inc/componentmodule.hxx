@@ -170,7 +170,6 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
             the instantiation of this object will automatically register the class via <method>OModule::registerComponent</method>.
             <p/>
             The factory creation function used is <code>::cppu::createSingleFactory</code>.
-            @see OOneInstanceAutoRegistration
         */
         OMultiInstanceAutoRegistration();
         ~OMultiInstanceAutoRegistration();
@@ -192,46 +191,6 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
     {
         OModule::revokeComponent(TYPE::getImplementationName_Static());
     }
-
-    template <class TYPE>
-    class OOneInstanceAutoRegistration
-    {
-    public:
-        /** automatically registeres a single instance component
-            <p>Assumed that the template argument has the three methods
-                <ul>
-                    <li><code>static OUString getImplementationName_Static()</code><li/>
-                    <li><code>static css::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><li/>
-                    <li><code>static css::uno::Reference< css::uno::XInterface >
-                        Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&)</code>
-                        </li>
-                <ul/>
-            the instantiation of this object will automatically register the class via <method>OModule::registerComponent</method>.
-            <p/>
-            The factory creation function used is <code>::cppu::createOneInstanceFactory</code>.
-            @see OOneInstanceAutoRegistration
-        */
-        OOneInstanceAutoRegistration();
-        ~OOneInstanceAutoRegistration();
-    };
-
-    template <class TYPE>
-    OOneInstanceAutoRegistration<TYPE>::OOneInstanceAutoRegistration()
-    {
-        OModule::registerComponent(
-            TYPE::getImplementationName_Static(),
-            TYPE::getSupportedServiceNames_Static(),
-            TYPE::Create,
-            ::cppu::createOneInstanceFactory
-            );
-    }
-
-    template <class TYPE>
-    OOneInstanceAutoRegistration<TYPE>::~OOneInstanceAutoRegistration()
-    {
-        OModule::revokeComponent(TYPE::getImplementationName_Static());
-    }
-
 
 }   // namespace COMPMOD_NAMESPACE
 

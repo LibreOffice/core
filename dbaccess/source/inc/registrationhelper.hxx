@@ -87,7 +87,6 @@ public:
             Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&)</code><BR>
         the instantiation of this object will automatically register the class via <code>OModuleRegistration::registerComponent</code>.
         The factory creation function used is <code>::cppu::createSingleFactory</code>.<BR>
-        @see OOneInstanceAutoRegistration
     */
     OMultiInstanceAutoRegistration();
     ~OMultiInstanceAutoRegistration();
@@ -106,41 +105,6 @@ OMultiInstanceAutoRegistration<TYPE>::OMultiInstanceAutoRegistration()
 
 template <class TYPE>
 OMultiInstanceAutoRegistration<TYPE>::~OMultiInstanceAutoRegistration()
-{
-    OModuleRegistration::revokeComponent(TYPE::getImplementationName_Static());
-}
-
-template <class TYPE>
-class OOneInstanceAutoRegistration
-{
-public:
-    /** provided that the template argument has three methods<BR>
-        <code>static OUString getImplementationName_Static()</code><BR>
-        <code>static css::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><BR>
-        and<BR>
-        <code>static css::uno::Reference< css::uno::XInterface >
-            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&)</code><BR>
-        the instantiation of this object will automatically register the class via <code>OModuleRegistration::registerComponent</code>.
-        The factory creation function used is <code>::cppu::createSingleFactory</code>.<BR>
-        @see OMultiInstanceAutoRegistration
-    */
-    OOneInstanceAutoRegistration();
-    ~OOneInstanceAutoRegistration();
-};
-
-template <class TYPE>
-OOneInstanceAutoRegistration<TYPE>::OOneInstanceAutoRegistration()
-{
-    OModuleRegistration::registerComponent(
-        TYPE::getImplementationName_Static(),
-        TYPE::getSupportedServiceNames_Static(),
-        TYPE::Create,
-        ::cppu::createOneInstanceFactory
-        );
-}
-
-template <class TYPE>
-OOneInstanceAutoRegistration<TYPE>::~OOneInstanceAutoRegistration()
 {
     OModuleRegistration::revokeComponent(TYPE::getImplementationName_Static());
 }
