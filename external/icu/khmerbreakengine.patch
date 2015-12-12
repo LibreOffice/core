@@ -1,0 +1,1403 @@
+diff --git a/source/common/dictbe.cpp b/source/common/dictbe.cpp
+index f1c874d..3ad1b3f 100644
+--- misc/icu/source/common/dictbe.cpp
++++ build/icu/source/common/dictbe.cpp
+@@ -27,8 +27,16 @@ U_NAMESPACE_BEGIN
+  ******************************************************************
+  */
+ 
+-DictionaryBreakEngine::DictionaryBreakEngine(uint32_t breakTypes) {
++DictionaryBreakEngine::DictionaryBreakEngine(uint32_t breakTypes) :
++    clusterLimit(3)
++{
++    UErrorCode status = U_ZERO_ERROR;
+     fTypes = breakTypes;
++    fViramaSet.applyPattern(UNICODE_STRING_SIMPLE("[[:ccc=VR:]]"), status);
++
++    fSkipStartSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=OP:][:lb=QU:]]"), status);
++    fSkipEndSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CP:][:lb=QU:][:lb=EX:][:lb=CL:]]"), status);
++    fNBeforeSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CR:][:lb=LF:][:lb=NL:][:lb=SP:][:lb=ZW:][:lb=IS:][:lb=BA:][:lb=NS:]]"), status);
+ }
+ 
+ DictionaryBreakEngine::~DictionaryBreakEngine() {
+@@ -90,7 +98,7 @@ DictionaryBreakEngine::findBreaks( UText *text,
+         result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks);
+         utext_setNativeIndex(text, current);
+     }
+-    
++
+     return result;
+ }
+ 
+@@ -101,6 +109,163 @@ DictionaryBreakEngine::setCharacters( const UnicodeSet &set ) {
+     fSet.compact();
+ }
+ 
++bool
++DictionaryBreakEngine::scanBeforeStart(UText *text, int32_t& start, bool &doBreak) const {
++    UErrorCode status = U_ZERO_ERROR;
++    UText* ut = utext_clone(NULL, text, false, true, &status);
++    utext_setNativeIndex(ut, start);
++    UChar32 c = utext_current32(ut);
++    bool res = false;
++    doBreak = true;
++    while (start >= 0) {
++        if (!fSkipStartSet.contains(c)) {
++            res = (c == ZWSP);
++            break;
++        }
++        --start;
++        c = utext_previous32(ut);
++        doBreak = false;
++    }
++    utext_close(ut);
++    return res;
++}
++
++bool
++DictionaryBreakEngine::scanAfterEnd(UText *text, int32_t textEnd, int32_t& end, bool &doBreak) const {
++    UErrorCode status = U_ZERO_ERROR;
++    UText* ut = utext_clone(NULL, text, false, true, &status);
++    utext_setNativeIndex(ut, end);
++    UChar32 c = utext_current32(ut);
++    bool res = false;
++    doBreak = !fNBeforeSet.contains(c);
++    while (end < textEnd) {
++        if (!fSkipEndSet.contains(c)) {
++            res = (c == ZWSP);
++            break;
++        }
++        ++end;
++        c = utext_next32(ut);
++        doBreak = false;
++    }
++    utext_close(ut);
++    return res;
++}
++
++void
++DictionaryBreakEngine::scanBackClusters(UText *text, int32_t textStart, int32_t& start) const {
++    UChar32 c = 0;
++    start = utext_getNativeIndex(text);
++    while (start > textStart) {
++        c = utext_previous32(text);
++        --start;
++        if (!fSkipEndSet.contains(c))
++            break;
++    }
++    for (int i = 0; i < clusterLimit; ++i) { // scan backwards clusterLimit clusters
++        while (start > textStart) {
++            if (!fMarkSet.contains(c)) {
++                if (fBaseSet.contains(c)) {
++                    c = utext_previous32(text);
++                    if (!fViramaSet.contains(c)) { // Virama (e.g. coeng) preceding base. Treat sequence as a mark
++                        utext_next32(text);
++                        c = utext_current32(text);
++                        break;
++                    } else {
++                        --start;
++                    }
++                } else {
++                    break;
++                }
++            }
++            c = utext_previous32(text);
++            --start;
++        }
++        if (!fBaseSet.contains(c) || start < textStart) {  // not a cluster start so finish
++            break;
++        }
++        c = utext_previous32(text);
++        --start;        // go round again
++    }                   // ignore hitting previous inhibitor since scanning for it should have found us!
++    ++start;            // counteract --before
++}
++
++void
++DictionaryBreakEngine::scanFwdClusters(UText *text, int32_t textEnd, int32_t& end) const {
++    UChar32 c = utext_current32(text);
++    end = utext_getNativeIndex(text);
++    while (end < textEnd) {
++        if (!fSkipStartSet.contains(c))
++            break;
++        utext_next32(text);
++        c = utext_current32(text);
++        ++end;
++    }
++    for (int i = 0; i < clusterLimit; ++i) { // scan forwards clusterLimit clusters
++        if (fBaseSet.contains(c)) {
++            while (end < textEnd) {
++                utext_next32(text);
++                c = utext_current32(text);
++                ++end;
++                if (!fMarkSet.contains(c))
++                    break;
++                else if (fViramaSet.contains(c)) {  // handle coeng + base as mark
++                    utext_next32(text);
++                    c = utext_current32(text);
++                    ++end;
++                    if (!fBaseSet.contains(c))
++                        break;
++                }
++            }
++        } else {
++            --end;    // bad char so break after char before it
++            break;
++        }
++    }
++}
++
++bool
++DictionaryBreakEngine::scanWJ(UText *text, int32_t &start, int32_t end, int32_t &before, int32_t &after) const {
++    UErrorCode status = U_ZERO_ERROR;
++    UText* ut = utext_clone(NULL, text, false, true, &status);
++    int32_t nat = start;
++    utext_setNativeIndex(ut, nat);
++    bool foundFirst = true;
++    int32_t curr = start;
++    while (nat < end) {
++        UChar32 c = utext_current32(ut);
++        if (c == ZWSP || c == WJ) {
++            curr = nat + 1;
++            if (foundFirst)     // only scan backwards for first inhibitor
++                scanBackClusters(ut, start, before);
++            foundFirst = false; // don't scan backwards if we go around again. Also marks found something
++
++            utext_next32(ut);
++            scanFwdClusters(ut, end, after);
++            nat = after + 1;
++
++            if (c == ZWSP || c == WJ) {  // did we hit another one?
++                continue;
++            } else {
++                break;
++            }
++        }
++
++        ++nat;                  // keep hunting
++        utext_next32(ut);
++    }
++
++    utext_close(ut);
++
++    if (nat >= end && foundFirst) {
++        start = before = after = nat;
++        return false;           // failed to find anything
++    }
++    else {
++        start = curr;
++    }
++    return true;                // yup hit one
++}
++
+ /*
+  ******************************************************************
+  * PossibleWord
+@@ -128,35 +293,35 @@ private:
+ public:
+     PossibleWord() : count(0), prefix(0), offset(-1), mark(0), current(0) {};
+     ~PossibleWord() {};
+-  
++
+     // Fill the list of candidates if needed, select the longest, and return the number found
+-    int32_t   candidates( UText *text, DictionaryMatcher *dict, int32_t rangeEnd );
+-  
++    int32_t   candidates( UText *text, DictionaryMatcher *dict, int32_t rangeEnd, UnicodeSet const *ignoreSet = NULL, int32_t minLength = 0 );
++
+     // Select the currently marked candidate, point after it in the text, and invalidate self
+     int32_t   acceptMarked( UText *text );
+-  
++
+     // Back up from the current candidate to the next shorter one; return TRUE if that exists
+     // and point the text after it
+     UBool     backUp( UText *text );
+-  
++
+     // Return the longest prefix this candidate location shares with a dictionary word
+     // Return value is in code points.
+     int32_t   longestPrefix() { return prefix; };
+-  
++
+     // Mark the current candidate as the one we like
+     void      markCurrent() { mark = current; };
+-    
++
+     // Get length in code points of the marked word.
+     int32_t   markedCPLength() { return cpLengths[mark]; };
+ };
+ 
+ 
+-int32_t PossibleWord::candidates( UText *text, DictionaryMatcher *dict, int32_t rangeEnd ) {
++int32_t PossibleWord::candidates( UText *text, DictionaryMatcher *dict, int32_t rangeEnd, UnicodeSet const *ignoreSet, int32_t minLength) {
+     // TODO: If getIndex is too slow, use offset < 0 and add discardAll()
+     int32_t start = (int32_t)utext_getNativeIndex(text);
+     if (start != offset) {
+         offset = start;
+-        count = dict->matches(text, rangeEnd-start, UPRV_LENGTHOF(cuLengths), cuLengths, cpLengths, NULL, &prefix);
++        count = dict->matches(text, rangeEnd-start, UPRV_LENGTHOF(cuLengths), cuLengths, cpLengths, NULL, &prefix, ignoreSet, minLength);
+         // Dictionary leaves text after longest prefix, not longest word. Back up.
+         if (count <= 0) {
+             utext_setNativeIndex(text, start);
+@@ -261,16 +426,16 @@ ThaiBreakEngine::divideUpDictionaryRange( UText *text,
+     int32_t current;
+     UErrorCode status = U_ZERO_ERROR;
+     PossibleWord words[THAI_LOOKAHEAD];
+-    
++
+     utext_setNativeIndex(text, rangeStart);
+-    
++
+     while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
+         cpWordLength = 0;
+         cuWordLength = 0;
+ 
+         // Look for candidate words at the current position
+         int32_t candidates = words[wordsFound%THAI_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+-        
++
+         // If we found exactly one, use that
+         if (candidates == 1) {
+             cuWordLength = words[wordsFound % THAI_LOOKAHEAD].acceptMarked(text);
+@@ -291,12 +456,12 @@ ThaiBreakEngine::divideUpDictionaryRange( UText *text,
+                         words[wordsFound%THAI_LOOKAHEAD].markCurrent();
+                         wordsMatched = 2;
+                     }
+-                    
++
+                     // If we're already at the end of the range, we're done
+                     if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+                         goto foundBest;
+                     }
+-                    
++
+                     // See if any of the possible second words is followed by a third word
+                     do {
+                         // If we find a third word, stop right away
+@@ -315,13 +480,13 @@ foundBest:
+             cpWordLength = words[wordsFound % THAI_LOOKAHEAD].markedCPLength();
+             wordsFound += 1;
+         }
+-        
++
+         // We come here after having either found a word or not. We look ahead to the
+         // next word. If it's not a dictionary word, we will combine it with the word we
+         // just found (if there is one), but only if the preceding word does not exceed
+         // the threshold.
+         // The text iterator should now be positioned at the end of the word we found.
+-        
++
+         UChar32 uc = 0;
+         if ((int32_t)utext_getNativeIndex(text) < rangeEnd &&  cpWordLength < THAI_ROOT_COMBINE_THRESHOLD) {
+             // if it is a dictionary word, do nothing. If it isn't, then if there is
+@@ -357,12 +522,12 @@ foundBest:
+                         }
+                     }
+                 }
+-                
++
+                 // Bump the word count if there wasn't already one
+                 if (cuWordLength <= 0) {
+                     wordsFound += 1;
+                 }
+-                
++
+                 // Update the length with the passed-over characters
+                 cuWordLength += chars;
+             }
+@@ -371,14 +536,14 @@ foundBest:
+                 utext_setNativeIndex(text, current+cuWordLength);
+             }
+         }
+-        
++
+         // Never stop before a combining mark.
+         int32_t currPos;
+         while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+             utext_next32(text);
+             cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
+         }
+-        
++
+         // Look ahead for possible suffixes if a dictionary word does not follow.
+         // We do this in code rather than using a rule so that the heuristic
+         // resynch continues to function. For example, one of the suffix characters
+@@ -496,16 +661,16 @@ LaoBreakEngine::divideUpDictionaryRange( UText *text,
+     int32_t current;
+     UErrorCode status = U_ZERO_ERROR;
+     PossibleWord words[LAO_LOOKAHEAD];
+-    
++
+     utext_setNativeIndex(text, rangeStart);
+-    
++
+     while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
+         cuWordLength = 0;
+         cpWordLength = 0;
+ 
+         // Look for candidate words at the current position
+         int32_t candidates = words[wordsFound%LAO_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+-        
++
+         // If we found exactly one, use that
+         if (candidates == 1) {
+             cuWordLength = words[wordsFound % LAO_LOOKAHEAD].acceptMarked(text);
+@@ -526,12 +691,12 @@ LaoBreakEngine::divideUpDictionaryRange( UText *text,
+                         words[wordsFound%LAO_LOOKAHEAD].markCurrent();
+                         wordsMatched = 2;
+                     }
+-                    
++
+                     // If we're already at the end of the range, we're done
+                     if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+                         goto foundBest;
+                     }
+-                    
++
+                     // See if any of the possible second words is followed by a third word
+                     do {
+                         // If we find a third word, stop right away
+@@ -549,7 +714,7 @@ foundBest:
+             cpWordLength = words[wordsFound % LAO_LOOKAHEAD].markedCPLength();
+             wordsFound += 1;
+         }
+-        
++
+         // We come here after having either found a word or not. We look ahead to the
+         // next word. If it's not a dictionary word, we will combine it withe the word we
+         // just found (if there is one), but only if the preceding word does not exceed
+@@ -587,12 +752,12 @@ foundBest:
+                         }
+                     }
+                 }
+-                
++
+                 // Bump the word count if there wasn't already one
+                 if (cuWordLength <= 0) {
+                     wordsFound += 1;
+                 }
+-                
++
+                 // Update the length with the passed-over characters
+                 cuWordLength += chars;
+             }
+@@ -601,14 +766,14 @@ foundBest:
+                 utext_setNativeIndex(text, current + cuWordLength);
+             }
+         }
+-        
++
+         // Never stop before a combining mark.
+         int32_t currPos;
+         while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+             utext_next32(text);
+             cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
+         }
+-        
++
+         // Look ahead for possible suffixes if a dictionary word does not follow.
+         // We do this in code rather than using a rule so that the heuristic
+         // resynch continues to function. For example, one of the suffix characters
+@@ -689,16 +854,16 @@ BurmeseBreakEngine::divideUpDictionaryRange( UText *text,
+     int32_t current;
+     UErrorCode status = U_ZERO_ERROR;
+     PossibleWord words[BURMESE_LOOKAHEAD];
+-    
++
+     utext_setNativeIndex(text, rangeStart);
+-    
++
+     while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
+         cuWordLength = 0;
+         cpWordLength = 0;
+ 
+         // Look for candidate words at the current position
+         int32_t candidates = words[wordsFound%BURMESE_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+-        
++
+         // If we found exactly one, use that
+         if (candidates == 1) {
+             cuWordLength = words[wordsFound % BURMESE_LOOKAHEAD].acceptMarked(text);
+@@ -719,12 +884,12 @@ BurmeseBreakEngine::divideUpDictionaryRange( UText *text,
+                         words[wordsFound%BURMESE_LOOKAHEAD].markCurrent();
+                         wordsMatched = 2;
+                     }
+-                    
++
+                     // If we're already at the end of the range, we're done
+                     if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+                         goto foundBest;
+                     }
+-                    
++
+                     // See if any of the possible second words is followed by a third word
+                     do {
+                         // If we find a third word, stop right away
+@@ -742,7 +907,7 @@ foundBest:
+             cpWordLength = words[wordsFound % BURMESE_LOOKAHEAD].markedCPLength();
+             wordsFound += 1;
+         }
+-        
++
+         // We come here after having either found a word or not. We look ahead to the
+         // next word. If it's not a dictionary word, we will combine it withe the word we
+         // just found (if there is one), but only if the preceding word does not exceed
+@@ -780,12 +945,12 @@ foundBest:
+                         }
+                     }
+                 }
+-                
++
+                 // Bump the word count if there wasn't already one
+                 if (cuWordLength <= 0) {
+                     wordsFound += 1;
+                 }
+-                
++
+                 // Update the length with the passed-over characters
+                 cuWordLength += chars;
+             }
+@@ -794,14 +959,14 @@ foundBest:
+                 utext_setNativeIndex(text, current + cuWordLength);
+             }
+         }
+-        
++
+         // Never stop before a combining mark.
+         int32_t currPos;
+         while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+             utext_next32(text);
+             cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
+         }
+-        
++
+         // Look ahead for possible suffixes if a dictionary word does not follow.
+         // We do this in code rather than using a rule so that the heuristic
+         // resynch continues to function. For example, one of the suffix characters
+@@ -828,51 +993,29 @@ foundBest:
+  * KhmerBreakEngine
+  */
+ 
+-// How many words in a row are "good enough"?
+-static const int32_t KHMER_LOOKAHEAD = 3;
+-
+-// Will not combine a non-word with a preceding dictionary word longer than this
+-static const int32_t KHMER_ROOT_COMBINE_THRESHOLD = 3;
+-
+-// Will not combine a non-word that shares at least this much prefix with a
+-// dictionary word, with a preceding word
+-static const int32_t KHMER_PREFIX_COMBINE_THRESHOLD = 3;
+-
+-// Minimum word size
+-static const int32_t KHMER_MIN_WORD = 2;
+-
+-// Minimum number of characters for two words
+-static const int32_t KHMER_MIN_WORD_SPAN = KHMER_MIN_WORD * 2;
+-
+ KhmerBreakEngine::KhmerBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status)
+     : DictionaryBreakEngine((1 << UBRK_WORD) | (1 << UBRK_LINE)),
+       fDictionary(adoptDictionary)
+ {
+-    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]]"), status);
++
++    clusterLimit = 3;
++
++    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]\\u2060\\u200C\\u200D]"), status);
+     if (U_SUCCESS(status)) {
+         setCharacters(fKhmerWordSet);
+     }
+     fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]&[:M:]]"), status);
+     fMarkSet.add(0x0020);
+-    fEndWordSet = fKhmerWordSet;
+-    fBeginWordSet.add(0x1780, 0x17B3);
+-    //fBeginWordSet.add(0x17A3, 0x17A4);      // deprecated vowels
+-    //fEndWordSet.remove(0x17A5, 0x17A9);     // Khmer independent vowels that can't end a word
+-    //fEndWordSet.remove(0x17B2);             // Khmer independent vowel that can't end a word
+-    fEndWordSet.remove(0x17D2);             // KHMER SIGN COENG that combines some following characters
+-    //fEndWordSet.remove(0x17B6, 0x17C5);     // Remove dependent vowels
+-//    fEndWordSet.remove(0x0E31);             // MAI HAN-AKAT
+-//    fEndWordSet.remove(0x0E40, 0x0E44);     // SARA E through SARA AI MAIMALAI
+-//    fBeginWordSet.add(0x0E01, 0x0E2E);      // KO KAI through HO NOKHUK
+-//    fBeginWordSet.add(0x0E40, 0x0E44);      // SARA E through SARA AI MAIMALAI
+-//    fSuffixSet.add(THAI_PAIYANNOI);
+-//    fSuffixSet.add(THAI_MAIYAMOK);
++    fIgnoreSet.add(0x2060);         // WJ
++    fIgnoreSet.add(0x200C, 0x200D); // ZWJ, ZWNJ
++    fBaseSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:^M:]]"), status);
++    fPuncSet.applyPattern(UNICODE_STRING_SIMPLE("[\\u17D4\\u17D5\\u17D6\\u17D7\\u17D9:]"), status);
+ 
+     // Compact for caching.
+     fMarkSet.compact();
+-    fEndWordSet.compact();
+-    fBeginWordSet.compact();
+-//    fSuffixSet.compact();
++	fIgnoreSet.compact();
++	fBaseSet.compact();
++	fPuncSet.compact();
+ }
+ 
+ KhmerBreakEngine::~KhmerBreakEngine() {
+@@ -884,180 +1027,204 @@ KhmerBreakEngine::divideUpDictionaryRange( UText *text,
+                                                 int32_t rangeStart,
+                                                 int32_t rangeEnd,
+                                                 UStack &foundBreaks ) const {
+-    if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
+-        return 0;       // Not enough characters for two words
++    uint32_t wordsFound = foundBreaks.size();
++    UErrorCode status = U_ZERO_ERROR;
++    int32_t before = 0;
++    int32_t after = 0;
++    int32_t finalBefore = 0;
++    int32_t initAfter = 0;
++    int32_t scanStart = rangeStart;
++    int32_t scanEnd = rangeEnd;
++
++    bool startZwsp = false;
++    bool breakStart = false;
++    bool breakEnd = false;
++
++    if (rangeStart > 0) {
++        --scanStart;
++        startZwsp = scanBeforeStart(text, scanStart, breakStart);
++    }
++    utext_setNativeIndex(text, rangeStart);
++    scanFwdClusters(text, rangeEnd, initAfter);
++    bool endZwsp = scanAfterEnd(text, utext_nativeLength(text), scanEnd, breakEnd);
++    utext_setNativeIndex(text, rangeEnd - 1);
++    scanBackClusters(text, rangeStart, finalBefore);
++    if (finalBefore < initAfter) {   // the whole run is tented so no breaks
++        if (breakStart || fTypes < UBRK_LINE)
++            foundBreaks.push(rangeStart, status);
++        if (breakEnd || fTypes < UBRK_LINE)
++            foundBreaks.push(rangeEnd, status);
++        return foundBreaks.size() - wordsFound;
+     }
+ 
+-    uint32_t wordsFound = 0;
+-    int32_t cpWordLength = 0;
+-    int32_t cuWordLength = 0;
+-    int32_t current;
+-    UErrorCode status = U_ZERO_ERROR;
+-    PossibleWord words[KHMER_LOOKAHEAD];
++    scanStart = rangeStart;
++    scanWJ(text, scanStart, rangeEnd, before, after);
++    if (startZwsp || initAfter >= before) {
++        after = initAfter;
++        before = 0;
++    }
++    if (!endZwsp && after > finalBefore && after < rangeEnd)
++        endZwsp = true;
++    if (endZwsp && before > finalBefore)
++        before = finalBefore;
+ 
+     utext_setNativeIndex(text, rangeStart);
++    int32_t numCodePts = rangeEnd - rangeStart;
++    // bestSnlp[i] is the snlp of the best segmentation of the first i
++    // code points in the range to be matched.
++    UVector32 bestSnlp(numCodePts + 1, status);
++    bestSnlp.addElement(0, status);
++    for(int32_t i = 1; i <= numCodePts; i++) {
++        bestSnlp.addElement(kuint32max, status);
++    }
+ 
+-    while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
+-        cuWordLength = 0;
+-        cpWordLength = 0;
++    // prev[i] is the index of the last code point in the previous word in
++    // the best segmentation of the first i characters. Note negative implies
++	// that the code point is part of an unknown word.
++    UVector32 prev(numCodePts + 1, status);
++    for(int32_t i = 0; i <= numCodePts; i++) {
++        prev.addElement(kuint32max, status);
++    }
+ 
+-        // Look for candidate words at the current position
+-        int32_t candidates = words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
++    const int32_t maxWordSize = 20;
++    UVector32 values(maxWordSize, status);
++    values.setSize(maxWordSize);
++    UVector32 lengths(maxWordSize, status);
++    lengths.setSize(maxWordSize);
+ 
+-        // If we found exactly one, use that
+-        if (candidates == 1) {
+-            cuWordLength = words[wordsFound % KHMER_LOOKAHEAD].acceptMarked(text);
+-            cpWordLength = words[wordsFound % KHMER_LOOKAHEAD].markedCPLength();
+-            wordsFound += 1;
+-        }
++    // Dynamic programming to find the best segmentation.
+ 
+-        // If there was more than one, see which one can take us forward the most words
+-        else if (candidates > 1) {
+-            // If we're already at the end of the range, we're done
+-            if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+-                goto foundBest;
+-            }
+-            do {
+-                int32_t wordsMatched = 1;
+-                if (words[(wordsFound + 1) % KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) > 0) {
+-                    if (wordsMatched < 2) {
+-                        // Followed by another dictionary word; mark first word as a good candidate
+-                        words[wordsFound % KHMER_LOOKAHEAD].markCurrent();
+-                        wordsMatched = 2;
+-                    }
++    // In outer loop, i  is the code point index,
++    //                ix is the corresponding string (code unit) index.
++    //    They differ when the string contains supplementary characters.
++    int32_t ix = rangeStart;
++    for (int32_t i = 0;  i < numCodePts;  ++i, utext_setNativeIndex(text, ++ix)) {
++        if ((uint32_t)bestSnlp.elementAti(i) == kuint32max) {
++            continue;
++        }
+ 
+-                    // If we're already at the end of the range, we're done
+-                    if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+-                        goto foundBest;
+-                    }
++        int32_t count;
++        count = fDictionary->matches(text, numCodePts - i, maxWordSize,
++                             NULL, lengths.getBuffer(), values.getBuffer(), NULL, &fIgnoreSet, 2);
++                             // Note: lengths is filled with code point lengths
++                             //       The NULL parameter is the ignored code unit lengths.
+ 
+-                    // See if any of the possible second words is followed by a third word
+-                    do {
+-                        // If we find a third word, stop right away
+-                        if (words[(wordsFound + 2) % KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd)) {
+-                            words[wordsFound % KHMER_LOOKAHEAD].markCurrent();
+-                            goto foundBest;
+-                        }
+-                    }
+-                    while (words[(wordsFound + 1) % KHMER_LOOKAHEAD].backUp(text));
+-                }
++        for (int32_t j = 0; j < count; j++) {
++            int32_t ln = lengths.elementAti(j);
++            if (ln + i >= numCodePts)
++                continue;
++            utext_setNativeIndex(text, ln+ix);
++            int32_t c = utext_current32(text);
++            if (fMarkSet.contains(c) || c == 0x17D2) { // Coeng
++                lengths.removeElementAt(j);
++                values.removeElementAt(j);
++                --j;
++                --count;
+             }
+-            while (words[wordsFound % KHMER_LOOKAHEAD].backUp(text));
+-foundBest:
+-            cuWordLength = words[wordsFound % KHMER_LOOKAHEAD].acceptMarked(text);
+-            cpWordLength = words[wordsFound % KHMER_LOOKAHEAD].markedCPLength();
+-            wordsFound += 1;
+         }
+-
+-        // We come here after having either found a word or not. We look ahead to the
+-        // next word. If it's not a dictionary word, we will combine it with the word we
+-        // just found (if there is one), but only if the preceding word does not exceed
+-        // the threshold.
+-        // The text iterator should now be positioned at the end of the word we found.
+-        if ((int32_t)utext_getNativeIndex(text) < rangeEnd && cpWordLength < KHMER_ROOT_COMBINE_THRESHOLD) {
+-            // if it is a dictionary word, do nothing. If it isn't, then if there is
+-            // no preceding word, or the non-word shares less than the minimum threshold
+-            // of characters with a dictionary word, then scan to resynchronize
+-            if (words[wordsFound % KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) <= 0
+-                  && (cuWordLength == 0
+-                      || words[wordsFound % KHMER_LOOKAHEAD].longestPrefix() < KHMER_PREFIX_COMBINE_THRESHOLD)) {
+-                // Look for a plausible word boundary
+-                int32_t remaining = rangeEnd - (current+cuWordLength);
+-                UChar32 pc;
+-                UChar32 uc;
+-                int32_t chars = 0;
+-                for (;;) {
+-                    int32_t pcIndex = utext_getNativeIndex(text);
+-                    pc = utext_next32(text);
+-                    int32_t pcSize = utext_getNativeIndex(text) - pcIndex;
+-                    chars += pcSize;
+-                    remaining -= pcSize;
+-                    if (remaining <= 0) {
++        if (count == 0) {
++            utext_setNativeIndex(text, ix);
++            int32_t c = utext_current32(text);
++            if (fPuncSet.contains(c) || c == ZWSP || c == WJ) {
++                values.setElementAt(0, count);
++                lengths.setElementAt(1, count++);
++            } else if (fBaseSet.contains(c)) {
++                int32_t currix = utext_getNativeIndex(text);
++                do {
++                    utext_next32(text);
++                    c = utext_current32(text);
++                    if (utext_getNativeIndex(text) >= rangeEnd)
+                         break;
+-                    }
+-                    uc = utext_current32(text);
+-                    if (fEndWordSet.contains(pc) && fBeginWordSet.contains(uc)) {
+-                        // Maybe. See if it's in the dictionary.
+-                        int32_t candidates = words[(wordsFound + 1) % KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+-                        utext_setNativeIndex(text, current+cuWordLength+chars);
+-                        if (candidates > 0) {
++                    if (c == 0x17D2) { // Coeng
++                        utext_next32(text);
++                        c = utext_current32(text);
++                        if (!fBaseSet.contains(c) || utext_getNativeIndex(text) >= rangeEnd) {
+                             break;
++                        } else {
++                            utext_next32(text);
++                            c = utext_current32(text);
++                            if (utext_getNativeIndex(text) >= rangeEnd)
++                                break;
+                         }
+                     }
+-                }
+-
+-                // Bump the word count if there wasn't already one
+-                if (cuWordLength <= 0) {
+-                    wordsFound += 1;
+-                }
++                } while (fMarkSet.contains(c));
++                values.setElementAt(BADSNLP, count);
++                lengths.setElementAt(utext_getNativeIndex(text) - currix, count++);
++            } else {
++                values.setElementAt(BADSNLP, count);
++                lengths.setElementAt(1, count++);
++            }
++        }
+ 
+-                // Update the length with the passed-over characters
+-                cuWordLength += chars;
++        for (int32_t j = 0; j < count; j++) {
++            uint32_t v = values.elementAti(j);
++            int32_t newSnlp = bestSnlp.elementAti(i) + v;
++            int32_t ln = lengths.elementAti(j);
++            utext_setNativeIndex(text, ln+ix);
++            int32_t c = utext_current32(text);
++            while (fPuncSet.contains(c)) {
++                ++ln;
++                utext_next32(text);
++                c = utext_current32(text);
+             }
+-            else {
+-                // Back up to where we were for next iteration
+-                utext_setNativeIndex(text, current+cuWordLength);
++            int32_t ln_j_i = ln + i;
++            if (newSnlp < bestSnlp.elementAti(ln_j_i)) {
++                if (v == BADSNLP) {
++                    int32_t p = prev.elementAti(i);
++                    if (p < 0)
++                        prev.setElementAt(p, ln_j_i);
++                    else
++                        prev.setElementAt(-i, ln_j_i);
++                }
++                else
++                    prev.setElementAt(i, ln_j_i);
++                bestSnlp.setElementAt(newSnlp, ln_j_i);
+             }
+         }
++    }
++    // Start pushing the optimal offset index into t_boundary (t for tentative).
++    // prev[numCodePts] is guaranteed to be meaningful.
++    // We'll first push in the reverse order, i.e.,
++    // t_boundary[0] = numCodePts, and afterwards do a swap.
++    UVector32 t_boundary(numCodePts+1, status);
+ 
+-        // Never stop before a combining mark.
+-        int32_t currPos;
+-        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+-            utext_next32(text);
+-            cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
++    int32_t numBreaks = 0;
++    // No segmentation found, set boundary to end of range
++    while (numCodePts >= 0 && (uint32_t)bestSnlp.elementAti(numCodePts) == kuint32max) {
++        --numCodePts;
++    }
++    if (numCodePts < 0) {
++        t_boundary.addElement(numCodePts, status);
++        numBreaks++;
++    } else {
++        for (int32_t i = numCodePts; (uint32_t)i != kuint32max; i = prev.elementAti(i)) {
++            if (i < 0) i = -i;
++            t_boundary.addElement(i, status);
++            numBreaks++;
+         }
++        U_ASSERT(prev.elementAti(t_boundary.elementAti(numBreaks - 1)) == 0);
++    }
+ 
+-        // Look ahead for possible suffixes if a dictionary word does not follow.
+-        // We do this in code rather than using a rule so that the heuristic
+-        // resynch continues to function. For example, one of the suffix characters
+-        // could be a typo in the middle of a word.
+-//        if ((int32_t)utext_getNativeIndex(text) < rangeEnd && wordLength > 0) {
+-//            if (words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd) <= 0
+-//                && fSuffixSet.contains(uc = utext_current32(text))) {
+-//                if (uc == KHMER_PAIYANNOI) {
+-//                    if (!fSuffixSet.contains(utext_previous32(text))) {
+-//                        // Skip over previous end and PAIYANNOI
+-//                        utext_next32(text);
+-//                        utext_next32(text);
+-//                        wordLength += 1;            // Add PAIYANNOI to word
+-//                        uc = utext_current32(text);     // Fetch next character
+-//                    }
+-//                    else {
+-//                        // Restore prior position
+-//                        utext_next32(text);
+-//                    }
+-//                }
+-//                if (uc == KHMER_MAIYAMOK) {
+-//                    if (utext_previous32(text) != KHMER_MAIYAMOK) {
+-//                        // Skip over previous end and MAIYAMOK
+-//                        utext_next32(text);
+-//                        utext_next32(text);
+-//                        wordLength += 1;            // Add MAIYAMOK to word
+-//                    }
+-//                    else {
+-//                        // Restore prior position
+-//                        utext_next32(text);
+-//                    }
+-//                }
+-//            }
+-//            else {
+-//                utext_setNativeIndex(text, current+wordLength);
+-//            }
+-//        }
+-
+-        // Did we find a word on this iteration? If so, push it on the break stack
+-        if (cuWordLength > 0) {
+-            foundBreaks.push((current+cuWordLength), status);
++    // Now that we're done, convert positions in t_boundary[] (indices in
++    // the normalized input string) back to indices in the original input UText
++    // while reversing t_boundary and pushing values to foundBreaks.
++    for (int32_t i = numBreaks-1; i >= 0; i--) {
++        int32_t cpPos = t_boundary.elementAti(i);
++        if (cpPos == 0 && !breakStart && fTypes >= UBRK_LINE) continue;
++        int32_t utextPos = cpPos + rangeStart;
++        while (utextPos > after && scanWJ(text, utextPos, scanEnd, before, after));
++        if (utextPos < before) {
++        // Boundaries are added to foundBreaks output in ascending order.
++            U_ASSERT(foundBreaks.size() == 0 ||foundBreaks.peeki() < utextPos);
++            foundBreaks.push(utextPos, status);
+         }
+     }
+-    
++
+     // Don't return a break for the end of the dictionary range if there is one there.
+-    if (foundBreaks.peeki() >= rangeEnd) {
++    if (!breakEnd && fTypes >= UBRK_LINE && foundBreaks.peeki() >= rangeEnd) {
+         (void) foundBreaks.popi();
+-        wordsFound -= 1;
+     }
+-
+-    return wordsFound;
++    return foundBreaks.size() - wordsFound;
+ }
+ 
+ #if !UCONFIG_NO_NORMALIZATION
+@@ -1121,7 +1288,7 @@ static inline int32_t utext_i32_flag(int32_t bitIndex) {
+     return (int32_t)1 << bitIndex;
+ }
+ 
+-       
++
+ /*
+  * @param text A UText representing the text
+  * @param rangeStart The start of the range of dictionary characters
+@@ -1129,7 +1296,7 @@ static inline int32_t utext_i32_flag(int32_t bitIndex) {
+  * @param foundBreaks Output of C array of int32_t break positions, or 0
+  * @return The number of breaks found
+  */
+-int32_t 
++int32_t
+ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
+         int32_t rangeStart,
+         int32_t rangeEnd,
+@@ -1192,7 +1359,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
+         if (U_FAILURE(status)) {
+             return 0;
+         }
+-        
++
+         UnicodeString fragment;
+         UnicodeString normalizedFragment;
+         for (int32_t srcI = 0; srcI < inString.length();) {  // Once per normalization chunk
+@@ -1261,7 +1428,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
+             }
+         }
+     }
+-                
++
+     // bestSnlp[i] is the snlp of the best segmentation of the first i
+     // code points in the range to be matched.
+     UVector32 bestSnlp(numCodePts + 1, status);
+@@ -1271,7 +1438,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
+     }
+ 
+ 
+-    // prev[i] is the index of the last CJK code point in the previous word in 
++    // prev[i] is the index of the last CJK code point in the previous word in
+     // the best segmentation of the first i characters.
+     UVector32 prev(numCodePts + 1, status);
+     for(int32_t i = 0; i <= numCodePts; i++){
+@@ -1305,8 +1472,8 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
+                              // Note: lengths is filled with code point lengths
+                              //       The NULL parameter is the ignored code unit lengths.
+ 
+-        // if there are no single character matches found in the dictionary 
+-        // starting with this charcter, treat character as a 1-character word 
++        // if there are no single character matches found in the dictionary
++        // starting with this charcter, treat character as a 1-character word
+         // with the highest value possible, i.e. the least likely to occur.
+         // Exclude Korean characters from this treatment, as they should be left
+         // together by default.
+@@ -1380,7 +1547,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
+         numBreaks++;
+     }
+ 
+-    // Now that we're done, convert positions in t_boundary[] (indices in 
++    // Now that we're done, convert positions in t_boundary[] (indices in
+     // the normalized input string) back to indices in the original input UText
+     // while reversing t_boundary and pushing values to foundBreaks.
+     for (int32_t i = numBreaks-1; i >= 0; i--) {
+diff --git a/source/common/dictbe.h b/source/common/dictbe.h
+index d3488cd..26caa75 100644
+--- misc/icu/source/common/dictbe.h
++++ build/icu/source/common/dictbe.h
+@@ -32,6 +32,15 @@ class Normalizer2;
+  */
+ class DictionaryBreakEngine : public LanguageBreakEngine {
+  private:
++
++  /**
++   * <p>Default constructor.</p>
++   *
++   */
++  DictionaryBreakEngine();
++
++ protected:
++
+     /**
+      * The set of characters handled by this engine
+      * @internal
+@@ -46,11 +55,63 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
+ 
+   uint32_t      fTypes;
+ 
++  const int32_t WJ   = 0x2060;
++  const int32_t ZWSP = 0x200B;
++
+   /**
+-   * <p>Default constructor.</p>
+-   *
++   * A Unicode set of all viramas
++   * @internal
+    */
+-  DictionaryBreakEngine();
++  UnicodeSet    fViramaSet;
++
++  /**
++   * A Unicode set of all base characters
++   * @internal
++   */
++  UnicodeSet    fBaseSet;
++
++  /**
++   * A Unicode set of all marks
++   * @internal
++   */
++  UnicodeSet    fMarkSet;
++
++  /**
++   * A Unicode set of all characters ignored ignored in dictionary matching
++   * @internal
++   */
++  UnicodeSet    fIgnoreSet;
++
++  /**
++   * A Unicode set of all characters ignored ignored in dictionary matching
++   * @internal
++   */
++  UnicodeSet    fSkipStartSet;
++
++  /**
++   * A Unicode set of all characters ignored ignored in dictionary matching
++   * @internal
++   */
++  UnicodeSet    fSkipEndSet;
++
++  /**
++   * A Unicode set of all characters that should not be broken before
++   * @internal
++   */
++  UnicodeSet    fNBeforeSet;
++
++  /**
++   * The number of clusters within which breaks are inhibited
++   * @internal
++   */
++  int32_t clusterLimit;
++
++  bool scanWJ(UText *text, int32_t &start, int32_t end, int32_t &before, int32_t &after) const;
++
++  bool scanBeforeStart(UText *text, int32_t& start, bool &doBreak) const;
++  bool scanAfterEnd(UText *text, int32_t rangeEnd, int32_t& end, bool &doBreak) const;
++  void scanBackClusters(UText *text, int32_t textStart, int32_t& start) const;
++  void scanFwdClusters(UText *text, int32_t textEnd, int32_t& end) const;
+ 
+  public:
+ 
+@@ -81,7 +142,7 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
+    * <p>Find any breaks within a run in the supplied text.</p>
+    *
+    * @param text A UText representing the text. The iterator is left at
+-   * the end of the run of characters which the engine is capable of handling 
++   * the end of the run of characters which the engine is capable of handling
+    * that starts from the first (or last) character in the range.
+    * @param startPos The start of the run within the supplied text.
+    * @param endPos The end of the run within the supplied text.
+@@ -243,118 +304,120 @@ class LaoBreakEngine : public DictionaryBreakEngine {
+ 
+ };
+ 
+-/******************************************************************* 
+- * BurmeseBreakEngine 
+- */ 
+- 
+-/** 
+- * <p>BurmeseBreakEngine is a kind of DictionaryBreakEngine that uses a 
+- * DictionaryMatcher and heuristics to determine Burmese-specific breaks.</p> 
+- * 
+- * <p>After it is constructed a BurmeseBreakEngine may be shared between 
+- * threads without synchronization.</p> 
+- */ 
+-class BurmeseBreakEngine : public DictionaryBreakEngine { 
+- private: 
+-    /** 
+-     * The set of characters handled by this engine 
+-     * @internal 
+-     */ 
+- 
+-  UnicodeSet                fBurmeseWordSet; 
+-  UnicodeSet                fEndWordSet; 
+-  UnicodeSet                fBeginWordSet; 
+-  UnicodeSet                fMarkSet; 
+-  DictionaryMatcher  *fDictionary; 
+- 
+- public: 
+- 
+-  /** 
+-   * <p>Default constructor.</p> 
+-   * 
+-   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the 
+-   * engine is deleted. 
+-   */ 
+-  BurmeseBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status); 
+- 
+-  /** 
+-   * <p>Virtual destructor.</p> 
+-   */ 
+-  virtual ~BurmeseBreakEngine(); 
+- 
+- protected: 
+- /** 
+-  * <p>Divide up a range of known dictionary characters.</p> 
+-  * 
+-  * @param text A UText representing the text 
+-  * @param rangeStart The start of the range of dictionary characters 
+-  * @param rangeEnd The end of the range of dictionary characters 
+-  * @param foundBreaks Output of C array of int32_t break positions, or 0 
+-  * @return The number of breaks found 
+-  */ 
+-  virtual int32_t divideUpDictionaryRange( UText *text, 
+-                                           int32_t rangeStart, 
+-                                           int32_t rangeEnd, 
+-                                           UStack &foundBreaks ) const; 
+- 
+-}; 
+- 
+-/******************************************************************* 
+- * KhmerBreakEngine 
+- */ 
+- 
+-/** 
+- * <p>KhmerBreakEngine is a kind of DictionaryBreakEngine that uses a 
+- * DictionaryMatcher and heuristics to determine Khmer-specific breaks.</p> 
+- * 
+- * <p>After it is constructed a KhmerBreakEngine may be shared between 
+- * threads without synchronization.</p> 
+- */ 
+-class KhmerBreakEngine : public DictionaryBreakEngine { 
+- private: 
+-    /** 
+-     * The set of characters handled by this engine 
+-     * @internal 
+-     */ 
+- 
+-  UnicodeSet                fKhmerWordSet; 
+-  UnicodeSet                fEndWordSet; 
+-  UnicodeSet                fBeginWordSet; 
+-  UnicodeSet                fMarkSet; 
+-  DictionaryMatcher  *fDictionary; 
+- 
+- public: 
+- 
+-  /** 
+-   * <p>Default constructor.</p> 
+-   * 
+-   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the 
+-   * engine is deleted. 
+-   */ 
+-  KhmerBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status); 
+- 
+-  /** 
+-   * <p>Virtual destructor.</p> 
+-   */ 
+-  virtual ~KhmerBreakEngine(); 
+- 
+- protected: 
+- /** 
+-  * <p>Divide up a range of known dictionary characters.</p> 
+-  * 
+-  * @param text A UText representing the text 
+-  * @param rangeStart The start of the range of dictionary characters 
+-  * @param rangeEnd The end of the range of dictionary characters 
+-  * @param foundBreaks Output of C array of int32_t break positions, or 0 
+-  * @return The number of breaks found 
+-  */ 
+-  virtual int32_t divideUpDictionaryRange( UText *text, 
+-                                           int32_t rangeStart, 
+-                                           int32_t rangeEnd, 
+-                                           UStack &foundBreaks ) const; 
+- 
+-}; 
+- 
++/*******************************************************************
++ * BurmeseBreakEngine
++ */
++
++/**
++ * <p>BurmeseBreakEngine is a kind of DictionaryBreakEngine that uses a
++ * DictionaryMatcher and heuristics to determine Burmese-specific breaks.</p>
++ *
++ * <p>After it is constructed a BurmeseBreakEngine may be shared between
++ * threads without synchronization.</p>
++ */
++class BurmeseBreakEngine : public DictionaryBreakEngine {
++ private:
++    /**
++     * The set of characters handled by this engine
++     * @internal
++     */
++
++  UnicodeSet                fBurmeseWordSet;
++  UnicodeSet                fEndWordSet;
++  UnicodeSet                fBeginWordSet;
++  UnicodeSet                fMarkSet;
++  DictionaryMatcher  *fDictionary;
++
++ public:
++
++  /**
++   * <p>Default constructor.</p>
++   *
++   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the
++   * engine is deleted.
++   */
++  BurmeseBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status);
++
++  /**
++   * <p>Virtual destructor.</p>
++   */
++  virtual ~BurmeseBreakEngine();
++
++ protected:
++ /**
++  * <p>Divide up a range of known dictionary characters.</p>
++  *
++  * @param text A UText representing the text
++  * @param rangeStart The start of the range of dictionary characters
++  * @param rangeEnd The end of the range of dictionary characters
++  * @param foundBreaks Output of C array of int32_t break positions, or 0
++  * @return The number of breaks found
++  */
++  virtual int32_t divideUpDictionaryRange( UText *text,
++                                           int32_t rangeStart,
++                                           int32_t rangeEnd,
++                                           UStack &foundBreaks ) const;
++
++};
++
++/*******************************************************************
++ * KhmerBreakEngine
++ */
++
++/**
++ * <p>KhmerBreakEngine is a kind of DictionaryBreakEngine that uses a
++ * DictionaryMatcher and heuristics to determine Khmer-specific breaks.</p>
++ *
++ * <p>After it is constructed a KhmerBreakEngine may be shared between
++ * threads without synchronization.</p>
++ */
++class KhmerBreakEngine : public DictionaryBreakEngine {
++ private:
++    /**
++     * The set of characters handled by this engine
++     * @internal
++     */
++
++  UnicodeSet                fKhmerWordSet;
++  UnicodeSet                fBeginWordSet;
++  UnicodeSet                fPuncSet;
++  DictionaryMatcher        *fDictionary;
++
++  const uint32_t BADSNLP = 256 * 20;
++  const uint32_t kuint32max = 0x7FFFFFFF;
++
++ public:
++
++  /**
++   * <p>Default constructor.</p>
++   *
++   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the
++   * engine is deleted.
++   */
++  KhmerBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status);
++
++  /**
++   * <p>Virtual destructor.</p>
++   */
++  virtual ~KhmerBreakEngine();
++
++ protected:
++ /**
++  * <p>Divide up a range of known dictionary characters.</p>
++  *
++  * @param text A UText representing the text
++  * @param rangeStart The start of the range of dictionary characters
++  * @param rangeEnd The end of the range of dictionary characters
++  * @param foundBreaks Output of C array of int32_t break positions, or 0
++  * @return The number of breaks found
++  */
++  virtual int32_t divideUpDictionaryRange( UText *text,
++                                           int32_t rangeStart,
++                                           int32_t rangeEnd,
++                                           UStack &foundBreaks ) const;
++
++};
++
+ #if !UCONFIG_NO_NORMALIZATION
+ 
+ /*******************************************************************
+diff --git a/source/common/dictionarydata.cpp b/source/common/dictionarydata.cpp
+index cb594c6..82f2e77 100644
+--- misc/icu/source/common/dictionarydata.cpp
++++ build/icu/source/common/dictionarydata.cpp
+@@ -42,7 +42,7 @@ int32_t UCharsDictionaryMatcher::getType() const {
+ 
+ int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
+                             int32_t *lengths, int32_t *cpLengths, int32_t *values,
+-                            int32_t *prefix) const {
++                            int32_t *prefix, UnicodeSet const* ignoreSet, int32_t minLength) const {
+ 
+     UCharsTrie uct(characters);
+     int32_t startingTextIndex = utext_getNativeIndex(text);
+@@ -53,7 +53,13 @@ int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t
+         UStringTrieResult result = (codePointsMatched == 0) ? uct.first(c) : uct.next(c);
+         int32_t lengthMatched = utext_getNativeIndex(text) - startingTextIndex;
+         codePointsMatched += 1;
++        if (ignoreSet != NULL && ignoreSet->contains(c)) {
++            continue;
++        }
+         if (USTRINGTRIE_HAS_VALUE(result)) {
++            if (codePointsMatched < minLength) {
++                continue;
++            }
+             if (wordCount < limit) {
+                 if (values != NULL) {
+                     values[wordCount] = uct.getValue();
+@@ -110,7 +116,7 @@ int32_t BytesDictionaryMatcher::getType() const {
+ 
+ int32_t BytesDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
+                             int32_t *lengths, int32_t *cpLengths, int32_t *values,
+-                            int32_t *prefix) const {
++                            int32_t *prefix, UnicodeSet const* ignoreSet, int32_t minLength) const {
+     BytesTrie bt(characters);
+     int32_t startingTextIndex = utext_getNativeIndex(text);
+     int32_t wordCount = 0;
+@@ -120,7 +126,13 @@ int32_t BytesDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t
+         UStringTrieResult result = (codePointsMatched == 0) ? bt.first(transform(c)) : bt.next(transform(c));
+         int32_t lengthMatched = utext_getNativeIndex(text) - startingTextIndex;
+         codePointsMatched += 1;
++        if (ignoreSet != NULL && ignoreSet->contains(c)) {
++            continue;
++        }
+         if (USTRINGTRIE_HAS_VALUE(result)) {
++            if (codePointsMatched < minLength) {
++                continue;
++            }
+             if (wordCount < limit) {
+                 if (values != NULL) {
+                     values[wordCount] = bt.getValue();
+diff --git a/source/common/dictionarydata.h b/source/common/dictionarydata.h
+index 0216ab0..ee9e571 100644
+--- misc/icu/source/common/dictionarydata.h
++++ build/icu/source/common/dictionarydata.h
+@@ -19,6 +19,7 @@
+ #include "unicode/utext.h"
+ #include "unicode/udata.h"
+ #include "udataswp.h"
++#include "unicode/uniset.h"
+ #include "unicode/uobject.h"
+ #include "unicode/ustringtrie.h"
+ 
+@@ -90,7 +91,7 @@ public:
+      */
+     virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
+                             int32_t *lengths, int32_t *cpLengths, int32_t *values,
+-                            int32_t *prefix) const = 0;
++                            int32_t *prefix, UnicodeSet const* ignoreSet = NULL, int32_t minLength = 0) const = 0;
+ 
+     /** @return DictionaryData::TRIE_TYPE_XYZ */
+     virtual int32_t getType() const = 0;
+@@ -105,7 +106,7 @@ public:
+     virtual ~UCharsDictionaryMatcher();
+     virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
+                             int32_t *lengths, int32_t *cpLengths, int32_t *values,
+-                            int32_t *prefix) const;
++                            int32_t *prefix, UnicodeSet const* ignoreSet = NULL, int32_t minLength = 0) const;
+     virtual int32_t getType() const;
+ private:
+     const UChar *characters;
+@@ -123,7 +124,7 @@ public:
+     virtual ~BytesDictionaryMatcher();
+     virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
+                             int32_t *lengths, int32_t *cpLengths, int32_t *values,
+-                            int32_t *prefix) const;
++                            int32_t *prefix, UnicodeSet const* ignoreSet = NULL, int32_t minLength = 0) const;
+     virtual int32_t getType() const;
+ private:
+     UChar32 transform(UChar32 c) const;
+diff --git a/source/data/Makefile.in b/source/data/Makefile.in
+index 816c82d..c637d70 100644
+--- misc/icu/source/data/Makefile.in
++++ build/icu/source/data/Makefile.in
+@@ -179,7 +179,7 @@ endif
+ endif
+ endif
+ 
+-packagedata: icupkg.inc $(PKGDATA_LIST) build-local
++packagedata: icupkg.inc $(PKGDATA_LIST) build-local $(MAINBUILDDIR)/khmerdict.stamp
+ ifneq ($(ENABLE_STATIC),)
+ ifeq ($(PKGDATA_MODE),dll)
+ 	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
+@@ -563,8 +563,14 @@ $(BRKBLDDIR)/burmesedict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
+ 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1000 -c -i $(BUILDDIR) $(BRKSRCDIR)/burmesedict.txt $(BRKBLDDIR)/burmesedict.dict
+
+ # TODO: figure out why combining characters are here?
+-$(BRKBLDDIR)/khmerdict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
+-	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(BRKSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
++#$(BRKBLDDIR)/khmerdict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
++#	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(BRKSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
++
++#$(MAINBUILDDIR)/khmerdict.stamp: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(BRKSRCDIR)/khmerdict.txt build-local
++# 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(BRKSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
++$(MAINBUILDDIR)/khmerdict.stamp: $(BRKSRCDIR)/khmerdict.dict build-local
++	cp $< $(MAINBUILDDIR)
++	echo "timestamp" > $@
+
+ ####################################################    CFU
+ # CFU FILES
+
