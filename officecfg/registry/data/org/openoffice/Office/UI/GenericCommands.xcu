@@ -3736,6 +3736,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Paste Unformatted Text</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Unformatted Text</value>
+        </prop>
       </node>
       <node oor:name=".uno:Delete" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
