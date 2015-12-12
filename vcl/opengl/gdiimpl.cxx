@@ -1665,6 +1665,9 @@ void OpenGLSalGraphicsImpl::drawBitmap(
             const SalBitmap& rSalBitmap,
             const SalBitmap& rMaskBitmap )
 {
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBitmap));
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rMaskBitmap));
+
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     const OpenGLSalBitmap& rMask = static_cast<const OpenGLSalBitmap&>(rMaskBitmap);
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
@@ -1681,6 +1684,7 @@ void OpenGLSalGraphicsImpl::drawMask(
             const SalBitmap& rSalBitmap,
             SalColor nMaskColor )
 {
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBitmap));
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
 
@@ -1782,6 +1786,8 @@ bool OpenGLSalGraphicsImpl::blendBitmap(
             const SalTwoRect& rPosAry,
             const SalBitmap& rSalBitmap )
 {
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBitmap));
+
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
 
@@ -1804,6 +1810,10 @@ bool OpenGLSalGraphicsImpl::blendAlphaBitmap(
             const SalBitmap& rSalMaskBitmap,
             const SalBitmap& rSalAlphaBitmap )
 {
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalSrcBitmap));
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalMaskBitmap));
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalAlphaBitmap));
+
     const OpenGLSalBitmap& rSrcBitmap = static_cast<const OpenGLSalBitmap&>(rSalSrcBitmap);
     const OpenGLSalBitmap& rMaskBitmap = static_cast<const OpenGLSalBitmap&>(rSalMaskBitmap);
     const OpenGLSalBitmap& rAlphaBitmap = static_cast<const OpenGLSalBitmap&>(rSalAlphaBitmap);
@@ -1835,6 +1845,9 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
             const SalBitmap& rSalBitmap,
             const SalBitmap& rAlphaBitmap )
 {
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBitmap));
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rAlphaBitmap));
+
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     const OpenGLSalBitmap& rAlpha = static_cast<const OpenGLSalBitmap&>(rAlphaBitmap);
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
@@ -1855,6 +1868,9 @@ bool OpenGLSalGraphicsImpl::drawTransformedBitmap(
             const SalBitmap& rSrcBitmap,
             const SalBitmap* pAlphaBitmap)
 {
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSrcBitmap));
+    assert(dynamic_cast<const OpenGLSalBitmap*>(pAlphaBitmap));
+
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSrcBitmap);
     const OpenGLSalBitmap* pMaskBitmap = static_cast<const OpenGLSalBitmap*>(pAlphaBitmap);
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
