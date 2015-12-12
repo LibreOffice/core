@@ -352,7 +352,7 @@ void LwpSuperTableLayout::ApplyAlignment(XFTableStyle * pTableStyle)
 void  LwpSuperTableLayout::XFConvert(XFContentContainer* pCont)
 {
     if ( LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == GetRelativeType()
-            && !GetContainerLayout()->IsCell())
+            && (!GetContainerLayout() || !GetContainerLayout()->IsCell()) )
     {
         LwpTableLayout * pTableLayout = GetTableLayout();
         if (pTableLayout)
