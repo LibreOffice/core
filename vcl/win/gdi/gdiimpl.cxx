@@ -707,6 +707,8 @@ void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& 
     }
 
     // fall back old stuff
+    assert(dynamic_cast<const WinSalBitmap*>(&rSalBitmap));
+
     ImplDrawBitmap(mrParent.getHDC(), rPosAry, static_cast<const WinSalBitmap&>(rSalBitmap),
         mrParent.isPrinter(),
         mbXORMode ? SRCINVERT : SRCCOPY );
@@ -724,6 +726,9 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     {
         return;
     }
+
+    assert(dynamic_cast<const WinSalBitmap*>(&rSSalBitmap));
+    assert(dynamic_cast<const WinSalBitmap*>(&rSTransparentBitmap));
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
     const WinSalBitmap& rTransparentBitmap = static_cast<const WinSalBitmap&>(rSTransparentBitmap);
@@ -826,6 +831,8 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
                             SalColor nMaskColor )
 {
     DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
+
+    assert(dynamic_cast<const WinSalBitmap*>(&rSSalBitmap));
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
@@ -2214,6 +2221,8 @@ bool WinSalGraphicsImpl::tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBi
 {
     if(rTR.mnSrcWidth && rTR.mnSrcHeight && rTR.mnDestWidth && rTR.mnDestHeight)
     {
+        assert(dynamic_cast<const WinSalBitmap*>(&rSrcBitmap));
+
         const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
         GdiPlusBmpPtr aARGB(rSalBitmap.ImplGetGdiPlusBitmap());
 
@@ -2263,6 +2272,9 @@ bool WinSalGraphicsImpl::drawAlphaBitmap(
 {
     if(rTR.mnSrcWidth && rTR.mnSrcHeight && rTR.mnDestWidth && rTR.mnDestHeight)
     {
+        assert(dynamic_cast<const WinSalBitmap*>(&rSrcBitmap));
+        assert(dynamic_cast<const WinSalBitmap*>(&rAlphaBmp));
+
         const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
         const WinSalBitmap& rSalAlpha = static_cast< const WinSalBitmap& >(rAlphaBmp);
         GdiPlusBmpPtr aARGB(rSalBitmap.ImplGetGdiPlusBitmap(&rSalAlpha));
@@ -2297,6 +2309,9 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
     const SalBitmap& rSourceBitmap,
     const SalBitmap* pAlphaBitmap)
 {
+    assert(dynamic_cast<const WinSalBitmap*>(&rSourceBitmap));
+    assert(dynamic_cast<const WinSalBitmap*>(&pAlphaBitmap));
+
     const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSourceBitmap);
     const WinSalBitmap* pSalAlpha = static_cast< const WinSalBitmap* >(pAlphaBitmap);
     GdiPlusBmpPtr aARGB(rSalBitmap.ImplGetGdiPlusBitmap(pSalAlpha));
