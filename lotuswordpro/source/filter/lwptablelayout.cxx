@@ -691,11 +691,8 @@ void LwpTableLayout::RegisterStyle()
 {
     // get super table layout
     LwpSuperTableLayout * pSuper = GetSuperTableLayout();
-    if(!pSuper)
-    {
-        assert(false);
+    if (!pSuper)
         return;
-    }
 
     // get table
     LwpTable * pTable = GetTable();

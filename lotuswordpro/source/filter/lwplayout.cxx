@@ -330,12 +330,12 @@ LwpVirtualLayout* LwpVirtualLayout::GetParentLayout()
 void LwpVirtualLayout::RegisterChildStyle()
 {
     //Register all children styles
-    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-    while(pLayout)
+    rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    while (xLayout.is())
     {
-        pLayout->SetFoundry(m_pFoundry);
-        pLayout->RegisterStyle();
-        pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
+        xLayout->SetFoundry(m_pFoundry);
+        xLayout->RegisterStyle();
+        xLayout.set(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
     }
 }
 
