@@ -201,12 +201,12 @@
 
             <menu:menu menu:id=".uno:ShapesMenu" >
                 <menu:menupopup>
-                    <menu:menu menu:id=".uno:BasicShapes"/>
-                    <menu:menu menu:id=".uno:SymbolShapes"/>
-                    <menu:menu menu:id=".uno:ArrowShapes"/>
-                    <menu:menu menu:id=".uno:FlowChartShapes"/>
-                    <menu:menu menu:id=".uno:CalloutShapes"/>
-                    <menu:menu menu:id=".uno:StarShapes"/>
+                    <menu:menuitem menu:id=".uno:BasicShapes"/>
+                    <menu:menuitem menu:id=".uno:SymbolShapes"/>
+                    <menu:menuitem menu:id=".uno:ArrowShapes"/>
+                    <menu:menuitem menu:id=".uno:FlowChartShapes"/>
+                    <menu:menuitem menu:id=".uno:CalloutShapes"/>
+                    <menu:menuitem menu:id=".uno:StarShapes"/>
                 </menu:menupopup>
             </menu:menu>
 
