@@ -199,61 +199,8 @@
                             <menu:menuitem menu:id=".uno:Polygon_Diagonal"/>
                         </menu:menupopup>
                     </menu:menu>
-                    <menu:menu menu:id=".uno:ShapesBasicMenu">
-                        <menu:menupopup>
-                            <menu:menuitem menu:id=".uno:BasicShapes.rectangle"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.round-rectangle"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.quadrat"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.round-quadrat"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.parallelogram"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.trapezoid"/>
-                            <menu:menuseparator/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.ellipse"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.circle"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.circle-pie"/>
-                            <menu:menuitem menu:id=".uno:CircleCut"/>
-                            <menu:menuitem menu:id=".uno:Arc"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.block-arc"/>
-                            <menu:menuseparator/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.isosceles-triangle"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.right-triangle"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.diamond"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.pentagon"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.hexagon"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.octagon"/>
-                            <menu:menuseparator/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.can"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.cube"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.paper"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.cross"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.frame"/>
-                            <menu:menuitem menu:id=".uno:BasicShapes.ring"/>
-                        </menu:menupopup>
-                    </menu:menu>
-                    <menu:menu menu:id=".uno:ShapesSymbolMenu">
-                        <menu:menupopup>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.smiley"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.heart"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.sun"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.moon"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.cloud"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.lightning"/>
-                            <menu:menuseparator/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.flower"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.forbidden"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.puzzle"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.quad-bevel"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.octagon-bevel"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.diamond-bevel"/>
-                            <menu:menuseparator/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.bracket-pair"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.left-bracket"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.right-bracket"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.brace-pair"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.left-brace"/>
-                            <menu:menuitem menu:id=".uno:SymbolShapes.right-brace"/>
-                        </menu:menupopup>
-                    </menu:menu>
+                    <menu:menuitem menu:id=".uno:BasicShapes"/>
+                    <menu:menuitem menu:id=".uno:SymbolShapes"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
