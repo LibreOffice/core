@@ -503,24 +503,24 @@ void LwpPageLayout::ResetXFColumns()
 
 LwpHeaderLayout* LwpPageLayout::GetHeaderLayout()
 {
-    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-    while(pLay)
+    rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    while (xLay.is())
     {
-        if( pLay->GetLayoutType() == LWP_HEADER_LAYOUT )
-            return ( static_cast<LwpHeaderLayout*> (pLay) );
-        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
+        if (xLay->GetLayoutType() == LWP_HEADER_LAYOUT)
+            return dynamic_cast<LwpHeaderLayout*>(xLay.get());
+        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
     }
     return nullptr;
 }
 
 LwpFooterLayout* LwpPageLayout::GetFooterLayout()
 {
-    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-    while(pLay)
+    rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    while (xLay.is())
     {
-        if( pLay->GetLayoutType() == LWP_FOOTER_LAYOUT )
-            return ( static_cast<LwpFooterLayout*> (pLay) );
-        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
+        if (xLay->GetLayoutType() == LWP_FOOTER_LAYOUT)
+            return dynamic_cast<LwpFooterLayout*>(xLay.get());
+        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
     }
     return nullptr;
 }
@@ -533,19 +533,19 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
 {
     if(IsComplex())
     {
-        LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-        while(pLay)
+        rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+        while (xLay.is())
         {
-            if( pLay->GetLayoutType() == LWP_PAGE_LAYOUT )
+            if (xLay->GetLayoutType() == LWP_PAGE_LAYOUT)
             {
-                LwpPageLayout* pPageLayout = static_cast<LwpPageLayout*> (pLay);
+                LwpPageLayout* pPageLayout = static_cast<LwpPageLayout*>(xLay.get());
                 LwpUseWhen* pUseWhen = pPageLayout->GetUseWhen();
                 if(pUseWhen && pUseWhen->IsUseOnAllOddPages())
                 {
                     return pPageLayout;
                 }
             }
-            pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
+            xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
         }
     }
     return nullptr;
