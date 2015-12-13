@@ -215,20 +215,20 @@ void LwpStory::SortPageLayout()
 {
     //Get all the pagelayout and store in list
     std::vector<LwpPageLayout*>  aLayoutList;
-    LwpVirtualLayout* pLayout = GetLayout(nullptr);
-    while(pLayout)
+    rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
+    while (xLayout.get())
     {
-        if(pLayout->IsPage())
+        if (xLayout->IsPage())
         {
-            LwpLayout::UseWhenType eSectionType = static_cast<LwpPageLayout*>(pLayout)->GetUseWhenType();
+            LwpLayout::UseWhenType eSectionType = static_cast<LwpPageLayout*>(xLayout.get())->GetUseWhenType();
             //for mirror page, the child is pagelayout
-            LwpVirtualLayout* pParent = pLayout->GetParentLayout();
+            LwpVirtualLayout* pParent = xLayout->GetParentLayout();
             if(eSectionType != LwpLayout::StartWithinColume && pParent && !pParent->IsPage())
             {
-                aLayoutList.push_back(static_cast<LwpPageLayout*>(pLayout));
+                aLayoutList.push_back(static_cast<LwpPageLayout*>(xLayout.get()));
             }
         }
-        pLayout = GetLayout(pLayout);
+        xLayout = GetLayout(xLayout.get());
     }
     // sort the pagelayout according to their position
     std::vector<LwpPageLayout*>::iterator aIt;
@@ -315,10 +315,10 @@ bool LwpStory::IsNeedSection()
 **************************************************************************/
 void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
 {
-    LwpVirtualLayout* pLayout = GetLayout(nullptr);
-    while(pLayout)
+    rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
+    while (xLayout.is())
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get());
         while(pFrameLayout)
         {
 
@@ -334,7 +334,7 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
             }
             pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
         }
-        pLayout = GetLayout(pLayout);
+        xLayout = GetLayout(xLayout.get());
     }
 }
 
@@ -343,10 +343,10 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
 **************************************************************************/
 void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
 {
-    LwpVirtualLayout* pLayout = GetLayout(nullptr);
-    while(pLayout)
+    rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
+    while (xLayout.is())
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get());
         while(pFrameLayout)
         {
             if((pFrameLayout->IsAnchorPage()
@@ -358,7 +358,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
             }
             pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
         }
-        pLayout = GetLayout(pLayout);
+        xLayout = GetLayout(xLayout.get());
     }
 }
 /**************************************************************************
@@ -366,10 +366,10 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
 **************************************************************************/
 void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
 {
-    LwpVirtualLayout* pLayout = GetLayout(nullptr);
-    while(pLayout)
+    rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
+    while (xLayout.get())
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get());
         while(pFrameLayout)
         {
             if(pFrameLayout->IsAnchorFrame())
@@ -378,7 +378,7 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
             }
             pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
         }
-        pLayout = GetLayout(pLayout);
+        xLayout = GetLayout(xLayout.get());
     }
 }
 /**************************************************************************
@@ -386,13 +386,13 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
 **************************************************************************/
 void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
 {
-    LwpVirtualLayout* pLayout = GetLayout(nullptr);
-    while(pLayout)
+    rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
+    while (xLayout.is())
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get());
         while(pFrameLayout)
         {
-            if(pFrameLayout->IsAnchorPage() && (pLayout->IsHeader() || pLayout->IsFooter()))
+            if(pFrameLayout->IsAnchorPage() && (xLayout->IsHeader() || xLayout->IsFooter()))
             {
                 //The frame must be included by <text:p>
                 rtl::Reference<XFContent> first(
@@ -403,7 +403,7 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
             }
             pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
         }
-        pLayout = GetLayout(pLayout);
+        xLayout = GetLayout(xLayout.get());
     }
 }
 
@@ -423,10 +423,10 @@ XFContentContainer* LwpStory::GetXFContent()
 
 LwpPara* LwpStory::GetLastParaOfPreviousStory()
 {
-    LwpVirtualLayout* pVLayout = this->GetLayout(nullptr);
-    if (pVLayout)
+    rtl::Reference<LwpVirtualLayout> xVLayout(this->GetLayout(nullptr));
+    if (xVLayout.is())
     {
-        return pVLayout->GetLastParaOfPreviousStory();
+        return xVLayout->GetLastParaOfPreviousStory();
     }
 
     return nullptr;

@@ -119,7 +119,10 @@ public:
     LwpObjectID& GetDefaultCellStyle() {return m_DefaultCellStyle;}
     sal_uInt16 GetRow() {return m_nRow;}
     sal_uInt16 GetColumn() {return m_nColumn;}
-    LwpTableLayout * GetTableLayout(){return dynamic_cast<LwpTableLayout *>(GetLayout(nullptr));}
+    rtl::Reference<LwpTableLayout> GetTableLayout()
+    {
+        return rtl::Reference<LwpTableLayout>(dynamic_cast<LwpTableLayout*>(GetLayout(nullptr).get()));
+    }
     bool IsNumberDown();
     virtual bool IsTable() override { return true;}
     LwpSuperTableLayout* GetSuperTableLayout();
