@@ -25,7 +25,6 @@ import lib.MultiMethodTest;
 
 public class _XSubmission extends MultiMethodTest {
     public XSubmission oObj = null;
-    public boolean HandlerWasCalled = false;
 
     public void _addSubmissionVetoListener() {
         log.println(
