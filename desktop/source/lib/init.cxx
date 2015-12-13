@@ -1573,7 +1573,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
                 continue;
 
-            VirtualDevice aDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+            VirtualDevice aDevice(nullptr, Size(1, 1), 0);
             ::Rectangle aRect;
             vcl::Font aFont(rInfo);
             aFont.SetSize(Size(0, 25));
@@ -1587,11 +1587,12 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
             memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
             boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
+            boost::shared_array<sal_uInt8> aAlphaBuffer;
 
             aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
             aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
                         Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
-                        aBuffer, nullptr);
+                        aBuffer, aAlphaBuffer);
             aDevice.DrawText(Point(0,0), aFontName);
 
             return pBuffer;
