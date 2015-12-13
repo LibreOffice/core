@@ -100,15 +100,15 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     XFConvertFrameInFrame(pCont);
     //process para list
     XFContentContainer* pParaCont = pCont;
-    LwpPara* pPara = dynamic_cast<LwpPara*> ( GetFirstPara().obj().get() );
-    while(pPara)
+    rtl::Reference<LwpPara> xPara(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
+    while (xPara.is())
     {
-        pPara->SetFoundry(m_pFoundry);
-        pPara->XFConvert(pParaCont);
+        xPara->SetFoundry(m_pFoundry);
+        xPara->XFConvert(pParaCont);
 
         //Get the xfcontainer for the next para
-        pParaCont = pPara->GetXFContainer();
-        pPara = dynamic_cast<LwpPara*> ( pPara->GetNext().obj().get() );
+        pParaCont = xPara->GetXFContainer();
+        xPara.set(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
     }
 
     //process frame which anchor is to cell after converter all the para
@@ -116,15 +116,15 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     XFConvertFrameInHeaderFooter(pCont);
 
     //Release Lwp Objects
-    LwpPara* pCur = dynamic_cast<LwpPara*> (GetFirstPara().obj().get());
-    LwpPara* pNext;
-    while(pCur)
+    rtl::Reference<LwpPara> xCur(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
+    rtl::Reference<LwpPara> xNext;
+    while (xCur.is())
     {
-        pNext = dynamic_cast<LwpPara*> ( pCur->GetNext().obj().get() );
+        xNext.set(dynamic_cast<LwpPara*>(xCur->GetNext().obj().get()));
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
-        pObjMgr->ReleaseObject(pCur->GetObjectID());
-        pCur = pNext;
+        pObjMgr->ReleaseObject(xCur->GetObjectID());
+        xCur = xNext;
     }
 }
 
@@ -146,23 +146,6 @@ void LwpStory::Parse(IXFStream* pOutputStream)
     m_pXFContainer->ToXml(pOutputStream);
     delete m_pXFContainer;
     m_pXFContainer = nullptr;
-
-    //It seems that, currently, we do not need to process the child story
-    /*LwpObject* pChildStory = GetFirstStory()->obj();
-    if(pChildStory)
-    {
-        pChildStory->SetFoundry(m_pFoundry);
-        pChildStory->Parse(pOutputStream);
-    }*/
-
-    //Don't process the next story
-/*  LwpObject* pNextStory = GetNextStory()->obj();
-    if(pNextStory)
-    {
-        pNextStory->SetFoundry(m_pFoundry);
-        pNextStory->Parse(pOutputStream);
-    }*/
-
 }
 
 #include "lwppagelayout.hxx"
