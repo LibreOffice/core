@@ -301,21 +301,19 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
     rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
     while (xLayout.is())
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get());
-        while(pFrameLayout)
+        rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
+        while (xFrameLayout.is())
         {
-
-            //if(pFrameLayout->IsAnchorCell())
-            if(pFrameLayout->IsAnchorCell() && pFrameLayout->HasContent())
+            if (xFrameLayout->IsAnchorCell() && xFrameLayout->HasContent())
             {
                 //get the first xfpara
                 rtl::Reference<XFContent> first(
                     pCont->FindFirstContent(enumXFContentPara));
                 XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
                 if(pXFFirtPara)
-                    pFrameLayout->XFConvert(pXFFirtPara);
+                    xFrameLayout->XFConvert(pXFFirtPara);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
+            xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
         }
         xLayout = GetLayout(xLayout.get());
     }
@@ -329,17 +327,17 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
     rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
     while (xLayout.is())
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get());
-        while(pFrameLayout)
+        rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
+        while (xFrameLayout.is())
         {
-            if((pFrameLayout->IsAnchorPage()
-                &&(pFrameLayout->IsFrame()
-                      ||pFrameLayout->IsSuperTable()
-                      ||pFrameLayout->IsGroupHead())))
+            if((xFrameLayout->IsAnchorPage()
+                &&(xFrameLayout->IsFrame()
+                      || xFrameLayout->IsSuperTable()
+                      || xFrameLayout->IsGroupHead())))
             {
-                pFrameLayout->XFConvert(pCont);
+                xFrameLayout->XFConvert(pCont);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
+            xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
         }
         xLayout = GetLayout(xLayout.get());
     }
@@ -352,14 +350,14 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
     rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
     while (xLayout.get())
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get());
-        while(pFrameLayout)
+        rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
+        while (xFrameLayout.is())
         {
-            if(pFrameLayout->IsAnchorFrame())
+            if (xFrameLayout->IsAnchorFrame())
             {
-                pFrameLayout->XFConvert(pCont);
+                xFrameLayout->XFConvert(pCont);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
+            xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
         }
         xLayout = GetLayout(xLayout.get());
     }
@@ -372,19 +370,19 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
     rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
     while (xLayout.is())
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get());
-        while(pFrameLayout)
+        rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
+        while (xFrameLayout.is())
         {
-            if(pFrameLayout->IsAnchorPage() && (xLayout->IsHeader() || xLayout->IsFooter()))
+            if (xFrameLayout->IsAnchorPage() && (xLayout->IsHeader() || xLayout->IsFooter()))
             {
                 //The frame must be included by <text:p>
                 rtl::Reference<XFContent> first(
                     pCont->FindFirstContent(enumXFContentPara));
                 XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
                 if(pXFFirtPara)
-                    pFrameLayout->XFConvert(pXFFirtPara);
+                    xFrameLayout->XFConvert(pXFFirtPara);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
+            xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
         }
         xLayout = GetLayout(xLayout.get());
     }
