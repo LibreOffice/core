@@ -499,18 +499,18 @@ void LwpHeadLayout::RegisterStyle()
  * @descr   find endnote supertable layout from the child layout list. Suppose that there is only one endnote supertablelayout in one division
  * @return pointer to endnote supertable layout
  */
-LwpVirtualLayout* LwpHeadLayout::FindEnSuperTableLayout()
+rtl::Reference<LwpVirtualLayout> LwpHeadLayout::FindEnSuperTableLayout()
 {
-    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-    while(pLayout)
+    rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    while (xLayout.get())
     {
-        if(pLayout->GetLayoutType() == LWP_ENDNOTE_SUPERTABLE_LAYOUT)
+        if (xLayout->GetLayoutType() == LWP_ENDNOTE_SUPERTABLE_LAYOUT)
         {
-            return pLayout;
+            return xLayout;
         }
-        pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
+        xLayout.set(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
     }
-    return nullptr;
+    return rtl::Reference<LwpVirtualLayout>();
 }
 
 LwpLayoutStyle::LwpLayoutStyle()

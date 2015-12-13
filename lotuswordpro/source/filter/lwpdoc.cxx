@@ -646,7 +646,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     LwpDocument *pLastDoc = pRoot ? pRoot->GetLastDivisionWithContents() : nullptr;
     while (pLastDoc)
     {
-        if(pLastDoc->GetEnSuperTableLayout())
+        if (pLastDoc->GetEnSuperTableLayout().is())
             return pLastDoc;
         pLastDoc = pLastDoc->GetPreviousDivisionWithContents();
     }
@@ -656,14 +656,14 @@ LwpDocument* LwpDocument::GetPreviousDivision()
  /**
  * @descr    Get endnote supertable layout, every division has only one endnote supertable layout.
  */
- LwpVirtualLayout* LwpDocument::GetEnSuperTableLayout()
+rtl::Reference<LwpVirtualLayout> LwpDocument::GetEnSuperTableLayout()
 {
     LwpHeadLayout* pHeadLayout = dynamic_cast<LwpHeadLayout*>(GetFoundry()->GetLayout().obj().get());
     if(pHeadLayout)
     {
         return pHeadLayout->FindEnSuperTableLayout();
     }
-    return nullptr;
+    return rtl::Reference<LwpVirtualLayout>();
 }
 
 /**
