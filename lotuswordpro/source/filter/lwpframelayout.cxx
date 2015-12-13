@@ -272,7 +272,7 @@ void LwpFrame::ApplyWrapType(XFFrameStyle *pFrameStyle)
         case LwpPlacableLayout::LAY_NO_WRAP_AROUND:
         {
             eWrap = enumXFWrapRunThrough;
-            if(!m_pLayout->GetBackColor() && !m_pLayout->GetWaterMarkLayout())
+            if(!m_pLayout->GetBackColor() && !m_pLayout->GetWaterMarkLayout().is())
             {
                 //pFrameStyle->SetBackGround(sal_True);
                 XFColor aXFColor(0xffffff); //white color
@@ -534,12 +534,13 @@ void LwpFrame::ApplyWatermark(XFFrameStyle *pFrameStyle)
     {
         pFrameStyle->SetBackImage(pBGImage);
         //set watermark transparent
-         LwpMiddleLayout* pLay = static_cast<LwpMiddleLayout*>(m_pLayout->GetWaterMarkLayout());
-         LwpBackgroundStuff* pBackgroundStuff = pLay->GetBackgroundStuff();
-         if(pBackgroundStuff && !pBackgroundStuff->IsTransparent())
-         {
-             pFrameStyle->SetTransparency(100);
-         }
+        rtl::Reference<LwpVirtualLayout> xWaterMarkLayout(m_pLayout->GetWaterMarkLayout());
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xWaterMarkLayout.get());
+        LwpBackgroundStuff* pBackgroundStuff = pLay ? pLay->GetBackgroundStuff() : nullptr;
+        if(pBackgroundStuff && !pBackgroundStuff->IsTransparent())
+        {
+            pFrameStyle->SetTransparency(100);
+        }
      }
 }
 

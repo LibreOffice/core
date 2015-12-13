@@ -1357,18 +1357,18 @@ bool LwpMiddleLayout::IsProtected()
 * @descr:   Get watermark layout
 *
 */
-LwpVirtualLayout* LwpMiddleLayout::GetWaterMarkLayout()
+rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
 {
-    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-    while(pLay)
+    rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    while (xLay.is())
     {
-        if( pLay->IsForWaterMark())
+        if (xLay->IsForWaterMark())
         {
-            return pLay;
+            return xLay;
         }
-        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
+        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
     }
-    return nullptr;
+    return rtl::Reference<LwpVirtualLayout>();
 }
 
 /**
@@ -1377,7 +1377,8 @@ LwpVirtualLayout* LwpMiddleLayout::GetWaterMarkLayout()
 */
 XFBGImage* LwpMiddleLayout::GetXFBGImage()
 {
-    LwpMiddleLayout* pLay = static_cast<LwpMiddleLayout*>(GetWaterMarkLayout());
+    rtl::Reference<LwpVirtualLayout> xWaterMarkLayout(GetWaterMarkLayout());
+    LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xWaterMarkLayout.get());
     if(pLay)
     {
         //test BGImage
