@@ -73,6 +73,7 @@
 
 LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
+    , m_bGettingHonorProtection(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -139,20 +140,16 @@ bool LwpVirtualLayout::HonorProtection()
         return false;
 
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-    if (pParent && !pParent->IsHeader() && pParent != this)
+    if (pParent && !pParent->IsHeader())
     {
-        return pParent->HonorProtection();
+        return pParent->GetHonorProtection();
     }
 
     if(m_pFoundry)//is null now
     {
         LwpDocument* pDoc = m_pFoundry->GetDocument();
-        /*if(pDoc)
-        {
-            return pDoc->HonorProtection();
-        }*/
         if(pDoc && pDoc->GetRootDocument())
-            return pDoc->GetRootDocument()->HonorProtection();
+            return pDoc->GetRootDocument()->GetHonorProtection();
     }
 
     return true;
@@ -169,7 +166,7 @@ bool LwpVirtualLayout::IsProtected()
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
     if(pParent && !pParent->IsHeader())
     {
-        if(pParent->HonorProtection()&&(pParent->HasProtection()||bProtected))
+        if(pParent->GetHonorProtection()&&(pParent->GetHasProtection()||bProtected))
         {
             return true;
         }
@@ -179,7 +176,7 @@ bool LwpVirtualLayout::IsProtected()
         LwpDocument* pDoc = m_pFoundry->GetDocument();
         if(pDoc)
         {
-            if (pDoc->HonorProtection() && bProtected)
+            if (pDoc->GetHonorProtection() && bProtected)
             {
                 return true;
             }
@@ -199,9 +196,9 @@ bool LwpVirtualLayout::HasProtection()
         return true;
 
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-    if (pParent && !pParent->IsHeader() && pParent != this)
+    if (pParent && !pParent->IsHeader())
     {
-        return pParent->HasProtection();
+        return pParent->GetHasProtection();
     }
 
     return false;
@@ -1235,9 +1232,9 @@ bool LwpMiddleLayout::HonorProtection()
             return false;
 
         LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-        if(pParent && !pParent->IsHeader())
+        if (pParent && !pParent->IsHeader())
         {
-            return pParent->HonorProtection();
+            return pParent->GetHonorProtection();
         }
 
         if(m_pFoundry)//is null now
@@ -1245,13 +1242,13 @@ bool LwpMiddleLayout::HonorProtection()
             LwpDocument* pDoc = m_pFoundry->GetDocument();
             if(pDoc)
             {
-                return pDoc->HonorProtection();
+                return pDoc->GetHonorProtection();
             }
         }
     }
     else if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> (GetBasedOnStyle().get()))
     {
-        return pLay->HonorProtection();
+        return pLay->GetHonorProtection();
     }
 
     return LwpVirtualLayout::HonorProtection();
@@ -1282,7 +1279,7 @@ bool LwpMiddleLayout::IsProtected()
         if(pParent->IsProtected())
             return true;
 
-        if(pParent->HonorProtection())
+        if(pParent->GetHonorProtection())
             return bProtected;
 
         /* If our parent isn't honoring protection then we aren't protected. */
@@ -1294,7 +1291,7 @@ bool LwpMiddleLayout::IsProtected()
         LwpDocument* pDoc = m_pFoundry->GetDocument();
         if(pDoc)
         {
-            if (pDoc->HonorProtection())
+            if (pDoc->GetHonorProtection())
                 return bProtected;
 
             /* If the document isn't honoring protection then we aren't protected.*/
