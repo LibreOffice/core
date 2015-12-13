@@ -348,13 +348,14 @@ void LwpPara::RegisterStyle()
   //2 reg para style
     if (!m_pFoundry)
         return;
-    XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(m_ParaStyle));
+    XFParaStyle* pBaseStyle = dynamic_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(m_ParaStyle));
     if (pBaseStyle == nullptr) return;
     m_StyleName = pBaseStyle->GetStyleName();//such intf to be added
     m_ParentStyleName = m_StyleName;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
 
-    if (GetParaStyle()->GetIndent())
+    LwpParaStyle* pParaStyle = GetParaStyle();
+    if (pParaStyle && pParaStyle->GetIndent())
     {
         std::unique_ptr<LwpIndentOverride> pIndentOverride(GetParaStyle()->GetIndent()->clone());
         delete m_pIndentOverride;
@@ -736,13 +737,13 @@ void LwpPara::RegisterStyle()
     //register tab style
     if(m_Fribs.HasFrib(FRIB_TAG_TAB))
     {
-        XFParaStyle* pParaStyle = new XFParaStyle;
-        *pParaStyle = *GetXFParaStyle();
+        XFParaStyle* pNewParaStyle = new XFParaStyle;
+        *pNewParaStyle = *GetXFParaStyle();
         //pOverStyle->SetStyleName("");
-        this->RegisterTabStyle(pParaStyle);
+        this->RegisterTabStyle(pNewParaStyle);
         if (!m_ParentStyleName.isEmpty())
-                    pParaStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(pParaStyle).m_pStyle->GetStyleName();
+                    pNewParaStyle->SetParentStyleName(m_ParentStyleName);
+        m_StyleName = pXFStyleManager->AddStyle(pNewParaStyle).m_pStyle->GetStyleName();
     }
 
     //register master page;
