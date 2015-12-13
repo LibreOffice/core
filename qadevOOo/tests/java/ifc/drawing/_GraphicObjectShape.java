@@ -82,17 +82,6 @@ public class _GraphicObjectShape extends MultiPropertyTest {
     } ;
 
     /**
-     * Property tester which returns new <code>XIndexAccess</code> object.
-     */
-    protected PropertyTester ImapTester = new PropertyTester() {
-        @Override
-        protected Object getNewValue(String propName, Object oldValue) {
-            return null;
-        }
-    } ;
-
-
-    /**
      * This property must have URL format
      */
     public void _GraphicURL() {
