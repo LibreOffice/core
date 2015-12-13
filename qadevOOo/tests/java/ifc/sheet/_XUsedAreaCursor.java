@@ -43,7 +43,6 @@ import com.sun.star.uno.UnoRuntime;
 public class _XUsedAreaCursor extends MultiMethodTest {
 
     public XUsedAreaCursor oObj = null;
-    public XSheetCellCursor oC = null;
     CellRangeAddress sAddr = null;
 
     /**
