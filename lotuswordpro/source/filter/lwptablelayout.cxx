@@ -580,7 +580,10 @@ void LwpTableLayout::RegisterColumns()
     {
         auto nColId = pColumnLayout->GetColumnID();
         if (nColId >= nCols)
+        {
+            delete [] pWidthCalculated;
             throw std::range_error("corrupt LwpTableLayout");
+        }
         m_pColumns[nColId] = pColumnLayout;
         if (!pColumnLayout->IsJustifiable())
         {
