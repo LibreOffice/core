@@ -71,6 +71,7 @@
 LwpDocument::LwpDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
     , m_pOwnedFoundry(nullptr)
+    , m_bGettingFirstDivisionWithContentsThatIsNotOLE(false)
     , m_nFlags(0)
     , m_nPersistentFlags(0)
     , m_pLnOpts(nullptr)
@@ -619,7 +620,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
   /**
  * @descr    Get first division with contents that is not ole, copy from lwp-source code
  */
- LwpDocument* LwpDocument::GetFirstDivisionWithContentsThatIsNotOLE()
+ LwpDocument* LwpDocument::ImplGetFirstDivisionWithContentsThatIsNotOLE()
 {
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID().obj().get());
     if(pDivInfo && pDivInfo->HasContents()
@@ -628,7 +629,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
     LwpDocument* pDivision = GetFirstDivision();
 
-    while (pDivision && pDivision != this)
+    while (pDivision)
     {
         LwpDocument* pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
         if(pContentDivision)
