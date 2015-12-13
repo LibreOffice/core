@@ -143,8 +143,8 @@ LwpParaAlignProperty::LwpParaAlignProperty(LwpObjectStream* pFile)
     LwpObjectID align;
     align.ReadIndexed(pFile);
 
-    LwpAlignmentPiece *pAlignmentPiece = dynamic_cast<LwpAlignmentPiece*>(align.obj(VO_ALIGNMENTPIECE).get());
-    m_pAlignment = pAlignmentPiece ? dynamic_cast<LwpAlignmentOverride*>(pAlignmentPiece->GetOverride()) : nullptr;
+    rtl::Reference<LwpAlignmentPiece> xAlignmentPiece(dynamic_cast<LwpAlignmentPiece*>(align.obj(VO_ALIGNMENTPIECE).get()));
+    m_pAlignment = xAlignmentPiece.is() ? dynamic_cast<LwpAlignmentOverride*>(xAlignmentPiece->GetOverride()) : nullptr;
 
 }
 
