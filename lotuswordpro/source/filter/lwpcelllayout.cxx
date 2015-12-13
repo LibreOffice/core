@@ -568,8 +568,8 @@ void LwpCellLayout::RegisterDefaultCell()
  */
 void LwpCellLayout::RegisterStyle()
 {
-    LwpVirtualLayout * pParent = dynamic_cast<LwpVirtualLayout *>(GetParent().obj().get());
-    if (!pParent || pParent->GetLayoutType() != LWP_ROW_LAYOUT)
+    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout *>(GetParent().obj().get()));
+    if (!xParent.is() || xParent->GetLayoutType() != LWP_ROW_LAYOUT)
     {
         // default cell layout, we must register 4 styles for it
         RegisterDefaultCell();
