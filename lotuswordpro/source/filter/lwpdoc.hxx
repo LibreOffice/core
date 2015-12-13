@@ -84,6 +84,7 @@ public:
 
 private:
     LwpFoundry* m_pOwnedFoundry;
+    bool m_bGettingFirstDivisionWithContentsThatIsNotOLE;
 
     //Data members in file format
     LwpObjectID m_DocSockID;
@@ -154,7 +155,15 @@ public:
     LwpDocument* GetLastDivisionWithContents();
     LwpDocument* GetLastInGroupWithContents();
     LwpDocument* GetRootDocument();
-    LwpDocument* GetFirstDivisionWithContentsThatIsNotOLE();
+    LwpDocument* GetFirstDivisionWithContentsThatIsNotOLE()
+    {
+        if (m_bGettingFirstDivisionWithContentsThatIsNotOLE)
+            throw std::runtime_error("recursion in page divisions");
+        m_bGettingFirstDivisionWithContentsThatIsNotOLE = true;
+        LwpDocument* pRet = ImplGetFirstDivisionWithContentsThatIsNotOLE();
+        m_bGettingFirstDivisionWithContentsThatIsNotOLE = false;
+        return pRet;
+    }
     LwpDocument* GetLastDivisionThatHasEndnote();
 
     LwpDocument* GetLastDivision();
@@ -167,6 +176,7 @@ public:
 
 private:
     void MaxNumberOfPages(sal_uInt16& nNumPages);
+    LwpDocument* ImplGetFirstDivisionWithContentsThatIsNotOLE();
     void XFConvertFrameInPage(XFContentContainer* pCont);
     static void ChangeStyleName();
     bool IsSkippedDivision();
