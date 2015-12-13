@@ -139,7 +139,7 @@ bool LwpVirtualLayout::HonorProtection()
         return false;
 
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-    if(pParent && !pParent->IsHeader())
+    if (pParent && !pParent->IsHeader() && pParent != this)
     {
         return pParent->HonorProtection();
     }
@@ -199,7 +199,7 @@ bool LwpVirtualLayout::HasProtection()
         return true;
 
     LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-    if(pParent && !pParent->IsHeader())
+    if (pParent && !pParent->IsHeader() && pParent != this)
     {
         return pParent->HasProtection();
     }
