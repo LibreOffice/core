@@ -211,49 +211,6 @@ public class _ParagraphProperties extends MultiPropertyTest {
         }
     };
 
-    protected PropertyTester rules = null;
-
-    /**
-     * Creates tester for 'NumberingRules' depending on relation.
-     */
-    @Override
-    public void before() {
-        final Object nRules = tEnv.getObjRelation("NRULES");
-
-        if (nRules != null) {
-            rules = new PropertyTester() {
-                @Override
-                protected Object getNewValue(String propName, Object oldValue) {
-                    return nRules;
-                }
-            };
-
-        } else {
-            Object rules1 = null;
-            Object rules2 = null;
-
-            try {
-                oObj.setPropertyValue("NumberingStyleName", "Numbering 1");
-                rules1 = oObj.getPropertyValue("NumberingRules");
-                oObj.setPropertyValue("NumberingStyleName", "Numbering 2");
-                rules2 = oObj.getPropertyValue("NumberingRules");
-            } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("WARNING !!! Exception getting numbering rules :");
-                e.printStackTrace(log);
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("WARNING !!! Exception getting numbering rules :");
-                e.printStackTrace(log);
-            } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("WARNING !!! Exception getting numbering rules :");
-                e.printStackTrace(log);
-            } catch (com.sun.star.beans.UnknownPropertyException e) {
-                log.println("Property 'NumberingStyleName' is not supported.");
-            }
-
-            rules = new PropertyValueSwitcher(rules1, rules2);
-        }
-    }
-
     /**
      * Tested with custom property tester.
      */
