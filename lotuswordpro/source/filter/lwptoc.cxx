@@ -243,6 +243,9 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
     // add TOC content
     LwpSuperTableLayout::XFConvert(pToc);
 
+    if (!GetContainerLayout())
+        return;
+
     // if current TOC is located in a cell, we must add a frame between upper level container and TOC
     if ( !GetContainerLayout()->IsCell() )
     {
