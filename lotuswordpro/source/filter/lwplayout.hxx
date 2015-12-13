@@ -322,7 +322,7 @@ public:
     virtual sal_uInt8 GetContentOrientation() override;
     virtual bool HonorProtection() override;
     virtual bool IsProtected() override;
-    LwpVirtualLayout* GetWaterMarkLayout();
+    rtl::Reference<LwpVirtualLayout> GetWaterMarkLayout();
     XFBGImage* GetXFBGImage();
     bool GetUsePrinterSettings();
 
