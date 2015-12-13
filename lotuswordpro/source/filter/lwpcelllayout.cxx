@@ -645,7 +645,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
 {
     bool bProtected = false;
     // judge current cell
-    if (IsProtected())
+    if (GetIsProtected())
     {
         bProtected = true;
     }
@@ -653,7 +653,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
     {
         // judge base on
         LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(GetBasedOnStyle().get());
-        if (pBase && pBase->IsProtected())
+        if (pBase && pBase->GetIsProtected())
         {
             bProtected = true;
         }
@@ -663,7 +663,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
             LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
             LwpTableLayout * pTableLayout = pTable ? dynamic_cast<LwpTableLayout *>(pTable->GetTableLayout()) : nullptr;
             LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : nullptr;
-            if (pSuper && pSuper->IsProtected())
+            if (pSuper && pSuper->GetIsProtected())
             {
                 bProtected = true;
             }

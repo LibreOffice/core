@@ -397,7 +397,7 @@ void LwpFrame::ApplyBackColor(XFFrameStyle* pFrameStyle)
 */
 void LwpFrame::ApplyProtect(XFFrameStyle* pFrameStyle)
 {
-    if(m_pLayout->IsProtected())
+    if(m_pLayout->GetIsProtected())
     {
         pFrameStyle->SetProtect(true,true,true);
     }

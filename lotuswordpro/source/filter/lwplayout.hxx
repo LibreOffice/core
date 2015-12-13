@@ -120,7 +120,15 @@ public:
         m_bGettingHonorProtection = false;
         return bRet;
     }
-    virtual bool IsProtected();
+    bool GetIsProtected()
+    {
+        if (m_bGettingIsProtected)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingIsProtected = true;
+        bool bRet = IsProtected();
+        m_bGettingIsProtected = false;
+        return bRet;
+    }
     bool GetHasProtection()
     {
         if (m_bGettingHasProtection)
@@ -181,9 +189,11 @@ protected:
     void Read() override;
     bool HasProtection();
     virtual bool HonorProtection();
+    virtual bool IsProtected();
 protected:
     bool m_bGettingHonorProtection;
     bool m_bGettingHasProtection;
+    bool m_bGettingIsProtected;
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
     sal_uInt32 m_nAttributes3;
