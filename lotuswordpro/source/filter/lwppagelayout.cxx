@@ -576,6 +576,8 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
 {
     sal_Int16 nPageNumber = -1;
     LwpFoundry* pFoundry = this->GetFoundry();
+    if (!pFoundry)
+        return nPageNumber;
     LwpDocument* pDoc = pFoundry->GetDocument();
     LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(pDoc->GetPageHintsID().obj().get());
     if(!pHeadTail) return nPageNumber;
