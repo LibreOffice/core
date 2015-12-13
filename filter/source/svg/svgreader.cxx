@@ -749,7 +749,11 @@ struct AnnotatingVisitor
             {
                 if( rState.meFillType == GRADIENT )
                 {
-                    xAttrs->AddAttribute( "draw:fill", "gradient");
+                    // don't fill the gradient if there's no stop element present
+                    if( rState.maFillGradient.maStops.size() == 0 )
+                        xAttrs->AddAttribute( "draw:fill", "none" );
+                    else
+                        xAttrs->AddAttribute( "draw:fill", "gradient");
                     xAttrs->AddAttribute( "draw:fill-gradient-name",
                                           getStyleName("svggradient", rState.maFillGradient.mnId) );
                     if( hasGradientOpacity(rState.maFillGradient) )
