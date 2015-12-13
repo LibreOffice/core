@@ -1243,7 +1243,7 @@ Const cstThisSub = &quot;OutputTo&quot;
 	If IsMissing(pvTemplateFile) Then pvTemplateFile = &quot;&quot;
 	If Not Utils._CheckArgument(pvTemplateFile, 6, vbString) Then Goto Exit_Function
 	If IsMissing(pvEncoding) Then pvEncoding = 0
-	If Not Utils._CheckArgument(pvEncoding, 7, _AddNumeric(), Array(0, acUTF8Encoding)) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvEncoding, 7, _AddNumeric()) Then Goto Exit_Function
 	If IsMissing(pvQuality) Then pvQuality = acExportQualityPrint
 	If Not Utils._CheckArgument(pvQuality, 7, _AddNumeric(), Array(acExportQualityPrint, acExportQualityScreen)) Then Goto Exit_Function
 

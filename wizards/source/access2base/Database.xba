@@ -621,7 +621,7 @@ Const cstThisSub = &quot;Database.OutputTo&quot;
 	If IsMissing(pvTemplateFile) Then pvTemplateFile = &quot;&quot;
 	If Not Utils._CheckArgument(pvTemplateFile, 6, vbString) Then Goto Exit_Function
 	If IsMissing(pvEncoding) Then pvEncoding = 0
-	If Not Utils._CheckArgument(pvEncoding, 7, _AddNumeric(), Array(0, acUTF8Encoding)) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvEncoding, 7, _AddNumeric()) Then Goto Exit_Function
 	If IsMissing(pvQuality) Then pvQuality = acExportQualityPrint
 	If Not Utils._CheckArgument(pvQuality, 7, _AddNumeric(), Array(acExportQualityPrint, acExportQualityScreen)) Then Goto Exit_Function
 
@@ -674,7 +674,7 @@ Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutp
 		Case UCase(acFormatXLS), &quot;XLSX&quot;
 			bOutput = _OutputToCalc(oTable, sOutputFile, acFormatXLSX)
 		Case UCase(acFormatTXT), &quot;TXT&quot;, &quot;CSV&quot;
-			bOutput = _OutputToCalc(oTable, sOutputFile, acFormatTXT)
+			bOutput = _OutputToCalc(oTable, sOutputFile, acFormatTXT, pvEncoding)
 	End Select
 	oTable.Dispose()
 	
@@ -1010,7 +1010,7 @@ Error_Function:
 End Function		&apos;	DFunction		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _FilterOptionsDefault() As String
+Private Function _FilterOptionsDefault(ByVal plEncoding As Long) As String
 &apos;	Return the default FilterOptions string for table/query export to csv
 
 Dim sFieldSeparator as string
@@ -1020,7 +1020,7 @@ Const cstTextDelimitor = &quot;&quot;&quot;&quot;
 	If _DecimalPoint() = &quot;,&quot; Then sFieldSeparator = &quot;;&quot; Else sFieldSeparator = cstComma
 	_FilteroptionsDefault = Trim(Str(Asc(sFieldSeparator))) _
 								&amp; cstComma &amp; Trim(Str(Asc(cstTextDelimitor))) _
-								&amp; cstComma &amp; Trim(Str(acUTF8Encoding)) _
+								&amp; cstComma &amp; Trim(Str(plEncoding)) _
 								&amp; cstComma &amp; &quot;1&quot;
 
 End Function		&apos;	_FilterOptionsDefault	V1.4.0
@@ -1296,7 +1296,11 @@ Dim i As Integer, l As Long
 End Function	&apos;	_OutputStringToHTML V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _OutputToCalc(poData As Object, ByVal psOutputFile As String, psFilter As String) As Boolean
+Private Function _OutputToCalc(poData As Object _
+								, ByVal psOutputFile As String _
+								, ByVal psFilter As String _
+								, Optional ByVal plEncoding As Long _
+								) As Boolean
 &apos;	https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Database_Import
 &apos;	https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filter_Options
 
@@ -1306,6 +1310,7 @@ Dim oRange As Object, i As Integer, iCol As Integer, oColumns As Object
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	_OutputToCalc = False
+	If IsMissing(plEncoding) Then plEncoding = acUTF8Encoding
     &apos; Create a new OO-Calc-Document
 	Set oCalcDoc = StarDesktop.LoadComponentFromURL( _
 			&quot;private:factory/scalc&quot; _
@@ -1344,14 +1349,18 @@ Dim oRange As Object, i As Integer, iCol As Integer, oColumns As Object
 			For i = 0 To iCol - 1
 				oColumns.getByIndex(i).OptimalWidth = True
 			Next i
+			oCalcDoc.storeAsUrl(psOutputFile, Array( _
+					_MakePropertyValue(&quot;FilterName&quot;, psFilter) _
+					, _MakePropertyValue(&quot;Overwrite&quot;, True) _
+					))
 		Case Else
+			oCalcDoc.storeAsUrl(psOutputFile, Array( _
+					_MakePropertyValue(&quot;FilterName&quot;, psFilter) _
+					, _MakePropertyValue(&quot;FilterOptions&quot;, _FilterOptionsDefault(plEncoding)) _
+					, _MakePropertyValue(&quot;Overwrite&quot;, True) _
+					))
 	End Select
 	
-	oCalcDoc.storeAsUrl(psOutputFile, Array( _
-			_MakePropertyValue(&quot;FilterName&quot;, psFilter) _
-			, _MakePropertyValue(&quot;FilterOptions&quot;, _FilterOptionsDefault()) _
-			, _MakePropertyValue(&quot;Overwrite&quot;, True) _
-			))
 	oCalcDoc.close(False)
 	_OutputToCalc = True
 
