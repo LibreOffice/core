@@ -93,8 +93,7 @@ SFX_IMPL_INTERFACE(SwPagePreview, SfxViewShell)
 
 void SwPagePreview::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_PPREVIEW_POPUPMENU));
-
+    GetStaticInterface()->RegisterPopupMenu("preview");
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_CLIENT|SFX_VISIBILITY_FULLSCREEN|SFX_VISIBILITY_READONLYDOC,
                                             RID_PVIEW_TOOLBOX);
 }

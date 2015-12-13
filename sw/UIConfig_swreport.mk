@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/swreport,\
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swreport,\
+	sw/uiconfig/swreport/popupmenu/preview \
 	sw/uiconfig/swreport/popupmenu/table \
 ))
 

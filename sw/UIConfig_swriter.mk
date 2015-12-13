@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/swriter,\
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swriter,\
+	sw/uiconfig/swriter/popupmenu/preview \
 	sw/uiconfig/swriter/popupmenu/table \
 ))
 
