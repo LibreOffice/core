@@ -68,11 +68,6 @@
           <value xml:lang="en-US">Page Number</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertFormMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fo~rm Control</value>
-        </prop>
-      </node>
       <node oor:name=".uno:InsertHeaderFooterMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">He~ader and Footer</value>
