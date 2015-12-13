@@ -111,9 +111,25 @@ public:
     bool IsAutoGrowWidth();
     bool IsInlineToMargin();
     virtual sal_uInt8 GetContentOrientation(){ return TEXT_ORIENT_LRTB;}
-    virtual bool HonorProtection();
+    bool GetHonorProtection()
+    {
+        if (m_bGettingHonorProtection)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingHonorProtection = true;
+        bool bRet = HonorProtection();
+        m_bGettingHonorProtection = false;
+        return bRet;
+    }
     virtual bool IsProtected();
-    bool HasProtection();
+    bool GetHasProtection()
+    {
+        if (m_bGettingHasProtection)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingHasProtection = true;
+        bool bRet = HasProtection();
+        m_bGettingHasProtection = false;
+        return bRet;
+    }
     OUString GetStyleName(){ return m_StyleName;}
     bool IsComplex();
     virtual bool IsAnchorPage(){ return false;}
@@ -163,7 +179,11 @@ public:
     //End by
 protected:
     void Read() override;
+    bool HasProtection();
+    virtual bool HonorProtection();
 protected:
+    bool m_bGettingHonorProtection;
+    bool m_bGettingHasProtection;
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
     sal_uInt32 m_nAttributes3;

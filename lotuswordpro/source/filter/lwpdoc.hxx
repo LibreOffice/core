@@ -132,7 +132,7 @@ public:
     void RegisterStyle() override;
 
     inline bool IsChildDoc();
-    inline bool HonorProtection();
+    inline bool GetHonorProtection();
     inline LwpObjectID& GetDocData();
     inline LwpObjectID& GetSocket();
 
@@ -176,7 +176,7 @@ inline bool LwpDocument::IsChildDoc()
 {
     return (m_nPersistentFlags & DOC_CHILDDOC) != 0;
 }
-inline bool LwpDocument::HonorProtection()
+inline bool LwpDocument::GetHonorProtection()
 {
     return (m_nPersistentFlags & DOC_PROTECTED) != 0;
 }
