@@ -119,24 +119,51 @@ static BOOL msidbExportStorage(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR storageName)
     sprintf(queryBuffer, "SELECT * FROM _Storages WHERE Name = '%s'", storageNameA);
 
     r = MsiOpenDatabaseW(dbfile, (LPWSTR) MSIDBOPEN_READONLY, &dbhandle);
-    if (r != ERROR_SUCCESS) return FALSE;
+    if (r != ERROR_SUCCESS)
+    {
+        free(storageNameA);
+        free(wdirA);
+        return FALSE;
+    }
 
     MsiDatabaseOpenView(dbhandle, queryBuffer, &view);
     MsiViewExecute(view, 0);
     r = MsiViewFetch(view, &rec);
-    if (r != ERROR_SUCCESS) return FALSE;
-
-    if (MsiRecordReadStream(rec, 2, 0, &dataLen) != ERROR_SUCCESS)
+    if (r != ERROR_SUCCESS)
     {
+        free(storageNameA);
+        free(wdirA);
         return FALSE;
     }
 
-    if ((dataBuffer = malloc(dataLen)) == NULL) return FALSE;
-    if (MsiRecordReadStream(rec, 2, dataBuffer, &dataLen) != ERROR_SUCCESS) return FALSE;
+    if (MsiRecordReadStream(rec, 2, 0, &dataLen) != ERROR_SUCCESS)
+    {
+        free(storageNameA);
+        free(wdirA);
+        return FALSE;
+    }
+
+    if ((dataBuffer = malloc(dataLen)) == NULL)
+    {
+        free(storageNameA);
+        free(wdirA);
+        return FALSE;
+    }
+    if (MsiRecordReadStream(rec, 2, dataBuffer, &dataLen) != ERROR_SUCCESS)
+    {
+        free(storageNameA);
+        free(wdirA);
+        return FALSE;
+    }
 
     len = strlen(wdirA) + strlen(storageNameA) + 2;
     storagePath = malloc(len * sizeof(WCHAR));
-    if (storagePath == NULL) return FALSE;
+    if (storagePath == NULL)
+    {
+        free(storageNameA);
+        free(wdirA);
+        return FALSE;
+    }
 
     strcpy(storagePath, wdirA);
     strcat(storagePath, "/");
@@ -232,24 +259,52 @@ static BOOL msidbExportStream(LPCWSTR dbfile, LPCWSTR wdir, LPCWSTR streamName)
     DWORD dataLen = 0;
 
     r = MsiOpenDatabaseW(dbfile, (LPCWSTR) MSIDBOPEN_READONLY, &dbhandle);
-    if (r != ERROR_SUCCESS) return FALSE;
+    if (r != ERROR_SUCCESS)
+    {
+        free(wdirA);
+        free(streamNameA);
+        return FALSE;
+    }
 
     sprintf(queryBuffer, "SELECT * FROM _Streams WHERE Name = '%s'", streamNameA);
     MsiDatabaseOpenView(dbhandle, queryBuffer, &streamListView);
     MsiViewExecute(streamListView, 0);
     r = MsiViewFetch(streamListView, &rec);
-    if (r != ERROR_SUCCESS) return FALSE;
+    if (r != ERROR_SUCCESS)
+    {
+        free(wdirA);
+        free(streamNameA);
+        return FALSE;
+    }
 
     if (MsiRecordReadStream(rec, 2, 0, &dataLen) != ERROR_SUCCESS)
+    {
+        free(wdirA);
+        free(streamNameA);
         return FALSE;
+    }
     dataBuffer = malloc(dataLen);
-    if (!dataBuffer) return FALSE;
-    if (MsiRecordReadStream(rec, 2, dataBuffer, &dataLen) != ERROR_SUCCESS)
+    if (!dataBuffer)
+    {
+        free(wdirA);
+        free(streamNameA);
         return FALSE;
+    }
+    if (MsiRecordReadStream(rec, 2, dataBuffer, &dataLen) != ERROR_SUCCESS)
+    {
+        free(wdirA);
+        free(streamNameA);
+        return FALSE;
+    }
 
     len = strlen(streamNameA) + 5;
     streamFileA = malloc(len);
-    if (streamFileA == NULL) return FALSE;
+    if (streamFileA == NULL)
+    {
+        free(wdirA);
+        free(streamNameA);
+        return FALSE;
+    }
 
     strcpy(streamFileA, streamNameA);
     strcat(streamFileA, ext);
@@ -333,7 +388,10 @@ static BOOL msidbImportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[], BOO
             }
         }
         else
+        {
+            free(dirNameA);
             return FALSE;
+        }
         closedir(dir);
         free(dirNameA);
     }
