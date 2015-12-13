@@ -205,8 +205,8 @@ void LwpStory::SortPageLayout()
         {
             LwpLayout::UseWhenType eSectionType = static_cast<LwpPageLayout*>(xLayout.get())->GetUseWhenType();
             //for mirror page, the child is pagelayout
-            LwpVirtualLayout* pParent = xLayout->GetParentLayout();
-            if(eSectionType != LwpLayout::StartWithinColume && pParent && !pParent->IsPage())
+            rtl::Reference<LwpVirtualLayout> xParent = xLayout->GetParentLayout();
+            if(eSectionType != LwpLayout::StartWithinColume && xParent.is() && !xParent->IsPage())
             {
                 aLayoutList.push_back(static_cast<LwpPageLayout*>(xLayout.get()));
             }

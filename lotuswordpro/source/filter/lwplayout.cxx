@@ -141,10 +141,10 @@ bool LwpVirtualLayout::HonorProtection()
     if(!(m_nAttributes2 & STYLE2_HONORPROTECTION))
         return false;
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-    if (pParent && !pParent->IsHeader())
+    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    if (xParent.is() && !xParent->IsHeader())
     {
-        return pParent->GetHonorProtection();
+        return xParent->GetHonorProtection();
     }
 
     if(m_pFoundry)//is null now
@@ -165,10 +165,10 @@ bool LwpVirtualLayout::IsProtected()
 {
     bool bProtected = (m_nAttributes & STYLE_PROTECTED)!=0;
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-    if(pParent && !pParent->IsHeader())
+    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    if (xParent.is() && !xParent->IsHeader())
     {
-        if(pParent->GetHonorProtection()&&(pParent->GetHasProtection()||bProtected))
+        if (xParent->GetHonorProtection() && (xParent->GetHasProtection()||bProtected))
         {
             return true;
         }
@@ -197,10 +197,10 @@ bool LwpVirtualLayout::HasProtection()
     if(m_nAttributes & STYLE_PROTECTED)
         return true;
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-    if (pParent && !pParent->IsHeader())
+    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    if (xParent.is() && !xParent->IsHeader())
     {
-        return pParent->GetHasProtection();
+        return xParent->GetHasProtection();
     }
 
     return false;
@@ -228,9 +228,9 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
     if(GetLayoutType()!=LWP_PAGE_LAYOUT)
     {
         //get parent
-        LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-        if(pParent && !pParent->IsHeader()&& (pParent->GetLayoutType()!=LWP_PAGE_LAYOUT))
-            return pParent->GetUseWhen();
+        rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+        if (xParent.is() && !xParent->IsHeader() && (xParent->GetLayoutType() != LWP_PAGE_LAYOUT))
+            return xParent->GetUseWhen();
 
     }
 
@@ -318,9 +318,9 @@ bool LwpVirtualLayout::IsMinimumHeight()
 * @descr:   Get parent layout
 *
 */
-LwpVirtualLayout* LwpVirtualLayout::GetParentLayout()
+rtl::Reference<LwpVirtualLayout> LwpVirtualLayout::GetParentLayout()
 {
-    return dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
+    return rtl::Reference<LwpVirtualLayout>(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
 }
 
 /**
@@ -349,9 +349,9 @@ bool LwpVirtualLayout::IsStyleLayout()
     if (m_nAttributes3 & STYLE3_STYLELAYOUT)
         return true;
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get());
-    if (pParent)
-        return pParent->IsStyleLayout();
+    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    if (xParent.is())
+        return xParent->IsStyleLayout();
     return false;
 }
 
@@ -712,10 +712,10 @@ double LwpMiddleLayout::GetMarginsValue(const sal_uInt8 &nWhichSide)
     {
         if ( MarginsSameAsParent() )
         {
-            LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-            if(pParent && !pParent->IsHeader())
+            rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+            if (xParent.is() && !xParent->IsHeader())
             {
-                fValue = pParent->GetMarginsValue(nWhichSide);
+                fValue = xParent->GetMarginsValue(nWhichSide);
                 return fValue;
             }
         }
@@ -1274,16 +1274,16 @@ bool LwpMiddleLayout::HonorProtection()
         if(!(m_nAttributes2 & STYLE2_HONORPROTECTION))
             return false;
 
-        LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-        if (pParent && !pParent->IsHeader())
+        rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+        if (xParent.is() && !xParent->IsHeader())
         {
-            return pParent->GetHonorProtection();
+            return xParent->GetHonorProtection();
         }
 
         if(m_pFoundry)//is null now
         {
             LwpDocument* pDoc = m_pFoundry->GetDocument();
-            if(pDoc)
+            if (pDoc)
             {
                 return pDoc->GetHonorProtection();
             }
@@ -1323,14 +1323,14 @@ bool LwpMiddleLayout::IsProtected()
             bProtected = LwpVirtualLayout::IsProtected();
     }
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent().obj().get());
-    if(pParent && !pParent->IsHeader())
+    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    if (xParent.is() && !xParent->IsHeader())
     {
         /* If a parent's protected then none of its children can be accessed. */
-        if(pParent->GetIsProtected())
+        if (xParent->GetIsProtected())
             return true;
 
-        if(pParent->GetHonorProtection())
+        if (xParent->GetHonorProtection())
             return bProtected;
 
         /* If our parent isn't honoring protection then we aren't protected. */
@@ -1928,7 +1928,7 @@ XFShadow* LwpLayout::GetXFShadow()
  * @descr get the layout that containers the current frame layout
  *
  */
-LwpVirtualLayout* LwpLayout::GetContainerLayout()
+rtl::Reference<LwpVirtualLayout> LwpLayout::GetContainerLayout()
 {
     if(IsRelativeAnchored())
     {
@@ -2091,9 +2091,8 @@ bool LwpPlacableLayout::IsAnchorPage()
     if(IsRelativeAnchored())
         return false;
 
-    LwpVirtualLayout* pLayout = GetParentLayout();
-    if(pLayout && (pLayout->IsPage() || pLayout->IsHeader() || pLayout->IsFooter()))
-    //if(pLayout && pLayout->IsPage())
+    rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
+    if (xLayout.is() && (xLayout->IsPage() || xLayout->IsHeader() || xLayout->IsFooter()))
     {
         return true;
     }
@@ -2108,8 +2107,8 @@ bool LwpPlacableLayout::IsAnchorFrame()
     if(IsRelativeAnchored())
         return false;
 
-    LwpVirtualLayout* pLayout = GetParentLayout();
-    if(pLayout && (pLayout->IsFrame()||pLayout->IsGroupHead()))
+    rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
+    if (xLayout.is() && (xLayout->IsFrame() || xLayout->IsGroupHead()))
     {
         return true;
     }
@@ -2124,8 +2123,8 @@ bool LwpPlacableLayout::IsAnchorCell()
     if(IsRelativeAnchored())
         return false;
 
-    LwpVirtualLayout* pLayout = GetParentLayout();
-    if(pLayout && pLayout->IsCell())
+    rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
+    if (xLayout.is() && xLayout->IsCell())
     {
         return true;
     }

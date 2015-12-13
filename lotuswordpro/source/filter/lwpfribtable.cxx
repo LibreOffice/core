@@ -102,11 +102,11 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
     if (!pSuper)
         return;
     sal_uInt8 nType = pSuper->GetRelativeType();
-    LwpVirtualLayout* pContainer = pSuper->GetContainerLayout();
-    if (!pContainer)
+    rtl::Reference<LwpVirtualLayout> xContainer(pSuper->GetContainerLayout());
+    if (!xContainer.is())
         return;
     if ( LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType
-        && !pContainer->IsCell())
+        && !xContainer->IsCell())
     {
         pXFContentContainer = m_pPara->GetXFContainer();
         //delete the additional blank para
@@ -122,11 +122,11 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
     else if( LwpLayoutRelativityGuts::LAY_PARA_RELATIVE == nType)
     {
         //same page as text and in frame
-        if(pContainer->IsFrame())
+        if (xContainer->IsFrame())
         {
             pXFContentContainer = m_pPara->GetXFContainer();
         }
-        else if(pContainer->IsCell())
+        else if (xContainer->IsCell())
         {
             //same page as text and in cell, get the first xfpara
             rtl::Reference<XFContent> first(

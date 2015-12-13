@@ -187,35 +187,35 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
  void LwpFrame::XFConvert(XFContentContainer* pCont)
  {
     // parse the frame which anchor to page
-    LwpVirtualLayout* pParent = m_pLayout->GetParentLayout();
-    if (!pParent)
+    rtl::Reference<LwpVirtualLayout> xParent = m_pLayout->GetParentLayout();
+    if (!xParent.is())
         throw std::runtime_error("missing Parent Layout");
-    if (pParent->IsPage() && pParent->GetParentLayout() && pParent->GetParentLayout()->IsPage())
+    if (xParent->IsPage() && xParent->GetParentLayout().is() && xParent->GetParentLayout()->IsPage())
     {
         //for mirror page, problems exist if the parent layout is header or footer layout,
-        pParent = pParent->GetParentLayout();
+        xParent = xParent->GetParentLayout();
     }
-    if(m_pLayout->IsAnchorPage()&& pParent->IsPage())
+    if(m_pLayout->IsAnchorPage()&& xParent->IsPage())
     {
         //get parent layout
         if(m_pLayout->IsUseOnPage())
         {
-            sal_Int32 nPageNo = pParent->GetPageNumber(m_pLayout->GetUsePage());
+            sal_Int32 nPageNo = xParent->GetPageNumber(m_pLayout->GetUsePage());
             if(nPageNo>0)
                 m_pLayout->XFConvertFrame(pCont, nPageNo);
         }
         else if(m_pLayout->IsUseOnAllPages())
         {
-            sal_Int32 nFirst = pParent->GetPageNumber(FIRST_LAYOUTPAGENO);
-            sal_Int32 nLast = pParent->GetPageNumber(LAST_LAYOUTPAGENO);
+            sal_Int32 nFirst = xParent->GetPageNumber(FIRST_LAYOUTPAGENO);
+            sal_Int32 nLast = xParent->GetPageNumber(LAST_LAYOUTPAGENO);
             if(nLast > 0)
                 m_pLayout->XFConvertFrame(pCont, nFirst, nLast, true);
 
         }
         else if(m_pLayout->IsUseOnAllOddPages()||m_pLayout->IsUseOnAllEvenPages())
         {
-            sal_Int32 nFirst = pParent->GetPageNumber(FIRST_LAYOUTPAGENO);
-            sal_Int32 nLast = pParent->GetPageNumber(LAST_LAYOUTPAGENO);
+            sal_Int32 nFirst = xParent->GetPageNumber(FIRST_LAYOUTPAGENO);
+            sal_Int32 nLast = xParent->GetPageNumber(LAST_LAYOUTPAGENO);
             if(nLast > 0)
             {
                 sal_uInt16 first = static_cast<sal_uInt16>(nFirst);
@@ -254,7 +254,8 @@ void LwpFrame::ApplyWrapType(XFFrameStyle *pFrameStyle)
             //between the frame object and page margins
 
             eWrap = enumXFWrapBest;
-            LwpMiddleLayout* pParent = static_cast<LwpMiddleLayout*>(m_pLayout->GetContainerLayout());
+            rtl::Reference<LwpVirtualLayout> xContainer(m_pLayout->GetContainerLayout());
+            LwpMiddleLayout* pParent = dynamic_cast<LwpMiddleLayout*>(xContainer.get());
             if(pParent)
             {
                 if(IsLeftWider())
@@ -434,8 +435,8 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
             //set vertical position
             if(m_pLayout->IsAnchorPage())//in page
             {
-                LwpVirtualLayout* pContainer = m_pLayout->GetContainerLayout();
-                if(pContainer && (pContainer->IsHeader() || pContainer->IsFooter()))
+                rtl::Reference<LwpVirtualLayout> xContainer(m_pLayout->GetContainerLayout());
+                if (xContainer.is() && (xContainer->IsHeader() || xContainer->IsFooter()))
                 {
                     //Only anchor to para, the frame can display in header and footer of each page
                     eYPos = enumXFFrameYPosFromTop; //from top
@@ -465,15 +466,15 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
             eXPos = enumXFFrameXPosFromLeft;
             eXRel = enumXFFrameXRelPage;
             //set vertical position
-            LwpVirtualLayout* pContainer = m_pLayout->GetContainerLayout();
-            if(pContainer && pContainer->IsPage())//in page
+            rtl::Reference<LwpVirtualLayout> xContainer(m_pLayout->GetContainerLayout());
+            if (xContainer.is() && xContainer->IsPage())//in page
             {
                 //eYPos = enumXFFrameYPosFromTop;
                 //eYRel = enumXFFrameYRelPage;
                 eYPos = enumXFFrameYPosBelow;
                 eYRel = enumXFFrameYRelChar;
             }
-            else if(pContainer && pContainer->IsFrame()) //in frame
+            else if (xContainer.is() && xContainer->IsFrame()) //in frame
             {
                 eYPos = enumXFFrameYPosFromTop;
                 eYRel = enumXFFrameYRelPage;
@@ -613,11 +614,11 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             //anchor to page, frame and cell
             if(m_pLayout->IsAnchorPage())//in page
             {
-                LwpVirtualLayout* pContainer = m_pLayout->GetContainerLayout();
-                if(pContainer && (pContainer->IsHeader() || pContainer->IsFooter()))
+                rtl::Reference<LwpVirtualLayout> xContainer(m_pLayout->GetContainerLayout());
+                if (xContainer.is() && (xContainer->IsHeader() || xContainer->IsFooter()))
                 {
                     eAnchor = enumXFAnchorPara;
-                    fYOffset -= pContainer->GetMarginsValue(MARGIN_TOP);
+                    fYOffset -= xContainer->GetMarginsValue(MARGIN_TOP);
                 }
                 else
                     eAnchor = enumXFAnchorPage;
@@ -630,8 +631,9 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             {
                 //eAnchor = enumXFAnchorChar;
                 eAnchor = enumXFAnchorPara;
-                LwpMiddleLayout* pContainer = static_cast<LwpMiddleLayout*>(m_pLayout->GetContainerLayout());
-                if(pContainer)
+                rtl::Reference<LwpVirtualLayout> xContainer(m_pLayout->GetContainerLayout());
+                LwpMiddleLayout* pContainer = dynamic_cast<LwpMiddleLayout*>(xContainer.get());
+                if (pContainer)
                 {
                     fYOffset -= pContainer->GetMarginsValue(MARGIN_TOP);
                 }
@@ -641,26 +643,26 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
         case LwpLayoutRelativityGuts::LAY_PARA_RELATIVE:    //same page as text
         {
             eAnchor = enumXFAnchorChar;
-            LwpVirtualLayout* pContainer = m_pLayout->GetContainerLayout();
-            if(pContainer && pContainer->IsPage())//in page
+            rtl::Reference<LwpVirtualLayout> xContainer(m_pLayout->GetContainerLayout());
+            if (xContainer.is() && xContainer->IsPage())//in page
             {
                 //eAnchor = enumXFAnchorPage;
                 eAnchor = enumXFAnchorChar;// to character
             }
-            else if(pContainer && pContainer->IsFrame()) //in frame
+            else if (xContainer.is() && xContainer->IsFrame()) //in frame
             {
                 eAnchor = enumXFAnchorFrame;
             }
-            else if(pContainer && pContainer->IsCell()) //in cell
+            else if (xContainer.is() && xContainer->IsCell()) //in cell
             {
                 //eAnchor = enumXFAnchorChar;
                 eAnchor = enumXFAnchorPara;
-                fYOffset -= pContainer->GetMarginsValue(MARGIN_TOP);
+                fYOffset -= xContainer->GetMarginsValue(MARGIN_TOP);
             }
-            else if(pContainer && (pContainer->IsHeader() || pContainer->IsFooter()))//in header or footer
+            else if (xContainer.is() && (xContainer->IsHeader() || xContainer->IsFooter()))//in header or footer
             {
                 eAnchor = enumXFAnchorPara;
-                fYOffset -= pContainer->GetMarginsValue(MARGIN_TOP);
+                fYOffset -= xContainer->GetMarginsValue(MARGIN_TOP);
             }
             break;
         }
@@ -712,9 +714,9 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
  */
 bool LwpFrame::IsLeftWider()
 {
-    //LwpMiddleLayout* pParent = static_cast<LwpMiddleLayout*>(m_pLayout->GetContainerLayout());
-    LwpVirtualLayout* pParent = static_cast<LwpVirtualLayout*>(m_pLayout->GetContainerLayout());
-    if(pParent)
+    rtl::Reference<LwpVirtualLayout> xLayout(m_pLayout->GetContainerLayout());
+    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*>(xLayout.get());
+    if (pParent)
     {
         LwpPoint aPoint = m_pLayout->GetOrigin();
         double fXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());
@@ -945,8 +947,9 @@ double LwpFrameLayout::GetWidth()
 double LwpFrameLayout::GetMaxWidth()
 {
     double fActualWidth = 0;
-    LwpMiddleLayout* pParent = static_cast<LwpMiddleLayout*>(GetContainerLayout());
-    if(pParent)
+    rtl::Reference<LwpVirtualLayout> xLayout(GetContainerLayout());
+    LwpMiddleLayout* pParent = dynamic_cast<LwpMiddleLayout*>(xLayout.get());
+    if (pParent)
     {
         LwpPoint aPoint = GetOrigin();
         double fXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());

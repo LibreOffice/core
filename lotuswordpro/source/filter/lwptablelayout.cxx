@@ -352,7 +352,7 @@ void LwpSuperTableLayout::ApplyAlignment(XFTableStyle * pTableStyle)
 void  LwpSuperTableLayout::XFConvert(XFContentContainer* pCont)
 {
     if ( LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == GetRelativeType()
-            && (!GetContainerLayout() || !GetContainerLayout()->IsCell()) )
+            && (!GetContainerLayout().is() || !GetContainerLayout()->IsCell()) )
     {
         LwpTableLayout * pTableLayout = GetTableLayout();
         if (pTableLayout)
@@ -720,7 +720,7 @@ void LwpTableLayout::RegisterStyle()
     // If the table is not "with paragraph above" placement, create an frame style
     // by supertable layout
     if ( LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType
-        && (!pSuper->GetContainerLayout() || !pSuper->GetContainerLayout()->IsCell()) )
+        && (!pSuper->GetContainerLayout().is() || !pSuper->GetContainerLayout()->IsCell()) )
     {
         //with para above
 //      pSuper->ApplyBackColor(pTableStyle);

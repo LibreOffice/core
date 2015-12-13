@@ -243,11 +243,12 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
     // add TOC content
     LwpSuperTableLayout::XFConvert(pToc);
 
-    if (!GetContainerLayout())
+    rtl::Reference<LwpVirtualLayout> xContainer(GetContainerLayout());
+    if (!xContainer.is())
         return;
 
     // if current TOC is located in a cell, we must add a frame between upper level container and TOC
-    if ( !GetContainerLayout()->IsCell() )
+    if (!xContainer->IsCell())
     {
         pCont->Add(pToc);
     }
