@@ -1222,14 +1222,17 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
 
                 if (bColorMod)
                 {
-                    rtl::Reference<XFFont> pFont = pOverStyle->GetFont();
-                    XFColor aColor = pFont->GetColor();
-                    if ( aColor == aNullColor )
+                    rtl::Reference<XFFont> xFont = pOverStyle->GetFont();
+                    if (xFont.is())
                     {
-                        rtl::Reference<XFFont> pNewFont = new XFFont;
-                        aColor = pNumStyle->GetColor();
-                        pNewFont->SetColor(aColor);
-                        pOverStyle->SetFont(pNewFont);
+                        XFColor aColor = xFont->GetColor();
+                        if ( aColor == aNullColor )
+                        {
+                            rtl::Reference<XFFont> pNewFont = new XFFont;
+                            aColor = pNumStyle->GetColor();
+                            pNewFont->SetColor(aColor);
+                            pOverStyle->SetFont(pNewFont);
+                        }
                     }
                 }
 
