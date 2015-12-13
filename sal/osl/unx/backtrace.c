@@ -112,12 +112,12 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
-                    fprintf( fp, "%s+0x%x", dli.dli_fname, offset );
+                    fprintf( fp, "%s+0x%" SAL_PRI_PTRDIFFT "x", dli.dli_fname, offset );
                 }
                 if ( dli.dli_sname && dli.dli_saddr )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_saddr;
-                    fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
+                    fprintf( fp, "(%s+0x%" SAL_PRI_PTRDIFFT "x)", dli.dli_sname, offset );
                 }
             }
             fprintf( fp, "[%p]\n", *pFramePtr );
