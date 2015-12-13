@@ -422,10 +422,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
 LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout)
 {
     if (!pTableLayout)
-    {
-        assert(false);
         return enumWholeBorder;
-    }
 
     // get left cell and judge if neighbour border is different
     XFBorders * pBorders = GetXFBorders();
@@ -664,7 +661,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
         {
             // judge whole table
             LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
-            LwpTableLayout * pTableLayout = pTable ? static_cast<LwpTableLayout *>(pTable->GetTableLayout()) : nullptr;
+            LwpTableLayout * pTableLayout = pTable ? dynamic_cast<LwpTableLayout *>(pTable->GetTableLayout()) : nullptr;
             LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : nullptr;
             if (pSuper && pSuper->IsProtected())
             {
