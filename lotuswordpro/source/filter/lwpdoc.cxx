@@ -284,18 +284,18 @@ void LwpDocument::RegisterLayoutStyles()
 void LwpDocument::RegisterStylesInPara()
 {
     //Register all automatic styles in para
-    LwpHeadContent* pContent = m_pFoundry
+    rtl::Reference<LwpHeadContent> xContent(m_pFoundry
         ? dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager().GetContentList().obj().get())
-        : nullptr;
-    if (pContent)
+        : nullptr);
+    if (xContent.is())
     {
-        LwpStory* pStory = dynamic_cast<LwpStory*>(pContent->GetChildHead().obj(VO_STORY).get());
-        while(pStory)
+        rtl::Reference<LwpStory> xStory(dynamic_cast<LwpStory*>(xContent->GetChildHead().obj(VO_STORY).get()));
+        while (xStory.is())
         {
             //Register the child para
-            pStory->SetFoundry(m_pFoundry);
-            pStory->DoRegisterStyle();
-            pStory = dynamic_cast<LwpStory*>(pStory->GetNext().obj(VO_STORY).get());
+            xStory->SetFoundry(m_pFoundry);
+            xStory->DoRegisterStyle();
+            xStory.set(dynamic_cast<LwpStory*>(xStory->GetNext().obj(VO_STORY).get()));
         }
     }
 }
