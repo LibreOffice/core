@@ -45,10 +45,8 @@ public class _XCheckBox extends MultiMethodTest {
     * Listener implementation which sets flags on appropriate method calls
     */
     protected static class TestItemListener implements com.sun.star.awt.XItemListener {
-        public boolean disposingCalled = false ;
 
         public void disposing(com.sun.star.lang.EventObject e) {
-            disposingCalled = true ;
         }
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent e) {}
