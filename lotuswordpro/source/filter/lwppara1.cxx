@@ -618,8 +618,10 @@ bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualLayou
 bool LwpPara::IsInCell()
 {
     LwpStory *pStory = GetStory();
-    LwpVirtualLayout* pLayout = pStory ? pStory->GetLayout(nullptr) : nullptr;
-    if(pLayout && pLayout->IsCell())
+    if (!pStory)
+        return false;
+    rtl::Reference<LwpVirtualLayout> xLayout(pStory->GetLayout(nullptr));
+    if (xLayout.is() && xLayout->IsCell())
         return true;
     return false;
 }

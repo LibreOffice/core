@@ -327,7 +327,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
     // we should adjust its style by current position
     if (pTable->GetDefaultCellStyle() == GetObjectID())
     {
-        aStyleName = GetCellStyleName(nRow, nCol, pTable->GetTableLayout());
+        aStyleName = GetCellStyleName(nRow, nCol, pTable->GetTableLayout().get());
     }
 
     // content of cell
@@ -661,8 +661,8 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
         {
             // judge whole table
             LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
-            LwpTableLayout * pTableLayout = pTable ? dynamic_cast<LwpTableLayout *>(pTable->GetTableLayout()) : nullptr;
-            LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : nullptr;
+            rtl::Reference<LwpTableLayout> xTableLayout(pTable ? pTable->GetTableLayout() : nullptr);
+            LwpSuperTableLayout * pSuper = xTableLayout.is() ? xTableLayout->GetSuperTableLayout() : nullptr;
             if (pSuper && pSuper->GetIsProtected())
             {
                 bProtected = true;

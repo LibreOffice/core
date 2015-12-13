@@ -254,7 +254,7 @@ public:
     LwpAssociatedLayouts(){}
     void Read(LwpObjectStream* pStrm);
     LwpObjectID& GetOnlyLayout() { return m_OnlyLayout;}
-    LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
+    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout* pStartLayout);
 protected:
     LwpObjectID m_OnlyLayout; //LwpVirtualLayout
     LwpDLVListHeadTail m_Layouts;

@@ -419,42 +419,40 @@ void LwpAssociatedLayouts::Read(LwpObjectStream* pStrm)
 * @descr:   Looking for the layout which follows the pStartLayout
 * @param:   pStartLayout - the layout which is used for looking for its following layout
 */
-LwpVirtualLayout* LwpAssociatedLayouts::GetLayout(LwpVirtualLayout *pStartLayout)
+rtl::Reference<LwpVirtualLayout> LwpAssociatedLayouts::GetLayout(LwpVirtualLayout *pStartLayout)
 {
     if (!pStartLayout && !m_OnlyLayout.IsNull())
         /* Looking for the first layout and there's only one layout in  the list.*/
-        return dynamic_cast<LwpVirtualLayout*>(m_OnlyLayout.obj().get());
+        return rtl::Reference<LwpVirtualLayout>(dynamic_cast<LwpVirtualLayout*>(m_OnlyLayout.obj().get()));
 
-    LwpObjectHolder* pObjHolder = dynamic_cast<LwpObjectHolder*>(m_Layouts.GetHead().obj().get());
-    if(pObjHolder)
+    rtl::Reference<LwpObjectHolder> xObjHolder(dynamic_cast<LwpObjectHolder*>(m_Layouts.GetHead().obj().get()));
+    if (xObjHolder.is())
     {
-        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject().obj().get());
-        if(!pStartLayout )
-            return pLayout;
+        rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(xObjHolder->GetObject().obj().get()));
+        if (!pStartLayout)
+            return xLayout;
 
-        while(pObjHolder && pStartLayout != pLayout)
+        while (xObjHolder.is() && pStartLayout != xLayout.get())
         {
-            pObjHolder = dynamic_cast<LwpObjectHolder*>(pObjHolder->GetNext().obj().get());
-            if(pObjHolder)
+            xObjHolder.set(dynamic_cast<LwpObjectHolder*>(xObjHolder->GetNext().obj().get()));
+            if (xObjHolder.is())
             {
-                pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject().obj().get());
+                xLayout.set(dynamic_cast<LwpVirtualLayout*>(xObjHolder->GetObject().obj().get()));
             }
         }
 
-        if(pObjHolder)
+        if (xObjHolder.is())
         {
-            pObjHolder = dynamic_cast<LwpObjectHolder*>(pObjHolder->GetNext().obj().get());
-            if(pObjHolder)
+            xObjHolder.set(dynamic_cast<LwpObjectHolder*>(xObjHolder->GetNext().obj().get()));
+            if (xObjHolder.is())
             {
-                pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject().obj().get());
-                return pLayout;
+                xLayout.set(dynamic_cast<LwpVirtualLayout*>(xObjHolder->GetObject().obj().get()));
+                return xLayout;
             }
         }
-
-        //return pLayout;
     }
 
-    return nullptr;
+    return rtl::Reference<LwpVirtualLayout>();
 }
 
 LwpHeadLayout::LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
@@ -473,27 +471,27 @@ void LwpHeadLayout::Read()
 void LwpHeadLayout::RegisterStyle()
 {
     //Register all children styles
-    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-    while(pLayout)
+    rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    while (xLayout.is())
     {
-        pLayout->SetFoundry(m_pFoundry);
+        xLayout->SetFoundry(m_pFoundry);
         //if the layout is relative to para, the layout will be registered in para
-        if(!pLayout->IsRelativeAnchored())
+        if (!xLayout->IsRelativeAnchored())
         {
-            if (pLayout == this)
+            if (xLayout.get() == this)
             {
                 OSL_FAIL("Layout points to itself");
                 break;
             }
-            pLayout->DoRegisterStyle();
+            xLayout->DoRegisterStyle();
         }
-        LwpVirtualLayout *pNext = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
-        if (pNext == pLayout)
+        rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
+        if (xNext.get() == xLayout.get())
         {
             OSL_FAIL("Layout points to itself");
             break;
         }
-        pLayout = pNext;
+        xLayout = xNext;
     }
 }
 
