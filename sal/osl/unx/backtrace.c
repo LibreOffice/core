@@ -124,7 +124,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                     fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
                 }
             }
-            fprintf( fp, "[0x%x]\n", *pFramePtr );
+            fprintf( fp, "[%p]\n", *pFramePtr );
         }
 
         fflush( fp );
@@ -192,7 +192,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                     fprintf( fp, "(%s+0x%" SAL_PRI_PTRDIFFT "x)", dli.dli_sname, offset );
                 }
             }
-            fprintf( fp, "[0x%p]\n", *pFramePtr );
+            fprintf( fp, "[%p]\n", *pFramePtr );
         }
         fflush( fp );
         fclose( fp );
@@ -278,7 +278,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                     fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
                 }
             }
-            fprintf( fp, "[0x%x]\n", *pFramePtr );
+            fprintf( fp, "[%p]\n", *pFramePtr );
         }
 
         fflush( fp );
@@ -344,7 +344,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                     fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
                 }
             }
-            fprintf( fp, "[0x%x]\n", (unsigned int)*pFramePtr );
+            fprintf( fp, "[%p]\n", *pFramePtr );
         }
 
         fflush( fp );
