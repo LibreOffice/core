@@ -127,11 +127,10 @@ OUString LwpPropList::EnumNamedProperty(OUString& name,OUString& value)
             value = pElement->GetValue().str();
             name  = pElement->GetName().str();
             pElement = pElement->GetNext();
-            return  pElement->GetName().str();
+            if(pElement)
+                return  pElement->GetName().str();
         }
-        else
-            return OUString("");
-
+        return OUString("");
     }
     else
     {
