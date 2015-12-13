@@ -74,6 +74,8 @@
 LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
     , m_bGettingHonorProtection(false)
+    , m_bGettingHasProtection(false)
+    , m_bGettingIsProtected(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -1267,7 +1269,7 @@ bool LwpMiddleLayout::IsProtected()
     }
     else if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> (GetBasedOnStyle().get()))
     {
-        bProtected = pLay->IsProtected();
+        bProtected = pLay->GetIsProtected();
     }
     else
         bProtected = LwpVirtualLayout::IsProtected();
@@ -1276,7 +1278,7 @@ bool LwpMiddleLayout::IsProtected()
     if(pParent && !pParent->IsHeader())
     {
         /* If a parent's protected then none of its children can be accessed. */
-        if(pParent->IsProtected())
+        if(pParent->GetIsProtected())
             return true;
 
         if(pParent->GetHonorProtection())
