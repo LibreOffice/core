@@ -415,7 +415,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
 
 void SAL_CALL OPreparedStatement::setByte( const sal_Int32 parameterIndex, const sal_Int8 x ) throw(SQLException, RuntimeException, std::exception)
 {
-    setScalarParameter(parameterIndex, DataType::TINYINT, 3, x);
+    setScalarParameter(parameterIndex, DataType::TINYINT, 3, 0, x);
 }
 
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException, std::exception)
@@ -501,7 +501,7 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
 
 void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException, std::exception)
 {
-    setScalarParameter(parameterIndex, DataType::INTEGER, 10, x);
+    setScalarParameter(parameterIndex, DataType::INTEGER, 10, 0, x);
 }
 
 
@@ -509,7 +509,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x
 {
     try
     {
-        setScalarParameter(parameterIndex, DataType::BIGINT, 19, x);
+        setScalarParameter(parameterIndex, DataType::BIGINT, 19, 0, x);
     }
     catch(SQLException&)
     {
@@ -635,7 +635,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
 
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException, std::exception)
 {
-    setScalarParameter(parameterIndex, DataType::SMALLINT, 5, x);
+    setScalarParameter(parameterIndex, DataType::SMALLINT, 5, 0, x);
 }
 
 
