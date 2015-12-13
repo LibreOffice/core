@@ -509,15 +509,30 @@ sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUStrin
 
 template<enum SfxStyleFamily eFamily>
 static uno::Reference< css::style::XStyle> lcl_CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
-    { return new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName); };
+    { return pBasePool ? new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), eFamily, false); };
 
 template<>
+uno::Reference< css::style::XStyle> lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
+    { return pBasePool ? new SwXStyle(*pBasePool, SFX_STYLE_FAMILY_PARA, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), SFX_STYLE_FAMILY_PARA, false); };
+template<>
 uno::Reference< css::style::XStyle> lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
-    { return new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), sStyleName); };
+    { return pBasePool ? new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), sStyleName) : new SwXFrameStyle(pDocShell->GetDoc()); };
 
 template<>
 uno::Reference< css::style::XStyle> lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
-    { return new SwXPageStyle(*pBasePool, pDocShell, SFX_STYLE_FAMILY_PAGE, sStyleName); };
+    { return pBasePool ? new SwXPageStyle(*pBasePool, pDocShell, SFX_STYLE_FAMILY_PAGE, sStyleName) : new SwXPageStyle(pDocShell); };
+
+uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc)
+{
+    auto pEntries(lcl_GetStyleFamilyEntries());
+    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
+            [eFamily] (const StyleFamilyEntry& e) { return e.m_eFamily == eFamily; });
+    return pEntry == pEntries->end() ? nullptr : pEntry->m_fCreateStyle(nullptr, rDoc.GetDocShell(), "");
+}
+
+// FIXME: Ugly special casing that should die.
+uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyleCondParagraph(SwDoc& rDoc)
+    { return new SwXStyle(&rDoc, SFX_STYLE_FAMILY_PARA, true); };
 
 template<enum SfxStyleFamily>
 static sal_uInt16 lcl_TranslateIndex(const sal_uInt16 nIndex);
@@ -965,7 +980,8 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
     m_bIsConditional(false),
     m_pPropertiesImpl(nullptr)
 {
-    StartListening(rPool);
+    if(!m_pBasePool)
+        return;
     if(eFam == SFX_STYLE_FAMILY_PARA)
     {
         m_pBasePool->SetSearchMask(m_eFamily);
