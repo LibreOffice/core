@@ -896,7 +896,7 @@ LwpTabOverride* LwpMiddleLayout::GetTabOverride()
 */
 sal_uInt16 LwpMiddleLayout::GetScaleMode()
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
         return GetLayoutScale()->GetScaleMode();
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
@@ -907,7 +907,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleMode()
 
 sal_uInt16 LwpMiddleLayout::GetScaleTile()
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
         return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::TILED)
             ? 1 : 0;
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
@@ -919,9 +919,11 @@ sal_uInt16 LwpMiddleLayout::GetScaleTile()
 
 sal_uInt16 LwpMiddleLayout::GetScaleCenter()
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
+    {
         return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED)
             ? 1 : 0;
+    }
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
         return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleCenter();
@@ -931,7 +933,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleCenter()
 
 sal_uInt32 LwpMiddleLayout::GetScalePercentage()
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
         return GetLayoutScale()->GetScalePercentage()/10;//m_nScalePercentage 1000 = 100%
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
@@ -942,7 +944,7 @@ sal_uInt32 LwpMiddleLayout::GetScalePercentage()
 
 double LwpMiddleLayout::GetScaleWidth()
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
         return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleWidth());
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
@@ -953,7 +955,7 @@ double LwpMiddleLayout::GetScaleWidth()
 
 double LwpMiddleLayout::GetScaleHeight()
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
         return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleHeight());
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
