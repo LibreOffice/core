@@ -290,6 +290,12 @@ void OPreparedStatement::setParameterPre(sal_Int32 parameterIndex)
 
 template <typename T> void OPreparedStatement::setScalarParameter(const sal_Int32 parameterIndex, const sal_Int32 i_nType, const SQLULEN i_nColSize, const T i_Value)
 {
+    setScalarParameter(parameterIndex, i_nType, i_nColSize, invalid_scale, i_Value);
+}
+
+
+template <typename T> void OPreparedStatement::setScalarParameter(const sal_Int32 parameterIndex, const sal_Int32 i_nType, const SQLULEN i_nColSize, sal_Int32 i_nScale, const T i_Value)
+{
     ::osl::MutexGuard aGuard( m_aMutex );
     setParameterPre(parameterIndex);
 
@@ -298,7 +304,7 @@ template <typename T> void OPreparedStatement::setScalarParameter(const sal_Int3
     TnoRef *bindBuf = static_cast< TnoRef* >( allocBindBuf(parameterIndex, sizeof(i_Value)) );
     *bindBuf = i_Value;
 
-    setParameter(parameterIndex, i_nType, i_nColSize, invalid_scale, bindBuf, sizeof(i_Value), sizeof(i_Value));
+    setParameter(parameterIndex, i_nType, i_nColSize, i_nScale, bindBuf, sizeof(i_Value), sizeof(i_Value));
 }
 
 
@@ -442,7 +448,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::
     else
         nColSize = 18;
     TIME_STRUCT x(OTools::TimeToOdbcTime(aVal));
-    setScalarParameter<TIME_STRUCT&>(parameterIndex, DataType::TIME, nColSize, x);
+    setScalarParameter<TIME_STRUCT&>(parameterIndex, DataType::TIME, nColSize, (nColSize == 8)? 0 : nColSize-9, x);
 }
 
 
@@ -476,7 +482,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
         nColSize = 29;
 
     TIMESTAMP_STRUCT x(OTools::DateTimeToTimestamp(aVal));
-    setScalarParameter<TIMESTAMP_STRUCT&>(parameterIndex, DataType::TIMESTAMP, nColSize, x);
+    setScalarParameter<TIMESTAMP_STRUCT&>(parameterIndex, DataType::TIMESTAMP, nColSize, (nColSize <= 19)? 0 : nColSize-20, x);
 }
 
 
