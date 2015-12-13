@@ -815,10 +815,7 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
     InitImageType();
 
     m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
-    if ( getenv("LO_USE_NEWCONTEXTMENU") )
-        m_nContextMenusPageId = AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
-    else
-        RemoveTabPage("contextmenus");
+    m_nContextMenusPageId = AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
     m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
     m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
     m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage, nullptr);
