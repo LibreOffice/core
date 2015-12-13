@@ -130,12 +130,12 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
 
 void LwpStory::RegisterStyle()
 {
-    LwpPara* pPara = dynamic_cast<LwpPara*>( GetFirstPara().obj().get() );
-    while(pPara)
+    rtl::Reference<LwpPara> xPara(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
+    while (xPara.is())
     {
-        pPara->SetFoundry(m_pFoundry);
-        pPara->DoRegisterStyle();
-        pPara = dynamic_cast<LwpPara*>(pPara->GetNext().obj().get());
+        xPara->SetFoundry(m_pFoundry);
+        xPara->DoRegisterStyle();
+        xPara.set(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
     }
 }
 
