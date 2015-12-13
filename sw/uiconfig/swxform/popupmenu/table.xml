@@ -23,6 +23,7 @@
   <menu:menuitem menu:id=".uno:IncrementLevel"/>
   <menu:menuitem menu:id=".uno:DecrementLevel"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:UnsetCellsReadOnly"/>
   <menu:menu menu:id=".uno:TableInsertMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
@@ -41,27 +42,13 @@
       <menu:menuitem menu:id=".uno:DeleteTable"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:TableSelectMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:EntireRow"/>
-      <menu:menuitem menu:id=".uno:EntireColumn"/>
-      <menu:menuitem menu:id=".uno:SelectTable"/>
-      <menu:menuitem menu:id=".uno:EntireCell"/>
-    </menu:menupopup>
-  </menu:menu>
   <menu:menuitem menu:id=".uno:MergeCells"/>
-  <menu:menu menu:id=".uno:AlignTextMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:CellVertTop"/>
-      <menu:menuitem menu:id=".uno:CellVertCenter"/>
-      <menu:menuitem menu:id=".uno:CellVertBottom"/>
-    </menu:menupopup>
-  </menu:menu>
   <menu:menu menu:id=".uno:TableAutoFitMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SetColumnWidth"/>
       <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:DistributeColumns"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetRowHeight"/>
       <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
       <menu:menuitem menu:id=".uno:DistributeRows"/>
@@ -70,24 +57,9 @@
   <menu:menuitem menu:id=".uno:TableNumberFormatDialog"/>
   <menu:menuitem menu:id=".uno:TableDialog"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ResetAttributes"/>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuitem menu:id=".uno:OutlineBullet"/>
-  <menu:menu menu:id=".uno:TransliterateMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
-      <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
-      <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
-      <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
-      <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
-      <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
-      <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
-      <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
-      <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
-    </menu:menupopup>
-  </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FieldDialog"/>
   <menu:menuitem menu:id=".uno:EditFootnote"/>
