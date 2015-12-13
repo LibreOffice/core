@@ -199,7 +199,7 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
     LwpEnSuperTableLayout* pEnSuperLayout = FindFootnoteTableLayout();
     if(pEnSuperLayout)
     {
-        LwpTableLayout* pTableLayout = static_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
+        LwpTableLayout* pTableLayout = dynamic_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
         if(pTableLayout)
         {
             LwpRowLayout* pRowLayout = pTableLayout->GetRowLayout(m_nRow);

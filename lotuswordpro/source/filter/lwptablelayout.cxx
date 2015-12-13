@@ -448,6 +448,7 @@ LwpCellLayout * LwpTableLayout::GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol
 
     return m_WordProCellsMap[static_cast<size_t>(nRow)*m_nCols + nCol];
 }
+
 /**
  * @short   traverse all table cells
  * @param
