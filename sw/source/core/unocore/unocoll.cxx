@@ -673,12 +673,15 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         case SW_SERVICE_STYLE_PAGE_STYLE:
         case SW_SERVICE_STYLE_NUMBERING_STYLE:
         {
-            SfxStyleFamily  eFamily = SFX_STYLE_FAMILY_CHAR;
+            SfxStyleFamily eFamily = SFX_STYLE_FAMILY_CHAR;
             switch(nObjectType)
             {
                 case SW_SERVICE_STYLE_PARAGRAPH_STYLE:
+                    eFamily = SFX_STYLE_FAMILY_PARA;
+                break;
                 case SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE:
                     eFamily = SFX_STYLE_FAMILY_PARA;
+                    xRet = SwXStyleFamilies::CreateStyleCondParagraph(rDoc);
                 break;
                 case SW_SERVICE_STYLE_FRAME_STYLE:
                     eFamily = SFX_STYLE_FAMILY_FRAME;
@@ -690,12 +693,8 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
                     eFamily = SFX_STYLE_FAMILY_PSEUDO;
                 break;
             }
-            SwXStyle* pNewStyle = (SFX_STYLE_FAMILY_PAGE == eFamily)
-                ? new SwXPageStyle(rDoc.GetDocShell())
-                : (eFamily == SFX_STYLE_FAMILY_FRAME)
-                    ? new SwXFrameStyle(&rDoc)
-                    : new SwXStyle(&rDoc, eFamily, nObjectType == SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE);
-            xRet = static_cast<cppu::OWeakObject*>(pNewStyle);
+            if(!xRet.is())
+                xRet = SwXStyleFamilies::CreateStyle(eFamily, rDoc);
         }
         break;
         case SW_SERVICE_FIELDTYPE_DATETIME:
