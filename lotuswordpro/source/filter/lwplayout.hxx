@@ -162,8 +162,8 @@ public:
     bool IsMinimumHeight();
     virtual bool IsForWaterMark(){ return false;}
     virtual LwpPara* GetLastParaOfPreviousStory() { return nullptr; }
-    LwpVirtualLayout* GetParentLayout();
-    virtual LwpVirtualLayout* GetContainerLayout(){ return nullptr;}
+    rtl::Reference<LwpVirtualLayout> GetParentLayout();
+    virtual rtl::Reference<LwpVirtualLayout> GetContainerLayout() { return rtl::Reference<LwpVirtualLayout>(); }
     void RegisterChildStyle();
     bool NoContentReference();
     bool IsStyleLayout();
@@ -418,7 +418,7 @@ public:
     virtual bool IsUseOnAllOddPages() override;
     virtual bool IsUseOnPage() override;
     LwpObjectID& GetPosition(){ return m_Positon;}
-    virtual LwpVirtualLayout* GetContainerLayout() override;
+    virtual rtl::Reference<LwpVirtualLayout> GetContainerLayout() override;
 };
 
 class LwpPlacableLayout : public LwpLayout
