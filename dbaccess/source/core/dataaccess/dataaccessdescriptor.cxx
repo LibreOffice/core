@@ -42,7 +42,6 @@ namespace
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::Property;
@@ -68,7 +67,7 @@ namespace
                                 ,public ::comphelper::OPropertyArrayUsageHelper< DataAccessDescriptor >
     {
     public:
-        explicit DataAccessDescriptor( const Reference<XComponentContext> & _rContext );
+        DataAccessDescriptor();
 
         // UNO
         DECLARE_XINTERFACE()
@@ -91,8 +90,6 @@ namespace
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
     private:
-        Reference<XComponentContext> m_xContext;
-
         // </properties>
         OUString             m_sDataSourceName;
         OUString             m_sDatabaseLocation;
@@ -117,11 +114,10 @@ namespace
 #define REGISTER_PROPERTY( propname, member ) \
     registerProperty( PROPERTY_##propname, PROPERTY_ID_##propname, PropertyAttribute::BOUND, &member, cppu::UnoType<decltype(member)>::get() )
 
-    DataAccessDescriptor::DataAccessDescriptor( const Reference<XComponentContext> & _rContext )
+    DataAccessDescriptor::DataAccessDescriptor()
         :DataAccessDescriptor_MutexBase()
         ,DataAccessDescriptor_TypeBase()
         ,DataAccessDescriptor_PropertyBase( m_aBHelper )
-        ,m_xContext( _rContext )
         ,m_sDataSourceName()
         ,m_sDatabaseLocation()
         ,m_sConnectionResource()
@@ -213,15 +209,11 @@ namespace
         // XDataAccessDescriptorFactory
         virtual Reference< XPropertySet > SAL_CALL createDataAccessDescriptor(  ) throw (RuntimeException, std::exception) override;
 
-        explicit DataAccessDescriptorFactory( const Reference< XComponentContext >& _rxContext );
+        DataAccessDescriptorFactory();
         virtual ~DataAccessDescriptorFactory();
-
-    private:
-        Reference<XComponentContext>  m_xContext;
     };
 
-    DataAccessDescriptorFactory::DataAccessDescriptorFactory( const Reference< XComponentContext >& _rxContext )
-        :m_xContext( _rxContext )
+    DataAccessDescriptorFactory::DataAccessDescriptorFactory()
     {
     }
 
@@ -247,31 +239,29 @@ namespace
 
     Reference< XPropertySet > SAL_CALL DataAccessDescriptorFactory::createDataAccessDescriptor(  ) throw (RuntimeException, std::exception)
     {
-        return new DataAccessDescriptor( m_xContext );
+        return new DataAccessDescriptor();
     }
 
 struct Instance {
-    explicit Instance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(new DataAccessDescriptorFactory(context))
+    explicit Instance():
+        instance(new DataAccessDescriptorFactory())
     {}
 
     css::uno::Reference<cppu::OWeakObject> instance;
 };
 
 struct Singleton:
-    public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+    public rtl::Static<Instance, Singleton>
 {};
 
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_dba_DataAccessDescriptorFactory(
-    css::uno::XComponentContext *context,
+    css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(Singleton::get(context).instance.get());
+    return cppu::acquire(Singleton::get().instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
