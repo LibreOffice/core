@@ -656,18 +656,24 @@ struct AnnotatingVisitor
             {
                 if( rState.meFillType == GRADIENT )
                 {
-                    xAttrs->AddAttribute( "draw:fill", "gradient");
-                    xAttrs->AddAttribute( "draw:fill-gradient-name",
-                                          getStyleName("svggradient", rState.maFillGradient.mnId) );
-                    if( hasGradientOpacity(rState.maFillGradient) )
+                    // don't fill the gradient if there's no stop element present
+                    if( rState.maFillGradient.maStops.size() == 0 )
+                        xAttrs->AddAttribute( "draw:fill", "none" );
+                    else
                     {
-                        // needs transparency gradient as well
-                        xAttrs->AddAttribute( "draw:opacity-name",
-                                              getStyleName("svgopacity", rState.maFillGradient.mnId) );
+                        xAttrs->AddAttribute( "draw:fill", "gradient");
+                        xAttrs->AddAttribute( "draw:fill-gradient-name",
+                                              getStyleName("svggradient", rState.maFillGradient.mnId) );
+                        if( hasGradientOpacity(rState.maFillGradient) )
+                        {
+                            // needs transparency gradient as well
+                            xAttrs->AddAttribute( "draw:opacity-name",
+                                                  getStyleName("svgopacity", rState.maFillGradient.mnId) );
+                        }
+                        else if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
+                            xAttrs->AddAttribute( "draw:opacity",
+                                                  OUString::number(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
                     }
-                    else if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
-                        xAttrs->AddAttribute( "draw:opacity",
-                                              OUString::number(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
                 }
                 else
                 {
