@@ -31,21 +31,13 @@ import com.sun.star.lang.WrappedTargetException;
 * <ul>
 *  <li><code> hasMoreElements()</code></li>
 *  <li><code> nextElement()</code></li>
-* </ul> <p>
-* This test needs the following object relations :
-* <ul>
-*  <li> <code>'ENUM'</code> (of type <code>XEnumerationAccess</code>):
-*   This test creates its own oObj because the method nextElement()
-*   will be modified this Object directly so other threads may be failed.
-*  </li>
-* <ul> <p>
+* </ul>
 * Test is multithread compliant. <p>
 * @see com.sun.star.container.XEnumeration
 */
 public class _XEnumeration extends MultiMethodTest {
 
     public XEnumeration oObj = null;
-    public XEnumerationAccess Enum = null;
 
     /**
     * Retrieves relation and sets oObj to a separate enumeration
