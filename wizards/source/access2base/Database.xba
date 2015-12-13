@@ -625,19 +625,12 @@ Const cstThisSub = &quot;Database.OutputTo&quot;
 	If IsMissing(pvQuality) Then pvQuality = acExportQualityPrint
 	If Not Utils._CheckArgument(pvQuality, 7, _AddNumeric(), Array(acExportQualityPrint, acExportQualityScreen)) Then Goto Exit_Function
 
-Dim sOutputFile As String, bFound As Boolean, i As Integer, iCount As Integer, oTable As Object
+Dim sOutputFile As String, oTable As Object
 Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutput As Boolean, sSuffix As String
+
 	&apos;Find applicable table or query
-	bFound = False
-	If pvObjectType = acOutputTable Then iCount = TableDefs.Count Else iCount = Querydefs.Count
-	For i = 0 To iCount
-		If pvObjectType = acOutputTable Then Set oTable = TableDefs(i) Else Set oTable = Querydefs(i)
-		If UCase(oTable._Name) = UCase(pvObjectName) Then
-			bFound = True
-			Exit For
-		End If
-	Next i
-	If Not bFound Then Goto Error_NotFound
+	If pvObjectType = acOutputTable Then Set oTable = TableDefs(pvObjectName, True) Else Set oTable = Querydefs(pvObjectName, True)
+	If IsNull(oTable) Then Goto Error_NotFound
 	
 	&apos;Determine format and parameters
 	If pvOutputFormat = &quot;&quot; Then
