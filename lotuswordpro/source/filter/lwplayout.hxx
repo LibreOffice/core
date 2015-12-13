@@ -266,7 +266,7 @@ public:
     LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpHeadLayout(){}
     void RegisterStyle() override;
-    LwpVirtualLayout* FindEnSuperTableLayout();
+    rtl::Reference<LwpVirtualLayout> FindEnSuperTableLayout();
 protected:
     void Read() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_HEAD_LAYOUT;}

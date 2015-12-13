@@ -159,7 +159,7 @@ public:
 
     LwpDocument* GetLastDivision();
     LwpDocument* GetFirstDivision();
-    LwpVirtualLayout* GetEnSuperTableLayout();
+    rtl::Reference<LwpVirtualLayout> GetEnSuperTableLayout();
     bool GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount);
 
     sal_uInt16 GetNumberOfPagesBefore();
