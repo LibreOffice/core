@@ -1812,9 +1812,6 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 {
     switch(nType)
     {
-        case CTRL_TOOLTIP:
-            return false;   //shaped, punt that problem for now
-
         case CTRL_PUSHBUTTON:
         case CTRL_RADIOBUTTON:
         case CTRL_CHECKBOX:

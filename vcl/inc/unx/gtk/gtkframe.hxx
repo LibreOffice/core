@@ -199,6 +199,8 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     Rectangle                       m_aRestorePosSize;
 
 #if GTK_CHECK_VERSION(3,0,0)
+    OUString                        m_aTooltip;
+    Rectangle                       m_aHelpArea;
     guint32                         m_nLastScrollEventTime;
     long                            m_nWidthRequest;
     long                            m_nHeightRequest;
@@ -231,6 +233,9 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
 #if GTK_CHECK_VERSION(3,0,0)
     static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
     static void         sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer frame);
+    static gboolean     signalTooltipQuery(GtkWidget*, gint x, gint y,
+                                     gboolean keyboard_mode, GtkTooltip *tooltip,
+                                     gpointer frame);
 #if GTK_CHECK_VERSION(3,14,0)
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
     static void         gestureLongPress(GtkGestureLongPress* gesture, gpointer frame);
@@ -449,6 +454,7 @@ public:
 
 #if GTK_CHECK_VERSION(3,0,0)
     virtual void                SetModal(bool bModal) override;
+    virtual bool                ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpArea) override;
 #endif
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );

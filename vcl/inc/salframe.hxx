@@ -243,6 +243,13 @@ public:
     {
     }
 
+    // return true to indicate tooltips are shown natively, false otherwise
+    virtual bool            ShowTooltip(const OUString& /*rHelpText*/, const Rectangle& /*rHelpArea*/ )
+    {
+        return false;
+    }
+
+
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
     void                    SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc );
