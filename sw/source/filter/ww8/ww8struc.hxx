@@ -32,6 +32,8 @@
 #   pragma pack(push, 2)
 #endif
 
+class WW8Export;
+
 inline void Set_UInt8( sal_uInt8 *& p, sal_uInt8 n )
 {
     *p = n;
@@ -1094,6 +1096,7 @@ class MSOFactoidType
 public:
     MSOFactoidType();
     void Read(SvStream& rStream);
+    void Write(WW8Export& rExport);
 
     sal_uInt32 m_nId;
     OUString m_aUri;
@@ -1105,6 +1108,7 @@ class MSOPropertyBagStore
 {
 public:
     void Read(SvStream& rStream);
+    void Write(WW8Export& rExport);
 
     std::vector<MSOFactoidType> m_aFactoidTypes;
     std::vector<OUString> m_aStringTable;
@@ -1140,6 +1144,7 @@ class WW8SmartTagData
 {
 public:
     void Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 lcbFactoidData);
+    void Write(WW8Export& rExport);
 
     MSOPropertyBagStore m_aPropBagStore;
     std::vector<MSOPropertyBag> m_aPropBags;
