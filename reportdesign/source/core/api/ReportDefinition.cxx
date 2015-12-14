@@ -2512,6 +2512,11 @@ bool OReportDefinition::isEnableSetModified() const
     return true;
 }
 
+OUString OReportDefinition::getDocumentBaseURL() const
+{
+    return const_cast<OReportDefinition*>(this)->getURL();
+}
+
 uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
 {
     SolarMutexGuard aSolarGuard;

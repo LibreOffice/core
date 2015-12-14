@@ -392,6 +392,7 @@ namespace reportdesign
         virtual ::comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const override;
         virtual css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() const override;
         virtual bool isEnableSetModified() const override;
+        virtual OUString getDocumentBaseURL() const override;
 
         css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2(  ) throw (css::uno::RuntimeException);
       };

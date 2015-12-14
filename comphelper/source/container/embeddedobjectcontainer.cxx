@@ -280,7 +280,9 @@ OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const css::uno::Referen
     return OUString();
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedObject( const OUString& rName )
+uno::Reference< embed::XEmbeddedObject>
+EmbeddedObjectContainer::GetEmbeddedObject(
+        const OUString& rName, OUString const*const pBaseURL)
 {
     SAL_WARN_IF( rName.isEmpty(), "comphelper.container", "Empty object name!");
 
@@ -303,12 +305,15 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
     if ( aIt != pImpl->maObjectContainer.end() )
         xObj = (*aIt).second;
     else
-        xObj = Get_Impl( rName, uno::Reference < embed::XEmbeddedObject >() );
+        xObj = Get_Impl(rName, uno::Reference<embed::XEmbeddedObject>(), pBaseURL);
 
     return xObj;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( const OUString& rName, const uno::Reference < embed::XEmbeddedObject >& xCopy )
+uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
+        const OUString& rName,
+        const uno::Reference<embed::XEmbeddedObject>& xCopy,
+        rtl::OUString const*const pBaseURL)
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
     try
@@ -328,13 +333,20 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
         // object was not added until now - should happen only by calling this method from "inside"
         //TODO/LATER: it would be good to detect an error when an object should be created already, but isn't (not an "inside" call)
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
-        uno::Sequence< beans::PropertyValue > aObjDescr( xCopy.is() ? 2 : 1 );
+        uno::Sequence< beans::PropertyValue > aObjDescr(1 + (xCopy.is() ? 1 : 0) + (pBaseURL ? 1 : 0));
         aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
+        sal_Int32 i = 1;
+        if (pBaseURL)
+        {
+            aObjDescr[i].Name = "DefaultParentBaseURL";
+            aObjDescr[i].Value <<= *pBaseURL;
+            ++i;
+        }
         if ( xCopy.is() )
         {
-            aObjDescr[1].Name = "CloneFrom";
-            aObjDescr[1].Value <<= xCopy;
+            aObjDescr[i].Name = "CloneFrom";
+            aObjDescr[i].Value <<= xCopy;
         }
 
         uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );

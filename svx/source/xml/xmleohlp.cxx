@@ -445,7 +445,8 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     //             server that was used to create the object. pClassId could be used to specify the server that should
     //             be used for the next opening, but this information seems to be out of the file format responsibility
     //             area.
-    rContainer.GetEmbeddedObject( aName );
+    OUString const baseURL(mpDocPersist->getDocumentBaseURL());
+    rContainer.GetEmbeddedObject(aName, &baseURL);
 
     return true;
 }
