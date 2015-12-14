@@ -273,6 +273,14 @@ gboolean                        lok_doc_view_paste                 (LOKDocView* 
                                                                     gsize nSize);
 
 /**
+ * lok_doc_view_destroy_document:
+ * @pDocView: The #LOKDocView instance
+ *
+ * Destroys the opened document in the widget, and its tiles.
+ */
+void                            lok_doc_view_destroy_document       (LOKDocView* pDocView);
+
+/**
  * lok_doc_view_pixel_to_twip:
  * @pDocView: The #LOKDocView instance
  * @fInput: The value in pixels to convert to twips

@@ -86,6 +86,9 @@ Tile& TileBuffer::getTile(int x, int y, GTask* task,
     int index = x * m_nWidth + y;
     GError* error = nullptr;
 
+    if (!m_pLOKDocument || !m_nWidth)
+        return m_DummyTile;
+
     if (m_mTiles.find(index) != m_mTiles.end() && !m_mTiles[index].valid)
     {
         g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);

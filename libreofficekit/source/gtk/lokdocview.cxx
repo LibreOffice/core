@@ -2468,10 +2468,26 @@ lok_doc_view_get_document (LOKDocView* pDocView)
 }
 
 SAL_DLLPUBLIC_EXPORT void
+lok_doc_view_destroy_document (LOKDocView* pDocView)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (priv->m_pDocument)
+    {
+        priv->m_pTileBuffer = std::unique_ptr<TileBuffer>(new TileBuffer());
+        gtk_widget_set_size_request(GTK_WIDGET(pDocView), -1, -1);
+        priv->m_pDocument->pClass->destroy(priv->m_pDocument);
+        priv->m_pDocument = nullptr;
+    }
+}
+
+SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     GError* error = nullptr;
+
+    if (!priv->m_pDocument)
+        return;
 
     priv->m_fZoom = fZoom;
     long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, fZoom);
