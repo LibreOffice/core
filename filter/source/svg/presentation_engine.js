@@ -1218,7 +1218,7 @@ function MetaDocument()
     this.aMasterPageSet = new Object();
     this.aTextFieldHandlerSet = new Object();
     this.aTextFieldContentProviderSet = new Array();
-    this.aSlideNumberProvider =  new SlideNumberProvider( this.nStartSlideNumber + 1, this.sPageNumberingType );
+    this.aSlideNumberProvider = new SlideNumberProvider( this.nStartSlideNumber + 1, this.sPageNumberingType );
 
     // We create a map with key an id and value the svg element containing
     // the animations performed on the slide with such an id.
@@ -1336,7 +1336,8 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     else
         this.nSlideNumber= -1;
 
-    // Each slide element is wrapped by a <g> element that is responsible for
+    // Each slide element is double wrapped by <g> elements.
+    // The outer <g> element is responsible for
     // the slide element visibility. In fact the visibility attribute has
     // to be set on the parent of the slide element and not directly on
     // the slide element. The reason is that in index mode each slide
@@ -1351,7 +1352,14 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     // The workaround of setting up the visibility attribute on the slide
     // parent element let us to make visible a slide in a <use> element
     // even if the slide parent element visibility is set to 'hidden'.
-    this.aVisibilityStatusElement = this.slideElement.parentNode;
+    // The inner <g> element is used in order to append some element
+    // before or after the slide, operation that can be needed for some
+    // slide transition (e.g. fade through black). In this way we can
+    // create a view of both the slide and the appended elements that turns out
+    // to be useful for handling transition from the last to the first slide.
+    this.aContainerElement = this.slideElement.parentNode;
+    this.slideContainerId = this.aContainerElement.getAttribute( 'id' );
+    this.aVisibilityStatusElement = this.aContainerElement.parentNode;
 
     // We get a reference to the draw page element, where all shapes specific
     // of this slide live.
@@ -8503,7 +8511,7 @@ function AnimatedSlide( aMetaSlide )
 
     this.aMetaSlide = aMetaSlide;
     this.aSlideElement = this.aMetaSlide.slideElement;
-    this.sSlideId =  this.aMetaSlide.slideId;
+    this.sSlideId = this.aMetaSlide.slideId;
 
     this.aUsedAttributeSet = new Array();
 
@@ -8628,7 +8636,7 @@ AnimatedSlide.prototype.insertBefore = function( aElement )
 {
     if( aElement )
     {
-         this.aSlideElement.parentNode.insertBefore( aElement, this.aSlideElement );
+        this.aSlideElement.parentNode.insertBefore( aElement, this.aSlideElement );
     }
 };
 
@@ -8656,7 +8664,7 @@ AnimatedSlide.prototype.removeElement = function( aElement )
 {
     if( aElement )
     {
-         this.aSlideElement.parentNode.removeChild( aElement );
+        this.aSlideElement.parentNode.removeChild( aElement );
     }
 };
 
@@ -12406,6 +12414,11 @@ SlideShow.prototype.notifySlideStart = function( nNewSlideIndex, nOldSlideIndex 
 SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
 {
     theMetaDoc.setCurrentSlide( nSlideIndex );
+    if( this.aSlideViewElement )
+    {
+        theMetaDoc.getCurrentSlide().aVisibilityStatusElement.parentNode.removeChild( this.aSlideViewElement );
+        this.aSlideViewElement = null;
+    }
     if( this.isEnabled() )
     {
         // clear all queues
@@ -12777,6 +12790,16 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
             var aSlideTransitionHandler = aNewMetaSlide.aTransitionHandler;
             if( aSlideTransitionHandler && aSlideTransitionHandler.isValid() )
             {
+                // when we switch from the last to the first slide we need to hide the last slide
+                // or nobody will see the transition, hence we create a view of the last slide and
+                // we place it before the first slide
+                if( nOldSlide > nNewSlide )
+                {
+                    this.aSlideViewElement = document.createElementNS( NSS['svg'], 'use' );
+                    setNSAttribute( 'xlink', this.aSlideViewElement, 'href', '#' + aOldMetaSlide.slideContainerId );
+                    aNewMetaSlide.aVisibilityStatusElement.parentNode.insertBefore( this.aSlideViewElement, aNewMetaSlide.aVisibilityStatusElement );
+                    aOldMetaSlide.hide();
+                }
                 var aLeavingSlide = aOldMetaSlide;
                 var aEnteringSlide = aNewMetaSlide;
                 var aTransitionEndEvent = makeEvent( bind2( this.notifyTransitionEnd, this, nNewSlide ) );
