@@ -319,11 +319,12 @@ class WW8_WrtFactoids: private boost::noncopyable
 {
     std::vector<WW8_CP> m_aStartCPs;
     std::vector<WW8_CP> m_aEndCPs;
+    std::vector< std::map<OUString, OUString> > m_aStatements;
 
 public:
     WW8_WrtFactoids();
     ~WW8_WrtFactoids();
-    void Append(WW8_CP nStartCp, WW8_CP nEndCp);
+    void Append(WW8_CP nStartCp, WW8_CP nEndCp, const std::map<OUString, OUString>& rStatements);
     void Write(WW8Export& rWrt);
 }
 ;
@@ -335,10 +336,11 @@ WW8_WrtFactoids::~WW8_WrtFactoids()
 {
 }
 
-void WW8_WrtFactoids::Append(WW8_CP nStartCp, WW8_CP nEndCp)
+void WW8_WrtFactoids::Append(WW8_CP nStartCp, WW8_CP nEndCp, const std::map<OUString, OUString>& rStatements)
 {
     m_aStartCPs.push_back(nStartCp);
     m_aEndCPs.push_back(nEndCp);
+    m_aStatements.push_back(rStatements);
 }
 
 void WW8_WrtFactoids::Write(WW8Export& rExport)
@@ -404,6 +406,19 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
     aFactoidType.m_aTag = "RDF";
     WW8SmartTagData aSmartTagData;
     aSmartTagData.m_aPropBagStore.m_aFactoidTypes.push_back(aFactoidType);
+
+    std::set<OUString> aSet;
+    for (const std::map<OUString, OUString>& rStatements : m_aStatements)
+    {
+        // Statements for a single text node.
+        for (const std::pair<OUString, OUString>& rPair : rStatements)
+        {
+            aSet.insert(rPair.first);
+            aSet.insert(rPair.second);
+        }
+    }
+    aSmartTagData.m_aPropBagStore.m_aStringTable.assign(aSet.begin(), aSet.end());
+
     aSmartTagData.Write(rExport);
     rExport.pFib->lcbFactoidData = rStream.Tell() - rExport.pFib->fcFactoidData;
 }
@@ -1477,7 +1492,7 @@ void WW8Export::AppendSmartTags(const SwTextNode& rTextNode)
     if (!aStatements.empty())
     {
         WW8_CP nCP = Fc2Cp(Strm().Tell());
-        m_pFactoids->Append(nCP, nCP);
+        m_pFactoids->Append(nCP, nCP, aStatements);
     }
 }
 
