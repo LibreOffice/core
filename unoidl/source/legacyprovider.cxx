@@ -234,19 +234,16 @@ rtl::Reference< Entity > readEntity(
             std::vector< AnnotatedReference > mandBases;
             sal_uInt16 n = reader.getSuperTypeCount();
             for (sal_uInt16 j = 0; j != n; ++j) {
-                mandBases.push_back(
-                    AnnotatedReference(
-                        reader.getSuperTypeName(j).replace('/', '.'),
-                        std::vector< OUString >()));
+                mandBases.emplace_back(
+                    reader.getSuperTypeName(j).replace('/', '.'),
+                    std::vector< OUString >());
             }
             std::vector< AnnotatedReference > optBases;
             n = reader.getReferenceCount();
             for (sal_uInt16 j = 0; j != n; ++j) {
-                optBases.push_back(
-                    AnnotatedReference(
-                        reader.getReferenceTypeName(j).replace('/', '.'),
-                        translateAnnotations(
-                            reader.getReferenceDocumentation(j))));
+                optBases.emplace_back(
+                    reader.getReferenceTypeName(j).replace('/', '.'),
+                    translateAnnotations(reader.getReferenceDocumentation(j)));
             }
             sal_uInt16 methodCount = reader.getMethodCount();
             std::vector< InterfaceTypeEntity::Attribute > attrs;
@@ -297,12 +294,11 @@ rtl::Reference< Entity > readEntity(
                     }
                 }
                 RTFieldAccess flags = reader.getFieldFlags(j);
-                attrs.push_back(
-                    InterfaceTypeEntity::Attribute(
-                        attrName, reader.getFieldTypeName(j).replace('/', '.'),
-                        bool(flags & RTFieldAccess::BOUND),
-                        bool(flags & RTFieldAccess::READONLY), getExcs, setExcs,
-                        translateAnnotations(reader.getFieldDocumentation(j))));
+                attrs.emplace_back(
+                    attrName, reader.getFieldTypeName(j).replace('/', '.'),
+                    bool(flags & RTFieldAccess::BOUND),
+                    bool(flags & RTFieldAccess::READONLY), getExcs, setExcs,
+                    translateAnnotations(reader.getFieldDocumentation(j)));
             }
             std::vector< InterfaceTypeEntity::Method > meths;
             for (sal_uInt16 j = 0; j != methodCount; ++j) {
@@ -338,12 +334,11 @@ rtl::Reference< Entity > readEntity(
                                  + " in interface type with key "
                                  + sub.getName()));
                         }
-                        params.push_back(
-                            InterfaceTypeEntity::Method::Parameter(
-                                reader.getMethodParameterName(j, k),
-                                (reader.getMethodParameterTypeName(j, k).
-                                 replace('/', '.')),
-                                dir));
+                        params.emplace_back(
+                            reader.getMethodParameterName(j, k),
+                            (reader.getMethodParameterTypeName(j, k).
+                             replace('/', '.')),
+                            dir);
                     }
                     std::vector< OUString > excs;
                     m = reader.getMethodExceptionCount(j);
@@ -354,13 +349,12 @@ rtl::Reference< Entity > readEntity(
                             reader.getMethodExceptionTypeName(j, k).replace(
                                 '/', '.'));
                     }
-                    meths.push_back(
-                        InterfaceTypeEntity::Method(
-                            reader.getMethodName(j),
-                            reader.getMethodReturnTypeName(j).replace('/', '.'),
-                            params, excs,
-                            translateAnnotations(
-                                reader.getMethodDocumentation(j))));
+                    meths.emplace_back(
+                        reader.getMethodName(j),
+                        reader.getMethodReturnTypeName(j).replace('/', '.'),
+                        params, excs,
+                        translateAnnotations(
+                            reader.getMethodDocumentation(j)));
                 }
             }
             return new InterfaceTypeEntity(
@@ -391,12 +385,10 @@ rtl::Reference< Entity > readEntity(
                 std::vector< PlainStructTypeEntity::Member > mems;
                 n = reader.getFieldCount();
                 for (sal_uInt16 j = 0; j < n; ++j) {
-                    mems.push_back(
-                        PlainStructTypeEntity::Member(
-                            reader.getFieldName(j),
-                            reader.getFieldTypeName(j).replace('/', '.'),
-                            translateAnnotations(
-                                reader.getFieldDocumentation(j))));
+                    mems.emplace_back(
+                        reader.getFieldName(j),
+                        reader.getFieldTypeName(j).replace('/', '.'),
+                        translateAnnotations(reader.getFieldDocumentation(j)));
                 }
                 return new PlainStructTypeEntity(
                     reader.isPublished(), base, mems,
@@ -418,14 +410,13 @@ rtl::Reference< Entity > readEntity(
                 std::vector< PolymorphicStructTypeTemplateEntity::Member > mems;
                 n = reader.getFieldCount();
                 for (sal_uInt16 j = 0; j < n; ++j) {
-                    mems.push_back(
-                        PolymorphicStructTypeTemplateEntity::Member(
-                            reader.getFieldName(j),
-                            reader.getFieldTypeName(j).replace('/', '.'),
-                            bool(reader.getFieldFlags(j)
-                                 & RTFieldAccess::PARAMETERIZED_TYPE),
-                            translateAnnotations(
-                                reader.getFieldDocumentation(j))));
+                    mems.emplace_back(
+                        reader.getFieldName(j),
+                        reader.getFieldTypeName(j).replace('/', '.'),
+                        bool(
+                            reader.getFieldFlags(j)
+                            & RTFieldAccess::PARAMETERIZED_TYPE),
+                        translateAnnotations(reader.getFieldDocumentation(j)));
                 }
                 return new PolymorphicStructTypeTemplateEntity(
                     reader.isPublished(), params, mems,
@@ -446,10 +437,9 @@ rtl::Reference< Entity > readEntity(
                          + reader.getFieldName(j) + " of enum type with key "
                          + sub.getName()));
                 }
-                mems.push_back(
-                    EnumTypeEntity::Member(
-                        reader.getFieldName(j), v.m_value.aLong,
-                        translateAnnotations(reader.getFieldDocumentation(j))));
+                mems.emplace_back(
+                    reader.getFieldName(j), v.m_value.aLong,
+                    translateAnnotations(reader.getFieldDocumentation(j)));
 
             }
             return new EnumTypeEntity(
@@ -476,11 +466,10 @@ rtl::Reference< Entity > readEntity(
             std::vector< ExceptionTypeEntity::Member > mems;
             sal_uInt16 n = reader.getFieldCount();
             for (sal_uInt16 j = 0; j != n; ++j) {
-                mems.push_back(
-                    ExceptionTypeEntity::Member(
-                        reader.getFieldName(j),
-                        reader.getFieldTypeName(j).replace('/', '.'),
-                        translateAnnotations(reader.getFieldDocumentation(j))));
+                mems.emplace_back(
+                    reader.getFieldName(j),
+                    reader.getFieldTypeName(j).replace('/', '.'),
+                    translateAnnotations(reader.getFieldDocumentation(j)));
             }
             return new ExceptionTypeEntity(
                 reader.isPublished(), base, mems,
@@ -507,10 +496,10 @@ rtl::Reference< Entity > readEntity(
                 std::vector< AnnotatedReference > optIfcs;
                 sal_uInt16 n = reader.getReferenceCount();
                 for (sal_uInt16 j = 0; j != n; ++j) {
-                    AnnotatedReference base(
+                    AnnotatedReference base{
                         reader.getReferenceTypeName(j).replace('/', '.'),
                         translateAnnotations(
-                            reader.getReferenceDocumentation(j)));
+                            reader.getReferenceDocumentation(j))};
                     switch (reader.getReferenceSort(j)) {
                     case RTReferenceType::EXPORTS:
                         if (!(reader.getReferenceFlags(j) & RTFieldAccess::OPTIONAL))
@@ -578,15 +567,13 @@ rtl::Reference< Entity > readEntity(
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_REMOVABLE;
                     }
-                    props.push_back(
-                        AccumulationBasedServiceEntity::Property(
-                            reader.getFieldName(j),
-                            reader.getFieldTypeName(j).replace('/', '.'),
-                            static_cast<
-                                AccumulationBasedServiceEntity::Property::
+                    props.emplace_back(
+                        reader.getFieldName(j),
+                        reader.getFieldTypeName(j).replace('/', '.'),
+                        static_cast<
+                            AccumulationBasedServiceEntity::Property::
                                 Attributes >(attrs),
-                            translateAnnotations(
-                                reader.getFieldDocumentation(j))));
+                        translateAnnotations(reader.getFieldDocumentation(j)));
                 }
                 return new AccumulationBasedServiceEntity(
                     reader.isPublished(), mandServs, optServs, mandIfcs,
@@ -652,13 +639,11 @@ rtl::Reference< Entity > readEntity(
                                      + " in service with key "
                                      + sub.getName()));
                             }
-                            params.push_back(
-                                SingleInterfaceBasedServiceEntity::Constructor::
-                                Parameter(
-                                    reader.getMethodParameterName(j, k),
-                                    (reader.getMethodParameterTypeName(j, k).
-                                     replace('/', '.')),
-                                    (mode & RT_PARAM_REST) != 0));
+                            params.emplace_back(
+                                reader.getMethodParameterName(j, k),
+                                (reader.getMethodParameterTypeName(j, k).
+                                 replace('/', '.')),
+                                (mode & RT_PARAM_REST) != 0);
                         }
                         std::vector< OUString > excs;
                         m = reader.getMethodExceptionCount(j);
@@ -768,11 +753,10 @@ rtl::Reference< Entity > readEntity(
             std::vector< ConstantGroupEntity::Member > mems;
             sal_uInt16 n = reader.getFieldCount();
             for (sal_uInt16 j = 0; j != n; ++j) {
-                mems.push_back(
-                    ConstantGroupEntity::Member(
-                        reader.getFieldName(j),
-                        translateConstantValue(sub, reader.getFieldValue(j)),
-                        translateAnnotations(reader.getFieldDocumentation(j))));
+                mems.emplace_back(
+                    reader.getFieldName(j),
+                    translateConstantValue(sub, reader.getFieldValue(j)),
+                    translateAnnotations(reader.getFieldDocumentation(j)));
             }
             return new ConstantGroupEntity(
                 reader.isPublished(), mems,

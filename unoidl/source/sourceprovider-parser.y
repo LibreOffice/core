@@ -1039,8 +1039,7 @@ enumMember:
           }
           ++v;
       }
-      pad->members.push_back(
-          unoidl::EnumTypeEntity::Member(id, v, annotations($1)));
+      pad->members.emplace_back(id, v, annotations($1));
   }
 | deprecated_opt identifier '=' expr
   {
@@ -1078,8 +1077,7 @@ enumMember:
           YYERROR;
           break;
       }
-      pad->members.push_back(
-          unoidl::EnumTypeEntity::Member(id, v, annotations($1)));
+      pad->members.emplace_back(id, v, annotations($1));
   }
 ;
 
@@ -1399,9 +1397,7 @@ structMember:
                       p->entity.get());
               }
           }
-          p1->members.push_back(
-              unoidl::PlainStructTypeEntity::Member(
-                  id, t.getName(), annotations($1)));
+          p1->members.emplace_back(id, t.getName(), annotations($1));
       } else {
           unoidl::detail::SourceProviderPolymorphicStructTypeTemplateEntityPad *
               p2 = dynamic_cast<unoidl::detail::SourceProviderPolymorphicStructTypeTemplateEntityPad *>(
@@ -1420,12 +1416,10 @@ structMember:
                       YYERROR;
                   }
               }
-              p2->members.push_back(
-                  unoidl::PolymorphicStructTypeTemplateEntity::Member(
-                      id, t.getName(),
-                      (t.type
-                       == unoidl::detail::SourceProviderType::TYPE_PARAMETER),
-                      annotations($1)));
+              p2->members.emplace_back(
+                  id, t.getName(),
+                  t.type == unoidl::detail::SourceProviderType::TYPE_PARAMETER,
+                  annotations($1));
           } else {
               unoidl::detail::SourceProviderExceptionTypeEntityPad * p3
                   = dynamic_cast<unoidl::detail::SourceProviderExceptionTypeEntityPad *>(
@@ -1499,9 +1493,7 @@ structMember:
                           p->entity.get());
                   }
               }
-              p3->members.push_back(
-                  unoidl::ExceptionTypeEntity::Member(
-                      id, t.getName(), annotations($1)));
+              p3->members.emplace_back(id, t.getName(), annotations($1));
           }
       }
   }
@@ -1625,14 +1617,14 @@ interfaceDefn:
                i(pad->directMandatoryBases.begin());
            i != pad->directMandatoryBases.end(); ++i)
       {
-          mbases.push_back(unoidl::AnnotatedReference(i->name, i->annotations));
+          mbases.emplace_back(i->name, i->annotations);
       }
       std::vector<unoidl::AnnotatedReference> obases;
       for (std::vector<unoidl::detail::SourceProviderInterfaceTypeEntityPad::DirectBase>::const_iterator
                i(pad->directOptionalBases.begin());
            i != pad->directOptionalBases.end(); ++i)
       {
-          obases.push_back(unoidl::AnnotatedReference(i->name, i->annotations));
+          obases.emplace_back(i->name, i->annotations);
       }
       ent->entity = new unoidl::InterfaceTypeEntity(
           pad->isPublished(), mbases, obases, pad->directAttributes,
@@ -1760,12 +1752,10 @@ interfaceAttribute:
       if (!pad->addDirectMember(@4, yyscanner, data, id)) {
           YYERROR;
       }
-      pad->directAttributes.push_back(
-          unoidl::InterfaceTypeEntity::Attribute(
-              id, t.getName(), ($2 & unoidl::detail::FLAG_BOUND) != 0,
-              ($2 & unoidl::detail::FLAG_READONLY) != 0,
-              std::vector<OUString>(), std::vector<OUString>(),
-              annotations($1)));
+      pad->directAttributes.emplace_back(
+          id, t.getName(), ($2 & unoidl::detail::FLAG_BOUND) != 0,
+          ($2 & unoidl::detail::FLAG_READONLY) != 0,
+          std::vector<OUString>(), std::vector<OUString>(), annotations($1));
   }
   attributeAccessDecls_opt ';'
 ;
@@ -1842,11 +1832,10 @@ interfaceMethod:
       if (!pad->addDirectMember(@3, yyscanner, data, id)) {
           YYERROR;
       }
-      pad->directMethods.push_back(
-          unoidl::InterfaceTypeEntity::Method(
-              id, t.getName(),
-              std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>(),
-              std::vector<OUString>(), annotations($1)));
+      pad->directMethods.emplace_back(
+          id, t.getName(),
+          std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>(),
+          std::vector<OUString>(), annotations($1));
   }
   '(' methodParams_opt ')' exceptionSpec_opt ';'
   {
@@ -1910,8 +1899,7 @@ methodParam:
               YYERROR;
           }
       }
-      pad->directMethods.back().parameters.push_back(
-          unoidl::InterfaceTypeEntity::Method::Parameter(id, t.getName(), $2));
+      pad->directMethods.back().parameters.emplace_back(id, t.getName(), $2);
   }
 ;
 
@@ -2309,8 +2297,7 @@ constant:
           YYERROR;
           break;
       }
-      pad->members.push_back(
-          unoidl::ConstantGroupEntity::Member(id, v, annotations($1)));
+      pad->members.emplace_back(id, v, annotations($1));
   }
 ;
 
@@ -2396,9 +2383,7 @@ singleInterfaceBasedServiceDefn:
                        j(i->parameters.begin());
                    j != i->parameters.end(); ++j)
               {
-                  parms.push_back(
-                      unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter(
-                          j->name, j->type.getName(), j->rest));
+                  parms.emplace_back(j->name, j->type.getName(), j->rest);
               }
               ctors.push_back(
                   unoidl::SingleInterfaceBasedServiceEntity::Constructor(
@@ -2691,7 +2676,7 @@ serviceBase:
               YYERROR;
           }
       }
-      v.push_back(unoidl::AnnotatedReference(name, annotations($1)));
+      v.emplace_back(name, annotations($1));
   }
 ;
 
@@ -2770,7 +2755,7 @@ serviceInterfaceBase:
               YYERROR;
           }
       }
-      v.push_back(unoidl::AnnotatedReference(name, annotations($1)));
+      v.emplace_back(name, annotations($1));
   }
 ;
 
@@ -2860,11 +2845,10 @@ serviceProperty:
               YYERROR;
           }
       }
-      pad->directProperties.push_back(
-          unoidl::AccumulationBasedServiceEntity::Property(
-              id, t.getName(),
-              unoidl::AccumulationBasedServiceEntity::Property::Attributes(att),
-              annotations($1)));
+      pad->directProperties.emplace_back(
+          id, t.getName(),
+          unoidl::AccumulationBasedServiceEntity::Property::Attributes(att),
+          annotations($1));
   }
 ;
 
