@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <cmath>
 #include <random>
 
@@ -324,8 +325,26 @@ void VBACompressionChunk::CopyTokenHelp(sal_uInt16& rLengthMask, sal_uInt16& rOf
         sal_uInt16& rBitCount, sal_uInt16& rMaximumLength)
 {
     sal_uInt16 nDifference = mnDecompressedCurrent;
-    sal_uInt16 nBitCount = std::ceil(std::log(nDifference)/std::log(2));
-    rBitCount = std::max<sal_uInt16>(nBitCount, 4);
+    assert(nDifference <= 4096);
+    assert(nDifference >= 1);
+    if (nDifference >= 2049)
+        rBitCount = 12;
+    else if (nDifference >= 1025)
+        rBitCount = 11;
+    else if (nDifference >= 513)
+        rBitCount = 10;
+    else if (nDifference >= 257)
+        rBitCount = 9;
+    else if (nDifference >= 129)
+        rBitCount = 8;
+    else if (nDifference >= 65)
+        rBitCount = 7;
+    else if (nDifference >= 33)
+        rBitCount = 6;
+    else if (nDifference >= 17)
+        rBitCount = 5;
+    else
+        rBitCount = 4;
     rLengthMask = 0xffff >> rBitCount;
     rOffsetMask = ~rLengthMask;
     rMaximumLength = rLengthMask + 3;
