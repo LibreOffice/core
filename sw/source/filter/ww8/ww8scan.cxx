@@ -44,7 +44,6 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/miscopt.hxx>
 
 #ifdef DEBUGSPRMREADER
 #include <stdio.h>
@@ -5855,15 +5854,11 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 rSt.Seek(0x432);
                 rSt.ReadInt32(fcPlcfBkfFactoid);
                 rSt.ReadUInt32(lcbPlcfBkfFactoid);
-            }
-            if (cfclcb > 136)
-            {
+
                 rSt.Seek(0x442);
                 rSt.ReadInt32(fcPlcfBklFactoid);
                 rSt.ReadUInt32(lcbPlcfBklFactoid);
-            }
-            if (cfclcb > 137)
-            {
+
                 rSt.Seek(0x44a);
                 rSt.ReadInt32(fcFactoidData);
                 rSt.ReadUInt32(lcbFactoidData);
@@ -6241,28 +6236,23 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, fcAtrdExtra );
         Set_UInt32( pData, lcbAtrdExtra );
 
-        SvtMiscOptions aMiscOptions;
-        if (aMiscOptions.IsExperimentalMode())
-        {
-            pData += 0x42a - 0x422;
-            Set_UInt32(pData, fcSttbfBkmkFactoid);
-            Set_UInt32(pData, lcbSttbfBkmkFactoid);
-            Set_UInt32(pData, fcPlcfBkfFactoid);
-            Set_UInt32(pData, lcbPlcfBkfFactoid);
+        pData += 0x42a - 0x422;
+        Set_UInt32(pData, fcSttbfBkmkFactoid);
+        Set_UInt32(pData, lcbSttbfBkmkFactoid);
+        Set_UInt32(pData, fcPlcfBkfFactoid);
+        Set_UInt32(pData, lcbPlcfBkfFactoid);
 
-            pData += 0x442 - 0x43A;
-            Set_UInt32(pData, fcPlcfBklFactoid);
-            Set_UInt32(pData, lcbPlcfBklFactoid);
-            Set_UInt32(pData, fcFactoidData);
-            Set_UInt32(pData, lcbFactoidData);
+        pData += 0x442 - 0x43A;
+        Set_UInt32(pData, fcPlcfBklFactoid);
+        Set_UInt32(pData, lcbPlcfBklFactoid);
+        Set_UInt32(pData, fcFactoidData);
+        Set_UInt32(pData, lcbFactoidData);
 
-            pData += 0x4BA - 0x452;
-            Set_UInt32(pData, fcPlcffactoid);
-            Set_UInt32(pData, lcbPlcffactoid);
-        }
-        else
-            pData += 0x4DA - 0x422;
+        pData += 0x4BA - 0x452;
+        Set_UInt32(pData, fcPlcffactoid);
+        Set_UInt32(pData, lcbPlcffactoid);
 
+        pData += 0x4DA - 0x4c2;
         Set_UInt32( pData, fcHplxsdr );
         Set_UInt32( pData, 0);
     }
