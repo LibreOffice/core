@@ -447,6 +447,10 @@ public:
     // done setting up the clipregion
     virtual void                EndSetClipRegion() override;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    virtual void                SetModal(bool bModal) override;
+#endif
+
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
 
     virtual Window              GetX11Window() override;
