@@ -43,6 +43,7 @@ namespace comphelper
         virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const = 0;
         virtual bool isEnableSetModified() const = 0;
+        virtual OUString getDocumentBaseURL() const = 0;
 
     protected:
         ~IEmbeddedHelper() {}
@@ -54,7 +55,8 @@ class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
     EmbedImpl*  pImpl;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > Get_Impl( const OUString&,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xCopy);
+            const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xCopy,
+            OUString const* pBaseURL = nullptr);
 
 public:
     // add an embedded object to the container storage
@@ -92,7 +94,7 @@ public:
     OUString     GetEmbeddedObjectName( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
 
     // retrieve an embedded object by name that either has been added already or is available in the container storage
-    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > GetEmbeddedObject( const OUString& );
+    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > GetEmbeddedObject( const OUString&, OUString const* pBaseURL = nullptr );
 
     // create an object from a ClassId
     ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >
