@@ -395,6 +395,17 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
         rStream.WriteInt16(0); // cDepth, 0 as does not overlap with any other smart tag.
     }
     rExport.pFib->lcbPlcfBklFactoid = rStream.Tell() - rExport.pFib->fcPlcfBklFactoid;
+
+    rExport.pFib->fcFactoidData = rStream.Tell();
+    // Write SmartTagData.
+    MSOFactoidType aFactoidType;
+    aFactoidType.m_nId = 1;
+    aFactoidType.m_aUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    aFactoidType.m_aTag = "RDF";
+    WW8SmartTagData aSmartTagData;
+    aSmartTagData.m_aPropBagStore.m_aFactoidTypes.push_back(aFactoidType);
+    aSmartTagData.Write(rExport);
+    rExport.pFib->lcbFactoidData = rStream.Tell() - rExport.pFib->fcFactoidData;
 }
 
 #define ANZ_DEFAULT_STYLES 16

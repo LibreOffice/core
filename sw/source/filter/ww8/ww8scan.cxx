@@ -6253,8 +6253,10 @@ bool WW8Fib::Write(SvStream& rStrm)
             pData += 0x442 - 0x43A;
             Set_UInt32(pData, fcPlcfBklFactoid);
             Set_UInt32(pData, lcbPlcfBklFactoid);
+            Set_UInt32(pData, fcFactoidData);
+            Set_UInt32(pData, lcbFactoidData);
 
-            pData += 0x4DA - 0x44A;
+            pData += 0x4DA - 0x452;
         }
         else
             pData += 0x4DA - 0x422;
@@ -6309,6 +6311,15 @@ OUString Read(SvStream& rStream)
 
     return aRet;
 }
+
+void Write(const OUString& rString, SvStream& rStream)
+{
+    sal_uInt16 nBuf = 0;
+    nBuf |= rString.getLength(); // cch, 0..14th bits.
+    nBuf |= 0x8000; // fAnsiString, 15th bit.
+    rStream.WriteUInt16(nBuf);
+    SwWW8Writer::WriteString8(rStream, rString, false, RTL_TEXTENCODING_ASCII_US);
+}
 };
 
 void MSOFactoidType::Read(SvStream& rStream)
@@ -6319,6 +6330,20 @@ void MSOFactoidType::Read(SvStream& rStream)
     m_aUri = MSOPBString::Read(rStream);
     m_aTag = MSOPBString::Read(rStream);
     MSOPBString::Read(rStream); // rgbDownloadURL
+}
+
+void MSOFactoidType::Write(WW8Export& rExport)
+{
+    SvStream& rStream = *rExport.pTableStrm;
+
+    SvMemoryStream aStream;
+    aStream.WriteUInt32(m_nId); // id
+    MSOPBString::Write(m_aUri, aStream);
+    MSOPBString::Write(m_aTag, aStream);
+    MSOPBString::Write("", aStream); // rgbDownloadURL
+    rStream.WriteUInt32(aStream.Tell());
+    aStream.Seek(0);
+    rStream.WriteStream(aStream);
 }
 
 void MSOPropertyBagStore::Read(SvStream& rStream)
@@ -6346,6 +6371,20 @@ void MSOPropertyBagStore::Read(SvStream& rStream)
         OUString aString = MSOPBString::Read(rStream);
         m_aStringTable.push_back(aString);
     }
+}
+
+void MSOPropertyBagStore::Write(WW8Export& rExport)
+{
+    SvStream& rStream = *rExport.pTableStrm;
+    rStream.WriteUInt32(m_aFactoidTypes.size()); // cFactoidType
+    for (MSOFactoidType& rType : m_aFactoidTypes)
+        rType.Write(rExport);
+    rStream.WriteUInt16(0xc); // cbHdr
+    rStream.WriteUInt16(0x0100); // sVer
+    rStream.WriteUInt32(0); // cfactoid
+    rStream.WriteUInt32(m_aStringTable.size()); // cste
+    for (const OUString& rString : m_aStringTable)
+        MSOPBString::Write(rString, rStream);
 }
 
 MSOProperty::MSOProperty()
@@ -6401,6 +6440,11 @@ void WW8SmartTagData::Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 l
     }
 
     rStream.Seek(nOldPosition);
+}
+
+void WW8SmartTagData::Write(WW8Export& rExport)
+{
+    m_aPropBagStore.Write(rExport);
 }
 
 WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
