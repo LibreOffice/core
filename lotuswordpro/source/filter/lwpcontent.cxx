@@ -129,7 +129,7 @@ rtl::Reference<LwpVirtualLayout> LwpContent::GetLayout(LwpVirtualLayout* pStartL
 bool LwpContent::HasNonEmbeddedLayouts()
 {
     rtl::Reference<LwpVirtualLayout> xLayout;
-    while (1)
+    while (true)
     {
         xLayout = GetLayout(xLayout.get());
         if (!xLayout.is())
@@ -143,7 +143,7 @@ bool LwpContent::HasNonEmbeddedLayouts()
 bool LwpContent::IsStyleContent()
 {
     rtl::Reference<LwpVirtualLayout> xLayout;
-    while (1)
+    while (true)
     {
         xLayout = GetLayout(xLayout.get());
         if (!xLayout.is())
