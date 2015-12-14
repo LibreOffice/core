@@ -43,6 +43,7 @@ namespace comphelper
         virtual css::uno::Reference < css::embed::XStorage > getStorage() const = 0;
         virtual css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() const = 0;
         virtual bool isEnableSetModified() const = 0;
+        virtual OUString getDocumentBaseURL() const = 0;
 
     protected:
         ~IEmbeddedHelper() {}
@@ -54,7 +55,8 @@ class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
     EmbedImpl*  pImpl;
 
     css::uno::Reference < css::embed::XEmbeddedObject > Get_Impl( const OUString&,
-            const css::uno::Reference < css::embed::XEmbeddedObject >& xCopy);
+            const css::uno::Reference < css::embed::XEmbeddedObject >& xCopy,
+            OUString const* pBaseURL = nullptr);
 
 public:
     // add an embedded object to the container storage
@@ -92,7 +94,7 @@ public:
     OUString        GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& );
 
     // retrieve an embedded object by name that either has been added already or is available in the container storage
-    css::uno::Reference < css::embed::XEmbeddedObject > GetEmbeddedObject( const OUString& );
+    css::uno::Reference<css::embed::XEmbeddedObject> GetEmbeddedObject(const OUString&, OUString const* pBaseURL = nullptr);
 
     // create an object from a ClassId
     css::uno::Reference < css::embed::XEmbeddedObject >

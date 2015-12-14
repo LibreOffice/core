@@ -3618,12 +3618,18 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
     return true;
 }
 
+// comphelper::IEmbeddedHelper
 uno::Reference< task::XInteractionHandler > SfxObjectShell::getInteractionHandler() const
 {
     uno::Reference< task::XInteractionHandler > xRet;
     if ( GetMedium() )
         xRet = GetMedium()->GetInteractionHandler();
     return xRet;
+}
+
+OUString SfxObjectShell::getDocumentBaseURL() const
+{
+    return GetMedium()->GetBaseURL();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
