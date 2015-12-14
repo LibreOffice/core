@@ -58,6 +58,9 @@
  * Table cell.
  ************************************************************************/
 #include "xfcell.hxx"
+
+#include <stdexcept>
+
 #include "xfparagraph.hxx"
 #include "xftable.hxx"
 #include "xfrow.hxx"
