@@ -6256,7 +6256,9 @@ bool WW8Fib::Write(SvStream& rStrm)
             Set_UInt32(pData, fcFactoidData);
             Set_UInt32(pData, lcbFactoidData);
 
-            pData += 0x4DA - 0x452;
+            pData += 0x4BA - 0x452;
+            Set_UInt32(pData, fcPlcffactoid);
+            Set_UInt32(pData, lcbPlcffactoid);
         }
         else
             pData += 0x4DA - 0x422;
