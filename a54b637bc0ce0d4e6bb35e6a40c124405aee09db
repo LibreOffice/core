@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_887cd921",
+        "filename": "lotuswordpro/source/filter/lwpstory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-12-14T13:54:09Z",
+      "side": 1,
+      "message": "I can add a check for that I guess",
+      "parentUuid": "dab17558_28b04df4",
+      "revId": "a54b637bc0ce0d4e6bb35e6a40c124405aee09db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_8895f941",
         "filename": "lotuswordpro/source/filter/lwpstory.cxx",
         "patchSetId": 1
