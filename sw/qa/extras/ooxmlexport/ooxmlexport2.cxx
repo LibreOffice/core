@@ -475,10 +475,32 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
 {
-    // The problem was that we lacked the fallback to export the replacement graphic for OLE objects.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+    // The problem was that we lacked the fallback to export the replacement
+    // graphic for OLE objects.  But we can actually export the OLE itself now,
+    // so check that instead.
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTextEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEmbeddedObjects->getCount());
+
+    xmlDocPtr pXmlDocCT = parseExport("[Content_Types].xml");
+
+    if (!pXmlDocCT)
+       return; // initial import
+
+    assertXPath(pXmlDocCT, "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/oleObject1.xlsx']", "ContentType", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsx']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "Excel.Sheet.12");
 }
 
 /*

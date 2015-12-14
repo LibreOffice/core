@@ -407,6 +407,7 @@ namespace reportdesign
         virtual ::comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const SAL_OVERRIDE;
         virtual bool isEnableSetModified() const SAL_OVERRIDE;
+        virtual OUString getDocumentBaseURL() const SAL_OVERRIDE;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const;
 

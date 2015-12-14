@@ -582,6 +582,8 @@ public:
     {
         return IsEnableSetModified();
     }
+    virtual OUString getDocumentBaseURL() const SAL_OVERRIDE;
+
     comphelper::EmbeddedObjectContainer&    GetEmbeddedObjectContainer() const;
     void    ClearEmbeddedObjects();
 
