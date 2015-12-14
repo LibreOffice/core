@@ -215,33 +215,35 @@ SwAccessibleFrameBase::~SwAccessibleFrameBase()
 void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    const SwFlyFrame *pFlyFrame = static_cast< const SwFlyFrame * >( GetFrame() );
     switch( nWhich )
     {
     case RES_NAME_CHANGED:
-        if(  pFlyFrame )
         {
-            const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
-            assert(pFrameFormat == GetRegisteredIn() && "invalid frame");
-
-            const OUString sOldName( GetName() );
-            assert( !pOld ||
-                    static_cast<const SwStringMsgPoolItem *>(pOld)->GetString() == GetName());
-
-            SetName( pFrameFormat->GetName() );
-            assert( !pNew ||
-                    static_cast<const SwStringMsgPoolItem *>(pNew)->GetString() == GetName());
-
-            if( sOldName != GetName() )
+            const SwFlyFrame *pFlyFrame = static_cast< const SwFlyFrame * >( GetFrame() );
+            if(  pFlyFrame )
             {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-                aEvent.OldValue <<= sOldName;
-                aEvent.NewValue <<= GetName();
-                FireAccessibleEvent( aEvent );
+                const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
+                assert(pFrameFormat == GetRegisteredIn() && "invalid frame");
+
+                const OUString sOldName( GetName() );
+                assert( !pOld ||
+                        static_cast<const SwStringMsgPoolItem *>(pOld)->GetString() == GetName());
+
+                SetName( pFrameFormat->GetName() );
+                assert( !pNew ||
+                        static_cast<const SwStringMsgPoolItem *>(pNew)->GetString() == GetName());
+
+                if( sOldName != GetName() )
+                {
+                    AccessibleEventObject aEvent;
+                    aEvent.EventId = AccessibleEventId::NAME_CHANGED;
+                    aEvent.OldValue <<= sOldName;
+                    aEvent.NewValue <<= GetName();
+                    FireAccessibleEvent( aEvent );
+                }
             }
+            break;
         }
-        break;
     case RES_OBJECTDYING:
         // mba: it seems that this class intentionally does not call code in base class SwClient
         if( pOld && ( GetRegisteredIn() == static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) ) )
