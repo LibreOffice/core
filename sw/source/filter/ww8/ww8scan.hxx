@@ -1474,7 +1474,14 @@ public:
     /// 0x44e smart tag data length.
     sal_uInt32 lcbFactoidData;
 
-    // 0x452 - 0x4d4 == ignore
+    // 0x452 - 0x4b9 == ignore
+
+    /// 0x4ba Plcffactoid offset.
+    WW8_FC fcPlcffactoid;
+    /// 0x4be Plcffactoid offset.
+    sal_uInt32 lcbPlcffactoid;
+
+    // 0x4bf - 0x4d4 == ignore
 
     WW8_FC fcHplxsdr;    //bizarrely, word xp seems to require this set to shows dates from AtrdExtra
     sal_uInt32 lcbHplxsdr;
