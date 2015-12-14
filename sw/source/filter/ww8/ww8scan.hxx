@@ -1452,8 +1452,12 @@ public:
     WW8_FC fcAtrdExtra;
     sal_uInt32 lcbAtrdExtra;
 
-    // 0x422 - 0x431 == ignore
+    // 0x422 - 0x429 == ignore
 
+    /// 0x42a smart-tag bookmark string table offset.
+    WW8_FC fcSttbfBkmkFactoid;
+    /// 0x42e smart-tag bookmark string table length.
+    sal_uInt32 lcbSttbfBkmkFactoid;
     /// 0x432 smart-tag bookmark starts offset.
     WW8_FC fcPlcfBkfFactoid;
     /// 0x436 smart-tag bookmark ends length.

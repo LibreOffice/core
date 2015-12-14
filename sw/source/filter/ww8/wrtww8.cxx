@@ -351,6 +351,23 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
 
     SvStream& rStream = *rExport.pTableStrm;
 
+    rExport.pFib->fcSttbfBkmkFactoid = rStream.Tell();
+    // Write SttbfBkmkFactoid.
+    rStream.WriteUInt16(0xffff); // fExtend
+    rStream.WriteUInt16(m_aStartCPs.size()); // cData
+    rStream.WriteUInt16(0); // cbExtra
+    rStream.WriteUInt16(6); // cchData
+
+    // Write FACTOIDINFO.
+    for (size_t i = 0; i < m_aStartCPs.size(); ++i)
+    {
+        rStream.WriteUInt32(i); // dwId
+        rStream.WriteUInt16(0); // fSubEntry
+        rStream.WriteUInt16(0); // fto
+        rStream.WriteUInt32(0); // pfpb
+    }
+    rExport.pFib->lcbSttbfBkmkFactoid = rStream.Tell() - rExport.pFib->fcSttbfBkmkFactoid;
+
     rExport.pFib->fcPlcfBkfFactoid = rStream.Tell();
     for (const WW8_CP& rCP : m_aStartCPs)
         rStream.WriteInt32(rCP);

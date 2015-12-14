@@ -6244,7 +6244,9 @@ bool WW8Fib::Write(SvStream& rStrm)
         SvtMiscOptions aMiscOptions;
         if (aMiscOptions.IsExperimentalMode())
         {
-            pData += 0x432 - 0x422;
+            pData += 0x42a - 0x422;
+            Set_UInt32(pData, fcSttbfBkmkFactoid);
+            Set_UInt32(pData, lcbSttbfBkmkFactoid);
             Set_UInt32(pData, fcPlcfBkfFactoid);
             Set_UInt32(pData, lcbPlcfBkfFactoid);
 
