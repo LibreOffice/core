@@ -760,6 +760,7 @@ static gboolean postDocumentLoad(gpointer pData)
                                 nDocumentHeightPixels);
     gtk_widget_set_can_focus(GTK_WIDGET(pLOKDocView), TRUE);
     gtk_widget_grab_focus(GTK_WIDGET(pLOKDocView));
+    lok_doc_view_set_zoom(pLOKDocView, 1.0);
 
     return G_SOURCE_REMOVE;
 }
@@ -2143,7 +2144,6 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                              "The current zoom level of the content",
                              0, 5.0, 1.0,
                              static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                      G_PARAM_CONSTRUCT |
                                                       G_PARAM_STATIC_STRINGS)));
 
     /**
