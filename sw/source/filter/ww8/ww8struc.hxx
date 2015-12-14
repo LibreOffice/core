@@ -1120,6 +1120,7 @@ class MSOProperty
 public:
     MSOProperty();
     void Read(SvStream& rStream);
+    void Write(SvStream& rStream);
 
     /// Index into MSOPropertyBagStore::m_aStringTable.
     sal_uInt32 m_nKey;
@@ -1133,6 +1134,7 @@ class MSOPropertyBag
 public:
     MSOPropertyBag();
     void Read(SvStream& rStream);
+    void Write(WW8Export& rExport);
 
     /// Matches MSOFactoidType::m_nId in MSOPropertyBagStore::m_aFactoidTypes.
     sal_uInt16 m_nId;
