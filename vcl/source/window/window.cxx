@@ -2007,7 +2007,14 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
         if ( rStr.isEmpty() && ImplGetParent() && !ImplIsOverlapWindow() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
-            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), rStr );
+        {
+            Point aPos = GetPosPixel();
+            if ( ImplGetParent() && !ImplIsOverlapWindow() )
+                aPos = ImplGetParent()->OutputToScreenPixel( aPos );
+            Rectangle   aRect( aPos, GetSizePixel() );
+
+            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aRect, rStr );
+        }
     }
     else if ( rHEvt.GetMode() & HelpEventMode::QUICK )
     {

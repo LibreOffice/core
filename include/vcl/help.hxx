@@ -86,9 +86,6 @@ public:
     static bool         IsBalloonHelpEnabled();
     static bool         ShowBalloon( vcl::Window* pParent,
                                      const Point& rScreenPos,
-                                     const OUString& rHelpText );
-    static bool         ShowBalloon( vcl::Window* pParent,
-                                     const Point& rScreenPos,
                                      const Rectangle&,
                                      const OUString& rHelpText );
 

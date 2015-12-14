@@ -63,7 +63,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_
 
         Rectangle aRect( aPos, Size() );
         if (!pMenu->GetHelpText(nId).isEmpty())
-            Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
+            Help::ShowBalloon( pMenuWindow, aPos, aRect, pMenu->GetHelpText( nId ) );
         else
         {
             // give user a chance to read the full filename

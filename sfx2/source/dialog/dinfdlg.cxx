@@ -1366,7 +1366,7 @@ void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
         Size aSize( GetSizePixel() );
         Rectangle aItemRect( rHEvt.GetMousePosPixel(), aSize );
         if (Help::IsBalloonHelpEnabled())
-            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), GetText() );
+            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aItemRect, GetText() );
         else
             Help::ShowQuickHelp( this, aItemRect, GetText(),
                 QuickHelpFlags::Left|QuickHelpFlags::VCenter );

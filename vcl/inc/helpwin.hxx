@@ -75,10 +75,10 @@ public:
 
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
         const OUString& rHelpText, const OUString& rStatusText,
-        const Point& rScreenPos, const Rectangle* pHelpArea = nullptr );
+        const Point& rScreenPos, const Rectangle& rHelpArea );
 void ImplDestroyHelpWindow( bool bUpdateHideTime );
 void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
-                            const Point& rPos, const Rectangle* pHelpArea );
+                            const Point& rPos, const Rectangle& rHelpArea );
 
 #endif // INCLUDED_VCL_INC_HELPWIN_HXX
 

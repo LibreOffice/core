@@ -147,21 +147,11 @@ bool Help::IsBalloonHelpEnabled()
 }
 
 bool Help::ShowBalloon( vcl::Window* pParent,
-                        const Point& rScreenPos,
-                        const OUString& rHelpText )
-{
-    ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, QuickHelpFlags::NONE,
-                        rHelpText, OUString(), rScreenPos );
-
-    return true;
-}
-
-bool Help::ShowBalloon( vcl::Window* pParent,
                         const Point& rScreenPos, const Rectangle& rRect,
                         const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, QuickHelpFlags::NONE,
-                        rHelpText, OUString(), rScreenPos, &rRect );
+                        rHelpText, OUString(), rScreenPos, rRect );
 
     return true;
 }
@@ -189,7 +179,7 @@ bool Help::ShowQuickHelp( vcl::Window* pParent,
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_QUICK, nStyle,
                         rHelpText, rLongHelpText,
-                        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
+                        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), rScreenRect );
     return true;
 }
 
@@ -221,7 +211,7 @@ void Help::UpdateTip( sal_uIntPtr nId, vcl::Window* pParent, const Rectangle& rS
     Size aSz = pHelpWin->CalcOutSize();
     pHelpWin->SetOutputSizePixel( aSz );
     ImplSetHelpWindowPos( pHelpWin, pHelpWin->GetWinStyle(), pHelpWin->GetStyle(),
-        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
+        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), rScreenRect );
 
     pHelpWin->SetHelpText( rText );
     pHelpWin->Invalidate();
@@ -470,7 +460,7 @@ OUString HelpTextWindow::GetText() const
 
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
                          const OUString& rHelpText, const OUString& rStatusText,
-                         const Point& rScreenPos, const Rectangle* pHelpArea )
+                         const Point& rScreenPos, const Rectangle& rHelpArea )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -485,9 +475,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
 
         if  (   (   ( pHelpWin->GetHelpText() != rHelpText )
                 ||  ( pHelpWin->GetWinStyle() != nHelpWinStyle )
-                ||  (   pHelpArea
-                    &&  ( pHelpWin->GetHelpArea() != *pHelpArea )
-                    )
+                ||  ( pHelpWin->GetHelpArea() != rHelpArea )
                 )
             &&  pSVData->maHelpData.mbRequestingHelp
             )
@@ -512,7 +500,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
 
                 pHelpWin->SetHelpText( rHelpText );
                 // approach mouse position
-                ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, pHelpArea );
+                ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, rHelpArea );
                 if( pHelpWin->IsVisible() )
                     pHelpWin->Invalidate();
             }
@@ -531,13 +519,12 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
         pSVData->maHelpData.mpHelpWin = pHelpWin;
         pHelpWin->SetStatusText( rStatusText );
-        if ( pHelpArea )
-            pHelpWin->SetHelpArea( *pHelpArea );
+        pHelpWin->SetHelpArea( rHelpArea );
 
         //  positioning
         Size aSz = pHelpWin->CalcOutSize();
         pHelpWin->SetOutputSizePixel( aSz );
-        ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, pHelpArea );
+        ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, rHelpArea );
         // if not called from Window::RequestHelp, then without delay...
         if ( !pSVData->maHelpData.mbRequestingHelp )
             nDelayMode = HELPDELAY_NONE;
@@ -566,7 +553,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
 }
 
 void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
-                           const Point& rPos, const Rectangle* pHelpArea )
+                           const Point& rPos, const Rectangle& rHelpArea )
 {
     Point       aPos = rPos;
     Size        aSz = pHelpWin->GetSizePixel();
@@ -601,26 +588,23 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
 
     if ( nStyle & QuickHelpFlags::NoAutoPos )
     {
-        if ( pHelpArea )
-        {
-            // convert help area to screen coords
-            Rectangle devHelpArea(
-                pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( pHelpArea->TopLeft() ),
-                pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( pHelpArea->BottomRight() ) );
+        // convert help area to screen coords
+        Rectangle devHelpArea(
+            pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( rHelpArea.TopLeft() ),
+            pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( rHelpArea.BottomRight() ) );
 
-            // Welche Position vom Rechteck?
-            aPos = devHelpArea.Center();
+        // Welche Position vom Rechteck?
+        aPos = devHelpArea.Center();
 
-            if ( nStyle & QuickHelpFlags::Left )
-                aPos.X() = devHelpArea.Left();
-            else if ( nStyle & QuickHelpFlags::Right )
-                aPos.X() = devHelpArea.Right();
+        if ( nStyle & QuickHelpFlags::Left )
+            aPos.X() = devHelpArea.Left();
+        else if ( nStyle & QuickHelpFlags::Right )
+            aPos.X() = devHelpArea.Right();
 
-            if ( nStyle & QuickHelpFlags::Top )
-                aPos.Y() = devHelpArea.Top();
-            else if ( nStyle & QuickHelpFlags::Bottom )
-                aPos.Y() = devHelpArea.Bottom();
-        }
+        if ( nStyle & QuickHelpFlags::Top )
+            aPos.Y() = devHelpArea.Top();
+        else if ( nStyle & QuickHelpFlags::Bottom )
+            aPos.Y() = devHelpArea.Bottom();
 
         // which direction?
         if ( nStyle & QuickHelpFlags::Left )

@@ -364,18 +364,19 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             if (!sText.isEmpty())
             {
+                Rectangle aRect( aFieldRect.SVRect() );
+                Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
+                aRect.Left()   = aPt.X();
+                aRect.Top()    = aPt.Y();
+                aPt = OutputToScreenPixel( LogicToPixel( aRect.BottomRight() ));
+                aRect.Right()  = aPt.X();
+                aRect.Bottom() = aPt.Y();
+
                 if( bBalloon )
-                    Help::ShowBalloon( this, rEvt.GetMousePosPixel(), sText );
+                    Help::ShowBalloon( this, rEvt.GetMousePosPixel(), aRect, sText );
                 else
                 {
                     // the show the help
-                    Rectangle aRect( aFieldRect.SVRect() );
-                    Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
-                    aRect.Left()   = aPt.X();
-                    aRect.Top()    = aPt.Y();
-                    aPt = OutputToScreenPixel( LogicToPixel( aRect.BottomRight() ));
-                    aRect.Right()  = aPt.X();
-                    aRect.Bottom() = aPt.Y();
                     OUString sDisplayText(ClipLongToolTip(sText));
                     Help::ShowQuickHelp(this, aRect, sDisplayText, nStyle);
                 }

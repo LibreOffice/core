@@ -1108,7 +1108,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RemoveHdl, Button*, void)
 IMPL_LINK_TYPED( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, void )
 {
     // disable help
-    Help::ShowBalloon( this, Point(), OUString() );
+    Help::ShowBalloon( this, Point(), Rectangle(), OUString() );
     if (pListBox == m_pEntriesBox)
     {
         sal_uLong nPos = SvTreeList::GetRelPos( m_pEntriesBox->FirstSelected() );
