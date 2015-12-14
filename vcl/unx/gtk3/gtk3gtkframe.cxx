@@ -980,6 +980,8 @@ void GtkSalFrame::InitCommon()
 
     // connect signals
     g_signal_connect( G_OBJECT(m_pWindow), "style-set", G_CALLBACK(signalStyleSet), this );
+    gtk_widget_set_has_tooltip(pEventWidget, true);
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "query-tooltip", G_CALLBACK(signalTooltipQuery), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
@@ -2384,6 +2386,32 @@ void GtkSalFrame::SetModal(bool bModal)
         //show/hide of menus ?
         gtk_grab_remove(m_pWindow);
     }
+}
+
+gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
+                                     gboolean /*keyboard_mode*/, GtkTooltip *tooltip,
+                                     gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    if (pThis->m_aTooltip.isEmpty())
+        return false;
+    gtk_tooltip_set_text(tooltip,
+        OUStringToOString(pThis->m_aTooltip, RTL_TEXTENCODING_UTF8).getStr());
+    GdkRectangle aHelpArea;
+    aHelpArea.x = pThis->m_aHelpArea.Left();
+    aHelpArea.y = pThis->m_aHelpArea.Top();
+    aHelpArea.width = pThis->m_aHelpArea.GetWidth();
+    aHelpArea.height = pThis->m_aHelpArea.GetHeight();
+    gtk_tooltip_set_tip_area(tooltip, &aHelpArea);
+    return true;
+}
+
+bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpArea)
+{
+    m_aTooltip = rHelpText;
+    m_aHelpArea = rHelpArea;
+    gtk_widget_trigger_tooltip_query(getMouseEventWidget());
+    return true;
 }
 
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )

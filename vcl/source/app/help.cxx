@@ -31,6 +31,7 @@
 #include "vcl/settings.hxx"
 
 #include "helpwin.hxx"
+#include "salframe.hxx"
 #include "svdata.hxx"
 
 #define HELPWINSTYLE_QUICK      0
@@ -462,6 +463,12 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
                          const OUString& rHelpText, const OUString& rStatusText,
                          const Point& rScreenPos, const Rectangle& rHelpArea )
 {
+    if (pParent->ImplGetFrame()->ShowTooltip(rHelpText, rHelpArea))
+    {
+        //tooltips are handled natively, return early
+        return;
+    }
+
     ImplSVData* pSVData = ImplGetSVData();
 
     if (rHelpText.isEmpty() && !pSVData->maHelpData.mbRequestingHelp)
