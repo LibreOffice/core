@@ -6399,6 +6399,12 @@ void MSOProperty::Read(SvStream& rStream)
     rStream.ReadUInt32(m_nValue);
 }
 
+void MSOProperty::Write(SvStream& rStream)
+{
+    rStream.WriteUInt32(m_nKey);
+    rStream.WriteUInt32(m_nValue);
+}
+
 MSOPropertyBag::MSOPropertyBag()
     : m_nId(0)
 {
@@ -6425,6 +6431,16 @@ void MSOPropertyBag::Read(SvStream& rStream)
     }
 }
 
+void MSOPropertyBag::Write(WW8Export& rExport)
+{
+    SvStream& rStream = *rExport.pTableStrm;
+    rStream.WriteUInt16(m_nId);
+    rStream.WriteUInt16(m_aProperties.size());
+    rStream.WriteUInt16(0); // cbUnknown
+    for (MSOProperty& rProperty : m_aProperties)
+        rProperty.Write(rStream);
+}
+
 void WW8SmartTagData::Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 lcbFactoidData)
 {
     sal_uInt64 nOldPosition = rStream.Tell();
@@ -6445,6 +6461,8 @@ void WW8SmartTagData::Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 l
 void WW8SmartTagData::Write(WW8Export& rExport)
 {
     m_aPropBagStore.Write(rExport);
+    for (MSOPropertyBag& rPropertyBag : m_aPropBags)
+        rPropertyBag.Write(rExport);
 }
 
 WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)

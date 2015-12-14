@@ -418,6 +418,19 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
         }
     }
     aSmartTagData.m_aPropBagStore.m_aStringTable.assign(aSet.begin(), aSet.end());
+    for (const std::map<OUString, OUString>& rStatements : m_aStatements)
+    {
+        MSOPropertyBag aPropertyBag;
+        aPropertyBag.m_nId = 1;
+        for (const std::pair<OUString, OUString>& rPair : rStatements)
+        {
+            MSOProperty aProperty;
+            aProperty.m_nKey = std::distance(aSet.begin(), aSet.find(rPair.first));
+            aProperty.m_nValue = std::distance(aSet.begin(), aSet.find(rPair.second));
+            aPropertyBag.m_aProperties.push_back(aProperty);
+        }
+        aSmartTagData.m_aPropBags.push_back(aPropertyBag);
+    }
 
     aSmartTagData.Write(rExport);
     rExport.pFib->lcbFactoidData = rStream.Tell() - rExport.pFib->fcFactoidData;
