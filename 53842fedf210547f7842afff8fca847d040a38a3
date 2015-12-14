@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_68a09591",
+        "filename": "sd/uiconfig/simpress/ui/presentationdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-14T14:17:48Z",
+      "side": 1,
+      "message": "It should :)",
+      "parentUuid": "dab17558_a88d5d7d",
+      "revId": "53842fedf210547f7842afff8fca847d040a38a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_08e9091b",
         "filename": "sd/uiconfig/simpress/ui/presentationdialog.ui",
         "patchSetId": 1
