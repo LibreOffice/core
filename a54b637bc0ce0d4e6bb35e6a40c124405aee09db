@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_28b04df4",
+        "filename": "lotuswordpro/source/filter/lwpstory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-14T12:57:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be dynamic_cast now?",
+      "revId": "a54b637bc0ce0d4e6bb35e6a40c124405aee09db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8895f941",
+        "filename": "lotuswordpro/source/filter/lwpstory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-14T12:57:16Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "a54b637bc0ce0d4e6bb35e6a40c124405aee09db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
