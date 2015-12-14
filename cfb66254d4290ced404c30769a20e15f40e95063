@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_88d179fe",
+        "filename": "filter/source/svg/svgreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2015-12-14T16:14:58Z",
+      "side": 1,
+      "message": "I would add the rest of the block to the \u0027else\u0027 path using a scope. Setting any of the attributes for gradient (e.g. \"draw:fill-gradient-name\") if not creating one is not needed.",
+      "range": {
+        "startLine": 755,
+        "startChar": 20,
+        "endLine": 755,
+        "endChar": 24
+      },
+      "revId": "cfb66254d4290ced404c30769a20e15f40e95063",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
