@@ -1181,10 +1181,22 @@ const SvxFieldData* toXMLPropertyStates(
             break;
             case EE_CHAR_ESCAPEMENT:
             {
-                if (!static_cast<const SvxEscapementItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
-                    continue;
+                sal_Int32 nIndexEsc = xMapper->FindEntryIndex("CharEscapement", XML_NAMESPACE_STYLE, "text-position");
+                if (nIndexEsc == -1 || nIndexEsc > nEntryCount)
+                    break;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                sal_Int32 nIndexEscHeight = xMapper->FindEntryIndex("CharEscapementHeight", XML_NAMESPACE_STYLE, "text-position");
+                if (nIndexEscHeight == -1 || nIndexEscHeight > nEntryCount)
+                    break;
+
+                const SvxEscapementItem* pEsc = static_cast<const SvxEscapementItem*>(p);
+
+                pEsc->QueryValue(aAny, MID_ESC);
+                rPropStates.push_back(XMLPropertyState(nIndexEsc, aAny));
+
+                pEsc->QueryValue(aAny, MID_ESC_HEIGHT);
+                rPropStates.push_back(XMLPropertyState(nIndexEscHeight, aAny));
+
             }
             break;
             case EE_CHAR_EMPHASISMARK:
