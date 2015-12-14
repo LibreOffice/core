@@ -237,14 +237,14 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                         sText = SwViewShell::GetShellRes()->aLinkClick + ": " + sText;
                 }
 
+                // then display the help:
+                Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                 if( rEvt.GetMode() & HelpEventMode::BALLOON )
                 {
-                    Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), sText );
+                    Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), aRect, sText );
                 }
                 else
                 {
-                    // then display the help:
-                    Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                     Help::ShowQuickHelp( pWindow, aRect, sText );
                 }
                 bContinue = false;
