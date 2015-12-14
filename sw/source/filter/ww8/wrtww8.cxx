@@ -358,11 +358,11 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
     rStream.WriteUInt16(0xffff); // fExtend
     rStream.WriteUInt16(m_aStartCPs.size()); // cData
     rStream.WriteUInt16(0); // cbExtra
-    rStream.WriteUInt16(6); // cchData
 
-    // Write FACTOIDINFO.
     for (size_t i = 0; i < m_aStartCPs.size(); ++i)
     {
+        rStream.WriteUInt16(6); // cchData
+        // Write FACTOIDINFO.
         rStream.WriteUInt32(i); // dwId
         rStream.WriteUInt16(0); // fSubEntry
         rStream.WriteUInt16(0); // fto
