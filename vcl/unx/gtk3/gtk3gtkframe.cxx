@@ -2344,6 +2344,13 @@ void GtkSalFrame::EndSetClipRegion()
         gdk_window_shape_combine_region( widget_get_window(m_pWindow), m_pRegion, 0, 0 );
 }
 
+void GtkSalFrame::SetModal(bool bModal)
+{
+    if (!m_pWindow)
+        return;
+    gtk_window_set_modal(GTK_WINDOW(m_pWindow), bModal);
+}
+
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);

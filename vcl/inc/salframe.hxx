@@ -239,6 +239,10 @@ public:
     // done setting up the clipregion
     virtual void            EndSetClipRegion() = 0;
 
+    virtual void            SetModal(bool /*bModal*/)
+    {
+    }
+
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
     void                    SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc );
