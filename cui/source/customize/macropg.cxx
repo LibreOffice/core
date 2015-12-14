@@ -654,7 +654,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
                 )
             )
     {
-        VclPtrInstance< AssignComponentDialog > pAssignDlg( pThis, sEventURL );
+        ScopedVclPtrInstance< AssignComponentDialog > pAssignDlg( pThis, sEventURL );
 
         short ret = pAssignDlg->Execute();
         if( ret )
@@ -668,7 +668,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     else if( bAssEnabled )
     {
         // assign pressed
-        VclPtrInstance< SvxScriptSelectorDialog > pDlg( pThis, false, pThis->GetFrame() );
+        ScopedVclPtrInstance< SvxScriptSelectorDialog > pDlg( pThis, false, pThis->GetFrame() );
         if( pDlg )
         {
             short ret = pDlg->Execute();
