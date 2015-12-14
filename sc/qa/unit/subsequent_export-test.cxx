@@ -54,6 +54,7 @@
 #include <editeng/section.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/borderline.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <formula/grammar.hxx>
@@ -571,6 +572,19 @@ void setFont( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int
     rEE.QuickSetAttribs(aItemSet, aSel);
 }
 
+void setEscapement( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, short nEsc, sal_uInt8 nRelSize )
+{
+    ESelection aSel;
+    aSel.nStartPara = aSel.nEndPara = nPara;
+    aSel.nStartPos = nStart;
+    aSel.nEndPos = nEnd;
+
+    SfxItemSet aItemSet = rEE.GetEmptyItemSet();
+    SvxEscapementItem aItem(nEsc, nRelSize, EE_CHAR_ESCAPEMENT);
+    aItemSet.Put(aItem);
+    rEE.QuickSetAttribs(aItemSet, aSel);
+}
+
 }
 
 void ScExportTest::testNamedRangeBugfdo62729()
@@ -700,6 +714,24 @@ void ScExportTest::testRichTextExportODS()
                     continue;
 
                 return static_cast<const SvxFontItem*>(p)->GetFamilyName() == rFontName;
+            }
+            return false;
+        }
+
+        static bool isEscapement(const editeng::Section& rAttr, short nEsc, sal_uInt8 nRelSize)
+        {
+            if (rAttr.maAttributes.empty())
+                return false;
+
+            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
+            for (; it != itEnd; ++it)
+            {
+                const SfxPoolItem* p = *it;
+                if (p->Which() != EE_CHAR_ESCAPEMENT)
+                    continue;
+
+                const SvxEscapementItem* pItem = static_cast<const SvxEscapementItem*>(p);
+                return ((pItem->GetEsc() == nEsc) && (pItem->GetProp() == nRelSize));
             }
             return false;
         }
@@ -898,6 +930,42 @@ void ScExportTest::testRichTextExportODS()
             return true;
         }
 
+        bool checkB9(const EditTextObject* pText) const
+        {
+            if (!pText)
+                return false;
+
+            if (pText->GetParagraphCount() != 1)
+                return false;
+
+            if (pText->GetText(0) != "Sub and Super")
+                return false;
+
+            std::vector<editeng::Section> aSecAttrs;
+            pText->GetAllSections(aSecAttrs);
+            if (aSecAttrs.size() != 3)
+                return false;
+
+            // superscript
+            const editeng::Section* pAttr = &aSecAttrs[0];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 3)
+                return false;
+
+            if (pAttr->maAttributes.size() != 1 || !isEscapement(*pAttr, 32, 64))
+                return false;
+
+            // subscript
+            pAttr = &aSecAttrs[2];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 8 || pAttr->mnEnd != 13)
+                return false;
+
+            if (pAttr->maAttributes.size() != 1 || !isEscapement(*pAttr, -32, 66))
+                return false;
+
+            return true;
+        }
+
+
     } aCheckFunc;
 
     // Start with an empty document, put one edit text cell, and make sure it
@@ -989,6 +1057,15 @@ void ScExportTest::testRichTextExportODS()
         rDoc3.SetEditText(ScAddress(1,7,0), pEE->CreateTextObject());
         pEditText = rDoc3.GetEditText(ScAddress(1,7,0));
         CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value.", aCheckFunc.checkB8(pEditText));
+
+        pEE->Clear();
+        pEE->SetText("Sub and Super");
+        setEscapement(*pEE, 0, 0, 3, 32, 64);
+        setEscapement(*pEE, 0, 8, 13, -32, 66);
+        rDoc3.SetEditText(ScAddress(1,8,0), pEE->CreateTextObject());
+        pEditText = rDoc3.GetEditText(ScAddress(1,8,0));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B9 value.", aCheckFunc.checkB9(pEditText));
+
     }
 
     // Reload the doc again, and check the content of B2, B4, B6 and B7.
