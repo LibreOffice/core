@@ -27,8 +27,6 @@
 
 #include "tabpages.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
 const sal_uInt16 ScTabPageProtection::pProtectionRanges[] =
 {
     SID_SCATTR_PROTECTION,

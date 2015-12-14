@@ -211,8 +211,6 @@ short Compare( const OUString &sInput1, const OUString &sInput2,
 
 }
 
-// STATIC DATA -----------------------------------------------------------
-
 struct ScSortInfo
 {
     ScRefCellValue maCell;
@@ -220,8 +218,6 @@ struct ScSortInfo
     DECL_FIXEDMEMPOOL_NEWDEL( ScSortInfo );
 };
 IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
-
-// END OF STATIC DATA -----------------------------------------------------
 
 class ScSortInfoArray : boost::noncopyable
 {

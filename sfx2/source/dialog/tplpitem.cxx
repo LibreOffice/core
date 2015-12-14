@@ -20,10 +20,6 @@
 #include <sfx2/tplpitem.hxx>
 #include <com/sun/star/frame/status/Template.hpp>
 
-
-// STATIC DATA -----------------------------------------------------------
-
-
 SfxPoolItem* SfxTemplateItem::CreateDefault() { return new SfxTemplateItem; }
 
 

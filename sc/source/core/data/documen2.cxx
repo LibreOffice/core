@@ -129,8 +129,6 @@ private:
     }
 };
 
-// STATIC DATA -----------------------------------------------------------
-
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpCellStringPool(new svl::SharedStringPool(ScGlobal::pCharClass)),
         mpFormulaGroupCxt(nullptr),

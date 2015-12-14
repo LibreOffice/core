@@ -39,8 +39,6 @@ using namespace com::sun::star;
 #include "drwlayer.hxx"
 #include "chartarr.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
 void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
                                 SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 )
 {

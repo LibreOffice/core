@@ -28,9 +28,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-// STATIC DATA -----------------------------------------------------------
-
-
 // class SfxSpellCheckItem -----------------------------------------------
 
 SfxSpellCheckItem::SfxSpellCheckItem

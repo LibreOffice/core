@@ -20,8 +20,6 @@
 #include "rfindlst.hxx"
 #include <tools/debug.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
 #define SC_RANGECOLORS  8
 
 static const ColorData aColNames[SC_RANGECOLORS] =

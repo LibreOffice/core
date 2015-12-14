@@ -30,7 +30,6 @@
 
 #include <mdds/flat_segment_tree.hpp>
 
-
 ScMarkData::ScMarkData() :
     maTabMarked(),
     aMultiSel()

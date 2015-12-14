@@ -62,8 +62,6 @@
 #error BCA_SLOTS_DEFINE DOOMed!
 #endif
 
-// STATIC DATA -----------------------------------------------------------
-
 namespace sc {
 
 bool AreaListener::SortByArea::operator ()( const AreaListener& rLeft, const AreaListener& rRight ) const

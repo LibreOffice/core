@@ -29,8 +29,6 @@
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 
-// STATIC DATA -----------------------------------------------------------
-
 // Constructor
 
 SfxTemplateControllerItem::SfxTemplateControllerItem(

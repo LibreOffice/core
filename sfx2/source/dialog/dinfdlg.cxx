@@ -102,8 +102,6 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
         && i_rLeft.IsUTC            == i_rRight.IsUTC;
 }
 
-// STATIC DATA -----------------------------------------------------------
-
 SfxPoolItem* SfxDocumentInfoItem::CreateDefault() { return new SfxDocumentInfoItem; }
 
 const sal_uInt16 HI_NAME = 1;

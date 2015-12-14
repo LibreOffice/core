@@ -72,8 +72,6 @@
 #define SC_MAX_POOLREF      (SFX_ITEMS_OLD_MAXREF - 39)
 #define SC_SAFE_POOLREF     (SC_MAX_POOLREF + 20)
 
-// STATIC DATA -----------------------------------------------------------
-
 sal_uInt16* ScDocumentPool::pVersionMap1 = nullptr;
 sal_uInt16* ScDocumentPool::pVersionMap2 = nullptr;
 sal_uInt16* ScDocumentPool::pVersionMap3 = nullptr;

@@ -26,8 +26,6 @@
 #include "hints.hxx"
 #include "sc.hrc"
 
-// STATIC DATA -----------------------------------------------------------
-
 void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     bool bDataChanged = false;

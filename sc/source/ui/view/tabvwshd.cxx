@@ -30,8 +30,6 @@
 #include "sc.hrc"
 #include <gridwin.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
 //!         parent window for dialogs
 //!         Problem: OLE Server!
 

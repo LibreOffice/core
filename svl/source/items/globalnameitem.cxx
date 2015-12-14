@@ -29,9 +29,6 @@
 
 #include <svl/globalnameitem.hxx>
 
-// STATIC DATA
-
-
 SfxPoolItem* SfxGlobalNameItem::CreateDefault() { return new SfxGlobalNameItem; }
 
 

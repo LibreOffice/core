@@ -64,8 +64,6 @@ struct ScStylePair
 
 }
 
-// STATIC DATA -----------------------------------------------------------
-
 //  Ole
 
 void ScDocShell::SetVisArea( const Rectangle & rVisArea )

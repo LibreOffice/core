@@ -19,9 +19,6 @@
 
 #include "target.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-
 ScTabViewTarget::~ScTabViewTarget()
 {
 }

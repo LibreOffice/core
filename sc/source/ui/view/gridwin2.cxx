@@ -55,8 +55,6 @@ using css::sheet::DataPilotFieldOrientation;
 using std::vector;
 using std::unique_ptr;
 
-// STATIC DATA -----------------------------------------------------------
-
 DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
     ScDocument* pDoc = pViewData->GetDocument();

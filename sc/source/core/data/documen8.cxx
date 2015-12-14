@@ -93,8 +93,6 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 namespace {
 
 inline sal_uInt16 getScaleValue(SfxStyleSheetBase& rStyle, sal_uInt16 nWhich)

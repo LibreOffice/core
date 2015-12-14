@@ -31,7 +31,6 @@
 #include "sc.hrc"
 #include <editutil.hxx>
 
-// STATIC DATA
 // Err527 Workaround
 const ScFormulaCell* pLastFormulaTreeTop = nullptr;
 

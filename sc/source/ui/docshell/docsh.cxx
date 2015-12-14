@@ -139,8 +139,6 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using std::shared_ptr;
 using ::std::vector;
 
-// STATIC DATA -----------------------------------------------------------
-
 //  Filter names (like in sclib.cxx)
 
 static const sal_Char pFilterSc50[]     = "StarCalc 5.0";

@@ -73,8 +73,6 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA ---------------------------------------------------------------
-
 //  GlobalName of writer-DocShell from comphelper/classids.hxx
 
 //      C U T

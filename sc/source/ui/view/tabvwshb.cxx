@@ -65,8 +65,6 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 {
     // is called from paint

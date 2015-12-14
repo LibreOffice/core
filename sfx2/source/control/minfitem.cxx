@@ -19,8 +19,6 @@
 
 #include <sfx2/minfitem.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
 SfxPoolItem* SfxMacroInfoItem::CreateDefault() { DBG_ASSERT(false, "No SfxMacroInfItem factory available"); return nullptr; }
 
 

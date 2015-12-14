@@ -33,7 +33,6 @@
 
 #define SC_CONS_NOTFOUND    -1
 
-// STATIC DATA
 static const OpCode eOpCodeTable[] = {      //  order as for enum ScSubTotalFunc
         ocBad,                              //  none
         ocAverage,

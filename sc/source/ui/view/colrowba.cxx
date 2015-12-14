@@ -30,8 +30,6 @@
 #include "markdata.hxx"
 #include <columnspanset.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
 static OUString lcl_MetricString( long nTwips, const OUString& rText )
 {
     if ( nTwips <= 0 )

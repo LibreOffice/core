@@ -22,8 +22,6 @@
 #include "sorgitm.hxx"
 #include <osl/diagnose.h>
 #include <typeinfo>
-// STATIC DATA -----------------------------------------------------------
-
 
 SfxPoolItem* SfxScriptOrganizerItem::CreateDefault() { return new SfxScriptOrganizerItem; }
 

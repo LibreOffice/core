@@ -22,8 +22,6 @@
 
 #include <osl/diagnose.h>
 
-// STATIC DATA
-
 ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {
