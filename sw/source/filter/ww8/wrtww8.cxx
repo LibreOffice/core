@@ -346,6 +346,9 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
     if (m_aStartCPs.empty())
         return;
 
+    // Smart tags are otherwise removed by Word on saving.
+    rExport.pDop->fEmbedFactoids = true;
+
     SvStream& rStream = *rExport.pTableStrm;
 
     rExport.pFib->fcPlcfBkfFactoid = rStream.Tell();

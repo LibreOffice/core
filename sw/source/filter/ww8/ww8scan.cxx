@@ -7720,6 +7720,8 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         pData += 32;
 
         a16Bit = 0;
+        if (fEmbedFactoids)
+            a16Bit |= 0x8;
         if (fAcetateShowMarkup)
             a16Bit |= 0x1000;
         //Word XP at least requires fAcetateShowMarkup to honour fAcetateShowAtn
