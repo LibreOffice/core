@@ -39,39 +39,6 @@ static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0
 #include "nranges.cxx"
 #include "poolio.hxx"
 
-
-#ifdef DBG_UTIL
-
-
-const sal_Char *DbgCheckItemSet( const void* pVoid )
-{
-    const SfxItemSet *pSet = static_cast<const SfxItemSet*>(pVoid);
-    SfxWhichIter aIter( *pSet );
-    sal_uInt16 nCount = 0, n = 0;
-    for ( sal_uInt16 nWh = aIter.FirstWhich(); nWh; nWh = aIter.NextWhich(), ++n )
-    {
-        const SfxPoolItem *pItem = pSet->m_pItems[n];
-        if ( pItem )
-        {
-            ++nCount;
-            assert((IsInvalidItem(pItem) ||
-                        pItem->Which() == 0 || pItem->Which() == nWh
-                    ) && "SfxItemSet: invalid which-id" );
-            assert((IsInvalidItem(pItem) || !pItem->Which() ||
-                    !SfxItemPool::IsWhich(pItem->Which()) ||
-                    pSet->GetPool()->IsItemFlag(nWh, SfxItemPoolFlags::NOT_POOLABLE) ||
-                    SFX_ITEMS_NULL != pSet->GetPool()->GetSurrogate(pItem)
-                   ) && "SfxItemSet: item in set which is not in pool" );
-        }
-
-    }
-    assert(pSet->m_nCount == nCount);
-
-    return nullptr;
-}
-
-#endif
-
 /**
  * Ctor for a SfxItemSet with exactly the Which Ranges, which are known to
  * the supplied SfxItemPool.
