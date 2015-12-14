@@ -847,6 +847,22 @@ bool SVGFilter::implExportDocument()
                 SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
             }
         }
+        // Create a ClipPath element applied to the leaving slide in order
+        // to avoid that slide borders are visible during transition
+        {
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation_clip_path_shrink" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
+            SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", true, true );
+            {
+                sal_Int32 nDocWidthExt = nDocWidth / 500;
+                sal_Int32 nDocHeightExt = nDocHeight / 500;
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( nDocX + nDocWidthExt / 2 ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( nDocY + nDocHeightExt / 2) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( nDocWidth - nDocWidthExt ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( nDocHeight - nDocHeightExt ) );
+                SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
+            }
+        }
     }
 
     if( implLookForFirstVisiblePage() )  // OK! We found at least one visible page.
