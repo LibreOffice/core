@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a88d5d7d",
+        "filename": "sd/uiconfig/simpress/ui/presentationdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-12-14T07:29:00Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the first letter be capitalized?",
+      "revId": "53842fedf210547f7842afff8fca847d040a38a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_08e9091b",
+        "filename": "sd/uiconfig/simpress/ui/presentationdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-12-14T07:29:00Z",
+      "side": 1,
+      "message": "Maybe better \"In the current window\", since this embeds the slideshow in the impress editor window.",
+      "revId": "53842fedf210547f7842afff8fca847d040a38a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
