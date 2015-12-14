@@ -110,7 +110,6 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        // convert helper stl vector of primitives to Primitive2DSequence
         Primitive2DContainer Primitive2DContainer::maybeInvert(bool bInvert) const
         {
             const sal_uInt32 nSize(size());
