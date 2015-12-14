@@ -1601,23 +1601,34 @@ bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPage
             }
             SvXMLElementExport aGElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
+
             {
-                // add id attribute
+                // Insert a further inner the <g> open tag for handling elements
+                // inserted before or after a slide: that is used for some
+                // when swithing from the last to the first slide.
                 const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
+                OUString sContainerId = "container-";
+                sContainerId += sPageId;
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sContainerId );
+                SvXMLElementExport aContainerExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Slide" );
+                {
+                    // add id attribute
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
 
-                // Adding a clip path to each exported slide , so in case
-                // bitmaps or other elements exceed the slide margins, they are
-                // trimmed, even when they are shown inside a thumbnail view.
-                OUString sClipPathAttrValue = "url(#" + msClipPathId + ")";
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Slide" );
 
-                SvXMLElementExport aSlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+                    // Adding a clip path to each exported slide , so in case
+                    // bitmaps or other elements exceed the slide margins, they are
+                    // trimmed, even when they are shown inside a thumbnail view.
+                    OUString sClipPathAttrValue = "url(#" + msClipPathId + ")";
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
 
-                bRet = implExportPage( sPageId, rxPages[i], xShapes, false /* is not a master page */ ) || bRet;
-            }
+                    SvXMLElementExport aSlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+
+                    bRet = implExportPage( sPageId, rxPages[i], xShapes, false /* is not a master page */ ) || bRet;
+                }
+            } // append the </g> closing tag related to inserted elements
         } // append the </g> closing tag related to the svg element handling the slide visibility
     }
 
