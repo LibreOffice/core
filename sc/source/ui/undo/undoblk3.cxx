@@ -58,9 +58,6 @@
 #include "editdataarray.hxx"
 #include <rowheightcontext.hxx>
 
-// STATIC DATA ---------------------------------------------------------------
-
-
 // TODO:
 /*A*/   // SetOptimalHeight on Document, when no View
 

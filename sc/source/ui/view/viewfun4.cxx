@@ -72,8 +72,6 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 bool bPasteIsDrop = false;
 
 void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,

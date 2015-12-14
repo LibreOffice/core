@@ -49,8 +49,6 @@
 #include "scuitphfedit.hxx"
 #include <memory>
 
-// STATIC DATA -----------------------------------------------------------
-
 // class ScHFEditPage
 
 ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,

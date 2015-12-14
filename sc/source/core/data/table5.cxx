@@ -51,8 +51,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 using ::std::set;
 
-// STATIC DATA -----------------------------------------------------------
-
 #define GET_SCALEVALUE(set,id)  static_cast<const SfxUInt16Item&>(set.Get( id )).GetValue()
 
 void ScTable::UpdatePageBreaks( const ScRange* pUserArea )

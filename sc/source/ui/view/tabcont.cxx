@@ -35,8 +35,6 @@
 #include "markdata.hxx"
 #include <gridwin.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
 ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
     : TabBar(pParent, WB_3DLOOK | WB_MINSCROLL | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG)
     , DropTargetHelper(this)

@@ -97,8 +97,6 @@ using ::editeng::SvxBorderLine;
 using ::std::vector;
 using ::std::unique_ptr;
 
-// STATIC DATA ---------------------------------------------------------------
-
 bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();

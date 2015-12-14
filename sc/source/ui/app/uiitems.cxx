@@ -26,10 +26,6 @@
 #include <osl/diagnose.h>
 #include <editeng/editobj.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-
-
 /**
  * Status update for entry field
  */

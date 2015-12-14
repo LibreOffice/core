@@ -40,7 +40,6 @@
 using ::std::vector;
 using namespace formula;
 
-// STATIC DATA
 #define MAX_ANZ_DOUBLE_FOR_SORT 100000
 
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental

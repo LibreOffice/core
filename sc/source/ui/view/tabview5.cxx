@@ -58,8 +58,6 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 void ScTabView::Init()
 {
     /*  RTL layout of the view windows is done manually, because it depends on

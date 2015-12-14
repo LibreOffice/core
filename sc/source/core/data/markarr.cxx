@@ -23,8 +23,6 @@
 
 #include <osl/diagnose.h>
 
-// STATIC DATA -----------------------------------------------------------
-
 ScMarkArray::ScMarkArray() :
     nCount( 0 ),
     nLimit( 0 ),

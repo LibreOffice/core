@@ -84,8 +84,6 @@ using ::com::sun::star::sheet::XDimensionsSupplier;
 using ::std::list;
 using ::std::vector;
 
-// STATIC DATA -----------------------------------------------------------
-
 //          outliner
 
 // create outline grouping

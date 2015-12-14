@@ -35,8 +35,6 @@
 #include "globstr.hrc"
 #include "tpusrlst.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
 #define CR  (sal_Unicode)13
 #define LF  (sal_Unicode)10
 

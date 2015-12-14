@@ -58,9 +58,6 @@
 #include <memory>
 #include <set>
 
-// STATIC DATA -----------------------------------------------------------
-
-
 // TODO:
 /*A*/   // SetOptimalHeight on Document, if no View
 /*B*/   // linked sheets

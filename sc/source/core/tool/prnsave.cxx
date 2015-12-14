@@ -23,8 +23,6 @@
 
 #include <osl/diagnose.h>
 
-// STATIC DATA
-
 //      Daten pro Tabelle
 
 ScPrintSaverTab::ScPrintSaverTab() :

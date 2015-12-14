@@ -40,8 +40,6 @@ extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 static Point aSwitchPos;                //! Member
 static bool bDidSwitch = false;
 

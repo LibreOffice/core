@@ -22,7 +22,6 @@
 #include "compiler.hxx"
 #include "document.hxx"
 
-// STATIC DATA
 namespace {
 
 // Include colon; addresses in range reference are handled individually.

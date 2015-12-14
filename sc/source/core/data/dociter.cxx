@@ -54,8 +54,6 @@ using ::std::set;
 // #define debugiter(...) fprintf(stderr, __VA_ARGS__)
 #define debugiter(...)
 
-// STATIC DATA -----------------------------------------------------------
-
 namespace {
 
 template<typename _Iter>

@@ -35,8 +35,6 @@
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
 ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
                              const SfxItemSet&  rArgSet ) :
     SfxTabPage(pParent, "TpViewPage", "modules/scalc/ui/tpviewpage.ui", &rArgSet),

@@ -81,8 +81,6 @@ using namespace com::sun::star;
 
 const sal_uInt16 SC_SHRINKAGAIN_MAX = 7;
 
-// STATIC DATA -----------------------------------------------------------
-
 class ScDrawStringsVars
 {
     ScOutputData*       pOutput;                // connection

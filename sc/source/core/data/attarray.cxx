@@ -47,8 +47,6 @@
 #include <rtl/strbuf.hxx>
 #include <memory>
 
-// STATIC DATA -----------------------------------------------------------
-
 using ::editeng::SvxBorderLine;
 
 ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :

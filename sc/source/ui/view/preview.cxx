@@ -66,8 +66,6 @@
 
 #include <memory>
 
-// STATIC DATA -----------------------------------------------------------
-
 #define SC_PREVIEW_SHADOWSIZE   2
 
 static long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, std::vector<long>& nPages )

@@ -86,8 +86,6 @@
 
 using namespace formula;
 
-// STATIC DATA -----------------------------------------------------------
-
 bool ScInputHandler::bOptLoaded = false;            // Evaluate App options
 bool ScInputHandler::bAutoComplete = false;         // Is set in KeyInput
 

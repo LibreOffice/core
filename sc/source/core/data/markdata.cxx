@@ -29,8 +29,6 @@
 
 #include <mdds/flat_segment_tree.hpp>
 
-// STATIC DATA -----------------------------------------------------------
-
 ScMarkData::ScMarkData() :
     maTabMarked(),
     pMultiSel( nullptr )

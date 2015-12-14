@@ -84,8 +84,6 @@
 
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 static ScDrawObjFactory* pFac = nullptr;
 static E3dObjFactory* pF3d = nullptr;
 static sal_uInt16 nInst = 0;

@@ -62,8 +62,6 @@
 #include "scmod.hxx"
 #include "fillinfo.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 

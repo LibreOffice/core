@@ -37,8 +37,6 @@
 #include "compiler.hxx"
 #include "markdata.hxx"
 
-// STATIC DATA ---------------------------------------------------------------
-
 // List box positions for print range (PR)
 enum {
     SC_AREASDLG_PR_ENTIRE  = 1,

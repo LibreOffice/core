@@ -66,8 +66,6 @@
 #include <math.h>
 #include <memory>
 
-// STATIC DATA -----------------------------------------------------------
-
 #define _D_MAX_LONG_  (double) 0x7fffffff
 
 extern sal_uInt16 nScFillModeMouseModifier;     // global.cxx

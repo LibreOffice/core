@@ -99,8 +99,6 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
 
-// STATIC DATA -----------------------------------------------------------
-
 IMPL_LINK_TYPED( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction, void )
 {
     // #i101118# if drawing layer collects the undo actions, add it there

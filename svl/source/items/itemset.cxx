@@ -35,8 +35,6 @@
 #include <tools/solar.h>
 #include <rtl/string.hxx>
 
-// STATIC DATA
-
 static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0'
 #include "nranges.cxx"
 #include "poolio.hxx"

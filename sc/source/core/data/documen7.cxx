@@ -43,8 +43,6 @@
 
 extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkAround
 
-// STATIC DATA -----------------------------------------------------------
-
 void ScDocument::StartListeningArea(
     const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {

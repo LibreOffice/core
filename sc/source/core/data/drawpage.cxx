@@ -24,8 +24,6 @@
 #include "document.hxx"
 #include "pageuno.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
 ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, bMasterPage)
 {

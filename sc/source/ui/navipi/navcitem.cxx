@@ -25,8 +25,6 @@
 #include "navipi.hxx"
 #include "sc.hrc"
 
-// STATIC DATA -----------------------------------------------------------
-
 ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
                                                       ScNavigatorDlg& rDlg,
                                                       SfxBindings&    rBindings )

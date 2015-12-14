@@ -50,7 +50,6 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA
 //  Delimiters zusaetzlich zu EditEngine-Default:
 
 ScEditUtil::ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
