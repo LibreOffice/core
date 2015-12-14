@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a8c1dd30",
+        "filename": "sc/source/ui/view/colrowba.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-14T16:55:51Z",
+      "side": 1,
+      "message": "When using ScViewData more than once or twice then it should be obtained from ScTabView first, e.g.\n\n const ScViewData\u0026 rViewData \u003d pTabView-\u003eGetViewData();\n\nI\u0027ll change that in an amended patch.",
+      "revId": "757475c125bc2aa8e642f5799eb199a27f7f87f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
