@@ -39,7 +39,7 @@ SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell)
 
 void ScAuditingShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_AUDIT));
+    GetStaticInterface()->RegisterPopupMenu("audit");
 }
 
 ScAuditingShell::ScAuditingShell(ScViewData* pData) :

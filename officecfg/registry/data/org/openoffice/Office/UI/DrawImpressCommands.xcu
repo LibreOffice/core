@@ -1375,11 +1375,6 @@
             <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:OriginalSize" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Original Size</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ChangePicture" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Replace...</value>

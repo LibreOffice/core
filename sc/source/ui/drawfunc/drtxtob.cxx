@@ -90,7 +90,7 @@ void ScDrawTextObjectBar::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             RID_TEXT_TOOLBOX);
 
-    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_DRAWTEXT));
+    GetStaticInterface()->RegisterPopupMenu("drawtext");
 
     GetStaticInterface()->RegisterChildWindow(ScGetFontWorkId());
 }

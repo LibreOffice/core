@@ -41,7 +41,7 @@ void ScMediaShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_MEDIA_OBJECTBAR);
 
-    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_MEDIA));
+    GetStaticInterface()->RegisterPopupMenu("media");
 }
 
 

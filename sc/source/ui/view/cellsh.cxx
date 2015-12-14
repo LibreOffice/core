@@ -70,7 +70,7 @@ void ScCellShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
                                             RID_OBJECTBAR_FORMAT);
 
-    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_CELLS));
+    GetStaticInterface()->RegisterPopupMenu("cell");
 }
 
 ScCellShell::ScCellShell(ScViewData* pData) :

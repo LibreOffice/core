@@ -68,7 +68,7 @@ void ScDrawShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             RID_DRAW_OBJECTBAR);
 
-    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_DRAW));
+    GetStaticInterface()->RegisterPopupMenu("draw");
 
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
 }
