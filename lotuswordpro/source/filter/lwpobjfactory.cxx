@@ -665,10 +665,15 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
             break;
         }
     }
-    if(newObj.is())
+    if (newObj.is())
     {
         newObj->QuickRead();
-        m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
+        auto result = m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
+        if (!result.second)
+        {
+            SAL_WARN("lwp", "clearing duplicate object");
+            newObj.clear();
+        }
     }
 
     return newObj;
