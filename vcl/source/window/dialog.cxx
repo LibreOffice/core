@@ -46,6 +46,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
+#include <salframe.hxx>
 
 #include <iostream>
 
@@ -1032,7 +1033,6 @@ void Dialog::SetModalInputMode( bool bModal )
             mpDialogParent = pParent->mpWindowImpl->mpFrameWindow;
             mpDialogParent->ImplIncModalCount();
         }
-
     }
     else
     {
@@ -1068,6 +1068,7 @@ void Dialog::SetModalInputMode( bool bModal )
             }
         }
     }
+    ImplGetFrame()->SetModal(bModal);
 }
 
 void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
