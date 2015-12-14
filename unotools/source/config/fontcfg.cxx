@@ -1004,7 +1004,7 @@ ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< X
             for( int k = 0; k < 32; k++ )
                 if( aToken.equalsIgnoreAsciiCaseAscii( pAttribNames[k] ) )
                 {
-                    type |= 1UL << k;
+                    type |= sal_uLong(1) << k;
                     break;
                 }
         }
