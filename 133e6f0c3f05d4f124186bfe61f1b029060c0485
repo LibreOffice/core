@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_88269914",
+        "filename": "ucb/source/ucp/webdav-neon/NeonPropFindRequest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-14T17:50:29Z",
+      "side": 1,
+      "message": "This was in a gerrit patch I thought to squash here:\nhttps://gerrit.libreoffice.org/#/c/20380/\n\nI could restore that one if you preferred.",
+      "parentUuid": "dab17558_285dede9",
+      "revId": "133e6f0c3f05d4f124186bfe61f1b029060c0485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_8872197b",
         "filename": "ucb/source/ucp/webdav-neon/NeonSession.cxx",
         "patchSetId": 3
