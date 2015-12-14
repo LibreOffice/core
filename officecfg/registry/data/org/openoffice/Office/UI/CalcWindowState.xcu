@@ -20,6 +20,71 @@
 <oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="CalcWindowState" oor:package="org.openoffice.Office.UI">
   <node oor:name="UIElements">
     <node oor:name="States">
+      <node oor:name="private:resource/popupmenu/audit" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Auditing</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/cell" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Cell</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/celledit" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Cell</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/chart" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Chart</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/draw" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Shape</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/drawtext" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Shape Text</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/form" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Form Control</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/graphic" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Image</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/media" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Media</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/oleobject" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">OLE Object</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/pagebreak" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Page Break</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/pivot" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Pivot Table</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/preview" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Print Preview</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/toolbar/graffilterbar" oor:op="replace">
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>false</value>

@@ -39,7 +39,7 @@ SFX_IMPL_INTERFACE(ScPageBreakShell, SfxShell)
 
 void ScPageBreakShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_PAGEBREAK));
+    GetStaticInterface()->RegisterPopupMenu("pagebreak");
 }
 
 ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :

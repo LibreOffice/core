@@ -87,7 +87,7 @@ SFX_IMPL_INTERFACE(ScEditShell, SfxShell)
 
 void ScEditShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_EDIT));
+    GetStaticInterface()->RegisterPopupMenu("celledit");
 }
 
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
