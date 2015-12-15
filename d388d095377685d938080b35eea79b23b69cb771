@@ -16,6 +16,29 @@
       "revId": "d388d095377685d938080b35eea79b23b69cb771",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_3341e20c",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2015-12-15T16:27:31Z",
+      "side": 1,
+      "message": "review for master had the comment whether it should rather be \"UI Render*er*\" - so repeating it here..",
+      "range": {
+        "startLine": 1207,
+        "startChar": 25,
+        "endLine": 1207,
+        "endChar": 31
+      },
+      "revId": "d388d095377685d938080b35eea79b23b69cb771",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
