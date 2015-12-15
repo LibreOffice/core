@@ -872,6 +872,14 @@ void GtkSalFrame::moveWindow( long nX, long nY )
         gtk_window_move( GTK_WINDOW(m_pWindow), nX, nY );
 }
 
+void GtkSalFrame::dragWindowTo(long nX, long nY)
+{
+    if (isChild(false))
+        moveWindow(nX, nY);
+    else
+        gtk_window_begin_move_drag(GTK_WINDOW(m_pWindow), 1, nX, nY, GDK_CURRENT_TIME);
+}
+
 void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
 {
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
@@ -1579,7 +1587,10 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 
         m_bDefaultPos = false;
 
-        moveWindow(nX, nY);
+        if (nFlags & SAL_FRAME_POSSIZE_BYDRAG)
+            dragWindowTo(nX, nY);
+        else
+            moveWindow(nX, nY);
 
         updateScreenNumber();
     }

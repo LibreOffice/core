@@ -302,7 +302,10 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     void widget_set_size_request(long nWidth, long nHeight);
 
     void resizeWindow( long nWidth, long nHeight );
-    void moveWindow( long nX, long nY );
+    void moveWindow(long nX, long nY);
+#if GTK_CHECK_VERSION(3,0,0)
+    void dragWindowTo(long nX, long nY);
+#endif
 
     Size calcDefaultSize();
 

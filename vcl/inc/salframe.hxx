@@ -100,6 +100,7 @@ typedef sal_uInt64 SalExtStyle;
 #define SAL_FRAME_POSSIZE_Y                 ((sal_uInt16)0x0002)
 #define SAL_FRAME_POSSIZE_WIDTH             ((sal_uInt16)0x0004)
 #define SAL_FRAME_POSSIZE_HEIGHT            ((sal_uInt16)0x0008)
+#define SAL_FRAME_POSSIZE_BYDRAG            ((sal_uInt16)0x0010)
 
 struct SystemParentData;
 struct ImplSVEvent;
