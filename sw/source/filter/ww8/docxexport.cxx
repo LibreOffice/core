@@ -476,11 +476,11 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
             sal_uInt32 n1;
             sal_uInt16 n2, n3;
             sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
-        } const ClassId;
-        char const*const pFilterName;
-        char const*const pMediaType;
-        char const*const pProgID;
-        char const*const pSuffix;
+        } ClassId;
+        char const* pFilterName;
+        char const* pMediaType;
+        char const* pProgID;
+        char const* pSuffix;
     } s_Mapping[] = {
         { {SO3_SW_CLASSID_60}, "MS Word 2007 XML", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word.Document.12", "docx" },
         { {SO3_SC_CLASSID_60}, "Calc MS Excel 2007 XML", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.Sheet.12", "xlsx" },
