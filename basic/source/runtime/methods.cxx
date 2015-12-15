@@ -1708,6 +1708,21 @@ RTLFUNC(String)
     }
 }
 
+RTLFUNC(Tab)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() < 2 )
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    else
+    {
+        String aStr;
+        aStr.Fill( (sal_uInt16)(rPar.Get(1)->GetLong() ), '\t');
+        rPar.Get(0)->PutString( aStr );
+    }
+}
+
 RTLFUNC(Tan)
 {
     (void)pBasic;

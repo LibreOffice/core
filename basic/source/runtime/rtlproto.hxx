@@ -193,6 +193,7 @@ extern RTLFUNC(Str);
 extern RTLFUNC(StrComp);
 extern RTLFUNC(String);
 extern RTLFUNC(StrReverse);
+extern RTLFUNC(Tab);
 extern RTLFUNC(Tan);
 extern RTLFUNC(UCase);
 extern RTLFUNC(Val);

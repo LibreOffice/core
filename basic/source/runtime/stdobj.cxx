@@ -521,7 +521,7 @@ static Methods aMethods[] = {
 { "Switch",         SbxVARIANT,   2 | _FUNCTION, RTLNAME(Switch),0          },
   { "Expression",   SbxVARIANT, 0,NULL,0 },
   { "Value",        SbxVARIANT, 0,NULL,0 },
-
+{ "Tab",            SbxSTRING,      1 | _FUNCTION, RTLNAME(Tab),0           },
 { "Tan",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Tan),0             },
   { "number",       SbxDOUBLE, 0,NULL,0 },
 { "Time",           SbxVARIANT,       _LFUNCTION,RTLNAME(Time),0            },
