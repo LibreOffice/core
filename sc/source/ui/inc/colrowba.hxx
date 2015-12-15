@@ -29,12 +29,12 @@ class ScTabView;
 
 class ScColBar : public ScHeaderControl
 {
-    ScHSplitPos              eWhich;
-    ScHeaderFunctionSet*     pFuncSet;
+    ScHSplitPos              meWhich;
+    ScHeaderFunctionSet*     mpFuncSet;
 
 public:
-                ScColBar( vcl::Window* pParent, ScHSplitPos eWhichPos,
-                          ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+                ScColBar( vcl::Window* pParent, ScHSplitPos eWhich,
+                          ScHeaderFunctionSet* pFuncSet, ScHeaderSelectionEngine* pEng,
                           ScTabView* pTab );
                 virtual ~ScColBar();
 
@@ -61,12 +61,12 @@ public:
 
 class ScRowBar : public ScHeaderControl
 {
-    ScVSplitPos              eWhich;
-    ScHeaderFunctionSet*     pFuncSet;
+    ScVSplitPos              meWhich;
+    ScHeaderFunctionSet*     mpFuncSet;
 
 public:
-                ScRowBar( vcl::Window* pParent, ScVSplitPos eWhichPos,
-                          ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+                ScRowBar( vcl::Window* pParent, ScVSplitPos eWhich,
+                          ScHeaderFunctionSet* pFuncSet, ScHeaderSelectionEngine* pEng,
                           ScTabView* pTab );
                 virtual ~ScRowBar();
 

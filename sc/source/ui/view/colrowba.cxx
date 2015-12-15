@@ -51,12 +51,12 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
     }
 }
 
-ScColBar::ScColBar( vcl::Window* pParent, ScHSplitPos eWhichPos,
-                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+ScColBar::ScColBar( vcl::Window* pParent, ScHSplitPos eWhich,
+                    ScHeaderFunctionSet* pFuncSet, ScHeaderSelectionEngine* pEng,
                     ScTabView* pTab ) :
             ScHeaderControl( pParent, pEng, MAXCOL+1, false, pTab ),
-            eWhich( eWhichPos ),
-            pFuncSet( pFunc )
+            meWhich( eWhich ),
+            mpFuncSet( pFuncSet )
 {
     Show();
 }
@@ -72,7 +72,7 @@ inline bool ScColBar::UseNumericHeader() const
 
 SCCOLROW ScColBar::GetPos() const
 {
-    return pTabView->GetViewData().GetPosX(eWhich);
+    return pTabView->GetViewData().GetPosX(meWhich);
 }
 
 sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
@@ -164,7 +164,7 @@ void ScColBar::SelectWindow()
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = rViewData.GetActivePart();
-    if (eWhich==SC_SPLIT_LEFT)
+    if (meWhich==SC_SPLIT_LEFT)
     {
         if (eActive==SC_SPLIT_TOPRIGHT)     eActive=SC_SPLIT_TOPLEFT;
         if (eActive==SC_SPLIT_BOTTOMRIGHT)  eActive=SC_SPLIT_BOTTOMLEFT;
@@ -176,8 +176,8 @@ void ScColBar::SelectWindow()
     }
     pViewSh->ActivatePart( eActive );
 
-    pFuncSet->SetColumn( true );
-    pFuncSet->SetWhich( eActive );
+    mpFuncSet->SetColumn( true );
+    mpFuncSet->SetWhich( eActive );
 
     pViewSh->ActiveGrabFocus();
 }
@@ -200,7 +200,7 @@ void ScColBar::DrawInvert( long nDragPosP )
     Update();
     Invert(aRect);
 
-    pTabView->GetViewData().GetView()->InvertVertical(eWhich,nDragPosP);
+    pTabView->GetViewData().GetView()->InvertVertical(meWhich,nDragPosP);
 }
 
 OUString ScColBar::GetDragHelp( long nVal )
@@ -215,12 +215,12 @@ bool ScColBar::IsLayoutRTL() const        // override only for columns
     return rViewData.GetDocument()->IsLayoutRTL( rViewData.GetTabNo() );
 }
 
-ScRowBar::ScRowBar( vcl::Window* pParent, ScVSplitPos eWhichPos,
-                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+ScRowBar::ScRowBar( vcl::Window* pParent, ScVSplitPos eWhich,
+                    ScHeaderFunctionSet* pFuncSet, ScHeaderSelectionEngine* pEng,
                     ScTabView* pTab ) :
             ScHeaderControl( pParent, pEng, MAXROW+1, true, pTab ),
-            eWhich( eWhichPos ),
-            pFuncSet( pFunc )
+            meWhich( eWhich ),
+            mpFuncSet( pFuncSet )
 {
     Show();
 }
@@ -231,7 +231,7 @@ ScRowBar::~ScRowBar()
 
 SCCOLROW ScRowBar::GetPos() const
 {
-    return pTabView->GetViewData().GetPosY(eWhich);
+    return pTabView->GetViewData().GetPosY(meWhich);
 }
 
 sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
@@ -323,7 +323,7 @@ void ScRowBar::SelectWindow()
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = rViewData.GetActivePart();
-    if (eWhich==SC_SPLIT_TOP)
+    if (meWhich==SC_SPLIT_TOP)
     {
         if (eActive==SC_SPLIT_BOTTOMLEFT)   eActive=SC_SPLIT_TOPLEFT;
         if (eActive==SC_SPLIT_BOTTOMRIGHT)  eActive=SC_SPLIT_TOPRIGHT;
@@ -335,8 +335,8 @@ void ScRowBar::SelectWindow()
     }
     pViewSh->ActivatePart( eActive );
 
-    pFuncSet->SetColumn( false );
-    pFuncSet->SetWhich( eActive );
+    mpFuncSet->SetColumn( false );
+    mpFuncSet->SetWhich( eActive );
 
     pViewSh->ActiveGrabFocus();
 }
@@ -359,7 +359,7 @@ void ScRowBar::DrawInvert( long nDragPosP )
     Update();
     Invert(aRect);
 
-    pTabView->GetViewData().GetView()->InvertHorizontal(eWhich,nDragPosP);
+    pTabView->GetViewData().GetView()->InvertHorizontal(meWhich,nDragPosP);
 }
 
 OUString ScRowBar::GetDragHelp( long nVal )
