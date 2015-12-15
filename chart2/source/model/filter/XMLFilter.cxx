@@ -364,7 +364,8 @@ sal_Int32 XMLFilter::impl_Import(
 
         // Set base URI and Hierarchical Name
         OUString aHierarchName, aBaseUri;
-        uno::Reference< frame::XModel > xModel( m_xSourceDoc, uno::UNO_QUERY );
+        // why retrieve this from the model when it's availabe as rMediaDescriptor?
+        uno::Reference<frame::XModel> const xModel(m_xTargetDoc, uno::UNO_QUERY);
         if( xModel.is() )
         {
             uno::Sequence< beans::PropertyValue > aModProps = xModel->getArgs();
