@@ -168,7 +168,6 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );
         ::framework::SetDockingWindowCreator( SfxDockingWindowFactory );
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
-        ::framework::SetActivateToolPanel( &SfxViewFrame::ActivateToolPanel );
 #if HAVE_FEATURE_DESKTOP
         Application::SetHelp( pSfxHelp );
         if (!utl::ConfigManager::IsAvoidConfig() && SvtHelpOptions().IsHelpTips())

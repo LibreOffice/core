@@ -1335,16 +1335,6 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     }
 }
 
-bool SfxWorkWindow::AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const
-{
-    // or checking the availability of child windows, we need access to the module
-    const SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-    const SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : nullptr;
-    const SfxModule* pModule = pShell ? pShell->GetModule() : nullptr;
-    ENSURE_OR_RETURN( pModule, "SfxWorkWindow::UpdateChildWindows_Impl: did not find an SfxModule to ask for the child win availability!", true );
-    return pModule->IsChildWindowAvailable( i_rCW.nId, pViewFrame );
-}
-
 void SfxWorkWindow::UpdateChildWindows_Impl()
 {
     // any current or in the context available Childwindows
@@ -1378,9 +1368,6 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 else
                     bCreate = true;
 
-                if ( bCreate )
-                    bCreate = AllowChildWindowCreation_Impl( *pCW );
-
                 // Currently, no window here, but it is enabled; windows
                 // Create window and if possible theContext
                 if ( bCreate )
@@ -1398,7 +1385,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 if ( ( !bIsFullScreen || pChildWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT ) && bAllChildrenVisible )
                 {
                     // Update Mode is compatible; definitely enable it
-                    bCreate = AllowChildWindowCreation_Impl( *pCW );
+                    bCreate = true;
                     if ( bCreate )
                     {
                         if ( pCW->pCli )
@@ -1961,7 +1948,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
             }
             else
             {
-                pCW->bCreate = AllowChildWindowCreation_Impl( *pCW );
+                pCW->bCreate = true;
                 if ( pCW->bCreate )
                 {
                     if ( pChild )

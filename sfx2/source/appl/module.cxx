@@ -34,7 +34,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svl/intitem.hxx>
-#include <sfx2/taskpane.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -361,17 +360,6 @@ void SfxModule::Invalidate( sal_uInt16 nId )
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
         if ( pFrame->GetObjectShell()->GetModule() == this )
             Invalidate_Impl( pFrame->GetBindings(), nId );
-}
-
-bool SfxModule::IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const
-{
-    if ( i_nId != SID_TASKPANE )
-        // by default, assume it is
-        return true;
-
-    const SfxViewFrame* pViewFrame = i_pViewFrame ? i_pViewFrame : GetFrame();
-    ENSURE_OR_RETURN( pViewFrame, "SfxModule::IsChildWindowAvailable: no frame to ask for the module identifier!", false );
-    return ::sfx2::ModuleTaskPane::ModuleHasToolPanels( pViewFrame->GetFrame().GetFrameInterface() );
 }
 
 SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )

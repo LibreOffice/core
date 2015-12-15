@@ -87,8 +87,6 @@ public:
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
 
-    bool                        IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const;
-
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=nullptr );
     static FieldUnit            GetCurrentFieldUnit();
     /** retrieves the field unit of the module belonging to the document displayed in the given frame

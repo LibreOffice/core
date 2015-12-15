@@ -527,7 +527,6 @@
 #include <sfx2/stbitem.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <sfx2/taskpane.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/templatecontaineritem.hxx>
