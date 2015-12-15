@@ -5,14 +5,7 @@ OpenGLContext::requestSingleBufferedRendering()
 OpenGLContext::requestVirtualDevice()
 OpenGLRender::CreateTextTexture(rtl::OUString const&, vcl::Font, long, com::sun::star::awt::Point, com::sun::star::awt::Size, long)
 OpenGLTexture::Draw()
-OutputDevice::GetCanvas() const
-OutputDevice::HasAlpha()
-OutputDevice::LogicHeightToDeviceCoordinate(long) const
 OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
-OutputDevice::LogicToPixel(basegfx::B2DPolygon const&) const
-OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
-OutputDevice::LogicToPixel(vcl::Region const&, MapMode const&) const
-OutputDevice::PixelToLogic(vcl::Region const&, MapMode const&) const
 Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
