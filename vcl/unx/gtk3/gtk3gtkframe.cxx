@@ -1177,6 +1177,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             gtk_window_set_accept_focus(GTK_WINDOW(m_pWindow), false);
+            gtk_window_set_decorated(GTK_WINDOW(m_pWindow), false);
         }
         else if( (nStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE) )
         {
