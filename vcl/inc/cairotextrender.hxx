@@ -124,7 +124,7 @@ public:
                                     Ucs2UIntMap& rUnicodeEnc ) override;
 
     virtual bool                GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) override;
-    virtual bool                GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& ) override;
+    virtual bool                GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) override;
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void                DrawServerFontLayout( const ServerFontLayout& ) override;
 #if ENABLE_CAIRO_CANVAS

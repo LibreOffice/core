@@ -265,11 +265,11 @@ protected:
     virtual void        drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void        drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) override;
-    virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) override;
+    virtual bool        drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
     virtual bool        drawPolyLine(
-        const ::basegfx::B2DPolygon&,
+        const basegfx::B2DPolygon&,
         double fTransparency,
-        const ::basegfx::B2DVector& rLineWidth,
+        const basegfx::B2DVector& rLineWidth,
         basegfx::B2DLineJoin,
         css::drawing::LineCap) override;
     virtual bool        drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) override;
@@ -425,7 +425,7 @@ public:
             int             GetMinKashidaWidth();
 
     virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& ) override;
-    virtual bool            GetGlyphOutline( sal_GlyphId, ::basegfx::B2DPolyPolygon& ) override;
+    virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) override;
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void            DrawServerFontLayout( const ServerFontLayout& ) override;

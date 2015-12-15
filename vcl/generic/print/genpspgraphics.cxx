@@ -431,7 +431,7 @@ void GenPspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, reinterpret_cast<const Point**>(pPtAry));
 }
 
-bool GenPspGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+bool GenPspGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
 {
         // TODO: implement and advertise OutDevSupport_B2DDraw support
         return false;
@@ -958,7 +958,7 @@ bool GenPspGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 }
 
 bool GenPspGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
-    ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
+    basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     const int nLevel = aGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )

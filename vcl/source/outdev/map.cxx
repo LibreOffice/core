@@ -1057,7 +1057,7 @@ tools::PolyPolygon OutputDevice::LogicToPixel( const tools::PolyPolygon& rLogicP
 basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
+    const basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
 }
@@ -1201,7 +1201,7 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
                                                     const MapMode& rMapMode ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
+    const basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
 }
@@ -1302,7 +1302,7 @@ tools::PolyPolygon OutputDevice::PixelToLogic( const tools::PolyPolygon& rDevice
 basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygon& rPixelPolyPoly ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rPixelPolyPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
+    const basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
 }
@@ -1450,7 +1450,7 @@ basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixe
                                                 const MapMode& rMapMode ) const
 {
     basegfx::B2DPolygon aTransformedPoly = rPixelPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
+    const basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
 }
@@ -1459,7 +1459,7 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
                                                     const MapMode& rMapMode ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rPixelPolyPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
+    const basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
 }

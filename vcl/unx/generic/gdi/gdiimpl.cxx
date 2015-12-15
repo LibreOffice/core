@@ -1449,7 +1449,7 @@ bool X11SalGraphicsImpl::drawEPS( long,long,long,long,void*,sal_uLong )
 }
 
 // draw a poly-polygon
-bool X11SalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
+bool X11SalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
 {
     // nothing to do for empty polypolygons
     const int nOrigPolyCount = rOrigPolyPoly.count();
@@ -1503,7 +1503,7 @@ long X11SalGraphicsImpl::GetGraphicsHeight() const
         return 0;
 }
 
-bool X11SalGraphicsImpl::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTraps, int nTrapCount, double fTransparency )
+bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2DTraps, int nTrapCount, double fTransparency )
 {
     if( nTrapCount <= 0 )
         return true;
@@ -1572,9 +1572,9 @@ bool X11SalGraphicsImpl::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB
 }
 
 bool X11SalGraphicsImpl::drawPolyLine(
-    const ::basegfx::B2DPolygon& rPolygon,
+    const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
-    const ::basegfx::B2DVector& rLineWidth,
+    const basegfx::B2DVector& rLineWidth,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap)
 {
@@ -1647,7 +1647,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     const int nPolyCount = aAreaPolyPoly.count();
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
-        const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
+        const basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
         bDrawnOk = drawPolyPolygon( aOnePoly, fTransparency );
         if( !bDrawnOk )
             break;

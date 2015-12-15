@@ -1974,7 +1974,7 @@ bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 }
 
 bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
-    ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
+    basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     rB2DPolyPoly.clear();
 

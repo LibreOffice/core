@@ -88,7 +88,7 @@ private:
                                );
 
     XID GetXRenderPicture();
-    bool drawFilledTrapezoids( const ::basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
+    bool drawFilledTrapezoids( const basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
 
     long GetGraphicsHeight() const;
 
@@ -153,12 +153,12 @@ public:
     virtual void drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
 
     virtual void drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) override;
-    virtual bool drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) override;
+    virtual bool drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
 
     virtual bool drawPolyLine(
-                const ::basegfx::B2DPolygon&,
+                const basegfx::B2DPolygon&,
                 double fTransparency,
-                const ::basegfx::B2DVector& rLineWidths,
+                const basegfx::B2DVector& rLineWidths,
                 basegfx::B2DLineJoin,
                 css::drawing::LineCap) override;
 

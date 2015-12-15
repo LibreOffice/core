@@ -337,19 +337,19 @@ namespace vcl
                          static_cast<long>(rSize.Height + .5) );
         }
 
-        ::Size sizeFromB2DSize( const ::basegfx::B2DVector& rVec )
+        ::Size sizeFromB2DSize( const basegfx::B2DVector& rVec )
         {
             return ::Size( FRound( rVec.getX() ),
                            FRound( rVec.getY() ) );
         }
 
-        ::Point pointFromB2DPoint( const ::basegfx::B2DPoint& rPoint )
+        ::Point pointFromB2DPoint( const basegfx::B2DPoint& rPoint )
         {
             return ::Point( FRound( rPoint.getX() ),
                             FRound( rPoint.getY() ) );
         }
 
-        ::Rectangle rectangleFromB2DRectangle( const ::basegfx::B2DRange& rRect )
+        ::Rectangle rectangleFromB2DRectangle( const basegfx::B2DRange& rRect )
         {
             return ::Rectangle( FRound( rRect.getMinX() ),
                                 FRound( rRect.getMinY() ),
@@ -357,13 +357,13 @@ namespace vcl
                                 FRound( rRect.getMaxY() ) );
         }
 
-        Point pointFromB2IPoint( const ::basegfx::B2IPoint& rPoint )
+        Point pointFromB2IPoint( const basegfx::B2IPoint& rPoint )
         {
             return ::Point( rPoint.getX(),
                             rPoint.getY() );
         }
 
-        Rectangle rectangleFromB2IRectangle( const ::basegfx::B2IRange& rRect )
+        Rectangle rectangleFromB2IRectangle( const basegfx::B2IRange& rRect )
         {
             return ::Rectangle( rRect.getMinX(),
                                 rRect.getMinY(),
@@ -371,21 +371,21 @@ namespace vcl
                                 rRect.getMaxY() );
         }
 
-        ::basegfx::B2DVector b2DSizeFromSize( const ::Size& rSize )
+        basegfx::B2DVector b2DSizeFromSize( const ::Size& rSize )
         {
-            return ::basegfx::B2DVector( rSize.Width(),
+            return basegfx::B2DVector( rSize.Width(),
                                          rSize.Height() );
         }
 
-        ::basegfx::B2DPoint b2DPointFromPoint( const ::Point& rPoint )
+        basegfx::B2DPoint b2DPointFromPoint( const ::Point& rPoint )
         {
-            return ::basegfx::B2DPoint( rPoint.X(),
+            return basegfx::B2DPoint( rPoint.X(),
                                         rPoint.Y() );
         }
 
-        ::basegfx::B2DRange b2DRectangleFromRectangle( const ::Rectangle& rRect )
+        basegfx::B2DRange b2DRectangleFromRectangle( const ::Rectangle& rRect )
         {
-            return ::basegfx::B2DRange( rRect.Left(),
+            return basegfx::B2DRange( rRect.Left(),
                                         rRect.Top(),
                                         rRect.Right(),
                                         rRect.Bottom() );

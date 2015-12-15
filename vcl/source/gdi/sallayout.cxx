@@ -693,13 +693,13 @@ int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool /*TODO:? bVertical
 }
 
 bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
-    ::basegfx::B2DPolyPolygonVector& rVector ) const
+    basegfx::B2DPolyPolygonVector& rVector ) const
 {
     bool bAllOk = true;
     bool bOneOk = false;
 
     Point aPos;
-    ::basegfx::B2DPolyPolygon aGlyphOutline;
+    basegfx::B2DPolyPolygon aGlyphOutline;
     for( int nStart = 0;;)
     {
         sal_GlyphId nLGlyph;
@@ -2005,7 +2005,7 @@ int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& r
 }
 
 bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
-                                 ::basegfx::B2DPolyPolygonVector& rPPV ) const
+                                 basegfx::B2DPolyPolygonVector& rPPV ) const
 {
     bool bRet = false;
 

@@ -524,7 +524,7 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&
     return cairo::SurfaceSharedPtr();
 }
 
-css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& /*rSize*/) const
+css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& /*rSize*/) const
 {
     cairo::X11Surface& rXlibSurface=dynamic_cast<cairo::X11Surface&>(*rSurface.get());
     css::uno::Sequence< css::uno::Any > args( 3 );
@@ -535,15 +535,15 @@ css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rS
 }
 
 // draw a poly-polygon
-bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
+bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
 {
     return mxImpl->drawPolyPolygon( rOrigPolyPoly, fTransparency );
 }
 
 bool X11SalGraphics::drawPolyLine(
-    const ::basegfx::B2DPolygon& rPolygon,
+    const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
-    const ::basegfx::B2DVector& rLineWidth,
+    const basegfx::B2DVector& rLineWidth,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap)
 {

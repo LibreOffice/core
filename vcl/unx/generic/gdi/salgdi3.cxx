@@ -146,7 +146,7 @@ bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 }
 
 bool X11SalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
-    ::basegfx::B2DPolyPolygon& rPolyPoly )
+    basegfx::B2DPolyPolygon& rPolyPoly )
 {
     return mxTextRenderImpl->GetGlyphOutline(aGlyphId, rPolyPoly);
 }

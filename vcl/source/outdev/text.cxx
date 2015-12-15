@@ -2630,7 +2630,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     return false;
 }
 
-bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
+bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         bool bOptimize, sal_uLong nLayoutWidth, const long* pDXArray ) const
@@ -2691,7 +2691,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
         if( bRet )
         {
             // transform polygon to pixel units
-            ::basegfx::B2DHomMatrix aMatrix;
+            basegfx::B2DHomMatrix aMatrix;
 
             int nWidthFactor = pSalLayout->GetUnitsPerPixel();
             if( nXOffset | mnTextOffX | mnTextOffY )
@@ -2709,7 +2709,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
 
             if( !aMatrix.isIdentity() )
             {
-                ::basegfx::B2DPolyPolygonVector::iterator aIt = rVector.begin();
+                basegfx::B2DPolyPolygonVector::iterator aIt = rVector.begin();
                 for(; aIt != rVector.end(); ++aIt )
                     (*aIt).transform( aMatrix );
             }
@@ -2848,8 +2848,8 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                 {
                     // convert  to B2DPolyPolygon
                     // TODO: get rid of intermediate tool's PolyPolygon
-                    ::basegfx::B2DPolyPolygon aB2DPolyPoly = aPolyPoly.getB2DPolyPolygon();
-                    ::basegfx::B2DHomMatrix aMatrix;
+                    basegfx::B2DPolyPolygon aB2DPolyPoly = aPolyPoly.getB2DPolyPolygon();
+                    basegfx::B2DHomMatrix aMatrix;
                     aMatrix.scale( fScaleX, fScaleY );
                     int nAngle = GetFont().GetOrientation();
                     if( nAngle )
@@ -2881,14 +2881,14 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     rResultVector.clear();
 
     // get the basegfx polypolygon vector
-    ::basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
+    basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
                          bOptimize, nTWidth, pDXArray ) )
         return false;
 
     // convert to a tool polypolygon vector
     rResultVector.reserve( aB2DPolyPolyVector.size() );
-    ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
+    basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
         rResultVector.push_back(tools::PolyPolygon(*aIt)); // #i76339#
 
@@ -2907,13 +2907,13 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
     rPolyPoly.Clear();
 
     // get the basegfx polypolygon vector
-    ::basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
+    basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
                          bOptimize, nTWidth, pDXArray ) )
         return false;
 
     // convert and merge into a tool polypolygon
-    ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
+    basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
         for( unsigned int i = 0; i < aIt->count(); ++i )
             rPolyPoly.Insert(tools::Polygon((*aIt).getB2DPolygon( i ))); // #i76339#

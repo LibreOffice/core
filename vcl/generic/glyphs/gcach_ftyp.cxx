@@ -1221,7 +1221,7 @@ static int FT_cubic_to( const FT_Vector* p1, const FT_Vector* p2, const FT_Vecto
 } // extern "C"
 
 bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
-    ::basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
+    basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
 {
     if( maSizeFT )
         FT_Activate_Size( maSizeFT );

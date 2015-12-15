@@ -856,9 +856,9 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
 }
 
 bool SvpSalGraphics::drawPolyLine(
-    const ::basegfx::B2DPolygon& rPolyLine,
+    const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
-    const ::basegfx::B2DVector& rLineWidths,
+    const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap)
 {

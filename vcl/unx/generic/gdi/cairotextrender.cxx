@@ -493,7 +493,7 @@ bool CairoTextRender::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
 }
 
 bool CairoTextRender::GetGlyphOutline( sal_GlyphId aGlyphId,
-    ::basegfx::B2DPolyPolygon& rPolyPoly )
+    basegfx::B2DPolyPolygon& rPolyPoly )
 {
     const int nLevel = aGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )

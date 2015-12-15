@@ -161,17 +161,17 @@ namespace vcl
         Rectangle                          VCL_DLLPUBLIC rectangleFromIntegerRectangle2D( const css::geometry::IntegerRectangle2D& );
 
         // basegfx::B2D
-        Size                        VCL_DLLPUBLIC sizeFromB2DSize( const ::basegfx::B2DVector& );
-        Point                       VCL_DLLPUBLIC pointFromB2DPoint( const ::basegfx::B2DPoint& );
-        Rectangle                   VCL_DLLPUBLIC rectangleFromB2DRectangle( const ::basegfx::B2DRange& );
+        Size                        VCL_DLLPUBLIC sizeFromB2DSize( const basegfx::B2DVector& );
+        Point                       VCL_DLLPUBLIC pointFromB2DPoint( const basegfx::B2DPoint& );
+        Rectangle                   VCL_DLLPUBLIC rectangleFromB2DRectangle( const basegfx::B2DRange& );
 
         basegfx::B2DVector          VCL_DLLPUBLIC b2DSizeFromSize( const Size& );
         basegfx::B2DPoint           VCL_DLLPUBLIC b2DPointFromPoint( const Point& );
         basegfx::B2DRange           VCL_DLLPUBLIC b2DRectangleFromRectangle( const Rectangle& );
 
         // basegfx::B2I
-        Point                       VCL_DLLPUBLIC pointFromB2IPoint( const ::basegfx::B2IPoint& );
-        Rectangle                   VCL_DLLPUBLIC rectangleFromB2IRectangle( const ::basegfx::B2IRange& );
+        Point                       VCL_DLLPUBLIC pointFromB2IPoint( const basegfx::B2IPoint& );
+        Rectangle                   VCL_DLLPUBLIC rectangleFromB2IRectangle( const basegfx::B2IRange& );
     }
 }
 

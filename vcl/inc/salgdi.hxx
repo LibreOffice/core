@@ -452,7 +452,7 @@ public:
     virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const = 0;
     /// Create Surface for given bitmap data
     virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const = 0;
-    virtual css::uno::Any       GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const = 0;
+    virtual css::uno::Any       GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const = 0;
 
     virtual SystemFontData      GetSysFontData( int nFallbacklevel ) const = 0;
 
@@ -474,12 +474,12 @@ protected:
     virtual void                drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 
     virtual void                drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
-    virtual bool                drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
+    virtual bool                drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
 
     virtual bool                drawPolyLine(
-                                    const ::basegfx::B2DPolygon&,
+                                    const basegfx::B2DPolygon&,
                                     double fTransparency,
-                                    const ::basegfx::B2DVector& rLineWidths,
+                                    const basegfx::B2DVector& rLineWidths,
                                     basegfx::B2DLineJoin,
                                     css::drawing::LineCap) = 0;
 

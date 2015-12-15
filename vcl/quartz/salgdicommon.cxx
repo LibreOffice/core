@@ -78,7 +78,7 @@ typedef std::vector<unsigned char> ByteVector;
 static const basegfx::B2DPoint aHalfPointOfs ( 0.5, 0.5 );
 
 static void AddPolygonToPath( CGMutablePathRef xPath,
-                              const ::basegfx::B2DPolygon& rPolygon,
+                              const basegfx::B2DPolygon& rPolygon,
                               bool bClosePath, bool bPixelSnap, bool bLineDraw )
 {
     // short circuit if there is nothing to do
@@ -106,7 +106,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
             }
         }
 
-        ::basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
+        basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
 
         if( bPixelSnap)
         {
@@ -163,7 +163,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
 }
 
 static void AddPolyPolygonToPath( CGMutablePathRef xPath,
-                                  const ::basegfx::B2DPolyPolygon& rPolyPoly,
+                                  const basegfx::B2DPolyPolygon& rPolyPoly,
                                   bool bPixelSnap, bool bLineDraw )
 {
     // short circuit if there is nothing to do
@@ -174,7 +174,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
     }
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
-        const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
+        const basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
         AddPolygonToPath( xPath, rPolygon, true, bPixelSnap, bLineDraw );
     }
 }
@@ -957,9 +957,9 @@ void AquaSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     ImplDrawPixel( nX, nY, aPixelColor );
 }
 
-bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
+bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
                                     double fTransparency,
-                                    const ::basegfx::B2DVector& rLineWidths,
+                                    const basegfx::B2DVector& rLineWidths,
                                     basegfx::B2DLineJoin eLineJoin,
                                     css::drawing::LineCap eLineCap)
 {

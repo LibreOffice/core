@@ -26,7 +26,7 @@
 
 #include "gdiimpl.hxx"
 
-bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency)
+bool WinSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency)
 {
     return mpImpl->drawPolyPolygon( rPolyPolygon, fTransparency );
 }

@@ -484,7 +484,7 @@ public:
     /// Create Surface for given bitmap data
     cairo::SurfaceSharedPtr     CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const;
     /// Return native handle for underlying surface
-    css::uno::Any               GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const;
+    css::uno::Any               GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const;
     css::uno::Any               GetSystemGfxDataAny() const;
 
     void                        SetRefPoint();
@@ -1123,7 +1123,7 @@ public:
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
-    bool                        GetTextOutlines( ::basegfx::B2DPolyPolygonVector &rVector,
+    bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;

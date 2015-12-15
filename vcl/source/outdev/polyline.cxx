@@ -61,8 +61,8 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
     if ( DrawPolyLineDirect( rPoly.getB2DPolygon() ) )
     {
         basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
-        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+        const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
         // transform the polygon
         aB2DPolyLine.transform( aTransform );
@@ -311,7 +311,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
         // transform the line width if used
         if( fLineWidth != 0.0 )
         {
-            aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
+            aB2DLineWidth = aTransform * basegfx::B2DVector( fLineWidth, fLineWidth );
         }
 
         // transform the polygon

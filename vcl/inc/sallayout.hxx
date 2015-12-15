@@ -186,7 +186,7 @@ public:
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
                                    const PhysicalFontFace** pFallbackFonts = nullptr ) const = 0;
-    virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
+    virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
     static bool     IsSpacingGlyph( sal_GlyphId );
@@ -242,7 +242,7 @@ public:
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
                                    int&, DeviceCoordinate* pGlyphAdvAry, int* pCharPosAry,
                                    const PhysicalFontFace** pFallbackFonts ) const override;
-    virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const override;
+    virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,

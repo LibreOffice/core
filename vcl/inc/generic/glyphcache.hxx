@@ -182,7 +182,7 @@ public:
     sal_GlyphId             GetGlyphIndex( sal_UCS4 ) const;
     sal_GlyphId             GetRawGlyphIndex( sal_UCS4, sal_UCS4 = 0 ) const;
     sal_GlyphId             FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 ) const;
-    bool                    GetGlyphOutline( sal_GlyphId aGlyphId, ::basegfx::B2DPolyPolygon& ) const;
+    bool                    GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& ) const;
     bool                    GetAntialiasAdvice() const;
 
 private:

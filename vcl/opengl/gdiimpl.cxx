@@ -950,27 +950,27 @@ void OpenGLSalGraphicsImpl::DrawRect( const Rectangle& rRect )
 
 void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    ::basegfx::B2DPolygon aPolygon;
+    basegfx::B2DPolygon aPolygon;
 
     for( sal_uInt32 i = 0; i < nPoints; i++ )
-        aPolygon.append( ::basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
+        aPolygon.append( basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
     aPolygon.setClosed( true );
 
-    if( ::basegfx::tools::isConvex( aPolygon ) )
+    if( basegfx::tools::isConvex( aPolygon ) )
     {
         if( nPoints > 2L )
             DrawConvexPolygon( nPoints, pPtAry );
     }
     else
     {
-        const ::basegfx::B2DPolyPolygon aPolyPolygon( aPolygon );
+        const basegfx::B2DPolyPolygon aPolyPolygon( aPolygon );
         DrawPolyPolygon( aPolyPolygon );
     }
 }
 
 void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA )
 {
-    const ::basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers( rPolyPolygon );
+    const basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers( rPolyPolygon );
     basegfx::B2DTrapezoidVector aB2DTrapVector;
     basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aSimplePolyPolygon );
     // draw tesselation result
@@ -1483,7 +1483,7 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
     PostDraw();
 }
 
-bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
+bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
 {
     VCL_GL_INFO( "::drawPolyPolygon trans " << fTransparency );
     if( rPolyPolygon.count() <= 0 )
@@ -1508,9 +1508,9 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rP
 }
 
 bool OpenGLSalGraphicsImpl::drawPolyLine(
-            const ::basegfx::B2DPolygon& rPolygon,
+            const basegfx::B2DPolygon& rPolygon,
             double fTransparency,
-            const ::basegfx::B2DVector& rLineWidth,
+            const basegfx::B2DVector& rLineWidth,
             basegfx::B2DLineJoin eLineJoin,
             css::drawing::LineCap eLineCap)
 {
@@ -1568,7 +1568,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     {
         for( sal_uInt32 i = 0; i < aAreaPolyPoly.count(); i++ )
         {
-            const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( i ) );
+            const basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( i ) );
             DrawPolyPolygon( aOnePoly );
         }
     }

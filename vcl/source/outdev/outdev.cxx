@@ -366,7 +366,7 @@ cairo::SurfaceSharedPtr OutputDevice::CreateBitmapSurface(const BitmapSystemData
     return mpGraphics->CreateBitmapSurface(*this, rData, rSize);
 }
 
-css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const
+css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
 {
     if (!mpGraphics)
     {

@@ -148,7 +148,7 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
     virtual bool            GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) override;
-    virtual bool            GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& ) override;
+    virtual bool            GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) override;
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void            DrawServerFontLayout( const ServerFontLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
@@ -156,10 +156,10 @@ public:
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) override;
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) override;
-    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&,
+    virtual bool            drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
+    virtual bool            drawPolyLine( const basegfx::B2DPolygon&,
                                           double fTransparency,
-                                          const ::basegfx::B2DVector& rLineWidths,
+                                          const basegfx::B2DVector& rLineWidths,
                                           basegfx::B2DLineJoin,
                                           css::drawing::LineCap) override;
     virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;

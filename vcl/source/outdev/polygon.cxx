@@ -68,7 +68,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
        ROP_OVERPAINT == GetRasterOp() &&
        (IsLineColor() || IsFillColor()))
     {
-        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPoly.getB2DPolyPolygon());
         bool bSuccess(true);
 
@@ -83,7 +83,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
         if(bSuccess && IsLineColor())
         {
-            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+            const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
             if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
@@ -178,7 +178,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
        ROP_OVERPAINT == GetRasterOp() &&
        (IsLineColor() || IsFillColor()))
     {
-        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
         bool bSuccess(true);
 
@@ -193,7 +193,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
 
         if(bSuccess && IsLineColor())
         {
-            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+            const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
             if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
@@ -293,7 +293,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
         if(bSuccess && IsLineColor())
         {
-            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+            const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
             if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
