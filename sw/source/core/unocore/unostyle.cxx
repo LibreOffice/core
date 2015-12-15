@@ -227,7 +227,8 @@ namespace sw
             const SfxSimpleHint *pHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
             if(pHint && (pHint->GetId() & SFX_HINT_DYING))
             {
-                m_pBasePool = nullptr, m_pDocShell = nullptr;
+                m_pBasePool = nullptr;
+                m_pDocShell = nullptr;
                 EndListening(rBC);
             }
         }
