@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_68ad3531",
+        "filename": "officecfg/registry/schema/org/openoffice/Inet.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-15T09:18:37Z",
+      "side": 1,
+      "message": "\u003e What motivates these arbitrary-looking numbers anyway?\n\nThe value I used are based on observation rather that measuring.\nFor example I observed that in some case 10~15 sec to make a connection may be possible, depending on the Internet behaviour and connection speed the user has and the server load.\n\n\u003e do we really need different connect vs. read timeout values?\n\nConnect timeout is the one that really matters to solve the bug.\nRead timeout it\u0027s something I thought that can be handy to solve problems when server is sluggish in answering after the connection has been made.",
+      "parentUuid": "dab17558_485831fb",
+      "revId": "133e6f0c3f05d4f124186bfe61f1b029060c0485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_285dede9",
         "filename": "ucb/source/ucp/webdav-neon/NeonPropFindRequest.cxx",
         "patchSetId": 3
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "ah, just pushed that other change through now",
       "parentUuid": "dab17558_88269914",
+      "revId": "133e6f0c3f05d4f124186bfe61f1b029060c0485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e8c005e3",
+        "filename": "ucb/source/ucp/webdav-neon/NeonPropFindRequest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-15T09:18:37Z",
+      "side": 1,
+      "message": "Thanks, already queued for 5.1 with an updated msg, to me it seems good to go there as well.\nIn:\nhttps://gerrit.libreoffice.org/#/c/20711/2",
+      "parentUuid": "dab17558_888979cd",
       "revId": "133e6f0c3f05d4f124186bfe61f1b029060c0485",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
