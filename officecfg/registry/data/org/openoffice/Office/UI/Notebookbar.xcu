@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data oor:name="Notebookbar" oor:package="org.openoffice.Office.UI" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="Content">
+    <node oor:name="TabList">
+
+      <node oor:name="HomeTab" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Home</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>HomeTab</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            any, any ;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+      </node>
+
+    </node>
+    <node oor:name="GroupList">
+
+      <node oor:name="FormattingGroup" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Formatting</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>FormattingGroup</value>
+        </prop>
+        <prop oor:name="TabId" oor:type="xs:string">
+          <value>HomeTab</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Calc,             Auditing,           visible,  .uno:CellTextDlg ;
+            Calc,             Cell,               visible,  .uno:CellTextDlg ;
+            Calc,             default,            visible,  .uno:CellTextDlg ;
+            Calc,             DrawText,           visible                    ;
+            Calc,             EditCell,           visible                    ;
+            Calc,             Pivot,              visible,  .uno:CellTextDlg ;
+            DrawImpress,      3DObject,           visible                    ;
+            DrawImpress,      Draw,               hidden                     ;
+            DrawImpress,      DrawText,           visible                    ;
+            DrawImpress,      Graphic,            hidden                     ;
+            DrawImpress,      OutlineText,        visible                    ;
+            DrawImpress,      Table,              visible                    ;
+            DrawImpress,      TextObject,         visible                    ;
+            WriterVariants,   Annotation,         visible                    ;
+            WriterVariants,   DrawText,           visible                    ;
+            WriterVariants,   Table,              visible                    ;
+            WriterVariants,   Text,               visible                    ;
+            WriterVariants,   default,            visible                    ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SvxPanelFactory/TextPropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>120</value>
+        </prop>
+      </node>
+
+      <node oor:name="PagePropertyGroup" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Page</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>PagePropertyGroup</value>
+        </prop>
+        <prop oor:name="TabId" oor:type="xs:string">
+          <value>HomeTab</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:PageDialog</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Writer, Table,    hidden ;
+            Writer, Text,     hidden ;
+            Writer, default,  hidden ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/PagePropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>300</value>
+        </prop>
+      </node>
+
+    </node>
+  </node>
+</oor:component-data>
