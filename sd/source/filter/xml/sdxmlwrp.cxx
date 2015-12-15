@@ -587,7 +587,9 @@ bool SdXMLFilter::Import( ErrCode& nError )
     }
 
     // Set base URI
-    xInfoSet->setPropertyValue( "BaseURI" , makeAny( mrMedium.GetBaseURL() ) );
+    OUString const baseURI(mrMedium.GetBaseURL());
+    assert(!baseURI.isEmpty()); // needed for relative URLs
+    xInfoSet->setPropertyValue("BaseURI", makeAny(baseURI));
 
     if( 0 == nRet && SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
     {

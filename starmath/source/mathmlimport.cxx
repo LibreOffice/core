@@ -141,8 +141,9 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
     // Set base URI
-    OUString sPropName( "BaseURI" );
-    xInfoSet->setPropertyValue( sPropName, makeAny( rMedium.GetBaseURL() ) );
+    OUString const baseURI(rMedium.GetBaseURL());
+    assert(!baseURI.isEmpty()); // needed for relative URLs
+    xInfoSet->setPropertyValue("BaseURI", makeAny(baseURI));
 
     sal_Int32 nSteps=3;
     if ( !(rMedium.IsStorage()))
@@ -174,8 +175,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
             if ( !aName.isEmpty() )
             {
-                sPropName = "StreamRelPath";
-                xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+                xInfoSet->setPropertyValue("StreamRelPath", makeAny(aName));
             }
         }
 
