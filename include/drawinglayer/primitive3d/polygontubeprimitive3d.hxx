@@ -49,7 +49,7 @@ namespace drawinglayer
         {
         private:
             /// hold the last decompositon since it's expensive
-            Primitive3DSequence                         maLast3DDecomposition;
+            Primitive3DContainer                         maLast3DDecomposition;
 
             /// visualisation parameters
             double                                      mfRadius;
@@ -63,11 +63,11 @@ namespace drawinglayer
                 later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
                 implementations for buffering the last decomposition.
              */
-            const Primitive3DSequence& getLast3DDecomposition() const { return maLast3DDecomposition; }
-            void setLast3DDecomposition(const Primitive3DSequence& rNew) { maLast3DDecomposition = rNew; }
+            const Primitive3DContainer& getLast3DDecomposition() const { return maLast3DDecomposition; }
+            void setLast3DDecomposition(const Primitive3DContainer& rNew) { maLast3DDecomposition = rNew; }
 
             /// local decomposition.
-            Primitive3DSequence impCreate3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            Primitive3DContainer impCreate3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             /// constructor
@@ -93,7 +93,7 @@ namespace drawinglayer
             /** local decomposition. Use own buffering since we are not derived from
                 BufferedDecompositionPrimitive3D
              */
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual Primitive3DContainer get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

@@ -133,7 +133,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive3DSequence create3DPolyPolygonLinePrimitives(
+        Primitive3DContainer create3DPolyPolygonLinePrimitives(
             const basegfx::B3DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const attribute::SdrLineAttribute& rLine)
@@ -147,7 +147,7 @@ namespace drawinglayer
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
 
             // create primitives
-            Primitive3DSequence aRetval(aScaledPolyPolygon.count());
+            Primitive3DContainer aRetval(aScaledPolyPolygon.count());
 
             for(sal_uInt32 a(0L); a < aScaledPolyPolygon.count(); a++)
             {
@@ -159,13 +159,13 @@ namespace drawinglayer
             {
                 // create UnifiedTransparenceTexturePrimitive3D, add created primitives and exchange
                 const Primitive3DReference xRef(new UnifiedTransparenceTexturePrimitive3D(rLine.getTransparence(), aRetval));
-                aRetval = Primitive3DSequence(&xRef, 1L);
+                aRetval = { xRef };
             }
 
             return aRetval;
         }
 
-        Primitive3DSequence create3DPolyPolygonFillPrimitives(
+        Primitive3DContainer create3DPolyPolygonFillPrimitives(
             const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,
@@ -173,12 +173,12 @@ namespace drawinglayer
             const attribute::SdrFillAttribute& rFill,
             const attribute::FillGradientAttribute& rFillGradient)
         {
-            Primitive3DSequence aRetval;
+            Primitive3DContainer aRetval;
 
             if(r3DPolyPolygonVector.size())
             {
                 // create list of simple fill primitives
-                aRetval.realloc(r3DPolyPolygonVector.size());
+                aRetval.resize(r3DPolyPolygonVector.size());
 
                 for(size_t a(0); a < r3DPolyPolygonVector.size(); a++)
                 {
@@ -242,7 +242,7 @@ namespace drawinglayer
 
                     // exchange aRetval content with texture group
                     const Primitive3DReference xRef(pNewTexturePrimitive3D);
-                    aRetval = Primitive3DSequence(&xRef, 1L);
+                    aRetval = { xRef };
 
                     if(css::drawing::TextureKind2_LUMINANCE == aSdr3DObjectAttribute.getTextureKind())
                     {
@@ -254,7 +254,7 @@ namespace drawinglayer
                                 aRetval,
                                 aBColorModifier));
 
-                        aRetval = Primitive3DSequence(&xRef2, 1L);
+                        aRetval = { xRef2 };
                     }
                 }
 
@@ -262,26 +262,26 @@ namespace drawinglayer
                 {
                     // create UnifiedTransparenceTexturePrimitive3D with sublist and exchange
                     const Primitive3DReference xRef(new UnifiedTransparenceTexturePrimitive3D(rFill.getTransparence(), aRetval));
-                    aRetval = Primitive3DSequence(&xRef, 1L);
+                    aRetval = { xRef };
                 }
                 else if(!rFillGradient.isDefault())
                 {
                     // create TransparenceTexturePrimitive3D with sublist and exchange
                     const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(rFillGradient, aRetval, rTextureSize));
-                    aRetval = Primitive3DSequence(&xRef, 1L);
+                    aRetval = { xRef };
                 }
             }
 
             return aRetval;
         }
 
-        Primitive3DSequence createShadowPrimitive3D(
-            const Primitive3DSequence& rSource,
+        Primitive3DContainer createShadowPrimitive3D(
+            const Primitive3DContainer& rSource,
             const attribute::SdrShadowAttribute& rShadow,
             bool bShadow3D)
         {
             // create Shadow primitives. Uses already created primitives
-            if(rSource.hasElements() && !basegfx::fTools::moreOrEqual(rShadow.getTransparence(), 1.0))
+            if(!rSource.empty() && !basegfx::fTools::moreOrEqual(rShadow.getTransparence(), 1.0))
             {
                 // prepare new list for shadow geometry
                 basegfx::B2DHomMatrix aShadowOffset;
@@ -290,15 +290,15 @@ namespace drawinglayer
 
                 // create shadow primitive and add primitives
                 const Primitive3DReference xRef(new ShadowPrimitive3D(aShadowOffset, rShadow.getColor(), rShadow.getTransparence(), bShadow3D, rSource));
-                return Primitive3DSequence(&xRef, 1L);
+                return { xRef };
             }
             else
             {
-                return Primitive3DSequence();
+                return Primitive3DContainer();
             }
         }
 
-        Primitive3DSequence createHiddenGeometryPrimitives3D(
+        Primitive3DContainer createHiddenGeometryPrimitives3D(
             const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,
@@ -323,7 +323,7 @@ namespace drawinglayer
                         aSimplifiedFillAttribute,
                         attribute::FillGradientAttribute())));
 
-            return Primitive3DSequence(&aHidden, 1);
+            return { aHidden };
         }
 
     } // end of namespace primitive3d

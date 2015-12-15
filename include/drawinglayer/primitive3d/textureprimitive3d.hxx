@@ -56,7 +56,7 @@ namespace drawinglayer
         public:
             /// constructor
             TexturePrimitive3D(
-                const Primitive3DSequence& rChildren,
+                const Primitive3DContainer& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
@@ -94,7 +94,7 @@ namespace drawinglayer
             /// constructor
             UnifiedTransparenceTexturePrimitive3D(
                 double fTransparence,
-                const Primitive3DSequence& rChildren);
+                const Primitive3DContainer& rChildren);
 
             /// data read access
             double getTransparence() const { return mfTransparence; }
@@ -106,7 +106,7 @@ namespace drawinglayer
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// local decomposition.
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual Primitive3DContainer get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()
@@ -136,7 +136,7 @@ namespace drawinglayer
             /// constructor
             GradientTexturePrimitive3D(
                 const attribute::FillGradientAttribute& rGradient,
-                const Primitive3DSequence& rChildren,
+                const Primitive3DContainer& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
@@ -175,7 +175,7 @@ namespace drawinglayer
             /// constructor
             BitmapTexturePrimitive3D(
                 const attribute::FillGraphicAttribute& rFillGraphicAttribute,
-                const Primitive3DSequence& rChildren,
+                const Primitive3DContainer& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
@@ -211,7 +211,7 @@ namespace drawinglayer
             /// constructor
             TransparenceTexturePrimitive3D(
                 const attribute::FillGradientAttribute& rGradient,
-                const Primitive3DSequence& rChildren,
+                const Primitive3DContainer& rChildren,
                 const basegfx::B2DVector& rTextureSize);
 
             /// compare operator

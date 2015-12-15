@@ -30,7 +30,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        GroupPrimitive3D::GroupPrimitive3D( const Primitive3DSequence& rChildren )
+        GroupPrimitive3D::GroupPrimitive3D( const Primitive3DContainer& rChildren )
         :   BasePrimitive3D(),
             maChildren(rChildren)
         {
@@ -46,14 +46,14 @@ namespace drawinglayer
             {
                 const GroupPrimitive3D& rCompare = static_cast< const GroupPrimitive3D& >(rPrimitive);
 
-                return (arePrimitive3DSequencesEqual(getChildren(), rCompare.getChildren()));
+                return getChildren() == rCompare.getChildren();
             }
 
             return false;
         }
 
         /// default: just return children, so all renderers not supporting group will use it's content
-        Primitive3DSequence GroupPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DContainer GroupPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             return getChildren();
         }

@@ -72,12 +72,12 @@ void getAllHit3DObjectWithRelativePoint(
     {
         // rObject is a E3dCompoundObject, so it cannot be a scene (which is a E3dObject)
         const sdr::contact::ViewContactOfE3d& rVCObject = static_cast< sdr::contact::ViewContactOfE3d& >(rObject.GetViewContact());
-        const drawinglayer::primitive3d::Primitive3DSequence aPrimitives(rVCObject.getViewIndependentPrimitive3DSequence());
+        const drawinglayer::primitive3d::Primitive3DContainer aPrimitives(rVCObject.getViewIndependentPrimitive3DContainer());
 
-        if(aPrimitives.hasElements())
+        if(!aPrimitives.empty())
         {
             // make BoundVolume empty and overlapping test for speedup
-            const basegfx::B3DRange aObjectRange(drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(aPrimitives, rObjectViewInformation3D));
+            const basegfx::B3DRange aObjectRange(aPrimitives.getB3DRange(rObjectViewInformation3D));
 
             if(!aObjectRange.isEmpty())
             {

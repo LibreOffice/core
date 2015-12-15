@@ -67,12 +67,12 @@ const sdr::contact::ViewContactOfE3dScene* tryToFindVCOfE3DScene(
 
 namespace sdr { namespace contact {
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithGivenPrimitive3DSequence(
-    const drawinglayer::primitive3d::Primitive3DSequence& rxContent3D) const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithGivenPrimitive3DContainer(
+    const drawinglayer::primitive3d::Primitive3DContainer& rxContent3D) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
-    if(rxContent3D.hasElements())
+    if(!rxContent3D.empty())
     {
         // try to get the outmost ViewObjectContactOfE3dScene for this single 3d object,
         // the ones on the way there are grouping scenes. Collect the in-between scene's
@@ -135,27 +135,27 @@ ViewContactOfE3d::~ViewContactOfE3d()
 {
 }
 
-drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3d::getVIP3DSWithoutObjectTransform() const
+drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3d::getVIP3DSWithoutObjectTransform() const
 {
     // local up-to-date checks. Create new list and compare.
-    drawinglayer::primitive3d::Primitive3DSequence xNew(createViewIndependentPrimitive3DSequence());
+    drawinglayer::primitive3d::Primitive3DContainer xNew(createViewIndependentPrimitive3DContainer());
 
-    if(!drawinglayer::primitive3d::arePrimitive3DSequencesEqual(mxViewIndependentPrimitive3DSequence, xNew))
+    if(mxViewIndependentPrimitive3DContainer != xNew)
     {
         // has changed, copy content
-        const_cast< ViewContactOfE3d* >(this)->mxViewIndependentPrimitive3DSequence = xNew;
+        const_cast< ViewContactOfE3d* >(this)->mxViewIndependentPrimitive3DContainer = xNew;
     }
 
     // return current Primitive2DContainer
-    return mxViewIndependentPrimitive3DSequence;
+    return mxViewIndependentPrimitive3DContainer;
 }
 
-drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3d::getViewIndependentPrimitive3DSequence() const
+drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3d::getViewIndependentPrimitive3DContainer() const
 {
     // get sequence without object transform
-    drawinglayer::primitive3d::Primitive3DSequence xRetval(getVIP3DSWithoutObjectTransform());
+    drawinglayer::primitive3d::Primitive3DContainer xRetval(getVIP3DSWithoutObjectTransform());
 
-    if(xRetval.hasElements())
+    if(!xRetval.empty())
     {
         // add object transform if it's used
         const basegfx::B3DHomMatrix& rObjectTransform(GetE3dObject().GetTransform());
@@ -167,7 +167,7 @@ drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3d::getViewIndepend
                     rObjectTransform,
                     xRetval));
 
-            xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
+            xRetval = { xReference };
         }
     }
 
@@ -180,7 +180,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::createViewInde
     // also need to create a 2D embedding when the view-independent part is requested,
     // see view-dependent part in ViewObjectContactOfE3d::createPrimitive2DSequence
     // get 3d primitive vector, isPrimitiveVisible() is done in 3d creator
-    return impCreateWithGivenPrimitive3DSequence(getViewIndependentPrimitive3DSequence());
+    return impCreateWithGivenPrimitive3DContainer(getViewIndependentPrimitive3DContainer());
 }
 
 ViewObjectContact& ViewContactOfE3d::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)

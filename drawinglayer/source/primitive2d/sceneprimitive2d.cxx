@@ -48,11 +48,11 @@ namespace drawinglayer
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // create on demand
-            if(!mbShadow3DChecked && getChildren3D().hasElements())
+            if(!mbShadow3DChecked && !getChildren3D().empty())
             {
                 basegfx::B3DVector aLightNormal;
                 const double fShadowSlant(getSdrSceneAttribute().getShadowSlant());
-                const basegfx::B3DRange aScene3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), getViewInformation3D()));
+                const basegfx::B3DRange aScene3DRange(getChildren3D().getB3DRange(getViewInformation3D()));
 
                 if(maSdrLightingAttribute.getLightVector().size())
                 {
@@ -320,7 +320,7 @@ namespace drawinglayer
             Primitive2DContainer aRetval;
 
             // create 2D projected geometry from 3D geometry
-            if(getChildren3D().hasElements())
+            if(!getChildren3D().empty())
             {
                 // create 2D geometry extraction processor
                 processor3d::Geometry2DExtractingProcessor aGeometryProcessor(
@@ -393,7 +393,7 @@ namespace drawinglayer
         }
 
         ScenePrimitive2D::ScenePrimitive2D(
-            const primitive3d::Primitive3DSequence& rxChildren3D,
+            const primitive3d::Primitive3DContainer& rxChildren3D,
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             const basegfx::B2DHomMatrix& rObjectTransformation,
@@ -419,7 +419,7 @@ namespace drawinglayer
             {
                 const ScenePrimitive2D& rCompare = static_cast<const ScenePrimitive2D&>(rPrimitive);
 
-                return (primitive3d::arePrimitive3DSequencesEqual(getChildren3D(), rCompare.getChildren3D())
+                return (getChildren3D() == rCompare.getChildren3D()
                     && getSdrSceneAttribute() == rCompare.getSdrSceneAttribute()
                     && getSdrLightingAttribute() == rCompare.getSdrLightingAttribute()
                     && getObjectTransformation() == rCompare.getObjectTransformation()

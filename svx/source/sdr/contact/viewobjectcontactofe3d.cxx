@@ -39,11 +39,11 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive3d::Primitive3DSequence ViewObjectContactOfE3d::createPrimitive3DSequence(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive3d::Primitive3DContainer ViewObjectContactOfE3d::createPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const
         {
             // get the view-independent Primitive from the viewContact
             const ViewContactOfE3d& rViewContactOfE3d(dynamic_cast< const ViewContactOfE3d& >(GetViewContact()));
-            drawinglayer::primitive3d::Primitive3DSequence xRetval(rViewContactOfE3d.getViewIndependentPrimitive3DSequence());
+            drawinglayer::primitive3d::Primitive3DContainer xRetval(rViewContactOfE3d.getViewIndependentPrimitive3DContainer());
 
             // handle ghosted
             if(isPrimitiveGhosted(rDisplayInfo))
@@ -58,7 +58,7 @@ namespace sdr
                         xRetval,
                         aBColorModifier));
 
-                xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
+                xRetval = { xReference };
             }
 
             return xRetval;
@@ -69,22 +69,22 @@ namespace sdr
             const ViewContactOfE3d& rViewContact = static_cast< const ViewContactOfE3d& >(GetViewContact());
 
             // get 3d primitive vector, isPrimitiveVisible() is done in 3d creator
-            return rViewContact.impCreateWithGivenPrimitive3DSequence(getPrimitive3DSequence(rDisplayInfo));
+            return rViewContact.impCreateWithGivenPrimitive3DContainer(getPrimitive3DContainer(rDisplayInfo));
         }
 
-        drawinglayer::primitive3d::Primitive3DSequence ViewObjectContactOfE3d::getPrimitive3DSequence(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive3d::Primitive3DContainer ViewObjectContactOfE3d::getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const
         {
-            drawinglayer::primitive3d::Primitive3DSequence xNewPrimitive3DSeq(createPrimitive3DSequence(rDisplayInfo));
+            drawinglayer::primitive3d::Primitive3DContainer xNewPrimitive3DSeq(createPrimitive3DContainer(rDisplayInfo));
 
             // local up-to-date checks. New list different from local one?
-            if(!drawinglayer::primitive3d::arePrimitive3DSequencesEqual(mxPrimitive3DSequence, xNewPrimitive3DSeq))
+            if(mxPrimitive3DContainer != xNewPrimitive3DSeq)
             {
                 // has changed, copy content
-                const_cast< ViewObjectContactOfE3d* >(this)->mxPrimitive3DSequence = xNewPrimitive3DSeq;
+                const_cast< ViewObjectContactOfE3d* >(this)->mxPrimitive3DContainer = xNewPrimitive3DSeq;
             }
 
             // return current Primitive2DContainer
-            return mxPrimitive3DSequence;
+            return mxPrimitive3DContainer;
         }
     } // end of namespace contact
 } // end of namespace sdr

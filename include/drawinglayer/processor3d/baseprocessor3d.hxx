@@ -60,7 +60,7 @@ namespace drawinglayer
             virtual ~BaseProcessor3D();
 
             // the central processing method
-            void process(const primitive3d::Primitive3DSequence& rSource);
+            void process(const primitive3d::Primitive3DContainer& rSource);
 
             // data access
             const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }

@@ -40,17 +40,17 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence HatchTexturePrimitive3D::impCreate3DDecomposition() const
+        Primitive3DContainer HatchTexturePrimitive3D::impCreate3DDecomposition() const
         {
-            Primitive3DSequence aRetval;
+            Primitive3DContainer aRetval;
 
-            if(getChildren().hasElements())
+            if(!getChildren().empty())
             {
-                const Primitive3DSequence aSource(getChildren());
-                const sal_uInt32 nSourceCount(aSource.getLength());
+                const Primitive3DContainer aSource(getChildren());
+                const size_t nSourceCount(aSource.size());
                 std::vector< Primitive3DReference > aDestination;
 
-                for(sal_uInt32 a(0); a < nSourceCount; a++)
+                for(size_t a(0); a < nSourceCount; a++)
                 {
                     // get reference
                     const Primitive3DReference xReference(aSource[a]);
@@ -265,7 +265,7 @@ namespace drawinglayer
 
                 // prepare return value
                 const sal_uInt32 nDestSize(aDestination.size());
-                aRetval.realloc(nDestSize);
+                aRetval.resize(nDestSize);
 
                 for(sal_uInt32 b(0); b < nDestSize; b++)
                 {
@@ -278,7 +278,7 @@ namespace drawinglayer
 
         HatchTexturePrimitive3D::HatchTexturePrimitive3D(
             const attribute::FillHatchAttribute& rHatch,
-            const Primitive3DSequence& rChildren,
+            const Primitive3DContainer& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
@@ -300,13 +300,13 @@ namespace drawinglayer
             return false;
         }
 
-        Primitive3DSequence HatchTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DContainer HatchTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(!getBuffered3DDecomposition().hasElements())
+            if(getBuffered3DDecomposition().empty())
             {
-                const Primitive3DSequence aNewSequence(impCreate3DDecomposition());
+                const Primitive3DContainer aNewSequence(impCreate3DDecomposition());
                 const_cast< HatchTexturePrimitive3D* >(this)->setBuffered3DDecomposition(aNewSequence);
             }
 

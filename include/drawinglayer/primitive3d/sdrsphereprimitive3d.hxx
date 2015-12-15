@@ -45,7 +45,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual Primitive3DContainer create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
         public:
             /// constructor

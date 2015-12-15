@@ -45,21 +45,21 @@ namespace drawinglayer
             attribute::FillHatchAttribute                   maHatch;
 
             /// the buffered decomposed hatch
-            Primitive3DSequence                             maBuffered3DDecomposition;
+            Primitive3DContainer                             maBuffered3DDecomposition;
 
         protected:
             /// helper: local decomposition
-            Primitive3DSequence impCreate3DDecomposition() const;
+            Primitive3DContainer impCreate3DDecomposition() const;
 
             /// local access methods to maBufferedDecomposition
-            const Primitive3DSequence& getBuffered3DDecomposition() const { return maBuffered3DDecomposition; }
-            void setBuffered3DDecomposition(const Primitive3DSequence& rNew) { maBuffered3DDecomposition = rNew; }
+            const Primitive3DContainer& getBuffered3DDecomposition() const { return maBuffered3DDecomposition; }
+            void setBuffered3DDecomposition(const Primitive3DContainer& rNew) { maBuffered3DDecomposition = rNew; }
 
         public:
             /// constructor
             HatchTexturePrimitive3D(
                 const attribute::FillHatchAttribute& rHatch,
-                const Primitive3DSequence& rChildren,
+                const Primitive3DContainer& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
@@ -71,7 +71,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
 
             /// local decomposition.
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual Primitive3DContainer get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

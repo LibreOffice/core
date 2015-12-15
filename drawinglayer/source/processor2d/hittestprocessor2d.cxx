@@ -183,14 +183,13 @@ namespace drawinglayer
 
                     if(!aFront.equal(aBack))
                     {
-                        const primitive3d::Primitive3DSequence& rPrimitives = rCandidate.getChildren3D();
+                        const primitive3d::Primitive3DContainer& rPrimitives = rCandidate.getChildren3D();
 
-                        if(rPrimitives.hasElements())
+                        if(!rPrimitives.empty())
                         {
                             // make BoundVolume empty and overlapping test for speedup
                             const basegfx::B3DRange aObjectRange(
-                                drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(
-                                    rPrimitives, rObjectViewInformation3D));
+                                    rPrimitives.getB3DRange(rObjectViewInformation3D));
 
                             if(!aObjectRange.isEmpty())
                             {

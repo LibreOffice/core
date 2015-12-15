@@ -32,7 +32,7 @@ namespace drawinglayer
     namespace primitive3d
     {
         TexturePrimitive3D::TexturePrimitive3D(
-            const Primitive3DSequence& rChildren,
+            const Primitive3DContainer& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
         :   GroupPrimitive3D(rChildren),
@@ -65,7 +65,7 @@ namespace drawinglayer
     {
         UnifiedTransparenceTexturePrimitive3D::UnifiedTransparenceTexturePrimitive3D(
             double fTransparence,
-            const Primitive3DSequence& rChildren)
+            const Primitive3DContainer& rChildren)
         :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
             mfTransparence(fTransparence)
         {
@@ -87,10 +87,10 @@ namespace drawinglayer
         {
             // do not use the fallback to decomposition here since for a correct BoundRect we also
             // need invisible (1.0 == getTransparence()) geometry; these would be deleted in the decomposition
-            return getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation);
+            return getChildren().getB3DRange(rViewInformation);
         }
 
-        Primitive3DSequence UnifiedTransparenceTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DContainer UnifiedTransparenceTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             if(0.0 == getTransparence())
             {
@@ -103,12 +103,12 @@ namespace drawinglayer
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
                 const attribute::FillGradientAttribute aFillGradient(attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
                 const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
-                return Primitive3DSequence(&xRef, 1L);
+                return { xRef };
             }
             else
             {
                 // completely transparent or invalid definition, add nothing
-                return Primitive3DSequence();
+                return Primitive3DContainer();
             }
         }
 
@@ -126,7 +126,7 @@ namespace drawinglayer
     {
         GradientTexturePrimitive3D::GradientTexturePrimitive3D(
             const attribute::FillGradientAttribute& rGradient,
-            const Primitive3DSequence& rChildren,
+            const Primitive3DContainer& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
@@ -161,7 +161,7 @@ namespace drawinglayer
     {
         BitmapTexturePrimitive3D::BitmapTexturePrimitive3D(
             const attribute::FillGraphicAttribute& rFillGraphicAttribute,
-            const Primitive3DSequence& rChildren,
+            const Primitive3DContainer& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
@@ -195,7 +195,7 @@ namespace drawinglayer
     {
         TransparenceTexturePrimitive3D::TransparenceTexturePrimitive3D(
             const attribute::FillGradientAttribute& rGradient,
-            const Primitive3DSequence& rChildren,
+            const Primitive3DContainer& rChildren,
             const basegfx::B2DVector& rTextureSize)
         :   GradientTexturePrimitive3D(rGradient, rChildren, rTextureSize, false, false)
         {

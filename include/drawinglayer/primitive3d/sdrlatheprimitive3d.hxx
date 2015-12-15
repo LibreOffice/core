@@ -76,7 +76,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual Primitive3DContainer create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
         public:
             /// constructor
@@ -120,7 +120,7 @@ namespace drawinglayer
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// Overridden to allow for reduced line mode to decide if to buffer decomposition or not
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual Primitive3DContainer get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

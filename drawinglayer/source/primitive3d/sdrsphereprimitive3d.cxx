@@ -38,9 +38,9 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence SdrSpherePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DContainer SdrSpherePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            Primitive3DSequence aRetval;
+            Primitive3DContainer aRetval;
             const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
             const bool bCreateNormals(css::drawing::NormalsKind_SPECIFIC == getSdr3DObjectAttribute().getNormalsKind()
                 || css::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind());
@@ -149,18 +149,18 @@ namespace drawinglayer
             if(!getSdrLFSAttribute().getLine().isDefault())
             {
                 basegfx::B3DPolyPolygon aSphere(basegfx::tools::createSpherePolyPolygonFromB3DRange(aUnitRange, getHorizontalSegments(), getVerticalSegments()));
-                const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(
+                const Primitive3DContainer aLines(create3DPolyPolygonLinePrimitives(
                     aSphere, getTransform(), getSdrLFSAttribute().getLine()));
-                appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
+                aRetval.append(aLines);
             }
 
             // add shadow
             if(!getSdrLFSAttribute().getShadow().isDefault()
-                && aRetval.hasElements())
+                && !aRetval.empty())
             {
-                const Primitive3DSequence aShadow(createShadowPrimitive3D(
+                const Primitive3DContainer aShadow(createShadowPrimitive3D(
                     aRetval, getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
-                appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aShadow);
+                aRetval.append(aShadow);
             }
 
             return aRetval;

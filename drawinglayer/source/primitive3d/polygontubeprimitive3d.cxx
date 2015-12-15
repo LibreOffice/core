@@ -40,7 +40,7 @@ namespace drawinglayer
             {
             private:
                 // data for buffered tube primitives
-                Primitive3DSequence m_aLineTubeList;
+                Primitive3DContainer m_aLineTubeList;
                 sal_uInt32 m_nLineTubeSegments;
                 attribute::MaterialAttribute3D m_aLineMaterial;
                 ::osl::Mutex m_aMutex;
@@ -50,7 +50,7 @@ namespace drawinglayer
                 {
                 }
 
-                Primitive3DSequence getLineTubeSegments(
+                Primitive3DContainer getLineTubeSegments(
                     sal_uInt32 nSegments,
                     const attribute::MaterialAttribute3D& rMaterial)
                 {
@@ -61,10 +61,10 @@ namespace drawinglayer
                     {
                         m_nLineTubeSegments = nSegments;
                         m_aLineMaterial = rMaterial;
-                        m_aLineTubeList = Primitive3DSequence();
+                        m_aLineTubeList = Primitive3DContainer();
                     }
 
-                    if (!m_aLineTubeList.hasElements() && m_nLineTubeSegments != 0)
+                    if (m_aLineTubeList.empty() && m_nLineTubeSegments != 0)
                     {
                         const basegfx::B3DPoint aLeft(0.0, 0.0, 0.0);
                         const basegfx::B3DPoint aRight(1.0, 0.0, 0.0);
@@ -72,7 +72,7 @@ namespace drawinglayer
                         basegfx::B3DPoint aLastRight(1.0, 1.0, 0.0);
                         basegfx::B3DHomMatrix aRot;
                         aRot.rotate(F_2PI / (double)m_nLineTubeSegments, 0.0, 0.0);
-                        m_aLineTubeList.realloc(m_nLineTubeSegments);
+                        m_aLineTubeList.resize(m_nLineTubeSegments);
 
                         for(sal_uInt32 a = 0; a < m_nLineTubeSegments; ++a)
                         {
@@ -109,7 +109,7 @@ namespace drawinglayer
             struct theTubeBuffer :
                 public rtl::Static< TubeBuffer, theTubeBuffer > {};
 
-            Primitive3DSequence getLineTubeSegments(
+            Primitive3DContainer getLineTubeSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
@@ -122,7 +122,7 @@ namespace drawinglayer
             {
             private:
                 // data for buffered cap primitives
-                Primitive3DSequence m_aLineCapList;
+                Primitive3DContainer m_aLineCapList;
                 sal_uInt32 m_nLineCapSegments;
                 attribute::MaterialAttribute3D m_aLineMaterial;
                 ::osl::Mutex m_aMutex;
@@ -131,7 +131,7 @@ namespace drawinglayer
                     : m_nLineCapSegments(0)
                 {
                 }
-                Primitive3DSequence getLineCapSegments(
+                Primitive3DContainer getLineCapSegments(
                     sal_uInt32 nSegments,
                     const attribute::MaterialAttribute3D& rMaterial)
                 {
@@ -142,16 +142,16 @@ namespace drawinglayer
                     {
                         m_nLineCapSegments = nSegments;
                         m_aLineMaterial = rMaterial;
-                        m_aLineCapList = Primitive3DSequence();
+                        m_aLineCapList = Primitive3DContainer();
                     }
 
-                    if (!m_aLineCapList.hasElements() && m_nLineCapSegments != 0)
+                    if (m_aLineCapList.empty() && m_nLineCapSegments != 0)
                     {
                         const basegfx::B3DPoint aNull(0.0, 0.0, 0.0);
                         basegfx::B3DPoint aLast(0.0, 1.0, 0.0);
                         basegfx::B3DHomMatrix aRot;
                         aRot.rotate(F_2PI / (double)m_nLineCapSegments, 0.0, 0.0);
-                        m_aLineCapList.realloc(m_nLineCapSegments);
+                        m_aLineCapList.resize(m_nLineCapSegments);
 
                         for(sal_uInt32 a = 0; a < m_nLineCapSegments; ++a)
                         {
@@ -184,7 +184,7 @@ namespace drawinglayer
             struct theCapBuffer :
                 public rtl::Static< CapBuffer, theCapBuffer > {};
 
-            Primitive3DSequence getLineCapSegments(
+            Primitive3DContainer getLineCapSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
@@ -197,7 +197,7 @@ namespace drawinglayer
             {
             private:
                 // data for buffered capround primitives
-                Primitive3DSequence m_aLineCapRoundList;
+                Primitive3DContainer m_aLineCapRoundList;
                 sal_uInt32 m_nLineCapRoundSegments;
                 attribute::MaterialAttribute3D m_aLineMaterial;
                 ::osl::Mutex m_aMutex;
@@ -206,7 +206,7 @@ namespace drawinglayer
                     : m_nLineCapRoundSegments(0)
                 {
                 }
-                Primitive3DSequence getLineCapRoundSegments(
+                Primitive3DContainer getLineCapRoundSegments(
                     sal_uInt32 nSegments,
                     const attribute::MaterialAttribute3D& rMaterial)
                 {
@@ -217,10 +217,10 @@ namespace drawinglayer
                     {
                         m_nLineCapRoundSegments = nSegments;
                         m_aLineMaterial = rMaterial;
-                        m_aLineCapRoundList = Primitive3DSequence();
+                        m_aLineCapRoundList = Primitive3DContainer();
                     }
 
-                    if (!m_aLineCapRoundList.hasElements() && m_nLineCapRoundSegments)
+                    if (m_aLineCapRoundList.empty() && m_nLineCapRoundSegments)
                     {
                         // calculate new horizontal segments
                         sal_uInt32 nVerSeg(nSegments / 2);
@@ -251,7 +251,7 @@ namespace drawinglayer
                             aSphere.transformNormals(aSphereTrans);
 
                             // realloc for primitives and create based on polygon snippets
-                            m_aLineCapRoundList.realloc(nCount);
+                            m_aLineCapRoundList.resize(nCount);
 
                             for (sal_uInt32 a = 0; a < nCount; ++a)
                             {
@@ -277,7 +277,7 @@ namespace drawinglayer
                 public rtl::Static< CapRoundBuffer, theCapRoundBuffer > {};
 
 
-            Primitive3DSequence getLineCapRoundSegments(
+            Primitive3DContainer getLineCapRoundSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
@@ -286,7 +286,7 @@ namespace drawinglayer
                 return rTheBuffer.getLineCapRoundSegments(nSegments, rMaterial);
             }
 
-            Primitive3DSequence getLineJoinSegments(
+            Primitive3DContainer getLineJoinSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial,
                 double fAngle,
@@ -496,7 +496,7 @@ namespace drawinglayer
                     }
                 }
 
-                Primitive3DSequence aRetval(aResultVector.size());
+                Primitive3DContainer aRetval(aResultVector.size());
 
                 for(size_t a(0); a < aResultVector.size(); a++)
                 {
@@ -535,7 +535,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence PolygonTubePrimitive3D::impCreate3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DContainer PolygonTubePrimitive3D::impCreate3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             const sal_uInt32 nPointCount(getB3DPolygon().count());
             std::vector< BasePrimitive3D* > aResultVector;
@@ -608,7 +608,7 @@ namespace drawinglayer
                             if(bNoLineJoin || (!bClosed && bFirst))
                             {
                                 // line start edge, build transformed primitiveVector3D
-                                Primitive3DSequence aSequence;
+                                Primitive3DContainer aSequence;
 
                                 if(bLineCapRound && bFirst)
                                 {
@@ -633,7 +633,7 @@ namespace drawinglayer
                                 {
                                     // line connect non-parallel, aBack, aForw, use getLineJoin()
                                     const double fAngle(acos(aBack.scalar(aForw) / (fForwLen * aBack.getLength()))); // 0.0 .. F_PI2
-                                    Primitive3DSequence aNewList(
+                                    Primitive3DContainer aNewList(
                                         getLineJoinSegments(
                                             nSegments,
                                             aMaterial,
@@ -696,7 +696,7 @@ namespace drawinglayer
                                 aBackCapTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
 
                                 // get primitiveVector3D
-                                Primitive3DSequence aSequence;
+                                Primitive3DContainer aSequence;
 
                                 if(bLineCapRound && bLast)
                                 {
@@ -730,7 +730,7 @@ namespace drawinglayer
             }
 
             // prepare return value
-            Primitive3DSequence aRetval(aResultVector.size());
+            Primitive3DContainer aRetval(aResultVector.size());
 
             for(size_t a(0); a < aResultVector.size(); a++)
             {
@@ -773,13 +773,13 @@ namespace drawinglayer
             return false;
         }
 
-        Primitive3DSequence PolygonTubePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DContainer PolygonTubePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(!getLast3DDecomposition().hasElements())
+            if(getLast3DDecomposition().empty())
             {
-                const Primitive3DSequence aNewSequence(impCreate3DDecomposition(rViewInformation));
+                const Primitive3DContainer aNewSequence(impCreate3DDecomposition(rViewInformation));
                 const_cast< PolygonTubePrimitive3D* >(this)->setLast3DDecomposition(aNewSequence);
             }
 

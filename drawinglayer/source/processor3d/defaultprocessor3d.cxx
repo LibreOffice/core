@@ -49,9 +49,9 @@ namespace drawinglayer
     {
         void DefaultProcessor3D::impRenderGradientTexturePrimitive3D(const primitive3d::GradientTexturePrimitive3D& rPrimitive, bool bTransparence)
         {
-            const primitive3d::Primitive3DSequence& rSubSequence = rPrimitive.getChildren();
+            const primitive3d::Primitive3DContainer& rSubSequence = rPrimitive.getChildren();
 
-            if(rSubSequence.hasElements())
+            if(!rSubSequence.empty())
             {
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
@@ -212,9 +212,9 @@ namespace drawinglayer
 
         void DefaultProcessor3D::impRenderHatchTexturePrimitive3D(const primitive3d::HatchTexturePrimitive3D& rPrimitive)
         {
-            const primitive3d::Primitive3DSequence& rSubSequence = rPrimitive.getChildren();
+            const primitive3d::Primitive3DContainer& rSubSequence = rPrimitive.getChildren();
 
-            if(rSubSequence.hasElements())
+            if(!rSubSequence.empty())
             {
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
@@ -253,9 +253,9 @@ namespace drawinglayer
 
         void DefaultProcessor3D::impRenderBitmapTexturePrimitive3D(const primitive3d::BitmapTexturePrimitive3D& rPrimitive)
         {
-            const primitive3d::Primitive3DSequence& rSubSequence = rPrimitive.getChildren();
+            const primitive3d::Primitive3DContainer& rSubSequence = rPrimitive.getChildren();
 
-            if(rSubSequence.hasElements())
+            if(!rSubSequence.empty())
             {
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
@@ -304,9 +304,9 @@ namespace drawinglayer
 
         void DefaultProcessor3D::impRenderModifiedColorPrimitive3D(const primitive3d::ModifiedColorPrimitive3D& rModifiedCandidate)
         {
-            const primitive3d::Primitive3DSequence& rSubSequence = rModifiedCandidate.getChildren();
+            const primitive3d::Primitive3DContainer& rSubSequence = rModifiedCandidate.getChildren();
 
-            if(rSubSequence.hasElements())
+            if(!rSubSequence.empty())
             {
                 // put modifier on stack
                 maBColorModifierStack.push(rModifiedCandidate.getColorModifier());

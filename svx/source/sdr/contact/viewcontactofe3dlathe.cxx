@@ -40,9 +40,9 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3dLathe::createViewIndependentPrimitive3DSequence() const
+        drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3dLathe::createViewIndependentPrimitive3DContainer() const
         {
-            drawinglayer::primitive3d::Primitive3DSequence xRetval;
+            drawinglayer::primitive3d::Primitive3DContainer xRetval;
             const SfxItemSet& rItemSet = GetE3dLatheObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowAttribute3D aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false));
@@ -91,7 +91,7 @@ namespace sdr
                     aPolyPolygon, nHorizontalSegments, nVerticalSegments,
                     fDiagonal, fBackScale, fRotation,
                     bSmoothNormals, true, bSmoothLids, bCharacterMode, bCloseFront, bCloseBack));
-            xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
+            xRetval = { xReference };
 
             return xRetval;
         }

@@ -35,7 +35,7 @@ namespace drawinglayer
             const basegfx::BColor& rShadowColor,
             double fShadowTransparence,
             bool bShadow3D,
-            const Primitive3DSequence& rChildren)
+            const Primitive3DContainer& rChildren)
         :   GroupPrimitive3D(rChildren),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor),

@@ -73,9 +73,9 @@ namespace drawinglayer
                 {
                     // ModifiedColorPrimitive3D; push, process and pop
                     const primitive3d::ModifiedColorPrimitive3D& rModifiedCandidate = static_cast< const primitive3d::ModifiedColorPrimitive3D& >(rCandidate);
-                    const primitive3d::Primitive3DSequence& rSubSequence = rModifiedCandidate.getChildren();
+                    const primitive3d::Primitive3DContainer& rSubSequence = rModifiedCandidate.getChildren();
 
-                    if(rSubSequence.hasElements())
+                    if(!rSubSequence.empty())
                     {
                         maBColorModifierStack.push(rModifiedCandidate.getColorModifier());
                         process(rModifiedCandidate.getChildren());
@@ -121,9 +121,9 @@ namespace drawinglayer
                 {
                     // TexturePrimitive3D: Process children, do not try to decompose
                     const primitive3d::TexturePrimitive3D& rTexturePrimitive = static_cast< const primitive3d::TexturePrimitive3D& >(rCandidate);
-                    const primitive3d::Primitive3DSequence aChildren(rTexturePrimitive.getChildren());
+                    const primitive3d::Primitive3DContainer aChildren(rTexturePrimitive.getChildren());
 
-                    if(aChildren.hasElements())
+                    if(!aChildren.empty())
                     {
                         process(aChildren);
                     }

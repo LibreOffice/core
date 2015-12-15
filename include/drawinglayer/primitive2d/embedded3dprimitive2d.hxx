@@ -48,7 +48,7 @@ namespace drawinglayer
         {
         private:
             /// the sequence of 3d primitives
-            primitive3d::Primitive3DSequence                    mxChildren3D;
+            primitive3d::Primitive3DContainer                    mxChildren3D;
 
             /// the 2D scene object transformation
             basegfx::B2DHomMatrix                               maObjectTransformation;
@@ -88,7 +88,7 @@ namespace drawinglayer
         public:
             /// constructor
             Embedded3DPrimitive2D(
-                const primitive3d::Primitive3DSequence& rxChildren3D,
+                const primitive3d::Primitive3DContainer& rxChildren3D,
                 const basegfx::B2DHomMatrix& rObjectTransformation,
                 const geometry::ViewInformation3D& rViewInformation3D,
                 const basegfx::B3DVector& rLightNormal,
@@ -96,7 +96,7 @@ namespace drawinglayer
                 const basegfx::B3DRange& rScene3DRange);
 
             /// data read access
-            const primitive3d::Primitive3DSequence& getChildren3D() const { return mxChildren3D; }
+            const primitive3d::Primitive3DContainer& getChildren3D() const { return mxChildren3D; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
             const basegfx::B3DVector& getLightNormal() const { return maLightNormal; }

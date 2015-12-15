@@ -40,9 +40,9 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3dExtrude::createViewIndependentPrimitive3DSequence() const
+        drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3dExtrude::createViewIndependentPrimitive3DContainer() const
         {
-            drawinglayer::primitive3d::Primitive3DSequence xRetval;
+            drawinglayer::primitive3d::Primitive3DContainer xRetval;
             const SfxItemSet& rItemSet = GetE3dExtrudeObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowAttribute3D aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false));
@@ -76,7 +76,7 @@ namespace sdr
                     aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute,
                     aPolyPolygon, fDepth, fDiagonal, fBackScale, bSmoothNormals, true, bSmoothLids,
                     bCharacterMode, bCloseFront, bCloseBack));
-            xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
+            xRetval = { xReference };
 
             return xRetval;
         }

@@ -70,7 +70,7 @@ public:
 
     // helpers to get the sequence of all contained 3D primitives and its range,
     // regardless of layer or visibility constraints and using a neutral ViewInformation3D
-    drawinglayer::primitive3d::Primitive3DSequence getAllPrimitive3DSequence() const;
+    drawinglayer::primitive3d::Primitive3DContainer getAllPrimitive3DContainer() const;
     basegfx::B3DRange getAllContentRange3D() const;
 
 protected:

@@ -31,7 +31,7 @@ namespace drawinglayer
     namespace primitive3d
     {
         ModifiedColorPrimitive3D::ModifiedColorPrimitive3D(
-            const Primitive3DSequence& rChildren,
+            const Primitive3DContainer& rChildren,
             const basegfx::BColorModifierSharedPtr& rColorModifier)
         :   GroupPrimitive3D(rChildren),
             maColorModifier(rColorModifier)

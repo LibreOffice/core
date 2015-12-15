@@ -56,22 +56,22 @@ public:
     }
 
     // public helpers
-    drawinglayer::primitive2d::Primitive2DContainer impCreateWithGivenPrimitive3DSequence(
-        const drawinglayer::primitive3d::Primitive3DSequence& rxContent3D) const;
+    drawinglayer::primitive2d::Primitive2DContainer impCreateWithGivenPrimitive3DContainer(
+        const drawinglayer::primitive3d::Primitive3DContainer& rxContent3D) const;
 
 
     // primitive stuff
 
 protected:
-    // Primitive3DSequence of the ViewContact. This contains all necessary information
+    // Primitive3DContainer of the ViewContact. This contains all necessary information
     // for the graphical visualisation and needs to be supported by all 3D VCs which
     // can be visualized. It does NOT contain the object transformation to be able to
     // buffer for all possible usages
-    drawinglayer::primitive3d::Primitive3DSequence              mxViewIndependentPrimitive3DSequence;
+    drawinglayer::primitive3d::Primitive3DContainer              mxViewIndependentPrimitive3DContainer;
 
     // This method is responsible for creating the graphical visualisation data which is
-    // stored in mxViewIndependentPrimitive3DSequence, but without object transformation
-    virtual drawinglayer::primitive3d::Primitive3DSequence createViewIndependentPrimitive3DSequence() const = 0;
+    // stored in mxViewIndependentPrimitive3DContainer, but without object transformation
+    virtual drawinglayer::primitive3d::Primitive3DContainer createViewIndependentPrimitive3DContainer() const = 0;
 
     // This method is responsible for creating the graphical visualisation data derived ONLY from
     // the model data. The default implementation will try to create a 3D to 2D embedding (will work
@@ -81,13 +81,13 @@ protected:
 public:
     // access to the local primitive without the object's local 3D transform. This is e.g. needed
     // to get the not-yet transformed BoundVolume for e.g. interactions
-    drawinglayer::primitive3d::Primitive3DSequence getVIP3DSWithoutObjectTransform() const;
+    drawinglayer::primitive3d::Primitive3DContainer getVIP3DSWithoutObjectTransform() const;
 
     // access to the local primitive. This will ensure that the list is
     // current in comparing the local list content with a fresh created incarnation. It will
     // use getVIP3DSWithoutObjectTransform and embed to 3d transform primitive when object's
     // local 3d transform is used
-    drawinglayer::primitive3d::Primitive3DSequence getViewIndependentPrimitive3DSequence() const;
+    drawinglayer::primitive3d::Primitive3DContainer getViewIndependentPrimitive3DContainer() const;
 };
 
 }}

@@ -548,15 +548,14 @@ basegfx::B3DRange E3dObject::RecalcBoundVolume() const
         if(pVCOfE3D)
         {
             // BoundVolume is without 3D object transformation, use correct sequence
-            const drawinglayer::primitive3d::Primitive3DSequence xLocalSequence(pVCOfE3D->getVIP3DSWithoutObjectTransform());
+            const drawinglayer::primitive3d::Primitive3DContainer xLocalSequence(pVCOfE3D->getVIP3DSWithoutObjectTransform());
 
-            if(xLocalSequence.hasElements())
+            if(!xLocalSequence.empty())
             {
                 const uno::Sequence< beans::PropertyValue > aEmptyParameters;
                 const drawinglayer::geometry::ViewInformation3D aLocalViewInformation3D(aEmptyParameters);
 
-                aRetval = drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(
-                    xLocalSequence, aLocalViewInformation3D);
+                aRetval = xLocalSequence.getB3DRange(aLocalViewInformation3D);
             }
         }
     }
@@ -907,13 +906,12 @@ void E3dCompoundObject::RecalcSnapRect()
         if(pVCOfE3D)
         {
             // get 3D primitive sequence
-            const drawinglayer::primitive3d::Primitive3DSequence xLocalSequence(pVCOfE3D->getViewIndependentPrimitive3DSequence());
+            const drawinglayer::primitive3d::Primitive3DContainer xLocalSequence(pVCOfE3D->getViewIndependentPrimitive3DContainer());
 
-            if(xLocalSequence.hasElements())
+            if(!xLocalSequence.empty())
             {
                 // get BoundVolume
-                basegfx::B3DRange aBoundVolume(drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(
-                    xLocalSequence, aViewInfo3D));
+                basegfx::B3DRange aBoundVolume(xLocalSequence.getB3DRange(aViewInfo3D));
 
                 // transform bound volume to relative scene coordinates
                 aBoundVolume.transform(aViewInfo3D.getObjectToView());

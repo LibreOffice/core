@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
+#include <comphelper/sequence.hxx>
 
 
 
@@ -42,13 +43,13 @@ namespace drawinglayer
         {
         }
 
-        void BaseProcessor3D::process(const primitive3d::Primitive3DSequence& rSource)
+        void BaseProcessor3D::process(const primitive3d::Primitive3DContainer& rSource)
         {
-            if(rSource.hasElements())
+            if(!rSource.empty())
             {
-                const sal_Int32 nCount(rSource.getLength());
+                const size_t nCount(rSource.size());
 
-                for(sal_Int32 a(0L); a < nCount; a++)
+                for(size_t a(0L); a < nCount; a++)
                 {
                     // get reference
                     const primitive3d::Primitive3DReference xReference(rSource[a]);
@@ -66,7 +67,7 @@ namespace drawinglayer
                         {
                             // unknown implementation, use UNO API call instead and process recursively
                             const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
-                            process(xReference->getDecomposition(rViewParameters));
+                            process(comphelper::sequenceToContainer<primitive3d::Primitive3DContainer>(xReference->getDecomposition(rViewParameters)));
                         }
                     }
                 }

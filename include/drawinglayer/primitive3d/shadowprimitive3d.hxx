@@ -60,7 +60,7 @@ namespace drawinglayer
                 const basegfx::BColor& rShadowColor,
                 double fShadowTransparence,
                 bool bShadow3D,
-                const Primitive3DSequence& rChildren);
+                const Primitive3DContainer& rChildren);
 
             /// data read access
             const basegfx::B2DHomMatrix& getShadowTransform() const { return maShadowTransform; }

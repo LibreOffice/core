@@ -33,7 +33,7 @@ namespace drawinglayer
     {
         TransformPrimitive3D::TransformPrimitive3D(
             const basegfx::B3DHomMatrix& rTransformation,
-            const Primitive3DSequence& rChildren)
+            const Primitive3DContainer& rChildren)
         :   GroupPrimitive3D(rChildren),
             maTransformation(rTransformation)
         {
@@ -53,7 +53,7 @@ namespace drawinglayer
 
         basegfx::B3DRange TransformPrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
         {
-            basegfx::B3DRange aRetval(getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation));
+            basegfx::B3DRange aRetval(getChildren().getB3DRange(rViewInformation));
             aRetval.transform(getTransformation());
             return aRetval;
         }

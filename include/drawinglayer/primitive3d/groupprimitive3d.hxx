@@ -53,20 +53,20 @@ namespace drawinglayer
         {
         private:
             /// the children. Declared private since this shall never be changed at all after construction
-            Primitive3DSequence                             maChildren;
+            Primitive3DContainer                             maChildren;
 
         public:
             /// constructor
-            explicit GroupPrimitive3D(const Primitive3DSequence& rChildren);
+            explicit GroupPrimitive3D(const Primitive3DContainer& rChildren);
 
             /// data read access
-            Primitive3DSequence getChildren() const { return maChildren; }
+            Primitive3DContainer getChildren() const { return maChildren; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive3D& rPrimitive ) const override;
 
             /// local decomposition. Implementation will just return children
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual Primitive3DContainer get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

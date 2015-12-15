@@ -64,12 +64,12 @@ namespace drawinglayer
             const basegfx::B3DRange& rRange,
             const basegfx::B2DVector& rTextureSize);
 
-        Primitive3DSequence DRAWINGLAYER_DLLPUBLIC create3DPolyPolygonLinePrimitives(
+        Primitive3DContainer DRAWINGLAYER_DLLPUBLIC create3DPolyPolygonLinePrimitives(
             const basegfx::B3DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const attribute::SdrLineAttribute& rLine);
 
-        Primitive3DSequence DRAWINGLAYER_DLLPUBLIC create3DPolyPolygonFillPrimitives(
+        Primitive3DContainer DRAWINGLAYER_DLLPUBLIC create3DPolyPolygonFillPrimitives(
             const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,
@@ -77,12 +77,12 @@ namespace drawinglayer
             const attribute::SdrFillAttribute& rFill,
             const attribute::FillGradientAttribute& rFillGradient);
 
-        Primitive3DSequence DRAWINGLAYER_DLLPUBLIC createShadowPrimitive3D(
-            const Primitive3DSequence& rSource,
+        Primitive3DContainer DRAWINGLAYER_DLLPUBLIC createShadowPrimitive3D(
+            const Primitive3DContainer& rSource,
             const attribute::SdrShadowAttribute& rShadow,
             bool bShadow3D);
 
-        Primitive3DSequence DRAWINGLAYER_DLLPUBLIC createHiddenGeometryPrimitives3D(
+        Primitive3DContainer DRAWINGLAYER_DLLPUBLIC createHiddenGeometryPrimitives3D(
             const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,

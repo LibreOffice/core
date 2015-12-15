@@ -31,20 +31,20 @@ namespace drawinglayer
     namespace primitive3d
     {
         HiddenGeometryPrimitive3D::HiddenGeometryPrimitive3D(
-            const Primitive3DSequence& rChildren)
+            const Primitive3DContainer& rChildren)
         :   GroupPrimitive3D(rChildren)
         {
         }
 
         basegfx::B3DRange HiddenGeometryPrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
         {
-            return getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation);
+            return getChildren().getB3DRange(rViewInformation);
         }
 
-        Primitive3DSequence HiddenGeometryPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DContainer HiddenGeometryPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             // return empty sequence
-            return Primitive3DSequence();
+            return Primitive3DContainer();
         }
 
         // provide unique ID

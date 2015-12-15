@@ -39,9 +39,9 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence SdrExtrudePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DContainer SdrExtrudePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
-            Primitive3DSequence aRetval;
+            Primitive3DContainer aRetval;
 
             // get slices
             const Slice3DVector& rSliceVector = getSlices();
@@ -322,9 +322,9 @@ namespace drawinglayer
 
                         if(aNewLineGeometry.count())
                         {
-                            const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(
+                            const Primitive3DContainer aLines(create3DPolyPolygonLinePrimitives(
                                 aNewLineGeometry, getTransform(), getSdrLFSAttribute().getLine()));
-                            appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
+                            aRetval.append(aLines);
                         }
                     }
                     else
@@ -334,23 +334,23 @@ namespace drawinglayer
                         const basegfx::B3DPolyPolygon aVerLine(extractVerticalLinesFromSlice(rSliceVector));
 
                         // add horizontal lines
-                        const Primitive3DSequence aHorLines(create3DPolyPolygonLinePrimitives(
+                        const Primitive3DContainer aHorLines(create3DPolyPolygonLinePrimitives(
                             aHorLine, getTransform(), getSdrLFSAttribute().getLine()));
-                        appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aHorLines);
+                        aRetval.append(aHorLines);
 
                         // add vertical lines
-                        const Primitive3DSequence aVerLines(create3DPolyPolygonLinePrimitives(
+                        const Primitive3DContainer aVerLines(create3DPolyPolygonLinePrimitives(
                             aVerLine, getTransform(), getSdrLFSAttribute().getLine()));
-                        appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aVerLines);
+                        aRetval.append(aVerLines);
                     }
                 }
 
                 // add shadow
-                if(!getSdrLFSAttribute().getShadow().isDefault() && aRetval.hasElements())
+                if(!getSdrLFSAttribute().getShadow().isDefault() && !aRetval.empty())
                 {
-                    const Primitive3DSequence aShadow(createShadowPrimitive3D(
+                    const Primitive3DContainer aShadow(createShadowPrimitive3D(
                         aRetval, getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
-                    appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aShadow);
+                    aRetval.append(aShadow);
                 }
             }
 
@@ -482,18 +482,18 @@ namespace drawinglayer
             return get3DRangeFromSlices(getSlices());
         }
 
-        Primitive3DSequence SdrExtrudePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DContainer SdrExtrudePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             if(getSdr3DObjectAttribute().getReducedLineGeometry())
             {
                 if(!mpLastRLGViewInformation ||
-                    (getBuffered3DDecomposition().hasElements()
+                    (!getBuffered3DDecomposition().empty()
                         && *mpLastRLGViewInformation != rViewInformation))
                 {
                     // conditions of last local decomposition with reduced lines have changed. Remember
                     // new one and clear current decompositiopn
                     SdrExtrudePrimitive3D* pThat = const_cast< SdrExtrudePrimitive3D* >(this);
-                    pThat->setBuffered3DDecomposition(Primitive3DSequence());
+                    pThat->setBuffered3DDecomposition(Primitive3DContainer());
                     delete pThat->mpLastRLGViewInformation;
                     pThat->mpLastRLGViewInformation = new geometry::ViewInformation3D(rViewInformation);
                 }

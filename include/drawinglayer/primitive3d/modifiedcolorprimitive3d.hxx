@@ -47,7 +47,7 @@ namespace drawinglayer
         public:
             /// constructor
             ModifiedColorPrimitive3D(
-                const Primitive3DSequence& rChildren,
+                const Primitive3DContainer& rChildren,
                 const basegfx::BColorModifierSharedPtr& rColorModifier);
 
             /// data read access

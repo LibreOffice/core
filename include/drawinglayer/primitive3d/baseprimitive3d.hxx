@@ -48,10 +48,30 @@ namespace drawinglayer { namespace geometry {
 }}
 
 namespace drawinglayer { namespace primitive3d {
-    /// typedefs for basePrimitive3DImplBase, Primitive3DSequence and Primitive3DReference
+    /// typedefs for basePrimitive3DImplBase, Primitive3DContainer and Primitive3DReference
     typedef cppu::WeakComponentImplHelper1< css::graphic::XPrimitive3D > BasePrimitive3DImplBase;
     typedef css::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
     typedef css::uno::Sequence< Primitive3DReference > Primitive3DSequence;
+
+    class DRAWINGLAYER_DLLPUBLIC SAL_WARN_UNUSED Primitive3DContainer : public std::vector< Primitive3DReference >
+    {
+    public:
+        explicit Primitive3DContainer() {}
+        explicit Primitive3DContainer( size_type count ) : vector(count) {}
+        Primitive3DContainer( const Primitive3DContainer& other ) : vector(other) {}
+        Primitive3DContainer( const Primitive3DContainer&& other ) : vector(other) {}
+        Primitive3DContainer( const vector< Primitive3DReference >& other ) : vector(other) {}
+        Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : vector(init) {}
+
+        void append(const Primitive3DContainer& rSource);
+        void append(const Primitive3DSequence& rSource);
+        void append(Primitive3DContainer&& rSource);
+        Primitive3DContainer& operator=(const Primitive3DContainer& r) { vector::operator=(r); return *this; }
+        Primitive3DContainer& operator=(const Primitive3DContainer&& r) { vector::operator=(r); return *this; }
+        bool operator==(const Primitive3DContainer& rB) const;
+        bool operator!=(const Primitive3DContainer& rB) const { return !operator==(rB); }
+        basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& aViewInformation) const;
+    };
 }}
 
 
@@ -106,7 +126,7 @@ namespace drawinglayer
             virtual sal_uInt32 getPrimitive3DID() const = 0;
 
             /// The default implementation returns an empty sequence
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DContainer get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
 
             // Methods from XPrimitive3D
@@ -144,20 +164,20 @@ namespace drawinglayer
         {
         private:
             /// a sequence used for buffering the last create3DDecomposition() result
-            Primitive3DSequence                             maBuffered3DDecomposition;
+            Primitive3DContainer                             maBuffered3DDecomposition;
 
         protected:
             /** access methods to maBuffered3DDecomposition. The usage of this methods may allow
                 later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
                 implementations for buffering the last decomposition.
              */
-            const Primitive3DSequence& getBuffered3DDecomposition() const { return maBuffered3DDecomposition; }
-            void setBuffered3DDecomposition(const Primitive3DSequence& rNew) { maBuffered3DDecomposition = rNew; }
+            const Primitive3DContainer& getBuffered3DDecomposition() const { return maBuffered3DDecomposition; }
+            void setBuffered3DDecomposition(const Primitive3DContainer& rNew) { maBuffered3DDecomposition = rNew; }
 
             /** method which is to be used to implement the local decomposition of a 2D primitive. The default
                 implementation will just return an empty decomposition
              */
-            virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DContainer create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             // constructor
@@ -169,7 +189,7 @@ namespace drawinglayer
                 overridden and the ViewInformation for the last decomposition needs to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual Primitive3DContainer get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -184,9 +204,6 @@ namespace drawinglayer
         /// get B3DRange from a given Primitive3DReference
         basegfx::B3DRange DRAWINGLAYER_DLLPUBLIC getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
-        /// get range3D from a given Primitive3DSequence
-        basegfx::B3DRange DRAWINGLAYER_DLLPUBLIC getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation);
-
         /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
             and using compare operator
          */
@@ -196,7 +213,7 @@ namespace drawinglayer
         bool DRAWINGLAYER_DLLPUBLIC arePrimitive3DSequencesEqual(const Primitive3DSequence& rA, const Primitive3DSequence& rB);
 
         /// concatenate sequence
-        void DRAWINGLAYER_DLLPUBLIC appendPrimitive3DSequenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DSequence& rSource);
+        void DRAWINGLAYER_DLLPUBLIC appendPrimitive3DSequenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DContainer& rSource);
 
         /// concatenate single Primitive3D
         void DRAWINGLAYER_DLLPUBLIC appendPrimitive3DReferenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DReference& rSource);
