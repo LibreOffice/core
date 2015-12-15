@@ -730,6 +730,7 @@ void GtkData::Init()
         aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
 #endif
 
+#if !GTK_CHECK_VERSION(3,0,0)
     /*
      * if a -display switch was used, we need
      * to set the environment accoringly since
@@ -740,6 +741,7 @@ void GtkData::Init()
     const gchar *name = gdk_display_get_name( pGdkDisp );
     OUString envValue(name, strlen(name), aEnc);
     osl_setEnvironment(envVar.pData, envValue.pData);
+#endif
 
     GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
     SetDisplay( pDisplay );
