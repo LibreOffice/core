@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_WINDOW_HXX
 #define INCLUDED_VCL_WINDOW_HXX
 
-#include <config_features.h>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
@@ -438,23 +437,6 @@ enum class GetDlgWindowType
 #ifdef DBG_UTIL
 const char* ImplDbgCheckWindow( const void* pObj );
 #endif
-
-inline bool ImplDoTiledRendering()
-{
-#if !HAVE_FEATURE_DESKTOP && !defined(ANDROID)
-    // We do tiled rendering only for iOS at the moment, actually, but
-    // let's see what happens if we assume it for Android, too.
-    // (That comment doesn't match what the code does, does it?)
-    return true;
-#else
-    // We need some way to know globally if this process will use
-    // tiled rendering or not. Or should this be a per-window setting?
-    // Or what?
-    return false;
-#endif
-}
-
-
 
 namespace vcl { class Window; }
 namespace vcl { class Cursor; }

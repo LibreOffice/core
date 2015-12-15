@@ -19,6 +19,8 @@
 
 #include <tbunosearchcontrollers.hxx>
 
+#include <config_features.h>
+
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 
