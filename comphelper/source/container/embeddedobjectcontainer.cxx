@@ -696,7 +696,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     // objects without persistence are not really stored by the method
     if (xObj.is() && StoreEmbeddedObject(xObj, rName, true, rSrcShellID, rDestShellID))
     {
-        xResult = Get_Impl( rName, xObj);
+        assert(!rDestShellID.isEmpty() && !rDestShellID.startsWith("0x")); // assume that every shell has a base URL
+        xResult = Get_Impl(rName, xObj, &rDestShellID);
         if ( !xResult.is() )
         {
             // this is a case when object has no real persistence
