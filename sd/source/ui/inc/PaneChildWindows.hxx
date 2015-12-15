@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_PANECHILDWINDOWS_HXX
 
 #include <sfx2/childwin.hxx>
-#include <sfx2/taskpane.hxx>
 
 namespace sd {
 

@@ -28,7 +28,6 @@ static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = nullptr
 static pfunc_getRefreshToolbars            pRefreshToolbars            = nullptr;
 static pfunc_createDockingWindow           pCreateDockingWindow        = nullptr;
 static pfunc_isDockingWindowVisible        pIsDockingWindowVisible     = nullptr;
-static pfunc_activateToolPanel             pActivateToolPanel          = nullptr;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -143,26 +142,6 @@ bool SAL_CALL IsDockingWindowVisible( const css::uno::Reference< css::frame::XFr
         return (*pCall)( rFrame, rResourceURL );
     else
         return false;
-}
-
-pfunc_activateToolPanel SAL_CALL SetActivateToolPanel( pfunc_activateToolPanel i_pActivator )
-{
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    pfunc_activateToolPanel pOldFunc = pActivateToolPanel;
-    pActivateToolPanel = i_pActivator;
-    return pOldFunc;
-}
-
-void SAL_CALL ActivateToolPanel( const css::uno::Reference< css::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL )
-{
-    pfunc_activateToolPanel pActivator = nullptr;
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        pActivator = pActivateToolPanel;
-    }
-
-    ENSURE_OR_RETURN_VOID( pActivator, "framework::ActivateToolPanel: no activator function!" );
-    (*pActivator)( i_rFrame, i_rPanelURL );
 }
 
 using namespace ::com::sun::star;

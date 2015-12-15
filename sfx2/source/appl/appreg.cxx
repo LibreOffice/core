@@ -28,7 +28,6 @@
 #include <sfx2/stbitem.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/navigat.hxx>
-#include <sfx2/taskpane.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "partwnd.hxx"

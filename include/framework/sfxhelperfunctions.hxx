@@ -51,10 +51,6 @@ typedef bool ( *pfunc_isDockingWindowVisible)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& rResourceURL );
 
-typedef void ( *pfunc_activateToolPanel)(
-    const css::uno::Reference< css::frame::XFrame >& i_rFrame,
-    const OUString& i_rPanelURL );
-
 
 namespace framework
 {
@@ -85,11 +81,6 @@ FWE_DLLPUBLIC pfunc_isDockingWindowVisible SAL_CALL SetIsDockingWindowVisible( p
 FWE_DLLPUBLIC bool SAL_CALL IsDockingWindowVisible(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& rResourceURL );
-
-FWE_DLLPUBLIC pfunc_activateToolPanel SAL_CALL SetActivateToolPanel( pfunc_activateToolPanel i_pActivator );
-FWE_DLLPUBLIC void SAL_CALL ActivateToolPanel(
-    const css::uno::Reference< css::frame::XFrame >& i_rFrame,
-    const OUString& i_rPanelURL );
 }
 
 #endif // INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
