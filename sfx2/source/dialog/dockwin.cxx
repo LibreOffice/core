@@ -857,6 +857,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nLine = pImp->nDockLine = 0;
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = false;
+    pImp->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
     pImp->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
     pImp->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
@@ -902,6 +903,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nLine = pImp->nDockLine = 0;
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = false;
+    pImp->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
     pImp->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
     pImp->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
@@ -947,6 +949,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nLine = pImp->nDockLine = 0;
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = false;
+    pImp->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
     pImp->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
     pImp->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
