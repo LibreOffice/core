@@ -2671,8 +2671,7 @@ void ChartExport::_exportAxis(
     }
 
     // only export each axis only once non-deleted
-    bool bDeleted = std::find(maExportedAxis.begin(),
-            maExportedAxis.end(), rAxisIdPair.nAxisType) != maExportedAxis.end();
+    bool bDeleted = maExportedAxis.find(rAxisIdPair.nAxisType) != maExportedAxis.end();
 
     if (!bDeleted)
         maExportedAxis.insert(rAxisIdPair.nAxisType);
