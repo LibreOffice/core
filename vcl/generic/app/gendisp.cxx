@@ -47,7 +47,12 @@ void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
         while ( it != m_aUserEvents.end() )
         {
             if( it->m_pFrame == pFrame )
+            {
+                if (it->m_nEvent == SALEVENT_USEREVENT) {
+                    delete static_cast<ImplSVEvent *>(it->m_pData);
+                }
                 it = m_aUserEvents.erase( it );
+            }
             else
                 ++it;
         }
