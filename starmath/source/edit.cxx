@@ -1026,6 +1026,11 @@ void SmEditWindow::InsertText(const OUString& rText)
         // callers
         OUString string(rText);
 
+        OUString selected(pEditView->GetSelected());
+        // if we have text selected, use it in the first placeholder
+        if (!selected.isEmpty())
+            string = string.replaceFirst("<?>", selected);
+
         // put a space before a new command if not in the beginning of a line
         if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
             string = " " + string;
