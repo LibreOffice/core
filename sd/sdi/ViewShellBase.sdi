@@ -32,11 +32,6 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_TASKPANE
-    [
-        ExecMethod = Execute;
-        StateMethod = GetState;
-    ]
     SID_NOTES_WINDOW
     [
         ExecMethod = Execute;

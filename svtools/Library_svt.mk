@@ -212,19 +212,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/table/mousefunction \
     svtools/source/table/cellvalueconversion \
     svtools/source/table/tablegeometry \
-    svtools/source/toolpanel/drawerlayouter \
-    svtools/source/toolpanel/dummypanel \
-    svtools/source/toolpanel/paneldecklisteners \
-    svtools/source/toolpanel/paneltabbar \
-    svtools/source/toolpanel/paneltabbarpeer \
-    svtools/source/toolpanel/tabbargeometry \
-    svtools/source/toolpanel/tablayouter \
-    svtools/source/toolpanel/toolpanel \
-    svtools/source/toolpanel/toolpanelcollection \
-    svtools/source/toolpanel/toolpaneldeck \
-    svtools/source/toolpanel/toolpaneldeckpeer \
-    svtools/source/toolpanel/toolpaneldrawer \
-    svtools/source/toolpanel/toolpaneldrawerpeer \
     svtools/source/uno/addrtempuno \
     svtools/source/uno/contextmenuhelper \
     svtools/source/uno/fpicker \

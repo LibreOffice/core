@@ -50,8 +50,6 @@ namespace svt
 {
 
 
-    class ToolPanelDeck;
-    class IToolPanelDeck;
     class PanelTabBar;
     namespace table
     {
@@ -159,18 +157,6 @@ namespace svt
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos
             ) const = 0;
-
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-            createAccessibleToolPanelDeck(
-                const css::uno::Reference< css::accessibility::XAccessible >& i_rAccessibleParent,
-                ::svt::ToolPanelDeck& i_rPanelDeck
-            ) = 0;
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-            createAccessibleToolPanelTabBar(
-                const css::uno::Reference< css::accessibility::XAccessible >& i_rAccessibleParent,
-                ::svt::IToolPanelDeck& i_rPanelDeck,
-                ::svt::PanelTabBar& i_rTabBar
-            ) = 0;
 
     protected:
         virtual ~IAccessibleFactory() {}
