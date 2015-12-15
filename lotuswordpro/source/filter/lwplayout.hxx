@@ -142,7 +142,7 @@ public:
         if (m_bGettingMarginsValue)
             throw std::runtime_error("recursion in layout");
         m_bGettingMarginsValue = true;
-        bool fRet = MarginsValue(nWhichSide);
+        auto fRet = MarginsValue(nWhichSide);
         m_bGettingMarginsValue = false;
         return fRet;
     }
