@@ -749,16 +749,16 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         if (static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DEINITIALIZING)
         {
             DELETEZ(m_pWebUsrPref);
-            DELETEZ(m_pUsrPref)   ;
+            DELETEZ(m_pUsrPref);
             DELETEZ(m_pModuleConfig);
-            DELETEZ(m_pPrintOptions)      ;
-            DELETEZ(m_pWebPrintOptions)   ;
+            DELETEZ(m_pPrintOptions);
+            DELETEZ(m_pWebPrintOptions);
             DELETEZ(m_pChapterNumRules);
-            DELETEZ(m_pStdFontConfig)     ;
-            DELETEZ(m_pNavigationConfig)  ;
-            DELETEZ(m_pToolbarConfig)     ;
-            DELETEZ(m_pWebToolbarConfig)  ;
-            DELETEZ(m_pAuthorNames)       ;
+            DELETEZ(m_pStdFontConfig);
+            DELETEZ(m_pNavigationConfig);
+            DELETEZ(m_pToolbarConfig);
+            DELETEZ(m_pWebToolbarConfig);
+            DELETEZ(m_pAuthorNames);
             DELETEZ(m_pDBConfig);
             if( m_pColorConfig )
             {

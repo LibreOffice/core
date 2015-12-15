@@ -3269,7 +3269,7 @@ void SwFrameHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING && &rBC == pFrame )
     {
-            pFrame = nullptr;
+        pFrame = nullptr;
     }
 }
 
