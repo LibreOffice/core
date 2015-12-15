@@ -1154,10 +1154,11 @@ public:
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override
     {
+        if (&rBroadcaster != &static_cast<SfxBroadcaster&>(mrBase))
+            return;
+
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-        if (pSimpleHint != nullptr
-            && pSimpleHint->GetId() == SFX_HINT_DYING
-            && &rBroadcaster == &static_cast<SfxBroadcaster&>(mrBase))
+        if (pSimpleHint != nullptr && pSimpleHint->GetId() == SFX_HINT_DYING)
         {
             Dispose();
         }
