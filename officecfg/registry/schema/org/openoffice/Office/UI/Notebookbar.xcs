@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Notebookbar" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Specification of tabs and groups in the Notebookbar.</desc>
+  </info>
+  <templates>
+    <group oor:name="Tab">
+      <info>
+        <desc>Specification of a Notebokbar tab which is a container of content groups.</desc>
+      </info>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>The title of the tab.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="Id" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>Internally used to identify the tab. Not displayed in the UI.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="HelpURL" oor:type="xs:string">
+        <info>
+          <desc>Help about the Notebookbar tab.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="ContextList" oor:type="oor:string-list">
+        <info><desc>
+          List of context descriptors. Each context descriptor is a string that contains four comma
+          separated values (note that values are case sensitive):
+          1  Application name. Valid values are
+                 com.sun.star.text.TextDocument
+                 com.sun.star.text.GlobalDocument
+                 com.sun.star.text.WebDocument
+                 com.sun.star.xforms.XMLFormDocument
+                 com.sun.star.sdb.FormDesign
+                 com.sun.star.sdb.TextReportDesign
+                 com.sun.star.sheet.SpreadsheetDocument
+                 com.sun.star.presentation.PresentationDocument
+                 com.sun.star.drawing.DrawingDocument
+                 com.sun.star.chart2.ChartDocument
+
+             Recognized shortcuts:
+                 Writer
+                 Calc
+                 Impress
+                 Draw
+                 Chart
+
+             Shortcuts for multiple applications:
+                 DrawImpress
+                 WriterVariants
+             These shortcuts exist for even more convenience and handle the frequent case of Draw
+             and Impress as well as different variants of the Writer where they have otherwise
+             identical context descriptions.
+
+             Special values:
+                 any
+                 none
+
+          2  Context name
+              Know context names are 3DObject, Annotation, Auditing, Axis, Cell, Chart, Draw, DrawPage, DrawText,
+              EditCell, ErrorBar, Form, Frame, Graphic, HandoutPage, MasterPage, Media, Multiobj, OLE, OutlineText,
+              Pivot, Series, SlidesorterPage, Table, Text, TextObject, Trendline
+              default
+
+             Special values:
+                 any
+
+          3  Content group state.  One of
+             visible  Content group is initially visible and expanded
+             hidden   Content group is initially collapsed, only a button with the title is visible
+
+          4  (Optional, only used for content groups) UNO command that overrides the DefaultMenuCommand.  Use
+             the special value none to override the DefaultMenuCommand to the empty string and thereby
+             disable the showing of a) the menu button in the title bar and b) the showing of a dialog.
+        </desc></info>
+      </prop>
+      <prop oor:name="OrderIndex" oor:type="xs:int">
+        <info>
+          <desc>Index used for ordering tabs in the tab bar. Smaller values correspond to positions nearer to the left.</desc>
+        </info>
+        <value>10000</value>
+      </prop>
+      <prop oor:name="IsExperimental" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the tab is experimental and is shown only when experimental mode is enabled.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="ContentGroup">
+      <info>
+        <desc>Specification of a Notebookbar content group (contained in a tab).</desc>
+      </info>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>The title is displayed below the content group.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="Id" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>Internally used to identify the tab. Not displayed in the UI.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="TabId" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>Id of the tab to which the content group belongs.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="HelpURL" oor:type="xs:string">
+        <info>
+          <desc>Help about the content group.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="DefaultMenuCommand" oor:type="xs:string">
+        <info><desc>
+          The default UNO command to execute when the user clicks on the menu button in the group title bar.
+          Can be overridden in the ContextList to provide context dependent menu dialogs.
+          When empty then the menu icon is not shown in the group title bar.
+        </desc></info>
+        <value></value>
+      </prop>
+      <prop oor:name="ContextList" oor:type="oor:string-list">
+        <info>
+          <desc>For documentation, please see the Tab/ContextList.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImplementationURL" oor:type="xs:string">
+        <info>
+          <desc>URL by which the implementation of the content group is known by its factory.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="OrderIndex" oor:type="xs:int">
+        <info>
+          <desc>Index used for ordering groups inside a tab. Smaller values correspond to positions nearer to the left.</desc>
+        </info>
+        <value>10000</value>
+      </prop>
+      <prop oor:name="ShowForReadOnlyDocument" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the content group is shown when the document in the edit view is read only.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsExperimental" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the content group is experimental and is shown only when experimental mode is enabled.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Content">
+      <info>
+        <desc>Description of the tabs and groups that can be displayed in the Notebokbar.</desc>
+      </info>
+      <set oor:name="TabList" oor:node-type="Tab">
+        <info>
+          <desc>Contains all registered Notebookbar tabs.</desc>
+        </info>
+      </set>
+      <set oor:name="GroupList" oor:node-type="ContentGroup">
+        <info>
+          <desc>Contains all registered Notebookbar content groups.</desc>
+        </info>
+      </set>
+    </group>
+  </component>
+</oor:component-schema>
