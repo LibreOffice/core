@@ -162,8 +162,8 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_nHashCode_Style_DropDown      = OUString( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
     m_nHashCode_Style_Repeat        = OUString( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
     m_nHashCode_Style_DropDownOnly  = OUString( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY ).hashCode();
-    m_nHashCode_Style_Text  = OUString( ATTRIBUTE_ITEMSTYLE_TEXT ).hashCode();
-    m_nHashCode_Style_Image  = OUString( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
+    m_nHashCode_Style_Text          = OUString( ATTRIBUTE_ITEMSTYLE_TEXT ).hashCode();
+    m_nHashCode_Style_Image         = OUString( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
 
     m_bToolBarStartFound            = false;
     m_bToolBarEndFound              = false;
@@ -216,43 +216,42 @@ throw(  SAXException, RuntimeException, std::exception )
                     aErrorMessage += "Element 'toolbar:toolbar' cannot be embedded into 'toolbar:toolbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
-                        else
-                        {
-                            // Check if we have a UI name set in our XML file
-                            OUString aUIName;
-                            for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
-                      {
+                else
+                {
+                    // Check if we have a UI name set in our XML file
+                    OUString aUIName;
+                    for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
+                    {
                         pToolBoxEntry = m_aToolBoxMap.find( xAttribs->getNameByIndex( n ) );
                         if ( pToolBoxEntry != m_aToolBoxMap.end() )
                         {
-                                    switch ( pToolBoxEntry->second )
-                                    {
-                                        case TB_ATTRIBUTE_UINAME:
-                                    aUIName = xAttribs->getValueByIndex( n );
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                            }
-
-                            if ( !aUIName.isEmpty() )
+                            switch ( pToolBoxEntry->second )
                             {
-                                // Try to set UI name as a container property
-                                Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
-                                if ( xPropSet.is() )
-                                {
-                                    try
-                                    {
-                                        xPropSet->setPropertyValue("UIName", makeAny( aUIName ) );
-                                    }
-                                    catch ( const UnknownPropertyException& )
-                                    {
-                                    }
-                                }
+                                case TB_ATTRIBUTE_UINAME:
+                                    aUIName = xAttribs->getValueByIndex( n );
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    if ( !aUIName.isEmpty() )
+                    {
+                        // Try to set UI name as a container property
+                        Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
+                        if ( xPropSet.is() )
+                        {
+                            try
+                            {
+                                xPropSet->setPropertyValue("UIName", makeAny( aUIName ) );
+                            }
+                            catch ( const UnknownPropertyException& )
+                            {
                             }
                         }
 
+                    }
+                }
                 m_bToolBarStartFound = true;
             }
             break;
