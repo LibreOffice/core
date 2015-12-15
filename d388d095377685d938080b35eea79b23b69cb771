@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_533e26b9",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2015-12-15T13:30:20Z",
+      "side": 1,
+      "message": "I do not understand the term \"CPU threads\". A thread runs on a core, but multiple threads can run on the same core.",
+      "revId": "d388d095377685d938080b35eea79b23b69cb771",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
