@@ -309,6 +309,9 @@ public:
 
     /** Determines if this formula may be followed by a reference. */
     bool                MayReferenceFollow();
+
+    /** Re-intern SharedString in case the SharedStringPool differs. */
+    void ReinternStrings( svl::SharedStringPool& rPool );
 };
 
 inline OpCode FormulaTokenArray::GetOuterFuncOpCode()
