@@ -862,6 +862,8 @@ private:
     std::unique_ptr< std::list<PostponedOLE> > m_pPostponedOLEs;
 
     std::vector<const SwOLENode*> m_aPostponedMaths;
+    /// count charts consistently for unit tests
+    unsigned int m_nChartCount;
     const SdrObject* m_postponedChart;
     Size m_postponedChartSize;
     std::vector<const SdrObject*> m_aPostponedFormControls;
