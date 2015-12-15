@@ -33,7 +33,7 @@
 /* ======================================================================= */
 
 /*
- * refCount is opaqueincludes 2 bit-fields;
+ * refCount is opaque and includes 2 bit-fields;
  * MSB:   'interned' - is stored in the intern hash
  * MSB-1: 'static'   - is a const / static string,
  *                     do no ref counting
