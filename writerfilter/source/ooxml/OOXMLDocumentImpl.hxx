@@ -64,6 +64,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     sal_Int32 mnProgressCurrentPos;
     /// End position, i.e. the estimated number of paragraphs.
     sal_Int32 mnProgressEndPos;
+    /// DocumentBaseURL
+    OUString const m_rBaseURL;
 
 protected:
     void resolveFastSubStream(Stream & rStream,
@@ -91,7 +93,7 @@ protected:
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream);
 public:
-    OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator, bool bSkipImages);
+    OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, OUString const& rBaseURL);
     virtual ~OOXMLDocumentImpl();
 
     virtual void resolve(Stream & rStream) override;
@@ -139,6 +141,7 @@ public:
 
     void incrementProgress();
     bool IsSkipImages() { return mbSkipImages; };
+    OUString const& GetDocumentBaseURL() { return m_rBaseURL; };
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX
