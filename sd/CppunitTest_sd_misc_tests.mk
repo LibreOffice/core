@@ -67,22 +67,8 @@ $(eval $(call gb_CppunitTest_use_api,sd_misc_tests,\
     udkapi \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_use_system_win32_libs,sd_misc_tests,\
-    uuid \
-    ws2_32 \
-))
-endif
-
 $(eval $(call gb_CppunitTest_use_externals,sd_misc_tests,\
     boost_headers \
-    gtk \
-    dbus \
-    $(if $(ENABLE_AVAHI), \
-        avahi \
-    ) \
-    $(if $(filter WNT,$(OS)),mDNSResponder) \
-    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sd_misc_tests))
@@ -133,11 +119,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_misc_tests,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_misc_tests))
-
-$(eval $(call gb_CppunitTest_use_packages,sd_misc_tests,\
-    oox_customshapes \
-))
-
 
 $(call gb_CppunitTest_get_target,sd_misc_tests) : $(call gb_AllLangResTarget_get_target,sd)
 
