@@ -100,7 +100,6 @@ public:
     inline virtual sal_uInt16 GetNumCols(){return 1;}
     virtual double GetColWidth(sal_uInt16 nIndex);
     virtual double GetColGap(sal_uInt16 nIndex);
-    virtual double GetMarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
     virtual double GetExtMarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
     virtual bool IsAutoGrow(){ return false;}
     virtual bool IsAutoGrowUp(){ return false;}
@@ -137,6 +136,15 @@ public:
         bool bRet = HasProtection();
         m_bGettingHasProtection = false;
         return bRet;
+    }
+    double GetMarginsValue(const sal_uInt8& nWhichSide)
+    {
+        if (m_bGettingMarginsValue)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingMarginsValue = true;
+        bool fRet = MarginsValue(nWhichSide);
+        m_bGettingMarginsValue = false;
+        return fRet;
     }
     OUString GetStyleName(){ return m_StyleName;}
     bool IsComplex();
@@ -190,10 +198,12 @@ protected:
     bool HasProtection();
     virtual bool HonorProtection();
     virtual bool IsProtected();
+    virtual double MarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
 protected:
     bool m_bGettingHonorProtection;
     bool m_bGettingHasProtection;
     bool m_bGettingIsProtected;
+    bool m_bGettingMarginsValue;
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
     sal_uInt32 m_nAttributes3;
@@ -304,7 +314,7 @@ public:
     LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
     virtual ~LwpMiddleLayout();
     virtual bool MarginsSameAsParent() override;
-    virtual double GetMarginsValue(const sal_uInt8& nWhichSide) override;
+    virtual double MarginsValue(const sal_uInt8& nWhichSide) override;
     virtual double GetExtMarginsValue(const sal_uInt8& nWhichSide) override;
     LwpLayoutGeometry* GetGeometry();
     double GetGeometryHeight();
