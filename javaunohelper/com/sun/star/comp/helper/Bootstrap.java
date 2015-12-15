@@ -91,6 +91,17 @@ public class Bootstrap {
             "com.sun.star.comp.connections.Acceptor", null, null, null ) );
     }
 
+    public static final String[] getDefaultOptions()
+    {
+        return new String[]
+        {
+            "--nologo",
+            "--nodefault",
+            "--norestore",
+            "--nolockcheck"
+        };
+    }
+
     /**
      * backwards compatibility stub.
      */
@@ -238,6 +249,13 @@ public class Bootstrap {
         String ini_file, String bootstrap_parameters [], ClassLoader loader )
         throws Exception;
 
+    public static final XComponentContext bootstrap()
+        throws BootstrapException {
+
+        String[] defaultArgArray = getDefaultOptions();
+        return bootstrap( defaultArgArray );
+    }
+
     /**
      * Bootstraps the component context from a UNO installation.
      *
@@ -245,7 +263,7 @@ public class Bootstrap {
      *
      * @since UDK 3.1.0
      */
-    public static final XComponentContext bootstrap()
+    public static final XComponentContext bootstrap( String[] argArray )
         throws BootstrapException {
 
         XComponentContext xContext = null;
@@ -271,13 +289,11 @@ public class Bootstrap {
                 Long.toString( (new Random()).nextLong() & 0x7fffffffffffffffL );
 
             // create call with arguments
-            String[] cmdArray = new String[] {
-                fOffice.getPath(),
-                "--nologo",
-                "--nodefault",
-                "--norestore",
-                "--nolockcheck",
-                "--accept=pipe,name=" + sPipeName + ";urp;" };
+            String[] cmdArray = new String[ argArray.length + 2];
+            cmdArray[0] = fOffice.getPath();
+            cmdArray[1] = ( "--accept=pipe,name=" + sPipeName + ";urp;" );
+
+            System.arraycopy( argArray, 0, cmdArray, 2, argArray.length );
 
             // start office process
             Process p = Runtime.getRuntime().exec( cmdArray );
