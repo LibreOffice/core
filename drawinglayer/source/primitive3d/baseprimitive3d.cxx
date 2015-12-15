@@ -248,40 +248,6 @@ namespace drawinglayer
             return true;
         }
 
-        // concatenate sequence
-        void appendPrimitive3DContainerToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DSequence& rSource)
-        {
-            if(rSource.hasElements())
-            {
-                if(rDest.hasElements())
-                {
-                    const sal_Int32 nSourceCount(rSource.getLength());
-                    const sal_Int32 nDestCount(rDest.getLength());
-                    const sal_Int32 nTargetCount(nSourceCount + nDestCount);
-                    sal_Int32 nInsertPos(nDestCount);
-
-                    rDest.realloc(nTargetCount);
-
-                    for(sal_Int32 a(0L); a < nSourceCount; a++)
-                    {
-                        if(rSource[a].is())
-                        {
-                            rDest[nInsertPos++] = rSource[a];
-                        }
-                    }
-
-                    if(nInsertPos != nTargetCount)
-                    {
-                        rDest.realloc(nInsertPos);
-                    }
-                }
-                else
-                {
-                    rDest = rSource;
-                }
-            }
-        }
-
         void Primitive3DContainer::append(const Primitive3DContainer& rSource)
         {
             insert(end(), rSource.begin(), rSource.end());
