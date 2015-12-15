@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
