@@ -2009,7 +2009,11 @@ void OOXMLFastContextHandlerMath::process()
     SvGlobalName name( SO3_SM_CLASSID );
     comphelper::EmbeddedObjectContainer container;
     OUString aName;
-    uno::Reference< embed::XEmbeddedObject > ref = container.CreateEmbeddedObject( name.GetByteSequence(), aName );
+    uno::Sequence<beans::PropertyValue> objArgs(1);
+    objArgs[0].Name = "DefaultParentBaseURL";
+    objArgs[0].Value <<= getDocument()->GetDocumentBaseURL();
+    uno::Reference<embed::XEmbeddedObject> ref =
+        container.CreateEmbeddedObject(name.GetByteSequence(), objArgs, aName);
     assert(ref.is());
     if (!ref.is())
         return;

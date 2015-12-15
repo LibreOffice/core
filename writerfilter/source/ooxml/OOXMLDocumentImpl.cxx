@@ -49,7 +49,7 @@ namespace writerfilter {
 namespace ooxml
 {
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages)
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, OUString const& rBaseURL)
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
@@ -61,6 +61,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::
     , mnProgressLastPos(0)
     , mnProgressCurrentPos(0)
     , mnProgressEndPos(0)
+    , m_rBaseURL(rBaseURL)
 {
 }
 
@@ -265,7 +266,7 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
 
     OOXMLDocumentImpl * pTemp;
     // Do not pass status indicator to sub-streams: they are typically marginal in size, so we just track the main document for now.
-    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages ));
+    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, m_rBaseURL));
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
     pTemp->setIsSubstream( true );
@@ -279,7 +280,7 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rT
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
     // See above, no status indicator for the note stream, either.
-    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages);
+    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, m_rBaseURL);
     pDocument->setXNoteId(nId);
     pDocument->setXNoteType(rType);
     pDocument->setModel(getModel());
@@ -927,9 +928,11 @@ uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
 
 OOXMLDocument *
 OOXMLDocumentFactory::createDocument
-(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool mbSkipImages)
+(OOXMLStream::Pointer_t pStream,
+ const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
+ bool mbSkipImages, OUString const& rBaseURL)
 {
-    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages);
+    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rBaseURL);
 }
 
 }}
