@@ -1191,6 +1191,7 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_INVERTPRIMITIVE2D :
                 {
                     // invert primitive (currently only used for HighContrast fallback for selection in SW and SC).
+                    // (Not true, also used at least for the drawing of dragged column and row boundaries in SC.)
                     // Set OutDev to XOR and switch AA off (XOR does not work with AA)
                     mpOutputDevice->Push();
                     mpOutputDevice->SetRasterOp( ROP_XOR );
