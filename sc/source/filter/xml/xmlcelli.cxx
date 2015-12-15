@@ -1331,7 +1331,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 
     if( nCellType == util::NumberFormat::TEXT )
     {
-        if( cellExists(rCellPos) && CellsAreRepeated() )
+        if( !bIsEmpty && !maStringValue && !mbEditEngineHasText && cellExists(rCellPos) && CellsAreRepeated() )
             pOUText.reset( getOutputString(rXMLImport.GetDocument(), rCellPos) );
 
         if (!mbEditEngineHasText && !pOUText && !maStringValue)
