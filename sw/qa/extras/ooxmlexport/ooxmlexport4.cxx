@@ -828,13 +828,13 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeXLSM, "fdo76098.docx")
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/Microsoft_Excel_Macro-Enabled_Worksheet1.xlsm']", "ContentType", "application/vnd.ms-excel.sheet.macroEnabled.12");
 
     // check the rels too
-    xmlDocPtr pXmlDocRels = parseExport("word/charts/_rels/chart2.xml.rels");
+    xmlDocPtr pXmlDocRels = parseExport("word/charts/_rels/chart1.xml.rels");
     assertXPath(pXmlDocRels,
         "/rels:Relationships/rels:Relationship[@Target='../embeddings/Microsoft_Excel_Macro-Enabled_Worksheet1.xlsm']",
         "Type",
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     // check the content too
-    xmlDocPtr pXmlDocChart1 = parseExport("word/charts/chart2.xml");
+    xmlDocPtr pXmlDocChart1 = parseExport("word/charts/chart1.xml");
     assertXPath(pXmlDocChart1,
         "/c:chartSpace/c:externalData",
         "id",
