@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#version 130
+#version 140
 
 attribute vec3 a_position;
 attribute vec3 a_normal;
