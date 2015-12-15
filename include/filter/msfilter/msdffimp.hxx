@@ -466,7 +466,8 @@ protected:
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const css::uno::Reference < css::embed::XStorage >& xDestStg,
                 const Graphic& rGrf,
-                const Rectangle& rVisArea );
+                const Rectangle& rVisArea,
+                OUString const& rBaseURL);
 
 // the following methods need to be overridden for Excel imports
     static bool ProcessClientAnchor( SvStream& rStData,
@@ -687,7 +688,8 @@ public:
                                                 SvStream* pDataStrrm,
                                                 ErrCode& rError,
                                                 sal_uInt32 nConvertFlags,
-                                                sal_Int64 nAspect );
+                                                sal_Int64 nAspect,
+                                                OUString const& rBaseURL);
 
     /** Create connections between shapes.
         This method should be called after a page is imported.

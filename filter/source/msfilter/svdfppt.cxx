@@ -1868,7 +1868,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                 {
                                     uno::Reference < embed::XStorage > xDestStorage( pOe->pShell->GetStorage() );
                                     uno::Reference < embed::XEmbeddedObject > xObj =
-                                        CheckForConvertToSOObj( nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf, rVisArea );
+                                        CheckForConvertToSOObj(nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf, rVisArea, maBaseURL);
                                     if( xObj.is() )
                                     {
                                         pOe->pShell->getEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
