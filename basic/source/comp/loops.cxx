@@ -124,7 +124,7 @@ void SbiParser::If()
             {
                 if( !Parse() ) break;
                 eTok = Peek();
-                if( eTok == EOLN )
+                if( eTok == EOLN || eTok == REM )
                     break;
             }
         }
