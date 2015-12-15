@@ -916,7 +916,11 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     }
 
     if (!pDocument->IsClipOrUndo())
+    {
+        if (&pDocument->GetSharedStringPool() != &rCell.pDocument->GetSharedStringPool())
+            pCode->ReinternStrings( pDocument->GetSharedStringPool());
         pCode->AdjustReferenceOnCopy( aPos);
+    }
 
     if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )
         pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
