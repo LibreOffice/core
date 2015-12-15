@@ -202,17 +202,10 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
             {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
-#ifdef OSL_BIGENDIAN
-                ColorMaskElement aRedMask(0x0000ff00);
-                ColorMaskElement aGreenMask(0x00ff0000);
-                ColorMaskElement aBlueMask(0xff000000);
-                sal_uInt32 nAlphaChannel(0x000000ff);
-#else
                 ColorMaskElement aRedMask(0x00ff0000);
                 ColorMaskElement aGreenMask(0x0000ff00);
                 ColorMaskElement aBlueMask(0x000000ff);
                 sal_uInt32 nAlphaChannel(0xff000000);
-#endif
                 aBlueMask.CalcMaskShift();
                 aRedMask.CalcMaskShift();
                 aGreenMask.CalcMaskShift();
@@ -223,17 +216,10 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
             {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
-#ifdef OSL_BIGENDIAN
-                ColorMaskElement aRedMask(0x00ff0000);
-                ColorMaskElement aGreenMask(0x0000ff00);
-                ColorMaskElement aBlueMask(0x000000ff);
-                sal_uInt32 nAlphaChannel(0xff000000);
-#else
                 ColorMaskElement aRedMask(0x0000ff00);
                 ColorMaskElement aGreenMask(0x00ff0000);
                 ColorMaskElement aBlueMask(0xff000000);
                 sal_uInt32 nAlphaChannel(0x000000ff);
-#endif
                 aBlueMask.CalcMaskShift();
                 aRedMask.CalcMaskShift();
                 aGreenMask.CalcMaskShift();
@@ -244,17 +230,10 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
             {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
-#ifdef OSL_BIGENDIAN
-                ColorMaskElement aRedMask(0x000000ff);
-                ColorMaskElement aGreenMask(0x0000ff00);
-                ColorMaskElement aBlueMask(0x00ff0000);
-                sal_uInt32 nAlphaChannel(0xff000000);
-#else
                 ColorMaskElement aRedMask(0xff000000);
                 ColorMaskElement aGreenMask(0x00ff0000);
                 ColorMaskElement aBlueMask(0x0000ff00);
                 sal_uInt32 nAlphaChannel(0x000000ff);
-#endif
                 aBlueMask.CalcMaskShift();
                 aRedMask.CalcMaskShift();
                 aGreenMask.CalcMaskShift();
@@ -265,17 +244,10 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
             {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
-#ifdef OSL_BIGENDIAN
-                ColorMaskElement aRedMask(0xff000000);
-                ColorMaskElement aGreenMask(0x00ff0000);
-                ColorMaskElement aBlueMask(0x0000ff00);
-                sal_uInt32 nAlphaChannel(0x000000ff);
-#else
                 ColorMaskElement aRedMask(0x000000ff);
                 ColorMaskElement aGreenMask(0x0000ff00);
                 ColorMaskElement aBlueMask(0x00ff0000);
                 sal_uInt32 nAlphaChannel(0xff000000);
-#endif
                 aBlueMask.CalcMaskShift();
                 aRedMask.CalcMaskShift();
                 aGreenMask.CalcMaskShift();
