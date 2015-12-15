@@ -1243,7 +1243,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 aPos.Y() += aMousePos.Y();
                 if ( maFrameData.mbDragFull )
                 {
-                    pBorderWindow->SetPosPixel( aPos );
+                    pBorderWindow->MoveToByDrag(aPos);
                     pBorderWindow->ImplUpdateAll();
                     pBorderWindow->ImplGetFrameWindow()->ImplUpdateAll();
                 }
@@ -2177,6 +2177,11 @@ long ImplBorderWindow::CalcTitleWidth() const
 Rectangle ImplBorderWindow::GetMenuRect() const
 {
     return mpBorderView->GetMenuRect();
+}
+
+void ImplBorderWindow::MoveToByDrag(const Point& rNewPos)
+{
+    setPosSizePixel(rNewPos.X(), rNewPos.Y(), 0, 0, PosSizeFlags::Pos | PosSizeFlags::ByDrag);
 }
 
 Size ImplBorderWindow::GetOptimalSize() const
