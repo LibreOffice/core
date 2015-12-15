@@ -150,7 +150,8 @@ public:
     virtual void                SetForceArray( bool b );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
-    virtual svl::SharedString GetString() const;
+    virtual svl::SharedString   GetString() const;
+    virtual void                SetString( const svl::SharedString& rStr );
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
     virtual bool                IsGlobal() const;
@@ -288,6 +289,7 @@ public:
 
     virtual FormulaToken* Clone() const SAL_OVERRIDE;
     virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual void SetString( const svl::SharedString& rStr ) SAL_OVERRIDE;
     virtual bool operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
@@ -305,6 +307,7 @@ public:
 
     virtual FormulaToken* Clone() const SAL_OVERRIDE;
     virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual void SetString( const svl::SharedString& rStr ) SAL_OVERRIDE;
     virtual bool operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 };
 

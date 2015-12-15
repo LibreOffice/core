@@ -204,6 +204,11 @@ svl::SharedString FormulaToken::GetString() const
     return svl::SharedString(); // invalid string
 }
 
+void FormulaToken::SetString( const svl::SharedString& )
+{
+    SAL_WARN( "formula.core", "FormulaToken::SetString: virtual dummy called" );
+}
+
 sal_uInt16 FormulaToken::GetIndex() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetIndex: virtual dummy called" );
@@ -1523,6 +1528,21 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
     return AddToken( *pRet );
 }
 
+void FormulaTokenArray::ReinternStrings( svl::SharedStringPool& rPool )
+{
+    for (sal_uInt16 i=0; i < nLen; ++i)
+    {
+        switch (pCode[i]->GetType())
+        {
+            case svString:
+                pCode[i]->SetString( rPool.intern( pCode[i]->GetString().getString()));
+                break;
+            default:
+                ;   // nothing
+        }
+    }
+}
+
 
 /*----------------------------------------------------------------------*/
 
@@ -1653,6 +1673,11 @@ svl::SharedString FormulaStringToken::GetString() const
     return maString;
 }
 
+void FormulaStringToken::SetString( const svl::SharedString& rStr )
+{
+    maString = rStr;
+}
+
 bool FormulaStringToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && maString == r.GetString();
@@ -1672,6 +1697,11 @@ FormulaToken* FormulaStringOpToken::Clone() const
 svl::SharedString FormulaStringOpToken::GetString() const
 {
     return maString;
+}
+
+void FormulaStringOpToken::SetString( const svl::SharedString& rStr )
+{
+    maString = rStr;
 }
 
 bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
