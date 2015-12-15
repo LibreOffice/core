@@ -10,8 +10,6 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCLWRAPPER_HXX
 #define INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCLWRAPPER_HXX
 
-#include <config_features.h>
-
 #include <cassert>
 #include <vector>
 
