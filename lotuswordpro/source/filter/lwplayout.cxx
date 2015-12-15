@@ -76,6 +76,7 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     , m_bGettingHonorProtection(false)
     , m_bGettingHasProtection(false)
     , m_bGettingIsProtected(false)
+    , m_bGettingMarginsValue(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -705,7 +706,7 @@ bool LwpMiddleLayout::MarginsSameAsParent()
 * @descr:   Get margin
 * @param:   nWhichSide - 0: left, 1: right, 2:top, 3: bottom
 */
-double LwpMiddleLayout::GetMarginsValue(const sal_uInt8 &nWhichSide)
+double LwpMiddleLayout::MarginsValue(const sal_uInt8 &nWhichSide)
 {
     double fValue = 0;
     if((nWhichSide==MARGIN_LEFT)||(nWhichSide==MARGIN_RIGHT))
@@ -737,7 +738,7 @@ double LwpMiddleLayout::GetMarginsValue(const sal_uInt8 &nWhichSide)
         fValue = pStyle->GetMarginsValue(nWhichSide);
         return fValue;
     }
-    return LwpVirtualLayout::GetMarginsValue(nWhichSide);
+    return LwpVirtualLayout::MarginsValue(nWhichSide);
 }
 /**
  * @descr:  Get extmargin value
