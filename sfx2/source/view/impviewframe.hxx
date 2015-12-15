@@ -50,8 +50,6 @@ struct SfxViewFrame_Impl
     bool            bWindowWasEnabled:1;
     bool            bActive;
     OUString            aFactoryName;
-    ::boost::optional< bool >
-                        aHasToolPanels;
 
     explicit SfxViewFrame_Impl(SfxFrame& i_rFrame)
         : rFrame(i_rFrame)

@@ -54,9 +54,6 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/extended/AccessibleGridControlTable \
     accessibility/source/extended/AccessibleGridControlTableBase \
     accessibility/source/extended/AccessibleGridControlTableCell \
-    accessibility/source/extended/AccessibleToolPanelDeck \
-    accessibility/source/extended/AccessibleToolPanelDeckTabBar \
-    accessibility/source/extended/AccessibleToolPanelDeckTabBarItem \
     accessibility/source/extended/accessiblebrowseboxcell \
     accessibility/source/extended/accessibleeditbrowseboxcell \
     accessibility/source/extended/accessibleiconchoicectrl \

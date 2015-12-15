@@ -176,24 +176,6 @@ namespace svt
             {
                 return nullptr;
             }
-
-            virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleToolPanelDeck(
-                    const css::uno::Reference< css::accessibility::XAccessible >& /*i_rAccessibleParent*/,
-                    ::svt::ToolPanelDeck& /*i_rPanelDeck*/
-                ) override
-            {
-                return nullptr;
-            }
-            virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleToolPanelTabBar(
-                    const css::uno::Reference< css::accessibility::XAccessible >& /*i_rAccessibleParent*/,
-                    ::svt::IToolPanelDeck& /*i_rPanelDeck*/,
-                    ::svt::PanelTabBar& /*i_rTabBar*/
-                ) override
-            {
-                return nullptr;
-            }
         };
 
 
