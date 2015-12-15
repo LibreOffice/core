@@ -991,13 +991,9 @@ ScFilterDescriptorBase::~ScFilterDescriptorBase()
 void ScFilterDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        sal_uLong nId = pSimpleHint->GetId();
-        if ( nId == SFX_HINT_DYING )
-        {
-            pDocSh = nullptr;          // invalid
-        }
+        pDocSh = nullptr;          // invalid
     }
 }
 

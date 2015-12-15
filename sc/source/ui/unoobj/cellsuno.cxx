@@ -1598,7 +1598,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        const sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             ForgetCurrentAttrs();
@@ -9418,7 +9418,7 @@ void ScCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        const sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = nullptr;                       // ungueltig geworden
@@ -9481,8 +9481,7 @@ void ScUniqueCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
-        if ( nId == SFX_HINT_DYING )
+        if ( static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
             pDocShell = nullptr;                       // ungueltig geworden
     }
 }
@@ -9739,8 +9738,7 @@ void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHi
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
-        if ( nId == SFX_HINT_DYING )
+        if ( static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
             pDocShell = nullptr;                       // ungueltig geworden
     }
 }

@@ -144,7 +144,7 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
 
         SfxStyleSheet* pStyle = nullptr;
-        sal_uLong nId = 0;
+        sal_uInt32 nId = 0;
 
         const SfxStyleSheetHint* pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
         if ( pStyleSheetHint )

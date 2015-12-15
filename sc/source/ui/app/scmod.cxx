@@ -318,14 +318,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
 void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DEINITIALIZING )
     {
-        sal_uLong nHintId = pSimpleHint->GetId();
-        if ( nHintId == SFX_HINT_DEINITIALIZING )
-        {
-            // ConfigItems must be removed before ConfigManager
-            DeleteCfg();
-        }
+        // ConfigItems must be removed before ConfigManager
+        DeleteCfg();
     }
 }
 

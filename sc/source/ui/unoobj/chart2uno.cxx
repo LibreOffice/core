@@ -2806,7 +2806,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint )
     {
-        sal_uLong nId = pSimpleHint->GetId();
+        const sal_uInt32 nId = pSimpleHint->GetId();
         if ( nId ==SFX_HINT_DYING )
         {
             m_pDocument = nullptr;

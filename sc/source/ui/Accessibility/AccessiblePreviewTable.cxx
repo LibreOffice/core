@@ -89,14 +89,14 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if (pSimpleHint)
     {
-        sal_uLong nId = pSimpleHint->GetId();
+        const sal_uInt32 nId {pSimpleHint->GetId()};
         if ( nId == SFX_HINT_DATACHANGED )
         {
             //  column / row layout may change with any document change,
             //  so it must be invalidated
             DELETEZ( mpTableInfo );
         }
-        else if (pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
+        else if (nId == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;

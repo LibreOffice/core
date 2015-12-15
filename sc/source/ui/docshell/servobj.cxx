@@ -239,8 +239,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if (const SfxSimpleHint *pSplHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
         {
-            sal_uLong nId = pSplHint->GetId();
-            if (nId == SFX_HINT_DYING)
+            if (pSplHint->GetId() == SFX_HINT_DYING)
             {
                 //  If the range is being deleted, listening must be restarted
                 //  after the deletion is complete (done in GetData)

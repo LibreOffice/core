@@ -122,7 +122,7 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if (pSimpleHint)
     {
-        sal_uLong nId = pSimpleHint->GetId();
+        const sal_uInt32 nId {pSimpleHint->GetId()};
         if (nId == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpTextHelper)

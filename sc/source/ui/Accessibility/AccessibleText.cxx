@@ -723,17 +723,13 @@ ScAccessibleCellTextData::~ScAccessibleCellTextData()
 void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        sal_uLong nId = pSimpleHint->GetId();
-        if ( nId == SFX_HINT_DYING )
-        {
-            mpViewShell = nullptr;                     // invalid now
-            if (mpViewForwarder)
-                mpViewForwarder->SetInvalid();
-            if (mpEditViewForwarder)
-                mpEditViewForwarder->SetInvalid();
-        }
+        mpViewShell = nullptr;                     // invalid now
+        if (mpViewForwarder)
+            mpViewForwarder->SetInvalid();
+        if (mpEditViewForwarder)
+            mpEditViewForwarder->SetInvalid();
     }
     ScAccessibleCellBaseTextData::Notify(rBC, rHint);
 }
@@ -979,20 +975,16 @@ ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
 void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        sal_uLong nId = pSimpleHint->GetId();
-        if ( nId == SFX_HINT_DYING )
-        {
-            mpWindow = nullptr;
-            mpEditView = nullptr;
-            mpEditEngine = nullptr;
-            DELETEZ(mpForwarder);
-            if (mpViewForwarder)
-                mpViewForwarder->SetInvalid();
-            if (mpEditViewForwarder)
-                mpEditViewForwarder->SetInvalid();
-        }
+        mpWindow = nullptr;
+        mpEditView = nullptr;
+        mpEditEngine = nullptr;
+        DELETEZ(mpForwarder);
+        if (mpViewForwarder)
+            mpViewForwarder->SetInvalid();
+        if (mpEditViewForwarder)
+            mpEditViewForwarder->SetInvalid();
     }
     ScAccessibleTextData::Notify(rBC, rHint);
 }
@@ -1240,15 +1232,11 @@ ScAccessiblePreviewCellTextData::~ScAccessiblePreviewCellTextData()
 void ScAccessiblePreviewCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        sal_uLong nId = pSimpleHint->GetId();
-        if ( nId == SFX_HINT_DYING )
-        {
-            mpViewShell = nullptr;                     // invalid now
-            if (mpViewForwarder)
-                mpViewForwarder->SetInvalid();
-        }
+        mpViewShell = nullptr;                     // invalid now
+        if (mpViewForwarder)
+            mpViewForwarder->SetInvalid();
     }
     ScAccessibleCellBaseTextData::Notify(rBC, rHint);
 }
@@ -1318,15 +1306,11 @@ ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
 void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        sal_uLong nId = pSimpleHint->GetId();
-        if ( nId == SFX_HINT_DYING )
-        {
-            mpViewShell = nullptr;                     // invalid now
-            if (mpViewForwarder)
-                mpViewForwarder->SetInvalid();
-        }
+        mpViewShell = nullptr;                     // invalid now
+        if (mpViewForwarder)
+            mpViewForwarder->SetInvalid();
     }
     ScAccessibleCellBaseTextData::Notify(rBC, rHint);
 }
@@ -1441,16 +1425,12 @@ ScAccessibleTextData* ScAccessibleHeaderTextData::Clone() const
 void ScAccessibleHeaderTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        sal_uLong nId = pSimpleHint->GetId();
-        if ( nId == SFX_HINT_DYING )
-        {
-            mpViewShell = nullptr;// invalid now
-            mpDocSh = nullptr;
-            if (mpViewForwarder)
-                mpViewForwarder->SetInvalid();
-        }
+        mpViewShell = nullptr;// invalid now
+        mpDocSh = nullptr;
+        if (mpViewForwarder)
+            mpViewForwarder->SetInvalid();
     }
 }
 
@@ -1556,16 +1536,12 @@ ScAccessibleTextData* ScAccessibleNoteTextData::Clone() const
 void ScAccessibleNoteTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        sal_uLong nId = pSimpleHint->GetId();
-        if ( nId == SFX_HINT_DYING )
-        {
-            mpViewShell = nullptr;// invalid now
-            mpDocSh = nullptr;
-            if (mpViewForwarder)
-                mpViewForwarder->SetInvalid();
-        }
+        mpViewShell = nullptr;// invalid now
+        mpDocSh = nullptr;
+        if (mpViewForwarder)
+            mpViewForwarder->SetInvalid();
     }
 }
 
@@ -1697,16 +1673,12 @@ ScAccessibleCsvTextData::~ScAccessibleCsvTextData()
 void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        sal_uLong nId = pSimpleHint->GetId();
-        if( nId == SFX_HINT_DYING )
-        {
-            mpWindow = nullptr;
-            mpEditEngine = nullptr;
-            if (mpViewForwarder.get())
-                mpViewForwarder->SetInvalid();
-        }
+        mpWindow = nullptr;
+        mpEditEngine = nullptr;
+        if (mpViewForwarder.get())
+            mpViewForwarder->SetInvalid();
     }
     ScAccessibleTextData::Notify( rBC, rHint );
 }
