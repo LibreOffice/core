@@ -90,6 +90,35 @@ public class Bootstrap {
     }
 
     /**
+     * Returns an array of default commandline options to start bootstrapped
+     * instance of soffice with. You may use it in connection with bootstrap
+     * method for example like this:
+     * <pre>
+     *     List list = Arrays.asList( Bootstrap.getDefaultOptions() );
+     *     list.remove("--nologo");
+     *     list.remove("--nodefault");
+     *     list.add("--invisible");
+     *
+     *     Bootstrap.bootstrap( list.toArray( new String[list.size()] );
+     * </pre>
+     *
+     * @return an array of default commandline options
+     * @see #bootstrap( String[] )
+     * @since UDK 5.2.0
+     */
+    public static final String[] getDefaultOptions()
+    {
+        return new String[]
+        {
+            "--nologo",
+            "--nodefault",
+            "--norestore",
+            "--nocrashreport",
+            "--nolockcheck"
+        };
+    }
+
+    /**
      * backwards compatibility stub.
      */
     static public XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
@@ -246,6 +275,24 @@ public class Bootstrap {
     public static final XComponentContext bootstrap()
         throws BootstrapException {
 
+        String[] defaultArgArray = getDefaultOptions();
+        return bootstrap( defaultArgArray );
+    }
+
+    /**
+     * Bootstraps the component context from a UNO installation.
+     *
+     * @param argArray
+     *        an array of strings - commandline options to start instance of
+     *        soffice with
+     * @see #getDefaultOptions()
+     * @return a bootstrapped component context.
+     *
+     * @since UDK 5.2.0
+     */
+    public static final XComponentContext bootstrap( String[] argArray )
+        throws BootstrapException {
+
         XComponentContext xContext = null;
 
         try {
@@ -269,14 +316,11 @@ public class Bootstrap {
                 Long.toString( (new Random()).nextLong() & 0x7fffffffffffffffL );
 
             // create call with arguments
-            String[] cmdArray = new String[7];
+            String[] cmdArray = new String[ argArray.length + 2 ];
             cmdArray[0] = fOffice.getPath();
-            cmdArray[1] = "--nologo";
-            cmdArray[2] = "--nodefault";
-            cmdArray[3] = "--norestore";
-            cmdArray[4] = "--nocrashreport";
-            cmdArray[5] = "--nolockcheck";
-            cmdArray[6] = "--accept=pipe,name=" + sPipeName + ";urp;";
+            cmdArray[1] = ( "--accept=pipe,name=" + sPipeName + ";urp;" );
+
+            System.arraycopy( argArray, 0, cmdArray, 2, argArray.length );
 
             // start office process
             Process p = Runtime.getRuntime().exec( cmdArray );
