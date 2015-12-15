@@ -33,7 +33,7 @@
 /* ======================================================================= */
 
 /*
- * refCount is opaqueincludes 2 bit-fields;
+ * refCount is opaque and includes 2 bit-fields;
  * MSB:   'interned' - is stored in the intern hash
  * MSB-1: 'static'   - is a const / static string,
  *                     do no ref counting
@@ -48,6 +48,9 @@
 sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
 
 bool rtl_ImplIsWhitespace( sal_Unicode c );
+
+// Fake pointer to mark strings that have been moved
+#define SAL_STRING_MOVED_PTR 0x00000001
 
 // string lifetime instrumentation / diagnostics
 #if USE_SDT_PROBES

@@ -1419,6 +1419,16 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_convertUStringToString(
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_ensureCapacity( rtl_String ** str, sal_Int32 size ) SAL_THROW_EXTERN_C();
 
+/** Mark a given string as being moved. Used in the move constructor.
+
+ @param str
+ pointer to the string.  The pointed-to data must be a valid string.
+
+ @since LibreOffice 5.2
+ @internal
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_string_moved( rtl_String ** str ) SAL_THROW_EXTERN_C();
+
 #ifdef __cplusplus
 }
 #endif
