@@ -401,7 +401,6 @@
 #include <svtools/soerr.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
-#include <svtools/toolpanel/decklayouter.hxx>
 #include <svtools/treelistentry.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/convert.hxx>
@@ -527,7 +526,6 @@
 #include <sfx2/stbitem.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <sfx2/taskpane.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/templatecontaineritem.hxx>
