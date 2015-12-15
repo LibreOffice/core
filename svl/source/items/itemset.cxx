@@ -459,7 +459,9 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                 // Turns into disabled?
                 if( !rItem.Which() )
                 {
-                    *ppFnd = rItem.Clone(m_pPool);
+                    if (IsInvalidItem(*ppFnd) || (*ppFnd)->Which() != 0) {
+                        *ppFnd = rItem.Clone(m_pPool);
+                    }
                     return nullptr;
                 }
                 else
