@@ -130,6 +130,21 @@ public:
         rtl_uString_acquire( pData );
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Move constructor.
+
+      @param    str         a OUString.
+      @since LibreOffice 5.2
+    */
+    OUString( OUString && str )
+    {
+        pData = str.pData;
+        str.pData = nullptr;
+        rtl_uString_new( &str.pData );
+    }
+#endif
+
     /**
       New string from OUString data.
 
@@ -385,6 +400,23 @@ public:
         rtl_uString_assign( &pData, str.pData );
         return *this;
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Move assign a new string.
+
+      @param    str         a OString.
+      @since LibreOffice 5.2
+    */
+    OUString & operator=( OUString && str )
+    {
+        rtl_uString_release( pData );
+        pData = str.pData;
+        str.pData = nullptr;
+        rtl_uString_new( &str.pData );
+        return *this;
+    }
+#endif
 
     /**
       Assign a new string from an 8-Bit string literal that is expected to contain only
