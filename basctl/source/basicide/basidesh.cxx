@@ -525,7 +525,7 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             if (SbxHint const* pSbxHint = dynamic_cast<SbxHint const*>(&rHint))
             {
-                sal_uLong nHintId = pSbxHint->GetId();
+                const sal_uInt32 nHintId = pSbxHint->GetId();
                 if (    ( nHintId == SBX_HINT_BASICSTART ) ||
                         ( nHintId == SBX_HINT_BASICSTOP ) )
                 {

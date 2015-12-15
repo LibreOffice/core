@@ -1540,7 +1540,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
     // possible that a new one is registered after the timer is up -
     // works bad in UpdateStyles_Impl ()!
 
-    sal_uIntPtr nId = pSfxSimpleHint ? pSfxSimpleHint->GetId() : 0;
+    const sal_uInt32 nId = pSfxSimpleHint ? pSfxSimpleHint->GetId() : 0;
 
     if(!bDontUpdate && nId != SFX_HINT_DYING &&
        (dynamic_cast<const SfxStyleSheetPoolHint*>(&rHint) ||

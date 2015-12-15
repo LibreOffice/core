@@ -620,8 +620,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if ( dynamic_cast<const SfxSimpleHint*>(&rHint) ) // Without parameter
     {
-        sal_uLong nSlot = static_cast<const SfxSimpleHint&>(rHint).GetId();
-        switch ( nSlot )
+        switch ( static_cast<const SfxSimpleHint&>(rHint).GetId() )
         {
             case SFX_HINT_TITLECHANGED:
                 aDocument.SetName( SfxShell::GetName() );

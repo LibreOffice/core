@@ -1564,7 +1564,7 @@ line (CL). The number of object margins per object varies between 0 and 3:
 void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     const SfxSimpleHint* pSimple = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    sal_uIntPtr nId=pSimple==nullptr ? 0 : pSimple->GetId();
+    const sal_uInt32 nId = pSimple==nullptr ? 0 : pSimple->GetId();
     bool bDataChg=nId==SFX_HINT_DATACHANGED;
     bool bDying=nId==SFX_HINT_DYING;
     bool bObj1=aCon1.pObj!=nullptr && aCon1.pObj->GetBroadcaster()==&rBC;

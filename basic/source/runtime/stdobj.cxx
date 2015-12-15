@@ -820,10 +820,10 @@ void SbiStdObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar_ = pVar->GetParameters();
-        sal_uLong t = pHint->GetId();
         const sal_uInt16 nCallId = static_cast<sal_uInt16>(pVar->GetUserData());
         if( nCallId )
         {
+            const sal_uInt32 t = pHint->GetId();
             if( t == SBX_HINT_INFOWANTED )
                 pVar->SetInfo( GetInfo( static_cast<short>(pVar->GetUserData()) ) );
             else

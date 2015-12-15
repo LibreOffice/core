@@ -2045,7 +2045,7 @@ void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
         if ( pSimpleHint )
         {
-            sal_uLong nHintId = pSimpleHint->GetId();
+            const sal_uInt32 nHintId = pSimpleHint->GetId();
             if ( nHintId == SC_HINT_AREAS_CHANGED || nHintId == SC_HINT_NAVIGATOR_UPDATEALL)
                 FillRangeNames();
         }

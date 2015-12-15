@@ -117,7 +117,7 @@ void SbxCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p )
     {
-        sal_uLong nId = p->GetId();
+        const sal_uInt32 nId = p->GetId();
         bool bRead  = ( nId == SBX_HINT_DATAWANTED );
         bool bWrite = ( nId == SBX_HINT_DATACHANGED );
         SbxVariable* pVar = p->GetVar();

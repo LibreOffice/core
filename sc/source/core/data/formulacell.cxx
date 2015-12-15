@@ -2167,7 +2167,7 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
     if (!pSimpleHint)
         return;
 
-    sal_uLong nHint = pSimpleHint->GetId();
+    const sal_uInt32 nHint = pSimpleHint->GetId();
     if (nHint == SC_HINT_REFERENCE)
     {
         const sc::RefHint& rRefHint = static_cast<const sc::RefHint&>(rHint);

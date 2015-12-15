@@ -177,7 +177,7 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( pTextHint )
     {
         bool    bLastVal = EndReached();
-        sal_uLong   nId = pTextHint->GetId();
+        const sal_uInt32 nId = pTextHint->GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {

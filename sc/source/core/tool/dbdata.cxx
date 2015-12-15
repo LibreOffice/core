@@ -888,8 +888,7 @@ void ScDBData::Notify( const SfxHint& rHint )
     if (!pScHint)
         return;
 
-    sal_uLong nHint = pScHint->GetId();
-    if (nHint & SC_HINT_DATACHANGED)
+    if (pScHint->GetId() & SC_HINT_DATACHANGED)
     {
         mbTableColumnNamesDirty = true;
         if (!mpContainer)
