@@ -591,7 +591,8 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
         {
             ErrCode nError = ERRCODE_NONE;
             pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
-                rGrf, rBoundRect, rVisArea, pStData, nError, nSvxMSDffOLEConvFlags, nAspect );
+                rGrf, rBoundRect, rVisArea, pStData, nError,
+                nSvxMSDffOLEConvFlags, nAspect, rReader.GetBaseURL());
         }
     }
     return pRet;

@@ -6517,7 +6517,7 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
         pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
                                         rGrf, rBoundRect, rVisArea, pStData, nError,
-                                        nSvxMSDffOLEConvFlags, nAspect );
+                                        nSvxMSDffOLEConvFlags, nAspect, maBaseURL);
     return pRet;
 }
 
@@ -6831,7 +6831,7 @@ OUString GetFilterNameFromClassID_Impl( const SvGlobalName& aGlobName )
 css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( sal_uInt32 nConvertFlags,
                         SotStorage& rSrcStg, const uno::Reference < embed::XStorage >& rDestStorage,
                         const Graphic& rGrf,
-                        const Rectangle& rVisArea )
+                        const Rectangle& rVisArea, OUString const& rBaseURL)
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
     SvGlobalName aStgNm = rSrcStg.GetClassName();
@@ -6930,17 +6930,19 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             else
                 aFilterName = GetFilterNameFromClassID_Impl( aStgNm );
 
-            uno::Sequence < beans::PropertyValue > aMedium( aFilterName.isEmpty() ? 2 : 3);
+            uno::Sequence<beans::PropertyValue> aMedium(aFilterName.isEmpty() ? 3 : 4);
             aMedium[0].Name = "InputStream";
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *xMemStream );
             aMedium[0].Value <<= xStream;
             aMedium[1].Name = "URL";
             aMedium[1].Value <<= OUString( "private:stream" );
+            aMedium[2].Name = "DocumentBaseURL";
+            aMedium[2].Value <<= OUString(rBaseURL);
 
             if ( !aFilterName.isEmpty() )
             {
-                aMedium[2].Name = "FilterName";
-                aMedium[2].Value <<= aFilterName;
+                aMedium[3].Name = "FilterName";
+                aMedium[3].Value <<= aFilterName;
             }
 
             OUString aName( aDstStgName );
@@ -7015,7 +7017,8 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 SvStream* pDataStrm,
                 ErrCode& rError,
                 sal_uInt32 nConvertFlags,
-                sal_Int64 nRecommendedAspect )
+                sal_Int64 nRecommendedAspect,
+                OUString const& rBaseURL)
 {
     sal_Int64 nAspect = nRecommendedAspect;
     SdrOle2Obj* pRet = nullptr;
@@ -7069,7 +7072,8 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     }
 
                     uno::Reference < embed::XEmbeddedObject > xObj( CheckForConvertToSOObj(
-                                nConvertFlags, *xObjStg, xDestStorage, rGrf, rVisArea ));
+                            nConvertFlags, *xObjStg, xDestStorage, rGrf,
+                            rVisArea, rBaseURL));
                     if ( xObj.is() )
                     {
                         svt::EmbeddedObjectRef aObj( xObj, nAspect );
