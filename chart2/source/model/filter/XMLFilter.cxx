@@ -383,6 +383,7 @@ sal_Int32 XMLFilter::impl_Import(
             }
         }
 
+        assert(!aBaseUri.isEmpty()); // needed for relative URLs
         if( !aBaseUri.isEmpty() )
             xImportInfo->setPropertyValue( "BaseURI", uno::makeAny( aBaseUri ) );
 
