@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_733a4acf",
+        "filename": "ucb/source/ucp/webdav-neon/NeonSession.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-15T13:20:54Z",
+      "side": 1,
+      "message": "Used here",
+      "revId": "d6058eedfd04a941b6369ba4e27394a273bb71b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_533746e3",
+        "filename": "ucb/source/ucp/webdav-neon/NeonSession.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-15T13:20:54Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "d6058eedfd04a941b6369ba4e27394a273bb71b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b334b2de",
+        "filename": "ucb/source/ucp/webdav-neon/NeonSession.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-15T13:20:54Z",
+      "side": 1,
+      "message": "Declared here, in class NeonSession",
+      "revId": "d6058eedfd04a941b6369ba4e27394a273bb71b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
