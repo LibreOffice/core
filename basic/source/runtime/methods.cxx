@@ -1725,6 +1725,21 @@ RTLFUNC(String)
     }
 }
 
+RTLFUNC(Tab)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() < 2 )
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    else
+    {
+        OUStringBuffer aStr;
+        comphelper::string::padToLength(aStr, rPar.Get(1)->GetLong(), '\t');
+        rPar.Get(0)->PutString(aStr.makeStringAndClear());
+    }
+}
+
 RTLFUNC(Tan)
 {
     (void)pBasic;
