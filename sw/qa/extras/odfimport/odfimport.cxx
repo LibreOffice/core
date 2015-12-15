@@ -613,6 +613,12 @@ DECLARE_ODFIMPORT_TEST(testTdf92586, "tdf92586.odt")
     CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_STRETCH, getProperty<drawing::BitmapMode>(xPageStyle, "FillBitmapMode"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf96113, "tdf96113.odt")
+{
+    // Background of the formula frame was white (0xffffff), not green.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(getShape(1), "BackColor"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
