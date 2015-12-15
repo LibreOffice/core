@@ -3546,32 +3546,6 @@ SfxBoolItem InfoBar SID_INFOBAR
     GroupId = GID_DOCUMENT;
 ]
 
-SfxBoolItem TaskPane SID_TASKPANE
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-
 SfxBoolItem Sidebar SID_SIDEBAR
 [
     /* flags: */

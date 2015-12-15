@@ -920,7 +920,6 @@ void SmViewShell::InitInterface_Impl()
                                             RID_MATH_TOOLBOX);
     //Dummy-Objectbar, to avoid quiver while activating
 
-    GetStaticInterface()->RegisterChildWindow(SID_TASKPANE);
     GetStaticInterface()->RegisterChildWindow(SmCmdBoxWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SmElementsDockingWindowWrapper::GetChildWindowId());
 }

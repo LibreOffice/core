@@ -76,6 +76,20 @@
           <value>com.sun.star.comp.framework.StatusBarFactory</value>
         </prop>
       </node>
+      <node oor:name="NotebookbarFactory" oor:op="replace">
+        <prop oor:name="Type">
+          <value>NotebookbarTab</value>
+        </prop>
+        <prop oor:name="Name">
+          <value/>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>com.sun.star.comp.framework.StatusBarFactory</value>
+        </prop>
+      </node>
       <node oor:name="SvxPanelFactory" oor:op="replace">
         <prop oor:name="Type">
           <value>toolpanel</value>
