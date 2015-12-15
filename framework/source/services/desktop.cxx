@@ -68,6 +68,10 @@
 
 namespace framework{
 
+enum PropHandle {
+    ActiveFrame, DispatchRecorderSupplier, IsPlugged, SuspendQuickstartVeto,
+    Title };
+
 OUString SAL_CALL Desktop::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -1288,7 +1292,7 @@ OUString SAL_CALL Desktop::getUntitledPrefix()
     @short      try to convert a property value
     @descr      This method is called from helperclass "OPropertySetHelper".
                 Don't use this directly!
-                You must try to convert the value of given DESKTOP_PROPHANDLE and
+                You must try to convert the value of given PropHandle and
                 return results of this operation. This will be used to ask vetoable
                 listener. If no listener has a veto, we will change value really!
                 ( in method setFastPropertyValue_NoBroadcast(...) )
@@ -1323,21 +1327,21 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
 
     switch( nHandle )
     {
-        case DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO:
+        case PropHandle::SuspendQuickstartVeto:
                 bReturn = PropHelper::willPropertyBeChanged(
                     css::uno::makeAny(m_bSuspendQuickstartVeto),
                     aValue,
                     aOldValue,
                     aConvertedValue);
                 break;
-        case DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER :
+        case PropHandle::DispatchRecorderSupplier :
                 bReturn = PropHelper::willPropertyBeChanged(
                     css::uno::makeAny(m_xDispatchRecorderSupplier),
                     aValue,
                     aOldValue,
                     aConvertedValue);
                 break;
-        case DESKTOP_PROPHANDLE_TITLE :
+        case PropHandle::Title :
                 bReturn = PropHelper::willPropertyBeChanged(
                     css::uno::makeAny(m_sTitle),
                     aValue,
@@ -1373,11 +1377,11 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
 
     switch( nHandle )
     {
-        case DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO:    aValue >>= m_bSuspendQuickstartVeto;
+        case PropHandle::SuspendQuickstartVeto:    aValue >>= m_bSuspendQuickstartVeto;
                                                     break;
-        case DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER:    aValue >>= m_xDispatchRecorderSupplier;
+        case PropHandle::DispatchRecorderSupplier:    aValue >>= m_xDispatchRecorderSupplier;
                                                     break;
-        case DESKTOP_PROPHANDLE_TITLE:    aValue >>= m_sTitle;
+        case PropHandle::Title:    aValue >>= m_sTitle;
                                                     break;
     }
 }
@@ -1404,15 +1408,15 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
 
     switch( nHandle )
     {
-        case DESKTOP_PROPHANDLE_ACTIVEFRAME           :   aValue <<= m_aChildTaskContainer.getActive();
+        case PropHandle::ActiveFrame           :   aValue <<= m_aChildTaskContainer.getActive();
                                                     break;
-        case DESKTOP_PROPHANDLE_ISPLUGGED           :   aValue <<= sal_False;
+        case PropHandle::IsPlugged           :   aValue <<= sal_False;
                                                     break;
-        case DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO:    aValue <<= m_bSuspendQuickstartVeto;
+        case PropHandle::SuspendQuickstartVeto:    aValue <<= m_bSuspendQuickstartVeto;
                                                     break;
-        case DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER:    aValue <<= m_xDispatchRecorderSupplier;
+        case PropHandle::DispatchRecorderSupplier:    aValue <<= m_xDispatchRecorderSupplier;
                                                     break;
-        case DESKTOP_PROPHANDLE_TITLE:    aValue <<= m_sTitle;
+        case PropHandle::Title:    aValue <<= m_sTitle;
                                                     break;
     }
 }
@@ -1573,19 +1577,23 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
     // It's necessary for methods of OPropertySetHelper.
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
-
-    const css::beans::Property pProperties[] =
-    {
-        css::beans::Property( DESKTOP_PROPNAME_ASCII_ACTIVEFRAME              , DESKTOP_PROPHANDLE_ACTIVEFRAME             , cppu::UnoType<css::lang::XComponent>::get(), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( DESKTOP_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER , DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER, cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(), css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( DESKTOP_PROPNAME_ASCII_ISPLUGGED                , DESKTOP_PROPHANDLE_ISPLUGGED               , cppu::UnoType<bool>::get()                                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( DESKTOP_PROPNAME_ASCII_SUSPENDQUICKSTARTVETO    , DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO   , cppu::UnoType<bool>::get()                                                                  , css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( DESKTOP_PROPNAME_ASCII_TITLE                    , DESKTOP_PROPHANDLE_TITLE                   , cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT ),
-    };
-    // Use it to initialize sequence!
-    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, DESKTOP_PROPCOUNT );
-    // Return "PropertyDescriptor"
-    return lPropertyDescriptor;
+    return {
+        {"ActiveFrame", PropHandle::ActiveFrame,
+         cppu::UnoType<css::lang::XComponent>::get(),
+         (css::beans::PropertyAttribute::TRANSIENT
+          | css::beans::PropertyAttribute::READONLY)},
+        {"DispatchRecorderSupplier",
+                PropHandle::DispatchRecorderSupplier,
+         cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
+         css::beans::PropertyAttribute::TRANSIENT},
+        {"IsPlugged", PropHandle::IsPlugged, cppu::UnoType<bool>::get(),
+         (css::beans::PropertyAttribute::TRANSIENT
+          | css::beans::PropertyAttribute::READONLY)},
+        {"SuspendQuickstartVeto",
+         PropHandle::SuspendQuickstartVeto, cppu::UnoType<bool>::get(),
+         css::beans::PropertyAttribute::TRANSIENT},
+        {"Title", PropHandle::Title, cppu::UnoType<OUString>::get(),
+         css::beans::PropertyAttribute::TRANSIENT}};
 }
 
 void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,

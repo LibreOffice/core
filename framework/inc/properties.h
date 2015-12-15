@@ -43,25 +43,6 @@ namespace framework{
 
 #define FRAME_PROPCOUNT                                 5
 
-/** properties for "Desktop" class */
-
-#define DESKTOP_PROPNAME_ASCII_ACTIVEFRAME              "ActiveFrame"
-#define DESKTOP_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER "DispatchRecorderSupplier"
-#define DESKTOP_PROPNAME_ASCII_ISPLUGGED                "IsPlugged"
-#define DESKTOP_PROPNAME_ASCII_SUSPENDQUICKSTARTVETO    "SuspendQuickstartVeto"
-#define DESKTOP_PROPNAME_ASCII_TITLE                    "Title"
-
-// Please add new entries alphabetical sorted and correct all other handles!
-// Start counting with 0, so it can be used as direct index into an array too.
-// Don't forget updating of define DESKTOP_PROPCOUNT below!!!
-#define DESKTOP_PROPHANDLE_ACTIVEFRAME                  0
-#define DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER     1
-#define DESKTOP_PROPHANDLE_ISPLUGGED                    2
-#define DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO        3
-#define DESKTOP_PROPHANDLE_TITLE                        4
-
-#define DESKTOP_PROPCOUNT                               5
-
 /** properties for "PathSettings" class */
 
 #define PATHSETTINGS_PROPNAME_ASCII_ADDIN               "Addin"
