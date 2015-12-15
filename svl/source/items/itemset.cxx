@@ -20,6 +20,7 @@
 
 #include <string.h>
 
+#include <cassert>
 #include <cstdarg>
 #include <libxml/xmlwriter.h>
 
@@ -452,7 +453,12 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                 // Will 'dontcare' or 'disabled' be overwritten with some real value?
                 if ( rItem.Which() && ( IsInvalidItem(*ppFnd) || !(*ppFnd)->Which() ) )
                 {
+                    auto const old = *ppFnd;
                     *ppFnd = &m_pPool->Put( rItem, nWhich );
+                    if (!IsInvalidItem(old)) {
+                        assert(old->Which() == 0);
+                        delete old;
+                    }
                     return *ppFnd;
                 }
 
