@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 
 #include <malloc.h>
 
@@ -77,16 +80,21 @@ static bool cpp_call(
     void * pAdjustedThisPtr = (void **)( pThis->getCppI() ) + aVtableSlot.offset;
     aCppParams[nCppParamIndex++].p = pAdjustedThisPtr;
 
-    bool bSimpleReturn = true;
-    if ( pReturnTD )
-    {
-        if ( !bridges::cpp_uno::shared::isSimpleType( pReturnTD ) )
+    enum class ReturnKind { Void, Simple, Complex, ComplexConvert };
+    ReturnKind retKind;
+    if (pUnoReturn == nullptr) {
+        retKind = ReturnKind::Void;
+    } else {
+        assert(pReturnTD != nullptr);
+        if (bridges::cpp_uno::shared::isSimpleType(pReturnTD)) {
+            retKind = ReturnKind::Simple;
+        } else if (bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTD))
         {
-            // Complex return via ptr
-            bSimpleReturn = false;
-            aCppParams[nCppParamIndex++].p =
-                bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTD )?
-                         alloca( pReturnTD->nSize ) : pUnoReturn;
+            retKind = ReturnKind::ComplexConvert;
+            aCppParams[nCppParamIndex++].p = alloca(pReturnTD->nSize);
+        } else {
+            retKind = ReturnKind::Complex;
+            aCppParams[nCppParamIndex++].p = pUnoReturn;
         }
     }
 
@@ -267,16 +275,24 @@ static bool cpp_call(
     }
 
     // Return value
-    if ( !bSimpleReturn )
-    {
+    switch (retKind) {
+    case ReturnKind::Void:
+        break;
+    case ReturnKind::Simple:
+        *(sal_Int64*)pUnoReturn = uRetVal.i;
+        break;
+    case ReturnKind::Complex:
+        assert(uRetVal.p == pUnoReturn);
+        break;
+    case ReturnKind::ComplexConvert:
+        assert(uRetVal.p == aCppParams[1].p);
         ::uno_copyAndConvertData(
             pUnoReturn, uRetVal.p, pReturnTD,
             pThis->getBridge()->getCpp2Uno() );
         ::uno_destructData(
-            aCppParams[1].p, pReturnTD, cpp_release );
+            uRetVal.p, pReturnTD, cpp_release );
+        break;
     }
-    else if ( pUnoReturn )
-        *(sal_Int64*)pUnoReturn = uRetVal.i;
 
     if ( pReturnTD )
         TYPELIB_DANGER_RELEASE( pReturnTD );
