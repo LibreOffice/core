@@ -512,17 +512,19 @@ OUString ImpVclMEdit::GetTextLines( LineEnd aSeparator ) const
 void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
-    if ( pTextHint )
+    if ( !pTextHint )
+        return;
+
+    switch (pTextHint->GetId())
     {
-        if( pTextHint->GetId() == TEXT_HINT_VIEWSCROLLED )
-        {
+        case TEXT_HINT_VIEWSCROLLED:
             if ( mpHScrollBar )
                 ImpSetHScrollBarThumbPos();
             if ( mpVScrollBar )
                 mpVScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().Y() );
-        }
-        else if( pTextHint->GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
-        {
+            break;
+
+        case TEXT_HINT_TEXTHEIGHTCHANGED:
             if ( mpTextWindow->GetTextView()->GetStartDocPos().Y() )
             {
                 long nOutHeight = mpTextWindow->GetOutputSizePixel().Height();
@@ -530,11 +532,10 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if ( nTextHeight < nOutHeight )
                     mpTextWindow->GetTextView()->Scroll( 0, mpTextWindow->GetTextView()->GetStartDocPos().Y() );
             }
-
             ImpSetScrollBarRanges();
-        }
-        else if( pTextHint->GetId() == TEXT_HINT_TEXTFORMATTED )
-        {
+            break;
+
+        case TEXT_HINT_TEXTFORMATTED:
             if ( mpHScrollBar )
             {
                 const long nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
@@ -545,20 +546,20 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     ImpSetHScrollBarThumbPos();
                 }
             }
-        }
-        else if( pTextHint->GetId() == TEXT_HINT_MODIFIED )
-        {
+            break;
+
+        case TEXT_HINT_MODIFIED:
             ImpUpdateSrollBarVis(pVclMultiLineEdit->GetStyle());
             pVclMultiLineEdit->Modify();
-        }
-        else if( pTextHint->GetId() == TEXT_HINT_VIEWSELECTIONCHANGED )
-        {
+            break;
+
+        case TEXT_HINT_VIEWSELECTIONCHANGED:
             pVclMultiLineEdit->SelectionChanged();
-        }
-        else if( pTextHint->GetId() == TEXT_HINT_VIEWCARETCHANGED )
-        {
+            break;
+
+        case TEXT_HINT_VIEWCARETCHANGED:
             pVclMultiLineEdit->CaretChanged();
-        }
+            break;
     }
 }
 
