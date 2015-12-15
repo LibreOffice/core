@@ -310,7 +310,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         iAttributes[2] = WGL_DRAW_TO_BITMAP_ARB;
     }
 
-    bool bArbMultisampleSupported = true;
+    bool bArbMultisampleSupported = false;
 
     // First we check to see if we can get a pixel format for 8 samples
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
