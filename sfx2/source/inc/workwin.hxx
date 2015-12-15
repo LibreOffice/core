@@ -308,7 +308,6 @@ public:
     bool                    IsFloating( sal_uInt16 nId );
     void                    SetActiveChild_Impl( vcl::Window *pChild );
     VclPtr<vcl::Window>     GetActiveChild_Impl() const { return pActiveChild; }
-    bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
     // Methods for StatusBar
     void                    ResetStatusBar_Impl();

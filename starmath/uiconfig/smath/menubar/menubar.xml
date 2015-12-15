@@ -82,8 +82,6 @@
       <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
       <menu:menuitem menu:id=".uno:ElementsDockingWindow"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:TaskPane"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
       <menu:menuitem menu:id=".uno:ZoomIn"/>
       <menu:menuitem menu:id=".uno:ZoomOut"/>

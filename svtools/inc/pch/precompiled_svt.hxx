@@ -433,7 +433,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/table/tabletypes.hxx>
-#include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>

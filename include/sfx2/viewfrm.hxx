@@ -140,8 +140,6 @@ public:
 
     void                    UpdateTitle();
 
-    static void ActivateToolPanel( const css::uno::Reference< css::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL );
-
     // interne Handler
     SAL_DLLPRIVATE bool SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
     SAL_DLLPRIVATE const SvBorder& GetBorderPixelImpl( const SfxViewShell *pSh ) const;
@@ -217,7 +215,6 @@ public:
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void SetCurViewId_Impl( const sal_uInt16 i_nID );
-    SAL_DLLPRIVATE void ActivateToolPanel_Impl( const OUString& i_rPanelURL );
 
 private:
     SAL_DLLPRIVATE bool SwitchToViewShell_Impl( sal_uInt16 nNo, bool bIsIndex = false );

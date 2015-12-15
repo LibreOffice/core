@@ -53,9 +53,6 @@
 #include <accessibility/extended/AccessibleBrowseBoxHeaderCell.hxx>
 #include <accessibility/extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
-#include <accessibility/extended/AccessibleToolPanelDeck.hxx>
-#include <accessibility/extended/AccessibleToolPanelDeckTabBar.hxx>
-#include <accessibility/extended/AccessibleToolPanelDeckTabBarItem.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <accessibility/extended/AccessibleGridControl.hxx>
@@ -202,18 +199,6 @@ public:
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos
         ) const override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleToolPanelDeck(
-            const css::uno::Reference< css::accessibility::XAccessible >& i_rAccessibleParent,
-            ::svt::ToolPanelDeck& i_rPanelDeck
-        ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleToolPanelTabBar(
-            const css::uno::Reference< css::accessibility::XAccessible >& i_rAccessibleParent,
-            ::svt::IToolPanelDeck& i_rPanelDeck,
-            ::svt::PanelTabBar& i_rTabBar
-        ) override;
 
 protected:
     virtual ~AccessibleFactory();
@@ -456,18 +441,6 @@ Reference< XAccessible > AccessibleFactory::createEditBrowseBoxTableCellAccess(
 {
     return new EditBrowseBoxTableCellAccess( _rxParent, _rxControlAccessible,
         _rxFocusWindow, _rBrowseBox, _nRowPos, _nColPos );
-}
-
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelDeck(
-        const Reference< XAccessible >& i_rAccessibleParent, ::svt::ToolPanelDeck& i_rPanelDeck )
-{
-    return new AccessibleToolPanelDeck( i_rAccessibleParent, i_rPanelDeck );
-}
-
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleToolPanelTabBar(
-    const Reference< XAccessible >& i_rAccessibleParent, ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
-{
-    return new AccessibleToolPanelTabBar( i_rAccessibleParent, i_rPanelDeck, i_rTabBar );
 }
 
 } // anonymous namespace

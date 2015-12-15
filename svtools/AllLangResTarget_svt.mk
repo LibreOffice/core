@@ -53,7 +53,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/misc/langtab.src \
     svtools/source/misc/svtools.src \
     svtools/source/misc/undo.src \
-    svtools/source/toolpanel/toolpanel.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,svt/res,\

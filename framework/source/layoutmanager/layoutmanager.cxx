@@ -1819,13 +1819,6 @@ throw (RuntimeException, std::exception)
 
         impl_setDockingWindowVisibility( xContext, xFrame, aElementName, true );
     }
-    else if ( aElementType.equalsIgnoreAsciiCase("toolpanel"))
-    {
-        SolarMutexClearableGuard aReadGuard;
-        uno::Reference< frame::XFrame > xFrame( m_xFrame );
-        aReadGuard.clear();
-        ActivateToolPanel( m_xFrame, aName );
-    }
 
     if ( bMustLayout )
         doLayout();
