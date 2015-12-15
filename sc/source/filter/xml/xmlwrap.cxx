@@ -379,6 +379,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     // Set base URI
     OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
     OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : OUString();
+    assert(!aBaseURL.isEmpty()); // needed for relative URLs
     OUString sPropName("BaseURI");
     xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 

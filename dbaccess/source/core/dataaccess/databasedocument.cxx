@@ -485,6 +485,7 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
     OUString sBaseURI = _rResource.getOrDefault("BaseURI", OUString());
     if (sBaseURI.isEmpty())
         sBaseURI = _rResource.getOrDefault("URL",OUString());
+    assert(!sBaseURI.isEmpty()); // needed for relative URLs
     xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sBaseURI));
     xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
 
