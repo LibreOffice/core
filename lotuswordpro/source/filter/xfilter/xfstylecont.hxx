@@ -87,9 +87,9 @@ public:
 
     explicit XFStyleContainer(const OUString& strStyleNamePrefix);
 
-    XFStyleContainer(const XFStyleContainer& other);
+    XFStyleContainer(const XFStyleContainer& other) = delete;
 
-    XFStyleContainer& operator=(const XFStyleContainer& other);
+    XFStyleContainer& operator=(const XFStyleContainer& other) = delete;
 
     virtual ~XFStyleContainer();
 

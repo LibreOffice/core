@@ -70,18 +70,6 @@ XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
 {
 }
 
-XFStyleContainer::XFStyleContainer(const XFStyleContainer& other):
-    m_aStyles(other.m_aStyles), m_strStyleNamePrefix(other.m_strStyleNamePrefix)
-{
-}
-
-XFStyleContainer& XFStyleContainer::operator=(const XFStyleContainer& other)
-{
-    this->m_strStyleNamePrefix = other.m_strStyleNamePrefix;
-    this->m_aStyles = other.m_aStyles;
-    return *this;
-}
-
 XFStyleContainer::~XFStyleContainer()
 {
     std::vector<IXFStyle*>::iterator it;
