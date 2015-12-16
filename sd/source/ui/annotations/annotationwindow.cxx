@@ -272,7 +272,7 @@ Selection AnnotationTextWindow::GetSurroundingTextSelection() const
 /************** AnnotationWindow***********************************++*/
 
 AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent )
-: FloatingWindow(pParent, WB_SYSTEMWINDOW|WB_BORDER|WB_NEEDSFOCUS)
+: FloatingWindow(pParent, WB_BORDER)
 , mrManager( rManager )
 , mpDocShell( pDocShell )
 , mpDoc( pDocShell->GetDoc() )
@@ -285,6 +285,7 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 , mpTextWindow(nullptr)
 , mpMeta(nullptr)
 {
+    EnableAlwaysOnTop();
 }
 
 AnnotationWindow::~AnnotationWindow()
