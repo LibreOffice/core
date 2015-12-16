@@ -60,6 +60,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/errinf.hxx>
@@ -1411,46 +1412,34 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     }
 }
 
-/*-************************************************************************************************************
-    @short      return structure and information about transient properties
-    @descr      This method is calling from helperclass "OPropertySetHelper".
-                Don't use this directly!
-
-    @attention  You must use global lock (method use static variable) ... and it must be the shareable osl mutex of it.
-                Because; our baseclass use this mutex to make his code threadsafe. We use our lock!
-                So we could have two different mutex/lock mechanism at the same object.
-
-    @seealso    class OPropertySetHelper
-    @return     structure with property-information
-    @threadsafe yes
-*//*-*************************************************************************************************************/
 ::cppu::IPropertyArrayHelper& SAL_CALL Desktop::getInfoHelper()
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = nullptr;
-
-    if( pInfoHelper == nullptr )
+    struct Static:
+        public rtl::StaticWithInit<cppu::OPropertyArrayHelper, Static>
     {
-        SolarMutexGuard aGuard;
-
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfoHelper == nullptr )
-        {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
-            static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
-            pInfoHelper = &aInfoHelper;
+        cppu::OPropertyArrayHelper operator ()() {
+            return {
+                {{"ActiveFrame", PropHandle::ActiveFrame,
+                  cppu::UnoType<css::lang::XComponent>::get(),
+                  (css::beans::PropertyAttribute::TRANSIENT
+                   | css::beans::PropertyAttribute::READONLY)},
+                 {"DispatchRecorderSupplier",
+                  PropHandle::DispatchRecorderSupplier,
+                  cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
+                  css::beans::PropertyAttribute::TRANSIENT},
+                 {"IsPlugged",
+                  PropHandle::IsPlugged, cppu::UnoType<bool>::get(),
+                  (css::beans::PropertyAttribute::TRANSIENT
+                   | css::beans::PropertyAttribute::READONLY)},
+                 {"SuspendQuickstartVeto", PropHandle::SuspendQuickstartVeto,
+                  cppu::UnoType<bool>::get(),
+                  css::beans::PropertyAttribute::TRANSIENT},
+                 {"Title", PropHandle::Title, cppu::UnoType<OUString>::get(),
+                  css::beans::PropertyAttribute::TRANSIENT}},
+                true};
         }
-    }
-
-    return(*pInfoHelper);
+    };
+    return Static::get();
 }
 
 /*-************************************************************************************************************
@@ -1547,43 +1536,6 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
     }
 
     return xComponent;
-}
-
-/*-************************************************************************************************************
-    @short      create table with information about properties
-    @descr      We use a helper class to support properties. These class need some information about this.
-                These method create a new static description table with name, type, r/w-flags and so on ...
-
-    @seealso    class OPropertySetHelper
-    @seealso    method getInfoHelper()
-    @return     Static table with information about properties.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticPropertyDescriptor()
-{
-    // Create a property array to initialize sequence!
-    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
-    // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
-    // It's necessary for methods of OPropertySetHelper.
-    // ATTENTION:
-    //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
-    return {
-        {"ActiveFrame", PropHandle::ActiveFrame,
-         cppu::UnoType<css::lang::XComponent>::get(),
-         (css::beans::PropertyAttribute::TRANSIENT
-          | css::beans::PropertyAttribute::READONLY)},
-        {"DispatchRecorderSupplier",
-                PropHandle::DispatchRecorderSupplier,
-         cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
-         css::beans::PropertyAttribute::TRANSIENT},
-        {"IsPlugged", PropHandle::IsPlugged, cppu::UnoType<bool>::get(),
-         (css::beans::PropertyAttribute::TRANSIENT
-          | css::beans::PropertyAttribute::READONLY)},
-        {"SuspendQuickstartVeto",
-         PropHandle::SuspendQuickstartVeto, cppu::UnoType<bool>::get(),
-         css::beans::PropertyAttribute::TRANSIENT},
-        {"Title", PropHandle::Title, cppu::UnoType<OUString>::get(),
-         css::beans::PropertyAttribute::TRANSIENT}};
 }
 
 void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,

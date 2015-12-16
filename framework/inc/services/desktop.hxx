@@ -322,7 +322,6 @@ class Desktop : private cppu::BaseMutex,
     private:
 
         css::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const css::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
-        static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                   );
 
         /** calls queryTermination() on every registered termination listener.
          *
