@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_538626ba",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-16T12:29:45Z",
+      "side": 1,
+      "message": "should probably copy the old javadoc comment block to this method.",
+      "revId": "a6578e1907a316af269880cc858b36d057b479f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_934b6eb0",
         "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
         "patchSetId": 1
