@@ -1205,8 +1205,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     m_nStyle = nStyle;
 
     GtkWindowType eWinType = (  (nStyle & SalFrameStyleFlags::FLOAT) &&
-                              ! (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|
-                                           SalFrameStyleFlags::FLOAT_FOCUSABLE))
+                              ! (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
                               )
         ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL;
 
@@ -1251,7 +1250,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     bool bDecoHandling =
         ! isChild() &&
         ( ! (nStyle & SalFrameStyleFlags::FLOAT) ||
-          (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|SalFrameStyleFlags::FLOAT_FOCUSABLE) ) );
+          (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) );
 
     if( bDecoHandling )
     {
@@ -1272,10 +1271,6 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, true );
-        }
-        else if( (nStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE) )
-        {
-            eType = GDK_WINDOW_TYPE_HINT_UTILITY;
         }
         if( (nStyle & SalFrameStyleFlags::PARTIAL_FULLSCREEN )
             && getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
@@ -2201,7 +2196,7 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
              *  to our window - which it of course won't since our input hint
              *  is set to false.
              */
-            if( (m_nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|SalFrameStyleFlags::FLOAT_FOCUSABLE)) )
+            if (m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
             {
                 // sad but true: this can cause an XError, we need to catch that
                 // to do this we need to synchronize with the XServer

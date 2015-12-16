@@ -371,11 +371,11 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->mbFloatWin = TRUE;
 
-        if ( (pEnvTransparentFloats /* does not work remote! || (nSalFrameStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE) */ )  )
+        if (pEnvTransparentFloats)
             nExSysStyle |= WS_EX_LAYERED;
 
     }
-    if( (nSalFrameStyle & SalFrameStyleFlags::TOOLTIP) || (nSalFrameStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE) )
+    if (nSalFrameStyle & SalFrameStyleFlags::TOOLTIP)
         nExSysStyle |= WS_EX_TOPMOST;
 
     // init frame data
