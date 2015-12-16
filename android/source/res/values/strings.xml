@@ -51,11 +51,17 @@
     <string name="close_document_locations">Close document locations</string>
     <string name="local_documents">Local documents</string>
     <string name="local_file_system">Local file system</string>
+    <string name="external_sd_file_system">External SD</string>
+    <string name="otg_file_system">OTG device (experimental)</string>
     <string name="owncloud">ownCloud</string>
 
     <string name="owncloud_wrong_connection">Cannot connect to ownCloud server. Check your configuration.</string>
     <string name="owncloud_unauthorized">Cannot log into ownCloud server. Check your configuration.</string>
     <string name="owncloud_unspecified_error">Unspecified error connecting to ownCloud server. Check your configuration and/or try later.</string>
+
+    <string name="ext_document_provider_error">Invalid root file. Check your configuration.</string>
+    <string name="legacy_extsd_missing_error">Invalid root file. Check your external sd card and/or configuration.</string>
+    <string name="otg_missing_error">Invalid root file. Check your OTG device and/or configuration.</string>
 
     <!-- Edit action names -->
     <string name="action_bold">Bold</string>
@@ -75,12 +81,24 @@
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Storage provider settings</string>
     <string name="owncloud_settings">ownCloud settings</string>
+    <string name="physical_storage_settings">Physical storage settings</string>
+    <string name="external_sd_path">External SD path</string>
+    <string name="otg_device_path">OTG device path</string>
+    <string name="otg_warning">Experimental Feature: Use only if OTG device is writable.</string>
     <string name="server_url">Server URL</string>
     <string name="server_url_and_port">URL and port of the ownCloud server.</string>
     <string name="user_name">User name</string>
     <string name="password">Password</string>
     <string name="action_undo">Undo</string>
     <string name="action_redo">Redo</string>
+
+    <!-- Directory browser strings -->
+    <string name="up_description">To parent directory</string>
+    <string name="confirm_label">Confirm</string>
+    <string name="cancel_label">Cancel</string>
+    <string name="search_label">Go</string>
+    <string name="directory_browser_label">Choose Directory</string>
+    <string name="bad_directory">Invalid directory path</string>
 
 
 </resources>

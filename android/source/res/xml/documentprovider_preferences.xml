@@ -23,4 +23,17 @@
             android:title="@string/password"
             android:defaultValue="" />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/physical_storage_settings">
+        <PreferenceScreen
+            android:title="@string/external_sd_path"
+            android:key="pref_extsd_path_uri">
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:title="@string/otg_device_path"
+            android:key="pref_otg_path_uri"
+            android:summary="@string/otg_warning">
+        </PreferenceScreen>
+    </PreferenceCategory>
+
 </PreferenceScreen>
