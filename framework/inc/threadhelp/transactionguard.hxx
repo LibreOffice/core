@@ -99,20 +99,6 @@ class TransactionGuard : private boost::noncopyable
             }
         }
 
-
-    private:
-
-        /*-****************************************************************************************************
-            @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occur otherwise.
-                        Thats why we disable it by make it private.
-
-            @seealso    other ctor
-        *//*-*****************************************************************************************************/
-        TransactionGuard();
-
-    //  private member
-
     private:
 
         TransactionManager*   m_pManager;   /// pointer to safed transaction manager
