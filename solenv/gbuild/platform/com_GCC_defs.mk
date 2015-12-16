@@ -112,7 +112,7 @@ gb_CXXFLAGS_COMMON += -fstack-protector-strong
 gb_LinkTarget_LDFLAGS += -fstack-protector-strong
 endif
 
-gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
+gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror -Wno-error=deprecated-declarations)
 
 # This is the default in non-C++11 mode
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
