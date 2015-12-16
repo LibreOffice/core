@@ -2358,6 +2358,21 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse by Body.
+
+    if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
+    {
+        if (IsBodyFrame())
+        {
+            // Whitespace is hidden and this body frame will not shrink, as it
+            // has a fix size.
+            // Invalidate the page frame size, so in case the reason for the
+            // shrink was that there is more whitespace on this page, the size
+            // without whitespace will be recalculated correctly.
+            SwPageFrame* pPageFrame = FindPageFrame();
+            pPageFrame->InvalidateSize();
+        }
+    }
+
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
