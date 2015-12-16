@@ -1135,6 +1135,10 @@ void SystemWindow::DoInitialLayout()
         mbIsCalculatingInitialLayoutSize = false;
         mbInitialLayoutDone = true;
     }
+    else if (!(GetStyle() & WB_SIZEABLE))
+    {
+        SetMinOutputSizePixel(GetSizePixel());
+    }
 }
 
 void SystemWindow::doDeferredInit(WinBits /*nBits*/)
