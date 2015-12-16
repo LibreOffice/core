@@ -382,6 +382,19 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']",
                 "PartName",
                 "/word/embeddings/oleObject1.xlsx");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsx']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "Excel.Sheet.12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo78420, "fdo78420.docx")
@@ -587,6 +600,19 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79968_sldx, "fdo79968.docx")
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.presentationml.slide']",
                 "PartName",
                 "/word/embeddings/oleObject1.sldx");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.sldx']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "PowerPoint.Slide.12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
@@ -601,6 +627,19 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.binary.macroEnabled.12']",
                 "PartName",
                 "/word/embeddings/oleObject1.xlsb");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsb']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "Excel.SheetBinaryMacroEnabled.12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80097, "fdo80097.docx")
@@ -678,6 +717,19 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.macroEnabled.12']",
                 "PartName",
                 "/word/embeddings/oleObject1.xlsm");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsm']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "Excel.SheetMacroEnabled.12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
@@ -691,6 +743,19 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-word.document.macroEnabled.12']",
                 "PartName",
                 "/word/embeddings/oleObject1.docm");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.docm']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "Word.DocumentMacroEnabled.12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
@@ -704,6 +769,19 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-powerpoint.presentation.macroEnabled.12']",
                 "PartName",
                 "/word/embeddings/oleObject1.pptm");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.pptm']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "PowerPoint.ShowMacroEnabled.12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
@@ -717,6 +795,19 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-powerpoint.slide.macroEnabled.12']",
                 "PartName",
                 "/word/embeddings/oleObject1.sldm");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.sldm']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "PowerPoint.SlideMacroEnabled.12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
@@ -731,6 +822,19 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
                 "/ContentType:Types/ContentType:Override[@ContentType='application/msword']",
                 "PartName",
                 "/word/embeddings/oleObject1.doc");
+
+    // check the rels too
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.doc']",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject");
+    // check the content too
+    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    assertXPath(pXmlDocContent,
+        "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject",
+        "ProgID",
+        "Word.Document.8");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
