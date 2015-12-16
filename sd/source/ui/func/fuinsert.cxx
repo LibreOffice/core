@@ -109,69 +109,96 @@ rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window
     return xFunc;
 }
 
-void FuInsertGraphic::DoExecute( SfxRequest&  )
+void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 {
-    SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
+    OUString aFileName;
+    OUString aFilterName;
+    Graphic aGraphic;
 
-    if( aDlg.Execute() == GRFILTER_OK )
+    bool bAsLink = false;
+    int nError = GRFILTER_OPENERROR;
+
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    const SfxPoolItem* pItem;
+
+    if ( pArgs &&
+         pArgs->GetItemState( SID_INSERT_GRAPHIC, true, &pItem ) == SfxItemState::SET )
     {
-        Graphic     aGraphic;
-        int nError = aDlg.GetGraphic(aGraphic);
-        if( nError == GRFILTER_OK )
+        aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+        if ( pArgs->GetItemState( FN_PARAM_FILTER, true, &pItem ) == SfxItemState::SET )
+            aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+        if ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
+            bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+
+        nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
+    }
+    else
+    {
+        SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
+
+        if( aDlg.Execute() == GRFILTER_OK )
         {
-            if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
+            nError = aDlg.GetGraphic(aGraphic);
+            bAsLink = aDlg.IsAsLink();
+            aFileName = aDlg.GetPath();
+            aFilterName = aDlg.GetCurrentFilter();
+        }
+    }
+
+    if( nError == GRFILTER_OK )
+    {
+        if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
+        {
+            sal_Int8    nAction = DND_ACTION_COPY;
+            SdrObject* pPickObj;
+            bool bSelectionReplaced(false);
+
+            if( ( pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() ) ) || ( pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC ) ) )
             {
-                sal_Int8    nAction = DND_ACTION_COPY;
-                SdrObject* pPickObj;
-                bool bSelectionReplaced(false);
+                nAction = DND_ACTION_LINK;
+            }
+            else if(1 == mpView->GetMarkedObjectCount())
+            {
+                pPickObj = mpView->GetMarkedObjectByIndex(0);
+                nAction = DND_ACTION_MOVE;
+                bSelectionReplaced = true;
+            }
 
-                if( ( pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() ) ) || ( pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC ) ) )
+            Point aPos;
+            Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
+            aPos = aRect.Center();
+            aPos = mpWindow->PixelToLogic(aPos);
+            SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, nullptr);
+
+            if(pGrafObj && bAsLink )
+            {
+                // really store as link only?
+                if( SvtMiscOptions().ShowLinkWarningDialog() )
                 {
-                    nAction = DND_ACTION_LINK;
-                }
-                else if(1 == mpView->GetMarkedObjectCount())
-                {
-                    pPickObj = mpView->GetMarkedObjectByIndex(0);
-                    nAction = DND_ACTION_MOVE;
-                    bSelectionReplaced = true;
-                }
-
-                Point aPos;
-                Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
-                aPos = aRect.Center();
-                aPos = mpWindow->PixelToLogic(aPos);
-                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, nullptr);
-
-                if(pGrafObj && aDlg.IsAsLink())
-                {
-                    // really store as link only?
-                    if( SvtMiscOptions().ShowLinkWarningDialog() )
-                    {
-                        ScopedVclPtrInstance< SvxLinkWarningDialog > aWarnDlg(mpWindow,aDlg.GetPath());
-                        if( aWarnDlg->Execute() != RET_OK )
-                            return; // don't store as link
-                    }
-
-                    // store as link
-                    OUString aFltName(aDlg.GetCurrentFilter());
-                    OUString aPath(aDlg.GetPath());
-                    OUString aReferer;
-                    if (mpDocSh->HasName()) {
-                        aReferer = mpDocSh->GetMedium()->GetName();
-                    }
-                    pGrafObj->SetGraphicLink(aPath, aReferer, aFltName);
+                    ScopedVclPtrInstance< SvxLinkWarningDialog > aWarnDlg(mpWindow, aFileName);
+                    if( aWarnDlg->Execute() != RET_OK )
+                        return; // don't store as link
                 }
 
-                if(bSelectionReplaced && pGrafObj)
-                {
-                    mpView->MarkObj(pGrafObj, mpView->GetSdrPageView());
+                // store as link
+                OUString aReferer;
+                if (mpDocSh->HasName()) {
+                    aReferer = mpDocSh->GetMedium()->GetName();
                 }
+                pGrafObj->SetGraphicLink(aFileName, aReferer, aFilterName);
+            }
+
+            if(bSelectionReplaced && pGrafObj)
+            {
+                mpView->MarkObj(pGrafObj, mpView->GetSdrPageView());
             }
         }
-        else
-        {
-            SdGRFFilter::HandleGraphicFilterError( (sal_uInt16)nError, GraphicFilter::GetGraphicFilter().GetLastError().nStreamError );
-        }
+    }
+    else
+    {
+        SdGRFFilter::HandleGraphicFilterError( (sal_uInt16)nError, GraphicFilter::GetGraphicFilter().GetLastError().nStreamError );
     }
 }
 
