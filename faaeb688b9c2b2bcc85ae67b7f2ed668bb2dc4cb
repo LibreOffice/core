@@ -16,6 +16,24 @@
       "revId": "faaeb688b9c2b2bcc85ae67b7f2ed668bb2dc4cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ae4ba558",
+        "filename": "android/source/src/java/org/libreoffice/storage/external/DirectoryBrowser/DirectoryBrowserActivity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001132
+      },
+      "writtenOn": "2015-12-16T17:47:42Z",
+      "side": 1,
+      "message": "Ah my bad. Forgot to clear up that auto generated comment. Thanks for the notification. I\u0027ll fix that up in a bit.",
+      "parentUuid": "dab17558_eefe4d04",
+      "revId": "faaeb688b9c2b2bcc85ae67b7f2ed668bb2dc4cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
