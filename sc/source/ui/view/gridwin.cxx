@@ -3215,7 +3215,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
         if (!bDone)
         {
-            SfxDispatcher::ExecutePopup( 0, this, &aMenuPos );
+            SfxDispatcher::ExecutePopup( this, &aMenuPos );
         }
     }
 }
