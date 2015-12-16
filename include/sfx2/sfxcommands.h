@@ -21,7 +21,6 @@
 
 #define CMD_SID_BROWSE_BACKWARD                     ".uno:BrowseBackward"
 #define CMD_SID_BROWSE_FORWARD                      ".uno:BrowseForward"
-#define CMD_SID_CLOSEWIN                            ".uno:CloseWin"
 #define CMD_SID_COPY                                ".uno:Copy"
 #define CMD_SID_CUT                                 ".uno:Cut"
 #define CMD_SID_DELETE                              ".uno:Delete"
@@ -39,10 +38,6 @@
 #define CMD_SID_PASTE                               ".uno:Paste"
 #define CMD_SID_PASTE_SPECIAL                       ".uno:PasteSpecial"
 #define CMD_SID_PASTE_UNFORMATTED                   ".uno:PasteUnformatted"
-#define CMD_SID_PASTE_ONLY                          ".uno:PasteOnly"
-#define CMD_SID_PASTE_ONLY_VALUE                    ".uno:PasteOnlyValue"
-#define CMD_SID_PASTE_ONLY_TEXT                     ".uno:PasteOnlyText"
-#define CMD_SID_PASTE_ONLY_FORMULA                  ".uno:PasteOnlyFormula"
 #define CMD_SID_PRINTPREVIEW                        ".uno:PrintPreview"
 #define CMD_SID_RELOAD                              ".uno:Reload"
 #define CMD_SID_BASICIDE_RENAMECURRENT              ".uno:RenameCurrent"

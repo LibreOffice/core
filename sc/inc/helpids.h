@@ -87,11 +87,6 @@
 #define HID_SC_REN_AFMT_DLG                                     "SC_HID_SC_REN_AFMT_DLG"
 
 // Hilfe IDs fuer Submenus (max.50) ------------------------------------------
-#define HID_SCMENU_OBJMIRROR                                    "SC_HID_SCMENU_OBJMIRROR"
-#define HID_SCMENU_OBJARRANGE                                   "SC_HID_SCMENU_OBJARRANGE"
-#define HID_SCMENU_ANCHOR                                       "SC_HID_SCMENU_ANCHOR"
-
-
 #define HID_SC_SORT_ACTION                                      "SC_HID_SC_SORT_ACTION"
 #define HID_SC_SORT_AUTHOR                                      "SC_HID_SC_SORT_AUTHOR"
 #define HID_SC_SORT_DATE                                        "SC_HID_SC_SORT_DATE"
