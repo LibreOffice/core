@@ -47,8 +47,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/navipi/navipi.src \
     sc/source/ui/styleui/scstyles.src \
     sc/source/ui/dbgui/pvfundlg.src \
-    sc/source/ui/drawfunc/drformsh.src \
-    sc/source/ui/drawfunc/objdraw.src \
     sc/source/ui/miscdlgs/retypepassdlg.src \
     sc/source/ui/miscdlgs/conflictsdlg.src \
     sc/source/ui/miscdlgs/acredlin.src \
