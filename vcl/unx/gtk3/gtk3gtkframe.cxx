@@ -1118,8 +1118,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     m_nStyle = nStyle;
 
     GtkWindowType eWinType = (  (nStyle & SalFrameStyleFlags::FLOAT) &&
-                              ! (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|
-                                           SalFrameStyleFlags::FLOAT_FOCUSABLE))
+                              ! (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
                               )
         ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL;
 
@@ -1164,7 +1163,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     bool bDecoHandling =
         ! isChild() &&
         ( ! (nStyle & SalFrameStyleFlags::FLOAT) ||
-          (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION|SalFrameStyleFlags::FLOAT_FOCUSABLE) ) );
+          (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) );
 
     if( bDecoHandling )
     {
@@ -1186,10 +1185,6 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             gtk_window_set_accept_focus(GTK_WINDOW(m_pWindow), false);
             gtk_window_set_decorated(GTK_WINDOW(m_pWindow), false);
-        }
-        else if( (nStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE) )
-        {
-            eType = GDK_WINDOW_TYPE_HINT_UTILITY;
         }
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), eType );
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );

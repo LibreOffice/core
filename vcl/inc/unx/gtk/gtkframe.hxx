@@ -278,8 +278,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
         return
             (m_nStyle & SalFrameStyleFlags::FLOAT) &&                // only a float can be floatgrab
             !(m_nStyle & SalFrameStyleFlags::TOOLTIP) &&             // tool tips are not
-            !(m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) && // toolbars are also not
-            !(m_nStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE);       // focusable floats are not
+            !(m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION);   // toolbars are also not
     }
 
     bool isChild( bool bPlug = true, bool bSysChild = true )

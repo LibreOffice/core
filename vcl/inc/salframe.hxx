@@ -74,8 +74,6 @@ enum class SalFrameStyleFlags
     INTRO               = 0x00000100,
     // partial fullscreen: fullscreen on one monitor of a multimonitor display
     PARTIAL_FULLSCREEN  = 0x00800000,
-    // floating window that needs to be focusable
-    FLOAT_FOCUSABLE     = 0x04000000,
     // system child window inside another SalFrame
     SYSTEMCHILD         = 0x08000000,
     // plugged system child window
