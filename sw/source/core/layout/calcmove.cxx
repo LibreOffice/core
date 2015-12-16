@@ -1519,7 +1519,34 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // Bottom(). This might happen with undersized TextFrms on the lower edge of a
         // multi-column section
         const long nPrtBottom = (GetUpper()->*fnRect->fnGetPrtBottom)();
-        const long nBottomDist =  (Frm().*fnRect->fnBottomDist)( nPrtBottom );
+        long nBottomDist =  (Frm().*fnRect->fnBottomDist)( nPrtBottom );
+
+        if (getRootFrm()->GetCurrShell()->GetViewOptions()->IsWhitespaceHidden())
+        {
+            // When whitespace is hidden, the page frame has two heights: the
+            // nominal (defined by the frame format), and the actual (which is
+            // at most the nominal height, but can be smaller in case there is
+            // no content for the whole page).
+            // The layout size is the actual one, but we want to move the
+            // content frame to a new page only in case it doesn't fit the
+            // nominal size.
+            if (nBottomDist < 0)
+            {
+                // Content frame doesn't fit the actual size, check if it fits the nominal one.
+                SwPageFrm* pPageFrame = FindPageFrm();
+                const SwFrameFormat* pPageFormat = static_cast<const SwFrameFormat*>(pPageFrame->GetRegisteredIn());
+                const Size& rPageSize = pPageFormat->GetFrmSize().GetSize();
+                long nWhitespace = rPageSize.getHeight() - pPageFrame->Frm().Height();
+                if (nWhitespace > -nBottomDist)
+                {
+                    // It does: don't move it and invalidate our page frame so
+                    // that it gets a larger height.
+                    nBottomDist = 0;
+                    pPageFrame->InvalidateSize();
+                }
+            }
+        }
+
         if( nBottomDist >= 0 )
         {
             if ( bKeep && bMoveable )

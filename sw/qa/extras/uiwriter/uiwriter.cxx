@@ -11,6 +11,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/text/XParagraphAppend.hpp>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -104,6 +105,7 @@ public:
     void testDde();
     void testTdf89954();
     void testTdf89720();
+    void testTdf96515();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -146,6 +148,7 @@ public:
     CPPUNIT_TEST(testDde);
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
+    CPPUNIT_TEST(testTdf96515);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1148,6 +1151,25 @@ void SwUiWriterTest::testTdf89720()
             CPPUNIT_ASSERT(!pItem->pPostIt->TextRange());
     }
 #endif
+}
+
+void SwUiWriterTest::testTdf96515()
+{
+    // Enable hide whitespace mode.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // Insert a new paragraph at the end of the document.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XParagraphAppend> xParagraphAppend(xTextDocument->getText(), uno::UNO_QUERY);
+    xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
+    calcLayout();
+
+    // This was 2, a new page was created for the new paragraph.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
