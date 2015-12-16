@@ -12,12 +12,16 @@ package org.libreoffice.storage;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.libreoffice.storage.external.ExtsdDocumentsProvider;
+import org.libreoffice.storage.external.LegacyExtSDDocumentsProvider;
+import org.libreoffice.storage.external.OTGDocumentsProvider;
 import org.libreoffice.storage.local.LocalDocumentsDirectoryProvider;
 import org.libreoffice.storage.local.LocalDocumentsProvider;
 import org.libreoffice.storage.owncloud.OwnCloudProvider;
 
 import android.content.Context;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 
 /**
  * Keeps the instances of the available IDocumentProviders in the system.
@@ -29,6 +33,8 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
  * DocumentProviderFactory.getInstance().
  */
 public final class DocumentProviderFactory {
+    public static int EXTSD_PROVIDER_INDEX = 2;
+    public static int OTG_PROVIDER_INDEX = 3;
 
     /**
      * Private factory instance for the Singleton pattern.
@@ -56,10 +62,19 @@ public final class DocumentProviderFactory {
             instance = new DocumentProviderFactory();
 
             // initialize document providers list
-            instance.providers = new IDocumentProvider[3];
+            instance.providers = new IDocumentProvider[5];
             instance.providers[0] = new LocalDocumentsDirectoryProvider(0);
             instance.providers[1] = new LocalDocumentsProvider(1);
-            instance.providers[2] = new OwnCloudProvider(2, context);
+            instance.providers[OTG_PROVIDER_INDEX] = new OTGDocumentsProvider(OTG_PROVIDER_INDEX, context);
+            instance.providers[4] = new OwnCloudProvider(4, context);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                instance.providers[EXTSD_PROVIDER_INDEX]
+                        = new ExtsdDocumentsProvider(EXTSD_PROVIDER_INDEX, context);
+            } else {
+                instance.providers[EXTSD_PROVIDER_INDEX]
+                        = new LegacyExtSDDocumentsProvider(EXTSD_PROVIDER_INDEX, context);
+            }
 
             // initialize document provider names list
             instance.providerNames = new String[instance.providers.length];

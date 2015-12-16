@@ -113,6 +113,15 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".storage.external.BrowserSelectorActivity"
+                  android:theme="@style/LibreOfficeTheme">
+        </activity>
+
+        <activity android:name=".storage.external.DirectoryBrowserActivity"
+            android:label="@string/directory_browser_label"
+            android:theme="@style/LibreOfficeTheme">
+        </activity>
+
     </application>
 
 </manifest>
