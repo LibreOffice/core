@@ -52,18 +52,6 @@ enum EWorkingMode
 };
 
 /*-************************************************************************************************************
-    @descr          If a request was refused by a transaction manager (internal state different E_WORK ...)
-                    user can check the reason by using this enum values.
-*//*-*************************************************************************************************************/
-enum ERejectReason
-{
-    E_UNINITIALIZED ,
-    E_NOREASON      ,
-    E_INCLOSE       ,
-    E_CLOSED
-};
-
-/*-************************************************************************************************************
     @descr          A transaction object should support throwing exceptions if user used it at wrong working mode.
                     e.g. We can throw a DisposedException if user try to work and our mode is E_CLOSE!
                     But sometimes he doesn't need this feature - will handle it by himself.
@@ -120,17 +108,8 @@ class FWI_DLLPUBLIC TransactionManager: private boost::noncopyable
                                    ~TransactionManager          (                                              );
         void               setWorkingMode               ( EWorkingMode eMode                           );
         EWorkingMode       getWorkingMode               (                                              ) const;
-        bool               isCallRejected               ( ERejectReason& eReason                       ) const;
         void               registerTransaction          ( EExceptionMode eMode ) throw( css::uno::RuntimeException, css::lang::DisposedException );
         void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException );
-
-    //  private methods
-
-    private:
-
-        void impl_throwExceptions( EExceptionMode eMode, ERejectReason eReason ) const throw( css::uno::RuntimeException, css::lang::DisposedException );
-
-    //  private member
 
     private:
 
