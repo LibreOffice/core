@@ -480,7 +480,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
     // so check that instead.
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTextEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
-#if 0 // TODO FIXME why does it fail on 5.1 branch?
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEmbeddedObjects->getCount());
 
     xmlDocPtr pXmlDocCT = parseExport("[Content_Types].xml");
@@ -502,7 +501,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
         "/w:document/w:body/w:p/w:r/w:object/o:OLEObject",
         "ProgID",
         "Excel.Sheet.12");
-#endif
 }
 
 /*
