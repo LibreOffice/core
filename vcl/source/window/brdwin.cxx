@@ -2179,7 +2179,7 @@ void ImplBorderWindow::SetMenuBarMode( bool bHide )
 
 void ImplBorderWindow::SetNotebookBarWindow(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
-    mpNotebookBarWindow.reset(new NotebookBarWindow(this, "NotebookBar", rUIXMLDescription, rFrame));
+    mpNotebookBarWindow = VclPtr<NotebookBarWindow>::Create(this, "NotebookBar", rUIXMLDescription, rFrame);
     Resize();
     mpNotebookBarWindow->Show();
 }
