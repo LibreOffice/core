@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_b3583258",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-16T14:02:21Z",
+      "side": 0,
+      "message": "Removing those looks odd to me. Even if the (sub|popup|context)menu items went from .src to .xml files there should be some connection between those items and their online help.\nOr what am I missing?",
+      "revId": "620f365032ed236e7350c87126e986cf236f3996",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
