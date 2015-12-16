@@ -176,6 +176,7 @@ public:
     void testTdf87922();
     void testTdf77014();
     void testTdf92648();
+    void testTdf96515();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -258,6 +259,7 @@ public:
     CPPUNIT_TEST(testTdf87922);
     CPPUNIT_TEST(testTdf77014);
     CPPUNIT_TEST(testTdf92648);
+    CPPUNIT_TEST(testTdf96515);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2918,6 +2920,25 @@ void SwUiWriterTest::testTdf92648()
         SwFormatFrameSize aSize((*it)->GetFrameSize());
         CPPUNIT_ASSERT(aSize.GetHeight() != 0);
     }
+}
+
+void SwUiWriterTest::testTdf96515()
+{
+    // Enable hide whitespace mode.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // Insert a new paragraph at the end of the document.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XParagraphAppend> xParagraphAppend(xTextDocument->getText(), uno::UNO_QUERY);
+    xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
+    calcLayout();
+
+    // This was 2, a new page was created for the new paragraph.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
