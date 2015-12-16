@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_aebe05fd",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-16T21:09:28Z",
+      "side": 1,
+      "message": "You may use default argument here (bool bReset \u003d false), then you don\u0027t have to modify existent callers of this method",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2ea5f503",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-16T21:09:28Z",
+      "side": 1,
+      "message": "conventional naming: bLock (b for boolean)",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_0eaab1d4",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-16T21:09:28Z",
+      "side": 1,
+      "message": "Can those two guys be const, too? They don\u0027t modify SwDBManager object, do they?",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4ec15980",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-16T21:09:28Z",
+      "side": 1,
+      "message": "Additionally, I don\u0027t see those methods used anywhere ... hopefully they\u0027re used in one of the follow-up patches",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6eaffde3",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-16T21:09:28Z",
+      "side": 1,
+      "message": "conventional naming: nCount, nCnt (n for integer variables)",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4eacb9ed",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-16T21:09:28Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ced42949",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-16T21:09:28Z",
+      "side": 1,
+      "message": "Givent its name, this method has quite surprising return value/side effect -- I\u0027d expect return value to indicate whether an error occurred, not whether headers|footers should be used.\n\nMake it return void and create a new method for header|footer story, or make this bStylesWithHeaderAndFooter an argument, reference to bool",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6ec41d92",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-16T21:09:28Z",
+      "side": 1,
+      "message": "This method wants to have some nicer name, FinishMailMergeFile for example?",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
