@@ -1029,19 +1029,9 @@ void SAL_CALL Desktop::disposing()
 
     SolarMutexClearableGuard aWriteLock;
 
-    // Look for multiple calls of this method!
-    // If somewhere call dispose() twice - he will be stopped here really!!!
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    // Now - we are alone and its the first call of this method ...
-    // otherwise call before had thrown a DisposedException / hopefully .-)
-    // But we don't use the transaction object created before ... we reset it immediately ...
-    // two lines of code ... for what ?
-    // The answer: We wished to synchronize concurrent dispose() calls -> OK
-    // But next line will wait for all currently running transaction (even if they
-    // are running within the same thread!) So we would block ourself there if aTransaction
-    // will stay registered .-)
-    aTransaction.stop();
+    {
+        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    }
 
     // Disable this instance for further work.
     // This will wait for all current running transactions ...

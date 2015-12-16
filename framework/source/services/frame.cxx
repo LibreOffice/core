@@ -1729,79 +1729,80 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
 void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::CloseVetoException,
                                                                 css::uno::RuntimeException, std::exception   )
 {
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    // At the end of this method may we must dispose ourself...
-    // and may nobody from outside hold a reference to us...
-    // then it's a good idea to do that by ourself.
-    css::uno::Reference< css::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
-
-    // Check any close listener before we look for currently running internal processes.
-    // Because if a listener disagree with this close() request - we have time to finish this
-    // internal operations too...
-    // Note: container is threadsafe himself.
-    css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
-    if (pContainer!=nullptr)
     {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-        while (pIterator.hasMoreElements())
+        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+        // At the end of this method may we must dispose ourself...
+        // and may nobody from outside hold a reference to us...
+        // then it's a good idea to do that by ourself.
+        css::uno::Reference< css::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
+
+        // Check any close listener before we look for currently running internal processes.
+        // Because if a listener disagree with this close() request - we have time to finish this
+        // internal operations too...
+        // Note: container is threadsafe himself.
+        css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
+        ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
+        if (pContainer!=nullptr)
         {
-            try
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            while (pIterator.hasMoreElements())
             {
-                static_cast<css::util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
-            }
-            catch( const css::uno::RuntimeException& )
-            {
-                pIterator.remove();
+                try
+                {
+                    static_cast<css::util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
+                }
+                catch( const css::uno::RuntimeException& )
+                {
+                    pIterator.remove();
+                }
             }
         }
-    }
 
-    // Ok - no listener disagreed with this close() request
-    // check if this frame is used for any load process currently
-    if (isActionLocked())
-    {
-        if (bDeliverOwnership)
+        // Ok - no listener disagreed with this close() request
+        // check if this frame is used for any load process currently
+        if (isActionLocked())
         {
-            SolarMutexGuard g;
-            m_bSelfClose = true;
+            if (bDeliverOwnership)
+            {
+                SolarMutexGuard g;
+                m_bSelfClose = true;
+            }
+
+            throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
         }
 
-        throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
-    }
+        if ( ! setComponent(nullptr,nullptr) )
+            throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
 
-    if ( ! setComponent(nullptr,nullptr) )
-        throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
-
-    // If closing is allowed... inform all listeners and dispose this frame!
-    pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
-    if (pContainer!=nullptr)
-    {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-        while (pIterator.hasMoreElements())
+        // If closing is allowed... inform all listeners and dispose this frame!
+        pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
+        if (pContainer!=nullptr)
         {
-            try
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            while (pIterator.hasMoreElements())
             {
-                static_cast<css::util::XCloseListener*>(pIterator.next())->notifyClosing( aSource );
-            }
-            catch( const css::uno::RuntimeException& )
-            {
-                pIterator.remove();
+                try
+                {
+                    static_cast<css::util::XCloseListener*>(pIterator.next())->notifyClosing( aSource );
+                }
+                catch( const css::uno::RuntimeException& )
+                {
+                    pIterator.remove();
+                }
             }
         }
+
+        /* SAFE { */
+        SolarMutexClearableGuard aWriteLock;
+        m_bIsHidden = true;
+        aWriteLock.clear();
+        /* } SAFE */
+        impl_checkMenuCloser();
+
+        // Attention: We must release our own registered transaction here. Otherwhise following dispose() call
+        // wait for us too ....
     }
-
-    /* SAFE { */
-    SolarMutexClearableGuard aWriteLock;
-    m_bIsHidden = true;
-    aWriteLock.clear();
-    /* } SAFE */
-    impl_checkMenuCloser();
-
-    // Attention: We must release our own registered transaction here. Otherwhise following dispose() call
-    // wait for us too ....
-    aTransaction.stop();
     dispose();
 }
 

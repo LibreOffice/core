@@ -67,24 +67,7 @@ class TransactionGuard : private boost::noncopyable
         *//*-*************************************************************************************************************/
         inline ~TransactionGuard()
         {
-            stop();
-        }
-
-        /*-************************************************************************************************************
-            @short      stop current transaction
-            @descr      We must release the transaction manager and can forget his pointer.
-
-            @attention  We don't support any start() method here - because it is not easy to
-                        detect if a transaction already started or not!
-                        (combination of EExceptionMode and ERejectReason)
-        *//*-*************************************************************************************************************/
-        inline void stop()
-        {
-            if( m_pManager != nullptr )
-            {
-                m_pManager->unregisterTransaction();
-                m_pManager = nullptr;
-            }
+            m_pManager->unregisterTransaction();
         }
 
     private:
