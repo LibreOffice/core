@@ -2453,7 +2453,8 @@ lok_doc_view_open_document (LOKDocView* pDocView,
     pLOEvent->m_pPath = pPath;
 
     priv->m_aDocPath = pPath;
-    priv->m_aRenderingArguments = pRenderingArguments;
+    if (pRenderingArguments)
+        priv->m_aRenderingArguments = pRenderingArguments;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
