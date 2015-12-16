@@ -730,7 +730,6 @@ public:
      * the default behavior and implements LOK calls.
      */
     virtual void libreOfficeKitCallback(int nType, const char* pPayload) const;
-    virtual bool isTiledRendering() const;
 };
 
 #define SFX_GLOBAL_CLASSID \

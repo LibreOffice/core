@@ -424,7 +424,7 @@ public:
     void SnapVisArea( Rectangle& rRect ) const;
 
     virtual void libreOfficeKitCallback(int nType, const char* pPayload) const override;
-    virtual bool isTiledRendering() const override;
+    bool isTiledRendering() const;
 };
 
 void UpdateAcceptChangesDialog();
