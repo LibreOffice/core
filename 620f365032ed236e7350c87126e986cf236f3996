@@ -16,6 +16,24 @@
       "revId": "620f365032ed236e7350c87126e986cf236f3996",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6e689dbb",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-16T18:13:44Z",
+      "side": 0,
+      "message": "Hi Eike,\n\nThanks for taking the time to review my patch!\n\nJust like for the menubar, the help mapping is done using the .uno:CommandName. You can see how it works in vcl/source/window/menuwindow.cxx#88. It takes the HelpId *only* if there is no command URL. Historically .src based menus didn\u0027t have command URLs, but sfx2 Slot IDs, so it was needed to map it back to command URLs using the HelpID entry - you can see this in various CMD_* defines that I removed in this commit too. They aren\u0027t needed in the new xml based implementation, because menus now contain command URLs, not SIDs.\n\nRegarding these specific HID_SCMENU_* you pointed, they seem to be useless anyway, because they bound to items that open sub-menus. In reality (at least on my PC) when you hover such item, the sub-menu is considered active, and by pressing F1 the app is trying to get help for the \"active\" item _in the sub-menu_, although there is no such item, because the mouse pointer is still in the parent menu. Not sure if it\u0027s a bug or by design (probably a bug), but that\u0027s how it seems to work right now.\n\nIs there anything else that caught your eyes in the patch, or I can merge it?",
+      "parentUuid": "dab17558_b3583258",
+      "revId": "620f365032ed236e7350c87126e986cf236f3996",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
