@@ -5292,7 +5292,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         }
                     }
                     else if ( !m_rView.ExecSpellPopup( aDocPos ) )
-                        SfxDispatcher::ExecutePopup( 0, this, &aPixPos);
+                        SfxDispatcher::ExecutePopup(this, &aPixPos);
                 }
                 else if (m_pApplyTempl->nUndo < rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount())
                 {

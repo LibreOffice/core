@@ -1873,17 +1873,14 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId, vcl::Window *pW
     return nullptr;
 }
 
-void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, vcl::Window *pWin, const Point *pPos )
+void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
 {
     SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
     SfxShell *pSh;
 
     if ( rDisp.xImp->bQuiet )
-    {
-        nConfigId = 0;
         nShLevel = rDisp.xImp->aStack.size();
-    }
 
     vcl::Window *pWindow = pWin ? pWin : rDisp.xImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
     Point aPos = pPos ? *pPos : pWindow->GetPointerPosPixel();
@@ -1891,12 +1888,12 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, vcl::Window *pWin, const
     {
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
         const OUString& rResName = pSh->GetInterface()->GetPopupMenuName();
-        if ( ( nConfigId == 0 && rResId.GetId() ) || ( nConfigId != 0 && rResId.GetId() == nConfigId ) )
+        if ( rResId.GetId() )
         {
             SfxPopupMenuManager::ExecutePopup( rResId, rDisp.GetFrame(), aPos, pWindow );
             return;
         }
-        else if ( nConfigId == 0 && !rResName.isEmpty() )
+        else if ( !rResName.isEmpty() )
         {
             css::uno::Sequence< css::uno::Any > aArgs( 3 );
             aArgs[0] <<= comphelper::makePropertyValue( "Value", rResName );

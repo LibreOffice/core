@@ -159,8 +159,7 @@ public:
 
     void                ExecutePopup( const ResId &rId,
                               vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
-    static void         ExecutePopup( sal_uInt16 nConfigId = 0,
-                              vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
+    static void         ExecutePopup( vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
 
     bool                IsAppDispatcher() const;
     bool                IsFlushed() const;
