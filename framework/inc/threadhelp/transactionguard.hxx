@@ -54,23 +54,15 @@ class TransactionGuard : private boost::noncopyable
                         from different threads at the same time ... this class use no refcount mechanism!
             @param      "rManager"  reference to transaction manager for using to register a request
             @param      "eMode"     enable/disable throwing of exceptions for rejected calls
-            @param      "eReason"   returns reason for rejected calls
         *//*-*****************************************************************************************************/
-        inline TransactionGuard( TransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = nullptr )
+        inline TransactionGuard( TransactionManager& rManager, EExceptionMode eMode )
             : m_pManager( &rManager )
         {
             // If exception mode is set to E_HARDEXCEPTIONS we don't need a buffer to return reason!
             // We handle it private. If a call is rejected, our manager throw some exceptions ... and the reason
             // could be ignorable ...
-            if( eReason == nullptr )
-            {
-                ERejectReason eMyReason;
-                m_pManager->registerTransaction( eMode, eMyReason );
-            }
-            else
-            {
-                m_pManager->registerTransaction( eMode, *eReason );
-            }
+            ERejectReason eMyReason;
+            m_pManager->registerTransaction( eMode, eMyReason );
         }
 
         /*-************************************************************************************************************
