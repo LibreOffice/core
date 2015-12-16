@@ -3769,6 +3769,7 @@ StackVar ScInterpreter::Interpret()
                 case ocSumX2MY2         : ScSumX2MY2();                 break;
                 case ocSumX2DY2         : ScSumX2DY2();                 break;
                 case ocSumXMY2          : ScSumXMY2();                  break;
+                case ocRawSubtract      : ScRawSubtract();              break;
                 case ocLog              : ScLog();                      break;
                 case ocGCD              : ScGCD();                      break;
                 case ocLCM              : ScLCM();                      break;

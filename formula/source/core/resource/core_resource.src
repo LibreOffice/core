@@ -435,6 +435,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ERF_MS { Text = "COM.MICROSOFT.ERF.PRECISE" ; };
     String SC_OPCODE_ERFC_MS { Text = "COM.MICROSOFT.ERFC.PRECISE" ; };
     String SC_OPCODE_ENCODEURL     { Text = "COM.MICROSOFT.ENCODEURL"; };
+    String SC_OPCODE_RAWSUBTRACT    { Text = "ORG.LIBREOFFICE.RAWSUBTRACT"; };
 };
 
 /** These function names are used only in the XLSX import. */
@@ -857,6 +858,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_ERF_MS { Text = "_xlfn.ERF.PRECISE" ; };
     String SC_OPCODE_ERFC_MS { Text = "_xlfn.ERFC.PRECISE" ; };
     String SC_OPCODE_ENCODEURL     { Text = "_xlfn.ENCODEURL"; };
+    String SC_OPCODE_RAWSUBTRACT    { Text = "_xlfn.ORG.LIBREOFFICE.RAWSUBTRACT"; };
 };
 
 // DO NOT CHANGE NAMES! Only add functions.
@@ -1281,6 +1283,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ERF_MS { Text = "ERF.PRECISE" ; };
     String SC_OPCODE_ERFC_MS { Text = "ERFC.PRECISE" ; };
     String SC_OPCODE_ENCODEURL     { Text = "ENCODEURL"; };
+    String SC_OPCODE_RAWSUBTRACT    { Text = "RAWSUBTRACT"; };
 };
 
 Resource RID_STRLIST_FUNCTION_NAMES
@@ -2878,6 +2881,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_ENCODEURL
     {
         Text [ en-US ] = "ENCODEURL";
+    };
+    String SC_OPCODE_RAWSUBTRACT
+    {
+        Text [ en-US ] = "RAWSUBTRACT";
     };
 };
 

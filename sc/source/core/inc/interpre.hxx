@@ -515,6 +515,7 @@ void ScVar( bool bTextAsZero = false );
 void ScVarP( bool bTextAsZero = false );
 void ScStDev( bool bTextAsZero = false );
 void ScStDevP( bool bTextAsZero = false );
+void ScRawSubtract();
 void ScColumns();
 void ScRows();
 void ScSheets();

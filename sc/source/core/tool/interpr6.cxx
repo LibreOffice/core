@@ -898,4 +898,27 @@ void ScInterpreter::ScCount2()
     PushDouble( IterateParameters( ifCOUNT2 ) );
 }
 
+void ScInterpreter::ScRawSubtract()
+{
+    short nParamCount = GetByte();
+    if (!MustHaveParamCountMin( nParamCount, 2))
+        return;
+
+    // Fish the 1st parameter from the stack and push it on top.
+    FormulaToken* p = pStack[ sp - nParamCount ];
+    PushWithoutError( *p );
+    // Obtain the minuend.
+    double fRes = GetDouble();
+
+    while (!nGlobalError && nParamCount-- > 1)
+    {
+        // Simple single values without matrix support.
+        fRes -= GetDouble();
+    }
+    while (nParamCount-- > 0)
+        PopError();
+
+    PushDouble( fRes);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

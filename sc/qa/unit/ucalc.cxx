@@ -2529,6 +2529,7 @@ void Test::testFunctionLists()
         "PRODUCT",
         "RADIANS",
         "RAND",
+        "RAWSUBTRACT",
         "ROUND",
         "ROUNDDOWN",
         "ROUNDUP",

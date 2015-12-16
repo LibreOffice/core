@@ -12376,6 +12376,37 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The lower limit for integration";
         };
     };
+    Resource SC_OPCODE_RAWSUBTRACT
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the subtraction of numbers. Like a-b-c but without eliminating small roundoff errors." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_RAWSUBTRACT );
+            VAR_ARGS+2; 0; 0; 1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Number from which following arguments are subtracted." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "number " ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Number 2, number 3, ... are arguments subtracted from first number." ;
+        };
+    };
 };
 
 #if defined(U2S)
