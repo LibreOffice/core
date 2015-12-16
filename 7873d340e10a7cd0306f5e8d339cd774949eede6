@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d31696a6",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-12-16T05:49:05Z",
+      "side": 1,
+      "message": "You are still passing the address of an OUString object to the write() function. That does not do what you think it does. Did you try what the code does at run-time at all?",
+      "revId": "7873d340e10a7cd0306f5e8d339cd774949eede6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_330c4294",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-12-16T05:49:05Z",
+      "side": 1,
+      "message": "It is pointless to print such warnings in a production build. Nobody will see them and there is nothing the user can do about it anyway. Use SAL_WARN, and it will be seen only in a development build. (That doesn\u0027t guarantee anybody does anything about it anyway, though, as can be seen from the tons of warning one gets when running a development build.)",
+      "revId": "7873d340e10a7cd0306f5e8d339cd774949eede6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
