@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_eefe4d04",
+        "filename": "android/source/src/java/org/libreoffice/storage/external/DirectoryBrowser/DirectoryBrowserActivity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-12-16T15:16:42Z",
+      "side": 1,
+      "message": "Javadoc comments are nice :-), but it would be better if the oneliner documentation would say what the class does. See android/source/src/java/org/libreoffice/LOKitShell.java as an example.",
+      "revId": "faaeb688b9c2b2bcc85ae67b7f2ed668bb2dc4cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
