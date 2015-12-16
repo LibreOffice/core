@@ -12,6 +12,7 @@
 #include "node.hxx"
 #include "caret.hxx"
 
+#include <cassert>
 #include <list>
 #include <memory>
 
@@ -268,8 +269,8 @@ private:
         SmNode* pNode = rpNode;
         if(rpNode && rpNode->GetParent()){    //Don't remove this, correctness relies on it
             int index = rpNode->GetParent()->IndexOfSubNode(rpNode);
-            if(index != -1)
-                rpNode->GetParent()->SetSubNode(index, nullptr);
+            assert(index >= 0);
+            rpNode->GetParent()->SetSubNode(index, nullptr);
         }
         rpNode = nullptr;
         //Create line from node

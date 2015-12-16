@@ -12,6 +12,7 @@
 #include "view.hxx"
 #include "accessibility.hxx"
 #include <comphelper/string.hxx>
+#include <cassert>
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = nullptr;
@@ -176,6 +177,7 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
     SmNode* pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
     SmStructureNode* pLineParent = pLine->GetParent();
     int nLineOffset = pLineParent->IndexOfSubNode(pLine);
+    assert(nLineOffset >= 0);
 
     //If we're in front of a node who's parent is a TABLE
     if(pLineParent->GetType() == NTABLE && mpPosition->CaretPos.Index == 0 && nLineOffset > 0){
@@ -262,11 +264,7 @@ void SmCursor::Delete(){
     SmStructureNode* pLineParent = pLine->GetParent();
     //Find line offset in parent
     int nLineOffset = pLineParent->IndexOfSubNode(pLine);
-    if (nLineOffset == -1)
-    {
-        SAL_WARN("starmath", "pLine must be a child of its parent!");
-        return;
-    }
+    assert(nLineOffset >= 0);
 
     //Position after delete
     SmCaretPos PosAfterDelete;
@@ -304,12 +302,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
     //Find line parent and line index in parent
     SmStructureNode* pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    OSL_ENSURE(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
-    if (nParentIndex == -1)
-    {
-        delete pNewNodes;
-        return;
-    }
+    assert(nParentIndex >= 0);
 
     //Convert line to list
     SmNodeList* pLineList = NodeToList(pLine);
@@ -506,7 +499,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    OSL_ENSURE(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
+    assert(nParentIndex >= 0);
 
     //TODO: Consider handling special cases where parent is an SmOperNode,
     //      Maybe this method should be able to add limits to an SmOperNode...
@@ -677,9 +670,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    OSL_ENSURE( nParentIndex != -1, "pLine must be a subnode of pLineParent!");
-    if (nParentIndex < 0)
-        return;
+    assert(nParentIndex >= 0);
 
     //Convert line to list
     SmNodeList *pLineList = NodeToList(pLine);
@@ -814,12 +805,7 @@ bool SmCursor::InsertRow() {
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-
-    if (nParentIndex == -1)
-    {
-        SAL_WARN("starmath", "pLine must be a subnode of pLineParent!");
-        return false;
-    }
+    assert(nParentIndex >= 0);
 
     //Discover the context of this command
     SmTableNode  *pTable  = nullptr;
@@ -834,7 +820,7 @@ bool SmCursor::InsertRow() {
         //NOTE: This hack might give problems if we stop ignoring SmAlignNode
         pTable = static_cast<SmTableNode*>(pLineParent->GetParent());
         nTableIndex = pTable->IndexOfSubNode(pLineParent);
-        OSL_ENSURE(nTableIndex != -1, "pLineParent must be a child of its parent!");
+        assert(nTableIndex >= 0);
     }
     if(pLineParent->GetType() == NMATRIX)
         pMatrix = static_cast<SmMatrixNode*>(pLineParent);
@@ -938,11 +924,7 @@ void SmCursor::InsertFraction() {
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    if (nParentIndex == -1)
-    {
-        SAL_WARN("starmath", "pLine must be a subnode of pLineParent!");
-        return;
-    }
+    assert(nParentIndex >= 0);
 
     //We begin modifying the tree here
     BeginEdit();
