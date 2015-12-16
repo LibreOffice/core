@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_53510662",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-12-16T10:37:37Z",
+      "side": 1,
+      "message": "why not avoid the additional _moved functions and clear to empty instead,\n\n  str.pData \u003d nullptr;\n  rtl_string_new(\u0026str.pData);",
+      "revId": "6efefb61b8410ded36531b8919f38977e6461d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
