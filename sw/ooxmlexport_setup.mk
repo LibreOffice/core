@@ -66,6 +66,7 @@ define sw_ooxmlexport_components
 	ucb/source/ucp/file/ucpfile1 \
 	unotools/util/utl \
 	unoxml/source/service/unoxml \
+	unoxml/source/rdf/unordf \
 	uui/util/uui \
 	writerfilter/util/writerfilter \
 	xmloff/util/xo
