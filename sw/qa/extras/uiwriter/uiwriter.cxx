@@ -106,6 +106,7 @@ public:
     void testTdf89954();
     void testTdf89720();
     void testTdf96515();
+    void testTdf96536();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -149,6 +150,7 @@ public:
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf96515);
+    CPPUNIT_TEST(testTdf96536);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1170,6 +1172,29 @@ void SwUiWriterTest::testTdf96515()
 
     // This was 2, a new page was created for the new paragraph.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+void SwUiWriterTest::testTdf96536()
+{
+    // Enable hide whitespace mode.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // Insert a new paragraph at the end of the document, and then delete it.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XParagraphAppend> xParagraphAppend(xTextDocument->getText(), uno::UNO_QUERY);
+    xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
+    calcLayout();
+    uno::Reference<lang::XComponent> xParagraph(getParagraph(2), uno::UNO_QUERY);
+    xParagraph->dispose();
+    calcLayout();
+
+    // This was 552, page did not shrink after deleting the second paragraph.
+    // 276 is 12pt font size + default line spacing (15%).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(276), parseDump("/root/infos/bounds", "height").toInt32());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

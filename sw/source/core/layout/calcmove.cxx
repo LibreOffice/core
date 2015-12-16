@@ -1521,7 +1521,8 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         const long nPrtBottom = (GetUpper()->*fnRect->fnGetPrtBottom)();
         long nBottomDist =  (Frm().*fnRect->fnBottomDist)( nPrtBottom );
 
-        if (getRootFrm()->GetCurrShell()->GetViewOptions()->IsWhitespaceHidden())
+        SwViewShell* pShell = getRootFrm()->GetCurrShell();
+        if (pShell && pShell->GetViewOptions()->IsWhitespaceHidden())
         {
             // When whitespace is hidden, the page frame has two heights: the
             // nominal (defined by the frame format), and the actual (which is
