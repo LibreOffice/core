@@ -58,12 +58,13 @@ class CheckFlies(unittest.TestCase):
 
         print (xEmbeddedFrames)
         for sFrameName in xEmbeddedFrames.getElementNames():
-            self.assertTrue("Unexpected frame name", vExpectedEmbeddedFrames.remove(sFrameName))
+            vExpectedEmbeddedFrames.remove(sFrameName)
+                # raises ValueError if not found
             print (sFrameName)
             xEmbeddedFrames.getByName(sFrameName)
-            self.assertTrue("Could not find embedded frame by name.", xEmbeddedFrames.hasByName(sFrameName))
+            self.assertTrue(xEmbeddedFrames.hasByName(sFrameName), "Could not find embedded frame by name.")
 
-        self.assertTrue("Missing expected embedded frames.",  not(vExpectedEmbeddedFrames))
+        self.assertTrue(not(vExpectedEmbeddedFrames), "Missing expected embedded frames.")
 
         xEmbeddedFramesIdx = xEmbeddedFrames
 
@@ -78,16 +79,15 @@ class CheckFlies(unittest.TestCase):
         xGraphicFrames = xTGOS.getGraphicObjects()
         nCurrentFrameIdx = 0
         for sFrameName in xGraphicFrames.getElementNames():
-            self.assertTrue(
-                "Unexpected frame name",
-                vExpectedGraphicFrames.remove(sFrameName))
+            vExpectedGraphicFrames.remove(sFrameName)
+                # raises ValueError if not found
             xGraphicFrames.getByName(sFrameName)
             self.assertTrue(
-                "Could not find graphics frame by name.",
-                xGraphicFrames.hasByName(sFrameName))
+                xGraphicFrames.hasByName(sFrameName),
+                "Could not find graphics frame by name.")
         self.assertTrue(
-            "Missing expected graphics frames.",
-            not(vExpectedGraphicFrames))
+            not(vExpectedGraphicFrames),
+            "Missing expected graphics frames.")
 
         xGraphicFramesIdx = xGraphicFrames
         self.assertEqual(nGraphicFrames,xGraphicFramesIdx.getCount()) #Unexpected number of graphics frames reported
@@ -102,16 +102,15 @@ class CheckFlies(unittest.TestCase):
         nCurrentFrameIdx=0
 
         for sFrameName in xTextFrames.getElementNames():
-            self.assertTrue(
-                "Unexpected frame name",
-                vExpectedTextFrames.remove(sFrameName))
+            vExpectedTextFrames.remove(sFrameName)
+                # raises ValueError if not found
             xTextFrames.getByName(sFrameName)
             self.assertTrue(
-                "Could not find text frame by name.",
-                xTextFrames.hasByName(sFrameName))
+                xTextFrames.hasByName(sFrameName),
+                "Could not find text frame by name.")
 
         self.assertTrue(
-            "Missing expected text frames.", not(vExpectedTextFrames))
+            not(vExpectedTextFrames), "Missing expected text frames.")
 
         xTextFramesIdx = xTextFrames
 
