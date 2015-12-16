@@ -89,7 +89,7 @@ public:
                      SalFrameStyleFlags  nSalFrameStyle,
                      SystemParentData   *pSysParent )
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
-                       true, basebmp::Format::ThirtyTwoBitTcMaskRGBA,
+                       basebmp::Format::ThirtyTwoBitTcMaskRGBA,
                        pSysParent )
     {
         if (pParent == NULL && viewWidth > 1 && viewHeight > 1)
