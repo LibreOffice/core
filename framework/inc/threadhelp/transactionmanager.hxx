@@ -121,7 +121,7 @@ class FWI_DLLPUBLIC TransactionManager: private boost::noncopyable
         void               setWorkingMode               ( EWorkingMode eMode                           );
         EWorkingMode       getWorkingMode               (                                              ) const;
         bool               isCallRejected               ( ERejectReason& eReason                       ) const;
-        void               registerTransaction          ( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException );
+        void               registerTransaction          ( EExceptionMode eMode ) throw( css::uno::RuntimeException, css::lang::DisposedException );
         void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException );
 
     //  private methods

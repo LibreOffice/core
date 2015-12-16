@@ -152,13 +152,13 @@ EWorkingMode TransactionManager::getWorkingMode() const
     @seealso    method unregisterTransaction()
 
     @param      "eMode"     ,used to enable/disable throwing exceptions automatically for rejected calls
-    @param      "eReason"   ,reason for rejected calls
 *//*-*****************************************************************************************************/
-void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException )
+void  TransactionManager::registerTransaction( EExceptionMode eMode ) throw( css::uno::RuntimeException, css::lang::DisposedException )
 {
     // Look for rejected calls first.
     // If call was refused we throw some exceptions or do nothing!
     // It depends from given parameter eMode.
+    ERejectReason eReason;
     if( isCallRejected( eReason ) )
     {
         impl_throwExceptions( eMode, eReason );
