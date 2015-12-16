@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_934b6eb0",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-12-16T10:45:18Z",
+      "side": 1,
+      "message": "get the @since tags right (new stuff should be \"@since LibreOffice 5.2\")",
+      "revId": "a6578e1907a316af269880cc858b36d057b479f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
