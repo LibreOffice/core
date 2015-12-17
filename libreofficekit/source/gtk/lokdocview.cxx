@@ -342,6 +342,9 @@ doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highligh
     cairo_rectangle_int_t cairoVisRect;
     int x, y;
 
+    if (!priv->m_pDocument)
+        return;
+
     cairo_region_get_rectangle(cairoVisRegion, 0, &cairoVisRect);
     x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
     y = pixelToTwip (cairoVisRect.y, priv->m_fZoom);
@@ -1630,8 +1633,6 @@ setClientZoomInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    if (!priv->m_pDocument)
-        return;
     priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
                                              pLOEvent->m_nTilePixelWidth,
                                              pLOEvent->m_nTilePixelHeight,
@@ -2520,6 +2521,9 @@ SAL_DLLPUBLIC_EXPORT gint
 lok_doc_view_get_parts (LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_pDocument)
+        return -1;
+
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getParts( priv->m_pDocument );
 }
@@ -2528,6 +2532,9 @@ SAL_DLLPUBLIC_EXPORT gint
 lok_doc_view_get_part (LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_pDocument)
+        return -1;
+
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPart( priv->m_pDocument );
 }
@@ -2539,6 +2546,9 @@ lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PART);
     GError* error = nullptr;
+
+    if (!priv->m_pDocument)
+        return;
 
     pLOEvent->m_nPart = nPart;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -2556,6 +2566,10 @@ SAL_DLLPUBLIC_EXPORT gchar*
 lok_doc_view_get_part_name (LOKDocView* pDocView, int nPart)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+
+    if (!priv->m_pDocument)
+        return nullptr;
+
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPartName( priv->m_pDocument, nPart );
 }
@@ -2568,6 +2582,10 @@ lok_doc_view_set_partmode(LOKDocView* pDocView,
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PARTMODE);
     GError* error = nullptr;
+
+    if (!priv->m_pDocument)
+        return;
+
     pLOEvent->m_nPartMode = nPartMode;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
@@ -2634,6 +2652,10 @@ lok_doc_view_set_edit(LOKDocView* pDocView,
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_EDIT);
     GError* error = nullptr;
+
+    if (!priv->m_pDocument)
+        return;
+
     pLOEvent->m_bEdit = bEdit;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
@@ -2660,6 +2682,10 @@ lok_doc_view_post_command (LOKDocView* pDocView,
                            gboolean bNotifyWhenFinished)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+
+    if (!priv->m_pDocument)
+        return;
+
     if (priv->m_bEdit)
         LOKPostCommand(pDocView, pCommand, pArguments, bNotifyWhenFinished);
     else
@@ -2695,6 +2721,8 @@ lok_doc_view_copy_selection (LOKDocView* pDocView,
                              gchar** pUsedMimeType)
 {
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    if (!pDocument)
+        return nullptr;
     return pDocument->pClass->getTextSelection(pDocument, pMimeType, pUsedMimeType);
 }
 
@@ -2707,6 +2735,9 @@ lok_doc_view_paste (LOKDocView* pDocView,
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LibreOfficeKitDocument* pDocument = priv->m_pDocument;
     gboolean ret = 0;
+
+    if (!pDocument)
+        return false;
 
     if (!priv->m_bEdit)
     {

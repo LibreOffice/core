@@ -549,7 +549,10 @@ static void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     char* pUsedFormat = nullptr;
+    // TODO: Should check `text-selection` signal before trying to copy
     char* pSelection = lok_doc_view_copy_selection(pLOKDocView, "text/html", &pUsedFormat);
+    if (!pSelection)
+        return;
 
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(rWindow.m_pDocView), GDK_SELECTION_CLIPBOARD);
     std::string aUsedFormat(pUsedFormat);
