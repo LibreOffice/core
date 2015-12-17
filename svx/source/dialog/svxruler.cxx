@@ -135,6 +135,7 @@ struct SvxRuler_Impl {
     bool bIsTableRows : 1;  // mxColumnItem contains table rows instead of columns
     //#i24363# tab stops relative to indent
     bool bIsTabsRelativeToIndent : 1; // Tab stops relative to paragraph indent?
+                                      // false means relative to SvxRuler::GetLeftFrameMargin()
 
     SvxRuler_Impl() :
         pPercBuf(nullptr), pBlockBuf(nullptr), nPercSize(0), nTotalDist(0),
@@ -1077,13 +1078,14 @@ void SvxRuler::UpdateTabs()
         // Distance last Tab <-> Right paragraph margin / DefaultTabDist
         bool bRTL = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();
 
-        long nLeftFrameMargin = GetLeftFrameMargin();
-        long nRightFrameMargin = GetRightFrameMargin();
+        const long nLeftFrameMargin = GetLeftFrameMargin();
+        const long nRightFrameMargin = GetRightFrameMargin();
 
         //#i24363# tab stops relative to indent
         const long nParaItemTxtLeft = mxParaItem->GetTextLeft();
 
         const long lParaIndent = nLeftFrameMargin + nParaItemTxtLeft;
+        const long lRightMargin = nRightFrameMargin - nParaItemTxtLeft;
 
         const long lLastTab = mxTabStopItem->Count()
                                 ? ConvertHPosPixel(mxTabStopItem->At(mxTabStopItem->Count() - 1).GetTabPos())
@@ -1110,94 +1112,50 @@ void SvxRuler::UpdateTabs()
         nTabCount = 0;
         sal_uInt16 j;
 
-        //#i24363# tab stops relative to indent
-        const long lRightPixMargin = ConvertSizePixel(nRightFrameMargin - nParaItemTxtLeft );
         const long lParaIndentPix = ConvertSizePixel(lParaIndent);
 
+        long lTabStartLogic = (mxRulerImpl->bIsTabsRelativeToIndent ? lParaIndent : nLeftFrameMargin)
+            + lAppNullOffset;
+        if (bRTL)
+        {
+            lTabStartLogic = lParaIndent + lRightMargin - lTabStartLogic;
+        }
+        long lLastTabOffsetLogic = 0;
         for(j = 0; j < mxTabStopItem->Count(); ++j)
         {
             const SvxTabStop* pTab = &mxTabStopItem->At(j);
-            if (mxRulerImpl->bIsTabsRelativeToIndent)
-            {
-                long nTabPosition = ConvertHPosPixel(lParaIndent + pTab->GetTabPos() + lAppNullOffset);
-                mpTabs[nTabCount + TAB_GAP].nPos = nTabPosition;
-            }
-            else
-            {
-                long nTabPosition = ConvertHPosPixel(0 + pTab->GetTabPos() + lAppNullOffset);
-                mpTabs[nTabCount + TAB_GAP].nPos = nTabPosition;
-            }
-
-            if(bRTL)
-            {
-                mpTabs[nTabCount + TAB_GAP].nPos = lParaIndentPix + lRightPixMargin - mpTabs[nTabCount + TAB_GAP].nPos;
-            }
+            lLastTabOffsetLogic = pTab->GetTabPos();
+            long lPos = lTabStartLogic + (bRTL ? -lLastTabOffsetLogic : lLastTabOffsetLogic);
+            mpTabs[nTabCount + TAB_GAP].nPos = ConvertHPosPixel(lPos);
             mpTabs[nTabCount + TAB_GAP].nStyle = ToSvTab_Impl(pTab->GetAdjustment());
             ++nTabCount;
         }
 
-        if(!mxTabStopItem->Count())
-            mpTabs[0].nPos = bRTL ? lRightPixMargin : lParaIndentPix;
+        // Adjust to previous-to-first default tab stop
+        lLastTabOffsetLogic -= lLastTabOffsetLogic % lDefTabDist;
 
         // fill the rest with default Tabs
-        if(bRTL)
+        for (j = 0; j < nDefTabBuf; ++j)
         {
-            sal_Int32 aFirst = mpTabs[nTabCount].nPos;
-            for(j = 0; j < nDefTabBuf; ++j)
+            //simply add the default distance to the last position
+            lLastTabOffsetLogic += lDefTabDist;
+            if (bRTL)
             {
                 mpTabs[nTabCount + TAB_GAP].nPos =
-                    aFirst - ConvertHPosPixel(j * lDefTabDist);
-
-                if(j == 0 )
-                {
-                    mpTabs[nTabCount + TAB_GAP].nPos -=
-                        ((mpTabs[nTabCount + TAB_GAP].nPos - lRightPixMargin)
-                         % nDefTabDist );
-                }
-
-                if(mpTabs[nTabCount + TAB_GAP].nPos <= lParaIndentPix)
+                    ConvertHPosPixel(lTabStartLogic - lLastTabOffsetLogic);
+                if (mpTabs[nTabCount + TAB_GAP].nPos <= lParaIndentPix)
                     break;
-                mpTabs[nTabCount + TAB_GAP].nStyle = RULER_TAB_DEFAULT;
-                ++nTabCount;
             }
-        }
-        else
-        {
-            sal_Int32 aFirst = 0;
-            for(j = 0; j < nDefTabBuf; ++j)
+            else
             {
-                if( j == 0 )
-                {
-                    //set the first default tab stop
-                    if(mxRulerImpl->bIsTabsRelativeToIndent)
-                    {
-                        mpTabs[nTabCount + TAB_GAP].nPos = (mpTabs[nTabCount].nPos + nDefTabDist);
-
-                        mpTabs[nTabCount + TAB_GAP].nPos -=
-                            (mpTabs[nTabCount + TAB_GAP].nPos - lParaIndentPix) % nDefTabDist;
-                        aFirst = mpTabs[nTabCount + TAB_GAP].nPos;
-                    }
-                    else
-                    {
-                        if( mpTabs[nTabCount].nPos < 0 )
-                            aFirst = ( mpTabs[nTabCount].nPos / nDefTabDist ) * nDefTabDist;
-                        else
-                            aFirst = ( mpTabs[nTabCount].nPos / nDefTabDist + 1 ) * nDefTabDist;
-                        mpTabs[nTabCount + TAB_GAP].nPos = aFirst;
-                    }
-                }
-                else
-                {
-                    //simply add the default distance to the last position
-
-                    mpTabs[nTabCount + TAB_GAP].nPos = aFirst + ConvertHPosPixel(j * lDefTabDist);
-                }
-
-                if(mpTabs[nTabCount + TAB_GAP].nPos >= lRightIndent)
+                mpTabs[nTabCount + TAB_GAP].nPos =
+                    ConvertHPosPixel(lTabStartLogic + lLastTabOffsetLogic);
+                if (mpTabs[nTabCount + TAB_GAP].nPos >= lRightIndent)
                     break;
-                mpTabs[nTabCount + TAB_GAP].nStyle = RULER_TAB_DEFAULT;
-                ++nTabCount;
             }
+
+            mpTabs[nTabCount + TAB_GAP].nStyle = RULER_TAB_DEFAULT;
+            ++nTabCount;
         }
         SetTabs(nTabCount, &mpTabs[0] + TAB_GAP);
         DBG_ASSERT(nTabCount + TAB_GAP <= nTabBufSize, "BufferSize too small");
@@ -2268,7 +2226,8 @@ void SvxRuler::ApplyTabs()
             {
                 //#i24363# tab stops relative to indent
                 const long nTmpLeftIndent = mxRulerImpl->bIsTabsRelativeToIndent ?
-                                            GetLeftIndent() : 0;
+                                            GetLeftIndent() :
+                                            ConvertHPosPixel( GetLeftFrameMargin() + lAppNullOffset );
 
                 long nNewPosition = ConvertHPosLogic(mpTabs[nCoreIdx + TAB_GAP].nPos - nTmpLeftIndent);
                 aTabStop.GetTabPos() = PixelHAdjust(nNewPosition - lAppNullOffset, aTabStop.GetTabPos());
@@ -2601,7 +2560,7 @@ void SvxRuler::Click()
                 nTabPos = lPos -
                           ( mxRulerImpl->bIsTabsRelativeToIndent ?
                             GetLeftIndent() :
-                            0 );
+                            ConvertHPosPixel( GetLeftFrameMargin() + lAppNullOffset ));
 
             SvxTabStop aTabStop(ConvertHPosLogic(nTabPos),
                                 ToAttrTab_Impl(nDefTabType));
