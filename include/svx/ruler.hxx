@@ -275,9 +275,6 @@ public:
     {
         Update();
     }
-
-    //#i24363# tab stops relative to indent
-    void SetTabsRelativeToIndent( bool bRel = true );
 };
 
 #endif

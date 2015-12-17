@@ -1021,11 +1021,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     nRulerStyle = m_pVRuler->GetStyle() & ~WB_EXTRAFIELD;
     m_pVRuler->SetStyle(bVerticalWriting ? nRulerStyle|WB_EXTRAFIELD : nRulerStyle);
 
-    //#i24363# tab stops relative to indent
-    bool bRelative = rSh.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
-    m_pHRuler->SetTabsRelativeToIndent( bRelative );
-    m_pVRuler->SetTabsRelativeToIndent( bRelative );
-
     SvxLRSpaceItem aPageLRSpace( rDesc.GetMaster().GetLRSpace() );
     SwapPageMargin( rDesc, aPageLRSpace );
 
