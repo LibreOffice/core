@@ -27,7 +27,6 @@
 #include <unordered_map>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
-#include <boost/ptr_container/ptr_map.hpp>
 
 #include "rangelst.hxx"
 #include "eeparser.hxx"
@@ -50,11 +49,11 @@ class ScHTMLStyles
 {
     typedef std::unordered_map<OUString, OUString, OUStringHash> PropsType;
     typedef ::std::map<OUString, std::unique_ptr<PropsType>> NamePropsType;
-    typedef ::boost::ptr_map<OUString, NamePropsType> ElemsType;
+    typedef ::std::map<OUString, std::unique_ptr<NamePropsType>> ElemsType;
 
     NamePropsType m_GlobalProps;     /// global properties (for a given class for all elements)
     NamePropsType m_ElemGlobalProps; /// element global properties (no class specified)
-    ElemsType maElemProps;           /// element to class to properties (both element and class are given)
+    ElemsType m_ElemProps;           /// element to class to properties (both element and class are given)
     const OUString maEmpty;     /// just a persistent empty string.
 public:
     ScHTMLStyles();

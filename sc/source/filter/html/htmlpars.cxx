@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <comphelper/string.hxx>
-#include <o3tl/ptr_container.hxx>
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -83,19 +82,20 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
         if (pClassName)
         {
             // Both element and class names given.
-            ElemsType::iterator itrElem = maElemProps.find(aElem);
-            if (itrElem == maElemProps.end())
+            ElemsType::iterator itrElem = m_ElemProps.find(aElem);
+            if (itrElem == m_ElemProps.end())
             {
                 // new element
                 std::unique_ptr<NamePropsType> p(new NamePropsType);
-                std::pair<ElemsType::iterator, bool> r = o3tl::ptr_container::insert(maElemProps, aElem, std::move(p));
+                std::pair<ElemsType::iterator, bool> r =
+                    m_ElemProps.insert(std::make_pair(aElem, std::move(p)));
                 if (!r.second)
                     // insertion failed.
                     return;
                 itrElem = r.first;
             }
 
-            NamePropsType* pClsProps = itrElem->second;
+            NamePropsType *const pClsProps = itrElem->second.get();
             OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
             aClass = aClass.toAsciiLowerCase();
             insertProp(*pClsProps, aClass, aProp, aValue);
@@ -123,10 +123,10 @@ const OUString& ScHTMLStyles::getPropertyValue(
 {
     // First, look into the element-class storage.
     {
-        ElemsType::const_iterator itr = maElemProps.find(rElem);
-        if (itr != maElemProps.end())
+        auto const itr = m_ElemProps.find(rElem);
+        if (itr != m_ElemProps.end())
         {
-            const NamePropsType* pClasses = itr->second;
+            const NamePropsType *const pClasses = itr->second.get();
             NamePropsType::const_iterator itr2 = pClasses->find(rClass);
             if (itr2 != pClasses->end())
             {
