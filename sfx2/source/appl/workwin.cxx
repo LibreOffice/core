@@ -110,15 +110,15 @@ static const ResIdToResName pToolBarResToName[] =
     { 23017,    "outlinetoolbar"       },      //impress
     { 23012,    "slideviewtoolbar"     },
     { 23014,    "slideviewobjectbar"   },
-    { 23283,    "bezierobjectbar"      },      //writer
-    { 23269,    "drawingobjectbar"     },
-    { 23270,    "drawtextobjectbar"    },
-    { 23267,    "frameobjectbar"       },
-    { 23268,    "graphicobjectbar"     },
-    { 23271,    "numobjectbar"         },
-    { 23272,    "oleobjectbar"         },
-    { 23266,    "tableobjectbar"       },
-    { 23265,    "textobjectbar"        },
+    { 23283,    "bezierobjectbar"      },      // RID_BEZIER_TOOLBOX
+    { 23269,    "drawingobjectbar"     },      // RID_DRAW_TOOLBOX
+    { 23270,    "drawtextobjectbar"    },      // RID_DRAW_TEXT_TOOLBOX
+    { 23267,    "frameobjectbar"       },      // RID_FRAME_TOOLBOX
+    { 23268,    "graphicobjectbar"     },      // RID_GRAFIK_TOOLBOX
+    { 23271,    "numobjectbar"         },      // RID_NUM_TOOLBOX
+    { 23272,    "oleobjectbar"         },      // RID_OLE_TOOLBOX
+    { 23266,    "tableobjectbar"       },      // RID_TOOLS_TOOLBOX
+    { 23265,    "textobjectbar"        },      // RID_TEXT_TOOLBOX
     { 20631,    "previewobjectbar"     },      //writer
     { 20402,    "toolbar"              },      //web
     { 20403,    "textobjectbar"        },
