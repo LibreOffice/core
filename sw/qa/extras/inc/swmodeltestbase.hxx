@@ -11,6 +11,7 @@
 #define INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -27,6 +28,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/xml/AttributeData.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
@@ -429,6 +431,18 @@ protected:
     {
         uno::Reference<beans::XPropertySet> properties(obj, uno::UNO_QUERY_THROW);
         return properties->getPropertySetInfo()->hasPropertyByName(name);
+    }
+
+    xml::AttributeData getUserDefineAttribute(const uno::Any& obj, const OUString& name, const OUString& rValue = OUString()) const
+    {
+        uno::Reference<container::XNameContainer> attrsCnt(getProperty<uno::Any>(obj, "UserDefinedAttributes"), uno::UNO_QUERY_THROW);
+
+        xml::AttributeData aValue;
+        attrsCnt->getByName(name) >>= aValue;
+        if (!rValue.isEmpty())
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("attribtes of cell does not contain expected value", rValue, aValue.Value);
+
+        return aValue;
     }
 
     /// Get number of paragraphs of the document.
