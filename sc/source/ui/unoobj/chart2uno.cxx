@@ -1762,6 +1762,18 @@ bool RangeAnalyzer::inSameSingleColumn( RangeAnalyzer& rOther )
     return false;
 }
 
+OUString constructKey(const uno::Reference< chart2::data::XLabeledDataSequence>& xNew)
+{
+    OUString key;
+    if( xNew->getLabel().is() )
+        key += xNew->getLabel()->getSourceRangeRepresentation();
+    key += "####";
+    if( xNew->getValues().is() )
+        key += xNew->getValues()->getSourceRangeRepresentation();
+    return key;
+}
+
+
 } //end anonymous namespace
 
 uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArguments(
@@ -1983,48 +1995,33 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
         if( xDataSource.is() && xCompareDataSource.is() )
         {
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aOldSequences(
-                xCompareDataSource->getDataSequences() );
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aNewSequences(
-                xDataSource->getDataSequences());
+            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> >& aOldSequences =
+                xCompareDataSource->getDataSequences();
+            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> >& aNewSequences =
+                xDataSource->getDataSequences();
 
-            OUString aOldLabel;
-            OUString aNewLabel;
-            OUString aOldValues;
-            OUString aNewValues;
-
+            std::map<OUString,sal_Int32> aOldEntryToIndex;
+            for( sal_Int32 nIndex = 0; nIndex < aOldSequences.getLength(); nIndex++ )
+            {
+                const uno::Reference< chart2::data::XLabeledDataSequence>& xOld( aOldSequences[nIndex] );
+                if( xOld.is() )
+                {
+                    OUString key = constructKey(xOld);
+                    aOldEntryToIndex[key] = nIndex;
+                }
+            }
             for( sal_Int32 nNewIndex = 0; nNewIndex < aNewSequences.getLength(); nNewIndex++ )
             {
-                uno::Reference< chart2::data::XLabeledDataSequence> xNew( aNewSequences[nNewIndex] );
-                for( sal_Int32 nOldIndex = 0; nOldIndex < aOldSequences.getLength(); nOldIndex++ )
-                {
-                    uno::Reference< chart2::data::XLabeledDataSequence> xOld( aOldSequences[nOldIndex] );
-
-                    if( xOld.is() && xNew.is() )
-                    {
-                        aOldLabel.clear();
-                        aNewLabel.clear();
-                        aOldValues.clear();
-                        aNewValues.clear();
-                        if( xOld.is() && xOld->getLabel().is() )
-                            aOldLabel = xOld->getLabel()->getSourceRangeRepresentation();
-                        if( xNew.is() && xNew->getLabel().is() )
-                            aNewLabel = xNew->getLabel()->getSourceRangeRepresentation();
-                        if( xOld.is() && xOld->getValues().is() )
-                            aOldValues = xOld->getValues()->getSourceRangeRepresentation();
-                        if( xNew.is() && xNew->getValues().is() )
-                            aNewValues = xNew->getValues()->getSourceRangeRepresentation();
-
-                        if( aOldLabel.equals(aNewLabel)
-                            && ( aOldValues.equals(aNewValues) ) )
-                        {
-                            if( nOldIndex!=nNewIndex )
-                                bDifferentIndexes = true;
-                            aSequenceMappingVector.push_back(nOldIndex);
-                            break;
-                        }
-                    }
-                }
+                const uno::Reference< chart2::data::XLabeledDataSequence>& xNew( aNewSequences[nNewIndex] );
+                if( !xNew.is() )
+                    continue;
+                OUString key = constructKey(xNew);
+                if (aOldEntryToIndex.find(key) == aOldEntryToIndex.end())
+                    continue;
+                sal_Int32 nOldIndex = aOldEntryToIndex[key];
+                if( nOldIndex != nNewIndex )
+                    bDifferentIndexes = true;
+                aSequenceMappingVector.push_back(nOldIndex);
             }
         }
 
