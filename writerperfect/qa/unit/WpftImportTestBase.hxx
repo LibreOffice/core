@@ -10,6 +10,10 @@
 #ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTIMPORTTESTBASE_HXX
 #define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTIMPORTTESTBASE_HXX
 
+#include "config_writerperfect.h"
+
+#include <unordered_map>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -18,6 +22,12 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <unotest/filters-test.hxx>
+
+#define REQUIRE_VERSION(major, minor, micro, req_major, req_minor, req_micro) \
+    (major) > (req_major) || \
+    ((major) == (req_major) && \
+        ((minor) > (req_minor) \
+         || ((minor) == (req_minor) && ((micro) >= (req_micro)))))
 
 namespace com
 {
@@ -54,6 +64,8 @@ namespace writerperfect
 namespace test
 {
 
+typedef std::unordered_map<rtl::OUString, bool, rtl::OUStringHash> WpftOptionalMap_t;
+
 class WpftImportTestBase
     : public ::test::FiltersTest
     , public ::test::BootstrapFixture
@@ -66,6 +78,7 @@ public:
 
 protected:
     void doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath);
+    void doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath, const WpftOptionalMap_t &rOptionalMap);
 
 private:
     virtual bool load(const OUString &, const OUString &rURL, const OUString &,
@@ -79,6 +92,7 @@ private:
     css::uno::Reference<css::ucb::XSimpleFileAccess> m_xFileAccess;
     css::uno::Reference<css::document::XFilter> m_xFilter;
     css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
+    const WpftOptionalMap_t *m_pOptionalMap;
 };
 
 }

@@ -24,6 +24,8 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
+#include <tools/urlobj.hxx>
+
 #include <ucbhelper/content.hxx>
 
 #include "WpftImportTestBase.hxx"
@@ -50,6 +52,7 @@ WpftImportTestBase::WpftImportTestBase(const rtl::OUString &rFactoryURL)
     , m_xDesktop()
     , m_xFilter()
     , m_xTypeMap()
+    , m_pOptionalMap(nullptr)
 {
 }
 
@@ -75,6 +78,15 @@ void WpftImportTestBase::tearDown()
 bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUString &,
                               SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
+    if (m_pOptionalMap)
+    {
+        // first check if this test file is supported by the used version of the library
+        const INetURLObject aUrl(rURL);
+        const WpftOptionalMap_t::const_iterator it(m_pOptionalMap->find(aUrl.getName()));
+        if ((it != m_pOptionalMap->end()) && !it->second)
+            return true; // skip the file
+    }
+
     // create an empty frame
     const uno::Reference<lang::XComponent> xDoc(
         m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0, uno::Sequence<beans::PropertyValue>()),
@@ -161,6 +173,14 @@ void WpftImportTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUStrin
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
     testDir(OUString(), getURLFromSrc(rPath), OUString());
+}
+
+void WpftImportTestBase::doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath, const WpftOptionalMap_t &rOptionalMap)
+{
+    m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
+    m_pOptionalMap = &rOptionalMap;
+    testDir(OUString(), getURLFromSrc(rPath), OUString());
+    m_pOptionalMap = nullptr;
 }
 
 void WpftImportTestBase::impl_detectFilterName(uno::Sequence<beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName)

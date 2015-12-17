@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_draw,\
 	cppuhelper \
 	sal \
 	test \
+	tl \
 	ucbhelper \
 	unotest \
 	$(gb_UWINAPI) \
