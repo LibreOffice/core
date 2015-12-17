@@ -32,6 +32,9 @@
 #define REQUIRE_ETONYEK_VERSION(major, minor, micro) \
     REQUIRE_VERSION(ETONYEK_VERSION_MAJOR, ETONYEK_VERSION_MINOR, ETONYEK_VERSION_MICRO, major, minor, micro)
 
+#define REQUIRE_MWAW_VERSION(major, minor, micro) \
+    REQUIRE_VERSION(MWAW_VERSION_MAJOR, MWAW_VERSION_MINOR, MWAW_VERSION_MICRO, major, minor, micro)
+
 namespace com
 {
 namespace sun
