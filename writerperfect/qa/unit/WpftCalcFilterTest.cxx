@@ -31,9 +31,14 @@ WpftCalcFilterTest::WpftCalcFilterTest()
 
 void WpftCalcFilterTest::test()
 {
+    const writerperfect::test::WpftOptionalMap_t aEtonyekOptional
+    {
+        {"Numbers_2.numbers", REQUIRE_ETONYEK_VERSION(0, 1, 2)},
+    };
+
     doTest("com.sun.star.comp.Calc.MWAWCalcImportFilter", "/writerperfect/qa/unit/data/calc/libmwaw/");
     doTest("com.sun.star.comp.Calc.MSWorksCalcImportFilter", "/writerperfect/qa/unit/data/calc/libwps/");
-    doTest("org.libreoffice.comp.Calc.NumbersImportFilter", "/writerperfect/qa/unit/data/calc/libetonyek/");
+    doTest("org.libreoffice.comp.Calc.NumbersImportFilter", "/writerperfect/qa/unit/data/calc/libetonyek/", aEtonyekOptional);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftCalcFilterTest);

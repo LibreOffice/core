@@ -7688,7 +7688,8 @@ libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.1 >= 0.1.1])
 dnl ===================================================================
 dnl Check for system libetonyek
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.1 >= 0.1.4])
+libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.1])
+libo_PKG_VERSION([ETONYEK], [libetonyek-0.1], [0.1.5])
 
 dnl ===================================================================
 dnl Check for system libfreehand
