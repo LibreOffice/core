@@ -579,7 +579,7 @@ struct SmXMLContext_Helper
     OUString sFontFamily;
     OUString sColor;
 
-    SmXMLImportContext rContext;
+    SmXMLImportContext & rContext;
 
     explicit SmXMLContext_Helper(SmXMLImportContext &rImport)
         : nIsBold( -1 )
