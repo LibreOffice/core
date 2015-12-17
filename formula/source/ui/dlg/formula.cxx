@@ -1417,12 +1417,21 @@ void FormulaDlg_Impl::UpdateSelection()
     sal_Int32 nArgPos=m_aFormulaHelper.GetArgStart( aFormula,PrivStart,0);
 
     sal_uInt16 nPos=pParaWin->GetActiveLine();
+    if (nPos >= m_aArguments.size())
+    {
+        SAL_WARN("formula.ui","FormulaDlg_Impl::UpdateSelection - shot in foot: nPos " <<
+                nPos << " >= m_aArguments.size() " << m_aArguments.size() <<
+                " for aFormula '" << aFormula << "'");
+        nPos = m_aArguments.size();
+        if (nPos)
+            --nPos;
+    }
 
     for(sal_uInt16 i=0;i<nPos;i++)
     {
         nArgPos += (m_aArguments[i].getLength() + 1);
     }
-    sal_Int32 nLength= m_aArguments[nPos].getLength();
+    sal_Int32 nLength = (nPos < m_aArguments.size()) ? m_aArguments[nPos].getLength() : 0;
 
     Selection aSel(nArgPos,nArgPos+nLength);
     m_pHelper->setSelection((sal_uInt16)nArgPos,(sal_uInt16)(nArgPos+nLength));

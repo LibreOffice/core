@@ -642,9 +642,18 @@ IMPL_LINK_TYPED( ParaWin, ModifyHdl, ArgInput&, rPtr, void )
     }
     if(nEdFocus!=NOT_FOUND)
     {
-        aParaArray[nEdFocus+nOffset] = aArgInput[nEdFocus].GetArgVal();
+        size_t nPara = nEdFocus + nOffset;
+        if (nPara < aParaArray.size())
+            aParaArray[nPara] = aArgInput[nEdFocus].GetArgVal();
+        else
+        {
+            SAL_WARN("formula.ui","ParaWin::ModifyHdl - shot in foot: nPara " <<
+                    nPara << " >= aParaArray.size() " << aParaArray.size() <<
+                    " with nEdFocus " << nEdFocus <<
+                    " and aArgInput[nEdFocus].GetArgVal() '" << aArgInput[nEdFocus].GetArgVal() << "'");
+        }
         UpdateArgDesc( nEdFocus);
-        nActiveLine=nEdFocus+nOffset;
+        nActiveLine = static_cast<sal_uInt16>(nPara);
     }
 
     ArgumentModified();
