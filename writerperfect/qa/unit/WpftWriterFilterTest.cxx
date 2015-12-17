@@ -31,11 +31,16 @@ WpftWriterFilterTest::WpftWriterFilterTest()
 
 void WpftWriterFilterTest::test()
 {
+    const writerperfect::test::WpftOptionalMap_t aEtonyekOptional
+    {
+        {"Pages_4.pages", REQUIRE_ETONYEK_VERSION(0, 1, 2)},
+    };
+
     doTest("com.sun.star.comp.Writer.AbiWordImportFilter", "/writerperfect/qa/unit/data/writer/libabw/");
     doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/writer/libe-book/");
     doTest("com.sun.star.comp.Writer.MSWorksImportFilter", "/writerperfect/qa/unit/data/writer/libwps/");
     doTest("com.sun.star.comp.Writer.MWAWImportFilter", "/writerperfect/qa/unit/data/writer/libmwaw/");
-    doTest("org.libreoffice.comp.Writer.PagesImportFilter", "/writerperfect/qa/unit/data/writer/libetonyek/");
+    doTest("org.libreoffice.comp.Writer.PagesImportFilter", "/writerperfect/qa/unit/data/writer/libetonyek/", aEtonyekOptional);
     doTest("com.sun.star.comp.Writer.WordPerfectImportFilter", "/writerperfect/qa/unit/data/writer/libwpd/");
 }
 
