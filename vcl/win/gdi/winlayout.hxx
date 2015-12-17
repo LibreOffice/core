@@ -53,7 +53,7 @@ public:
     virtual void        DrawText(SalGraphics&) const override;
 
     /// Draw to the provided HDC.
-    virtual void        DrawTextImpl(HDC hDC) const = 0;
+    virtual void        DrawTextImpl(HDC hDC, const Rectangle* pRectToErase) const = 0;
 
     virtual bool        CacheGlyphs(SalGraphics& rGraphics) const = 0;
     virtual bool        DrawCachedGlyphs(SalGraphics& rGraphics) const = 0;
@@ -75,7 +75,7 @@ public:
 
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;
-    virtual void    DrawTextImpl(HDC hDC) const override;
+    virtual void    DrawTextImpl(HDC hDC, const Rectangle* pRectToErase) const override;
     virtual bool    CacheGlyphs(SalGraphics& rGraphics) const override;
     virtual bool    DrawCachedGlyphs(SalGraphics& rGraphics) const override;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
@@ -168,7 +168,7 @@ public:
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& ) override;    // first step of layout
     virtual void  AdjustLayout( ImplLayoutArgs& ) override;  // adjusting after fallback etc.
-    virtual void  DrawTextImpl(HDC hDC) const override;
+    virtual void  DrawTextImpl(HDC hDC, const Rectangle* pRectToErase) const override;
     virtual bool  CacheGlyphs(SalGraphics& rGraphics) const override;
     virtual bool  DrawCachedGlyphs(SalGraphics& rGraphics) const override;
 

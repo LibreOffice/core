@@ -566,7 +566,7 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
     if (!mbUseOpenGL)
     {
         // no OpenGL, just classic rendering
-        DrawTextImpl(hDC);
+        DrawTextImpl(hDC, NULL);
     }
     else if (CacheGlyphs(rGraphics) &&
              DrawCachedGlyphs(rGraphics))
@@ -623,7 +623,7 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
         SetTextAlign(aDC.getCompatibleHDC(), nTextAlign);
 
         // the actual drawing
-        DrawTextImpl(aDC.getCompatibleHDC());
+        DrawTextImpl(aDC.getCompatibleHDC(), &aRect);
 
         COLORREF color = GetTextColor(hDC);
         SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
@@ -1764,7 +1764,7 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
     }
 }
 
-void UniscribeLayout::DrawTextImpl(HDC hDC) const
+void UniscribeLayout::DrawTextImpl(HDC hDC, const Rectangle* /* pRectToErase */) const
 {
     HFONT hOrigFont = DisableFontScaling();
 
@@ -2801,8 +2801,14 @@ void  GraphiteWinLayout::AdjustLayout(ImplLayoutArgs& rArgs)
     maImpl.AdjustLayout(rArgs);
 }
 
-void GraphiteWinLayout::DrawTextImpl(HDC hDC) const
+void GraphiteWinLayout::DrawTextImpl(HDC hDC, const Rectangle* pRectToErase) const
 {
+    if (pRectToErase)
+    {
+        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left()+pRectToErase->GetWidth(), pRectToErase->Top()+pRectToErase->GetHeight() };
+        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
+    }
+
     HFONT hOrigFont = DisableFontScaling();
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;
