@@ -12,19 +12,20 @@
 
 #include "menuwindow.hxx"
 
-#include <vcl/builder.hxx>
-#include <vcl/ctrl.hxx>
+#include <vcl/tabctrl.hxx>
 
-/// This implements Widget Layout-based notebook-like menu bar.
-class NotebookBarWindow : public Control, public VclBuilderContainer
+/// This implements Widget Layout-based notebook-like toolbar.
+class NotebookBarWindow : public TabControl
 {
 public:
-    NotebookBarWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame);
+    NotebookBarWindow(Window* pParent);
     virtual ~NotebookBarWindow();
     virtual void dispose() SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
+
+    void insertTabs();
 };
 
 #endif // VCL_SOURCE_WINDOW_NOTEBOOKBARWINDOW_HXX
