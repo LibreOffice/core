@@ -122,7 +122,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
 
         if ( nArgs < VAR_ARGS )
         {
-            sal_uInt16 nRealArg = (aVisibleArgMapping.size() < nArg) ? aVisibleArgMapping[nArg] : nArg;
+            sal_uInt16 nRealArg = (nArg < aVisibleArgMapping.size()) ? aVisibleArgMapping[nArg] : nArg;
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg);
             aArgName += " ";
