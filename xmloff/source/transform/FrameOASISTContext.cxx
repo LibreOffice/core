@@ -105,20 +105,20 @@ void XMLFrameOASISTransformerContext::StartElement(
     }
 }
 
-XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
         const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
 
     if( m_bIgnoreElement )
     {
         // do not export the frame element and all of its children
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+        pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
-                                                                true, true );
+                                                                true, true ));
     }
     else
     {
@@ -136,9 +136,9 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
                 if( m_aElemQName.isEmpty() &&
                     !IsLinkedEmbeddedObject( rLocalName, rAttrList ) )
                 {
-                    pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+                    pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
-                                                                false, false );
+                                                                false, false ));
                     m_aElemQName = rQName;
                     static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                         ->AppendAttributeList( rAttrList );
@@ -150,9 +150,9 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
                 }
                 else
                 {
-                    pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+                    pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
-                                                                true, true );
+                                                                true, true ));
                 }
                 break;
             default:
@@ -163,7 +163,7 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
     }
 
     // default is copying
-    if( !pContext )
+    if( !pContext.is() )
         pContext = XMLTransformerContext::CreateChildContext( nPrefix,
                                                               rLocalName,
                                                               rQName,

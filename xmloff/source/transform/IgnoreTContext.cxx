@@ -53,20 +53,20 @@ XMLIgnoreTransformerContext::~XMLIgnoreTransformerContext()
 {
 }
 
-XMLTransformerContext *XMLIgnoreTransformerContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLIgnoreTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
         const Reference< XAttributeList >& xAttrList )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
     if( m_bIgnoreElements )
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+        pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName, true,
-                                                    true );
+                                                    true ));
     else if (m_bRecursiveUse)
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
-                                                    rQName, m_bAllowCharactersRecursive );
+        pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
+                                                    rQName, m_bAllowCharactersRecursive ));
     else
         pContext = XMLTransformerContext::CreateChildContext(
                         nPrefix, rLocalName, rQName, xAttrList );

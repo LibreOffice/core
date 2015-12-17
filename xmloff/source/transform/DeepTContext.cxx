@@ -29,12 +29,11 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-void XMLPersElemContentTContext::AddContent( XMLTransformerContext *pContext )
+void XMLPersElemContentTContext::AddContent( rtl::Reference<XMLTransformerContext> const & pContext )
 {
-    OSL_ENSURE( pContext && pContext->IsPersistent(),
+    OSL_ENSURE( pContext.is() && pContext->IsPersistent(),
                 "non-persistent context" );
-    XMLTransformerContextVector::value_type aVal( pContext );
-    m_aChildContexts.push_back( aVal );
+    m_aChildContexts.push_back(pContext);
 }
 
 XMLPersElemContentTContext::XMLPersElemContentTContext(
@@ -75,13 +74,13 @@ XMLPersElemContentTContext::~XMLPersElemContentTContext()
 {
 }
 
-XMLTransformerContext *XMLPersElemContentTContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLPersElemContentTContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
         const Reference< XAttributeList >& )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
 
     XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
     XMLTransformerActions::const_iterator aIter =
@@ -92,63 +91,61 @@ XMLTransformerContext *XMLPersElemContentTContext::CreateChildContext(
         switch( (*aIter).second.m_nActionType )
         {
         case XML_ETACTION_COPY:
-            pContext = new XMLPersMixedContentTContext( GetTransformer(),
-                                                       rQName );
+            pContext.set(new XMLPersMixedContentTContext( GetTransformer(),
+                                                       rQName ));
             break;
         case XML_ETACTION_COPY_TEXT:
-            pContext = new XMLPersMixedContentTContext( GetTransformer(),
-                                                       rQName );
+            pContext.set(new XMLPersMixedContentTContext( GetTransformer(),
+                                                       rQName ));
             break;
         case XML_ETACTION_RENAME_ELEM:
-            pContext = new XMLPersMixedContentTContext( GetTransformer(), rQName,
+            pContext.set(new XMLPersMixedContentTContext( GetTransformer(), rQName,
                     (*aIter).second.GetQNamePrefixFromParam1(),
-                    (*aIter).second.GetQNameTokenFromParam1() );
+                    (*aIter).second.GetQNameTokenFromParam1() ));
             break;
         case XML_ETACTION_RENAME_ELEM_PROC_ATTRS:
-            pContext = new XMLPersMixedContentTContext( GetTransformer(), rQName,
+            pContext.set(new XMLPersMixedContentTContext( GetTransformer(), rQName,
                     (*aIter).second.GetQNamePrefixFromParam1(),
                     (*aIter).second.GetQNameTokenFromParam1(),
-                       static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) );
+                       static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) ));
             break;
         case XML_ETACTION_RENAME_ELEM_ADD_PROC_ATTR:
             {
-                XMLPersMixedContentTContext *pMC =
+                rtl::Reference<XMLPersMixedContentTContext> pMC(
                     new XMLPersMixedContentTContext( GetTransformer(), rQName,
                         (*aIter).second.GetQNamePrefixFromParam1(),
                         (*aIter).second.GetQNameTokenFromParam1(),
                         static_cast< sal_uInt16 >(
-                            (*aIter).second.m_nParam3  >> 16 ) );
+                            (*aIter).second.m_nParam3  >> 16 ) ));
                 pMC->AddAttribute(
                     (*aIter).second.GetQNamePrefixFromParam2(),
                     (*aIter).second.GetQNameTokenFromParam2(),
                        static_cast< ::xmloff::token::XMLTokenEnum >(
                         (*aIter).second.m_nParam3 & 0xffff ) );
-                pContext = pMC;
+                pContext.set(pMC.get());
             }
             break;
         case XML_ETACTION_PROC_ATTRS:
-            pContext = new XMLPersMixedContentTContext( GetTransformer(), rQName,
-                       static_cast< sal_uInt16 >( (*aIter).second.m_nParam1 ) );
+            pContext.set(new XMLPersMixedContentTContext( GetTransformer(), rQName,
+                       static_cast< sal_uInt16 >( (*aIter).second.m_nParam1 ) ));
             break;
         default:
             pContext = GetTransformer().CreateUserDefinedContext(
                             (*aIter).second, rQName, true );
-            OSL_ENSURE( pContext && pContext->IsPersistent(),
+            OSL_ENSURE( pContext.is() && pContext->IsPersistent(),
                         "unknown or not persistent action" );
-            if( pContext && !pContext->IsPersistent() )
+            if( pContext.is() && !pContext->IsPersistent() )
             {
-                delete pContext;
-                pContext = nullptr;
+                pContext.clear();
             }
             break;
         }
     }
 
     // default is copying
-    if( !pContext )
-        pContext = new XMLPersMixedContentTContext( GetTransformer(), rQName );
-    XMLTransformerContextVector::value_type aVal( pContext );
-    m_aChildContexts.push_back( aVal );
+    if( !pContext.is() )
+        pContext.set(new XMLPersMixedContentTContext( GetTransformer(), rQName ));
+    m_aChildContexts.push_back(pContext);
 
     return pContext;
 }

@@ -36,7 +36,7 @@ public:
         XMLTransformerBase & rTransformer, const OUString & rQName );
     virtual ~XMLChartPlotAreaOOoTContext();
 
-    virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -44,7 +44,7 @@ public:
     virtual void ExportContent() override;
 
 protected:
-    void AddContent( XMLAxisOOoContext *pContent );
+    void AddContent( rtl::Reference<XMLAxisOOoContext> const & pContent );
 
 private:
     XMLAxisContextVector m_aChildContexts;

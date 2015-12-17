@@ -150,36 +150,36 @@ XMLFormPropOOoTransformerContext::~XMLFormPropOOoTransformerContext()
 {
 }
 
-XMLTransformerContext *XMLFormPropOOoTransformerContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLFormPropOOoTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
         const Reference< XAttributeList >& )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
 
     if( XML_NAMESPACE_FORM == nPrefix &&
         IsXMLToken( rLocalName, XML_PROPERTY_VALUE ) )
     {
         if( m_bIsList )
         {
-            pContext = new XMLFormPropValueTContext_Impl( GetTransformer(),
+            pContext.set(new XMLFormPropValueTContext_Impl( GetTransformer(),
                                                           rQName,
                                                           XML_NAMESPACE_OFFICE,
-                                                          m_eValueToken );
+                                                          m_eValueToken ));
         }
         else if( !m_xValueContext.is() )
         {
             m_xValueContext=
                 new XMLFormPropValueTContext_Impl( GetTransformer(), rQName );
-            pContext = m_xValueContext.get();
+            pContext.set(m_xValueContext.get());
         }
     }
 
     // default is ignore
-    if( !pContext )
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(), rQName,
-                                             true, true );
+    if( !pContext.is() )
+        pContext.set(new XMLIgnoreTransformerContext( GetTransformer(), rQName,
+                                             true, true ));
     return pContext;
 }
 

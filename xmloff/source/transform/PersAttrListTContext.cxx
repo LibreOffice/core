@@ -110,7 +110,7 @@ XMLPersAttrListTContext::~XMLPersAttrListTContext()
 {
 }
 
-XMLTransformerContext *XMLPersAttrListTContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLPersAttrListTContext::CreateChildContext(
         sal_uInt16 /*nPrefix*/,
         const OUString& /*rLocalName*/,
         const OUString& rQName,

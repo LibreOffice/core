@@ -153,13 +153,13 @@ void XMLNotesTransformerContext::EndElement()
     }
 }
 
-XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLNotesTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
         const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
     if( XML_NOTE == m_eTypeToken )
     {
         if( XML_NAMESPACE_TEXT == nPrefix )
@@ -180,25 +180,25 @@ XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
             {
                 if( m_bPersistent  )
                 {
-                    pContext = new XMLPersTextContentTContext(
+                    pContext.set(new XMLPersTextContentTContext(
                                     GetTransformer(), rQName,
                                     XML_NAMESPACE_TEXT,
-                                    eToken );
+                                    eToken ));
                     AddContent( pContext );
 
                 }
                 else
                 {
-                    pContext = new XMLRenameElemTransformerContext(
+                    pContext.set(new XMLRenameElemTransformerContext(
                                     GetTransformer(), rQName,
                                     XML_NAMESPACE_TEXT,
-                                    eToken );
+                                    eToken ));
                 }
             }
         }
     }
 
-    if( !pContext )
+    if( !pContext.is() )
     {
         pContext = m_bPersistent
                         ? XMLPersElemContentTContext::CreateChildContext(

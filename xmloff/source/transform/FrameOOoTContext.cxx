@@ -100,13 +100,13 @@ void XMLFrameOOoTransformerContext::StartElement(
     XMLTransformerContext::StartElement( xAttrList );
 }
 
-XMLTransformerContext *XMLFrameOOoTransformerContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLFrameOOoTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
         const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
 
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_FRAME_ELEM_ACTIONS );
@@ -133,7 +133,7 @@ XMLTransformerContext *XMLFrameOOoTransformerContext::CreateChildContext(
     }
 
     // default is copying
-    if( !pContext )
+    if( !pContext.is() )
         pContext = XMLTransformerContext::CreateChildContext(
                     nPrefix, rLocalName, rQName, rAttrList );
 

@@ -1252,7 +1252,7 @@ public:
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -1276,7 +1276,7 @@ void XMLBodyOASISTransformerContext_Impl::StartElement(
 {
 }
 
-XMLTransformerContext* XMLBodyOASISTransformerContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
+rtl::Reference<XMLTransformerContext> XMLBodyOASISTransformerContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )

@@ -226,7 +226,7 @@ void XMLEventOOoTransformerContext::EndElement()
         GetTransformer().GetDocHandler()->endElement( GetExportQName() );
 }
 
-XMLTransformerContext * XMLEventOOoTransformerContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLEventOOoTransformerContext::CreateChildContext(
                             sal_uInt16 nPrefix,
                             const OUString& rLocalName,
                             const OUString& rQName,

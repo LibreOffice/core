@@ -87,13 +87,11 @@ void XMLCreateElemTransformerContext::StartElement(
                                 (*aIter).second.GetQNamePrefixFromParam1(),
                                 ::xmloff::token::GetXMLToken(
                                 (*aIter).second.GetQNameTokenFromParam1()) ) );
-                        XMLTransformerContext *pContext =
+                        rtl::Reference<XMLTransformerContext> pContext(
                             new XMLPersTextContentTContext( GetTransformer(),
-                                                       aElemQName );
+                                                       aElemQName ));
                         pContext->Characters( rAttrValue );
-                        XMLTransformerContextVector::value_type aVal(
-                                pContext );
-                        aChildContexts.push_back( aVal );
+                        aChildContexts.push_back(pContext);
                         pMutableAttrList->RemoveAttributeByIndex( i );
                         --i;
                         --nAttrCount;

@@ -34,7 +34,7 @@ public:
                            const OUString& rChars );
     virtual ~XMLPersTextTContext_Impl();
 
-    virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -58,14 +58,14 @@ XMLPersTextTContext_Impl::~XMLPersTextTContext_Impl()
 {
 }
 
-XMLTransformerContext *XMLPersTextTContext_Impl::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLPersTextTContext_Impl::CreateChildContext(
         sal_uInt16,
         const OUString&,
         const OUString&,
         const Reference< XAttributeList >& )
 {
     OSL_ENSURE( false, "illegal call to CreateChildContext" );
-    return nullptr;
+    return {};
 }
 
 void XMLPersTextTContext_Impl::StartElement(

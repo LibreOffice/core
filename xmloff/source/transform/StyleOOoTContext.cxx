@@ -237,7 +237,7 @@ public:
 
     virtual ~XMLPropertiesOOoTContext_Impl();
 
-    XMLTransformerContext *CreateChildContext(
+    rtl::Reference<XMLTransformerContext> CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const OUString& rQName,
@@ -378,7 +378,7 @@ XMLPropertiesOOoTContext_Impl::~XMLPropertiesOOoTContext_Impl()
 {
 }
 
-XMLTransformerContext *XMLPropertiesOOoTContext_Impl::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLPropertiesOOoTContext_Impl::CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const OUString& rQName,
@@ -1067,13 +1067,13 @@ XMLStyleOOoTContext::~XMLStyleOOoTContext()
 {
 }
 
-XMLTransformerContext *XMLStyleOOoTContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLStyleOOoTContext::CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const OUString& rQName,
             const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_PROPERTIES ) )
@@ -1093,29 +1093,29 @@ XMLTransformerContext *XMLStyleOOoTContext::CreateChildContext(
                 aAttrActionMaps[aPropTypes[m_eFamily][0]];
             if( nActionMap < MAX_OOO_PROP_ACTIONS )
             {
-                pContext = new XMLPropertiesOOoTContext_Impl(
+                pContext.set(new XMLPropertiesOOoTContext_Impl(
                                     GetTransformer(), rQName,
-                                    aPropTypes[m_eFamily], m_bPersistent );
+                                    aPropTypes[m_eFamily], m_bPersistent ));
             }
             else
             {
                 if( m_bPersistent )
-                    pContext = new XMLPersElemContentTContext(
+                    pContext.set(new XMLPersElemContentTContext(
                                     GetTransformer(), rQName,
                                     XML_NAMESPACE_STYLE,
-                                    aPropTokens[aPropTypes[m_eFamily][0]] );
+                                    aPropTokens[aPropTypes[m_eFamily][0]] ));
                 else
-                    pContext = new XMLRenameElemTransformerContext(
+                    pContext.set(new XMLRenameElemTransformerContext(
                                     GetTransformer(), rQName,
                                     XML_NAMESPACE_STYLE,
-                                    aPropTokens[aPropTypes[m_eFamily][0]] );
+                                    aPropTokens[aPropTypes[m_eFamily][0]] ));
             }
         }
         else
         {
-            pContext = new XMLPropertiesOOoTContext_Impl(
+            pContext.set(new XMLPropertiesOOoTContext_Impl(
                                 GetTransformer(), rQName,
-                                aPropTypes[m_eFamily], m_bPersistent);
+                                aPropTypes[m_eFamily], m_bPersistent));
         }
 
         if( m_bPersistent )

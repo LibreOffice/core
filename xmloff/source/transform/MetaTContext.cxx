@@ -67,18 +67,18 @@ XMLMetaTransformerContext::~XMLMetaTransformerContext()
 {
 }
 
-XMLTransformerContext *XMLMetaTransformerContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLMetaTransformerContext::CreateChildContext(
             sal_uInt16 /*nPrefix*/,
             const OUString& rLocalName,
             const OUString& rQName,
             const Reference< XAttributeList >& )
 {
-    XMLPersTextContentTContext *pContext =
-        new XMLPersTextContentTContext( GetTransformer(), rQName );
+    rtl::Reference<XMLPersTextContentTContext> pContext(
+        new XMLPersTextContentTContext( GetTransformer(), rQName ));
     XMLMetaContexts_Impl::value_type aVal( rLocalName, pContext );
     m_aContexts.insert( aVal );
 
-    return pContext;
+    return pContext.get();
 }
 
 void XMLMetaTransformerContext::EndElement()

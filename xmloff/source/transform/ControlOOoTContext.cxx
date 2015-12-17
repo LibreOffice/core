@@ -48,19 +48,19 @@ void XMLControlOOoTransformerContext::StartElement(
     m_xAttrList = new XMLMutableAttributeList( rAttrList, true );
 }
 
-XMLTransformerContext *XMLControlOOoTransformerContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLControlOOoTransformerContext::CreateChildContext(
         sal_uInt16 /*nPrefix*/,
         const OUString& /*rLocalName*/,
         const OUString& rQName,
         const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
 
     if( m_aElemQName.isEmpty() )
     {
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+        pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName,
-                                                    false, false );
+                                                    false, false ));
         m_aElemQName = rQName;
         static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                 ->AppendAttributeList( rAttrList );
@@ -72,9 +72,9 @@ XMLTransformerContext *XMLControlOOoTransformerContext::CreateChildContext(
     }
     else
     {
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+        pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName,
-                                                    true, true );
+                                                    true, true ));
     }
     return pContext;
 }

@@ -58,7 +58,7 @@ XMLTransformerContext::~XMLTransformerContext()
 {
 }
 
-XMLTransformerContext *XMLTransformerContext::CreateChildContext( sal_uInt16 nPrefix,
+rtl::Reference<XMLTransformerContext> XMLTransformerContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLocalName,
                                             const OUString& rQName,
                                             const Reference< XAttributeList >& )

@@ -759,13 +759,13 @@ XMLStyleOASISTContext::~XMLStyleOASISTContext()
 {
 }
 
-XMLTransformerContext *XMLStyleOASISTContext::CreateChildContext(
+rtl::Reference<XMLTransformerContext> XMLStyleOASISTContext::CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const OUString& rQName,
             const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = nullptr;
+    rtl::Reference<XMLTransformerContext> pContext;
 
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
@@ -779,10 +779,10 @@ XMLTransformerContext *XMLStyleOASISTContext::CreateChildContext(
                     GetTransformer(), rQName, ePropType, m_aStyleFamily, m_bControlStyle );
             else
                 m_xPropContext->SetQNameAndPropType( rQName, ePropType );
-            pContext = m_xPropContext.get();
+            pContext.set(m_xPropContext.get());
         }
     }
-    if( !pContext )
+    if( !pContext.is() )
     {
         // if a properties context exist close it
         if( m_xPropContext.is() && !m_bPersistent )

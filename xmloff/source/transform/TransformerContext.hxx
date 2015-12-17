@@ -22,6 +22,7 @@
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <salhelper/simplereferenceobject.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltoken.hxx>
 
@@ -69,7 +70,7 @@ public:
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
-    virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
