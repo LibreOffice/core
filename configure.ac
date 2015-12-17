@@ -12961,6 +12961,7 @@ AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_CONFIG_HEADERS([config_host/config_poppler.h])
 AC_CONFIG_HEADERS([config_host/config_python.h])
+AC_CONFIG_HEADERS([config_host/config_writerperfect.h])
 AC_OUTPUT
 
 if test "$CROSS_COMPILING" = TRUE; then
