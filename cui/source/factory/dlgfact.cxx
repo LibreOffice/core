@@ -1553,8 +1553,6 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
     InsertObjectDialog_Impl* pDlg=nullptr;
     if ( rCommand == ".uno:InsertObject" )
         pDlg = VclPtr<SvInsertOleDlg>::Create( pParent, xStor, pList );
-    else if ( rCommand == ".uno:InsertPlugin" )
-        pDlg = VclPtr<SvInsertPlugInDialog>::Create( pParent, xStor );
     else if ( rCommand == ".uno:InsertObjectFloatingFrame" )
         pDlg = VclPtr<SfxInsertFloatingFrameDialog>::Create( pParent, xStor );
 

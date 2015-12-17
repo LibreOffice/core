@@ -236,46 +236,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_AVMEDIA:
         rReq.SetReturnValue(SfxBoolItem(nSlot, InsertMediaDlg( rReq )));
         break;
-
-    case  SID_INSERT_SOUND:
-    case  SID_INSERT_VIDEO:
-    {
-        SvxPluginFileDlg aDlg( &GetView().GetViewFrame()->GetWindow(), nSlot );
-        aDlg.SetContext( nSlot == SID_INSERT_SOUND? sfx2::FileDialogHelper::SW_INSERT_SOUND : sfx2::FileDialogHelper::SW_INSERT_VIDEO );
-
-        if ( ERRCODE_NONE == aDlg.Execute() )
-        {
-            // Determine URL
-            OUString aStrURL( aDlg.GetPath() );
-            aStrURL = URIHelper::SmartRel2Abs(
-                INetURLObject(), aStrURL, URIHelper::GetMaybeFileHdl() );
-
-            INetURLObject url;
-            url.SetSmartProtocol( INetProtocol::File );
-
-            if ( url.SetURL( aStrURL ) )
-            {
-                OUString aName;
-                comphelper::EmbeddedObjectContainer aCnt;
-                svt::EmbeddedObjectRef xObj( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ), embed::Aspects::MSOLE_CONTENT );
-                if ( xObj.is() )
-                {
-                    svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
-
-                    // set properties from dialog
-                    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-                    if ( xSet.is() )
-                    {
-                        xSet->setPropertyValue("PluginURL",
-                                uno::makeAny( OUString( url.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
-                    }
-                }
-
-                rSh.InsertObject( xObj, nullptr, true, nSlot);
-            }
-        }
-    }
-    break;
 #endif
 
     case SID_INSERT_OBJECT:

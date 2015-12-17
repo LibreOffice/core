@@ -226,7 +226,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/objxtor \
     sfx2/source/doc/oleprops \
     sfx2/source/doc/ownsubfilterservice \
-    sfx2/source/doc/plugin \
     sfx2/source/doc/printhelper \
     sfx2/source/doc/querytemplate \
     sfx2/source/doc/docundomanager \

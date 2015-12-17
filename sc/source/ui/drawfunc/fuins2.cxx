@@ -262,44 +262,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
 
                 break;
             }
-            case SID_INSERT_SOUND :
-            case SID_INSERT_VIDEO :
-            {
-                // create special filedialog for plugins
-                SvxPluginFileDlg aPluginFileDialog(pWin, nSlot);
-
-                // open filedlg
-                if ( ERRCODE_NONE == aPluginFileDialog.Execute() )
-                {
-                    // get URL
-                    INetURLObject aURL;
-                    aURL.SetSmartProtocol( INetProtocol::File );
-                    if ( aURL.SetURL( aPluginFileDialog.GetPath() ) )
-                    {
-                        // create a plugin object
-                        OUString aObjName;
-                        SvGlobalName aClassId( SO3_PLUGIN_CLASSID );
-                        comphelper::EmbeddedObjectContainer aCnt( xStorage );
-                        xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aObjName );
-                        if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
-                        {
-                            // set properties from dialog
-                            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-                            if ( xSet.is() )
-                            {
-                                xSet->setPropertyValue("PluginURL",
-                                        uno::makeAny( OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        OSL_FAIL("Invalid URL!");
-                        //! error message
-                        //! can this happen???
-                    }
-                }
-            }
         }
     }
 

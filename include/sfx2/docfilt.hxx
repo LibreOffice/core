@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_DOCFILT_HXX
 #define INCLUDED_SFX2_DOCFILT_HXX
 
-#include <com/sun/star/plugin/PluginDescription.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
