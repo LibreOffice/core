@@ -49,11 +49,11 @@ class ScHTMLTable;
 class ScHTMLStyles
 {
     typedef std::unordered_map<OUString, OUString, OUStringHash> PropsType;
-    typedef ::boost::ptr_map<OUString, PropsType> NamePropsType;
+    typedef ::std::map<OUString, std::unique_ptr<PropsType>> NamePropsType;
     typedef ::boost::ptr_map<OUString, NamePropsType> ElemsType;
 
-    NamePropsType maGlobalProps;     /// global properties (for a given class for all elements)
-    NamePropsType maElemGlobalProps; /// element global properties (no class specified)
+    NamePropsType m_GlobalProps;     /// global properties (for a given class for all elements)
+    NamePropsType m_ElemGlobalProps; /// element global properties (no class specified)
     ElemsType maElemProps;           /// element to class to properties (both element and class are given)
     const OUString maEmpty;     /// just a persistent empty string.
 public:

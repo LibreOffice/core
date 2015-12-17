@@ -103,7 +103,7 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
         else
         {
             // Element name only. Add it to the element global.
-            insertProp(maElemGlobalProps, aElem, aProp, aValue);
+            insertProp(m_ElemGlobalProps, aElem, aProp, aValue);
         }
     }
     else
@@ -113,7 +113,7 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
             // Class name only. Add it to the global.
             OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
             aClass = aClass.toAsciiLowerCase();
-            insertProp(maGlobalProps, aClass, aProp, aValue);
+            insertProp(m_GlobalProps, aClass, aProp, aValue);
         }
     }
 }
@@ -130,7 +130,7 @@ const OUString& ScHTMLStyles::getPropertyValue(
             NamePropsType::const_iterator itr2 = pClasses->find(rClass);
             if (itr2 != pClasses->end())
             {
-                const PropsType* pProps = itr2->second;
+                const PropsType *const pProps = itr2->second.get();
                 PropsType::const_iterator itr3 = pProps->find(rPropName);
                 if (itr3 != pProps->end())
                     return itr3->second;
@@ -139,10 +139,10 @@ const OUString& ScHTMLStyles::getPropertyValue(
     }
     // Next, look into the class global storage.
     {
-        NamePropsType::const_iterator itr = maGlobalProps.find(rClass);
-        if (itr != maGlobalProps.end())
+        auto const itr = m_GlobalProps.find(rClass);
+        if (itr != m_GlobalProps.end())
         {
-            const PropsType* pProps = itr->second;
+            const PropsType *const pProps = itr->second.get();
             PropsType::const_iterator itr2 = pProps->find(rPropName);
             if (itr2 != pProps->end())
                 return itr2->second;
@@ -150,10 +150,10 @@ const OUString& ScHTMLStyles::getPropertyValue(
     }
     // As the last resort, look into the element global storage.
     {
-        NamePropsType::const_iterator itr = maElemGlobalProps.find(rClass);
-        if (itr != maElemGlobalProps.end())
+        auto const itr = m_ElemGlobalProps.find(rClass);
+        if (itr != m_ElemGlobalProps.end())
         {
-            const PropsType* pProps = itr->second;
+            const PropsType *const pProps = itr->second.get();
             PropsType::const_iterator itr2 = pProps->find(rPropName);
             if (itr2 != pProps->end())
                 return itr2->second;
@@ -172,7 +172,8 @@ void ScHTMLStyles::insertProp(
     {
         // new element
         std::unique_ptr<PropsType> p(new PropsType);
-        std::pair<NamePropsType::iterator, bool> r = o3tl::ptr_container::insert(rStore, aName, std::move(p));
+        std::pair<NamePropsType::iterator, bool> r =
+            rStore.insert(std::make_pair(aName, std::move(p)));
         if (!r.second)
             // insertion failed.
             return;
@@ -180,7 +181,7 @@ void ScHTMLStyles::insertProp(
         itr = r.first;
     }
 
-    PropsType* pProps = itr->second;
+    PropsType *const pProps = itr->second.get();
     pProps->insert(PropsType::value_type(aProp, aValue));
 }
 
