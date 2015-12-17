@@ -7683,7 +7683,8 @@ libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0 >= 0.0.1],["-I${
 dnl ===================================================================
 dnl Check for system libe-book
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.1 >= 0.1.1])
+libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.1])
+libo_PKG_VERSION([EBOOK], [libe-book-0.1], [0.1.2])
 
 dnl ===================================================================
 dnl Check for system libetonyek
