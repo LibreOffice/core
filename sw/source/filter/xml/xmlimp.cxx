@@ -398,7 +398,6 @@ SwXMLImport::SwXMLImport(
     const uno::Reference< uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport( rContext, implementationName, nImportFlags ),
-    m_pSttNdIdx( nullptr ),
     m_pTableItemMapper( nullptr ),
     m_pDocElemTokenMap( nullptr ),
     m_pTableElemTokenMap( nullptr ),
@@ -653,7 +652,7 @@ void SwXMLImport::startDocument()
 
     if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
     {
-        m_pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
+        m_pSttNdIdx.reset(new SwNodeIndex( pDoc->GetNodes() ));
         if( IsInsertMode() )
         {
             SwPaM *pPaM = pTextCursor->GetPaM();
@@ -861,8 +860,7 @@ void SwXMLImport::endDocument()
 
     GetTextImport()->ResetCursor();
 
-    delete m_pSttNdIdx;
-    m_pSttNdIdx = nullptr;
+    m_pSttNdIdx.reset();;
 
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )

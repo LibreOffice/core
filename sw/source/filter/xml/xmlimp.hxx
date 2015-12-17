@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLIMP_HXX
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLIMP_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <sot/storage.hxx>
@@ -49,7 +53,7 @@ namespace SwImport {
 
 class SwXMLImport: public SvXMLImport
 {
-    SwNodeIndex             *m_pSttNdIdx;
+    std::unique_ptr<SwNodeIndex> m_pSttNdIdx;
 
     SvXMLUnitConverter      *m_pTwipUnitConv;
     SvXMLImportItemMapper   *m_pTableItemMapper;// paragraph item import
