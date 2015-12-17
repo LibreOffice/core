@@ -768,6 +768,17 @@ DECLARE_ODFEXPORT_TEST(testOdtBorderTypes, "border_types.odt")
     } while (xParaEnum->hasMoreElements());
 }
 
+DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> const xCellA1(xTable->getCellByName("A1"), uno::UNO_SET_THROW);
+    uno::Reference<table::XCell> const xCellB1(xTable->getCellByName("B1"), uno::UNO_SET_THROW);
+    uno::Reference<table::XCell> const xCellC1(xTable->getCellByName("C1"), uno::UNO_SET_THROW);
+    getUserDefineAttribute(uno::makeAny(xCellA1), "proName", "v1");
+    getUserDefineAttribute(uno::makeAny(xCellB1), "proName", "v2");
+    getUserDefineAttribute(uno::makeAny(xCellC1), "proName", "v3");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
