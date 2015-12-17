@@ -632,14 +632,14 @@ void Window::ImplCallOverlapPaint()
 
 void Window::ImplPostPaint()
 {
-    if ( !ImplDoTiledRendering() && !mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
+    if ( !mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
 }
 
 IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
 {
     // save paint events until layout is done
-    if (!ImplDoTiledRendering() && IsSystemWindow() && static_cast<const SystemWindow*>(this)->hasPendingLayout())
+    if (IsSystemWindow() && static_cast<const SystemWindow*>(this)->hasPendingLayout())
     {
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
         return;
@@ -648,7 +648,7 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
     OutputDevice::PaintScope aScope(this);
 
     // save paint events until resizing or initial sizing done
-    if (!ImplDoTiledRendering() && mpWindowImpl->mbFrame &&
+    if (mpWindowImpl->mbFrame &&
         (mpWindowImpl->mpFrameData->maResizeIdle.IsActive() ||
          mpWindowImpl->mpFrame->PaintsBlocked()))
     {
@@ -667,11 +667,7 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
         OutputDevice::PaintScope aScope(this);
 
         ImplCallResize();
-        if( ImplDoTiledRendering() )
-        {
-            ImplHandlePaintHdl(nullptr);
-        }
-        else if( mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
+        if( mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
         {
             mpWindowImpl->mpFrameData->maPaintIdle.Stop();
             mpWindowImpl->mpFrameData->maPaintIdle.GetIdleHdl().Call( nullptr );

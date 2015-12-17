@@ -1064,12 +1064,9 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->mbInSysObjFocusHdl = false;
         mpWindowImpl->mpFrameData->mbInSysObjToTopHdl = false;
         mpWindowImpl->mpFrameData->mbSysObjFocus      = false;
-        if (!ImplDoTiledRendering())
-        {
-            mpWindowImpl->mpFrameData->maPaintIdle.SetPriority( SchedulerPriority::REPAINT );
-            mpWindowImpl->mpFrameData->maPaintIdle.SetIdleHdl( LINK( this, Window, ImplHandlePaintHdl ) );
-            mpWindowImpl->mpFrameData->maPaintIdle.SetDebugName( "vcl::Window maPaintIdle" );
-        }
+        mpWindowImpl->mpFrameData->maPaintIdle.SetPriority( SchedulerPriority::REPAINT );
+        mpWindowImpl->mpFrameData->maPaintIdle.SetIdleHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+        mpWindowImpl->mpFrameData->maPaintIdle.SetDebugName( "vcl::Window maPaintIdle" );
         mpWindowImpl->mpFrameData->maResizeIdle.SetPriority( SchedulerPriority::RESIZE );
         mpWindowImpl->mpFrameData->maResizeIdle.SetIdleHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpWindowImpl->mpFrameData->maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );

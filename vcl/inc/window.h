@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <config_features.h>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <list>
@@ -412,21 +410,6 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                            long nX, long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode );
 void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
-
-inline bool ImplDoTiledRendering()
-{
-#if !HAVE_FEATURE_DESKTOP && !defined(ANDROID)
-    // We do tiled rendering only for iOS at the moment, actually, but
-    // let's see what happens if we assume it for Android, too.
-    // (That comment doesn't match what the code does, does it?)
-    return true;
-#else
-    // We need some way to know globally if this process will use
-    // tiled rendering or not. Or should this be a per-window setting?
-    // Or what?
-    return false;
-#endif
-}
 
 #endif // INCLUDED_VCL_INC_WINDOW_H
 
