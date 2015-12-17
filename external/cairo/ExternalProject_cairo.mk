@@ -11,6 +11,11 @@ $(eval $(call gb_ExternalProject_ExternalProject,cairo))
 
 $(eval $(call gb_ExternalProject_use_external_project,cairo,pixman))
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_ExternalProject_use_unpacked,cairo,fontconfig))
+$(eval $(call gb_ExternalProject_use_unpacked,cairo,png))
+endif
+
 $(eval $(call gb_ExternalProject_register_targets,cairo,\
 	build \
 ))
