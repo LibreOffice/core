@@ -115,8 +115,10 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSe
     : SfxTabPage(pParent, "OptMemoryPage", "cui/ui/optmemorypage.ui", &rSet)
 {
     get(m_pNfGraphicCache, "graphiccache");
-    m_pNfGraphicCache->SetMax(std::numeric_limits< long >::max() >> 20);
+    sal_Int32 maxValue = std::numeric_limits< sal_Int32 >::max() >> 20;
+    m_pNfGraphicCache->SetMax(maxValue);
     get(m_pNfGraphicObjectCache, "objectcache");
+    m_pNfGraphicObjectCache->SetMax(10 * maxValue);
     get(m_pTfGraphicObjectTime,"objecttime");
     get(m_pNfOLECache, "olecache");
     get(m_pQuickStarterFrame, "quickstarter");
@@ -137,7 +139,9 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSe
 
     SetExchangeSupport();
 
-    m_pNfGraphicCache->SetModifyHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
+    m_pNfGraphicCache->SetUpHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
+    m_pNfGraphicCache->SetDownHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
+    m_pNfGraphicCache->SetLoseFocusHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheLoseFocusHdl ) );
 }
 
 OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
@@ -174,7 +178,7 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
         totalCacheSize, batch);
     sal_Int32 objectCacheSize = GetNfGraphicObjectCacheVal();
     officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::set(
-        objectCacheSize, batch);
+        std::min(objectCacheSize, totalCacheSize), batch);
 
     const tools::Time aTime( m_pTfGraphicObjectTime->GetTime() );
     sal_Int32 objectReleaseTime =
@@ -187,7 +191,7 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
     GraphicManager&     rGrfMgr = aDummyObject.GetGraphicManager();
 
     rGrfMgr.SetMaxCacheSize(totalCacheSize);
-    rGrfMgr.SetMaxObjCacheSize(objectCacheSize, true);
+    rGrfMgr.SetMaxObjCacheSize(std::min(totalCacheSize, objectCacheSize), true);
     rGrfMgr.SetCacheTimeout(objectReleaseTime);
 
     // OLECache
@@ -250,9 +254,12 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )
     m_pQuickLaunchCB->SaveValue();
 }
 
+IMPL_LINK_NOARG_TYPED(OfaMemoryOptionsPage, GraphicCacheLoseFocusHdl, Control&, void)
+{
+    GraphicCacheConfigHdl(*m_pNfGraphicCache);
+}
 
-
-IMPL_LINK_NOARG_TYPED(OfaMemoryOptionsPage, GraphicCacheConfigHdl, Edit&, void)
+IMPL_LINK_NOARG_TYPED(OfaMemoryOptionsPage, GraphicCacheConfigHdl, SpinField&, void)
 {
     sal_Int32 n = GetNfGraphicCacheVal();
     SetNfGraphicObjectCacheMax( n );
