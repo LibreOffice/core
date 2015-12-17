@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_0e175152",
+        "filename": "reportdesign/source/filter/xml/xmlExport.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-12-17T15:12:33Z",
+      "side": 1,
+      "message": "the \":\" at the end of this line is at least one reason why it does not compile",
+      "range": {
+        "startLine": 201,
+        "startChar": 118,
+        "endLine": 201,
+        "endChar": 121
+      },
+      "revId": "f67893b33e6f1679957416b79bc1cc78bd9dbd6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
