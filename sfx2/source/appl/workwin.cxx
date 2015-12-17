@@ -1385,6 +1385,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 if ( ( !bIsFullScreen || pChildWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT ) && bAllChildrenVisible )
                 {
                     // Update Mode is compatible; definitely enable it
+                    bCreate = true;
                     if ( pCW->pCli )
                     {
                         // The window is a direct Child
