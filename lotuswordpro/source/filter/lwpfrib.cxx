@@ -250,14 +250,14 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     m_StyleName = "";
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     XFTextStyle* pNamedStyle = nullptr;
-    if (m_pModifiers->HasCharStyle)
+    if (m_pModifiers->HasCharStyle && pFoundry)
     {
         pNamedStyle = static_cast<XFTextStyle*>
                                 (pFoundry->GetStyleManager()->GetStyle(m_pModifiers->CharStyleID));
     }
     if (pNamedStyle)
     {
-        if (m_pModifiers->FontID)
+        if (m_pModifiers->FontID && pFoundry)
         {
             pStyle = new XFTextStyle();
             *pStyle = *pNamedStyle;
@@ -277,7 +277,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     }
     else
     {
-        if (m_pModifiers->FontID)
+        if (m_pModifiers->FontID && pFoundry)
         {
             pStyle = new XFTextStyle();
             pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
