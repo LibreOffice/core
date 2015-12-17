@@ -2509,14 +2509,14 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     g_object_unref(task);
 }
 
-SAL_DLLPUBLIC_EXPORT float
+SAL_DLLPUBLIC_EXPORT gfloat
 lok_doc_view_get_zoom (LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     return priv->m_fZoom;
 }
 
-SAL_DLLPUBLIC_EXPORT int
+SAL_DLLPUBLIC_EXPORT gint
 lok_doc_view_get_parts (LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
@@ -2524,7 +2524,7 @@ lok_doc_view_get_parts (LOKDocView* pDocView)
     return priv->m_pDocument->pClass->getParts( priv->m_pDocument );
 }
 
-SAL_DLLPUBLIC_EXPORT int
+SAL_DLLPUBLIC_EXPORT gint
 lok_doc_view_get_part (LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
@@ -2552,7 +2552,7 @@ lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
     g_object_unref(task);
 }
 
-SAL_DLLPUBLIC_EXPORT char*
+SAL_DLLPUBLIC_EXPORT gchar*
 lok_doc_view_get_part_name (LOKDocView* pDocView, int nPart)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
@@ -2720,14 +2720,14 @@ lok_doc_view_paste (LOKDocView* pDocView,
     return ret;
 }
 
-SAL_DLLPUBLIC_EXPORT float
+SAL_DLLPUBLIC_EXPORT gfloat
 lok_doc_view_pixel_to_twip (LOKDocView* pDocView, float fInput)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     return pixelToTwip(fInput, priv->m_fZoom);
 }
 
-SAL_DLLPUBLIC_EXPORT float
+SAL_DLLPUBLIC_EXPORT gfloat
 lok_doc_view_twip_to_pixel (LOKDocView* pDocView, float fInput)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
