@@ -7526,7 +7526,7 @@ if test "$with_system_zlib" = "yes"; then
         # Emscripten provides its own zlib, don't check for that
         AC_CHECK_HEADER(zlib.h, [],
             [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
-        AC_CHECK_LIB(z, deflate, [ ZLIB=-lz ],
+        AC_CHECK_LIB(z, deflate, [ ZLIB_LIBS=-lz ],
             [AC_MSG_ERROR(zlib not found or functional)], [])
     fi
 else
