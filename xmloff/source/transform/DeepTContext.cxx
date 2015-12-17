@@ -152,11 +152,9 @@ rtl::Reference<XMLTransformerContext> XMLPersElemContentTContext::CreateChildCon
 
 void XMLPersElemContentTContext::ExportContent()
 {
-    XMLTransformerContextVector::iterator aIter = m_aChildContexts.begin();
-
-    for( ; aIter != m_aChildContexts.end(); ++aIter )
+    for (auto const & i: m_aChildContexts)
     {
-        (*aIter)->Export();
+        i->Export();
     }
 }
 

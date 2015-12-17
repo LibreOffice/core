@@ -20,12 +20,17 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERBASE_HXX
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERBASE_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <rtl/ref.hxx>
 #include <xmloff/xmltoken.hxx>
 
 #include "Transformer.hxx"
@@ -36,7 +41,6 @@ namespace com { namespace sun { namespace star {
 
 class SvXMLNamespaceMap;
 class XMLTransformerContext;
-class XMLTransformerContextVector;
 class XMLTransformerActions;
 struct XMLTransformerActionInit;
 struct TransformerAction_Impl;
@@ -60,7 +64,7 @@ class XMLTransformerBase : public XMLTransformer
 
     SvXMLNamespaceMap           *m_pNamespaceMap;
     SvXMLNamespaceMap           *m_pReplaceNamespaceMap;
-    XMLTransformerContextVector *m_pContexts;
+    std::vector<rtl::Reference<XMLTransformerContext>> m_pContexts;
     XMLTransformerActions       *m_pElemActions;
     XMLTransformerTokenMap      *m_pTokenMap;
 

@@ -24,11 +24,10 @@
 
 #include <vector>
 #include "PersAttrListTContext.hxx"
-#include "TContextVector.hxx"
 
 class XMLPersElemContentTContext : public XMLPersAttrListTContext
 {
-    XMLTransformerContextVector m_aChildContexts;
+    std::vector<rtl::Reference<XMLTransformerContext>> m_aChildContexts;
 
 public:
     // element content persistence only

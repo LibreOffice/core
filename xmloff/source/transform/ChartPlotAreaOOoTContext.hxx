@@ -19,8 +19,11 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOOOTCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOOOTCONTEXT_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include "ProcAttrTContext.hxx"
-#include "TContextVector.hxx"
 
 class XMLAxisOOoContext;
 

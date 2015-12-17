@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include "CreateElemTContext.hxx"
 #include "MutableAttrList.hxx"
 #include "TransformerBase.hxx"
 #include "TransformerActions.hxx"
-#include "TContextVector.hxx"
 #include "FlatTContext.hxx"
 #include "AttrTransformerAction.hxx"
 #include <xmloff/nmspmap.hxx>
@@ -49,7 +52,7 @@ void XMLCreateElemTransformerContext::StartElement(
 {
     Reference< XAttributeList > xAttrList( rAttrList );
 
-    XMLTransformerContextVector aChildContexts;
+    std::vector<rtl::Reference<XMLTransformerContext>> aChildContexts;
 
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     XMLTransformerActions *pActions =
@@ -106,11 +109,9 @@ void XMLCreateElemTransformerContext::StartElement(
     }
     XMLTransformerContext::StartElement( xAttrList );
 
-    XMLTransformerContextVector::iterator aIter = aChildContexts.begin();
-
-    for( ; aIter != aChildContexts.end(); ++aIter )
+    for (auto const & i: aChildContexts)
     {
-        (*aIter)->Export();
+        i->Export();
     }
 }
 
