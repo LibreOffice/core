@@ -1346,10 +1346,4 @@ void SwDocShell::libreOfficeKitCallback(int nType, const char* pPayload) const
     pDrawModel->libreOfficeKitCallback(nType, pPayload);
 }
 
-bool SwDocShell::isTiledRendering() const
-{
-    SwDrawModel* pDrawModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
-    return pDrawModel->isTiledRendering();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
