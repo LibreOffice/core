@@ -75,6 +75,8 @@
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
@@ -228,11 +230,13 @@
                       <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <object class="svxlo-SvxTextEncodingBox" id="charsetdropdown">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                          </object>
+                            <property name="hexpand">True</property>
+                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
@@ -243,6 +247,8 @@
                             <property name="dropdown">False</property>
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

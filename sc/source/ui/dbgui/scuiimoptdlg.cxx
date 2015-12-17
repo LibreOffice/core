@@ -117,6 +117,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     {
         get(m_pLbCharset, "charsetlist");
         m_pLbCharset->set_height_request(6 * m_pLbCharset->GetTextHeight());
+        get(m_pEncGrid, "grid2");
+        m_pEncGrid->set_vexpand(true);
     }
     m_pLbCharset->SetStyle(m_pLbCharset->GetStyle() | WB_SORT);
     m_pLbCharset->Show();
