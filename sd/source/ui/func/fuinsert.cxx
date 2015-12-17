@@ -501,45 +501,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     break;
                 }
-                case SID_INSERT_SOUND :
-                case SID_INSERT_VIDEO :
-                {
-                    // create special filedialog for plugins
-                    SvxPluginFileDlg aPluginFileDialog (mpWindow, nSlotId);
-                    if( ERRCODE_NONE == aPluginFileDialog.Execute () )
-                    {
-                        // get URL
-                        OUString aStrURL(aPluginFileDialog.GetPath());
-                        INetURLObject aURL( aStrURL, INetProtocol::File );
-                        if( aURL.GetProtocol() != INetProtocol::NotValid )
-                        {
-                            // create a plugin object
-                            xObj = mpViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName );
-                        }
-
-                        if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
-                        {
-                            // set properties from dialog
-                            uno::Reference < embed::XComponentSupplier > xSup( xObj, uno::UNO_QUERY );
-                            if ( xSup.is() )
-                            {
-                                uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
-                                if ( xSet.is() )
-                                {
-                                    xSet->setPropertyValue("PluginURL",
-                                            uno::makeAny( OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // unable to create PlugIn
-                            OUString aStrErr( SdResId( STR_ERROR_OBJNOCREATE_PLUGIN ) );
-                            aStrErr = aStrErr.replaceFirst( "%", aStrURL );
-                            ScopedVclPtrInstance<MessageDialog>::Create(mpWindow, aStrErr)->Execute();
-                        }
-                    }
-                }
             }
         }
 
