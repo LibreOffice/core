@@ -994,6 +994,97 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             }
         }
     }
+    //set height
+    ::std::vector<sal_Int32>::iterator aIter = m_aHeight.begin();
+    ::std::vector<sal_Int32>::iterator aEnd = m_aHeight.end();
+    sal_Int32 nHeight = 0;
+    for (; aIter != aEnd; ++aIter)
+        nHeight += *aIter;
+    m_xSection->setHeight( nHeight );
+    //set position, widths, and heights
+    sal_Int32 nLeftMargin = rptui::getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
+    sal_Int32 nPosY = 0;
+    ::std::vector< ::std::vector<TCell> >::iterator aRowIter = m_aGrid.begin();
+    ::std::vector< ::std::vector<TCell> >::iterator aRowEnd = m_aGrid.end();
+    for (sal_Int32 i = 0; aRowIter != aRowEnd; ++aRowIter,++i)
+    {
+         sal_Int32 nPosX = nLeftMargin;
+         ::std::vector<TCell>::iterator aColIter = (*aRowIter).begin();
+         ::std::vector<TCell>::iterator aColEnd = (*aRowIter).end();
+         for (sal_Int32 j = 0; aColIter != aColEnd; ++aColIter,++j)
+         {
+             TCell& rCell = *aColIter;
+             if ( !rCell.xElements.empty())
+             {
+                 ::std::vector< uno::Reference< report::XReportComponent> >::iterator aCellIter = rCell.xElements.begin();
+                 const ::std::vector< uno::Reference< report::XReportComponent> >::iterator aCellEnd = rCell.xElements.end();
+                 for (;aCellIter != aCellEnd ; ++aCellIter)
+                 {
+                      uno::Reference<report::XShape> xShape(*aCellIter,uno::UNO_QUERY);
+                      if ( xShape.is() )
+                      {
+                          xShape->setPositionX(xShape->getPositionX() + nLeftMargin);
+                      }
+                      else
+                      {
+                          sal_Int32 nWidth = rCell.nWidth;
+                          sal_Int32 nColSpan = rCell.nColSpan;
+                          if ( nColSpan > 1 )
+                          {
+                              ::std::vector<TCell>::iterator aWidthIter = aColIter + 1;
+                              while ( nColSpan > 1 )
+                              {
+                                   nWidth += (aWidthIter++)->nWidth;
+                                   --nColSpan;
+                              }
+                          }
+                          nHeight = rCell.nHeight;
+                          sal_Int32 nRowSpan = rCell.nRowSpan;
+                          if ( nRowSpan > 1 )
+                          {
+                              ::std::vector< ::std::vector<TCell> >::iterator aHeightIter = aRowIter + 1;
+                              while( nRowSpan > 1)
+                              {
+                                   nHeight += (*aHeightIter)[j].nHeight;
+                                   ++aHeightIter;
+                                   --nRowSpan;
+                              }
+                          }
+                          Reference<XFixedLine> xFixedLine(*aCellIter,uno::UNO_QUERY);
+                          if ( xFixedLine.is() )
+                          {
+                              if ( xFixedLine->getOrientation() == 1 ) // vertical
+                              {
+                                  OSL_ENSURE(static_cast<sal_uInt32>(j+1) < m_aWidth.size(),"Illegal pos of col iter. There should be an empty cell for the next line part.");
+                                  nWidth += m_aWidth[j+1];
+                                  if ( nWidth < MIN_WIDTH )
+                                      nWidth = MIN_WIDTH;
+                              }
+                              else if ( nHeight < MIN_HEIGHT )
+                                      nHeight = MIN_HEIGHT;
+                          }
+                          try
+                          {
+                              (*aCellIter)->setSize(awt::Size(nWidth,nHeight));
+                              (*aCellIter)->setPosition(awt::Point(nPosX,nPosY));
+                          }
+                          catch(beans::PropertyVetoException)
+                          {
+                               OSL_FAIL("Could not set the correct position or size!");
+                          }
+                      }
+                  }
+              }
+              nPosX += m_aWidth[j];
+          }
+          nPosY += m_aHeight[i];
+            }
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_FAIL("OXMLTable::EndElement -> exception catched");
+    }
 }
 
 OUString ORptExport::convertFormula(const OUString& _sFormula)

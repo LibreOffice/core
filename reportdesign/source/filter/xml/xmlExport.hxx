@@ -69,6 +69,7 @@ public:
         sal_Int32 nHeight;
         sal_Int32 nColSpan;
         sal_Int32 nRowSpan;
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> > xElements;
         Reference<XReportComponent> xElement;
         bool      bSet;
         TCell(  sal_Int32 _nWidth,
@@ -108,9 +109,12 @@ public:
     typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
     typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >    m_xSection;
+    ::std::vector<sal_Int32>                        m_aHeight;
     ::std::unique_ptr< TStringPair >                m_aAutoIncrement;
     ::std::unique_ptr< TDelimiter >                 m_aDelimiter;
     ::std::vector< Any >                            m_aDataSourceSettings;
+    ::std::vector< ::std::vector<TCell> >           m_aGrid;
     TSectionsGrid                                   m_aSectionsGrid;
 
     TPropertyStyleMap                               m_aAutoStyleNames;
@@ -194,7 +198,8 @@ public:
 
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 
-    rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
+    rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}:
+    sal_Int32 m_aWidth;
 };
 
 /** Exports only settings
