@@ -105,9 +105,16 @@ public:
     /**
       Returns number of arguments
 
-      @return   help id of the function
+      @return   number of arguments
     */
     virtual sal_uInt32 getParameterCount() const override ;
+
+    /**
+      Returns start of variable arguments
+
+      @return   start of variable arguments
+    */
+    virtual sal_uInt32 getVarArgsStart() const override ;
 
     /**
       Returns description of parameter at given position
@@ -205,6 +212,7 @@ public:
     sal_uInt16            nFIndex;                /**< Unique function index */
     sal_uInt16            nCategory;              /**< Function category */
     sal_uInt16            nArgCount;              /**< All parameter count, suppressed and unsuppressed */
+    sal_uInt16            nVarArgsStart;          /**< Start of variable arguments, for numbering */
     OString          sHelpId;                /**< HelpId of function */
     bool                  bIncomplete         :1; /**< Incomplete argument info (set for add-in info from configuration) */
     bool                  bHasSuppressedArgs  :1; /**< Whether there is any suppressed parameter. */

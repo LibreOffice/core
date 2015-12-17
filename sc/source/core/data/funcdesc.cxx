@@ -67,6 +67,7 @@ ScFuncDesc::ScFuncDesc() :
         nFIndex         (0),
         nCategory       (0),
         nArgCount       (0),
+        nVarArgsStart   (0),
         bIncomplete     (false),
         bHasSuppressedArgs(false)
 {}
@@ -88,6 +89,7 @@ void ScFuncDesc::Clear()
         delete [] pDefArgFlags;
     }
     nArgCount = 0;
+    nVarArgsStart = 0;
     maDefArgNames.clear();
     maDefArgDescs.clear();
     pDefArgFlags = nullptr;
@@ -140,8 +142,7 @@ OUString ScFuncDesc::GetParamList() const
         }
         else if ( nArgCount < PAIRED_VAR_ARGS)
         {
-            sal_uInt16 nFix = nArgCount - VAR_ARGS;
-            for ( sal_uInt16 nArg = 0; nArg < nFix; nArg++ )
+            for ( sal_uInt16 nArg = 0; nArg < nVarArgsStart; nArg++ )
             {
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
@@ -154,19 +155,18 @@ OUString ScFuncDesc::GetParamList() const
              * there were, we'd have to cope with it here and above for the fix
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
-            aSig.append(maDefArgNames[nFix]);
+            aSig.append(maDefArgNames[nVarArgsStart]);
             aSig.append('1');
             aSig.append(sep);
             aSig.append(' ');
-            aSig.append(maDefArgNames[nFix]);
+            aSig.append(maDefArgNames[nVarArgsStart]);
             aSig.append('2');
             aSig.append(sep);
             aSig.append(" ... ");
         }
         else
         {
-            sal_uInt16 nFix = nArgCount - PAIRED_VAR_ARGS;
-            for ( sal_uInt16 nArg = 0; nArg < nFix; nArg++ )
+            for ( sal_uInt16 nArg = 0; nArg < nVarArgsStart; nArg++ )
             {
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
@@ -176,17 +176,17 @@ OUString ScFuncDesc::GetParamList() const
                 }
             }
 
-            aSig.append(maDefArgNames[nFix]);
+            aSig.append(maDefArgNames[nVarArgsStart]);
             aSig.append('1');
             aSig.append(sep);
-            aSig.append(maDefArgNames[nFix+1]);
+            aSig.append(maDefArgNames[nVarArgsStart+1]);
             aSig.append('1');
             aSig.append(sep);
             aSig.append( " " );
-            aSig.append(maDefArgNames[nFix]);
+            aSig.append(maDefArgNames[nVarArgsStart]);
             aSig.append('2');
             aSig.append(sep);
-            aSig.append(maDefArgNames[nFix+1]);
+            aSig.append(maDefArgNames[nVarArgsStart+1]);
             aSig.append('2');
             aSig.append(sep);
             aSig.append( " ... " );
@@ -357,6 +357,11 @@ OString ScFuncDesc::getHelpId() const
 sal_uInt32 ScFuncDesc::getParameterCount() const
 {
     return nArgCount;
+}
+
+sal_uInt32 ScFuncDesc::getVarArgsStart() const
+{
+    return nVarArgsStart;
 }
 
 OUString ScFuncDesc::getParameterName(sal_uInt32 _nPos) const
@@ -799,12 +804,20 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     pDesc->sHelpId = ReadByteStringRes();
     pDesc->nArgCount = GetNum();
     sal_uInt16 nArgs = pDesc->nArgCount;
+    sal_uInt16 nVarArgsSet = 0;
     if (nArgs >= PAIRED_VAR_ARGS)
-        nArgs -= PAIRED_VAR_ARGS - 2;
+    {
+        nVarArgsSet = 2;
+        nArgs -= PAIRED_VAR_ARGS - nVarArgsSet;
+    }
     else if (nArgs >= VAR_ARGS)
-        nArgs -= VAR_ARGS - 1;
+    {
+        nVarArgsSet = 1;
+        nArgs -= VAR_ARGS - nVarArgsSet;
+    }
     if (nArgs)
     {
+        pDesc->nVarArgsStart = nArgs - nVarArgsSet;
         pDesc->pDefArgFlags = new ScFuncDesc::ParameterFlags[nArgs];
         for (sal_uInt16 i = 0; i < nArgs; ++i)
         {
@@ -864,6 +877,25 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
         {
             pDesc->maDefArgNames[i] = SC_RESSTR(2*(i+1)  );
             pDesc->maDefArgDescs[i] = SC_RESSTR(2*(i+1)+1);
+            // If empty and variable number of arguments and last parameter and
+            // parameter is optional and the previous is not optional, repeat
+            // previous parameter name and description.
+            if ((pDesc->maDefArgNames[i].isEmpty() || pDesc->maDefArgDescs[i].isEmpty()) &&
+                    nVarArgsSet > 0 && i > nVarArgsSet && (i == nArgs-1 || i == nArgs-2) &&
+                    pDesc->pDefArgFlags[i].bOptional)
+            {
+                sal_uInt16 nPrev = i - nVarArgsSet;
+                if (!pDesc->pDefArgFlags[nPrev].bOptional)
+                {
+                    if (pDesc->maDefArgNames[i].isEmpty())
+                        pDesc->maDefArgNames[i] = pDesc->maDefArgNames[nPrev];
+                    if (pDesc->maDefArgDescs[i].isEmpty())
+                        pDesc->maDefArgDescs[i] = pDesc->maDefArgDescs[nPrev];
+                    // This also means that variable arguments start one
+                    // parameter set earlier.
+                    pDesc->nVarArgsStart -= nVarArgsSet;
+                }
+            }
         }
     }
 

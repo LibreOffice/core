@@ -198,6 +198,24 @@ sal_uInt32 FunctionDescription::getParameterCount() const
     return m_aParameter.getLength();
 }
 
+sal_uInt32 FunctionDescription::getVarArgsStart() const
+{
+    /* XXX there are no variable number of arguments, are there? Nevertheless
+     * consider the varargs handling of the Function Wizard and return a value
+     * within the bounds of parameters. */
+    // Don't use defines/constants that could change in future, parameter count
+    // could be part of an implicit stable API.
+    // offapi/com/sun/star/report/meta/XFunctionDescription.idl doesn't tell.
+    const sal_uInt32 nVarArgs = 30;         // ugly hard coded VAR_ARGS of formula::ParaWin
+    const sal_uInt32 nPairedVarArgs = 60;   // ugly hard coded PAIRED_VAR_ARGS of formula::ParaWin
+    sal_uInt32 nLen = m_aParameter.getLength();
+    if (nLen >= nPairedVarArgs)
+        nLen -= nPairedVarArgs;
+    else if (nLen >= nVarArgs)
+        nLen -= nVarArgs;
+    return nLen ? nLen - 1 : 0;
+}
+
 OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )

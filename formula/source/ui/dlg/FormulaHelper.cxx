@@ -45,6 +45,7 @@ namespace formula
             virtual OUString getSignature() const override { return OUString(); }
             virtual OString getHelpId() const override { return ""; }
             virtual sal_uInt32 getParameterCount() const override { return 0; }
+            virtual sal_uInt32 getVarArgsStart() const override { return 0; }
             virtual OUString getParameterName(sal_uInt32 ) const override { return OUString(); }
             virtual OUString getParameterDescription(sal_uInt32 ) const override { return OUString(); }
             virtual bool isParameterOptional(sal_uInt32 ) const override { return false; }

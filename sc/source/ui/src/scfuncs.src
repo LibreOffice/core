@@ -12392,7 +12392,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "number" ;
+            Text [ en-US ] = "minuend" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -12400,11 +12400,19 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "number " ;
+            Text [ en-US ] = "subtrahend " ;
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "Number 2, number 3, ... are arguments subtracted from first number." ;
+            Text [ en-US ] = "Subtrahend 1, subtrahend 2, ... are numerical arguments subtracted from the minuend." ;
+        };
+        String 6 // Name of Parameter 3, empty dummy to repeat Parameter 2, now optional
+        {
+            Text = "" ;
+        };
+        String 7 // Description of Parameter 3, empty dummy to repeat Parameter 2, now optional
+        {
+            Text = "" ;
         };
     };
 };

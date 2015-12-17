@@ -136,8 +136,9 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
                     aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg);
-            if ( nArg >= nFix )
-                aArgName += OUString::number( nArg-nFix+1 );
+            sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+            if ( nArg >= nVarArgsStart )
+                aArgName += OUString::number( nArg-nVarArgsStart+1 );
             aArgName += " ";
 
             aArgName += (nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
@@ -154,8 +155,9 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
                     aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg);
-            if ( nArg >= nFix )
-                aArgName += OUString::number( (nArg-nFix)/2 + 1 );
+            sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+            if ( nArg >= nVarArgsStart )
+                aArgName += OUString::number( (nArg-nVarArgsStart)/2 + 1 );
             aArgName += " ";
 
             aArgName += (nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
@@ -188,10 +190,11 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         SetArgNameFont( i,
                 (nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ?
                 aFntLight : aFntBold );
-        if ( nArg >= nFix )
+        sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+        if ( nArg >= nVarArgsStart )
         {
             OUString aArgName( pFuncDesc->getParameterName(nRealArg) );
-            aArgName += OUString::number(nArg-nFix+1);
+            aArgName += OUString::number(nArg-nVarArgsStart+1);
             SetArgName( i, aArgName );
         }
         else
@@ -210,10 +213,11 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         SetArgNameFont( i,
                 (nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ?
                 aFntLight : aFntBold );
-        if ( nArg >= nFix )
+        sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+        if ( nArg >= nVarArgsStart )
         {
             OUString aArgName( pFuncDesc->getParameterName(nRealArg) );
-            aArgName += OUString::number( (nArg-nFix)/2 + 1 );
+            aArgName += OUString::number( (nArg-nVarArgsStart)/2 + 1 );
             SetArgName( i, aArgName );
         }
         else
