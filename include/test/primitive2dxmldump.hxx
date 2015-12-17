@@ -29,9 +29,6 @@ public:
     Primitive2dXmlDump();
     virtual ~Primitive2dXmlDump();
 
-    void filterActionType(const sal_uInt16 nActionType, bool bShouldFilter);
-    void filterAllActionTypes();
-
     /** The actual result that will be used for testing.
 
         This function normally uses a SvMemoryStream for its operation; but
