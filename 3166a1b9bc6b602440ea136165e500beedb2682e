@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_4ee4b90c",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2015-12-17T09:56:41Z",
+      "side": 1,
+      "message": "Thorsten say, never ues default argument for boolean, my first patch was with default parameter!?",
+      "parentUuid": "dab17558_aebe05fd",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_2ea5f503",
         "filename": "sw/inc/dbmgr.hxx",
         "patchSetId": 1
@@ -70,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_0e3ab136",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2015-12-17T09:56:41Z",
+      "side": 1,
+      "message": "In patch 4 line 1291",
+      "parentUuid": "dab17558_4ec15980",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_6eaffde3",
         "filename": "sw/source/uibase/dbui/dbmgr.cxx",
         "patchSetId": 1
@@ -115,6 +151,24 @@
       "writtenOn": "2015-12-16T21:09:28Z",
       "side": 1,
       "message": "Givent its name, this method has quite surprising return value/side effect -- I\u0027d expect return value to indicate whether an error occurred, not whether headers|footers should be used.\n\nMake it return void and create a new method for header|footer story, or make this bStylesWithHeaderAndFooter an argument, reference to bool",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_cebee9d3",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2015-12-17T09:56:41Z",
+      "side": 1,
+      "message": "In patch 3 i have changed",
+      "parentUuid": "dab17558_ced42949",
       "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
