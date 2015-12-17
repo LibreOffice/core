@@ -731,7 +731,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
     // Remember old namespace map.
     if( pRewindMap )
-        pContext->SetRewindMap( pRewindMap );
+        pContext->PutRewindMap( pRewindMap );
 
     // Call a startElement at the new context.
     pContext->StartElement( xAttrList );
@@ -768,7 +768,7 @@ rName
         pContext->EndElement();
 
         // Get a namespace map to rewind.
-        SvXMLNamespaceMap *pRewindMap = pContext->GetRewindMap();
+        SvXMLNamespaceMap *pRewindMap = pContext->TakeRewindMap();
 
         // Delete the current context.
         pContext->ReleaseRef();

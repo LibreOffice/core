@@ -47,6 +47,7 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp ) :
 
 SvXMLImportContext::~SvXMLImportContext()
 {
+    delete mpRewindMap;
 }
 
 SvXMLImportContext *SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,

@@ -56,6 +56,7 @@ XMLTransformerContext::XMLTransformerContext( XMLTransformerBase& rImp,
 
 XMLTransformerContext::~XMLTransformerContext()
 {
+    delete m_pRewindMap;
 }
 
 rtl::Reference<XMLTransformerContext> XMLTransformerContext::CreateChildContext( sal_uInt16 nPrefix,

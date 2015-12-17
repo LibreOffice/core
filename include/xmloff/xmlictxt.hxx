@@ -44,9 +44,9 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public SvRefBase,
 
     SvXMLNamespaceMap   *mpRewindMap;
 
-    SAL_DLLPRIVATE SvXMLNamespaceMap *GetRewindMap() const
-    { return mpRewindMap; }
-    SAL_DLLPRIVATE void SetRewindMap( SvXMLNamespaceMap *p ) { mpRewindMap = p; }
+    SAL_DLLPRIVATE SvXMLNamespaceMap *TakeRewindMap()
+    { auto p = mpRewindMap; mpRewindMap = nullptr; return p; }
+    SAL_DLLPRIVATE void PutRewindMap( SvXMLNamespaceMap *p ) { mpRewindMap = p; }
 
 protected:
 

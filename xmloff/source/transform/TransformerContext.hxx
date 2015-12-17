@@ -39,8 +39,9 @@ class XMLTransformerContext : public ::salhelper::SimpleReferenceObject
 
     SvXMLNamespaceMap   *m_pRewindMap;
 
-    SvXMLNamespaceMap  *GetRewindMap() const { return m_pRewindMap; }
-    void SetRewindMap( SvXMLNamespaceMap *p ) { m_pRewindMap = p; }
+    SvXMLNamespaceMap  *TakeRewindMap()
+    { auto p = m_pRewindMap; m_pRewindMap = nullptr; return p; }
+    void PutRewindMap( SvXMLNamespaceMap *p ) { m_pRewindMap = p; }
 
 protected:
 
