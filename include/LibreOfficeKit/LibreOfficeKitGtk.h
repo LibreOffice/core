@@ -118,7 +118,7 @@ void                           lok_doc_view_set_zoom               (LOKDocView* 
  *
  * Returns: The current zoom factor value in float for pDocView
  */
-float                          lok_doc_view_get_zoom               (LOKDocView* pDocView);
+gfloat                         lok_doc_view_get_zoom               (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_get_parts:
@@ -127,7 +127,7 @@ float                          lok_doc_view_get_zoom               (LOKDocView* 
  * Returns: Part refers to either individual sheets in a Calc, or slides in Impress,
  * and has no relevance for Writer.
  */
-int                            lok_doc_view_get_parts              (LOKDocView* pDocView);
+gint                           lok_doc_view_get_parts              (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_get_part:
@@ -135,7 +135,7 @@ int                            lok_doc_view_get_parts              (LOKDocView* 
  *
  * Returns: Current part number of the document
  */
-int                            lok_doc_view_get_part               (LOKDocView* pDocView);
+gint                           lok_doc_view_get_part               (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_set_part:
@@ -152,7 +152,7 @@ void                           lok_doc_view_set_part               (LOKDocView* 
  *
  * Returns: Get current part name of loaded document
  */
-char*                          lok_doc_view_get_part_name          (LOKDocView* pDocView,
+gchar*                         lok_doc_view_get_part_name          (LOKDocView* pDocView,
                                                                     int nPart);
 
 /**
@@ -279,7 +279,7 @@ gboolean                        lok_doc_view_paste                 (LOKDocView* 
  *
  * Returns: The corresponding value in twips
  */
-float                          lok_doc_view_pixel_to_twip          (LOKDocView* pDocView,
+gfloat                         lok_doc_view_pixel_to_twip          (LOKDocView* pDocView,
                                                                     float fInput);
 
 /**
@@ -291,7 +291,7 @@ float                          lok_doc_view_pixel_to_twip          (LOKDocView* 
  *
  * Returns: The corresponding value in pixels
  */
-float                          lok_doc_view_twip_to_pixel          (LOKDocView* pDocView,
+gfloat                         lok_doc_view_twip_to_pixel          (LOKDocView* pDocView,
                                                                     float fInput);
 
 G_END_DECLS
