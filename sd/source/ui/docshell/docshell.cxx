@@ -470,15 +470,6 @@ void DrawDocShell::libreOfficeKitCallback(int nType, const char* pPayload) const
         mpDoc->libreOfficeKitCallback(nType, pPayload);
 }
 
-bool DrawDocShell::isTiledRendering() const
-{
-    if (!mpDoc)
-        return false;
-    return mpDoc->isTiledRendering();
-}
-
-
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

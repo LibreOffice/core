@@ -310,7 +310,6 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     virtual void libreOfficeKitCallback(int nType, const char* pPayload) const override;
-    bool isTiledRendering() const;
 };
 
 /** Find the right DocShell and create a new one:

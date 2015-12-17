@@ -204,7 +204,6 @@ public:
     void                    ClearUndoBuffer();
 
     virtual void libreOfficeKitCallback(int nType, const char* pPayload) const override;
-    bool isTiledRendering() const;
 
 protected:
 
