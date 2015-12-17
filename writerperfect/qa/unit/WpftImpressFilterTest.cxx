@@ -37,9 +37,13 @@ void WpftImpressFilterTest::test()
         {"v3.zip", REQUIRE_ETONYEK_VERSION(0, 1, 1)},
         {"v6.zip", REQUIRE_ETONYEK_VERSION(0, 1, 4)},
     };
+    const writerperfect::test::WpftOptionalMap_t aMWAWOptional
+    {
+        {"ClarisWorks_6.0.cwk", REQUIRE_MWAW_VERSION(0, 3, 3)},
+    };
 
     doTest("org.libreoffice.comp.Impress.KeynoteImportFilter", "/writerperfect/qa/unit/data/impress/libetonyek/", aEtonyekOptional);
-    doTest("com.sun.star.comp.Impress.MWAWPresentationImportFilter", "/writerperfect/qa/unit/data/impress/libmwaw/");
+    doTest("com.sun.star.comp.Impress.MWAWPresentationImportFilter", "/writerperfect/qa/unit/data/impress/libmwaw/", aMWAWOptional);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftImpressFilterTest);

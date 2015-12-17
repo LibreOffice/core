@@ -35,11 +35,17 @@ void WpftWriterFilterTest::test()
     {
         {"Pages_4.pages", REQUIRE_ETONYEK_VERSION(0, 1, 2)},
     };
+    const writerperfect::test::WpftOptionalMap_t aMWAWOptional
+    {
+        {"RagTime_2.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
+        {"RagTime_3.2.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
+        {"RagTime_5.5.rag", REQUIRE_MWAW_VERSION(0, 3, 6)},
+    };
 
     doTest("com.sun.star.comp.Writer.AbiWordImportFilter", "/writerperfect/qa/unit/data/writer/libabw/");
     doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/writer/libe-book/");
     doTest("com.sun.star.comp.Writer.MSWorksImportFilter", "/writerperfect/qa/unit/data/writer/libwps/");
-    doTest("com.sun.star.comp.Writer.MWAWImportFilter", "/writerperfect/qa/unit/data/writer/libmwaw/");
+    doTest("com.sun.star.comp.Writer.MWAWImportFilter", "/writerperfect/qa/unit/data/writer/libmwaw/", aMWAWOptional);
     doTest("org.libreoffice.comp.Writer.PagesImportFilter", "/writerperfect/qa/unit/data/writer/libetonyek/", aEtonyekOptional);
     doTest("com.sun.star.comp.Writer.WordPerfectImportFilter", "/writerperfect/qa/unit/data/writer/libwpd/");
 }

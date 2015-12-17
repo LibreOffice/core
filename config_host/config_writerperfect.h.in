@@ -16,4 +16,8 @@
 #undef ETONYEK_VERSION_MINOR
 #undef ETONYEK_VERSION_MICRO
 
+#undef MWAW_VERSION_MAJOR
+#undef MWAW_VERSION_MINOR
+#undef MWAW_VERSION_MICRO
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
