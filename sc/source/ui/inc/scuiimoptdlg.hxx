@@ -44,6 +44,7 @@ public:
 private:
     VclPtr<VclFrame>           m_pFieldFrame;
     VclPtr<FixedText>          m_pFtCharset;
+    VclPtr<VclContainer>       m_pEncGrid;
     VclPtr<SvxTextEncodingBox> m_pLbCharset;
     VclPtr<FixedText>          m_pFtFieldSep;
     VclPtr<ComboBox>           m_pEdFieldSep;
@@ -54,6 +55,7 @@ private:
     VclPtr<CheckBox>           m_pCbQuoteAll;
     VclPtr<CheckBox>           m_pCbFixed;
     VclPtr<OKButton>           m_pBtnOk;
+
 
     ScDelimiterTable*   pFieldSepTab;
     ScDelimiterTable*   pTextSepTab;
