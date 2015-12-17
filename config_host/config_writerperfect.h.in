@@ -20,4 +20,8 @@
 #undef MWAW_VERSION_MINOR
 #undef MWAW_VERSION_MICRO
 
+#undef WPS_VERSION_MAJOR
+#undef WPS_VERSION_MINOR
+#undef WPS_VERSION_MICRO
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

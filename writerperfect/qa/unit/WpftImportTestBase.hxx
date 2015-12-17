@@ -35,6 +35,9 @@
 #define REQUIRE_MWAW_VERSION(major, minor, micro) \
     REQUIRE_VERSION(MWAW_VERSION_MAJOR, MWAW_VERSION_MINOR, MWAW_VERSION_MICRO, major, minor, micro)
 
+#define REQUIRE_WPS_VERSION(major, minor, micro) \
+    REQUIRE_VERSION(WPS_VERSION_MAJOR, WPS_VERSION_MINOR, WPS_VERSION_MICRO, major, minor, micro)
+
 namespace com
 {
 namespace sun

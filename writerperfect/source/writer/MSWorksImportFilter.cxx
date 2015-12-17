@@ -55,7 +55,7 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
             else if (pDlg->hasUserCalledCancel())
                 return false;
         }
-        else if ((kind == libwps::WPS_TEXT) && (creator == libwps::WPS_MSWRITE) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
+        else if ((kind == libwps::WPS_TEXT) && (creator == libwps::WPS_RESERVED_0) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
         {
             const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(
                 "Import MsWrite files(libwps)", "CP1252");
