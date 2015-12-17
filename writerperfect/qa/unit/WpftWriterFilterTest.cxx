@@ -41,6 +41,10 @@ void WpftWriterFilterTest::test()
         {"RagTime_3.2.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
         {"RagTime_5.5.rag", REQUIRE_MWAW_VERSION(0, 3, 6)},
     };
+    const writerperfect::test::WpftOptionalMap_t aWpsOptional
+    {
+        {"Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2)},
+    };
 
     doTest("com.sun.star.comp.Writer.AbiWordImportFilter", "/writerperfect/qa/unit/data/writer/libabw/");
     doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/writer/libe-book/");
