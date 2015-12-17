@@ -29,6 +29,9 @@
         ((minor) > (req_minor) \
          || ((minor) == (req_minor) && ((micro) >= (req_micro)))))
 
+#define REQUIRE_EBOOK_VERSION(major, minor, micro) \
+    REQUIRE_VERSION(EBOOK_VERSION_MAJOR, EBOOK_VERSION_MINOR, EBOOK_VERSION_MICRO, major, minor, micro)
+
 #define REQUIRE_ETONYEK_VERSION(major, minor, micro) \
     REQUIRE_VERSION(ETONYEK_VERSION_MAJOR, ETONYEK_VERSION_MINOR, ETONYEK_VERSION_MICRO, major, minor, micro)
 
