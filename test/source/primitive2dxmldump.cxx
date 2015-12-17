@@ -49,15 +49,6 @@ Primitive2dXmlDump::Primitive2dXmlDump() :
 Primitive2dXmlDump::~Primitive2dXmlDump()
 {}
 
-void Primitive2dXmlDump::filterActionType(const sal_uInt16 nActionType, bool bShouldFilter)
-{
-    maFilter[nActionType] = bShouldFilter;
-}
-
-void Primitive2dXmlDump::filterAllActionTypes()
-{
-    maFilter.assign(constMaxActionType, true);
-}
 
 xmlDocPtr Primitive2dXmlDump::dumpAndParse(
     const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
