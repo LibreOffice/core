@@ -41,7 +41,8 @@ private:
     VclPtr<VclContainer>       m_pQuickStarterFrame;
     VclPtr<CheckBox>           m_pQuickLaunchCB;
 
-    DECL_LINK_TYPED(GraphicCacheConfigHdl, Edit&, void);
+    DECL_LINK_TYPED(GraphicCacheConfigHdl, SpinField&, void);
+    DECL_LINK_TYPED(GraphicCacheLoseFocusHdl, Control&, void);
 
     sal_Int32 GetNfGraphicCacheVal() const; // returns # of Bytes
     inline void         SetNfGraphicCacheVal( long nSizeInBytes );
