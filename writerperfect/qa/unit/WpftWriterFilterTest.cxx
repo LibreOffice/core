@@ -31,6 +31,10 @@ WpftWriterFilterTest::WpftWriterFilterTest()
 
 void WpftWriterFilterTest::test()
 {
+    const writerperfect::test::WpftOptionalMap_t aEBookOptional
+    {
+        {"FictionBook2.fb2.zip", REQUIRE_EBOOK_VERSION(0, 1, 1)},
+    };
     const writerperfect::test::WpftOptionalMap_t aEtonyekOptional
     {
         {"Pages_4.pages", REQUIRE_ETONYEK_VERSION(0, 1, 2)},
@@ -47,7 +51,7 @@ void WpftWriterFilterTest::test()
     };
 
     doTest("com.sun.star.comp.Writer.AbiWordImportFilter", "/writerperfect/qa/unit/data/writer/libabw/");
-    doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/writer/libe-book/");
+    doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/writer/libe-book/", aEBookOptional);
     doTest("com.sun.star.comp.Writer.MSWorksImportFilter", "/writerperfect/qa/unit/data/writer/libwps/", aWpsOptional);
     doTest("com.sun.star.comp.Writer.MWAWImportFilter", "/writerperfect/qa/unit/data/writer/libmwaw/", aMWAWOptional);
     doTest("org.libreoffice.comp.Writer.PagesImportFilter", "/writerperfect/qa/unit/data/writer/libetonyek/", aEtonyekOptional);
