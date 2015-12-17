@@ -123,12 +123,17 @@ gfloat                         lok_doc_view_get_zoom               (LOKDocView* 
 /**
  * lok_doc_view_get_parts:
  * @pDocView: The #LOKDocView instance
+ *
+ * Returns: Part refers to either individual sheets in a Calc, or slides in Impress,
+ * and has no relevance for Writer.
  */
 gint                           lok_doc_view_get_parts              (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_get_part:
  * @pDocView: The #LOKDocView instance
+ *
+ * Returns: Current part number of the document
  */
 gint                           lok_doc_view_get_part               (LOKDocView* pDocView);
 
@@ -144,6 +149,8 @@ void                           lok_doc_view_set_part               (LOKDocView* 
  * lok_doc_view_get_part_name:
  * @pDocView: The #LOKDocView instance
  * @nPart:
+ *
+ * Returns: Get current part name of loaded document
  */
 gchar*                         lok_doc_view_get_part_name          (LOKDocView* pDocView,
                                                                     int nPart);
