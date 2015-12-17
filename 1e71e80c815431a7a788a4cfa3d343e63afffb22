@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_ee300d0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-12-17T14:41:54Z",
+      "side": 1,
+      "message": "is this the wrong bug? when loading the bugdoc on current master no OLE object is visible, and the resolveData function is never called.",
+      "revId": "1e71e80c815431a7a788a4cfa3d343e63afffb22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ce670924",
+        "filename": "writerfilter/source/ooxml/OOXMLFastContextHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-12-17T14:41:54Z",
+      "side": 1,
+      "message": "that message is a copy-paste error",
+      "revId": "1e71e80c815431a7a788a4cfa3d343e63afffb22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
