@@ -125,7 +125,7 @@ gfloat                         lok_doc_view_get_zoom               (LOKDocView* 
  * @pDocView: The #LOKDocView instance
  *
  * Returns: Part refers to either individual sheets in a Calc, or slides in Impress,
- * and has no relevance for Writer.
+ * and has no relevance for Writer. Returns -1 if no document is set currently.
  */
 gint                           lok_doc_view_get_parts              (LOKDocView* pDocView);
 
@@ -133,7 +133,7 @@ gint                           lok_doc_view_get_parts              (LOKDocView* 
  * lok_doc_view_get_part:
  * @pDocView: The #LOKDocView instance
  *
- * Returns: Current part number of the document
+ * Returns: Current part number of the document. Returns -1 if no document is set currently.
  */
 gint                           lok_doc_view_get_part               (LOKDocView* pDocView);
 
@@ -150,7 +150,8 @@ void                           lok_doc_view_set_part               (LOKDocView* 
  * @pDocView: The #LOKDocView instance
  * @nPart:
  *
- * Returns: Get current part name of loaded document
+ * Returns: Get current part name of loaded document. Returns null if no
+ * document is set, or document has been destroyed using lok_doc_view_destroy_document.
  */
 gchar*                         lok_doc_view_get_part_name          (LOKDocView* pDocView,
                                                                     int nPart);
@@ -248,7 +249,8 @@ void                           lok_doc_view_highlight_all          (LOKDocView* 
  * @pUsedMimeType: (out): output parameter to inform about the determined format
  * (suggested or plain text).
  *
- * Returns: Selected text. The caller must free the returned buffer after use.
+ * Returns: Selected text. The caller must free the returned buffer after
+ * use. Returns null if no document is set.
  */
 gchar*                          lok_doc_view_copy_selection        (LOKDocView* pDocView,
                                                                     const gchar* pMimeType,
