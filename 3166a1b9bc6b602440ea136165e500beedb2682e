@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_eec64d15",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-17T11:31:19Z",
+      "side": 1,
+      "message": "If *he* says so, then it must be true :)",
+      "parentUuid": "dab17558_4ee4b90c",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_2ea5f503",
         "filename": "sw/inc/dbmgr.hxx",
         "patchSetId": 1
@@ -100,6 +118,24 @@
       "side": 1,
       "message": "In patch 4 line 1291",
       "parentUuid": "dab17558_4ec15980",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_cef2696f",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-12-17T11:31:19Z",
+      "side": 1,
+      "message": "What about the other two -- GetRowCount (OUString, OUString) and GetRowCount( XConnection, OUString)? \n\nI\u0027ve looked at all four patches but haven\u0027t seen the above two methods used -- I might\u0027ve missed something",
+      "parentUuid": "dab17558_0e3ab136",
       "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
