@@ -698,7 +698,7 @@ void LwpTableLayout::RegisterStyle()
     LwpTable * pTable = GetTable();
     if (pTable == nullptr)
     {
-        assert(false);
+        SAL_WARN("lwp", "missing table, early return");
         return;
     }
 
