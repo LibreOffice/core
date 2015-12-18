@@ -880,7 +880,7 @@ void LwpPara::ParseDropcapContent()
  */
 void LwpPara::AddBreakBefore(XFContentContainer* pCont)
 {
-    if (!m_pBreaks)
+    if (!m_pBreaks || !pCont)
         return;
     if (m_pBreaks->IsPageBreakBefore())
     {
