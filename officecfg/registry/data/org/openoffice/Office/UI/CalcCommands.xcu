@@ -1602,6 +1602,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sheet ~Tab Color...</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Tab Color...</value>
+        </prop>
       </node>
       <node oor:name=".uno:TabBgColor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1825,6 +1828,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">R~ight-To-Left</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Sheet R~ight-To-Left</value>
         </prop>
       </node>
       <node oor:name=".uno:SetAnchorToPage" oor:op="replace">

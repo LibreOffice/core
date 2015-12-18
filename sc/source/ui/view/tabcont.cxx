@@ -430,7 +430,7 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
 
         //  Popup-Menu:
         //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
-        pViewData->GetDispatcher().ExecutePopup( ScResId(RID_POPUP_TAB) );
+        pViewData->GetDispatcher().ExecutePopup( "sheettab" );
     }
 }
 

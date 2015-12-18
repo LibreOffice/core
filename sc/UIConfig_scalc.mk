@@ -33,6 +33,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/pagebreak \
 	sc/uiconfig/scalc/popupmenu/pivot \
 	sc/uiconfig/scalc/popupmenu/preview \
+	sc/uiconfig/scalc/popupmenu/sheettab \
 ))
 
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/scalc,\

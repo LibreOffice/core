@@ -85,6 +85,11 @@
           <value xml:lang="en-US">Print Preview</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/sheettab" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Sheet Tabs Bar</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/toolbar/graffilterbar" oor:op="replace">
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>false</value>
