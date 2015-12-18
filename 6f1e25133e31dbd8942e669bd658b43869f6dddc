@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_543e0cb9",
+        "filename": "sw/JunitTest_sw_complex.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-12-18T13:02:46Z",
+      "side": 0,
+      "message": "please remove the class from the invocation too...",
+      "revId": "6f1e25133e31dbd8942e669bd658b43869f6dddc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
