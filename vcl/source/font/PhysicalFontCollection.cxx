@@ -189,27 +189,6 @@ void PhysicalFontCollection::InitGenericGlyphFallback() const
         }
     }
 
-#ifdef SAL_FONTENUM_STABLE_ON_PLATFORM // #i113472#
-    // sort the list of fonts for glyph fallback by quality (highest first)
-    // #i33947# keep the EUDC font at the front of the list
-    // an insertion sort is good enough for this short list
-    const int nSortStart = bHasEudc ? 1 : 0;
-    for( int i = nSortStart+1, j; i < nMaxLevel; ++i )
-    {
-        PhysicalFontFamily* pTestFont = pFallbackList[ i ];
-        int nTestQuality = pTestFont->GetMinQuality();
-
-        for( j = i; --j >= nSortStart; )
-        {
-            if( nTestQuality > pFallbackList[j]->GetMinQuality() )
-                pFallbackList[ j+1 ] = pFallbackList[ j ];
-            else
-                break;
-        }
-        pFallbackList[ j+1 ] = pTestFont;
-    }
-#endif
-
     mnFallbackCount = nMaxLevel;
     mpFallbackList  = pFallbackList;
 }
