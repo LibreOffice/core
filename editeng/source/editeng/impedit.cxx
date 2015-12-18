@@ -123,11 +123,6 @@ void ImpEditView::setTiledRendering(bool bTiledRendering)
     mbTiledRendering = bTiledRendering;
 }
 
-bool ImpEditView::isTiledRendering() const
-{
-    return mbTiledRendering;
-}
-
 void ImpEditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
 {
     mpLibreOfficeKitCallback = pCallback;
@@ -145,7 +140,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
     // set state before notification
     aEditSelection = rEditSelection;
 
-    if (isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
         // Tiled rendering: selections are only painted when we are in selection mode.
         pEditEngine->SetInSelectionMode(aEditSelection.HasRange());
 
@@ -188,7 +183,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
     vcl::Region* pOldRegion = pRegion;
     vcl::Region aRegion;
-    if (isTiledRendering() && !pRegion)
+    if (comphelper::LibreOfficeKit::isActive() && !pRegion)
         pRegion = &aRegion;
 
     tools::PolyPolygon* pPolyPoly = nullptr;
@@ -325,7 +320,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     {
         *pRegion = vcl::Region( *pPolyPoly );
 
-        if (isTiledRendering() && !pOldRegion)
+        if (comphelper::LibreOfficeKit::isActive() && !pOldRegion)
         {
             bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM;
 
@@ -947,7 +942,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
 
         GetCursor()->SetSize( aCursorSz );
 
-        if (isTiledRendering())
+        if (comphelper::LibreOfficeKit::isActive())
         {
             const Point& rPos = GetCursor()->GetPos();
             Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
@@ -1562,8 +1557,8 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     EditPaM aPaM = pEditEngine->GetPaM(aDocPos);
     bool bGotoCursor = DoAutoScroll();
 
-    // aTmpNewSel: Diff between old and new, not the new selection, unless tiled rendering
-    EditSelection aTmpNewSel( isTiledRendering() ? GetEditSelection().Min() : GetEditSelection().Max(), aPaM );
+    // aTmpNewSel: Diff between old and new, not the new selection, unless for tiled rendering
+    EditSelection aTmpNewSel( comphelper::LibreOfficeKit::isActive() ? GetEditSelection().Min() : GetEditSelection().Max(), aPaM );
 
     // #i27299#
     // work on copy of current selection and set new selection, if it has changed.

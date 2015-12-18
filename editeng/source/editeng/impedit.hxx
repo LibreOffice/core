@@ -369,7 +369,6 @@ public:
                         return ( pBackgroundColor ? *pBackgroundColor : pOutWin->GetBackground().GetColor() ); }
 
     void            setTiledRendering(bool bTiledRendering);
-    bool            isTiledRendering() const;
     /// @see vcl::ITiledRenderable::registerCallback().
     void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.

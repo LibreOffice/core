@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
+#include <comphelper/lok.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
@@ -388,6 +389,7 @@ static void lcl_search(const OUString& rKey, bool bFindAll = false)
 
 void SdTiledRenderingTest::testSearch()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -417,6 +419,7 @@ void SdTiledRenderingTest::testSearch()
     // This should trigger the not-found callback.
     lcl_search("ccc");
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSearchAll()
