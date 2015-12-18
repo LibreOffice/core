@@ -297,8 +297,8 @@ public:
     class NameCaches
     {
         friend class ScDPCollection;
-        typedef ::boost::ptr_map<OUString, ScDPCache> CachesType;
-        CachesType maCaches;
+        typedef ::std::map<OUString, std::unique_ptr<ScDPCache>> CachesType;
+        CachesType m_Caches;
         ScDocument* mpDoc;
     public:
         NameCaches(ScDocument* pDoc);

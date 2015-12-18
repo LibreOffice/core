@@ -3024,49 +3024,49 @@ ScDPCollection::NameCaches::NameCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
 bool ScDPCollection::NameCaches::hasCache(const OUString& rName) const
 {
-    return maCaches.count(rName) != 0;
+    return m_Caches.count(rName) != 0;
 }
 
 const ScDPCache* ScDPCollection::NameCaches::getCache(
     const OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData)
 {
-    CachesType::const_iterator itr = maCaches.find(rName);
-    if (itr != maCaches.end())
+    CachesType::const_iterator const itr = m_Caches.find(rName);
+    if (itr != m_Caches.end())
         // already cached.
-        return itr->second;
+        return itr->second.get();
 
     ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     pCache->InitFromDoc(mpDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
 
-    const ScDPCache* p = pCache.get();
-    o3tl::ptr_container::insert(maCaches, rName, std::move(pCache));
+    const ScDPCache *const p = pCache.get();
+    m_Caches.insert(std::make_pair(rName, std::move(pCache)));
     return p;
 }
 
 ScDPCache* ScDPCollection::NameCaches::getExistingCache(const OUString& rName)
 {
-    CachesType::iterator itr = maCaches.find(rName);
-    return itr != maCaches.end() ? itr->second : nullptr;
+    CachesType::iterator const itr = m_Caches.find(rName);
+    return itr != m_Caches.end() ? itr->second.get() : nullptr;
 }
 
 size_t ScDPCollection::NameCaches::size() const
 {
-    return maCaches.size();
+    return m_Caches.size();
 }
 
 void ScDPCollection::NameCaches::updateCache(
     const OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs)
 {
-    CachesType::iterator itr = maCaches.find(rName);
-    if (itr == maCaches.end())
+    CachesType::iterator const itr = m_Caches.find(rName);
+    if (itr == m_Caches.end())
     {
         rRefs.clear();
         return;
     }
 
-    ScDPCache& rCache = *itr->second;
+    ScDPCache& rCache = *itr->second.get();
     // Update the cache with new cell values. This will clear all group dimension info.
     rCache.InitFromDoc(mpDoc, rRange);
 
@@ -3079,12 +3079,12 @@ void ScDPCollection::NameCaches::updateCache(
 
 bool ScDPCollection::NameCaches::remove(const ScDPCache* p)
 {
-    CachesType::iterator it = maCaches.begin(), itEnd = maCaches.end();
+    CachesType::iterator it = m_Caches.begin(), itEnd = m_Caches.end();
     for (; it != itEnd; ++it)
     {
-        if (it->second == p)
+        if (it->second.get() == p)
         {
-            maCaches.erase(it);
+            m_Caches.erase(it);
             return true;
         }
     }
