@@ -706,13 +706,13 @@ void OPreparedStatement::setParameterNull(sal_Int32 nParameterIndex,
                                           bool bSetNull)
 {
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
-    if (pVar->sqltype & 1)
+    if (bSetNull)
     {
-        if (bSetNull)
-            *pVar->sqlind = -1;
-        else
-            *pVar->sqlind = 0;
+        pVar->sqltype |= 1;
+        *pVar->sqlind = -1;
     }
+    else
+        *pVar->sqlind = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
