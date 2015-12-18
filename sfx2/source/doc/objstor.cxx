@@ -1325,7 +1325,10 @@ bool SfxObjectShell::SaveTo_Impl
 
     // TODO/LATER: error handling
     if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
+    {
+        SAL_WARN("sfx.doc", "SfxObjectShell::SaveTo_Impl: very early error return");
         return false;
+    }
 
     AddLog( OSL_LOG_PREFIX "Locking" );
 
