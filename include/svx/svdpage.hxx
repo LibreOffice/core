@@ -28,7 +28,6 @@
 #include <tools/contnr.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svx/svdtypes.hxx>
-#include <svx/svdlayer.hxx>
 #include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
@@ -417,9 +416,8 @@ friend class reportdesign::OSection;
     sal_Int32 nBordRgt; // Seitenrand rechts
     sal_Int32 nBordLwr; // Seitenrand unten
 
-protected:
-    SdrLayerAdmin*      pLayerAdmin;
 private:
+    std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
     SdrPageProperties*  mpSdrPageProperties;
     css::uno::Reference< css::uno::XInterface > mxUnoPage;
 
@@ -506,8 +504,8 @@ protected:
 public:
 
     /// changing the layers does not set the modified-flag!
-    const         SdrLayerAdmin& GetLayerAdmin() const                  { return *pLayerAdmin; }
-                  SdrLayerAdmin& GetLayerAdmin()                        { return *pLayerAdmin; }
+    const SdrLayerAdmin& GetLayerAdmin() const;
+    SdrLayerAdmin& GetLayerAdmin();
 
     virtual OUString GetLayoutName() const;
 
