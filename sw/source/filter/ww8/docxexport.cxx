@@ -24,8 +24,10 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -548,24 +550,40 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
 OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
 {
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
-    comphelper::EmbeddedObjectContainer* aContainer = rObject.GetObject().GetContainer();
-    uno::Reference< io::XInputStream > xInStream = aContainer->GetObjectStream( xObj );
 
+    uno::Reference<io::XInputStream> xInStream;
     OUString sMediaType;
     OUString sRelationType;
     OUString sSuffix;
     const char * pProgID(nullptr);
 
-    if (xInStream.is())
+    try
     {
-        lcl_ConvertProgID(io_rProgID, sMediaType, sRelationType, sSuffix);
+        uno::Reference<document::XStorageBasedDocument> const xParent(
+            uno::Reference<container::XChild>(xObj, uno::UNO_QUERY)->getParent(),
+            uno::UNO_QUERY);
+        uno::Reference<embed::XStorage> const xParentStorage(xParent->getDocumentStorage());
+        OUString const entryName(
+            uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName());
+
+        if (xParentStorage->isStreamElement(entryName))
+        {
+            lcl_ConvertProgID(io_rProgID, sMediaType, sRelationType, sSuffix);
+
+            xInStream = xParentStorage->cloneStreamElement(entryName)->getInputStream();
+            // TODO: is it possible to take the sMediaType from the stream?
+        }
+        else // the object is ODF - either the whole document is
+        {    // ODF, or the OLE was edited so it was converted to ODF
+            uno::Reference<uno::XComponentContext> const xContext(
+                GetFilter().getComponentContext());
+            xInStream = lcl_StoreOwnAsOOXML(xContext, xObj,
+                    pProgID, sMediaType, sRelationType, sSuffix);
+        }
     }
-    else // the object is ODF - either the whole document is
-    {    // ODF, or the OLE was edited so it was converted to ODF
-        uno::Reference<uno::XComponentContext> const xContext(
-            GetFilter().getComponentContext());
-        xInStream = lcl_StoreOwnAsOOXML(xContext, xObj,
-                pProgID, sMediaType, sRelationType, sSuffix);
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("sw.ww8", "DocxExport::WriteOLEObject: exception: " << e.Message);
     }
 
     if (!xInStream.is())
