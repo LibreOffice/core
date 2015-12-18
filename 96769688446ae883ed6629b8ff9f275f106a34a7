@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_546a8c1b",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-12-18T21:57:46Z",
+      "side": 1,
+      "message": "Please place free functions into an anonymous namespace. I will change that in a follow-up commit.",
+      "revId": "96769688446ae883ed6629b8ff9f275f106a34a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b4777801",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-12-18T21:57:46Z",
+      "side": 1,
+      "message": "For something like this a OUStringBuffer is the better choice but will replace it with a std::pair\u003cOUString, OUString\u003e which does not show the problem anyway.",
+      "revId": "96769688446ae883ed6629b8ff9f275f106a34a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_746d1032",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2003,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-12-18T21:57:46Z",
+      "side": 1,
+      "message": "I would prefer to use std::pair\u003cOUString, OUString\u003e here. We can do that in another commit.",
+      "revId": "96769688446ae883ed6629b8ff9f275f106a34a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
