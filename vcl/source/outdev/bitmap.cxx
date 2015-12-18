@@ -693,7 +693,10 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
         if (!aBmpRect.Intersection(Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
         {
-            DrawDeviceAlphaBitmapSlowPath(rBmp, rAlpha, aDstRect, aBmpRect, aOutSz, aOutPt);
+            Point     auxOutPt(LogicToPixel(rDestPt));
+            Size      auxOutSz(LogicToPixel(rDestSize));
+
+            DrawDeviceAlphaBitmapSlowPath(rBmp, rAlpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
         }
     }
 }
@@ -993,6 +996,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
         else
         {
             LinearScaleContext aLinearContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
+
             if (aLinearContext.blendBitmap( Bitmap::ScopedWriteAccess(aBmp).get(), pBitmapReadAccess.get(), pAlphaReadAccess.get(),
                     nDstWidth, nDstHeight))
             {
@@ -1174,6 +1178,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
     if ( mnDrawMode & DrawModeFlags::NoBitmap )
         return;
+
 
     // decompose matrix to check rotation and shear
     basegfx::B2DVector aScale, aTranslate;
@@ -1501,13 +1506,21 @@ Bitmap OutputDevice::BlendBitmap(
 
             for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
             {
-                const long nMapY = pMapY[ nY ];
+                long nMapY = pMapY[ nY ];
+                if (bVMirr)
+                {
+                    nMapY = aBmpRect.Bottom() - nMapY;
+                }
                 const long nModY = ( nOutY & 0x0FL ) << 4L;
                 int nOutX;
 
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
-                    const long  nMapX = pMapX[ nX ];
+                    long  nMapX = pMapX[ nX ];
+                    if (bHMirr)
+                    {
+                        nMapX = aBmpRect.Right() - nMapX;
+                    }
                     const sal_uLong nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aDstCol = pB->GetColor( nY, nX );
@@ -1548,13 +1561,22 @@ Bitmap OutputDevice::BlendBitmap(
                     {
                         for( nY = 0; nY < nDstHeight; nY++ )
                         {
-                            const long  nMapY = pMapY[ nY ];
+                            long  nMapY = pMapY[ nY ];
+                            if ( bVMirr )
+                            {
+                                nMapY = aBmpRect.Bottom() - nMapY;
+                            }
                             Scanline    pPScan = pP->GetScanline( nMapY );
                             Scanline    pAScan = pA->GetScanline( nMapY );
 
                             for( nX = 0; nX < nDstWidth; nX++ )
                             {
-                                const long nMapX = pMapX[ nX ];
+                                long nMapX = pMapX[ nX ];
+
+                                if ( bHMirr )
+                                {
+                                    nMapX = aBmpRect.Right() - nMapX;
+                                }
                                 aDstCol = pB->GetPixel( nY, nX );
                                 pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
                                                                      pAScan[ nMapX ] ) );
@@ -1565,14 +1587,25 @@ Bitmap OutputDevice::BlendBitmap(
 
                 default:
                 {
+
                     for( nY = 0; nY < nDstHeight; nY++ )
                     {
-                        const long  nMapY = pMapY[ nY ];
+                        long  nMapY = pMapY[ nY ];
+
+                        if ( bVMirr )
+                        {
+                            nMapY = aBmpRect.Bottom() - nMapY;
+                        }
                         Scanline    pAScan = pA->GetScanline( nMapY );
 
                         for( nX = 0; nX < nDstWidth; nX++ )
                         {
-                            const long nMapX = pMapX[ nX ];
+                            long nMapX = pMapX[ nX ];
+
+                            if ( bHMirr )
+                            {
+                                nMapX = aBmpRect.Right() - nMapX;
+                            }
                             aDstCol = pB->GetPixel( nY, nX );
                             pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
                                                                  pAScan[ nMapX ] ) );
