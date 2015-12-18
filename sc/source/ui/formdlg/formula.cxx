@@ -301,9 +301,10 @@ bool ScFormulaDlg::Close()
 
 //                          functions for right side
 
-bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult )
+bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult, bool bMatrixFormula )
 {
-    std::unique_ptr<ScSimpleFormulaCalculator> pFCell(new ScSimpleFormulaCalculator(m_pDoc, m_CursorPos, rStrExp));
+    std::unique_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator(
+                m_pDoc, m_CursorPos, rStrExp, bMatrixFormula));
     pFCell->SetLimitString(true);
 
     // HACK! to avoid neither #REF! from ColRowNames
@@ -320,7 +321,8 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
             aBraced.append('(');
             aBraced.append(rStrExp);
             aBraced.append(')');
-            pFCell.reset(new ScSimpleFormulaCalculator(m_pDoc, m_CursorPos, aBraced.makeStringAndClear()));
+            pFCell.reset( new ScSimpleFormulaCalculator(
+                        m_pDoc, m_CursorPos, aBraced.makeStringAndClear(), bMatrixFormula));
             pFCell->SetLimitString(true);
         }
         else

@@ -31,13 +31,15 @@ private:
     ScDocument* mpDoc;
     ScFormulaResult maResult;
     formula::FormulaGrammar::Grammar maGram;
-    bool bIsMatrix;
+    bool mbMatrixResult;
     OUString maMatrixFormulaResult;
     bool mbLimitString;
+    bool mbMatrixFormula;
 
 public:
     ScSimpleFormulaCalculator(ScDocument* pDoc, const ScAddress& rAddr,
-            const OUString& rFormula, formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT);
+            const OUString& rFormula, bool bMatrixFormula,
+            formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT);
     ~ScSimpleFormulaCalculator();
 
     void Calculate();

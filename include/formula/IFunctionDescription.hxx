@@ -124,7 +124,7 @@ namespace formula
         virtual void setSelection(sal_Int32 _nStart, sal_Int32 _nEnd) = 0;
 
         virtual FormEditData* getFormEditData() const = 0;
-        virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult) = 0;
+        virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult, bool bMatrixFormula) = 0;
 
         virtual void switchBack() = 0;
 

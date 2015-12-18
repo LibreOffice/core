@@ -6585,7 +6585,7 @@ void Test::testFormulaWizardSubformula()
     m_pDoc->SetString(ScAddress(1,1,0), "=1/0");        // B2
     m_pDoc->SetString(ScAddress(1,2,0), "=gibberish");  // B3
 
-    ScSimpleFormulaCalculator pFCell1( m_pDoc, ScAddress(0,0,0), "=B1:B3" );
+    ScSimpleFormulaCalculator pFCell1( m_pDoc, ScAddress(0,0,0), "=B1:B3", true );
     sal_uInt16 nErrCode = pFCell1.GetErrCode();
     CPPUNIT_ASSERT( nErrCode == 0 || pFCell1.IsMatrix() );
     CPPUNIT_ASSERT_EQUAL( OUString("{1;#DIV/0!;#NAME?}"), pFCell1.GetString().getString() );
@@ -6593,7 +6593,7 @@ void Test::testFormulaWizardSubformula()
     m_pDoc->SetString(ScAddress(1,0,0), "=NA()");       // B1
     m_pDoc->SetString(ScAddress(1,1,0), "2");           // B2
     m_pDoc->SetString(ScAddress(1,2,0), "=1+2");        // B3
-    ScSimpleFormulaCalculator pFCell2( m_pDoc, ScAddress(0,0,0), "=B1:B3" );
+    ScSimpleFormulaCalculator pFCell2( m_pDoc, ScAddress(0,0,0), "=B1:B3", true );
     nErrCode = pFCell2.GetErrCode();
     CPPUNIT_ASSERT( nErrCode == 0 || pFCell2.IsMatrix() );
     CPPUNIT_ASSERT_EQUAL( OUString("{#N/A;2;3}"), pFCell2.GetString().getString() );
