@@ -70,6 +70,7 @@
 #include "ww8par.hxx"
 #include "ww8scan.hxx"
 #include <oox/token/properties.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
@@ -393,39 +394,24 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
         GetFilter().openFragmentStream("word/" + sFileName, sMediaType);
     assert(xOutStream.is()); // no reason why that could fail
 
-    bool const isExported = lcl_CopyStream(xInStream, xOutStream);
-
-    OUString sId;
-    if (isExported)
+    try
     {
-        sId = m_pFilter->addRelation( GetFS()->getOutputStream(),
+        ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("sw.ww8", "DocxExport::WriteOLEObject: exception: " << e.Message);
+        return OString();
+    }
+
+    OUString const sId = m_pFilter->addRelation( GetFS()->getOutputStream(),
                 sRelationType, sFileName );
-        if (pProgID)
-        {
-            io_rProgID = OUString::createFromAscii(pProgID);
-        }
+    if (pProgID)
+    {
+        io_rProgID = OUString::createFromAscii(pProgID);
     }
 
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
-}
-
-// function copied from embeddedobj/source/msole/oleembed.cxx
-bool DocxExport::lcl_CopyStream( uno::Reference<io::XInputStream> xIn, uno::Reference<io::XOutputStream> xOut )
-{
-    if( !xIn.is() || !xOut.is() )
-        return false;
-
-    const sal_Int32 nChunkSize = 4096;
-    uno::Sequence< sal_Int8 > aData(nChunkSize);
-    sal_Int32 nTotalRead = 0;
-    sal_Int32 nRead = 0;
-    do
-    {
-        nRead = xIn->readBytes(aData, nChunkSize);
-        nTotalRead += nRead;
-        xOut->writeBytes(aData);
-    } while (nRead == nChunkSize);
-    return nTotalRead != 0;
 }
 
 void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
