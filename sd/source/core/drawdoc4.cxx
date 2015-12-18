@@ -84,6 +84,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdlayer.hxx>
 #include <tools/shl.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/editeng.hxx>
