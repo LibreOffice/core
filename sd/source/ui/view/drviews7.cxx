@@ -56,7 +56,6 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
 
-#include <svx/pfiledlg.hxx>
 #include <svx/grafctrl.hxx>
 #include <svtools/cliplistener.hxx>
 #include <sfx2/viewfrm.hxx>

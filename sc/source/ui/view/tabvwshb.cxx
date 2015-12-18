@@ -26,7 +26,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/pfiledlg.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdograf.hxx>
@@ -39,6 +38,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <svtools/soerr.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/slstitm.hxx>

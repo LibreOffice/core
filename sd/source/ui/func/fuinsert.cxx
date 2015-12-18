@@ -35,6 +35,7 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <svtools/sores.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>
@@ -42,7 +43,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/embedhlp.hxx>
-#include <svx/pfiledlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/linkmgr.hxx>
 #include <svx/linkwarn.hxx>

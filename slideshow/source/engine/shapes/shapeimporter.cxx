@@ -277,24 +277,6 @@ ShapeSharedPtr ShapeImporter::createShape(
                                 mnAscendingPrio,
                                 mrContext);
     }
-    else if( shapeType == "com.sun.star.drawing.PluginShape" )
-    {
-        // PropertyValues to copy from XShape to plugin
-        static const char* aPropertyValues[] =
-            {
-                "PluginURL",
-                "PluginMimeType",
-                "PluginCommands"
-            };
-
-        // (Netscape)Plugin shape. This is a special object
-        return createAppletShape( xCurrShape,
-                                  mnAscendingPrio,
-                                  "com.sun.star.comp.sfx2.PluginObject",
-                                  aPropertyValues,
-                                  SAL_N_ELEMENTS(aPropertyValues),
-                                  mrContext );
-    }
     else if( shapeType == "com.sun.star.drawing.AppletShape" )
     {
         // PropertyValues to copy from XShape to applet
