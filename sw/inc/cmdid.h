@@ -252,6 +252,11 @@
 #define FN_MAILMERGE_CHILDWINDOW (FN_INSERT + 68)   /* back-to-mail-merge-wizard child window*/
 #define FN_INSERT_SMA           (FN_INSERT + 69)    /* insert StarMath  */
 
+#define FN_MAILMERGE_FIRST_ENTRY (FN_INSERT+ 70)    /* mail merge wizard - go to the first entry */
+#define FN_MAILMERGE_PREV_ENTRY (FN_INSERT + 71)    /* mail merge wizard - go to the previous entry */
+#define FN_MAILMERGE_NEXT_ENTRY (FN_INSERT + 72)    /* mail merge wizard - go to the next entry */
+#define FN_MAILMERGE_LAST_ENTRY (FN_INSERT + 73)    /* mail merge wizard - go to the next entry */
+
 #define FN_DRAWTEXT_ATTR_DLG    (FN_INSERT + 76)    /* position DrawText */
 
 #define FN_TOOL_ANCHOR_CHAR     (FN_INSERT + 84)    /* anchor Draw object to character */

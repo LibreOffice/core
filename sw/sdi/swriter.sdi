@@ -3773,6 +3773,74 @@ SfxVoidItem MailMergeWizard FN_MAILMERGE_WIZARD
     GroupId = GID_DOCUMENT;
 ]
 
+SfxVoidItem MailMergeFirstEntry FN_MAILMERGE_FIRST_ENTRY
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+SfxVoidItem MailMergePrevEntry FN_MAILMERGE_PREV_ENTRY
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+SfxVoidItem MailMergeNextEntry FN_MAILMERGE_NEXT_ENTRY
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+SfxVoidItem MailMergeLastEntry FN_MAILMERGE_LAST_ENTRY
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
 SfxBoolItem MergeTable FN_TABLE_MERGE_TABLE
 ()
 [

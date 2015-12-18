@@ -22,6 +22,7 @@
 #include <hintids.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
 #include <tools/link.hxx>
 #include <svl/urihelper.hxx>
@@ -200,6 +201,35 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_SET_MODOPT_TBLNUMFMT:
                 rSet.Put( SfxBoolItem( nWhich, m_pModuleConfig->
                                             IsInsTableFormatNum( bWebView )));
+            break;
+            case FN_MAILMERGE_FIRST_ENTRY:
+            case FN_MAILMERGE_PREV_ENTRY:
+            case FN_MAILMERGE_NEXT_ENTRY:
+            case FN_MAILMERGE_LAST_ENTRY:
+            {
+                /*
+                SwView* pView = ::GetActiveView();
+                SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+                if (!pConfigItem)
+                    rSet.DisableItem(nWhich);
+                else
+                {
+                    bool bFirst, bLast;
+                    bool bValid = pConfigItem->IsResultSetFirstLast(bFirst, bLast);
+
+                    if (!bValid ||
+                        (bFirst && (nWhich == FN_MAILMERGE_FIRST_ENTRY || nWhich == FN_MAILMERGE_PREV_ENTRY)) ||
+                        (bLast && (nWhich == FN_MAILMERGE_LAST_ENTRY || nWhich == FN_MAILMERGE_NEXT_ENTRY)))
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
+                    else
+                    {
+                        rSet.Put(SfxVoidItem(nWhich));
+                    }
+                }
+                */
+            }
             break;
             default:
                 OSL_FAIL("::StateOther: default");
@@ -697,6 +727,45 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 xLayoutManager->createElement(sResourceURL);
                 xLayoutManager->showElement(sResourceURL);
             }
+        }
+        break;
+        case FN_MAILMERGE_FIRST_ENTRY:
+        case FN_MAILMERGE_PREV_ENTRY:
+        case FN_MAILMERGE_NEXT_ENTRY:
+        case FN_MAILMERGE_LAST_ENTRY:
+        {
+            SwView* pView = ::GetActiveView();
+            SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+            if (!pConfigItem)
+                return;
+
+            sal_Int32 nPos = pConfigItem->GetResultSetPosition();
+            switch (nWhich)
+            {
+                case FN_MAILMERGE_FIRST_ENTRY: pConfigItem->MoveResultSet(1); break;
+                case FN_MAILMERGE_PREV_ENTRY:  pConfigItem->MoveResultSet(nPos - 1); break;
+                case FN_MAILMERGE_NEXT_ENTRY:  pConfigItem->MoveResultSet(nPos + 1); break;
+                case FN_MAILMERGE_LAST_ENTRY:  pConfigItem->MoveResultSet(-1); break;
+                default: break;
+            }
+
+            //now the record has to be merged into the source document
+            const SwDBData& rDBData = pConfigItem->GetCurrentDBData();
+            uno::Sequence<uno::Any> vSelection({ uno::makeAny(pConfigItem->GetResultSetPosition()) });
+            svx::ODataAccessDescriptor aDescriptor(::comphelper::InitPropertySequence({
+                        {"Selection",        uno::makeAny(vSelection)},
+                        {"DataSourceName",   uno::makeAny(rDBData.sDataSource)},
+                        {"Command",          uno::makeAny(rDBData.sCommand)},
+                        {"CommandType",      uno::makeAny(rDBData.nCommandType)},
+                        {"ActiveConnection", uno::makeAny(pConfigItem->GetConnection().getTyped())},
+                        {"Filter",           uno::makeAny(pConfigItem->GetFilter())},
+                        {"Cursor",           uno::makeAny(pConfigItem->GetResultSet())}
+                        }));
+
+            SwView* pActView = ::GetActiveView();
+            SwWrtShell& rSh = pActView->GetWrtShell();
+            SwMergeDescriptor aMergeDesc(DBMGR_MERGE, rSh, aDescriptor);
+            rSh.GetDBManager()->MergeNew(aMergeDesc);
         }
         break;
 #endif
