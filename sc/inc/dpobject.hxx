@@ -33,6 +33,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <map>
 
 #include <boost/ptr_container/ptr_map.hpp>
 
@@ -267,9 +268,9 @@ public:
     class SheetCaches
     {
         friend class ScDPCollection;
-        typedef boost::ptr_map<size_t, ScDPCache> CachesType;
+        typedef std::map<size_t, std::unique_ptr<ScDPCache>> CachesType;
         typedef std::vector<ScRange> RangeIndexType;
-        CachesType maCaches;
+        CachesType m_Caches;
         RangeIndexType maRanges;
         ScDocument* mpDoc;
     public:

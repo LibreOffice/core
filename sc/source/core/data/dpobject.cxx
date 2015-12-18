@@ -2841,8 +2841,8 @@ bool ScDPCollection::SheetCaches::hasCache(const ScRange& rRange) const
 
     // Already cached.
     size_t nIndex = std::distance(maRanges.begin(), it);
-    CachesType::const_iterator itCache = maCaches.find(nIndex);
-    return itCache != maCaches.end();
+    CachesType::const_iterator const itCache = m_Caches.find(nIndex);
+    return itCache != m_Caches.end();
 }
 
 const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData)
@@ -2852,8 +2852,8 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     {
         // Already cached.
         size_t nIndex = std::distance(maRanges.begin(), it);
-        CachesType::iterator itCache = maCaches.find(nIndex);
-        if (itCache == maCaches.end())
+        CachesType::iterator const itCache = m_Caches.find(nIndex);
+        if (itCache == m_Caches.end())
         {
             OSL_FAIL("Cache pool and index pool out-of-sync !!!");
             return nullptr;
@@ -2862,7 +2862,7 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
         if (pDimData)
             pDimData->WriteToCache(*itCache->second);
 
-        return itCache->second;
+        return itCache->second.get();
     }
 
     // Not cached.  Create a new cache.
@@ -2888,7 +2888,7 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     }
 
     const ScDPCache* p = pCache.get();
-    o3tl::ptr_container::insert(maCaches, nIndex, std::move(pCache));
+    m_Caches.insert(std::make_pair(nIndex, std::move(pCache)));
     return p;
 }
 
@@ -2901,14 +2901,14 @@ ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rRange)
 
     // Already cached.
     size_t nIndex = std::distance(maRanges.begin(), it);
-    CachesType::iterator itCache = maCaches.find(nIndex);
-    if (itCache == maCaches.end())
+    CachesType::iterator const itCache = m_Caches.find(nIndex);
+    if (itCache == m_Caches.end())
     {
         OSL_FAIL("Cache pool and index pool out-of-sync !!!");
         return nullptr;
     }
 
-    return itCache->second;
+    return itCache->second.get();
 }
 
 const ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rRange) const
@@ -2920,19 +2920,19 @@ const ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rR
 
     // Already cached.
     size_t nIndex = std::distance(maRanges.begin(), it);
-    CachesType::const_iterator itCache = maCaches.find(nIndex);
-    if (itCache == maCaches.end())
+    CachesType::const_iterator const itCache = m_Caches.find(nIndex);
+    if (itCache == m_Caches.end())
     {
         OSL_FAIL("Cache pool and index pool out-of-sync !!!");
         return nullptr;
     }
 
-    return itCache->second;
+    return itCache->second.get();
 }
 
 size_t ScDPCollection::SheetCaches::size() const
 {
-    return maCaches.size();
+    return m_Caches.size();
 }
 
 void ScDPCollection::SheetCaches::updateReference(
@@ -2979,8 +2979,8 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<Sc
     }
 
     size_t nIndex = std::distance(maRanges.begin(), it);
-    CachesType::iterator itCache = maCaches.find(nIndex);
-    if (itCache == maCaches.end())
+    CachesType::iterator const itCache = m_Caches.find(nIndex);
+    if (itCache == m_Caches.end())
     {
         OSL_FAIL("Cache pool and index pool out-of-sync !!!");
         rRefs.clear();
@@ -3001,13 +3001,13 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<Sc
 
 bool ScDPCollection::SheetCaches::remove(const ScDPCache* p)
 {
-    CachesType::iterator it = maCaches.begin(), itEnd = maCaches.end();
+    CachesType::iterator it = m_Caches.begin(), itEnd = m_Caches.end();
     for (; it != itEnd; ++it)
     {
-        if (it->second == p)
+        if (it->second.get() == p)
         {
             size_t idx = it->first;
-            maCaches.erase(it);
+            m_Caches.erase(it);
             maRanges[idx].SetInvalid();
             return true;
         }
