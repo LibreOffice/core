@@ -36,7 +36,23 @@ namespace drawing {
     class XShape;
     class XShapes;
 }
+namespace embed {
+    class XEmbeddedObject;
+}
 }}}
+
+namespace oox {
+
+OOX_DLLPUBLIC css::uno::Reference<css::io::XInputStream> GetOLEObjectStream(
+    css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    css::uno::Reference<css::embed::XEmbeddedObject> const& xObj,
+    OUString const& i_rProgID,
+    OUString & o_rMediaType,
+    OUString & o_rRelationType,
+    OUString & o_rSuffix,
+    const char *& o_rpProgID);
+
+}
 
 namespace oox { namespace drawingml {
 
