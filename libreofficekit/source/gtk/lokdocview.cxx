@@ -344,6 +344,8 @@ doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highligh
     cairo_rectangle_int_t cairoVisRect;
     GtkWidget* drawingWidget = GTK_WIDGET(pDocView);
     GdkWindow* drawingWindow = gtk_widget_get_window(drawingWidget);
+    if (!drawingWindow)
+        return;
     std::shared_ptr<cairo_region_t> cairoVisRegion( gdk_window_get_visible_region(drawingWindow),
                                                     cairo_region_destroy);
     cairo_region_get_rectangle(cairoVisRegion.get(), 0, &cairoVisRect);
