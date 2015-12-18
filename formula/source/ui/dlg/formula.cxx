@@ -695,6 +695,8 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
 
                 if (bCalcSubformula)
                 {
+/* FIXME: tdf#96366 this simply does not work, disable until solved. */
+#if 0
                     OUString aStr;
                     OUString aEquals(" = ");
 
@@ -717,6 +719,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
                         m_pWndResult->SetText( aStr );
                     aStr = m_pWndResult->GetText();
                     pStructPage->GetTlbStruct()->SetEntryText(pEntry,aResult + aEquals + aStr);
+#endif
                 }
 
                 --Count;
