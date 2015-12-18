@@ -2485,6 +2485,8 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
 
+    g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_ZOOM]);
+
     // Update the client's view size
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_CLIENT_ZOOM);
