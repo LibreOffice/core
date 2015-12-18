@@ -205,10 +205,13 @@ enum
     PROP_DOC_WIDTH,
     PROP_DOC_HEIGHT,
     PROP_CAN_ZOOM_IN,
-    PROP_CAN_ZOOM_OUT
+    PROP_CAN_ZOOM_OUT,
+
+    PROP_LAST
 };
 
 static guint doc_view_signals[LAST_SIGNAL] = { 0 };
+static GParamSpec *properties[PROP_LAST] = { nullptr };
 
 static void lok_doc_view_initable_iface_init (GInitableIface *iface);
 static void callbackWorker (int nType, const char* pPayload, void* pData);
@@ -2047,15 +2050,14 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      *
      * The absolute path of the LibreOffice install.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_LO_PATH,
-          g_param_spec_string("lopath",
-                              "LO Path",
-                              "LibreOffice Install Path",
-                              nullptr,
-                              static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                       G_PARAM_CONSTRUCT_ONLY |
-                                                       G_PARAM_STATIC_STRINGS)));
+    properties[PROP_LO_PATH] =
+        g_param_spec_string("lopath",
+                            "LO Path",
+                            "LibreOffice Install Path",
+                            nullptr,
+                            static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                     G_PARAM_CONSTRUCT_ONLY |
+                                                     G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:lopointer:
@@ -2063,28 +2065,26 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * A LibreOfficeKit* in case lok_init() is already called
      * previously.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_LO_POINTER,
-          g_param_spec_pointer("lopointer",
-                               "LO Pointer",
-                               "A LibreOfficeKit* from lok_init()",
-                               static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS)));
+    properties[PROP_LO_POINTER] =
+        g_param_spec_pointer("lopointer",
+                             "LO Pointer",
+                             "A LibreOfficeKit* from lok_init()",
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT_ONLY |
+                                                      G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:docpath:
      *
      * The path of the document that is currently being viewed.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_DOC_PATH,
-          g_param_spec_string("docpath",
-                              "Document Path",
-                              "The URI of the document to open",
-                              nullptr,
-                              static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                       G_PARAM_STATIC_STRINGS)));
+    properties[PROP_DOC_PATH] =
+        g_param_spec_string("docpath",
+                            "Document Path",
+                            "The URI of the document to open",
+                            nullptr,
+                            static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                     G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:docpointer:
@@ -2092,27 +2092,25 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * A LibreOfficeKitDocument* in case documentLoad() is already called
      * previously.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_DOC_POINTER,
-          g_param_spec_pointer("docpointer",
-                               "Document Pointer",
-                               "A LibreOfficeKitDocument* from documentLoad()",
-                               static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                        G_PARAM_STATIC_STRINGS)));
+    properties[PROP_DOC_POINTER] =
+        g_param_spec_pointer("docpointer",
+                             "Document Pointer",
+                             "A LibreOfficeKitDocument* from documentLoad()",
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:editable:
      *
      * Whether the document loaded inside of #LOKDocView is editable or not.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_EDITABLE,
-          g_param_spec_boolean("editable",
-                               "Editable",
-                               "Whether the content is in edit mode or not",
-                               FALSE,
-                               static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                        G_PARAM_STATIC_STRINGS)));
+    properties[PROP_EDITABLE] =
+        g_param_spec_boolean("editable",
+                             "Editable",
+                             "Whether the content is in edit mode or not",
+                             FALSE,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:load-progress:
@@ -2122,14 +2120,13 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * very accurate progress indicator, and its value might reset it couple of
      * times to 0 and start again. You should not rely on its numbers.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_LOAD_PROGRESS,
-          g_param_spec_double("load-progress",
-                              "Estimated Load Progress",
-                              "Shows the progress of the document load operation",
-                              0.0, 1.0, 0.0,
-                              static_cast<GParamFlags>(G_PARAM_READABLE |
-                                                       G_PARAM_STATIC_STRINGS)));
+    properties[PROP_LOAD_PROGRESS] =
+        g_param_spec_double("load-progress",
+                            "Estimated Load Progress",
+                            "Shows the progress of the document load operation",
+                            0.0, 1.0, 0.0,
+                            static_cast<GParamFlags>(G_PARAM_READABLE |
+                                                     G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:zoom-level:
@@ -2137,14 +2134,13 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * The current zoom level of the document loaded inside #LOKDocView. The
      * default value is 1.0.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_ZOOM,
-          g_param_spec_float("zoom-level",
-                             "Zoom Level",
-                             "The current zoom level of the content",
-                             0, 5.0, 1.0,
-                             static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                      G_PARAM_STATIC_STRINGS)));
+    properties[PROP_ZOOM] =
+        g_param_spec_float("zoom-level",
+                           "Zoom Level",
+                           "The current zoom level of the content",
+                           0, 5.0, 1.0,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                    G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:is-loading:
@@ -2152,70 +2148,67 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * Whether the requested document is being loaded or not. %TRUE if it is
      * being loaded, otherwise %FALSE.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_IS_LOADING,
-          g_param_spec_boolean("is-loading",
-                               "Is Loading",
-                               "Whether the view is loading a document",
-                               FALSE,
-                               static_cast<GParamFlags>(G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_STRINGS)));
+    properties[PROP_IS_LOADING] =
+        g_param_spec_boolean("is-loading",
+                             "Is Loading",
+                             "Whether the view is loading a document",
+                             FALSE,
+                             static_cast<GParamFlags>(G_PARAM_READABLE |
+                                                      G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:doc-width:
      *
      * The width of the currently loaded document in #LOKDocView in twips.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_DOC_WIDTH,
-          g_param_spec_long("doc-width",
-                            "Document Width",
-                            "Width of the document in twips",
-                            0, G_MAXLONG, 0,
-                            static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                     G_PARAM_STATIC_STRINGS)));
+    properties[PROP_DOC_WIDTH] =
+        g_param_spec_long("doc-width",
+                          "Document Width",
+                          "Width of the document in twips",
+                          0, G_MAXLONG, 0,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:doc-height:
      *
      * The height of the currently loaded document in #LOKDocView in twips.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_DOC_HEIGHT,
-          g_param_spec_long("doc-height",
-                            "Document Height",
-                            "Height of the document in twips",
-                            0, G_MAXLONG, 0,
-                            static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                     G_PARAM_STATIC_STRINGS)));
+    properties[PROP_DOC_HEIGHT] =
+        g_param_spec_long("doc-height",
+                          "Document Height",
+                          "Height of the document in twips",
+                          0, G_MAXLONG, 0,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:can-zoom-in:
      *
      * It tells whether the view can further be zoomed in or not.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_CAN_ZOOM_IN,
-          g_param_spec_boolean("can-zoom-in",
-                               "Can Zoom In",
-                               "Whether the view can be zoomed in further",
-                               TRUE,
-                               static_cast<GParamFlags>(G_PARAM_READABLE
-                                                       | G_PARAM_STATIC_STRINGS)));
+    properties[PROP_CAN_ZOOM_IN] =
+        g_param_spec_boolean("can-zoom-in",
+                             "Can Zoom In",
+                             "Whether the view can be zoomed in further",
+                             TRUE,
+                             static_cast<GParamFlags>(G_PARAM_READABLE
+                                                      | G_PARAM_STATIC_STRINGS));
 
     /**
      * LOKDocView:can-zoom-out:
      *
      * It tells whether the view can further be zoomed out or not.
      */
-    g_object_class_install_property (pGObjectClass,
-          PROP_CAN_ZOOM_OUT,
-          g_param_spec_boolean("can-zoom-out",
-                               "Can Zoom Out",
-                               "Whether the view can be zoomed out further",
-                               TRUE,
-                               static_cast<GParamFlags>(G_PARAM_READABLE
-                                                       | G_PARAM_STATIC_STRINGS)));
+    properties[PROP_CAN_ZOOM_OUT] =
+        g_param_spec_boolean("can-zoom-out",
+                             "Can Zoom Out",
+                             "Whether the view can be zoomed out further",
+                             TRUE,
+                             static_cast<GParamFlags>(G_PARAM_READABLE
+                                                      | G_PARAM_STATIC_STRINGS));
+
+    g_object_class_install_properties(pGObjectClass, PROP_LAST, properties);
 
     /**
      * LOKDocView::load-changed:
