@@ -40,8 +40,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
@@ -50,6 +52,10 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -69,6 +75,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <tools/stream.hxx>
+#include <tools/globname.hxx>
+#include <comphelper/classids.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <unotools/fontcvt.hxx>
 #include <vcl/graph.hxx>
@@ -105,6 +113,223 @@ using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
 
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
+
+namespace oox {
+
+static void lcl_ConvertProgID(OUString const& rProgID,
+    OUString & o_rMediaType, OUString & o_rRelationType, OUString & o_rFileExtension)
+{
+    if (rProgID == "Excel.Sheet.12")
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "xlsx";
+    }
+    else if (rProgID.startsWith("Excel.SheetBinaryMacroEnabled.12") )
+    {
+        o_rMediaType = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "xlsb";
+    }
+    else if (rProgID.startsWith("Excel.SheetMacroEnabled.12"))
+    {
+        o_rMediaType = "application/vnd.ms-excel.sheet.macroEnabled.12";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "xlsm";
+    }
+    else if (rProgID.startsWith("Excel.Sheet"))
+    {
+        o_rMediaType = "application/vnd.ms-excel";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "xls";
+    }
+    else if (rProgID == "PowerPoint.Show.12")
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "pptx";
+    }
+    else if (rProgID == "PowerPoint.ShowMacroEnabled.12")
+    {
+        o_rMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "pptm";
+    }
+    else if (rProgID.startsWith("PowerPoint.Show"))
+    {
+        o_rMediaType = "application/vnd.ms-powerpoint";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "ppt";
+    }
+    else if (rProgID.startsWith("PowerPoint.Slide.12"))
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
+       o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+       o_rFileExtension = "sldx";
+    }
+    else if (rProgID == "PowerPoint.SlideMacroEnabled.12")
+    {
+       o_rMediaType = "application/vnd.ms-powerpoint.slide.macroEnabled.12";
+       o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+       o_rFileExtension = "sldm";
+    }
+    else if (rProgID == "Word.DocumentMacroEnabled.12")
+    {
+        o_rMediaType = "application/vnd.ms-word.document.macroEnabled.12";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "docm";
+    }
+    else if (rProgID == "Word.Document.12")
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rFileExtension = "docx";
+    }
+    else if (rProgID == "Word.Document.8")
+    {
+        o_rMediaType = "application/msword";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "doc";
+    }
+    else if (rProgID == "Excel.Chart.8")
+    {
+        o_rMediaType = "application/vnd.ms-excel";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "xls";
+    }
+    else if (rProgID == "AcroExch.Document.11")
+    {
+        o_rMediaType = "application/pdf";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "pdf";
+    }
+    else
+    {
+        o_rMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
+        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rFileExtension = "bin";
+    }
+}
+
+static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
+    uno::Reference<uno::XComponentContext> const& xContext,
+    uno::Reference<embed::XEmbeddedObject> const& xObj,
+    char const*& o_rpProgID,
+    OUString & o_rMediaType, OUString & o_rRelationType, OUString & o_rSuffix)
+{
+    static struct {
+        struct {
+            sal_uInt32 n1;
+            sal_uInt16 n2, n3;
+            sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
+        } ClassId;
+        char const* pFilterName;
+        char const* pMediaType;
+        char const* pProgID;
+        char const* pSuffix;
+    } s_Mapping[] = {
+        { {SO3_SW_CLASSID_60}, "MS Word 2007 XML", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word.Document.12", "docx" },
+        { {SO3_SC_CLASSID_60}, "Calc MS Excel 2007 XML", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.Sheet.12", "xlsx" },
+        { {SO3_SIMPRESS_CLASSID_60}, "Impress MS PowerPoint 2007 XML", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "PowerPoint.Show.12", "pptx" },
+        // FIXME: Draw does not appear to have a MSO format export filter?
+//            { {SO3_SDRAW_CLASSID}, "", "", "", "" },
+        { {SO3_SCH_CLASSID_60}, "unused", "", "", "" },
+        { {SO3_SM_CLASSID_60}, "unused", "", "", "" },
+    };
+
+    const char * pFilterName(nullptr);
+    SvGlobalName const classId(xObj->getClassID());
+    for (size_t i = 0; i < SAL_N_ELEMENTS(s_Mapping); ++i)
+    {
+        auto const& rId(s_Mapping[i].ClassId);
+        SvGlobalName const temp(rId.n1, rId.n2, rId.n3, rId.b8, rId.b9, rId.b10, rId.b11, rId.b12, rId.b13, rId.b14, rId.b15);
+        if (temp == classId)
+        {
+            assert(SvGlobalName(SO3_SCH_CLASSID_60) != classId); // chart should be written elsewhere!
+            assert(SvGlobalName(SO3_SM_CLASSID_60) != classId); // formula should be written elsewhere!
+            pFilterName = s_Mapping[i].pFilterName;
+            o_rMediaType = OUString::createFromAscii(s_Mapping[i].pMediaType);
+            o_rpProgID = s_Mapping[i].pProgID;
+            o_rSuffix = OUString::createFromAscii(s_Mapping[i].pSuffix);
+            o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+            break;
+        }
+    }
+
+    if (!pFilterName)
+    {
+        SAL_WARN("oox", "oox::GetOLEObjectStream: unknown ClassId " << classId.GetHexName());
+        return nullptr;
+    }
+
+    if (embed::EmbedStates::LOADED == xObj->getCurrentState())
+    {
+        xObj->changeState(embed::EmbedStates::RUNNING);
+    }
+    // use a temp stream - while it would work to store directly to a
+    // fragment stream, an error during export means we'd have to delete it
+    uno::Reference<io::XStream> const xTempStream(
+        xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.comp.MemoryStream", xContext),
+        uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> args(2);
+    args[0].Name = "OutputStream";
+    args[0].Value <<= xTempStream->getOutputStream();
+    args[1].Name = "FilterName";
+    args[1].Value <<= OUString::createFromAscii(pFilterName);
+    uno::Reference<frame::XStorable> xStorable(xObj->getComponent(), uno::UNO_QUERY);
+    try
+    {
+        xStorable->storeToURL("private:stream", args);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("oox", "oox::GetOLEObjectStream: exception: \"" << e.Message << "\"");
+        return nullptr;
+    }
+    xTempStream->getOutputStream()->closeOutput();
+    return xTempStream->getInputStream();
+}
+
+uno::Reference<io::XInputStream> GetOLEObjectStream(
+        uno::Reference<uno::XComponentContext> const& xContext,
+        uno::Reference<embed::XEmbeddedObject> const& xObj,
+        OUString const& i_rProgID,
+        OUString & o_rMediaType,
+        OUString & o_rRelationType,
+        OUString & o_rSuffix,
+        const char *& o_rpProgID)
+{
+    uno::Reference<io::XInputStream> xInStream;
+    try
+    {
+        uno::Reference<document::XStorageBasedDocument> const xParent(
+            uno::Reference<container::XChild>(xObj, uno::UNO_QUERY)->getParent(),
+            uno::UNO_QUERY);
+        uno::Reference<embed::XStorage> const xParentStorage(xParent->getDocumentStorage());
+        OUString const entryName(
+            uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName());
+
+        if (xParentStorage->isStreamElement(entryName))
+        {
+            lcl_ConvertProgID(i_rProgID, o_rMediaType, o_rRelationType, o_rSuffix);
+            xInStream = xParentStorage->cloneStreamElement(entryName)->getInputStream();
+            // TODO: is it possible to take the sMediaType from the stream?
+        }
+        else // the object is ODF - either the whole document is
+        {    // ODF, or the OLE was edited so it was converted to ODF
+            xInStream = lcl_StoreOwnAsOOXML(xContext, xObj,
+                    o_rpProgID, o_rMediaType, o_rRelationType, o_rSuffix);
+        }
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("oox", "oox::GetOLEObjectStream: exception: " << e.Message);
+    }
+    return xInStream;
+}
+
+} // namespace oox
 
 namespace oox { namespace drawingml {
 
