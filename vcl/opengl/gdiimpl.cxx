@@ -121,6 +121,8 @@ bool OpenGLSalGraphicsImpl::AcquireContext( bool bForceCreate )
         mpContext.clear();
     }
 
+    // We don't care what context we have - but not switching context
+    // is rather useful from a performance perspective.
     OpenGLContext *pContext = pSVData->maGDIData.mpLastContext;
     while( pContext )
     {
@@ -181,7 +183,10 @@ void OpenGLSalGraphicsImpl::Init()
     }
 
     if( mpWindowContext.is() )
+    {
         mpWindowContext->reset();
+        mpWindowContext.clear();
+    }
 }
 
 // Currently only used to get windows ordering right.
@@ -193,8 +198,11 @@ void OpenGLSalGraphicsImpl::DeInit()
     // let it know. Other eg. VirtualDevice contexts which have
     // references on and rely on this context continuing to work will
     // get a shiny new context in AcquireContext:: next PreDraw.
-    if( mpContext.is() && !IsOffscreen() )
-        mpContext->reset();
+    if( mpWindowContext.is() )
+    {
+        mpWindowContext->reset();
+        mpWindowContext.clear();
+    }
     mpContext.clear();
 }
 

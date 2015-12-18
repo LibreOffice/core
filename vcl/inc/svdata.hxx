@@ -357,6 +357,7 @@ struct ImplSVData
 
 void        ImplDeInitSVData();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
+VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultContextWindow();
 VCL_PLUGIN_PUBLIC ResMgr*     ImplGetResMgr();
 VCL_PLUGIN_PUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
