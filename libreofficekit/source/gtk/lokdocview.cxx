@@ -339,14 +339,15 @@ doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highligh
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     boost::property_tree::ptree aTree;
     GtkWidget* drawingWidget = GTK_WIDGET(pDocView);
-    GdkWindow* drawingWindow = gtk_widget_get_window(drawingWidget);
-    cairo_region_t* cairoVisRegion = gdk_window_get_visible_region(drawingWindow);
+    GdkWindow* drawingWindow;
+    cairo_region_t* cairoVisRegion;
     cairo_rectangle_int_t cairoVisRect;
-    int x, y;
+    float x, y;
 
-    if (!priv->m_pDocument)
+    drawingWindow = gtk_widget_get_window(drawingWidget);
+    if ( !priv->m_pDocument || !drawingWindow )
         return;
-
+    cairoVisRegion = gdk_window_get_visible_region(drawingWindow);
     cairo_region_get_rectangle(cairoVisRegion, 0, &cairoVisRect);
     x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
     y = pixelToTwip (cairoVisRect.y, priv->m_fZoom);
@@ -371,6 +372,8 @@ doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highligh
     boost::property_tree::write_json(aStream, aTree);
 
     LOKPostCommand (pDocView, ".uno:ExecuteSearch", aStream.str().c_str(), false);
+
+    cairo_region_destroy(cairoVisRegion);
 }
 
 static bool
