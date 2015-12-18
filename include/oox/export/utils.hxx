@@ -28,8 +28,9 @@
 #define BS(x) (x ? "1":"0")
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 
+// FIXME: this should be removed and replaced by SAL_INFO
 #ifndef DBG
-#  if OSL_DEBUG_LEVEL > 0
+#  if OSL_DEBUG_LEVEL > 1
 #    define DBG(x) x
 #  else
 #    define DBG(x)
