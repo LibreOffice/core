@@ -371,7 +371,6 @@ public:
     void addAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, int nIndex = -1 );
     void removeAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
-    sal_Int32 getHash() const;
     OString stringify() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 

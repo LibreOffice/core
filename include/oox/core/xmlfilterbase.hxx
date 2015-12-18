@@ -220,12 +220,6 @@ public:
      */
     XmlFilterBase& exportDocumentProperties( css::uno::Reference< css::document::XDocumentProperties > xProperties );
 
-    OUString getNamespaceURL( const OUString& rPrefix );
-
-    bool hasNamespaceURL( const OUString& rPrefix ) const;
-
-    sal_Int32 getNamespaceId( const OUString& rUrl );
-
     void importDocumentProperties();
 
     FastParser* createParser() const;

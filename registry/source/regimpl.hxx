@@ -80,11 +80,6 @@ public:
                         bool bWarings=false,
                         bool bReport=false);
 
-    RegError    saveKey(RegKeyHandle hKey,
-                        const OUString& regFileName,
-                        bool bWarings=false,
-                        bool bReport=false);
-
     RegError    dumpRegistry(RegKeyHandle hKey) const;
 
     ~ORegistry();

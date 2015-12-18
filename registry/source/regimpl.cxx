@@ -946,54 +946,6 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 
 
 
-//  saveKey
-
-RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
-                            bool bWarnings, bool bReport)
-{
-    ORegKey* pKey = static_cast< ORegKey* >(hKey);
-
-    std::unique_ptr< ORegistry > pReg (new ORegistry());
-    RegError _ret = pReg->initRegistry(regFileName, RegAccessMode::READWRITE, true/*bCreate*/);
-    if (_ret != RegError::NO_ERROR)
-        return _ret;
-    ORegKey* pRootKey = pReg->getRootKey();
-
-    REG_GUARD(m_mutex);
-
-    OStoreDirectory::iterator   iter;
-    OStoreDirectory             rStoreDir(pKey->getStoreDir());
-    storeError                  _err = rStoreDir.first(iter);
-
-    while ( _err == store_E_None )
-    {
-        OUString const keyName = iter.m_pszName;
-
-        if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR )
-        {
-            _ret = loadAndSaveKeys(pRootKey, pKey, keyName,
-                                   pKey->getName().getLength(),
-                                   bWarnings, bReport);
-        }
-        else
-        {
-            _ret = loadAndSaveValue(pRootKey, pKey, keyName,
-                                    pKey->getName().getLength(),
-                                    bWarnings, bReport);
-        }
-
-        if (_ret != RegError::NO_ERROR)
-            break;
-
-        _err = rStoreDir.next(iter);
-    }
-
-    (void) pReg->releaseKey(pRootKey);
-    return _ret;
-}
-
-
-
 //  loadAndSaveValue()
 
 RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,

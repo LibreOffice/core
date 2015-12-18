@@ -101,21 +101,6 @@ namespace comphelper
             const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxComponent
         );
 
-        /** sets the parent for a derived implementation
-
-        @param _rxComponent
-            is the component which's new parent should be set
-        @param _rxNewParent
-            is the new parent of the component
-        @return
-            <TRUE/> in case of success, <FALSE/> otherwise. For error condition please look at
-            <method>getImplementation</method>.
-        */
-        static bool setAccessibleParent(
-            const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxComponent,
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxNewParent
-        );
-
     private:
         COMPHELPER_DLLPRIVATE static const css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };

@@ -307,11 +307,6 @@ namespace drawinglayer
             }
         }
 
-        void appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DContainer& rSource)
-        {
-            appendPrimitive2DSequenceToPrimitive2DSequence(rDest, comphelper::containerToSequence(rSource));
-        }
-
         void Primitive2DContainer::append(const Primitive2DContainer& rSource)
         {
             insert(end(), rSource.begin(), rSource.end());
@@ -330,17 +325,6 @@ namespace drawinglayer
         void Primitive2DContainer::append(const Primitive2DSequence& rSource)
         {
             std::copy(rSource.begin(), rSource.end(), std::back_inserter(*this));
-        }
-
-        // concatenate single Primitive2D
-        void appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource)
-        {
-            if(rSource.is())
-            {
-                const sal_Int32 nDestCount(rDest.getLength());
-                rDest.realloc(nDestCount + 1L);
-                rDest[nDestCount] = rSource;
-            }
         }
 
         OUString idToString(sal_uInt32 nId)

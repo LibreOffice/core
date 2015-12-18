@@ -250,13 +250,6 @@ OfficeInstallationDirectories::getSupportedServiceNames_static()
 
 
 // static
-OUString SAL_CALL OfficeInstallationDirectories::getSingletonName_static()
-{
-    return OUString("com.sun.star.util.theOfficeInstallationDirectories");
-}
-
-
-// static
 uno::Reference< uno::XInterface > SAL_CALL
 OfficeInstallationDirectories::Create(
         const uno::Reference< uno::XComponentContext > & rxContext )

@@ -60,12 +60,6 @@ OUString SAL_CALL OSimpleLogRing::getImplementationName_static()
 }
 
 
-OUString SAL_CALL OSimpleLogRing::getSingletonName_static()
-{
-    return OUString( "com.sun.star.logging.DocumentIOLogRing" );
-}
-
-
 OUString SAL_CALL OSimpleLogRing::getServiceName_static()
 {
     return OUString( "com.sun.star.logging.SimpleLogRing" );

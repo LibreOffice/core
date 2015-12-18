@@ -282,9 +282,6 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /// support to handle a sequence of primitives as stl vector and convert it during creation
-        Primitive2DSequence DRAWINGLAYER_DLLPUBLIC Primitive2DVectorToPrimitive2DSequence(const Primitive2DContainer& rSource, bool bInvert = false);
-
         /// get B2DRange from a given Primitive2DReference
         basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
 
@@ -298,10 +295,6 @@ namespace drawinglayer
 
         /// concatenate sequence
         void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource);
-        void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DContainer& rSource);
-
-        /// concatenate single Primitive2D
-        void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource);
 
         OUString DRAWINGLAYER_DLLPUBLIC idToString(sal_uInt32 nId);
 

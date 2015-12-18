@@ -119,18 +119,6 @@ namespace comphelper
     }
 
 
-    bool OAccessibleImplementationAccess::setAccessibleParent(
-            const Reference< XAccessibleContext >& _rxComponent, const Reference< XAccessible >& _rxNewParent )
-    {
-        OAccessibleImplementationAccess* pImplementation = getImplementation( _rxComponent );
-
-        if ( pImplementation )
-            pImplementation->setAccessibleParent( _rxNewParent );
-
-        return ( nullptr != pImplementation );
-    }
-
-
 }   // namespace comphelper
 
 

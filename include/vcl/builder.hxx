@@ -106,19 +106,6 @@ public:
     static void     reorderWithinParent(std::vector< vcl::Window*>& rChilds, bool bIsButtonBox);
     static void     reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
 
-    /// Get label of the command (like of .uno:Save) from the description service
-    static OUString getCommandProperty(const OUString& rProperty, const OUString& rCommand,
-                                       const css::uno::Reference<css::uno::XComponentContext>& rContext,
-                                       const OUString& rModuleId);
-
-    /// Get image of the command (like of .uno:Save) from the description service
-    static Image    getCommandImage(
-                        const OUString& rCommand,
-                        bool bLarge,
-                        const css::uno::Reference<css::uno::XComponentContext>& rContext,
-                        const css::uno::Reference<css::frame::XFrame>& rFrame,
-                        const OUString& rModuleId );
-
     css::uno::Reference<css::frame::XFrame> getFrame() { return m_xFrame; }
 
 private:
