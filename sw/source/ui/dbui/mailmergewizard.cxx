@@ -219,7 +219,6 @@ void SwMailMergeWizard::UpdateRoadmap()
     TabPage* pCurPage = GetPage( nCurPage );
     if(!pCurPage)
         return;
-    bool bEnable = false;
     bool bAddressFieldsConfigured = !m_rConfigItem.IsOutputToLetter() ||
                 !m_rConfigItem.IsAddressBlock() ||
                 m_rConfigItem.IsAddressFieldsAssigned();
@@ -233,34 +232,35 @@ void SwMailMergeWizard::UpdateRoadmap()
 
     for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_OUTPUTPAGE; ++nPage)
     {
+        bool bEnable = true;
         switch(nPage)
         {
-            case MM_DOCUMENTSELECTPAGE :
+            case MM_DOCUMENTSELECTPAGE:
                 bEnable = true;
             break;
-            case MM_OUTPUTTYPETPAGE :
+            case MM_OUTPUTTYPETPAGE:
                 bEnable = bEnableOutputTypePage;
             break;
-            case MM_ADDRESSBLOCKPAGE  :
+            case MM_ADDRESSBLOCKPAGE:
                 bEnable = !m_bDocumentLoad && bEnableOutputTypePage;
             break;
-            case MM_GREETINGSPAGE     :
+            case MM_GREETINGSPAGE:
                 bEnable = !m_bDocumentLoad && bEnableOutputTypePage &&
                     m_rConfigItem.GetResultSet().is() &&
                             bAddressFieldsConfigured;
             break;
-            case MM_PREPAREMERGEPAGE  :
-            case MM_MERGEPAGE         :
-            case MM_OUTPUTPAGE       :
-            case MM_LAYOUTPAGE        :
-                bEnable = !m_bDocumentLoad && bEnableOutputTypePage &&
+            case MM_LAYOUTPAGE:
+                bEnable =
+                        ((m_rConfigItem.IsAddressBlock() && !m_rConfigItem.IsAddressInserted()) ||
+                            (m_rConfigItem.IsGreetingLine(false) && !m_rConfigItem.IsGreetingInserted() ));
+                // fall-through
+            case MM_PREPAREMERGEPAGE:
+            case MM_MERGEPAGE:
+            case MM_OUTPUTPAGE:
+                bEnable = bEnable && !m_bDocumentLoad && bEnableOutputTypePage &&
                             m_rConfigItem.GetResultSet().is() &&
                             bAddressFieldsConfigured &&
                             bGreetingFieldsConfigured;
-                if(MM_LAYOUTPAGE == nPage)
-                    bEnable &=
-                        ((m_rConfigItem.IsAddressBlock() && !m_rConfigItem.IsAddressInserted()) ||
-                            (m_rConfigItem.IsGreetingLine(false) && !m_rConfigItem.IsGreetingInserted() ));
             break;
         }
         enableState( nPage, bEnable );
