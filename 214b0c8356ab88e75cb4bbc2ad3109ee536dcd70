@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_74afd0e3",
+        "filename": "sw/qa/python/check_cross_references.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2015-12-18T13:57:05Z",
+      "side": 1,
+      "message": "It is still good to have as a reference.",
+      "parentUuid": "dab17558_f473c0b2",
+      "revId": "214b0c8356ab88e75cb4bbc2ad3109ee536dcd70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_b44bf858",
         "filename": "sw/qa/python/check_cross_references.py",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-18T13:02:46Z",
       "side": 1,
       "message": "this does not actually test anything, because the arguments are in the wrong order: the testable boolean is the first argument to assertTrue, and a string is always True\n\nhttps://docs.python.org/3.5/library/unittest.html#unittest.TestCase.assertTrue",
+      "revId": "214b0c8356ab88e75cb4bbc2ad3109ee536dcd70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b4b93831",
+        "filename": "sw/qa/python/check_cross_references.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2015-12-18T13:57:05Z",
+      "side": 1,
+      "message": "who decided to use a language with weak typechecking.",
+      "parentUuid": "dab17558_b44bf858",
       "revId": "214b0c8356ab88e75cb4bbc2ad3109ee536dcd70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
