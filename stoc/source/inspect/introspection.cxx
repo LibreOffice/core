@@ -1766,29 +1766,15 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         if( xTypeProvider.is() )
         {
             SupportedTypesSeq = xTypeProvider->getTypes();
-            sal_Int32 nTypeCount = SupportedTypesSeq.getLength();
-            if( nTypeCount )
-            {
-                const Type* pTypes = SupportedTypesSeq.getConstArray();
-                for( sal_Int32 i = 0 ; i < nTypeCount ; i++ )
-                {
-                    if( pTypes[i].getTypeName() == "com.sun.star.beans.XPropertySet" )
-                    {
-                        xPropSet.set( x, UNO_QUERY );
-                        break;
-                    }
-                }
-            }
         } else {
             SAL_WARN(
                 "stoc",
                 "object of type \"" << aToInspectObj.getValueTypeName()
                     << "\" lacks XTypeProvider");
             SupportedTypesSeq = Sequence<Type>(&aToInspectObj.getValueType(), 1);
-            xPropSet.set( x, UNO_QUERY );
         }
-
         // Now try to get the PropertySetInfo
+        xPropSet.set( x, UNO_QUERY );
         if( xPropSet.is() )
             xPropSetInfo = xPropSet->getPropertySetInfo();
 
