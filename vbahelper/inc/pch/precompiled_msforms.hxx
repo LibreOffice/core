@@ -225,7 +225,6 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/plugin/PluginDescription.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>

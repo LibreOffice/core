@@ -51,7 +51,6 @@
 #include <editeng/scripttypeitem.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svx/pfiledlg.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>

@@ -28,7 +28,6 @@
 #include <sfx2/docfile.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/pfiledlg.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/syschild.hxx>

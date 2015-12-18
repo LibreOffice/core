@@ -33,7 +33,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include "insdlg.hxx"
-#include <plfilter.hxx>
 #include <dialmgr.hxx>
 #include <svtools/sores.hxx>
 

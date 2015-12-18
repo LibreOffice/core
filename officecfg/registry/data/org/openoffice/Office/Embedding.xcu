@@ -151,20 +151,6 @@
         <value>PRIMARY SHOW IPACTIVATE PROPERTIES</value>
       </prop>
     </node>
-    <node oor:name="4CAA7761-6B8B-11CF-89CA-008029E4B0B1" oor:op="replace">
-      <prop oor:name="ObjectFactory">
-        <value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value>
-      </prop>
-      <prop oor:name="ObjectDocumentServiceName">
-        <value>com.sun.star.comp.sfx2.PluginObject</value>
-      </prop>
-      <prop oor:name="ObjectMiscStatus">
-        <value>2432</value>
-      </prop>
-      <prop oor:name="ObjectVerbs">
-        <value>PRIMARY SHOW IPACTIVATE PROPERTIES</value>
-      </prop>
-    </node>
     <node oor:name="1A8A6701-DE58-11CF-89CA-008029E4B0B1" oor:op="replace">
       <prop oor:name="ObjectFactory">
         <value>com.sun.star.embed.OOoSpecialEmbeddedObjectFactory</value>

@@ -78,10 +78,6 @@
       constructor="com_sun_star_comp_sfx2_IFrameObject_get_implementation">
     <service name="com.sun.star.frame.SpecialEmbeddedObject"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sfx2.PluginObject"
-      constructor="com_sun_star_comp_sfx2_PluginObject_get_implementation">
-    <service name="com.sun.star.frame.SpecialEmbeddedObject"/>
-  </implementation>
   <implementation name="com.sun.star.comp.sfx2.SfxMacroLoader"
       constructor="com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
