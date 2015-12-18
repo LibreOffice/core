@@ -39,6 +39,7 @@
 #include <vcl/rendersettings.hxx>
 #include "vcleventlisteners.hxx"
 #include <vector>
+#include <set>
 
 struct SalPaintEvent;
 struct ImplDelData;
@@ -231,6 +232,8 @@ public:
     VclPtr<vcl::Window> mpDlgCtrlDownWindow;
     std::vector<Link<VclWindowEvent&,void>> maEventListeners;
     std::vector<Link<VclWindowEvent&,void>> maChildEventListeners;
+    int maChildEventListenersIteratingCount;
+    std::set<Link<VclWindowEvent&,void>> maChildEventListenersDeleted;
 
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
     css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;

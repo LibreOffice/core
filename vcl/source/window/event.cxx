@@ -30,6 +30,7 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <comphelper/scopeguard.hxx>
 
 namespace vcl {
 
@@ -238,17 +239,26 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
         if ( aDelData.IsDead() )
             return;
 
-        auto& rChildListeners = pWindow->mpWindowImpl->maChildEventListeners;
-        if (!rChildListeners.empty())
+        auto& rWindowImpl = *pWindow->mpWindowImpl;
+        if (!rWindowImpl.maChildEventListeners.empty())
         {
             // Copy the list, because this can be destroyed when calling a Link...
-            std::vector<Link<VclWindowEvent&,void>> aCopy( rChildListeners );
+            std::vector<Link<VclWindowEvent&,void>> aCopy( rWindowImpl.maChildEventListeners );
+            // we use an iterating counter/flag and a set of deleted Link's to avoid O(n^2) behaviour
+            rWindowImpl.maChildEventListenersIteratingCount++;
+            comphelper::ScopeGuard aGuard(
+                [&rWindowImpl]()
+                {
+                    if (--rWindowImpl.maChildEventListenersIteratingCount == 0)
+                    rWindowImpl.maChildEventListenersDeleted.clear();
+                }
+            );
             for ( Link<VclWindowEvent&,void>& rLink : aCopy )
             {
                 if (aDelData.IsDead())
                     return;
-                // check this hasn't been removed in some re-enterancy scenario fdo#47368
-                if( std::find(rChildListeners.begin(), rChildListeners.end(), rLink) != rChildListeners.end() )
+                // Check this hasn't been removed in some re-enterancy scenario fdo#47368.
+                if( rWindowImpl.maChildEventListenersDeleted.find(rLink) != rWindowImpl.maChildEventListenersDeleted.end() )
                     rLink.Call( aEvent );
             }
         }
@@ -292,6 +302,8 @@ void Window::RemoveChildEventListener( const Link<VclWindowEvent&,void>& rEventL
     {
         auto& rListeners = mpWindowImpl->maChildEventListeners;
         rListeners.erase( std::remove(rListeners.begin(), rListeners.end(), rEventListener ), rListeners.end() );
+        if (mpWindowImpl->maChildEventListenersIteratingCount)
+            mpWindowImpl->maChildEventListenersDeleted.insert(rEventListener);
     }
 }
 
