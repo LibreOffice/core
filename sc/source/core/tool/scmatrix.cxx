@@ -2994,6 +2994,16 @@ void ScVectorRefMatrix::ensureFullMatrix()
     size_t nColSize = rArrays.size();
     mpFullMatrix.reset(new ScFullMatrix(nColSize, mnRowSize));
 
+    size_t nRowSize = mnRowSize;
+    size_t nRowEnd = mnRowStart + mnRowSize;
+    size_t nDataRowEnd = mpToken->GetArrayLength();
+    if (nRowEnd > nDataRowEnd)
+    {
+        // Data array is shorter than the row size of the reference. Truncate
+        // it to the data.
+        nRowSize -= nRowEnd - nDataRowEnd;
+    }
+
     for (size_t nCol = 0; nCol < nColSize; ++nCol)
     {
         const formula::VectorRefArray& rArray = rArrays[nCol];
@@ -3006,14 +3016,14 @@ void ScVectorRefMatrix::ensureFullMatrix()
                 pNums += mnRowStart;
                 rtl_uString** pStrs = rArray.mpStringArray;
                 pStrs += mnRowStart;
-                fillMatrix(*mpFullMatrix, nCol, pNums, pStrs, mnRowSize);
+                fillMatrix(*mpFullMatrix, nCol, pNums, pStrs, nRowSize);
             }
             else
             {
                 // String cells only.
                 rtl_uString** pStrs = rArray.mpStringArray;
                 pStrs += mnRowStart;
-                fillMatrix(*mpFullMatrix, nCol, pStrs, mnRowSize);
+                fillMatrix(*mpFullMatrix, nCol, pStrs, nRowSize);
             }
         }
         else if (rArray.mpNumericArray)
@@ -3021,7 +3031,7 @@ void ScVectorRefMatrix::ensureFullMatrix()
             // Numeric cells only.
             const double* pNums = rArray.mpNumericArray;
             pNums += mnRowStart;
-            fillMatrix(*mpFullMatrix, nCol, pNums, mnRowSize);
+            fillMatrix(*mpFullMatrix, nCol, pNums, nRowSize);
         }
     }
 }
