@@ -92,6 +92,8 @@ public:
     bool            EditNextFunc( bool bForward, sal_Int32 nFStart=NOT_FOUND );
     void            EditThisFunc(sal_Int32 nFStart);
 
+    OUString        GetPrevFuncExpression( bool bStartFromEnd );
+
     void            StoreFormEditData(FormEditData* pEditData);
 
     void            Update();
@@ -206,6 +208,8 @@ public:
     ::std::vector< OUString > m_aArguments;
     Selection       aFuncSel;
 
+    sal_Int32       mnFuncExpStart;     ///< current formula position for treeview results
+
     FormulaDlg_Impl(Dialog* pParent
             , bool _bSupportFunctionResult
             , bool _bSupportResult
@@ -242,7 +246,8 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     bMakingTree     (false),
     nEdFocus        (0),
     pFuncDesc       (nullptr),
-    nArgs           (0)
+    nArgs           (0),
+    mnFuncExpStart  (0)
 {
     pParent->get(m_pParaWinBox, "BOX");
     pParent->get(m_pTabCtrl, "tabs");
@@ -695,31 +700,25 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
 
                 if (bCalcSubformula)
                 {
-/* FIXME: tdf#96366 this simply does not work, disable until solved. */
-#if 0
-                    OUString aStr;
-                    OUString aEquals(" = ");
+                    OUString aFormula;
 
                     if (!bMakingTree)
-                    { // gets the last subformula result
+                    {
+                        // gets the last subformula result
                         bMakingTree = true;
-                        EditThisFunc(0);
-                        while ( EditNextFunc(true) ) {}
+                        aFormula = GetPrevFuncExpression( true);
                     }
                     else
-                    { // gets subsequent subformula results (from the back)
-                        const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
-                        if(pDesc==pFuncDesc || !pFuncPage->IsVisible())
-                        {
-                            EditNextFunc(false);
-                        }
+                    {
+                        // gets subsequent subformula results (from the back)
+                        aFormula = GetPrevFuncExpression( false);
                     }
 
-                    if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStr ) )
+                    OUString aStr;
+                    if (CalcValue( aFormula, aStr))
                         m_pWndResult->SetText( aStr );
                     aStr = m_pWndResult->GetText();
-                    pStructPage->GetTlbStruct()->SetEntryText(pEntry,aResult + aEquals + aStr);
-#endif
+                    pStructPage->GetTlbStruct()->SetEntryText( pEntry, aResult + " = " + aStr);
                 }
 
                 --Count;
@@ -1198,6 +1197,28 @@ bool FormulaDlg_Impl::EditNextFunc( bool bForward, sal_Int32 nFStart )
     }
 
     return bFound;
+}
+
+OUString FormulaDlg_Impl::GetPrevFuncExpression( bool bStartFromEnd )
+{
+    OUString aExpression;
+
+    OUString aFormula( m_pHelper->getCurrentFormula());
+    if (aFormula.isEmpty())
+        return aExpression;
+
+    if (bStartFromEnd || mnFuncExpStart >= aFormula.getLength())
+        mnFuncExpStart = aFormula.getLength() - 1;
+
+    sal_Int32 nFStart = mnFuncExpStart;
+    sal_Int32 nFEnd   = 0;
+    if (m_aFormulaHelper.GetNextFunc( aFormula, true, nFStart, &nFEnd))
+    {
+        aExpression = aFormula.copy( nFStart, nFEnd - nFStart); // nFEnd is exclusive
+        mnFuncExpStart = nFStart;
+    }
+
+    return aExpression;
 }
 
 void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
