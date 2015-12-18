@@ -527,6 +527,26 @@
           <value xml:lang="en-US">Mail Merge Wi~zard...</value>
         </prop>
       </node>
+      <node oor:name=".uno:MailMergeFirstEntry" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">First Mail Merge Entry</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MailMergePrevEntry" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Previous Mail Merge Entry</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MailMergeNextEntry" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Next Mail Merge Entry</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MailMergeLastEntry" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Last Mail Merge Entry</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SetAnchorToFrame" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Anchor To Frame</value>
