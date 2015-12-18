@@ -11,6 +11,8 @@
 
 #include <dpsave.hxx>
 
+#include <algorithm>
+
 namespace sc {
 
 PivotTableSources::SelectedPages::SelectedPages( ScDPObject* pObj, const SelectedPagesType& rSelected ) :

@@ -35,8 +35,6 @@
 #include <vector>
 #include <map>
 
-#include <boost/ptr_container/ptr_map.hpp>
-
 namespace com { namespace sun { namespace star {
 
     namespace container {
@@ -337,8 +335,8 @@ public:
     class DBCaches
     {
         friend class ScDPCollection;
-        typedef ::boost::ptr_map<DBType, ScDPCache, DBType::less> CachesType;
-        CachesType maCaches;
+        typedef ::std::map<DBType, std::unique_ptr<ScDPCache>, DBType::less> CachesType;
+        CachesType m_Caches;
         ScDocument* mpDoc;
     public:
         DBCaches(ScDocument* pDoc);

@@ -68,7 +68,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
-#include <o3tl/ptr_container.hxx>
 #include <sal/macros.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -3104,8 +3103,8 @@ ScDPCollection::DBCaches::DBCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 bool ScDPCollection::DBCaches::hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const
 {
     DBType aType(nSdbType, rDBName, rCommand);
-    CachesType::const_iterator itr = maCaches.find(aType);
-    return itr != maCaches.end();
+    CachesType::const_iterator const itr = m_Caches.find(aType);
+    return itr != m_Caches.end();
 }
 
 const ScDPCache* ScDPCollection::DBCaches::getCache(
@@ -3113,10 +3112,10 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
     const ScDPDimensionSaveData* pDimData)
 {
     DBType aType(nSdbType, rDBName, rCommand);
-    CachesType::const_iterator itr = maCaches.find(aType);
-    if (itr != maCaches.end())
+    CachesType::const_iterator const itr = m_Caches.find(aType);
+    if (itr != m_Caches.end())
         // already cached.
-        return itr->second;
+        return itr->second.get();
 
     uno::Reference<sdbc::XRowSet> xRowSet = createRowSet(nSdbType, rDBName, rCommand);
     if (!xRowSet.is())
@@ -3140,7 +3139,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
 
     ::comphelper::disposeComponent(xRowSet);
     const ScDPCache* p = pCache.get();
-    o3tl::ptr_container::insert(maCaches, aType, std::move(pCache));
+    m_Caches.insert(std::make_pair(aType, std::move(pCache)));
     return p;
 }
 
@@ -3148,8 +3147,8 @@ ScDPCache* ScDPCollection::DBCaches::getExistingCache(
     sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
 {
     DBType aType(nSdbType, rDBName, rCommand);
-    CachesType::iterator itr = maCaches.find(aType);
-    return itr != maCaches.end() ? itr->second : nullptr;
+    CachesType::iterator const itr = m_Caches.find(aType);
+    return itr != m_Caches.end() ? itr->second.get() : nullptr;
 }
 
 uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
@@ -3215,8 +3214,8 @@ void ScDPCollection::DBCaches::updateCache(
     std::set<ScDPObject*>& rRefs)
 {
     DBType aType(nSdbType, rDBName, rCommand);
-    CachesType::iterator it = maCaches.find(aType);
-    if (it == maCaches.end())
+    CachesType::iterator const it = m_Caches.find(aType);
+    if (it == m_Caches.end())
     {
         // not cached.
         rRefs.clear();
@@ -3255,12 +3254,12 @@ void ScDPCollection::DBCaches::updateCache(
 
 bool ScDPCollection::DBCaches::remove(const ScDPCache* p)
 {
-    CachesType::iterator it = maCaches.begin(), itEnd = maCaches.end();
+    CachesType::iterator it = m_Caches.begin(), itEnd = m_Caches.end();
     for (; it != itEnd; ++it)
     {
-        if (it->second == p)
+        if (it->second.get() == p)
         {
-            maCaches.erase(it);
+            m_Caches.erase(it);
             return true;
         }
     }
