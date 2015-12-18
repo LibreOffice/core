@@ -123,6 +123,26 @@
           <value>true</value>
         </prop>
       </node>
+      <node oor:name="private:resource/toolbar/mailmerge" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,2</value>
+        </prop>
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Mail Merge</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>false</value>

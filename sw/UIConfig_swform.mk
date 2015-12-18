@@ -59,6 +59,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swform,\
 	sw/uiconfig/swform/toolbar/graphicobjectbar \
 	sw/uiconfig/swform/toolbar/insertbar \
 	sw/uiconfig/swform/toolbar/insertobjectbar \
+	sw/uiconfig/swform/toolbar/mailmerge \
 	sw/uiconfig/swform/toolbar/mediaobjectbar \
 	sw/uiconfig/swform/toolbar/moreformcontrols \
 	sw/uiconfig/swform/toolbar/numobjectbar \
