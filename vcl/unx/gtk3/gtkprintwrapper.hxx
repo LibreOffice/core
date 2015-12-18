@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
 #define INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
 
-#include "../gtk/gtkprintwrapper.hxx"
+#include "gtk/gtkprintwrapper.hxx"
 
 #endif // INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
 
