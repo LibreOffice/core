@@ -49,7 +49,6 @@ $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.accessibility.AccessibleRelationSet \
     complex.checkColor.CheckChangeColor \
     complex.writer.CheckBookmarks \
-    complex.writer.CheckCrossReferences \
     complex.writer.CheckTable \
     complex.writer.CheckIndexedPropertyValues \
     complex.writer.CheckNamedPropertyValues \

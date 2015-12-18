@@ -75,7 +75,7 @@ class CheckCrossReferences(unittest.TestCase):
 
     def getFieldProps(self,xField):
         xProps = xField
-        self.assertTrue("Cannot retrieve field properties.", xProps)
+        self.assertTrue(xProps, "Cannot retrieve field properties.")
         return xProps
 
     def checkField(self, xField , xProps, nFormat, aExpectedFieldResult ):
@@ -222,7 +222,7 @@ class CheckCrossReferences(unittest.TestCase):
 
         #check inserted reference field
         xField = xNewField
-        self.assertTrue("J", xField.getPresentation(False)) #inserted reference field doesn't has correct field result
+        self.assertEqual("J", xField.getPresentation(False)) #inserted reference field doesn't has correct field result
 
         xParaTextRange.getStart().setString( "Hallo new bookmark: ")
         self.xFieldsRefresh.refresh()
