@@ -37,6 +37,7 @@
 #include <svx/xtable.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdlayer.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdoedge.hxx>

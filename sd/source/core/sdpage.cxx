@@ -47,6 +47,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdlayer.hxx>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>

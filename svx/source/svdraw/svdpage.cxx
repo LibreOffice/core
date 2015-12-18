@@ -1203,7 +1203,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     nBordUpp(0L),
     nBordRgt(0L),
     nBordLwr(0L),
-    pLayerAdmin(new SdrLayerAdmin(&rNewModel.GetLayerAdmin())),
+    mpLayerAdmin(new SdrLayerAdmin(&rNewModel.GetLayerAdmin())),
     mpSdrPageProperties(nullptr),
     mpMasterPageDescriptor(nullptr),
     nPageNum(0L),
@@ -1228,7 +1228,7 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     nBordUpp(rSrcPage.nBordUpp),
     nBordRgt(rSrcPage.nBordRgt),
     nBordLwr(rSrcPage.nBordLwr),
-    pLayerAdmin(new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin())),
+    mpLayerAdmin(new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin())),
     mpSdrPageProperties(nullptr),
     mpMasterPageDescriptor(nullptr),
     nPageNum(rSrcPage.nPageNum),
@@ -1269,7 +1269,7 @@ SdrPage::~SdrPage()
     // when they get called from PageInDestruction().
     maPageUsers.clear();
 
-    delete pLayerAdmin;
+    mpLayerAdmin.reset();
 
     TRG_ClearMasterPage();
 
@@ -1506,11 +1506,11 @@ sal_Int32 SdrPage::GetLwrBorder() const
 void SdrPage::impl_setModelForLayerAdmin(SdrModel* const pNewModel)
 {
     if (pNewModel!=nullptr) {
-        pLayerAdmin->SetParent(&pNewModel->GetLayerAdmin());
+        mpLayerAdmin->SetParent(&pNewModel->GetLayerAdmin());
     } else {
-        pLayerAdmin->SetParent(nullptr);
+        mpLayerAdmin->SetParent(nullptr);
     }
-    pLayerAdmin->SetModel(pNewModel);
+    mpLayerAdmin->SetModel(pNewModel);
 }
 
 void SdrPage::SetModel(SdrModel* pNewModel)
@@ -1659,6 +1659,16 @@ void SdrPage::TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage)
 const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/, const Rectangle* /*pRect*/) const
 {
     return nullptr;
+}
+
+const SdrLayerAdmin& SdrPage::GetLayerAdmin() const
+{
+    return *mpLayerAdmin;
+}
+
+SdrLayerAdmin& SdrPage::GetLayerAdmin()
+{
+    return *mpLayerAdmin;
 }
 
 OUString SdrPage::GetLayoutName() const
