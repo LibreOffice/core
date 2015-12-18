@@ -77,9 +77,9 @@ public:
         RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
     void            RefInputDoneAfter( bool bForced );
-    bool        CalcValue( const OUString& rStrExp, OUString& rStrResult );
-    bool        CalcStruct( const OUString& rStrExp);
-    void            UpdateValues();
+    bool            CalcValue( const OUString& rStrExp, OUString& rStrResult, bool bForceMatrixFormula = false );
+    bool            CalcStruct( const OUString& rStrExp, bool bForceRecalcStruct = false );
+    void            UpdateValues( bool bForceRecalcStruct = false );
     void            DeleteArgs();
     sal_Int32       GetFunctionPos(sal_Int32 nPos);
     void            ClearAllParas();
@@ -568,7 +568,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
     return nFuncPos;
 }
 
-bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult )
+bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult, bool bForceMatrixFormula )
 {
     bool bResult = true;
 
@@ -578,7 +578,7 @@ bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult )
 
         if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) )
         {
-            bResult = m_pHelper->calculateValue(rStrExp,rStrResult);
+            bResult = m_pHelper->calculateValue( rStrExp, rStrResult, bForceMatrixFormula || m_pBtnMatrix->IsChecked());
         }
         else
             bResult = false;
@@ -587,7 +587,7 @@ bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult )
     return bResult;
 }
 
-void FormulaDlg_Impl::UpdateValues()
+void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
 {
     OUString aStrResult;
     if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
@@ -603,15 +603,15 @@ void FormulaDlg_Impl::UpdateValues()
         aStrResult.clear();
         m_pWndFormResult->SetText( aStrResult );
     }
-    CalcStruct(pMEdit->GetText());
+    CalcStruct( pMEdit->GetText(), bForceRecalcStruct);
 }
 
-bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp)
+bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStruct )
 {
     bool bResult = true;
     sal_Int32 nLength = rStrExp.getLength();
 
-    if ( !rStrExp.isEmpty() && aOldFormula!=rStrExp && bStructUpdate)
+    if ( !rStrExp.isEmpty() && (bForceRecalcStruct || aOldFormula != rStrExp) && bStructUpdate)
     {
         // Only calculate the value when there isn't any more keyboard input:
 
@@ -733,10 +733,17 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
                 }
                 else if (eOp==ocPush)
                 {
+                    // Interpret range reference in matrix context to resolve
+                    // as array elements.
+                    /* TODO: this should depend on parameter classification, if
+                     * a scalar value is expected matrix should not be forced.
+                     * */
+                    bool bForceMatrix = (!m_pBtnMatrix->IsChecked() &&
+                            (_pToken->GetType() == svDoubleRef || _pToken->GetType() == svExternalDoubleRef));
                     OUString aCellResult;
-                    OUString aEquals(" = ");
-                    if (CalcValue( "=" + aResult, aCellResult) && aCellResult != aResult) // cell is a formula, print subformula
-                        _pTree->InsertEntry(aResult + aEquals + aCellResult,pParent,STRUCT_END,0,_pToken);
+                    if (CalcValue( "=" + aResult, aCellResult, bForceMatrix) && aCellResult != aResult)
+                        // Cell is a formula, print subformula.
+                        _pTree->InsertEntry(aResult + " = " + aCellResult, pParent,STRUCT_END,0,_pToken);
                     else
                         _pTree->InsertEntry(aResult,pParent,STRUCT_END,0,_pToken);
                 }
@@ -1607,6 +1614,7 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, StructSelHdl, StructPage&, void)
 IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, MatrixHdl, Button*, void)
 {
     bUserMatrixFlag=true;
+    UpdateValues(true);
 }
 
 IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FuncSelHdl, FuncPage&, void)

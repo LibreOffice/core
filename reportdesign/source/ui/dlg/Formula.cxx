@@ -107,7 +107,7 @@ void FormulaDialog::dispose()
 
 //                          Funktionen fuer rechte Seite
 
-bool FormulaDialog::calculateValue( const OUString& rStrExp, OUString& rStrResult )
+bool FormulaDialog::calculateValue( const OUString& rStrExp, OUString& rStrResult, bool /*bMatrixFormula*/ )
 {
     rStrResult = rStrExp;
     return false;
