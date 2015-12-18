@@ -735,6 +735,7 @@ var aOOOElemMetaSlides = 'ooo:meta_slides';
 var aOOOElemMetaSlide = 'ooo:meta_slide';
 var aOOOElemTextField = 'ooo:text_field';
 var aPresentationClipPathId = 'presentation_clip_path';
+var aPresentationClipPathShrinkId = 'presentation_clip_path_shrink';
 
 // ooo attributes
 var aOOOAttrNumberOfSlides = 'number-of-slides';
@@ -1948,8 +1949,12 @@ MasterPageView.prototype.createElement = function()
     // that is also a workaround for some kind of slide transition
     // when the master page is empty
     var aWhiteRect = theDocument.createElementNS( NSS['svg'], 'rect' );
-    aWhiteRect.setAttribute( 'width', String( WIDTH ) );
-    aWhiteRect.setAttribute( 'height', String( HEIGHT) );
+    var nWidthExt = WIDTH / 1000;
+    var nHeightExt = HEIGHT / 1000;
+    aWhiteRect.setAttribute( 'x', String( -nWidthExt / 2 ) );
+    aWhiteRect.setAttribute( 'y', String( -nHeightExt / 2 ) );
+    aWhiteRect.setAttribute( 'width', String( WIDTH + nWidthExt ) );
+    aWhiteRect.setAttribute( 'height', String( HEIGHT + nHeightExt ) );
     aWhiteRect.setAttribute( 'fill', '#FFFFFF' );
     aMasterPageViewElement.appendChild( aWhiteRect );
 
@@ -12413,7 +12418,16 @@ SlideShow.prototype.notifySlideStart = function( nNewSlideIndex, nOldSlideIndex 
 
 SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
 {
-    theMetaDoc.setCurrentSlide( nSlideIndex );
+    // reset the presentation clip path on the leaving slide
+    // to the standard one when transition ends
+    if( theMetaDoc.getCurrentSlide() )
+    {
+        var sRef = 'url(#' + aPresentationClipPathId + ')';
+        theMetaDoc.getCurrentSlide().slideElement.setAttribute('clip-path', sRef);
+    }
+
+    theMetaDoc.setCurrentSlide(nSlideIndex);
+
     if( this.aSlideViewElement )
     {
         theMetaDoc.getCurrentSlide().aVisibilityStatusElement.parentNode.removeChild( this.aSlideViewElement );
@@ -12790,6 +12804,11 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
             var aSlideTransitionHandler = aNewMetaSlide.aTransitionHandler;
             if( aSlideTransitionHandler && aSlideTransitionHandler.isValid() )
             {
+                // clipPath element used for the leaving slide in order
+                // to avoid that slide borders are visible during transition
+                var sRef = 'url(#' + aPresentationClipPathShrinkId + ')';
+                aOldMetaSlide.slideElement.setAttribute( 'clip-path', sRef );
+
                 // when we switch from the last to the first slide we need to hide the last slide
                 // or nobody will see the transition, hence we create a view of the last slide and
                 // we place it before the first slide
@@ -12800,6 +12819,7 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
                     aNewMetaSlide.aVisibilityStatusElement.parentNode.insertBefore( this.aSlideViewElement, aNewMetaSlide.aVisibilityStatusElement );
                     aOldMetaSlide.hide();
                 }
+
                 var aLeavingSlide = aOldMetaSlide;
                 var aEnteringSlide = aNewMetaSlide;
                 var aTransitionEndEvent = makeEvent( bind2( this.notifyTransitionEnd, this, nNewSlide ) );
