@@ -190,6 +190,11 @@ void ScDPFilteredCache::fillTable(
             SCROW nIndex = getCache().GetItemDataId(nCol, nRow, bRepeatIfEmpty);
             SCROW nOrder = getOrder(nCol, nIndex);
             aAdded[nOrder] = nIndex;
+
+            // tdf#96588 - large numbers of trailing identical empty
+            // rows generate the same nIndex & nOrder.
+            if (nRow == nDataSize)
+                break;
         }
         for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
         {
