@@ -74,6 +74,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -3881,7 +3882,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
         // In case of tiled rendering pass a region to DrawSelection(), so that
         // selection callbacks are not emitted during every repaint.
         vcl::Region aRegion;
-        pView->DrawSelection(pView->GetEditSelection(), pView->isTiledRendering() ? &aRegion : nullptr, pTarget);
+        pView->DrawSelection(pView->GetEditSelection(), comphelper::LibreOfficeKit::isActive() ? &aRegion : nullptr, pTarget);
     }
 }
 

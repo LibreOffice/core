@@ -62,6 +62,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <o3tl/make_unique.hxx>
+#include <comphelper/lok.hxx>
 
 #include <unicode/ubidi.h>
 #include <algorithm>
@@ -570,7 +571,7 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
     // FIXME I believe resetting bInSelection should not be here even in the
     // non-tiled-rendering case, but it has been here since 2000 (and before)
     // so who knows what corner case it was supposed to solve back then
-    if (!pView->pImpEditView->isTiledRendering())
+    if (!comphelper::LibreOfficeKit::isActive())
         bInSelection = false;
 
     // Special treatments
@@ -906,7 +907,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
     if ( bKeyModifySelection )
     {
         // Then the selection is expanded ... or the whole selection is painted in case of tiled rendering.
-        EditSelection aTmpNewSel( pEditView->isTiledRendering() ? pEditView->pImpEditView->GetEditSelection().Min() : aOldEnd, aPaM );
+        EditSelection aTmpNewSel( comphelper::LibreOfficeKit::isActive() ? pEditView->pImpEditView->GetEditSelection().Min() : aOldEnd, aPaM );
         pEditView->pImpEditView->DrawSelection( aTmpNewSel );
     }
     else

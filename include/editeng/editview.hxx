@@ -183,7 +183,6 @@ public:
     Color           GetBackgroundColor() const;
 
     void            setTiledRendering(bool bTiledRendering);
-    bool            isTiledRendering();
     /// @see vcl::ITiledRenderable::registerCallback().
     void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable *pSearchable);
 

@@ -63,6 +63,7 @@
 #include <linguistic/lngprops.hxx>
 #include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -400,7 +401,7 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             bGotoCursor = false;
         pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
 
-        if (pImpEditView->isTiledRendering())
+        if (comphelper::LibreOfficeKit::isActive())
             pImpEditView->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
     }
 }
@@ -408,7 +409,7 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 void EditView::HideCursor()
 {
     pImpEditView->GetCursor()->Hide();
-    if (pImpEditView->isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
         pImpEditView->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
 }
 
@@ -585,11 +586,6 @@ Color EditView::GetBackgroundColor() const
 void EditView::setTiledRendering(bool bTiledRendering)
 {
     pImpEditView->setTiledRendering(bTiledRendering);
-}
-
-bool EditView::isTiledRendering()
-{
-    return pImpEditView->isTiledRendering();
 }
 
 void EditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable *pSearchable)
