@@ -1990,6 +1990,91 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=20" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Blank</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=19" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=0" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, Text</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=1" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=32" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Centered Text</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=3" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, 2 Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=12" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, Content and 2 Content on Right</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=15" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, 2 Content on Left and Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=14" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, Content above Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=16" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, 2 Content above Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=18" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, 4 Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=34" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, 6 Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=28" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, Content (Vertical)</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=27" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, Content over Content (Vertical)</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=29" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, Vertical Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AssignLayout?WhatLayout:long=30" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Title, 2 Vertical Content</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SlideLayoutMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Layout</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
