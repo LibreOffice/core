@@ -17,6 +17,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_index \
         check_flies \
  	check_fields \
+        check_cross_references \
 	check_styles \
 	check_table \
 	get_expression \
