@@ -78,6 +78,7 @@
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <sot/exchange.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <unotools/fontcvt.hxx>
 #include <vcl/graph.hxx>
@@ -1584,12 +1585,19 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
     if( xPropSet.is() ) {
-        if( GetProperty( xPropSet, "Model" ) )
+        OUString clsid;
+        xPropSet->getPropertyValue("CLSID") >>= clsid;
+        assert(!clsid.isEmpty());
+        SvGlobalName aClassID;
+        bool const isValid(aClassID.MakeId(clsid));
+        assert(isValid); (void)isValid;
+
         {
-            Reference< XChartDocument > xChartDoc;
-            mAny >>= xChartDoc;
-            if( xChartDoc.is() )
+            if (SotExchange::IsChart(aClassID))
             {
+                Reference< XChartDocument > xChartDoc;
+                xPropSet->getPropertyValue("Model") >>= xChartDoc;
+                assert(xChartDoc.is());
                 //export the chart
                 Reference< XModel > xModel( xChartDoc, UNO_QUERY );
                 ChartExport aChartExport( mnXmlNamespace, GetFS(), xModel, GetFB(), GetDocumentType() );
