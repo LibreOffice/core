@@ -2000,7 +2000,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 xDataSource->getDataSequences();
 
             std::map<std::pair<OUString, OUString>,sal_Int32> aOldEntryToIndex;
-            for( sal_Int32 nIndex = 0; nIndex < aOldSequences.getLength(); nIndex++ )
+            for( sal_Int32 nIndex = 0, n = aOldSequences.getLength(); nIndex < n; nIndex++ )
             {
                 const uno::Reference< chart2::data::XLabeledDataSequence>& xOld( aOldSequences[nIndex] );
                 if( xOld.is() )
@@ -2010,7 +2010,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 }
             }
 
-            for( sal_Int32 nNewIndex = 0; nNewIndex < aNewSequences.getLength(); nNewIndex++ )
+            for( sal_Int32 nNewIndex = 0, n = aNewSequences.getLength(); nNewIndex < n; nNewIndex++ )
             {
                 const uno::Reference< chart2::data::XLabeledDataSequence>& xNew( aNewSequences[nNewIndex] );
                 if( !xNew.is() )
