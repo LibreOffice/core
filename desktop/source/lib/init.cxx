@@ -661,9 +661,12 @@ static void doc_iniUnoCommands ()
     OUString sUnoCommands[] =
     {
         OUString(".uno:BackColor"),
+        OUString(".uno:BackgroundColor"),
         OUString(".uno:Bold"),
         OUString(".uno:CenterPara"),
+        OUString(".uno:CharBackColor"),
         OUString(".uno:CharFontName"),
+        OUString(".uno:Color"),
         OUString(".uno:DecrementIndent"),
         OUString(".uno:DefaultBullet"),
         OUString(".uno:DefaultNumbering"),

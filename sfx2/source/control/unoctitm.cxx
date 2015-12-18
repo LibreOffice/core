@@ -1102,8 +1102,11 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
         aEvent.State >>= aTemplate;
         aBuffer.append(aTemplate.StyleName);
     }
-    else if (aEvent.FeatureURL.Path == "FontColor" ||
-             aEvent.FeatureURL.Path == "BackColor")
+    else if (aEvent.FeatureURL.Path == "BackColor" ||
+             aEvent.FeatureURL.Path == "BackgroundColor" ||
+             aEvent.FeatureURL.Path == "CharBackColor" ||
+             aEvent.FeatureURL.Path == "Color" ||
+             aEvent.FeatureURL.Path == "FontColor")
     {
         sal_Int32 nColor = -1;
         aEvent.State >>= nColor;
