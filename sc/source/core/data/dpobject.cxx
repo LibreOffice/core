@@ -2791,11 +2791,9 @@ void ScDPObject::DumpCache() const
     if (!mpTableData)
         return;
 
-    const ScDPCache* pCache = mpTableData->GetCacheTable().getCache();
-    if (!pCache)
-        return;
+    const ScDPCache &rCache = mpTableData->GetCacheTable().getCache();
 
-    pCache->Dump();
+    rCache.Dump();
 }
 #endif
 
