@@ -566,7 +566,10 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
     if (!mbUseOpenGL)
     {
         // no OpenGL, just classic rendering
-        DrawTextImpl(hDC, NULL);
+        Point aPos(0, 0);
+        int nGetNextGlypInfo(0);
+        bool bContinue = DrawTextImpl(hDC, NULL, &aPos, &nGetNextGlypInfo);
+        assert(!bContinue);
     }
     else if (CacheGlyphs(rGraphics) &&
              DrawCachedGlyphs(rGraphics))
@@ -607,40 +610,49 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
         Rectangle aRect;
         GetBoundRect(rGraphics, aRect);
 
-        OpenGLCompatibleDC aDC(rGraphics, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
-
-        // we are making changes to the DC, make sure we got a new one
-        assert(aDC.getCompatibleHDC() != hDC);
-
-        // setup the hidden DC with black color and white background, we will
-        // use the result of the text drawing later as a mask only
-        HFONT hOrigFont = SelectFont(aDC.getCompatibleHDC(), mhFont);
-
-        SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
-        SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
-
-        UINT nTextAlign = GetTextAlign(hDC);
-        SetTextAlign(aDC.getCompatibleHDC(), nTextAlign);
-
-        // the actual drawing
-        DrawTextImpl(aDC.getCompatibleHDC(), &aRect);
-
-        COLORREF color = GetTextColor(hDC);
-        SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
-
         WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
+
         if (pImpl)
         {
             pImpl->PreDraw();
 
-            std::unique_ptr<OpenGLTexture> xTexture(aDC.getTexture());
-            if (xTexture)
-                pImpl->DrawMask(*xTexture, salColor, aDC.getTwoRect());
+            Point aPos(0, 0);
+            int nGetNextGlypInfo(0);
+            while (true)
+            {
+                OpenGLCompatibleDC aDC(rGraphics, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
 
+                // we are making changes to the DC, make sure we got a new one
+                assert(aDC.getCompatibleHDC() != hDC);
+
+                // setup the hidden DC with black color and white background, we will
+                // use the result of the text drawing later as a mask only
+                HFONT hOrigFont = SelectFont(aDC.getCompatibleHDC(), mhFont);
+
+                SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
+                SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
+
+                UINT nTextAlign = GetTextAlign(hDC);
+                SetTextAlign(aDC.getCompatibleHDC(), nTextAlign);
+
+                COLORREF color = GetTextColor(hDC);
+                SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
+
+                // the actual drawing
+                bool bContinue = DrawTextImpl(aDC.getCompatibleHDC(), &aRect, &aPos, &nGetNextGlypInfo);
+
+                std::unique_ptr<OpenGLTexture> xTexture(aDC.getTexture());
+                if (xTexture)
+                    pImpl->DrawMask(*xTexture, salColor, aDC.getTwoRect());
+
+                SelectFont(aDC.getCompatibleHDC(), hOrigFont);
+
+                if (!bContinue)
+                    break;
+            }
             pImpl->PostDraw();
         }
 
-        SelectFont(aDC.getCompatibleHDC(), hOrigFont);
     }
 }
 
@@ -1764,7 +1776,10 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
     }
 }
 
-void UniscribeLayout::DrawTextImpl(HDC hDC, const Rectangle* /* pRectToErase */) const
+bool UniscribeLayout::DrawTextImpl(HDC hDC,
+                                   const Rectangle* /* pRectToErase */,
+                                   Point* /* pPos */,
+                                   int* /* pGetNextGlypInfo */) const
 {
     HFONT hOrigFont = DisableFontScaling();
 
@@ -1812,6 +1827,8 @@ void UniscribeLayout::DrawTextImpl(HDC hDC, const Rectangle* /* pRectToErase */)
 
     if( hOrigFont )
         DeleteFont(SelectFont(hDC, hOrigFont));
+
+    return false;
 }
 
 bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
@@ -2801,7 +2818,10 @@ void  GraphiteWinLayout::AdjustLayout(ImplLayoutArgs& rArgs)
     maImpl.AdjustLayout(rArgs);
 }
 
-void GraphiteWinLayout::DrawTextImpl(HDC hDC, const Rectangle* pRectToErase) const
+bool GraphiteWinLayout::DrawTextImpl(HDC hDC,
+                                     const Rectangle* pRectToErase,
+                                     Point* pPos,
+                                     int* pGetNextGlypInfo) const
 {
     if (pRectToErase)
     {
@@ -2815,19 +2835,18 @@ void GraphiteWinLayout::DrawTextImpl(HDC hDC, const Rectangle* pRectToErase) con
     const int MAX_GLYPHS = 2;
     sal_GlyphId glyphIntStr[MAX_GLYPHS];
     WORD glyphWStr[MAX_GLYPHS];
-    int glyphIndex = 0;
-    Point aPos(0,0);
     int nGlyphs = 0;
     do
     {
-        nGlyphs = maImpl.GetNextGlyphs(1, glyphIntStr, aPos, glyphIndex);
+        nGlyphs = maImpl.GetNextGlyphs(1, glyphIntStr, *pPos, *pGetNextGlypInfo);
         if (nGlyphs < 1)
             break;
         std::copy(glyphIntStr, glyphIntStr + nGlyphs, glyphWStr);
-        ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
-    } while (nGlyphs);
+        ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
+    } while (!pRectToErase);
     if( hOrigFont )
         DeleteFont(SelectFont(hDC, hOrigFont));
+    return (pRectToErase && nGlyphs >= 1);
 }
 
 bool GraphiteWinLayout::CacheGlyphs(SalGraphics& /*rGraphics*/) const
