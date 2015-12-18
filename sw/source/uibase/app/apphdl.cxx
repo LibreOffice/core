@@ -87,6 +87,7 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -672,11 +673,36 @@ void SwModule::ExecOther(SfxRequest& rReq)
 #if HAVE_FEATURE_DBCONNECTIVITY
         case FN_MAILMERGE_WIZARD:
         {
+            // show the mailmerge wizard
             rtl::Reference< SwMailMergeWizardExecutor > xEx( new SwMailMergeWizardExecutor );
             xEx->ExecuteMailMergeWizard( pArgs );
+
+            // show the mailmerge toolbar
+            SwView* pView = ::GetActiveView();
+            if (!pView)
+                return;
+
+            uno::Reference<beans::XPropertySet> xPropSet(pView->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
+            if (!xPropSet.is())
+                return;
+
+            uno::Reference<frame::XLayoutManager> xLayoutManager;
+            uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+            aValue >>= xLayoutManager;
+            if (!xLayoutManager.is())
+                return;
+
+            const OUString sResourceURL( "private:resource/toolbar/mailmerge" );
+            uno::Reference<ui::XUIElement> xUIElement = xLayoutManager->getElement(sResourceURL);
+            if (!xUIElement.is())
+            {
+                // do the work, finally
+                xLayoutManager->createElement(sResourceURL);
+                xLayoutManager->showElement(sResourceURL);
+            }
         }
-#endif
         break;
+#endif
     }
 }
 
