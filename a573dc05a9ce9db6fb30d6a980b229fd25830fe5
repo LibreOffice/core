@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d4931c4e",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1000534
+      },
+      "writtenOn": "2015-12-18T18:30:47Z",
+      "side": 1,
+      "message": "I know I may be too picky, but please be careful with this kind of unwanted indent changes. The problem with these is the line loses the pointer to its original author when you do \"git blame\".",
+      "revId": "a573dc05a9ce9db6fb30d6a980b229fd25830fe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
