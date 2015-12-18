@@ -1762,15 +1762,14 @@ bool RangeAnalyzer::inSameSingleColumn( RangeAnalyzer& rOther )
     return false;
 }
 
-OUString constructKey(const uno::Reference< chart2::data::XLabeledDataSequence>& xNew)
+std::pair<OUString, OUString> constructKey(const uno::Reference< chart2::data::XLabeledDataSequence>& xNew)
 {
-    OUString key;
+    std::pair<OUString, OUString> aKey;
     if( xNew->getLabel().is() )
-        key += xNew->getLabel()->getSourceRangeRepresentation();
-    key += "####";
+        aKey.first = xNew->getLabel()->getSourceRangeRepresentation();
     if( xNew->getValues().is() )
-        key += xNew->getValues()->getSourceRangeRepresentation();
-    return key;
+        aKey.second = xNew->getValues()->getSourceRangeRepresentation();
+    return aKey;
 }
 
 
@@ -2000,27 +1999,31 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
             const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> >& aNewSequences =
                 xDataSource->getDataSequences();
 
-            std::map<OUString,sal_Int32> aOldEntryToIndex;
+            std::map<std::pair<OUString, OUString>,sal_Int32> aOldEntryToIndex;
             for( sal_Int32 nIndex = 0; nIndex < aOldSequences.getLength(); nIndex++ )
             {
                 const uno::Reference< chart2::data::XLabeledDataSequence>& xOld( aOldSequences[nIndex] );
                 if( xOld.is() )
                 {
-                    OUString key = constructKey(xOld);
-                    aOldEntryToIndex[key] = nIndex;
+                    std::pair<OUString, OUString> aKey = constructKey(xOld);
+                    aOldEntryToIndex[aKey] = nIndex;
                 }
             }
+
             for( sal_Int32 nNewIndex = 0; nNewIndex < aNewSequences.getLength(); nNewIndex++ )
             {
                 const uno::Reference< chart2::data::XLabeledDataSequence>& xNew( aNewSequences[nNewIndex] );
                 if( !xNew.is() )
                     continue;
-                OUString key = constructKey(xNew);
-                if (aOldEntryToIndex.find(key) == aOldEntryToIndex.end())
+
+                std::pair<OUString, OUString> aKey = constructKey(xNew);
+                if (aOldEntryToIndex.find(aKey) == aOldEntryToIndex.end())
                     continue;
-                sal_Int32 nOldIndex = aOldEntryToIndex[key];
+
+                sal_Int32 nOldIndex = aOldEntryToIndex[aKey];
                 if( nOldIndex != nNewIndex )
                     bDifferentIndexes = true;
+
                 aSequenceMappingVector.push_back(nOldIndex);
             }
         }
