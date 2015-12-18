@@ -22,7 +22,7 @@
     <node oor:name="States">
       <node oor:name="private:resource/popupmenu/audit" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Auditing</value>
+          <value xml:lang="en-US">Detective</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/cell" oor:op="replace">
@@ -32,7 +32,7 @@
       </node>
       <node oor:name="private:resource/popupmenu/celledit" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Edit Cell</value>
+          <value xml:lang="en-US">Cell Edit</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/chart" oor:op="replace">

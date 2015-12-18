@@ -8,6 +8,10 @@
  *
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
+  <menu:menuitem menu:id=".uno:Cut"/>
+  <menu:menuitem menu:id=".uno:Copy"/>
+  <menu:menuitem menu:id=".uno:Paste"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FillModeTracePredescessor"/>
   <menu:menuitem menu:id=".uno:FillModeRemovePredescessor"/>
   <menu:menuitem menu:id=".uno:FillModeTraceSuccessor"/>

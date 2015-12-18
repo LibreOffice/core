@@ -8,6 +8,10 @@
  *
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
+  <menu:menuitem menu:id=".uno:Cut"/>
+  <menu:menuitem menu:id=".uno:Copy"/>
+  <menu:menuitem menu:id=".uno:Paste"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
   <menu:menuitem menu:id=".uno:RecalcPivotTable"/>
   <menu:menuitem menu:id=".uno:DataPilotFilter"/>

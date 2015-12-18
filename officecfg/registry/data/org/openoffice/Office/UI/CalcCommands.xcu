@@ -1374,7 +1374,7 @@
           <value xml:lang="en-US">~Page...</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Pa~ge Layout...</value>
+          <value xml:lang="en-US">Format Pa~ge...</value>
         </prop>
       </node>
       <node oor:name=".uno:StandardTextAttributes" oor:op="replace">
