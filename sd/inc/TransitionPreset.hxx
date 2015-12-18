@@ -54,7 +54,6 @@ public:
     sal_Int32 getFadeColor() const { return mnFadeColor; }
 
     const OUString& getPresetId() const { return maPresetId; }
-    const OUString& getGroupId() const { return maGroupId; }
     const OUString& getSetId() const { return maSetId; }
     const OUString& getSetLabel() const { return maSetLabel; }
     const OUString& getVariantLabel() const { return maVariantLabel; }

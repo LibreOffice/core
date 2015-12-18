@@ -75,10 +75,6 @@ namespace comphelper
         */
         sal_Int64   implGetForeignControlledStates( ) const;
 
-        /// sets the accessible parent component
-        void setAccessibleParent(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxAccParent );
-
     protected:
         OAccessibleImplementationAccess( );
         virtual ~OAccessibleImplementationAccess( );
@@ -87,34 +83,6 @@ namespace comphelper
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) throw (css::uno::RuntimeException, std::exception) override;
 
     public:
-        /** tries to access the implementation of an OAccessibleImplementationAccess derivee which is known as
-            interface only.
-
-        @param _rxComponent
-            is the component which should be examined.
-        @return
-            the pointer to the implementation, if successful. The only known error condition so far
-            is an invalid context (which means it is <NULL/>, or the implementation is not derived
-            from OAccessibleImplementationAccess, or retrieving the implementation failed).
-        */
-        static OAccessibleImplementationAccess* getImplementation(
-            const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxComponent
-        );
-
-        /** sets the parent for a derived implementation
-
-        @param _rxComponent
-            is the component which's new parent should be set
-        @param _rxNewParent
-            is the new parent of the component
-        @return
-            <TRUE/> in case of success, <FALSE/> otherwise. For error condition please look at
-            <method>getImplementation</method>.
-        */
-        static bool setAccessibleParent(
-            const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxComponent,
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxNewParent
-        );
 
     private:
         COMPHELPER_DLLPRIVATE static const css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

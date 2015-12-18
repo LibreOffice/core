@@ -571,35 +571,6 @@ void OConnection::disposing()
     OConnection_BASE::disposing();
 }
 
-/* ToDo - upcast the connection to MySQL_Connection and use ::getSessionVariable() */
-
-rtl::OUString OConnection::getMysqlVariable(const char *varname)
-    throw(SQLException, RuntimeException)
-{
-    OSL_TRACE("OConnection::getMysqlVariable");
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-    rtl::OUString ret;
-    rtl::OUStringBuffer aStatement;
-    aStatement.appendAscii( "SHOW SESSION VARIABLES LIKE '" );
-    aStatement.appendAscii( varname );
-    aStatement.append( '\'' );
-
-    try {
-        XStatement * stmt = new OStatement(this, m_settings.cppConnection->createStatement());
-        Reference< XResultSet > rs = stmt->executeQuery( aStatement.makeStringAndClear() );
-        if (rs.is() && rs->next()) {
-            Reference< XRow > xRow(rs, UNO_QUERY);
-            ret = xRow->getString(2);
-        }
-    } catch (const sql::SQLException & e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
-    }
-
-    return ret;
-}
-
 sal_Int32 OConnection::getMysqlVersion()
     throw(SQLException, RuntimeException)
 {

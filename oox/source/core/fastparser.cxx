@@ -131,39 +131,6 @@ void FastParser::parseStream( StorageBase& rStorage, const OUString& rStreamName
     parseStream( rStorage.openInputStream( rStreamName ), rStreamName, bCloseStream );
 }
 
-OUString FastParser::getNamespaceURL( const OUString& rPrefix ) throw( IllegalArgumentException, RuntimeException )
-{
-    if( !mxParser.is() )
-        throw RuntimeException();
-    return mxParser->getNamespaceURL( rPrefix );
-}
-
-bool FastParser::hasNamespaceURL( const OUString& rPrefix ) const
-{
-    if (!mxParser.is())
-        throw RuntimeException();
-
-    if (!mpParser)
-        return false;
-
-    return mpParser->hasNamespaceURL(rPrefix);
-}
-
-sal_Int32 FastParser::getNamespaceId( const OUString& rUrl )
-{
-    for( NamespaceMap::const_iterator aIt = mrNamespaceMap.maTransitionalNamespaceMap.begin(),
-            aEnd = mrNamespaceMap.maTransitionalNamespaceMap.end(); aIt != aEnd; ++aIt )
-        if( rUrl  == aIt->second )
-            return aIt->first;
-
-    for( NamespaceMap::const_iterator aIt = mrNamespaceMap.maStrictNamespaceMap.begin(),
-            aEnd = mrNamespaceMap.maStrictNamespaceMap.end(); aIt != aEnd; ++aIt )
-        if( rUrl  == aIt->second )
-            return aIt->first;
-
-    return 0;
-}
-
 } // namespace core
 } // namespace oox
 

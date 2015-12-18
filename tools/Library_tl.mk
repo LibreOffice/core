@@ -68,7 +68,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/memtools/mempool \
     tools/source/memtools/multisel \
     tools/source/memtools/unqidx \
-    tools/source/misc/appendunixshellword \
     tools/source/misc/cpuid \
     tools/source/misc/extendapplicationenvironment \
     tools/source/misc/getprocessworkingdir \

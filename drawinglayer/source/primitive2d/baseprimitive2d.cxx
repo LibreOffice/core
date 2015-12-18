@@ -273,45 +273,6 @@ namespace drawinglayer
             return true;
         }
 
-        // concatenate sequence
-        void appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource)
-        {
-            if(rSource.hasElements())
-            {
-                if(rDest.hasElements())
-                {
-                    const sal_Int32 nSourceCount(rSource.getLength());
-                    const sal_Int32 nDestCount(rDest.getLength());
-                    const sal_Int32 nTargetCount(nSourceCount + nDestCount);
-                    sal_Int32 nInsertPos(nDestCount);
-
-                    rDest.realloc(nTargetCount);
-
-                    for(sal_Int32 a(0L); a < nSourceCount; a++)
-                    {
-                        if(rSource[a].is())
-                        {
-                            rDest[nInsertPos++] = rSource[a];
-                        }
-                    }
-
-                    if(nInsertPos != nTargetCount)
-                    {
-                        rDest.realloc(nInsertPos);
-                    }
-                }
-                else
-                {
-                    rDest = rSource;
-                }
-            }
-        }
-
-        void appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DContainer& rSource)
-        {
-            appendPrimitive2DSequenceToPrimitive2DSequence(rDest, comphelper::containerToSequence(rSource));
-        }
-
         void Primitive2DContainer::append(const Primitive2DContainer& rSource)
         {
             insert(end(), rSource.begin(), rSource.end());
@@ -330,17 +291,6 @@ namespace drawinglayer
         void Primitive2DContainer::append(const Primitive2DSequence& rSource)
         {
             std::copy(rSource.begin(), rSource.end(), std::back_inserter(*this));
-        }
-
-        // concatenate single Primitive2D
-        void appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource)
-        {
-            if(rSource.is())
-            {
-                const sal_Int32 nDestCount(rDest.getLength());
-                rDest.realloc(nDestCount + 1L);
-                rDest[nDestCount] = rSource;
-            }
         }
 
         OUString idToString(sal_uInt32 nId)

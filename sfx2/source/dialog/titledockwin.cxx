@@ -234,25 +234,6 @@ namespace sfx2
     }
 
 
-    sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<ToolBox *, void>& i_rCallback )
-    {
-        // Add the menu before the closer button.
-        const sal_uInt16 nItemCount( m_aToolbox->GetItemCount() );
-        const sal_uInt16 nItemId( nItemCount + 1 );
-        m_aToolbox->InsertItem( nItemId, i_rItemText, ToolBoxItemBits::DROPDOWNONLY, nItemCount > 0 ? nItemCount - 1 : TOOLBOX_APPEND );
-        m_aToolbox->SetHelpId( nItemId, i_nHelpId );
-        m_aToolbox->SetClickHdl( i_rCallback );
-        m_aToolbox->SetDropdownClickHdl( i_rCallback );
-
-        // The tool box has likely changed its size. The title bar has to be
-        // resized.
-        impl_scheduleLayout();
-        Invalidate();
-
-        return nItemId;
-    }
-
-
     IMPL_LINK_TYPED( TitledDockingWindow, OnToolboxItemSelected, ToolBox*, pToolBox, void )
     {
         const sal_uInt16 nId = pToolBox->GetCurItemId();

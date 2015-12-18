@@ -97,38 +97,6 @@ ODatabaseMetaData::~ODatabaseMetaData()
     OSL_TRACE("ODatabaseMetaData::~ODatabaseMetaData");
 }
 
-rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const std::string& (sql::DatabaseMetaData::*_Method)() )
-{
-    OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
-    rtl::OUString stringMetaData;
-    try {
-        stringMetaData = mysqlc_sdbc_driver::convert((meta->*_Method)(), m_rConnection.getConnectionEncoding());
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-    return stringMetaData;
-}
-
-rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, std::string (sql::DatabaseMetaData::*_Method)() )
-{
-    OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
-    rtl::OUString stringMetaData;
-    try {
-        stringMetaData = mysqlc_sdbc_driver::convert((meta->*_Method)(), m_rConnection.getConnectionEncoding());
-    } catch (const sql::MethodNotImplementedException &) {
-        mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (const sql::InvalidArgumentException &) {
-        mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
-    } catch (const sql::SQLException& e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
-    }
-    return stringMetaData;
-}
-
 rtl::OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);

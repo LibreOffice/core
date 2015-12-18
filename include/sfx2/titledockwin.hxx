@@ -44,31 +44,6 @@ namespace sfx2
         */
         void        SetTitle( const OUString& i_rTitle );
 
-        /** adds a drop down item to the toolbox. Usually, this is used to add some kind of menu to the toolbox.
-
-            @param i_rItemText
-                the text to display for the item
-            @param i_nHelpId
-                the help ID for the new toolbox item
-            @param i_rCallback
-                the callback to invoke when the drop item has been clicked
-            @return
-                the ID of the newly created toolbox item
-        */
-        sal_uInt16  AddDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<ToolBox *, void>& i_rCallback )
-        {
-            return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
-        }
-
-        void        SetEndDockingHdl( const Link<TitledDockingWindow*,void>& i_rEndDockingHdl ) { m_aEndDockingHdl = i_rEndDockingHdl; }
-
-        /** resets the toolbox. Upon return, the only item in the toolbox is the closer.
-        */
-        void    ResetToolBox()
-        {
-            impl_resetToolBox();
-        }
-
         /** returns the content window, which is to be used as parent window for any content to be displayed
             in the docking window.
         */
@@ -99,10 +74,6 @@ namespace sfx2
         /** internal version of ResetToolBox
         */
         void    impl_resetToolBox();
-
-        /** internal version of AddDropDownToolBoxItem
-        */
-        sal_uInt16  impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link<ToolBox *, void>& i_rCallback );
 
         /** returns the current title.
 

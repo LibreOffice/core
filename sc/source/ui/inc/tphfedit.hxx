@@ -43,8 +43,6 @@ class SvxFieldItem;
 class ScAccessibleEditObject;
 class ScEditWindow;
 
-SC_DLLPUBLIC ScEditWindow* GetScEditWindow ();
-
 enum ScEditWindowLocation
 {
     Left,

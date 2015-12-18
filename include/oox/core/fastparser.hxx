@@ -75,13 +75,6 @@ public:
     void                parseStream( StorageBase& rStorage, const OUString& rStreamName, bool bCloseStream = false )
                             throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException );
 
-    OUString getNamespaceURL( const OUString& rPrefix )
-                        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
-
-    bool hasNamespaceURL( const OUString& rPrefix ) const;
-
-    sal_Int32 getNamespaceId( const OUString& aUrl );
-
     css::uno::Reference< css::xml::sax::XFastTokenHandler >
                getTokenHandler() const { return mxTokenHandler; }
 

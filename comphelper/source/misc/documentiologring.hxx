@@ -52,8 +52,6 @@ public:
 
     static OUString SAL_CALL getImplementationName_static();
 
-    static OUString SAL_CALL getSingletonName_static();
-
     static OUString SAL_CALL getServiceName_static();
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL

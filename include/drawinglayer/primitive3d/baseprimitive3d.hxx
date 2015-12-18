@@ -64,7 +64,6 @@ namespace drawinglayer { namespace primitive3d {
         Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : vector(init) {}
 
         void append(const Primitive3DContainer& rSource);
-        void append(const Primitive3DSequence& rSource);
         void append(Primitive3DContainer&& rSource);
         Primitive3DContainer& operator=(const Primitive3DContainer& r) { vector::operator=(r); return *this; }
         Primitive3DContainer& operator=(const Primitive3DContainer&& r) { vector::operator=(r); return *this; }
@@ -208,15 +207,6 @@ namespace drawinglayer
             and using compare operator
          */
         bool DRAWINGLAYER_DLLPUBLIC arePrimitive3DReferencesEqual(const Primitive3DReference& rA, const Primitive3DReference& rB);
-
-        /// compare two Primitive3DReferences for equality, uses arePrimitive3DReferencesEqual internally
-        bool DRAWINGLAYER_DLLPUBLIC arePrimitive3DSequencesEqual(const Primitive3DSequence& rA, const Primitive3DSequence& rB);
-
-        /// concatenate sequence
-        void DRAWINGLAYER_DLLPUBLIC appendPrimitive3DSequenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DContainer& rSource);
-
-        /// concatenate single Primitive3D
-        void DRAWINGLAYER_DLLPUBLIC appendPrimitive3DReferenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DReference& rSource);
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

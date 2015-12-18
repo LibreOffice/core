@@ -130,7 +130,6 @@ public:
 #if ENABLE_CAIRO_CANVAS
     virtual SystemFontData      GetSysFontData( int nFallbackLevel ) const override;
 #endif
-    SalColor                    GetTextColor() const { return mnTextColor; }
 };
 
 #endif

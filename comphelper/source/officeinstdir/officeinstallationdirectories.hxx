@@ -77,8 +77,6 @@ public:
         getImplementationName_static();
     static css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames_static();
-    static OUString SAL_CALL
-        getSingletonName_static();
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
         Create( const css::uno::Reference< css::uno::XComponentContext >& );
 

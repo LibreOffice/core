@@ -62,7 +62,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
-#include <vcl/svpforlokit.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <svtools/ctrltool.hxx>

@@ -107,7 +107,6 @@ public:
     static void         WriteStars( SvStream & );
 
     virtual bool                SetName( const OString& rName, SvIdlDataBase * = nullptr  );
-    const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
     virtual const SvString &    GetName() const { return aName; }
     virtual const SvString &    GetHelpText() const { return aHelpText; }
     virtual const SvString &    GetConfigName() const{ return aConfigName; }

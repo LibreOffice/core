@@ -132,21 +132,6 @@ namespace utl
         return sLocalName;
     }
 
-    OUString OConfigurationNode::getNodePath() const
-    {
-        OUString sNodePath;
-        try
-        {
-            Reference< XHierarchicalName > xNamed( m_xDirectAccess, UNO_QUERY_THROW );
-            sNodePath = xNamed->getHierarchicalName();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return sNodePath;
-    }
-
     OUString OConfigurationNode::normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const
     {
         OUString sName(_rName);

@@ -74,9 +74,6 @@ public:
                         return aCommandList[ i ];
                     }
 
-    void            clear() {
-                        aCommandList.clear();
-                    }
 };
 
 #endif // INCLUDED_SVL_OWNLIST_HXX

@@ -47,12 +47,6 @@ OUString SAL_CALL OOfficeRestartManager::getImplementationName_static()
 }
 
 
-OUString SAL_CALL OOfficeRestartManager::getSingletonName_static()
-{
-    return OUString( "com.sun.star.task.OfficeRestartManager" );
-}
-
-
 OUString SAL_CALL OOfficeRestartManager::getServiceName_static()
 {
     return OUString( "com.sun.star.comp.task.OfficeRestartManager" );

@@ -182,10 +182,6 @@ public: // XDataDescriptorFactory
 };
 
 
-void copyProperties(
-    ReflectionBase *target,
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & source );
-
 }
 
 

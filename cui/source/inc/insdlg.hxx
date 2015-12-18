@@ -104,8 +104,6 @@ private:
     OUString m_aCommands;
 
     DECL_LINK_TYPED(BrowseHdl, Button*, void);
-    OUString GetPlugInFile() const { return m_pEdFileurl->GetText(); }
-    OUString GetPlugInOptions() const { return m_pEdPluginsOptions->GetText(); }
 
 public:
     SvInsertPlugInDialog(vcl::Window* pParent,

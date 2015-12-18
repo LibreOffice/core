@@ -131,8 +131,6 @@ public:
     virtual void                SetScreenNumber( unsigned int nScreen ) override { (void)nScreen; }
     virtual void                SetApplicationID(const OUString &rApplicationID) override { (void) rApplicationID; }
 
-    static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
-
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX

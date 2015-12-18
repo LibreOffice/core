@@ -577,11 +577,6 @@ OString SdPage::stringify() const
     return aString.makeStringAndClear();
 }
 
-sal_Int32 SdPage::getHash() const
-{
-    return stringify().hashCode();
-}
-
 void SdPage::createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation )
 {
     sd::createAnnotation( xAnnotation, this );

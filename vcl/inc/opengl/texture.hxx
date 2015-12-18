@@ -113,7 +113,6 @@ public:
     void            Unbind();
     void            Read( GLenum nFormat, GLenum nType, sal_uInt8* pData );
     GLuint          AddStencil();
-    bool            HasStencil() const;
     GLuint          StencilId() const;
 
     void            SaveToFile(const OUString& rFileName);
