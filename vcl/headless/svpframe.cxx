@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <vcl/svpforlokit.hxx>
 #include <vcl/syswin.hxx>
 
 #include "headless/svpframe.hxx"
@@ -487,16 +486,6 @@ void SvpSalFrame::UnionClipRegion( long, long, long, long )
 
 void SvpSalFrame::EndSetClipRegion()
 {
-}
-
-SalFrame* GetSvpFocusFrameForLibreOfficeKit()
-{
-    return SvpSalFrame::GetFocusFrame();
-}
-
-vcl::Window* GetSalFrameWindowForLibreOfficeKit(SalFrame *pSF)
-{
-    return pSF->GetWindow();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,8 +19,6 @@
 
 #ifndef IOS
 
-#include <vcl/svpforlokit.hxx>
-
 #include "headless/svpbmp.hxx"
 #include "headless/svpinst.hxx"
 #include "headless/svpvd.hxx"
@@ -56,36 +54,32 @@ bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 }
 
 bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
-                                              const basebmp::RawMemorySharedArray &pBuffer )
+        const basebmp::RawMemorySharedArray &pBuffer )
 {
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )
         aDevSize.setX( 1 );
     if( aDevSize.getY() == 0 )
         aDevSize.setY( 1 );
-    if( ! m_aDevice.get() || m_aDevice->getSize() != aDevSize )
-    {
+    if( ! m_aDevice.get() || m_aDevice->getSize() != aDevSize ) {
         basebmp::Format nFormat = SvpSalInstance::getBaseBmpFormatForDeviceFormat(m_eFormat);
 
-        if (m_eFormat == DeviceFormat::BITMASK)
-        {
+        if (m_eFormat == DeviceFormat::BITMASK) {
             std::vector< basebmp::Color > aDevPal(2);
             aDevPal[0] = basebmp::Color( 0, 0, 0 );
             aDevPal[1] = basebmp::Color( 0xff, 0xff, 0xff );
             m_aDevice = createBitmapDevice( aDevSize, true, nFormat,
                                             PaletteMemorySharedVector( new std::vector< basebmp::Color >(aDevPal) ) );
-        }
-        else
-        {
+        } else {
             m_aDevice = pBuffer ?
-                          createBitmapDevice( aDevSize, true, nFormat, pBuffer, PaletteMemorySharedVector() )
+                        createBitmapDevice( aDevSize, true, nFormat, pBuffer, PaletteMemorySharedVector() )
                         : createBitmapDevice( aDevSize, true, nFormat );
         }
 
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
-             (*it)->setDevice( m_aDevice );
+            (*it)->setDevice( m_aDevice );
 
     }
     return true;

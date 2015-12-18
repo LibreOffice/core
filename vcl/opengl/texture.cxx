@@ -299,11 +299,6 @@ int OpenGLTexture::GetHeight() const
     return maRect.GetHeight();
 }
 
-bool OpenGLTexture::HasStencil() const
-{
-    return mpImpl && mpImpl->mnOptStencil != 0;
-}
-
 GLuint OpenGLTexture::StencilId() const
 {
     return mpImpl ? mpImpl->mnOptStencil : 0;

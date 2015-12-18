@@ -86,9 +86,6 @@ namespace utl
         /// returns the local name of the node
         OUString     getLocalName() const;
 
-        /// returns the fully qualified path of the node
-        OUString     getNodePath() const;
-
         /** open a sub node
             @param      _rPath      access path of the to-be-opened sub node. May be a hierarchical path.
         */

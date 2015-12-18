@@ -112,9 +112,6 @@ namespace connectivity
             bool    m_bUseCatalog;  // should we use the catalog on filebased databases
 
         public:
-            rtl::OUString getMysqlVariable(const char *varname)
-                                                                throw(SQLException, RuntimeException);
-
             sal_Int32 getMysqlVersion()
                                                                 throw(SQLException, RuntimeException);
 
@@ -215,9 +212,7 @@ namespace connectivity
 
             // should we use the catalog on filebased databases
             inline bool             isCatalogUsed()     const { return m_bUseCatalog; }
-            inline rtl::OUString             getUserName()       const { return m_sUser; }
             inline const MysqlCDriver&  getDriver()         const { return m_rDriver;}
-            inline rtl_TextEncoding     getTextEncoding()   const { return m_settings.encoding; }
 
         }; /* OConnection */
         // TODO: Not used.

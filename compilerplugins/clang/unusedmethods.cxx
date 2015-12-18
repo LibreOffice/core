@@ -255,7 +255,7 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
         return true;
     }
 
-    if( !ignoreLocation( functionDecl ))
+    if( functionDecl->getLocation().isValid() && !ignoreLocation( functionDecl ))
         definitionSet.insert(niceName(functionDecl));
     return true;
 }

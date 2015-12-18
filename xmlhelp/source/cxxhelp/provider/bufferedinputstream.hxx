@@ -100,11 +100,6 @@ namespace chelp {
                    css::uno::RuntimeException, std::exception ) override;
     };
 
-
-    extern css::uno::Reference<css::io::XInputStream>
-    turnToSeekable(
-        const css::uno::Reference<css::io::XInputStream>& xInputStream);
-
 }
 
 #endif // INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_BUFFEREDINPUTSTREAM_HXX

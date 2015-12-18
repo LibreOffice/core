@@ -37,7 +37,6 @@ public:
     SfxIntegerListItem( const SfxIntegerListItem& rItem );
     virtual ~SfxIntegerListItem();
 
-    std::vector< sal_Int32 >& GetList() { return m_aList; }
     const std::vector< sal_Int32 >& GetList() const { return m_aList; }
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

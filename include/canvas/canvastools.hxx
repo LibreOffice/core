@@ -102,9 +102,6 @@ namespace canvas
          *
          */
 
-        // mickey's math tricks...
-        inline unsigned int pow2( unsigned int c ) { return 0x1 << c; }
-
         /** Round given floating point value down to next integer
          */
         inline sal_Int32 roundDown( const double& rVal )

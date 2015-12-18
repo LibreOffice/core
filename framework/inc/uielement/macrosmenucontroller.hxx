@@ -67,7 +67,6 @@ namespace framework
 
         private:
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
-            OUString RetrieveLabelFromCommand(const OUString& rCmdURL);
             void addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId );
     };
 }

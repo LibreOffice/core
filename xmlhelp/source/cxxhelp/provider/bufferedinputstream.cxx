@@ -30,21 +30,6 @@ using namespace com::sun::star::io;
 using namespace chelp;
 
 
-Reference<XInputStream> chelp::turnToSeekable(const Reference<XInputStream>& xInputStream)
-{
-    if( ! xInputStream.is() )
-        return xInputStream;
-
-    Reference<XSeekable> xSeekable(xInputStream,UNO_QUERY);
-
-    if( xSeekable.is() )
-        return xInputStream;
-
-    return new BufferedInputStream(xInputStream);
-}
-
-
-
 BufferedInputStream::BufferedInputStream(const Reference<XInputStream>& xInputStream)
     : m_nBufferLocation(0),
       m_nBufferSize(0),

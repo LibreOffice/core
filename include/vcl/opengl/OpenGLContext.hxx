@@ -195,11 +195,6 @@ public:
         return mbInitialized;
     }
 
-    bool requestedLegacy()
-    {
-        return mbRequestLegacyContext;
-    }
-
     /// VCL promiscuously re-uses its own contexts:
     void setVCLOnly() { mbVCLOnly = true; }
     bool isVCLOnly() { return mbVCLOnly; }
