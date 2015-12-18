@@ -474,9 +474,6 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
     case RET_TARGET_CREATED:
         {
             SwView* pTargetView = m_pMMConfig->GetTargetView();
-            uno::Reference< frame::XFrame > xFrame =
-                m_pView->GetViewFrame()->GetFrame().GetFrameInterface();
-            xFrame->getContainerWindow()->setVisible(sal_False);
             OSL_ENSURE(pTargetView, "No target view has been created");
             if(pTargetView)
             {
