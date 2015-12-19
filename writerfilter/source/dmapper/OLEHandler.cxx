@@ -22,6 +22,7 @@
 #include "GraphicHelpers.hxx"
 
 #include <editeng/unoprnms.hxx>
+#include <oox/ole/oleobjecthelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
@@ -179,43 +180,6 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
     }
 }
 
-
-void OLEHandler::saveInteropProperties(uno::Reference<text::XTextDocument> const& xTextDocument, const OUString& sObjectName, const OUString& sOldObjectName)
-{
-    static const char sEmbeddingsPropName[] = "EmbeddedObjects";
-
-    // get interop grab bag from document
-    uno::Reference< beans::XPropertySet > xDocProps( xTextDocument, uno::UNO_QUERY );
-    comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG));
-
-    // get EmbeddedObjects property inside grab bag
-    comphelper::SequenceAsHashMap objectsList;
-    if (aGrabBag.find(sEmbeddingsPropName) != aGrabBag.end())
-        objectsList << aGrabBag[sEmbeddingsPropName];
-
-    uno::Sequence< beans::PropertyValue > aGrabBagAttribute(2);
-    aGrabBagAttribute[0].Name = "ProgID";
-    aGrabBagAttribute[0].Value = uno::Any( m_sProgId );
-    aGrabBagAttribute[1].Name = "DrawAspect";
-    aGrabBagAttribute[1].Value = uno::Any( m_sDrawAspect );
-
-    // If we got an "old name", erase that first.
-    if (!sOldObjectName.isEmpty())
-    {
-        comphelper::SequenceAsHashMap::iterator it = objectsList.find(sOldObjectName);
-        if (it != objectsList.end())
-            objectsList.erase(it);
-    }
-
-    objectsList[sObjectName] = uno::Any( aGrabBagAttribute );
-
-    // put objects list back into the grab bag
-    aGrabBag[sEmbeddingsPropName] = uno::Any(objectsList.getAsConstPropertyValueList());
-
-    // put grab bag back into the document
-    xDocProps->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, uno::Any(aGrabBag.getAsConstPropertyValueList()));
-}
-
 void OLEHandler::importStream(uno::Reference<uno::XComponentContext> xComponentContext, uno::Reference<text::XTextDocument> xTextDocument, uno::Reference<text::XTextContent> xOLE)
 {
     OUString aFilterService;
@@ -248,7 +212,9 @@ void OLEHandler::importStream(uno::Reference<uno::XComponentContext> xComponentC
 
     // Now that the data is imported, update the (typically) changed stream name.
     uno::Reference<beans::XPropertySet> xPropertySet(xOLE, uno::UNO_QUERY);
-    saveInteropProperties(xTextDocument, xPropertySet->getPropertyValue("StreamName").get<OUString>(), m_aURL);
+    ::oox::ole::SaveInteropProperties(xTextDocument,
+        xPropertySet->getPropertyValue("StreamName").get<OUString>(), &m_aURL,
+        m_sProgId, m_sDrawAspect);
 }
 
 OUString OLEHandler::getCLSID(uno::Reference<uno::XComponentContext> xComponentContext) const
@@ -305,7 +271,7 @@ OUString OLEHandler::copyOLEOStream(
                 }
             }
 
-            saveInteropProperties( xTextDocument, aURL );
+            ::oox::ole::SaveInteropProperties(xTextDocument, aURL, nullptr, m_sProgId, m_sDrawAspect);
 
             static const char sProtocol[] = "vnd.sun.star.EmbeddedObject:";
             OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );

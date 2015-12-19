@@ -26,6 +26,7 @@
 namespace com { namespace sun { namespace star {
     namespace awt { struct Size; }
     namespace document { class XEmbeddedObjectResolver; }
+    namespace frame { class XModel; }
     namespace lang { class XMultiServiceFactory; }
 } } }
 
@@ -70,6 +71,11 @@ private:
     sal_Int32                                                     mnObjectId;
 };
 
+
+OOX_DLLPUBLIC void SaveInteropProperties(
+       css::uno::Reference<css::frame::XModel> const& xModel,
+       OUString const& rObjectName, OUString const* pOldObjectName,
+       OUString const& rProgId, OUString const& rDrawAspect);
 
 
 } // namespace ole

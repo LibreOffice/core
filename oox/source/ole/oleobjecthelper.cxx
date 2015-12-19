@@ -21,6 +21,7 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -28,6 +29,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
+#include <comphelper/sequenceashashmap.hxx>
 #include "oox/helper/propertymap.hxx"
 
 namespace oox {
@@ -70,6 +72,44 @@ OleObjectHelper::~OleObjectHelper()
     catch(const Exception& )
     {
     }
+}
+
+void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
+       OUString const& rObjectName, OUString const*const pOldObjectName,
+       OUString const& rProgId, OUString const& rDrawAspect)
+{
+    static const char sEmbeddingsPropName[] = "EmbeddedObjects";
+
+    // get interop grab bag from document
+    uno::Reference<beans::XPropertySet> const xDocProps(xModel, uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue("InteropGrabBag"));
+
+    // get EmbeddedObjects property inside grab bag
+    comphelper::SequenceAsHashMap objectsList;
+    if (aGrabBag.find(sEmbeddingsPropName) != aGrabBag.end())
+        objectsList << aGrabBag[sEmbeddingsPropName];
+
+    uno::Sequence< beans::PropertyValue > aGrabBagAttribute(2);
+    aGrabBagAttribute[0].Name = "ProgID";
+    aGrabBagAttribute[0].Value <<= rProgId;
+    aGrabBagAttribute[1].Name = "DrawAspect";
+    aGrabBagAttribute[1].Value <<= rDrawAspect;
+
+    // If we got an "old name", erase that first.
+    if (pOldObjectName)
+    {
+        comphelper::SequenceAsHashMap::iterator it = objectsList.find(*pOldObjectName);
+        if (it != objectsList.end())
+            objectsList.erase(it);
+    }
+
+    objectsList[rObjectName] = uno::Any( aGrabBagAttribute );
+
+    // put objects list back into the grab bag
+    aGrabBag[sEmbeddingsPropName] = uno::Any(objectsList.getAsConstPropertyValueList());
+
+    // put grab bag back into the document
+    xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
 }
 
 bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInfo& rOleObject, const awt::Size& rObjSize )
