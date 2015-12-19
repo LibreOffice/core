@@ -160,7 +160,8 @@ struct AnnotatingVisitor
                       StateMap&                                         rStateMap,
                       const State&                                       rInitialState,
                       const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
-                      std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector) :
+                      std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector,
+                      bool& rGradientNotFound) :
         mnCurrStateId(0),
         maCurrState(),
         maParentStates(),
@@ -170,7 +171,8 @@ struct AnnotatingVisitor
         maGradientVector(),
         maGradientStopVector(),
         maElementVector(),
-        mrUseElementVector(rUseElementVector)
+        mrUseElementVector(rUseElementVector),
+        mrGradientNotFound(rGradientNotFound)
     {
         maParentStates.push_back(rInitialState);
     }
@@ -215,6 +217,12 @@ struct AnnotatingVisitor
 
                     if( aFound != maGradientIdMap.end() )
                         maGradientVector.back() = maGradientVector[aFound->second];
+                    else
+                    {
+                        mrGradientNotFound = true;
+                        maGradientVector.pop_back();
+                        return;
+                    }
                 }
 
                 // do that after dereferencing, to prevent hyperlinked
@@ -252,6 +260,12 @@ struct AnnotatingVisitor
 
                     if( aFound != maGradientIdMap.end() )
                         maGradientVector.back() = maGradientVector[aFound->second];
+                    else
+                    {
+                        mrGradientNotFound = true;
+                        maGradientVector.pop_back();
+                        return;
+                    }
                 }
 
                 // do that after dereferencing, to prevent hyperlinked
@@ -1317,6 +1331,7 @@ struct AnnotatingVisitor
     ElementRefMapType                          maGradientIdMap;
     ElementRefMapType                          maStopIdMap;
     ElementRefMapType                          maElementIdMap;
+    bool&                                      mrGradientNotFound;
 };
 
 /// Annotate svg styles with unique references to state pool
@@ -1327,9 +1342,14 @@ static void annotateStyles( StatePool&                                        rS
                             const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
                             std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
 {
-
-    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl,rUseElementVector);
+    bool maGradientNotFound = false;
+    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl,rUseElementVector, maGradientNotFound);
     visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
+
+    //Sometimes, xlink:href in gradients refers to another gradient which hasn't been parsed yet.
+    // if that happens, we'll need to parse the styles twice, so everything gets referred.
+    if( maGradientNotFound )
+        visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
 }
 
 struct ShapeWritingVisitor
