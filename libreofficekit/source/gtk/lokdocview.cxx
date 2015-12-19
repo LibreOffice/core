@@ -2579,12 +2579,12 @@ lok_doc_view_set_partmode(LOKDocView* pDocView,
                           int nPartMode)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_pDocument)
+        return;
+
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PARTMODE);
     GError* error = nullptr;
-
-    if (!priv->m_pDocument)
-        return;
 
     pLOEvent->m_nPartMode = nPartMode;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
