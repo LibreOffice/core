@@ -136,6 +136,7 @@ public:
 };
 
 typedef tools::SvRef<SbModule> SbModuleRef;
+typedef std::vector<SbModuleRef> SbModules;
 
 // Object class for instances of class modules
 class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
