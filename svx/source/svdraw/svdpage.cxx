@@ -1061,18 +1061,22 @@ sdr::contact::ViewContact* SdrPage::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrPage(*this);
 }
 
-sdr::contact::ViewContact& SdrPage::GetViewContact() const
+const sdr::contact::ViewContact& SdrPage::GetViewContact() const
 {
-    if(!mpViewContact)
-    {
-        const_cast< SdrPage* >(this)->mpViewContact =
-            const_cast< SdrPage* >(this)->CreateObjectSpecificViewContact();
-    }
+    if (!mpViewContact)
+        const_cast<SdrPage*>(this)->mpViewContact.reset(
+            const_cast<SdrPage*>(this)->CreateObjectSpecificViewContact());
 
     return *mpViewContact;
 }
 
+sdr::contact::ViewContact& SdrPage::GetViewContact()
+{
+    if (!mpViewContact)
+        mpViewContact.reset(CreateObjectSpecificViewContact());
 
+    return *mpViewContact;
+}
 
 void SdrPageProperties::ImpRemoveStyleSheet()
 {
@@ -1273,11 +1277,7 @@ SdrPage::~SdrPage()
 
     TRG_ClearMasterPage();
 
-    if(mpViewContact)
-    {
-        delete mpViewContact;
-        mpViewContact = nullptr;
-    }
+    mpViewContact.reset();
 
     {
         delete mpSdrPageProperties;
@@ -1780,7 +1780,7 @@ bool SdrPage::checkVisibility(
 }
 
 // DrawContact support: Methods for handling Page changes
-void SdrPage::ActionChanged() const
+void SdrPage::ActionChanged()
 {
     // Do necessary ViewContact actions
     GetViewContact().ActionChanged();

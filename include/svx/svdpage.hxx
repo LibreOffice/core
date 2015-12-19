@@ -375,6 +375,14 @@ public:
 */
 class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage >
 {
+    // #i9076#
+    friend class SdrModel;
+    friend class SvxUnoDrawPagesAccess;
+
+    // this class uses its own UNO wrapper
+    // and thus has to set mxUnoPage (it also relies on mxUnoPage not being WeakRef)
+    friend class reportdesign::OSection;
+
     SdrPage& operator=(const SdrPage& rSrcPage) = delete;
 
     // start PageUser section
@@ -382,32 +390,20 @@ private:
     // #111111# PageUser section
     sdr::PageUserVector                                             maPageUsers;
 
+    std::unique_ptr<sdr::contact::ViewContact> mpViewContact;
+
 public:
     void AddPageUser(sdr::PageUser& rNewUser);
     void RemovePageUser(sdr::PageUser& rOldUser);
 
-
-    // end PageUser section
-
-
-    // #110094# DrawContact section
-private:
-    sdr::contact::ViewContact*                                      mpViewContact;
 protected:
     sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
-    sdr::contact::ViewContact& GetViewContact() const;
+    const sdr::contact::ViewContact& GetViewContact() const;
+    sdr::contact::ViewContact& GetViewContact();
 
     // #110094# DrawContact support: Methods for handling Page changes
-    void ActionChanged() const;
-
-    // #i9076#
-    friend class SdrModel;
-    friend class SvxUnoDrawPagesAccess;
-
-// this class uses its own UNO wrapper
-// and thus has to set mxUnoPage (it also relies on mxUnoPage not being WeakRef)
-friend class reportdesign::OSection;
+    void ActionChanged();
 
     sal_Int32 nWdt;     // Seitengroesse
     sal_Int32 nHgt;     // Seitengroesse
