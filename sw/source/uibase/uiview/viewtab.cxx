@@ -1563,7 +1563,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         SwSectionFormat const *pFormat = pSect->GetFormat();
                         const SwFormatCol& rCol = pFormat->GetCol();
-                        if(rSh.IsInRightToLeftText())
+                        if (rSh.IsColRightToLeft())
                             nNum = rCol.GetColumns().size() - nNum;
                         else
                             --nNum;
@@ -1601,7 +1601,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         const SwFrameFormat* pFormat = rSh.GetFlyFrameFormat() ;
 
                         const SwFormatCol& rCol = pFormat->GetCol();
-                        if(rSh.IsInRightToLeftText())
+                        if (rSh.IsColRightToLeft())
                             nNum = rCol.GetColumns().size() - nNum;
                         else
                             nNum--;
