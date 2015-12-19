@@ -49,10 +49,14 @@ OleObjectInfo::OleObjectInfo() :
 {
 }
 
-OleObjectHelper::OleObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
-    maEmbeddedObjScheme( "vnd.sun.star.EmbeddedObject:" ),
-    mnObjectId( 100 )
+OleObjectHelper::OleObjectHelper(
+        const Reference< XMultiServiceFactory >& rxModelFactory,
+        uno::Reference<frame::XModel> const& xModel)
+    : m_xModel(xModel)
+    , maEmbeddedObjScheme("vnd.sun.star.EmbeddedObject:")
+    , mnObjectId( 100 )
 {
+    assert(m_xModel.is());
     if( rxModelFactory.is() ) try
     {
         mxResolver.set( rxModelFactory->createInstance( "com.sun.star.document.ImportEmbeddedObjectResolver" ), UNO_QUERY );
@@ -74,6 +78,10 @@ OleObjectHelper::~OleObjectHelper()
     }
 }
 
+// TODO: this is probably a sub-optimal approach: ideally the media type
+// of the stream from [Content_Types].xml should be stored somewhere for this
+// purpose, but currently the media type of all OLE streams in the storage is
+// just "application/vnd.sun.star.oleobject"
 void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
        OUString const& rObjectName, OUString const*const pOldObjectName,
        OUString const& rProgId, OUString const& rDrawAspect)
@@ -136,6 +144,10 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
             Reference< XOutputStream > xOutStrm( xResolverNA->getByName( aObjectId ), UNO_QUERY_THROW );
             xOutStrm->writeBytes( rOleObject.maEmbeddedData );
             xOutStrm->closeOutput();
+
+            SaveInteropProperties(m_xModel, aObjectId, nullptr,
+                rOleObject.maProgId,
+                rOleObject.mbShowAsIcon ? OUString("Icon") : OUString("Content"));
 
             OUString aUrl = mxResolver->resolveEmbeddedObjectURL( aObjectId );
             OSL_ENSURE( aUrl.match( maEmbeddedObjScheme ), "OleObjectHelper::importOleObject - unexpected URL scheme" );

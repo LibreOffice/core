@@ -57,7 +57,8 @@ class OleObjectHelper
 {
 public:
     explicit            OleObjectHelper(
-                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory );
+                            const css::uno::Reference<css::lang::XMultiServiceFactory>& rxModelFactory,
+                            const css::uno::Reference<css::frame::XModel>& xModel);
                         ~OleObjectHelper();
 
     bool                importOleObject(
@@ -66,6 +67,7 @@ public:
                             const css::awt::Size& rObjSize );
 
 private:
+    css::uno::Reference<css::frame::XModel> m_xModel;
     css::uno::Reference< css::document::XEmbeddedObjectResolver > mxResolver;
     const OUString                                                maEmbeddedObjScheme;
     sal_Int32                                                     mnObjectId;

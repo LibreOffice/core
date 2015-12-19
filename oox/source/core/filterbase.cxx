@@ -366,7 +366,7 @@ ModelObjectHelper& FilterBase::getModelObjectHelper() const
 OleObjectHelper& FilterBase::getOleObjectHelper() const
 {
     if( !mxImpl->mxOleObjHelper )
-        mxImpl->mxOleObjHelper.reset( new OleObjectHelper( mxImpl->mxModelFactory ) );
+        mxImpl->mxOleObjHelper.reset(new OleObjectHelper(mxImpl->mxModelFactory, mxImpl->mxModel));
     return *mxImpl->mxOleObjHelper;
 }
 
