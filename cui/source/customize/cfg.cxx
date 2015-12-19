@@ -3396,7 +3396,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             if ( pNameDialog->Execute() == RET_OK ) {
                 pNameDialog->GetName(aNewName);
 
-                if( aNewName == "" ) //tdf#80758 - Accelerator character ("~") is passed as
+                if( aNewName.isEmpty() ) //tdf#80758 - Accelerator character ("~") is passed as
                     pEntry->SetName( "~" ); // the button name in case of empty values.
                 else
                     pEntry->SetName( aNewName );
