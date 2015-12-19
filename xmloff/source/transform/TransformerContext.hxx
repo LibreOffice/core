@@ -26,6 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <memory>
 
 class SvXMLNamespaceMap;
 class XMLTransformerBase;
