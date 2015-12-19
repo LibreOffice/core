@@ -38,7 +38,6 @@ public:
     int    mnHeight;
     GLenum mnFilter;
     GLuint mnOptStencil;
-    bool   mbHasOptStencil;
 
     std::unique_ptr<std::vector<int>> mpSlotReferences;
     int mnFreeSlots;
