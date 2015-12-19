@@ -1400,12 +1400,11 @@ void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
 void StarBASIC::ClearAllModuleVars()
 {
     // Initialise the own module
-    for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
+    for (const auto& rModule: pModules)
     {
-        SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
         // Initialise only, if the startcode was already executed
-        if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && nullptr == dynamic_cast<const SbObjModule*>( pModule) )
-            pModule->ClearPrivateVars();
+        if( rModule->pImage && rModule->pImage->bInit && !rModule->isProxyModule() && nullptr == dynamic_cast<const SbObjModule*>( rModule.get()) )
+            rModule->ClearPrivateVars();
     }
 
 }
