@@ -22,6 +22,7 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
+#include <basic/sbmod.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <tools/link.hxx>
@@ -32,7 +33,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <basic/basicdllapi.h>
 
-class SbModule;                     // completed module
 class SbiInstance;                  // runtime instance
 class SbiRuntime;                   // currently running procedure
 class SbiImage;                     // compiled image
@@ -49,7 +49,7 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     friend class SbiRuntime;
     friend class DocBasicItem;
 
-    SbxArrayRef     pModules;               // List of all modules
+    SbModules       pModules;               // List of all modules
     SbxObjectRef    pRtl;               // Runtime Library
     SbxArrayRef     xUnoListeners;          // Listener handled by CreateUnoListener
 
@@ -120,7 +120,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
     virtual bool Call( const OUString&, SbxArray* = nullptr ) override;
 
-    SbxArray*       GetModules() { return pModules; }
+    SbModules&      GetModules() { return pModules; }
     SbxObject*      GetRtl()     { return pRtl;     }
     SbModule*       FindModule( const OUString& );
     // Run init code of all modules (including the inserted Doc-Basics)

@@ -19,6 +19,7 @@
 
 
 #include <math.h>
+#include <algorithm>
 
 #include <rtl/math.hxx>
 #include "codegen.hxx"
@@ -191,9 +192,7 @@ short SbiExprNode::GetDepth()
     if( IsOperand() ) return 0;
     else
     {
-        short d1 = pLeft->GetDepth();
-        short d2 = pRight->GetDepth();
-        return( (d1 < d2 ) ? d2 : d1 ) + 1;
+        return std::max(pLeft->GetDepth(), pRight->GetDepth()) + 1;
     }
 }
 
