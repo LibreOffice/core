@@ -302,7 +302,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 SbModule* pModule = pBasic->FindModule( rInfo.GetModule() );
                 if ( !pModule )
                 {
-                    if ( !rInfo.GetModule().isEmpty() || !pBasic->GetModules()->Count() )
+                    if ( !rInfo.GetModule().isEmpty() || pBasic->GetModules().empty() )
                     {
                         OUString aModName = rInfo.GetModule();
 
@@ -311,7 +311,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                             pModule = pBasic->FindModule( aModName );
                     }
                     else
-                        pModule = static_cast<SbModule*>( pBasic->GetModules()->Get(0) );
+                        pModule = pBasic->GetModules().front();
                 }
                 DBG_ASSERT( pModule, "Kein Modul!" );
                 if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxCLASS_METHOD ) )
