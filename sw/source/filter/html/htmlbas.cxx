@@ -268,23 +268,21 @@ void SwHTMLWriter::OutBasic()
         return;
     }
 
+    bool bFirst=true;
     // und jetzt alle StarBasic-Module und alle unbenutzen JavaSrript-Module
     // ausgeben
     for( sal_uInt16 i=0; i<pBasicMan->GetLibCount(); i++ )
     {
         StarBASIC *pBasic = pBasicMan->GetLib( i  );
         const OUString& rLibName = pBasic->GetName();
-
-        SbxArray *pModules = pBasic->GetModules();
-        for( sal_uInt16 j=0; j<pModules->Count(); j++ )
+        for( const auto& pModule: pBasic->GetModules() )
         {
-            const SbModule &rModule = dynamic_cast<const SbModule&>(*pModules->Get(j));
-
             OUString sLang(SVX_MACRO_LANGUAGE_STARBASIC);
             ScriptType eType = STARBASIC;
 
-            if( 0==i && 0==j )
+            if( bFirst )
             {
+                bFirst = false;
                 OutNewLine();
                 OStringBuffer sOut;
                 sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta)
@@ -299,9 +297,9 @@ void SwHTMLWriter::OutBasic()
                    .WriteCharPtr( "\">" );
             }
 
-            const OUString& rModName = rModule.GetName();
+            const OUString& rModName = pModule->GetName();
             Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // nicht einruecken!
-            HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), rModule.GetSource(),
+            HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyOUStr,
                                      &rLibName, &rModName,
                                      m_eDestEnc, &m_aNonConvertableCharacters );
