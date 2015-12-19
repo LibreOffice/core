@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_e84be057",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9470,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2015-12-19T10:28:24Z",
+      "side": 1,
+      "message": "Thanks I missed it! :-)",
+      "parentUuid": "dab17558_d41cbc79",
+      "revId": "894863a4ad3b2f1eb597629e0d5adfd04d13317b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_a813985b",
         "filename": "filter/source/svg/presentation_engine.js",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-19T07:06:32Z",
       "side": 1,
       "message": "missed a semi-colon :-)",
+      "revId": "894863a4ad3b2f1eb597629e0d5adfd04d13317b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_686ed0ca",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 12190,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2015-12-19T10:28:24Z",
+      "side": 1,
+      "message": "semicolon is not needed after a function definition",
+      "parentUuid": "dab17558_a813985b",
       "revId": "894863a4ad3b2f1eb597629e0d5adfd04d13317b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
