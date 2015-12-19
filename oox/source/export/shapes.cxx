@@ -316,7 +316,7 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
         {
             lcl_ConvertProgID(i_rProgID, o_rMediaType, o_rRelationType, o_rSuffix);
             xInStream = xParentStorage->cloneStreamElement(entryName)->getInputStream();
-            // TODO: is it possible to take the sMediaType from the stream?
+            // TODO: make it possible to take the sMediaType from the stream
         }
         else // the object is ODF - either the whole document is
         {    // ODF, or the OLE was edited so it was converted to ODF
@@ -1609,6 +1609,44 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                 uno::Reference<embed::XEmbeddedObject> const xObj(
                     xPropSet->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
 
+                uno::Reference<beans::XPropertySet> const xParent(
+                    uno::Reference<container::XChild>(xObj, uno::UNO_QUERY)->getParent(),
+                    uno::UNO_QUERY);
+
+                uno::Sequence<beans::PropertyValue> grabBag;
+                xParent->getPropertyValue("InteropGrabBag") >>= grabBag;
+
+                OUString const entryName(
+                    uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName());
+                OUString progID;
+
+                for (auto const& it : grabBag)
+                {
+                    if (it.Name == "EmbeddedObjects")
+                    {
+                        uno::Sequence<beans::PropertyValue> objects;
+                        it.Value >>= objects;
+                        for (auto const& object : objects)
+                        {
+                            if (object.Name == entryName)
+                            {
+                                uno::Sequence<beans::PropertyValue> props;
+                                object.Value >>= props;
+                                for (auto const& prop : props)
+                                {
+                                    if (prop.Name == "ProgID")
+                                    {
+                                        prop.Value >>= progID;
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+
                 OUString sMediaType;
                 OUString sRelationType;
                 OUString sSuffix;
@@ -1616,12 +1654,19 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
 
                 uno::Reference<io::XInputStream> const xInStream =
                     oox::GetOLEObjectStream(
-                        mpFB->getComponentContext(), xObj, OUString(),
+                        mpFB->getComponentContext(), xObj, progID,
                         sMediaType, sRelationType, sSuffix, pProgID);
 
                 if (!xInStream.is())
                 {
                     return *this;
+                }
+
+                OString anotherProgID;
+                if (!pProgID && !progID.isEmpty())
+                {
+                    anotherProgID = OUStringToOString(progID, RTL_TEXTENCODING_UTF8);
+                    pProgID = anotherProgID.getStr();
                 }
 
                 assert(!sMediaType.isEmpty());
