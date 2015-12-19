@@ -255,7 +255,8 @@ namespace
                 IDocumentMarkAccess::GetType(*pMark));
             // Explicitly try to get exactly the same name as in the source
             // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
-            pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
+            if (pNewMark)
+                pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
 
             // copying additional attributes for bookmarks or fieldmarks
             ::sw::mark::IBookmark* const pNewBookmark =
