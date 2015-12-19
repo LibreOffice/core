@@ -22,7 +22,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <osl/diagnose.h>
-#include <xmloff/nmspmap.hxx>
 
 #include "TransformerBase.hxx"
 
@@ -47,16 +46,14 @@ bool XMLTransformerContext::HasNamespace( sal_uInt16 nPrefix ) const
 }
 
 XMLTransformerContext::XMLTransformerContext( XMLTransformerBase& rImp,
-                                                const OUString& rQName ) :
-    m_rTransformer( rImp ),
-    m_aQName( rQName ),
-    m_pRewindMap( nullptr )
+                                                const OUString& rQName )
+    : m_rTransformer(rImp)
+    , m_aQName(rQName)
 {
 }
 
 XMLTransformerContext::~XMLTransformerContext()
 {
-    delete m_pRewindMap;
 }
 
 rtl::Reference<XMLTransformerContext> XMLTransformerContext::CreateChildContext( sal_uInt16 nPrefix,

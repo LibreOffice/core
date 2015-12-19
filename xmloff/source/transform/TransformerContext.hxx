@@ -24,6 +24,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
 class SvXMLNamespaceMap;
@@ -37,11 +38,10 @@ class XMLTransformerContext : public ::salhelper::SimpleReferenceObject
 
     OUString m_aQName;
 
-    SvXMLNamespaceMap   *m_pRewindMap;
+    std::unique_ptr<SvXMLNamespaceMap>   m_xRewindMap;
 
-    SvXMLNamespaceMap  *TakeRewindMap()
-    { auto p = m_pRewindMap; m_pRewindMap = nullptr; return p; }
-    void PutRewindMap( SvXMLNamespaceMap *p ) { m_pRewindMap = p; }
+    SvXMLNamespaceMap  *TakeRewindMap() { return m_xRewindMap.release(); }
+    void PutRewindMap( SvXMLNamespaceMap *p ) { m_xRewindMap.reset(p); }
 
 protected:
 

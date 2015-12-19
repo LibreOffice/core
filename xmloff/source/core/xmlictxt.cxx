@@ -23,31 +23,27 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlictxt.hxx>
 
 using namespace ::com::sun::star;
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-                              const OUString& rLName ) :
-    mrImport( rImp ),
-    mnPrefix( nPrfx ),
-    maLocalName( rLName ),
-    mpRewindMap( nullptr )
+                              const OUString& rLName )
+    : mrImport(rImp)
+    , mnPrefix(nPrfx)
+    , maLocalName(rLName)
 {
 }
 
-SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp ) :
-    mrImport( rImp ),
-    mnPrefix ( 0 ),
-    mpRewindMap( nullptr )
+SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
+    : mrImport(rImp)
+    , mnPrefix(0)
 {
 }
 
 SvXMLImportContext::~SvXMLImportContext()
 {
-    delete mpRewindMap;
 }
 
 SvXMLImportContext *SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
