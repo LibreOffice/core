@@ -338,7 +338,7 @@ bool LwpMasterPage::IsNeedSection()
     //get story
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
     //if pagelayout is modified, register the pagelayout
-    if(pStory->IsPMModified())
+    if (pStory && pStory->IsPMModified())
     {
         bNewSection = pStory->IsNeedSection();
     }
