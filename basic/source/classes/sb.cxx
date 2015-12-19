@@ -924,7 +924,6 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
     pLibInfo = nullptr;
     bNoRtl = bBreak = false;
     bVBAEnabled = false;
-    pModules = new SbxArray;
 
     if( !GetSbData()->nInst++ )
     {
@@ -1033,10 +1032,9 @@ void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
 {
     if( this != pDeletedBasic )
     {
-        for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
+        for( const auto& rpModule: pModules)
         {
-            SbModule* p = static_cast<SbModule*>(pModules->Get( i ));
-            p->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
+            rpModule.get()->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
         }
     }
 
@@ -1097,7 +1095,7 @@ SbModule* StarBASIC::MakeModule32( const OUString& rName, const ModuleInfo& mInf
     }
     p->SetSource32( rSrc );
     p->SetParent( this );
-    pModules->Insert( p, pModules->Count() );
+    pModules.push_back(p);
     SetModified( true );
     return p;
 }
@@ -1106,7 +1104,7 @@ void StarBASIC::Insert( SbxVariable* pVar )
 {
     if( dynamic_cast<const SbModule*>(pVar) != nullptr)
     {
-        pModules->Insert( pVar, pModules->Count() );
+        pModules.push_back(dynamic_cast<SbModule*>(pVar));
         pVar->SetParent( this );
         StartListening( pVar->GetBroadcaster(), true );
     }
@@ -1127,7 +1125,7 @@ void StarBASIC::Remove( SbxVariable* pVar )
     {
         // #87540 Can be last reference!
         SbxVariableRef xVar = pVar;
-        pModules->Remove( pVar );
+        std::remove(pModules.begin(), pModules.end(), pVar);
         pVar->SetParent( nullptr );
         EndListening( pVar->GetBroadcaster() );
     }
@@ -1144,20 +1142,19 @@ bool StarBASIC::Compile( SbModule* pMod )
 
 void StarBASIC::Clear()
 {
-    while( pModules->Count() )
+    while( !pModules.empty() )
     {
-        pModules->Remove( pModules->Count() - 1 );
+        pModules.pop_back();
     }
 }
 
 SbModule* StarBASIC::FindModule( const OUString& rName )
 {
-    for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
+    for (const auto& rModule: pModules)
     {
-        SbModule* p = static_cast<SbModule*>( pModules->Get( i ) );
-        if( p->GetName().equalsIgnoreAsciiCase( rName ) )
+        if( rModule->GetName().equalsIgnoreAsciiCase( rName ) )
         {
-            return p;
+            return rModule.get();
         }
     }
     return nullptr;
@@ -1233,12 +1230,11 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     SolarMutexGuard guard;
 
     // Init own modules
-    for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
+    for (const auto& rModule: pModules)
     {
-        SbModule* pModule = static_cast<SbModule*>( pModules->Get( nMod ) );
-        if( !pModule->IsCompiled() )
+        if( !rModule->IsCompiled() )
         {
-            pModule->Compile();
+            rModule->Compile();
         }
     }
     // compile modules first then RunInit ( otherwise there is
@@ -1248,13 +1244,12 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     // Consider required types to init in right order. Class modules
     // that are required by other modules have to be initialized first.
     ModuleInitDependencyMap aMIDMap;
-    for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
+    for (const auto& rModule: pModules)
     {
-        SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
-        OUString aModuleName = pModule->GetName();
-        if( pModule->isProxyModule() )
+        OUString aModuleName = rModule->GetName();
+        if( rModule->isProxyModule() )
         {
-            aMIDMap[aModuleName] = ClassModuleRunInitItem( pModule );
+            aMIDMap[aModuleName] = ClassModuleRunInitItem( rModule.get() );
         }
     }
 
@@ -1266,12 +1261,11 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     }
 
     // Call RunInit on standard modules
-    for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
+    for (const auto& rModule: pModules)
     {
-        SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
-        if( !pModule->isProxyModule() )
+        if( !rModule->isProxyModule() )
         {
-            pModule->RunInit();
+            rModule->RunInit();
         }
     }
 
@@ -1293,12 +1287,11 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 void StarBASIC::DeInitAllModules()
 {
     // Deinit own modules
-    for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
+    for (const auto& rModule: pModules)
     {
-        SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
-        if( pModule->pImage && !pModule->isProxyModule() && nullptr == dynamic_cast<const SbObjModule*>( pModule) )
+        if( rModule->pImage && !rModule->isProxyModule() && nullptr == dynamic_cast<SbObjModule*>( rModule.get()) )
         {
-            pModule->pImage->bInit = false;
+            rModule->pImage->bInit = false;
         }
     }
 
@@ -1346,34 +1339,33 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
     // Search module
     if( !pRes )
     {
-        for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
+        for (const auto& rModule: pModules)
         {
-            SbModule* p = static_cast<SbModule*>( pModules->Get( i ) );
-            if( p->IsVisible() )
+            if( rModule->IsVisible() )
             {
                 // Remember modul fpr Main() call
                 // or is the name equal?!?
-                if( p->GetName().equalsIgnoreAsciiCase( rName ) )
+                if( rModule->GetName().equalsIgnoreAsciiCase( rName ) )
                 {
                     if( t == SbxCLASS_OBJECT || t == SbxCLASS_DONTCARE )
                     {
-                        pRes = p; break;
+                        pRes = rModule.get(); break;
                     }
-                    pNamed = p;
+                    pNamed = rModule.get();
                 }
                 // Only variables qualified by the Module Name e.g. Sheet1.foo
                 // should work for Document && Class type Modules
-                sal_Int32 nType = p->GetModuleType();
+                sal_Int32 nType = rModule->GetModuleType();
                 if ( nType == ModuleType::DOCUMENT || nType == ModuleType::FORM )
                 {
                     continue;
                 }
                 // otherwise check if the element is available
                 // unset GBLSEARCH-Flag (due to Rekursion)
-                SbxFlagBits nGblFlag = p->GetFlags() & SbxFlagBits::GlobalSearch;
-                p->ResetFlag( SbxFlagBits::GlobalSearch );
-                pRes = p->Find( rName, t );
-                p->SetFlag( nGblFlag );
+                SbxFlagBits nGblFlag = rModule->GetFlags() & SbxFlagBits::GlobalSearch;
+                rModule->ResetFlag( SbxFlagBits::GlobalSearch );
+                pRes = rModule->Find( rName, t );
+                rModule->SetFlag( nGblFlag );
                 if( pRes )
                 {
                     break;
@@ -1902,7 +1894,7 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     ppDeleteTab.reset();
 
     sal_uInt16 nMod(0);
-    pModules->Clear();
+    pModules.clear();
     r.ReadUInt16( nMod );
     const size_t nMinSbxSize(14);
     const size_t nMaxPossibleEntries = r.remainingSize() / nMinSbxSize;
@@ -1928,7 +1920,7 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         else
         {
             pMod->SetParent( this );
-            pModules->Put( pMod, i );
+            pModules.push_back( pMod );
         }
     }
     // HACK for SFX-Bullshit!
@@ -1955,11 +1947,11 @@ bool StarBASIC::StoreData( SvStream& r ) const
     {
         return false;
     }
-    r.WriteUInt16( pModules->Count() );
-    for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
+    assert(pModules.size() < SAL_MAX_UINT16);
+    r.WriteUInt16( static_cast<sal_uInt16>(pModules.size()));
+    for( const auto& rpModule: pModules )
     {
-        SbModule* p = static_cast<SbModule*>( pModules->Get( i ) );
-        if( !p->Store( r ) )
+        if( !rpModule->Store( r ) )
         {
             return false;
         }
