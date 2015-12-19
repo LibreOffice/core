@@ -395,12 +395,13 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
                 pCurrContainer->RemoveLastContent();
             }
         }
-        pStory->AddXFContent( pContent );
+        if (pStory)
+            pStory->AddXFContent( pContent );
     }
     else
     {
         LwpStory* pStory = dynamic_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
-        pContent = pStory->GetXFContent();
+        pContent = pStory ? pStory->GetXFContent() : nullptr;
     }
     if(pContent)
     {
