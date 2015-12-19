@@ -2649,12 +2649,12 @@ lok_doc_view_set_edit(LOKDocView* pDocView,
                       gboolean bEdit)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_pDocument)
+        return;
+
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_EDIT);
     GError* error = nullptr;
-
-    if (!priv->m_pDocument)
-        return;
 
     pLOEvent->m_bEdit = bEdit;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
