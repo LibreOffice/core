@@ -631,6 +631,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mpNextOverlap                       = nullptr;                      // next overlap window of frame
     mpLastFocusWindow                   = nullptr;                      // window for focus restore
     mpDlgCtrlDownWindow                 = nullptr;                      // window for dialog control
+    mnChildEventListenersIteratingCount = 0;
     mpFirstDel                          = nullptr;                      // Dtor notification list
     mpUserData                          = nullptr;                      // user data
     mpCursor                            = nullptr;                      // cursor

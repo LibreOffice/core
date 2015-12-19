@@ -232,7 +232,7 @@ public:
     VclPtr<vcl::Window> mpDlgCtrlDownWindow;
     std::vector<Link<VclWindowEvent&,void>> maEventListeners;
     std::vector<Link<VclWindowEvent&,void>> maChildEventListeners;
-    int maChildEventListenersIteratingCount;
+    int mnChildEventListenersIteratingCount;
     std::set<Link<VclWindowEvent&,void>> maChildEventListenersDeleted;
 
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
