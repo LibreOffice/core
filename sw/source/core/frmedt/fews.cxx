@@ -578,6 +578,21 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
     return bRet;
 }
 
+bool SwFEShell::IsColRightToLeft() const
+{
+    bool nRet = false;
+    SwFrame* pFrame = GetCurrFrame();
+    while (pFrame)
+    {
+        pFrame = pFrame->GetUpper();
+        if (pFrame && pFrame->IsColumnFrame())
+        {
+            return pFrame->IsRightToLeft();
+        }
+    }
+    return false;
+}
+
 sal_uInt16 SwFEShell::_GetCurColNum( const SwFrame *pFrame,
                                 SwGetCurColNumPara* pPara ) const
 {
