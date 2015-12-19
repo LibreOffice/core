@@ -335,15 +335,15 @@ static void
 doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highlightAll)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_pDocument)
+        return;
+
     boost::property_tree::ptree aTree;
     GtkWidget* drawingWidget = GTK_WIDGET(pDocView);
     GdkWindow* drawingWindow = gtk_widget_get_window(drawingWidget);
     cairo_region_t* cairoVisRegion = gdk_window_get_visible_region(drawingWindow);
     cairo_rectangle_int_t cairoVisRect;
     int x, y;
-
-    if (!priv->m_pDocument)
-        return;
 
     cairo_region_get_rectangle(cairoVisRegion, 0, &cairoVisRect);
     x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
@@ -2543,12 +2543,12 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_pDocument)
+        return;
+
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PART);
     GError* error = nullptr;
-
-    if (!priv->m_pDocument)
-        return;
 
     pLOEvent->m_nPart = nPart;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -2566,7 +2566,6 @@ SAL_DLLPUBLIC_EXPORT gchar*
 lok_doc_view_get_part_name (LOKDocView* pDocView, int nPart)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-
     if (!priv->m_pDocument)
         return nullptr;
 
@@ -2682,7 +2681,6 @@ lok_doc_view_post_command (LOKDocView* pDocView,
                            gboolean bNotifyWhenFinished)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-
     if (!priv->m_pDocument)
         return;
 
