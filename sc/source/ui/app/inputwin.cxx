@@ -1635,8 +1635,10 @@ IMPL_LINK_NOARG_TYPED(ScTextWnd, ModifyHdl, LinkParamNone*, void)
 
 void ScTextWnd::StopEditEngine( bool bAll )
 {
-    if (pEditEngine)
-        pEditEngine->SetNotifyHdl(Link<EENotify&, void>());
+    if (!pEditEngine)
+        return;
+
+    pEditEngine->SetNotifyHdl(Link<EENotify&, void>());
 
     if (pEditView)
     {
