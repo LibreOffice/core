@@ -105,9 +105,11 @@ LibreOfficeKitDocument*        lok_doc_view_get_document           (LOKDocView* 
 /**
  * lok_doc_view_set_zoom:
  * @pDocView: The #LOKDocView instance
- * @fZoom: The new zoom level that pDocView must set it into.
+ * @fZoom: The new zoom level that pDocView must set it into. Will be rounded
+ * off to two decimal places
  *
- * Sets the new zoom level for the widget.
+ * Sets the new zoom level for the widget. Does nothing if fZoom is either equal
+ * to existing zoom level, or out of widget's defined zoom bounds: [0.25, 5.0]
  */
 void                           lok_doc_view_set_zoom               (LOKDocView* pDocView,
                                                                     float fZoom);

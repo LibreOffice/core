@@ -37,6 +37,10 @@
 #define CURSOR_HANDLE_DIR "/android/source/res/drawable/"
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
+// Maximum Zoom allowed
+#define MAX_ZOOM 5.0
+// Minimum Zoom allowed
+#define MIN_ZOOM 0.25
 
 /// Private struct used by this GObject type
 struct LOKDocViewPrivateImpl
@@ -123,8 +127,8 @@ struct LOKDocViewPrivateImpl
         m_aDocPath(nullptr),
         m_nLoadProgress(0),
         m_bIsLoading(false),
-        m_bCanZoomIn(false),
-        m_bCanZoomOut(false),
+        m_bCanZoomIn(true),
+        m_bCanZoomOut(true),
         m_pOffice(nullptr),
         m_pDocument(nullptr),
         lokThreadPool(nullptr),
@@ -261,6 +265,28 @@ payloadToSize(const char* pPayload, long& rWidth, long& rHeight)
         return;
     rHeight = atoi(*ppCoordinate);
     g_strfreev(ppCoordinates);
+}
+
+/// Helper function to tell if view can be further zoomed in or not
+static gboolean
+canZoomIn(float fCurrentZoom)
+{
+    gboolean ret = 0;
+    if (static_cast<gint>(fCurrentZoom * 100 + 0.5) < static_cast<gint>(MAX_ZOOM * 100 + 0.5))
+        ret = 1;
+
+    return ret;
+}
+
+/// Helper function to tell if view can be further zoomed out or not
+static gboolean
+canZoomOut(float fCurrentZoom)
+{
+    gboolean ret = 0;
+    if (static_cast<gint>(fCurrentZoom * 100 + 0.5) > static_cast<gint>(MIN_ZOOM * 100 + 0.5))
+        ret = 1;
+
+    return ret;
 }
 
 /// Returns the string representation of a LibreOfficeKitCallbackType enumeration element.
@@ -2488,8 +2514,16 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     GError* error = nullptr;
+    gint nZoom = static_cast<gint>((fZoom * 100) + 0.5);
+    gint nCurrentZoom = static_cast<gint>((priv->m_fZoom * 100) + 0.5);
 
     if (!priv->m_pDocument)
+        return;
+
+    // Don't allow zoom out of [MIN_ZOOM, MAX_ZOOM]
+    if ( nZoom < static_cast<gint>(MIN_ZOOM * 100 + 0.5) ||
+         nZoom > static_cast<gint>(MAX_ZOOM * 100 + 0.5) ||
+         nCurrentZoom == static_cast<gint>(fZoom * 100 + 0.5) )
         return;
 
     priv->m_fZoom = fZoom;
@@ -2505,6 +2539,29 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
                                 nDocumentHeightPixels);
 
     g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_ZOOM]);
+
+    // set properties to indicate if view can be further zoomed in/out
+    if (canZoomIn(priv->m_fZoom))
+    {
+        priv->m_bCanZoomIn = true;
+        g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_IN]);
+    }
+    else
+    {
+        priv->m_bCanZoomIn = false;
+        g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_IN]);
+    }
+
+    if (canZoomOut(priv->m_fZoom))
+    {
+        priv->m_bCanZoomOut = true;
+        g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_OUT]);
+    }
+    else
+    {
+        priv->m_bCanZoomOut = false;
+        g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_OUT]);
+    }
 
     // Update the client's view size
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
