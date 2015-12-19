@@ -755,6 +755,7 @@ public:
     size_t GetCurMouseTabColNum( const Point &rPt ) const;
     sal_uInt16 GetCurOutColNum( SwGetCurColNumPara* pPara = nullptr ) const;  ///< Current outer column.
 
+    bool IsColRightToLeft() const;
     bool IsTableRightToLeft() const;
     bool IsMouseTableRightToLeft( const Point &rPt ) const;
     bool IsTableVertical() const;
