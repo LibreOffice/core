@@ -190,7 +190,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
 
     LwpIndexSection* pIndexSection = dynamic_cast<LwpIndexSection*>(m_Section.obj().get());
     XFIndexTemplate * pTemplateSep = new XFIndexTemplate();
-    if (pIndexSection->IsFormatSeparator())
+    if (pIndexSection && pIndexSection->IsFormatSeparator())
     {
         pXFIndex->SetSeparator(true);
         pTemplateSep->AddEntry(enumXFIndexTemplateText,"");
@@ -216,7 +216,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
     pTemplate3->AddEntry(enumXFIndexTemplateTab,"");
     pTemplate3->AddEntry(enumXFIndexTemplatePage,"");
 
-    if (pIndexSection->IsFormatRunin())
+    if (pIndexSection && pIndexSection->IsFormatRunin())
     {
         //pXFIndex->AddTemplate(OUString::number(2),"Primary",pTemplate2);
         //pXFIndex->AddTemplate(OUString::number(3),"Primary",pTemplate3);
