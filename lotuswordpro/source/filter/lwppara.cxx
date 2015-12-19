@@ -305,7 +305,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
     m_Fribs.SetXFPara(pPara);
     m_Fribs.XFConvert();
 
-    if (m_pBreaks)
+    if (m_pBreaks && m_pXFContainer)
         AddBreakAfter(m_pXFContainer);
 }
 
