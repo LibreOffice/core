@@ -580,12 +580,8 @@ void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInfo& rInf
     if ( !xLib.is() )
         return;
 
-    sal_uInt16 nModCount = pBasic->GetModules()->Count();
-    for ( sal_uInt16 nMod = 0 ; nMod < nModCount ; nMod++ )
+    for ( const auto& pModule: pBasic->GetModules() )
     {
-        SbModule* pModule = static_cast<SbModule*>(pBasic->GetModules()->Get( nMod ));
-        DBG_ASSERT( pModule, "Module not received!" );
-
         OUString aModName = pModule->GetName();
         if( !xLib->hasByName( aModName ) )
         {
@@ -917,14 +913,10 @@ bool BasicManager::HasExeCode( const OUString& sLib )
     StarBASIC* pLib = GetLib(sLib);
     if ( pLib )
     {
-        SbxArray* pMods = pLib->GetModules();
-        sal_uInt16 nMods = pMods ? pMods->Count() : 0;
-        for( sal_uInt16 i = 0; i < nMods; i++ )
+        for (const auto& pModule: pLib->GetModules())
         {
-            SbModule* p = static_cast<SbModule*>( pMods->Get( i ) );
-            if ( p )
-                if ( p->HasExeCode() )
-                    return true;
+            if (pModule->HasExeCode())
+                return true;
         }
     }
     return false;
@@ -1114,9 +1106,8 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference )
     }
     bool bModified = pLib->IsModified();
 
-    for ( sal_uInt16 nMod = 0; nMod < pLib->GetModules()->Count(); nMod++ )
+    for ( const auto& pModule: pLib->GetModules() )
     {
-        SbModule* pModule = static_cast<SbModule*>(pLib->GetModules()->Get( nMod ));
         DBG_ASSERT( pModule, "Module not received!" );
         if ( !pModule->IsCompiled() && !StarBASIC::GetErrorCode() )
         {
@@ -1601,11 +1592,9 @@ namespace
 
                 if( pLib )
                 {
-                    sal_uInt16 nModCount = pLib->GetModules()->Count();
-                    for( sal_uInt16 nMod = 0; nMod < nModCount; ++nMod )
+                    for ( const auto& pMod: pLib->GetModules() )
                     {
-                        SbModule* pMod = static_cast<SbModule*>(pLib->GetModules()->Get( nMod ));
-                        if ( pMod && rTransliteration.isEqual( pMod->GetName(), sModule ) )
+                        if ( rTransliteration.isEqual( pMod->GetName(), sModule ) )
                         {
                             SbMethod* pMethod = static_cast<SbMethod*>(pMod->Find( sMacro, SbxCLASS_METHOD ));
                             if( pMethod )
@@ -1827,8 +1816,7 @@ uno::Type ModuleContainer_Impl::getElementType()
 sal_Bool ModuleContainer_Impl::hasElements()
     throw(uno::RuntimeException, std::exception)
 {
-    SbxArray* pMods = mpLib ? mpLib->GetModules() : nullptr;
-    return pMods && pMods->Count() > 0;
+    return mpLib && !mpLib->GetModules().empty();
 }
 
 // Methods XNameAccess
@@ -1848,14 +1836,12 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
 uno::Sequence< OUString > ModuleContainer_Impl::getElementNames()
     throw(uno::RuntimeException, std::exception)
 {
-    SbxArray* pMods = mpLib ? mpLib->GetModules() : nullptr;
-    sal_uInt16 nMods = pMods ? pMods->Count() : 0;
+    sal_uInt16 nMods = mpLib ? mpLib->GetModules().size() : 0;
     uno::Sequence< OUString > aRetSeq( nMods );
     OUString* pRetSeq = aRetSeq.getArray();
     for( sal_uInt16 i = 0 ; i < nMods ; i++ )
     {
-        SbxVariable* pMod = pMods->Get( i );
-        pRetSeq[i] = OUString( pMod->GetName() );
+        pRetSeq[i] = mpLib->GetModules()[i]->GetName();
     }
     return aRetSeq;
 }
