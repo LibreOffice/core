@@ -120,7 +120,7 @@ void PagePrimitiveExtractor::Invoke()
 drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPrimitive2DSequenceForPage(const DisplayInfo& /*rDisplayInfo*/)
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
-    const SdrPage* pStartPage = GetStartPage();
+    SdrPage* pStartPage = GetStartPage();
 
     if(pStartPage)
     {

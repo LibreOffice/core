@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC ObjectContactPainter : public ObjectContact
 protected:
     // Hierarchy access methods
     virtual sal_uInt32 GetPaintObjectCount() const = 0;
-    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const = 0;
+    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) = 0;
 
 public:
     // basic constructor/destructor
@@ -59,7 +59,7 @@ protected:
 
     // Hierarchy access methods
     virtual sal_uInt32 GetPaintObjectCount() const override;
-    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const override;
+    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) override;
 
 public:
     // basic constructor/destructor
@@ -95,7 +95,7 @@ protected:
 
     // Hierarchy access methods
     virtual sal_uInt32 GetPaintObjectCount() const override;
-    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const override;
+    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) override;
 
 public:
     // basic constructor
@@ -107,6 +107,7 @@ public:
     // set another page
     void SetStartPage(const SdrPage* pPage);
     const SdrPage* GetStartPage() const { return mxStartPage.get(); }
+    SdrPage* GetStartPage() { return mxStartPage.get(); }
 
     virtual OutputDevice* TryToGetOutputDevice() const override;
 };

@@ -45,7 +45,7 @@ sal_uInt32 ObjectContactOfObjListPainter::GetPaintObjectCount() const
     return maStartObjects.size();
 }
 
-ViewContact& ObjectContactOfObjListPainter::GetPaintObjectViewContact(sal_uInt32 nIndex) const
+ViewContact& ObjectContactOfObjListPainter::GetPaintObjectViewContact(sal_uInt32 nIndex)
 {
     const SdrObject* pObj = maStartObjects[nIndex];
     DBG_ASSERT(pObj, "ObjectContactOfObjListPainter: Corrupt SdrObjectVector (!)");
@@ -157,7 +157,7 @@ sal_uInt32 ObjectContactOfPagePainter::GetPaintObjectCount() const
     return (GetStartPage() ? 1L : 0L);
 }
 
-ViewContact& ObjectContactOfPagePainter::GetPaintObjectViewContact(sal_uInt32 /*nIndex*/) const
+ViewContact& ObjectContactOfPagePainter::GetPaintObjectViewContact(sal_uInt32 /*nIndex*/)
 {
     DBG_ASSERT(GetStartPage(), "ObjectContactOfPagePainter::GetPaintObjectViewContact: no StartPage set (!)");
     return GetStartPage()->GetViewContact();
