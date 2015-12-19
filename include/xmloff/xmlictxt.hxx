@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <memory>
 
 class SvXMLNamespaceMap;
 class SvXMLImport;
