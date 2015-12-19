@@ -88,8 +88,17 @@ public class NestedRegistry extends TestCase {
         File srcF = new File(src) ;
         File dstF = new File(dst) ;
 
-        if (dstF.exists()) dstF.delete() ;
-        dstF.createNewFile() ;
+        if (dstF.exists()) {
+            boolean bDeleteOk = dstF.delete();
+            if (!bDeleteOk) {
+                System.out.println("delete failed");
+            }
+        }
+
+        boolean bCreateOk = dstF.createNewFile();
+        if (!bCreateOk) {
+            System.out.println("create failed");
+        }
 
         dstF.deleteOnExit() ;
 

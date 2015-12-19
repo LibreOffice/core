@@ -120,8 +120,12 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
 
         public void reset() {
             File f = new File(printFileName);
-            if (f.exists())
-                f.delete();
+            if (f.exists()) {
+                boolean bDeleteOk = f.delete();
+                if (!bDeleteOk) {
+                    System.out.println("delete failed");
+                }
+            }
             eventCalled = false;
         }
 

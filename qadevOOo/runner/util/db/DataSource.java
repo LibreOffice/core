@@ -113,11 +113,15 @@ public class DataSource
             if ( docURL.length() == 0 )
             {
                 final java.io.File tempFile = java.io.File.createTempFile( _registrationName + "_", ".odb" );
-                if ( tempFile.exists() )
+                if ( tempFile.exists() ) {
                     // we did not really want to create that file, we just wanted its local name, but
                     // createTempFile actually creates it => throw it away
                     // (This is necessary since some JVM/platform combinations seem to actually lock the file)
-                    tempFile.delete();
+                    boolean bDeleteOk = tempFile.delete();
+                    if (!bDeleteOk) {
+                         System.out.println("delete failed");
+                    }
+                }
                 String localPart = tempFile.toURI().toURL().toString();
                 localPart = localPart.substring( localPart.lastIndexOf( '/' ) + 1 );
                 docURL = util.utils.getOfficeTemp( m_orb ) + localPart;

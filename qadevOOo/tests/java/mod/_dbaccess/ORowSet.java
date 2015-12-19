@@ -522,8 +522,9 @@ public class ORowSet extends TestCase {
     private final void impl_deleteFile( final String _file )
     {
         java.io.File file = new java.io.File( _file );
-        file.delete();
-        if ( file.exists() )
+
+        boolean bDeleteOk = file.delete();
+        if (!bDeleteOk && file.exists())
             file.deleteOnExit();
     }
 

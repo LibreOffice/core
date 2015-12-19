@@ -65,9 +65,19 @@ public class SimpleRegistry extends TestCase {
         File dstF = new File(dst) ;
         log.println("H1");
 
-        if (dstF.exists()) dstF.delete() ;
-        log.println("H2");
-        dstF.createNewFile() ;
+        if (dstF.exists()) {
+            boolean bDeleteOk = dstF.delete();
+            if (!bDeleteOk) {
+                System.out.println("delete failed");
+            }
+        }
+
+        System.out.println("H2");
+
+        boolean bCreateOk = dstF.createNewFile();
+        if (!bCreateOk) {
+            System.out.println("create failed");
+        }
 
         dstF.deleteOnExit() ;
         log.println("H3");

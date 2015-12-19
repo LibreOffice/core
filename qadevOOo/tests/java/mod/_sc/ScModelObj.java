@@ -195,7 +195,10 @@ public class ScModelObj extends TestCase {
         String fileName = utils.getOfficeTempDirSys(Param.getMSF())+"printfile.prt" ;
         File f = new File(fileName);
         if (f.exists()) {
-            f.delete();
+            boolean bDeleteOk = f.delete();
+            if (!bDeleteOk) {
+                System.out.println("delete failed");
+            }
         }
         _XPrintJobBroadcaster.MyPrintJobListener listener = new _XPrintJobBroadcaster.MyPrintJobListener(oObj, fileName);
         tEnv.addObjRelation("XPrintJobBroadcaster.XPrintJobListener", listener);
