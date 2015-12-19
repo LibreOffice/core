@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d41cbc79",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9470,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-19T07:06:32Z",
+      "side": 1,
+      "message": "dropping the i\u003d0 is a bad idea unless you are sure the previous loop that uses i did not execute",
+      "revId": "894863a4ad3b2f1eb597629e0d5adfd04d13317b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a813985b",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 12190,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-19T07:06:32Z",
+      "side": 1,
+      "message": "missed a semi-colon :-)",
+      "revId": "894863a4ad3b2f1eb597629e0d5adfd04d13317b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
