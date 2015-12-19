@@ -175,7 +175,7 @@ struct AnnotatingVisitor
     void operator()( const uno::Reference<xml::dom::XElement>& xElem)
     {
         const sal_Int32 nTagId(getTokenId(xElem->getTagName()));
-        if (nTagId != XML_TEXT || nTagId != XML_TSPAN)
+        if (nTagId != XML_TEXT && nTagId != XML_TSPAN)
             return;
 
         maCurrState = maParentStates.back();
