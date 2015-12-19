@@ -2065,6 +2065,7 @@ static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
       osl_ProfileGenerateExtension(pProfile->m_FileName,"bak",pszBakFile);
 
     strncpy(pszIniFile,pProfile->m_FileName,PATH_MAX);
+    pszIniFile[PATH_MAX-1] = '\0';
 
     osl_ProfileGenerateExtension(pProfile->m_FileName,"tmp",pszTmpFile);
 

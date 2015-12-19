@@ -329,7 +329,8 @@ nRunde++;
                     cerror("Can't open input file \"%s\"", useargv[1]);
                     exit(IO_ERROR);
                 }
-                strncpy(work, useargv[1], sizeof(work));  /* Remember input filename      */
+                strncpy(work, useargv[1], NWORK+1);  /* Remember input filename      */
+                work[NWORK] = '\0';
                 break;
             }                           /* Else, just get stdin         */
         case 0:                         /* No args?                     */
