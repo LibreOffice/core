@@ -57,11 +57,7 @@ public:
 };
 
 RTTI::RTTI()
-#if defined(FREEBSD) && __FreeBSD_version < 702104
-    : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
-#else
     : m_hApp( dlopen( nullptr, RTLD_LAZY ) )
-#endif
 {
 }
 
