@@ -160,7 +160,8 @@ struct AnnotatingVisitor
                       StateMap&                                         rStateMap,
                       const State&                                       rInitialState,
                       const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
-                      std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector) :
+                      std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector,
+                      bool& rGradientNotFound) :
         mnCurrStateId(0),
         maCurrState(),
         maParentStates(),
@@ -170,7 +171,8 @@ struct AnnotatingVisitor
         maGradientVector(),
         maGradientStopVector(),
         maElementVector(),
-        mrUseElementVector(rUseElementVector)
+        mrUseElementVector(rUseElementVector),
+        mrGradientNotFound(rGradientNotFound)
     {
         maParentStates.push_back(rInitialState);
     }
@@ -215,6 +217,12 @@ struct AnnotatingVisitor
 
                     if( aFound != maGradientIdMap.end() )
                         maGradientVector.back() = maGradientVector[aFound->second];
+                    else
+                    {
+                        mrGradientNotFound = true;
+                        maGradientVector.pop_back();
+                        return;
+                    }
                 }
 
                 // do that after dereferencing, to prevent hyperlinked
@@ -252,6 +260,12 @@ struct AnnotatingVisitor
 
                     if( aFound != maGradientIdMap.end() )
                         maGradientVector.back() = maGradientVector[aFound->second];
+                    else
+                    {
+                        mrGradientNotFound = true;
+                        maGradientVector.pop_back();
+                        return;
+                    }
                 }
 
                 // do that after dereferencing, to prevent hyperlinked
@@ -362,70 +376,73 @@ struct AnnotatingVisitor
             }
             default:
             {
-                // init state. inherit defaults from parent.
-                maCurrState = maParentStates.back();
-                maCurrState.maTransform.identity();
-                maCurrState.maViewBox.reset();
-
-                // first parse 'color' and 'style' as 'fill' and 'stroke' might depend on them
-                // if their values are "currentColor" and parsed previously
-                uno::Reference<xml::dom::XNode> xNodeColor(xAttributes->getNamedItem("color"));
-                if(xNodeColor.is())
-                    parseAttribute(XML_COLOR, xNodeColor->getNodeValue());
-
-                uno::Reference<xml::dom::XNode> xNodeStyle(xAttributes->getNamedItem("style"));
-                if(xNodeStyle.is())
-                    parseStyle(xNodeStyle->getNodeValue());
-
-                const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                OUString sAttributeValue;
-
-                //now, parse the rest of attributes
-                for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                if ( !mrGradientNotFound )
                 {
-                    sAttributeValue = xAttributes->item(i)->getNodeValue();
-                    const sal_Int32 nTokenId(
-                        getTokenId(xAttributes->item(i)->getNodeName()));
-                    if( XML_ID == nTokenId )
+                    // init state. inherit defaults from parent.
+                    maCurrState = maParentStates.back();
+                    maCurrState.maTransform.identity();
+                    maCurrState.maViewBox.reset();
+
+                    // first parse 'color' and 'style' as 'fill' and 'stroke' might depend on them
+                    // if their values are "currentColor" and parsed previously
+                    uno::Reference<xml::dom::XNode> xNodeColor(xAttributes->getNamedItem("color"));
+                    if(xNodeColor.is())
+                        parseAttribute(XML_COLOR, xNodeColor->getNodeValue());
+
+                    uno::Reference<xml::dom::XNode> xNodeStyle(xAttributes->getNamedItem("style"));
+                    if(xNodeStyle.is())
+                        parseStyle(xNodeStyle->getNodeValue());
+
+                    const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                    OUString sAttributeValue;
+
+                    //now, parse the rest of attributes
+                    for( sal_Int32 i=0; i<nNumAttrs; ++i )
                     {
-                        maElementVector.push_back(xElem);
-                        maElementIdMap.insert(std::make_pair(sAttributeValue,
-                            maElementVector.size() - 1));
+                        sAttributeValue = xAttributes->item(i)->getNodeValue();
+                        const sal_Int32 nTokenId(
+                            getTokenId(xAttributes->item(i)->getNodeName()));
+                        if( XML_ID == nTokenId )
+                        {
+                            maElementVector.push_back(xElem);
+                            maElementIdMap.insert(std::make_pair(sAttributeValue,
+                                maElementVector.size() - 1));
+                        }
+                        else if ( nTokenId != XML_COLOR || nTokenId != XML_STYLE )
+                            parseAttribute(nTokenId,
+                                sAttributeValue);
                     }
-                    else if ( nTokenId != XML_COLOR || nTokenId != XML_STYLE )
-                        parseAttribute(nTokenId,
-                            sAttributeValue);
+
+                    // all attributes parsed, can calc total CTM now
+                    basegfx::B2DHomMatrix aLocalTransform;
+                    if( !maCurrState.maViewBox.isEmpty() &&
+                        maCurrState.maViewBox.getWidth() != 0.0 &&
+                        maCurrState.maViewBox.getHeight() != 0.0 )
+                    {
+                        // transform aViewBox into viewport, keep aspect ratio
+                        aLocalTransform.translate(-maCurrState.maViewBox.getMinX(),
+                                                  -maCurrState.maViewBox.getMinY());
+                        double scaleW = maCurrState.maViewport.getWidth()/maCurrState.maViewBox.getWidth();
+                        double scaleH = maCurrState.maViewport.getHeight()/maCurrState.maViewBox.getHeight();
+                        double scale = (scaleW < scaleH) ? scaleW : scaleH;
+                        aLocalTransform.scale(scale,scale);
+                    }
+                    else if( !maParentStates.back().maViewBox.isEmpty() )
+                                        maCurrState.maViewBox = maParentStates.back().maViewBox;
+
+                    maCurrState.maCTM = maCurrState.maCTM*maCurrState.maTransform*aLocalTransform;
+
+                    OSL_TRACE("annotateStyle - CTM is: %f %f %f %f %f %f",
+                              maCurrState.maCTM.get(0,0),
+                              maCurrState.maCTM.get(0,1),
+                              maCurrState.maCTM.get(0,2),
+                              maCurrState.maCTM.get(1,0),
+                              maCurrState.maCTM.get(1,1),
+                              maCurrState.maCTM.get(1,2));
+
+                    // if necessary, serialize to automatic-style section
+                    writeStyle(xElem,nTagId);
                 }
-
-                // all attributes parsed, can calc total CTM now
-                basegfx::B2DHomMatrix aLocalTransform;
-                if( !maCurrState.maViewBox.isEmpty() &&
-                    maCurrState.maViewBox.getWidth() != 0.0 &&
-                    maCurrState.maViewBox.getHeight() != 0.0 )
-                {
-                    // transform aViewBox into viewport, keep aspect ratio
-                    aLocalTransform.translate(-maCurrState.maViewBox.getMinX(),
-                                              -maCurrState.maViewBox.getMinY());
-                    double scaleW = maCurrState.maViewport.getWidth()/maCurrState.maViewBox.getWidth();
-                    double scaleH = maCurrState.maViewport.getHeight()/maCurrState.maViewBox.getHeight();
-                    double scale = (scaleW < scaleH) ? scaleW : scaleH;
-                    aLocalTransform.scale(scale,scale);
-                }
-                else if( !maParentStates.back().maViewBox.isEmpty() )
-                                    maCurrState.maViewBox = maParentStates.back().maViewBox;
-
-                maCurrState.maCTM = maCurrState.maCTM*maCurrState.maTransform*aLocalTransform;
-
-                OSL_TRACE("annotateStyle - CTM is: %f %f %f %f %f %f",
-                          maCurrState.maCTM.get(0,0),
-                          maCurrState.maCTM.get(0,1),
-                          maCurrState.maCTM.get(0,2),
-                          maCurrState.maCTM.get(1,0),
-                          maCurrState.maCTM.get(1,1),
-                          maCurrState.maCTM.get(1,2));
-
-                // if necessary, serialize to automatic-style section
-                writeStyle(xElem,nTagId);
             }
         }
     }
@@ -1320,6 +1337,7 @@ struct AnnotatingVisitor
     ElementRefMapType                          maGradientIdMap;
     ElementRefMapType                          maStopIdMap;
     ElementRefMapType                          maElementIdMap;
+    bool&                                      mrGradientNotFound;
 };
 
 /// Annotate svg styles with unique references to state pool
@@ -1330,9 +1348,17 @@ static void annotateStyles( StatePool&                                        rS
                             const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
                             std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
 {
-
-    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl,rUseElementVector);
+    bool maGradientNotFound = false;
+    AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl,rUseElementVector, maGradientNotFound);
     visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
+
+    //Sometimes, xlink:href in gradients refers to another gradient which hasn't been parsed yet.
+    // if that happens, we'll need to parse the styles again, so everything gets referred.
+    if( maGradientNotFound )
+    {
+        maGradientNotFound = false;
+        visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
+    }
 }
 
 struct ShapeWritingVisitor
