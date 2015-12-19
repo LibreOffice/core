@@ -233,9 +233,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
             char aBuffer[ 1024 ];
             aBuffer[0] = 0;
             char *pBuffer = fgets( aBuffer, sizeof(aBuffer), pPipe );
-            pclose( pPipe );
+            bool bOk = pclose(pPipe) == 0;
 
-            if (pBuffer && *pBuffer != 0)
+            if (bOk && pBuffer && *pBuffer != 0)
             {
                 OString aPaper(pBuffer);
                 aPaper = aPaper.trim();
