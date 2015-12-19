@@ -587,17 +587,6 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         }
     }
     else
-#else
-    // if it is possible, the object will be converted to OOo format
-    if ( !m_bTriedConversion )
-    {
-        m_bTriedConversion = true;
-        if ( TryToConvertToOOo() )
-        {
-            changeState( nNewState );
-            return;
-        }
-    }
 #endif
     {
         throw embed::UnreachableStateException();
