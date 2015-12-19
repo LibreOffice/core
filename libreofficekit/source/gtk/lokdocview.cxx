@@ -37,6 +37,10 @@
 #define CURSOR_HANDLE_DIR "/android/source/res/drawable/"
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
+// Maximum Zoom allowed
+#define MAX_ZOOM 5.0f
+// Minimum Zoom allowed
+#define MIN_ZOOM 0.25f
 
 /// Private struct used by this GObject type
 struct LOKDocViewPrivateImpl
@@ -123,8 +127,8 @@ struct LOKDocViewPrivateImpl
         m_aDocPath(nullptr),
         m_nLoadProgress(0),
         m_bIsLoading(false),
-        m_bCanZoomIn(false),
-        m_bCanZoomOut(false),
+        m_bCanZoomIn(true),
+        m_bCanZoomOut(true),
         m_pOffice(nullptr),
         m_pDocument(nullptr),
         lokThreadPool(nullptr),
@@ -2490,6 +2494,13 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     if (!priv->m_pDocument)
         return;
 
+    // Clamp the input value in [MIN_ZOOM, MAX_ZOOM]
+    fZoom = fZoom < MIN_ZOOM ? MIN_ZOOM : fZoom;
+    fZoom = fZoom > MAX_ZOOM ? MAX_ZOOM : fZoom;
+
+    if (fZoom == priv->m_fZoom)
+        return;
+
     priv->m_fZoom = fZoom;
     long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, fZoom);
     long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, fZoom);
@@ -2503,6 +2514,20 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
                                 nDocumentHeightPixels);
 
     g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_ZOOM]);
+
+    // set properties to indicate if view can be further zoomed in/out
+    bool bCanZoomIn  = priv->m_fZoom < MAX_ZOOM;
+    bool bCanZoomOut = priv->m_fZoom > MIN_ZOOM;
+    if (bCanZoomIn != priv->m_bCanZoomIn)
+    {
+        priv->m_bCanZoomIn = bCanZoomIn;
+        g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_IN]);
+    }
+    if (bCanZoomOut != priv->m_bCanZoomOut)
+    {
+        priv->m_bCanZoomOut = bCanZoomOut;
+        g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_OUT]);
+    }
 
     // Update the client's view size
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
