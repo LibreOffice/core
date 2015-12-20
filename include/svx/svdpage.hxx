@@ -414,12 +414,12 @@ public:
 
 private:
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
-    SdrPageProperties*  mpSdrPageProperties;
+    std::unique_ptr<SdrPageProperties> mpSdrPageProperties;
     css::uno::Reference< css::uno::XInterface > mxUnoPage;
 
 public:
-    SdrPageProperties& getSdrPageProperties() { return *mpSdrPageProperties; }
-    const SdrPageProperties& getSdrPageProperties() const { return *mpSdrPageProperties; }
+    SdrPageProperties& getSdrPageProperties();
+    const SdrPageProperties& getSdrPageProperties() const;
     const SdrPageProperties* getCorrectSdrPageProperties() const;
 
 protected:
