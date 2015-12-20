@@ -91,6 +91,15 @@ using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::container::XIndexAccess;
 using ::sax_fastparser::FSHelperPtr;
 
+// FIXME: this should be removed and replaced by SAL_INFO
+#ifndef DBG
+#  if OSL_DEBUG_LEVEL > 1
+#    define DBG(x) x
+#  else
+#    define DBG(x)
+#  endif
+#endif
+
 DBG(void dump_pset(Reference< XPropertySet > rXPropSet);)
 
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
