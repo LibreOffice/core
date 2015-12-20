@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_48bb0c73",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-20T19:15:29Z",
+      "side": 1,
+      "message": "you sure about this part of the change? The new code is very different from the old code. I would have expected the part inside the for loop to read:\n   if (pModule-\u003eHasExeCode())\n        return true;",
+      "revId": "f2d441c8c4fa08ebd7d11c89a3d83262c360ade6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2863281c",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1843,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-20T19:15:29Z",
+      "side": 1,
+      "message": "the OUString constructor is unnecessary here",
+      "revId": "f2d441c8c4fa08ebd7d11c89a3d83262c360ade6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_88adf433",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-20T19:15:29Z",
+      "side": 1,
+      "message": "this should be a static_cast",
+      "revId": "f2d441c8c4fa08ebd7d11c89a3d83262c360ade6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e8aac018",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-20T19:15:29Z",
+      "side": 1,
+      "message": "this doesn\u0027t actualy remove anything. to do that, you need\npModules.erase(std::remove(...",
+      "revId": "f2d441c8c4fa08ebd7d11c89a3d83262c360ade6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c8a7fc4d",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-20T19:15:29Z",
+      "side": 1,
+      "message": "much better to write as:\n pModules.clear()",
+      "revId": "f2d441c8c4fa08ebd7d11c89a3d83262c360ade6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
