@@ -9,12 +9,13 @@
 
 #include <uielement/menubarmanager.hxx>
 
+#include <cppuhelper/implbase.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -210,17 +211,11 @@ void ResourceMenuController::addVerbs( const css::uno::Sequence< css::embed::Ver
 {
     // Check if the document is read-only.
     css::uno::Reference< css::frame::XController > xController( m_xFrame->getController() );
-    css::uno::Reference< css::frame::XModel > xModel;
+    css::uno::Reference< css::frame::XStorable > xStorable;
     if ( xController.is() )
-        xModel.set( xController->getModel() );
+        xStorable.set( xController->getModel(), css::uno::UNO_QUERY );
 
-    bool bReadOnly = false;
-    if ( xModel.is() )
-    {
-        utl::MediaDescriptor aMediaDesc( xModel->getArgs() );
-        bReadOnly = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_READONLY(), false );
-    }
-
+    bool bReadOnly = xStorable.is() && xStorable->isReadonly();
     VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( m_xPopupMenu );
     Menu* pVCLMenu = pAwtMenu->GetMenu();
 
