@@ -144,9 +144,12 @@ void PPTShape::addShape(
                     break;
                     case XML_subTitle :
                     {
-                        sServiceName = "com.sun.star.presentation.SubtitleShape";
-                        aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
-                        bClearText = true;
+                        if ( ( meShapeLocation == Master ) || ( meShapeLocation == Layout ) )
+                            sServiceName = OUString();
+                        else {
+                            sServiceName = "com.sun.star.presentation.SubtitleShape";
+                            aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
+                        }
                     }
                     break;
                        case XML_obj :
