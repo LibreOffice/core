@@ -132,6 +132,8 @@ bool HelpParser::CreatePO(
         }
         else
         {
+            // If this is something totally unexpected, wouldn't an assert() be in order?
+            // On the other hand, if this is expected, why the printf?
             fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreatePO, File %s\n", sHelpFile.getStr());
         }
     }
