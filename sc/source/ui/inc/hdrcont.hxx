@@ -59,7 +59,7 @@ private:
 
     bool            bIgnoreMove;
 
-    bool            bDoneInitRef;
+    bool            bInRefMode;
 
     long            GetScrPos( SCCOLROW nEntryNo ) const;
     SCCOLROW        GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) const;
