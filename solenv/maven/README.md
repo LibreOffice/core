@@ -6,10 +6,11 @@ API to Maven Central or local Maven repository.
 To install LibreOffice API to local Maven repository or deploy the API
 to the Maven Central, extra build toolchain is required.
 
-`Ant` is used to bootstrap `Buck` build tool. `Buck` build tool is used to
-build sources and javadocs for the API and install or deploy the artifacts
-to Maven repository. `Maven` commands are invoked for that from within
-`Buck` driven build. To be able to upload the API to Maven Central, access
+`Ant` is used to bootstrap `Buck` build tool. `Buck` build tool is
+used to build sources and javadocs for the API and install or deploy
+the artifacts to Maven repository. `Maven` commands are invoked for
+that from within `Buck` driven build - so make sure you've maven
+installed, too. To be able to upload the API to Maven Central, access
 must be granted to LibreOffice project on OSSRH.
 
 
@@ -173,11 +174,15 @@ account to be able to upload artifacts to Maven Central.
 * Configure your Sonatype user and password in `~/.m2/settings.xml`:
 
 ----
-<server>
-  <id>sonatype-nexus-staging</id>
-  <username>USER</username>
-  <password>PASSWORD</password>
-</server>
+<settings>
+  <servers>
+    <server>
+     <id>sonatype-nexus-staging</id>
+     <username>USER</username>
+     <password>PASSWORD</password>
+   </server>
+  </servers>
+</settings>
 ----
 
 * Request permissions to upload artifacts to the `org.libreoffice`
@@ -202,7 +207,9 @@ while until it is visible to the Sonatype server.
 The PGP key is needed to be able to sign the artifacts before the
 upload to Maven Central.
 
-The PGP passphrase can be put in `~/.m2/settings.xml`:
+The PGP passphrase can be put in `~/.m2/settings.xml`, or
+alternatively make gpg use the agent to provide and cache the
+credentials:
 
 ----
 <settings>
@@ -212,6 +219,8 @@ The PGP passphrase can be put in `~/.m2/settings.xml`:
       <properties>
         <gpg.executable>gpg2</gpg.executable>
         <gpg.passphrase>mypassphrase</gpg.passphrase>
+        <gpg.keyname>mykeynameoremail</gpg.keyname>
+        <gpg.useAgent>true</gpg.useAgent>
       </properties>
     </profile>
   </profiles>
@@ -246,10 +255,12 @@ Build LibreOffice as usually, so that API JARs are created.
 
 == Publish the LibreOffice artifacts to local Maven repository
 
-Execute this command to install LibreOffice API to local Maven repository:
+Execute this command to install LibreOffice API to your local Maven
+repository. For troubleshooting, the environment variable `VERBOSE`
+can be set:
 
 ----
-  buck build api_install
+  VERBOSE=1 buck build api_install
 ----
 
 Once executed, he local Maven respoitory contains the LibreOffice API
