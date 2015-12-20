@@ -912,7 +912,9 @@ void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
 
         pDoc->SkipOverlapped(nNewX, nNewY, nRefTab);
         UpdateRef(nNewX, nNewY, nRefTab);
-        AlignToCursor(nNewX, nNewY, eMode);
+        if ((aViewData.GetRefStartX() == MAXCOL || nNewX != MAXCOL) &&
+            (aViewData.GetRefStartY() == MAXROW || nNewY != MAXROW))
+            AlignToCursor(nNewX, nNewY, eMode);
     }
     else
     {
