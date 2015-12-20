@@ -273,7 +273,6 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pFileDlgROImage, "lockimage");
     get(m_pPrintDlgCB, "printdlg");
     get(m_pDocStatusCB, "docstatus");
-    get(m_pSaveAlwaysCB, "savealways");
     get(m_pYearFrame, "yearframe");
     get(m_pYearValueField, "year");
     get(m_pToYearFT, "toyear");
@@ -309,7 +308,6 @@ void OfaMiscTabPage::dispose()
     m_pFileDlgCB.clear();
     m_pPrintDlgCB.clear();
     m_pDocStatusCB.clear();
-    m_pSaveAlwaysCB.clear();
     m_pYearFrame.clear();
     m_pYearValueField.clear();
     m_pToYearFT.clear();
@@ -352,13 +350,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
-    if ( m_pSaveAlwaysCB->IsValueChangedFromSaved() )
-    {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetSaveAlwaysAllowed( m_pSaveAlwaysCB->IsChecked() );
-        bModified = true;
-    }
-
     const SfxUInt16Item* pUInt16Item = dynamic_cast< const SfxUInt16Item* >( GetOldItem( *rSet, SID_ATTR_YEAR2000 ) );
     sal_uInt16 nNum = (sal_uInt16)m_pYearValueField->GetText().toInt32();
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
@@ -389,8 +380,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_pFileDlgCB->SaveValue();
     m_pPrintDlgCB->Check( !aMiscOpt.UseSystemPrintDialog() );
     m_pPrintDlgCB->SaveValue();
-    m_pSaveAlwaysCB->Check( aMiscOpt.IsSaveAlwaysAllowed() );
-    m_pSaveAlwaysCB->SaveValue();
 
     SvtPrintWarningOptions aPrintOptions;
     m_pDocStatusCB->Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
