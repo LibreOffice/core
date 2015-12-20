@@ -186,13 +186,11 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     if (comphelper::LibreOfficeKit::isActive() && !pRegion)
         pRegion = &aRegion;
 
-    tools::PolyPolygon* pPolyPoly = nullptr;
-    if ( pRegion )
-        pPolyPoly = new tools::PolyPolygon;
-
     OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pOutWin;
     bool bClipRegion = pTarget->IsClipRegion();
     vcl::Region aOldRegion = pTarget->GetClipRegion();
+
+    tools::PolyPolygon* pPolyPoly = nullptr;
 
     if ( !pRegion )
     {
@@ -213,6 +211,10 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
         if ( pOutWin->GetCursor() )
             pOutWin->GetCursor()->Hide();
+    }
+    else
+    {
+        pPolyPoly = new tools::PolyPolygon;
     }
 
     DBG_ASSERT( !pEditEngine->IsIdleFormatterActive(), "DrawSelection: Not formatted!" );
