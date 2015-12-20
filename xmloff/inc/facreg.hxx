@@ -49,11 +49,6 @@ css::uno::Sequence<OUString> SAL_CALL XMLImpressContentImportOasis_getSupportedS
 css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressContentImportOasis_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
     throw (css::uno::Exception);
-OUString SAL_CALL XMLImpressMetaImportOasis_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLImpressMetaImportOasis_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressMetaImportOasis_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 OUString SAL_CALL XMLImpressSettingsImportOasis_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLImpressSettingsImportOasis_getSupportedServiceNames() throw();
 css::uno::Reference<css::uno::XInterface> SAL_CALL XMLImpressSettingsImportOasis_createInstance(

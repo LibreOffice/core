@@ -62,7 +62,6 @@ XMLOFF_DLLPUBLIC void * SAL_CALL xo_component_getFactory( const sal_Char * pImpl
         SINGLEFACTORY( XMLImpressImportOasis )
         else SINGLEFACTORY( XMLImpressStylesImportOasis )
         else SINGLEFACTORY( XMLImpressContentImportOasis )
-        else SINGLEFACTORY( XMLImpressMetaImportOasis )
         else SINGLEFACTORY( XMLImpressSettingsImportOasis )
 
         // impress oasis export
