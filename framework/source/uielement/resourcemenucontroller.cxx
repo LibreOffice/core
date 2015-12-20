@@ -226,8 +226,8 @@ void ResourceMenuController::addVerbs( const css::uno::Sequence< css::embed::Ver
 
     for ( const auto& rVerb : rVerbs )
     {
-        if ( rVerb.VerbAttributes ^ css::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU ||
-            ( bReadOnly && rVerb.VerbAttributes ^ css::embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES ) )
+        if ( !( rVerb.VerbAttributes & css::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU ) ||
+            ( bReadOnly && !( rVerb.VerbAttributes & css::embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES ) ) )
             continue;
 
         pVCLMenu->InsertItem( m_nNewMenuId, rVerb.VerbName );
