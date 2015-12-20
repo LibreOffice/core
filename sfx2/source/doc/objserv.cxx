@@ -531,7 +531,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_SAVEASDOC:
         case SID_SAVEASREMOTE:
         case SID_SAVEDOC:
+        case SID_SAVEALWAYS:
         {
+            if ( nId == SID_SAVEALWAYS )
+                nId = SID_SAVEDOC;
+
             // derived class may decide to abort this
             if( !QuerySlotExecutable( nId ) )
             {
@@ -1013,6 +1017,11 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     else
                         rSet.DisableItem(nWhich);
                 }
+                break;
+
+            case SID_SAVEALWAYS:
+                if ( !GetMedium() || IsReadOnlyMedium() )
+                    rSet.DisableItem( nWhich );
                 break;
 
             case SID_DOCINFO:

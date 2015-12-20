@@ -4906,6 +4906,29 @@ SfxVoidItem RunBasic SID_BASICRUN
     GroupId = GID_MACRO;
 ]
 
+SfxVoidItem SaveAlways SID_SAVEALWAYS
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DOCUMENT;
+]
 
 SfxBoolItem Save SID_SAVEDOC
 (SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR)
@@ -4913,7 +4936,7 @@ SfxBoolItem Save SID_SAVEDOC
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
-    FastCall = TRUE,
+    FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
