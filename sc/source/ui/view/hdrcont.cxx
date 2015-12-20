@@ -902,8 +902,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                     pViewSh->MarkRange( aNewRange );
             }
 
-            ScResId aResId( bVertical ? RID_POPUP_ROWHEADER : RID_POPUP_COLHEADER );
-            pViewSh->GetDispatcher()->ExecutePopup( aResId );
+            pViewSh->GetDispatcher()->ExecutePopup( bVertical ? OUString( "rowheader" ) : OUString( "colheader" ) );
         }
     }
     else if ( nCmd == CommandEventId::StartDrag )

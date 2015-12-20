@@ -1130,6 +1130,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Rows ~Above</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Rows ~Above</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -1153,6 +1156,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Columns ~Left</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Columns ~Left</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -1164,6 +1170,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Rows ~Below</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Rows ~Below</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -1174,6 +1183,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Columns ~Right</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Columns ~Right</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1266,6 +1278,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Height...</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Row ~Height...</value>
+        </prop>
       </node>
       <node oor:name=".uno:SetOptimalRowHeight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1285,6 +1300,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">H~ide</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">H~ide Rows</value>
+        </prop>
       </node>
       <node oor:name=".uno:ShowRow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1293,6 +1311,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Show</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Sho~w Rows</value>
+        </prop>
       </node>
       <node oor:name=".uno:ColumnWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1300,6 +1321,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Width...</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Column ~Width...</value>
         </prop>
       </node>
       <node oor:name=".uno:SetOptimalColumnWidth" oor:op="replace">
@@ -1320,6 +1344,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Hide</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">H~ide Columns</value>
+        </prop>
       </node>
       <node oor:name=".uno:ShowColumn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1327,6 +1354,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Show</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">S~how Columns</value>
         </prop>
       </node>
       <node oor:name=".uno:Hide" oor:op="replace">

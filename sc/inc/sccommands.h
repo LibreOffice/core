@@ -19,26 +19,6 @@
 #ifndef INCLUDED_SC_INC_SCCOMMANDS_H
 #define INCLUDED_SC_INC_SCCOMMANDS_H
 
-#define CMD_FID_COL_WIDTH                           ".uno:ColumnWidth"
-#define CMD_SID_CREATE_SW_DRAWVIEW                  ".uno:CreateSWDrawView"
-#define CMD_SID_DEL_COLS                            ".uno:DeleteColumns"
-#define CMD_SID_DEL_ROWS                            ".uno:DeleteRows"
-#define CMD_FID_CELL_FORMAT                         ".uno:FormatCellDialog"
-#define CMD_FID_COL_HIDE                            ".uno:HideColumn"
-#define CMD_FID_ROW_HIDE                            ".uno:HideRow"
-#define CMD_FID_INS_COLUMNS_AFTER                   ".uno:InsertColumnsAfter"
-#define CMD_FID_INS_COLUMN                          ".uno:InsertColumns"
-#define CMD_FID_INS_COLUMNS_BEFORE                  ".uno:InsertColumnsBefore"
-#define CMD_FID_INS_ROWS_AFTER                      ".uno:InsertRowsAfter"
-#define CMD_FID_INS_ROW                             ".uno:InsertRows"
-#define CMD_FID_INS_ROWS_BEFORE                     ".uno:InsertRowsBefore"
-#define CMD_SID_OBJECT_MIRROR                       ".uno:Mirror"
-#define CMD_FID_ROW_HEIGHT                          ".uno:RowHeight"
-#define CMD_FID_COL_OPT_WIDTH                       ".uno:SetOptimalColumnWidth"
-#define CMD_FID_ROW_OPT_HEIGHT                      ".uno:SetOptimalRowHeight"
-#define CMD_FID_COL_SHOW                            ".uno:ShowColumn"
-#define CMD_FID_ROW_SHOW                            ".uno:ShowRow"
-#define CMD_SID_ULINE_VAL_DOUBLE                    ".uno:UnderlineDouble"
 #define CMD_FID_TAB_SET_TAB_BG_COLOR                ".uno:TabBgColor"
 
 #endif

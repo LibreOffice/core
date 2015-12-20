@@ -40,6 +40,11 @@
           <value xml:lang="en-US">Chart</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/colheader" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Column Header</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/draw" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Shape</value>
@@ -83,6 +88,11 @@
       <node oor:name="private:resource/popupmenu/preview" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Print Preview</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/popupmenu/rowheader" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Row Header</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/sheettab" oor:op="replace">

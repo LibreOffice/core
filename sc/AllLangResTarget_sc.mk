@@ -37,7 +37,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/toolbox.src \
     sc/source/ui/src/scfuncs.src \
     sc/source/ui/src/sc.src \
-    sc/source/ui/src/hdrcont.src \
     sc/source/ui/src/scerrors.src \
     sc/source/ui/src/scstring.src \
     sc/source/ui/src/filter.src \
