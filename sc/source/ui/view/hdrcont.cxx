@@ -61,7 +61,7 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
             nDragPos    ( 0 ),
             bDragMoved  ( false ),
             bIgnoreMove ( false ),
-            bDoneInitRef( false ),
+            bInRefMode  ( false ),
             pTabView    ( pTab )
 {
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
@@ -666,8 +666,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             return;
         SCTAB nTab = pTabView->GetViewData().GetTabNo();
         if( !rMEvt.IsShift() )
-            pTabView->DoneRefMode();
-        bDoneInitRef = true;
+            pTabView->DoneRefMode( rMEvt.IsMod1() );
         if( !bVertical )
         {
             pTabView->InitRefMode( nHitNo, 0, nTab, SC_REFTYPE_REF );
@@ -678,6 +677,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             pTabView->InitRefMode( 0, nHitNo, nTab, SC_REFTYPE_REF );
             pTabView->UpdateRef( MAXCOL, nHitNo, nTab );
         }
+        bInRefMode = true;
         return;
     }
     if ( bIsBorder && ResizeAllowed() )
@@ -741,7 +741,7 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     if ( SC_MOD()->IsFormulaMode() )
     {
         SC_MOD()->EndReference();
-        bDoneInitRef = false;
+        bInRefMode = false;
         return;
     }
 
@@ -798,7 +798,7 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    if ( bDoneInitRef && rMEvt.IsLeft() && SC_MOD()->IsFormulaMode() )
+    if ( bInRefMode && rMEvt.IsLeft() && SC_MOD()->IsFormulaMode() )
     {
         if( !pTabView )
             return;
