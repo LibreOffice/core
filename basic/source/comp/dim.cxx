@@ -1206,16 +1206,13 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
     if( pOld )
     {
-        bool bError_ = false;
-
         pProc = pOld->GetProcDef();
         if( !pProc )
         {
             // Declared as a variable
             Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName() );
             delete pDef;
-            pProc = nullptr;
-            bError_ = true;
+            return;
         }
         // #100027: Multiple declaration -> Error
         // #112787: Not for setup, REMOVE for 8
@@ -1226,16 +1223,12 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
             {
                 Error( ERRCODE_BASIC_PROC_DEFINED, pDef->GetName() );
                 delete pDef;
-                pProc = nullptr;
-                bError_ = true;
+                return;
             }
         }
 
-        if( !bError_ )
-        {
-            pDef->Match( pProc );
-            pProc = pDef;
-        }
+        pDef->Match( pProc );
+        pProc = pDef;
     }
     else
     {
