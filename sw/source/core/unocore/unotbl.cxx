@@ -3474,7 +3474,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 case RES_VERT_ORIENT:
                 {
                     SwFormatVertOrient aVertOrient;
-                    if( m_pTableCursor->GetDoc()->GetBoxAttr( *m_pTableCursor, aVertOrient ) )
+                    if( SwDoc::GetBoxAttr( *m_pTableCursor, aVertOrient ) )
                     {
                         aVertOrient.QueryValue( aRet, pEntry->nMemberId );
                     }
