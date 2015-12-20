@@ -1220,7 +1220,7 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill )
                                     aBoxes[i]->GetFrameFormat()->GetVertOrient();
                     if( !bOneFound )
                     {
-                        (SwFormatVertOrient&)rToFill = rOrient;
+                        static_cast<SwFormatVertOrient&>(rToFill) = rOrient;
                         bOneFound = true;
                     }
                     else if( rToFill != rOrient )
