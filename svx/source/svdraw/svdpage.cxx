@@ -1219,7 +1219,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     aPrefVisiLayers.SetAll();
     eListKind = (bMasterPage) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
-    mpSdrPageProperties = new SdrPageProperties(*this);
+    mpSdrPageProperties.reset(new SdrPageProperties(*this));
 }
 
 SdrPage::SdrPage(const SdrPage& rSrcPage)
@@ -1278,12 +1278,7 @@ SdrPage::~SdrPage()
     TRG_ClearMasterPage();
 
     mpViewContact.reset();
-
-    {
-        delete mpSdrPageProperties;
-        mpSdrPageProperties = nullptr;
-    }
-
+    mpSdrPageProperties.reset();
 }
 
 void SdrPage::lateInit(const SdrPage& rSrcPage, SdrModel* const pNewModel)
@@ -1325,7 +1320,7 @@ void SdrPage::lateInit(const SdrPage& rSrcPage, SdrModel* const pNewModel)
     mbObjectsNotPersistent = rSrcPage.mbObjectsNotPersistent;
 
     {
-        mpSdrPageProperties = new SdrPageProperties(*this);
+        mpSdrPageProperties.reset(new SdrPageProperties(*this));
 
         if(!IsMasterPage())
         {
@@ -1524,7 +1519,7 @@ void SdrPage::SetModel(SdrModel* pNewModel)
 
         // create new SdrPageProperties with new model (due to SfxItemSet there)
         // and copy ItemSet and StyleSheet
-        SdrPageProperties *pNew = new SdrPageProperties(*this);
+        std::unique_ptr<SdrPageProperties> pNew(new SdrPageProperties(*this));
 
         if(!IsMasterPage())
         {
@@ -1533,8 +1528,7 @@ void SdrPage::SetModel(SdrModel* pNewModel)
 
         pNew->SetStyleSheet(getSdrPageProperties().GetStyleSheet());
 
-        delete mpSdrPageProperties;
-        mpSdrPageProperties = pNew;
+        mpSdrPageProperties = std::move(pNew);
     }
 
     // update listeners at possible API wrapper object
@@ -1792,7 +1786,15 @@ void SdrPage::ActionChanged()
     }
 }
 
-// sdr::Comment interface
+SdrPageProperties& SdrPage::getSdrPageProperties()
+{
+    return *mpSdrPageProperties;
+}
+
+const SdrPageProperties& SdrPage::getSdrPageProperties() const
+{
+    return *mpSdrPageProperties;
+}
 
 const SdrPageProperties* SdrPage::getCorrectSdrPageProperties() const
 {
