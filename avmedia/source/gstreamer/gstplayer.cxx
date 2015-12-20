@@ -481,7 +481,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
             gst_message_parse_state_changed (message, nullptr, &newstate, &pendingstate);
 
-            SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " state change received, new state " << (int)newState << " pending " << (int)pendingstate );
+            SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " state change received, new state " << (int)newstate << " pending " << (int)pendingstate );
             if( newstate == GST_STATE_PAUSED &&
                 pendingstate == GST_STATE_VOID_PENDING ) {
 
