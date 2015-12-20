@@ -867,7 +867,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     if( mbFakeVideo )
         preparePlaybin( maURL, nullptr );
 
-    SAL_INFO( "avmedia.gstreamer", AVVERSION << "Player::createPlayerWindow " << aSize.Width << "x" << aSize.Height << " length: " << rArguments.getLength() );
+    SAL_INFO( "avmedia.gstreamer", AVVERSION "Player::createPlayerWindow " << aSize.Width << "x" << aSize.Height << " length: " << rArguments.getLength() );
 
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
@@ -885,7 +885,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             if (pEnvData)
             {
                 mnWindowID = pEnvData->aWindow;
-                SAL_INFO( "avmedia.gstreamer", AVVERSION << "set window id to " << (int)mnWindowID << " XOverlay " << mpXOverlay);
+                SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << (int)mnWindowID << " XOverlay " << mpXOverlay);
                 gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
                 if ( mpXOverlay != nullptr )
                     gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
@@ -907,7 +907,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 
     if( ( aPrefSize.Width > 0 ) && ( aPrefSize.Height > 0 ) )
         pFrameGrabber = FrameGrabber::create( maURL );
-    SAL_INFO( "avmedia.gstreamer", AVVERSION << "created FrameGrabber " << pFrameGrabber );
+    SAL_INFO( "avmedia.gstreamer", AVVERSION "created FrameGrabber " << pFrameGrabber );
 
     return pFrameGrabber;
 }
