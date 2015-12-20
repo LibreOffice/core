@@ -106,7 +106,7 @@ public class Bootstrap {
      *
      * @return an array of default commandline options
      * @see #bootstrap( String[] )
-     * @since UDK 5.2.0
+     * @since LibreOffice 5.2
      */
     public static final String[] getDefaultOptions()
     {
@@ -289,7 +289,7 @@ public class Bootstrap {
      * @see #getDefaultOptions()
      * @return a bootstrapped component context.
      *
-     * @since UDK 5.2.0
+     * @since LibreOffice 5.2
      */
     public static final XComponentContext bootstrap( String[] argArray )
         throws BootstrapException {
