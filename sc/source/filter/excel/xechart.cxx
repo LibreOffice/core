@@ -720,6 +720,7 @@ void XclExpChEscherFormat::WriteBody( XclExpStream& rStrm )
     // write Escher property container via temporary memory stream
     SvMemoryStream aMemStrm;
     maData.mxEscherSet->Commit( aMemStrm );
+    aMemStrm.Flush();
     aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
     rStrm.CopyFromStream( aMemStrm );
 }
