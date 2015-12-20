@@ -405,6 +405,7 @@ public:
     // #110094# DrawContact support: Methods for handling Page changes
     void ActionChanged();
 
+private:
     sal_Int32 nWdt;     // Seitengroesse
     sal_Int32 nHgt;     // Seitengroesse
     sal_Int32 nBordLft; // Seitenrand links
@@ -412,7 +413,6 @@ public:
     sal_Int32 nBordRgt; // Seitenrand rechts
     sal_Int32 nBordLwr; // Seitenrand unten
 
-private:
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
     std::unique_ptr<SdrPageProperties> mpSdrPageProperties;
     css::uno::Reference< css::uno::XInterface > mxUnoPage;
