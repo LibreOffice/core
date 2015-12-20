@@ -1,6 +1,6 @@
 Resource Compiler.
 
-This compiler converts .src files and .hrc equivalents into binary
+ This compiler converts .src files and .hrc equivalents into binary
 .res files.  The basic idea is that this provides a map between
 integer identifiers and the resources: string, pixmap (only the
 file-name), and VCL control properties.
