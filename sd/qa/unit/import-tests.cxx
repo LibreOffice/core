@@ -92,7 +92,6 @@ public:
     void testCreationDate();
     void testBnc584721_1();
     void testBnc584721_2();
-    void testBnc584721_3();
     void testBnc584721_4();
     void testBnc904423();
     void testShapeLineStyle();
@@ -134,7 +133,6 @@ public:
     CPPUNIT_TEST(testCreationDate);
     CPPUNIT_TEST(testBnc584721_1);
     CPPUNIT_TEST(testBnc584721_2);
-    CPPUNIT_TEST(testBnc584721_3);
     CPPUNIT_TEST(testBnc584721_4);
     CPPUNIT_TEST(testBnc904423);
     CPPUNIT_TEST(testShapeLineStyle);
@@ -858,31 +856,6 @@ void SdImportTest::testBnc584721_2()
     const SdrPage *pPage = &(pDoc->GetPage(1)->TRG_GetMasterPage());
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
-
-    xDocShRef->DoClose();
-}
-
-void SdImportTest::testBnc584721_3()
-{
-    // Subtitle was simply skipped on master slides.
-    // Check whether the second shape is a subtitle shape with the right text.
-
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_3.pptx"), PPTX);
-
-    SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
-    const SdrPage *pPage = &(pDoc->GetPage(1)->TRG_GetMasterPage());
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
-    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(1) );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
-
-    // Check the shape type
-    uno::Reference< drawing::XShape > xShape( pTxtObj->getUnoShape(), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.presentation.SubtitleShape"), xShape->getShapeType());
-
-    // Check the text
-    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
-    CPPUNIT_ASSERT_EQUAL(OUString("Click to edit Master subtitle style"), aEdit.GetText(0));
 
     xDocShRef->DoClose();
 }
