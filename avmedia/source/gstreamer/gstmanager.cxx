@@ -31,21 +31,14 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace gstreamer {
 
-// - Manager -
-
-
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
 }
 
-
-
 Manager::~Manager()
 {
 }
-
-
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
     throw (uno::RuntimeException, std::exception)
@@ -60,23 +53,17 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
     return xRet;
 }
 
-
-
 OUString SAL_CALL Manager::getImplementationName(  )
     throw (uno::RuntimeException, std::exception)
 {
     return OUString( AVMEDIA_GST_MANAGER_IMPLEMENTATIONNAME );
 }
 
-
-
 sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
-
-
 
 uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
