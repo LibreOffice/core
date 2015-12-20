@@ -843,7 +843,6 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
             WriteTextShape( xShape );
 
-            //DBG(dump_pset(mXPropSet));
             return;
         }
     }
