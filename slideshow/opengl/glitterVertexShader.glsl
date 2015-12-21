@@ -57,22 +57,28 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 void main( void )
 {
-    // There are 18 vertices in an hexagon
-    int instanceID = gl_VertexID / 18;
+    vec2 pos = (center.xy + 1.0) / 2.0;
 
-    vec2 pos = (center.xy + 1) / 2;
+    // 0..1 pseudo-random value used to randomize the tile’s start time.
     float fuzz = snoise(pos);
+
     float startTime = pos.x * 0.5 + fuzz * 0.25;
     float endTime = startTime + 0.25;
-    float actualTime = clamp((time - startTime) / (endTime - startTime), 0, 1);
-    angle = actualTime * M_PI * 2;
+
+    // Scale the transition time to minimize the time a tile will stay black.
+    float transitionTime = clamp((time - startTime) / (endTime - startTime), 0.0, 1.0);
+    if (transitionTime < 0.5)
+        transitionTime = transitionTime * 0.3 / 0.5;
+    else
+        transitionTime = (transitionTime * 0.3 / 0.5) + 0.4;
+    angle = transitionTime * M_PI * 2.0;
 
     mat4 modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
-    mat4 transformMatrix = translationMatrix(center) * rotationMatrix(vec3(0, 1, 0), angle) * translationMatrix(-center);
+    mat4 transformMatrix = translationMatrix(center) * rotationMatrix(vec3(0.0, 1.0, 0.0), angle) * translationMatrix(-center);
 
     mat3 normalMatrix = mat3(transpose(inverse(transformMatrix)));
     gl_Position = u_projectionMatrix * modelViewMatrix * transformMatrix * vec4(a_position, 1.0);
-    v_texturePosition = vec2((a_position.x + 1) / 2, (1 - a_position.y) / 2);
+    v_texturePosition = vec2((a_position.x + 1.0) / 2.0, (1.0 - a_position.y) / 2.0);
     v_normal = normalize(normalMatrix * a_normal);
 }
 
