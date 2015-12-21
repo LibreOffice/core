@@ -90,7 +90,6 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 
 BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
-    mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
     mbLocalViewInitialized(false),
     maButtonsTextColor(officecfg::Office::Common::Help::StartCenter::StartCenterTextColor::get()),
     mbIsSaveMode( false ),

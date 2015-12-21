@@ -26,11 +26,10 @@ class MathTypeFilter : public cppu::WeakImplHelper
     lang::XServiceInfo
     >
 {
-    uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XComponent> m_xDstDoc;
 
 public:
-    explicit MathTypeFilter(const uno::Reference<uno::XComponentContext>& xContext);
+    MathTypeFilter();
     virtual ~MathTypeFilter();
 
     // XFilter
@@ -46,8 +45,7 @@ public:
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
 };
 
-MathTypeFilter::MathTypeFilter(const uno::Reference< uno::XComponentContext >& rxContext)
-    : m_xContext(rxContext)
+MathTypeFilter::MathTypeFilter()
 {
 }
 
@@ -124,9 +122,9 @@ uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames() throw(uno::Ru
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Math_MathTypeFilter_get_implementation(uno::XComponentContext* pComponent, uno::Sequence<uno::Any> const&)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Math_MathTypeFilter_get_implementation(uno::XComponentContext* , uno::Sequence<uno::Any> const&)
 {
-    return cppu::acquire(new MathTypeFilter(pComponent));
+    return cppu::acquire(new MathTypeFilter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

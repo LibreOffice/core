@@ -45,7 +45,6 @@ struct SfxViewShell_Impl
     ::cppu::OInterfaceContainerHelper aInterceptorContainer;
     bool                        m_bControllerSet;
     SfxShellArr_Impl            aArr;
-    SvBorder                    aBorder;
     Size                        aMargin;
     sal_uInt16                  m_nPrinterLocks;
     bool                        m_bCanPrint;

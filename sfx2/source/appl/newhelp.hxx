@@ -493,8 +493,6 @@ friend class SfxHelpIndexWindow_Impl;
 
     css::uno::Reference < css::awt::XWindow >
                                 xWindow;
-    css::uno::Reference < css::frame::XDispatchResultListener >
-                                xOpenListener;
     css::uno::Reference < css::frame::XFrame2 >
                                 xFrame;
 

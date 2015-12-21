@@ -207,7 +207,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     bool                                                       m_bExternalTitle         ;
     bool                                                       m_bModifiedSinceLastSave ;
     Reference< view::XPrintable>                               m_xPrintable             ;
-    Reference< script::provider::XScriptProvider >             m_xScriptProvider        ;
     Reference< ui::XUIConfigurationManager2 >                  m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >  m_pStorageModifyListen   ;
     OUString                                                   m_sModuleIdentifier      ;

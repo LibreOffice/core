@@ -106,8 +106,6 @@ public:
 
 class IFrameWindow_Impl : public vcl::Window
 {
-    uno::Reference < frame::XFrame2 > mxFrame;
-
 public:
     IFrameWindow_Impl( vcl::Window *pParent,
                        bool bHasBorder,

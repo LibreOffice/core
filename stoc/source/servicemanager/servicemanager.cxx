@@ -262,7 +262,6 @@ private:
     Mutex                           aMutex;
     HashSet_Ref                     aImplementationMap;
     HashSet_Ref::iterator           aIt;
-    Reference<XInterface >          xNext;
 };
 
 ImplementationEnumeration_Impl::~ImplementationEnumeration_Impl() {}

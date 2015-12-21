@@ -55,7 +55,6 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::frame::XDispatchProvider> mxDesktopDispatchProvider;
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    css::uno::Reference<css::frame::XDesktop2> mxDesktop;
 
     /** helper for drag&drop. */
     css::uno::Reference<css::datatransfer::dnd::XDropTargetListener> mxDropTargetListener;

@@ -46,9 +46,7 @@ class Translator:
     private boost::noncopyable
 {
 public:
-    explicit Translator(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
-        m_context(context) {}
+    Translator() {}
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -69,8 +67,6 @@ public:
 
 private:
     virtual ~Translator() {}
-
-    css::uno::Reference< css::uno::XComponentContext > m_context;
 };
 
 OUString Translator::getImplementationName()
@@ -190,10 +186,10 @@ OUString Translator::translateToExternal(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation(css::uno::XComponentContext* rxContext,
+com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation(css::uno::XComponentContext* ,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return ::cppu::acquire(new Translator(rxContext));
+    return ::cppu::acquire(new Translator);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

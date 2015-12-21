@@ -23,14 +23,6 @@
 
 
 
-class SfxStyleFamilyItem_Impl
-{
-    Bitmap aBitmap;
-    Image   aImage;
-};
-
-
-
 // Implementierung des Resource-Konstruktors
 
 SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :

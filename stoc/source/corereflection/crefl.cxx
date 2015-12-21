@@ -60,7 +60,6 @@ static OUString core_getImplementationName()
 IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     const Reference< XComponentContext > & xContext )
     : OComponentHelper( _aComponentMutex )
-    , _xMgr( xContext->getServiceManager(), UNO_QUERY )
     , _aElements( CACHE_SIZE )
 {
     xContext->getValueByName(

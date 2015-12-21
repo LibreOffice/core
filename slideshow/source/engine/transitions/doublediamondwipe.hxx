@@ -33,10 +33,8 @@ namespace internal {
 class DoubleDiamondWipe : public ParametricPolyPolygon
 {
 public:
-    DoubleDiamondWipe() : m_unitRect( createUnitRect() ) {}
+    DoubleDiamondWipe() {}
     virtual ::basegfx::B2DPolyPolygon operator()( double x ) override;
-private:
-    const ::basegfx::B2DPolyPolygon m_unitRect;
 };
 
 }

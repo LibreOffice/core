@@ -82,7 +82,6 @@ class IdlReflectionServiceImpl
     , public css::lang::XServiceInfo
 {
     ::osl::Mutex                            _aComponentMutex;
-    css::uno::Reference< css::lang::XMultiServiceFactory >       _xMgr;
     css::uno::Reference< css::container::XHierarchicalNameAccess >    _xTDMgr;
 
     // caching
