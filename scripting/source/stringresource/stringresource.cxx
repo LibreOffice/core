@@ -1245,14 +1245,12 @@ void StringResourcePersistenceImpl::implStoreAtLocation
 
 class BinaryOutput
 {
-    Reference< XMultiComponentFactory >     m_xMCF;
     Reference< XComponentContext >          m_xContext;
     Reference< XInterface >                 m_xTempFile;
     Reference< io::XOutputStream >          m_xOutputStream;
 
 public:
-    BinaryOutput( Reference< XMultiComponentFactory > xMCF,
-        Reference< XComponentContext > xContext );
+    BinaryOutput( Reference< XComponentContext > xContext );
 
     Reference< io::XOutputStream > getOutputStream() const
         { return m_xOutputStream; }
@@ -1270,10 +1268,8 @@ public:
     void writeString( const OUString& aStr );
 };
 
-BinaryOutput::BinaryOutput( Reference< XMultiComponentFactory > xMCF,
-    Reference< XComponentContext > xContext )
-        : m_xMCF( xMCF )
-        , m_xContext( xContext )
+BinaryOutput::BinaryOutput( Reference< XComponentContext > xContext )
+        : m_xContext( xContext )
 {
     m_xTempFile = io::TempFile::create( m_xContext );
     m_xOutputStream.set( m_xTempFile, UNO_QUERY_THROW );
@@ -1380,8 +1376,7 @@ Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
 Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
     throw (RuntimeException, std::exception)
 {
-    Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
-    BinaryOutput aOut( xMCF, m_xContext );
+    BinaryOutput aOut( m_xContext );
 
     sal_Int32 nLocaleCount = m_aLocaleItemVector.size();
     Sequence< sal_Int8 >* pLocaleDataSeq = new Sequence< sal_Int8 >[ nLocaleCount ];
@@ -1397,7 +1392,7 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
             if( m_pDefaultLocaleItem == pLocaleItem )
                 iDefault = iLocale;
 
-            BinaryOutput aLocaleOut( m_xMCF, m_xContext );
+            BinaryOutput aLocaleOut( m_xContext );
             implWriteLocaleBinary( pLocaleItem, aLocaleOut );
 
             pLocaleDataSeq[iLocale] = aLocaleOut.closeAndGetData();
@@ -1462,7 +1457,6 @@ void StringResourcePersistenceImpl::implWriteLocaleBinary
 class BinaryInput
 {
     Sequence< sal_Int8 >                    m_aData;
-    Reference< XMultiComponentFactory >     m_xMCF;
     Reference< XComponentContext >          m_xContext;
 
     const sal_Int8*                         m_pData;
@@ -1470,8 +1464,7 @@ class BinaryInput
     sal_Int32                               m_nSize;
 
 public:
-    BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XMultiComponentFactory > xMCF,
-        Reference< XComponentContext > xContext );
+    BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XComponentContext > xContext );
 
     Reference< io::XInputStream > getInputStreamForSection( sal_Int32 nSize );
 
@@ -1485,10 +1478,8 @@ public:
     OUString readString();
 };
 
-BinaryInput::BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XMultiComponentFactory > xMCF,
-    Reference< XComponentContext > xContext )
+BinaryInput::BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XComponentContext > xContext )
         : m_aData( aData )
-        , m_xMCF( xMCF )
         , m_xContext( xContext )
 {
     m_pData = m_aData.getConstArray();
@@ -1607,8 +1598,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
     while( nOldLocaleCount > 0 );
 
     // Import data
-    Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
-    BinaryInput aIn( Data, xMCF, m_xContext );
+    BinaryInput aIn( Data, m_xContext );
 
     sal_Int32 nVersion = aIn.readInt16();
     (void)nVersion;

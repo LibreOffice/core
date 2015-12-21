@@ -42,7 +42,6 @@ class BrowseNodeFactoryImpl :
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
-    css::uno::Reference< css::script::browse::XBrowseNode > m_xSelectorBrowseNode;
 
 protected:
     virtual ~BrowseNodeFactoryImpl();
