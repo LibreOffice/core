@@ -61,7 +61,6 @@ private:
         std::list< PK11SymKey* >            m_tSymKeyList ;
         std::list< SECKEYPublicKey* >       m_tPubKeyList ;
         std::list< SECKEYPrivateKey* >      m_tPriKeyList ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public:
         SecurityEnvironment_NssImpl();

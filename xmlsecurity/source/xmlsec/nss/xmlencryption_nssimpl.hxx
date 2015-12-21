@@ -38,9 +38,6 @@ class XMLEncryption_NssImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::xml::crypto::XXMLEncryption ,
     ::com::sun::star::lang::XServiceInfo >
 {
-    private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
-
     public:
         explicit XMLEncryption_NssImpl(const css::uno::Reference<css::lang::XMultiServiceFactory >& rFactory);
         virtual ~XMLEncryption_NssImpl() ;

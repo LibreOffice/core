@@ -43,14 +43,12 @@ namespace xmlscript
     {
     private:
         ::osl::Mutex                                              m_aMutex;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
         css::uno::Reference< css::frame::XModel >                 m_xModel;
         bool                                                      m_bOasis;
 
     public:
-        XMLBasicExporterBase(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext, bool bOasis );
+        XMLBasicExporterBase(bool bOasis );
         virtual ~XMLBasicExporterBase();
 
         // XServiceInfo
@@ -77,8 +75,7 @@ namespace xmlscript
     class XMLBasicExporter : public XMLBasicExporterBase
     {
     public:
-        explicit XMLBasicExporter(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit XMLBasicExporter();
         virtual ~XMLBasicExporter();
 
         // XServiceInfo
@@ -93,8 +90,7 @@ namespace xmlscript
     class XMLOasisBasicExporter : public XMLBasicExporterBase
     {
     public:
-        explicit XMLOasisBasicExporter(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit XMLOasisBasicExporter();
         virtual ~XMLOasisBasicExporter();
 
         // XServiceInfo

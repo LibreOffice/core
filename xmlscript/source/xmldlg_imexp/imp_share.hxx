@@ -124,7 +124,6 @@ struct DialogImport
     css::uno::Reference< css::container::XNameContainer > _xDialogModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > _xDialogModelFactory;
     css::uno::Reference< css::frame::XModel > _xDoc;
-    css::uno::Reference< css::script::XLibraryContainer > _xScriptLibraryContainer;
 
     sal_Int32 XMLNS_DIALOGS_UID, XMLNS_SCRIPT_UID;
 
