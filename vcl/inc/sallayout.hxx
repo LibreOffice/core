@@ -57,8 +57,8 @@ public:
             ImplLayoutRuns() { mnRunIndex = 0; maRuns.reserve(8); }
 
     void    Clear()             { maRuns.clear(); }
-    bool    AddPos( int nCharPos, bool bRTL );
-    bool    AddRun( int nMinRunPos, int nEndRunPos, bool bRTL );
+    void    AddPos( int nCharPos, bool bRTL );
+    void    AddRun( int nMinRunPos, int nEndRunPos, bool bRTL );
 
     bool    IsEmpty() const     { return maRuns.empty(); }
     void    ResetPos()          { mnRunIndex = 0; }
@@ -106,10 +106,10 @@ public:
     bool        GetNextPos( int* nCharPos, bool* bRTL )
                     { return maRuns.GetNextPos( nCharPos, bRTL ); }
     bool        GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL );
-    bool        NeedFallback( int nCharPos, bool bRTL )
-                    { return maFallbackRuns.AddPos( nCharPos, bRTL ); }
-    bool        NeedFallback( int nMinRunPos, int nEndRunPos, bool bRTL )
-                    { return maFallbackRuns.AddRun( nMinRunPos, nEndRunPos, bRTL ); }
+    void        NeedFallback( int nCharPos, bool bRTL )
+                    { maFallbackRuns.AddPos( nCharPos, bRTL ); }
+    void        NeedFallback( int nMinRunPos, int nEndRunPos, bool bRTL )
+                    { maFallbackRuns.AddRun( nMinRunPos, nEndRunPos, bRTL ); }
     // methods used by BiDi and glyph fallback
     bool        NeedFallback() const
                     { return !maFallbackRuns.IsEmpty(); }

@@ -281,7 +281,7 @@ inline bool IsControlChar( sal_UCS4 cChar )
     return false;
 }
 
-bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
+void ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
 {
     // check if charpos could extend current run
     int nIndex = maRuns.size();
@@ -293,25 +293,24 @@ bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
         {
             // extend current run by new charpos
             maRuns[ nIndex-1 ] = nCharPos + int(!bRTL);
-            return false;
+            return;
         }
         // ignore new charpos when it is in current run
         if( (nRunPos0 <= nCharPos) && (nCharPos < nRunPos1) )
-            return false;
+            return;
         if( (nRunPos1 <= nCharPos) && (nCharPos < nRunPos0) )
-            return false;
+            return;
     }
 
     // else append a new run consisting of the new charpos
     maRuns.push_back( nCharPos + (bRTL ? 1 : 0) );
     maRuns.push_back( nCharPos + (bRTL ? 0 : 1) );
-    return true;
 }
 
-bool ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
+void ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 {
     if( nCharPos0 == nCharPos1 )
-        return false;
+        return;
 
     // swap if needed
     if( bRTL == (nCharPos0 < nCharPos1) )
@@ -324,7 +323,6 @@ bool ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
     // append new run
     maRuns.push_back( nCharPos0 );
     maRuns.push_back( nCharPos1 );
-    return true;
 }
 
 bool ImplLayoutRuns::PosIsInRun( int nCharPos ) const
