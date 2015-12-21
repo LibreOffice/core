@@ -60,6 +60,19 @@ bool overridesXServiceInfo(clang::CXXMethodDecl const * decl) {
     return false;
 }
 
+std::string replace_all(std::string subject, const std::string& search, const std::string& replace)
+{
+    size_t pos = 0;
+
+    while ((pos = subject.find(search, pos)) != std::string::npos)
+    {
+        subject.replace(pos, search.length(), replace);
+        pos += replace.length();
+    }
+
+    return subject;
+}
+
 class GetImplementationName:
     public clang::RecursiveASTVisitor<GetImplementationName>,
     public loplugin::Plugin
@@ -263,8 +276,8 @@ void GetImplementationName::generateOutput(FunctionDecl const * decl, const std:
     if(modulematch.empty())
         return;
     const std::string module(modulematch[0]);
-    const std::regex doublecolonregex("::");
-    const std::string cppclassweb(std::regex_replace(cppclass, doublecolonregex, "_1_1"));
+    const std::string doublecolonregex("::");
+    const std::string cppclassweb(replace_all(cppclass, doublecolonregex, "_1_1"));
     std::ofstream redirectfile(m_Outdir + "/" + unoimpl + ".html");
     redirectfile << "<meta http-equiv=\"refresh\" content=\"0; URL=http://docs.libreoffice.org/" << module << "/html/class" << cppclassweb << "\">\n";
     redirectfile.close();
