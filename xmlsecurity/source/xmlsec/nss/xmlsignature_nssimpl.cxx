@@ -47,7 +47,7 @@ using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
 using ::com::sun::star::xml::crypto::XMLSignatureException ;
 
-XMLSignature_NssImpl::XMLSignature_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {
+XMLSignature_NssImpl::XMLSignature_NssImpl() {
 }
 
 XMLSignature_NssImpl::~XMLSignature_NssImpl() {
@@ -305,8 +305,8 @@ OUString XMLSignature_NssImpl::impl_getImplementationName() throw( RuntimeExcept
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignature_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new XMLSignature_NssImpl( aServiceManager ) ) ;
+Reference< XInterface > SAL_CALL XMLSignature_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
+    return Reference< XInterface >( *new XMLSignature_NssImpl ) ;
 }
 
 Reference< XSingleServiceFactory > XMLSignature_NssImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {

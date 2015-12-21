@@ -39,14 +39,13 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::lang::XServiceInfo >
 {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTemplate ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTarget ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTemplate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTarget;
         ::com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
     public:
-        explicit XMLEncryptionTemplateImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
-        virtual ~XMLEncryptionTemplateImpl() ;
+        explicit XMLEncryptionTemplateImpl();
+        virtual ~XMLEncryptionTemplateImpl();
 
         //Methods from XXMLEncryptionTemplate
         virtual void SAL_CALL setTemplate(

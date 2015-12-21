@@ -28,10 +28,9 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 
-XMLEncryptionTemplateImpl::XMLEncryptionTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLEncryptionTemplateImpl::XMLEncryptionTemplateImpl()
     : m_xTemplate( nullptr ),
       m_xTarget( nullptr ),
-      m_xServiceManager( aFactory ),
       m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN ) {
 }
 
@@ -111,8 +110,8 @@ OUString XMLEncryptionTemplateImpl::impl_getImplementationName() throw( RuntimeE
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLEncryptionTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new XMLEncryptionTemplateImpl( aServiceManager ) ) ;
+Reference< XInterface > SAL_CALL XMLEncryptionTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) throw( RuntimeException ) {
+    return Reference< XInterface >( *new XMLEncryptionTemplateImpl ) ;
 }
 
 Reference< XSingleServiceFactory > XMLEncryptionTemplateImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {

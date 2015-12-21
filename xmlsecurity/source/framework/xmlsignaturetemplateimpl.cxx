@@ -29,9 +29,8 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 
-XMLSignatureTemplateImpl::XMLSignatureTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLSignatureTemplateImpl::XMLSignatureTemplateImpl()
     :m_xTemplate( nullptr ),
-     m_xServiceManager( aFactory ),
      m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN )
 {
 }
@@ -137,8 +136,8 @@ OUString XMLSignatureTemplateImpl::impl_getImplementationName() throw( RuntimeEx
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new XMLSignatureTemplateImpl( aServiceManager ) ) ;
+Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) throw( RuntimeException ) {
+    return Reference< XInterface >( *new XMLSignatureTemplateImpl ) ;
 }
 
 Reference< XSingleServiceFactory > XMLSignatureTemplateImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {

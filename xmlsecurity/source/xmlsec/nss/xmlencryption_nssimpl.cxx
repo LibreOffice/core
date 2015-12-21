@@ -43,7 +43,7 @@ using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XMLEncryptionException ;
 
-XMLEncryption_NssImpl::XMLEncryption_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {
+XMLEncryption_NssImpl::XMLEncryption_NssImpl() {
 }
 
 XMLEncryption_NssImpl::~XMLEncryption_NssImpl() {
@@ -342,8 +342,8 @@ OUString XMLEncryption_NssImpl::impl_getImplementationName() throw( RuntimeExcep
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLEncryption_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new XMLEncryption_NssImpl( aServiceManager ) ) ;
+Reference< XInterface > SAL_CALL XMLEncryption_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) throw( RuntimeException ) {
+    return Reference< XInterface >( *new XMLEncryption_NssImpl ) ;
 }
 
 Reference< XSingleServiceFactory > XMLEncryption_NssImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {

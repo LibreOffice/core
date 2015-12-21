@@ -40,15 +40,14 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::lang::XServiceInfo >
 {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTemplate ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTemplate;
         std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > > targets;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XUriBinding > m_xUriBinding;
         ::com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
     public:
-        explicit XMLSignatureTemplateImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
-        virtual ~XMLSignatureTemplateImpl() ;
+        explicit XMLSignatureTemplateImpl();
+        virtual ~XMLSignatureTemplateImpl();
 
         //Methods from XXMLSignatureTemplate
         virtual void SAL_CALL setTemplate(
