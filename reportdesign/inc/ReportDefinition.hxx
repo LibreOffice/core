@@ -25,6 +25,7 @@
 #include "ReportHelperDefines.hxx"
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/frame/XModule.hpp>
@@ -61,6 +62,7 @@ namespace reportdesign
     class OReportComponentProperties;
     typedef cppu::PartialWeakComponentImplHelper<   css::report::XReportDefinition
                                                     ,   css::document::XEventBroadcaster
+                                                    ,   css::document::XDocumentEventBroadcaster
                                                     ,   css::lang::XServiceInfo
                                                     ,   css::frame::XModule
                                                     ,   css::lang::XUnoTunnel
@@ -334,6 +336,11 @@ namespace reportdesign
         // document::XEventBroadcaster
         virtual void SAL_CALL addEventListener( const css::uno::Reference< css::document::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+
+        // document::XDocumentEventBroadcaster
+        virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& rListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& rListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL notifyDocumentEvent( const OUString& rEventName, const css::uno::Reference< css::frame::XController2 >& rViewController, const css::uno::Any& rSupplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
         // XUIConfigurationManagerSupplier
         virtual css::uno::Reference< css::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager(  ) throw (css::uno::RuntimeException, std::exception) override;
