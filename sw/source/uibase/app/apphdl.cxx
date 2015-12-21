@@ -207,12 +207,9 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_MAILMERGE_NEXT_ENTRY:
             case FN_MAILMERGE_LAST_ENTRY:
             {
-                /*
                 SwView* pView = ::GetActiveView();
                 SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
-                if (!pConfigItem)
-                    rSet.DisableItem(nWhich);
-                else
+                if (pConfigItem)
                 {
                     bool bFirst, bLast;
                     bool bValid = pConfigItem->IsResultSetFirstLast(bFirst, bLast);
@@ -223,12 +220,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                     {
                         rSet.DisableItem(nWhich);
                     }
-                    else
-                    {
-                        rSet.Put(SfxVoidItem(nWhich));
-                    }
                 }
-                */
             }
             break;
             default:
@@ -749,7 +741,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 default: break;
             }
 
-            //now the record has to be merged into the source document
+            // now the record has to be merged into the source document
             const SwDBData& rDBData = pConfigItem->GetCurrentDBData();
             uno::Sequence<uno::Any> vSelection({ uno::makeAny(pConfigItem->GetResultSetPosition()) });
             svx::ODataAccessDescriptor aDescriptor(::comphelper::InitPropertySequence({
@@ -766,6 +758,14 @@ void SwModule::ExecOther(SfxRequest& rReq)
             SwWrtShell& rSh = pActView->GetWrtShell();
             SwMergeDescriptor aMergeDesc(DBMGR_MERGE, rSh, aDescriptor);
             rSh.GetDBManager()->MergeNew(aMergeDesc);
+
+            // update enabled / disabled status of the buttons in the toolbar
+            SfxBindings& rBindings = rSh.GetView().GetViewFrame()->GetBindings();
+            rBindings.Invalidate(FN_MAILMERGE_FIRST_ENTRY);
+            rBindings.Invalidate(FN_MAILMERGE_PREV_ENTRY);
+            rBindings.Invalidate(FN_MAILMERGE_NEXT_ENTRY);
+            rBindings.Invalidate(FN_MAILMERGE_LAST_ENTRY);
+            rBindings.Update();
         }
         break;
 #endif
