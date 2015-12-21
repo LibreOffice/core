@@ -28,11 +28,28 @@ uniform float time;
 uniform ivec2 numTiles;
 uniform sampler2D permTexture;
 attribute float tileInfo;
-varying float v_textureSelect;
+uniform float slide;
+
+varying vec4 debug;
 
 float snoise(vec2 p)
 {
     return texture2D(permTexture, p).r;
+}
+
+mat4 identityMatrix(void)
+{
+    return mat4(1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0);
+}
+
+mat4 translationMatrix(vec3 axis)
+{
+    mat4 matrix = identityMatrix();
+    matrix[3] = vec4(axis, 1.0);
+    return matrix;
 }
 
 mat4 rotationMatrix(vec3 axis, float angle)
@@ -53,13 +70,6 @@ void main( void )
     vec4 v = vec4(a_position, 1.0);
     vec4 normal = vec4(a_normal, 1.0);
 
-    // Not sure it this is like what it should eventually be; just
-    // experimenting to get at least something.
-
-    // Move the tile on a semicircular path so that it will end up at
-    // the correct place. All tiles move the same direction around the
-    // vertical centre axis.
-
     // Each tile moves during only half of the transition. The letmost
     // tiles start moving at the start and arrive at their end
     // position around time=0.5, when the tiles there (the rightmost
@@ -70,48 +80,68 @@ void main( void )
 
     int tileXIndex = int(mod(int(tileInfo), 256));
     int tileYIndex = int(mod(int(tileInfo) / 256, 256));
-    int vertexIndexInTile = int(mod(int(tileInfo) / (256*256), 256));
 
-    // A semi-random number 0..1, different for neighbouring tiles.
-    float fuzz = snoise(vec2(float(tileXIndex)/(numTiles.x-1), float(tileYIndex)/(numTiles.y-1)));
+    // A semi-random number 0..1, different for neighbouring tiles, to know when they should start moving.
+    float startTimeFuzz = snoise(vec2(float(tileXIndex)/(numTiles.x-1), float(tileYIndex)/(numTiles.y-1)));
 
-    // Semi-random rotation direction, identical for tiles that rotate into each other's location
-    // so that they don't pass through each others in flight, which looks ugly.
-    float direction = (snoise(vec2(floor(abs(float(numTiles.x-1)/2-tileXIndex))/(float(numTiles.x-1)/2), float(tileYIndex)/(numTiles.y-1))) < 0.5 ? -1 : 1);
+    // A semi-random number -1.5..1.5, different for neighbouring tiles, to specify their rotation center.
+    // The additional 0.5 on each side is because we want some tiles to rotate outside.
+    float rotationFuzz = snoise(vec2(float(numTiles.x + tileXIndex)/(numTiles.x-1), float(tileYIndex)/(numTiles.y-1))) * 3.0 - 1.5;
 
-    float startTime = float(tileXIndex)/(numTiles.x-1) * 0.5 + fuzz*0.2;
-    float endTime = min(startTime + 0.5, 1.0);
+    float startTime = float(tileXIndex)/(numTiles.x-1) * 0.2 + startTimeFuzz * 0.2;
+    float endTime = min(startTime + 0.7, 1.0);
 
-    const float ALMOST_ONE = 0.999;
+    bool isLeavingSlide = (slide < 0.5);
+    const vec4 invalidPosition = vec4(-256.0, -256.0, -256.0, -256.0);
 
-    if (time <= startTime)
+    float nTime;
+
+    // Don’t display the tile before or after its rotation, depending on the slide.
+    if (!isLeavingSlide)
     {
-        // Still at start location, nothing needed
-        v_textureSelect = 0;
-    }
-    else if (time > startTime && time <= endTime)
-    {
-        // Moving
-        float rotation = direction * (time - startTime) / (endTime - startTime);
-
-        // Avoid z fighting
-        mat4 matrix = rotationMatrix(vec3(0, 1, 0), max(min(rotation, ALMOST_ONE), -ALMOST_ONE)*M_PI);
-        v = matrix * v;
-        normal = matrix * normal;
-
-        v_textureSelect = float(rotation > 0.5 || rotation < -0.5);
+        if (time < max(0.3, startTime))
+        {
+            gl_Position = invalidPosition;
+            return;
+        }
+        nTime = 1.0 - time;
     }
     else
     {
-        // At end location. Tile is 180 degrees rotated
-
-        // Avoid z fighting
-        mat4 matrix = rotationMatrix(vec3(0, 1, 0), direction*ALMOST_ONE*M_PI);
-        v = matrix * v;
-        normal = matrix * normal;
-
-        v_textureSelect = 1;
+        if (time > endTime)
+        {
+            gl_Position = invalidPosition;
+            return;
+        }
+        nTime = time;
     }
+
+    mat4 transform = identityMatrix();
+    if (nTime > startTime && nTime <= endTime)
+    {
+        // We are in the rotation part.
+        float rotation = -(nTime - startTime) / (endTime - startTime);
+
+        // Translation vector to set the origin of the rotation.
+        vec3 translationVector = vec3(rotationFuzz, 0.0, 0.0);
+
+        // Compute the actual rotation matrix.
+        transform = translationMatrix(translationVector)
+                  * rotationMatrix(vec3(0, 1, 0), clamp(rotation, -1.0, 1.0) * M_PI)
+                  * translationMatrix(-translationVector)
+                  * transform;
+
+        // Add a translation movement to the leaving slide so it doesn’t exactly mirror the entering one.
+        if (isLeavingSlide && nTime > 0.3)
+        {
+            float movement = smoothstep(0.0, 1.0, (nTime - 0.3) * 2.0);
+            transform = translationMatrix(vec3(-movement, 0.0, -0.5 * movement)) * transform;
+        }
+    }
+
+    // Apply our transform operations.
+    v = transform * v;
+    normal = transform * normal;
 
     mat4 modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
     mat3 normalMatrix = mat3(transpose(inverse(modelViewMatrix)));
