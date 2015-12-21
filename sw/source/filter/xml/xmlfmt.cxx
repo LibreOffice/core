@@ -362,31 +362,23 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
 void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 {
     XMLTextStyleContext::Finish( bOverwrite );
-
-    if( !pConditions || XML_STYLE_FAMILY_TEXT_PARAGRAPH != GetFamily() )
+    if(!pConditions || XML_STYLE_FAMILY_TEXT_PARAGRAPH != GetFamily())
         return;
-
-    uno::Reference < style::XStyle > xStyle = GetStyle();
-    if( !xStyle.is() )
+    uno::Reference<style::XStyle> xStyle = GetStyle();
+    if(!xStyle.is())
         return;
-
-    const SwXStyle* pStyle = nullptr;
-    uno::Reference<lang::XUnoTunnel> xStyleTunnel( xStyle, uno::UNO_QUERY);
-    if( xStyleTunnel.is() )
-    {
-        pStyle = reinterpret_cast< SwXStyle * >(
-                sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId() )));
-    }
-    if( !pStyle )
+    uno::Reference<lang::XUnoTunnel> xStyleTunnel(xStyle, uno::UNO_QUERY);
+    if(!xStyleTunnel.is())
         return;
-
-    const SwDoc *pDoc = pStyle->GetDoc();
-
-    SwTextFormatColl *pColl = pDoc->FindTextFormatCollByName( pStyle->GetStyleName() );
+    sw::ICoreParagraphStyle* pCoreParagraphStyle(reinterpret_cast<sw::ICoreParagraphStyle*>(
+            xStyleTunnel->getSomething(sw::ICoreParagraphStyle::getUnoTunnelId())));
+    if(!pCoreParagraphStyle)
+        return;
+    SwTextFormatColl* pColl = const_cast<SwTextFormatColl*>(pCoreParagraphStyle->GetFormatColl());
     OSL_ENSURE( pColl, "Text collection not found" );
     if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
         return;
-
+    SwDoc *pDoc = SwImport::GetDocFromXMLImport(GetImport());
     const size_t nCount = pConditions->size();
     OUString sName;
     for( size_t i = 0; i < nCount; i++ )

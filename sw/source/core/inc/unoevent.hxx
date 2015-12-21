@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_UNOEVENT_HXX
 
 #include <svtools/unoevent.hxx>
+#include <unostyle.hxx>
 #include <svl/macitem.hxx>
 
 class SvxMacroItem;
@@ -82,10 +83,10 @@ class SwFrameStyleEventDescriptor : public SvEventDescriptor
 {
     OUString sSwFrameStyleEventDescriptor;
 
-    SwXFrameStyle& rStyle;
+    sw::ICoreFrameStyle& m_rStyle;
 
 public:
-    SwFrameStyleEventDescriptor( SwXFrameStyle& rStyleRef );
+    SwFrameStyleEventDescriptor( sw::ICoreFrameStyle& rStyle );
 
     virtual ~SwFrameStyleEventDescriptor();
 
