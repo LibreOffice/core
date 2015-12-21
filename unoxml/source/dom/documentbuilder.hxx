@@ -51,17 +51,13 @@ namespace DOM
     {
     private:
         ::osl::Mutex m_Mutex;
-        css::uno::Reference< css::lang::XMultiServiceFactory > const
-            m_xFactory;
         css::uno::Reference< css::xml::sax::XEntityResolver > m_xEntityResolver;
         css::uno::Reference< css::xml::sax::XErrorHandler > m_xErrorHandler;
 
     public:
 
         // ctor
-        explicit CDocumentBuilder(
-            css::uno::Reference< css::lang::XMultiServiceFactory > const&
-                xFactory);
+        explicit CDocumentBuilder();
 
         // static helpers for service info and component management
         static const char* aImplementationName;

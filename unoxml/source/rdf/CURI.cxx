@@ -41,7 +41,7 @@ class CURI:
     private boost::noncopyable
 {
 public:
-    explicit CURI(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit CURI();
     virtual ~CURI() {}
 
     // css::lang::XServiceInfo:
@@ -63,14 +63,12 @@ private:
     /// handle css.rdf.URIs
     void SAL_CALL initFromConstant(const sal_Int16 i_Constant);
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
     OUString m_Namespace;
     OUString m_LocalName;
 };
 
-CURI::CURI(css::uno::Reference< css::uno::XComponentContext > const & context) :
-    m_xContext(context), m_Namespace(), m_LocalName()
+CURI::CURI() :
+    m_Namespace(), m_LocalName()
 {}
 
 // com.sun.star.uno.XServiceInfo:
@@ -820,9 +818,9 @@ css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
-    const css::uno::Reference< css::uno::XComponentContext > & context)
+    const css::uno::Reference< css::uno::XComponentContext > & )
 {
-    return static_cast< ::cppu::OWeakObject * >(new CURI(context));
+    return static_cast< ::cppu::OWeakObject * >(new CURI);
 }
 
 } // closing component helper namespace

@@ -40,7 +40,7 @@ class CBlankNode:
     private boost::noncopyable
 {
 public:
-    explicit CBlankNode(css::uno::Reference< css::uno::XComponentContext > const & context);
+    CBlankNode();
     virtual ~CBlankNode() {}
 
     // css::lang::XServiceInfo:
@@ -55,13 +55,11 @@ public:
     virtual OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
     OUString m_NodeID;
 };
 
-CBlankNode::CBlankNode(css::uno::Reference< css::uno::XComponentContext > const & context) :
-    m_xContext(context), m_NodeID()
+CBlankNode::CBlankNode() :
+    m_NodeID()
 {}
 
 // com.sun.star.uno.XServiceInfo:
@@ -130,9 +128,9 @@ css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
-    const css::uno::Reference< css::uno::XComponentContext > & context)
+    const css::uno::Reference< css::uno::XComponentContext > & )
 {
-    return static_cast< ::cppu::OWeakObject * >(new CBlankNode(context));
+    return static_cast< ::cppu::OWeakObject * >(new CBlankNode);
 }
 
 } // closing component helper namespace

@@ -1041,10 +1041,9 @@ static bool _UCBOpenContentSync(
     return ( bAborted || bException );
 }
 
-UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
+UcbLockBytes::UcbLockBytes()
     : m_aExpireDate( DateTime::EMPTY )
     , m_xInputStream (nullptr)
-    , m_xHandler( pHandler )
     , m_nError( ERRCODE_NONE )
     , m_bTerminated  (false)
     , m_bDontClose( false )
@@ -1375,7 +1374,7 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     if( !xInputStream.is() )
         return nullptr;
 
-    UcbLockBytesRef xLockBytes = new UcbLockBytes(nullptr);
+    UcbLockBytesRef xLockBytes = new UcbLockBytes;
     xLockBytes->setDontClose_Impl();
     xLockBytes->setInputStream_Impl( xInputStream );
     xLockBytes->terminate_Impl();
@@ -1387,7 +1386,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference< XStream >& xStre
     if( !xStream.is() )
         return nullptr;
 
-    UcbLockBytesRef xLockBytes = new UcbLockBytes(nullptr);
+    UcbLockBytesRef xLockBytes = new UcbLockBytes;
     xLockBytes->setDontClose_Impl();
     xLockBytes->setStream_Impl( xStream );
     xLockBytes->terminate_Impl();
@@ -1400,7 +1399,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     if( !xContent.is() )
         return nullptr;
 
-    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
+    UcbLockBytesRef xLockBytes = new UcbLockBytes;
     xLockBytes->SetSynchronMode( !pHandler );
     Reference< XActiveDataControl > xSink;
     if ( eOpenMode & StreamMode::WRITE )

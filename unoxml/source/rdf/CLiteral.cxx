@@ -42,7 +42,7 @@ class CLiteral:
     private boost::noncopyable
 {
 public:
-    explicit CLiteral(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit CLiteral();
     virtual ~CLiteral() {}
 
     // css::lang::XServiceInfo:
@@ -62,15 +62,13 @@ public:
     virtual css::uno::Reference< css::rdf::XURI > SAL_CALL getDatatype() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
     OUString m_Value;
     OUString m_Language;
     css::uno::Reference< css::rdf::XURI > m_xDatatype;
 };
 
-CLiteral::CLiteral(css::uno::Reference< css::uno::XComponentContext > const & context) :
-    m_xContext(context), m_Value(), m_Language(), m_xDatatype()
+CLiteral::CLiteral() :
+    m_Value(), m_Language(), m_xDatatype()
 {}
 
 // com.sun.star.uno.XServiceInfo:
@@ -193,9 +191,9 @@ css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
-    const css::uno::Reference< css::uno::XComponentContext > & context)
+    const css::uno::Reference< css::uno::XComponentContext > & )
 {
-    return static_cast< ::cppu::OWeakObject * >(new CLiteral(context));
+    return static_cast< ::cppu::OWeakObject * >(new CLiteral);
 }
 
 } // closing component helper namespace

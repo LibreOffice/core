@@ -52,7 +52,7 @@ namespace DOM
         css::uno::Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != nullptr)
         {
-            aMap.set(new CEntitiesMap(this));
+            aMap.set(new CEntitiesMap);
         }
         return aMap;
     }
@@ -93,7 +93,7 @@ namespace DOM
         css::uno::Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != nullptr)
         {
-            aMap.set(new CNotationsMap(this));
+            aMap.set(new CNotationsMap);
         }
         return aMap;
     }

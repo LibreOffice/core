@@ -36,11 +36,8 @@ namespace DOM
     class CNotationsMap
         : public cppu::WeakImplHelper< css::xml::dom::XNamedNodeMap >
     {
-    private:
-        ::rtl::Reference<CDocumentType> const m_pDocType;
-
     public:
-        CNotationsMap(::rtl::Reference<CDocumentType> const& pDocType);
+        CNotationsMap();
 
         /**
         The number of nodes in this map.

@@ -28,9 +28,7 @@ using namespace css::xml::dom;
 
 namespace DOM
 {
-    CNotationsMap::CNotationsMap(
-            ::rtl::Reference<CDocumentType> const& pDocType)
-        : m_pDocType(pDocType)
+    CNotationsMap::CNotationsMap()
     {
     }
 

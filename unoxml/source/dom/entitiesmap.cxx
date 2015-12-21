@@ -28,8 +28,7 @@ using namespace css::xml::dom;
 
 namespace DOM
 {
-    CEntitiesMap::CEntitiesMap(::rtl::Reference<CDocumentType> const& pDocType)
-        : m_pDocType(pDocType)
+    CEntitiesMap::CEntitiesMap()
     {
     }
 

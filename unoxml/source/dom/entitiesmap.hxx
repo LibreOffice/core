@@ -36,11 +36,8 @@ namespace DOM
     class CEntitiesMap
         : public cppu::WeakImplHelper< css::xml::dom::XNamedNodeMap >
     {
-    private:
-        ::rtl::Reference<CDocumentType> const m_pDocType;
-
     public:
-        CEntitiesMap(::rtl::Reference<CDocumentType> const& pDocType);
+        CEntitiesMap();
 
         /**
         The number of nodes in this map.
