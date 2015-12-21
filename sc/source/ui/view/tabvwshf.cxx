@@ -187,7 +187,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                         aName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
                         nTabNr = static_cast<const SfxUInt16Item*>(pTabItem)->GetValue() - 1;
-                        if ( nTabNr < nTabCount )
+                        if ( nTabNr <= nTabCount )
                             bOk = InsertTable( aName, nTabNr );
                     }
 
