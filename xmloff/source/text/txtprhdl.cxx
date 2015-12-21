@@ -1219,16 +1219,8 @@ bool XMLNumber8OneBasedHdl::exportXML(
     }
     return bRet;
 }
-class XMLTextPropertyHandlerFactory_Impl
-{
-public:
-    static const XMLPropertyHandler *GetPropertyHandler( sal_Int32 nType );
 
-    XMLTextPropertyHandlerFactory_Impl();
-    ~XMLTextPropertyHandlerFactory_Impl();
-};
-
-const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
+static const XMLPropertyHandler *GetPropertyHandler
     ( sal_Int32 nType )
 {
     const XMLPropertyHandler* pHdl = nullptr;
@@ -1432,17 +1424,8 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     return pHdl;
 }
 
-XMLTextPropertyHandlerFactory_Impl::XMLTextPropertyHandlerFactory_Impl()
-{
-}
-
-XMLTextPropertyHandlerFactory_Impl::~XMLTextPropertyHandlerFactory_Impl()
-{
-}
-
 XMLTextPropertyHandlerFactory::XMLTextPropertyHandlerFactory() :
-    XMLPropertyHandlerFactory(),
-   pImpl( new XMLTextPropertyHandlerFactory_Impl )
+    XMLPropertyHandlerFactory()
 {
 }
 
@@ -1458,7 +1441,7 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory::GetPropertyHandler(
 
     if( !pHdl )
     {
-        const XMLPropertyHandler *pNewHdl = XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler( nType );
+        const XMLPropertyHandler *pNewHdl = ::GetPropertyHandler( nType );
 
         if( pNewHdl )
             PutHdlCache( nType, pNewHdl );

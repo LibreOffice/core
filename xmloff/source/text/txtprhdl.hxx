@@ -27,8 +27,6 @@ class XMLTextPropertyHandlerFactory_Impl;
 
 class XMLTextPropertyHandlerFactory : public XMLPropertyHandlerFactory
 {
-    std::unique_ptr<XMLTextPropertyHandlerFactory_Impl> pImpl;
-
 public:
 
     XMLTextPropertyHandlerFactory();

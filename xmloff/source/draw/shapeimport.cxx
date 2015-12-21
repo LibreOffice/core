@@ -95,9 +95,6 @@ struct XMLShapeImportHelperImpl
     // context for sorting shapes
     ShapeSortContext*           mpSortContext;
 
-    std::map<sal_Int32, css::uno::Reference< css::drawing::XShape >, ltint32>
-                                maShapeIds;
-
     std::vector<ConnectionHint> maConnections;
 
     // #88546# possibility to switch progress bar handling on/off

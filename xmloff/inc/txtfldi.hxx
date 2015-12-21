@@ -1341,8 +1341,6 @@ public:
 
 class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
 {
-    css::uno::Any aValue;
-
 public:
 
     XMLCustomPropertyFieldImportContext (SvXMLImport& rImport,

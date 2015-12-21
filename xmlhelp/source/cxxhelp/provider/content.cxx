@@ -330,9 +330,7 @@ uno::Any SAL_CALL Content::execute(
             uno::Reference< ucb::XDynamicResultSet > xSet
                 = new DynamicResultSet(
                     m_xContext,
-                    this,
                     aOpenCommand,
-                    Environment,
                     new ResultSetForRootFactory(
                         m_xContext,
                         m_xProvider.get(),
@@ -346,9 +344,7 @@ uno::Any SAL_CALL Content::execute(
             uno::Reference< ucb::XDynamicResultSet > xSet
                 = new DynamicResultSet(
                     m_xContext,
-                    this,
                     aOpenCommand,
-                    Environment,
                     new ResultSetForQueryFactory(
                         m_xContext,
                         m_xProvider.get(),

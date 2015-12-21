@@ -39,12 +39,6 @@ namespace com { namespace sun { namespace star {
  */
 class XMLSectionImportContext : public SvXMLImportContext
 {
-    /// start position; ranges acquired via getStart(),getEnd() don't move
-    css::uno::Reference<css::text::XTextRange> xStartRange;
-
-    /// end position
-    css::uno::Reference<css::text::XTextRange> xEndRange;
-
     /// TextSection (as XPropertySet) for passing down to data source elements
     css::uno::Reference<css::beans::XPropertySet> xSectionPropertySet;
 

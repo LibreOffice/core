@@ -63,7 +63,6 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         const css::awt::Size & rChartSize,
         RegressionStyle & rRegressionStyle );
 
@@ -74,7 +73,6 @@ public:
 private:
     SchXMLImportHelper&                           mrImportHelper;
     RegressionStyle&                              mrRegressionStyle;
-    css::uno::Reference< css::chart2::XDataSeries > mxSeries;
     css::awt::Size                                maChartSize;
 };
 

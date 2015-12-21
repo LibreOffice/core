@@ -108,7 +108,6 @@ public:
 
     OUString GetDefaultCellStyleName() const;
 
-    rtl::Reference< XMLTableImport > mxTableImporter;
     css::uno::Reference< css::table::XTable > mxTable;
     Reference< XTableColumns > mxColumns;
     Reference< XTableRows > mxRows;
@@ -275,7 +274,6 @@ void XMLTableImport::finishStyles()
 
 XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, sal_uInt16 nPrfx, const OUString& rLName,  Reference< XColumnRowRange >& xColumnRowRange )
 : SvXMLImportContext( xImporter->mrImport, nPrfx, rLName )
-, mxTableImporter( xImporter )
 , mxTable( xColumnRowRange, UNO_QUERY )
 , mxColumns( xColumnRowRange->getColumns() )
 , mxRows( xColumnRowRange->getRows() )

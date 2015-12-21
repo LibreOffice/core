@@ -94,7 +94,7 @@ SvXMLImportContext* SchXMLRegressionCurveObjectContext::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_CHART && IsXMLToken( rLocalName, XML_EQUATION ) )
     {
         pContext = new SchXMLEquationContext(
-            mrImportHelper, GetImport(), nPrefix, rLocalName, mxSeries, maChartSize, mrRegressionStyleList.back());
+            mrImportHelper, GetImport(), nPrefix, rLocalName, maChartSize, mrRegressionStyleList.back());
     }
     else
     {
@@ -109,15 +109,12 @@ SchXMLEquationContext::SchXMLEquationContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const css::uno::Reference<
-        css::chart2::XDataSeries >& xSeries,
     const awt::Size& rChartSize,
     RegressionStyle& rRegressionStyle ) :
 
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrRegressionStyle( rRegressionStyle ),
-        mxSeries( xSeries ),
         maChartSize( rChartSize )
 {}
 

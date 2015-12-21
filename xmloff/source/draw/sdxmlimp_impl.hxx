@@ -196,9 +196,6 @@ class SdXMLImport: public SvXMLImport
     bool                        mbLoadDoc;
     bool                        mbPreview;
 
-    std::map< sal_Int32, css::uno::Reference< css::drawing::XDrawPage >, SdXMLltXDrawPageId >
-                                maDrawPageIds;
-
     OUString                    msPageLayouts;
     OUString                    msPreview;
 

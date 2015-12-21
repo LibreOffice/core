@@ -507,7 +507,6 @@ struct XMLTextImportHelper::Impl
     std::unique_ptr<XMLTextListsHelper> m_xTextListsHelper;
 
     SvXMLImportContextRef m_xAutoStyles;
-    SvXMLImportContextRef m_xFontDecls;
 
     rtl::Reference< SvXMLImportPropertyMapper > m_xParaImpPrMap;
     rtl::Reference< SvXMLImportPropertyMapper > m_xTextImpPrMap;

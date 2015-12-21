@@ -31,8 +31,6 @@ namespace chelp {
 
     class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     {
-        rtl::Reference< Content > m_xContent;
-        css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
         ResultSetFactory*                    m_pFactory;
 
     private:
@@ -42,9 +40,7 @@ namespace chelp {
     public:
         DynamicResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& rxContent,
             const css::ucb::OpenCommandArgument2& rCommand,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
             ResultSetFactory* pFactory );
 
         virtual ~DynamicResultSet();
