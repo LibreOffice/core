@@ -215,7 +215,6 @@ private:
     css::uno::Reference<css::drawing::XDrawPage> mxCurrentSlide;
     css::uno::Reference<css::drawing::XDrawPage> mxNextSlide;
     ::rtl::Reference<PresenterWindowManager> mpWindowManager;
-    std::shared_ptr<PresenterPaneAnimator> mpCurrentPaneAnimation;
     std::shared_ptr<PresenterTheme> mpTheme;
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     ::rtl::Reference<PresenterPaneBorderPainter> mpPaneBorderPainter;

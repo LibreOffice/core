@@ -110,7 +110,6 @@ public:
 
     css::uno::Reference< css::uno::XInterface >               mxDialogModel;
     css::uno::Reference< css::beans::XMultiPropertySet >      mxDialogModelMultiPropertySet;
-    css::uno::Reference< css::beans::XPropertySet >           mxDialogModelPropertySet;
     css::uno::Reference< css::lang::XMultiServiceFactory >    mxDialogModelMSF;
     css::uno::Reference< css::container::XNameContainer >     mxDialogModelNameContainer;
     css::uno::Reference< css::container::XNameAccess >        mxDialogModelNameAccess;

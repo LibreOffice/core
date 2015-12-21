@@ -532,7 +532,6 @@ PresenterAccessible::PresenterAccessible (
     : PresenterAccessibleInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
       mpPresenterController(rpPresenterController),
-      mxMainPaneId(rxMainPane.is() ? rxMainPane->getResourceId() : Reference<XResourceId>()),
       mxMainPane(rxMainPane, UNO_QUERY),
       mxMainWindow(),
       mxPreviewContentWindow(),

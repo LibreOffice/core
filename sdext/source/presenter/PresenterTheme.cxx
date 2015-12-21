@@ -177,7 +177,6 @@ public:
     OUString msStyleName;
     std::shared_ptr<ViewStyle> mpParentStyle;
     PresenterTheme::SharedFontDescriptor mpFont;
-    std::shared_ptr<PresenterBitmapContainer> mpBitmaps;
     SharedBitmapDescriptor mpBackground;
 };
 
@@ -272,7 +271,6 @@ PresenterTheme::PresenterTheme (
     : mxContext(rxContext),
       msThemeName(rsThemeName),
       mpTheme(),
-      mpBitmapContainer(),
       mxCanvas(rxCanvas)
 {
     mpTheme = ReadTheme();

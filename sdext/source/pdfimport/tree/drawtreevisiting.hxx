@@ -80,9 +80,6 @@ namespace pdfi
     class DrawXmlEmitter : public ElementTreeVisitor
     {
     private:
-        css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
-        css::uno::Reference< css::uno::XComponentContext > xCtx;
-        css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
         css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
 
         EmitContext& m_rEmitContext ;

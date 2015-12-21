@@ -57,7 +57,6 @@ namespace pdfi
 
     m_xContext(xContext),
     prevCharWidth(0),
-    m_pElFactory( new ElementFactory() ),
     m_pDocument( ElementFactory::createDocumentElement() ),
     m_pCurPage(nullptr),
     m_pCurElement(nullptr),

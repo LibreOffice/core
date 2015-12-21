@@ -49,7 +49,6 @@ UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference
     mxDialogModel( mxContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.awt.UnoControlDialogModel", mxContext ), UNO_QUERY_THROW ),
     mxDialogModelMultiPropertySet( mxDialogModel, UNO_QUERY_THROW ),
-    mxDialogModelPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelMSF( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelNameContainer( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelNameAccess( mxDialogModel, UNO_QUERY_THROW ),

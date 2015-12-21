@@ -113,7 +113,6 @@ protected:
     ::rtl::Reference<PresenterController> mpPresenterController;
 
 private:
-    css::uno::Reference<css::drawing::framework::XPane> mxPane;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
     css::uno::Reference<css::drawing::XSlideRenderer> mxPreviewRenderer;
 

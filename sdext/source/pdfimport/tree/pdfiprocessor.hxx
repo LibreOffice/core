@@ -178,7 +178,6 @@ namespace pdfi
 
         std::vector<CharGlyph>             m_GlyphsList;
 
-        std::shared_ptr<ElementFactory>  m_pElFactory;
         std::shared_ptr<DocumentElement> m_pDocument;
         PageElement*                       m_pCurPage;
         Element*                           m_pCurElement;
@@ -187,7 +186,6 @@ namespace pdfi
         FontToIdMap                        m_aFontToId;
 
         GraphicsContextStack               m_aGCStack;
-        GraphicsContext                    m_prev_aGC;
         sal_Int32                          m_nNextGCId;
         IdToGCMap                          m_aIdToGC;
         GCToIdMap                          m_aGCToId;

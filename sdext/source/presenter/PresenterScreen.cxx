@@ -274,7 +274,6 @@ PresenterScreen::PresenterScreen (
       mxContextWeak(rxContext),
       mxSlideShowControllerWeak(),
       mpPresenterController(),
-      mxSlideShowViewId(),
       mxSavedConfiguration(),
       mpPaneContainer(),
       mnComponentIndex(0),

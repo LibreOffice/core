@@ -53,7 +53,6 @@ PresenterSlidePreview::PresenterSlidePreview (
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterSlidePreviewInterfaceBase(m_aMutex),
       mpPresenterController(rpPresenterController),
-      mxPane(rxAnchorPane),
       mxViewId(rxViewId),
       mxPreviewRenderer(),
       mxPreview(),

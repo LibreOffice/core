@@ -127,7 +127,6 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     const OUString msThemeName;
     std::shared_ptr<Theme> mpTheme;
-    std::shared_ptr<PresenterBitmapContainer> mpBitmapContainer;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
 
     std::shared_ptr<Theme> ReadTheme();

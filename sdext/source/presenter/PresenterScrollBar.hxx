@@ -162,7 +162,6 @@ public:
 
 protected:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;

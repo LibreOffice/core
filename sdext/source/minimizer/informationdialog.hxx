@@ -56,9 +56,6 @@ public:
 
 private:
 
-    css::uno::Reference< css::frame::XFrame >         mxFrame;
-    css::uno::Reference< css::io::XStream >           mxTempFile;
-
     css::uno::Reference< css::awt::XActionListener >  mxActionListener;
 
     void InitDialog();

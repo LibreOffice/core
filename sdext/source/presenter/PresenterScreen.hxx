@@ -134,7 +134,6 @@ private:
     css::uno::WeakReference<css::uno::XComponentContext> mxContextWeak;
     css::uno::WeakReference<css::presentation::XSlideShowController> mxSlideShowControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxSlideShowViewId;
     css::uno::Reference<css::drawing::framework::XConfiguration> mxSavedConfiguration;
     ::rtl::Reference<PresenterPaneContainer> mpPaneContainer;
     sal_Int32 mnComponentIndex;

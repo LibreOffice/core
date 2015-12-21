@@ -102,7 +102,6 @@ public:
 private:
     const css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxMainPaneId;
     css::uno::Reference<css::drawing::framework::XPane2> mxMainPane;
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     css::uno::Reference<css::awt::XWindow> mxPreviewContentWindow;

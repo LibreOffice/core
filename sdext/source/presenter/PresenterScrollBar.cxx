@@ -75,7 +75,6 @@ PresenterScrollBar::PresenterScrollBar (
     const ::std::function<void (double)>& rThumbMotionListener)
     : PresenterScrollBarInterfaceBase(m_aMutex),
       mxComponentContext(rxComponentContext),
-      mxParentWindow(rxParentWindow),
       mxWindow(),
       mxCanvas(),
       mxPresenterHelper(),
