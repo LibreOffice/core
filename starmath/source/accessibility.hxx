@@ -37,6 +37,7 @@
 #include <editeng/unoedsrc.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <edit.hxx>
+#include <memory>
 
 class SmGraphicWindow;
 class SmEditWindow;
@@ -314,7 +315,7 @@ class SmEditAccessible :
     public SmEditAccessibleBaseClass
 {
     OUString                                aAccName;
-    ::accessibility::AccessibleTextHelper    *pTextHelper;
+    std::unique_ptr<::accessibility::AccessibleTextHelper> pTextHelper;
     VclPtr<SmEditWindow>                    pWin;
 
     SmEditAccessible( const SmEditAccessible & ) = delete;
@@ -324,7 +325,7 @@ public:
     explicit SmEditAccessible( SmEditWindow *pEditWin );
     virtual ~SmEditAccessible();
 
-    ::accessibility::AccessibleTextHelper *   GetTextHelper() { return pTextHelper; }
+    ::accessibility::AccessibleTextHelper *   GetTextHelper();
 
     void                Init();
     void                ClearWin();     // to be called when view is destroyed
