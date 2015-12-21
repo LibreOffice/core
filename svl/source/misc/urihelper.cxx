@@ -738,6 +738,8 @@ OUString URIHelper::resolveIdnaHost(OUString const & url) {
         return url;
     }
     auto auth(uri->getAuthority());
+    if (auth.isEmpty())
+        return url;
     sal_Int32 hostStart = auth.indexOf('@') + 1;
     sal_Int32 hostEnd = auth.getLength() - 1;
     while (hostEnd > hostStart && rtl::isAsciiDigit(auth[hostEnd])) {

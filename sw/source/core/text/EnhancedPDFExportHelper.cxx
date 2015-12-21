@@ -1748,7 +1748,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
 
                 OUString aURL( static_cast<const SwFormatURL*>(pItem)->GetURL() );
-                const bool bIntern = '#' == aURL[0];
+                const bool bIntern = !aURL.isEmpty() ? '#' == aURL[0] : false;
 
                 // Create the destination for internal links:
                 sal_Int32 nDestId = -1;

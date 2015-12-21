@@ -2632,9 +2632,12 @@ SwFlyFrameFormat* DocumentContentOperationsManager::Insert(const SwPaM &rRg, con
     if( !pFrameFormat )
     {
         sal_uInt16 nId = RES_POOLFRM_OLE;
-        SvGlobalName aClassName( xObj->getClassID() );
-        if (SotExchange::IsMath(aClassName))
-            nId = RES_POOLFRM_FORMEL;
+        if (xObj.is())
+        {
+            SvGlobalName aClassName( xObj->getClassID() );
+            if (SotExchange::IsMath(aClassName))
+                nId = RES_POOLFRM_FORMEL;
+        }
 
         pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( nId );
     }
