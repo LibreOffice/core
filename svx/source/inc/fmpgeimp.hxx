@@ -48,7 +48,6 @@ class SdrObject;
 
 class SVX_DLLPRIVATE FmFormPageImpl
 {
-    ::std::map< css::uno::Reference< css::form::XFormComponent >,SdrObject* > m_aComponentMap;
     css::uno::Reference< css::form::XForm >               xCurrentForm;
     css::uno::Reference< css::form::XForms >              m_xForms;
     css::uno::WeakReference< css::container::XMap >       m_aControlShapeMap;

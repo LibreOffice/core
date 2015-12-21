@@ -101,11 +101,10 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     rDev.SetFillColor( aOldFillColor );
 }
 
-BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
+BrowserColumn::BrowserColumn( sal_uInt16 nItemId,
                               const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
-    _aImage( rImage ),
     _aTitle( rTitle ),
     _bFrozen( false )
 {

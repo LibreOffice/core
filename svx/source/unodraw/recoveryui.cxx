@@ -71,10 +71,6 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
         /** @short TODO */
         RecoveryUI::EJob m_eJob;
 
-        /** @short TODO */
-        css::uno::Reference< css::task::XStatusIndicatorFactory > m_xProgressFactory;
-
-
     // interface
     public:
 

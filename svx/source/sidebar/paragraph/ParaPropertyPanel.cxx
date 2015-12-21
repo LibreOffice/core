@@ -573,7 +573,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : PanelLayout(pParent, "ParaPropertyPanel", "svx/ui/sidebarparagraph.ui", rxFrame),
 
-      maSpace3 (SVX_RES(IMG_SPACE3)),
       maIndHang (SVX_RES(IMG_INDENT_HANG)),
       maTxtLeft (0),
       maUpper (0),
@@ -587,7 +586,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       maDecIndentControl(SID_DEC_INDENT, *pBindings,*this, OUString("DecrementIndent"), rxFrame),
       maIncIndentControl(SID_INC_INDENT, *pBindings,*this, OUString("IncrementIndent"), rxFrame),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
-      mxFrame(rxFrame),
       maContext(),
       mpBindings(pBindings),
       mxSidebar(rxSidebar)

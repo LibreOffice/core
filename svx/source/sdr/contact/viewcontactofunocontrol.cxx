@@ -53,26 +53,8 @@ namespace sdr { namespace contact {
 
     //= ViewContactOfUnoControl
 
-    class ViewContactOfUnoControl_Impl: private boost::noncopyable
-    {
-    public:
-        ViewContactOfUnoControl_Impl();
-        ~ViewContactOfUnoControl_Impl();
-    };
-
-
-    ViewContactOfUnoControl_Impl::ViewContactOfUnoControl_Impl()
-    {
-    }
-
-
-    ViewContactOfUnoControl_Impl::~ViewContactOfUnoControl_Impl()
-    {
-    }
-
     ViewContactOfUnoControl::ViewContactOfUnoControl( SdrUnoObj& _rUnoObject )
         :ViewContactOfSdrObj( _rUnoObject )
-        ,m_pImpl( new ViewContactOfUnoControl_Impl )
     {
     }
 

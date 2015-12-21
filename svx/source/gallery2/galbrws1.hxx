@@ -89,7 +89,6 @@ private:
     Image                   aImgNormal;
     Image                   aImgDefault;
     Image                   aImgReadOnly;
-    Image                   aImgImported;
 
     ::std::function<sal_Bool (const KeyEvent&,Window*)> maKeyInputHandler;
     ::std::function<void ()> maThemeSlectionHandler;

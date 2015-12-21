@@ -136,7 +136,6 @@ private:
     ::sfx2::sidebar::ControllerItem         maAutoHeightControl;
     ::sfx2::sidebar::ControllerItem         m_aMetricCtl;
 
-    css::uno::Reference< css::frame::XFrame >   mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 

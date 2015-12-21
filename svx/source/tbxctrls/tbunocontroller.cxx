@@ -86,7 +86,6 @@ class SvxFontSizeBox_Impl : public FontSizeBox
 {
 public:
                         SvxFontSizeBox_Impl( vcl::Window* pParent,
-                                             const uno::Reference< frame::XDispatchProvider >& rDispatchProvider,
                                              const uno::Reference< frame::XFrame >& _xFrame,
                                              FontHeightToolBoxControl& rCtrl );
 
@@ -105,16 +104,13 @@ private:
     OUString                                   m_aCurText;
     Size                                       m_aLogicalSize;
     bool                                       m_bRelease;
-    uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
     uno::Reference< frame::XFrame >            m_xFrame;
-    uno::Reference< awt::XWindow >             m_xOldFocusWindow;
 
     void                ReleaseFocus_Impl();
 };
 
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
-    vcl::Window*                                           _pParent,
-    const uno::Reference< frame::XDispatchProvider >& _rDispatchProvider,
+    vcl::Window*                                      _pParent,
     const uno::Reference< frame::XFrame >&            _xFrame,
     FontHeightToolBoxControl&                         _rCtrl ) :
 
@@ -123,7 +119,6 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     m_pCtrl             ( &_rCtrl ),
     m_aLogicalSize      ( 0,100 ),
     m_bRelease          ( true ),
-    m_xDispatchProvider ( _rDispatchProvider ),
     m_xFrame            ( _xFrame )
 {
     SetValue( 0 );
@@ -399,12 +394,7 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
     if ( pParent )
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_pBox = VclPtr<SvxFontSizeBox_Impl>::Create(
-
-                        pParent,
-                        uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
-                        m_xFrame,
-                        *this );
+        m_pBox = VclPtr<SvxFontSizeBox_Impl>::Create( pParent, m_xFrame, *this );
         //Get the box to fill itself with all its sizes
         m_pBox->UpdateFont(m_aCurrentFont);
         //Make it size itself to its optimal size re above sizes

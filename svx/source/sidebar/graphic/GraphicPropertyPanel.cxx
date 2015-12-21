@@ -52,7 +52,6 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     maBlueControl(SID_ATTR_GRAF_BLUE, *pBindings, *this),
     maGammaControl(SID_ATTR_GRAF_GAMMA, *pBindings, *this),
     maModeControl(SID_ATTR_GRAF_MODE, *pBindings, *this),
-    mxFrame(rxFrame),
     mpBindings(pBindings)
 {
     get(mpMtrBrightness, "setbrightness");

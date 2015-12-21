@@ -81,7 +81,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     maAutoWidthControl(SID_ATTR_TRANSFORM_AUTOWIDTH, *pBindings, *this),
     maAutoHeightControl(SID_ATTR_TRANSFORM_AUTOHEIGHT, *pBindings, *this),
     m_aMetricCtl(SID_ATTR_METRIC, *pBindings, *this),
-    mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings),
     mbMtrPosXMirror(false),

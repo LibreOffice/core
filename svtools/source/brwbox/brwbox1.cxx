@@ -249,7 +249,7 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
     }
 #endif
 
-    pCols->insert( pCols->begin(), new BrowserColumn( 0, Image(), OUString(), nWidth, GetZoom() ) );
+    pCols->insert( pCols->begin(), new BrowserColumn( 0, OUString(), nWidth, GetZoom() ) );
     FreezeColumn( 0 );
 
     // adjust headerbar
@@ -285,11 +285,11 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
     {
         BrowserColumns::iterator it = pCols->begin();
         ::std::advance( it, nPos );
-        pCols->insert( it, new BrowserColumn( nItemId, Image(), rText, nWidth, GetZoom() ) );
+        pCols->insert( it, new BrowserColumn( nItemId, rText, nWidth, GetZoom() ) );
     }
     else
     {
-        pCols->push_back( new BrowserColumn( nItemId, Image(), rText, nWidth, GetZoom() ) );
+        pCols->push_back( new BrowserColumn( nItemId, rText, nWidth, GetZoom() ) );
     }
     if ( nCurColId == 0 )
         nCurColId = nItemId;

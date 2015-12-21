@@ -45,8 +45,7 @@ namespace svx { namespace sidebar {
 InsertPropertyPanel::InsertPropertyPanel (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    :   PanelLayout(pParent, "InsertPropertyPanel", "svx/ui/sidebarinsert.ui", rxFrame),
-        mxFrame(rxFrame)
+    :   PanelLayout(pParent, "InsertPropertyPanel", "svx/ui/sidebarinsert.ui", rxFrame)
 {
     get(mpStandardShapesToolBox, "standardshapes");
     get(mpCustomShapesToolBox,   "customshapes");

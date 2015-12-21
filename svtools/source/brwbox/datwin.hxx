@@ -70,12 +70,11 @@ class BrowserColumn
     sal_uInt16          _nId;
     sal_uLong           _nOriginalWidth;
     sal_uLong           _nWidth;
-    Image               _aImage;
     OUString            _aTitle;
     bool                _bFrozen;
 
 public:
-                        BrowserColumn( sal_uInt16 nItemId, const Image &rImage,
+                        BrowserColumn( sal_uInt16 nItemId,
                                         const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom );
     virtual            ~BrowserColumn();
 

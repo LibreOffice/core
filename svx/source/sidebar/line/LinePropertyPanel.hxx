@@ -108,7 +108,6 @@ private:
     sfx2::sidebar::ControllerItem maEdgeStyle;
     sfx2::sidebar::ControllerItem maCapStyle;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
     SfxBindings* mpBindings;
 
     void Initialize();

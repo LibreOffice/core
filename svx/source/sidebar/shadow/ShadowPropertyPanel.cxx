@@ -78,7 +78,6 @@ ShadowPropertyPanel::ShadowPropertyPanel(
     maShadowColorController(SID_ATTR_SHADOW_COLOR, *pBindings, *this),
     maShadowXDistanceController(SID_ATTR_SHADOW_XDISTANCE, *pBindings, *this),
     maShadowYDistanceController(SID_ATTR_SHADOW_YDISTANCE, *pBindings, *this),
-    mxFrame(rxFrame),
     mpBindings(pBindings),
     nX(0),
     nY(0),

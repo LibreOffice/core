@@ -124,20 +124,6 @@ public:
      */
     storeError flush();
 
-    /** ScanContext.
-     */
-    struct ScanContext
-    {
-        /** Representation.
-         */
-        OStorePageDescriptor m_aDescr;
-
-        /** Construction.
-         */
-        inline ScanContext();
-
-    };
-
 protected:
     /** Destruction (OReference).
      */
@@ -211,11 +197,6 @@ inline bool OStorePageBIOS::isWriteable() const
 inline bool OStorePageBIOS::isValid() const
 {
     return m_xLockBytes.is();
-}
-
-inline OStorePageBIOS::ScanContext::ScanContext()
-    : m_aDescr (0, 0, 0)
-{
 }
 
 /*========================================================================

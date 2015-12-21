@@ -125,14 +125,12 @@ namespace svt
     class AssigmentTransientData : public IAssigmentData
     {
     protected:
-        Reference< XDataSource >    m_xDataSource;
         OUString             m_sDSName;
         OUString             m_sTableName;
-        MapString2String            m_aAliases;
+        MapString2String     m_aAliases;
 
-public:
+    public:
         AssigmentTransientData(
-            const Reference< XDataSource >& _rxDataSource,
             const OUString& _rDataSourceName,
             const OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields
@@ -151,11 +149,10 @@ public:
     };
 
 
-    AssigmentTransientData::AssigmentTransientData( const Reference< XDataSource >& _rxDataSource,
+    AssigmentTransientData::AssigmentTransientData(
             const OUString& _rDataSourceName, const OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields )
-        :m_xDataSource( _rxDataSource )
-        ,m_sDSName( _rDataSourceName )
+        :m_sDSName( _rDataSourceName )
         ,m_sTableName( _rTableName )
     {
         // fill our aliases structure
@@ -485,7 +482,7 @@ void AssignmentPersistentData::ImplCommit()
             ,nLastVisibleListIndex(0)
             ,bOddFieldNumber(false)
             ,bWorkingPersistent( false )
-            ,pConfigData( new AssigmentTransientData( m_xTransientDataSource, _rDataSourceName, _rTableName, _rFields ) )
+            ,pConfigData( new AssigmentTransientData( _rDataSourceName, _rTableName, _rFields ) )
         {
             memset(pFieldLabels, 0, sizeof(pFieldLabels));
             memset(pFields, 0, sizeof(pFields));

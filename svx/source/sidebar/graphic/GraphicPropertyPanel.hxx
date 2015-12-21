@@ -83,7 +83,6 @@ private:
     ::sfx2::sidebar::ControllerItem                     maGammaControl;
     ::sfx2::sidebar::ControllerItem                     maModeControl;
 
-    css::uno::Reference<css::frame::XFrame>                 mxFrame;
     SfxBindings*                                        mpBindings;
 
     DECL_LINK_TYPED( ModifyBrightnessHdl, Edit&, void );

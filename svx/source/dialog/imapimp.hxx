@@ -30,7 +30,6 @@ class IMapOwnData
 public:
 
     Idle            aIdle;
-    Timer           aTbxTimer;
     Graphic         aUpdateGraphic;
     ImageMap        aUpdateImageMap;
     TargetList      aUpdateTargetList;

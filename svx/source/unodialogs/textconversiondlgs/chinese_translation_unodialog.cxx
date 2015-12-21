@@ -35,9 +35,8 @@ namespace textconversiondlgs
 {
 using namespace ::com::sun::star;
 
-ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog( const uno::Reference< uno::XComponentContext >& xContext )
-                    : m_xCC( xContext )
-                    , m_xParentWindow( nullptr )
+ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog()
+                    : m_xParentWindow( nullptr )
                     , m_pDialog( nullptr )
                     , m_bDisposed(false)
                     , m_bInDispose(false)

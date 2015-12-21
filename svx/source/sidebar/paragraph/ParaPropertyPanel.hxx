@@ -89,7 +89,6 @@ private:
     VclPtr<SvxRelativeField>   mpFLineIndent;
 
     // Resources
-    Image  maSpace3;
     Image  maIndHang;
 
     // Data Member
@@ -108,7 +107,6 @@ private:
     ::sfx2::sidebar::ControllerItem  maIncIndentControl;
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
