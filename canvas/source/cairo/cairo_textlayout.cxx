@@ -497,6 +497,14 @@ namespace cairocanvas
             if (cairo_glyphs.empty())
                 continue;
 
+            vcl::Font aFont = rOutDev.GetFont();
+            long nWidth = aFont.GetWidth();
+            long nHeight = aFont.GetHeight();
+            if (nWidth == 0)
+                nWidth = nHeight;
+            if (nWidth == 0 || nHeight == 0)
+                continue;
+
             /**
              * Setup font
              **/
@@ -548,17 +556,12 @@ namespace cairocanvas
 
             // Font rotation and scaling
             cairo_matrix_t m;
-            vcl::Font aFont = rOutDev.GetFont();
 
             cairo_matrix_init_identity(&m);
 
             if (aSysLayoutData.orientation)
                 cairo_matrix_rotate(&m, (3600 - aSysLayoutData.orientation) * M_PI / 1800.0);
 
-            long nWidth = aFont.GetWidth();
-            long nHeight = aFont.GetHeight();
-            if (nWidth == 0)
-                nWidth = nHeight;
             cairo_matrix_scale(&m, nWidth, nHeight);
 
             //faux italics
