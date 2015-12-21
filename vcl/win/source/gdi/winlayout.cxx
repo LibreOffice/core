@@ -1777,10 +1777,16 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
 }
 
 bool UniscribeLayout::DrawTextImpl(HDC hDC,
-                                   const Rectangle* /* pRectToErase */,
+                                   const Rectangle* pRectToErase,
                                    Point* /* pPos */,
                                    int* /* pGetNextGlypInfo */) const
 {
+    if (pRectToErase)
+    {
+        RECT aRect = { pRectToErase->Left(), pRectToErase->Top(), pRectToErase->Left()+pRectToErase->GetWidth(), pRectToErase->Top()+pRectToErase->GetHeight() };
+        FillRect(hDC, &aRect, static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
+    }
+
     HFONT hOrigFont = DisableFontScaling();
 
     int nBaseClusterOffset = 0;
