@@ -267,6 +267,10 @@ struct LOEvent
         , m_nSetGraphicSelectionType(0)
         , m_nSetGraphicSelectionX(0)
         , m_nSetGraphicSelectionY(0)
+        , m_nTilePixelWidth(0)
+        , m_nTilePixelHeight(0)
+        , m_nTileTwipWidth(0)
+        , m_nTileTwipHeight(0)
     {
     }
 
