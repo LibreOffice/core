@@ -1696,8 +1696,10 @@ public:
 private:
     virtual GLuint makeShader() const override;
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
+    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
 
     glm::vec2 maCenter;
+    GLint maSlideRatioLocation = -1;
 };
 
 GLuint RippleTransition::makeShader() const
@@ -1712,6 +1714,15 @@ void RippleTransition::prepareTransition( sal_Int32, sal_Int32 )
 
     glUniform2fv(nCenterLocation, 1, glm::value_ptr(maCenter));
     CHECK_GL_ERROR();
+
+    maSlideRatioLocation = glGetUniformLocation(m_nProgramObject, "slideRatio");
+    CHECK_GL_ERROR();
+}
+
+void RippleTransition::prepare( double /* nTime */, double SlideWidth, double SlideHeight, double /* DispWidth */, double /* DispHeight */ )
+{
+    if( maSlideRatioLocation != -1 )
+        glUniform1f( maSlideRatioLocation, SlideWidth / SlideHeight );
 }
 
 std::shared_ptr<OGLTransitionImpl>
