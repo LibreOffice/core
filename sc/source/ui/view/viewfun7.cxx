@@ -223,7 +223,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( !bSameDocClipboard )
             GetViewData().GetDocument()->SetPastingDrawFromOtherDoc( true );
 
-        pScDrawView->Paste(*pModel, aPos, nullptr, nOptions, rSrcShellID, rDestShellID);
+        pScDrawView->Paste(*pModel, aPos, nullptr, nOptions);
 
         if ( !bSameDocClipboard )
             GetViewData().GetDocument()->SetPastingDrawFromOtherDoc( false );

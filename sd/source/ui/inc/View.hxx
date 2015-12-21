@@ -183,8 +183,7 @@ public:
 
     virtual SdrModel*   GetMarkedObjModel() const override;
     virtual bool Paste(
-        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
-        const OUString& rSrcShellID, const OUString& rDestShellID ) override;
+        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions) override;
 
     using SdrExchangeView::Paste;
 

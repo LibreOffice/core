@@ -735,7 +735,7 @@ void ScDrawTransferObj::InitDocShell()
         aDestView.Paste(
             *pModel,
             Point(aSrcSize.Width()/2, aSrcSize.Height()/2),
-            nullptr, SdrInsertFlags::NONE, OUString(), OUString());
+            nullptr, SdrInsertFlags::NONE);
 
         // put objects to right layer (see ScViewFunc::PasteDataFormat for SotClipboardFormatId::DRAWING)
 

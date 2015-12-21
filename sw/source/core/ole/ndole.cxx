@@ -439,8 +439,8 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         pSrc->GetEmbeddedObjectContainer(),
         pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ),
         aNewName,
-        SfxObjectShell::CreateShellID(pSrc),
-        SfxObjectShell::CreateShellID(pPersistShell));
+        pSrc->getDocumentBaseURL(),
+        pPersistShell->getDocumentBaseURL());
 
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
                                     pDoc->GetDfltGrfFormatColl(),

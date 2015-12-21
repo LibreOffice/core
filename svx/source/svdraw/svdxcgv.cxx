@@ -224,8 +224,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
 }
 
 bool SdrExchangeView::Paste(
-    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
-    const OUString& rSrcShellID, const OUString& rDestShellID )
+    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
 {
     const SdrModel* pSrcMod=&rMod;
     if (pSrcMod==mpModel)
@@ -300,7 +299,7 @@ bool SdrExchangeView::Paste(
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-            SdrObject* pNeuObj = pSrcOb->CloneWithShellIDs(rSrcShellID, rDestShellID);
+            SdrObject* pNeuObj = pSrcOb->Clone();
 
             if (pNeuObj!=nullptr)
             {

@@ -605,7 +605,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdDrawDocument* pSourceDoc = static_cast<SdDrawDocument*>( pSourceView->GetModel() );
                     pSourceDoc->CreatingDataObj( pOwnData );
                     SdDrawDocument* pModel = static_cast<SdDrawDocument*>( pSourceView->GetMarkedObjModel() );
-                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
+                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
 
                     if( !pPage )
                         pPage = static_cast<SdPage*>( GetSdrPageView()->GetPage() );
@@ -646,7 +646,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     pWorkModel->DeletePage( (sal_uInt16) i );
             }
 
-            bReturn = Paste(*pWorkModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
+            bReturn = Paste(*pWorkModel, maDropPos, pPage, nPasteOptions);
 
             if( !pPage )
                 pPage = static_cast<SdPage*>( GetSdrPageView()->GetPage() );
@@ -807,7 +807,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         maDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
                     }
 
-                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
+                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
                 }
 
                 xShell->DoClose();
@@ -890,7 +890,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             pModel->DeletePage( (sal_uInt16) i );
                     }
 
-                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
+                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
 
                     if( !pPage )
                         pPage = static_cast<SdPage*>(GetSdrPageView()->GetPage());
@@ -1515,7 +1515,7 @@ bool View::PasteRTFTable( ::tools::SvRef<SotStorageStream> xStm, SdrPage* pPage,
     pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
 
     CreateTableFromRTF( *xStm, pModel.get() );
-    bool bRet = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
+    bool bRet = Paste(*pModel, maDropPos, pPage, nPasteOptions);
 
     xComponent->dispose();
     xComponent.clear();

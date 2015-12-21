@@ -444,8 +444,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
 // not the scene itself
 
 bool E3dView::Paste(
-    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
-    const OUString& rSrcShellID, const OUString& rDestShellID )
+    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
 {
     bool bRetval = false;
 
@@ -490,7 +489,7 @@ bool E3dView::Paste(
     else
     {
         // call parent
-        bRetval = SdrView::Paste(rMod, rPos, pLst, nOptions, rSrcShellID, rDestShellID);
+        bRetval = SdrView::Paste(rMod, rPos, pLst, nOptions);
     }
 
     return bRetval;

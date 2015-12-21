@@ -937,10 +937,9 @@ SdrModel* View::GetMarkedObjModel() const
 }
 
 bool View::Paste(
-    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
-    const OUString& rSrcShellID, const OUString& rDestShellID )
+    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
 {
-    return FmFormView::Paste(rMod, rPos, pLst, nOptions, rSrcShellID, rDestShellID);
+    return FmFormView::Paste(rMod, rPos, pLst, nOptions);
 }
 
 } // end of namespace sd

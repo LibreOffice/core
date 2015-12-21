@@ -1642,27 +1642,12 @@ OUString SdrOle2Obj::TakeObjNamePlural() const
     return ImpGetResStr(mpImpl->mbFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
-
-
 SdrOle2Obj* SdrOle2Obj::Clone() const
 {
     return CloneHelper< SdrOle2Obj >();
 }
 
-SdrOle2Obj* SdrOle2Obj::CloneWithShellIDs( const OUString& rSrcShellID, const OUString& rDestShellID ) const
-{
-    SdrOle2Obj* pObj =
-        dynamic_cast<SdrOle2Obj*>(
-            SdrObjFactory::MakeNewObject(GetObjInventor(), GetObjIdentifier(), nullptr));
-
-    if (pObj)
-        pObj->assignFrom(*this, rSrcShellID, rDestShellID);
-
-    return pObj;
-}
-
-SdrOle2Obj& SdrOle2Obj::assignFrom(
-    const SdrOle2Obj& rObj, const OUString& rSrcShellID, const OUString& rDestShellID )
+SdrOle2Obj& SdrOle2Obj::assignFrom(const SdrOle2Obj& rObj)
 {
     //TODO/LATER: who takes over control of my old object?!
     if( &rObj != this )
@@ -1709,7 +1694,7 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(
                 {
                     OUString aTmp;
                     mpImpl->mxObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
-                        rContainer, xObj, aTmp, rSrcShellID, rDestShellID), rOle2Obj.GetAspect());
+                        rContainer, xObj, aTmp, pSrcPers->getDocumentBaseURL(), pDestPers->getDocumentBaseURL()), rOle2Obj.GetAspect());
                     mpImpl->mbTypeAsked = false;
                     mpImpl->aPersistName = aTmp;
                     CheckFileLink_Impl();
@@ -1724,7 +1709,7 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(
 
 SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
 {
-    return assignFrom(rObj, OUString(), OUString());
+    return assignFrom(rObj);
 }
 
 void SdrOle2Obj::ImpSetVisAreaSize()
