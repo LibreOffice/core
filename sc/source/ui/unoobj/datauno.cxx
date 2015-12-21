@@ -446,7 +446,6 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
 }
 
 ScSubTotalFieldObj::ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uInt16 nP ) :
-    xRef( pDesc ),          // Objekt festhalten
     rParent( *pDesc ),
     nPos( nP )
 {

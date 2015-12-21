@@ -291,13 +291,11 @@ void ScVbaRange::fireChangeEvent()
 
 class SingleRangeEnumeration : public EnumerationHelper_BASE
 {
-    uno::Reference< XHelperInterface > m_xParent;
     uno::Reference< table::XCellRange > m_xRange;
-    uno::Reference< uno::XComponentContext > mxContext;
     bool bHasMore;
 public:
 
-    SingleRangeEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException ) : m_xParent( xParent ), m_xRange( xRange ), mxContext( xContext ), bHasMore( true ) { }
+    SingleRangeEnumeration( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException ) : m_xRange( xRange ), bHasMore( true ) { }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override { return bHasMore; }
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
     {
@@ -334,7 +332,7 @@ public:
 
         virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override { return sal_True; }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException, std::exception) override { return new SingleRangeEnumeration( mxParent, mxContext, m_xRange ); }
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException, std::exception) override { return new SingleRangeEnumeration( m_xRange ); }
 
 };
 
@@ -615,14 +613,13 @@ typedef ::std::vector< CellPos > vCellPos;
 // multi area ranges?? )
 class ColumnsRowEnumeration: public CellsEnumeration_BASE
 {
-    uno::Reference< uno::XComponentContext > mxContext;
-        uno::Reference< excel::XRange > mxRange;
+    uno::Reference< excel::XRange > mxRange;
     sal_Int32 mMaxElems;
     sal_Int32 mCurElem;
 
 public:
-    ColumnsRowEnumeration( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XRange >& xRange, sal_Int32 nElems ) : mxContext( xContext ), mxRange( xRange ), mMaxElems( nElems ), mCurElem( 0 )
-        {
+    ColumnsRowEnumeration( const uno::Reference< excel::XRange >& xRange, sal_Int32 nElems ) : mxRange( xRange ), mMaxElems( nElems ), mCurElem( 0 )
+    {
     }
 
     virtual sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception) override { return mCurElem < mMaxElems; }
@@ -3717,7 +3714,7 @@ ScVbaRange::createEnumeration() throw (uno::RuntimeException, std::exception)
             nElems = xColumnRowRange->getColumns()->getCount();
         else
             nElems = xColumnRowRange->getRows()->getCount();
-                return new ColumnsRowEnumeration( mxContext, xRange, nElems );
+                return new ColumnsRowEnumeration( xRange, nElems );
 
     }
     return new CellsEnumeration( mxParent, mxContext, m_Areas );

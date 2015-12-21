@@ -55,10 +55,6 @@ public:
         ChildControlType eType);
 
 private:
-    /** The top menu part */
-    css::uno::Reference< css::accessibility::XAccessible >
-        mxAccMenu;
-
     /** Edit search box for searching field members */
     css::uno::Reference< css::accessibility::XAccessible >
         mxAccEditSearchBox;

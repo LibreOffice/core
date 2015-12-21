@@ -23,25 +23,11 @@ using namespace ::com::sun::star;
 
 //      ScAccWinFocusLostHint - the current window lost its focus (to another application, view or document)
 
-ScAccWinFocusLostHint::ScAccWinFocusLostHint(
-        const uno::Reference< uno::XInterface >& xOld )
-    :
-    xOldAccessible(xOld)
-{
-}
-
 ScAccWinFocusLostHint::~ScAccWinFocusLostHint()
 {
 }
 
 //      ScAccWinFocusGotHint - the window got the focus (from another application, view or document)
-
-ScAccWinFocusGotHint::ScAccWinFocusGotHint(
-        const uno::Reference< uno::XInterface >& xNew )
-    :
-    xNewAccessible(xNew)
-{
-}
 
 ScAccWinFocusGotHint::~ScAccWinFocusGotHint()
 {
@@ -49,10 +35,9 @@ ScAccWinFocusGotHint::~ScAccWinFocusGotHint()
 
 //      ScAccGridWinFocusLostHint - the current grid window lost its focus (to another application, view or document)
 
-ScAccGridWinFocusLostHint::ScAccGridWinFocusLostHint(ScSplitPos eOld,
-        const uno::Reference< uno::XInterface >& xOld )
+ScAccGridWinFocusLostHint::ScAccGridWinFocusLostHint(ScSplitPos eOld )
     :
-    ScAccWinFocusLostHint(xOld),
+    ScAccWinFocusLostHint(),
     eOldGridWin(eOld)
 {
 }
@@ -63,10 +48,9 @@ ScAccGridWinFocusLostHint::~ScAccGridWinFocusLostHint()
 
 //      ScAccGridWinFocusGotHint - the grid window got the focus (from another application, view or document)
 
-ScAccGridWinFocusGotHint::ScAccGridWinFocusGotHint(ScSplitPos eNew,
-        const uno::Reference< uno::XInterface >& xNew )
+ScAccGridWinFocusGotHint::ScAccGridWinFocusGotHint(ScSplitPos eNew )
     :
-    ScAccWinFocusGotHint(xNew),
+    ScAccWinFocusGotHint(),
     eNewGridWin(eNew)
 {
 }

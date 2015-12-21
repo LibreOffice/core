@@ -47,8 +47,6 @@ protected:
     css::uno::Reference< css::beans::XPropertyState > xPropertyState;
     bool mbCheckAmbiguoity;
     bool mbAddIndent;
-    //NumberFormatter oNumberFormatter = null;
-    css::uno::Reference< css::lang::XMultiServiceFactory > xMultiServiceFactory;
     bool isAmbiguous(const OUString& _sPropertyName) throw ( css::script::BasicErrorException );
     css::uno::Reference< css::beans::XPropertyState > getXPropertyState() throw ( css::uno::RuntimeException );
     void initializeNumberFormats() throw ( css::script::BasicErrorException, css::uno::RuntimeException );

@@ -81,7 +81,6 @@ struct XclRootData
     SfxMedium&          mrMedium;           /// The medium to import from.
     tools::SvRef<SotStorage>       mxRootStrg;         /// The root OLE storage of imported/exported file.
     ScDocument&         mrDoc;              /// The source or destination document.
-    ScDocumentImport    maDocImport;
     OUString            maDocUrl;           /// Document URL of imported/exported file.
     OUString            maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
     OUString            maUserName;         /// Current user name.

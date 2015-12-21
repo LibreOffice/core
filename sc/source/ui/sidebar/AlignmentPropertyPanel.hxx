@@ -93,7 +93,6 @@ private:
     /// bitfield
     bool                                        mbMultiDisable : 1;
 
-    css::uno::Reference<css::frame::XFrame>         mxFrame;
     ::sfx2::sidebar::EnumContext                maContext;
     SfxBindings*                                mpBindings;
 

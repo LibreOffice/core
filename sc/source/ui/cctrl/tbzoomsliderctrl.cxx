@@ -85,7 +85,7 @@ VclPtr<vcl::Window> ScZoomSliderControl::CreateItemWindow( vcl::Window *pParent 
     // The view's value is always notified via StateChanged later.
     VclPtrInstance<ScZoomSliderWnd> pSlider( pParent,
         css::uno::Reference< css::frame::XDispatchProvider >( m_xFrame->getController(),
-        css::uno::UNO_QUERY ), m_xFrame, 100 );
+        css::uno::UNO_QUERY ), 100 );
     return pSlider.get();
 }
 
@@ -218,13 +218,11 @@ long ScZoomSliderWnd::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 
 ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent,
                 const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
-                const css::uno::Reference< css::frame::XFrame >& _xFrame,
                 sal_uInt16 nCurrentZoom ):
                 Window( pParent ),
                 mpImpl( new ScZoomSliderWnd_Impl( nCurrentZoom ) ),
                 aLogicalSize( 115, 40 ),
-                m_xDispatchProvider( rDispatchProvider ),
-                m_xFrame( _xFrame )
+                m_xDispatchProvider( rDispatchProvider )
 {
     mpImpl->maSliderButton      = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
     mpImpl->maIncreaseButton    = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );

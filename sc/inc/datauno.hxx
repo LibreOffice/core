@@ -238,7 +238,6 @@ class ScSubTotalFieldObj : public cppu::WeakImplHelper<
                                 css::lang::XServiceInfo >
 {
 private:
-    css::uno::Reference<css::sheet::XSubTotalDescriptor> xRef;
     ScSubTotalDescriptorBase&       rParent;
     sal_uInt16                      nPos;
 

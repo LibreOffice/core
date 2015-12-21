@@ -80,7 +80,6 @@ private:
 
     sal_Int32                               mnCategorySelected;
 
-    css::uno::Reference<css::frame::XFrame>     mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
