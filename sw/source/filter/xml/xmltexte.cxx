@@ -83,88 +83,84 @@ void SwXMLTextParagraphExport::exportStyleContent(
         const Reference< XStyle > & rStyle )
 {
 
-    const SwXStyle* pStyle = nullptr;
-    Reference<XUnoTunnel> xStyleTunnel( rStyle, UNO_QUERY);
-    if( xStyleTunnel.is() )
+    Reference<XUnoTunnel> xStyleTunnel(rStyle, UNO_QUERY);
+    Reference<lang::XServiceInfo> xServiceInfo(rStyle, UNO_QUERY);
+    if(!xStyleTunnel.is() || !xServiceInfo.is() || !xServiceInfo->supportsService("com.sun.star.style.ParagraphStyle"))
+        return;
+    sw::ICoreParagraphStyle* pCoreParagraphStyle(reinterpret_cast<sw::ICoreParagraphStyle*>(
+            xStyleTunnel->getSomething(sw::ICoreParagraphStyle::getUnoTunnelId())));
+    if(!pCoreParagraphStyle)
+        return;
+    const SwTextFormatColl* pColl(pCoreParagraphStyle->GetFormatColl());
+    OSL_ENSURE( pColl, "There is the text collection?" );
+    if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
     {
-        pStyle = reinterpret_cast< SwXStyle * >(
-                sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId() )));
-    }
-    if( pStyle && SFX_STYLE_FAMILY_PARA == pStyle->GetFamily() )
-    {
-        const SwDoc *pDoc = pStyle->GetDoc();
-        const SwTextFormatColl *pColl =
-            pDoc->FindTextFormatCollByName( pStyle->GetStyleName() );
-        OSL_ENSURE( pColl, "There is the text collection?" );
-        if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
+        const SwFormatCollConditions& rConditions =
+            static_cast<const SwConditionTextFormatColl *>(pColl)->GetCondColls();
+        for( size_t i=0; i < rConditions.size(); ++i )
         {
-            const SwFormatCollConditions& rConditions =
-                static_cast<const SwConditionTextFormatColl *>(pColl)->GetCondColls();
-            for( size_t i=0; i < rConditions.size(); ++i )
+            const SwCollCondition& rCond = *rConditions[i];
+
+            enum XMLTokenEnum eFunc = XML_TOKEN_INVALID;
+            OUString sVal;
+            switch( rCond.GetCondition() )
             {
-                const SwCollCondition& rCond = *rConditions[i];
-
-                enum XMLTokenEnum eFunc = XML_TOKEN_INVALID;
-                OUString sVal;
-                switch( rCond.GetCondition() )
+            case PARA_IN_LIST:
+                eFunc = XML_LIST_LEVEL;
+                sVal = OUString::number(rCond.GetSubCondition()+1);
+                break;
+            case PARA_IN_OUTLINE:
+                eFunc = XML_OUTLINE_LEVEL;
+                sVal = OUString::number(rCond.GetSubCondition()+1);
+                break;
+            case PARA_IN_FRAME:
+                eFunc = XML_TEXT_BOX;
+                break;
+            case PARA_IN_TABLEHEAD:
+                eFunc = XML_TABLE_HEADER;
+                break;
+            case PARA_IN_TABLEBODY:
+                eFunc = XML_TABLE;
+                break;
+            case PARA_IN_SECTION:
+                eFunc = XML_SECTION;
+                break;
+            case PARA_IN_FOOTENOTE:
+                eFunc = XML_FOOTNOTE;
+                break;
+            case PARA_IN_FOOTER:
+                eFunc = XML_FOOTER;
+                break;
+            case PARA_IN_HEADER:
+                eFunc = XML_HEADER;
+                break;
+            case PARA_IN_ENDNOTE:
+                eFunc = XML_ENDNOTE;
+                break;
+            }
+            OSL_ENSURE( eFunc != XML_TOKEN_INVALID,
+                        "SwXMLExport::ExportFormat: unknown condition" );
+            if( eFunc != XML_TOKEN_INVALID )
+            {
+                OUString sCond = GetXMLToken(eFunc) + "()";
+                if( !sVal.isEmpty() )
                 {
-                case PARA_IN_LIST:
-                    eFunc = XML_LIST_LEVEL;
-                    sVal = OUString::number(rCond.GetSubCondition()+1);
-                    break;
-                case PARA_IN_OUTLINE:
-                    eFunc = XML_OUTLINE_LEVEL;
-                    sVal = OUString::number(rCond.GetSubCondition()+1);
-                    break;
-                case PARA_IN_FRAME:
-                    eFunc = XML_TEXT_BOX;
-                    break;
-                case PARA_IN_TABLEHEAD:
-                    eFunc = XML_TABLE_HEADER;
-                    break;
-                case PARA_IN_TABLEBODY:
-                    eFunc = XML_TABLE;
-                    break;
-                case PARA_IN_SECTION:
-                    eFunc = XML_SECTION;
-                    break;
-                case PARA_IN_FOOTENOTE:
-                    eFunc = XML_FOOTNOTE;
-                    break;
-                case PARA_IN_FOOTER:
-                    eFunc = XML_FOOTER;
-                    break;
-                case PARA_IN_HEADER:
-                    eFunc = XML_HEADER;
-                    break;
-                case PARA_IN_ENDNOTE:
-                    eFunc = XML_ENDNOTE;
-                    break;
+                    sCond += "=" + sVal;
                 }
-                OSL_ENSURE( eFunc != XML_TOKEN_INVALID,
-                            "SwXMLExport::ExportFormat: unknown condition" );
-                if( eFunc != XML_TOKEN_INVALID )
-                {
-                    OUString sCond = GetXMLToken(eFunc) + "()";
-                    if( !sVal.isEmpty() )
-                    {
-                        sCond += "=" + sVal;
-                    }
 
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                XML_CONDITION, sCond );
-                    OUString aString;
-                    SwStyleNameMapper::FillProgName(
-                                    rCond.GetTextFormatColl()->GetName(),
-                                    aString,
-                                    nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
-                                    true);
-                    aString = GetExport().EncodeStyleName( aString );
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                XML_APPLY_STYLE_NAME, aString );
-                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                              XML_MAP, true, true );
-                }
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                            XML_CONDITION, sCond );
+                OUString aString;
+                SwStyleNameMapper::FillProgName(
+                                rCond.GetTextFormatColl()->GetName(),
+                                aString,
+                                nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
+                                true);
+                aString = GetExport().EncodeStyleName( aString );
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                            XML_APPLY_STYLE_NAME, aString );
+                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                                          XML_MAP, true, true );
             }
         }
     }

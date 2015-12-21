@@ -211,11 +211,11 @@ OUString SwFrameEventDescriptor::getImplementationName()
 }
 
 SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
-    SwXFrameStyle& rStyleRef ) :
-        SvEventDescriptor((document::XEventsSupplier&)rStyleRef,
+    sw::ICoreFrameStyle& rStyle ) :
+        SvEventDescriptor(rStyle.GetEventsSupplier(),
                           aFrameStyleEvents),
         sSwFrameStyleEventDescriptor("SwFrameStyleEventDescriptor"),
-        rStyle(rStyleRef)
+        m_rStyle(rStyle)
 {
 }
 
@@ -225,43 +225,15 @@ SwFrameStyleEventDescriptor::~SwFrameStyleEventDescriptor()
 
 void SwFrameStyleEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 {
-    // As I was told, for some entirely unobvious reason getting an
-    // item from a style has to look as follows:
-    SfxStyleSheetBasePool* pBasePool = rStyle.GetBasePool();
-    if (pBasePool)
-    {
-        SfxStyleSheetBase* pBase = pBasePool->Find(rStyle.GetStyleName());
-        if (pBase)
-        {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-            SfxItemSet& rStyleSet = xStyle->GetItemSet();
-            SfxItemSet aSet(*rStyleSet.GetPool(), RES_FRMMACRO, RES_FRMMACRO);
-            aSet.Put(rItem);
-            xStyle->SetItemSet(aSet);
-        }
-    }
+    m_rStyle.SetItem(RES_FRMMACRO, rItem);
 }
 
 static const SvxMacroItem aEmptyMacroItem(RES_FRMMACRO);
 
 const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 {
-    // As I was told, for some entirely unobvious reason getting an
-    // item from a style has to look as follows:
-    SfxStyleSheetBasePool* pBasePool = rStyle.GetBasePool();
-    if (pBasePool)
-    {
-        SfxStyleSheetBase* pBase = pBasePool->Find(rStyle.GetStyleName());
-        if (pBase)
-        {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase)) );
-            return static_cast<const SvxMacroItem&>(xStyle->GetItemSet().Get(RES_FRMMACRO));
-        }
-        else
-            return aEmptyMacroItem;
-    }
-    else
-        return aEmptyMacroItem;
+    const SfxPoolItem* pItem(m_rStyle.GetItem(RES_FRMMACRO));
+    return pItem ? static_cast<const SvxMacroItem&>(*pItem) : aEmptyMacroItem;
 }
 
 OUString SwFrameStyleEventDescriptor::getImplementationName()
