@@ -166,7 +166,9 @@ public class _XChartDataArray extends MultiMethodTest {
         if (bResult) {
             for (int i = 0; i < dscs.length; i++) {
                 log.println("Col " + i + ": got " + dscs[i] + " expected: " + colDscs[i]);
-                bResult &= dscs[i].equals(colDscs[i]);
+                if (!dscs[i].equals(colDscs[i])) {
+                    bResult = false;
+                }
             }
         }
 
