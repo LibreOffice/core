@@ -649,15 +649,6 @@ private:
     FillPropertiesPtr   mxAutoFill;         /// Automatic fill properties.
 };
 
-class EffectFormatter : public DetailFormatterBase
-{
-public:
-    explicit            EffectFormatter(
-                            ObjectFormatterData& rData,
-                            const AutoFormatEntry* pAutoFormatEntry );
-
-};
-
 class TextFormatter : public DetailFormatterBase
 {
 public:
@@ -720,7 +711,6 @@ public:
 private:
     LineFormatter       maLineFormatter;    /// Converter for line formatting.
     FillFormatter       maFillFormatter;    /// Converter for fill formatting.
-    EffectFormatter     maEffectFormatter;  /// Converter for effect formatting.
     TextFormatter       maTextFormatter;    /// Converter for text formatting.
     ModelObjectHelper&  mrModelObjHelper;   /// Helper for named drawing formatting.
     const ObjectTypeFormatEntry& mrEntry;   /// Additional settings.
@@ -894,11 +884,6 @@ void FillFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
     aFillProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), 0, getPhColor( nSeriesIdx ) );
 }
 
-EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
-    DetailFormatterBase( rData, pAutoFormatEntry )
-{
-}
-
 namespace {
 
 const TextCharacterProperties* lclGetTextProperties( const ModelRef< TextBody >& rxTextProp )
@@ -951,7 +936,6 @@ void TextFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Te
 ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const ObjectTypeFormatEntry& rEntry, const ChartSpaceModel& rChartSpace, const ObjectType eObjType ) :
     maLineFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoLines,   rChartSpace.mnStyle ) ),
     maFillFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoFills,   rChartSpace.mnStyle ), eObjType ),
-    maEffectFormatter( rData, lclGetAutoFormatEntry( rEntry.mpAutoEffects, rChartSpace.mnStyle ) ),
     maTextFormatter(   rData, lclGetAutoTextEntry(   rEntry.mpAutoTexts,   rChartSpace.mnStyle ), rChartSpace.mxTextProp ),
     mrModelObjHelper( rData.maModelObjHelper ),
     mrEntry( rEntry )

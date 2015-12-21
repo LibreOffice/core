@@ -33,7 +33,6 @@ struct SPStreamData_Impl
     // the streams below are not visible from outside so there is no need to remember position
 
     // original stream related members
-    uno::Reference< io::XStream > m_xOrigStream;
     uno::Reference< io::XTruncate > m_xOrigTruncate;
     uno::Reference< io::XSeekable > m_xOrigSeekable;
     uno::Reference< io::XInputStream > m_xOrigInStream;
@@ -44,7 +43,6 @@ struct SPStreamData_Impl
 
     SPStreamData_Impl(
             bool bInStreamBased,
-            const uno::Reference< io::XStream >& xOrigStream,
             const uno::Reference< io::XTruncate >& xOrigTruncate,
             const uno::Reference< io::XSeekable >& xOrigSeekable,
             const uno::Reference< io::XInputStream >& xOrigInStream,
@@ -52,7 +50,6 @@ struct SPStreamData_Impl
             bool bInOpen,
             bool bOutOpen )
     : m_bInStreamBased( bInStreamBased )
-    , m_xOrigStream( xOrigStream )
     , m_xOrigTruncate( xOrigTruncate )
     , m_xOrigSeekable( xOrigSeekable )
     , m_xOrigInStream( xOrigInStream )
@@ -116,7 +113,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
     CloseAll_Impl();
 
     m_pStreamData = new SPStreamData_Impl( false,
-                                            xStream, xNewTruncate, xNewSeekable, xNewInStream, xNewOutStream,
+                                            xNewTruncate, xNewSeekable, xNewInStream, xNewOutStream,
                                             bInOpen, bOutOpen );
 }
 
@@ -150,7 +147,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
     CloseAll_Impl();
 
     m_pStreamData = new SPStreamData_Impl( true,
-                                            xNewStream, xNewTruncate, xNewSeekable, xInputStream, xNewOutStream,
+                                            xNewTruncate, xNewSeekable, xInputStream, xNewOutStream,
                                             bInOpen, bOutOpen );
 
 }
@@ -194,7 +191,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
     CloseAll_Impl();
 
     m_pStreamData = new SPStreamData_Impl( false,
-                                        xTargetStream, xTargetTruncate, xTargetSeek, xTargetInStream, xTargetOutStream,
+                                        xTargetTruncate, xTargetSeek, xTargetInStream, xTargetOutStream,
                                         bInOpen, bOutOpen );
 }
 

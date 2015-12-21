@@ -37,7 +37,6 @@ public:
 
 protected:
     TextBody&           mrTextBody;
-    css::uno::Reference< css::text::XText > mxText;
 };
 
 // CT_RegularTextRun

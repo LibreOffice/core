@@ -151,7 +151,6 @@ private:
     ::sal_uInt32 mnStartToken;
     css::awt::Point maPosition;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     drawingml::ShapePtr mpShape;
     std::shared_ptr< vml::Drawing > mpDrawing;
 

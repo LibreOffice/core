@@ -41,7 +41,6 @@ namespace oox { namespace ppt {
 
     private:
         bool mbIterate;
-        css::uno::Reference< css::animations::XIterateContainer > mxIter;
     };
 
 } }

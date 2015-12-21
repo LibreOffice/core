@@ -129,7 +129,6 @@ void PPTShapeGroupContext::importExtDrawings( )
                 getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), getFragmentPathFromRelId( *aIt ),
                                                                            mpSlidePersistPtr,
                                                                            meShapeLocation,
-                                                                           mpMasterShapePtr,
                                                                            mpGroupShapePtr,
                                                                            pGraphicShape ) );
                 // Apply font color imported from color fragment

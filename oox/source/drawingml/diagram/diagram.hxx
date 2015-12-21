@@ -283,7 +283,6 @@ private:
     DiagramLayoutPtr               mpLayout;
     DiagramQStyleMap               maStyles;
     DiagramColorMap                maColors;
-    std::map< OUString, ShapePtr > maShapeMap;
     DiagramDomMap                  maMainDomMap;
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > > maDataRelsMap;
 };

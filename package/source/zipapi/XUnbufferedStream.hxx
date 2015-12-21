@@ -53,7 +53,6 @@ protected:
     css::uno::Reference < css::io::XSeekable > mxZipSeek;
     css::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
     ZipEntry maEntry;
-    ::rtl::Reference< EncryptionData > mxData;
     sal_Int32 mnBlockSize;
     css::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
     ZipUtils::Inflater maInflater;

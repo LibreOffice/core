@@ -39,8 +39,7 @@ namespace docprop {
 
 OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentContext >& xContext,
                                           const uno::Reference< document::XDocumentProperties >& rDocProp )
-    : m_xContext( xContext )
-    , m_xDocProp( rDocProp )
+    : m_xDocProp( rDocProp )
     , m_nState( 0 )
     , m_nBlock( 0 )
     , m_nType( 0 )

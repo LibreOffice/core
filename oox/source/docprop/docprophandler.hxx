@@ -41,7 +41,6 @@ namespace docprop {
 
 class OOXMLDocPropHandler : public ::cppu::WeakImplHelper< css::xml::sax::XFastDocumentHandler >
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::document::XDocumentProperties > m_xDocProp;
 
     sal_Int32 m_nState;
