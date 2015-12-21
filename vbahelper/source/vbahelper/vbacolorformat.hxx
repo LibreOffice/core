@@ -93,8 +93,6 @@ struct MsoColorIndices
 class ScVbaColorFormat : public ScVbaColorFormat_BASE
 {
 private:
-    css::uno::Reference< ov::XHelperInterface > m_xInternalParent;
-    css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     ScVbaFillFormat *m_pFillFormat;
     sal_Int16 m_nColorFormatType;
