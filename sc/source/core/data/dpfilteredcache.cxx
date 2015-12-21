@@ -265,13 +265,21 @@ bool ScDPFilteredCache::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
 void ScDPFilteredCache::filterByPageDimension(const vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     SCROW nRowSize = getRowSize();
+    SCROW nDataSize = mrCache.GetDataSize();
 
     maShowByPage.clear();
 
-    for (SCROW nRow = 0; nRow < nRowSize; ++nRow)
+    for (SCROW nRow = 0; nRow < nDataSize; ++nRow)
     {
         bool bShow = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
         maShowByPage.insert_back(nRow, nRow+1, bShow);
+    }
+
+    // tdf#96588 - rapidly extend for blank rows with identical data
+    if (nDataSize < nRowSize)
+    {
+        bool bBlankShow = isRowQualified(nDataSize, rCriteria, rRepeatIfEmptyDims);
+        maShowByPage.insert_back(nDataSize, nRowSize, bBlankShow);
     }
 
     maShowByPage.build_tree();
