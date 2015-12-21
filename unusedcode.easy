@@ -7,9 +7,6 @@ OpenGLRender::CreateTextTexture(rtl::OUString const&, vcl::Font, long, com::sun:
 OpenGLTexture::Draw()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScCellValue::set(ScRefCellValue const&)
-ScDocument::CreateFormatTable() const
-ScDocument::EndAllListeners(ScRange const&)
-ScDocument::GetLastDataPos(short) const
 ScImportExport::ImportData(rtl::OUString const&, com::sun::star::uno::Any const&)
 ScImportExport::ScImportExport(ScDocument*, rtl::OUString const&)
 ScPrivatSplit::GetDeltaX()
