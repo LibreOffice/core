@@ -96,9 +96,7 @@ namespace rptui
 
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::inspection::XPropertyHandler >  m_xFormComponentHandler; /// delegatee
-        css::uno::Reference< css::uno::XInterface >               m_xReportComponent; /// inspectee
         css::uno::Reference< css::uno::XInterface >               m_xFormComponent; /// inspectee
-        ::std::unique_ptr< OPropertyInfoService >                 m_pInfoService;
     };
 
 } // namespace rptui

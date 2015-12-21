@@ -57,7 +57,6 @@ namespace rptui
         ,m_bIsReadOnly(false)
         ,m_nMinHelpTextLines( 3 )
         ,m_nMaxHelpTextLines( 8 )
-        ,m_pInfoService(new OPropertyInfoService())
     {
     }
 

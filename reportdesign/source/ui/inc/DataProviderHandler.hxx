@@ -112,7 +112,6 @@ namespace rptui
         css::uno::Reference< css::beans::XPropertyChangeListener >        m_xMasterDetails;
         /// type converter, needed on various occasions
         css::uno::Reference< css::script::XTypeConverter >                m_xTypeConverter;
-        ::std::unique_ptr< OPropertyInfoService >                                                   m_pInfoService;
     };
 
 } // namespace rptui

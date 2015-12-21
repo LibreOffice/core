@@ -42,7 +42,6 @@ using namespace ::com::sun::star;
 ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentContext > const & context)
     :ReportComponentHandler_Base(m_aMutex)
     ,m_xContext(context)
-    ,m_pInfoService( new OPropertyInfoService() )
 {
     try
     {

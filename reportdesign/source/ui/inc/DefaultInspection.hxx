@@ -50,8 +50,6 @@ namespace rptui
         bool                                                                                    m_bIsReadOnly;
         sal_Int32                                                                               m_nMinHelpTextLines;
         sal_Int32                                                                               m_nMaxHelpTextLines;
-        /// access to property meta data
-        ::std::unique_ptr< OPropertyInfoService >                                               m_pInfoService;
 
         DefaultComponentInspectorModel(const DefaultComponentInspectorModel&) = delete;
         DefaultComponentInspectorModel& operator=(const DefaultComponentInspectorModel&) = delete;

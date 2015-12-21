@@ -177,8 +177,6 @@ namespace rptui
                         m_xOwnElement;  // object owned by the action
         css::uno::Reference< css::container::XIndexContainer >
                         m_xContainer;
-        css::uno::Reference< css::report::XSection >
-                        m_xSection;
         Action          m_eAction;
 
     public:

@@ -298,8 +298,6 @@ namespace rptui
         mutable css::uno::Reference< css::sdbc::XRowSet >         m_xRowSet;
         /// type converter, needed on various occasions
         css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
-        /// access to property meta data
-        ::std::unique_ptr< OPropertyInfoService >                 m_pInfoService;
         mutable OUString                                          m_sDefaultFunction;
         mutable OUString                                          m_sScope;
         sal_uInt32                                                m_nDataFieldType;

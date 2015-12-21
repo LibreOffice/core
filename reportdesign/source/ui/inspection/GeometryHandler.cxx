@@ -229,7 +229,6 @@ GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const 
     : GeometryHandler_Base(m_aMutex)
     , m_aPropertyListeners(m_aMutex)
     , m_xContext(context)
-    , m_pInfoService(new OPropertyInfoService())
     , m_nDataFieldType(0)
     , m_bNewFunction(false)
     , m_bIn(false)

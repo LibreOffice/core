@@ -60,7 +60,6 @@ using namespace ::com::sun::star;
 DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext > const & context)
     :DataProviderHandler_Base(m_aMutex)
     ,m_xContext(context)
-    ,m_pInfoService( new OPropertyInfoService() )
 {
     try
     {

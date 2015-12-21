@@ -111,8 +111,6 @@ private:
     OUString                                 m_sTableStyle;
     OUString                                 m_sCellStyle;
     OUString                                 m_sColumnStyle;
-    rtl::Reference < SvXMLExportPropertyMapper>       m_xExportHelper;
-    rtl::Reference < SvXMLExportPropertyMapper>       m_xSectionPropMapper;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xTableStylesExportPropertySetMapper;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xCellStylesExportPropertySetMapper;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xColumnStylesExportPropertySetMapper;
@@ -120,8 +118,6 @@ private:
     rtl::Reference < SvXMLExportPropertyMapper >      m_xParaPropMapper;
     rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
 
-    mutable rtl::Reference < XMLPropertySetMapper >   m_xControlStylePropertyMapper;
-    mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
     Reference<XReportDefinition>                    m_xReportDefinition;
     bool                                        m_bAllreadyFilled;

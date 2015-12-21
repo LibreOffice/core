@@ -41,7 +41,6 @@ namespace reportdesign
                             public FunctionPropertySet
     {
         css::beans::Optional< OUString> m_sInitialFormula;
-        css::uno::Reference< css::uno::XComponentContext >  m_xContext;
         css::uno::WeakReference< css::report::XFunctions >  m_xParent;
         OUString m_sName;
         OUString m_sFormula;

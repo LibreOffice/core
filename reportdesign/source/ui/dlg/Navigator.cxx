@@ -144,7 +144,6 @@ class NavigatorTree :   public ::cppu::BaseMutex
 
     enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
     AutoTimer                                                                   m_aDropActionTimer;
-    Timer                                                                       m_aSynchronizeTimer;
     ImageList                                                                   m_aNavigatorImages;
     Point                                                                       m_aTimerTriggered;      // position at which the DropTimer started
     DROP_ACTION                                                                 m_aDropActionType;
