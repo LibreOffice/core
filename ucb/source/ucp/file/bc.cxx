@@ -1316,7 +1316,6 @@ BaseContent::cPSL()
     PropertySetInfoChangeNotifier* p = nullptr;
     if( m_pPropertySetInfoChangeListeners  )
         p = new PropertySetInfoChangeNotifier( this,
-                                               m_xContentIdentifier,
                                                m_pPropertySetInfoChangeListeners->getElements() );
 
     return p;
@@ -1350,7 +1349,6 @@ BaseContent::cPCL()
         }
 
         p = new PropertyChangeNotifier( this,
-                                        m_xContentIdentifier,
                                         listener );
     }
 

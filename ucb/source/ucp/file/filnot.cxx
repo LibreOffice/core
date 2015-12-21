@@ -149,10 +149,8 @@ void ContentEventNotifier::notifyExchanged()
 
 PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
     const uno::Reference< XContent >& xCreatorContent,
-    const uno::Reference< XContentIdentifier >& xCreatorId,
     const uno::Sequence< uno::Reference< uno::XInterface > >& sListeners )
     : m_xCreatorContent( xCreatorContent ),
-      m_xCreatorId( xCreatorId ),
       m_sListeners( sListeners )
 {
 
@@ -202,10 +200,8 @@ PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aProperty
 
 PropertyChangeNotifier::PropertyChangeNotifier(
     const css::uno::Reference< XContent >& xCreatorContent,
-    const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
     ListenerMap* pListeners )
     : m_xCreatorContent( xCreatorContent ),
-      m_xCreatorId( xCreatorId ),
       m_pListeners( pListeners )
 {
 }

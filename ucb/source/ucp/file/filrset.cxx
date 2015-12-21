@@ -47,7 +47,6 @@ XResultSet_impl::XResultSet_impl( shell* pMyShell,
                                   const uno::Sequence< beans::Property >& seq,
                                   const uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
     : m_pMyShell( pMyShell )
-    , m_xProvider( pMyShell->m_pProvider )
     , m_nRow( -1 )
     , m_nWasNull ( false )
     , m_nOpenMode( OpenMode )

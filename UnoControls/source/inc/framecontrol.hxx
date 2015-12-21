@@ -213,7 +213,6 @@ private:
     css::uno::Reference< css::frame::XFrame2 >              m_xFrame;
     OUString                                                m_sComponentURL;
     css::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;
-    ::cppu::OMultiTypeInterfaceContainerHelper              m_aInterfaceContainer;
     css::uno::Reference<OConnectionPointContainerHelper>    m_aConnectionPointContainer;
 
 };  // class FrameControl

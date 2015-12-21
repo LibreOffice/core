@@ -41,11 +41,9 @@ using namespace css::ucb;
 /*                                                                            */
 /******************************************************************************/
 
-XStream_impl::XStream_impl( shell* pMyShell,const OUString& aUncPath, bool bLock )
+XStream_impl::XStream_impl( const OUString& aUncPath, bool bLock )
     : m_bInputStreamCalled( false ),
       m_bOutputStreamCalled( false ),
-      m_pMyShell( pMyShell ),
-      m_xProvider( m_pMyShell->m_pProvider ),
       m_aFile( aUncPath ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )

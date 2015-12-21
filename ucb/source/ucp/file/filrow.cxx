@@ -79,7 +79,6 @@ XRow_impl::XRow_impl( shell* pMyShell,const uno::Sequence< uno::Any >& seq )
     : m_aValueMap( seq ),
       m_nWasNull(false),
       m_pMyShell( pMyShell ),
-      m_xProvider( pMyShell->m_pProvider ),
       m_xTypeConverter( nullptr )
 {
 }

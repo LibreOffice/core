@@ -661,7 +661,7 @@ shell::open( sal_Int32 CommandId,
              const OUString& aUnqPath,
              bool bLock )
 {
-    XInputStream_impl* xInputStream = new XInputStream_impl( this, aUnqPath, bLock ); // from filinpstr.hxx
+    XInputStream_impl* xInputStream = new XInputStream_impl( aUnqPath, bLock ); // from filinpstr.hxx
 
     sal_Int32 ErrorCode = xInputStream->CtorSuccess();
 
@@ -697,7 +697,7 @@ shell::open_rw( sal_Int32 CommandId,
                 const OUString& aUnqPath,
                 bool bLock )
 {
-    XStream_impl* xStream = new XStream_impl( this, aUnqPath, bLock );  // from filstr.hxx
+    XStream_impl* xStream = new XStream_impl( aUnqPath, bLock );  // from filstr.hxx
 
     sal_Int32 ErrorCode = xStream->CtorSuccess();
 

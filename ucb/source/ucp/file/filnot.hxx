@@ -64,12 +64,10 @@ namespace fileaccess {
     {
     private:
         css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
-        css::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
         css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > m_sListeners;
     public:
         PropertySetInfoChangeNotifier(
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
             const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
         void SAL_CALL notifyPropertyAdded( const OUString & aPropertyName );
@@ -85,12 +83,10 @@ namespace fileaccess {
     {
     private:
         css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
-        css::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
         ListenerMap* m_pListeners;
     public:
         PropertyChangeNotifier(
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
             ListenerMap* pListeners );
 
         ~PropertyChangeNotifier();

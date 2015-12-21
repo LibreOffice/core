@@ -111,13 +111,11 @@ PropertySetMap_Impl;
 // class PropertySetInfo_Impl
 class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 {
-    Reference< XComponentContext >    m_xContext;
     Sequence< Property >*             m_pProps;
     PersistentPropertySet*            m_pOwner;
 
 public:
-    PropertySetInfo_Impl( const Reference< XComponentContext >& xContext,
-                          PersistentPropertySet* pOwner );
+    PropertySetInfo_Impl( PersistentPropertySet* pOwner );
     virtual ~PropertySetInfo_Impl();
 
     // XPropertySetInfo
@@ -1238,7 +1236,7 @@ Reference< XPropertySetInfo > SAL_CALL PersistentPropertySet::getPropertySetInfo
     PropertySetInfo_Impl*& rpInfo = m_pImpl->m_pInfo;
     if ( !rpInfo )
     {
-        rpInfo = new PropertySetInfo_Impl( m_xContext, this );
+        rpInfo = new PropertySetInfo_Impl( this );
         rpInfo->acquire();
     }
     return Reference< XPropertySetInfo >( rpInfo );
@@ -2197,10 +2195,8 @@ PropertySetRegistry& PersistentPropertySet::getPropertySetRegistry()
 
 
 PropertySetInfo_Impl::PropertySetInfo_Impl(
-                        const Reference< XComponentContext >& xContext,
                         PersistentPropertySet* pOwner )
-: m_xContext( xContext ),
-  m_pProps( nullptr ),
+: m_pProps( nullptr ),
   m_pOwner( pOwner )
 {
 }

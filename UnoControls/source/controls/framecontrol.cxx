@@ -50,7 +50,6 @@ FrameControl::FrameControl( const Reference< XComponentContext >& rxContext)
     : BaseControl                   ( rxContext                                     )
     , OBroadcastHelper              ( m_aMutex                                      )
     , OPropertySetHelper            ( *(static_cast< OBroadcastHelper * >(this))    )
-    , m_aInterfaceContainer         ( m_aMutex                                      )
     , m_aConnectionPointContainer   ( new OConnectionPointContainerHelper(m_aMutex) )
 {
 }

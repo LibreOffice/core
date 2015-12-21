@@ -92,7 +92,6 @@ namespace fileaccess {
     private:
 
         shell*                                            m_pMyShell;
-        css::uno::Reference< css::ucb::XContentProvider > m_xProvider;
     };
 
 }

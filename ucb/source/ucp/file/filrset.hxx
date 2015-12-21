@@ -582,17 +582,12 @@ class XResultSet_impl : public Notifier,
 
     private:
 
-        // Members
-        //  const uno::Reference< lang::XMultiServiceFactory > m_xMSF;
-        //  const uno::Reference< ucb::XContentProvider > m_xProvider;
-
         shell*                              m_pMyShell;
-        css::uno::Reference< css::ucb::XContentProvider >  m_xProvider;
-        bool                            m_nIsOpen;
+        bool                                m_nIsOpen;
         sal_Int32                           m_nRow;
-        bool                            m_nWasNull;
+        bool                                m_nWasNull;
         sal_Int32                           m_nOpenMode;
-        bool                            m_bRowCountFinal;
+        bool                                m_bRowCountFinal;
 
         typedef std::vector< css::uno::Reference< css::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< css::uno::Reference< css::sdbc::XRow > >         ItemSet;

@@ -32,9 +32,8 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-XInputStream_impl::XInputStream_impl( shell* pMyShell,const OUString& aUncPath, bool bLock )
-    : m_xProvider( pMyShell->m_pProvider ),
-      m_aFile( aUncPath ),
+XInputStream_impl::XInputStream_impl( const OUString& aUncPath, bool bLock )
+    : m_aFile( aUncPath ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {

@@ -551,9 +551,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                     Reference< XDynamicResultSet > xSet
                         = new DynamicResultSet(
                             m_xContext,
-                            this,
                             aOpenCommand,
-                            Environment,
                             new ResultSetFactoryI(m_xContext,
                                                   m_xProvider.get(),
                                                   aOpenCommand.Properties,

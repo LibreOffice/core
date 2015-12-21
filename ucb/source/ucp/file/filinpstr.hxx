@@ -42,7 +42,7 @@ namespace fileaccess {
     {
     public:
 
-        XInputStream_impl( shell* pMyShell,const OUString& aUncPath, bool bLock );
+        XInputStream_impl( const OUString& aUncPath, bool bLock );
 
         virtual ~XInputStream_impl();
 
@@ -137,7 +137,6 @@ namespace fileaccess {
 
     private:
 
-        css::uno::Reference< css::ucb::XContentProvider >  m_xProvider;
         bool                                               m_nIsOpen;
 
         ReconnectingFile                                   m_aFile;

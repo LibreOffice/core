@@ -53,9 +53,8 @@ class XPropertySetInfo_impl : public cppu::WeakImplHelper<
             throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
-        shell*                                                                     m_pMyShell;
-        css::uno::Reference< css::ucb::XContentProvider >    m_xProvider;
-        sal_Int32                                                                  m_count;
+        shell*                                               m_pMyShell;
+        sal_Int32                                            m_count;
         css::uno::Sequence< css::beans::Property >           m_seq;
     };
 }
