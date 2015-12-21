@@ -23,7 +23,6 @@ $(eval $(call gb_Package_add_files,slideshow_opengl_shader,$(LIBO_ETC_FOLDER)/op
 		reflectionVertexShader.glsl \
 		reflectionFragmentShader.glsl \
 		staticFragmentShader.glsl \
-		vortexFragmentShader.glsl \
 		vortexVertexShader.glsl \
 		rippleFragmentShader.glsl \
 ))
