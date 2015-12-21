@@ -1601,7 +1601,7 @@ bool SmEditViewForwarder::Paste()
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     aAccName            (SM_RESSTR(STR_CMDBOXWINDOW)),
-    pTextHelper         (nullptr),
+    pTextHelper         (),
     pWin                (pEditWin)
 {
     OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
@@ -1609,7 +1609,11 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
 
 SmEditAccessible::~SmEditAccessible()
 {
-    delete pTextHelper;
+}
+
+::accessibility::AccessibleTextHelper *SmEditAccessible::GetTextHelper()
+{
+    return pTextHelper.get();
 }
 
 void SmEditAccessible::Init()
@@ -1623,7 +1627,8 @@ void SmEditAccessible::Init()
         {
             ::std::unique_ptr< SvxEditSource > pEditSource(
                     new SmEditSource( pWin, *this ) );
-            pTextHelper = new ::accessibility::AccessibleTextHelper( std::move(pEditSource) );
+            assert(!pTextHelper);
+            pTextHelper.reset(new ::accessibility::AccessibleTextHelper( std::move(pEditSource) ));
             pTextHelper->SetEventSource( this );
         }
     }
@@ -1644,7 +1649,7 @@ void SmEditAccessible::ClearWin()
     //! make TextHelper release references
     //! (e.g. the one set by the 'SetEventSource' call)
     pTextHelper->Dispose();
-    delete pTextHelper;     pTextHelper = nullptr;
+    pTextHelper.reset();
 }
 
 // XAccessible
