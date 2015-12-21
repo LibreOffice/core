@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_6be7eae4",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-12-21T18:55:08Z",
+      "side": 1,
+      "message": "\"LibreOffice 5.1\", not \"UDK 5.1\"\n\nUDK 3.x.y (\"UNO Deveopment Kit\") was used for URE versioning back in the day, with the major fixed at \"3\" (until URE would have changed incompatibly and the major bumped to \"4\") and \"x.y\" mapping to OOo major.minor versions per some manually maintained table.  That\u0027s history, and for LO\u0027s additions to C++/Java/UNOIDL URE interfaces we once decided on \"@since LibreOffice x.y\" tags.",
+      "revId": "42cfd0ea0327c301aa0f229aa143d23bb24ca275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
