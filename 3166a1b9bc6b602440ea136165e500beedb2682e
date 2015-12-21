@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_2b37a2b1",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2015-12-21T09:53:17Z",
+      "side": 1,
+      "message": "No, it is not possible to change that guys to const\nThe first, static and const is not allowed\nThe second, it used FindDSDate and here make a change on the class",
+      "parentUuid": "dab17558_0eaab1d4",
+      "revId": "3166a1b9bc6b602440ea136165e500beedb2682e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_4ec15980",
         "filename": "sw/inc/dbmgr.hxx",
         "patchSetId": 1
