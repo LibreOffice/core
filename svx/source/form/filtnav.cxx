@@ -782,8 +782,10 @@ void FmFilterModel::Remove(FmFilterData* pData)
                 while ( !rChildren.empty() )
                 {
                     ::std::vector< FmFilterData* >::iterator removePos = rChildren.end() - 1;
-                    FmFilterItem* pFilterItem = dynamic_cast<FmFilterItem*>( *removePos  );
-                    FmFilterAdapter::setText( nPos, pFilterItem, OUString() );
+                    if (FmFilterItem* pFilterItem = dynamic_cast<FmFilterItem*>( *removePos))
+                    {
+                        FmFilterAdapter::setText( nPos, pFilterItem, OUString() );
+                    }
                     Remove( removePos );
                 }
             }
