@@ -937,19 +937,19 @@ void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 
     rRenderContext.SetClipRegion(aClipRegion);
 
+    if (!pCursor && ((nExtendedWinBits & EWB_NO_AUTO_CURENTRY) == 0))
+    {
+        // do not select if multiselection or explicit set
+        bool bNotSelect = (aSelEng.GetSelectionMode() == MULTIPLE_SELECTION ) || ((m_nStyle & WB_NOINITIALSELECTION) == WB_NOINITIALSELECTION);
+        SetCursor(pStartEntry, bNotSelect);
+    }
+
     for(sal_uInt16 n=0; n< nCount && pEntry; n++)
     {
         /*long nMaxRight=*/
         pView->PaintEntry1(*pEntry, nY, rRenderContext, SvLBoxTabFlags::ALL, true );
         nY += nEntryHeight;
         pEntry = pView->NextVisible(pEntry);
-    }
-
-    if (!pCursor && ((nExtendedWinBits & EWB_NO_AUTO_CURENTRY) == 0))
-    {
-        // do not select if multiselection or explicit set
-        bool bNotSelect = (aSelEng.GetSelectionMode() == MULTIPLE_SELECTION ) || ((m_nStyle & WB_NOINITIALSELECTION) == WB_NOINITIALSELECTION);
-        SetCursor(pStartEntry, bNotSelect);
     }
 
     nFlags &= (~F_DESEL_ALL);
