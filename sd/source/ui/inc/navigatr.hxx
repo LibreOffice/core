@@ -181,8 +181,7 @@ private:
 class SdPageNameControllerItem : public SfxControllerItem
 {
 public:
-    SdPageNameControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings*,
-        const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest);
+    SdPageNameControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings*);
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
@@ -190,7 +189,6 @@ protected:
 
 private:
     VclPtr<SdNavigatorWin> pNavigatorWin;
-    const SdNavigatorWin::UpdateRequestFunctor maUpdateRequest;
 };
 
 #endif

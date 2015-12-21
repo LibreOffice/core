@@ -55,7 +55,6 @@ public:
         be called when the queue becomes empty.
     */
     ChangeRequestQueueProcessor (
-        const ::rtl::Reference<ConfigurationController>& rxController,
         const std::shared_ptr<ConfigurationUpdater>& rpUpdater);
     ~ChangeRequestQueueProcessor();
 
@@ -106,8 +105,6 @@ private:
     ImplSVEvent * mnUserEventId;
 
     css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration;
-
-    ::rtl::Reference<ConfigurationController> mpConfigurationController;
 
     std::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
 

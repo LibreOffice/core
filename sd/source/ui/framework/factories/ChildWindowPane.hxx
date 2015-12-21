@@ -90,7 +90,6 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
     sal_uInt16 mnChildWindowId;
     ViewShellBase& mrViewShellBase;
     ::std::unique_ptr<SfxShell> mpShell;

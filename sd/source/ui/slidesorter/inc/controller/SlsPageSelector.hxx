@@ -185,7 +185,6 @@ private:
     model::SharedPageDescriptor mpMostRecentlySelectedPage;
     /// Anchor for a range selection.
     model::SharedPageDescriptor mpSelectionAnchor;
-    model::SharedPageDescriptor mpCurrentPage;
     sal_Int32 mnUpdateLockCount;
     bool mbIsUpdateCurrentPagePending;
 

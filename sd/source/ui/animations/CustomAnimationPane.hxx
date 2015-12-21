@@ -158,7 +158,6 @@ private:
 
     css::uno::Reference< css::drawing::XDrawPage > mxCurrentPage;
     css::uno::Reference< css::drawing::XDrawView > mxView;
-    css::uno::Reference< css::frame::XModel > mxModel;
 
     /** The mpCustomAnimationPresets is initialized either on demand or
         after a short time after the construction of a new object of this

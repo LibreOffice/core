@@ -94,7 +94,6 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     class PresenterCacheContext;
     Size maPreviewSize;
     std::shared_ptr<PresenterCacheContext> mpCacheContext;

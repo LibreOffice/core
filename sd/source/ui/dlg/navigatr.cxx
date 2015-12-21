@@ -147,7 +147,7 @@ SdNavigatorWin::SdNavigatorWin(
 void SdNavigatorWin::SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest)
 {
     mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings, rUpdateRequest);
-    mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings, rUpdateRequest);
+    mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings);
 
     // InitTlb; is initiated over Slot
     if (rUpdateRequest)
@@ -934,11 +934,9 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
 SdPageNameControllerItem::SdPageNameControllerItem(
     sal_uInt16 _nId,
     SdNavigatorWin* pNavWin,
-    SfxBindings*    _pBindings,
-    const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest)
+    SfxBindings*    _pBindings)
     : SfxControllerItem( _nId, *_pBindings ),
-      pNavigatorWin( pNavWin ),
-      maUpdateRequest(rUpdateRequest)
+      pNavigatorWin( pNavWin )
 {
 }
 

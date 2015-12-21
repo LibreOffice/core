@@ -166,10 +166,6 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         OUString                   maBaseURI;
 
         css::uno::Reference< css::text::XSimpleText >             mXText;             // TextRef of the global text
-        css::uno::Reference< css::text::XTextCursor >             mXCursor;
-        css::uno::Reference< css::text::XTextRange >              mXCursorText;       // TextRef of part of the cursor
-        css::uno::Reference< css::beans::XPropertySet >           mXCursorPropSet;    // properties of the part
-        css::uno::Reference< css::text::XTextField >              mXTextField;
         sal_uInt32          mnTextStyle;
 
         bool                mbFontIndependentLineSpacing;

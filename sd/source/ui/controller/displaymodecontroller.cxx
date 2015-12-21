@@ -64,7 +64,6 @@ protected:
 
 private:
     DisplayModeController& mrController;
-    Reference< XFrame > mxFrame;
     VclPtr<ValueSet> mpDisplayModeSet1;
     VclPtr<ValueSet> mpDisplayModeSet2;
 };
@@ -138,7 +137,6 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
     const Reference< XFrame >& xFrame, vcl::Window* pParent )
 : svtools::ToolbarMenu(xFrame, pParent, WB_CLIPCHILDREN )
 , mrController( rController )
-, mxFrame(xFrame)
 , mpDisplayModeSet1( nullptr )
 , mpDisplayModeSet2( nullptr )
 {

@@ -109,11 +109,9 @@ private:
 
 AccessibleSlideSorterView::AccessibleSlideSorterView(
     ::sd::slidesorter::SlideSorter& rSlideSorter,
-    const Reference<XAccessible>& rxParent,
     vcl::Window* pContentWindow)
     : AccessibleSlideSorterViewBase(MutexOwner::maMutex),
       mrSlideSorter(rSlideSorter),
-      mxParent(rxParent),
       mnClientId(0),
       mpContentWindow(pContentWindow)
 {

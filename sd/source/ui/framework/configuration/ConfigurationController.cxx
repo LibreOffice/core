@@ -553,7 +553,7 @@ ConfigurationController::Implementation::Implementation (
           new ConfigurationControllerResourceManager(mpResourceFactoryContainer,mpBroadcaster)),
       mpConfigurationUpdater(
           new ConfigurationUpdater(mpBroadcaster, mpResourceManager,mxControllerManager)),
-      mpQueueProcessor(new ChangeRequestQueueProcessor(&rController,mpConfigurationUpdater)),
+      mpQueueProcessor(new ChangeRequestQueueProcessor(mpConfigurationUpdater)),
       mpConfigurationUpdaterLock(),
       mnLockCount(0)
 {

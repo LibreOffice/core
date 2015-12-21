@@ -151,7 +151,6 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mrBase( rBase ),
     mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
-    mxModel( rBase.GetDocShell()->GetDoc()->getUnoModel(), UNO_QUERY ),
     maLateInitTimer()
 {
     // load resources

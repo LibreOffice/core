@@ -1113,7 +1113,6 @@ private:
     const OUString      maStrScript;
 
     SdXShape*   mpShape;
-    uno::Reference< document::XEventsSupplier > mxShape;
 
 public:
     SdUnoEventsAccess( SdXShape* pShape ) throw();
@@ -1158,7 +1157,7 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
   maStrSpeed( "Speed" ),
   maStrStarBasic( "StarBasic" ),
   maStrScript( "Script" ),
-  mpShape( pShape ), mxShape( pShape )
+  mpShape( pShape )
 {
 }
 

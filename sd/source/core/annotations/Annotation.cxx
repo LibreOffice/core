@@ -98,7 +98,6 @@ private:
     virtual void SAL_CALL disposing() override;
 
     SdPage* mpPage;
-    Reference< XComponentContext > m_xContext;
     mutable ::osl::Mutex m_aMutex;
     RealPoint2D m_Position;
     RealSize2D m_Size;

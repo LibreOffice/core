@@ -60,8 +60,6 @@ protected:
     virtual void ExecuteCommand (const sal_Int32 nCommandId) override;
 
 private:
-    css::uno::Reference<css::lang::XComponent> mxListener;
-
     CurrentMasterPagesSelector (
         vcl::Window* pParent,
         SdDrawDocument& rDocument,

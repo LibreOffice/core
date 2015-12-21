@@ -55,8 +55,6 @@ protected:
 
     static const int FRAME;
 
-    svtools::ColorConfig maColorConfig;
-
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     void updateViewSettings();

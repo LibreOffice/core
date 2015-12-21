@@ -65,7 +65,6 @@ class AccessibleSlideSorterView
 public:
     AccessibleSlideSorterView(
         ::sd::slidesorter::SlideSorter& rSlideSorter,
-        const css::uno::Reference< css::accessibility::XAccessible> & rxParent,
         vcl::Window* pParentWindow);
 
     void Init();
@@ -279,8 +278,6 @@ private:
     ::std::unique_ptr<Implementation> mpImpl;
 
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
-
-    css::uno::Reference<css::accessibility::XAccessible> mxParent;
 
     sal_uInt32 mnClientId;
 

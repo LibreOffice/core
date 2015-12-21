@@ -51,13 +51,11 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 namespace sd { namespace framework {
 
 ChangeRequestQueueProcessor::ChangeRequestQueueProcessor (
-    const ::rtl::Reference<ConfigurationController>& rpConfigurationController,
     const std::shared_ptr<ConfigurationUpdater>& rpConfigurationUpdater)
     : maMutex(),
       maQueue(),
       mnUserEventId(nullptr),
       mxConfiguration(),
-      mpConfigurationController(rpConfigurationController),
       mpConfigurationUpdater(rpConfigurationUpdater)
 {
 }

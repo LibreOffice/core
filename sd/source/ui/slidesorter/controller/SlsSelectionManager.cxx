@@ -56,20 +56,12 @@ using namespace ::sd::slidesorter::controller;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-class SelectionManager::PageInsertionListener
-    : public SfxListener
-{
-public:
-
-};
-
 SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mrController(rSlideSorter.GetController()),
       mbIsMakeSelectionVisiblePending(true),
       mnInsertionPosition(-1),
       mnAnimationId(Animator::NotAnAnimationId),
-      mpPageInsertionListener(),
       mpSelectionObserver(new SelectionObserver(rSlideSorter))
 {
 }

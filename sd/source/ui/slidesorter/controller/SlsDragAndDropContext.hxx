@@ -68,7 +68,6 @@ public:
 
 private:
     SlideSorter* mpTargetSlideSorter;
-    model::SharedPageDescriptor mpHitDescriptor;
     sal_Int32 mnInsertionIndex;
 };
 

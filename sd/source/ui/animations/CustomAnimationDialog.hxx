@@ -154,7 +154,6 @@ private:
     STLPropertySet* mpSet;
     STLPropertySet* mpResultSet;
 
-    CustomAnimationEffectPtr mpEffect;
     VclPtr<TabControl> mpTabControl;
 
     VclPtr<CustomAnimationDurationTabPage> mpDurationTabPage;

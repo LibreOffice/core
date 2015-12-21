@@ -98,7 +98,6 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxSelectedTable;
     css::uno::Reference< css::drawing::XDrawView > mxView;
     css::uno::Reference< css::container::XIndexAccess > mxTableFamily;
-    css::uno::Reference< css::ui::XUIElement > mxToolbar;
 
     bool mbModal;
     bool mbStyleSelected;

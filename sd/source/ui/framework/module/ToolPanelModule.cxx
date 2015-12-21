@@ -41,8 +41,7 @@ ToolPanelModule::ToolPanelModule (
     const Reference<frame::XController>& rxController,
     const OUString& rsSidebarPaneURL)
     : ResourceManager(rxController,
-        FrameworkHelper::CreateResourceId(FrameworkHelper::msSidebarViewURL, rsSidebarPaneURL)),
-      mxControllerManager(rxController,UNO_QUERY)
+        FrameworkHelper::CreateResourceId(FrameworkHelper::msSidebarViewURL, rsSidebarPaneURL))
 {
     if (mxConfigurationController.is())
     {

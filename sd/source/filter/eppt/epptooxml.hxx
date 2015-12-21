@@ -134,8 +134,6 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
 
-    std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
-
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
     LayoutInfo mLayoutInfo[EPP_LAYOUT_SIZE];

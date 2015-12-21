@@ -80,10 +80,6 @@ public:
     */
     virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) override;
 
-private:
-    std::unique_ptr< ToolPanelViewShell_Impl >   mpImpl;
-
-    std::shared_ptr<TaskPaneShellManager> mpSubShellManager;
 };
 
 } } // end of namespace ::sd::toolpanel

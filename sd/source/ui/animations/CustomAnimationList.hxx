@@ -107,8 +107,6 @@ private:
 
     MainSequencePtr mpMainSequence;
 
-    Image maImgEmpty;
-
     Image maImages[ IMG_CUSTOMANIMATION_MEDIA_STOP - IMG_CUSTOMANIMATION_ON_CLICK + 1];
 
     css::uno::Reference< css::drawing::XShape > mxLastTargetShape;

@@ -129,13 +129,12 @@ uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  ) thr
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_DrawingModule_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_DrawingModule_get_implementation(css::uno::XComponentContext* ,
                                                         css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< lang::XMultiServiceFactory> xSM(context->getServiceManager(), uno::UNO_QUERY_THROW);
-    return cppu::acquire(new SdUnoModule(xSM));
+    return cppu::acquire(new SdUnoModule);
 }
 
 

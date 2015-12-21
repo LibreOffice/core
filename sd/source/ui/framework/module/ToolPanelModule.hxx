@@ -44,9 +44,6 @@ public:
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (css::uno::RuntimeException, std::exception) override;
-
-private:
-    css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
 };
 
 } } // end of namespace sd::framework

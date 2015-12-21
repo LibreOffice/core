@@ -183,7 +183,6 @@ private:
     std::shared_ptr<SlideSorter> mpSlideSorter;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
-    std::unique_ptr<cppu::IPropertyArrayHelper> mpPropertyArrayHelper;
 
     void Resize();
 

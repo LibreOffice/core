@@ -127,9 +127,6 @@ private:
     */
     Animator::AnimationId mnAnimationId;
 
-    class PageInsertionListener;
-    std::unique_ptr<PageInsertionListener> mpPageInsertionListener;
-
     std::shared_ptr<SelectionObserver> mpSelectionObserver;
 
     /** Delete the given list of normal pages.  This method is a helper

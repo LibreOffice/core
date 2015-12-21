@@ -55,7 +55,6 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
       mbSelectionChangeBroadcastPending(false),
       mpMostRecentlySelectedPage(),
       mpSelectionAnchor(),
-      mpCurrentPage(),
       mnUpdateLockCount(0),
       mbIsUpdateCurrentPagePending(true)
 {

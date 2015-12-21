@@ -71,19 +71,10 @@ public:
 private:
     const Layouter& mrLayouter;
     std::shared_ptr<cache::PageCache> mpCache;
-    std::shared_ptr<controller::Properties> mpProperties;
     std::shared_ptr<view::Theme> mpTheme;
     std::shared_ptr<vcl::Font> mpPageNumberFont;
     std::unique_ptr<FramePainter> mpShadowPainter;
     std::unique_ptr<FramePainter> mpFocusBorderPainter;
-    Bitmap maNormalBackground;
-    Bitmap maSelectionBackground;
-    Bitmap maFocusedSelectionBackground;
-    Bitmap maFocusedBackground;
-    Bitmap maMouseOverBackground;
-    Bitmap maMouseOverFocusedBackground;
-    Bitmap maMouseOverSelectedBackground;
-    Bitmap maMouseOverSelectedAndFocusedBackground;
 
     void PaintBackground (
         PageObjectLayouter *pPageObjectLayouter,

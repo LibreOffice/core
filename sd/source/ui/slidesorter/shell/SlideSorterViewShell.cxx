@@ -259,7 +259,6 @@ css::uno::Reference<css::accessibility::XAccessible>
     ::accessibility::AccessibleSlideSorterView *pAccessibleView =
     new ::accessibility::AccessibleSlideSorterView(
         *mpSlideSorter.get(),
-        pWindow->GetAccessibleParentWindow()->GetAccessible(),
         pWindow);
 
     css::uno::Reference< css::accessibility::XAccessible> xRet(pAccessibleView);

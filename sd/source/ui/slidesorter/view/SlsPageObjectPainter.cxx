@@ -46,7 +46,6 @@ PageObjectPainter::PageObjectPainter (
     const SlideSorter& rSlideSorter)
     : mrLayouter(rSlideSorter.GetView().GetLayouter()),
       mpCache(rSlideSorter.GetView().GetPreviewCache()),
-      mpProperties(rSlideSorter.GetProperties()),
       mpTheme(rSlideSorter.GetTheme()),
       mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *rSlideSorter.GetContentWindow())),
       mpShadowPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_RawShadow))),

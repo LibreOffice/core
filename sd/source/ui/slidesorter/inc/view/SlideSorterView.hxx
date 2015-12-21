@@ -224,7 +224,6 @@ private:
     Size maPreviewSize;
     bool mbPreciousFlagUpdatePending;
     Layouter::Orientation meOrientation;
-    std::shared_ptr<controller::Properties> mpProperties;
     model::SharedPageDescriptor mpPageUnderMouse;
     std::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     std::shared_ptr<SelectionPainter> mpSelectionPainter;

@@ -144,7 +144,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       maPreviewSize(0,0),
       mbPreciousFlagUpdatePending(true),
       meOrientation(Layouter::GRID),
-      mpProperties(rSlideSorter.GetProperties()),
       mpPageUnderMouse(),
       mpPageObjectPainter(),
       mpSelectionPainter(),

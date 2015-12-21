@@ -252,13 +252,11 @@ public:
 
 private:
     SdrPathObj* mpPathObj;
-    rtl::Reference< MotionPathTag > mxTag;
 };
 
 SdPathHdl::SdPathHdl( const SmartTagReference& xTag, SdrPathObj* pPathObj )
 : SmartHdl( xTag, pPathObj->GetCurrentBoundRect().TopLeft() )
 , mpPathObj( pPathObj )
-, mxTag( dynamic_cast< MotionPathTag* >( xTag.get() ) )
 {
 }
 
