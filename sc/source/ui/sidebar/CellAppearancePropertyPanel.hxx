@@ -136,7 +136,6 @@ private:
     std::unique_ptr< CellLineStylePopup > mpCellLineStylePopup;
     std::unique_ptr< CellBorderStylePopup > mpCellBorderStylePopup;
 
-    css::uno::Reference<css::frame::XFrame>     mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 

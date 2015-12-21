@@ -34,7 +34,7 @@ using namespace ooo::vba;
 
 ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
             css::uno::Reference< css::drawing::XControlShape > xControlShape )
-: OLEObjectImpl_BASE( xParent, xContext ), m_xControlShape( xControlShape )
+: OLEObjectImpl_BASE( xParent, xContext )
 {
     //init m_xWindowPeer
     uno::Reference< awt::XControlModel > xControlModel( xControlShape->getControl(), css::uno::UNO_QUERY_THROW );

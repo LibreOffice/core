@@ -93,7 +93,6 @@ enum ObjectSelectionType
 class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
-    SvxHtmlOptions          aHTMLOpt;
     ObjectSelectionType     eCurOST;
     sal_uInt16              nDrawSfxId;
     sal_uInt16              nFormSfxId;

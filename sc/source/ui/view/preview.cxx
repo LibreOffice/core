@@ -1502,13 +1502,13 @@ void ScPreview::GetFocus()
 {
     Window::GetFocus();
     if (pViewShell && pViewShell->HasAccessibilityObjects())
-        pViewShell->BroadcastAccessibility( ScAccWinFocusGotHint(GetAccessible()) );
+        pViewShell->BroadcastAccessibility( ScAccWinFocusGotHint() );
 }
 
 void ScPreview::LoseFocus()
 {
     if (pViewShell && pViewShell->HasAccessibilityObjects())
-        pViewShell->BroadcastAccessibility( ScAccWinFocusLostHint(GetAccessible()) );
+        pViewShell->BroadcastAccessibility( ScAccWinFocusLostHint() );
     Window::LoseFocus();
 }
 

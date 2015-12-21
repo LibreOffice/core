@@ -125,7 +125,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mpCellLineStylePopup(),
     mpCellBorderStylePopup(),
 
-    mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings)
 {

@@ -36,7 +36,6 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
 
     css::uno::Reference< css::table::XTableChart  > xTableChart;
     css::uno::Reference< css::document::XEmbeddedObjectSupplier > xEmbeddedObjectSupplier;
-    css::uno::Reference< css::beans::XPropertySet > xPropertySet;
     css::uno::Reference< css::drawing::XDrawPageSupplier > xDrawPageSupplier;
     css::uno::Reference< css::drawing::XDrawPage > xDrawPage;
     css::uno::Reference< css::drawing::XShape > xShape;

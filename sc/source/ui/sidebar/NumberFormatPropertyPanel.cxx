@@ -51,7 +51,6 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     maFormatControl(SID_NUMBER_FORMAT, *pBindings, *this),
 
     mnCategorySelected(0),
-    mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings)
 {

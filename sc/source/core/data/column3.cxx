@@ -2933,7 +2933,6 @@ namespace {
 
 class GroupFormulaCells
 {
-    ScFormulaCellGroupRef mxNone;
     std::vector<ScAddress>* mpGroupPos;
 
 public:

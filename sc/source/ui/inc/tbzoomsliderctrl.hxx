@@ -44,7 +44,6 @@ private:
     ScZoomSliderWnd_Impl* mpImpl;
     Size aLogicalSize;
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
 
     sal_uInt16 Offset2Zoom(long nOffset) const;
     long Zoom2Offset(sal_uInt16 nZoom) const;
@@ -52,7 +51,7 @@ private:
 
 public:
     ScZoomSliderWnd(vcl::Window* pParent, const css::uno::Reference<css::frame::XDispatchProvider >& rDispatchProvider,
-                    const css::uno::Reference<css::frame::XFrame>& _xFrame, sal_uInt16 nCurrentZoom);
+                    sal_uInt16 nCurrentZoom);
     virtual ~ScZoomSliderWnd();
     virtual void dispose() override;
     void UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem );
