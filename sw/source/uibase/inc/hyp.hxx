@@ -29,7 +29,6 @@ class SwView;
 class SwHyphWrapper : public SvxSpellWrapper {
 private:
     SwView* pView;
-    css::uno::Reference< css::linguistic2::XHyphenator >  xHyph;
     sal_uInt16      nPageCount;     // page count for progress view
     sal_uInt16      nPageStart;     // 1st checked page
     bool            bInSelection : 1; // separating selected text

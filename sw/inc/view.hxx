@@ -166,7 +166,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static SearchAttrItemList* m_pSrchList;
     static SearchAttrItemList* m_pReplList;
 
-    SvxHtmlOptions      m_aHTMLOpt;
     Timer               m_aTimer;         // for delayed ChgLnks during an action
     OUString            m_sSwViewData,
     //and the new cursor position if the user double click in the PagePreview
@@ -203,9 +202,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     VclPtr<SvxRuler>    m_pHRuler,
                         m_pVRuler;
     VclPtr<ImageButton> m_pTogglePageBtn;
-
-    VclPtr<SwHlpImageButton> m_pPageUpBtn,
-                             m_pPageDownBtn;
 
     SwGlossaryHdl       *m_pGlosHdl;          // handle text block
     SwDrawBase          *m_pDrawActual;

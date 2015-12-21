@@ -92,9 +92,6 @@ class SwXTextPortion : public cppu::WeakImplHelper
 {
 private:
 
-    class Impl;
-    ::sw::UnoImplPtr<Impl> m_pImpl;
-
     const SfxItemPropertySet *  m_pPropSet;
     const css::uno::Reference< css::text::XText >
         m_xParentText;

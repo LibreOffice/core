@@ -27,8 +27,6 @@ typedef CollTestImplHelper< ov::XDocumentProperties > SwVbaDocumentproperties_BA
 
 class SwVbaBuiltinDocumentProperties : public SwVbaDocumentproperties_BASE
 {
-protected:
-    css::uno::Reference< css::frame::XModel > m_xModel;
 public:
     SwVbaBuiltinDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xDocument );
 

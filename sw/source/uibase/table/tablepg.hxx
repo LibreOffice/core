@@ -38,9 +38,8 @@ struct TColumn
 class SwFormatTablePage : public SfxTabPage
 {
     VclPtr<Edit>           m_pNameED;
-    TextFilter      m_aTextFilter;
     VclPtr<FixedText>      m_pWidthFT;
-    PercentField m_aWidthMF;
+    PercentField           m_aWidthMF;
     VclPtr<CheckBox>       m_pRelWidthCB;
 
     VclPtr<RadioButton>    m_pFullBtn;

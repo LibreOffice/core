@@ -33,7 +33,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const  uno::Reference< css::text::XTextField >& xTextField) throw ( uno::RuntimeException ) : SwVbaField_BASE( rParent, rContext ), mxTextDocument( rDocument )
+SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const  uno::Reference< css::text::XTextField >& xTextField) throw ( uno::RuntimeException ) : SwVbaField_BASE( rParent, rContext )
 {
     mxTextField.set( xTextField, uno::UNO_QUERY_THROW );
 }
@@ -223,7 +223,7 @@ static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xPare
 {
     uno::Reference< text::XTextField > xTextField( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xTextDocument( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< word::XField > xField( new SwVbaField( xParent, xContext, xTextDocument, xTextField ) );
+    uno::Reference< word::XField > xField( new SwVbaField( xParent, xContext, xTextField ) );
     return uno::makeAny( xField );
 }
 
@@ -341,7 +341,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     uno::Reference< text::XTextRange > xTextRange = rVbaRange.getXTextRange();
     uno::Reference< text::XText > xText = xTextRange->getText();
     xText->insertTextContent( xTextRange, xTextField, true );
-    return uno::Reference< word::XField >( new SwVbaField( mxParent, mxContext, uno::Reference< text::XTextDocument >( mxModel, uno::UNO_QUERY_THROW ), uno::Reference< text::XTextField >( xTextField, uno::UNO_QUERY_THROW ) ) );
+    return uno::Reference< word::XField >( new SwVbaField( mxParent, mxContext, uno::Reference< text::XTextField >( xTextField, uno::UNO_QUERY_THROW ) ) );
 }
 
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUString& _text )

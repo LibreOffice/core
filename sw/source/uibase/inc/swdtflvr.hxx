@@ -57,7 +57,6 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
     SfxObjectShellLock              m_aDocShellRef;
-    TransferableDataHelper          m_aOleData;
     TransferableObjectDescriptor    m_aObjDesc;
     tools::SvRef<sfx2::SvBaseLink>  m_xDdeLink;
 

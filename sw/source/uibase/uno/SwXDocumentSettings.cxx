@@ -235,7 +235,6 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
 SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 : MasterPropertySet ( lcl_createSettingsInfo (),
                       &Application::GetSolarMutex () )
-, mxModel ( pModel )
 , mpModel ( pModel )
 , mpDocSh ( nullptr )
 , mpDoc ( nullptr )

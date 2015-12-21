@@ -255,7 +255,7 @@ SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException, std::exceptio
     uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
     OUString sTemplateUrl = xDocProps->getTemplateURL();
 
-    xTemplate = new SwVbaTemplate( this, mxContext, getModel(), sTemplateUrl );
+    xTemplate = new SwVbaTemplate( this, mxContext, sTemplateUrl );
     return uno::makeAny( xTemplate );
 }
 

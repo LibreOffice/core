@@ -51,17 +51,6 @@
 
 using namespace ::com::sun::star;
 
-class SwXTextPortion::Impl
-{
-private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
-
-public:
-    ::cppu::OInterfaceContainerHelper m_EventListeners;
-
-    Impl() : m_EventListeners(m_Mutex) { }
-};
-
 void SwXTextPortion::init(const SwUnoCursor* pPortionCursor)
 {
     m_pUnoCursor = pPortionCursor->GetDoc()->CreateUnoCursor(*pPortionCursor->GetPoint());
@@ -76,8 +65,7 @@ SwXTextPortion::SwXTextPortion(
     const SwUnoCursor* pPortionCursor,
         uno::Reference< text::XText > const& rParent,
         SwTextPortionType eType)
-    : m_pImpl(new Impl)
-    , m_pPropSet(aSwMapProvider.GetPropertySet(
+    : m_pPropSet(aSwMapProvider.GetPropertySet(
         (PORTION_REDLINE_START == eType ||
          PORTION_REDLINE_END   == eType)
             ?  PROPERTY_MAP_REDLINE_PORTION
@@ -95,8 +83,7 @@ SwXTextPortion::SwXTextPortion(
     const SwUnoCursor* pPortionCursor,
     uno::Reference< text::XText > const& rParent,
     SwFrameFormat& rFormat )
-    : m_pImpl(new Impl)
-    , m_pPropSet(aSwMapProvider.GetPropertySet(
+    : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
     , m_FrameDepend(this, &rFormat)
@@ -112,8 +99,7 @@ SwXTextPortion::SwXTextPortion(
     SwTextRuby const& rAttr,
     uno::Reference< text::XText > const& xParent,
     bool bIsEnd )
-    : m_pImpl(new Impl)
-    , m_pPropSet(aSwMapProvider.GetPropertySet(
+    : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(xParent)
     , m_pRubyText   ( bIsEnd ? nullptr : new uno::Any )

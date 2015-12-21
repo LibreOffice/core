@@ -446,13 +446,11 @@ class SwZoomBox_Impl : public ComboBox
 {
     sal_uInt16          nSlotId;
     bool            bRelease;
-    uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
 
 public:
     SwZoomBox_Impl(
         vcl::Window* pParent,
-        sal_uInt16 nSlot,
-        const Reference< XDispatchProvider >& rDispatchProvider );
+        sal_uInt16 nSlot );
     virtual ~SwZoomBox_Impl();
 
 protected:
@@ -465,12 +463,10 @@ protected:
 
 SwZoomBox_Impl::SwZoomBox_Impl(
     vcl::Window* pParent,
-    sal_uInt16 nSlot,
-    const Reference< XDispatchProvider >& rDispatchProvider ):
+    sal_uInt16 nSlot ):
     ComboBox( pParent, SW_RES(RID_PVIEW_ZOOM_LB)),
     nSlotId(nSlot),
-    bRelease(true),
-    m_xDispatchProvider( rDispatchProvider )
+    bRelease(true)
 {
     EnableAutocomplete( false );
     sal_uInt16 aZoomValues[] =
@@ -608,20 +604,18 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
 
 VclPtr<vcl::Window> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent )
 {
-    VclPtrInstance<SwZoomBox_Impl> pRet( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
+    VclPtrInstance<SwZoomBox_Impl> pRet( pParent, GetSlotId() );
     return pRet.get();
 }
 
 class SwJumpToSpecificBox_Impl : public NumericField
 {
     sal_uInt16          nSlotId;
-    uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
 
 public:
     SwJumpToSpecificBox_Impl(
         vcl::Window* pParent,
-        sal_uInt16 nSlot,
-        const Reference< XDispatchProvider >& rDispatchProvider );
+        sal_uInt16 nSlot );
     virtual ~SwJumpToSpecificBox_Impl();
 
 protected:
@@ -631,11 +625,9 @@ protected:
 
 SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(
     vcl::Window* pParent,
-    sal_uInt16 nSlot,
-    const Reference< XDispatchProvider >& rDispatchProvider ):
+    sal_uInt16 nSlot ):
     NumericField( pParent, SW_RES(RID_JUMP_TO_SPEC_PAGE)),
-    nSlotId(nSlot),
-    m_xDispatchProvider( rDispatchProvider )
+    nSlotId(nSlot)
 {}
 
 SwJumpToSpecificBox_Impl::~SwJumpToSpecificBox_Impl()
@@ -671,7 +663,7 @@ SwJumpToSpecificPageControl::~SwJumpToSpecificPageControl()
 
 VclPtr<vcl::Window> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *pParent )
 {
-    VclPtrInstance<SwJumpToSpecificBox_Impl> pRet( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
+    VclPtrInstance<SwJumpToSpecificBox_Impl> pRet( pParent, GetSlotId() );
     return pRet.get();
 }
 

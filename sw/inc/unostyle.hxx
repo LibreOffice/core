@@ -276,7 +276,6 @@ class SwXAutoStyles :
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoCharStyles;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoRubyStyles;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoParaStyles;
-    css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoNotxtStyles;
     virtual ~SwXAutoStyles();
 
 public:

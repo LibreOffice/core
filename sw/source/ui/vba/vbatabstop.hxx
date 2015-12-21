@@ -26,11 +26,8 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTabStop > SwVbaTabSto
 
 class SwVbaTabStop : public SwVbaTabStop_BASE
 {
-private:
-    css::uno::Reference< css::beans::XPropertySet > mxParaProps;
-
 public:
-    SwVbaTabStop( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ) throw ( css::uno::RuntimeException );
+    SwVbaTabStop( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaTabStop();
 
     // XHelperInterface

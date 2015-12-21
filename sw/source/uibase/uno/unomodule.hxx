@@ -50,12 +50,8 @@ namespace com
 
 class SwUnoModule : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider, css::frame::XNotifyingDispatch, css::lang::XServiceInfo >
 {
-    css::uno::Reference < css::lang::XMultiServiceFactory > m_xFactory;
-
 public:
-    explicit SwUnoModule( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory )
-        : m_xFactory( xFactory )
-    {}
+    SwUnoModule() {}
 
     // XNotifyingDispatch
     virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs, const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;

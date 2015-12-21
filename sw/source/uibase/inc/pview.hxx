@@ -179,8 +179,6 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     VclPtr<SwScrollbar> pVScrollbar;
     bool mbHScrollbarEnabled : 1;
     bool mbVScrollbarEnabled : 1;
-    VclPtr<ImageButton> pPageUpBtn;
-    VclPtr<ImageButton> pPageDownBtn;
     // dummy window for filling the lower right edge when both scrollbars are active
     VclPtr<vcl::Window> pScrollFill;
 

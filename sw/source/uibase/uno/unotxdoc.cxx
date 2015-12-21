@@ -3807,7 +3807,6 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
     sLinkDisplayName(rLinkDisplayName),
-    xDoc(&rxDoc),
     pxDoc(&rxDoc)
 {
 }

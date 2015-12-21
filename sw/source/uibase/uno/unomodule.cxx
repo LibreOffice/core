@@ -45,11 +45,11 @@ uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw(
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+                const uno::Reference< lang::XMultiServiceFactory > &  )
     throw (css::uno::Exception)
 {
     SolarMutexGuard aGuard;
-    return uno::Reference< uno::XInterface >( dynamic_cast< frame::XDispatch * >(new SwUnoModule( rSMgr )), uno::UNO_QUERY );
+    return uno::Reference< uno::XInterface >( dynamic_cast< frame::XDispatch * >(new SwUnoModule), uno::UNO_QUERY );
 }
 
     // XNotifyingDispatch

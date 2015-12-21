@@ -92,7 +92,6 @@ class SwCaptionDialog : public SvxStandardDialog
     bool        bOrderNumberingFirst; //#i61007# order of captions
 
     css::uno::Reference< css::container::XNameAccess >    xNameAccess;
-    css::uno::Reference< css::container::XNamed >         xNamed;
 
     DECL_LINK_TYPED(SelectHdl, ComboBox&, void);
     DECL_LINK_TYPED(SelectListBoxHdl, ListBox&, void);

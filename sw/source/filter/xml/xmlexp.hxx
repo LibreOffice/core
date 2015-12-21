@@ -54,7 +54,6 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableItemMap;
     SvXMLItemMapEntriesRef      xTableRowItemMap;
     SvXMLItemMapEntriesRef      xTableCellItemMap;
-    rtl::Reference < XMLPropertySetMapper > xParaPropMapper;
 
     bool                    bBlock : 1;         // export text block?
     bool                    bShowProgress : 1;

@@ -38,7 +38,6 @@ class SwVbaSelection : public SwVbaSelection_BASE
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::text::XTextViewCursor > mxTextViewCursor;
-    css::uno::Reference< ooo::vba::word::XRange > mxRange;
 
 private:
     void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

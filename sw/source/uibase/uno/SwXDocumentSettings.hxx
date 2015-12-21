@@ -38,7 +38,6 @@ class SwXDocumentSettings :
         public cppu::OWeakObject
 {
 protected:
-    css::uno::Reference< css::text::XTextDocument >       mxModel;
     SwXTextDocument*        mpModel;
     SwDocShell*             mpDocSh;
     SwDoc*                  mpDoc;

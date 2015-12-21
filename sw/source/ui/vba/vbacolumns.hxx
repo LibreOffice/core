@@ -32,7 +32,6 @@ class SwVbaColumns : public SwVbaColumns_BASE
 {
 private:
     css::uno::Reference< css::text::XTextTable > mxTextTable;
-    css::uno::Reference< css::table::XTableColumns > mxTableColumns;
     sal_Int32 mnStartColumnIndex;
     sal_Int32 mnEndColumnIndex;
 

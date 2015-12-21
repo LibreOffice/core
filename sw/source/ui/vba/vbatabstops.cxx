@@ -89,7 +89,7 @@ public:
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
 
-        return uno::makeAny( uno::Reference< word::XTabStop >( new SwVbaTabStop( mxParent, mxContext, mxParaProps ) ) );
+        return uno::makeAny( uno::Reference< word::XTabStop >( new SwVbaTabStop( mxParent, mxContext ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override
     {
@@ -222,7 +222,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
     else
         lcl_setTabStops( mxParaProps, aNewTabs );
 
-    return uno::Reference< word::XTabStop >( new SwVbaTabStop( this, mxContext, mxParaProps ) );
+    return uno::Reference< word::XTabStop >( new SwVbaTabStop( this, mxContext ) );
 }
 
 void SAL_CALL SwVbaTabStops::ClearAll() throw (uno::RuntimeException, std::exception)

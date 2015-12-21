@@ -171,7 +171,6 @@ private:
     css::uno::Reference< css::beans::XPropertySet >             mxXLineNumberingProperties;
     css::uno::Reference< css::container::XNameAccess >          mxLinkTargetSupplier;
     css::uno::Reference< css::container::XEnumerationAccess >   mxXRedlines;
-    css::uno::Reference< css::container::XNameContainer>        xXFormsContainer;
 
     //temporary frame to enable PDF export if no valid view is available
     SfxViewFrame*                                   m_pHiddenViewFrame;
@@ -506,11 +505,10 @@ class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper
 >
 {
     css::uno::Reference< css::container::XNameAccess >    xRealAccess;
-    const SfxItemPropertySet*                                                       pPropSet;
-    const OUString                                                                    sLinkSuffix;
-    const OUString                                                                    sLinkDisplayName;
-    css::uno::Reference< css::text::XTextDocument >         xDoc;
-    SwXTextDocument*                                                                pxDoc;
+    const SfxItemPropertySet*                             pPropSet;
+    const OUString                                        sLinkSuffix;
+    const OUString                                        sLinkDisplayName;
+    SwXTextDocument*                                      pxDoc;
 
 public:
     SwXLinkNameAccessWrapper(css::uno::Reference< css::container::XNameAccess >  xAccess,

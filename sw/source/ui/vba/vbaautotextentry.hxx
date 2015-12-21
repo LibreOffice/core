@@ -49,9 +49,6 @@ typedef CollTestImplHelper< ooo::vba::word::XAutoTextEntries > SwVbaAutoTextEntr
 
 class SwVbaAutoTextEntries : public SwVbaAutoTextEntries_BASE
 {
-private:
-    css::uno::Reference< css::container::XIndexAccess > mxAutoTextEntryAccess;
-
 public:
     SwVbaAutoTextEntries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw (css::uno::RuntimeException);
     virtual ~SwVbaAutoTextEntries() {}

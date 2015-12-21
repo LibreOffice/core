@@ -35,7 +35,6 @@ class SwVbaBookmarks : public SwVbaBookmarks_BASE
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::text::XBookmarksSupplier > mxBookmarksSupplier;
-    css::uno::Reference< css::text::XText > mxText;
 
 private:
     void removeBookmarkByName( const OUString& rName ) throw (css::uno::RuntimeException);

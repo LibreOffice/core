@@ -61,11 +61,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 
-struct SwConnectionData
-{
-    Reference<XConnection>  xConnection;
-};
-
 class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
 {
     Reference< XDatabaseContext > m_xDatabaseContext;

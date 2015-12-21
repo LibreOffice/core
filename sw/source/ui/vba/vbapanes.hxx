@@ -29,9 +29,6 @@ typedef CollTestImplHelper< ooo::vba::word::XPanes > SwVbaPanes_BASE;
 
 class SwVbaPanes : public SwVbaPanes_BASE
 {
-private:
-    css::uno::Reference< css::frame::XModel > mxModel;
-
 public:
     SwVbaPanes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~SwVbaPanes() {}

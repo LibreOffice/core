@@ -129,7 +129,7 @@ uno::Reference< word::XParagraphFormat > SAL_CALL SwVbaStyle::getParagraphFormat
     if( word::WdStyleType::wdStyleTypeParagraph == getType() )
     {
         uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
-        return uno::Reference< word::XParagraphFormat >( new SwVbaParagraphFormat( this, mxContext, xTextDocument, mxStyleProps ) );
+        return uno::Reference< word::XParagraphFormat >( new SwVbaParagraphFormat( this, mxContext, mxStyleProps ) );
     }
     else
     {

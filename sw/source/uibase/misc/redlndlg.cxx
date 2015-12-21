@@ -165,8 +165,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     m_aDeleted        (SW_RES(IMG_REDLINE_DELETED)),
     m_aFormated       (SW_RES(IMG_REDLINE_FORMATED)),
     m_aTableChgd      (SW_RES(IMG_REDLINE_TABLECHG)),
-    m_aFormatCollSet  (SW_RES(IMG_REDLINE_FMTCOLLSET)),
-    m_aAutoFormat     (SW_RES(IMG_REDLINE_AUTOFMT))
+    m_aFormatCollSet  (SW_RES(IMG_REDLINE_FMTCOLLSET))
 
 {
     m_aTabPagesCTRL->SetHelpId(HID_REDLINE_CTRL);

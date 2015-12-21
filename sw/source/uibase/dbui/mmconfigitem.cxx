@@ -87,10 +87,9 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     Reference< XDataSource>                 m_xSource;
     SharedConnection                        m_xConnection;
     Reference< XColumnsSupplier>            m_xColumnsSupplier;
-    Reference< XStatement>                  m_xStatement;
     Reference< XResultSet>                  m_xResultSet;
     SwDBData                                m_aDBData;
-    OUString                         m_sFilter;
+    OUString                                m_sFilter;
     sal_Int32                               m_nResultSetCursorPos;
 
     ::std::vector<DBAddressDataAssignment>  m_aAddressDataAssignments;

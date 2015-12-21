@@ -27,11 +27,10 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTemplate > SwVbaTempl
 class SwVbaTemplate : public SwVbaTemplate_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
     OUString msFullUrl;
 public:
     SwVbaTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::frame::XModel >& rModel, const OUString& );
+        const OUString& );
     virtual ~SwVbaTemplate();
 
    // XTemplate

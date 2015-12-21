@@ -67,7 +67,6 @@ class SwXMLImport: public SvXMLImport
     SvXMLItemMapEntriesRef  m_xTableColItemMap;
     SvXMLItemMapEntriesRef  m_xTableRowItemMap;
     SvXMLItemMapEntriesRef  m_xTableCellItemMap;
-    tools::SvRef<SotStorage>            m_xPackage;
     css::uno::Reference< css::container::XNameContainer >
                             m_xLateInitSettings;
 

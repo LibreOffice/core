@@ -114,7 +114,6 @@ private:
 
     SAL_DLLPRIVATE sal_uInt16            GetCurrLanguage() const;
 
-    css::uno::Reference<css::container::XNameAccess> xDBContext;
     css::uno::Reference<css::text::XNumberingTypeInfo> xNumberingInfo;
     SAL_DLLPRIVATE css::uno::Reference<css::text::XNumberingTypeInfo> GetNumberingInfo()const;
 

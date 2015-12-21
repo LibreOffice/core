@@ -36,7 +36,7 @@ static const sal_Int16 PERCENT100 = 100;
 static const sal_Int16 PERCENT150 = 150;
 static const sal_Int16 PERCENT200 = 200;
 
-SwVbaParagraphFormat::SwVbaParagraphFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rTextDocument, const uno::Reference< beans::XPropertySet >& rParaProps ) : SwVbaParagraphFormat_BASE( rParent, rContext ), mxTextDocument( rTextDocument ), mxParaProps( rParaProps )
+SwVbaParagraphFormat::SwVbaParagraphFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< beans::XPropertySet >& rParaProps ) : SwVbaParagraphFormat_BASE( rParent, rContext ), mxParaProps( rParaProps )
 {
 }
 

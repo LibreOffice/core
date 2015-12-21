@@ -47,7 +47,6 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
             bool bStart, bool bOther, bool bSelect ) :
     SvxSpellWrapper( &pVw->GetEditWin(), rxHyph, bStart, bOther ),
     pView( pVw ),
-    xHyph( rxHyph ),
     nPageCount( 0 ),
     nPageStart( 0 ),
     bInSelection( bSelect ),

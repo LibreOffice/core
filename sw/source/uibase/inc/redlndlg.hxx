@@ -94,7 +94,6 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     Image                   m_aFormated;
     Image                   m_aTableChgd;
     Image                   m_aFormatCollSet;
-    Image                   m_aAutoFormat;
 
     DECL_DLLPRIVATE_LINK_TYPED( AcceptHdl,     SvxTPView*, void );
     DECL_DLLPRIVATE_LINK_TYPED( AcceptAllHdl,  SvxTPView*, void );

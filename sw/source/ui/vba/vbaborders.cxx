@@ -46,7 +46,6 @@ class SwVbaBorder : public SwVbaBorder_Base
 private:
     uno::Reference< beans::XPropertySet > m_xProps;
     sal_Int32 m_LineType;
-    VbaPalette m_Palette;
     bool setBorderLine( table::BorderLine& rBorderLine )
     {
         table::TableBorder aTableBorder;
@@ -150,7 +149,7 @@ protected:
         return aServiceNames;
     }
 public:
-    SwVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, VbaPalette& rPalette) : SwVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}
+    SwVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType ) : SwVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ) {}
 
     uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException, std::exception) override
     {
@@ -264,7 +263,7 @@ public:
         if ( nIndex >= 0 && nIndex < getCount() )
         {
             uno::Reference< beans::XPropertySet > xProps( m_xRange, uno::UNO_QUERY_THROW );
-            return uno::makeAny( uno::Reference< word::XBorder >( new SwVbaBorder( xProps, m_xContext, supportedIndexTable[ nIndex ], m_Palette )) );
+            return uno::makeAny( uno::Reference< word::XBorder >( new SwVbaBorder( xProps, m_xContext, supportedIndexTable[ nIndex ] )) );
         }
         throw lang::IndexOutOfBoundsException();
     }
