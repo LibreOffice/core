@@ -199,6 +199,13 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     if (cairo_glyphs.empty())
         return;
 
+    ServerFont& rFont = rLayout.GetServerFont();
+    const FontSelectPattern& rFSD = rFont.GetFontSelData();
+    int nHeight = rFSD.mnHeight;
+    int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
+    if (nWidth == 0 || nHeight == 0)
+        return;
+
     /*
      * It might be ideal to cache surface and cairo context between calls and
      * only destroy it when the drawable changes, but to do that we need to at
@@ -227,8 +234,6 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         SALCOLOR_GREEN(mnTextColor)/255.0,
         SALCOLOR_BLUE(mnTextColor)/255.0);
 
-    ServerFont& rFont = rLayout.GetServerFont();
-
     FT_Face aFace = rFont.GetFtFace();
     CairoFontsCache::CacheId aId;
     aId.maFace = aFace;
@@ -236,9 +241,6 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     aId.mbEmbolden = rFont.NeedsArtificialBold();
 
     cairo_matrix_t m;
-    const FontSelectPattern& rFSD = rFont.GetFontSelData();
-    int nHeight = rFSD.mnHeight;
-    int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
 
     std::vector<int>::const_iterator aEnd = glyph_extrarotation.end();
     std::vector<int>::const_iterator aStart = glyph_extrarotation.begin();
