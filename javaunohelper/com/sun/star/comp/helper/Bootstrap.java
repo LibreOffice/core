@@ -314,7 +314,7 @@ public class Bootstrap {
 
             // create random pipe name
             String sPipeName = "uno" +
-                Long.toString( (new Random()).nextLong() & 0x7fffffffffffffffL );
+                Long.toString(randomPipeName.nextLong() & 0x7fffffffffffffffL);
 
             // create call with arguments
             String[] cmdArray = new String[ argArray.length + 2 ];
@@ -371,6 +371,8 @@ public class Bootstrap {
 
         return xContext;
     }
+
+    private static final Random randomPipeName = new Random();
 
     private static void pipe(
         final InputStream in, final PrintStream out, final String prefix ) {
