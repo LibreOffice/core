@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_ebe75a3e",
+        "filename": "vcl/unx/gtk/a11y/atkwrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000534
+      },
+      "writtenOn": "2015-12-21T09:35:54Z",
+      "side": 1,
+      "message": "If you set the role for END_NOTE later, with the call to registerRole(), you don\u0027t need to set it here. I\u0027d remove this part because the #ifs make the code uglier ;)\nSame for FOOTNOTE and NOTE below.",
+      "revId": "f42658cfc913524cc8428c2d64410fdcd2cbdf43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8bda0e77",
+        "filename": "vcl/unx/gtk/a11y/atkwrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000534
+      },
+      "writtenOn": "2015-12-21T09:35:54Z",
+      "side": 1,
+      "message": "In this line and the next one, the roles for SHAPE and TEXT_FRAME are being overwritten but they were already set in the definition of the roleMap above. You can remove these two lines.",
+      "revId": "f42658cfc913524cc8428c2d64410fdcd2cbdf43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
