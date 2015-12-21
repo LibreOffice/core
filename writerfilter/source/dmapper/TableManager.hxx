@@ -52,11 +52,6 @@ class TableManager
     class TableManagerState
     {
         /**
-         properties at the current point in document
-         */
-        TablePropertyMapPtr mpProps;
-
-        /**
          properties of the current cell
          */
         TablePropertyMapPtr mpCellProps;

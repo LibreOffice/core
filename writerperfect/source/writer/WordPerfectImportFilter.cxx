@@ -280,8 +280,8 @@ throw (RuntimeException, std::exception)
 }
 
 
-WordPerfectImportFilterDialog::WordPerfectImportFilterDialog(const Reference< XComponentContext > &rContext) :
-    mxContext(rContext) {}
+WordPerfectImportFilterDialog::WordPerfectImportFilterDialog()
+{}
 
 WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
 {
@@ -385,10 +385,10 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance(const Reference< XComponentContext > &rContext)
+Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance(const Reference< XComponentContext > &)
 throw(Exception)
 {
-    return static_cast<cppu::OWeakObject *>(new WordPerfectImportFilterDialog(rContext));
+    return static_cast<cppu::OWeakObject *>(new WordPerfectImportFilterDialog);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

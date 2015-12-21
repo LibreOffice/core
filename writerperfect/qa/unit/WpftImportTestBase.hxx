@@ -101,7 +101,6 @@ private:
 private:
     const rtl::OUString m_aFactoryURL;
     css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
-    css::uno::Reference<css::ucb::XSimpleFileAccess> m_xFileAccess;
     css::uno::Reference<css::document::XFilter> m_xFilter;
     css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
     const WpftOptionalMap_t *m_pOptionalMap;

@@ -38,7 +38,6 @@ protected:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;
-    css::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
 
     bool SAL_CALL importImpl(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor)
     throw (css::uno::RuntimeException, std::exception);
@@ -96,7 +95,6 @@ class WordPerfectImportFilterDialog : public cppu::WeakImplHelper <
     css::beans::XPropertyAccess
     >
 {
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
     OUString msPassword;
     css::uno::Reference< css::io::XInputStream > mxInputStream;
 
@@ -128,7 +126,7 @@ class WordPerfectImportFilterDialog : public cppu::WeakImplHelper <
            css::uno::RuntimeException, std::exception) override;
 
 public:
-    explicit WordPerfectImportFilterDialog(const css::uno::Reference< css::uno::XComponentContext > &rContext);
+    explicit WordPerfectImportFilterDialog();
 
 };
 

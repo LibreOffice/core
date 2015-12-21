@@ -180,7 +180,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;
-    css::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
 };
 
 }

@@ -245,11 +245,6 @@ class TableData
     typedef ::std::vector<RowPointer_t> Rows;
 
     /**
-       the table properties
-     */
-    TablePropertyMapPtr mpTableProps;
-
-    /**
        the data of the rows of the table
     */
     Rows mRows;

@@ -33,10 +33,8 @@ class WriterFilterDetection : public cppu::WeakImplHelper
     lang::XServiceInfo
     >
 {
-    uno::Reference<uno::XComponentContext> m_xContext;
-
 public:
-    explicit WriterFilterDetection(const uno::Reference<uno::XComponentContext>& rxContext);
+    explicit WriterFilterDetection();
     virtual ~WriterFilterDetection();
 
     //XExtendedFilterDetection
@@ -50,8 +48,7 @@ public:
 
 uno::Sequence<OUString> SAL_CALL WriterFilterDetection_getSupportedServiceNames() throw (uno::RuntimeException);
 
-WriterFilterDetection::WriterFilterDetection(const uno::Reference<uno::XComponentContext>& rxContext)
-    : m_xContext(rxContext)
+WriterFilterDetection::WriterFilterDetection()
 {
 }
 
@@ -135,9 +132,9 @@ uno::Sequence<OUString> WriterFilterDetection::getSupportedServiceNames() throw 
     return WriterFilterDetection_getSupportedServiceNames();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Writer_WriterFilterDetector_get_implementation(uno::XComponentContext* pComp, uno::Sequence<css::uno::Any> const&)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Writer_WriterFilterDetector_get_implementation(uno::XComponentContext* /*pComp*/, uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new WriterFilterDetection(pComp));
+    return cppu::acquire(new WriterFilterDetection);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

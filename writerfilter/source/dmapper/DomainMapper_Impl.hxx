@@ -593,7 +593,7 @@ public:
     SettingsTablePtr GetSettingsTable()
     {
         if( !m_pSettingsTable )
-            m_pSettingsTable.reset( new SettingsTable( m_xTextFactory ) );
+            m_pSettingsTable.reset( new SettingsTable );
         return m_pSettingsTable;
     }
 
