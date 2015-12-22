@@ -36,8 +36,7 @@ using namespace     ::com::sun::star::lang;
 using namespace     ::com::sun::star::uno;
 using namespace     ::com::sun::star::beans;
 
-SvtFolderPicker::SvtFolderPicker( const Reference < XMultiServiceFactory >& _rxFactory )
-    :SvtFolderPicker_Base( _rxFactory )
+SvtFolderPicker::SvtFolderPicker()
 {
 }
 
@@ -184,11 +183,10 @@ OUString SvtFolderPicker::impl_getStaticImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL SvtFolderPicker::impl_createInstance( const Reference< XComponentContext >& rxContext )
+Reference< XInterface > SAL_CALL SvtFolderPicker::impl_createInstance( const Reference< XComponentContext >&  )
     throw( Exception )
 {
-    Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference< XInterface >( *new SvtFolderPicker( xServiceManager ) );
+    return Reference< XInterface >( *new SvtFolderPicker );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

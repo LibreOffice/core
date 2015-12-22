@@ -78,8 +78,6 @@ private:
     ::utl::OConfigurationNode   m_aConfiguration;
     ::rtl::Reference< ::svt::AsyncPickerAction >
                                 m_pCurrentAsyncAction;
-    css::uno::Reference< css::ui::dialogs::XDialogClosedListener >
-                                m_xListener;
     bool                        m_bInExecuteAsync;
     bool                        m_bHasFilename;
     css::uno::Reference < css::uno::XComponentContext >

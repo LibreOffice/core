@@ -82,7 +82,7 @@ protected:
                         m_xDlgClosedListener;
 
 public:
-                       SvtFilePicker( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
+                       SvtFilePicker();
     virtual           ~SvtFilePicker();
 
 
@@ -231,7 +231,7 @@ protected:
 class SvtRemoteFilePicker : public SvtFilePicker
 {
 public:
-    SvtRemoteFilePicker( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
+    SvtRemoteFilePicker();
 
     virtual VclPtr<SvtFileDialog_Base> implCreateDialog( vcl::Window* _pParent ) override;
 

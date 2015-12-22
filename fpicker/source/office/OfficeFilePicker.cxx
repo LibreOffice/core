@@ -415,9 +415,8 @@ void SvtFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
 
 // class SvtFilePicker
 
-SvtFilePicker::SvtFilePicker( const Reference < XMultiServiceFactory >& xFactory )
-    :OCommonPicker( xFactory )
-    ,m_pFilterList      ( nullptr )
+SvtFilePicker::SvtFilePicker()
+    :m_pFilterList      ( nullptr )
     ,m_pElemList        ( nullptr )
     ,m_bMultiSelection  ( false )
     ,m_nServiceType     ( TemplateDescription::FILEOPEN_SIMPLE )
@@ -1147,16 +1146,14 @@ OUString SvtFilePicker::impl_getStaticImplementationName()
 
 /* Helper for registry */
 Reference< XInterface > SAL_CALL SvtFilePicker::impl_createInstance(
-    const Reference< XComponentContext >& rxContext) throw( Exception )
+    const Reference< XComponentContext >& ) throw( Exception )
 {
-    Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference< XInterface >( *new SvtFilePicker( xServiceManager ) );
+    return Reference< XInterface >( *new SvtFilePicker );
 }
 
 // SvtRemoteFilePicker
 
-SvtRemoteFilePicker::SvtRemoteFilePicker( const Reference < XMultiServiceFactory >& xFactory )
-    :SvtFilePicker( xFactory )
+SvtRemoteFilePicker::SvtRemoteFilePicker()
 {
 }
 
@@ -1214,10 +1211,9 @@ OUString SvtRemoteFilePicker::impl_getStaticImplementationName()
 
 /* Helper for registry */
 Reference< XInterface > SAL_CALL SvtRemoteFilePicker::impl_createInstance(
-    const Reference< XComponentContext >& rxContext) throw( Exception )
+    const Reference< XComponentContext >& ) throw( Exception )
 {
-    Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference< XInterface >( *new SvtRemoteFilePicker( xServiceManager ) );
+    return Reference< XInterface >( *new SvtRemoteFilePicker );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

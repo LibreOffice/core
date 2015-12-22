@@ -49,7 +49,7 @@ private:
     DECL_LINK_TYPED(                DialogClosedHdl, Dialog&, void );
 
 public:
-                                    SvtFolderPicker( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
+                                    SvtFolderPicker();
     virtual                        ~SvtFolderPicker();
 
 
