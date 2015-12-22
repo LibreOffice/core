@@ -870,13 +870,10 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
 
             // Search Font in the FontList
             OUString      aName;
-            OUString      aSearchName;
             sal_Int32     nIndex = 0;
             do
             {
-                aSearchName = GetEnglishSearchFontName( GetNextFontToken( aSearch, nIndex ) );
-
-                PhysicalFontFamily* pFontFamily = pOutDev->mpFontCollection->ImplFindBySearchName( aSearchName );
+                PhysicalFontFamily* pFontFamily = pOutDev->mpFontCollection->FindFontFamily( GetNextFontToken( aSearch, nIndex ) );
                 if( pFontFamily )
                 {
                     AddTokenFontName( aName, pFontFamily->GetFamilyName() );
