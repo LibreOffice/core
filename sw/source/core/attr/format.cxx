@@ -279,7 +279,7 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
                 else
                 {
                     // otherwise de-register at least from dying one
-                    DerivedFrom()->Remove( this );
+                    GetRegisteredIn()->Remove( this );
                     m_aSet.SetParent( nullptr );
                 }
             }
