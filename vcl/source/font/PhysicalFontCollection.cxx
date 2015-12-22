@@ -421,7 +421,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindBySubstFontAttr( const utl::
         const FontItalic eSearchSlant  = ITALIC_DONTKNOW;
         const OUString aSearchName;
 
-        pFoundData = ImplFindByAttributes( nSearchType,
+        pFoundData = FindByAttributes( nSearchType,
             eSearchWeight, eSearchWidth, eSearchSlant, aSearchName );
 
         if( pFoundData )
@@ -454,7 +454,7 @@ void PhysicalFontCollection::InitMatchData() const
     }
 }
 
-PhysicalFontFamily* PhysicalFontCollection::ImplFindByAttributes( ImplFontAttrs nSearchType,
+PhysicalFontFamily* PhysicalFontCollection::FindByAttributes( ImplFontAttrs nSearchType,
                                                                   FontWeight eSearchWeight,
                                                                   FontWidth eSearchWidth,
                                                                   FontItalic eSearchItalic,
@@ -1271,7 +1271,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindByFont( FontSelectPattern& rFSD 
     }
 
     PhysicalFontFamily::CalcType( nSearchType, eSearchWeight, eSearchWidth, rFSD.GetFamilyType(), pFontAttr );
-    PhysicalFontFamily* pFoundData = ImplFindByAttributes( nSearchType,
+    PhysicalFontFamily* pFoundData = FindByAttributes( nSearchType,
         eSearchWeight, eSearchWidth, rFSD.GetSlant(), aSearchFamilyName );
 
     if( pFoundData )
