@@ -431,7 +431,7 @@ public:
                         SwRangeDescriptor& rDesc);
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
@@ -550,8 +550,8 @@ class SwXTableRows final : public cppu::WeakImplHelper
 >
 {
 private:
-   class Impl;
-   ::sw::UnoImplPtr<Impl> m_pImpl;
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
     SwFrameFormat* GetFrameFormat();
     const SwFrameFormat* GetFrameFormat() const { return const_cast<SwXTableRows*>(this)->GetFrameFormat(); }
 protected:
@@ -589,8 +589,8 @@ class SwXTableColumns : public cppu::WeakImplHelper
 >
 {
 private:
-   class Impl;
-   ::sw::UnoImplPtr<Impl> m_pImpl;
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
     SwFrameFormat* GetFrameFormat() const;
 protected:
     virtual ~SwXTableColumns();
