@@ -79,8 +79,6 @@ private:
     sal_Int32 m_nNoBorderResizeReact;
     sal_Int32 m_nNoResizeReact;
 
-    css::uno::Reference< css::ui::XDockingAreaAcceptor > m_xCachedDocAreaAcc;
-
     css::uno::Sequence< css::uno::Any > m_aOutplaceFrameProps;
 
 

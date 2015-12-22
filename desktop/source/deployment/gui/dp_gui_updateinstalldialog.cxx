@@ -96,8 +96,6 @@ private:
     void removeTempDownloads();
 
     UpdateInstallDialog & m_dialog;
-    cssu::Reference< css::deployment::XUpdateInformationProvider >
-        m_updateInformation;
 
     // guarded by Application::GetSolarMutex():
     cssu::Reference< css::task::XAbortChannel > m_abort;
@@ -208,7 +206,6 @@ UpdateInstallDialog::UpdateInstallDialog(
         "UpdateInstallDialog","desktop/ui/updateinstalldialog.ui"),
 
         m_thread(new Thread(xCtx, *this, aVecUpdateData)),
-        m_xComponentContext(xCtx),
         m_bError(false),
         m_bNoEntry(true),
         m_sInstalling(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_INSTALLING)),

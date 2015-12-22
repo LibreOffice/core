@@ -90,7 +90,6 @@ private:
             { return m_xExtensionManager; }
 
     rtl::Reference< Thread > m_thread;
-    css::uno::Reference< css::uno::XComponentContext >        m_xComponentContext;
     css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
     //Signals that an error occurred during download and installation
     bool m_bError;

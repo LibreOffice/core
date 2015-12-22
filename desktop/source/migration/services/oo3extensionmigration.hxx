@@ -114,8 +114,6 @@ namespace migration
                                           css::task::XInteractionHandler,
                                           css::ucb::XProgressHandler >
     {
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
-        css::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
     public:
         virtual ~TmpRepositoryCommandEnv();
         TmpRepositoryCommandEnv();

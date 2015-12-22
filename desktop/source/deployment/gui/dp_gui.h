@@ -65,22 +65,6 @@ enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 
 
 
-class SelectedPackage: public salhelper::SimpleReferenceObject {
-public:
-    SelectedPackage() {}
-    explicit SelectedPackage( const css::uno::Reference< css::deployment::XPackage> &xPackage)
-    : m_xPackage( xPackage )
-    {}
-
-    virtual ~SelectedPackage();
-
-private:
-    SelectedPackage(SelectedPackage &) = delete;
-    void operator =(SelectedPackage &) = delete;
-
-    css::uno::Reference< css::deployment::XPackage> m_xPackage;
-};
-
 } // namespace dp_gui
 
 #endif

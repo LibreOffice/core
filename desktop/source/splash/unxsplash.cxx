@@ -29,9 +29,8 @@ using namespace com::sun::star;
 
 namespace desktop
 {
-    UnxSplashScreen::UnxSplashScreen( const uno::Reference< uno::XComponentContext >& xCtx )
-    : m_xCtx( xCtx ),
-      m_pOutFd( nullptr )
+    UnxSplashScreen::UnxSplashScreen()
+    : m_pOutFd( nullptr )
 {
 }
 
@@ -143,14 +142,14 @@ using namespace desktop;
 // get service instance...
 static uno::Reference< uno::XInterface > m_xINSTANCE;
 
-uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
+uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > &  ) throw( uno::Exception )
 {
     static osl::Mutex m_aMutex;
     if ( !m_xINSTANCE.is() )
     {
         osl::MutexGuard guard( m_aMutex );
         if ( !m_xINSTANCE.is() )
-            m_xINSTANCE = static_cast<cppu::OWeakObject*>(new UnxSplashScreen( xCtx ));
+            m_xINSTANCE = static_cast<cppu::OWeakObject*>(new UnxSplashScreen);
     }
 
     return m_xINSTANCE;

@@ -246,7 +246,6 @@ public:
 class UpdateRequiredDialogService : public ::cppu::WeakImplHelper< css::ui::dialogs::XExecutableDialog >
 {
     css::uno::Reference< css::uno::XComponentContext > const m_xComponentContext;
-    css::uno::Reference< css::awt::XWindow > m_xParent;
 public:
     UpdateRequiredDialogService( css::uno::Sequence< css::uno::Any > const & args,
                                  css::uno::Reference< css::uno::XComponentContext> const & xComponentContext );

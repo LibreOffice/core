@@ -39,12 +39,11 @@ private:
     static  UnxSplashScreen *m_pINSTANCE;
 
     static osl::Mutex m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext > m_xCtx;
 
     FILE *m_pOutFd;
 
 public:
-    explicit UnxSplashScreen( const css::uno::Reference< css::uno::XComponentContext >& xCtx );
+    explicit UnxSplashScreen();
 
     // XStatusIndicator
     virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) throw ( css::uno::RuntimeException, std::exception ) override;

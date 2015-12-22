@@ -36,7 +36,6 @@ class BaseCommandEnv
                                       css::ucb::XProgressHandler >
 {
 protected:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
 
     void handle_(bool approve, bool abort,
