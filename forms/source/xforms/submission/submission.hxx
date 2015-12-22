@@ -109,7 +109,6 @@ class CSubmission
 
 protected:
     INetURLObject m_aURLObj;
-    css::uno::Reference< css::xml::xpath::XXPathObject >    m_aXPathObject;
     css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
     css::uno::Reference< css::io::XInputStream >            m_aResultStream;
     css::uno::Reference< css::uno::XComponentContext >      m_xContext;

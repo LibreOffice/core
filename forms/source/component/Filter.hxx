@@ -64,16 +64,12 @@ namespace frm
         css::uno::Reference< css::beans::XPropertySet >               m_xField;
         css::uno::Reference< css::util::XNumberFormatter >            m_xFormatter;
         css::uno::Reference< css::sdbc::XConnection >                 m_xConnection;
-        css::uno::Reference< css::sdbc::XDatabaseMetaData >           m_xMetaData;
         css::uno::Reference< css::awt::XWindow >                      m_xMessageParent;
 
         typedef std::unordered_map< OUString, OUString, OUStringHash > MapString2String;
         MapString2String                m_aDisplayItemToValueItem;
 
         OUString                        m_aText;
-#if HAVE_FEATURE_DBCONNECTIVITY
-        ::connectivity::OSQLParser      m_aParser;
-#endif
         sal_Int16                       m_nControlClass;        // which kind of control do we use?
         bool                            m_bFilterList : 1;
         bool                            m_bMultiLine : 1;

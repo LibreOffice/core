@@ -85,9 +85,6 @@ namespace frm
         :UnoControl()
         ,m_aTextListeners( *this )
         ,m_xContext( _rxORB )
-#if HAVE_FEATURE_DBCONNECTIVITY
-        ,m_aParser( _rxORB )
-#endif
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( false )
         ,m_bMultiLine( false )

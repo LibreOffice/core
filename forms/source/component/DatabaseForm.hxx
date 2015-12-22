@@ -162,7 +162,6 @@ class ODatabaseForm :public OFormComponents
     // listener administration
     ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
     ::cppu::OInterfaceContainerHelper   m_aRowSetApproveListeners;
-    ::cppu::OInterfaceContainerHelper   m_aRowSetListeners;
     ::cppu::OInterfaceContainerHelper   m_aSubmitListeners;
     ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
     ResetListeners                      m_aResetListeners;
