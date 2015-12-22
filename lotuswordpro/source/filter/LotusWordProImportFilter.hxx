@@ -48,7 +48,6 @@ protected:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;
-    css::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
 
     bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
         throw (css::uno::RuntimeException, std::exception);

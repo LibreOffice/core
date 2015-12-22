@@ -73,8 +73,6 @@ struct LangSvcEntries_Spell : public LangSvcEntries
 
 struct LangSvcEntries_Grammar : public LangSvcEntries
 {
-    css::uno::Sequence< css::uno::Reference< css::linguistic2::XProofreader > >  aSvcRefs;
-
     LangSvcEntries_Grammar() : LangSvcEntries() {}
     explicit LangSvcEntries_Grammar( const OUString &rSvcImplName ) : LangSvcEntries( rSvcImplName ) {}
 };

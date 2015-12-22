@@ -70,7 +70,6 @@ class Hyphenator :
     sal_Int32 numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
-    Reference< XMultiServiceFactory >       rSMgr;
     linguistic::PropertyHelper_Hyphenation* pPropHelper;
     bool                                    bDisposing;
 

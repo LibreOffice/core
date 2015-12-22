@@ -104,7 +104,6 @@ namespace connectivity
                                             // of all the Statement objects
                                             // for this Connection
 
-            rtl::OUString        m_sUser;        // the user name
             MysqlCDriver&   m_rDriver;      // Pointer to the owning driver object
             sql::Driver*    cppDriver;
 
