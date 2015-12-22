@@ -199,7 +199,7 @@ public final class urp implements IProtocol {
         if (propertiesTid == null) {
             propertiesTid = ThreadId.createFresh();
         }
-        random = new Random().nextInt();
+        random = randomGenerator.nextInt();
         writeRequest(
             true, PROPERTIES_OID,
             TypeDescription.getTypeDescription(XProtocolProperties.class),
@@ -722,6 +722,8 @@ public final class urp implements IProtocol {
     private static final int STATE_TERMINATED = 5;
 
     private static final int MAX_RELEASE_QUEUE_SIZE = 100;
+
+    private static final Random randomGenerator = new Random();
 
     private final DataInput input;
     private final DataOutputStream output;
