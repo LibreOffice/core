@@ -599,7 +599,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = true;
                 break;
             case ID_BROWSER_SAVEDOC:
-                aReturn.bEnabled = !isDataSourceReadOnly() && m_xDocumentModify.is() && m_xDocumentModify->isModified();
+                aReturn.bEnabled = !isDataSourceReadOnly();
                 break;
             case ID_BROWSER_SAVEASDOC:
                 aReturn.bEnabled = true;
@@ -2659,7 +2659,6 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     }
 
     m_xModel = _rxModel;
-    m_xDocumentModify = xDocModify;
     m_xDataSource.set( xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference< XDataSource >(), UNO_QUERY );
 
     // connect to new model

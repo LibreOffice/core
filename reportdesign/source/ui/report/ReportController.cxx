@@ -787,11 +787,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.aValue <<= getSplitPos();
             break;
         case SID_SAVEDOC:
-            aReturn.bEnabled = impl_isModified() && isEditable();
-            break;
         case SID_SAVEASDOC:
-            aReturn.bEnabled = isConnected() && isEditable();
-            break;
         case SID_SAVEACOPY:
             aReturn.bEnabled = isConnected() && isEditable();
             break;
@@ -1175,7 +1171,6 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     UndoContext aUndoContext( getUndoManager(), sUndoAction );
                     xFunctions->removeByIndex(nIndex);
                     select(uno::makeAny(xFunctions->getParent()));
-                    InvalidateFeature( SID_SAVEDOC );
                     InvalidateFeature( SID_UNDO );
                 }
             }
@@ -2621,7 +2616,6 @@ void OReportController::executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std
     const OUString sUndoAction = ModuleRes(_nUndoStrId);
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
     _pMemfun( getDesignView() );
-    InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
 
@@ -2630,7 +2624,6 @@ void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _
     const OUString sUndoAction = ModuleRes(_nUndoStrId);
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
     getDesignView()->alignMarkedObjects(_nControlModification,_bAlignAtSection);
-    InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
 
@@ -2724,7 +2717,6 @@ void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, uno::Reference<rep
         }
     }
 
-    InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
 
