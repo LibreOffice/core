@@ -1191,7 +1191,7 @@ const SvxFieldData* toXMLPropertyStates(
 
                 const SvxEscapementItem* pEsc = static_cast<const SvxEscapementItem*>(p);
 
-                pEsc->QueryValue(aAny, MID_ESC);
+                pEsc->QueryValue(aAny);
                 rPropStates.push_back(XMLPropertyState(nIndexEsc, aAny));
 
                 pEsc->QueryValue(aAny, MID_ESC_HEIGHT);
