@@ -251,25 +251,20 @@ class SwXStyle : public cppu::WeakImplHelper
     , public SfxListener
     , public SwClient
 {
-    friend class sw::XStyleFamily;
-    SwDoc*                  m_pDoc;
-    OUString                m_sStyleName;
-    SfxStyleSheetBasePool*  m_pBasePool;
-    SfxStyleFamily          m_eFamily;    // for Notify
+    SwDoc* m_pDoc;
+    OUString m_sStyleName;
+    SfxStyleFamily m_eFamily; // for Notify
 
-    bool                    m_bIsDescriptor  : 1;
-    bool                    m_bIsConditional : 1;
-    OUString                m_sParentStyleName;
+    bool m_bIsDescriptor;
+    bool m_bIsConditional;
+    OUString m_sParentStyleName;
     std::unique_ptr<SwStyleProperties_Impl> m_pPropertiesImpl;
 
-    void    ApplyDescriptorProperties();
 protected:
-    void    Invalidate();
-
+    SfxStyleSheetBasePool* m_pBasePool;
     const SfxStyleSheetBasePool*    GetBasePool() const {return m_pBasePool;}
     SfxStyleSheetBasePool*  GetBasePool() {return m_pBasePool;}
 
-    void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
     SwStyleProperties_Impl& GetPropImpl(){return *m_pPropertiesImpl;}
     css::uno::Reference< css::beans::XPropertySet > mxStyleData;
     css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
@@ -364,6 +359,9 @@ public:
                                 StartListening(*m_pBasePool);
                             }
     SwDoc*                GetDoc() const { return m_pDoc; }
+    void Invalidate();
+    void ApplyDescriptorProperties();
+    void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
     virtual const SwTextFormatColl* GetFormatColl() const
     {
         assert(m_eFamily == SFX_STYLE_FAMILY_PARA);
@@ -389,10 +387,7 @@ public:
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
-
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) throw(css::uno::RuntimeException, std::exception) override;
-
-    friend class SwFrameStyleEventDescriptor;
 
     //ICoreStyle
     virtual void SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem);
@@ -1095,10 +1090,10 @@ uno::Sequence< OUString > SwXStyle::getSupportedServiceNames() throw( uno::Runti
 
 SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, bool bConditional) :
     m_pDoc( pDoc ),
-    m_pBasePool(nullptr),
     m_eFamily(eFam),
     m_bIsDescriptor(true),
-    m_bIsConditional(bConditional)
+    m_bIsConditional(bConditional),
+    m_pBasePool(nullptr)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -1163,11 +1158,11 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
         SwDoc* pDoc, const OUString& rStyleName) :
     m_pDoc(pDoc),
     m_sStyleName(rStyleName),
-    m_pBasePool(&rPool),
     m_eFamily(eFam),
     m_bIsDescriptor(false),
     m_bIsConditional(false),
-    m_pPropertiesImpl(nullptr)
+    m_pPropertiesImpl(nullptr),
+    m_pBasePool(&rPool)
 {
     if(!m_pBasePool)
         return;
