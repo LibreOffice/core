@@ -80,13 +80,12 @@ class LangGuess_Impl :
 {
     SimpleGuesser   m_aGuesser;
     bool            m_bInitialized;
-    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
     virtual ~LangGuess_Impl() {}
     void    EnsureInitialized();
 
 public:
-    explicit LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
+    LangGuess_Impl();
 
     // XServiceInfo implementation
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) override;
@@ -106,9 +105,8 @@ public:
     void SetFingerPrintsDB( const OUString &fileName ) throw (RuntimeException);
 };
 
-LangGuess_Impl::LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext) :
-    m_bInitialized( false ),
-    m_xContext( rxContext )
+LangGuess_Impl::LangGuess_Impl() :
+    m_bInitialized( false )
 {
 }
 
@@ -351,9 +349,9 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames_Static(  )
  * @param xMgr service manager to if the components needs other component instances
  */
 Reference< XInterface > SAL_CALL LangGuess_Impl_create(
-    Reference< XComponentContext > const & xContext )
+    Reference< XComponentContext > const & )
 {
-    return static_cast< ::cppu::OWeakObject * >( new LangGuess_Impl(xContext) );
+    return static_cast< ::cppu::OWeakObject * >( new LangGuess_Impl );
 }
 
 //#### EXPORTED ### functions to allow for registration and creation of the UNO component

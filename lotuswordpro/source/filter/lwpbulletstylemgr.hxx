@@ -97,7 +97,6 @@ private:
     bool m_bContinue;
     bool m_bIsBulletSkipped;
     LwpObjectID m_aCurrentNumberingID;
-    std::unique_ptr<LwpNumberingOverride> m_pCurrentNumOverride;
 };
 
 inline void LwpBulletStyleMgr::SetFoundry(LwpFoundry* pFoundry)
