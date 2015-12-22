@@ -46,8 +46,6 @@ namespace bib
 
             css::uno::Reference< css::frame::XController >            m_xController;
             css::uno::Reference< css::frame::XFrame >                 m_xToolBarRef;
-            css::uno::Reference< css::frame::XFrame >                 m_xGridRef;
-            css::uno::Reference< css::awt::XWindow >                  m_xGridWin;
 
             BibDataManager*         pDatMan;
             VclPtr<BibToolBar>      pToolBar;

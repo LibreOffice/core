@@ -280,7 +280,6 @@ private:
         { osl::MutexGuard aGuard(m_aMutex); m_xProvider.clear(); };
 
     osl::Mutex      m_aMutex;
-    osl::Module     m_aModule;
 
 protected:
     osl::Condition& m_aCondition;

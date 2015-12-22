@@ -111,9 +111,7 @@ class BibToolBar:   public ToolBox
         css::uno::Reference< css::frame::XController >  xController;
         Idle                    aIdle;
         ImageList               aImgLst;
-        ImageList               aImgLstHC;
         ImageList               aBigImgLst;
-        ImageList               aBigImgLstHC;
         VclPtr<FixedText>       aFtSource;
         VclPtr<ListBox>         aLBSource;
         VclPtr<FixedText>       aFtQuery;

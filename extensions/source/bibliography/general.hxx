@@ -119,9 +119,6 @@ class BibGeneralPage: public BibTabPage
                         xCtrlContnr;
 
     css::uno::Reference< css::form::XBoundComponent >
-                        xCurrentBoundComponent;
-
-    css::uno::Reference< css::form::XBoundComponent >
                         xLBModel;
 
     css::uno::Reference< css::sdbc::XRowSetListener >

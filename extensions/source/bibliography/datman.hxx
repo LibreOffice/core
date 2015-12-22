@@ -83,7 +83,6 @@ class BibDataManager
 private:
         css::uno::Reference< css::form::XForm >                       m_xForm;
         css::uno::Reference< css::awt::XControlModel >                m_xGridModel;
-        css::uno::Reference< css::beans::XPropertySet >               m_xSourceProps;
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xParser;
         css::uno::Reference< css::form::runtime::XFormController >    m_xFormCtrl;
         css::uno::Reference< css::frame::XDispatch >                  m_xFormDispatch;
