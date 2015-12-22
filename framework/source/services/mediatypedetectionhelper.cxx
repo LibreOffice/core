@@ -28,8 +28,7 @@ using namespace ::com::sun::star;
 
 //  constructor
 
-MediaTypeDetectionHelper::MediaTypeDetectionHelper( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-    : m_xFactory( xFactory )
+MediaTypeDetectionHelper::MediaTypeDetectionHelper( const uno::Reference< lang::XMultiServiceFactory >&  )
 {
 }
 

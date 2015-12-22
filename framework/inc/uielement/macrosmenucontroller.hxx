@@ -44,13 +44,7 @@ namespace framework
     {
         using svt::PopupMenuControllerBase::disposing;
 
-        struct ExecuteInfo
-        {
-            css::uno::Reference< css::frame::XDispatch >     xDispatch;
-         };
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-        css::uno::Reference< css::frame::XDispatchProvider >  m_xDispatchProvider;
-        css::uno::Reference< css::container::XNameAccess >    m_xUICommandLabels;
 
         public:
             MacrosMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );

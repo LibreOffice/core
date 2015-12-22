@@ -170,7 +170,6 @@ class ToolBarManager : public ToolbarManager_Base
 
         css::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
         css::uno::Reference< css::frame::XFrame >                    m_xFrame;
-        css::uno::Reference< css::container::XNameAccess >           m_xUICommandLabels;
         ToolBarControllerMap                                         m_aControllerMap;
         osl::Mutex                                                   m_mutex;
         ::cppu::OMultiTypeInterfaceContainerHelper                   m_aListenerContainer;   /// container for ALL Listener

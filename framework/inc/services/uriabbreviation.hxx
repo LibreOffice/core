@@ -49,8 +49,6 @@ private:
     void operator =(UriAbbreviation &) = delete;
 
     virtual ~UriAbbreviation() {}
-
-    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 };
 
 } //    namespace framework

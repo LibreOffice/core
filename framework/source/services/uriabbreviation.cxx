@@ -43,8 +43,7 @@ DEFINE_INIT_SERVICE                 (   UriAbbreviation,
                                         }
                                     )
 
-UriAbbreviation::UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & context) :
-    m_xContext(context)
+UriAbbreviation::UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & )
 {
 }
 

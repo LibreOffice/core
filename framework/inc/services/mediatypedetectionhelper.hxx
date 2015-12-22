@@ -79,13 +79,6 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper< css::util::XS
         virtual sal_Bool SAL_CALL mapStrings(css::uno::Sequence< OUString >& seqParameter)
             throw (css::uno::RuntimeException, std::exception) override;
 
-    //  variables
-    //  should be private every time
-
-    private:
-
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory; /// reference to global servicemanager
-
 };
 
 }       // namespace framework
