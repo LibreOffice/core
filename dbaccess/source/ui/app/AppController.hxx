@@ -99,8 +99,6 @@ namespace dbaui
                                 m_xDataSource;
         css::uno::Reference< css::frame::XModel >
                                 m_xModel;
-        css::uno::Reference< css::util::XModifiable >
-                                m_xDocumentModify;
         ::cppu::OInterfaceContainerHelper
                                 m_aContextMenuInterceptors;
 

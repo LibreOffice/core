@@ -25,7 +25,6 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
-#include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include "documentdefinition.hxx"
 #include <vcl/svapp.hxx>
@@ -36,8 +35,7 @@ namespace dbaccess
 
 class OInterceptor : public ::cppu::WeakImplHelper< css::frame::XDispatchProviderInterceptor,
                                                     css::frame::XInterceptorInfo,
-                                                    css::frame::XDispatch,
-                                                    css::document::XDocumentEventListener>
+                                                    css::frame::XDispatch >
 {
     DECL_LINK_TYPED( OnDispatch, void*, void );
 protected:
@@ -121,10 +119,6 @@ public:
         throw (
             css::uno::RuntimeException, std::exception
         ) override;
-
-    // XDocumentEventListener
-    virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
 

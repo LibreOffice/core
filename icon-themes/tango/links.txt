@@ -537,3 +537,4 @@ cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 # Toggle graphics visibility in Writer
 cmd/sc_showgraphics.png cmd/sc_insertgraphic.png
 cmd/lc_showgraphics.png cmd/lc_insertgraphic.png
+

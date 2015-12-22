@@ -48,7 +48,6 @@ private:
     VclPtr<CheckBox>     m_pPrintDlgCB;
 
     VclPtr<CheckBox>     m_pDocStatusCB;
-    VclPtr<CheckBox>     m_pSaveAlwaysCB;
 
     VclPtr<VclContainer> m_pYearFrame;
     VclPtr<NumericField> m_pYearValueField;

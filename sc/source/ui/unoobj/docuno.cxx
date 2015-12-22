@@ -44,7 +44,6 @@
 #include <tools/multisel.hxx>
 #include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <svtools/miscopt.hxx>
 
 #include <ctype.h>
 #include <float.h>
@@ -941,9 +940,6 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     aInputOptions.SetTextWysiwyg(true);
     SC_MOD()->SetInputOptions(aInputOptions);
     pDocShell->CalcOutputFactor();
-    // tdf#93154: in tiled rendering LO doesn't always detect changes
-    SvtMiscOptions aMiscOpt;
-    aMiscOpt.SetSaveAlwaysAllowed(true);
 
     // default tile size in pixels
     nTilePixelWidth = 256;

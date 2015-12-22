@@ -60,7 +60,6 @@
 #include <editeng/unolingu.hxx>
 #include <svx/svdpagv.hxx>
 #include <svtools/unoimap.hxx>
-#include <svtools/miscopt.hxx>
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/eeitem.hxx>
@@ -2386,9 +2385,6 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
         //  by the tile being rerendered - which is wasteful and ugly).
         pViewShell->GetDrawView()->SetSwapAsynchron(false);
     }
-    // tdf#93154: in tiled rendering LO doesn't always detect changes
-    SvtMiscOptions aMiscOpt;
-    aMiscOpt.SetSaveAlwaysAllowed(true);
 }
 
 void SdXImpressDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)

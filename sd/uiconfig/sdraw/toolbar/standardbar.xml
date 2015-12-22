@@ -24,7 +24,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Open"/>
  <toolbar:toolbaritem xlink:href=".uno:OpenRemote" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:helpid="5505"/>
- <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:helpid="5502"/>
+ <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:helpid="5502" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:visible="false" toolbar:helpid="5331"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="6312" toolbar:visible="false"/>

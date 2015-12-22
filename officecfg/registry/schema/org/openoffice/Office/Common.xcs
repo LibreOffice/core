@@ -5599,13 +5599,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="AlwaysAllowSave" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Determines if the user can save the document even when it's not
-          modified.</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="ExperimentalMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if various experimental, and potentially unstable
