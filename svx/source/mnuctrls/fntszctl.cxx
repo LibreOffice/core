@@ -165,8 +165,7 @@ SvxFontSizeMenuControl::SvxFontSizeMenuControl
     SfxMenuControl( _nId, rBindings ),
 
     pMenu   ( new FontSizeMenu ),
-    rParent ( rMenu ),
-    aFontNameForwarder( SID_ATTR_CHAR_FONT, *this )
+    rParent ( rMenu )
 
 {
     rMenu.SetPopupMenu( _nId, pMenu );

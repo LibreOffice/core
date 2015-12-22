@@ -245,7 +245,7 @@ private:
 };
 
 ScVbaObjectEnumeration::ScVbaObjectEnumeration( const ScVbaObjectContainerRef& rxContainer ) :
-    SimpleEnumerationBase( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
+    SimpleEnumerationBase( rxContainer.get() ),
     mxContainer( rxContainer )
 {
 }

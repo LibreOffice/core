@@ -178,7 +178,6 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     maLineWidthPopup(this, ::boost::bind(&LinePropertyPanelBase::CreateLineWidthPopupControl, this, _1)),
     maIMGNone(SVX_RES(IMG_NONE_ICON)),
     mpIMGWidthIcon(),
-    mxFrame(rxFrame),
     mbWidthValuable(true),
     mbArrowSupported(true)
 {

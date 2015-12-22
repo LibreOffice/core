@@ -84,16 +84,12 @@ class VBAHELPER_DLLPUBLIC SimpleEnumerationBase : public EnumerationHelper_BASE
 {
 public:
     explicit SimpleEnumerationBase(
-            const css::uno::Reference< ov::XHelperInterface >& rxParent,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::container::XEnumeration >& rxEnumeration ) throw (css::uno::RuntimeException) :
-        mxParent( rxParent ), mxContext( rxContext ), mxEnumeration( rxEnumeration ) {}
+        mxEnumeration( rxEnumeration ) {}
 
     explicit SimpleEnumerationBase(
-            const css::uno::Reference< ov::XHelperInterface >& rxParent,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) throw (css::uno::RuntimeException) :
-        mxParent( rxParent ), mxContext( rxContext ), mxEnumeration( new SimpleIndexAccessToEnumeration( rxIndexAccess ) ) {}
+        mxEnumeration( new SimpleIndexAccessToEnumeration( rxIndexAccess ) ) {}
 
     virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) override
     {
@@ -110,8 +106,6 @@ public:
     virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) = 0;
 
 protected:
-    css::uno::Reference< ov::XHelperInterface > mxParent;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::container::XEnumeration > mxEnumeration;
 };
 

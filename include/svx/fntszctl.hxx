@@ -34,7 +34,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontSizeMenuControl : public SfxMenuContr
 private:
     FontSizeMenu*   pMenu;
     Menu&           rParent;
-    SfxStatusForwarder  aFontNameForwarder;
 
     DECL_LINK_TYPED( MenuSelect, FontSizeMenu *, void );
 

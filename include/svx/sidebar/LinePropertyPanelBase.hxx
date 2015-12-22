@@ -160,8 +160,6 @@ private:
     // multi-images
     std::unique_ptr<Image[]> mpIMGWidthIcon;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
-
     /// bitfield
     bool                mbWidthValuable : 1;
     bool mbArrowSupported;

@@ -34,7 +34,6 @@ struct SfxPrinter_Impl;
 class SFX2_DLLPUBLIC SfxPrinter : public Printer
 {
 private:
-    JobSetup                aOrigJobSetup;
     SfxItemSet*             pOptions;
     SfxPrinter_Impl*        pImpl;
     bool                    bKnown;

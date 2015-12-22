@@ -144,7 +144,6 @@ private:
     AxAlignedOutputStream maOutStrm;        ///< The input stream to read from.
     ComplexPropVector   maLargeProps;       ///< Stores info for all used large properties.
     ComplexPropVector   maStreamProps;      ///< Stores info for all used stream data properties.
-    AxPairData          maDummyPairData;    ///< Dummy pair for unsupported properties.
     sal_Int16           mnBlockSize;
     sal_Int64           mnPropFlagsStart;     ///< pos of Prop flags
     sal_Int64           mnPropFlags;        ///< Flags specifying existing properties.
