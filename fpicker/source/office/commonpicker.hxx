@@ -58,8 +58,6 @@ namespace svt
                     ,public ::comphelper::OPropertyArrayUsageHelper< OCommonPicker >
     {
     private:
-        css::uno::Reference< css::lang::XMultiServiceFactory >    m_xORB;
-
         // <properties>
         OUString                                                  m_sHelpURL;
         css::uno::Reference< css::awt::XWindow >                  m_xWindow;
@@ -85,7 +83,7 @@ namespace svt
         inline          ::cppu::OBroadcastHelper&   GetBroadcastHelper()        { return OCommonPicker_Base::rBHelper; }
 
     public:
-        OCommonPicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory );
+        OCommonPicker();
 
     protected:
         virtual ~OCommonPicker();

@@ -46,10 +46,9 @@ namespace svt
     using namespace     ::comphelper;
 
 
-    OCommonPicker::OCommonPicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory )
+    OCommonPicker::OCommonPicker()
         :OCommonPicker_Base( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
-        ,m_xORB( _rxFactory )
         ,m_pDlg( nullptr )
         ,m_nCancelEvent( nullptr )
         ,m_bExecuting( false )
