@@ -209,7 +209,9 @@ void SwModule::StateOther(SfxItemSet &rSet)
             {
                 SwView* pView = ::GetActiveView();
                 SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
-                if (pConfigItem)
+                if (!pConfigItem)
+                    rSet.DisableItem(nWhich);
+                else
                 {
                     bool bFirst, bLast;
                     bool bValid = pConfigItem->IsResultSetFirstLast(bFirst, bLast);
@@ -287,7 +289,6 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 {
     SwView*                  m_pView;       // never owner
     SwView*                  m_pView2Close; // never owner
-    SwMailMergeConfigItem*   m_pMMConfig;   // sometimes owner
     AbstractMailMergeWizard* m_pWizard;     // always owner
 
     DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
@@ -296,7 +297,7 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     DECL_LINK_TYPED( CancelHdl, void*, void );
     DECL_LINK_TYPED( CloseFrameHdl, void*, void );
 
-    void ExecutionFinished( bool bDeleteConfigItem );
+    void ExecutionFinished();
     void ExecuteWizard();
 
 public:
@@ -309,7 +310,6 @@ public:
 SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
     : m_pView( nullptr ),
       m_pView2Close( nullptr ),
-      m_pMMConfig( nullptr ),
       m_pWizard( nullptr )
 {
 }
@@ -317,7 +317,6 @@ SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
 SwMailMergeWizardExecutor::~SwMailMergeWizardExecutor()
 {
     OSL_ENSURE( m_pWizard == nullptr, "SwMailMergeWizardExecutor: m_pWizard must be Null!" );
-    OSL_ENSURE( m_pMMConfig == nullptr, "SwMailMergeWizardExecutor: m_pMMConfig must be Null!" );
 }
 
 void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs )
@@ -362,23 +361,23 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
         static_cast<SwMailMergeChildWindow*>(m_pView->GetViewFrame()->GetChildWindow(FN_MAILMERGE_CHILDWINDOW));
     bool bRestoreWizard = false;
     sal_uInt16 nRestartPage = 0;
+
+    SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
     if (pChildWin && pChildWin->IsVisible())
     {
-        m_pMMConfig = m_pView->GetMailMergeConfigItem();
         nRestartPage = m_pView->GetMailMergeRestartPage();
         if (m_pView->IsMailMergeSourceView())
-            m_pMMConfig->SetSourceView(m_pView);
-        m_pView->SetMailMergeConfigItem(nullptr, 0, true);
+            pMMConfig->SetSourceView(m_pView);
         SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
         pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, false);
-        OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
         bRestoreWizard = true;
     }
-    // to make it bullet proof ;-)
-    if (!m_pMMConfig)
+
+    // create if it does not exist yet
+    if (!pMMConfig)
     {
-        m_pMMConfig = new SwMailMergeConfigItem;
-        m_pMMConfig->SetSourceView(m_pView);
+        pMMConfig = new SwMailMergeConfigItem;
+        pMMConfig->SetSourceView(m_pView);
 
         //set the first used database as default source on the config item
         const SfxPoolItem* pItem = nullptr;
@@ -406,7 +405,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                 uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);
                 if (xChild.is())
                     xSource.set(xChild->getParent(), uno::UNO_QUERY);
-                m_pMMConfig->SetCurrentConnection(
+                pMMConfig->SetCurrentConnection(
                     xSource, SharedConnection(xConnection, SharedConnection::NoTakeOwnership),
                     xColumnsSupplier, aDBData);
             }
@@ -424,13 +423,15 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                 aDBData.sCommand = sDBName.getToken(1, DB_DELIM);
                 aDBData.nCommandType = sDBName.getToken(2, DB_DELIM).toInt32();
                 //set the currently used database for the wizard
-                m_pMMConfig->SetCurrentDBData(aDBData);
+                pMMConfig->SetCurrentDBData(aDBData);
             }
         }
+
+        m_pView->SetMailMergeConfigItem(pMMConfig, m_pWizard? m_pWizard->GetRestartPage(): 0, true);
     }
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *m_pMMConfig);
+    m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *pMMConfig);
 
     if (bRestoreWizard)
     {
@@ -440,13 +441,11 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
     ExecuteWizard();
 }
 
-void SwMailMergeWizardExecutor::ExecutionFinished( bool bDeleteConfigItem )
+void SwMailMergeWizardExecutor::ExecutionFinished()
 {
-    m_pMMConfig->Commit();
-    if ( bDeleteConfigItem ) // owner?
-        delete m_pMMConfig;
-
-    m_pMMConfig = nullptr;
+    SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
+    if (pMMConfig)
+        pMMConfig->Commit();
 
     // release/destroy asynchronously
     Application::PostUserEvent( LINK( this, SwMailMergeWizardExecutor, DestroyDialogHdl ) );
@@ -474,18 +473,19 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                 LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            if(pNewView)
+            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
+            if (pNewView)
             {
                 m_pView = pNewView;
-                m_pMMConfig->DocumentReloaded();
+                pMMConfig->DocumentReloaded();
                 //new source view!
-                m_pMMConfig->SetSourceView( m_pView );
-                m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *m_pMMConfig);
+                pMMConfig->SetSourceView( m_pView );
+                m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *pMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
             }
             else
             {
-                m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *m_pMMConfig);
+                m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *pMMConfig);
             }
 
             // execute the wizard again
@@ -494,7 +494,8 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
         }
     case RET_TARGET_CREATED:
         {
-            SwView* pTargetView = m_pMMConfig->GetTargetView();
+            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
+            SwView* pTargetView = pMMConfig->GetTargetView();
             OSL_ENSURE(pTargetView, "No target view has been created");
             if(pTargetView)
             {
@@ -503,7 +504,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                     LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                m_pWizard = pFact->CreateMailMergeWizard(*pTargetView, *m_pMMConfig);
+                m_pWizard = pFact->CreateMailMergeWizard(*pTargetView, *pMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
 
                 // execute the wizard again
@@ -512,7 +513,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
             else
             {
                 // should not happen - just in case no target view has been created
-                ExecutionFinished( true );
+                ExecutionFinished();
             }
             break;
         }
@@ -521,19 +522,21 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
         {
             //create a non-modal dialog that allows to return to the wizard
             //the ConfigItem ownership moves to this dialog
-            bool bResult = nRet == RET_EDIT_RESULT_DOC && m_pMMConfig->GetTargetView();
-            SwView* pTempView = bResult ? m_pMMConfig->GetTargetView() : m_pMMConfig->GetSourceView();
-            pTempView->SetMailMergeConfigItem(m_pMMConfig, m_pWizard->GetRestartPage(), !bResult);
+            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
+            bool bResult = nRet == RET_EDIT_RESULT_DOC && pMMConfig->GetTargetView();
+            SwView* pTempView = bResult ? pMMConfig->GetTargetView() : pMMConfig->GetSourceView();
+            pTempView->SetMailMergeConfigItem(pMMConfig, m_pWizard->GetRestartPage(), !bResult);
             SfxViewFrame* pViewFrame = pTempView->GetViewFrame();
             pViewFrame->GetDispatcher()->Execute(
                 FN_MAILMERGE_CHILDWINDOW, SfxCallMode::SYNCHRON);
-            ExecutionFinished( false );
+            ExecutionFinished();
             break;
         }
     case RET_REMOVE_TARGET:
         {
-            SwView* pTargetView = m_pMMConfig->GetTargetView();
-            SwView* pSourceView = m_pMMConfig->GetSourceView();
+            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
+            SwView* pTargetView = pMMConfig->GetTargetView();
+            SwView* pSourceView = pMMConfig->GetSourceView();
             OSL_ENSURE(pTargetView && pSourceView, "source or target view not available" );
             if(pTargetView && pSourceView)
             {
@@ -542,14 +545,14 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                 pSourceView->GetViewFrame()->GetFrame().AppearWithUpdate();
                 // the current view has be set when the target is destroyed
                 m_pView = pSourceView;
-                m_pMMConfig->SetTargetView(nullptr);
+                pMMConfig->SetTargetView(nullptr);
 
                 // destroy wizard asynchronously
                 Application::PostUserEvent(
                     LINK( this, SwMailMergeWizardExecutor, CloseFrameHdl ), m_pWizard );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                m_pWizard = pFact->CreateMailMergeWizard(*pSourceView, *m_pMMConfig);
+                m_pWizard = pFact->CreateMailMergeWizard(*pSourceView, *pMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
 
                 // execute the wizard again
@@ -558,7 +561,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
             else
             {
                 // should not happen - just in case no target view has been created
-                ExecutionFinished( true );
+                ExecutionFinished();
             }
             break;
         }
@@ -571,16 +574,17 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
         }
     default: // finish
         {
-            SwView* pSourceView = m_pMMConfig->GetSourceView();
+            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
+            SwView* pSourceView = pMMConfig->GetSourceView();
             if(pSourceView)
             {
                 SwDocShell* pDocShell = pSourceView->GetDocShell();
                 if(pDocShell->HasName() && !pDocShell->IsModified())
-                    m_pMMConfig->GetSourceView()->GetViewFrame()->DoClose();
+                    pMMConfig->GetSourceView()->GetViewFrame()->DoClose();
                 else
-                    m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
+                    pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
             }
-            ExecutionFinished( true );
+            ExecutionFinished();
             break;
         }
 
@@ -602,17 +606,16 @@ IMPL_STATIC_LINK_TYPED(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, pDial
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
 {
-    if(m_pMMConfig->GetTargetView())
+    SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
+    if (pMMConfig->GetTargetView())
     {
-        m_pMMConfig->GetTargetView()->GetViewFrame()->DoClose();
-        m_pMMConfig->SetTargetView(nullptr);
+        pMMConfig->GetTargetView()->GetViewFrame()->DoClose();
+        pMMConfig->SetTargetView(nullptr);
     }
-    if(m_pMMConfig->GetSourceView())
-        m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().AppearWithUpdate();
+    if (pMMConfig->GetSourceView())
+        pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().AppearWithUpdate();
 
-    m_pMMConfig->Commit();
-    delete m_pMMConfig;
-    m_pMMConfig = nullptr;
+    pMMConfig->Commit();
     delete m_pWizard;
     m_pWizard = nullptr;
     release();

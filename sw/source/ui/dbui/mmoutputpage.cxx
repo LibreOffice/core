@@ -906,7 +906,6 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeOutputPage, PrintHdl_Impl, Button*, void)
     pTargetView->ExecPrint( aProps, false, true );
     SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
-    pTargetView->SetMailMergeConfigItem(nullptr, 0, false);
     m_pWizard->enableButtons(WizardButtonFlags::CANCEL, true);
     m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
 }
