@@ -190,15 +190,10 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             break;
         case ID_BROWSER_EDITDOC:
             aReturn.bChecked = isEditable();
-            aReturn.bEnabled = m_bNew || isEditable();// the editable flag is set through this one -> || isAddAllowed() || isDropAllowed() || isAlterAllowed();
+            aReturn.bEnabled = true;
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = impl_isModified();
-            if ( aReturn.bEnabled )
-            {
-                aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
-                                                 ::boost::mem_fn(&OTableRow::isValid));
-            }
+            aReturn.bEnabled = isEditable() && ::std::any_of(m_vRowList.begin(),m_vRowList.end(),::boost::mem_fn(&OTableRow::isValid));
             break;
         case ID_BROWSER_SAVEASDOC:
             aReturn.bEnabled = isConnected() && isEditable();
@@ -244,6 +239,7 @@ void OTableController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         case ID_BROWSER_EDITDOC:
             setEditable(!isEditable());
             static_cast<OTableDesignView*>(getView())->setReadOnly(!isEditable());
+            InvalidateFeature(ID_BROWSER_SAVEDOC);
             InvalidateFeature(ID_BROWSER_PASTE);
             InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
             break;

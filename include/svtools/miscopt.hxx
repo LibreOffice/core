@@ -90,9 +90,6 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         void        SetShowLinkWarningDialog( bool bSet );
         bool        IsShowLinkWarningDialogReadOnly() const;
 
-        void        SetSaveAlwaysAllowed( bool bSet );
-        bool        IsSaveAlwaysAllowed() const;
-
         void        SetExperimentalMode( bool bSet );
         bool        IsExperimentalMode() const;
 

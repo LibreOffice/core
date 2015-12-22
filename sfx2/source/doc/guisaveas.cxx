@@ -689,7 +689,6 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
         return STATUS_SAVEAS;
 
     // check acceptable entries for media descriptor
-    bool bVersInfoNeedsStore = false;
     ::comphelper::SequenceAsHashMap aAcceptedArgs;
 
     OUString aVersionCommentString("VersionComment");
@@ -699,33 +698,21 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     OUString aFailOnWarningString("FailOnWarning");
 
     if ( GetMediaDescr().find( aVersionCommentString ) != GetMediaDescr().end() )
-    {
-        bVersInfoNeedsStore = true;
         aAcceptedArgs[ aVersionCommentString ] = GetMediaDescr()[ aVersionCommentString ];
-    }
     if ( GetMediaDescr().find( aAuthorString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aAuthorString ] = GetMediaDescr()[ aAuthorString ];
     if ( GetMediaDescr().find( aInteractionHandlerString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aInteractionHandlerString ] = GetMediaDescr()[ aInteractionHandlerString ];
     if ( GetMediaDescr().find( aStatusIndicatorString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aStatusIndicatorString ] = GetMediaDescr()[ aStatusIndicatorString ];
-	if ( GetMediaDescr().find( aFailOnWarningString ) != GetMediaDescr().end() )
-		aAcceptedArgs[ aFailOnWarningString ] = GetMediaDescr()[ aFailOnWarningString ];
+    if ( GetMediaDescr().find( aFailOnWarningString ) != GetMediaDescr().end() )
+        aAcceptedArgs[ aFailOnWarningString ] = GetMediaDescr()[ aFailOnWarningString ];
 
     // remove unacceptable entry if there is any
     DBG_ASSERT( GetMediaDescr().size() == aAcceptedArgs.size(),
                 "Unacceptable parameters are provided in Save request!\n" );
     if ( GetMediaDescr().size() != aAcceptedArgs.size() )
         GetMediaDescr() = aAcceptedArgs;
-
-    // the document must be modified unless the always-save flag is set.
-    SvtMiscOptions aMiscOptions;
-    bool bAlwaysAllowSave = aMiscOptions.IsSaveAlwaysAllowed();
-    if (!bAlwaysAllowSave)
-    {
-        if ( !GetModifiable()->isModified() && !bVersInfoNeedsStore )
-            return STATUS_NO_ACTION;
-    }
 
     // check that the old filter is acceptable
     OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
