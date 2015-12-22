@@ -28,15 +28,11 @@ namespace framework
 struct CommandInfo
 {
     CommandInfo() : nId( 0 ),
-                    nImageInfo( 0 ),
-                    bMirrored( false ),
-                    bRotated( false ) {}
+                    nImageInfo( 0 ) {}
 
     sal_uInt16                  nId;
     ::std::vector< sal_uInt16 > aIds;
     sal_Int16                   nImageInfo;
-    bool                        bMirrored : 1,
-                                bRotated  : 1;
 };
 
 typedef BaseHash< CommandInfo > CommandToInfoMap;
