@@ -93,9 +93,6 @@ public:
         // not delivered to Parent.
     virtual void SetModified( bool ) override;
 
-    void* operator  new( size_t );
-    void operator   delete( void* );
-
     virtual void    Insert( SbxVariable* ) override;
     using SbxObject::Remove;
     virtual void    Remove( SbxVariable* ) override;
