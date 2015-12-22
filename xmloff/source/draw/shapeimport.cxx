@@ -110,7 +110,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImportPropertyMapper *pExtMapper )
 :   mpImpl( new XMLShapeImportHelperImpl() ),
     mpPageContext(nullptr),
-    mxModel(rModel),
 
     mpPropertySetMapper(nullptr),
     mpPresPagePropsMapper(nullptr),

@@ -273,8 +273,6 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
 
     XMLShapeImportPageContextImpl*  mpPageContext;
 
-    css::uno::Reference< css::frame::XModel > mxModel;
-
     // PropertySetMappers and factory
     XMLSdPropHdlFactory*        mpSdPropHdlFactory;
     SvXMLImportPropertyMapper*      mpPropertySetMapper;
