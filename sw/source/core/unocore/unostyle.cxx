@@ -262,9 +262,6 @@ class SwXStyle : public cppu::WeakImplHelper
 
 protected:
     SfxStyleSheetBasePool* m_pBasePool;
-    const SfxStyleSheetBasePool*    GetBasePool() const {return m_pBasePool;}
-    SfxStyleSheetBasePool*  GetBasePool() {return m_pBasePool;}
-
     SwStyleProperties_Impl& GetPropImpl(){return *m_pPropertiesImpl;}
     css::uno::Reference< css::beans::XPropertySet > mxStyleData;
     css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
@@ -3233,12 +3230,12 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     SwStyleBase_Impl aBaseImpl(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrameFormat()->GetAttrSet()); //UUUU add pDfltFrameFormat as parent
-    if(GetBasePool())
+    if(m_pBasePool)
     {
-        const sal_uInt16 nSaveMask = GetBasePool()->GetSearchMask();
-        GetBasePool()->SetSearchMask(GetFamily());
-        SfxStyleSheetBase* pBase = GetBasePool()->Find(GetStyleName());
-        GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
+        const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
+        m_pBasePool->SetSearchMask(GetFamily());
+        SfxStyleSheetBase* pBase = m_pBasePool->Find(GetStyleName());
+        m_pBasePool->SetSearchMask(GetFamily(), nSaveMask );
         OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
         {
@@ -3265,7 +3262,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
             throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
 
-        if(GetBasePool())
+        if(m_pBasePool)
         {
             switch(pEntry->nWID)
             {
@@ -3293,7 +3290,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                         if (lcl_GetHeaderFooterItem(aBaseImpl.GetItemSet(),
                                     rPropName, bFooter, pSetItem))
                         {
-                            lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                            lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
 
                             if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
                             {
@@ -3302,7 +3299,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                                             bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
                                             false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
                                 {
-                                    lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                                    lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
                                 }
                             }
                         }
@@ -3357,7 +3354,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                             default:
                             {
                                 // part of PageStyle, fallback to default
-                                lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                                lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
                             }
                         }
                     }
@@ -3407,7 +3404,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                             // replace the used SfxItemSet at the SwStyleBase_Impl temporarily and use the
                             // default method to set the property
                             SfxItemSet* pRememberItemSet = aBaseImpl.replaceItemSet(&rSetSet);
-                            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
                             aBaseImpl.replaceItemSet(pRememberItemSet);
 
                             // reset paret at ItemSet from SetItem
@@ -3421,7 +3418,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     else
                     {
                         // part of PageStyle, fallback to default
-                        lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                        lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
                     }
 
                     break;
@@ -3451,7 +3448,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 default:
                 {
                     //UUUU
-                    lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                    lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
                     break;
                 }
             }
@@ -3554,14 +3551,14 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
             throw beans::UnknownPropertyException("Unknown property: " + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
         }
 
-        if(GetBasePool())
+        if(m_pBasePool)
         {
             if(!pBase)
             {
-                const sal_uInt16 nSaveMask = GetBasePool()->GetSearchMask();
-                GetBasePool()->SetSearchMask(GetFamily());
-                pBase = GetBasePool()->Find(GetStyleName());
-                GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
+                const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
+                m_pBasePool->SetSearchMask(GetFamily());
+                pBase = m_pBasePool->Find(GetStyleName());
+                m_pBasePool->SetSearchMask(GetFamily(), nSaveMask );
             }
 
             sal_uInt16 nRes = 0;
@@ -3835,7 +3832,7 @@ void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)
 {
     // As I was told, for some entirely unobvious reason getting an
     // item from a style has to look as follows:
-    SfxStyleSheetBasePool* pBasePool = GetBasePool();
+    SfxStyleSheetBasePool* pBasePool = m_pBasePool;
     if (pBasePool)
     {
         SfxStyleSheetBase* pBase = pBasePool->Find(GetStyleName());
@@ -3854,7 +3851,7 @@ const SfxPoolItem* SwXFrameStyle::GetItem(enum RES_FRMATR eAtr)
 {
     // As I was told, for some entirely unobvious reason getting an
     // item from a style has to look as follows:
-    SfxStyleSheetBasePool* pBasePool = GetBasePool();
+    SfxStyleSheetBasePool* pBasePool = m_pBasePool;
     if(!pBasePool)
         return nullptr;
     SfxStyleSheetBase* pBase = pBasePool->Find(GetStyleName());
