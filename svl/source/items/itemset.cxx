@@ -1552,9 +1552,7 @@ sal_Int32 SfxItemSet::getHash() const
 OString SfxItemSet::stringify() const
 {
     SvMemoryStream aStream;
-    SfxItemSet aSet(*this);
-    aSet.InvalidateDefaultItems();
-    aSet.Store(aStream, true);
+    Store(aStream, true);
     aStream.Flush();
     return OString(
         static_cast<char const *>(aStream.GetData()), aStream.GetEndOfData());
