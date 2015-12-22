@@ -884,7 +884,6 @@
                 <it>/org.openoffice.Office.Common/I18N</it>
                 <it>/org.openoffice.Office.Common/InternalMSExport</it>
                 <it>/org.openoffice.Office.Common/Load</it>
-                <it>/org.openoffice.Office.Common/Misc/AlwaysAllowSave</it>
                 <it>/org.openoffice.Office.Common/Misc/DisableUICustomization</it>
                 <it>/org.openoffice.Office.Common/Misc/ExperimentalMode</it>
                 <it>/org.openoffice.Office.Common/Misc/FormControlPilotsEnabled</it>

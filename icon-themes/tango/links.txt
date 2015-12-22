@@ -537,3 +537,7 @@ cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 # Toggle graphics visibility in Writer
 cmd/sc_showgraphics.png cmd/sc_insertgraphic.png
 cmd/lc_showgraphics.png cmd/lc_insertgraphic.png
+
+# Modified state for the save button
+res/savemodified_small.png cmd/sc_saveas.png
+res/savemodified_large.png cmd/lc_saveas.png

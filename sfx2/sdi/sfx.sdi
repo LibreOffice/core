@@ -4939,7 +4939,7 @@ SfxBoolItem Save SID_SAVEDOC
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
-    FastCall = TRUE,
+    FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
