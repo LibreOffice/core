@@ -66,7 +66,6 @@ public:
     PhysicalFontFamily*     FindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;
 private:
-    friend class WinGlyphFallbackSubstititution;
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
 
