@@ -110,7 +110,8 @@ public:
     */
     model::SharedPageDescriptor GetPageAt (const Point& rPixelPosition);
 
-    PageSelector& GetPageSelector();
+    // Exported for unit test
+    SD_DLLPUBLIC PageSelector& GetPageSelector();
     FocusManager& GetFocusManager();
     // Exported for unit test
     SD_DLLPUBLIC controller::Clipboard& GetClipboard();

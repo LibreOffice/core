@@ -30,6 +30,7 @@
 #include <SlideSorter.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
+#include <controller/SlsPageSelector.hxx>
 
 using namespace ::com::sun::star;
 
@@ -38,17 +39,19 @@ class SdMiscTest : public SdModelTestBase
 {
 public:
     void testTdf96206();
+    void testTdf96708();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
+    CPPUNIT_TEST(testTdf96708);
     CPPUNIT_TEST_SUITE_END();
 
+private:
+    sd::DrawDocShellRef Load(const OUString& rURL, sal_Int32 nFormat);
 };
 
-void SdMiscTest::testTdf96206()
+sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
 {
-    // Copying/pasting slide referring to a non-default master with a text duplicated the master
-
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop.is());
 
@@ -57,8 +60,8 @@ void SdMiscTest::testTdf96206()
     CPPUNIT_ASSERT(xTargetFrame.is());
 
     // 1. Open the document
-    sd::DrawDocShellRef xDocSh = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf96206.odp.", xDocSh.Is());
+    sd::DrawDocShellRef xDocSh = loadURL(rURL, nFormat);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
 
     uno::Reference< frame::XModel2 > xModel2(xDocSh->GetModel(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel2.is());
@@ -82,13 +85,51 @@ void SdMiscTest::testTdf96206()
         while (Scheduler::ProcessTaskScheduling(true));
         if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
             break;
-        TimeValue aSleep(0, 100*1000000); // 100 msec
+        TimeValue aSleep(0, 100 * 1000000); // 100 msec
         osl::Thread::wait(aSleep);
     }
     CPPUNIT_ASSERT(pSSVS);
+
+    return xDocSh;
+}
+
+void SdMiscTest::testTdf96206()
+{
+    // Copying/pasting slide referring to a non-default master with a text duplicated the master
+
+    sd::DrawDocShellRef xDocSh = Load(getURLFromSrc("/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
+    sd::ViewShell *pViewShell = xDocSh->GetViewShell();
+    auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
     auto& xSSController = pSSVS->GetSlideSorter().GetController();
+
     const sal_uInt16 nMasterPageCnt1 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nMasterPageCnt1);
     xSSController.GetClipboard().DoCopy();
+    xSSController.GetClipboard().DoPaste();
+    const sal_uInt16 nMasterPageCnt2 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
+    CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
+
+    xDocSh->DoClose();
+}
+
+void SdMiscTest::testTdf96708()
+{
+    sd::DrawDocShellRef xDocSh = Load(getURLFromSrc("/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
+    sd::ViewShell *pViewShell = xDocSh->GetViewShell();
+    auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
+    auto& xSSController = pSSVS->GetSlideSorter().GetController();
+    auto& xPageSelector = xSSController.GetPageSelector();
+
+    const sal_uInt16 nMasterPageCnt1 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), nMasterPageCnt1);
+    xPageSelector.SelectAllPages();
+    xSSController.GetClipboard().DoCopy();
+
+    // Now wait for timers to trigger creation of auto-layout
+    TimeValue aSleep(0, 100 * 1000000); // 100 msec
+    osl::Thread::wait(aSleep);
+    Scheduler::ProcessTaskScheduling(true);
+
     xSSController.GetClipboard().DoPaste();
     const sal_uInt16 nMasterPageCnt2 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::PK_STANDARD);
     CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);

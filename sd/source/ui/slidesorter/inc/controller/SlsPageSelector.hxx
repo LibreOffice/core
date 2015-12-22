@@ -27,6 +27,8 @@
 #include <memory>
 #include <boost/noncopyable.hpp>
 
+#include "sddllapi.h"
+
 class SdPage;
 
 namespace sd { namespace slidesorter {
@@ -55,7 +57,8 @@ class PageSelector : private ::boost::noncopyable
 public:
     PageSelector (SlideSorter& rSlideSorter);
 
-    void SelectAllPages();
+    // Exported for unit test
+    SD_DLLPUBLIC void SelectAllPages();
     void DeselectAllPages();
 
     /** Update the selection state of all page descriptors to be the same as
