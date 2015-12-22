@@ -76,7 +76,6 @@ public:
     virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) throw( RuntimeException, std::exception ) override;
 
 private:
-    Reference< XIdlReflection >  m_xCoreReflection;
     Reference< XAllListener >    m_xAllListener;
     Reference< XIdlClass >       m_xListenerType;
     Any                          m_Helper;
@@ -449,7 +448,6 @@ private:
             throw (CannotConvertException, RuntimeException);
 
     EventAttacherImpl *         m_pEA;
-    Reference< XInterface >     m_xEAHold;
     OUString                    m_EventMethod;
     Reference< XAllListener >   m_AllListener;
 };
@@ -458,7 +456,6 @@ private:
 FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, const OUString& EventMethod_,
                                               const Reference< XAllListener >& AllListener_ )
         : m_pEA( pEA_ )
-        , m_xEAHold( *pEA_ )
         , m_EventMethod( EventMethod_ )
         , m_AllListener( AllListener_ )
 {
