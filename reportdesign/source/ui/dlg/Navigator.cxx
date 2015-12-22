@@ -911,6 +911,12 @@ void ONavigator::GetFocus()
         m_pImpl->m_pNavigatorTree->GrabFocus();
 }
 
+void ONavigator::dispose()
+{
+    m_pImpl->m_pNavigatorTree.disposeAndClear();
+    FloatingWindow::dispose();
+}
+
 } // rptui
 
 

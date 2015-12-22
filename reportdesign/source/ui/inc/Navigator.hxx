@@ -38,6 +38,7 @@ namespace rptui
 
         // window
         virtual void GetFocus() override;
+        virtual void dispose() override;
     };
 
 } // namespace rptui
