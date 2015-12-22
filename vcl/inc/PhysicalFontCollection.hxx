@@ -65,9 +65,6 @@ public:
     PhysicalFontFamily*     FindByTokenNames(const OUString& rTokenStr) const;
     PhysicalFontFamily*     FindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;
-protected:
-    PhysicalFontFamily*     FindDefaultFont() const;
-
 private:
     friend class WinGlyphFallbackSubstititution;
     mutable bool            mbMatchData;    // true if matching attributes are initialized
@@ -87,6 +84,8 @@ private:
     PhysicalFontFamily*     ImplFindByAliasName(const OUString& rSearchName,
                                                 const OUString& rShortName) const;
     PhysicalFontFamily*     ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
+
+    PhysicalFontFamily*     FindDefaultFont() const;
 
     void                    InitMatchData() const;
 };
