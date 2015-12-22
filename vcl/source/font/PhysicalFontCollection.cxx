@@ -379,7 +379,7 @@ PhysicalFontFamily *PhysicalFontCollection::FindOrCreateFamily( const OUString &
     return pFoundData;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::ImplFindByTokenNames(const OUString& rTokenStr) const
+PhysicalFontFamily* PhysicalFontCollection::FindByTokenNames(const OUString& rTokenStr) const
 {
     PhysicalFontFamily* pFoundData = nullptr;
 
@@ -886,23 +886,23 @@ PhysicalFontFamily* PhysicalFontCollection::FindDefaultFont() const
         const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
         LanguageTag aLanguageTag( OUString( "en"));
         OUString aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS_UNICODE );
-        pFoundData = ImplFindByTokenNames( aFontname );
+        pFoundData = FindByTokenNames( aFontname );
 
         if( pFoundData )
             return pFoundData;
 
         aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS );
-        pFoundData = ImplFindByTokenNames( aFontname );
+        pFoundData = FindByTokenNames( aFontname );
         if( pFoundData )
             return pFoundData;
 
         aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SERIF );
-        pFoundData = ImplFindByTokenNames( aFontname );
+        pFoundData = FindByTokenNames( aFontname );
         if( pFoundData )
             return pFoundData;
 
         aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::FIXED );
-        pFoundData = ImplFindByTokenNames( aFontname );
+        pFoundData = FindByTokenNames( aFontname );
         if( pFoundData )
             return pFoundData;
     }
@@ -1189,7 +1189,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindByFont( FontSelectPattern& rFSD 
             aSearchName = "OpenSymbol";
         else
             aSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
-        PhysicalFontFamily* pFoundData = ImplFindByTokenNames( aSearchName );
+        PhysicalFontFamily* pFoundData = FindByTokenNames( aSearchName );
         if( pFoundData )
             return pFoundData;
     }
