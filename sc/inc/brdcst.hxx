@@ -31,7 +31,7 @@ class ScHint : public SfxSimpleHint
     ScAddress   aAddress;
 
 public:
-    ScHint( sal_uLong n, const ScAddress& a );
+    ScHint( sal_uInt32 n, const ScAddress& a );
     const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
 };

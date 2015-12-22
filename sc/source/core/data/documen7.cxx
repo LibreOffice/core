@@ -94,7 +94,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     }
 }
 
-void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint, bool bBroadcastSingleBroadcasters )
+void ScDocument::BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool bBroadcastSingleBroadcasters )
 {
     ClearFormulaContext();
 
@@ -591,7 +591,7 @@ bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
     The next is broadcasted again, and so on.
     View initiates Interpret.
  */
-void ScDocument::TrackFormulas( sal_uLong nHintId )
+void ScDocument::TrackFormulas( sal_uInt32 nHintId )
 {
 
     if ( pFormulaTrack )

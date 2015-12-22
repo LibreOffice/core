@@ -282,7 +282,7 @@ ScBroadcastAreas::iterator ScBroadcastAreaSlot::FindBroadcastArea(
 
 namespace {
 
-void broadcastRangeByCell( SvtBroadcaster& rBC, const ScRange& rRange, sal_uLong nHint )
+void broadcastRangeByCell( SvtBroadcaster& rBC, const ScRange& rRange, sal_uInt32 nHint )
 {
     ScHint aHint(nHint, ScAddress());
     ScAddress& rPos = aHint.GetAddress();
@@ -303,7 +303,7 @@ void broadcastRangeByCell( SvtBroadcaster& rBC, const ScRange& rRange, sal_uLong
 
 }
 
-bool ScBroadcastAreaSlot::AreaBroadcast( const ScRange& rRange, sal_uLong nHint )
+bool ScBroadcastAreaSlot::AreaBroadcast( const ScRange& rRange, sal_uInt32 nHint )
 {
     if (aBroadcastAreaTbl.empty())
         return false;
@@ -842,7 +842,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea(
     }
 }
 
-bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScRange& rRange, sal_uLong nHint )
+bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScRange& rRange, sal_uInt32 nHint )
 {
     bool bBroadcasted = false;
     SCTAB nEndTab = rRange.aEnd.Tab();

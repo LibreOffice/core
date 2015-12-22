@@ -1909,7 +1909,7 @@ public:
                          */
     void                Broadcast( const ScHint& rHint );
 
-    void BroadcastCells( const ScRange& rRange, sal_uLong nHint, bool bBroadcastSingleBroadcasters = true );
+    void BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool bBroadcastSingleBroadcasters = true );
     void BroadcastRefMoved( const sc::RefMovedHint& rHint );
 
                         /// only area, no cell broadcast
@@ -1952,7 +1952,7 @@ public:
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
-    void                TrackFormulas( sal_uLong nHintId = SC_HINT_DATACHANGED );
+    void                TrackFormulas( sal_uInt32 nHintId = SC_HINT_DATACHANGED );
     bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;
     HardRecalcState     GetHardRecalcState() { return eHardRecalcState; }

@@ -75,7 +75,7 @@ void ScColumn::Broadcast( SCROW nRow )
     pDocument->Broadcast(aHint);
 }
 
-void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, sal_uLong nHint )
+void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, sal_uInt32 nHint )
 {
     if (rRows.empty())
         return;
