@@ -22,7 +22,6 @@
 #include "dbastrings.hrc"
 
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <cppuhelper/weak.hxx>
 
@@ -187,10 +186,6 @@ IMPL_LINK_TYPED( OInterceptor, OnDispatch, void*, _pDispatcher, void )
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(pHelper->aURL, "_self", 0 );
             if ( xDispatch.is() )
             {
-                Reference< css::document::XDocumentEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
-                if ( xEvtB.is() )
-                    xEvtB->removeDocumentEventListener(this);
-
                 Reference< XInterface > xKeepContentHolderAlive( *m_pContentHolder );
                 xDispatch->dispatch( pHelper->aURL,pHelper->aArguments);
             }
@@ -240,7 +235,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVE];
         aStateEvent.FeatureDescriptor = "Update";
-        aStateEvent.IsEnabled = m_pContentHolder != nullptr && m_pContentHolder->isModified();
+        aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
 
         Control->statusChanged(aStateEvent);
@@ -251,9 +246,6 @@ void SAL_CALL OInterceptor::addStatusListener(
         }
 
         m_pStatCL->addInterface(_URL.Complete,Control);
-        Reference< css::document::XDocumentEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
-        if ( xEvtB.is() )
-            xEvtB->addDocumentEventListener(this);
     }
     else
     {
@@ -393,50 +385,6 @@ void SAL_CALL OInterceptor::setMasterDispatchProvider(
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_xMasterDispatchProvider = NewSupplier;
-}
-
-void SAL_CALL OInterceptor::documentEventOccured( const css::document::DocumentEvent& Event ) throw (css::uno::RuntimeException, std::exception)
-{
-    osl::ResettableMutexGuard _rGuard(m_aMutex);
-    if ( m_pStatCL &&   Event.EventName == "OnModifyChanged" )
-    {
-        OInterfaceContainerHelper* pListener = m_pStatCL->getContainer(m_aInterceptedURL[DISPATCH_SAVE]);
-        if ( pListener )
-        {
-            FeatureStateEvent aEvt;
-            aEvt.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVE];
-            aEvt.FeatureDescriptor = "Update";
-            Reference<XModifiable> xModel(Event.Source,UNO_QUERY);
-            aEvt.IsEnabled = xModel.is() && xModel->isModified();
-            aEvt.Requery = sal_False;
-
-            Sequence< Reference< XInterface > > aListenerSeq = pListener->getElements();
-
-            const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();
-            const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength();
-
-            _rGuard.clear();
-            while( pxInt > pxIntBegin )
-            {
-                try
-                {
-                    while( pxInt > pxIntBegin )
-                    {
-                        --pxInt;
-                        static_cast< XStatusListener* >( pxInt->get() )->statusChanged(aEvt);
-                    }
-                }
-                catch( RuntimeException& )
-                {
-                }
-            }
-            _rGuard.reset();
-        }
-    }
-}
-
-void SAL_CALL OInterceptor::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
-{
 }
 
 }   // namespace dbaccess

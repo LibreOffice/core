@@ -1320,7 +1320,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             {
                 SfxBindings& rBind = GetBindings();
                 rBind.Invalidate( SID_DOC_MODIFIED );
-                rBind.Invalidate( SID_SAVEDOC );
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
                 break;
