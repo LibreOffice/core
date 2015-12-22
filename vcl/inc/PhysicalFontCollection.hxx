@@ -65,8 +65,6 @@ public:
     PhysicalFontFamily*     FindByTokenNames(const OUString& rTokenStr) const;
 
 protected:
-    void                    InitMatchData() const;
-
     PhysicalFontFamily*     ImplFindByAliasName(const OUString& rSearchName,
                                                 const OUString& rShortName) const;
     PhysicalFontFamily*     ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
@@ -90,6 +88,8 @@ private:
     mutable int             mnFallbackCount;
 
     PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
+
+    void                    InitMatchData() const;
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
