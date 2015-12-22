@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_3e2522ab",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_abd1d2fd",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_8bce8e58",
         "filename": "sc/inc/helpids.h",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-21T20:24:05Z",
       "side": 1,
       "message": "Why shorten to _AD and _ML suffix instead of using at least _ADD and _MUL?",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9e3a4ecc",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_8bce8e58",
       "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_1e265eba",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_cbd89620",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_2b04c27c",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2015-12-21T20:24:05Z",
       "side": 1,
       "message": "Use SetError( errNoValue) instead.",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_fe2a7a7d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4430,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_2b04c27c",
       "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_5e20e69b",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4455,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_0b09fe95",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_abf8b27d",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 6
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_7e3e8ab9",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_abf8b27d",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_cbeff6ae",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 6
@@ -115,6 +223,24 @@
       "writtenOn": "2015-12-21T20:24:05Z",
       "side": 1,
       "message": "Please don\u0027t use C-style casts use static_cast\u003cdouble\u003e() instead. (several occurrences in this file)",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_be5f520d",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_cbeff6ae",
       "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -144,6 +270,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_5ea58602",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "As these are (re)filled approx. a thousand times during calculation of alpha, beta and gamma parameters, I chose the simplest (fastest) way to store the data.\nI now have added a destructor to the class.",
+      "parentUuid": "dab17558_8bf5ee84",
+      "range": {
+        "startLine": 293,
+        "startChar": 0,
+        "endLine": 296,
+        "endChar": 37
+      },
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_ebf2ba99",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 6
@@ -155,6 +305,24 @@
       "writtenOn": "2015-12-21T20:24:05Z",
       "side": 1,
       "message": "That leaks. Why not a vector\u003cdouble\u003e?",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_dee7b63e",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Changed to vector, there are no performance reasons here for an array of doubles.",
+      "parentUuid": "dab17558_ebf2ba99",
       "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -178,6 +346,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_1ed01e53",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Although fPILevel is only assigned a value in case of eETSType being etsPIAdd and etsPIMult and only then sETSCalc.GetPredictionIntervals() can be called, I have given fPILevel a default (dummy) value.",
+      "parentUuid": "dab17558_ab3f1224",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_4b030674",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 6
@@ -189,6 +375,24 @@
       "writtenOn": "2015-12-21T20:24:05Z",
       "side": 1,
       "message": "umm.. where did you get these settings? Please use\n\n /* vim:set shiftwidth\u003d4 softtabstop\u003d4 expandtab: */",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9ec40e93",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "Ohh, I worked one sunday afternoon on the Windows laptop of my wife. It must have crept in there.\nI have removed the nu and put the 2\u0027s back to 4",
+      "parentUuid": "dab17558_4b030674",
       "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -212,6 +416,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_7e37aae3",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "There are 5 new Excel2016 functions.\nThe other 3 new functions do not exist in Excel 2016.",
+      "parentUuid": "dab17558_2b2b22ed",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_0b30de55",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 6
@@ -223,6 +445,24 @@
       "writtenOn": "2015-12-21T20:24:05Z",
       "side": 1,
       "message": "These are only 5 entries, but we have 8 new functions..?",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1e4dbe72",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-12-22T12:44:37Z",
+      "side": 1,
+      "message": "These 5 are new Excel 2016 functions, the other 3 don\u0027t exist in Excel.",
+      "parentUuid": "dab17558_0b30de55",
       "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
