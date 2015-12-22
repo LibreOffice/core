@@ -25,7 +25,6 @@ StyleSettings::SetSpinSize(long)
 StyleSettings::SetTitleHeight(long)
 StyleSettings::SetUseFlatBorders(bool)
 StyleSettings::SetUseFlatMenus(bool)
-SvpSalFrame::enableDamageTracker(bool)
 SvpSalInstance::PostedEventsInQueue()
 SvtAccessibilityOptions::IsModified() const
 SvtListener::IsListening(SvtBroadcaster&) const

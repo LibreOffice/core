@@ -29,4 +29,5 @@ comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUStrin
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 FontCharMap::GetDefaultMap(bool)
 OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
+SvpSalFrame::enableDamageTracker(bool)
 
