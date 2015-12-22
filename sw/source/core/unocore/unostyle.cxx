@@ -260,7 +260,7 @@ class SwXStyle : public cppu::WeakImplHelper
     bool                    m_bIsDescriptor  : 1;
     bool                    m_bIsConditional : 1;
     OUString                m_sParentStyleName;
-    SwStyleProperties_Impl* m_pPropertiesImpl;
+    std::unique_ptr<SwStyleProperties_Impl> m_pPropertiesImpl;
 
     void    ApplyDescriptorProperties();
 protected:
@@ -270,7 +270,7 @@ protected:
     SfxStyleSheetBasePool*  GetBasePool() {return m_pBasePool;}
 
     void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
-    SwStyleProperties_Impl* GetPropImpl(){return m_pPropertiesImpl;}
+    SwStyleProperties_Impl& GetPropImpl(){return *m_pPropertiesImpl;}
     css::uno::Reference< css::beans::XPropertySet > mxStyleData;
     css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
 
@@ -1156,7 +1156,7 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, bool bConditional) :
         default:
             ;
     }
-    m_pPropertiesImpl = new SwStyleProperties_Impl(aSwMapProvider.GetPropertySet(nMapId)->getPropertyMap());
+    m_pPropertiesImpl = std::unique_ptr<SwStyleProperties_Impl>(new SwStyleProperties_Impl(aSwMapProvider.GetPropertySet(nMapId)->getPropertyMap()));
 }
 
 SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
@@ -1192,7 +1192,7 @@ SwXStyle::~SwXStyle()
     SolarMutexGuard aGuard;
     if(m_pBasePool)
         EndListening(*m_pBasePool);
-    delete m_pPropertiesImpl;
+    m_pPropertiesImpl.reset();
     if(GetRegisteredIn())
         GetRegisteredIn()->Remove( this );
 }
@@ -3463,7 +3463,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
         }
         else if(IsDescriptor())
         {
-            if(!GetPropImpl()->SetProperty(rPropName, pValues[nProp]))
+            if(!GetPropImpl().SetProperty(rPropName, pValues[nProp]))
                 throw lang::IllegalArgumentException();
         }
         else
@@ -3764,7 +3764,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
         else if(IsDescriptor())
         {
             const uno::Any* pAny = nullptr;
-            GetPropImpl()->GetProperty(rPropName, pAny);
+            GetPropImpl().GetProperty(rPropName, pAny);
             if (!pAny->hasValue())
             {
                 SwStyleProperties_Impl::GetProperty(rPropName, mxStyleData, pRet[nProp]);
