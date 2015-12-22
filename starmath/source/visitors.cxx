@@ -1319,7 +1319,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmFontNode* pNode )
  * n6 -> n7 [label="0"];
  * n7 [label="SmTextNode: i"];
  * n5 -> n8 [label="1"];
- * n8 [label="SmMathSymbolNode: ∣"];
+ * n8 [label="SmMathSymbolNode: &#124;"]; // Unicode "VERTICAL LINE"
  * n5 -> n9 [label="2"];
  * n9 [label="SmExpressionNode"];
  * n9 -> n10 [label="0"];
@@ -1327,9 +1327,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmFontNode* pNode )
  * n10 -> n11 [label="0"];
  * n11 [label="SmTextNode: i"];
  * n10 -> n12 [label="1"];
- * n12 [label="SmMathSymbolNode: ∈"];
+ * n12 [label="SmMathSymbolNode: &#8712;"]; // Unicode "ELEMENT OF"
  * n10 -> n13 [label="2"];
- * n13 [label="SmMathSymbolNode: ℤ"];
+ * n13 [label="SmMathSymbolNode: &#8484;"]; // Unicode "DOUBLE-STRUCK CAPITAL Z"
  * n3 -> n14 [label="2"];
  * n14 [label="SmMathSymbolNode: }"];
  * }
