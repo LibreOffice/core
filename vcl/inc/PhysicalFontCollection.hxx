@@ -48,7 +48,6 @@ public:
     PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
     PhysicalFontFamily*     FindOrCreateFamily( const OUString &rFamilyName );
     PhysicalFontFamily*     ImplFindByFont( FontSelectPattern& ) const;
-    PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
 
     // suggest fonts for glyph fallback
     PhysicalFontFamily*    GetGlyphFallbackFont( FontSelectPattern&,
@@ -89,6 +88,8 @@ private:
     void                    InitGenericGlyphFallback() const;
     mutable PhysicalFontFamily**  mpFallbackList;
     mutable int             mnFallbackCount;
+
+    PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
