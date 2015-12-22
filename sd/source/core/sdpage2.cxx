@@ -560,7 +560,7 @@ void SdPage::setTransitionDuration ( double fTranstionDuration )
 OString SdPage::stringify() const
 {
     OStringBuffer aString(100);
-    aString.append((sal_Int32)mePageKind).append((sal_Int32)meAutoLayout).append(mbSelected).append((sal_Int32)mePresChange).append(mfTime).append(mbSoundOn).append(mbExcluded).
+    aString.append((sal_Int32)mePageKind).append((sal_Int32)meAutoLayout).append((sal_Int32)mePresChange).append(mfTime).append(mbSoundOn).append(mbExcluded).
              append(OUStringToOString( maLayoutName, RTL_TEXTENCODING_UTF8 )).
              append(OUStringToOString(maSoundFile, RTL_TEXTENCODING_UTF8 )).
              append(mbLoopSound).append(mbStopSound).

@@ -1432,7 +1432,7 @@ const Rectangle& SdrObjCustomShape::GetLogicRect() const
 // state of the ResizeShapeToFitText flag to correctly set TextMinFrameWidth/Height
 void SdrObjCustomShape::AdaptTextMinSize()
 {
-    if(!pModel || !pModel->IsPasteResize())
+    if (!pModel || (!pModel->IsCreatingDataObj() && !pModel->IsPasteResize()))
     {
         const bool bResizeShapeToFitText(static_cast< const SdrOnOffItem& >(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue());
         SfxItemSet aSet(
