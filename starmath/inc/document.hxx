@@ -32,6 +32,7 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/mathml/import.hxx>
 
+#include <memory>
 #include <set>
 
 #include "format.hxx"
@@ -102,7 +103,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     VclPtr<Printer>     pTmpPrinter;    //ditto
     sal_uInt16          nModifyCount;
     bool                bIsFormulaArranged;
-    SmCursor           *pCursor;
+    std::unique_ptr<SmCursor> pCursor;
     std::set< OUString >    aUsedSymbols;   // to export used symbols only when saving
 
 
@@ -219,7 +220,7 @@ public:
     /** True, if cursor have previously been requested and thus
      * has some sort of position.
      */
-    bool        HasCursor() { return pCursor != nullptr; }
+    bool        HasCursor();
 };
 
 #endif
