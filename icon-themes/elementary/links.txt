@@ -622,3 +622,13 @@ sw/res/styfamnu.png sw/imglst/sf05.png
 vcl/res/closedoc.png sfx2/res/closedoc.png
 vcl/source/src/msgbox.png vcl/res/msgbox.png
 xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
+
+# Mail merge
+cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
+cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
+cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
+cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png
+cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
+cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
+cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
+cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
