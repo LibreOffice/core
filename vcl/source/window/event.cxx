@@ -249,8 +249,9 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
             comphelper::ScopeGuard aGuard(
                 [&rWindowImpl]()
                 {
-                    if (--rWindowImpl.mnChildEventListenersIteratingCount == 0)
-                    rWindowImpl.maChildEventListenersDeleted.clear();
+                    rWindowImpl.mnChildEventListenersIteratingCount--;
+                    if (rWindowImpl.mnChildEventListenersIteratingCount == 0)
+                        rWindowImpl.maChildEventListenersDeleted.clear();
                 }
             );
             for ( Link<VclWindowEvent&,void>& rLink : aCopy )
@@ -258,7 +259,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
                 if (aDelData.IsDead())
                     return;
                 // Check this hasn't been removed in some re-enterancy scenario fdo#47368.
-                if( rWindowImpl.maChildEventListenersDeleted.find(rLink) != rWindowImpl.maChildEventListenersDeleted.end() )
+                if( rWindowImpl.maChildEventListenersDeleted.find(rLink) == rWindowImpl.maChildEventListenersDeleted.end() )
                     rLink.Call( aEvent );
             }
         }
