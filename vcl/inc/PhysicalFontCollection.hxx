@@ -63,10 +63,9 @@ public:
     ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
 
     PhysicalFontFamily*     FindByTokenNames(const OUString& rTokenStr) const;
-
+    PhysicalFontFamily*     FindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
+                                             FontItalic, const OUString& rSearchFamily) const;
 protected:
-    PhysicalFontFamily*     ImplFindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
-                                                 FontItalic, const OUString& rSearchFamily) const;
     PhysicalFontFamily*     FindDefaultFont() const;
 
 private:
