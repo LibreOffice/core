@@ -74,7 +74,6 @@ class ImpPDFTabLinksPage;
 class ImpPDFTabDialog : public SfxTabDialog
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext> mxContext;
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
 

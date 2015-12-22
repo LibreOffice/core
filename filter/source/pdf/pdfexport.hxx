@@ -92,8 +92,6 @@ private:
     bool                mbCanCopyOrExtract;
     bool                mbCanExtractForAccessibility;
 
-    SvtGraphicFill          maCacheFill;
-
 //--->i56629
     bool                mbExportRelativeFsysLinks;
     sal_Int32               mnDefaultLinkAction;

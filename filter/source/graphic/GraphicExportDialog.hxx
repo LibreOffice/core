@@ -45,7 +45,6 @@ class GraphicExportDialog : public cppu::WeakImplHelper
     Sequence<PropertyValue>         maMediaDescriptor;
     Sequence<PropertyValue>         maFilterDataSequence;
     Reference<XComponent>           mxSourceDocument;
-    Reference<XComponentContext>    mxContext;
 
     OUString   maDialogTitle;
     FieldUnit  meFieldUnit;

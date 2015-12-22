@@ -46,7 +46,6 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext >        mxContext;
     css::uno::Reference< css::drawing::XGraphicExportFilter > mxGraphicExporter;
-    css::uno::Reference< css::task::XInteractionHandler >     mxInteractionHandler;
 };
 
 #endif

@@ -40,7 +40,6 @@ class SVGDialog : public ::svt::OGenericUnoDialog,
 {
 private:
 
-    ::std::unique_ptr< ResMgr >                     mapResMgr;
     css::uno::Sequence< css::beans::PropertyValue > maMediaDescriptor;
     css::uno::Sequence< css::beans::PropertyValue > maFilterData;
     css::uno::Reference< css::lang::XComponent >    mxSrcDoc;

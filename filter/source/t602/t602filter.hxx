@@ -96,7 +96,6 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
         css::beans::XPropertyAccess
 >
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
     css::lang::Locale meLocale;
     ResMgr *mpResMgr;
     bool OptionsDlg();
@@ -138,7 +137,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
                                         css::uno::RuntimeException, std::exception) override;
 
 public:
-    explicit T602ImportFilterDialog(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
+    explicit T602ImportFilterDialog();
 
 };
 

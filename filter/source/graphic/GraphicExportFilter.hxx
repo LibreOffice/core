@@ -41,8 +41,6 @@ class GraphicExportFilter :
     public cppu::WeakImplHelper < XFilter, XExporter, XInitialization >
 {
     Reference<XComponent>               mxDocument;
-    Reference<XComponentContext>        mxContext;
-    Reference<task::XStatusIndicator>   mxStatusIndicator;
     Reference<io::XOutputStream>        mxOutputStream;
 
     void gatherProperties( const Sequence<PropertyValue>& rDescriptor );

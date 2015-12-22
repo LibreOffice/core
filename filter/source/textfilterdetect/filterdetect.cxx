@@ -116,8 +116,7 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
 
 }
 
-PlainTextFilterDetect::PlainTextFilterDetect(const uno::Reference<uno::XComponentContext>& xCxt) :
-    mxCxt(xCxt) {}
+PlainTextFilterDetect::PlainTextFilterDetect() {}
 
 PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
@@ -234,10 +233,10 @@ uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation(css::uno::XComponentContext* component,
-                                                                           css::uno::Sequence<css::uno::Any> const &)
+com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation(css::uno::XComponentContext* ,
+                                                                   css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new PlainTextFilterDetect(component));
+    return cppu::acquire(new PlainTextFilterDetect);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -912,8 +912,8 @@ Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Referenc
     return static_cast<cppu::OWeakObject*>(new T602ImportFilter( rSMgr ));
 }
 
-T602ImportFilterDialog::T602ImportFilterDialog(const css::uno::Reference<css::lang::XMultiServiceFactory > &r ) :
-    mxMSF( r ), mpResMgr( nullptr ) {}
+T602ImportFilterDialog::T602ImportFilterDialog() :
+    mpResMgr( nullptr ) {}
 
 T602ImportFilterDialog::~T602ImportFilterDialog()
 {
@@ -1192,10 +1192,10 @@ Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL T602ImportFilterDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SAL_CALL T602ImportFilterDialog_createInstance( const Reference< XMultiServiceFactory > & )
     throw( Exception )
 {
-    return static_cast<cppu::OWeakObject*>(new T602ImportFilterDialog( rSMgr ));
+    return static_cast<cppu::OWeakObject*>(new T602ImportFilterDialog);
 }
 
 }
