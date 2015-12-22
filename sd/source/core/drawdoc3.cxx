@@ -449,9 +449,9 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         // this will make copied masters to differ from the originals,
         // and thus InsertBookmarkAsPage_FindDuplicateLayouts will
         // duplicate masters on insert to same document
-        bool bIsClipBoard = (SD_MOD()->pTransferClip &&
-                             SD_MOD()->pTransferClip->GetWorkDocument() == this);
-        if (!bIsClipBoard)
+        bTransportContainer = (SD_MOD()->pTransferClip &&
+                               SD_MOD()->pTransferClip->GetWorkDocument() == this);
+        if (!bTransportContainer)
         {
             if (rBookmarkList.empty())
                 bScaleObjects = pRefPage->IsScaleObjects();

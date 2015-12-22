@@ -199,14 +199,14 @@ protected:
     bool                bInfoChanged:1;
     bool                bPagNumsDirty:1;
     bool                bMPgNumsDirty:1;
-    bool                bPageNotValid:1;  // TRUE=Doc is only object container. Page is invalid.
+    bool                bTransportContainer:1;  // doc is temporary object container, no display (e.g. clipboard)
     bool                bSavePortable:1;  // save metafiles portably
     bool                bNoBitmapCaching:1;   // cache bitmaps for screen output
     bool                bReadOnly:1;
     bool                bTransparentTextFrames:1;
     bool                bSaveCompressed:1;
     bool                bSwapGraphics:1;
-    bool                bPasteResize:1; // Objects are beingresized due to Paste with different MapMode
+    bool                bPasteResize:1; // Objects are being resized due to Paste with different MapMode
     bool                bSaveOLEPreview:1;      // save preview metafile of OLE objects
     bool                bSaveNative:1;
     bool                bStarDrawPreviewMode:1;
@@ -275,6 +275,8 @@ private:
     css::uno::Reference< css::uno::XInterface > mxUnoModel;
 
 public:
+    SVX_DLLPRIVATE virtual bool IsCreatingDataObj() const { return false; }
+    bool     IsTransportContainer() const { return bTransportContainer; }
     bool     IsPasteResize() const        { return bPasteResize; }
     void     SetPasteResize(bool bOn) { bPasteResize=bOn; }
     // If a custom Pool is put here, the class will call methods

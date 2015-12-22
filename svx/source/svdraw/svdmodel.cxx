@@ -148,7 +148,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     bInfoChanged=false;
     bPagNumsDirty=false;
     bMPgNumsDirty=false;
-    bPageNotValid=false;
+    bTransportContainer = false;
     bSavePortable=false;
     bSaveCompressed=false;
     bSaveNative=false;
