@@ -157,3 +157,13 @@ cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
 # anchor menu
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
+
+# Mail merge
+cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
+cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
+cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
+cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png
+cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
+cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
+cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
+cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png

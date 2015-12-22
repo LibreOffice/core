@@ -463,6 +463,16 @@ cmd/lc_hfixedline.png cmd/lc_line.png
 cmd/sc_xlinestyle.png cmd/sc_linestyle.png
 cmd/sc_hfixedline.png cmd/sc_line.png
 
+# Mail merge
+cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
+cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
+cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
+cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png
+cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
+cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
+cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
+cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
+
 # Arrows
 cmd/lc_arrowstoolbox.png cmd/lc_linearrowend.png
 cmd/sc_arrowstoolbox.png cmd/sc_linearrowend.png
