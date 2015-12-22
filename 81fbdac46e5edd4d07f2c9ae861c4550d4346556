@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_7eaccaed",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-22T10:55:11Z",
+      "side": 1,
+      "message": "is the checking of pMod against null still necessary?",
+      "revId": "81fbdac46e5edd4d07f2c9ae861c4550d4346556",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
