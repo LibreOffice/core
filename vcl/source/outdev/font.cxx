@@ -1283,7 +1283,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     if( !pEntry ) // no direct cache hit
     {
         // find the best matching logical font family and update font selector accordingly
-        pFontFamily = pFontList->ImplFindByFont( aFontSelData );
+        pFontFamily = pFontList->FindByFont( aFontSelData );
         DBG_ASSERT( (pFontFamily != nullptr), "ImplFontCache::Get() No logical font found!" );
         if( pFontFamily )
             aFontSelData.maSearchName = pFontFamily->GetSearchName();

@@ -985,7 +985,7 @@ ImplGetDevSizeList* PhysicalFontCollection::GetDevSizeList( const OUString& rFon
     return pGetDevSizeList;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& rFSD ) const
+PhysicalFontFamily* PhysicalFontCollection::FindByFont( FontSelectPattern& rFSD ) const
 {
     // give up if no fonts are available
     if( !Count() )
