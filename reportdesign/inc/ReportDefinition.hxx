@@ -25,6 +25,7 @@
 #include "ReportHelperDefines.hxx"
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/frame/XModule.hpp>
@@ -44,9 +45,9 @@
 #include <cppuhelper/propertysetmixin.hxx>
 #include <svx/unomod.hxx>
 
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -64,8 +65,9 @@ namespace utl
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::comphelper::PartialWeakComponentImplHelper13 <   ::com::sun::star::report::XReportDefinition
+    typedef ::comphelper::PartialWeakComponentImplHelper14<    ::com::sun::star::report::XReportDefinition
                                                     ,   ::com::sun::star::document::XEventBroadcaster
+                                                    ,   ::com::sun::star::document::XDocumentEventBroadcaster
                                                     ,   ::com::sun::star::lang::XServiceInfo
                                                     ,   ::com::sun::star::frame::XModule
                                                     ,   ::com::sun::star::lang::XUnoTunnel
@@ -349,6 +351,11 @@ namespace reportdesign
 
         // document::XEventListener
         void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+
+        // document::XDocumentEventBroadcaster
+        virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& rListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& rListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL notifyDocumentEvent( const OUString& rEventName, const css::uno::Reference< css::frame::XController2 >& rViewController, const css::uno::Any& rSupplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XUIConfigurationManagerSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
