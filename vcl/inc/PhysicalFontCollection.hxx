@@ -47,7 +47,7 @@ public:
     // find the device font
     PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
     PhysicalFontFamily*     FindOrCreateFamily( const OUString &rFamilyName );
-    PhysicalFontFamily*     ImplFindByFont( FontSelectPattern& ) const;
+    PhysicalFontFamily*     FindByFont( FontSelectPattern& ) const;
 
     // suggest fonts for glyph fallback
     PhysicalFontFamily*    GetGlyphFallbackFont( FontSelectPattern&,
