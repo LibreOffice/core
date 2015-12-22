@@ -111,7 +111,7 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         pXFContentContainer = m_pPara->GetXFContainer();
         //delete the additional blank para
         XFParagraph* pCurrPara = m_pPara->GetFribs().GetXFPara();
-        if(!pCurrPara->HasContents())
+        if (pXFContentContainer && !pCurrPara->HasContents())
         {
             if(pXFContentContainer->GetLastContent() == pCurrPara)
             {
@@ -142,18 +142,20 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
         sChangeID = pChangeMgr->GetChangeID(this);
-        if (!sChangeID.isEmpty())
+        if (!sChangeID.isEmpty() && pXFContentContainer)
         {
             XFChangeStart* pChangeStart = new XFChangeStart;
             pChangeStart->SetChangeID(sChangeID);
             pXFContentContainer->Add(pChangeStart);
         }
     }
-    pSuper->XFConvert(pXFContentContainer);
+
+    if (pXFContentContainer)
+        pSuper->XFConvert(pXFContentContainer);
 
     if(m_bRevisionFlag)
     {
-        if (!sChangeID.isEmpty())
+        if (!sChangeID.isEmpty() && pXFContentContainer)
         {
             XFChangeEnd* pChangeEnd = new XFChangeEnd;
             pChangeEnd->SetChangeID(sChangeID);
