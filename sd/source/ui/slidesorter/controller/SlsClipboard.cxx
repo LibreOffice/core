@@ -432,7 +432,6 @@ void Clipboard::CreateSlideTransferable (
 
         pDocument->CreatingDataObj (pTransferable);
         pTransferable->SetWorkDocument(pDocument->AllocSdDrawDocument());
-        pDocument->CreatingDataObj (nullptr);
         TransferableObjectDescriptor aObjDesc;
         pTransferable->GetWorkDocument()->GetDocSh()
             ->FillTransferableObjectDescriptor (aObjDesc);
@@ -465,6 +464,8 @@ void Clipboard::CreateSlideTransferable (
         }
         else
             pTransferable->CopyToClipboard (pActionWindow);
+
+        pDocument->CreatingDataObj(nullptr);
     }
 }
 
