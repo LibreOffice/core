@@ -489,17 +489,19 @@ Size SmDocShell::GetSize()
 }
 
 void SmDocShell::InvalidateCursor(){
-    delete pCursor;
-    pCursor = nullptr;
+    pCursor.reset();
 }
 
 SmCursor& SmDocShell::GetCursor(){
     if(!pCursor)
-        pCursor = new SmCursor(pTree, this);
+        pCursor.reset(new SmCursor(pTree, this));
     return *pCursor;
 }
 
-
+bool SmDocShell::HasCursor()
+{
+    return pCursor.get() != nullptr;
+}
 
 SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
 {
@@ -656,8 +658,6 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     , nModifyCount(0)
     , bIsFormulaArranged(false)
 {
-    pCursor = nullptr;
-
     SetPool(&SfxGetpApp()->GetPool());
 
     SmModule *pp = SM_MOD();
@@ -676,10 +676,7 @@ SmDocShell::~SmDocShell()
     EndListening(aFormat);
     EndListening(*pp->GetConfig());
 
-
-    delete pCursor;
-    pCursor = nullptr;
-
+    pCursor.reset();
     delete pEditEngine;
     SfxItemPool::Free(pEditEngineItemPool);
     delete pTree;
