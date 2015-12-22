@@ -33,7 +33,6 @@ typedef std::shared_ptr<CellSequence_t> CellSequencePointer_t;
 typedef css::uno::Sequence<CellSequence_t> RowSequence_t;
 typedef std::shared_ptr<RowSequence_t> RowSequencePointer_t;
 typedef css::uno::Sequence<RowSequence_t> TableSequence_t;
-typedef std::shared_ptr<TableSequence_t> TableSequencePointer_t;
 
 typedef css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValues> >  CellPropertyValuesSeq_t;
 
@@ -67,7 +66,7 @@ class DomainMapperTableHandler
     DomainMapper_Impl&      m_rDMapper_Impl;
     CellSequencePointer_t   m_pCellSeq;
     RowSequencePointer_t    m_pRowSeq;
-    TableSequencePointer_t  m_pTableSeq;
+    TableSequence_t m_aTableSeq;
 
     css::uno::Reference< css::text::XTextRange >           m_xTableRange;
 
