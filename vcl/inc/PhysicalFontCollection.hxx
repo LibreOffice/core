@@ -65,7 +65,6 @@ public:
     PhysicalFontFamily*     FindByTokenNames(const OUString& rTokenStr) const;
 
 protected:
-    PhysicalFontFamily*     ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
     PhysicalFontFamily*     ImplFindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                                  FontItalic, const OUString& rSearchFamily) const;
     PhysicalFontFamily*     FindDefaultFont() const;
@@ -88,6 +87,7 @@ private:
     PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
     PhysicalFontFamily*     ImplFindByAliasName(const OUString& rSearchName,
                                                 const OUString& rShortName) const;
+    PhysicalFontFamily*     ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
 
     void                    InitMatchData() const;
 };
