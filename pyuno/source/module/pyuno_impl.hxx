@@ -26,6 +26,10 @@
 
 #include <Python.h>
 
+#if PY_VERSION_HEX < 0x02070000
+typedef long Py_hash_t;
+#endif
+
 //Must define PyVarObject_HEAD_INIT for Python 2.5 or older
 #ifndef PyVarObject_HEAD_INIT
 #define PyVarObject_HEAD_INIT(type, size)  PyObject_HEAD_INIT(type) size,

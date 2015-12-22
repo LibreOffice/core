@@ -325,9 +325,14 @@ sal_Int32 lcl_PyNumber_AsSal_Int32( PyObject *pObj )
 
     // Convert Python number to platform long, then check actual value against
     // bounds of sal_Int32
+#if PY_VERSION_HEX >= 0x02070000
     int nOverflow;
     long nResult = PyLong_AsLongAndOverflow( pObj, &nOverflow );
     if ( nOverflow || nResult > SAL_MAX_INT32 || nResult < SAL_MIN_INT32) {
+#else
+    long nResult = PyLong_AsLong( pObj );
+    if ( nResult > SAL_MAX_INT32 || nResult < SAL_MIN_INT32) {
+#endif
         PyErr_SetString( PyExc_IndexError, "Python int too large to convert to UNO long" );
         return -1;
     }
