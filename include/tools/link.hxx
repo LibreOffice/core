@@ -88,8 +88,14 @@ public:
     bool operator !() const { return !IsSet(); }
 
     bool operator <(Link const & other) const {
-        return reinterpret_cast<sal_uIntPtr>(function_)
-            < reinterpret_cast<sal_uIntPtr>(other.function_);
+        sal_uIntPtr ptr1 = reinterpret_cast<sal_uIntPtr>(function_);
+        sal_uIntPtr ptr2 = reinterpret_cast<sal_uIntPtr>(other.function_);
+        if (ptr1 < ptr2)
+            return true;
+        else if (ptr1 > ptr2)
+            return false;
+        else
+            return instance_ < other.instance_;
     };
 
     bool operator ==(Link const & other) const
