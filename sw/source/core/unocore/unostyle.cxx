@@ -258,11 +258,10 @@ class SwXStyle : public cppu::WeakImplHelper
     bool m_bIsDescriptor;
     bool m_bIsConditional;
     OUString m_sParentStyleName;
-    std::unique_ptr<SwStyleProperties_Impl> m_pPropertiesImpl;
 
 protected:
     SfxStyleSheetBasePool* m_pBasePool;
-    SwStyleProperties_Impl& GetPropImpl(){return *m_pPropertiesImpl;}
+    std::unique_ptr<SwStyleProperties_Impl> m_pPropertiesImpl;
     css::uno::Reference< css::beans::XPropertySet > mxStyleData;
     css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
 
@@ -1158,8 +1157,8 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
     m_eFamily(eFam),
     m_bIsDescriptor(false),
     m_bIsConditional(false),
-    m_pPropertiesImpl(nullptr),
-    m_pBasePool(&rPool)
+    m_pBasePool(&rPool),
+    m_pPropertiesImpl(nullptr)
 {
     if(!m_pBasePool)
         return;
@@ -3455,7 +3454,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
         }
         else if(IsDescriptor())
         {
-            if(!GetPropImpl().SetProperty(rPropName, pValues[nProp]))
+            if(!m_pPropertiesImpl->SetProperty(rPropName, pValues[nProp]))
                 throw lang::IllegalArgumentException();
         }
         else
@@ -3756,7 +3755,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
         else if(IsDescriptor())
         {
             const uno::Any* pAny = nullptr;
-            GetPropImpl().GetProperty(rPropName, pAny);
+            m_pPropertiesImpl->GetProperty(rPropName, pAny);
             if (!pAny->hasValue())
             {
                 SwStyleProperties_Impl::GetProperty(rPropName, mxStyleData, pRet[nProp]);
