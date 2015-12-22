@@ -137,7 +137,6 @@
 #include <PostItMgr.hxx>
 
 #include <svtools/langtab.hxx>
-#include <svtools/miscopt.hxx>
 #include <map>
 #include <set>
 #include <vector>
@@ -3233,9 +3232,6 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // directly in twips.
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     rEditWin.EnableMapMode(false);
-    // tdf#93154: in tiled rendering LO doesn't always detect changes
-    SvtMiscOptions aMiscOpt;
-    aMiscOpt.SetSaveAlwaysAllowed(true);
 }
 
 void SwXTextDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
