@@ -63,8 +63,6 @@ namespace dbaui
         VclPtr< ::svt::ListBoxControl>              m_pTableCell;
         VclPtr< ::svt::ListBoxControl>              m_pOrderCell;
 
-        OTableFieldDescRef                  m_pEmptyEntry;              // default entry in the list may reference more than once
-
         sal_Int32                           m_nMaxColumns;              // maximum number of columns in a Select-Statement
 
         OUString                            m_aFunctionStrings;

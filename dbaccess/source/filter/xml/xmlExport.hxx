@@ -108,7 +108,6 @@ class ODBExport : public SvXMLExport
     mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
-    mutable rtl::Reference < XMLPropertySetMapper >   m_xRowStylesPropertySetMapper;
 
     Reference<XPropertySet>                         m_xDataSource;
     ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;

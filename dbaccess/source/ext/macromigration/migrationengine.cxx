@@ -431,8 +431,7 @@ namespace dbmm
     {
     public:
         explicit DrawPageIterator( const Reference< XModel >& _rxDocument )
-            :m_xDocument( _rxDocument )
-            ,m_nPageCount( 0 )
+            :m_nPageCount( 0 )
             ,m_nCurrentPage( 0 )
         {
             Reference< XDrawPageSupplier > xSingle( _rxDocument, UNO_QUERY );
@@ -471,7 +470,6 @@ namespace dbmm
         }
 
     private:
-        const Reference< XModel >   m_xDocument;
         Reference< XDrawPage >      m_xSinglePage;
         Reference< XDrawPages >     m_xMultiPages;
         sal_Int32                   m_nPageCount;

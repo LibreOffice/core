@@ -63,7 +63,6 @@ private:
     TPropertyNameMap                                m_aQuerySettings;
     TPropertyNameMap                                m_aTablesSettings;
     TInfoSequence                                   m_aInfoSequence;
-    Reference< XComponent >                         m_xSrcDoc;
 
     mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;

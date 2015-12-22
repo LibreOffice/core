@@ -75,7 +75,6 @@ namespace dbaui
         SharedConnection                                      m_xConnection;  ///< dest conn
 
         std::shared_ptr<IUpdateHelper>                    m_pUpdateHelper;
-        css::uno::Reference< css::sdbc::XResultSet >          m_xResultSet;
         css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
         css::uno::Reference< css::uno::XComponentContext>     m_xContext;
         css::util::Date                                       m_aNullDate;

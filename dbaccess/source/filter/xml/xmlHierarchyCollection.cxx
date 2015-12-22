@@ -46,7 +46,6 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,const OUString& _sCollectionServiceName
                 ,const OUString& _sComponentServiceName) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
-    ,m_xParentContainer(_xParentContainer)
     ,m_sCollectionServiceName(_sCollectionServiceName)
     ,m_sComponentServiceName(_sComponentServiceName)
 {

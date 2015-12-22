@@ -90,7 +90,6 @@ namespace dbaccess
         css::uno::Reference< css::container::XNameAccess>         m_xConnectionTables;
         css::uno::Reference< css::container::XNameAccess>         m_xConnectionQueries;
         css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
-        css::uno::Reference< css::container::XNameAccess>         m_xColumns;
         css::uno::Reference< css::uno::XComponentContext>         m_aContext;
         css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
 

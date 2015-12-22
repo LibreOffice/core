@@ -39,7 +39,6 @@ namespace dbaxml
     {
     protected:
         mutable ::std::unique_ptr<XMLConstantsPropertyHandler>    m_pDisplayHandler;
-        mutable ::std::unique_ptr<XMLPropertyHandler>             m_pTextAlignHandler;
     public:
         OPropertyHandlerFactory();
         virtual ~OPropertyHandlerFactory();

@@ -47,7 +47,6 @@ namespace dbaccess
         css::uno::Sequence<sal_Bool>            m_aNullable;
         css::uno::Sequence<sal_Bool>            m_aSignedFlags;
         css::uno::Sequence<sal_Int32>           m_aColumnTypes;
-        ORowSetRow                              m_aInsertRow;
         OUString                                m_aComposedTableName;
         sal_Int32                               m_nMaxRows;
         bool                                    m_bInserted;

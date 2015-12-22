@@ -135,7 +135,6 @@ namespace dbaui
         // </properties>
         OUString                        m_sDataSourceName;  // the data source we're working for
         DataSourceHolder                m_aDataSource;
-        Reference< XModel >             m_xDocument;
         Reference< XNumberFormatter >   m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         sal_Int32                       m_nDocStartNumber;
         bool                            m_bSuspended;   // is true when the controller was already suspended
