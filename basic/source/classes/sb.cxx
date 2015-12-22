@@ -1014,21 +1014,6 @@ StarBASIC::~StarBASIC()
     clearUnoMethodsForBasic( this );
 }
 
-// Override new() operator, so that everyone can create a new instance
-void* StarBASIC::operator new( size_t n )
-{
-    if( n < sizeof( StarBASIC ) )
-    {
-        n = sizeof( StarBASIC );
-    }
-    return ::operator new( n );
-}
-
-void StarBASIC::operator delete( void* p )
-{
-    ::operator delete( p );
-}
-
 void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
 {
     if( this != pDeletedBasic )
