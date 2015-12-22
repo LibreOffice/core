@@ -83,7 +83,6 @@ public:
 
 private:
     const OUString msId;
-    Image maIcon;
     sal_Int32 mnMinimalWidth;
     SharedPanelContainer maPanels;
     VclPtr<DeckTitleBar> mpTitleBar;

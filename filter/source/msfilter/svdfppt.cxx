@@ -1882,9 +1882,8 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                 }
                                 if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
                                 {
-                                    uno::Reference< io::XInputStream > xIStrm = new utl::OSeekableInputStreamWrapper(*pDest );
                                     uno::Reference< frame::XModel > xModel( pOe->pShell->GetModel() );
-                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xIStrm, xModel, eAktPageKind );
+                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xModel, eAktPageKind );
                                     css::uno::Reference< css::drawing::XShape > xShape;
                                     if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
                                         pRet = GetSdrObjectFromXShape( xShape );

@@ -238,8 +238,6 @@ private:
     bool                                                                                    mbAdjustingImagePosition;
     bool                                                                                    mbAdjustingGraphic;
 
-    css::uno::Reference< css::graphic::XGraphicObject > mxGrfObj;
-
 protected:
     GraphicControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         :UnoControlModel( rxContext )

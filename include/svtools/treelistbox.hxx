@@ -239,7 +239,6 @@ class SVT_DLLPUBLIC SvTreeListBox
     Link<SvTreeListBox*,void>  aSelectHdl;
     Link<SvTreeListBox*,void>  aDeselectHdl;
 
-    Accelerator     aInpEditAcc;
     Image           aPrevInsertedExpBmp;
     Image           aPrevInsertedColBmp;
     Image           aCurInsertedExpBmp;

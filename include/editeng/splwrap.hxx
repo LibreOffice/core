@@ -53,8 +53,6 @@ private:
     css::uno::Reference<
         css::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
     css::uno::Reference<
-        css::linguistic2::XSpellChecker1 > xSpell;
-    css::uno::Reference<
         css::linguistic2::XHyphenator >    xHyph;
     SdrObject*  mpTextObj;
     bool        bOtherCntnt : 1; // set => Check special sections initially
@@ -76,7 +74,6 @@ private:
 
 public:
     SvxSpellWrapper( vcl::Window* pWn,
-                     css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpellChecker,
                      const bool bStart = false, const bool bIsAllRight = false,
                      const bool bOther = false, const bool bRevAllow = true );
     SvxSpellWrapper( vcl::Window* pWn,

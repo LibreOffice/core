@@ -1282,14 +1282,12 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
     virtual const css::uno::Reference< css::drawing::XDrawPage > & GetDrawPage() override;
     PptPageKind     ePageKind;
     const SdrPowerPointImport* mpPPTImporter;
-    css::uno::Reference< css::io::XInputStream > mxInStrm;
 public:
 
-    PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, css::uno::Reference< css::io::XInputStream >& rxInStrm, const css::uno::Reference< css::frame::XModel >& rxModel, PptPageKind ePKind ) :
+    PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, const css::uno::Reference< css::frame::XModel >& rxModel, PptPageKind ePKind ) :
         SvxMSConvertOCXControls ( rxModel ),
         ePageKind               ( ePKind ),
-        mpPPTImporter           ( pPPTImporter ),
-        mxInStrm                ( rxInStrm )
+        mpPPTImporter           ( pPPTImporter )
     {};
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
         css::uno::Reference<

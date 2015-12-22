@@ -41,9 +41,8 @@ using namespace com::sun::star::linguistic2;
 
 
 EditSpellWrapper::EditSpellWrapper( vcl::Window* _pWin,
-        Reference< XSpellChecker1 >  &xChecker,
         bool bIsStart, bool bIsAllRight, EditView* pView ) :
-    SvxSpellWrapper( _pWin, xChecker, bIsStart, bIsAllRight )
+    SvxSpellWrapper( _pWin, bIsStart, bIsAllRight )
 {
     SAL_WARN_IF( !pView, "editeng", "One view has to be abandoned!" );
     // Keep IgnoreList, delete ReplaceList...

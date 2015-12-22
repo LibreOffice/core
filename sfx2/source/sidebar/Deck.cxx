@@ -41,7 +41,6 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
            const std::function<void()>& rCloserAction)
     : Window(pParentWindow, 0)
     , msId(rDeckDescriptor.msId)
-    , maIcon()
     , mnMinimalWidth(0)
     , maPanels()
     , mpTitleBar(VclPtr<DeckTitleBar>::Create(rDeckDescriptor.msTitle, this, rCloserAction))

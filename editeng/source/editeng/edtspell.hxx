@@ -54,8 +54,6 @@ protected:
 
 public:
     EditSpellWrapper( vcl::Window* pWin,
-            css::uno::Reference<
-                css::linguistic2::XSpellChecker1 > &xChecker,
             bool bIsStart,
             bool bIsAllRight, EditView* pView );
 

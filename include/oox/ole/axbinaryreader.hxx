@@ -231,11 +231,9 @@ private:
     AxAlignedInputStream maInStrm;          ///< The input stream to read from.
     ComplexPropVector   maLargeProps;       ///< Stores info for all used large properties.
     ComplexPropVector   maStreamProps;      ///< Stores info for all used stream data properties.
-    AxPairData          maDummyPairData;    ///< Dummy pair for unsupported properties.
-    AxFontData          maDummyFontData;    ///< Dummy font for unsupported properties.
     StreamDataSequence  maDummyPicData;     ///< Dummy picture for unsupported properties.
-    OUString     maDummyString;      ///< Dummy string for unsupported properties.
-    AxArrayString maDummyArrayString; ///< Dummy strings for unsupported ArrayString properties.
+    OUString            maDummyString;      ///< Dummy string for unsupported properties.
+    AxArrayString       maDummyArrayString; ///< Dummy strings for unsupported ArrayString properties.
     sal_Int64           mnPropFlags;        ///< Flags specifying existing properties.
     sal_Int64           mnNextProp;         ///< Next property to read.
     sal_Int64           mnPropsEnd;         ///< End position of simple/large properties.

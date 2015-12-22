@@ -819,9 +819,6 @@ typedef ::cppu::WeakAggImplHelper1<
 
 class SVX_DLLPUBLIC SvxCustomShape : public SvxShapeText, public SvxShape_UnoImplHelper1
 {
-private:
-    rtl::Reference< SvxDrawPage > mxPage;
-
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;

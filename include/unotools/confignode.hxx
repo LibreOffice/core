@@ -54,8 +54,6 @@ namespace utl
                     m_xReplaceAccess;       /// replacing child values
         css::uno::Reference< css::container::XNameContainer >
                     m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
-        css::uno::Reference< css::uno::XInterface >
-                    m_xDummy;
         bool        m_bEscapeNames;         /// escape names before accessing children ?
 
         OUString    m_sCompletePath;
