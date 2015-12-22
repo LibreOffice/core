@@ -349,96 +349,95 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
         return;
     }
 
-    m_pView = ::GetActiveView(); // not owner!
-    OSL_ENSURE(m_pView, "no current view?");
-    if(m_pView)
+    m_pView = ::GetActiveView();
+    if (!m_pView)
+        return;
+
+    // keep self alive until done.
+    acquire();
+
+    // if called from the child window - get the config item and close the ChildWindow, then restore
+    // the wizard
+    SwMailMergeChildWindow* pChildWin =
+        static_cast<SwMailMergeChildWindow*>(m_pView->GetViewFrame()->GetChildWindow(FN_MAILMERGE_CHILDWINDOW));
+    bool bRestoreWizard = false;
+    sal_uInt16 nRestartPage = 0;
+    if (pChildWin && pChildWin->IsVisible())
     {
-        // keep self alive until done.
-        acquire();
-
-        // if called from the child window - get the config item and close the ChildWindow, then restore
-        // the wizard
-        SwMailMergeChildWindow* pChildWin =
-            static_cast<SwMailMergeChildWindow*>(m_pView->GetViewFrame()->GetChildWindow(FN_MAILMERGE_CHILDWINDOW));
-        bool bRestoreWizard = false;
-        sal_uInt16 nRestartPage = 0;
-        if(pChildWin && pChildWin->IsVisible())
-        {
-            m_pMMConfig = m_pView->GetMailMergeConfigItem();
-            nRestartPage = m_pView->GetMailMergeRestartPage();
-            if(m_pView->IsMailMergeSourceView())
-                m_pMMConfig->SetSourceView( m_pView );
-            m_pView->SetMailMergeConfigItem(nullptr, 0, true);
-            SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
-            pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, false);
-            OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
-            bRestoreWizard = true;
-        }
-        // to make it bullet proof ;-)
-        if(!m_pMMConfig)
-        {
-            m_pMMConfig = new SwMailMergeConfigItem;
+        m_pMMConfig = m_pView->GetMailMergeConfigItem();
+        nRestartPage = m_pView->GetMailMergeRestartPage();
+        if (m_pView->IsMailMergeSourceView())
             m_pMMConfig->SetSourceView(m_pView);
-
-            //set the first used database as default source on the config item
-            const SfxPoolItem* pItem = nullptr;
-            if(pArgs && SfxItemState::SET == pArgs->GetItemState(
-                   FN_PARAM_DATABASE_PROPERTIES, false, &pItem))
-            {
-                //mailmerge has been called from the database beamer
-                uno::Sequence< beans::PropertyValue> aDBValues;
-                if(static_cast<const SfxUsrAnyItem*>(pItem)->GetValue() >>= aDBValues)
-                {
-                    SwDBData aDBData;
-                    svx::ODataAccessDescriptor aDescriptor(aDBValues);
-                    aDescriptor[svx::daDataSource]   >>= aDBData.sDataSource;
-                    aDescriptor[svx::daCommand]      >>= aDBData.sCommand;
-                    aDescriptor[svx::daCommandType]  >>= aDBData.nCommandType;
-
-                    uno::Sequence< uno::Any >                   aSelection;
-                    uno::Reference< sdbc::XConnection>          xConnection;
-                    uno::Reference< sdbc::XDataSource>          xSource;
-                    uno::Reference< sdbcx::XColumnsSupplier>    xColumnsSupplier;
-                    if ( aDescriptor.has(svx::daSelection) )
-                        aDescriptor[svx::daSelection] >>= aSelection;
-                    if ( aDescriptor.has(svx::daConnection) )
-                        aDescriptor[svx::daConnection] >>= xConnection;
-                    uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);
-                    if(xChild.is())
-                        xSource.set(xChild->getParent(), uno::UNO_QUERY);
-                    m_pMMConfig->SetCurrentConnection(
-                        xSource, SharedConnection( xConnection, SharedConnection::NoTakeOwnership ),
-                        xColumnsSupplier, aDBData);
-                }
-            }
-            else
-            {
-                std::vector<OUString> aDBNameList;
-                std::vector<OUString> aAllDBNames;
-                m_pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
-                if(!aDBNameList.empty())
-                {
-                    OUString sDBName(aDBNameList[0]);
-                    SwDBData aDBData;
-                    aDBData.sDataSource = sDBName.getToken(0, DB_DELIM);
-                    aDBData.sCommand = sDBName.getToken(1, DB_DELIM);
-                    aDBData.nCommandType = sDBName.getToken(2, DB_DELIM ).toInt32();
-                    //set the currently used database for the wizard
-                    m_pMMConfig->SetCurrentDBData( aDBData );
-                }
-            }
-        }
-
-        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *m_pMMConfig);
-
-        if(bRestoreWizard)
-        {
-            m_pWizard->ShowPage( nRestartPage );
-        }
-
-        ExecuteWizard();
+        m_pView->SetMailMergeConfigItem(nullptr, 0, true);
+        SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
+        pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, false);
+        OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
+        bRestoreWizard = true;
     }
+    // to make it bullet proof ;-)
+    if (!m_pMMConfig)
+    {
+        m_pMMConfig = new SwMailMergeConfigItem;
+        m_pMMConfig->SetSourceView(m_pView);
+
+        //set the first used database as default source on the config item
+        const SfxPoolItem* pItem = nullptr;
+        if (pArgs && SfxItemState::SET == pArgs->GetItemState(
+               FN_PARAM_DATABASE_PROPERTIES, false, &pItem))
+        {
+            //mailmerge has been called from the database beamer
+            uno::Sequence< beans::PropertyValue> aDBValues;
+            if (static_cast<const SfxUsrAnyItem*>(pItem)->GetValue() >>= aDBValues)
+            {
+                SwDBData aDBData;
+                svx::ODataAccessDescriptor aDescriptor(aDBValues);
+                aDescriptor[svx::daDataSource]   >>= aDBData.sDataSource;
+                aDescriptor[svx::daCommand]      >>= aDBData.sCommand;
+                aDescriptor[svx::daCommandType]  >>= aDBData.nCommandType;
+
+                uno::Sequence< uno::Any >                   aSelection;
+                uno::Reference< sdbc::XConnection>          xConnection;
+                uno::Reference< sdbc::XDataSource>          xSource;
+                uno::Reference< sdbcx::XColumnsSupplier>    xColumnsSupplier;
+                if (aDescriptor.has(svx::daSelection))
+                    aDescriptor[svx::daSelection] >>= aSelection;
+                if (aDescriptor.has(svx::daConnection))
+                    aDescriptor[svx::daConnection] >>= xConnection;
+                uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);
+                if (xChild.is())
+                    xSource.set(xChild->getParent(), uno::UNO_QUERY);
+                m_pMMConfig->SetCurrentConnection(
+                    xSource, SharedConnection(xConnection, SharedConnection::NoTakeOwnership),
+                    xColumnsSupplier, aDBData);
+            }
+        }
+        else
+        {
+            std::vector<OUString> aDBNameList;
+            std::vector<OUString> aAllDBNames;
+            m_pView->GetWrtShell().GetAllUsedDB(aDBNameList, &aAllDBNames);
+            if (!aDBNameList.empty())
+            {
+                OUString sDBName(aDBNameList[0]);
+                SwDBData aDBData;
+                aDBData.sDataSource = sDBName.getToken(0, DB_DELIM);
+                aDBData.sCommand = sDBName.getToken(1, DB_DELIM);
+                aDBData.nCommandType = sDBName.getToken(2, DB_DELIM).toInt32();
+                //set the currently used database for the wizard
+                m_pMMConfig->SetCurrentDBData(aDBData);
+            }
+        }
+    }
+
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *m_pMMConfig);
+
+    if (bRestoreWizard)
+    {
+        m_pWizard->ShowPage(nRestartPage);
+    }
+
+    ExecuteWizard();
 }
 
 void SwMailMergeWizardExecutor::ExecutionFinished( bool bDeleteConfigItem )
