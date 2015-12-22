@@ -1613,11 +1613,10 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
     }
     else if (m_pLinguDicsNewPB == pBtn)
     {
-        uno::Reference< XSpellChecker1 > xSpellChecker1;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            std::unique_ptr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1 ));
+            std::unique_ptr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog( this ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             uno::Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK )
@@ -1652,7 +1651,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        std::unique_ptr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName(), xSpellChecker1, RID_SFXDLG_EDITDICT ));
+                        std::unique_ptr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName(), RID_SFXDLG_EDITDICT ));
                         DBG_ASSERT(aDlg, "Dialog creation failed!");
                         aDlg->Execute();
                     }

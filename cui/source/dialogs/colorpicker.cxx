@@ -1522,7 +1522,7 @@ class ColorPicker : protected ::comphelper::OBaseMutex,    // Struct for right i
                     public ColorPickerBase
 {
 public:
-    explicit ColorPicker( Reference< XComponentContext > const & xContext );
+    explicit ColorPicker();
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) override;
@@ -1541,7 +1541,6 @@ public:
     virtual sal_Int16 SAL_CALL execute(  ) throw (RuntimeException, std::exception) override;
 
 private:
-    Reference< XComponentContext > mxContext;
     OUString msTitle;
     const OUString msColorKey;
     const OUString msModeKey;
@@ -1555,9 +1554,9 @@ OUString SAL_CALL ColorPicker_getImplementationName()
     return OUString( "com.sun.star.cui.ColorPicker" );
 }
 
-Reference< XInterface > SAL_CALL ColorPicker_createInstance( Reference< XComponentContext > const & xContext )
+Reference< XInterface > SAL_CALL ColorPicker_createInstance( Reference< XComponentContext > const & )
 {
-    return static_cast<XWeak*>( new ColorPicker( xContext ) );
+    return static_cast<XWeak*>( new ColorPicker );
 }
 
 Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( RuntimeException )
@@ -1566,9 +1565,8 @@ Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( Runt
     return seq;
 }
 
-ColorPicker::ColorPicker( Reference< XComponentContext > const & xContext )
+ColorPicker::ColorPicker()
     : ColorPickerBase( m_aMutex )
-    , mxContext( xContext )
     , msColorKey( "Color" )
     , msModeKey( "Mode" )
     , mnColor( 0 )

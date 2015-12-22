@@ -343,11 +343,9 @@ public:
                                                             const SfxItemSet& rOptionsSet,
                                                             sal_Int32 nInitialFlags )=0;
     virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( vcl::Window* pParent ) = 0;
-    virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent,
-                                            css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpl ) = 0;
+    virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent ) = 0;
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName,
-                                            css::uno::Reference< css::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId) = 0;
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( vcl::Window* pParent,
                                             const OUString& rName, const OUString& rDesc ) = 0;

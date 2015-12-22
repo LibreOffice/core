@@ -39,7 +39,6 @@ private:
     std::vector<OUString> m_vExtensionPersonaSettings;
 
 public:
-    ::rtl::Reference< SearchAndParseThread > m_rApplyThread;
     SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet );
     virtual ~SvxPersonalizationTabPage();
     virtual void dispose() override;

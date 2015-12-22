@@ -97,12 +97,8 @@ static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rTex
 
 // class SvxNewDictionaryDialog -------------------------------------------
 
-SvxNewDictionaryDialog::SvxNewDictionaryDialog( vcl::Window* pParent,
-        Reference< XSpellChecker1 >  &xSpl ) :
-
-    ModalDialog( pParent, "OptNewDictionaryDialog" , "cui/ui/optnewdictionarydialog.ui" ),
-
-    xSpell( xSpl )
+SvxNewDictionaryDialog::SvxNewDictionaryDialog( vcl::Window* pParent ) :
+    ModalDialog( pParent, "OptNewDictionaryDialog" , "cui/ui/optnewdictionarydialog.ui" )
 {
     get(pNameEdit,"nameedit");
     get(pLanguageLB,"language");
@@ -219,14 +215,11 @@ VCL_BUILDER_FACTORY_ARGS(SvxDictEdit, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
 
 SvxEditDictionaryDialog::SvxEditDictionaryDialog(
             vcl::Window* pParent,
-            const OUString& rName,
-            Reference< XSpellChecker1 >  &xSpl ) :
+            const OUString& rName ) :
 
     ModalDialog( pParent, "EditDictionaryDialog" ,"cui/ui/editdictionarydialog.ui" ),
 
     sModify         (CUI_RESSTR(STR_MODIFY)),
-    aDecoView       ( this),
-    xSpell          ( xSpl ),
     nOld            ( NOACTDICT ),
     bFirstSelect    (true),
     bDoNothing      (false),

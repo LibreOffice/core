@@ -668,11 +668,6 @@ public:
     }
 };
 
-struct SvxIconSelectorToolBoxItem
-{
-    Image aImg;
-};
-
 class SvxIconSelectorDialog : public ModalDialog
 {
 private:

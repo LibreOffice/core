@@ -1174,23 +1174,21 @@ AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordN
     return new AbstractFmInputRecordNoDialog_Impl( pDlg );
 }
 
-AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( vcl::Window* pParent,
-                                            ::Reference< css::linguistic2::XSpellChecker1 >  &xSpl )
+AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( vcl::Window* pParent )
 {
-    VclPtrInstance<SvxNewDictionaryDialog> pDlg( pParent, xSpl );
+    VclPtrInstance<SvxNewDictionaryDialog> pDlg( pParent );
     return new AbstractSvxNewDictionaryDialog_Impl( pDlg );
 }
 
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName,
-                                            ::Reference< css::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId )
 {
     Dialog* pDlg=nullptr;
     switch ( nResId )
     {
         case RID_SFXDLG_EDITDICT :
-            pDlg = VclPtr<SvxEditDictionaryDialog>::Create( pParent, rName, xSpl );
+            pDlg = VclPtr<SvxEditDictionaryDialog>::Create( pParent, rName );
             break;
         default:
             break;

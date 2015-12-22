@@ -586,11 +586,9 @@ public:
                                                             const SfxItemSet& rOptionsSet,
                                                             sal_Int32 nInitialFlags) override;
     virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( vcl::Window* pParent ) override;
-    virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent,
-                                            css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpl ) override;
+    virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent ) override;
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName,
-                                            css::uno::Reference< css::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId) override;
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( vcl::Window* pParent,
                                             const OUString& rName, const OUString& rDesc ) override;

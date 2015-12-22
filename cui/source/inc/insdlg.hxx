@@ -98,10 +98,7 @@ class SvInsertPlugInDialog : public InsertObjectDialog_Impl
 {
 private:
     VclPtr<Edit> m_pEdFileurl;
-    VclPtr<PushButton> m_pBtnFileurl;
     VclPtr<VclMultiLineEdit> m_pEdPluginsOptions;
-    INetURLObject* m_pURL;
-    OUString m_aCommands;
 
     DECL_LINK_TYPED(BrowseHdl, Button*, void);
 

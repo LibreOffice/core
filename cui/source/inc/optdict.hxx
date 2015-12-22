@@ -55,17 +55,13 @@ private:
     VclPtr<CheckBox>            pExceptBtn;
     VclPtr<OKButton>            pOKBtn;
     css::uno::Reference<
-        css::linguistic2::XSpellChecker1 >     xSpell;
-    css::uno::Reference<
         css::linguistic2::XDictionary >    xNewDic;
 
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
     DECL_LINK_TYPED(ModifyHdl_Impl, Edit&, void);
 
 public:
-    SvxNewDictionaryDialog( vcl::Window* pParent,
-            css::uno::Reference<
-                css::linguistic2::XSpellChecker1 >  &xSpl );
+    SvxNewDictionaryDialog( vcl::Window* pParent );
     virtual ~SvxNewDictionaryDialog();
     virtual void dispose() override;
 
@@ -115,13 +111,10 @@ private:
 
     OUString                sModify;
     OUString                sNew;
-    DecorationView          aDecoView;
 
     css::uno::Sequence<
         css::uno::Reference<
             css::linguistic2::XDictionary >  > aDics;  //! snapshot copy to work on
-    css::uno::Reference<
-        css::linguistic2::XSpellChecker1 >     xSpell;
 
     short               nOld;
     long                nWidth;
@@ -149,9 +142,7 @@ private:
 
 public:
     SvxEditDictionaryDialog( vcl::Window* pParent,
-            const OUString& rName,
-            css::uno::Reference<
-                css::linguistic2::XSpellChecker1> &xSpl );
+            const OUString& rName );
     virtual ~SvxEditDictionaryDialog();
     virtual void dispose() override;
 };
