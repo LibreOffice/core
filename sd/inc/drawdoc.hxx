@@ -237,6 +237,7 @@ public:
     SAL_DLLPRIVATE void                SetAllocDocSh(bool bAlloc);
 
     SAL_DLLPRIVATE void                CreatingDataObj( SdTransferable* pTransferable ) { mpCreatingTransferable = pTransferable; }
+    SAL_DLLPRIVATE virtual bool        IsCreatingDataObj() const override { return mpCreatingTransferable != nullptr; }
 
     /** if the document does not contain at least one handout, one slide and one notes page with
         at least one master each this methods creates them.
