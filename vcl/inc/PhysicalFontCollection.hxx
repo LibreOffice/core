@@ -35,6 +35,46 @@ class ImplPreMatchFontSubstitution;
 
 class VCL_PLUGIN_PUBLIC PhysicalFontCollection
 {
+public:
+    explicit                PhysicalFontCollection();
+    virtual                 ~PhysicalFontCollection();
+
+    // fill the list with device fonts
+    void                    Add( PhysicalFontFace* );
+    void                    Clear();
+    int                     Count() const { return maPhysicalFontFamilies.size(); }
+
+    // find the device font
+    PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
+    PhysicalFontFamily*     FindOrCreateFamily( const OUString &rFamilyName );
+    PhysicalFontFamily*     ImplFindByFont( FontSelectPattern& ) const;
+    PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
+
+    // suggest fonts for glyph fallback
+    PhysicalFontFamily*    GetGlyphFallbackFont( FontSelectPattern&,
+                                                 OUString& rMissingCodes, int nFallbackLevel ) const;
+
+    // prepare platform specific font substitutions
+    void                    SetPreMatchHook( ImplPreMatchFontSubstitution* );
+    void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
+
+    // misc utilities
+    PhysicalFontCollection* Clone( bool bScalable, bool bEmbeddable ) const;
+    ImplGetDevFontList*     GetDevFontList() const;
+    ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
+
+    PhysicalFontFamily*     ImplFindByTokenNames(const OUString& rTokenStr) const;
+
+protected:
+    void                    InitMatchData() const;
+
+    PhysicalFontFamily*     ImplFindByAliasName(const OUString& rSearchName,
+                                                const OUString& rShortName) const;
+    PhysicalFontFamily*     ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
+    PhysicalFontFamily*     ImplFindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
+                                                 FontItalic, const OUString& rSearchFamily) const;
+    PhysicalFontFamily*     FindDefaultFont() const;
+
 private:
     friend class WinGlyphFallbackSubstititution;
     mutable bool            mbMatchData;    // true if matching attributes are initialized
@@ -46,50 +86,9 @@ private:
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
 
-public:
-    explicit                PhysicalFontCollection();
-    virtual                 ~PhysicalFontCollection();
-
-    // fill the list with device fonts
-    void                    Add( PhysicalFontFace* );
-    void                    Clear();
-    int                     Count() const { return maPhysicalFontFamilies.size(); }
-
-    // find the device font
-    PhysicalFontFamily*    FindFontFamily( const OUString& rFontName ) const;
-    PhysicalFontFamily*    FindOrCreateFamily( const OUString &rFamilyName );
-    PhysicalFontFamily*    ImplFindByFont( FontSelectPattern& ) const;
-    PhysicalFontFamily*    ImplFindBySearchName( const OUString& ) const;
-
-    // suggest fonts for glyph fallback
-    PhysicalFontFamily*    GetGlyphFallbackFont( FontSelectPattern&,
-                        OUString& rMissingCodes, int nFallbackLevel ) const;
-
-    // prepare platform specific font substitutions
-    void                    SetPreMatchHook( ImplPreMatchFontSubstitution* );
-    void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
-
-    // misc utilities
-    PhysicalFontCollection* Clone( bool bScalable, bool bEmbeddable ) const;
-    ImplGetDevFontList*     GetDevFontList() const;
-    ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
-
-    PhysicalFontFamily*    ImplFindByTokenNames(const OUString& rTokenStr) const;
-
-protected:
-    void                    InitMatchData() const;
-
-    PhysicalFontFamily*    ImplFindByAliasName(const OUString& rSearchName,
-        const OUString& rShortName) const;
-    PhysicalFontFamily*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
-    PhysicalFontFamily*    ImplFindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
-                                                 FontItalic, const OUString& rSearchFamily) const;
-    PhysicalFontFamily*    FindDefaultFont() const;
-
-private:
     void                    InitGenericGlyphFallback() const;
-    mutable PhysicalFontFamily**   mpFallbackList;
-    mutable int                     mnFallbackCount;
+    mutable PhysicalFontFamily**  mpFallbackList;
+    mutable int             mnFallbackCount;
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
