@@ -93,8 +93,6 @@ struct VCL_DLLPUBLIC AnimationBitmap
 
 struct AInfo
 {
-    Bitmap          aLastSaveBitmap;
-    Bitmap          aBackBitmap;
     Point           aStartOrg;
     Size            aStartSize;
     VclPtr<OutputDevice>   pOutDev;

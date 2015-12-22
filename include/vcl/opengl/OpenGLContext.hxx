@@ -242,9 +242,6 @@ private:
     typedef std::unordered_map< rtl::OString, std::shared_ptr<OpenGLProgram>, ProgramHash > ProgramCollection;
     ProgramCollection maPrograms;
     OpenGLProgram* mpCurrentProgram;
-#ifdef DBG_UTIL
-    std::set<SalGraphicsImpl*> maParents;
-#endif
 
 public:
     vcl::Region maClipRegion;

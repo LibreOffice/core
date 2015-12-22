@@ -63,13 +63,11 @@ enum PrinterSupport
 class VCL_DLLPUBLIC PrinterPage
 {
     GDIMetaFile*    mpMtf;
-    JobSetup        maJobSetup;
 
 public:
 
                     PrinterPage() : mpMtf( new GDIMetaFile() ) {}
-                    PrinterPage( GDIMetaFile* pMtf, const JobSetup& rSetup )
-                        : mpMtf( pMtf ), maJobSetup( rSetup ) {}
+                    PrinterPage( GDIMetaFile* pMtf ) : mpMtf( pMtf ) {}
                     ~PrinterPage() { delete mpMtf; }
 };
 
