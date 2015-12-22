@@ -62,7 +62,7 @@ public:
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
 
-    PhysicalFontFamily*     ImplFindByTokenNames(const OUString& rTokenStr) const;
+    PhysicalFontFamily*     FindByTokenNames(const OUString& rTokenStr) const;
 
 protected:
     void                    InitMatchData() const;

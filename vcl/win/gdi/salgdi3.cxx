@@ -500,7 +500,7 @@ namespace
         // get the default font for a specified locale
         const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
         const OUString aDefault = rDefaults.getUserInterfaceFont(rLanguageTag);
-        return rFontCollection.ImplFindByTokenNames(aDefault);
+        return rFontCollection.FindByTokenNames(aDefault);
     }
 }
 
