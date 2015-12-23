@@ -257,9 +257,12 @@
 #define FN_MAILMERGE_NEXT_ENTRY (FN_INSERT + 72)    /* mail merge toolbar - go to the next entry */
 #define FN_MAILMERGE_LAST_ENTRY (FN_INSERT + 73)    /* mail merge toolbar - go to the next entry */
 
-#define FN_MAILMERGE_CREATE_DOCUMENTS (FN_INSERT + 74) /* mail merge toolbar - create individual documents */
-
 #define FN_DRAWTEXT_ATTR_DLG    (FN_INSERT + 76)    /* position DrawText */
+
+#define FN_MAILMERGE_CREATE_DOCUMENTS (FN_INSERT + 77) /* mail merge toolbar - create the merged document */
+#define FN_MAILMERGE_SAVE_DOCUMENTS (FN_INSERT + 78) /* mail merge toolbar - save merged documents */
+#define FN_MAILMERGE_PRINT_DOCUMENTS (FN_INSERT + 79) /* mail merge toolbar - print merged documents */
+#define FN_MAILMERGE_EMAIL_DOCUMENTS (FN_INSERT + 80) /* mail merge toolbar - email merged documents */
 
 #define FN_TOOL_ANCHOR_CHAR     (FN_INSERT + 84)    /* anchor Draw object to character */
 

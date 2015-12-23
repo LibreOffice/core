@@ -91,6 +91,7 @@
 #include <mailmergewizard.hxx>
 #include <mailconfigpage.hxx>
 #include <uiborder.hxx>
+#include <mmresultdialogs.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1188,6 +1189,24 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
     }
 
     return pRet;
+}
+
+void SwAbstractDialogFactory_Impl::ExecuteMMResultSaveDialog()
+{
+    ScopedVclPtrInstance<SwMMResultSaveDialog> pDialog;
+    pDialog->Execute();
+}
+
+void SwAbstractDialogFactory_Impl::ExecuteMMResultPrintDialog()
+{
+    ScopedVclPtrInstance<SwMMResultPrintDialog> pDialog;
+    pDialog->Execute();
+}
+
+void SwAbstractDialogFactory_Impl::ExecuteMMResultEmailDialog()
+{
+    ScopedVclPtrInstance<SwMMResultEmailDialog> pDialog;
+    pDialog->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

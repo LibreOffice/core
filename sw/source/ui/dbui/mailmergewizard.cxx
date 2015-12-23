@@ -24,7 +24,6 @@
 #include <mmpreparemergepage.hxx>
 #include <mmmergepage.hxx>
 #include <mmgreetingspage.hxx>
-#include <mmoutputpage.hxx>
 #include <mmlayoutpage.hxx>
 #include <mmconfigitem.hxx>
 #include <swabstdlg.hxx>

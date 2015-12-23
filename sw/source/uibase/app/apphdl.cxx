@@ -226,6 +226,9 @@ void SwModule::StateOther(SfxItemSet &rSet)
             }
             break;
             case FN_MAILMERGE_CREATE_DOCUMENTS:
+            case FN_MAILMERGE_SAVE_DOCUMENTS:
+            case FN_MAILMERGE_PRINT_DOCUMENTS:
+            case FN_MAILMERGE_EMAIL_DOCUMENTS:
             {
                 SwView* pView = ::GetActiveView();
                 SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
@@ -804,6 +807,24 @@ void SwModule::ExecOther(SfxRequest& rReq)
             if (pConfigItem->GetTargetView())
                 pConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
         }
+        case FN_MAILMERGE_SAVE_DOCUMENTS:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            pFact->ExecuteMMResultSaveDialog();
+        }
+        break;
+        case FN_MAILMERGE_PRINT_DOCUMENTS:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            pFact->ExecuteMMResultPrintDialog();
+        }
+        break;
+        case FN_MAILMERGE_EMAIL_DOCUMENTS:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            pFact->ExecuteMMResultEmailDialog();
+        }
+        break;
 #endif
     }
 }

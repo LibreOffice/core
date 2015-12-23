@@ -92,6 +92,24 @@ interface StarWriter
         StateMethod = StateOther ;
     ]
 
+    FN_MAILMERGE_SAVE_DOCUMENTS
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+    ]
+
+    FN_MAILMERGE_PRINT_DOCUMENTS
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+    ]
+
+    FN_MAILMERGE_EMAIL_DOCUMENTS
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+    ]
+
     FN_SET_MODOPT_TBLNUMFMT // status()
     [
         ExecMethod = ExecOther ;

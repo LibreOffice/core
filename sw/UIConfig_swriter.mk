@@ -199,6 +199,9 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/mmoutputpage \
 	sw/uiconfig/swriter/ui/mmoutputtypepage \
 	sw/uiconfig/swriter/ui/mmpreparepage \
+	sw/uiconfig/swriter/ui/mmresultemaildialog \
+	sw/uiconfig/swriter/ui/mmresultprintdialog \
+	sw/uiconfig/swriter/ui/mmresultsavedialog \
 	sw/uiconfig/swriter/ui/mmselectpage \
 	sw/uiconfig/swriter/ui/mmsendmails \
 	sw/uiconfig/swriter/ui/mmsalutationpage \
