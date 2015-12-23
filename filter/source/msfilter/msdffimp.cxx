@@ -6947,7 +6947,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
 
             OUString aName( aDstStgName );
             comphelper::EmbeddedObjectContainer aCnt( rDestStorage );
-            xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+            xObj = aCnt.InsertEmbeddedObject(aMedium, aName, &rBaseURL);
 
             if ( !xObj.is() )
             {
@@ -6955,7 +6955,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
                 {
                     // throw the filter parameter away as workaround
                     aMedium.realloc( 2 );
-                    xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+                    xObj = aCnt.InsertEmbeddedObject(aMedium, aName, &rBaseURL);
                 }
 
                 if ( !xObj.is() )

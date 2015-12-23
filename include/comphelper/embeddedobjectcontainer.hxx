@@ -110,7 +110,7 @@ public:
     // load an embedded object from a MediaDescriptor and insert it into the container
     // a new object will be created from the new content and returned
     css::uno::Reference < css::embed::XEmbeddedObject >
-                        InsertEmbeddedObject( const css::uno::Sequence < css::beans::PropertyValue >&, OUString& );
+                        InsertEmbeddedObject( const css::uno::Sequence < css::beans::PropertyValue >&, OUString& rName, OUString const* pBaseURL = nullptr);
 
     // create an embedded link based on a MediaDescriptor and insert it into the container
     // a new object will be created from the new content and returned

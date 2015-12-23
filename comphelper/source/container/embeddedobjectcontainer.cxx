@@ -589,7 +589,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     return xRet;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const css::uno::Sequence < css::beans::PropertyValue >& aMedium, OUString& rNewName )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const css::uno::Sequence < css::beans::PropertyValue >& aMedium, OUString& rNewName, OUString const* pBaseURL )
 {
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
@@ -598,9 +598,14 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     try
     {
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
-        uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
+        uno::Sequence< beans::PropertyValue > aObjDescr(pBaseURL ? 2 : 1);
         aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
+        if (pBaseURL)
+        {
+            aObjDescr[1].Name = "DefaultParentBaseURL";
+            aObjDescr[1].Value <<= *pBaseURL;
+        }
         xObj.set( xFactory->createInstanceInitFromMediaDescriptor(
                 pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
