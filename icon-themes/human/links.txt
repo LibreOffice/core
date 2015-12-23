@@ -15,6 +15,8 @@ cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 svtools/res/folderop.png formula/res/fapopen.png
 
 # Mail merge
+cmd/lc_mailmergewizard.png cmd/lc_dsbformletter.png
+cmd/sc_mailmergewizard.png cmd/sc_dsbformletter.png
 cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
 cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
 cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
