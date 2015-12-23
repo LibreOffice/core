@@ -129,8 +129,6 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
     const Reference< uno::XComponentContext > & xContext)
     : TabDialog(pParent, "DataRangeDialog",
         "modules/schart/ui/datarangedialog.ui")
-    , m_xChartDocument(xChartDocument)
-    , m_xContext(xContext)
     , m_apDocTemplateProvider(new DocumentChartTypeTemplateProvider(xChartDocument))
     , m_apDialogModel(new DialogModel(xChartDocument, xContext))
     , m_pTabControl(VclPtr<DataSourceTabControl>::Create(get_content_area()))

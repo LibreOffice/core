@@ -260,7 +260,6 @@ DataBrowserModel::DataBrowserModel(
     const Reference< chart2::XChartDocument > & xChartDoc,
     const Reference< uno::XComponentContext > & xContext ) :
         m_xChartDocument( xChartDoc ),
-        m_xContext( xContext ),
         m_apDialogModel( new DialogModel( xChartDoc, xContext ))
 {
     updateFromModel();

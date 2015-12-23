@@ -64,8 +64,7 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xValues );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
-            createLabeledDataSequence(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            createLabeledDataSequence();
 
         static ::com::sun::star::uno::Sequence<
                ::com::sun::star::beans::PropertyValue > createArguments(

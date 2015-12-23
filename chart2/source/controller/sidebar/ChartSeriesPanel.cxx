@@ -289,7 +289,6 @@ ChartSeriesPanel::ChartSeriesPanel(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
   : PanelLayout(pParent, "ChartSeriesPanel", "modules/schart/ui/sidebarseries.ui", rxFrame),
-    mxFrame(rxFrame),
     mxModel(pController->getModel()),
     mxListener(new ChartSidebarModifyListener(this)),
     mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_DATA_SERIES)),

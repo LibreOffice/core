@@ -453,9 +453,8 @@ void DummyPieSegment2D::render()
 
 }
 
-DummyStripe::DummyStripe(const Stripe& rStripe, const uno::Reference< beans::XPropertySet > & xPropSet,
-        const tPropertyNameMap& rPropertyNameMap ):
-    maStripe(rStripe)
+DummyStripe::DummyStripe(const uno::Reference< beans::XPropertySet > & xPropSet,
+        const tPropertyNameMap& rPropertyNameMap )
 {
     setProperties(xPropSet, rPropertyNameMap, maProperties);
 }
@@ -997,9 +996,7 @@ void SAL_CALL DummyGroup2D::setSize( const awt::Size& )
     SAL_WARN("chart2.opengl", "set size on group shape");
 }
 
-DummyGraphic2D::DummyGraphic2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
-        const uno::Reference< graphic::XGraphic >& rGraphic ):
-    mxGraphic(rGraphic)
+DummyGraphic2D::DummyGraphic2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize)
 {
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));

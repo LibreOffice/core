@@ -171,8 +171,6 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >     m_xModifyListener;
-
 private:
     //private methods
 

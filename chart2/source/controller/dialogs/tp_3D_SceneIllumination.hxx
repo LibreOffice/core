@@ -99,7 +99,6 @@ private:
 
     bool            m_bInCommitToModel;
 
-    ModifyListenerCallBack m_aModelChangeListener;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XModel >       m_xChartModel;
 };

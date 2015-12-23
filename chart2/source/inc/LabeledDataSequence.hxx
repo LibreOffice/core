@@ -45,9 +45,7 @@ class LabeledDataSequence :
         public impl::LabeledDataSequence_Base
 {
 public:
-    explicit LabeledDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit LabeledDataSequence();
     explicit LabeledDataSequence(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & rValues );
@@ -99,7 +97,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > m_xData;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > m_xLabel;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >       m_xModifyEventForwarder;
 };
 

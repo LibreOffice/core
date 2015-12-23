@@ -43,10 +43,8 @@ ChartTypeDialog::ChartTypeDialog( vcl::Window* pParent
     , m_xCC( xContext )
 {
     m_pChartTypeTabPage = VclPtr<ChartTypeTabPage>::Create(
-
         get_content_area(),
         uno::Reference<XChartDocument>::query(m_xChartModel),
-        m_xCC,
         true/*live update*/,
         false/*don't show title description*/);
 

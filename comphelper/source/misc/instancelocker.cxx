@@ -40,9 +40,8 @@ using namespace ::com::sun::star;
 
 
 
-OInstanceLocker::OInstanceLocker( const uno::Reference< uno::XComponentContext >& xContext )
-: m_xContext( xContext )
-, m_pLockListener( nullptr )
+OInstanceLocker::OInstanceLocker()
+: m_pLockListener( nullptr )
 , m_pListenersContainer( nullptr )
 , m_bDisposed( false )
 , m_bInitialized( false )
@@ -224,9 +223,9 @@ OUString SAL_CALL OInstanceLocker::getImplementationName_static()
 
 
 uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::Create(
-                                const uno::Reference< uno::XComponentContext >& rxContext )
+                                const uno::Reference< uno::XComponentContext >&  )
 {
-    return static_cast< cppu::OWeakObject * >( new OInstanceLocker( rxContext ) );
+    return static_cast< cppu::OWeakObject * >( new OInstanceLocker );
 }
 
 

@@ -60,10 +60,6 @@ public:
     virtual void setValidPage( TabPage * pTabPage ) override;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
-        m_xChartDocument;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext;
     ::std::unique_ptr< ChartTypeTemplateProvider >  m_apDocTemplateProvider;
     ::std::unique_ptr< DialogModel >                m_apDialogModel;
 

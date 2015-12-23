@@ -837,7 +837,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                 // create or change categories
                 if( !xLabeledSeq.is())
                 {
-                    xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(nullptr)));
+                    xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence() );
                     m_rDialogModel.setCategories( xLabeledSeq );
                 }
                 try
@@ -892,7 +892,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                             if( ! xLabeledSeq.is())
                             {
                                 // no corresponding labeled data sequence for label found
-                                xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(nullptr)));
+                                xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence() );
                                 lcl_addLSequenceToDataSource( xLabeledSeq, xSource );
                             }
                         }
@@ -956,7 +956,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                         xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSource ));
                                     if( ! xLabeledSeq.is())
                                     {
-                                        xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(nullptr)));
+                                        xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence() );
                                         lcl_addLSequenceToDataSource( xLabeledSeq, xSource );
                                     }
                                 }

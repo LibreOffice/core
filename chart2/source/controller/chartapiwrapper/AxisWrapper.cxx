@@ -669,7 +669,7 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedDirectStateProperty("TryStaggeringFirst","TryStaggeringFirst") );
     aWrappedProperties.push_back( new WrappedDirectStateProperty("TextBreak","TextBreak") );
     aWrappedProperties.push_back( new WrappedNumberFormatProperty(m_spChart2ModelContact) );
-    aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(m_spChart2ModelContact) );
+    aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty );
     aWrappedProperties.push_back( new WrappedProperty("StackedText","StackCharacters") );
     aWrappedProperties.push_back( new WrappedDirectStateProperty("CrossoverPosition","CrossoverPosition") );
     {

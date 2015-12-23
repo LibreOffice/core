@@ -49,14 +49,12 @@ using osl::MutexGuard;
 namespace chart
 {
 
-AccessibleChartView::AccessibleChartView(
-    const Reference< uno::XComponentContext >& xContext, SdrView* pView ) :
+AccessibleChartView::AccessibleChartView(SdrView* pView ) :
         impl::AccessibleChartView_Base(
             AccessibleElementInfo(), // empty for now
             true, // has children
             true  // always transparent
             ),
-        m_xContext( xContext ),
         m_pSdrView( pView ),
         m_pViewForwarder( nullptr )
 {

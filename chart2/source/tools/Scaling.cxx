@@ -37,10 +37,9 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-LogarithmicScaling::LogarithmicScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
+LogarithmicScaling::LogarithmicScaling() :
         m_fBase( 10.0 ),
-        m_fLogOfBase( log( 10.0 ) ),
-        m_xContext( xContext )
+        m_fLogOfBase( log( 10.0 ) )
 {
 }
 
@@ -107,9 +106,8 @@ css::uno::Sequence< OUString > SAL_CALL LogarithmicScaling::getSupportedServiceN
     return getSupportedServiceNames_Static();
 }
 
-ExponentialScaling::ExponentialScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
-        m_fBase( 10.0 ),
-        m_xContext( xContext )
+ExponentialScaling::ExponentialScaling() :
+        m_fBase( 10.0 )
 {
 }
 
@@ -175,10 +173,9 @@ css::uno::Sequence< OUString > SAL_CALL ExponentialScaling::getSupportedServiceN
     return getSupportedServiceNames_Static();
 }
 
-LinearScaling::LinearScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
+LinearScaling::LinearScaling() :
         m_fSlope( 1.0 ),
-        m_fOffset( 0.0 ),
-        m_xContext( xContext )
+        m_fOffset( 0.0 )
 {}
 
 LinearScaling::LinearScaling( double fSlope, double fOffset ) :
@@ -247,9 +244,8 @@ css::uno::Sequence< OUString > SAL_CALL LinearScaling::getSupportedServiceNames(
     return getSupportedServiceNames_Static();
 }
 
-PowerScaling::PowerScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
-        m_fExponent( 10.0 ),
-        m_xContext( xContext )
+PowerScaling::PowerScaling() :
+        m_fExponent( 10.0 )
 {}
 
 PowerScaling::PowerScaling( double fExponent ) :
@@ -321,31 +317,31 @@ css::uno::Sequence< OUString > SAL_CALL PowerScaling::getSupportedServiceNames()
 } //namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_chart2_LinearScaling_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_chart2_LinearScaling_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new chart::LinearScaling(context));
+    return cppu::acquire(new chart::LinearScaling );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_chart2_ExponentialScaling_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_chart2_ExponentialScaling_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new chart::ExponentialScaling(context));
+    return cppu::acquire(new chart::ExponentialScaling );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_chart2_LogarithmicScaling_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_chart2_LogarithmicScaling_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new chart::LogarithmicScaling(context));
+    return cppu::acquire(new chart::LogarithmicScaling );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_chart2_PowerScaling_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_chart2_PowerScaling_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new chart::PowerScaling(context));
+    return cppu::acquire(new chart::PowerScaling );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

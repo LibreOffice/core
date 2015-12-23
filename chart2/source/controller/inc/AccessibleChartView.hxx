@@ -57,9 +57,7 @@ class AccessibleChartView :
         public impl::AccessibleChartView_Base
 {
 public:
-    AccessibleChartView(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext >& xContext, SdrView* pView );
+    AccessibleChartView(SdrView* pView );
     virtual ~AccessibleChartView();
 
     // ____ WeakComponentHelper (called from XComponent::dispose()) ____
@@ -115,8 +113,6 @@ private: // methods
     ExplicitValueProvider* getExplicitValueProvider();
 
 private: // members
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext>    m_xContext;
     ::com::sun::star::uno::WeakReference<
                        ::com::sun::star::view::XSelectionSupplier > m_xSelectionSupplier;
     ::com::sun::star::uno::WeakReference<

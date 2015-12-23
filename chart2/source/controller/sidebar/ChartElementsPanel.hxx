@@ -98,7 +98,6 @@ private:
     VclPtr<ListBox> mpLBLegendPosition;
     VclPtr<VclHBox> mpBoxLegend;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
 
     css::uno::Reference<css::frame::XModel> mxModel;

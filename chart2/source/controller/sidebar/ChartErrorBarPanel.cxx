@@ -248,7 +248,6 @@ ChartErrorBarPanel::ChartErrorBarPanel(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
   : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui", rxFrame),
-    mxFrame(rxFrame),
     mxModel(pController->getModel()),
     mxListener(new ChartSidebarModifyListener(this)),
     mbModelValid(true)

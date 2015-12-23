@@ -53,9 +53,7 @@ class RegressionEquation :
         public ::property::OPropertySet
 {
 public:
-    explicit RegressionEquation(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit RegressionEquation();
     virtual ~RegressionEquation();
 
     virtual OUString SAL_CALL
@@ -137,9 +135,6 @@ private:
             ::com::sun::star::chart2::XFormattedString > > m_aStrings;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
 };
 
 } //  namespace chart

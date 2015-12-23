@@ -112,7 +112,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > context_;
     css::uno::Reference< css::lang::XMultiServiceFactory > provider_;
 };
 

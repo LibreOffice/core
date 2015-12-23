@@ -271,8 +271,7 @@ Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_
     Sequence<OUString> aServices { "com.sun.star.frame.ToolbarController" };
     return aServices;
 }
-ElementSelectorToolbarController::ElementSelectorToolbarController( const uno::Reference< uno::XComponentContext > & xContext )
-    : m_xCC( xContext )
+ElementSelectorToolbarController::ElementSelectorToolbarController()
 {
 }
 ElementSelectorToolbarController::~ElementSelectorToolbarController()
@@ -336,10 +335,10 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
 } // chart2
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart_ElementSelectorToolbarController_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_ElementSelectorToolbarController_get_implementation(css::uno::XComponentContext *,
                                                                             css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new chart::ElementSelectorToolbarController(context));
+    return cppu::acquire(new chart::ElementSelectorToolbarController );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

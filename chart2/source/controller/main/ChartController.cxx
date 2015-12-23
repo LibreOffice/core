@@ -1521,7 +1521,7 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
 
 uno::Reference< XAccessible > ChartController::CreateAccessible()
 {
-    uno::Reference< XAccessible > xResult = new AccessibleChartView( m_xCC, GetDrawViewWrapper() );
+    uno::Reference< XAccessible > xResult = new AccessibleChartView( GetDrawViewWrapper() );
     impl_initializeAccessible( uno::Reference< lang::XInitialization >( xResult, uno::UNO_QUERY ) );
     return xResult;
 }

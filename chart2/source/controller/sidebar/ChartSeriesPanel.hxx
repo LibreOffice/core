@@ -98,8 +98,6 @@ private:
     VclPtr<FixedText> mpFTSeriesName;
     VclPtr<FixedText> mpFTSeriesTemplate;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
-
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;

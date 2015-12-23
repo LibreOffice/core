@@ -65,10 +65,6 @@ private:
         m_xChartDocument;
 
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XCellRangesAccess >
-        m_xCellRangesAccess;
-
-    ::com::sun::star::uno::Reference<
             ::com::sun::star::sheet::XRangeSelectionListener >
         m_xRangeSelectionListener;
 };

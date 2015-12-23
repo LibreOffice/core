@@ -144,10 +144,9 @@ Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledD
     return new ::chart::LabeledDataSequence( xValues );
 }
 
-Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
-        const Reference< uno::XComponentContext >& xContext )
+Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence()
 {
-    return new ::chart::LabeledDataSequence( xContext );
+    return new ::chart::LabeledDataSequence;
 }
 
 uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(

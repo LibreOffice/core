@@ -180,18 +180,16 @@ struct StaticRegressionEquationInfo : public rtl::StaticAggregate< uno::Referenc
 namespace chart
 {
 
-RegressionEquation::RegressionEquation( const Reference< uno::XComponentContext > & xContext ) :
+RegressionEquation::RegressionEquation() :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
-        m_xContext( xContext )
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
         MutexContainer(),
         impl::RegressionEquation_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
-    m_xContext( nullptr )
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 RegressionEquation::~RegressionEquation()
@@ -346,10 +344,10 @@ IMPLEMENT_FORWARD_XINTERFACE2( RegressionEquation, RegressionEquation_Base, ::pr
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_RegressionEquation_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_RegressionEquation_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::RegressionEquation(context));
+    return cppu::acquire(new ::chart::RegressionEquation);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

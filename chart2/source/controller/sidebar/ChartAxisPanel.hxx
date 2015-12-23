@@ -84,8 +84,6 @@ private:
 
     VclPtr<MetricField> mpNFRotation;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
-
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxModifyListener;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;

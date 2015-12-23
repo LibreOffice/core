@@ -159,7 +159,6 @@ private:
     tDataSequenceContainer m_aDataSequences;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
 };
 
 } //  namespace chart

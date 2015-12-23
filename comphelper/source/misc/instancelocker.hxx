@@ -43,7 +43,6 @@ class OInstanceLocker : public ::cppu::WeakImplHelper< css::lang::XComponent,
                                                        css::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     css::uno::Reference< css::uno::XInterface > m_xLockListener;
     OLockListener* m_pLockListener;
@@ -54,7 +53,7 @@ class OInstanceLocker : public ::cppu::WeakImplHelper< css::lang::XComponent,
     bool m_bInitialized;
 
 public:
-    explicit OInstanceLocker( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit OInstanceLocker();
     virtual ~OInstanceLocker();
 
     static css::uno::Sequence< OUString > SAL_CALL

@@ -217,14 +217,14 @@ uno::Reference< drawing::XShape >
 
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createStripe( const uno::Reference< drawing::XShapes >& xTarget
-                    , const Stripe& rStripe
+                    , const Stripe&
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
                     , bool
                     , short
                     , bool )
 {
-    dummy::DummyStripe* pStripe = new dummy::DummyStripe(rStripe,
+    dummy::DummyStripe* pStripe = new dummy::DummyStripe(
             xSourceProp, rPropertyNameMap);
     xTarget->add(pStripe);
     return pStripe;
@@ -269,10 +269,9 @@ uno::Reference< drawing::XShape >
                       const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
-                    , const uno::Reference< graphic::XGraphic >& xGraphic )
+                    , const uno::Reference< graphic::XGraphic >&  )
 {
-    dummy::DummyGraphic2D* pGraphic = new dummy::DummyGraphic2D(rPosition, rSize,
-            xGraphic);
+    dummy::DummyGraphic2D* pGraphic = new dummy::DummyGraphic2D(rPosition, rSize);
     xTarget->add(pGraphic);
     return pGraphic;
 }

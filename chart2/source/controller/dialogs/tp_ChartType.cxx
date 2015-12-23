@@ -681,7 +681,6 @@ IMPL_LINK_NOARG_TYPED(GeometryResourceGroup, GeometryChangeHdl, ListBox&, void)
 
 ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         , const uno::Reference< XChartDocument >& xChartModel
-        , const uno::Reference< uno::XComponentContext >& xContext
         , bool bDoLiveUpdate, bool bShowDescription)
         : OWizardPage(pParent, "tp_ChartType",
             "modules/schart/ui/tp_ChartType.ui")
@@ -692,7 +691,6 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         , m_pSortByXValuesResourceGroup( new SortByXValuesResourceGroup( this ) )
         , m_pGL3DResourceGroup(new GL3DResourceGroup(this))
         , m_xChartModel( xChartModel )
-        , m_xCC( xContext )
         , m_aChartTypeDialogControllerList(0)
         , m_pCurrentMainType(nullptr)
         , m_nChangingCalls(0)

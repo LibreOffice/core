@@ -70,8 +70,7 @@ class ElementSelectorToolbarController : public ::svt::ToolboxController
                                                 , ElementSelectorToolbarController_BASE
 {
 public:
-    explicit ElementSelectorToolbarController( ::com::sun::star::uno::Reference<
-               ::com::sun::star::uno::XComponentContext > const & xContext );
+    explicit ElementSelectorToolbarController();
     virtual ~ElementSelectorToolbarController();
 
     // XServiceInfo
@@ -98,11 +97,6 @@ public:
      virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
 private:
-    //no default constructor
-    ElementSelectorToolbarController(){}
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
     VclPtr< SelectorListBox > m_apSelectorListBox;
 };
 

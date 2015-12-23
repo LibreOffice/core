@@ -215,7 +215,6 @@ ChartAxisPanel::ChartAxisPanel(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
   : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui", rxFrame),
-    mxFrame(rxFrame),
     mxModel(pController->getModel()),
     mxModifyListener(new ChartSidebarModifyListener(this)),
     mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS)),

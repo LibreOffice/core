@@ -485,8 +485,6 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > m_xUndoManager;
     std::unique_ptr< UndoGuard > m_pTextActionUndoGuard;
-    /// needed for dispatching URLs in FeatureStateEvents
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 
     std::unique_ptr< ::svt::AcceleratorExecute > m_apAccelExecute;
 

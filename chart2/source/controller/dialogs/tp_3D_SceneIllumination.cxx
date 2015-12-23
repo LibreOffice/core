@@ -224,7 +224,6 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window*
                 , m_xSceneProperties( xSceneProperties )
                 , m_aTimerTriggeredControllerLock( xChartModel )
                 , m_bInCommitToModel( false )
-                , m_aModelChangeListener( LINK( this, ThreeD_SceneIllumination_TabPage, fillControlsFromModel ) )
                 , m_xChartModel( xChartModel )
 {
     get(m_pBtn_Light1, "BTN_LIGHT_1");

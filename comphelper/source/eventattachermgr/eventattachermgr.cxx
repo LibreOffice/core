@@ -87,7 +87,6 @@ class ImplEventAttacherManager
     Reference< XEventAttacher2 >        xAttacher;
     Reference< XComponentContext >      mxContext;
     Reference< XIdlReflection >         mxCoreReflection;
-    Reference< XIntrospection >         mxIntrospection;
     Reference< XTypeConverter >         xConverter;
     sal_Int16                           nVersion;
 public:
@@ -361,7 +360,6 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
                                                     const Reference< XComponentContext >& rContext )
     : aScriptListeners( aLock )
     , mxContext( rContext )
-    , mxIntrospection( rIntrospection )
     , nVersion(0)
 {
     if ( rContext.is() )

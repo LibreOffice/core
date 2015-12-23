@@ -220,8 +220,6 @@ private:
     void ProcessClickFlyBack();
     void AutoMoveToBar();
 private:
-    glm::vec3 maStartPos;
-    glm::vec3 maEndPos;
     bool mbAutoFlyExecuting;
     bool mbExecuting;
     bool mbNeedFlyBack;

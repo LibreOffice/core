@@ -117,7 +117,7 @@ VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
     case STATE_CHARTTYPE:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        VclPtrInstance<ChartTypeTabPage> pChartTypeTabPage(this,m_xChartModel,m_xCC,bDoLiveUpdate);
+        VclPtrInstance<ChartTypeTabPage> pChartTypeTabPage(this,m_xChartModel,bDoLiveUpdate);
         pRet  = pChartTypeTabPage;
         m_pTemplateProvider = pChartTypeTabPage;
         if (m_pDialogModel)

@@ -51,8 +51,6 @@ public:
     ChartTypeTabPage( vcl::Window* pParent
                 , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartDocument >& xChartModel
-                , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext >& xContext
                 , bool bDoLiveUpdate, bool bShowDescription = true );
     virtual ~ChartTypeTabPage();
     virtual void        dispose() override;
@@ -91,8 +89,6 @@ protected:
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XChartDocument >   m_xChartModel;
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext >    m_xCC;
 
     ::std::vector< ChartTypeDialogController* > m_aChartTypeDialogControllerList;
     ChartTypeDialogController*                  m_pCurrentMainType;

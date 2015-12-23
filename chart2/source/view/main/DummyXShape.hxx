@@ -231,11 +231,8 @@ class DummyPieSegment : public DummyXShape {};
 class DummyStripe : public DummyXShape
 {
 public:
-    DummyStripe(const Stripe& rStripe, const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
+    DummyStripe(const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
             const tPropertyNameMap& rPropertyNameMap );
-
-private:
-    Stripe maStripe;
 };
 
 class DummyArea3D : public DummyXShape {};
@@ -265,11 +262,7 @@ private:
 class DummyGraphic2D : public DummyXShape
 {
 public:
-    DummyGraphic2D(const css::drawing::Position3D& rPosition, const css::drawing::Direction3D& rSize,
-            const css::uno::Reference< css::graphic::XGraphic >& rGraphic );
-
-private:
-    css::uno::Reference< css::graphic::XGraphic > mxGraphic;
+    DummyGraphic2D(const css::drawing::Position3D& rPosition, const css::drawing::Direction3D& rSize );
 };
 
 class DummyCircle : public DummyXShape

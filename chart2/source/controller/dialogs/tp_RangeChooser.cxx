@@ -72,7 +72,6 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
         ,"modules/schart/ui/tp_RangeChooser.ui")
         , m_nChangingControlCalls(0)
         , m_bIsDirty(false)
-        , m_xDataProvider( nullptr )
         , m_aLastValidRangeString()
         , m_xCurrentChartTypeTemplate(nullptr)
         , m_pTemplateProvider(pTemplateProvider)

@@ -276,7 +276,6 @@ ChartElementsPanel::ChartElementsPanel(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
   : PanelLayout(pParent, "ChartElementsPanel", "modules/schart/ui/sidebarelements.ui", rxFrame),
-    mxFrame(rxFrame),
     maContext(),
     mxModel(pController->getModel()),
     mxListener(new ChartSidebarModifyListener(this)),

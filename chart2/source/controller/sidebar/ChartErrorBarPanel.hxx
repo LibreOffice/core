@@ -80,8 +80,6 @@ private:
     VclPtr<NumericField> mpMFPos;
     VclPtr<NumericField> mpMFNeg;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
-
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
 

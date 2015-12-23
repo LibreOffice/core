@@ -30,8 +30,7 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-LabeledDataSequence::LabeledDataSequence( const Reference< uno::XComponentContext > & xContext ) :
-        m_xContext( xContext ),
+LabeledDataSequence::LabeledDataSequence() :
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
@@ -183,10 +182,10 @@ css::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedService
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_LabeledDataSequence_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_LabeledDataSequence_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::LabeledDataSequence(context));
+    return cppu::acquire(new ::chart::LabeledDataSequence );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
