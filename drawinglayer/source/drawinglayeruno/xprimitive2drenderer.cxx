@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <comphelper/processfactory.hxx>
@@ -112,7 +113,7 @@ namespace drawinglayer
         }
 
         uno::Reference< rendering::XBitmap > XPrimitive2DRenderer::rasterize(
-            const uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& Primitive2DSequence,
+            const uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& aPrimitive2DSequence,
             const uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
             ::sal_uInt32 DPI_X,
             ::sal_uInt32 DPI_Y,
@@ -121,7 +122,7 @@ namespace drawinglayer
         {
             uno::Reference< rendering::XBitmap > XBitmap;
 
-            if(Primitive2DSequence.hasElements())
+            if(aPrimitive2DSequence.hasElements())
             {
                 const basegfx::B2DRange aRange(Range.X1, Range.Y1, Range.X2, Range.Y2);
                 const double fWidth(aRange.getWidth());
@@ -161,7 +162,7 @@ namespace drawinglayer
                     const primitive2d::Primitive2DReference xEmbedRef(
                         new primitive2d::TransformPrimitive2D(
                             aEmbedding,
-                            primitive2d::Primitive2DContainer()));
+                            comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(aPrimitive2DSequence)));
                     const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
                     BitmapEx aBitmapEx(
