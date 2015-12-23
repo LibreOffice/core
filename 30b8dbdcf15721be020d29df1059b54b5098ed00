@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_fe355af7",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2015-12-23T00:48:00Z",
+      "side": 0,
+      "message": "I would add an explicit pCursor.reset() here just to not change the order of destruction.  It may not be necessary, but I\u0027m not knowledgeable enough about this code to tell whether it\u0027s really unnecessary.",
+      "revId": "30b8dbdcf15721be020d29df1059b54b5098ed00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
