@@ -91,14 +91,14 @@ SFX_IMPL_OBJECTFACTORY(
     SfxObjectShellFlags::STD_NORMAL,
     "simpress" )
 
-void DrawDocShell::Construct( bool bClipboard )
+void DrawDocShell::Construct( bool bClipboard, SfxItemPool* pPool )
 {
     mbInDestruction = false;
     SetSlotFilter();     // setzt Filter zurueck
 
     mbOwnDocument = mpDoc == nullptr;
     if( mbOwnDocument )
-        mpDoc = new SdDrawDocument(meDocType, this);
+        mpDoc = new SdDrawDocument(meDocType, this, pPool);
 
     // The document has been created so we can call UpdateRefDevice() to set
     // the document's ref device.
@@ -115,7 +115,8 @@ void DrawDocShell::Construct( bool bClipboard )
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                bool bDataObject,
-                               DocumentType eDocumentType) :
+                               DocumentType eDocumentType,
+                               SfxItemPool* pPool) :
     SfxObjectShell( eMode == SfxObjectCreateMode::INTERNAL ?  SfxObjectCreateMode::EMBEDDED : eMode),
     mpDoc(nullptr),
     mpUndoManager(nullptr),
@@ -128,7 +129,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     mbOwnPrinter(false),
     mbNewDocument( true )
 {
-    Construct( eMode == SfxObjectCreateMode::INTERNAL );
+    Construct( eMode == SfxObjectCreateMode::INTERNAL, pPool );
 }
 
 DrawDocShell::DrawDocShell( SfxModelFlags nModelCreationFlags, bool bDataObject, DocumentType eDocumentType ) :
