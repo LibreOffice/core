@@ -169,7 +169,11 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             Point aPos;
             Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
             aPos = aRect.Center();
+            bool bMapModeWasEnabled(mpWindow->IsMapModeEnabled());
+            mpWindow->EnableMapMode(true);
             aPos = mpWindow->PixelToLogic(aPos);
+            mpWindow->EnableMapMode(bMapModeWasEnabled);
+
             SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, nullptr);
 
             if(pGrafObj && bAsLink )
