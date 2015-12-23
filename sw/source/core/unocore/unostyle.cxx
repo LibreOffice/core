@@ -989,6 +989,14 @@ public:
     }
     void ClearAllProperties( )
             { m_vPropertyValues.clear(); }
+    void Apply(SwXStyle& rStyle)
+    {
+        for(auto pPropertyPair : m_vPropertyValues)
+        {
+            if(pPropertyPair.second.hasValue())
+                rStyle.setPropertyValue(pPropertyPair.first, pPropertyPair.second);
+        }
+    }
     static void GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny )
     {
         rAny = rxPropertySet->getPropertyValue( rPropertyName );
@@ -1300,22 +1308,12 @@ uno::Reference<beans::XPropertySetInfo> SwXStyle::getPropertySetInfo() throw( un
     return m_rEntry.m_xPSInfo;
 }
 
-void    SwXStyle::ApplyDescriptorProperties()
+void SwXStyle::ApplyDescriptorProperties()
 {
     m_bIsDescriptor = false;
     m_xStyleData.clear();
     m_xStyleFamily.clear();
-
-    const PropertyEntryVector_t& rPropertyVector = m_pPropertiesImpl->GetPropertyVector();
-    PropertyEntryVector_t::const_iterator aIt = rPropertyVector.begin();
-    while(aIt != rPropertyVector.end())
-    {
-        const uno::Any* pAny(nullptr);
-        m_pPropertiesImpl->GetProperty(aIt->sName, pAny);
-        if(pAny->hasValue())
-            setPropertyValue(aIt->sName, *pAny);
-        ++aIt;
-    }
+    m_pPropertiesImpl->Apply(*this);
 }
 
 class SwStyleBase_Impl
