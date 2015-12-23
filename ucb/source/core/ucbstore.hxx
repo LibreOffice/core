@@ -181,7 +181,6 @@ class PersistentPropertySet : public cppu::WeakImplHelper <
     css::beans::XPropertySetInfoChangeNotifier,
     css::beans::XPropertyAccess >
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     std::unique_ptr<PersistentPropertySet_Impl> m_pImpl;
 
 private:
@@ -192,7 +191,6 @@ private:
 
 public:
     PersistentPropertySet(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         PropertySetRegistry& rCreator,
         const OUString& rKey );
     virtual ~PersistentPropertySet();

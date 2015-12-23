@@ -459,14 +459,12 @@ struct BSaveStruct
     Bitmap          aBmp;
     Rectangle       aOutRect;
     sal_uInt32      nWinRop;
-    WinMtfFillStyle aStyle;
 
     BSaveStruct(const Bitmap& rBmp, const Rectangle& rOutRect,
-                sal_uInt32 nRop, WinMtfFillStyle& rStyle)
+                sal_uInt32 nRop)
         : aBmp(rBmp)
         , aOutRect(rOutRect)
         , nWinRop(nRop)
-        , aStyle (rStyle)
     {}
 };
 

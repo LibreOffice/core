@@ -741,7 +741,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             OUString message;
             try
             {
-                m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, true, m_bForceRecovery, xProgressHandler );
+                m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, true, m_bForceRecovery );
                 getZipFileContents();
             }
             catch ( IOException & e )

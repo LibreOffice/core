@@ -34,14 +34,11 @@ namespace sdbtools
     // DataSourceMetaData
     typedef ::cppu::WeakImplHelper<   css::sdb::tools::XDataSourceMetaData
                                   >   DataSourceMetaData_Base;
-    struct DataSourceMetaData_Impl;
     /** default implementation for XDataSourceMetaData
     */
     class DataSourceMetaData    :public DataSourceMetaData_Base
                                 ,public ConnectionDependentComponent
     {
-    private:
-        ::std::unique_ptr< DataSourceMetaData_Impl >   m_pImpl;
 
     public:
         /** constructs the instance

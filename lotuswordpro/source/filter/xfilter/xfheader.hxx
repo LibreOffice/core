@@ -80,8 +80,6 @@ public:
         XFContentContainer::ToXml(pStrm);
         pStrm->EndElement( "style:header" );
     }
-private:
-    rtl::Reference<XFContentContainer>  m_aContents;
 };
 
 #endif

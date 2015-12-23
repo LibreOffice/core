@@ -119,7 +119,6 @@ protected:
     AstScope*           m_pScope;
     NodeType            m_nodeType;
     bool            m_bImported;        // imported ?
-    bool            m_bIsAdded;         // mark declaration as added in scope
     bool            m_bInMainFile;      // defined in main file
     bool                m_bPublished;
     bool                m_bPredefined;

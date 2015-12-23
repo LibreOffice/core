@@ -72,15 +72,6 @@ class LwpPrinterInfo
 public:
     explicit LwpPrinterInfo(LwpObjectStream* pStrm);
     ~LwpPrinterInfo(){}
-private:
-    LwpAtomHolder m_OutputFile;
-    LwpAtomHolder cSelectedDivisions;
-
-    LwpAtomHolder m_Output;
-    LwpAtomHolder m_Name;
-    LwpAtomHolder m_Driver;
-    LwpAtomHolder m_Queue;
-    LwpAtomHolder m_SelectedPages;
 
 public:
     static void Read(LwpObjectStream* pStrm);

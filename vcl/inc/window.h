@@ -382,8 +382,6 @@ public:
                         mbNonHomogeneous:1,
                         mbDoubleBufferingRequested:1;
 
-    vcl::RenderSettings maRenderSettings;
-
     css::uno::Reference< css::uno::XInterface > mxDNDListenerContainer;
 };
 

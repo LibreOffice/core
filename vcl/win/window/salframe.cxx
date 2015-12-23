@@ -3192,13 +3192,7 @@ static long ImplHandleMouseActivateMsg( HWND hWnd )
     if ( pFrame->mbFloatWin )
         return TRUE;
 
-    SalMouseActivateEvent   aMouseActivateEvt;
-    POINT                   aPt;
-    GetCursorPos( &aPt );
-    ScreenToClient( hWnd, &aPt );
-    aMouseActivateEvt.mnX = aPt.x;
-    aMouseActivateEvt.mnY = aPt.y;
-    return pFrame->CallCallback( SALEVENT_MOUSEACTIVATE, &aMouseActivateEvt );
+    return pFrame->CallCallback( SALEVENT_MOUSEACTIVATE, nullptr );
 }
 
 static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )

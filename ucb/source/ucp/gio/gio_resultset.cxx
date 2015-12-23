@@ -42,7 +42,7 @@ void DynamicResultSet::initStatic()
 {
     m_xResultSet1 = new ::ucbhelper::ResultSet(
         m_xContext, m_aCommand.Properties,
-        new DataSupplier( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), m_xContent, m_aCommand.Mode ), m_xEnv );
+        new DataSupplier( m_xContent, m_aCommand.Mode ), m_xEnv );
 }
 
 void DynamicResultSet::initDynamic()

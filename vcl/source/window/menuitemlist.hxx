@@ -106,8 +106,6 @@ private:
     typedef ::std::vector< MenuItemData* > MenuItemDataList_impl;
     MenuItemDataList_impl maItemList;
 
-    css::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
-
 public:
                     MenuItemList() {}
                     ~MenuItemList();

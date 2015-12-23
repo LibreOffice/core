@@ -90,8 +90,6 @@ namespace dbaui
         PreviewMode               m_ePreviewMode;
         css::uno::Reference < css::frame::XFrame2 >
                                   m_xFrame;
-        css::uno::Reference < css::io::XPersist >
-                                  m_xDocInfo;
         css::uno::Reference< css::awt::XWindow >
                                   m_xWindow;
 

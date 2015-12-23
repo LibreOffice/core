@@ -87,7 +87,6 @@ private:
     OUString   m_strSectionName;
     bool    m_bProtected;
     bool    m_bHiden;
-    XFColor     m_aBackColor;
     OUString   m_strSourceLink;
 };
 

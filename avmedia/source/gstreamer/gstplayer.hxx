@@ -43,7 +43,7 @@ class Player : public ::cppu::BaseMutex,
 {
 public:
 
-    explicit Player( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
+    explicit Player();
     virtual ~Player();
 
     void preparePlaybin( const OUString& rURL, GstElement *pSink );
@@ -77,8 +77,6 @@ public:
     virtual void SAL_CALL disposing() override;
 
 protected:
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
-
     OUString                maURL;
 
     // Add elements and pipeline here

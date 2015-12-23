@@ -33,15 +33,9 @@ namespace sdbtools
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XComponentContext;
 
-    // DataSourceMetaData_Impl
-    struct DataSourceMetaData_Impl
-    {
-    };
-
     // DataSourceMetaData
     DataSourceMetaData::DataSourceMetaData( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
         :ConnectionDependentComponent( _rContext )
-        ,m_pImpl( new DataSourceMetaData_Impl )
     {
         setWeakConnection( _rxConnection );
     }
