@@ -1001,8 +1001,6 @@ public:
     {
         rAny = rxPropertySet->getPropertyValue( rPropertyName );
     }
-    const PropertyEntryVector_t& GetPropertyVector() const
-            { return aPropertyEntries; }
 };
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
