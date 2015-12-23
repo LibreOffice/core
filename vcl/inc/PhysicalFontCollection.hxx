@@ -50,8 +50,8 @@ public:
     PhysicalFontFamily*     FindByFont( FontSelectPattern& ) const;
 
     // suggest fonts for glyph fallback
-    PhysicalFontFamily*    GetGlyphFallbackFont( FontSelectPattern&,
-                                                 OUString& rMissingCodes, int nFallbackLevel ) const;
+    PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPattern&,
+                                                  OUString& rMissingCodes, int nFallbackLevel ) const;
 
     // prepare platform specific font substitutions
     void                    SetPreMatchHook( ImplPreMatchFontSubstitution* );
@@ -78,16 +78,15 @@ private:
     mutable PhysicalFontFamily**  mpFallbackList;
     mutable int             mnFallbackCount;
 
-    void                    InitGenericGlyphFallback() const;
+    void                    ImplInitMatchData() const;
+    void                    ImplInitGenericGlyphFallback() const;
 
     PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
-    PhysicalFontFamily*     ImplFindByAliasName(const OUString& rSearchName,
-                                                const OUString& rShortName) const;
+    PhysicalFontFamily*     ImplFindByAliasName ( const OUString& rSearchName, const OUString& rShortName) const;
     PhysicalFontFamily*     ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
 
-    PhysicalFontFamily*     FindDefaultFont() const;
+    PhysicalFontFamily*     ImplFindDefaultFont() const;
 
-    void                    InitMatchData() const;
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
