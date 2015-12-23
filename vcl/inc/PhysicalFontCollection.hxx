@@ -78,16 +78,15 @@ private:
     mutable PhysicalFontFamily**  mpFallbackList;
     mutable int             mnFallbackCount;
 
-    void                    InitGenericGlyphFallback() const;
+    void                    initMatchData() const;
+    void                    initGenericGlyphFallback() const;
 
-    PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
-    PhysicalFontFamily*     ImplFindByAliasName(const OUString& rSearchName,
-                                                const OUString& rShortName) const;
-    PhysicalFontFamily*     ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
+    PhysicalFontFamily*     findBySearchName( const OUString& ) const;
+    PhysicalFontFamily*     findByAliasName ( const OUString& rSearchName, const OUString& rShortName) const;
+    PhysicalFontFamily*     findBySubstFontAttr( const utl::FontNameAttr& ) const;
 
-    PhysicalFontFamily*     FindDefaultFont() const;
+    PhysicalFontFamily*     findDefaultFont() const;
 
-    void                    InitMatchData() const;
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
