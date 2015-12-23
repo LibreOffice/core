@@ -98,14 +98,16 @@ namespace
         using CreateStyle_t = std::function<uno::Reference<css::style::XStyle>(SfxStyleSheetBasePool*, SwDocShell*, const OUString&)>;
         using TranslateIndex_t = std::function<sal_uInt16(const sal_uInt16)>;
         SfxStyleFamily m_eFamily;
+        sal_uInt16 m_nPropMapType;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
         sal_uInt32 m_nResId;
         GetCountOrName_t m_fGetCountOrName;
         CreateStyle_t m_fCreateStyle;
         TranslateIndex_t m_fTranslateIndex;
-        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName, CreateStyle_t fCreateStyle, TranslateIndex_t fTranslateIndex)
+        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName, CreateStyle_t fCreateStyle, TranslateIndex_t fTranslateIndex)
                 : m_eFamily(eFamily)
+                , m_nPropMapType(nPropMapType)
                 , m_aPoolId(aPoolId)
                 , m_sName(sName)
                 , m_nResId(nResId)
@@ -936,11 +938,11 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
     if(!our_pStyleFamilyEntries)
     {
         our_pStyleFamilyEntries = new std::vector<StyleFamilyEntry>{
-            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>                       },
-            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>                       },
-            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
-            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
-            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   }
+            { SFX_STYLE_FAMILY_CHAR,   PROPERTY_MAP_CHAR_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>                       },
+            { SFX_STYLE_FAMILY_PARA,   PROPERTY_MAP_PARA_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>                       },
+            { SFX_STYLE_FAMILY_PAGE,   PROPERTY_MAP_PAGE_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
+            { SFX_STYLE_FAMILY_FRAME,  PROPERTY_MAP_FRAME_STYLE, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
+            { SFX_STYLE_FAMILY_PSEUDO, PROPERTY_MAP_NUM_STYLE, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   }
        };
     }
     return our_pStyleFamilyEntries;
@@ -1111,53 +1113,30 @@ static const StyleFamilyEntry& lcl_GetStyleEntry(const SfxStyleFamily eFamily)
     assert(pEntry != pEntries->end());
     return *pEntry;
 }
-SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFamily, bool bConditional) :
+SwXStyle::SwXStyle(SwDoc *pDoc, SfxStyleFamily eFamily, bool bConditional) :
     m_pDoc(pDoc),
     m_rEntry(lcl_GetStyleEntry(eFamily)),
     m_bIsDescriptor(true),
     m_bIsConditional(bConditional),
     m_pBasePool(nullptr)
 {
+    assert(!m_bIsConditional || m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PARA); // only paragraph styles are conditional
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-    sal_uInt16 nMapId = PROPERTY_MAP_NUM_STYLE;
     switch(m_rEntry.m_eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-        {
-            nMapId = PROPERTY_MAP_CHAR_STYLE;
-            mxStyleFamily = lcl_GetStyleFamily(pDoc, m_rEntry);
-        }
-        break;
         case SFX_STYLE_FAMILY_PARA:
-        {
-            nMapId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
-            mxStyleFamily = lcl_GetStyleFamily(pDoc, m_rEntry);
-            mxStyleData = lcl_GetStandardStyle(mxStyleFamily);
-        }
-        break;
         case SFX_STYLE_FAMILY_PAGE:
-        {
-            nMapId = PROPERTY_MAP_PAGE_STYLE;
             mxStyleFamily = lcl_GetStyleFamily(pDoc, m_rEntry);
-            mxStyleData = lcl_GetStandardStyle(mxStyleFamily);
-        }
         break;
-        case SFX_STYLE_FAMILY_FRAME :
-        {
-            nMapId = PROPERTY_MAP_FRAME_STYLE;
-        }
-        break;
-        case SFX_STYLE_FAMILY_PSEUDO:
-        {
-            nMapId = PROPERTY_MAP_NUM_STYLE;
-        }
-        break;
-
         default:
             ;
     }
-    m_pPropertiesImpl = std::unique_ptr<SwStyleProperties_Impl>(new SwStyleProperties_Impl(aSwMapProvider.GetPropertySet(nMapId)->getPropertyMap()));
+    if(m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PARA || m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PAGE)
+        mxStyleData = lcl_GetStandardStyle(mxStyleFamily);
+    m_pPropertiesImpl = std::unique_ptr<SwStyleProperties_Impl>(
+            new SwStyleProperties_Impl(aSwMapProvider.GetPropertySet(m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE :  m_rEntry.m_nPropMapType)->getPropertyMap()));
 }
 
 SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
