@@ -306,11 +306,11 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
     try
     {
         uno::Reference<document::XStorageBasedDocument> const xParent(
-            uno::Reference<container::XChild>(xObj, uno::UNO_QUERY)->getParent(),
-            uno::UNO_QUERY);
+            uno::Reference<container::XChild>(xObj, uno::UNO_QUERY_THROW)->getParent(),
+            uno::UNO_QUERY_THROW);
         uno::Reference<embed::XStorage> const xParentStorage(xParent->getDocumentStorage());
         OUString const entryName(
-            uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName());
+            uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY_THROW)->getEntryName());
 
         if (xParentStorage->isStreamElement(entryName))
         {
