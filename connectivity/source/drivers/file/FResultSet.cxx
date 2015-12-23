@@ -90,7 +90,6 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
                         ,m_xStatement(*pStmt)
                         ,m_xMetaData(nullptr)
-                        ,m_xDBMetaData(pStmt->getOwnConnection()->getMetaData())
                         ,m_nRowPos(-1)
                         ,m_nFilePos(0)
                         ,m_nLastVisitedPos(-1)

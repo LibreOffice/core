@@ -225,7 +225,6 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const
 
 OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xColumn)
     : OOperandRow(_nPos,::comphelper::getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
-    , m_xColumn(_xColumn)
 {
 }
 

@@ -29,11 +29,6 @@
 namespace connectivity
 {
 
-struct OOO_DLLPUBLIC_DBTOOLS RowEquation
-{
-    ORowSetValueDecoratorRef    nPara[ 3 ];
-};
-
 enum ExpressionFunct
 {
     FUNC_CONST,

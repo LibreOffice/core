@@ -34,7 +34,6 @@ namespace connectivity
                                         public java_lang_Object
     {
     protected:
-        java::sql::ConnectionLog    m_aLogger;
         java_sql_Connection*        m_pConnection;
         sal_Int32                   m_nColumnCount;
 
@@ -45,7 +44,7 @@ namespace connectivity
         virtual jclass getMyClass() const override;
 
         // A ctor that is needed for returning the object
-        java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger, java_sql_Connection& _rCon  );
+        java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, java_sql_Connection& _rCon  );
 
         virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;

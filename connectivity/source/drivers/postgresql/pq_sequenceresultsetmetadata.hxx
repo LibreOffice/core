@@ -48,8 +48,6 @@ namespace pq_sdbc_driver
     class SequenceResultSetMetaData :
         public ::cppu::WeakImplHelper< com::sun::star::sdbc::XResultSetMetaData >
     {
-        ::rtl::Reference< RefCountedMutex > m_refMutex;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > m_origin;
         ColumnMetaDataVector m_columnData;
         sal_Int32 m_colCount;
 
@@ -58,7 +56,6 @@ namespace pq_sdbc_driver
 
     public:
         SequenceResultSetMetaData(
-            const ::rtl::Reference< RefCountedMutex > & reMutex,
             const ColumnMetaDataVector &vec,
             int colCount );
 

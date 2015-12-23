@@ -74,7 +74,6 @@ namespace connectivity
             OConnection*                    m_pConnection;// The owning Connection object
             SQLHANDLE                       m_aStatementHandle;
             SQLUSMALLINT*                   m_pRowStatusArray;
-            ::cppu::OBroadcastHelper&       rBHelper;
 
         protected:
 

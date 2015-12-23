@@ -53,7 +53,6 @@ namespace pq_sdbc_driver
 class Index : public ReflectionBase,
               public com::sun::star::sdbcx::XColumnsSupplier
 {
-    ::com::sun::star::uno::Reference< com::sun::star::sdbc::XDatabaseMetaData > m_meta;
     ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > m_indexColumns;
 
     OUString m_schemaName;

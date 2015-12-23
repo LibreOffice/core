@@ -33,9 +33,8 @@ using namespace ::com::sun::star::lang;
 
 
 jclass java_sql_ResultSetMetaData::theClass = nullptr;
-java_sql_ResultSetMetaData::java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger, java_sql_Connection& _rCon  )
+java_sql_ResultSetMetaData::java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, java_sql_Connection& _rCon  )
     :java_lang_Object( pEnv, myObj )
-    ,m_aLogger( _rResultSetLogger )
     ,m_pConnection( &_rCon )
     ,m_nColumnCount(-1)
 {

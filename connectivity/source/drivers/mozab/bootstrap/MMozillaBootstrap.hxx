@@ -38,17 +38,14 @@ namespace connectivity
         class MozillaBootstrap : public OMozillaBootstrap_BASE
         {
         protected:
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xMSFactory;
-
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access
             virtual ~MozillaBootstrap();
         protected:
             ProfileAccess * m_ProfileAccess;
-            ProfileManager  * m_ProfileManager;
         public:
 
             void Init();
-            explicit MozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            MozillaBootstrap();
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;

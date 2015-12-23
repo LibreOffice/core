@@ -97,7 +97,6 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_nCurrentFetchState(0)
                         ,m_bWasNull(true)
                         ,m_bEOF(true)
-                        ,m_bLastRecord(false)
                         ,m_bFreeHandle(false)
                         ,m_bInserting(false)
                         ,m_bRowInserted(false)

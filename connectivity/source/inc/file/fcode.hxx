@@ -94,9 +94,6 @@ namespace connectivity
         // Attributes from a result row
         class OOO_DLLPUBLIC_FILE OOperandAttr : public OOperandRow
         {
-        protected:
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xColumn;
-
         public:
             OOperandAttr(sal_uInt16 _nPos,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);

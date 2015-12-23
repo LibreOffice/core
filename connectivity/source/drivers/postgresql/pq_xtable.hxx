@@ -63,7 +63,6 @@ class Table : public ReflectionBase,
               public com::sun::star::sdbcx::XRename,
               public com::sun::star::sdbcx::XAlterTable
 {
-    ::com::sun::star::uno::Reference< com::sun::star::sdbc::XDatabaseMetaData > m_meta;
     ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > m_columns;
     ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > m_keys;
     ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > m_indexes;

@@ -637,7 +637,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     static jmethodID mID(nullptr);
     jobject out = callObjectMethod(t.pEnv,"getMetaData","()Ljava/sql/ResultSetMetaData;", mID);
 
-    return out==nullptr ? nullptr : new java_sql_ResultSetMetaData( t.pEnv, out, m_aLogger,*m_pConnection );
+    return out==nullptr ? nullptr : new java_sql_ResultSetMetaData( t.pEnv, out, *m_pConnection );
 }
 
 void SAL_CALL java_sql_PreparedStatement::acquire() throw()

@@ -76,7 +76,7 @@ SequenceResultSet::SequenceResultSet(
 {
     if( pVec )
     {
-        m_meta = new SequenceResultSetMetaData( mutex, *pVec, m_columnNames.getLength() );
+        m_meta = new SequenceResultSetMetaData( *pVec, m_columnNames.getLength() );
     }
 }
 

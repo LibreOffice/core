@@ -48,10 +48,8 @@ namespace pq_sdbc_driver
 {
 
 SequenceResultSetMetaData::SequenceResultSetMetaData(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ColumnMetaDataVector &metaDataVector,
     int colCount ) :
-    m_refMutex( refMutex ),
     m_columnData( metaDataVector ),
     m_colCount( colCount )
 {

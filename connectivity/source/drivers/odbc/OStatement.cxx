@@ -62,7 +62,6 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_pConnection(_pConnection)
     ,m_aStatementHandle(SQL_NULL_HANDLE)
     ,m_pRowStatusArray(nullptr)
-    ,rBHelper(OStatement_BASE::rBHelper)
 {
     osl_atomic_increment( &m_refCount );
     m_pConnection->acquire();

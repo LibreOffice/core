@@ -47,19 +47,6 @@ namespace connectivity
         {
         protected:
             static const short invalid_scale = -1;
-            struct Parameter
-            {
-                ::com::sun::star::uno::Any  aValue;
-                sal_Int32                   nDataType;
-
-                Parameter(const ::com::sun::star::uno::Any& rValue,
-                          sal_Int32                         rDataType) : aValue(rValue),nDataType(rDataType)
-                {
-                }
-
-            };
-
-            ::std::vector< Parameter>                   m_aParameters;
 
             // Data attributes
 

@@ -36,21 +36,20 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 
 static MozillaBootstrap *pMozillaBootstrap=nullptr;
 static Reference<XMozillaBootstrap> xMozillaBootstrap;
-extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
 {
     if (!pMozillaBootstrap)
     {
-        pMozillaBootstrap=new connectivity::mozab::MozillaBootstrap( _rxFactory );
+        pMozillaBootstrap=new connectivity::mozab::MozillaBootstrap;
         pMozillaBootstrap->Init();
         xMozillaBootstrap = pMozillaBootstrap;
     }
     return  pMozillaBootstrap;
 }
 
-MozillaBootstrap::MozillaBootstrap(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
-    : OMozillaBootstrap_BASE(m_aMutex), m_xMSFactory( _rxFactory ),
-      m_ProfileAccess(nullptr), m_ProfileManager(nullptr)
+MozillaBootstrap::MozillaBootstrap()
+    : OMozillaBootstrap_BASE(m_aMutex),
+      m_ProfileAccess(nullptr)
 {
 }
 

@@ -242,7 +242,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
     static jmethodID mID(nullptr);
     jobject out = callObjectMethod(t.pEnv,"getMetaData","()Ljava/sql/ResultSetMetaData;", mID);
 
-    return out==nullptr ? nullptr : new java_sql_ResultSetMetaData( t.pEnv, out, m_aLogger,*m_pConnection );
+    return out==nullptr ? nullptr : new java_sql_ResultSetMetaData( t.pEnv, out, *m_pConnection );
 }
 
 Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
