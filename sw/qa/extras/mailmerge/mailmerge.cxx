@@ -234,7 +234,7 @@ protected:
     DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest)
 
 int MMTest::documentStartPageNumber( int document ) const
-{   // See SwMailMergeOutputPage::documentStartPageNumber() .
+{   // See documentStartPageNumber() .
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* shell = pTextDoc->GetDocShell()->GetWrtShell();
@@ -365,8 +365,8 @@ DECLARE_SHELL_MAILMERGE_TEST(testPageBoundariesSimpleMailMerge, "simple-mail-mer
 {
     // This is like the test above, but this one uses the create-single-document-containing-everything-generated approach,
     // and verifies that boundaries of the generated sub-documents are correct inside that document.
-    // These boundaries are done using "SwMailMergeOutputPage::documentStartPageNumber<number>" UNO bookmarks (see also
-    // SwMailMergeOutputPage::documentStartPageNumber() ).
+    // These boundaries are done using "documentStartPageNumber<number>" UNO bookmarks (see also
+    // documentStartPageNumber() ).
     executeMailMerge();
     // Here getPages() works on the source document, so get pages of the resulting one.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());

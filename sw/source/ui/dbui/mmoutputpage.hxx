@@ -43,91 +43,111 @@ namespace com{ namespace sun{ namespace star{
     }
 }}}
 
-class SwMailMergeOutputPage : public svt::OWizardPage
+/// Dialog implementing the saving as of the result document.
+class SwMMResultSaveDialog : public SfxModalDialog
 {
-    VclPtr<RadioButton>    m_pSaveStartDocRB;
-    VclPtr<RadioButton>    m_pSaveMergedDocRB;
-    VclPtr<RadioButton>    m_pPrintRB;
-    VclPtr<RadioButton>    m_pSendMailRB;
-
-    VclPtr<VclFrame>       m_pSeparator;
-
-    VclPtr<PushButton>     m_pSaveStartDocPB;
-
     VclPtr<RadioButton>    m_pSaveAsOneRB;
     VclPtr<RadioButton>    m_pSaveIndividualRB;
-    VclPtr<RadioButton>    m_pPrintAllRB; //has to be here for tab control reasons
-    VclPtr<RadioButton>    m_pSendAllRB;  //has to be here for tab control reasons
-    //this group is used in save and print
     VclPtr<RadioButton>    m_pFromRB;
     VclPtr<NumericField>   m_pFromNF;
     VclPtr<FixedText>      m_pToFT;
     VclPtr<NumericField>   m_pToNF;
-    VclPtr<PushButton>     m_pSaveNowPB;
 
+    VclPtr<Button>         m_pOKButton;
+
+    bool                   m_bCancelSaving;
+
+    DECL_LINK_TYPED(SaveOutputHdl_Impl, Button* , void);
+    DECL_LINK_TYPED(SaveCancelHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);
+
+public:
+    SwMMResultSaveDialog(vcl::Window* pParent = nullptr);
+    virtual ~SwMMResultSaveDialog();
+
+    virtual void dispose() override;
+};
+
+/// Dialog implementing the printing of the result document.
+class SwMMResultPrintDialog : public SfxModalDialog
+{
     VclPtr<FixedText>      m_pPrinterFT;
     VclPtr<ListBox>        m_pPrinterLB;
     VclPtr<PushButton>     m_pPrinterSettingsPB;
-    VclPtr<PushButton>     m_pPrintNowPB;
 
+    VclPtr<RadioButton>    m_pPrintAllRB;
+
+    VclPtr<RadioButton>    m_pFromRB;
+    VclPtr<NumericField>   m_pFromNF;
+    VclPtr<FixedText>      m_pToFT;
+    VclPtr<NumericField>   m_pToNF;
+
+    VclPtr<Button>         m_pOKButton;
+
+    VclPtr<Printer>        m_pTempPrinter;
+
+    DECL_LINK_TYPED(PrinterChangeHdl_Impl, ListBox&,void );
+    DECL_LINK_TYPED(PrintHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(PrinterSetupHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);
+
+    void FillInPrinterSettings();
+
+public:
+    SwMMResultPrintDialog(vcl::Window* pParent = nullptr);
+    virtual ~SwMMResultPrintDialog();
+
+    virtual void dispose() override;
+};
+
+/// Dialog implementing the sending as email of the result document.
+class SwMMResultEmailDialog : public SfxModalDialog
+{
     VclPtr<FixedText>      m_pMailToFT;
     VclPtr<ListBox>        m_pMailToLB;
     VclPtr<PushButton>     m_pCopyToPB;
+
     VclPtr<FixedText>      m_pSubjectFT;
     VclPtr<Edit>           m_pSubjectED;
+
     VclPtr<FixedText>      m_pSendAsFT;
     VclPtr<ListBox>        m_pSendAsLB;
+    VclPtr<PushButton>     m_pSendAsPB;
+
     VclPtr<VclContainer>   m_pAttachmentGroup;
     VclPtr<Edit>           m_pAttachmentED;
-    VclPtr<PushButton>     m_pSendAsPB;
-    VclPtr<PushButton>     m_pSendDocumentsPB;
 
-    //some FixedLine labels
-    OUString        m_sSaveStartST;
-    OUString        m_sSaveMergedST;
-    OUString        m_sPrintST;
-    OUString        m_sSendMailST;
+    VclPtr<RadioButton>    m_pSendAllRB;
 
-    //misc strings
+    VclPtr<RadioButton>    m_pFromRB;
+    VclPtr<NumericField>   m_pFromNF;
+    VclPtr<FixedText>      m_pToFT;
+    VclPtr<NumericField>   m_pToNF;
+
+    VclPtr<Button>         m_pOKButton;
+
     OUString        m_sDefaultAttachmentST;
     OUString        m_sNoSubjectST;
     OUString        m_sConfigureMail;
 
-    OUString        m_sBody;
-
-    bool            m_bCancelSaving;
-
-    VclPtr<SwMailMergeWizard>  m_pWizard;
-
-    //some dialog data
-    VclPtr<Printer> m_pTempPrinter;
     OUString        m_sCC;
     OUString        m_sBCC;
 
-    DECL_LINK_TYPED(OutputTypeHdl_Impl, Button*, void);
+    OUString        m_sBody;
+
     DECL_LINK_TYPED(CopyToHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(SaveStartHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(SaveOutputHdl_Impl, Button* , void);
-    DECL_LINK_TYPED(PrinterChangeHdl_Impl, ListBox&,void );
-    DECL_LINK_TYPED(PrintHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(PrinterSetupHdl_Impl, Button*, void );
     DECL_LINK_TYPED(SendTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(SendAsHdl_Impl, Button*, void);
     DECL_LINK_TYPED(SendDocumentsHdl_Impl, Button*, void);
     DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(SaveCancelHdl_Impl, Button*, void);
 
-    int documentStartPageNumber( int document ) const;
-    int documentEndPageNumber( int document ) const;
+    void FillInEmailSettings();
 
-protected:
-        virtual bool    canAdvance() const override;
-        virtual void    ActivatePage() override;
 public:
-        SwMailMergeOutputPage( SwMailMergeWizard* _pParent);
-        virtual ~SwMailMergeOutputPage();
-    virtual void dispose() override;
+    SwMMResultEmailDialog(vcl::Window* pParent = nullptr);
+    virtual ~SwMMResultEmailDialog();
 
+    virtual void dispose() override;
 };
 
 struct SwMailDescriptor
