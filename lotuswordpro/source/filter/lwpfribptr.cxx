@@ -288,10 +288,15 @@ void LwpFribPtr::XFConvert()
             LwpFribFrame* frameFrib= static_cast<LwpFribFrame*>(pFrib);
             rtl::Reference<LwpObject> pLayout = frameFrib->GetLayout();
             if (pLayout.is() && pLayout->GetTag() == VO_DROPCAPLAYOUT)
-                m_pPara->GetFoundry()->GetDropcapMgr()->SetXFPara(m_pXFPara);
+            {
+                LwpFoundry* pFoundry = m_pPara->GetFoundry();
+                LwpDropcapMgr* pMgr = pFoundry ? pFoundry->GetDropcapMgr() : nullptr;
+                if (pMgr)
+                    pMgr->SetXFPara(m_pXFPara);
+            }
             frameFrib->XFConvert(m_pXFPara);
-        }
             break;
+        }
         case FRIB_TAG_CHBLOCK:
         {
             LwpFribCHBlock* chbFrib = static_cast<LwpFribCHBlock*>(pFrib);
