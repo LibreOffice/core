@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_61b42bf2",
+        "filename": "sd/source/ui/view/ViewShellBase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2015-12-23T13:07:59Z",
+      "side": 1,
+      "message": "i am trying to find SID_INSERT_DRAW slots\u0027s execution method. ViewShellBase::Execute method is defined execution method. But When i click the \"show draw functions\" button this method is not triggered. \n\nWhere is my fault? Help please",
+      "range": {
+        "startLine": 608,
+        "startChar": 5,
+        "endLine": 608,
+        "endChar": 43
+      },
+      "revId": "774931d953e14c45bf63d599d2cf04e0045139ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
