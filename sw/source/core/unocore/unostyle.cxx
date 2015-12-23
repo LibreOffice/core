@@ -278,10 +278,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 public:
     SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, bool bConditional = false);
-    SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
-                                SwDoc*  pDoc,
-                                const OUString& rStyleName);
-
+    SwXStyle(SfxStyleSheetBasePool* pPool, SfxStyleFamily eFamily, SwDoc* pDoc, const OUString& rStyleName);
     virtual ~SwXStyle();
 
 
@@ -375,7 +372,7 @@ public:
     SwXFrameStyle(SfxStyleSheetBasePool& rPool,
                                 SwDoc*  pDoc,
                                 const OUString& rStyleName) :
-        SwXStyle(rPool, SFX_STYLE_FAMILY_FRAME, pDoc, rStyleName){}
+        SwXStyle(&rPool, SFX_STYLE_FAMILY_FRAME, pDoc, rStyleName){}
     SwXFrameStyle( SwDoc *pDoc );
     virtual ~SwXFrameStyle();
 
@@ -690,11 +687,11 @@ sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUStrin
 
 template<enum SfxStyleFamily eFamily>
 static uno::Reference< css::style::XStyle> lcl_CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
-    { return pBasePool ? new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), eFamily, false); };
+    { return pBasePool ? new SwXStyle(pBasePool, eFamily, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), eFamily, false); };
 
 template<>
 uno::Reference< css::style::XStyle> lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
-    { return pBasePool ? new SwXStyle(*pBasePool, SFX_STYLE_FAMILY_PARA, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), SFX_STYLE_FAMILY_PARA, false); };
+    { return pBasePool ? new SwXStyle(pBasePool, SFX_STYLE_FAMILY_PARA, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), SFX_STYLE_FAMILY_PARA, false); };
 template<>
 uno::Reference< css::style::XStyle> lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
     { return pBasePool ? new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), sStyleName) : new SwXFrameStyle(pDocShell->GetDoc()); };
@@ -1112,6 +1109,21 @@ static uno::Reference<container::XNameAccess> lcl_InitStyleFamily(SwDoc* pDoc, c
     return aResult.get<return_t>();
 }
 
+static bool lcl_InitConditional(SfxStyleSheetBasePool* pBasePool, const SfxStyleFamily eFamily, const OUString& rStyleName)
+{
+    if(!pBasePool || eFamily != SFX_STYLE_FAMILY_PARA)
+        return false;
+    pBasePool->SetSearchMask(eFamily);
+    SfxStyleSheetBase* pBase = pBasePool->Find(rStyleName);
+    SAL_WARN_IF(!pBase, "sw.uno", "where is the style?" );
+    if(!pBase)
+        return false;
+    const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(rStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL));
+    if(nId != USHRT_MAX)
+        return ::IsConditionalByPoolId(nId);
+    return RES_CONDTXTFMTCOLL == static_cast<SwDocStyleSheet*>(pBase)->GetCollection()->Which();
+}
+
 static const StyleFamilyEntry& lcl_GetStyleEntry(const SfxStyleFamily eFamily)
 {
     auto pEntries = lcl_GetStyleFamilyEntries();
@@ -1137,33 +1149,15 @@ SwXStyle::SwXStyle(SwDoc* pDoc, SfxStyleFamily eFamily, bool bConditional)
             new SwStyleProperties_Impl(aSwMapProvider.GetPropertySet(m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE :  m_rEntry.m_nPropMapType)->getPropertyMap()));
 }
 
-SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
-        SwDoc* pDoc, const OUString& rStyleName) :
-    m_pDoc(pDoc),
-    m_sStyleName(rStyleName),
-    m_rEntry(lcl_GetStyleEntry(eFam)),
-    m_bIsDescriptor(false),
-    m_bIsConditional(false),
-    m_pBasePool(&rPool),
-    m_pPropertiesImpl(nullptr)
-{
-    if(!m_pBasePool)
-        return;
-    if(eFam == SFX_STYLE_FAMILY_PARA)
-    {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        OSL_ENSURE(pBase, "where is the style?" );
-        if(pBase)
-        {
-            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(m_sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
-            if(nId != USHRT_MAX)
-                m_bIsConditional = ::IsConditionalByPoolId( nId );
-            else
-                m_bIsConditional = RES_CONDTXTFMTCOLL == static_cast<SwDocStyleSheet*>(pBase)->GetCollection()->Which();
-        }
-    }
-}
+SwXStyle::SwXStyle(SfxStyleSheetBasePool* pPool, SfxStyleFamily eFamily, SwDoc* pDoc, const OUString& rStyleName)
+    : m_pDoc(pDoc)
+    , m_sStyleName(rStyleName)
+    , m_rEntry(lcl_GetStyleEntry(eFamily))
+    , m_bIsDescriptor(false)
+    , m_bIsConditional(lcl_InitConditional(pPool, eFamily, rStyleName))
+    , m_pBasePool(pPool)
+    , m_pPropertiesImpl(nullptr)
+{ }
 
 SwXStyle::~SwXStyle()
 {
@@ -3160,7 +3154,7 @@ void SwXStyle::Invalidate()
 SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool,
         SwDocShell* pDocSh, SfxStyleFamily eFam,
         const OUString& rStyleName):
-    SwXStyle(rPool, eFam, pDocSh->GetDoc(), rStyleName)
+    SwXStyle(&rPool, eFam, pDocSh->GetDoc(), rStyleName)
 {
 
 }
