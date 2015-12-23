@@ -99,6 +99,7 @@ namespace
         using TranslateIndex_t = std::function<sal_uInt16(const sal_uInt16)>;
         SfxStyleFamily m_eFamily;
         sal_uInt16 m_nPropMapType;
+        uno::Reference<beans::XPropertySetInfo> m_xPSInfo;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
         sal_uInt32 m_nResId;
@@ -108,13 +109,14 @@ namespace
         StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName, CreateStyle_t fCreateStyle, TranslateIndex_t fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_nPropMapType(nPropMapType)
+                , m_xPSInfo(aSwMapProvider.GetPropertySet(nPropMapType)->getPropertySetInfo())
                 , m_aPoolId(aPoolId)
                 , m_sName(sName)
                 , m_nResId(nResId)
                 , m_fGetCountOrName(fGetCountOrName)
                 , m_fCreateStyle(fCreateStyle)
                 , m_fTranslateIndex(fTranslateIndex)
-            {}
+            { }
     };
     static const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
     // these should really be constexprs, but MSVC still is apparently too stupid for them
@@ -1286,76 +1288,16 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle) throw( container::No
     }
 }
 
-static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, bool bIsConditional )
+uno::Reference<beans::XPropertySetInfo> SwXStyle::getPropertySetInfo() throw( uno::RuntimeException, std::exception )
 {
-    uno::Reference< beans::XPropertySetInfo >  xRet;
-    switch( eFamily )
+    if(m_bIsConditional)
     {
-        case SFX_STYLE_FAMILY_CHAR:
-        {
-            static uno::Reference< beans::XPropertySetInfo >  xCharRef;
-            if(!xCharRef.is())
-            {
-                xCharRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_STYLE)->getPropertySetInfo();
-            }
-            xRet = xCharRef;
-        }
-        break;
-        case SFX_STYLE_FAMILY_PARA:
-        {
-            static uno::Reference< beans::XPropertySetInfo > xCondParaRef;
-            static uno::Reference< beans::XPropertySetInfo >  xParaRef;
-            if(!xParaRef.is())
-            {
-                xCondParaRef = aSwMapProvider.GetPropertySet(
-                    PROPERTY_MAP_CONDITIONAL_PARA_STYLE)->getPropertySetInfo();
-                xParaRef = aSwMapProvider.GetPropertySet(
-                    PROPERTY_MAP_PARA_STYLE)->getPropertySetInfo();
-            }
-            xRet = bIsConditional ? xCondParaRef : xParaRef;
-        }
-        break;
-        case SFX_STYLE_FAMILY_PAGE     :
-        {
-            static uno::Reference< beans::XPropertySetInfo >  xPageRef;
-            if(!xPageRef.is())
-            {
-                xPageRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE)->getPropertySetInfo();
-            }
-            xRet = xPageRef;
-        }
-        break;
-        case SFX_STYLE_FAMILY_FRAME    :
-        {
-            static uno::Reference< beans::XPropertySetInfo >  xFrameRef;
-            if(!xFrameRef.is())
-            {
-                xFrameRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_FRAME_STYLE)->getPropertySetInfo();
-            }
-            xRet = xFrameRef;
-        }
-        break;
-        case SFX_STYLE_FAMILY_PSEUDO:
-        {
-            static uno::Reference< beans::XPropertySetInfo >  xNumRef;
-            if(!xNumRef.is())
-            {
-                xNumRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_NUM_STYLE)->getPropertySetInfo();
-            }
-            xRet = xNumRef;
-        }
-        break;
-
-        default:
-            ;
+        assert(m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PARA);
+        static uno::Reference<beans::XPropertySetInfo> xCondParaRef;
+        xCondParaRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CONDITIONAL_PARA_STYLE)->getPropertySetInfo();
+        return xCondParaRef;
     }
-    return xRet;
-}
-
-uno::Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo()
-    throw( uno::RuntimeException, std::exception )
-{
-    return lcl_getPropertySetInfo( m_rEntry.m_eFamily, m_bIsConditional );
+    return m_rEntry.m_xPSInfo;
 }
 
 void    SwXStyle::ApplyDescriptorProperties()
