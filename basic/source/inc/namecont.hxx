@@ -560,7 +560,6 @@ class SfxLibrary
     friend class SfxDialogLibraryContainer;
     friend class SfxScriptLibraryContainer;
 
-    css::uno::Reference< css::uno::XComponentContext >    mxContext;
     css::uno::Reference< css::ucb::XSimpleFileAccess3 >   mxSFI;
 
     ModifiableHelper&                                     mrModifiable;
@@ -622,13 +621,11 @@ public:
     SfxLibrary(
         ModifiableHelper& _rModifiable,
         const css::uno::Type& aType,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
     );
     SfxLibrary(
         ModifiableHelper& _rModifiable,
         const css::uno::Type& aType,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL,
         const OUString& aStorageURL,

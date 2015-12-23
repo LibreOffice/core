@@ -148,14 +148,12 @@ public:
     SfxScriptLibrary
     (
         ModifiableHelper& _rModifiable,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
     );
 
     SfxScriptLibrary
     (
         ModifiableHelper& _rModifiable,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly
     );

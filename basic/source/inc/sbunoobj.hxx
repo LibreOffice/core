@@ -285,11 +285,8 @@ public:
 // Wrapper for UNO Singleton
 class SbUnoSingleton : public SbxObject
 {
-    const css::uno::Reference< css::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
-
 public:
-    SbUnoSingleton( const OUString& aName_,
-        const css::uno::Reference< css::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
+    SbUnoSingleton( const OUString& aName_ );
 
     void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 };

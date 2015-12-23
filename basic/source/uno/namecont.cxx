@@ -3003,9 +3003,8 @@ sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServic
 
 // Ctor
 SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
-    const Reference< XComponentContext >& xContext, const Reference< XSimpleFileAccess3 >& xSFI )
+    const Reference< XSimpleFileAccess3 >& xSFI )
         : OComponentHelper( m_aMutex )
-        , mxContext( xContext )
         , mxSFI( xSFI )
         , mrModifiable( _rModifiable )
         , maNameContainer( new NameContainer(aType) )
@@ -3025,10 +3024,9 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
 }
 
 SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
-    const Reference< XComponentContext >& xContext, const Reference< XSimpleFileAccess3 >& xSFI,
+    const Reference< XSimpleFileAccess3 >& xSFI,
     const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly )
         : OComponentHelper( m_aMutex )
-        , mxContext( xContext )
         , mxSFI( xSFI )
         , mrModifiable( _rModifiable )
         , maNameContainer( new NameContainer(aType) )

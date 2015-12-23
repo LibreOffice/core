@@ -3793,17 +3793,15 @@ SbUnoSingleton* findUnoSingleton( const OUString& rName )
             {
                 Reference< XSingletonTypeDescription > xSingletonTypeDesc( xTypeDesc, UNO_QUERY );
                 if( xSingletonTypeDesc.is() )
-                    pSbUnoSingleton = new SbUnoSingleton( rName, xSingletonTypeDesc );
+                    pSbUnoSingleton = new SbUnoSingleton( rName );
             }
         }
     }
     return pSbUnoSingleton;
 }
 
-SbUnoSingleton::SbUnoSingleton( const OUString& aName_,
-    const Reference< XSingletonTypeDescription >& xSingletonTypeDesc )
+SbUnoSingleton::SbUnoSingleton( const OUString& aName_ )
         : SbxObject( aName_ )
-        , m_xSingletonTypeDesc( xSingletonTypeDesc )
 {
     SbxVariableRef xGetMethodRef = new SbxMethod( OUString( "get"  ), SbxOBJECT );
     QuickInsert( static_cast<SbxVariable*>(xGetMethodRef) );
@@ -3991,7 +3989,6 @@ public:
     virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) throw( RuntimeException, std::exception ) override;
 
 private:
-    Reference< XIdlReflection >  m_xCoreReflection;
     Reference< XAllListener >    m_xAllListener;
     Reference< XIdlClass >       m_xListenerType;
     Any                          m_Helper;

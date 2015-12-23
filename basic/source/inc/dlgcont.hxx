@@ -119,7 +119,6 @@ public:
     (
         ModifiableHelper& _rModifiable,
         const OUString& aName,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         SfxDialogLibraryContainer* pParent
     );
@@ -128,7 +127,6 @@ public:
     (
         ModifiableHelper& _rModifiable,
         const OUString& aName,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly,
         SfxDialogLibraryContainer* pParent

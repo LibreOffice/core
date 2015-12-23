@@ -117,7 +117,7 @@ SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embe
 SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& aName )
 {
     (void)aName;    // Only needed for SfxDialogLibrary
-    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxContext, mxSFI );
+    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxSFI );
     return pRet;
 }
 
@@ -127,7 +127,7 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString& aN
                                                               bool ReadOnly )
 {
     (void)aName;    // Only needed for SfxDialogLibrary
-    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxContext, mxSFI,
+    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxSFI,
                                              aLibInfoFileURL, StorageURL, ReadOnly );
     return pRet;
 }
@@ -1181,21 +1181,19 @@ Sequence< OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceName
 
 // Ctor
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
-                                    const Reference< XComponentContext >& xContext,
                                     const Reference< XSimpleFileAccess3 >& xSFI )
-    : SfxLibrary( _rModifiable, cppu::UnoType<OUString>::get(), xContext, xSFI )
+    : SfxLibrary( _rModifiable, cppu::UnoType<OUString>::get(), xSFI )
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
 {
 }
 
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
-                                    const Reference< XComponentContext >& xContext,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     bool ReadOnly )
-    : SfxLibrary( _rModifiable, cppu::UnoType<OUString>::get(), xContext, xSFI,
+    : SfxLibrary( _rModifiable, cppu::UnoType<OUString>::get(), xSFI,
                         aLibInfoFileURL, aStorageURL, ReadOnly)
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
