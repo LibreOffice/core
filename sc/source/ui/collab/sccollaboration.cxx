@@ -12,6 +12,7 @@
 #include "docsh.hxx"
 #include "sendfunc.hxx"
 #include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <osl/file.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 
