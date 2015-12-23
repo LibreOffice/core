@@ -46,4 +46,9 @@ $(eval $(call gb_Library_add_exception_objects,ftransl,\
 	dtrans/source/win32/ftransl/ftranslentry \
 ))
 
+$(eval $(call gb_Library_set_include,ftransl,\
+        -I$(SRCDIR)/dtrans/source/inc \
+        $$(INCLUDE) \
+))
+
 # vim: set noet sw=4 ts=4:

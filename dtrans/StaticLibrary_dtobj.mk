@@ -36,4 +36,9 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,dtobj,\
 	dtrans/source/win32/misc/ImplHelper \
 ))
 
+$(eval $(call gb_StaticLibrary_set_include,dtobj,\
+	-I$(SRCDIR)/dtrans/source/inc \
+	$$(INCLUDE) \
+))
+
 # vim: set noet sw=4 ts=4:
