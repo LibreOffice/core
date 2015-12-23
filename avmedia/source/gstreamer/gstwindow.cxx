@@ -52,8 +52,7 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
 // Window
 
 
-Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
-    mxMgr( rxMgr ),
+Window::Window() :
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
     mnPointerType( awt::SystemPointer::ARROW )
 {

@@ -39,7 +39,7 @@ class Window : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
 {
 public:
 
-    explicit Window( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
+    explicit Window();
     virtual ~Window();
 
     // XPlayerWindow
@@ -78,8 +78,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 
     css::media::ZoomLevel                       meZoomLevel;
     int                                         mnPointerType;
