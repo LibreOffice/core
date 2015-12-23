@@ -15,4 +15,6 @@
   <toolbar:toolbaritem xlink:href=".uno:MailMergePrevEntry"/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergeNextEntry"/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergeLastEntry"/>
+  <toolbar:toolbarseparator/>
+  <toolbar:toolbaritem xlink:href=".uno:MailMergeCreateDocuments"/>
 </toolbar:toolbar>
