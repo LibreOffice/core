@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_01639fb2",
+        "filename": "vcl/unx/gtk/a11y/atkwrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000534
+      },
+      "writtenOn": "2015-12-23T09:51:05Z",
+      "side": 1,
+      "message": "It\u0027s not necessary to ifdef this code, because registerRole will use ATK\u0027s atk_role_for_name function to find for the correct role.\n\nIn case you are running an old version of ATK, the only thing that will happen is that ATK_ROLE_INVALID will be returned, and in that case atk_role_register will be called to create a new role with that name.\n\nThat new role would probably be ignored by the screen reader in that old system, but we cannot control it; we just have to make sure that LO works in that context.",
+      "revId": "65826e864c9bac1ee3e8613f7a0ee40b8f8258eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
