@@ -1238,68 +1238,52 @@ sal_Bool SwXStyle::isInUse() throw( uno::RuntimeException, std::exception )
 OUString SwXStyle::getParentStyle() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    OUString aString;
-    if(m_pBasePool)
+    if(!m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        if(pBase)
-            aString = pBase->GetParent();
+        if(!m_bIsDescriptor)
+            throw uno::RuntimeException();
+        return m_sParentStyleName;
     }
-    else if(m_bIsDescriptor)
-        aString = m_sParentStyleName;
-    else
-        throw uno::RuntimeException();
-    SwStyleNameMapper::FillProgName(aString, aString, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ), true );
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    OUString aString;
+    if(pBase)
+        aString = pBase->GetParent();
+    SwStyleNameMapper::FillProgName(aString, aString, lcl_GetSwEnumFromSfxEnum(m_rEntry.m_eFamily), true);
     return aString;
 }
 
-void SwXStyle::setParentStyle(const OUString& rParentStyle)
-            throw( container::NoSuchElementException, uno::RuntimeException, std::exception )
+void SwXStyle::setParentStyle(const OUString& rParentStyle) throw( container::NoSuchElementException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     OUString sParentStyle;
     SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ), true );
-    if(m_pBasePool)
+    if(!m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        bool bExcept = false;
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        if(pBase)
-        {
-            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)) );
-            //make it a 'real' style - necessary for pooled styles
-            xBase->GetItemSet();
-            if(xBase->GetParent() != sParentStyle)
-            {
-                bExcept = !xBase->SetParent(sParentStyle);
-            }
-        }
-        else
-            bExcept = true;
-        if(bExcept)
+        if(!m_bIsDescriptor)
             throw uno::RuntimeException();
-    }
-    else if(m_bIsDescriptor)
-    {
         m_sParentStyleName = sParentStyle;
         try
         {
-            uno::Any aAny = m_xStyleFamily->getByName ( sParentStyle );
-            aAny >>= m_xStyleData;
+            const auto aAny = m_xStyleFamily->getByName(sParentStyle);
+            m_xStyleData = aAny.get<decltype(m_xStyleData)>();
         }
-        catch ( container::NoSuchElementException& )
-        {
-        }
-        catch ( lang::WrappedTargetException& )
-        {
-        }
-        catch ( uno::RuntimeException& )
-        {
-        }
+        catch(...)
+        { }
+        return;
     }
-    else
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    if(!pBase)
         throw uno::RuntimeException();
+    rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    //make it a 'real' style - necessary for pooled styles
+    xBase->GetItemSet();
+    if(xBase->GetParent() != sParentStyle)
+    {
+        if(!xBase->SetParent(sParentStyle))
+            throw uno::RuntimeException();
+    }
 }
 
 static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, bool bIsConditional )
