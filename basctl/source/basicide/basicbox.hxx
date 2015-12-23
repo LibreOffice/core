@@ -77,7 +77,6 @@ private:
     OUString        aCurText;
     bool            bIgnoreSelect;
     bool            bFillBox;
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
 
     static void     ReleaseFocus();
     void            InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation );
@@ -93,8 +92,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
-                    LibBox( vcl::Window* pParent,
-                            const css::uno::Reference< css::frame::XFrame >& rFrame );
+                    LibBox( vcl::Window* pParent );
     virtual         ~LibBox();
     virtual void    dispose() override;
 

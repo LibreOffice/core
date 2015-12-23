@@ -534,8 +534,6 @@ public:
 class UnoTypeCodeCompletetor
 {
 private:
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
-    css::uno::Reference< css::reflection::XIdlReflection > xRefl;
     css::uno::Reference< css::reflection::XIdlClass > xClass;
     bool bCanComplete;
 
