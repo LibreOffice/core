@@ -149,8 +149,8 @@ PresentationSettings::PresentationSettings( const PresentationSettings& r )
 {
 }
 
-SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
-: FmFormModel( !utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetPalettePath() : OUString(), nullptr, pDrDocSh )
+SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh, SfxItemPool* pPool)
+: FmFormModel( !utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetPalettePath() : OUString(), pPool, pDrDocSh )
 , bReadOnly(false)
 , mpOutliner(nullptr)
 , mpInternalOutliner(nullptr)
@@ -456,7 +456,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
 
         if( meDocType == DOCUMENT_TYPE_IMPRESS )
             mpCreatingTransferable->SetDocShell( new ::sd::DrawDocShell(
-                SfxObjectCreateMode::EMBEDDED, true, meDocType ) );
+                SfxObjectCreateMode::EMBEDDED, true, meDocType, GetItemPool().Clone() ) );
         else
             mpCreatingTransferable->SetDocShell( new ::sd::GraphicDocShell(
                 SfxObjectCreateMode::EMBEDDED, true, meDocType ) );

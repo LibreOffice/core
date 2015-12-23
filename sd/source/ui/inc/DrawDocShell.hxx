@@ -60,7 +60,8 @@ public:
     DrawDocShell (
         SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
         bool bSdDataObj=false,
-        DocumentType=DOCUMENT_TYPE_IMPRESS);
+        DocumentType=DOCUMENT_TYPE_IMPRESS,
+        SfxItemPool* pPool = nullptr);
 
     DrawDocShell (
         SfxModelFlags nModelCreationFlags,
@@ -224,7 +225,7 @@ protected:
     bool                    mbNewDocument;
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
-    void                    Construct(bool bClipboard);
+    void                    Construct(bool bClipboard, SfxItemPool* pPool = nullptr);
     virtual void            InPlaceActivate( bool bActive ) override;
 private:
     static void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);

@@ -206,8 +206,8 @@ protected:
 public:
 
 
-                        SAL_DLLPRIVATE SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
-                        SAL_DLLPRIVATE virtual ~SdDrawDocument();
+    SAL_DLLPRIVATE                     SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh, SfxItemPool* pPool = nullptr);
+    SAL_DLLPRIVATE virtual             ~SdDrawDocument();
 
     SAL_DLLPRIVATE SdDrawDocument*     AllocSdDrawDocument() const;
     SAL_DLLPRIVATE virtual SdrModel*   AllocModel() const override; //forwards to AllocSdDrawDocument
@@ -220,17 +220,17 @@ public:
 
     SAL_DLLPRIVATE SfxItemPool&        GetPool() { return( *pItemPool ); }
 
-    SAL_DLLPRIVATE ::sd::Outliner* GetOutliner(bool bCreateOutliner=true);
-    ::sd::Outliner* GetInternalOutliner(bool bCreateOutliner=true);
+    SAL_DLLPRIVATE ::sd::Outliner*     GetOutliner(bool bCreateOutliner=true);
+    ::sd::Outliner*                    GetInternalOutliner(bool bCreateOutliner=true);
 
-    SAL_DLLPRIVATE ::sd::DrawDocShell*     GetDocSh() const { return mpDocSh; }
+    SAL_DLLPRIVATE ::sd::DrawDocShell* GetDocSh() const { return mpDocSh; }
 
     SAL_DLLPRIVATE LanguageType        GetLanguage( const sal_uInt16 nId ) const;
     SAL_DLLPRIVATE void                SetLanguage( const LanguageType eLang, const sal_uInt16 nId );
 
     SAL_DLLPRIVATE SvxNumType          GetPageNumType() const override;
     SAL_DLLPRIVATE void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
-    OUString CreatePageNumValue(sal_uInt16 nNum) const;
+    OUString                           CreatePageNumValue(sal_uInt16 nNum) const;
 
     SAL_DLLPRIVATE DocumentType        GetDocumentType() const { return meDocType; }
 
@@ -243,22 +243,22 @@ public:
         If a reference document is given, the sizes and border settings of that document are used
         for newly created slides.
     */
-    void   CreateFirstPages( SdDrawDocument* pRefDocument = nullptr );
-    bool                CreateMissingNotesAndHandoutPages();
+    void                               CreateFirstPages( SdDrawDocument* pRefDocument = nullptr );
+    bool                               CreateMissingNotesAndHandoutPages();
 
     SAL_DLLPRIVATE void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) override;
     SAL_DLLPRIVATE void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
     SAL_DLLPRIVATE void                DeletePage(sal_uInt16 nPgNum) override;
     SAL_DLLPRIVATE SdrPage*            RemovePage(sal_uInt16 nPgNum) override;
 
-    SAL_DLLPRIVATE virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
-    SAL_DLLPRIVATE virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) override;
+    SAL_DLLPRIVATE virtual void        InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
+    SAL_DLLPRIVATE virtual SdrPage*    RemoveMasterPage(sal_uInt16 nPgNum) override;
 
     SAL_DLLPRIVATE void                RemoveUnnecessaryMasterPages( SdPage* pMaster=nullptr, bool bOnlyDuplicatePages=false, bool bUndo=true );
-    void   SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
-                                      SdDrawDocument* pSourceDoc, bool bMaster, bool bCheckMasters);
+    void                               SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
+                                       SdDrawDocument* pSourceDoc, bool bMaster, bool bCheckMasters);
 
-    SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile);
+    SdDrawDocument*                    OpenBookmarkDoc(const OUString& rBookmarkFile);
     SAL_DLLPRIVATE SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
 
     SAL_DLLPRIVATE bool InsertBookmark(const std::vector<OUString> &rBookmarkList,
