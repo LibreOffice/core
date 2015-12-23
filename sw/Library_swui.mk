@@ -169,9 +169,9 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/dbui/mmgreetingspage \
     sw/source/ui/dbui/mmlayoutpage \
     sw/source/ui/dbui/mmmergepage \
-    sw/source/ui/dbui/mmoutputpage \
     sw/source/ui/dbui/mmoutputtypepage \
     sw/source/ui/dbui/mmpreparemergepage \
+    sw/source/ui/dbui/mmresultdialogs \
     sw/source/ui/dbui/selectdbtabledialog \
 ))
 endif

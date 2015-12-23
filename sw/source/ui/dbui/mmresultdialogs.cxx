@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <mmoutputpage.hxx>
+#include <mmresultdialogs.hxx>
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <mailmergechildwindow.hxx>
@@ -53,7 +53,6 @@
 
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
-#include <mmgreetingspage.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
