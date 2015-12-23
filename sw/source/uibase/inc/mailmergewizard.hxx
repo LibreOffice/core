@@ -32,7 +32,6 @@ class SwMailMergeConfigItem;
 #define MM_LAYOUTPAGE           4
 #define MM_PREPAREMERGEPAGE     5
 #define MM_MERGEPAGE            6
-#define MM_OUTPUTPAGE           7
 
 class SwMailMergeWizard : public ::svt::RoadmapWizard
 {

@@ -55,7 +55,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
         m_sLayout(          SW_RES( ST_LAYOUT        )),
         m_sPrepareMerge(    SW_RES( ST_PREPAREMERGE )),
         m_sMerge(           SW_RES( ST_MERGE        )),
-        m_sOutput(          SW_RES( ST_OUTPUT       )),
         m_sFinish(          SW_RES( ST_FINISH       )),
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
@@ -77,7 +76,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
             MM_LAYOUTPAGE,
             MM_PREPAREMERGEPAGE,
             MM_MERGEPAGE,
-            MM_OUTPUTPAGE,
             WZS_INVALID_STATE
         );
     else
@@ -89,7 +87,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
             MM_LAYOUTPAGE,
             MM_PREPAREMERGEPAGE,
             MM_MERGEPAGE,
-            MM_OUTPUTPAGE,
             WZS_INVALID_STATE
         );
 
@@ -113,7 +110,6 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
         case MM_LAYOUTPAGE        : pRet = VclPtr<SwMailMergeLayoutPage>::Create(this);     break;
         case MM_PREPAREMERGEPAGE  : pRet = VclPtr<SwMailMergePrepareMergePage>::Create(this);   break;
         case MM_MERGEPAGE         : pRet = VclPtr<SwMailMergeMergePage>::Create(this);          break;
-        case MM_OUTPUTPAGE       :  pRet = VclPtr<SwMailMergeOutputPage>::Create(this);         break;
     }
     OSL_ENSURE(pRet, "no page created in ::createPage");
     return pRet;
@@ -161,7 +157,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
         case MM_ADDRESSBLOCKPAGE  :
             bEnableNext = m_rConfigItem.GetResultSet().is();
         break;
-        case MM_OUTPUTPAGE       :
+        case MM_MERGEPAGE:
             bEnableNext = false;
         break;
     }
@@ -190,8 +186,6 @@ OUString SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
             return m_sPrepareMerge;
         case MM_MERGEPAGE:
             return m_sMerge;
-        case MM_OUTPUTPAGE:
-            return m_sOutput;
     }
     return OUString();
 }
@@ -210,8 +204,6 @@ void SwMailMergeWizard::UpdateRoadmap()
     MM_PREPAREMERGEPAGE         > only active if address data has been selected
                                     inactive after preparemerge page
     MM_MERGEPAGE                > only active if address data has been selected
-
-    MM_OUTPUTPAGE               > only active if address data has been selected
 */
 
     // enableState( <page id>, false );
@@ -230,7 +222,7 @@ void SwMailMergeWizard::UpdateRoadmap()
     bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
         static_cast<svt::OWizardPage*>(pCurPage)->commitPage( ::svt::WizardTypes::eValidate );
 
-    for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_OUTPUTPAGE; ++nPage)
+    for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_MERGEPAGE; ++nPage)
     {
         bool bEnable = true;
         switch(nPage)
@@ -256,7 +248,6 @@ void SwMailMergeWizard::UpdateRoadmap()
                 // fall-through
             case MM_PREPAREMERGEPAGE:
             case MM_MERGEPAGE:
-            case MM_OUTPUTPAGE:
                 bEnable = bEnable && !m_bDocumentLoad && bEnableOutputTypePage &&
                             m_rConfigItem.GetResultSet().is() &&
                             bAddressFieldsConfigured &&
