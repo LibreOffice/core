@@ -1183,41 +1183,35 @@ void SwXStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 OUString SwXStyle::getName() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(m_pBasePool)
-    {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        OSL_ENSURE(pBase, "where is the style?" );
-        if(!pBase)
-            throw uno::RuntimeException();
-        OUString aString;
-        SwStyleNameMapper::FillProgName(pBase->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ), true);
-        return aString;
-    }
-    return m_sStyleName;
+    if(!m_pBasePool)
+        return m_sStyleName;
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
+    if(!pBase)
+        throw uno::RuntimeException();
+    OUString aString;
+    SwStyleNameMapper::FillProgName(pBase->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ), true);
+    return aString;
 }
 
 void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(m_pBasePool)
+    if(!m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        OSL_ENSURE(pBase, "where is the style?" );
-        bool bExcept = true;
-        if(pBase && pBase->IsUserDefined())
-        {
-            rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-            bExcept = !xTmp->SetName(rName);
-            if(!bExcept)
-                m_sStyleName = rName;
-        }
-        if(bExcept)
-            throw uno::RuntimeException();
-    }
-    else
         m_sStyleName = rName;
+        return;
+    }
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
+    if(!pBase || !pBase->IsUserDefined())
+        throw uno::RuntimeException();
+    rtl::Reference<SwDocStyleSheet> xTmp(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    if(!xTmp->SetName(rName))
+        throw uno::RuntimeException();
+    m_sStyleName = rName;
 }
 
 sal_Bool SwXStyle::isUserDefined() throw( uno::RuntimeException, std::exception )
