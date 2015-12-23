@@ -263,8 +263,8 @@ class SwXStyle : public cppu::WeakImplHelper
 protected:
     SfxStyleSheetBasePool* m_pBasePool;
     std::unique_ptr<SwStyleProperties_Impl> m_pPropertiesImpl;
-    css::uno::Reference< css::beans::XPropertySet > mxStyleData;
-    css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
+    css::uno::Reference<css::container::XNameAccess> m_xStyleFamily;
+    css::uno::Reference<css::beans::XPropertySet> m_xStyleData;
 
     void SAL_CALL SetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues )
         throw (css::beans::UnknownPropertyException,
@@ -1085,17 +1085,24 @@ uno::Sequence< OUString > SwXStyle::getSupportedServiceNames() throw( uno::Runti
     return aRet;
 }
 
-static uno::Reference<beans::XPropertySet> lcl_GetStandardStyle(uno::Reference<container::XNameAccess>& rxStyleFamily)
+static uno::Reference<beans::XPropertySet> lcl_InitStandardStyle(const SfxStyleFamily eFamily,  uno::Reference<container::XNameAccess>& rxStyleFamily)
 {
-    using return_t = decltype(lcl_GetStandardStyle(rxStyleFamily));
+    using return_t = decltype(lcl_InitStandardStyle(eFamily, rxStyleFamily));
+    if(eFamily != SFX_STYLE_FAMILY_PARA && eFamily != SFX_STYLE_FAMILY_PAGE)
+        return {};
     auto aResult(rxStyleFamily->getByName("Standard"));
     if(!aResult.isExtractableTo(cppu::UnoType<return_t>::get()))
         return {};
     return aResult.get<return_t>();
 }
-static uno::Reference<container::XNameAccess> lcl_GetStyleFamily(SwDoc* pDoc, const StyleFamilyEntry& rEntry)
+
+static uno::Reference<container::XNameAccess> lcl_InitStyleFamily(SwDoc* pDoc, const StyleFamilyEntry& rEntry)
 {
-    using return_t = decltype(lcl_GetStyleFamily(pDoc, rEntry));
+    using return_t = decltype(lcl_InitStyleFamily(pDoc, rEntry));
+    if(rEntry.m_eFamily != SFX_STYLE_FAMILY_CHAR
+            && rEntry.m_eFamily != SFX_STYLE_FAMILY_PARA
+            && rEntry.m_eFamily != SFX_STYLE_FAMILY_PAGE)
+        return {};
     auto xModel(pDoc->GetDocShell()->GetBaseModel());
     uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xModel, uno::UNO_QUERY);
     auto xFamilies = xFamilySupplier->getStyleFamilies();
@@ -1113,28 +1120,19 @@ static const StyleFamilyEntry& lcl_GetStyleEntry(const SfxStyleFamily eFamily)
     assert(pEntry != pEntries->end());
     return *pEntry;
 }
-SwXStyle::SwXStyle(SwDoc *pDoc, SfxStyleFamily eFamily, bool bConditional) :
-    m_pDoc(pDoc),
-    m_rEntry(lcl_GetStyleEntry(eFamily)),
-    m_bIsDescriptor(true),
-    m_bIsConditional(bConditional),
-    m_pBasePool(nullptr)
+
+SwXStyle::SwXStyle(SwDoc* pDoc, SfxStyleFamily eFamily, bool bConditional)
+    : m_pDoc(pDoc)
+    , m_rEntry(lcl_GetStyleEntry(eFamily))
+    , m_bIsDescriptor(true)
+    , m_bIsConditional(bConditional)
+    , m_pBasePool(nullptr)
+    , m_xStyleFamily(lcl_InitStyleFamily(pDoc, m_rEntry))
+    , m_xStyleData(lcl_InitStandardStyle(eFamily, m_xStyleFamily))
 {
     assert(!m_bIsConditional || m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PARA); // only paragraph styles are conditional
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-    switch(m_rEntry.m_eFamily)
-    {
-        case SFX_STYLE_FAMILY_CHAR:
-        case SFX_STYLE_FAMILY_PARA:
-        case SFX_STYLE_FAMILY_PAGE:
-            mxStyleFamily = lcl_GetStyleFamily(pDoc, m_rEntry);
-        break;
-        default:
-            ;
-    }
-    if(m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PARA || m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PAGE)
-        mxStyleData = lcl_GetStandardStyle(mxStyleFamily);
     m_pPropertiesImpl = std::unique_ptr<SwStyleProperties_Impl>(
             new SwStyleProperties_Impl(aSwMapProvider.GetPropertySet(m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE :  m_rEntry.m_nPropMapType)->getPropertyMap()));
 }
@@ -1183,8 +1181,8 @@ void SwXStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     if(!GetRegisteredIn())
     {
         m_pDoc = nullptr;
-        mxStyleData.clear();
-        mxStyleFamily.clear();
+        m_xStyleData.clear();
+        m_xStyleFamily.clear();
     }
 }
 
@@ -1311,8 +1309,8 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         m_sParentStyleName = sParentStyle;
         try
         {
-            uno::Any aAny = mxStyleFamily->getByName ( sParentStyle );
-            aAny >>= mxStyleData;
+            uno::Any aAny = m_xStyleFamily->getByName ( sParentStyle );
+            aAny >>= m_xStyleData;
         }
         catch ( container::NoSuchElementException& )
         {
@@ -1403,8 +1401,8 @@ uno::Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo()
 void    SwXStyle::ApplyDescriptorProperties()
 {
     m_bIsDescriptor = false;
-    mxStyleData.clear();
-    mxStyleFamily.clear();
+    m_xStyleData.clear();
+    m_xStyleFamily.clear();
 
     const PropertyEntryVector_t& rPropertyVector = m_pPropertiesImpl->GetPropertyVector();
     PropertyEntryVector_t::const_iterator aIt = rPropertyVector.begin();
@@ -2558,7 +2556,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                     break;
                     case SFX_STYLE_FAMILY_PARA:
                     case SFX_STYLE_FAMILY_PAGE:
-                        SwStyleProperties_Impl::GetProperty ( pNames[nProp], mxStyleData, pRet[ nProp ] );
+                        SwStyleProperties_Impl::GetProperty ( pNames[nProp], m_xStyleData, pRet[ nProp ] );
                     break;
                     case SFX_STYLE_FAMILY_CHAR:
                     case SFX_STYLE_FAMILY_FRAME :
@@ -3155,8 +3153,8 @@ void SwXStyle::Invalidate()
     m_sStyleName.clear();
     m_pBasePool = nullptr;
     m_pDoc = nullptr;
-    mxStyleData.clear();
-    mxStyleFamily.clear();
+    m_xStyleData.clear();
+    m_xStyleFamily.clear();
 }
 
 SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool,
@@ -3747,7 +3745,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
             m_pPropertiesImpl->GetProperty(rPropName, pAny);
             if (!pAny->hasValue())
             {
-                SwStyleProperties_Impl::GetProperty(rPropName, mxStyleData, pRet[nProp]);
+                SwStyleProperties_Impl::GetProperty(rPropName, m_xStyleData, pRet[nProp]);
             }
             else
             {
