@@ -76,9 +76,10 @@ private:
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
 
-    void                    InitGenericGlyphFallback() const;
     mutable PhysicalFontFamily**  mpFallbackList;
     mutable int             mnFallbackCount;
+
+    void                    InitGenericGlyphFallback() const;
 
     PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
     PhysicalFontFamily*     ImplFindByAliasName(const OUString& rSearchName,
