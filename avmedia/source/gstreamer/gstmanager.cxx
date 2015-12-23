@@ -43,7 +43,7 @@ Manager::~Manager()
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
     throw (uno::RuntimeException, std::exception)
 {
-    Player*                             pPlayer( new Player( mxMgr ) );
+    Player*                             pPlayer( new Player );
     uno::Reference< media::XPlayer >    xRet( pPlayer );
     const INetURLObject                 aURL( rURL );
 

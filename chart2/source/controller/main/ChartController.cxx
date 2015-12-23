@@ -1380,7 +1380,7 @@ void ChartController::executeDispatch_ChartType()
 
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
-    ScopedVclPtrInstance< ChartTypeDialog > aDlg( m_pChartWindow, getModel(), m_xCC );
+    ScopedVclPtrInstance< ChartTypeDialog > aDlg( m_pChartWindow, getModel() );
     if( aDlg->Execute() == RET_OK )
     {
         impl_adaptDataSeriesAutoResize();

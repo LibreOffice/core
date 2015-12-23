@@ -86,14 +86,13 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
     }
 }
 
-ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, bool bInitialise, bool bForceRecovery, uno::Reference < XProgressHandler > xProgress )
+ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, bool bInitialise, bool bForceRecovery)
     throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
 , aInflater( true )
 , xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
 , m_xContext ( rxContext )
-, xProgressHandler( xProgress )
 , bRecoveryMode( bForceRecovery )
 {
     if (bInitialise)

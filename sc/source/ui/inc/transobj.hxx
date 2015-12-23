@@ -42,7 +42,6 @@ private:
     ScDocument*                     pDoc;
     ScRange                         aBlock;
     SCROW                           nNonFiltered;       // non-filtered rows
-    TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     SfxObjectShellRef               aDocShellRef;
     SfxObjectShellRef               aDrawPersistRef;

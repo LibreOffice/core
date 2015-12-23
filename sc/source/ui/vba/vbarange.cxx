@@ -313,12 +313,10 @@ class SingleRangeIndexAccess : public ::cppu::WeakImplHelper< container::XIndexA
                                                                container::XEnumerationAccess >
 {
 private:
-    uno::Reference< XHelperInterface > mxParent;
     uno::Reference< table::XCellRange > m_xRange;
-    uno::Reference< uno::XComponentContext > mxContext;
 
 public:
-    SingleRangeIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ):mxParent( xParent ), m_xRange( xRange ), mxContext( xContext ) {}
+    SingleRangeIndexAccess( const uno::Reference< table::XCellRange >& xRange ) : m_xRange( xRange ) {}
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() throw (::uno::RuntimeException, std::exception) override { return 1; }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
@@ -327,10 +325,9 @@ public:
             throw lang::IndexOutOfBoundsException();
         return uno::makeAny( m_xRange );
     }
-        // XElementAccess
-        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) override { return cppu::UnoType<table::XCellRange>::get(); }
-
-        virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override { return sal_True; }
+    // XElementAccess
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) override { return cppu::UnoType<table::XCellRange>::get(); }
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override { return sal_True; }
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException, std::exception) override { return new SingleRangeEnumeration( m_xRange ); }
 
@@ -1422,7 +1419,7 @@ ScVbaRange::ScVbaRange( uno::Sequence< uno::Any> const & args,
     uno::Reference< container::XIndexAccess >  xIndex;
     if ( mxRange.is() )
     {
-        xIndex = new SingleRangeIndexAccess( mxParent, mxContext, mxRange );
+        xIndex = new SingleRangeIndexAccess( mxRange );
     }
     else if ( mxRanges.is() )
     {
@@ -1441,7 +1438,7 @@ ScVbaRange::ScVbaRange( const uno::Reference< XHelperInterface >& xParent, const
     if  ( !xRange.is() )
         throw lang::IllegalArgumentException("range is not set ", uno::Reference< uno::XInterface >() , 1 );
 
-    uno::Reference< container::XIndexAccess > xIndex( new SingleRangeIndexAccess( mxParent, mxContext, xRange ) );
+    uno::Reference< container::XIndexAccess > xIndex( new SingleRangeIndexAccess( xRange ) );
     m_Areas = new ScVbaRangeAreas( mxParent, mxContext, xIndex, mbIsRows, mbIsColumns );
 
 }

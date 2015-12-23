@@ -39,7 +39,6 @@ class ImplWheelWindow : public FloatingWindow
 private:
 
     ImageList           maImgList;
-    Bitmap              maWheelBmp;
     Point               maLastMousePos;
     Point               maCenter;
     Timer*              mpTimer;

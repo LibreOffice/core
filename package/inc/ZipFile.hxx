@@ -62,7 +62,6 @@ protected:
     css::uno::Reference < css::io::XInputStream > xStream;
     css::uno::Reference < css::io::XSeekable > xSeek;
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
-    css::uno::Reference < css::ucb::XProgressHandler > xProgressHandler;
 
     bool bRecoveryMode;
 
@@ -94,8 +93,7 @@ public:
     ZipFile( css::uno::Reference < css::io::XInputStream > &xInput,
              const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise,
-             bool bForceRecover,
-             css::uno::Reference < css::ucb::XProgressHandler > xProgress
+             bool bForceRecover
              )
         throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
 

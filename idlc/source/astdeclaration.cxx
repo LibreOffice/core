@@ -45,7 +45,6 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
     , m_pScope(pScope)
     , m_nodeType(type)
     , m_bImported(false)
-    , m_bIsAdded(false)
     , m_bInMainFile(false)
     , m_bPredefined(false)
     , m_lineNumber(0)

@@ -211,7 +211,6 @@ private:
     LwpDocument* m_pDoc;
     bool m_bRegisteredAll;
 private: //file members
-    LwpVersionManager m_VerMgr;
     LwpObjectManager m_ObjMgr;
     LwpObjectID m_MarkerHead;
     LwpObjectID m_FootnoteMgr;

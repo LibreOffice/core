@@ -69,11 +69,10 @@ class TabStopCollectionHelper : public ::cppu::WeakImplHelper< container::XIndex
 private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
-    uno::Reference< beans::XPropertySet > mxParaProps;
     sal_Int32 mnTabStops;
 
 public:
-    TabStopCollectionHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ) throw ( css::uno::RuntimeException ): mxParent( xParent ), mxContext( xContext ), mxParaProps( xParaProps )
+    TabStopCollectionHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ) throw ( css::uno::RuntimeException ): mxParent( xParent ), mxContext( xContext )
     {
         mnTabStops = lcl_getTabStops( xParaProps ).getLength();
     }

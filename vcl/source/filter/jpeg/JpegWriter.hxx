@@ -29,11 +29,10 @@
 class JPEGWriter
 {
     SvStream&           mrStream;
-    Bitmap              maBitmap;
     BitmapReadAccess*   mpReadAccess;
     sal_uInt8*          mpBuffer;
     bool                mbNative;
-    bool            mbGreys;
+    bool                mbGreys;
     sal_Int32           mnQuality;
     sal_Int32           maChromaSubsampling;
 

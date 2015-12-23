@@ -37,9 +37,8 @@ namespace gio
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-DataSupplier::DataSupplier( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
-    const uno::Reference< ::gio::Content >& rContent, sal_Int32 nOpenMode )
-    : mxContent(rContent), m_xSMgr(rxSMgr), mnOpenMode(nOpenMode), mbCountFinal(false)
+DataSupplier::DataSupplier( const uno::Reference< ::gio::Content >& rContent, sal_Int32 nOpenMode )
+    : mxContent(rContent), mnOpenMode(nOpenMode), mbCountFinal(false)
 {
 }
 

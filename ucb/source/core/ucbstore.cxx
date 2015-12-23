@@ -313,7 +313,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                     // Yep!
                     return Reference< XPersistentPropertySet >(
                                             new PersistentPropertySet(
-                                                    m_xContext, *this, key ) );
+                                                    *this, key ) );
                 }
                 else if ( create )
                 {
@@ -348,11 +348,6 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                             {
                                 // Fill new item...
 
-//                              // Set Values
-//                              xNameReplace->replaceByName(
-//                                      OUString("Values"),
-//                                      makeAny( ... ) );
-
                                 // Insert new item.
                                 xContainer->insertByName(
                                         key, makeAny( xNameReplace ) );
@@ -361,7 +356,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 
                                 return Reference< XPersistentPropertySet >(
                                             new PersistentPropertySet(
-                                                    m_xContext, *this, key ) );
+                                                    *this, key ) );
                             }
                         }
                         catch (const IllegalArgumentException&)
@@ -1136,11 +1131,9 @@ struct PersistentPropertySet_Impl
 
 
 PersistentPropertySet::PersistentPropertySet(
-                        const Reference< XComponentContext >& xContext,
                         PropertySetRegistry& rCreator,
                         const OUString& rKey )
-: m_xContext( xContext ),
-  m_pImpl( new PersistentPropertySet_Impl( rCreator, rKey ) )
+: m_pImpl( new PersistentPropertySet_Impl( rCreator, rKey ) )
 {
     // register at creator.
     rCreator.add( this );

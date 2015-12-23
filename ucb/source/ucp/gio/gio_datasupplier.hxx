@@ -54,14 +54,12 @@ class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
 private:
     css::uno::Reference< ::gio::Content > mxContent;
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMgr;
     sal_Int32 mnOpenMode;
     bool mbCountFinal;
     bool getData();
     ResultList maResults;
 public:
-    DataSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSMgr,
-        const css::uno::Reference< Content >& rContent, sal_Int32 nOpenMode );
+    DataSupplier( const css::uno::Reference< Content >& rContent, sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;

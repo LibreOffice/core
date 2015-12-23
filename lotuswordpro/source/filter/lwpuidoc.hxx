@@ -132,7 +132,6 @@ public:
     explicit LwpUIDocument(LwpObjectStream *pStrm);
     ~LwpUIDocument();
 private:
-    LwpNamedProperties m_NamedProps;
     LwpAutoRunMacroOptions m_ARMacroOpts;
     LwpMergeOptions m_MergedOpts;
     LwpAtomHolder m_SheetFullPath;  // full path for style sheet

@@ -295,8 +295,7 @@ IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, EndReachedHdl, LicenseView&, void)
 
 
 LicenseDialog::LicenseDialog( Sequence<Any> const& args,
-                          Reference<XComponentContext> const& xComponentContext)
-    : m_xComponentContext(xComponentContext)
+                          Reference<XComponentContext> const& )
 {
     comphelper::unwrapArgs( args, m_parent, m_sExtensionName, m_sLicenseText );
 }

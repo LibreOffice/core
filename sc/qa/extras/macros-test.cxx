@@ -53,9 +53,6 @@ public:
 #endif
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
 #if !defined MACOSX

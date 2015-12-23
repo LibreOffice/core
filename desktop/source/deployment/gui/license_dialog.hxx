@@ -31,7 +31,6 @@ namespace dp_gui {
 class LicenseDialog
     : public ::cppu::WeakImplHelper<css::ui::dialogs::XExecutableDialog>
 {
-    css::uno::Reference<css::uno::XComponentContext> const m_xComponentContext;
     css::uno::Reference<css::awt::XWindow> /* const */ m_parent;
     OUString m_sExtensionName;
     OUString /* const */ m_sLicenseText;

@@ -278,9 +278,8 @@ void MissingPluginInstallerThread::execute() {
 // - Player -
 
 
-Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+Player::Player() :
     GstPlayer_BASE( m_aMutex ),
-    mxMgr( rxMgr ),
     mpPlaybin( nullptr ),
     mbFakeVideo (false ),
     mnUnmutedVolume( 0 ),

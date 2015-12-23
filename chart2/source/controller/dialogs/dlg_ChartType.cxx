@@ -34,13 +34,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 ChartTypeDialog::ChartTypeDialog( vcl::Window* pParent
-                , const uno::Reference< frame::XModel >& xChartModel
-                , const uno::Reference< uno::XComponentContext >& xContext )
+                , const uno::Reference< frame::XModel >& xChartModel )
     : ModalDialog( pParent, "ChartTypeDialog",
             "modules/schart/ui/charttypedialog.ui")
     , m_pChartTypeTabPage(nullptr)
     , m_xChartModel(xChartModel)
-    , m_xCC( xContext )
 {
     m_pChartTypeTabPage = VclPtr<ChartTypeTabPage>::Create(
         get_content_area(),

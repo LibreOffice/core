@@ -127,9 +127,6 @@ public:
     virtual bool IsTable() override { return true;}
     LwpSuperTableLayout* GetSuperTableLayout();
 protected:
-    LwpDLVListHeadTail m_RowCache;
-    LwpDLVListHeadTail m_ColumnCache;
-    LwpNotifyListPersistent m_CPTempVersionedNotifyList;
     LwpForkedNotifyList m_CPNotifyList;
 
     sal_uInt16      m_nRow, m_nColumn;

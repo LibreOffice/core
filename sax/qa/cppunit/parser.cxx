@@ -46,7 +46,6 @@ class ParserTest: public test::BootstrapFixture
 {
     InputSource maInput;
     uno::Reference< sax_fastparser::FastSaxParser > mxParser;
-    uno::Reference< XFastDocumentHandler > mxDocumentHandler;
     uno::Reference< DummyTokenHandler > mxTokenHandler;
 
 public:

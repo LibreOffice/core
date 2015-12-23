@@ -98,7 +98,6 @@ public:
     virtual void    ToXml(IXFStream *pStrm) override;
 
 protected:
-    rtl::Reference<XFContentContainer>  m_aContents;
     double          m_fRotate;
     XFPoint         m_aRotatePoint;
     double          m_fScaleX;

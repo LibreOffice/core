@@ -72,7 +72,6 @@ class VCL_DLLPUBLIC CairoTextRender : public TextRenderImpl
     ServerFont*     mpServerFont[ MAX_FALLBACK ];
 
     SalColor        mnTextColor;
-    CairoFontsCache m_aCairoFontsCache;
 
     bool            bDisableGraphite_;
 
