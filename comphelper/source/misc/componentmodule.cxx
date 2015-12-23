@@ -75,22 +75,17 @@ namespace comphelper
 
     void OModule::registerClient( OModule::ClientAccess )
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        if ( 1 == osl_atomic_increment( &m_nClients ) )
-            onFirstClient();
+        osl_atomic_increment( &m_nClients );
     }
 
 
     void OModule::revokeClient( OModule::ClientAccess )
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
         if ( 0 == osl_atomic_decrement( &m_nClients ) )
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
             onLastClient();
-    }
-
-
-    void OModule::onFirstClient()
-    {
+        }
     }
 
 
