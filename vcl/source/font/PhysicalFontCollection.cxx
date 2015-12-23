@@ -115,7 +115,7 @@ void PhysicalFontCollection::Clear()
     mbMatchData = false;
 }
 
-void PhysicalFontCollection::InitGenericGlyphFallback() const
+void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
 {
     // normalized family names of fonts suited for glyph fallback
     // if a font is available related fonts can be ignored
@@ -284,7 +284,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
     {
         // initialize font candidates for generic glyph fallback if needed
         if( mnFallbackCount < 0 )
-            InitGenericGlyphFallback();
+            ImplInitGenericGlyphFallback();
 
         // TODO: adjust nFallbackLevel by number of levels resolved by the fallback hook
         if( nFallbackLevel < mnFallbackCount )
@@ -431,7 +431,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindBySubstFontAttr( const utl::
     return nullptr;
 }
 
-void PhysicalFontCollection::InitMatchData() const
+void PhysicalFontCollection::ImplInitMatchData() const
 {
     // short circuit if already done
     if( mbMatchData )
@@ -469,7 +469,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindByAttributes( ImplFontAttrs nSea
     && ((eSearchWidth == WIDTH_DONTKNOW) || (eSearchWidth == WIDTH_NORMAL)) )
         return nullptr;
 
-    InitMatchData();
+    ImplInitMatchData();
     PhysicalFontFamily* pFoundData = nullptr;
 
     long    nBestMatch = 40000;
@@ -876,7 +876,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindByAttributes( ImplFontAttrs nSea
     return pFoundData;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindDefaultFont() const
+PhysicalFontFamily* PhysicalFontCollection::ImplFindDefaultFont() const
 {
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
@@ -909,7 +909,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindDefaultFont() const
 
     // now try to find a reasonable non-symbol font
 
-    InitMatchData();
+    ImplInitMatchData();
 
     PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
     for(; it !=  maPhysicalFontFamilies.end(); ++it )
@@ -1302,7 +1302,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindByFont( FontSelectPattern& rFSD 
     else
     {
         // if still needed fall back to default fonts
-        pFoundData = FindDefaultFont();
+        pFoundData = ImplFindDefaultFont();
     }
 
     return pFoundData;
