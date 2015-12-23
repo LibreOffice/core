@@ -1217,34 +1217,22 @@ void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException, std:
 sal_Bool SwXStyle::isUserDefined() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    bool bRet = false;
-    if(m_pBasePool)
-    {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        //if it is not found it must be non user defined
-        if(pBase)
-            bRet = pBase->IsUserDefined();
-    }
-    else
+    if(!m_pBasePool)
         throw uno::RuntimeException();
-    return bRet;
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    //if it is not found it must be non user defined
+    return pBase && pBase->IsUserDefined();
 }
 
 sal_Bool SwXStyle::isInUse() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    bool bRet = false;
-    if(m_pBasePool)
-    {
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, SFXSTYLEBIT_USED);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        if(pBase)
-            bRet = pBase->IsUsed();
-    }
-    else
+    if(!m_pBasePool)
         throw uno::RuntimeException();
-    return bRet;
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, SFXSTYLEBIT_USED);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    return pBase && pBase->IsUsed();
 }
 
 OUString SwXStyle::getParentStyle() throw( uno::RuntimeException, std::exception )
