@@ -1649,6 +1649,13 @@ void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGrap
 {
     VCL_GL_INFO( "::copyBits" );
 
+    if( !rImpl.maOffscreenTex )
+    {
+        VCL_GL_INFO( "::copyBits - skipping copy of un-initialized framebuffer contents of size "
+                     << rImpl.GetWidth() << "x" << rImpl.GetHeight() );
+        return;
+    }
+
     if( &rImpl == this &&
         (rPosAry.mnSrcWidth == rPosAry.mnDestWidth) &&
         (rPosAry.mnSrcHeight == rPosAry.mnDestHeight))
