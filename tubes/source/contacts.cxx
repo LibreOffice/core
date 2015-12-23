@@ -23,12 +23,12 @@ namespace {
 
 class TubeContacts : public ModelessDialog
 {
-    PushButton*             mpBtnDemo;
-    PushButton*             mpBtnBuddy;
-    PushButton*             mpBtnGroup;
-    PushButton*             mpBtnInvite;
-    PushButton*             mpBtnListen;
-    ListBox*                mpList;
+    VclPtr<PushButton>             mpBtnDemo;
+    VclPtr<PushButton>             mpBtnBuddy;
+    VclPtr<PushButton>             mpBtnGroup;
+    VclPtr<PushButton>             mpBtnInvite;
+    VclPtr<PushButton>             mpBtnListen;
+    VclPtr<ListBox>                mpList;
     Collaboration*          mpCollaboration;
 
     DECL_LINK_TYPED( BtnDemoHdl, Button*, void );
@@ -124,6 +124,17 @@ public:
     }
     virtual ~TubeContacts()
     {
+        dispose();
+    }
+
+    virtual void dispose() override
+    {
+        mpBtnListen.clear();
+        mpBtnGroup.clear();
+        mpBtnDemo.clear();
+        mpBtnBuddy.clear();
+        mpBtnGroup.clear();
+        mpList.clear();
     }
 
     static OUString fromUTF8( const char *pStr )
