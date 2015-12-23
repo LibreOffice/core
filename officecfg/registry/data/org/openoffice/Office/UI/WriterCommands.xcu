@@ -562,6 +562,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:MailMergeCreateDocuments" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Individual Documents</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SetAnchorToFrame" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Anchor To Frame</value>

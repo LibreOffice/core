@@ -225,6 +225,14 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 }
             }
             break;
+            case FN_MAILMERGE_CREATE_DOCUMENTS:
+            {
+                SwView* pView = ::GetActiveView();
+                SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+                if (!pConfigItem)
+                    rSet.DisableItem(nWhich);
+            }
+            break;
             default:
                 OSL_FAIL("::StateOther: default");
         }
@@ -756,8 +764,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                         {"Cursor",           uno::makeAny(pConfigItem->GetResultSet())}
                         }));
 
-            SwView* pActView = ::GetActiveView();
-            SwWrtShell& rSh = pActView->GetWrtShell();
+            SwWrtShell& rSh = pView->GetWrtShell();
             SwMergeDescriptor aMergeDesc(DBMGR_MERGE, rSh, aDescriptor);
             rSh.GetDBManager()->MergeNew(aMergeDesc);
 
@@ -770,6 +777,33 @@ void SwModule::ExecOther(SfxRequest& rReq)
             rBindings.Update();
         }
         break;
+        case FN_MAILMERGE_CREATE_DOCUMENTS:
+        {
+            SwView* pView = ::GetActiveView();
+            SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+            if (!pConfigItem)
+                return;
+
+            // TODO share this code somehow with the above FN_MAILMERGE_*_ENTRY
+            // TODO kill SwMailMergeWizard::CreateTargetDocument()
+            svx::ODataAccessDescriptor aDescriptor;
+            aDescriptor.setDataSource(pConfigItem->GetCurrentDBData().sDataSource);
+            aDescriptor[ svx::daConnection ]  <<= pConfigItem->GetConnection().getTyped();
+            aDescriptor[ svx::daCursor ]      <<= pConfigItem->GetResultSet();
+            aDescriptor[ svx::daCommand ]     <<= pConfigItem->GetCurrentDBData().sCommand;
+            aDescriptor[ svx::daCommandType ] <<= pConfigItem->GetCurrentDBData().nCommandType;
+            aDescriptor[ svx::daSelection ]   <<= pConfigItem->GetSelection();
+
+            SwWrtShell& rSh = pView->GetWrtShell();
+            SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
+            aMergeDesc.pMailMergeConfigItem = pConfigItem;
+            aMergeDesc.bCreateSingleFile = true;
+            rSh.GetDBManager()->MergeNew(aMergeDesc);
+
+            pConfigItem->SetMergeDone();
+            if (pConfigItem->GetTargetView())
+                pConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
+        }
 #endif
     }
 }
