@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_MISC_WINCLIP_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_MISC_WINCLIP_HXX
+#ifndef INCLUDED_DTRANS_SOURCE_INC_WINCLIP_HXX
+#define INCLUDED_DTRANS_SOURCE_INC_WINCLIP_HXX
 
 #include <sal/types.h>
 
