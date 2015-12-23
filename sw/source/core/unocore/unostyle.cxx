@@ -253,7 +253,7 @@ class SwXStyle : public cppu::WeakImplHelper
 {
     SwDoc* m_pDoc;
     OUString m_sStyleName;
-    SfxStyleFamily m_eFamily; // for Notify
+    const StyleFamilyEntry& m_rEntry;
     bool m_bIsDescriptor;
     bool m_bIsConditional;
     OUString m_sParentStyleName;
@@ -342,7 +342,7 @@ public:
     //SfxListener
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     OUString            GetStyleName() const { return m_sStyleName;}
-    SfxStyleFamily      GetFamily() const {return m_eFamily;}
+    SfxStyleFamily      GetFamily() const {return m_rEntry.m_eFamily;}
 
     bool                IsDescriptor() const {return m_bIsDescriptor;}
     bool                IsConditional() const { return m_bIsConditional;}
@@ -359,7 +359,7 @@ public:
     void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
     virtual const SwTextFormatColl* GetFormatColl() const
     {
-        assert(m_eFamily == SFX_STYLE_FAMILY_PARA);
+        assert(m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PARA);
         return m_pDoc->FindTextFormatCollByName(GetStyleName());
     }
 };
@@ -1043,20 +1043,20 @@ sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
 uno::Sequence< OUString > SwXStyle::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     long nCount = 1;
-    if(SFX_STYLE_FAMILY_PARA == m_eFamily)
+    if(SFX_STYLE_FAMILY_PARA == m_rEntry.m_eFamily)
     {
         nCount = 5;
         if(m_bIsConditional)
             nCount++;
     }
-    else if(SFX_STYLE_FAMILY_CHAR == m_eFamily)
+    else if(SFX_STYLE_FAMILY_CHAR == m_rEntry.m_eFamily)
         nCount = 5;
-    else if(SFX_STYLE_FAMILY_PAGE == m_eFamily)
+    else if(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily)
         nCount = 3;
     uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.style.Style";
-    switch(m_eFamily)
+    switch(m_rEntry.m_eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
             pArray[1] = "com.sun.star.style.CharacterStyle";
@@ -1091,24 +1091,29 @@ static uno::Reference<beans::XPropertySet> lcl_GetStandardStyle(uno::Reference<c
         return {};
     return aResult.get<return_t>();
 }
-static uno::Reference<container::XNameAccess> lcl_GetStyleFamily(SwDoc* pDoc, const SfxStyleFamily eFamily)
+static uno::Reference<container::XNameAccess> lcl_GetStyleFamily(SwDoc* pDoc, const StyleFamilyEntry& rEntry)
 {
-    using return_t = decltype(lcl_GetStyleFamily(pDoc, eFamily));
-    auto pEntries = lcl_GetStyleFamilyEntries();
-    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
-            [eFamily] (const StyleFamilyEntry& e) { return e.m_eFamily == eFamily; });
+    using return_t = decltype(lcl_GetStyleFamily(pDoc, rEntry));
     auto xModel(pDoc->GetDocShell()->GetBaseModel());
     uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xModel, uno::UNO_QUERY);
     auto xFamilies = xFamilySupplier->getStyleFamilies();
-    auto aResult(xFamilies->getByName(pEntry->m_sName));
+    auto aResult(xFamilies->getByName(rEntry.m_sName));
     if(!aResult.isExtractableTo(cppu::UnoType<return_t>::get()))
         return {};
     return aResult.get<return_t>();
 }
 
+static const StyleFamilyEntry& lcl_GetStyleEntry(const SfxStyleFamily eFamily)
+{
+    auto pEntries = lcl_GetStyleFamilyEntries();
+    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
+            [eFamily] (const StyleFamilyEntry& e) { return e.m_eFamily == eFamily; });
+    assert(pEntry != pEntries->end());
+    return *pEntry;
+}
 SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFamily, bool bConditional) :
     m_pDoc(pDoc),
-    m_eFamily(eFamily),
+    m_rEntry(lcl_GetStyleEntry(eFamily)),
     m_bIsDescriptor(true),
     m_bIsConditional(bConditional),
     m_pBasePool(nullptr)
@@ -1116,25 +1121,25 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFamily, bool bConditional) :
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     sal_uInt16 nMapId = PROPERTY_MAP_NUM_STYLE;
-    switch( m_eFamily )
+    switch(m_rEntry.m_eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
             nMapId = PROPERTY_MAP_CHAR_STYLE;
-            mxStyleFamily = lcl_GetStyleFamily(pDoc, eFamily);
+            mxStyleFamily = lcl_GetStyleFamily(pDoc, m_rEntry);
         }
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
             nMapId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
-            mxStyleFamily = lcl_GetStyleFamily(pDoc, eFamily);
+            mxStyleFamily = lcl_GetStyleFamily(pDoc, m_rEntry);
             mxStyleData = lcl_GetStandardStyle(mxStyleFamily);
         }
         break;
         case SFX_STYLE_FAMILY_PAGE:
         {
             nMapId = PROPERTY_MAP_PAGE_STYLE;
-            mxStyleFamily = lcl_GetStyleFamily(pDoc, eFamily);
+            mxStyleFamily = lcl_GetStyleFamily(pDoc, m_rEntry);
             mxStyleData = lcl_GetStandardStyle(mxStyleFamily);
         }
         break;
@@ -1159,7 +1164,7 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
         SwDoc* pDoc, const OUString& rStyleName) :
     m_pDoc(pDoc),
     m_sStyleName(rStyleName),
-    m_eFamily(eFam),
+    m_rEntry(lcl_GetStyleEntry(eFam)),
     m_bIsDescriptor(false),
     m_bIsConditional(false),
     m_pBasePool(&rPool),
@@ -1169,7 +1174,7 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
         return;
     if(eFam == SFX_STYLE_FAMILY_PARA)
     {
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
@@ -1209,13 +1214,13 @@ OUString SwXStyle::getName() throw( uno::RuntimeException, std::exception )
     SolarMutexGuard aGuard;
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         OSL_ENSURE(pBase, "where is the style?" );
         if(!pBase)
             throw uno::RuntimeException();
         OUString aString;
-        SwStyleNameMapper::FillProgName(pBase->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( m_eFamily ), true);
+        SwStyleNameMapper::FillProgName(pBase->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ), true);
         return aString;
     }
     return m_sStyleName;
@@ -1226,7 +1231,7 @@ void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException, std:
     SolarMutexGuard aGuard;
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         OSL_ENSURE(pBase, "where is the style?" );
         bool bExcept = true;
@@ -1250,7 +1255,7 @@ sal_Bool SwXStyle::isUserDefined() throw( uno::RuntimeException, std::exception 
     bool bRet = false;
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         //if it is not found it must be non user defined
         if(pBase)
@@ -1267,7 +1272,7 @@ sal_Bool SwXStyle::isInUse() throw( uno::RuntimeException, std::exception )
     bool bRet = false;
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily, SFXSTYLEBIT_USED);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, SFXSTYLEBIT_USED);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         if(pBase)
             bRet = pBase->IsUsed();
@@ -1283,7 +1288,7 @@ OUString SwXStyle::getParentStyle() throw( uno::RuntimeException, std::exception
     OUString aString;
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         if(pBase)
             aString = pBase->GetParent();
@@ -1292,7 +1297,7 @@ OUString SwXStyle::getParentStyle() throw( uno::RuntimeException, std::exception
         aString = m_sParentStyleName;
     else
         throw uno::RuntimeException();
-    SwStyleNameMapper::FillProgName(aString, aString, lcl_GetSwEnumFromSfxEnum ( m_eFamily ), true );
+    SwStyleNameMapper::FillProgName(aString, aString, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ), true );
     return aString;
 }
 
@@ -1301,10 +1306,10 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
 {
     SolarMutexGuard aGuard;
     OUString sParentStyle;
-    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum ( m_eFamily ), true );
+    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum ( m_rEntry.m_eFamily ), true );
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         bool bExcept = false;
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         if(pBase)
@@ -1413,7 +1418,7 @@ static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyl
 uno::Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo()
     throw( uno::RuntimeException, std::exception )
 {
-    return lcl_getPropertySetInfo( m_eFamily, m_bIsConditional );
+    return lcl_getPropertySetInfo( m_rEntry.m_eFamily, m_bIsConditional );
 }
 
 void    SwXStyle::ApplyDescriptorProperties()
@@ -2111,7 +2116,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
 
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
 
-    switch(m_eFamily)
+    switch(m_rEntry.m_eFamily)
     {
         case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
         case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
@@ -2134,9 +2139,9 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
     if(m_pBasePool)
     {
         const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        m_pBasePool->SetSearchMask(m_eFamily, nSaveMask );
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
         OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
             aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
@@ -2155,7 +2160,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
             throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if(aBaseImpl.getNewBase().is())
         {
-            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_eFamily);
+            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_rEntry.m_eFamily);
         }
         else if(m_bIsDescriptor)
         {
@@ -2524,7 +2529,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
 
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
 
-    switch(m_eFamily)
+    switch(m_rEntry.m_eFamily)
     {
         case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
         case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
@@ -2553,12 +2558,12 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
             if(!pBase)
             {
                 const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
-                m_pBasePool->SetSearchMask(m_eFamily);
+                m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
                 pBase = m_pBasePool->Find(m_sStyleName);
-                m_pBasePool->SetSearchMask(m_eFamily, nSaveMask );
+                m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
             }
 
-            pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, m_eFamily, GetDoc() );
+            pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, m_rEntry.m_eFamily, GetDoc() );
         }
         else if(m_bIsDescriptor)
         {
@@ -2567,7 +2572,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
             if(!pAny->hasValue())
             {
                 bool bExcept = false;
-                switch( m_eFamily )
+                switch( m_rEntry.m_eFamily )
                 {
                     case SFX_STYLE_FAMILY_PSEUDO:
                         bExcept = true;
@@ -2582,7 +2587,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                         if (pEntry->nWID >= POOLATTR_BEGIN && pEntry->nWID < RES_UNKNOWNATR_END )
                         {
                             SwFormat * pFormat;
-                            if ( m_eFamily == SFX_STYLE_FAMILY_CHAR )
+                            if ( m_rEntry.m_eFamily == SFX_STYLE_FAMILY_CHAR )
                                 pFormat = m_pDoc->GetDfltCharFormat();
                             else
                                 pFormat = m_pDoc->GetDfltFrameFormat();
@@ -2679,7 +2684,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
 
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily );
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily );
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         OSL_ENSURE(pBase, "where is the style?" );
 
@@ -2689,7 +2694,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
             rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
             sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
 
-            switch(m_eFamily)
+            switch(m_rEntry.m_eFamily)
             {
                 case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
                 case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
@@ -2727,8 +2732,8 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                 if(!bDone)
                 {
                     // check for Header/Footer entry
-                    const bool bHeader(SFX_STYLE_FAMILY_PAGE == m_eFamily && sPropName.startsWith("Header"));
-                    const bool bFooter(SFX_STYLE_FAMILY_PAGE == m_eFamily && sPropName.startsWith("Footer"));
+                    const bool bHeader(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily && sPropName.startsWith("Header"));
+                    const bool bFooter(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily && sPropName.startsWith("Footer"));
 
                     if(bHeader || bFooter || sPropName == UNO_NAME_FIRST_IS_SHARED)
                     {
@@ -2785,7 +2790,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                 {
                     pStates[i] = pPropSet->getPropertyState(*pEntry, *pSourceSet);
 
-                    if(SFX_STYLE_FAMILY_PAGE == m_eFamily && SID_ATTR_PAGE_SIZE == pEntry->nWID && beans::PropertyState_DIRECT_VALUE == pStates[i])
+                    if(SFX_STYLE_FAMILY_PAGE == m_rEntry.m_eFamily && SID_ATTR_PAGE_SIZE == pEntry->nWID && beans::PropertyState_DIRECT_VALUE == pStates[i])
                     {
                         const SvxSizeItem& rSize = static_cast <const SvxSizeItem&>( rSet.Get(SID_ATTR_PAGE_SIZE));
                         sal_uInt8 nMemberId = pEntry->nMemberId & 0x7f;
@@ -2830,14 +2835,14 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
 
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         OSL_ENSURE(pBase, "Where is the style?");
 
         if(pBase)
         {
             rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
-            switch(m_eFamily)
+            switch(m_rEntry.m_eFamily)
             {
                 case SFX_STYLE_FAMILY_CHAR:
                     pTargetFormat = xStyle->GetCharFormat();
@@ -2867,7 +2872,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
 
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
 
-    switch(m_eFamily)
+    switch(m_rEntry.m_eFamily)
     {
         case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
         case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE; break;
@@ -2940,7 +2945,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
 
     if(m_pBasePool)
     {
-        m_pBasePool->SetSearchMask(m_eFamily);
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
         OSL_ENSURE(pBase, "Where is the style?");
 
@@ -2949,7 +2954,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
             rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
             SwFormat *pTargetFormat = nullptr;
             size_t nPgDscPos = SIZE_MAX;
-            switch(m_eFamily)
+            switch(m_rEntry.m_eFamily)
             {
                 case SFX_STYLE_FAMILY_CHAR:
                     pTargetFormat = xStyle->GetCharFormat();
@@ -3071,7 +3076,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
     {
         if(m_pBasePool)
         {
-            m_pBasePool->SetSearchMask(m_eFamily);
+            m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
             SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
             OSL_ENSURE(pBase, "Doesn't seem to be a style!");
 
@@ -3079,7 +3084,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
             {
                 rtl::Reference< SwDocStyleSheet > xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
                 sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
-                switch(m_eFamily)
+                switch(m_rEntry.m_eFamily)
                 {
                     case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
                     case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE; break;
@@ -3154,7 +3159,7 @@ void SwXStyle::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if( pHint->GetId() &(SfxStyleSheetHintId::CHANGED|SfxStyleSheetHintId::ERASED) )
         {
-            static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(m_eFamily);
+            static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(m_rEntry.m_eFamily);
             SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);
             if(!pOwnBase)
             {
