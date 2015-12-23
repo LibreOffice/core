@@ -305,12 +305,14 @@ Const cstMaxTextLength = 65535
 					Case .CHAR				:	_PropertyGet = dbText
 					Case .VARCHAR			:	_PropertyGet = dbChar
 					Case .LONGVARCHAR		:	_PropertyGet = dbMemo
+					Case .CLOB				:	_PropertyGet = dbMemo
 					Case .DATE				:	_PropertyGet = dbDate
 					Case .TIME				:	_PropertyGet = dbTime
 					Case .TIMESTAMP			:	_PropertyGet = dbTimeStamp
 					Case .BINARY			:	_PropertyGet = dbBinary
 					Case .VARBINARY			:	_PropertyGet = dbVarBinary
 					Case .LONGVARBINARY		:	_PropertyGet = dbLongBinary
+					Case .BLOB				:	_PropertyGet = dbLongBinary
 					Case .BOOLEAN			:	_PropertyGet = dbBoolean
 					Case Else				:	_PropertyGet = dbUndefined
 				End Select
@@ -352,9 +354,9 @@ Const cstMaxTextLength = 65535
 		Case UCase(&quot;FieldSize&quot;)					&apos;	Probably physical size = 2 * unicode string length
 			With com.sun.star.sdbc.DataType
 				Select Case Column.Type
-					Case .LONGVARCHAR
+					Case .VARCHAR, .LONGVARCHAR, .CLOB
 						Set oSize = Column.getCharacterStream
-					Case .LONGVARBINARY, .VARBINARY, .BINARY
+					Case .LONGVARBINARY, .VARBINARY, .BINARY, .BLOB
 						Set oSize = Column.getBinaryStream
 					Case Else
 						Set oSize = Nothing
@@ -660,14 +662,14 @@ Const cstMaxLength = 64000
 
 	With com.sun.star.sdbc.DataType
 		Select Case Column.Type
-			Case .BINARY, .VARBINARY, .LONGVARBINARY
+			Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
 				If psMethod &lt;&gt; &quot;ReadAllBytes&quot; Then Goto Trace_Error
 				Set oStream = oSimpleFileAccess.openFileRead(sFile)
 				lFileLength = oStream.getLength()
 				If lFileLength = 0 Then Goto Trace_File
 				Column.updateBinaryStream(oStream, lFileLength)
 				oStream.closeInput()
-			Case .LONGVARCHAR
+			Case .VARCHAR, .LONGVARCHAR, .CLOB
 				If psMethod &lt;&gt; &quot;ReadAllText&quot; Then Goto Trace_Error
 				sMemo = &quot;&quot;
 				lFileLength = 0
@@ -728,10 +730,10 @@ Dim sFile As String, oSimpleFileAccess As Object, sMethod As String, oStream As 
 	oSimpleFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	With com.sun.star.sdbc.DataType
 		Select Case Column.Type
-			Case .BINARY, .VARBINARY, .LONGVARBINARY
+			Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
 				If psMethod &lt;&gt; &quot;WriteAllBytes&quot; Then Goto Trace_Error
 				Set oStream = Column.getBinaryStream()
-			Case .LONGVARCHAR
+			Case .VARCHAR, .LONGVARCHAR, .CLOB
 				If psMethod &lt;&gt; &quot;WriteAllText&quot; Then Goto Trace_Error
 				Set oStream = Column.getCharacterStream()
 			Case Else
