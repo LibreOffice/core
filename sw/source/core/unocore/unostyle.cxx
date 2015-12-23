@@ -254,7 +254,6 @@ class SwXStyle : public cppu::WeakImplHelper
     SwDoc* m_pDoc;
     OUString m_sStyleName;
     SfxStyleFamily m_eFamily; // for Notify
-
     bool m_bIsDescriptor;
     bool m_bIsConditional;
     OUString m_sParentStyleName;
@@ -1084,53 +1083,59 @@ uno::Sequence< OUString > SwXStyle::getSupportedServiceNames() throw( uno::Runti
     return aRet;
 }
 
-SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, bool bConditional) :
-    m_pDoc( pDoc ),
-    m_eFamily(eFam),
+static uno::Reference<beans::XPropertySet> lcl_GetStandardStyle(uno::Reference<container::XNameAccess>& rxStyleFamily)
+{
+    using return_t = decltype(lcl_GetStandardStyle(rxStyleFamily));
+    auto aResult(rxStyleFamily->getByName("Standard"));
+    if(!aResult.isExtractableTo(cppu::UnoType<return_t>::get()))
+        return {};
+    return aResult.get<return_t>();
+}
+static uno::Reference<container::XNameAccess> lcl_GetStyleFamily(SwDoc* pDoc, const SfxStyleFamily eFamily)
+{
+    using return_t = decltype(lcl_GetStyleFamily(pDoc, eFamily));
+    auto pEntries = lcl_GetStyleFamilyEntries();
+    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
+            [eFamily] (const StyleFamilyEntry& e) { return e.m_eFamily == eFamily; });
+    auto xModel(pDoc->GetDocShell()->GetBaseModel());
+    uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xModel, uno::UNO_QUERY);
+    auto xFamilies = xFamilySupplier->getStyleFamilies();
+    auto aResult(xFamilies->getByName(pEntry->m_sName));
+    if(!aResult.isExtractableTo(cppu::UnoType<return_t>::get()))
+        return {};
+    return aResult.get<return_t>();
+}
+
+SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFamily, bool bConditional) :
+    m_pDoc(pDoc),
+    m_eFamily(eFamily),
     m_bIsDescriptor(true),
     m_bIsConditional(bConditional),
     m_pBasePool(nullptr)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-    // get the property set for the default style data
-    // First get the model
-    uno::Reference < frame::XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
-    // Ask the model for it's family supplier interface
-    uno::Reference < style::XStyleFamiliesSupplier > xFamilySupplier ( xModel, uno::UNO_QUERY );
-    // Get the style families
-    uno::Reference < container::XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
-
-    uno::Any aAny;
     sal_uInt16 nMapId = PROPERTY_MAP_NUM_STYLE;
     switch( m_eFamily )
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
             nMapId = PROPERTY_MAP_CHAR_STYLE;
-            aAny = xFamilies->getByName ("CharacterStyles");
-            // Get the Frame family (and keep it for later)
-            aAny >>= mxStyleFamily;
+            mxStyleFamily = lcl_GetStyleFamily(pDoc, eFamily);
         }
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
             nMapId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
-            aAny = xFamilies->getByName ("ParagraphStyles");
-            // Get the Frame family (and keep it for later)
-            aAny >>= mxStyleFamily;
-            aAny = mxStyleFamily->getByName ("Standard");
-            aAny >>= mxStyleData;
+            mxStyleFamily = lcl_GetStyleFamily(pDoc, eFamily);
+            mxStyleData = lcl_GetStandardStyle(mxStyleFamily);
         }
         break;
         case SFX_STYLE_FAMILY_PAGE:
         {
             nMapId = PROPERTY_MAP_PAGE_STYLE;
-            aAny = xFamilies->getByName ("PageStyles");
-            // Get the Frame family (and keep it for later)
-            aAny >>= mxStyleFamily;
-            aAny = mxStyleFamily->getByName ("Standard");
-            aAny >>= mxStyleData;
+            mxStyleFamily = lcl_GetStyleFamily(pDoc, eFamily);
+            mxStyleData = lcl_GetStandardStyle(mxStyleFamily);
         }
         break;
         case SFX_STYLE_FAMILY_FRAME :
