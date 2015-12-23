@@ -105,11 +105,6 @@ namespace utl
         return m_pImpl->getResManager();
     }
 
-    void OComponentResourceModule::onFirstClient()
-    {
-        BaseClass::onFirstClient();
-    }
-
     void OComponentResourceModule::onLastClient()
     {
         m_pImpl->freeResManager();

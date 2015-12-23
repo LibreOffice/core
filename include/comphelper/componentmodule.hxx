@@ -142,11 +142,6 @@ namespace comphelper
         void revokeClient( ClientAccess );
 
     protected:
-        /** called when the first client has been registered
-            @precond
-                <member>m_aMutex</member> is locked
-        */
-        virtual void onFirstClient();
 
         /** called when the last client has been revoked
             @precond

@@ -57,7 +57,6 @@ namespace utl
 
     protected:
         // OModule overridables
-        virtual void onFirstClient() override;
         virtual void onLastClient() override;
     };
 
