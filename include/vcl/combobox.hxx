@@ -67,7 +67,7 @@ public:
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
     virtual void    Select();
-    virtual void    DoubleClick();
+    void            DoubleClick();
 
     virtual void    Modify() override;
 

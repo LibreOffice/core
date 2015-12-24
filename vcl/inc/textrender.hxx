@@ -43,8 +43,6 @@ class TextRenderImpl
 public:
     virtual ~TextRenderImpl() {}
 
-    virtual void setDevice(basebmp::BitmapDeviceSharedPtr& /*rDevice*/) {}
-
     virtual void                    SetTextColor( SalColor nSalColor ) = 0;
     virtual sal_uInt16              SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
     virtual void                    GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) = 0;

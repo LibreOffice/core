@@ -66,9 +66,6 @@ namespace sfx2
         // DockingWindow overridables
         void EndDocking(const Rectangle& rRect, bool bFloatMode) override;
 
-        // own overridables
-        virtual void onLayoutDone();
-
         virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     protected:
         /** internal version of ResetToolBox

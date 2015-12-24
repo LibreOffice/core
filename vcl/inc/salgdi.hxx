@@ -438,8 +438,6 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
-    virtual OpenGLContext      *BeginPaint() { return nullptr; }
-
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 
 #if ENABLE_CAIRO_CANVAS

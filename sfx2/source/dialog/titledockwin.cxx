@@ -92,12 +92,6 @@ namespace sfx2
     }
 
 
-    void TitledDockingWindow::onLayoutDone()
-    {
-        // not interested in
-    }
-
-
     void TitledDockingWindow::impl_scheduleLayout()
     {
         m_bLayoutPending = true;
@@ -136,8 +130,6 @@ namespace sfx2
                 aWindowSize.Height() - m_aBorder.Top() - m_aBorder.Bottom()
             )
         );
-
-        onLayoutDone();
     }
 
     void TitledDockingWindow::ApplySettings(vcl::RenderContext& rRenderContext)

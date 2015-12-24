@@ -263,8 +263,6 @@ public:
     virtual css::uno::Any           GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
     virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const override;
 
-    virtual OpenGLContext          *BeginPaint() override;
-
     bool TryRenderCachedNativeControl(ControlCacheKey& aControlCacheKey,
                                       int nX, int nY);
 

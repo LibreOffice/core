@@ -36,9 +36,8 @@
 
 static GlyphCache* pInstance = nullptr;
 
-GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
-:   mrPeer( rPeer ),
-    mnMaxSize( 1500000 ),
+GlyphCache::GlyphCache()
+:   mnMaxSize( 1500000 ),
     mnBytesUsed(sizeof(GlyphCache)),
     mnLruIndex(0),
     mnGlyphCount(0),
@@ -62,7 +61,6 @@ void GlyphCache::InvalidateAllGlyphs()
         ServerFont* pServerFont = it->second;
         // free all pServerFont related data
         pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
-        mrPeer.RemovingFont(*pServerFont);
         delete pServerFont;
     }
 
@@ -262,7 +260,6 @@ void GlyphCache::GarbageCollect()
             mpCurrentGCFont = nullptr;
         const FontSelectPattern& rIFSD = pServerFont->GetFontSelData();
         maFontList.erase( rIFSD );
-        mrPeer.RemovingFont( *pServerFont );
         mnBytesUsed -= pServerFont->GetByteCount();
 
         // remove font from list of garbage collected fonts
@@ -296,9 +293,8 @@ void GlyphCache::GrowNotify()
         GarbageCollect();
 }
 
-inline void GlyphCache::RemovingGlyph( GlyphData& rGD )
+inline void GlyphCache::RemovingGlyph()
 {
-    mrPeer.RemovingGlyph( rGD );
     mnBytesUsed -= sizeof( GlyphData );
     --mnGlyphCount;
 }
@@ -348,7 +344,7 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
         {
             OSL_ASSERT( mnBytesUsed >= sizeof(GlyphData) );
             mnBytesUsed -= sizeof( GlyphData );
-            GlyphCache::GetInstance().RemovingGlyph( rGD );
+            GlyphCache::GetInstance().RemovingGlyph();
             it = maGlyphList.erase( it );
         }
         else
