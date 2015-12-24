@@ -46,10 +46,10 @@ public:
 
     // find the device font family
     PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
-    PhysicalFontFamily*     FindOrCreateFamily( const OUString &rFamilyName );
-    PhysicalFontFamily*     FindByFont( FontSelectPattern& ) const;
-    PhysicalFontFamily*     FindByTokenNames(const OUString& rTokenStr) const;
-    PhysicalFontFamily*     FindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
+    PhysicalFontFamily*     FindOrCreateFontFamily( const OUString &rFamilyName );
+    PhysicalFontFamily*     FindFontFamilyByFont( FontSelectPattern& ) const;
+    PhysicalFontFamily*     FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
+    PhysicalFontFamily*     FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;
 
     // suggest fonts for glyph fallback
@@ -81,11 +81,11 @@ private:
     void                    ImplInitMatchData() const;
     void                    ImplInitGenericGlyphFallback() const;
 
-    PhysicalFontFamily*     ImplFindBySearchName( const OUString& ) const;
-    PhysicalFontFamily*     ImplFindByAliasName ( const OUString& rSearchName, const OUString& rShortName) const;
-    PhysicalFontFamily*     ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
+    PhysicalFontFamily*     ImplFindFontFamilyBySearchName( const OUString& ) const;
+    PhysicalFontFamily*     ImplFindFontFamilyByAliasName ( const OUString& rSearchName, const OUString& rShortName) const;
+    PhysicalFontFamily*     ImplFindFontFamilyBySubstFontAttr( const utl::FontNameAttr& ) const;
 
-    PhysicalFontFamily*     ImplFindDefaultFont() const;
+    PhysicalFontFamily*     ImplFindDefaultFontFamily() const;
 
 };
 
