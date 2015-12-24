@@ -136,8 +136,9 @@ endif
 export RAPTOR_TARBALL := 4ceb9316488b0ea01acf011023cf7fff-raptor2-2.0.9.tar.gz
 export RASQAL_TARBALL := b12c5f9cfdb6b04efce5a4a186b8416b-rasqal-0.9.30.tar.gz
 export REDLAND_TARBALL := 32f8e1417a64d3c6f2c727f9053f55ea-redland-1.0.16.tar.gz
-export REVENGE_MD5SUM := 2d4183bf17aea1a71842468a71a68c47
-export REVENGE_TARBALL := librevenge-0.0.2.tar.bz2
+export REVENGE_MD5SUM := 42d3fa020016196ec90012bcba4b8da2
+export REVENGE_VERSION_MICRO := 3
+export REVENGE_TARBALL := librevenge-0.0.$(REVENGE_VERSION_MICRO).tar.bz2
 export RHINO_TARBALL := 798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip
 export SERF_MD5SUM := 4f8e76c9c6567aee1d66aba49f76a58b
 export SERF_TARBALL := serf-1.2.1.tar.bz2

@@ -1,7 +1,7 @@
 --- src/lib/Makefile.in.orig	2015-08-07 11:57:42.256742305 +0200
 +++ src/lib/Makefile.in	2015-08-07 11:58:11.818741799 +0200
 @@ -470,7 +470,7 @@
- 	-DLIBREVENGE_BUILD $(am__append_2)
+ 	$(am__append_2)
  librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD = @LIBREVENGE_WIN32_RESOURCE@
  librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_WIN32_RESOURCE@
 -librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
