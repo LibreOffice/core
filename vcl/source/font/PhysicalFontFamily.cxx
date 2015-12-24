@@ -270,7 +270,7 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
 {
     // This is rather expensive to do per face.
     OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );
-    PhysicalFontFamily* pFamily = rFontCollection.FindOrCreateFamily( aFamilyName );
+    PhysicalFontFamily* pFamily = rFontCollection.FindOrCreateFontFamily( aFamilyName );
 
     for( PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
     {
@@ -282,7 +282,7 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
         PhysicalFontFace* pClonedFace = pFace->Clone();
 
         assert( pClonedFace->GetFamilyName().replaceAll("-", "").trim() == GetFamilyName().replaceAll("-", "").trim() );
-        assert( rFontCollection.FindOrCreateFamily( GetEnglishSearchFontName( pClonedFace->GetFamilyName() ) ) == pFamily );
+        assert( rFontCollection.FindOrCreateFontFamily( GetEnglishSearchFontName( pClonedFace->GetFamilyName() ) ) == pFamily );
 
         if (! pFamily->AddFontFace( pClonedFace ) )
             delete pClonedFace;

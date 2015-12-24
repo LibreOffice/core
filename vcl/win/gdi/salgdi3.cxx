@@ -500,7 +500,7 @@ namespace
         // get the default font for a specified locale
         const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
         const OUString aDefault = rDefaults.getUserInterfaceFont(rLanguageTag);
-        return rFontCollection.FindByTokenNames(aDefault);
+        return rFontCollection.FindFontFamilyByTokenNames(aDefault);
     }
 }
 
@@ -543,7 +543,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     }
 
     // are the missing characters symbols?
-    pFontFamily = pFontCollection->FindByAttributes( ImplFontAttrs::Symbol,
+    pFontFamily = pFontCollection->FindFontFamilyByAttributes( ImplFontAttrs::Symbol,
                                                      rFontSelData.GetWeight(),
                                                      rFontSelData.GetWidthType(),
                                                      rFontSelData.GetSlant(),
