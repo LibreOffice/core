@@ -876,7 +876,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
     return pFoundData;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::ImplFindDefaultFontFamily() const
+PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() const
 {
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
@@ -1302,7 +1302,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByFont( FontSelectPatt
     else
     {
         // if still needed fall back to default fonts
-        pFoundData = ImplFindDefaultFontFamily();
+        pFoundData = ImplFindFontFamilyOfDefaultFont();
     }
 
     return pFoundData;
