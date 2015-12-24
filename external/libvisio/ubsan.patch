@@ -1,0 +1,10 @@
+--- src/lib/VSDContentCollector.cpp
++++ src/lib/VSDContentCollector.cpp
+@@ -3285,6 +3285,7 @@
+   _handleLevelChange(level);
+   librevenge::RVNGString text;
+   std::vector<unsigned char> tmpData(layerMem.m_data.size());
++  if (!layerMem.m_data.empty())
+   memcpy(&tmpData[0], layerMem.m_data.getDataBuffer(), layerMem.m_data.size());
+   appendCharacters(text, tmpData, layerMem.m_format);
+ 

@@ -13,6 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libvisio,$(VISIO_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libvisio,0))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libvisio, \
+    external/libvisio/ubsan.patch \
+))
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libvisio, \
