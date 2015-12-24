@@ -39,15 +39,18 @@ public:
     explicit                PhysicalFontCollection();
     virtual                 ~PhysicalFontCollection();
 
-    // fill the list with device fonts
+    // fill the list with device font faces
     void                    Add( PhysicalFontFace* );
     void                    Clear();
     int                     Count() const { return maPhysicalFontFamilies.size(); }
 
-    // find the device font
+    // find the device font family
     PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
     PhysicalFontFamily*     FindOrCreateFamily( const OUString &rFamilyName );
     PhysicalFontFamily*     FindByFont( FontSelectPattern& ) const;
+    PhysicalFontFamily*     FindByTokenNames(const OUString& rTokenStr) const;
+    PhysicalFontFamily*     FindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
+                                             FontItalic, const OUString& rSearchFamily) const;
 
     // suggest fonts for glyph fallback
     PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPattern&,
@@ -62,9 +65,6 @@ public:
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
 
-    PhysicalFontFamily*     FindByTokenNames(const OUString& rTokenStr) const;
-    PhysicalFontFamily*     FindByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
-                                             FontItalic, const OUString& rSearchFamily) const;
 private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
