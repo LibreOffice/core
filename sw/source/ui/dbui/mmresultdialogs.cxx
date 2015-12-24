@@ -529,6 +529,15 @@ int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document)
     }
 }
 
+void endDialog(Button* pButton)
+{
+    vcl::Window* pParent = getNonLayoutParent(pButton);
+    Dialog *pDialog = dynamic_cast<Dialog*>(pParent);
+
+    if (pDialog && pDialog->IsInExecute())
+        pDialog->EndDialog(RET_OK);
+}
+
 } // anonymous namespace
 
 IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
@@ -538,16 +547,17 @@ IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void
     assert(pConfigItem);
 
     SwView* pTargetView = pConfigItem->GetTargetView();
-    OSL_ENSURE(pTargetView, "no target view exists");
-    if(!pTargetView)
-        return;
+    assert(pTargetView);
 
     if(m_pSaveAsOneRB->IsChecked())
     {
         OUString sFilter;
         const OUString sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
         if (sPath.isEmpty())
+        {
+            // just return back to the dialog
             return;
+        }
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = "FilterName";
@@ -592,7 +602,10 @@ IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void
         OUString sFilter;
         OUString sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
         if (sPath.isEmpty())
+        {
+            // just return back to the dialog
             return;
+        }
         OUString sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
@@ -697,18 +710,22 @@ IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void
                     else
                     {
                         xTempDocShell->DoClose();
+                        endDialog(pButton);
                         return;
                     }
                 }
                 else
                 {
                     xTempDocShell->DoClose();
+                    endDialog(pButton);
                     break;
                 }
             }
         }
         ::osl::File::remove( sTargetTempURL );
     }
+
+    endDialog(pButton);
 }
 
 IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, void)
@@ -757,16 +774,14 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, vo
     pConfigItem->SetSelectedPrinter(rBox.GetSelectEntry());
 }
 
-IMPL_LINK_NOARG_TYPED(SwMMResultPrintDialog, PrintHdl_Impl, Button*, void)
+IMPL_LINK_TYPED(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
 {
     SwView* pView = ::GetActiveView();
     SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
     assert(pConfigItem);
 
     SwView* pTargetView = pConfigItem->GetTargetView();
-    OSL_ENSURE(pTargetView, "no target view exists");
-    if(!pTargetView)
-        return;
+    assert(pTargetView);
 
     sal_uInt32 nBegin = 0;
     sal_uInt32 nEnd = 0;
@@ -810,6 +825,8 @@ IMPL_LINK_NOARG_TYPED(SwMMResultPrintDialog, PrintHdl_Impl, Button*, void)
 
     pTargetView->ExecPrint( aProps, false, true );
     SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
+
+    endDialog(pButton);
 }
 
 IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterSetupHdl_Impl, Button*, pButton, void)
@@ -867,9 +884,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
 
     //get the composed document
     SwView* pTargetView = pConfigItem->GetTargetView();
-    OSL_ENSURE(pTargetView, "no target view exists");
-    if(!pTargetView)
-        return;
+    assert(pTargetView);
 
     if(pConfigItem->GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(pConfigItem->GetMailAddress()) )
@@ -884,7 +899,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
         }
 
         if(nRet != RET_OK && nRet != RET_YES)
-            return;
+            return; // back to the dialog
     }
     //add the documents
     sal_uInt32 nBegin = 0;
@@ -963,7 +978,10 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
         pSfxFlt = pFilterContainer->GetFilter4Extension(sExtension, SfxFilterFlags::EXPORT);
 
     if(!pSfxFlt)
+    {
+        endDialog(pButton);
         return;
+    }
     OUString sMimeType = pSfxFlt->GetMimeType();
 
     if(m_pSubjectED->GetText().isEmpty())
@@ -978,7 +996,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
                 m_pSubjectED->SetText(aQuery->GetValue());
         }
         else
-            return;
+            return; // back to the dialog
     }
     if(!bAsBody && m_pAttachmentED->GetText().isEmpty())
     {
@@ -999,7 +1017,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
             m_pAttachmentED->SetText(sAttach);
         }
         else
-            return;
+            return; // back to the dialog
     }
     SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName() );
     OUString sEMailColumn = m_pMailToLB->GetSelectEntry();
@@ -1007,7 +1025,10 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
     Reference< sdbcx::XColumnsSupplier > xColsSupp( pConfigItem->GetResultSet(), UNO_QUERY);
     Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
     if(sEMailColumn.isEmpty() || !xColAccess.is() || !xColAccess->hasByName(sEMailColumn))
+    {
+        endDialog(pButton);
         return;
+    }
 
     OUString sFilterOptions;
     if(MM_DOCTYPE_TEXT == nDocType)
@@ -1195,6 +1216,8 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
     }
     pDlg->EnableDesctruction();
     ::osl::File::remove( sTargetTempURL );
+
+    endDialog(pButton);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
