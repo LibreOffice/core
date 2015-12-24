@@ -62,7 +62,7 @@ public:
 
     // misc utilities
     PhysicalFontCollection* Clone( bool bScalable, bool bEmbeddable ) const;
-    ImplGetDevFontList*     GetDevFontList() const;
+    ImplDeviceFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
 
 private:

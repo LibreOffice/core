@@ -636,10 +636,10 @@ void Printer::ImplReleaseFonts()
         mpFontEntry = nullptr;
     }
 
-    if ( mpGetDevFontList )
+    if ( mpDeviceFontList )
     {
-        delete mpGetDevFontList;
-        mpGetDevFontList = nullptr;
+        delete mpDeviceFontList;
+        mpDeviceFontList = nullptr;
     }
 
     if ( mpGetDevSizeList )
@@ -1013,10 +1013,10 @@ void Printer::dispose()
             mpFontCache->Release( mpFontEntry );
             mpFontEntry = nullptr;
         }
-        if ( mpGetDevFontList )
+        if ( mpDeviceFontList )
         {
-            delete mpGetDevFontList;
-            mpGetDevFontList = nullptr;
+            delete mpDeviceFontList;
+            mpDeviceFontList = nullptr;
         }
         if ( mpGetDevSizeList )
         {
@@ -1167,10 +1167,10 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
                 mpFontCache->Release( mpFontEntry );
                 mpFontEntry = nullptr;
             }
-            if ( mpGetDevFontList )
+            if ( mpDeviceFontList )
             {
-                delete mpGetDevFontList;
-                mpGetDevFontList = nullptr;
+                delete mpDeviceFontList;
+                mpDeviceFontList = nullptr;
             }
             if ( mpGetDevSizeList )
             {
@@ -1210,10 +1210,10 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
                 mpFontCache->Release( mpFontEntry );
                 mpFontEntry = nullptr;
             }
-            if ( mpGetDevFontList )
+            if ( mpDeviceFontList )
             {
-                delete mpGetDevFontList;
-                mpGetDevFontList = nullptr;
+                delete mpDeviceFontList;
+                mpDeviceFontList = nullptr;
             }
             if ( mpGetDevSizeList )
             {

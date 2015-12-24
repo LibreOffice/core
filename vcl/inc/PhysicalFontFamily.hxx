@@ -61,7 +61,7 @@ public:
     PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
     void                GetFontHeights( std::set<int>& rHeights ) const;
-    void                UpdateDevFontList( ImplGetDevFontList& ) const;
+    void                UpdateDevFontList( ImplDeviceFontList& ) const;
     void                UpdateCloneFontList( PhysicalFontCollection&,
                                              bool bScalable, bool bEmbeddable ) const;
 

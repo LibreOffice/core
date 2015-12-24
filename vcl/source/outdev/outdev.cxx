@@ -96,7 +96,7 @@ OutputDevice::OutputDevice() :
     mpFontEntry                     = nullptr;
     mpFontCache                     = nullptr;
     mpFontCollection                = nullptr;
-    mpGetDevFontList                = nullptr;
+    mpDeviceFontList                = nullptr;
     mpGetDevSizeList                = nullptr;
     mpOutDevStateStack              = new OutDevStateStack;
     mpPDFWriter                     = nullptr;
@@ -239,8 +239,8 @@ void OutputDevice::dispose()
 
     // remove cached results of GetDevFontList/GetDevSizeList
     // TODO: use smart pointers for them
-    delete mpGetDevFontList;
-    mpGetDevFontList = nullptr;
+    delete mpDeviceFontList;
+    mpDeviceFontList = nullptr;
 
     delete mpGetDevSizeList;
     mpGetDevSizeList = nullptr;
