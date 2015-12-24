@@ -514,10 +514,10 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
         mpFontCache->Release( mpFontEntry );
         mpFontEntry = nullptr;
     }
-    if ( mpGetDevFontList )
+    if ( mpDeviceFontList )
     {
-        delete mpGetDevFontList;
-        mpGetDevFontList = nullptr;
+        delete mpDeviceFontList;
+        mpDeviceFontList = nullptr;
     }
     if ( mpGetDevSizeList )
     {

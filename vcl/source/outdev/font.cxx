@@ -70,7 +70,7 @@ vcl::FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
     int nCount = GetDevFontCount();
     if( nDevFontIndex < nCount )
     {
-        const PhysicalFontFace& rData = *mpGetDevFontList->Get( nDevFontIndex );
+        const PhysicalFontFace& rData = *mpDeviceFontList->Get( nDevFontIndex );
         aFontInfo.SetName( rData.GetFamilyName() );
         aFontInfo.SetStyleName( rData.GetStyleName() );
         aFontInfo.SetCharSet( rData.IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
@@ -90,14 +90,14 @@ vcl::FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
 
 int OutputDevice::GetDevFontCount() const
 {
-    if( !mpGetDevFontList )
+    if( !mpDeviceFontList )
     {
         if (!mpFontCollection)
             return 0;
 
-        mpGetDevFontList = mpFontCollection->GetDevFontList();
+        mpDeviceFontList = mpFontCollection->GetDevFontList();
     }
-    return mpGetDevFontList->Count();
+    return mpDeviceFontList->Count();
 }
 
 bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
@@ -503,10 +503,10 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
 
     if ( bNewFontLists )
     {
-        if ( mpGetDevFontList )
+        if ( mpDeviceFontList )
         {
-            delete mpGetDevFontList;
-            mpGetDevFontList = nullptr;
+            delete mpDeviceFontList;
+            mpDeviceFontList = nullptr;
         }
         if ( mpGetDevSizeList )
         {

@@ -65,7 +65,7 @@ struct SystemFontData;
 struct SystemTextLayoutData;
 class ImplFontCache;
 class PhysicalFontCollection;
-class ImplGetDevFontList;
+class ImplDeviceFontList;
 class ImplGetDevSizeList;
 class ImplMultiTextLineInfo;
 class SalGraphics;
@@ -361,7 +361,7 @@ private:
     mutable ImplFontEntry*          mpFontEntry;
     mutable ImplFontCache*          mpFontCache;
     mutable PhysicalFontCollection* mpFontCollection;
-    mutable ImplGetDevFontList*     mpGetDevFontList;
+    mutable ImplDeviceFontList*     mpDeviceFontList;
     mutable ImplGetDevSizeList*     mpGetDevSizeList;
     OutDevStateStack*               mpOutDevStateStack;
     ImplOutDevData*                 mpOutDevData;

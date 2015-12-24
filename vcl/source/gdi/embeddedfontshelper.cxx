@@ -230,7 +230,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     SalGraphics* graphics = Application::GetDefaultDevice()->GetGraphics();
     PhysicalFontCollection fonts;
     graphics->GetDevFontList( &fonts );
-    std::unique_ptr< ImplGetDevFontList > fontInfo( fonts.GetDevFontList());
+    std::unique_ptr< ImplDeviceFontList > fontInfo( fonts.GetDevFontList());
     PhysicalFontFace* selected = nullptr;
     for( int i = 0;
          i < fontInfo->Count();
