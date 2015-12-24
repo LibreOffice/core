@@ -247,7 +247,7 @@ PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern&
 
 // update device font list with unique font faces, with uniqueness
 // meaning different font attributes, but not different fonts sizes
-void PhysicalFontFamily::UpdateDevFontList( ImplGetDevFontList& rDevFontList ) const
+void PhysicalFontFamily::UpdateDevFontList( ImplDeviceFontList& rDevFontList ) const
 {
     PhysicalFontFace* pPrevFace = nullptr;
     for( PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )

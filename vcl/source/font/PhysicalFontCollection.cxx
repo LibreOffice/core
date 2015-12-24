@@ -953,18 +953,18 @@ PhysicalFontCollection* PhysicalFontCollection::Clone( bool bScalable, bool bEmb
     return pClonedCollection;
 }
 
-ImplGetDevFontList* PhysicalFontCollection::GetDevFontList() const
+ImplDeviceFontList* PhysicalFontCollection::GetDevFontList() const
 {
-    ImplGetDevFontList* pGetDevFontList = new ImplGetDevFontList;
+    ImplDeviceFontList* pDeviceFontList = new ImplDeviceFontList;
 
     PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
     for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         const PhysicalFontFamily* pFontFamily = (*it).second;
-        pFontFamily->UpdateDevFontList( *pGetDevFontList );
+        pFontFamily->UpdateDevFontList( *pDeviceFontList );
     }
 
-    return pGetDevFontList;
+    return pDeviceFontList;
 }
 
 ImplGetDevSizeList* PhysicalFontCollection::GetDevSizeList( const OUString& rFontName ) const
