@@ -24,7 +24,6 @@
 #include <helpids.h>
 #include <map>
 #include <memory>
-#include <sccommands.h>
 #include <unordered_map>
 #include <vector>
 #include <boost/optional.hpp>

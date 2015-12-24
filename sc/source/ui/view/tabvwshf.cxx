@@ -48,7 +48,6 @@
 
 #include "tabbgcolor.hxx"
 #include "tabbgcolordlg.hxx"
-#include "sccommands.h"
 #include "markdata.hxx"
 
 #include <vector>
@@ -701,7 +700,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                                                 OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
                                                                 OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)),
                                                                 aTabBgColor,
-                                                                CMD_FID_TAB_SET_TAB_BG_COLOR));
+                                                                ".uno:TabBgColor"));
                     while ( !bDone && nRet == RET_OK )
                     {
                         nRet = pDlg->Execute();

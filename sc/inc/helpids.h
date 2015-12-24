@@ -19,7 +19,6 @@
 
 #include <sfx2/sfxcommands.h>
 #include <svx/svxcommands.h>
-#include "sccommands.h"
 
 #define HID_INSWIN_POS                                          "SC_HID_INSWIN_POS"
 #define HID_INSWIN_CALC                                         "SC_HID_INSWIN_CALC"

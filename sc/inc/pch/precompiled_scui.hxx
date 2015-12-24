@@ -26,7 +26,6 @@
 #include <limits.h>
 #include <math.h>
 #include <memory>
-#include <sccommands.h>
 #include <vector>
 #include <osl/thread.h>
 #include <rtl/math.hxx>
