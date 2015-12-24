@@ -211,8 +211,6 @@ public:
                     sal_uInt8 nTransparency ) = 0;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;
-
-    virtual OpenGLContext *beginPaint() { return nullptr; }
 };
 
 #endif

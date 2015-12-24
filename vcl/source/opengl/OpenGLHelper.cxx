@@ -1144,14 +1144,6 @@ OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
 {
     if( pDev->mpGraphics || pDev->AcquireGraphics() )
     {
-        OpenGLContext *pContext = pDev->mpGraphics->BeginPaint();
-        if( pContext )
-        {
-            assert( pContext->mnPainting >= 0 );
-            pContext->mnPainting++;
-            pContext->acquire();
-            pHandle = static_cast<void *>( pContext );
-        }
     }
 }
 

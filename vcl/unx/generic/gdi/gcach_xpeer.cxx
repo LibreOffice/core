@@ -28,11 +28,7 @@
 #include "gcach_xpeer.hxx"
 #include "xrender_peer.hxx"
 
-X11GlyphPeer::X11GlyphPeer()
-{
-}
-
-X11GlyphPeer::~X11GlyphPeer()
+X11GlyphCache::~X11GlyphCache()
 {
     if( !ImplGetSVData() )
         return;
@@ -57,8 +53,7 @@ X11GlyphPeer::~X11GlyphPeer()
     }
 }
 
-X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
-:   GlyphCache( rPeer )
+X11GlyphCache::X11GlyphCache()
 {
 }
 
@@ -67,20 +62,16 @@ namespace
     struct GlyphCacheHolder
     {
     private:
-        X11GlyphPeer* m_pX11GlyphPeer;
         X11GlyphCache* m_pX11GlyphCache;
     public:
         GlyphCacheHolder()
         {
-            m_pX11GlyphPeer = new X11GlyphPeer();
-            m_pX11GlyphCache = new X11GlyphCache( *m_pX11GlyphPeer );
+            m_pX11GlyphCache = new X11GlyphCache;
         }
         void release()
         {
             delete m_pX11GlyphCache;
-            delete m_pX11GlyphPeer;
             m_pX11GlyphCache = nullptr;
-            m_pX11GlyphPeer = nullptr;
         }
         X11GlyphCache& getGlyphCache()
         {

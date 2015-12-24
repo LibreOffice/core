@@ -22,17 +22,11 @@
 
 #include "generic/glyphcache.hxx"
 
-class X11GlyphPeer : public GlyphCachePeer
-{
-public:
-    X11GlyphPeer();
-    virtual ~X11GlyphPeer();
-};
-
 class X11GlyphCache : public GlyphCache
 {
 public:
-    explicit X11GlyphCache( X11GlyphPeer& );
+    explicit X11GlyphCache();
+    virtual ~X11GlyphCache();
     static X11GlyphCache& GetInstance();
     static void  KillInstance();
 };

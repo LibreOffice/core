@@ -39,7 +39,6 @@
 
 class FreetypeManager;
 class FtFontInfo;
-class GlyphCachePeer;
 class GlyphData;
 class GraphiteFaceWrapper;
 class FontConfigFontOptions;
@@ -55,7 +54,7 @@ namespace vcl { struct FontCapabilities; }
 class VCL_DLLPUBLIC GlyphCache
 {
 public:
-    explicit                GlyphCache( GlyphCachePeer& );
+    explicit                GlyphCache();
                             ~GlyphCache();
 
     static GlyphCache&      GetInstance();
@@ -72,14 +71,11 @@ public:
     void                    ClearFontCache();
     void                    InvalidateAllGlyphs();
 
-protected:
-    GlyphCachePeer&         mrPeer;
-
 private:
     friend class ServerFont;
     // used by ServerFont class only
     void                    AddedGlyph( ServerFont&, GlyphData& );
-    void                    RemovingGlyph( GlyphData& );
+    void                    RemovingGlyph();
     void                    UsingGlyph( ServerFont&, GlyphData& );
     void                    GrowNotify();
 
@@ -296,17 +292,6 @@ public:
     virtual                 ~ServerFontLayoutEngine() {}
 
     virtual bool            Layout(ServerFontLayout&, ImplLayoutArgs&) = 0;
-};
-
-class GlyphCachePeer
-{
-protected:
-                            GlyphCachePeer() {}
-    virtual                 ~GlyphCachePeer() {}
-
-public:
-    virtual void            RemovingFont( ServerFont& ) {}
-    virtual void            RemovingGlyph( GlyphData& ) {}
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX

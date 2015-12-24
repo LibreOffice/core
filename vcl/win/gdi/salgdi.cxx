@@ -1046,9 +1046,4 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
     return aRes;
 }
 
-OpenGLContext *WinSalGraphics::BeginPaint()
-{
-    return mpImpl->beginPaint();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

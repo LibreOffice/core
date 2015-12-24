@@ -28,24 +28,16 @@
 #include "generic/glyphcache.hxx"
 #include "headless/svpgdi.hxx"
 
-class SvpGlyphPeer : public GlyphCachePeer
-{
-public:
-    SvpGlyphPeer() {}
-};
-
 namespace
 {
     struct GlyphCacheHolder
     {
     private:
-        SvpGlyphPeer* m_pSvpGlyphPeer;
         GlyphCache* m_pSvpGlyphCache;
     public:
         GlyphCacheHolder()
         {
-            m_pSvpGlyphPeer = new SvpGlyphPeer();
-            m_pSvpGlyphCache = new GlyphCache( *m_pSvpGlyphPeer );
+            m_pSvpGlyphCache = new GlyphCache;
         }
         GlyphCache& getGlyphCache()
         {
@@ -54,7 +46,6 @@ namespace
         ~GlyphCacheHolder()
         {
             delete m_pSvpGlyphCache;
-            delete m_pSvpGlyphPeer;
         }
     };
 

@@ -404,7 +404,6 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 {
     m_aOrigDevice = rDevice;
     ResetClipRegion();
-    m_aTextRenderImpl.setDevice(rDevice);
 }
 
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )

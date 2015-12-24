@@ -114,7 +114,7 @@ namespace connectivity
             sal_Int32 getMysqlVersion()
                                                                 throw(SQLException, RuntimeException);
 
-            virtual void construct(const rtl::OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info)
+            void construct(const rtl::OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info)
                                                                 throw(SQLException);
 
             OConnection(MysqlCDriver& _rDriver, sql::Driver * cppDriver);
