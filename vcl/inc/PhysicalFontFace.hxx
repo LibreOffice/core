@@ -60,7 +60,6 @@ public:
     int                     GetFontMagic() const        { return mnMagic; }
     bool                    IsScalable() const          { return (mnHeight == 0); }
     bool                    CheckMagic( int n ) const   { return (n == mnMagic); }
-    PhysicalFontFace*       GetNextFace() const         { return mpNext; }
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;
@@ -78,7 +77,6 @@ protected:
 private:
 friend class PhysicalFontFamily;
     const int               mnMagic;    // poor man's RTTI
-    PhysicalFontFace*       mpNext;
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
