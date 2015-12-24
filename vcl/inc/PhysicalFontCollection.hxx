@@ -85,7 +85,7 @@ private:
     PhysicalFontFamily*     ImplFindFontFamilyByAliasName ( const OUString& rSearchName, const OUString& rShortName) const;
     PhysicalFontFamily*     ImplFindFontFamilyBySubstFontAttr( const utl::FontNameAttr& ) const;
 
-    PhysicalFontFamily*     ImplFindDefaultFontFamily() const;
+    PhysicalFontFamily*     ImplFindFontFamilyOfDefaultFont() const;
 
 };
 
