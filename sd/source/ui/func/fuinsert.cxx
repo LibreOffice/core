@@ -170,7 +170,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
             aPos = aRect.Center();
             bool bMapModeWasEnabled(mpWindow->IsMapModeEnabled());
-            mpWindow->EnableMapMode(true);
+            mpWindow->EnableMapMode(/*true*/);
             aPos = mpWindow->PixelToLogic(aPos);
             mpWindow->EnableMapMode(bMapModeWasEnabled);
 
