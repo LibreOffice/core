@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_dc9fbe5d",
+        "filename": "dtrans/source/win32/ftransl/ftransl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2015-12-24T17:40:31Z",
+      "side": 1,
+      "message": "I cannot find winclip.hxx on my master branch, is that the real problem ?",
+      "revId": "d1ae2bdd0e048d6b2be516551f585791dc365c1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
