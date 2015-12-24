@@ -147,6 +147,10 @@ OdfFlatXml::importer(
     saxParser->setDocumentHandler(docHandler);
     try
         {
+            css::uno::Reference< css::io::XSeekable > xSeekable( inputStream, css::uno::UNO_QUERY );
+            if ( xSeekable.is() )
+                xSeekable->seek( 0 );
+
             saxParser->parseStream(inputSource);
         }
     catch (const Exception &exc)
