@@ -721,8 +721,8 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     maFaceFT = pFI->GetFaceFT();
 
 #ifdef HDU_DEBUG
-    fprintf( stderr, "FTSF::FTSF(\"%s\", h=%d, w=%d, sy=%d) => %d\n",
-        pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth, pFI->IsSymbolFont(), maFaceFT!=0 );
+    fprintf( stderr, "FTSF::FTSF(\"%s\", h=%d, w=%d, vt=%d, sy=%d) => %d\n",
+        pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth, rFSD.mbVertical, pFI->IsSymbolFont(), maFaceFT!=0 );
 #endif
 
     if( !maFaceFT )
@@ -2469,6 +2469,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         }
 
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
+        pFeatureTable += 2; // ignore FeatureParams
         const sal_uInt16 nCntLookups = GetUShort( pFeatureTable+0 );
         pFeatureTable += 2;
         for( sal_uInt16 i = 0; i < nCntLookups; ++i )
