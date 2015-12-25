@@ -3393,8 +3393,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                 }
                             }
                             if ( pForm )
+                            {
                                 pBase->SetTOXForm( *pForm );
-                            // <--
+                                delete pForm;
+                            }
                         }
 
                         if (eCreateFrom)
