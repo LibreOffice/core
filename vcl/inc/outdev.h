@@ -50,13 +50,13 @@ public:
     int                 Count() const               { return maDevFontVector.size(); }
 };
 
-class ImplGetDevSizeList
+class ImplDeviceFontSizeList
 {
 private:
     std::vector<int>    maSizeList;
 
 public:
-                        ImplGetDevSizeList()
+                        ImplDeviceFontSizeList()
                         { maSizeList.reserve( 32 ); }
     void                Add( int nHeight )      { maSizeList.push_back( nHeight ); }
     int                 Count() const           { return maSizeList.size(); }

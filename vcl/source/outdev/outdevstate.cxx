@@ -645,10 +645,10 @@ void OutputDevice::ImplReleaseFonts()
         mpDeviceFontList = nullptr;
     }
 
-    if ( mpDeviceSizeList )
+    if ( mpDeviceFontSizeList )
     {
-        delete mpDeviceSizeList;
-        mpDeviceSizeList = nullptr;
+        delete mpDeviceFontSizeList;
+        mpDeviceFontSizeList = nullptr;
     }
 }
 

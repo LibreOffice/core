@@ -108,11 +108,11 @@ bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
 
 int OutputDevice::GetDevFontSizeCount( const vcl::Font& rFont ) const
 {
-    delete mpDeviceSizeList;
+    delete mpDeviceFontSizeList;
 
     ImplInitFontList();
-    mpDeviceSizeList = mpFontCollection->GetDeviceSizeList( rFont.GetName() );
-    return mpDeviceSizeList->Count();
+    mpDeviceFontSizeList = mpFontCollection->GetDeviceFontSizeList( rFont.GetName() );
+    return mpDeviceFontSizeList->Count();
 }
 
 Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) const
@@ -123,7 +123,7 @@ Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) cons
         return Size();
 
     // when mapping is enabled round to .5 points
-    Size aSize( 0, mpDeviceSizeList->Get( nSizeIndex ) );
+    Size aSize( 0, mpDeviceFontSizeList->Get( nSizeIndex ) );
     if ( mbMap )
     {
         aSize.Height() *= 10;
@@ -508,10 +508,10 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
             delete mpDeviceFontList;
             mpDeviceFontList = nullptr;
         }
-        if ( mpDeviceSizeList )
+        if ( mpDeviceFontSizeList )
         {
-            delete mpDeviceSizeList;
-            mpDeviceSizeList = nullptr;
+            delete mpDeviceFontSizeList;
+            mpDeviceFontSizeList = nullptr;
         }
 
         // release all physically selected fonts on this device
