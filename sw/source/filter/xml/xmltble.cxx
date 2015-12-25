@@ -29,7 +29,6 @@
 #include <svl/zforlist.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/xmlcnitm.hxx>
 #include <fmtrowsplt.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <list>
@@ -313,7 +312,6 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
     const SvxBoxItem *pBox = nullptr;
     const SwTableBoxNumFormat *pNumFormat = nullptr;
     const SvxFrameDirectionItem *pFrameDir = nullptr;
-    const SvXMLAttrContainerItem *pAttCnt = nullptr;
 
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     const SfxPoolItem *pItem;
@@ -333,12 +331,9 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
     if ( SfxItemState::SET == rItemSet.GetItemState( RES_FRAMEDIR,
                                                 false, &pItem ) )
         pFrameDir = static_cast<const SvxFrameDirectionItem *>(pItem);
-    if ( SfxItemState::SET == rItemSet.GetItemState( RES_UNKNOWNATR_CONTAINER,
-                                                false, &pItem ) )
-        pAttCnt = static_cast<const SvXMLAttrContainerItem *>(pItem);
 
     // empty styles have not to be exported
-    if( !pVertOrient && !pBrush && !pBox && !pNumFormat && !pFrameDir && !pAttCnt )
+    if( !pVertOrient && !pBrush && !pBox && !pNumFormat && !pFrameDir )
         return false;
 
     // order is: -/-/-/num,
@@ -356,7 +351,6 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
         const SvxBoxItem *pTestBox = nullptr;
         const SwTableBoxNumFormat *pTestNumFormat = nullptr;
         const SvxFrameDirectionItem *pTestFrameDir = nullptr;
-        const SvXMLAttrContainerItem *pTestAttCnt = nullptr;
         const SwFrameFormat* pTestFormat = *i;
         const SfxItemSet& rTestSet = pTestFormat->GetAttrSet();
         if( SfxItemState::SET == rTestSet.GetItemState( RES_VERT_ORIENT, false,
@@ -430,21 +424,6 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
 
         }
 
-        if ( SfxItemState::SET == rTestSet.GetItemState( RES_UNKNOWNATR_CONTAINER,
-                                                false, &pItem ) )
-        {
-             if( !pAttCnt )
-                 break;
-
-             pTestAttCnt = static_cast<const SvXMLAttrContainerItem *>(pItem);
-        }
-        else
-        {
-             if ( pAttCnt )
-                 continue;
-
-        }
-
         if( pVertOrient &&
             pVertOrient->GetVertOrient() != pTestVertOrient->GetVertOrient() )
             continue;
@@ -459,9 +438,6 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
             continue;
 
         if( pFrameDir && pFrameDir->GetValue() != pTestFrameDir->GetValue() )
-            continue;
-
-        if( pAttCnt && ( *pAttCnt != *pTestAttCnt ) )
             continue;
 
         // found!
