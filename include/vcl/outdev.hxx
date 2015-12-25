@@ -66,7 +66,7 @@ struct SystemTextLayoutData;
 class ImplFontCache;
 class PhysicalFontCollection;
 class ImplDeviceFontList;
-class ImplGetDevSizeList;
+class ImplDeviceFontSizeList;
 class ImplMultiTextLineInfo;
 class SalGraphics;
 class Gradient;
@@ -362,7 +362,7 @@ private:
     mutable ImplFontCache*          mpFontCache;
     mutable PhysicalFontCollection* mpFontCollection;
     mutable ImplDeviceFontList*     mpDeviceFontList;
-    mutable ImplGetDevSizeList*     mpDeviceSizeList;
+    mutable ImplDeviceFontSizeList* mpDeviceFontSizeList;
     OutDevStateStack*               mpOutDevStateStack;
     ImplOutDevData*                 mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;

@@ -967,9 +967,9 @@ ImplDeviceFontList* PhysicalFontCollection::GetDeviceFontList() const
     return pDeviceFontList;
 }
 
-ImplGetDevSizeList* PhysicalFontCollection::GetDeviceSizeList( const OUString& rFontName ) const
+ImplDeviceFontSizeList* PhysicalFontCollection::GetDeviceFontSizeList( const OUString& rFontName ) const
 {
-    ImplGetDevSizeList* pGetDevSizeList = new ImplGetDevSizeList;
+    ImplDeviceFontSizeList* pDeviceFontSizeList = new ImplDeviceFontSizeList;
 
     PhysicalFontFamily* pFontFamily = FindFontFamily( rFontName );
     if( pFontFamily != nullptr )
@@ -979,10 +979,10 @@ ImplGetDevSizeList* PhysicalFontCollection::GetDeviceSizeList( const OUString& r
 
         std::set<int>::const_iterator it = rHeights.begin();
         for(; it != rHeights.begin(); ++it )
-            pGetDevSizeList->Add( *it );
+            pDeviceFontSizeList->Add( *it );
     }
 
-    return pGetDevSizeList;
+    return pDeviceFontSizeList;
 }
 
 PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByFont( FontSelectPattern& rFSD ) const

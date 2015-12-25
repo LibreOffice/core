@@ -519,10 +519,10 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
         delete mpDeviceFontList;
         mpDeviceFontList = nullptr;
     }
-    if ( mpDeviceSizeList )
+    if ( mpDeviceFontSizeList )
     {
-        delete mpDeviceSizeList;
-        mpDeviceSizeList = nullptr;
+        delete mpDeviceFontSizeList;
+        mpDeviceFontSizeList = nullptr;
     }
 
     // preserve global font lists
