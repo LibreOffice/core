@@ -62,8 +62,8 @@ public:
 
     // misc utilities
     PhysicalFontCollection* Clone( bool bScalable, bool bEmbeddable ) const;
-    ImplDeviceFontList*     GetDevFontList() const;
-    ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
+    ImplDeviceFontList*     GetDeviceFontList() const;
+    ImplGetDevSizeList*     GetDeviceSizeList( const OUString& rFontName ) const;
 
 private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized

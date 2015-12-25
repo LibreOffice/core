@@ -362,7 +362,7 @@ private:
     mutable ImplFontCache*          mpFontCache;
     mutable PhysicalFontCollection* mpFontCollection;
     mutable ImplDeviceFontList*     mpDeviceFontList;
-    mutable ImplGetDevSizeList*     mpGetDevSizeList;
+    mutable ImplGetDevSizeList*     mpDeviceSizeList;
     OutDevStateStack*               mpOutDevStateStack;
     ImplOutDevData*                 mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
