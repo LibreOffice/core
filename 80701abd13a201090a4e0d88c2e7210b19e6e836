@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_bcd8fa1e",
+        "filename": "sd/source/ui/view/ViewShellBase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-25T00:05:09Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "revId": "80701abd13a201090a4e0d88c2e7210b19e6e836",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1c04a67c",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-25T00:05:09Z",
+      "side": 1,
+      "message": "These IDs are based on the position of the button on the toolbar. It will stop working as soon as someone changes the toolbar layout.\n\nInstead you should check for the module name. You already have it in the m_sModuleName member. The catch is that it\u0027s initialized using late initialization in the initialize(const css::uno::Sequence\u003c css::uno::Any \u003e\u0026) method of the base class, so you can\u0027t check it in the ctor. The solution would be to override the initialize method, and check it there after calling the base class stuff.",
+      "revId": "80701abd13a201090a4e0d88c2e7210b19e6e836",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
