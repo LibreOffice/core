@@ -1403,6 +1403,7 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
         }
 
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
+        pFeatureTable += 2; // ignore FeatureParams
         const sal_uInt16 nCntLookups = GetUShort( pFeatureTable+0 );
         pFeatureTable += 2;
         for( sal_uInt16 i = 0; i < nCntLookups; ++i )
