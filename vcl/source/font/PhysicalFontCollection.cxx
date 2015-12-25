@@ -953,7 +953,7 @@ PhysicalFontCollection* PhysicalFontCollection::Clone( bool bScalable, bool bEmb
     return pClonedCollection;
 }
 
-ImplDeviceFontList* PhysicalFontCollection::GetDevFontList() const
+ImplDeviceFontList* PhysicalFontCollection::GetDeviceFontList() const
 {
     ImplDeviceFontList* pDeviceFontList = new ImplDeviceFontList;
 
@@ -967,7 +967,7 @@ ImplDeviceFontList* PhysicalFontCollection::GetDevFontList() const
     return pDeviceFontList;
 }
 
-ImplGetDevSizeList* PhysicalFontCollection::GetDevSizeList( const OUString& rFontName ) const
+ImplGetDevSizeList* PhysicalFontCollection::GetDeviceSizeList( const OUString& rFontName ) const
 {
     ImplGetDevSizeList* pGetDevSizeList = new ImplGetDevSizeList;
 
