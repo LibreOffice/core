@@ -559,7 +559,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     }
 
     // last level fallback, check each font type face one by one
-    ImplDeviceFontList* pTestFontList = pFontCollection->GetDevFontList();
+    ImplDeviceFontList* pTestFontList = pFontCollection->GetDeviceFontList();
     // limit the count of fonts to be checked to prevent hangs
     static const int MAX_GFBFONT_COUNT = 600;
     int nTestFontCount = pTestFontList->Count();

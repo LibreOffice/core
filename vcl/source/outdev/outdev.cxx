@@ -97,7 +97,7 @@ OutputDevice::OutputDevice() :
     mpFontCache                     = nullptr;
     mpFontCollection                = nullptr;
     mpDeviceFontList                = nullptr;
-    mpGetDevSizeList                = nullptr;
+    mpDeviceSizeList                = nullptr;
     mpOutDevStateStack              = new OutDevStateStack;
     mpPDFWriter                     = nullptr;
     mpAlphaVDev                     = nullptr;
@@ -242,8 +242,8 @@ void OutputDevice::dispose()
     delete mpDeviceFontList;
     mpDeviceFontList = nullptr;
 
-    delete mpGetDevSizeList;
-    mpGetDevSizeList = nullptr;
+    delete mpDeviceSizeList;
+    mpDeviceSizeList = nullptr;
 
     // release ImplFontCache specific to this OutputDevice
     // TODO: refcount ImplFontCache
