@@ -72,14 +72,6 @@ public:
     getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override;
 
-    // XServiceInfo - static versions (used for component registration)
-    static OUString SAL_CALL
-        getImplementationName_static();
-    static css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames_static();
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        Create( const css::uno::Reference< css::uno::XComponentContext >& );
-
 private:
     void initDirs();
 

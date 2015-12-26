@@ -19,8 +19,6 @@
 
 #include <config_folders.h>
 
-#include "comphelper_module.hxx"
-#include "comphelper_services.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
 /**************************************************************************
@@ -30,20 +28,13 @@
  *************************************************************************/
 
 #include <osl/file.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/ref.hxx>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/fileurl.hxx>
 
 #include "officeinstallationdirectories.hxx"
 
 using namespace com::sun::star;
-
-using namespace comphelper;
-
-
-// helpers
-
-
 
 static bool makeCanonicalFileURL( OUString & rURL )
 {
@@ -82,13 +73,7 @@ static bool makeCanonicalFileURL( OUString & rURL )
     return false;
 }
 
-
-
-
-// OfficeInstallationDirectories Implementation.
-
-
-
+namespace comphelper {
 
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
@@ -212,7 +197,7 @@ OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName()
     throw ( uno::RuntimeException, std::exception )
 {
-    return getImplementationName_static();
+    return OUString("com.sun.star.comp.util.OfficeInstallationDirectories");
 }
 
 // virtual
@@ -228,39 +213,8 @@ uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames()
     throw ( uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.util.OfficeInstallationDirectories" };
 }
-
-
-// static
-OUString SAL_CALL
-OfficeInstallationDirectories::getImplementationName_static()
-{
-    return OUString("com.sun.star.comp.util.OfficeInstallationDirectories");
-}
-
-
-// static
-uno::Sequence< OUString > SAL_CALL
-OfficeInstallationDirectories::getSupportedServiceNames_static()
-{
-    const OUString aServiceName("com.sun.star.util.OfficeInstallationDirectories");
-    return uno::Sequence< OUString >( &aServiceName, 1 );
-}
-
-
-// static
-uno::Reference< uno::XInterface > SAL_CALL
-OfficeInstallationDirectories::Create(
-        const uno::Reference< uno::XComponentContext > & rxContext )
-{
-    return static_cast< cppu::OWeakObject * >(
-        new OfficeInstallationDirectories( rxContext ) );
-}
-
-
-// non-UNO
-
 
 void OfficeInstallationDirectories::initDirs()
 {
@@ -293,9 +247,34 @@ void OfficeInstallationDirectories::initDirs()
     }
 }
 
-void createRegistryInfo_OfficeInstallationDirectories()
+}
+
+namespace {
+
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(
+            new comphelper::OfficeInstallationDirectories(context)))
+    {}
+
+    rtl::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_util_OfficeInstallationDirectories(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::comphelper::module::OSingletonRegistration< OfficeInstallationDirectories > aAutoRegistration;
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
