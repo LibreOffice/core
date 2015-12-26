@@ -62,30 +62,17 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed, DejaVuSerifCondensed.ttf, Deja
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Bold, DejaVuSerifCondensed-Bold.ttf, DejaVu Serif Condensed Bold) 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Italic, DejaVuSerifCondensed-Italic.ttf, DejaVu Serif Condensed Italic) 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondensed-BoldItalic.ttf, DejaVu Serif Condensed Bold Italic) 
-#endif // WITH_CATA_FONTS
 
 
 // Google ChromeOS fonts
 
-#ifdef WITH_CATA_FONTS
+#ifndef WNT 
 
 // Arimo
 STD_FONT_FILE( gid_File_Fnt_Arimo_Regular, Arimo-Regular.ttf, Arimo Regular) 
 STD_FONT_FILE( gid_File_Fnt_Arimo_Bold, Arimo-Bold.ttf, Arimo Bold) 
 STD_FONT_FILE( gid_File_Fnt_Arimo_Italic, Arimo-Italic.ttf, Arimo Italic) 
 STD_FONT_FILE( gid_File_Fnt_Arimo_BoldItalic, Arimo-BoldItalic.ttf, Arimo Bold Italic) 
-
-#ifdef UNX
-File gid_File_FcLocal_Conf
-    Dir = gid_Dir_Fonts_Truetype;
-    USER_FILE_BODY;
-//  Styles = ();
-    Name = "fc_local.conf";
-End
-#endif
-
-
-#ifndef WNT 
 
 // Cousine
 STD_FONT_FILE( gid_File_Fnt_Cousine_Regular, Cousine-Regular.ttf, Cousine Regular) 
@@ -99,10 +86,27 @@ STD_FONT_FILE( gid_File_Fnt_Tinos_Bold, Tinos-Bold.ttf, Tinos Bold)
 STD_FONT_FILE( gid_File_Fnt_Tinos_Italic, Tinos-Italic.ttf, Tinos Italic)
 STD_FONT_FILE( gid_File_Fnt_Tinos_BoldItalic, Tinos-BoldItalic.ttf, Tinos Bold Italic)
 
-#endif // WNT
+#endif // !WNT
 
-#endif // WITH_CATB_FONTS
+// Caladea
+STD_FONT_FILE( gid_File_Fnt_Caladea_Regular, Caladea-Regular.ttf, Caladea Regular)
+STD_FONT_FILE( gid_File_Fnt_Caladea_Bold, Caladea-Bold.ttf, Caladea Bold)
+STD_FONT_FILE( gid_File_Fnt_Caladea_Italic, Caladea-Italic.ttf, Caladea Italic)
+STD_FONT_FILE( gid_File_Fnt_Caladea_BoldItalic, Caladea-BoldItalic.ttf, Caladea Bold Italic)
 
+#endif // WITH_CATA_FONTS
+
+
+// fontconfig updates to allow proper use of local fonts
+
+#ifdef UNX
+File gid_File_FcLocal_Conf
+    Dir = gid_Dir_Fonts_Truetype;
+    USER_FILE_BODY;
+//  Styles = ();
+    Name = "fc_local.conf";
+End
+#endif
 
 
 // Gentium fonts
@@ -120,6 +124,4 @@ STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicItalic, GenBkBasI.ttf, Gentium Book 
 STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium Book Basic Bold Italic)
 
 #endif
-
-// fontconfig updates to allow proper use of local fonts
 

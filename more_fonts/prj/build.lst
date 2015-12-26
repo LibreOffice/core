@@ -1,4 +1,5 @@
 bs	more_fonts	:	solenv NULL
 bs	more_fonts\fonts\ttf_dejavu		nmake	-	all	deja_fonts NULL
 bs	more_fonts\fonts\ttf_croscore	nmake	-	all	cros_fonts NULL
+bs	more_fonts\fonts\ttf_crosextra	nmake	-	all	xtra_fonts NULL
 bs	more_fonts\fonts\ttf_gentium	nmake	-	all	gent_fonts NULL
