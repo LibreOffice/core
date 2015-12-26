@@ -34,7 +34,8 @@ class SdXMLDrawPageContext : public SdXMLGenericPageContext
     OUString               maStyleName;
     OUString               maHREF;
 
-    bool                        mbHadSMILNodes;
+    bool                   mbHadSMILNodes;
+
 public:
     SdXMLDrawPageContext( SdXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
