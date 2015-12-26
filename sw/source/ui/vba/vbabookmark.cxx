@@ -32,11 +32,11 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaBookmark::SwVbaBookmark( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
-    const css::uno::Reference< frame::XModel >& rModel, const OUString& rName ) throw ( css::uno::RuntimeException ) :
-    SwVbaBookmark_BASE( rParent, rContext ), mxModel( rModel ), maName( rName ), mbValid( true )
+    const css::uno::Reference< frame::XModel >& rModel, const OUString& rBookmarkName ) throw ( css::uno::RuntimeException ) :
+    SwVbaBookmark_BASE( rParent, rContext ), mxModel( rModel ), maBookmarkName( rBookmarkName ), mbValid( true )
 {
     uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( mxModel, uno::UNO_QUERY_THROW );
-    mxBookmark.set( xBookmarksSupplier->getBookmarks()->getByName( maName ), uno::UNO_QUERY_THROW );
+    mxBookmark.set( xBookmarksSupplier->getBookmarks()->getByName( maBookmarkName ), uno::UNO_QUERY_THROW );
 }
 
 SwVbaBookmark::~SwVbaBookmark()
@@ -66,7 +66,7 @@ void SAL_CALL SwVbaBookmark::Select() throw ( uno::RuntimeException, std::except
 
 OUString SAL_CALL SwVbaBookmark::getName() throw ( uno::RuntimeException, std::exception )
 {
-    return maName;
+    return maBookmarkName;
 }
 
 void SAL_CALL SwVbaBookmark::setName( const OUString& _name ) throw ( uno::RuntimeException, std::exception )
