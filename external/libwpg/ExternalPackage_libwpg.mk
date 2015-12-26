@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalPackage_add_file,libwpg,$(LIBO_LIB_FOLDER)/libwpg-0.3.3
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libwpg,$(LIBO_LIB_FOLDER)/libwpg-0.3.dll,src/lib/.libs/libwpg-0.3.dll))
 else ifeq ($(DISABLE_DYNLOADING),)
-$(eval $(call gb_ExternalPackage_add_file,libwpg,$(LIBO_LIB_FOLDER)/libwpg-0.3-lo.so.3,src/lib/.libs/libwpg-0.3-lo.so.3.0.0))
+$(eval $(call gb_ExternalPackage_add_file,libwpg,$(LIBO_LIB_FOLDER)/libwpg-0.3-lo.so.3,src/lib/.libs/libwpg-0.3-lo.so.3.0.$(WPG_VERSION_MICRO)))
 endif
 
 # vim: set noet sw=4 ts=4:
