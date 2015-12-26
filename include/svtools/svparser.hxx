@@ -59,7 +59,7 @@ protected:
     rtl_TextEncoding    eSrcEnc;        // Source encoding
 
     sal_uLong nNextChPos;
-    sal_Unicode nNextCh;                // current character for the "lex"
+    sal_uInt32 nNextCh;                // current character for the "lex"
 
 
     bool                bDownloadingFile : 1; // true: An external file is
@@ -128,7 +128,7 @@ public:
     inline sal_uLong    SetLineNr( sal_uLong nlNum );           // inline bottom
     inline sal_uLong    SetLinePos( sal_uLong nlPos );          // inline bottom
 
-    sal_Unicode GetNextChar();
+    sal_uInt32 GetNextChar();
     void RereadLookahead();
 
     inline bool IsParserWorking() const { return SVPAR_WORKING == eState; }
