@@ -19,11 +19,8 @@
 
 #include <pattern/window.hxx>
 #include <helper/persistentwindowstate.hxx>
-#include <services.h>
 
 #include <com/sun/star/awt/XWindow.hpp>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 
@@ -162,27 +159,18 @@ OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference<
     return sModuleName;
 }
 
-OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                       const OUString&                                    sModuleName)
+OUString PersistentWindowState::implst_getWindowStateFromConfig(
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const OUString& sModuleName)
 {
     OUString sWindowState;
-
-    OUStringBuffer sRelPathBuf(256);
-    sRelPathBuf.append("Office/Factories/*[\"");
-    sRelPathBuf.append     (sModuleName            );
-    sRelPathBuf.append("\"]"                  );
-
-    OUString sPackage("org.openoffice.Setup/");
-    OUString sRelPath = sRelPathBuf.makeStringAndClear();
-    OUString sKey("ooSetupFactoryWindowAttributes");
-
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(rxContext,
-                                                                                      sPackage,
-                                                                                      sRelPath,
-                                                                                      sKey,
-                                                                                      ::comphelper::ConfigurationHelper::E_READONLY) >>= sWindowState;
+            "org.openoffice.Setup/",
+            "Office/Factories/*[\"" + sModuleName + "\"]",
+            "ooSetupFactoryWindowAttributes",
+            ::comphelper::ConfigurationHelper::E_READONLY) >>= sWindowState;
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -192,27 +180,18 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::
     return sWindowState;
 }
 
-void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                          const OUString&                                    sModuleName ,
-                                                          const OUString&                                    sWindowState)
+void PersistentWindowState::implst_setWindowStateOnConfig(
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const OUString& sModuleName, const OUString& sWindowState)
 {
-    OUStringBuffer sRelPathBuf(256);
-    sRelPathBuf.append("Office/Factories/*[\"");
-    sRelPathBuf.append     (sModuleName            );
-    sRelPathBuf.append("\"]"                  );
-
-    OUString sPackage("org.openoffice.Setup/");
-    OUString sRelPath = sRelPathBuf.makeStringAndClear();
-    OUString sKey("ooSetupFactoryWindowAttributes");
-
     try
     {
         ::comphelper::ConfigurationHelper::writeDirectKey(rxContext,
-                                                          sPackage,
-                                                          sRelPath,
-                                                          sKey,
-                                                          css::uno::makeAny(sWindowState),
-                                                          ::comphelper::ConfigurationHelper::E_STANDARD);
+            "org.openoffice.Setup/",
+            "Office/Factories/*[\"" + sModuleName + "\"]",
+            "ooSetupFactoryWindowAttributes",
+            css::uno::makeAny(sWindowState),
+            ::comphelper::ConfigurationHelper::E_STANDARD);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
