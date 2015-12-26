@@ -19,8 +19,8 @@ namespace apitest {
 void XNameReplace::testReplaceByName()
 {
     uno::Reference< container::XNameReplace > xNameReplace(init(), UNO_QUERY_THROW);
-    xNameReplace->replaceByName(maName, getAnyElementForNameReplace());
-    Any aAny = xNameReplace->getByName( maName );
+    xNameReplace->replaceByName(maTestReplacementName, getAnyElementForNameReplace());
+    Any aAny = xNameReplace->getByName( maTestReplacementName );
     uno::Reference< uno::XInterface > xElement(aAny, UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xElement.is());
 }
