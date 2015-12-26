@@ -32,7 +32,7 @@ class FileOpenDialog
     // a list of filters that are provided within the SaveDialog
     struct FilterEntry
     {
-        OUString maName;
+        OUString maFilterEntryName;
         OUString maType;
         OUString maUIName;
         sal_Int32 maFlags;
