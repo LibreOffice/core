@@ -178,12 +178,12 @@ ln -sf $INSTALLDIR/program/soffice $DESTDIR$PREFIXDIR/bin/soffice
 test -f $DESTDIR/gid_Module_Root_Brand && echo "$PREFIXDIR/bin/soffice" >>$DESTDIR/gid_Module_Root_Brand
 
 # create bash completion
-mkdir -p $DESTDIR/etc/bash_completion.d
-./bin/generate-bash-completion bin/bash-completion.in $DESTDIR/etc/bash_completion.d/$INSTALLDIRNAME.sh
-test -f $DESTDIR/gid_Module_Root_Brand && echo "/etc/bash_completion.d/$INSTALLDIRNAME.sh" >>$DESTDIR/gid_Module_Root_Brand
+mkdir -p $DESTDIR/usr/share/bash-completion/completions
+./bin/generate-bash-completion bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/$INSTALLDIRNAME.sh
+test -f $DESTDIR/gid_Module_Root_Brand && echo "/usr/share/bash-completion/completions/$INSTALLDIRNAME.sh" >>$DESTDIR/gid_Module_Root_Brand
 if test "$WITH_COMPAT_OOWRAPPERS" = "TRUE" ; then
-    ./bin/generate-bash-completion --compat-oowrappers bin/bash-completion.in $DESTDIR/etc/bash_completion.d/ooffice.sh
-    test -f $DESTDIR/gid_Module_Root_Brand && echo "/etc/bash_completion.d/ooffice.sh" >>$DESTDIR/gid_Module_Root_Brand
+    ./bin/generate-bash-completion --compat-oowrappers bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/ooffice.sh
+    test -f $DESTDIR/gid_Module_Root_Brand && echo "/usr/share/bash-completion/completions/ooffice.sh" >>$DESTDIR/gid_Module_Root_Brand
 fi
 
 echo "Install $OOINSTDIR/basis$VERSION/program/java-set-classpath";
