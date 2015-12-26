@@ -97,7 +97,7 @@ OutputDevice::OutputDevice() :
     mpFontCache                     = nullptr;
     mpFontCollection                = nullptr;
     mpDeviceFontList                = nullptr;
-    mpDeviceFontSizeList                = nullptr;
+    mpDeviceFontSizeList            = nullptr;
     mpOutDevStateStack              = new OutDevStateStack;
     mpPDFWriter                     = nullptr;
     mpAlphaVDev                     = nullptr;
