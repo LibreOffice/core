@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
+#include <rtl/character.hxx>
 
 #include <vector>
 
@@ -35,7 +36,7 @@ struct SvParser_Impl
     long            nTokenValue;        // extra value (RTF)
     bool        bTokenHasValue;     // indicates whether nTokenValue is valid
     int             nToken;             // actual Token
-    sal_Unicode     nNextCh;            // actual character
+    sal_uInt32      nNextCh;            // actual character
     int             nSaveToken;         // the token from Continue
 
     rtl_TextToUnicodeConverter hConv;
@@ -148,9 +149,9 @@ void SvParser::RereadLookahead()
     nNextCh = GetNextChar();
 }
 
-sal_Unicode SvParser::GetNextChar()
+sal_uInt32 SvParser::GetNextChar()
 {
-    sal_Unicode c = 0U;
+    sal_uInt32 c = 0U;
 
     // When reading multiple bytes, we don't have to care about the file
     // position when we run into the pending state. The file position is
@@ -257,7 +258,7 @@ sal_Unicode SvParser::GetNextChar()
                    )
                 {
                     // no convserion shall take place
-                    c = (sal_Unicode)c1;
+                    c = reinterpret_cast<sal_uChar&>( c1 );
                     nChars = 1;
                 }
                 else
@@ -280,6 +281,7 @@ sal_Unicode SvParser::GetNextChar()
                         // read enough characters.
                         if( pImplData->hContext != reinterpret_cast<rtl_TextToUnicodeContext>(1) )
                         {
+                            sal_Unicode sCh[2];
                             while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
                             {
                                 rInput.ReadChar( c1 );
@@ -289,7 +291,7 @@ sal_Unicode SvParser::GetNextChar()
 
                                 nChars = rtl_convertTextToUnicode(
                                             pImplData->hConv, pImplData->hContext,
-                                            &c1, 1, &cUC, 1,
+                                            &c1, 1, sCh , 2,
                                             RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
                                             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
                                             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
@@ -299,7 +301,11 @@ sal_Unicode SvParser::GetNextChar()
                             {
                                 if( 1 == nChars && 0 == nInfo )
                                 {
-                                    c = cUC;
+                                    c = sal_uInt32( sCh[0] );
+                                }
+                                else if( 2 == nChars && 0 == nInfo )
+                                {
+                                    c = rtl::combineSurrogates( sCh[0], sCh[1] );
                                 }
                                 else if( 0 != nChars || 0 != nInfo )
                                 {
@@ -311,7 +317,7 @@ sal_Unicode SvParser::GetNextChar()
                                        "there is a converted character, but an error" );
                                     // There are still errors, but nothing we can
                                     // do
-                                    c = (sal_Unicode)'?';
+                                    c = (sal_uInt32)'?';
                                     nChars = 1;
                                 }
                             }
@@ -356,7 +362,7 @@ sal_Unicode SvParser::GetNextChar()
 
                                     // There are still errors, so we use the first
                                     // character and restart after that.
-                                    c = (sal_Unicode)sBuffer[0];
+                                    c = reinterpret_cast<sal_uChar&>( sBuffer[0] );
                                     rInput.SeekRel( -(nLen-1) );
                                     nChars = 1;
                                 }
@@ -378,7 +384,7 @@ sal_Unicode SvParser::GetNextChar()
                                 "there is no converted character and no error" );
                         // #73398#: If the character could not be converted,
                         // because a conversion is not available, do no conversion at all.
-                        c = (sal_Unicode)c1;
+                        c = reinterpret_cast<sal_uChar&>( c1 );
                         nChars = 1;
 
                     }
@@ -387,6 +393,10 @@ sal_Unicode SvParser::GetNextChar()
         }
         while( 0 == nChars  && !bErr );
     }
+
+    if ( ! rtl::isValidCodePoint( c ) )
+        c = (sal_uInt32) '?' ;
+
     if( bErr )
     {
         if( ERRCODE_IO_PENDING == rInput.GetError() )
@@ -405,6 +415,7 @@ sal_Unicode SvParser::GetNextChar()
     }
     else
         IncLinePos();
+
     return c;
 }
 
