@@ -19,20 +19,20 @@ namespace apitest {
 void XNamed::testGetName()
 {
     uno::Reference< container::XNamed > xNamed(init(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT( maName == xNamed->getName() );
+    CPPUNIT_ASSERT( maTestName == xNamed->getName() );
 }
 
 void XNamed::testSetName()
 {
     uno::Reference< container::XNamed > xNamed(init(), UNO_QUERY_THROW);
-    OUString aName("NewName");
+    OUString aTestName("NewName");
 
-    xNamed->setName(aName);
-    CPPUNIT_ASSERT( aName == xNamed->getName() );
+    xNamed->setName(aTestName);
+    CPPUNIT_ASSERT( aTestName == xNamed->getName() );
 
     // restore old name
-    xNamed->setName(maName);
-    CPPUNIT_ASSERT(maName == xNamed->getName());
+    xNamed->setName(maTestName);
+    CPPUNIT_ASSERT(maTestName == xNamed->getName());
 }
 
 XNamed::~XNamed()

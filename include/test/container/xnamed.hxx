@@ -19,7 +19,7 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XNamed
 {
 public:
-    XNamed(const OUString& rName): maName(rName) {}
+    XNamed(const OUString& rName): maTestName(rName) {}
     virtual ~XNamed();
 
     void testGetName();
@@ -27,7 +27,7 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 private:
-    OUString maName;
+    OUString maTestName;
 
 };
 

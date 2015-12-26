@@ -20,7 +20,7 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XNameReplace
 {
 public:
-    XNameReplace(const OUString& rName): maName(rName) {}
+    XNameReplace(const OUString& rName): maTestReplacementName(rName) {}
 
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
@@ -31,7 +31,7 @@ public:
     virtual ~XNameReplace() {}
 
 private:
-    OUString maName;
+    OUString maTestReplacementName;
 
 };
 
