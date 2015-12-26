@@ -45,7 +45,6 @@ namespace comphelper { namespace module
                 createRegistryInfo_OInstanceLocker();
                 createRegistryInfo_Map();
                 createRegistryInfo_OSimpleLogRing();
-                createRegistryInfo_OOfficeRestartManager();
             }
         };
 

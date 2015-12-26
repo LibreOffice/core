@@ -23,40 +23,14 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include "officerestartmanager.hxx"
 
 using namespace ::com::sun::star;
 
 namespace comphelper
 {
-
-
-uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames_static()
-{
-    uno::Sequence<OUString> aResult { getServiceName_static() };
-    return aResult;
-}
-
-
-OUString SAL_CALL OOfficeRestartManager::getImplementationName_static()
-{
-    return OUString( "com.sun.star.comp.task.OfficeRestartManager" );
-}
-
-
-OUString SAL_CALL OOfficeRestartManager::getServiceName_static()
-{
-    return OUString( "com.sun.star.comp.task.OfficeRestartManager" );
-}
-
-
-uno::Reference< uno::XInterface > SAL_CALL OOfficeRestartManager::Create( const uno::Reference< uno::XComponentContext >& rxContext )
-{
-    return static_cast< cppu::OWeakObject* >( new OOfficeRestartManager( rxContext ) );
-}
 
 // XRestartManager
 
@@ -160,7 +134,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
 OUString SAL_CALL OOfficeRestartManager::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
-    return getImplementationName_static();
+    return OUString("com.sun.star.comp.task.OfficeRestartManager");
 }
 
 sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException, std::exception)
@@ -170,15 +144,36 @@ sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServi
 
 uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.comp.task.OfficeRestartManager" };
 }
 
 } // namespace comphelper
 
-void createRegistryInfo_OOfficeRestartManager()
+namespace {
+
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(new comphelper::OOfficeRestartManager(context)))
+    {}
+
+    rtl::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_task_OfficeRestartManager(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::comphelper::module::OAutoRegistration< ::comphelper::OOfficeRestartManager > aAutoRegistration;
-    static ::comphelper::module::OSingletonRegistration< ::comphelper::OOfficeRestartManager > aSingletonRegistration;
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

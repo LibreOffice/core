@@ -51,16 +51,6 @@ public:
     virtual ~OOfficeRestartManager()
     {}
 
-    static css::uno::Sequence< OUString > SAL_CALL
-            getSupportedServiceNames_static();
-
-    static OUString SAL_CALL getImplementationName_static();
-
-    static OUString SAL_CALL getServiceName_static();
-
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        Create( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
 // XRestartManager
     virtual void SAL_CALL requestRestart( const css::uno::Reference< css::task::XInteractionHandler >& xInteractionHandler ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isRestartRequested( sal_Bool bInitialized ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;

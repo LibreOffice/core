@@ -47,7 +47,8 @@
     <service name="com.sun.star.logging.SimpleLogRing"/>
     <singleton name="com.sun.star.logging.DocumentIOLogRing"/>
   </implementation>
-  <implementation name="com.sun.star.comp.task.OfficeRestartManager">
+  <implementation name="com.sun.star.comp.task.OfficeRestartManager"
+      constructor="com_sun_star_comp_task_OfficeRestartManager">
     <service name="com.sun.star.comp.task.OfficeRestartManager"/>
     <singleton name="com.sun.star.task.OfficeRestartManager"/>
   </implementation>
