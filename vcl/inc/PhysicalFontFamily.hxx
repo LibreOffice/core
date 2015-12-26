@@ -45,7 +45,7 @@ public:
                         PhysicalFontFamily( const OUString& rSearchName );
                        ~PhysicalFontFamily();
 
-    const OUString&     GetFamilyName() const    { return maName; }
+    const OUString&     GetFamilyName() const    { return maFamilyName; }
     const OUString&     GetSearchName() const    { return maSearchName; }
     const OUString&     GetAliasNames() const    { return maMapNames; }
     const OUString&     GetMatchFamilyName() const { return maMatchFamilyName; }
@@ -71,7 +71,7 @@ static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, Fon
 private:
     std::vector< PhysicalFontFace* > maFontFaces;
 
-    OUString            maName;             // Fontname (original font family name)
+    OUString            maFamilyName;       // original font family name
     OUString            maSearchName;       // normalized font family name
     OUString            maMapNames;         // fontname aliases
     int                 mnTypeFaces;        // Typeface Flags

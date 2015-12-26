@@ -115,7 +115,7 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
 {
     if( maFontFaces.empty() )
     {
-        maName         = pNewFontFace->GetFamilyName();
+        maFamilyName   = pNewFontFace->GetFamilyName();
         maMapNames     = pNewFontFace->maMapNames;
         meFamily       = pNewFontFace->GetFamilyType();
         mePitch        = pNewFontFace->GetPitch();
@@ -206,7 +206,7 @@ void PhysicalFontFamily::InitMatchData( const utl::FontSubstConfiguration& rFont
         if( aShortName != rSearchName )
             pFontAttr = rFontSubst.getSubstInfo( aShortName );
     CalcType( mnMatchType, meMatchWeight, meMatchWidth, meFamily, pFontAttr );
-    mnMatchType |= lcl_IsCJKFont( maName );
+    mnMatchType |= lcl_IsCJKFont( maFamilyName );
 }
 
 PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern& rFSD ) const
