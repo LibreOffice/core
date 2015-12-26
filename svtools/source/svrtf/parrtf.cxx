@@ -193,7 +193,7 @@ int SvRTFParser::_GetNextToken()
                                 // can be also \{, \}, \'88
                                 for( sal_uInt8 m = 0; m < nUCharOverread; ++m )
                                 {
-                                    sal_Unicode cAnsi = nNextCh;
+                                    sal_uInt32 cAnsi = nNextCh;
                                     while( 0xD == cAnsi )
                                         cAnsi = GetNextChar();
                                     while( 0xA == cAnsi )
@@ -384,7 +384,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 case '}':
                 case '{':
                 case '+':       // I found in a RTF file
-                    aStrBuffer.append(nNextCh);
+                    aStrBuffer.append(sal_Unicode(nNextCh));
                     break;
                 case '~':       // nonbreaking space
                     aStrBuffer.append(static_cast< sal_Unicode >(0xA0));
@@ -486,7 +486,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
             {
                 do {
                     // all other characters end up in the text
-                    aStrBuffer.append(nNextCh);
+                    aStrBuffer.appendUtf32(nNextCh);
 
                     if (sal_Unicode(EOF) == (nNextCh = GetNextChar()))
                     {
