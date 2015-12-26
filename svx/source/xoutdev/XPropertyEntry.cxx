@@ -19,14 +19,14 @@
 
 #include <svx/XPropertyEntry.hxx>
 
-XPropertyEntry::XPropertyEntry(const OUString& rName)
-:   maName(rName),
+XPropertyEntry::XPropertyEntry(const OUString& rPropEntryName)
+:   maPropEntryName(rPropEntryName),
     maUiBitmap()
 {
 }
 
 XPropertyEntry::XPropertyEntry(const XPropertyEntry& rOther)
-:   maName(rOther.maName),
+:   maPropEntryName(rOther.maPropEntryName),
     maUiBitmap(rOther.maUiBitmap)
 {
 }
