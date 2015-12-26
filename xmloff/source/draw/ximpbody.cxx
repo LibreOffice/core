@@ -65,7 +65,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         {
             case XML_TOK_DRAWPAGE_NAME:
             {
-                maName = sValue;
+                maContextName = sValue;
                 break;
             }
             case XML_TOK_DRAWPAGE_STYLE_NAME:
@@ -128,13 +128,13 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     uno::Reference< drawing::XDrawPage > xShapeDrawPage(rShapes, uno::UNO_QUERY);
 
     // set PageName?
-    if(!maName.isEmpty())
+    if(!maContextName.isEmpty())
     {
         if(xShapeDrawPage.is())
         {
             uno::Reference < container::XNamed > xNamed(xShapeDrawPage, uno::UNO_QUERY);
             if(xNamed.is())
-                xNamed->setName(maName);
+                xNamed->setName(maContextName);
         }
     }
 
