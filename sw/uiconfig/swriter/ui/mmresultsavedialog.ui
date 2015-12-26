@@ -114,7 +114,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">printallrb</property>
+                        <property name="group">fromrb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -136,6 +136,7 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <property name="group">singlerb</property>
                             <accessibility>
                               <relation type="label-for" target="from-nospin"/>
                             </accessibility>
