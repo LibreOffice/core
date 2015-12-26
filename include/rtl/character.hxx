@@ -222,6 +222,19 @@ sal_uInt32 const surrogatesLowLast = 0xDFFF;
 }
 /// @endcond
 
+/** Check if a codepoint is accessible via utf16 per RFC3629
+
+    @param code  A non-BMP Unicode code point.
+
+    @return  True if the code is a valid codepoint.
+
+    @since LibreOffice 5.2
+*/
+inline bool isValidCodePoint( sal_uInt32 code)
+{
+    return code <= 0x10FFFF;
+}
+
 /** Check for high surrogate.
 
     @param code  A Unicode code point.
