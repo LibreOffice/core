@@ -43,7 +43,7 @@ CustomShowContext::CustomShowContext( FragmentHandler2& rParent,
 : FragmentHandler2( rParent )
 , mrCustomShow( rCustomShow )
 {
-    mrCustomShow.maName = rxAttribs->getOptionalValue( XML_name );
+    mrCustomShow.maCustomShowName = rxAttribs->getOptionalValue( XML_name );
     mrCustomShow.mnId = rxAttribs->getOptionalValue( XML_id );
 }
 

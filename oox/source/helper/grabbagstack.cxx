@@ -18,9 +18,9 @@ namespace oox
 using namespace css::beans;
 using namespace css::uno;
 
-GrabBagStack::GrabBagStack(const OUString& aName)
+GrabBagStack::GrabBagStack(const OUString& aElementName)
 {
-    mCurrentElement.maName = aName;
+    mCurrentElement.maElementName = aElementName;
 }
 
 GrabBagStack::~GrabBagStack()
@@ -37,7 +37,7 @@ PropertyValue GrabBagStack::getRootProperty()
         pop();
 
     PropertyValue aProperty;
-    aProperty.Name = mCurrentElement.maName;
+    aProperty.Name = mCurrentElement.maElementName;
     aProperty.Value = makeAny(comphelper::containerToSequence(mCurrentElement.maPropertyList));
 
     return aProperty;
@@ -54,13 +54,13 @@ void GrabBagStack::appendElement(const OUString& aName, Any aAny)
 void GrabBagStack::push(const OUString& aKey)
 {
     mStack.push(mCurrentElement);
-    mCurrentElement.maName = aKey;
+    mCurrentElement.maElementName = aKey;
     mCurrentElement.maPropertyList.clear();
 }
 
 void GrabBagStack::pop()
 {
-    OUString aName = mCurrentElement.maName;
+    OUString aName = mCurrentElement.maElementName;
     Sequence<PropertyValue> aSequence(comphelper::containerToSequence(mCurrentElement.maPropertyList));
     mCurrentElement = mStack.top();
     mStack.pop();

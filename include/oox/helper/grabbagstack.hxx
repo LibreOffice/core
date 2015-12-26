@@ -22,7 +22,7 @@ namespace oox {
 
 struct GrabBagStackElement
 {
-    OUString maName;
+    OUString maElementName;
     std::vector<css::beans::PropertyValue> maPropertyList;
 };
 
@@ -34,11 +34,11 @@ private:
     GrabBagStackElement mCurrentElement;
 
 public:
-    GrabBagStack(const OUString& aName);
+    GrabBagStack(const OUString& aElementName);
 
     virtual ~GrabBagStack();
 
-    OUString getCurrentName() { return mCurrentElement.maName;}
+    OUString getCurrentName() { return mCurrentElement.maElementName;}
 
     css::beans::PropertyValue getRootProperty();
 
