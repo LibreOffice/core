@@ -254,6 +254,19 @@ DECLARE_HTMLEXPORT_TEST(testExportInternalUrl, "tdf90905.odt")
     assertXPath(pDoc, "/html/body/p[2]/a", "href", "#bookmark");
 }
 
+DECLARE_HTMLEXPORT_TEST(testExtbChars, "extb.html")
+{
+    sal_uInt32  nCh = 0x24b62;
+    OUString aExpected( &nCh, 1);
+    // Assert that UTF8 encoded non-BMP Unicode character is correct
+    uno::Reference<text::XTextRange> xTextRange1 = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange1->getString());
+
+    // Assert that non-BMP Unicode in chracter entity format is correct
+    uno::Reference<text::XTextRange> xTextRange2 = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange2->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
