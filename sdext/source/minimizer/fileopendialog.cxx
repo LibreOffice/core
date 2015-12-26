@@ -97,7 +97,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                                 j = aFilterProperties.getLength();
                         }
                         break;
-                        case TK_Name :      rProperty.Value >>= aFilterEntry.maName; break;
+                        case TK_Name :      rProperty.Value >>= aFilterEntry.maFilterEntryName; break;
                         case TK_UIName :    rProperty.Value >>= aFilterEntry.maUIName; break;
                         case TK_Type :      rProperty.Value >>= aFilterEntry.maType; break;
                         case TK_Flags :     rProperty.Value >>= aFilterEntry.maFlags; break;
@@ -177,7 +177,7 @@ OUString FileOpenDialog::getFilterName() const
     {
         if ( aIter->maUIName == aUIName )
         {
-            aFilterName = aIter->maName;
+            aFilterName = aIter->maFilterEntryName;
             break;
         }
     }
