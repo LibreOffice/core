@@ -26,8 +26,8 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaVariable::SwVbaVariable( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
-    const uno::Reference< beans::XPropertyAccess >& rUserDefined, const OUString& rName ) throw ( uno::RuntimeException ) :
-    SwVbaVariable_BASE( rParent, rContext ), mxUserDefined( rUserDefined ), maName( rName )
+    const uno::Reference< beans::XPropertyAccess >& rUserDefined, const OUString& rVariableName ) throw ( uno::RuntimeException ) :
+    SwVbaVariable_BASE( rParent, rContext ), mxUserDefined( rUserDefined ), maVariableName( rVariableName )
 {
 }
 
@@ -38,7 +38,7 @@ SwVbaVariable::~SwVbaVariable()
 OUString SAL_CALL
 SwVbaVariable::getName() throw ( css::uno::RuntimeException, std::exception )
 {
-    return maName;
+    return maVariableName;
 }
 
 void SAL_CALL
@@ -51,7 +51,7 @@ uno::Any SAL_CALL
 SwVbaVariable::getValue() throw ( css::uno::RuntimeException, std::exception )
 {
     uno::Reference< beans::XPropertySet > xProp( mxUserDefined, uno::UNO_QUERY_THROW );
-    return xProp->getPropertyValue( maName );
+    return xProp->getPropertyValue( maVariableName );
 }
 
 void SAL_CALL
@@ -59,7 +59,7 @@ SwVbaVariable::setValue( const uno::Any& rValue ) throw ( css::uno::RuntimeExcep
 {
     // FIXME: fail to set the value if the new type of value is different from the original one.
     uno::Reference< beans::XPropertySet > xProp( mxUserDefined, uno::UNO_QUERY_THROW );
-    xProp->setPropertyValue( maName, rValue );
+    xProp->setPropertyValue( maVariableName, rValue );
 }
 
 sal_Int32 SAL_CALL
@@ -68,7 +68,7 @@ SwVbaVariable::getIndex() throw ( css::uno::RuntimeException, std::exception )
     const uno::Sequence< beans::PropertyValue > props = mxUserDefined->getPropertyValues();
     for (sal_Int32 i = 0; i < props.getLength(); ++i)
     {
-        if( maName.equals( props[i].Name ) )
+        if( maVariableName.equals( props[i].Name ) )
             return i+1;
     }
 
