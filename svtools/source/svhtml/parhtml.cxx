@@ -25,6 +25,7 @@
 #include <tools/color.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/character.hxx>
 
 #include <tools/tenccvt.hxx>
 #include <tools/datetime.hxx>
@@ -429,7 +430,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
     OUStringBuffer sTmpBuffer( MAX_LEN );
     bool bContinue = true;
     bool bEqSignFound = false;
-    sal_Unicode cQuote = 0U;
+    sal_uInt32  cQuote = 0U;
 
     while( bContinue && IsParserWorking() )
     {
@@ -445,7 +446,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 sal_uLong nStreamPos = rInput.Tell();
                 sal_uLong nLinePos = GetLinePos();
 
-                sal_Unicode cChar = 0U;
+                sal_uInt32 cChar = 0U;
                 if( '#' == (nNextCh = GetNextChar()) )
                 {
                     nNextCh = GetNextChar();
@@ -460,10 +461,10 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             {
                                 cChar = cChar * 16U +
                                         ( nNextCh <= '9'
-                                          ? sal_Unicode( nNextCh - '0' )
+                                          ? sal_uInt32( nNextCh - '0' )
                                           : ( nNextCh <= 'F'
-                                              ? sal_Unicode( nNextCh - 'A' + 10 )
-                                              : sal_Unicode( nNextCh - 'a' + 10 ) ) );
+                                              ? sal_uInt32( nNextCh - 'A' + 10 )
+                                              : sal_uInt32( nNextCh - 'a' + 10 ) ) );
                                 nNextCh = GetNextChar();
                             }
                         }
@@ -471,7 +472,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         {
                             do
                             {
-                                cChar = cChar * 10U + sal_Unicode( nNextCh - '0');
+                                cChar = cChar * 10U + sal_uInt32( nNextCh - '0');
                                 nNextCh = GetNextChar();
                             }
                             while( HTML_ISDIGIT(nNextCh) );
@@ -500,6 +501,9 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     }
                     else
                         nNextCh = 0U;
+
+                    if (cChar > 0x10ffff)
+                        cChar = '?';
                 }
                 else if( HTML_ISALPHA( nNextCh ) )
                 {
@@ -507,7 +511,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     sal_Int32 nPos = 0L;
                     do
                     {
-                        sEntityBuffer.append( nNextCh );
+                        sEntityBuffer.appendUtf32( nNextCh );
                         nPos++;
                         nNextCh = GetNextChar();
                     }
@@ -637,7 +641,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 if( IsParserWorking() )
                 {
                     if( cChar )
-                        sTmpBuffer.append( cChar );
+                        sTmpBuffer.appendUtf32( cChar );
                 }
                 else if( SVPAR_PENDING==eState && '>'!=cBreak )
                 {
@@ -661,7 +665,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         case '=':
             if( '>'==cBreak && !cQuote )
                 bEqSignFound = true;
-            sTmpBuffer.append( nNextCh );
+            sTmpBuffer.appendUtf32( nNextCh );
             break;
 
         case '\\':
@@ -684,7 +688,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 else if( cQuote && (cQuote==nNextCh ) )
                     cQuote = 0U;
             }
-            sTmpBuffer.append( nNextCh );
+            sTmpBuffer.appendUtf32( nNextCh );
             bEqSignFound = false;
             break;
 
@@ -695,14 +699,15 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             }
             else
             {
-                sTmpBuffer.append( nNextCh );
+                sTmpBuffer.appendUtf32( nNextCh );
             }
+
             break;
 
         case '<':
             bEqSignFound = false;
             if( '>'==cBreak )
-                sTmpBuffer.append( nNextCh );
+                sTmpBuffer.appendUtf32( nNextCh );
             else
                 bContinue = false;      // break, String zusammen
             break;
@@ -725,7 +730,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '>'==cBreak )
             {
                 // cr/lf in tag is handled in _GetNextToken()
-                sTmpBuffer.append( nNextCh );
+                sTmpBuffer.appendUtf32( nNextCh );
                 break;
             }
             else if( bReadListing || bReadXMP || bReadPRE || bReadTextArea )
@@ -752,7 +757,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             nNextCh = ' ';
             // no break;
         case ' ':
-            sTmpBuffer.append( nNextCh );
+            sTmpBuffer.appendUtf32( nNextCh );
             if( '>'!=cBreak && (!bReadListing && !bReadXMP &&
                                 !bReadPRE && !bReadTextArea) )
             {
@@ -787,7 +792,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             {
                 do {
                     // All remaining characters make their way into the text.
-                    sTmpBuffer.append( nNextCh );
+                    sTmpBuffer.appendUtf32( nNextCh );
                     if( MAX_LEN == sTmpBuffer.getLength() )
                     {
                         aToken += sTmpBuffer.makeStringAndClear();
@@ -864,7 +869,7 @@ int HTMLParser::_GetNextRawToken()
                 }
                 else if( '!' == nNextCh )
                 {
-                    sTmpBuffer.append( nNextCh );
+                    sTmpBuffer.appendUtf32( nNextCh );
                     nNextCh = GetNextChar();
                 }
 
@@ -872,7 +877,7 @@ int HTMLParser::_GetNextRawToken()
                 while( (HTML_ISALPHA(nNextCh) || '-'==nNextCh) &&
                        IsParserWorking() && sTmpBuffer.getLength() < MAX_LEN )
                 {
-                    sTmpBuffer.append( nNextCh );
+                    sTmpBuffer.appendUtf32( nNextCh );
                     nNextCh = GetNextChar();
                 }
 
@@ -959,7 +964,7 @@ int HTMLParser::_GetNextRawToken()
             }
             break;
         case '-':
-            sTmpBuffer.append( nNextCh );
+            sTmpBuffer.appendUtf32( nNextCh );
             if( bReadComment )
             {
                 bool bTwoMinus = false;
@@ -970,7 +975,7 @@ int HTMLParser::_GetNextRawToken()
 
                     if( MAX_LEN == sTmpBuffer.getLength() )
                         aToken += sTmpBuffer.makeStringAndClear();
-                    sTmpBuffer.append( nNextCh );
+                    sTmpBuffer.appendUtf32( nNextCh );
                     nNextCh = GetNextChar();
                 }
 
@@ -1015,7 +1020,7 @@ int HTMLParser::_GetNextRawToken()
             // no break
         default:
             // all remaining characters are appended to the buffer
-            sTmpBuffer.append( nNextCh );
+            sTmpBuffer.appendUtf32( nNextCh );
             break;
         }
 
@@ -1095,7 +1100,7 @@ int HTMLParser::_GetNextToken()
                 {
                     OUStringBuffer sTmpBuffer;
                     do {
-                        sTmpBuffer.append( nNextCh );
+                        sTmpBuffer.appendUtf32( nNextCh );
                         if( MAX_LEN == sTmpBuffer.getLength() )
                             aToken += sTmpBuffer.makeStringAndClear();
                         nNextCh = GetNextChar();
@@ -1166,10 +1171,10 @@ int HTMLParser::_GetNextToken()
                                 }
                                 bDone = aToken.endsWith( "--" );
                                 if( !bDone )
-                                aToken += OUString(nNextCh);
+                                aToken += OUString(&nNextCh,1);
                             }
                             else
-                                aToken += OUString(nNextCh);
+                                aToken += OUString(&nNextCh,1);
                             if( !bDone )
                                 nNextCh = GetNextChar();
                         }
@@ -1261,7 +1266,7 @@ int HTMLParser::_GetNextToken()
                             bDone = '>'==nNextCh && aToken.endsWith("%");
                             if( !bDone )
                             {
-                                aToken += OUString(nNextCh);
+                                aToken += OUString(&nNextCh,1);
                                 nNextCh = GetNextChar();
                             }
                         }
