@@ -40,11 +40,13 @@ public:
     virtual bool                IsValid() = 0;
 };
 
+// ASE = Adobe Swatch Exchange
+
 class PaletteASE : public Palette
 {
     bool        mbValidPalette;
     OUString    maFPath;
-    OUString    maName;
+    OUString    maASEPaletteName;
     ColorList   maColors;
 
     void        LoadPalette();
@@ -58,13 +60,15 @@ public:
     virtual bool                IsValid() override;
 };
 
+// GPL - this is *not* GNU Public License, but is the Gimp PaLette
+
 class PaletteGPL : public Palette
 {
     bool        mbLoadedPalette;
     bool        mbValidPalette;
     OUString    maFName;
     OUString    maFPath;
-    OUString    maName;
+    OUString    maGPLPaletteName;
     ColorList   maColors;
 
     bool        ReadPaletteHeader(SvFileStream& rFileStream);
@@ -80,11 +84,13 @@ public:
     virtual bool                IsValid() override;
 };
 
+// SOC - Star Office Color-table
+
 class PaletteSOC : public Palette
 {
     bool            mbLoadedPalette;
     OUString        maFPath;
-    OUString        maName;
+    OUString        maSOCPaletteName;
     XColorListRef   mpColorList;
 public:
     PaletteSOC( const OUString &rFPath, const OUString &rFName );

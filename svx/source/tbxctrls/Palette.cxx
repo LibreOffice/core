@@ -32,7 +32,7 @@ PaletteASE::~PaletteASE()
 PaletteASE::PaletteASE( const OUString &rFPath, const OUString &rFName ) :
     mbValidPalette( false ),
     maFPath ( rFPath ),
-    maName  ( rFName )
+    maASEPaletteName  ( rFName )
 {
     LoadPalette();
 }
@@ -50,7 +50,7 @@ void PaletteASE::LoadColorSet( SvxColorValueSet& rColorSet )
 
 const OUString& PaletteASE::GetName()
 {
-    return maName;
+    return maASEPaletteName;
 }
 
 bool PaletteASE::IsValid()
@@ -102,19 +102,19 @@ void PaletteASE::LoadPalette()
         aFile.ReadUInt16(nChunkSize);
         aFile.ReadUInt16(nChars);
 
-        OUString aName("");
+        OUString aPaletteName("");
         if (nChars > 1)
-            aName = read_uInt16s_ToOUString(aFile, nChars);
+            aPaletteName = read_uInt16s_ToOUString(aFile, nChars);
         else
             aFile.SeekRel(2);
 
         if (nChunkType == 0xC0010000)
         {
             // Got a start chunk, so set palette name
-            maName = aName;
+            maASEPaletteName = aPaletteName;
             // Is there color data? (shouldn't happen in a start block, but check anyway)
             if (nChunkSize > ((nChars * 2) + 2))
-                aName.clear();
+                aPaletteName.clear();
             else
                 continue;
         }
@@ -158,7 +158,7 @@ void PaletteASE::LoadPalette()
 
         // Ignore color type
         aFile.SeekRel(2);
-        maColors.push_back(std::make_pair(Color(r * 255, g * 255, b * 255), aName));
+        maColors.push_back(std::make_pair(Color(r * 255, g * 255, b * 255), aPaletteName));
     }
 
     mbValidPalette = true;
@@ -183,7 +183,7 @@ PaletteGPL::~PaletteGPL()
 
 const OUString& PaletteGPL::GetName()
 {
-    return maName;
+    return maGPLPaletteName;
 }
 
 void PaletteGPL::LoadColorSet( SvxColorValueSet& rColorSet )
@@ -207,21 +207,21 @@ bool PaletteGPL::IsValid()
 bool PaletteGPL::ReadPaletteHeader(SvFileStream& rFileStream)
 {
     OString aLine;
-    OString aName;
+    OString aPaletteName;
 
     rFileStream.ReadLine(aLine);
     if( !aLine.startsWith("GIMP Palette") ) return false;
     rFileStream.ReadLine(aLine);
-    if( aLine.startsWith("Name: ", &aName) )
+    if( aLine.startsWith("Name: ", &aPaletteName) )
     {
-        maName = OStringToOUString(aName, RTL_TEXTENCODING_ASCII_US);
+        maGPLPaletteName = OStringToOUString(aPaletteName, RTL_TEXTENCODING_ASCII_US);
         rFileStream.ReadLine(aLine);
         if( aLine.startsWith("Columns: "))
             rFileStream.ReadLine(aLine); // we can ignore this
     }
     else
     {
-        maName = maFName;
+        maGPLPaletteName = maFName;
     }
     return true;
 }
@@ -314,7 +314,7 @@ OString lcl_getToken(const OString& rStr, sal_Int32& index)
 PaletteSOC::PaletteSOC( const OUString &rFPath, const OUString &rFName ) :
     mbLoadedPalette( false ),
     maFPath( rFPath ),
-    maName( rFName )
+    maSOCPaletteName( rFName )
 {
 }
 
@@ -324,7 +324,7 @@ PaletteSOC::~PaletteSOC()
 
 const OUString& PaletteSOC::GetName()
 {
-    return maName;
+    return maSOCPaletteName;
 }
 
 void PaletteSOC::LoadColorSet( SvxColorValueSet& rColorSet )

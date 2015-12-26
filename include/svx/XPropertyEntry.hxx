@@ -29,18 +29,18 @@
 class SVX_DLLPUBLIC XPropertyEntry
 {
 private:
-    OUString maName;
+    OUString maPropEntryName;
     Bitmap   maUiBitmap;
 
 protected:
-    XPropertyEntry(const OUString& rName);
+    XPropertyEntry(const OUString& rPropEntryName);
     XPropertyEntry(const XPropertyEntry& rOther);
 
 public:
     virtual ~XPropertyEntry();
 
-    void SetName(const OUString& rName) { maName = rName; }
-    const OUString& GetName() const { return maName; }
+    void SetName(const OUString& rPropEntryName) { maPropEntryName = rPropEntryName; }
+    const OUString& GetName() const { return maPropEntryName; }
     void SetUiBitmap(const Bitmap& rUiBitmap) { maUiBitmap = rUiBitmap; }
     const Bitmap& GetUiBitmap() const { return maUiBitmap; }
 };
