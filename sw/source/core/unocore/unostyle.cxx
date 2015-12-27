@@ -386,9 +386,9 @@ public:
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     //ICoreStyle
-    virtual void SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem);
-    virtual const SfxPoolItem* GetItem(enum RES_FRMATR eAtr);
-    virtual css::document::XEventsSupplier& GetEventsSupplier()
+    virtual void SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem) override;
+    virtual const SfxPoolItem* GetItem(enum RES_FRMATR eAtr) override;
+    virtual css::document::XEventsSupplier& GetEventsSupplier() override
             { return *this; };
 };
 
