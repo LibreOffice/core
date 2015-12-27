@@ -23,7 +23,6 @@
 #include "image.hxx"
 #include "sbobjmod.hxx"
 #include <svtools/miscopt.hxx>
-#include <stdio.h>
 #include <rtl/character.hxx>
 #include <memory>
 

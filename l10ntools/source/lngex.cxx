@@ -19,8 +19,6 @@
 
 #include "sal/config.h"
 
-#include <stdio.h>
-
 #include "sal/main.h"
 
 #include "lngmerge.hxx"
