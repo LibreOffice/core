@@ -24,7 +24,6 @@
 
 namespace logging {
 
-void createRegistryInfo_LoggerPool();
 void createRegistryInfo_FileHandler();
 void createRegistryInfo_ConsoleHandler();
 void createRegistryInfo_PlainTextFormatter();

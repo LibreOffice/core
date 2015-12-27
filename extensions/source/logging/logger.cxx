@@ -18,8 +18,6 @@
  */
 
 
-#include "log_module.hxx"
-#include "log_services.hxx"
 #include "logrecord.hxx"
 #include "loggerconfig.hxx"
 
@@ -34,6 +32,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <rtl/ref.hxx>
 #include <map>
 
 
@@ -47,24 +46,17 @@ namespace logging
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::WeakReference;
     using ::com::sun::star::logging::XLogHandler;
-    using ::com::sun::star::logging::XLoggerPool;
     using ::com::sun::star::logging::LogRecord;
 
-    namespace LogLevel = ::com::sun::star::logging::LogLevel;
-
-    typedef ::cppu::WeakImplHelper <   XLogger
-                                    ,   XServiceInfo
-                                    >   EventLogger_Base;
-    class EventLogger   :public ::cppu::BaseMutex
-                        ,public EventLogger_Base
+    class EventLogger : public cppu::BaseMutex,
+                        public cppu::WeakImplHelper<css::logging::XLogger>
     {
     private:
-        ::cppu::OInterfaceContainerHelper   m_aHandlers;
+        cppu::OInterfaceContainerHelper     m_aHandlers;
         oslInterlockedCount                 m_nEventNumber;
 
         // <attributes>
@@ -74,11 +66,6 @@ namespace logging
 
     public:
         EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName );
-
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) override;
 
         // XLogger
         virtual OUString SAL_CALL getName() throw (RuntimeException, std::exception) override;
@@ -103,21 +90,15 @@ namespace logging
         bool    impl_nts_isLoggable_nothrow( ::sal_Int32 _nLevel );
     };
 
-    typedef ::cppu::WeakImplHelper <   XLoggerPool
-                                    ,   XServiceInfo
-                                    >   LoggerPool_Base;
     /** administrates a pool of XLogger instances, where a logger is keyed by its name,
         and subsequent requests for a logger with the same name return the same instance.
     */
-    class LoggerPool : public LoggerPool_Base
+    class LoggerPool : public cppu::WeakImplHelper<css::logging::XLoggerPool, XServiceInfo>
     {
-    private:
-        typedef ::std::map< OUString, WeakReference< XLogger > > ImplPool;
-
     private:
         ::osl::Mutex                    m_aMutex;
         Reference<XComponentContext>    m_xContext;
-        ImplPool                        m_aImpl;
+        std::map< OUString, WeakReference<XLogger> > m_aLoggerMap;
 
     public:
         explicit LoggerPool( const Reference< XComponentContext >& _rxContext );
@@ -127,12 +108,6 @@ namespace logging
         virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) override;
 
-        // helper for factories
-        static Sequence< OUString > getSupportedServiceNames_static();
-        static OUString  getImplementationName_static();
-        static OUString  getSingletonName_static();
-        static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
-
         // XLoggerPool
         virtual Reference< XLogger > SAL_CALL getNamedLogger( const OUString& Name ) throw (RuntimeException, std::exception) override;
         virtual Reference< XLogger > SAL_CALL getDefaultLogger(  ) throw (RuntimeException, std::exception) override;
@@ -141,7 +116,7 @@ namespace logging
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName )
         :m_aHandlers( m_aMutex )
         ,m_nEventNumber( 0 )
-        ,m_nLogLevel( LogLevel::OFF )
+        ,m_nLogLevel( css::logging::LogLevel::OFF )
         ,m_sName( _rName )
     {
         osl_atomic_increment( &m_refCount );
@@ -236,22 +211,6 @@ namespace logging
         ) );
     }
 
-    OUString SAL_CALL EventLogger::getImplementationName() throw(RuntimeException, std::exception)
-    {
-        return OUString( "com.sun.star.comp.extensions.EventLogger" );
-    }
-
-    sal_Bool EventLogger::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
-    {
-        return cppu::supportsService(this, _rServiceName);
-    }
-
-    Sequence< OUString > SAL_CALL EventLogger::getSupportedServiceNames() throw(RuntimeException, std::exception)
-    {
-        Sequence< OUString > aServiceNames { "com.sun.star.logging.Logger" };
-        return aServiceNames;
-    }
-
     LoggerPool::LoggerPool( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
     {
@@ -259,7 +218,7 @@ namespace logging
 
     OUString SAL_CALL LoggerPool::getImplementationName() throw(RuntimeException, std::exception)
     {
-        return getImplementationName_static();
+        return OUString("com.sun.star.comp.extensions.LoggerPool");
     }
 
     sal_Bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
@@ -269,35 +228,14 @@ namespace logging
 
     Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_static();
-    }
-
-    OUString SAL_CALL LoggerPool::getImplementationName_static()
-    {
-        return OUString( "com.sun.star.comp.extensions.LoggerPool" );
-    }
-
-    Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames_static()
-    {
-        Sequence< OUString > aServiceNames { getSingletonName_static() };
-        return aServiceNames;
-    }
-
-    OUString LoggerPool::getSingletonName_static()
-    {
-        return OUString( "com.sun.star.logging.LoggerPool" );
-    }
-
-    Reference< XInterface > SAL_CALL LoggerPool::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new LoggerPool( _rxContext ) );
+        return { "com.sun.star.logging.LoggerPool" };
     }
 
     Reference< XLogger > SAL_CALL LoggerPool::getNamedLogger( const OUString& _rName ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WeakReference< XLogger >& rLogger( m_aImpl[ _rName ] );
+        WeakReference< XLogger >& rLogger( m_aLoggerMap[ _rName ] );
         Reference< XLogger > xLogger( rLogger );
         if ( !xLogger.is() )
         {
@@ -314,11 +252,33 @@ namespace logging
         return getNamedLogger( "org.openoffice.logging.DefaultLogger" );
     }
 
-    void createRegistryInfo_LoggerPool()
-    {
-        static OSingletonRegistration< LoggerPool > aAutoRegistration;
-    }
-
 } // namespace logging
+
+namespace {
+
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(new logging::LoggerPool(context)))
+    {}
+
+    rtl::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_extensions_LoggerPool(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
