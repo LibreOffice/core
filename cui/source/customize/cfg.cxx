@@ -1403,7 +1403,10 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
             for ( const auto& aElementProp : aElement )
             {
                 if ( aElementProp.Name == ITEM_DESCRIPTOR_RESOURCEURL )
+                {
                     aElementProp.Value >>= aUrl;
+                    break;
+                }
             }
 
             css::uno::Reference< css::container::XIndexAccess > xPopupMenu;
@@ -1416,13 +1419,13 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
 
             if ( xPopupMenu.is() )
             {
-                OUString aMenuName = aUrl.copy( aUrl.lastIndexOf( '/' ) + 1 );
+                // insert into std::unordered_map to filter duplicates from the parent
+                aMenuInfo.insert( MenuInfo::value_type( aUrl, true ) );
+
                 OUString aUIMenuName = GetUIName( aUrl );
                 if ( aUIMenuName.isEmpty() )
-                    aUIMenuName = aMenuName;
-
-                // insert into std::unordered_map to filter duplicates from the parent
-                aMenuInfo.insert( MenuInfo::value_type( aMenuName, true ) );
+                    // Menus without UI name aren't supposed to be customized.
+                    continue;
 
                 SvxConfigEntry* pEntry = new SvxConfigEntry( aUIMenuName, aUrl, true );
                 pEntry->SetMain();
@@ -1444,20 +1447,20 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
 
         for ( const auto& aElement : aParentElementsInfo )
         {
-            OUString aUrl, aMenuName;
+            OUString aUrl;
             for ( const auto& aElementProp : aElement )
             {
                 if ( aElementProp.Name == ITEM_DESCRIPTOR_RESOURCEURL )
                 {
                     aElementProp.Value >>= aUrl;
-                    aMenuName = aUrl.copy( aUrl.lastIndexOf( '/' ) + 1 );
+                    break;
                 }
             }
 
             css::uno::Reference< css::container::XIndexAccess > xPopupMenu;
             try
             {
-                if ( aMenuInfo.find( aMenuName ) == aMenuInfo.end() )
+                if ( aMenuInfo.find( aUrl ) == aMenuInfo.end() )
                     xPopupMenu = xParentCfgMgr->getSettings( aUrl, sal_False );
             }
             catch ( const css::uno::Exception& )
@@ -1467,7 +1470,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
             {
                 OUString aUIMenuName = GetUIName( aUrl );
                 if ( aUIMenuName.isEmpty() )
-                    aUIMenuName = aMenuName;
+                    continue;
 
                 SvxConfigEntry* pEntry = new SvxConfigEntry( aUIMenuName, aUrl, true, true );
                 pEntry->SetMain();
