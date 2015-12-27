@@ -1,5 +1,14 @@
 --- src/lib/VSDContentCollector.cpp
 +++ src/lib/VSDContentCollector.cpp
+@@ -3220,7 +3220,7 @@
+     }
+     if (U_SUCCESS(status) && conv)
+     {
+-      const char *src = (const char *)&characters[0];
++      const char *src = (const char *)characters.data();
+       const char *srcLimit = (const char *)src + characters.size();
+       while (src < srcLimit)
+       {
 @@ -3285,6 +3285,7 @@
    _handleLevelChange(level);
    librevenge::RVNGString text;
