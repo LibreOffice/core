@@ -553,8 +553,18 @@ void Window::dispose()
     // cleanup overlap related window data
     delete mpWindowImpl->mpOverlapData;
 
+    // save the pointer
+    WindowImpl* pWindowImplTmp = mpWindowImpl;
+
     // remove BorderWindow or Frame window data
     mpWindowImpl->mpBorderWindow.disposeAndClear();
+
+    if (pWindowImplTmp != mpWindowImpl)
+    {  // in this case it was delete
+        mpWindowImpl = nullptr;
+        return;
+    }
+
     if ( mpWindowImpl->mbFrame )
     {
         if ( pSVData->maWinData.mpFirstFrame == this )
