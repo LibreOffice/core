@@ -233,7 +233,7 @@ en-US = "Removing applications"
 en-US = "Application: [1], Command line: [2]"
 
 [OOO_ACTIONTEXT_73]
-en-US = "Removing files"
+en-US = "Removing files from previous installation"
 
 [OOO_ACTIONTEXT_74]
 en-US = "File: [1], Directory: [9]"
