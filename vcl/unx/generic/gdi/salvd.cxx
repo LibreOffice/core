@@ -35,7 +35,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <opengl/x11/salvd.hxx>
 
-static SalVirtualDevice* X11SalInstance::CreateX11VirtualDevice(SalGraphics* pGraphics,
+SalVirtualDevice* X11SalInstance::CreateX11VirtualDevice(SalGraphics* pGraphics,
         long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
         X11SalGraphics* pNewGraphics)
 {
