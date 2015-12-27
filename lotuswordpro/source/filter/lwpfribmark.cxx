@@ -136,12 +136,12 @@ void LwpFribCHBlock::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
 void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
 {
     OUString name;
-    LwpBookMark* pBook = pFoundry->GetBookMark(GetMarkerID());
+    LwpBookMark* pBook = pFoundry ? pFoundry->GetBookMark(GetMarkerID()) : nullptr;
     if (pBook)
         name = pBook->GetName();
 
     OUString sDivision;
-    LwpDocument* pDoc = pFoundry->GetDocument();
+    LwpDocument* pDoc = pFoundry ? pFoundry->GetDocument() : nullptr;
     if (pDoc)
     {
         LwpObjectID& rID = pDoc->GetDivInfoID();
