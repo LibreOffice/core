@@ -865,6 +865,7 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
                     switch ( eType )
                     {
                     case UNKNOWN:
+                    case NOT_FOUND:
                     case DAV:
                         throw lang::IllegalArgumentException();
 
@@ -953,6 +954,7 @@ void Content::removeProperty( const OUString& Name,
                     switch ( eType )
                     {
                         case UNKNOWN:
+                        case NOT_FOUND:
                         case DAV:
                             throw beans::UnknownPropertyException();
 
@@ -1439,7 +1441,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         NeonUri aUri( xResAccess->getURL() );
         aUnescapedTitle = aUri.GetPathBaseNameUnescaped();
 
-        if ( eType == UNKNOWN )
+        if ( eType == UNKNOWN || eType == NOT_FOUND )
         {
             xProps.reset( new ContentProperties( aUnescapedTitle ) );
         }
@@ -1470,10 +1472,20 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 "IsFolder",
                 uno::makeAny( false ),
                 true );
-            xProps->addProperty(
+            if ( eType == NOT_FOUND )
+            {
+                xProps->addProperty(
+                "IsDocument",
+                uno::makeAny( false ),
+                true );
+            }
+            else
+            {
+                xProps->addProperty(
                 "IsDocument",
                 uno::makeAny( true ),
                 true );
+            }
         }
     }
     else
@@ -2897,7 +2909,7 @@ Content::ResourceType Content::resourceTypeForLocks(
         }
     }
     osl::MutexGuard g(m_aMutex);
-    if (m_eResourceTypeForLocks == UNKNOWN)
+    if ( m_eResourceTypeForLocks == UNKNOWN || m_eResourceTypeForLocks == NOT_FOUND )
     {
         m_eResourceTypeForLocks = eResourceTypeForLocks;
     }
@@ -3435,7 +3447,7 @@ Content::ResourceType Content::getResourceType(
 {
     {
         osl::MutexGuard g(m_aMutex);
-        if (m_eResourceType != UNKNOWN) {
+        if ( m_eResourceType != UNKNOWN && m_eResourceType != NOT_FOUND ) {
             return m_eResourceType;
         }
     }
@@ -3484,6 +3496,10 @@ Content::ResourceType Content::getResourceType(
         {
             rResAccess->resetUri();
 
+            if ( e.getStatus() == SC_NOT_FOUND )
+            {
+                eResourceType = NOT_FOUND;
+            }
             if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
             {
                 // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
@@ -3507,7 +3523,7 @@ Content::ResourceType Content::getResourceType(
     }
 
     osl::MutexGuard g(m_aMutex);
-    if (m_eResourceType == UNKNOWN) {
+    if ( m_eResourceType == UNKNOWN || m_eResourceType == NOT_FOUND ) {
         m_eResourceType = eResourceType;
     } else {
         SAL_WARN_IF(
