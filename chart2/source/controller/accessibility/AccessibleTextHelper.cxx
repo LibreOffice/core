@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-
+#include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -90,8 +90,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
             SdrObject * pTextObj = m_pDrawViewWrapper->getNamedSdrObject( aCID );
             if( pTextObj )
             {
-                std::unique_ptr<SvxEditSource> pEditSource(new SvxTextEditSource( *pTextObj, nullptr, *pView, *pWindow ));
-                m_pTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
+                m_pTextHelper = new ::accessibility::AccessibleTextHelper(o3tl::make_unique<SvxTextEditSource>(*pTextObj, nullptr, *pView, *pWindow));
                 m_pTextHelper->SetEventSource( xEventSource );
             }
         }

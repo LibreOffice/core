@@ -39,7 +39,7 @@
 #include <svtools/svlbitm.hxx>
 
 #include <map>
-
+#include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;
 using namespace css::uno;
 using namespace css::lang;
@@ -239,10 +239,8 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
         Image aImage;
         pEntry = new UnoTreeListEntry( xNode, this );
         {
-            std::unique_ptr<ImplContextGraphicItem> pContextBmp(
-                new ImplContextGraphicItem(pEntry, 0, aImage, aImage, true));
 
-            pEntry->AddItem(std::move(pContextBmp));
+            pEntry->AddItem(o3tl::make_unique<ImplContextGraphicItem>(pEntry, 0, aImage, aImage, true));
         }
 
         std::unique_ptr<UnoTreeListItem> pUnoItem(new UnoTreeListItem(pEntry));

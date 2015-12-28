@@ -29,7 +29,7 @@
 #include <docsort.hxx>
 #include <redline.hxx>
 #include <node2lay.hxx>
-
+#include <o3tl/make_unique.hxx>
 // Undo for Sorting
 SwSortUndoElement::~SwSortUndoElement()
 {
@@ -249,14 +249,12 @@ void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
 
 void SwUndoSort::Insert( const OUString& rOrgPos, const OUString& rNewPos)
 {
-    std::unique_ptr<SwSortUndoElement> p(new SwSortUndoElement(rOrgPos, rNewPos));
-    m_SortList.push_back(std::move(p));
+    m_SortList.push_back(o3tl::make_unique< SwSortUndoElement>(rOrgPos, rNewPos));
 }
 
 void SwUndoSort::Insert( sal_uLong nOrgPos, sal_uLong nNewPos)
 {
-    std::unique_ptr<SwSortUndoElement> p(new SwSortUndoElement(nOrgPos, nNewPos));
-    m_SortList.push_back(std::move(p));
+    m_SortList.push_back(o3tl::make_unique<SwSortUndoElement>(nOrgPos, nNewPos));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

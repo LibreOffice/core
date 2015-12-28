@@ -69,7 +69,7 @@
 
 #include <sfx2/StyleManager.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
-
+#include <o3tl/make_unique.hxx>
 using namespace css;
 using namespace css::beans;
 using namespace css::frame;
@@ -640,9 +640,7 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 
     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
     {
-        std::unique_ptr<StyleLBoxString> pStyleLBoxString(
-            new StyleLBoxString(pTreeListEntry, 0, pEntry->getName(), eStyleFamily));
-        pTreeListEntry->ReplaceItem(std::move(pStyleLBoxString), 1);
+        pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(pTreeListEntry, 0, pEntry->getName(), eStyleFamily), 1);
     }
 
     pBox->GetModel()->InvalidateEntry(pTreeListEntry);
@@ -1258,9 +1256,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                     SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], nullptr, false, nPos);
                     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
                     {
-                        std::unique_ptr<StyleLBoxString> pStyleLBoxString(
-                            new StyleLBoxString(pTreeListEntry, 0, aStrings[nPos], eFam));
-                        pTreeListEntry->ReplaceItem(std::move(pStyleLBoxString), 1);
+                        pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(pTreeListEntry, 0, aStrings[nPos], eFam), 1);
                     }
                     aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
                 }
