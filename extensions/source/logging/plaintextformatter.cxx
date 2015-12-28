@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "log_module.hxx"
-#include "log_services.hxx"
-
-#include <stdio.h>
+#include <sal/config.h>
 
 #include <com/sun/star/logging/XLogFormatter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -31,32 +27,26 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ustrbuf.hxx>
-
 #include <osl/thread.h>
 
+#include <stdio.h>
 
 namespace logging
 {
-
-
-    using ::com::sun::star::logging::XLogFormatter;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
 
-    typedef ::cppu::WeakImplHelper <   XLogFormatter
-                                    ,   XServiceInfo
-                                    >   PlainTextFormatter_Base;
-    class PlainTextFormatter : public PlainTextFormatter_Base
+    class PlainTextFormatter : public cppu::WeakImplHelper<css::logging::XLogFormatter, css::lang::XServiceInfo>
     {
-    protected:
+    public:
         PlainTextFormatter();
         virtual ~PlainTextFormatter();
 
+    private:
         // XLogFormatter
         virtual OUString SAL_CALL getHead(  ) throw (RuntimeException, std::exception) override;
         virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException, std::exception) override;
@@ -66,12 +56,6 @@ namespace logging
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) override;
-
-    public:
-        // XServiceInfo - static version
-        static OUString SAL_CALL getImplementationName_static();
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-        static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
     };
 
     PlainTextFormatter::PlainTextFormatter()
@@ -153,42 +137,23 @@ namespace logging
 
     OUString SAL_CALL PlainTextFormatter::getImplementationName() throw(RuntimeException, std::exception)
     {
-        return getImplementationName_static();
+        return OUString("com.sun.star.comp.extensions.PlainTextFormatter");
     }
-
 
     Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_static();
+        return { "com.sun.star.logging.PlainTextFormatter" };
     }
-
-
-    OUString SAL_CALL PlainTextFormatter::getImplementationName_static()
-    {
-        return OUString( "com.sun.star.comp.extensions.PlainTextFormatter" );
-    }
-
-
-    Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames_static()
-    {
-        Sequence< OUString > aServiceNames { "com.sun.star.logging.PlainTextFormatter" };
-        return aServiceNames;
-    }
-
-
-    Reference< XInterface > PlainTextFormatter::Create( const Reference< XComponentContext >& )
-    {
-        return *( new PlainTextFormatter );
-    }
-
-
-    void createRegistryInfo_PlainTextFormatter()
-    {
-        static OAutoRegistration< PlainTextFormatter > aAutoRegistration;
-    }
-
 
 } // namespace logging
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_extensions_PlainTextFormatter(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new logging::PlainTextFormatter());
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
