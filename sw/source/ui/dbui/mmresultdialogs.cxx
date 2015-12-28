@@ -396,52 +396,54 @@ void SwMMResultEmailDialog::FillInEmailSettings()
 
     SwView* pSourceView = pConfigItem->GetSourceView();
     OSL_ENSURE(pSourceView, "no source view exists");
-    if(pSourceView)
+    if (pSourceView)
     {
         SwDocShell* pDocShell = pSourceView->GetDocShell();
-        if ( pDocShell->HasName() )
+        if (pDocShell->HasName())
         {
-            INetURLObject aTmp( pDocShell->GetMedium()->GetName() );
+            INetURLObject aTmp(pDocShell->GetMedium()->GetName());
             m_pAttachmentED->SetText(aTmp.getName(
                     INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ));
         }
     }
 
-        if(m_pAttachmentED->GetText().isEmpty())
-        {
-            OUString sAttach( m_sDefaultAttachmentST );
-            sAttach += ".";
-            sAttach += lcl_GetExtensionForDocType(
-                        reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData()));
-            m_pAttachmentED->SetText( sAttach );
+    if (m_pAttachmentED->GetText().isEmpty())
+    {
+        OUString sAttach(m_sDefaultAttachmentST);
+        sAttach += ".";
+        sAttach += lcl_GetExtensionForDocType(
+                    reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData()));
+        m_pAttachmentED->SetText(sAttach);
 
-        }
-        //fill mail address ListBox
-        if(!m_pMailToLB->GetEntryCount())
-        {
-            //select first column
-            uno::Reference< sdbcx::XColumnsSupplier > xColsSupp(pConfigItem->GetResultSet(), uno::UNO_QUERY);
-            //get the name of the actual columns
-            uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
-            uno::Sequence< OUString > aFields;
-            if(xColAccess.is())
-                aFields = xColAccess->getElementNames();
-            const OUString* pFields = aFields.getConstArray();
-            for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
-                m_pMailToLB->InsertEntry(pFields[nField]);
+    }
 
-            m_pMailToLB->SelectEntryPos(0);
-            // then select the right one - may not be available
-            const ResStringArray& rHeaders = pConfigItem->GetDefaultAddressHeaders();
-            OUString sEMailColumn = rHeaders.GetString( MM_PART_E_MAIL );
-            Sequence< OUString> aAssignment = pConfigItem->GetColumnAssignment(pConfigItem->GetCurrentDBData());
-            if(aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
-                sEMailColumn = aAssignment[MM_PART_E_MAIL];
-            m_pMailToLB->SelectEntry(sEMailColumn);
-            // HTML format pre-selected
-            m_pSendAsLB->SelectEntryPos(3);
-            SendTypeHdl_Impl(*m_pSendAsLB);
-        }
+    //fill mail address ListBox
+    if (!m_pMailToLB->GetEntryCount())
+    {
+        //select first column
+        uno::Reference< sdbcx::XColumnsSupplier > xColsSupp(pConfigItem->GetResultSet(), uno::UNO_QUERY);
+        //get the name of the actual columns
+        uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
+        uno::Sequence< OUString > aFields;
+        if (xColAccess.is())
+            aFields = xColAccess->getElementNames();
+        const OUString* pFields = aFields.getConstArray();
+        for (sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
+            m_pMailToLB->InsertEntry(pFields[nField]);
+
+        m_pMailToLB->SelectEntryPos(0);
+        // then select the right one - may not be available
+        const ResStringArray& rHeaders = pConfigItem->GetDefaultAddressHeaders();
+        OUString sEMailColumn = rHeaders.GetString( MM_PART_E_MAIL );
+        Sequence< OUString> aAssignment = pConfigItem->GetColumnAssignment(pConfigItem->GetCurrentDBData());
+        if (aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
+            sEMailColumn = aAssignment[MM_PART_E_MAIL];
+        m_pMailToLB->SelectEntry(sEMailColumn);
+
+        // HTML format pre-selected
+        m_pSendAsLB->SelectEntryPos(3);
+        SendTypeHdl_Impl(*m_pSendAsLB);
+    }
 }
 
 IMPL_LINK_TYPED(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
