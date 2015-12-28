@@ -321,7 +321,15 @@ public:
     virtual bool MarginsSameAsParent() SAL_OVERRIDE;
     virtual double MarginsValue(const sal_uInt8& nWhichSide) SAL_OVERRIDE;
     virtual double GetExtMarginsValue(const sal_uInt8& nWhichSide) SAL_OVERRIDE;
-    LwpLayoutGeometry* GetGeometry();
+    LwpLayoutGeometry* GetGeometry()
+    {
+        if (m_bGettingGeometry)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingGeometry = true;
+        auto pRet = Geometry();
+        m_bGettingGeometry = false;
+        return pRet;
+    }
     double GetGeometryHeight();
     double GetGeometryWidth();
     LwpBorderStuff* GetBorderStuff();
@@ -369,6 +377,7 @@ protected:
     void Read() SAL_OVERRIDE;
 private:
     LwpObjectID m_BasedOnStyle;
+    LwpLayoutGeometry* Geometry();
 protected:
     enum
     {
@@ -387,6 +396,7 @@ protected:
     LwpObjectID     m_LayBorderStuff;
     LwpObjectID     m_LayBackgroundStuff;
     LwpObjectID     m_LayExtBorderStuff;
+    bool            m_bGettingGeometry;
 public:
     LwpObjectID& GetContent() { return m_Content; }
     LwpTabOverride* GetTabOverride();
