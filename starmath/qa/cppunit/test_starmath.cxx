@@ -45,12 +45,14 @@ public:
     void editMarker();
     void editFailure();
 
+    void replacePlaceholder();
     void viewZoom();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(editUndoRedo);
     CPPUNIT_TEST(editMarker);
     CPPUNIT_TEST(editFailure);
+    CPPUNIT_TEST(replacePlaceholder);
     CPPUNIT_TEST(viewZoom);
     CPPUNIT_TEST_SUITE_END();
 
@@ -219,6 +221,17 @@ void Test::editUndoRedo()
         CPPUNIT_ASSERT_MESSAGE("Must be empty", !sFinalText.getLength());
     }
 
+}
+
+void Test::replacePlaceholder()
+{
+    // Test the placeholder replacement. In this case, testing 'a + b', it
+    // should return '+a + b' when selecting '+<?>' in ElementsDock
+    m_pEditWindow->SetText("a + b");
+    m_pEditWindow->SelectAll();
+    m_pEditWindow->InsertText("+<?>");
+    OUString sFinalText = m_pEditWindow->GetText();
+    CPPUNIT_ASSERT_MESSAGE("Should be '+a + b'", sFinalText == "+a + b");
 }
 
 void Test::viewZoom()
