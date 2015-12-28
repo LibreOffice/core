@@ -38,7 +38,6 @@
 
 class Menu;
 class DataChangedEvent;
-class SmClipboardChangeListener;
 class SmDocShell;
 class SmViewShell;
 class SmPrintUIOptions;
@@ -235,9 +234,6 @@ struct SmViewShell_Impl;
 
 class SmViewShell: public SfxViewShell
 {
-    // for handling the PasteClipboardState
-    friend class SmClipboardChangeListener;
-
     std::unique_ptr<SmViewShell_Impl> pImpl;
 
     VclPtr<SmGraphicWindow> aGraphic;
