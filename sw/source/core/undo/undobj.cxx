@@ -996,9 +996,8 @@ bool SwUndo::FillSaveData(
              && eCmpPos != POS_COLLIDE_END
              && eCmpPos != POS_COLLIDE_START )
         {
-            std::unique_ptr<SwRedlineSaveData> pNewData(
-                new SwRedlineSaveData(eCmpPos, *pStt, *pEnd, *pRedl, bCopyNext));
-            rSData.push_back(std::move(pNewData));
+
+            rSData.push_back(o3tl::make_unique<SwRedlineSaveData>(eCmpPos, *pStt, *pEnd, *pRedl, bCopyNext));
         }
     }
     if( !rSData.empty() && bDelRange )

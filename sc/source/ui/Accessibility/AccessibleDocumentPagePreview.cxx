@@ -58,7 +58,7 @@
 #include <list>
 #include <algorithm>
 #include <memory>
-
+#include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -140,9 +140,7 @@ ScNotesChildren::~ScNotesChildren()
 
 ::accessibility::AccessibleTextHelper* ScNotesChildren::CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, bool bMarkNote, sal_Int32 nChildOffset) const
 {
-    ::std::unique_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
-        (new ScAccessibleNoteTextData(mpViewShell, rString, aCellPos, bMarkNote));
-    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::move(pAccessiblePreviewHeaderCellTextData)));
+    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(o3tl::make_unique<ScAccessibleNoteTextData>(mpViewShell, rString, aCellPos, bMarkNote)));
 
     ::accessibility::AccessibleTextHelper* pTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
 
