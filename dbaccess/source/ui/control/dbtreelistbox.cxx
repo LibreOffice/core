@@ -39,7 +39,7 @@
 #include "svtools/treelistentry.hxx"
 
 #include <memory>
-
+#include <o3tl/make_unique.hxx>
 namespace dbaui
 {
 
@@ -139,8 +139,7 @@ void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, co
 {
     SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp, eButtonKind);
     SvLBoxItem* pTextItem(_pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-    std::unique_ptr<SvLBoxString> pString(new OBoldListboxString(_pEntry, 0, aStr));
-    _pEntry->ReplaceItem(std::move(pString), _pEntry->GetPos(pTextItem));
+    _pEntry->ReplaceItem(o3tl::make_unique<OBoldListboxString>(_pEntry, 0, aStr), _pEntry->GetPos(pTextItem));
 }
 
 void DBTreeListBox::implStopSelectionTimer()
