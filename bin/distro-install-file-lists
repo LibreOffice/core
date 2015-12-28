@@ -227,7 +227,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     add_used_directories tde_list.txt common_list.txt
 
     # create kde4 subpackage
-    mv_file_between_flists kde4_list.txt kde_list.txt    $INSTALLDIR/program/kde4be1lo.so
+    test -f $DESTDIR/gid_Module_Optional_Kde && cp $DESTDIR/gid_Module_Optional_Kde kde4_list.txt || :
     mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kde4l..so
     mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/fps_kde4lo.so
     add_used_directories kde4_list.txt common_list.txt
