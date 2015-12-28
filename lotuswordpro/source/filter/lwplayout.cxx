@@ -560,9 +560,12 @@ void LwpLayoutMisc::Read(LwpObjectStream* pStrm)
 }
 
 LwpMiddleLayout::LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
-    : LwpVirtualLayout(objHdr, pStrm),
-      m_pStyleStuff(new LwpLayoutStyle), m_pMiscStuff(new LwpLayoutMisc)
-{}
+    : LwpVirtualLayout(objHdr, pStrm)
+    , m_pStyleStuff(new LwpLayoutStyle)
+    , m_pMiscStuff(new LwpLayoutMisc)
+    , m_bGettingGeometry(false)
+{
+}
 
 LwpMiddleLayout::~LwpMiddleLayout()
 {
@@ -637,7 +640,7 @@ rtl::Reference<LwpObject> LwpMiddleLayout::GetBasedOnStyle()
 * @descr:   Get the geometry of current layout
 *
 */
-LwpLayoutGeometry* LwpMiddleLayout::GetGeometry()
+LwpLayoutGeometry* LwpMiddleLayout::Geometry()
 {
     if( !m_LayGeometry.IsNull() )
     {
