@@ -176,11 +176,12 @@ AtkStateType mapAtkState( sal_Int16 nState )
     return type;
 }
 
-static inline AtkRole registerRole( const gchar * name )
+static inline AtkRole getRoleForName( const gchar * name )
 {
     AtkRole ret = atk_role_for_name( name );
     if( ATK_ROLE_INVALID == ret )
     {
+        // this should only happen in old ATK versions
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ret = atk_role_register( name );
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -220,7 +221,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_IMAGE,           // GRAPHIC
         ATK_ROLE_UNKNOWN,         // GROUP_BOX - registered below
         ATK_ROLE_HEADER,
-        ATK_ROLE_HEADING,         // HEADING - registered below
+        ATK_ROLE_HEADING,
         ATK_ROLE_TEXT,            // HYPER_LINK - registered below
         ATK_ROLE_ICON,
         ATK_ROLE_INTERNAL_FRAME,
@@ -294,24 +295,24 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
 
     if( ! initialized )
     {
-        // re-use strings from ATK library
-        roleMap[accessibility::AccessibleRole::EDIT_BAR] = registerRole("editbar");
-        roleMap[accessibility::AccessibleRole::EMBEDDED_OBJECT] = registerRole("embedded");
-        roleMap[accessibility::AccessibleRole::CHART] = registerRole("chart");
-        roleMap[accessibility::AccessibleRole::CAPTION] = registerRole("caption");
-        roleMap[accessibility::AccessibleRole::DOCUMENT] = registerRole("document frame");
-        roleMap[accessibility::AccessibleRole::HEADING] = registerRole("heading");
-        roleMap[accessibility::AccessibleRole::PAGE] = registerRole("page");
-        roleMap[accessibility::AccessibleRole::SECTION] = registerRole("section");
-        roleMap[accessibility::AccessibleRole::FORM] = registerRole("form");
-        roleMap[accessibility::AccessibleRole::GROUP_BOX] = registerRole("grouping");
-        roleMap[accessibility::AccessibleRole::COMMENT] = registerRole("comment");
-        roleMap[accessibility::AccessibleRole::IMAGE_MAP] = registerRole("image map");
-        roleMap[accessibility::AccessibleRole::TREE_ITEM] = registerRole("tree item");
-        roleMap[accessibility::AccessibleRole::HYPER_LINK] = registerRole("link");
-        roleMap[accessibility::AccessibleRole::END_NOTE] = registerRole("comment");
-        roleMap[accessibility::AccessibleRole::FOOTNOTE] = registerRole("comment");
-        roleMap[accessibility::AccessibleRole::NOTE] = registerRole("comment");
+        // the accessible roles below were added to ATK in later versions,
+        // with role_for_name we will know if they exist in runtime.
+        roleMap[accessibility::AccessibleRole::EDIT_BAR] = getRoleForName("editbar");
+        roleMap[accessibility::AccessibleRole::EMBEDDED_OBJECT] = getRoleForName("embedded");
+        roleMap[accessibility::AccessibleRole::CHART] = getRoleForName("chart");
+        roleMap[accessibility::AccessibleRole::CAPTION] = getRoleForName("caption");
+        roleMap[accessibility::AccessibleRole::DOCUMENT] = getRoleForName("document frame");
+        roleMap[accessibility::AccessibleRole::PAGE] = getRoleForName("page");
+        roleMap[accessibility::AccessibleRole::SECTION] = getRoleForName("section");
+        roleMap[accessibility::AccessibleRole::FORM] = getRoleForName("form");
+        roleMap[accessibility::AccessibleRole::GROUP_BOX] = getRoleForName("grouping");
+        roleMap[accessibility::AccessibleRole::COMMENT] = getRoleForName("comment");
+        roleMap[accessibility::AccessibleRole::IMAGE_MAP] = getRoleForName("image map");
+        roleMap[accessibility::AccessibleRole::TREE_ITEM] = getRoleForName("tree item");
+        roleMap[accessibility::AccessibleRole::HYPER_LINK] = getRoleForName("link");
+        roleMap[accessibility::AccessibleRole::END_NOTE] = getRoleForName("comment");
+        roleMap[accessibility::AccessibleRole::FOOTNOTE] = getRoleForName("comment");
+        roleMap[accessibility::AccessibleRole::NOTE] = getRoleForName("comment");
 
         initialized = true;
     }
