@@ -17,12 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "log_module.hxx"
-#include "log_services.hxx"
-
-#include <stdio.h>
-#include <string>
+#include <sal/config.h>
 
 #include <com/sun/star/logging/XCsvLogFormatter.hpp>
 #include <com/sun/star/logging/XLogFormatter.hpp>
@@ -33,40 +28,28 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ustrbuf.hxx>
-
 #include <osl/thread.h>
+
+#include <stdio.h>
+#include <string>
 
 namespace logging
 {
-
-    using ::com::sun::star::logging::XCsvLogFormatter;
-    using ::com::sun::star::logging::XLogFormatter;
-    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::logging::LogRecord;
-    using ::com::sun::star::uno::XInterface;
 
     // formats for csv files as defined by RFC4180
-    typedef ::cppu::WeakImplHelper <   XCsvLogFormatter
-                                    ,   XServiceInfo
-                                    >   CsvFormatter_Base;
-    class CsvFormatter : public CsvFormatter_Base
+    class CsvFormatter : public cppu::WeakImplHelper<css::logging::XCsvLogFormatter, css::lang::XServiceInfo>
     {
     public:
         virtual OUString SAL_CALL formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException, std::exception) override;
 
-        // XServiceInfo - static version
-        static OUString SAL_CALL getImplementationName_static();
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-        static Reference< XInterface > Create( const Reference< XComponentContext >& context );
-
-    protected:
         CsvFormatter();
         virtual ~CsvFormatter();
 
+    private:
         // XCsvLogFormatter
         virtual sal_Bool SAL_CALL getLogEventNo() throw (RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL getLogThread() throw (RuntimeException, std::exception) override;
@@ -142,12 +125,6 @@ namespace
         else
             buf.append(str);
     };
-
-    css::uno::Sequence< OUString> initialColumns()
-    {
-        css::uno::Sequence< OUString> result { "message" };
-        return result;
-    };
 }
 
 namespace logging
@@ -158,7 +135,7 @@ namespace logging
         m_LogTimestamp(true),
         m_LogSource(false),
         m_MultiColumn(false),
-        m_Columnnames(initialColumns())
+        m_Columnnames({ "message" })
     { }
 
     CsvFormatter::~CsvFormatter()
@@ -317,34 +294,22 @@ namespace logging
 
     OUString SAL_CALL CsvFormatter::getImplementationName() throw(RuntimeException, std::exception)
     {
-        return getImplementationName_static();
+        return OUString("com.sun.star.comp.extensions.CsvFormatter");
     }
 
     Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_static();
+        return { "com.sun.star.logging.CsvFormatter" };
     }
 
-    OUString SAL_CALL CsvFormatter::getImplementationName_static()
-    {
-        return OUString( "com.sun.star.comp.extensions.CsvFormatter" );
-    }
-
-    Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames_static()
-    {
-        Sequence< OUString > aServiceNames { "com.sun.star.logging.CsvFormatter" };
-        return aServiceNames;
-    }
-
-    Reference< XInterface > CsvFormatter::Create( const Reference< XComponentContext >& )
-    {
-        return *( new CsvFormatter );
-    }
-
-    void createRegistryInfo_CsvFormatter()
-    {
-        static OAutoRegistration< CsvFormatter > aAutoRegistration;
-    }
 } // namespace logging
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_extensions_CsvFormatter(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new logging::CsvFormatter());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

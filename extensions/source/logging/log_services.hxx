@@ -25,7 +25,6 @@
 namespace logging {
 
 void createRegistryInfo_PlainTextFormatter();
-void createRegistryInfo_CsvFormatter();
 
 }
 

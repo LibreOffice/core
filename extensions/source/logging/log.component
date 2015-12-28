@@ -23,7 +23,8 @@
       constructor="com_sun_star_comp_extensions_ConsoleHandler">
     <service name="com.sun.star.logging.ConsoleHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.extensions.CsvFormatter">
+  <implementation name="com.sun.star.comp.extensions.CsvFormatter"
+      constructor="com_sun_star_comp_extensions_CsvFormatter">
     <service name="com.sun.star.logging.CsvFormatter"/>
   </implementation>
   <implementation name="com.sun.star.comp.extensions.FileHandler"

@@ -26,7 +26,6 @@ namespace logging
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         createRegistryInfo_PlainTextFormatter();
-        createRegistryInfo_CsvFormatter();
     }
 
 
