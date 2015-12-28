@@ -21,7 +21,6 @@ $(eval $(call gb_Library_add_exception_objects,log,\
 	extensions/source/logging/consolehandler \
 	extensions/source/logging/csvformatter \
 	extensions/source/logging/filehandler \
-	extensions/source/logging/log_module \
 	extensions/source/logging/logger \
 	extensions/source/logging/loggerconfig \
 	extensions/source/logging/loghandler \
