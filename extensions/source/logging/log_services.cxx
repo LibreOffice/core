@@ -25,7 +25,6 @@ namespace logging
     static void initializeModule()
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        createRegistryInfo_FileHandler();
         createRegistryInfo_ConsoleHandler();
         createRegistryInfo_PlainTextFormatter();
         createRegistryInfo_CsvFormatter();

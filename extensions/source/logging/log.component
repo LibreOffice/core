@@ -25,7 +25,8 @@
   <implementation name="com.sun.star.comp.extensions.CsvFormatter">
     <service name="com.sun.star.logging.CsvFormatter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.extensions.FileHandler">
+  <implementation name="com.sun.star.comp.extensions.FileHandler"
+      constructor="com_sun_star_comp_extensions_FileHandler">
     <service name="com.sun.star.logging.FileHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.extensions.LoggerPool"

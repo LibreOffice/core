@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include "log_module.hxx"
-#include "log_services.hxx"
 #include "methodguard.hxx"
 #include "loghandler.hxx"
 
 #include <com/sun/star/logging/XLogHandler.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ucb/AlreadyInitializedException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -39,16 +36,12 @@
 
 #include <osl/thread.h>
 #include <osl/file.hxx>
-
 #include <rtl/strbuf.hxx>
 
 #include <memory>
 
-
 namespace logging
 {
-
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::RuntimeException;
@@ -58,19 +51,14 @@ namespace logging
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::logging::XLogHandler;
     using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::ucb::AlreadyInitializedException;
-    using ::com::sun::star::lang::XInitialization;
-    using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::util::PathSubstitution;
     using ::com::sun::star::util::XStringSubstitution;
     using ::com::sun::star::beans::NamedValue;
 
     typedef ::cppu::WeakComponentImplHelper    <   XLogHandler
                                                 ,   XServiceInfo
-                                                ,   XInitialization
                                                 >   FileHandler_Base;
     class FileHandler   :public ::cppu::BaseMutex
                         ,public FileHandler_Base
@@ -86,17 +74,18 @@ namespace logging
             eInvalid
         };
 
-    private:
         Reference<XComponentContext>    m_xContext;
         LogHandlerHelper                m_aHandlerHelper;
         OUString                 m_sFileURL;
         ::std::unique_ptr< ::osl::File >  m_pFile;
         FileValidity                    m_eFileValidity;
 
-    protected:
-        explicit FileHandler( const Reference< XComponentContext >& _rxContext );
+    public:
+        FileHandler(const css::uno::Reference<XComponentContext> &context,
+                const css::uno::Sequence<css::uno::Any> &arguments);
         virtual ~FileHandler();
 
+    private:
         // XLogHandler
         virtual OUString SAL_CALL getEncoding() throw (RuntimeException, std::exception) override;
         virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException, std::exception) override;
@@ -107,9 +96,6 @@ namespace logging
         virtual void SAL_CALL flush(  ) throw (RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException, std::exception) override;
 
-        // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) override;
@@ -117,12 +103,6 @@ namespace logging
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
-
-    public:
-        // XServiceInfo - static version
-        static OUString SAL_CALL getImplementationName_static();
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-        static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
 
     public:
         typedef ComponentMethodGuard< FileHandler > MethodGuard;
@@ -142,16 +122,40 @@ namespace logging
         void    impl_doStringsubstitution_nothrow( OUString& _inout_rURL );
     };
 
-    FileHandler::FileHandler( const Reference< XComponentContext >& _rxContext )
+    FileHandler::FileHandler(const css::uno::Reference<XComponentContext> &context,
+            const css::uno::Sequence<css::uno::Any> &arguments)
         :FileHandler_Base( m_aMutex )
-        ,m_xContext( _rxContext )
-        ,m_aHandlerHelper( _rxContext, m_aMutex, rBHelper )
+        ,m_xContext( context )
+        ,m_aHandlerHelper( context, m_aMutex, rBHelper )
         ,m_sFileURL( )
         ,m_pFile( )
         ,m_eFileValidity( eUnknown )
     {
-    }
+        ::osl::MutexGuard aGuard( m_aMutex );
 
+        if ( arguments.getLength() != 1 )
+            throw IllegalArgumentException( OUString(), *this, 1 );
+
+        Sequence< NamedValue > aSettings;
+        if ( arguments[0] >>= m_sFileURL )
+        {
+            // create( [in] string URL );
+            impl_doStringsubstitution_nothrow( m_sFileURL );
+        }
+        else if ( arguments[0] >>= aSettings )
+        {
+            // createWithSettings( [in] sequence< css::beans::NamedValue > Settings )
+            ::comphelper::NamedValueCollection aTypedSettings( aSettings );
+            m_aHandlerHelper.initFromSettings( aTypedSettings );
+
+            if ( aTypedSettings.get_ensureType( "FileURL", m_sFileURL ) )
+                impl_doStringsubstitution_nothrow( m_sFileURL );
+        }
+        else
+            throw IllegalArgumentException( OUString(), *this, 1 );
+
+        m_aHandlerHelper.setIsInitialized();
+    }
 
     FileHandler::~FileHandler()
     {
@@ -328,42 +332,9 @@ namespace logging
         return sal_True;
     }
 
-
-    void SAL_CALL FileHandler::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        if ( m_aHandlerHelper.getIsInitialized() )
-            throw AlreadyInitializedException();
-
-        if ( _rArguments.getLength() != 1 )
-            throw IllegalArgumentException( OUString(), *this, 1 );
-
-        Sequence< NamedValue > aSettings;
-        if ( _rArguments[0] >>= m_sFileURL )
-        {
-            // create( [in] string URL );
-            impl_doStringsubstitution_nothrow( m_sFileURL );
-        }
-        else if ( _rArguments[0] >>= aSettings )
-        {
-            // createWithSettings( [in] sequence< css::beans::NamedValue > Settings )
-            ::comphelper::NamedValueCollection aTypedSettings( aSettings );
-            m_aHandlerHelper.initFromSettings( aTypedSettings );
-
-            if ( aTypedSettings.get_ensureType( "FileURL", m_sFileURL ) )
-                impl_doStringsubstitution_nothrow( m_sFileURL );
-        }
-        else
-            throw IllegalArgumentException( OUString(), *this, 1 );
-
-        m_aHandlerHelper.setIsInitialized();
-    }
-
-
     OUString SAL_CALL FileHandler::getImplementationName() throw(RuntimeException, std::exception)
     {
-        return getImplementationName_static();
+        return OUString("com.sun.star.comp.extensions.FileHandler");
     }
 
     sal_Bool SAL_CALL FileHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
@@ -371,39 +342,19 @@ namespace logging
         return cppu::supportsService(this, _rServiceName);
     }
 
-
     Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_static();
+        return { "com.sun.star.logging.FileHandler" };
     }
-
-
-    OUString SAL_CALL FileHandler::getImplementationName_static()
-    {
-        return OUString( "com.sun.star.comp.extensions.FileHandler" );
-    }
-
-
-    Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames_static()
-    {
-        Sequence< OUString > aServiceNames { "com.sun.star.logging.FileHandler" };
-        return aServiceNames;
-    }
-
-
-    Reference< XInterface > FileHandler::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new FileHandler( _rxContext ) );
-    }
-
-
-    void createRegistryInfo_FileHandler()
-    {
-        static OAutoRegistration< FileHandler > aAutoRegistration;
-    }
-
 
 } // namespace logging
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_extensions_FileHandler(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &arguments)
+{
+    return cppu::acquire(new logging::FileHandler(context, arguments));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
