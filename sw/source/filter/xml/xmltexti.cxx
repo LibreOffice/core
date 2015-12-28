@@ -276,10 +276,12 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 OUString aName("DummyName");
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
+                uno::Sequence<beans::PropertyValue> aObjArgs(1);
+                aObjArgs[0].Name = "DefaultParentBaseURL";
+                aObjArgs[0].Value <<= GetXMLImport().GetBaseURL();
                 uno::Reference < embed::XEmbeddedObject > xObj =
                     uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
-                    aClass, OUString(), xStorage, aName,
-                    uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
+                    aClass, OUString(), xStorage, aName, aObjArgs), uno::UNO_QUERY );
                 if ( xObj.is() )
                 {
                     //TODO/LATER: is it enough to only set the VisAreaSize?
