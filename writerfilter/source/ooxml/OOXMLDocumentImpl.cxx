@@ -761,9 +761,17 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream)
                 }
                 if(bHeaderFooterFound)
                 {
-                    OOXMLStream::Pointer_t Stream = OOXMLDocumentFactory::createStream(pStream, streamType);
-                    if(Stream)
-                        resolveEmbeddingsStream(Stream);
+                    try
+                    {
+                        OOXMLStream::Pointer_t Stream = OOXMLDocumentFactory::createStream(pStream, streamType);
+                        if(Stream)
+                            resolveEmbeddingsStream(Stream);
+                    }
+                    catch (uno::Exception const& e)
+                    {
+                        SAL_WARN("writerfilter", "resolveEmbeddingsStream: exception while "
+                               "resolving stream " << streamType << " : " << e.Message);
+                    }
                 }
 
                 beans::PropertyValue embeddingsTemp;
