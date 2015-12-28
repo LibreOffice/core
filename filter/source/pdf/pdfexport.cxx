@@ -116,7 +116,6 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbAllowDuplicateFieldNames  ( false ),
     mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( false ),
-    mbWatermark                 ( false ),
 
     mbHideViewerToolbar         ( false ),
     mbHideViewerMenubar         ( false ),
@@ -504,10 +503,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 else if ( rFilterData[ nData ].Name == "IsAddStream" )
                     rFilterData[ nData ].Value >>= mbAddStream;
                 else if ( rFilterData[ nData ].Name == "Watermark" )
-                {
-                    maWatermark = rFilterData[ nData ].Value;
-                    mbWatermark = true;
-                }
+                    rFilterData[ nData ].Value >>= msWatermark;
 //now all the security related properties...
                 else if ( rFilterData[ nData ].Name == "EncryptFile" )
                     rFilterData[ nData ].Value >>= mbEncrypt;
@@ -1046,7 +1042,7 @@ bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
 
     rPDFExtOutDevData.ResetSyncData();
 
-    if( mbWatermark )
+    if (!msWatermark.isEmpty())
         ImplWriteWatermark( rWriter, aSizePDF );
 
     return bRet;
@@ -1067,11 +1063,6 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     {
         nTextWidth = rPageSize.Height();
         aFont.SetOrientation( 2700 );
-    }
-
-    if( ! ( maWatermark >>= aText ) )
-    {
-        // more complicated watermark ?
     }
 
     // adjust font height for text to fit
