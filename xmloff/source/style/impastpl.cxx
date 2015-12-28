@@ -34,7 +34,7 @@
 #include <xmloff/xmltoken.hxx>
 
 #include "impastpl.hxx"
-
+#include <o3tl/make_unique.hxx>
 using namespace ::std;
 
 using namespace ::com::sun::star;
@@ -433,9 +433,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     }
 #endif
 
-    std::unique_ptr<XMLAutoStyleFamily> pFamily(
-        new XMLAutoStyleFamily(nFamily, rStrName, rMapper, aPrefix, bAsFamily));
-    m_FamilySet.insert(std::move(pFamily));
+    m_FamilySet.insert(o3tl::make_unique<XMLAutoStyleFamily>(nFamily, rStrName, rMapper, aPrefix, bAsFamily));
 }
 
 void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(

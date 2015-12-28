@@ -57,7 +57,7 @@
 #include "rangelst.hxx"
 
 #include <config_orcus.h>
-
+#include <o3tl/make_unique.hxx>
 #if ENABLE_ORCUS
 #include <orcus/css_parser.hpp>
 #endif
@@ -86,9 +86,8 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
             if (itrElem == m_ElemProps.end())
             {
                 // new element
-                std::unique_ptr<NamePropsType> p(new NamePropsType);
                 std::pair<ElemsType::iterator, bool> r =
-                    m_ElemProps.insert(std::make_pair(aElem, std::move(p)));
+                    m_ElemProps.insert(std::make_pair(aElem, o3tl::make_unique<NamePropsType>()));
                 if (!r.second)
                     // insertion failed.
                     return;
@@ -171,9 +170,8 @@ void ScHTMLStyles::insertProp(
     if (itr == rStore.end())
     {
         // new element
-        std::unique_ptr<PropsType> p(new PropsType);
         std::pair<NamePropsType::iterator, bool> r =
-            rStore.insert(std::make_pair(aName, std::move(p)));
+            rStore.insert(std::make_pair(aName, o3tl::make_unique<PropsType>()));
         if (!r.second)
             // insertion failed.
             return;

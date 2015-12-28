@@ -23,7 +23,7 @@
 #include "blink.hxx"
 #include "porlin.hxx"
 #include "porlay.hxx"
-
+#include <o3tl/make_unique.hxx>
 // Visible time
 #define BLINK_ON_TIME       2400L
 // Invisible time
@@ -147,9 +147,8 @@ void SwBlink::Replace( const SwLinePortion* pOld, const SwLinePortion* pNew )
     SwBlinkSet::iterator it = m_List.find( pBlinkPortion );
     if (it != m_List.end())
     {
-        std::unique_ptr<SwBlinkPortion> pTmp(new SwBlinkPortion(it->get(), pNew));
         m_List.erase( it );
-        m_List.insert(std::move(pTmp));
+        m_List.insert(o3tl::make_unique<SwBlinkPortion>(it->get(), pNew));
     }
 }
 

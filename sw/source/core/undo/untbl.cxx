@@ -66,7 +66,7 @@
 
 #include <memory>
 #include <vector>
-
+#include <o3tl/make_unique.hxx>
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
@@ -674,9 +674,8 @@ void SwUndoTableToText::SetRange( const SwNodeRange& rRg )
 
 void SwUndoTableToText::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx, sal_Int32 nContentIdx )
 {
-    std::unique_ptr<SwTableToTextSave> pNew(
-            new SwTableToTextSave(rDoc, nNdIdx, nEndIdx, nContentIdx));
-    m_pBoxSaves->push_back(std::move(pNew));
+
+    m_pBoxSaves->push_back(o3tl::make_unique<SwTableToTextSave>(rDoc, nNdIdx, nEndIdx, nContentIdx));
 }
 
 SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
