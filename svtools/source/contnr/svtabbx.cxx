@@ -27,7 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include "svtaccessiblefactory.hxx"
-
+#include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
@@ -83,8 +83,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
         const OUString aToken = GetToken(aCurEntry, nIndex);
-        std::unique_ptr<SvLBoxString> pStr(new SvLBoxString(pEntry, 0, aToken));
-        pEntry->AddItem(std::move(pStr));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxString>(pEntry, 0, aToken));
     }
 }
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )

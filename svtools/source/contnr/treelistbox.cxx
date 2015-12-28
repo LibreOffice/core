@@ -44,7 +44,7 @@
 #include <set>
 #include <string.h>
 #include <vector>
-
+#include <o3tl/make_unique.hxx>
 using namespace css::accessibility;
 
 // Drag&Drop
@@ -1730,17 +1730,12 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
 {
     if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
-        std::unique_ptr<SvLBoxButton> pButton(
-                new SvLBoxButton(pEntry, eButtonKind, 0, pCheckButtonData));
-        pEntry->AddItem(std::move(pButton));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(pEntry, eButtonKind, 0, pCheckButtonData));
     }
 
-    std::unique_ptr<SvLBoxContextBmp> pContextBmp(new SvLBoxContextBmp(
-        pEntry,0, aCollEntryBmp,aExpEntryBmp, mbContextBmpExpanded));
-    pEntry->AddItem(std::move(pContextBmp));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>( pEntry,0, aCollEntryBmp,aExpEntryBmp, mbContextBmpExpanded));
 
-    std::unique_ptr<SvLBoxString> pString(new SvLBoxString(pEntry, 0, aStr));
-    pEntry->AddItem(std::move(pString));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(pEntry, 0, aStr));
 }
 
 OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const

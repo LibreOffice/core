@@ -36,7 +36,7 @@
 #include <editeng/outlobj.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
-
+#include <o3tl/make_unique.hxx>
 using namespace sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -83,8 +83,8 @@ void AccessibleCell::Init()
         if( pOutlinerParaObject )
         {
             // non-empty text -> use full-fledged edit source right away
-            ::std::unique_ptr<SvxEditSource> pEditSource( new SvxTextEditSource( mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
-            mpText = new AccessibleTextHelper( std::move(pEditSource) );
+
+            mpText = new AccessibleTextHelper( o3tl::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
             mpText->SetEventSource(this);
         }
 

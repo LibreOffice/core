@@ -58,7 +58,7 @@
 #include <algorithm>
 #include <memory>
 #include <utility>
-
+#include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
@@ -172,14 +172,12 @@ void AccessibleShape::Init()
                 if( !pOutlinerParaObject )
                 {
                     // empty text -> use proxy edit source to delay creation of EditEngine
-                    ::std::unique_ptr<SvxEditSource> pEditSource( new AccessibleEmptyEditSource ( *pSdrObject, *pView, *pWindow) );
-                    mpText = new AccessibleTextHelper( std::move(pEditSource) );
+                    mpText = new AccessibleTextHelper( o3tl::make_unique<AccessibleEmptyEditSource >(*pSdrObject, *pView, *pWindow) );
                 }
                 else
                 {
                     // non-empty text -> use full-fledged edit source right away
-                    ::std::unique_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, nullptr, *pView, *pWindow) );
-                    mpText = new AccessibleTextHelper( std::move(pEditSource) );
+                    mpText = new AccessibleTextHelper( o3tl::make_unique<SvxTextEditSource >(*pSdrObject, nullptr, *pView, *pWindow) );
                 }
 
                 if( bOwnParaObj )

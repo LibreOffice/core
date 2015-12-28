@@ -59,7 +59,7 @@
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
-
+#include <o3tl/make_unique.hxx>
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -1625,10 +1625,8 @@ void SmEditAccessible::Init()
         EditView   *pEditView   = pWin->GetEditView();
         if (pEditEngine && pEditView)
         {
-            ::std::unique_ptr< SvxEditSource > pEditSource(
-                    new SmEditSource( pWin, *this ) );
             assert(!pTextHelper);
-            pTextHelper.reset(new ::accessibility::AccessibleTextHelper( std::move(pEditSource) ));
+            pTextHelper.reset(new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SmEditSource>( pWin, *this ) ));
             pTextHelper->SetEventSource( this );
         }
     }
