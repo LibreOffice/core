@@ -186,7 +186,7 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
     OOXMLStream::Pointer_t cStream;
     try
     {
-       cStream = OOXMLDocumentFactory::createStream(pStream, nType);
+        cStream = OOXMLDocumentFactory::createStream(pStream, nType);
     }
     catch (uno::Exception const& e)
     {
@@ -763,9 +763,18 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                 }
                 if(bHeaderFooterFound)
                 {
-                    OOXMLStream::Pointer_t Stream = OOXMLDocumentFactory::createStream(pStream, streamType);
-                    if(Stream)
-                        resolveEmbeddingsStream(Stream);
+                    try
+                    {
+                        OOXMLStream::Pointer_t Stream = OOXMLDocumentFactory::createStream(pStream, streamType);
+                        if (Stream)
+                            resolveEmbeddingsStream(Stream);
+                    }
+                    catch (uno::Exception const& e)
+                    {
+                        SAL_INFO("writerfilter", "resolveEmbeddingsStream: can't find header/footer whilst "
+                               "resolving stream " << streamType << " : " << e.Message);
+                        return;
+                    }
                 }
 
                 beans::PropertyValue embeddingsTemp;
