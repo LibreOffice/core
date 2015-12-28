@@ -932,6 +932,7 @@ void TextView::Command( const CommandEvent& rCEvt )
             delete mpImpl->mpTextEngine->mpIMEInfos;
             mpImpl->mpTextEngine->mpIMEInfos = NULL;
 
+            mpImpl->mpTextEngine->TextModified();
             mpImpl->mpTextEngine->FormatAndUpdate( this );
 
             SetInsertMode( bInsertMode );
