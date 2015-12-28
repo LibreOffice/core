@@ -220,7 +220,11 @@ void PopupMenuToolbarController::createPopupMenuController()
     if( !m_bHasController )
         return;
 
-    if ( !m_xPopupMenuController.is() )
+    if ( m_xPopupMenuController.is() )
+    {
+        m_xPopupMenuController->updatePopupMenu();
+    }
+    else
     {
         css::uno::Sequence< css::uno::Any > aArgs( 3 );
         aArgs[0] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
