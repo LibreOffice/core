@@ -116,7 +116,6 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbAllowDuplicateFieldNames  ( false ),
     mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( false ),
-    mbWatermark                 ( false ),
 
     mbHideViewerToolbar         ( false ),
     mbHideViewerMenubar         ( false ),
@@ -504,10 +503,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 else if ( rFilterData[ nData ].Name == "IsAddStream" )
                     rFilterData[ nData ].Value >>= mbAddStream;
                 else if ( rFilterData[ nData ].Name == "Watermark" )
-                {
-                    maWatermark = rFilterData[ nData ].Value;
-                    mbWatermark = true;
-                }
+                    rFilterData[ nData ].Value >>= msWatermark;
 //now all the security related properties...
                 else if ( rFilterData[ nData ].Name == "EncryptFile" )
                     rFilterData[ nData ].Value >>= mbEncrypt;
@@ -1046,7 +1042,7 @@ bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
 
     rPDFExtOutDevData.ResetSyncData();
 
-    if( mbWatermark )
+    if (!msWatermark.isEmpty())
         ImplWriteWatermark( rWriter, aSizePDF );
 
     return bRet;
@@ -1056,7 +1052,6 @@ bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
 
 void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
 {
-    OUString aText( "Watermark" );
     vcl::Font aFont( OUString( "Helvetica" ), Size( 0, 3*rPageSize.Height()/4 ) );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
@@ -1069,18 +1064,13 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
         aFont.SetOrientation( 2700 );
     }
 
-    if( ! ( maWatermark >>= aText ) )
-    {
-        // more complicated watermark ?
-    }
-
     // adjust font height for text to fit
     OutputDevice* pDev = rWriter.GetReferenceDevice();
     pDev->Push();
     pDev->SetFont( aFont );
     pDev->SetMapMode( MapMode( MAP_POINT ) );
     int w = 0;
-    while( ( w = pDev->GetTextWidth( aText ) ) > nTextWidth )
+    while( ( w = pDev->GetTextWidth( msWatermark ) ) > nTextWidth )
     {
         if (w == 0)
             break;
@@ -1122,7 +1112,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     }
     rWriter.SetClipRegion();
     rWriter.BeginTransparencyGroup();
-    rWriter.DrawText( aTextPoint, aText );
+    rWriter.DrawText( aTextPoint, msWatermark );
     rWriter.EndTransparencyGroup( aTextRect, 50 );
     rWriter.Pop();
 }

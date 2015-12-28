@@ -66,8 +66,7 @@ private:
     sal_Int32               mnProgressValue;
     bool                mbRemoveTransparencies;
 
-    bool                mbWatermark;
-    uno::Any                maWatermark;
+    OUString            msWatermark;
 
 //these variable are here only to have a location in filter/pdf to set the default
 //to be used by the macro (when the FilterData are set by the macro itself)
