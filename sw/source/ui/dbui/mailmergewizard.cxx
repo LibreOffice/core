@@ -22,7 +22,6 @@
 #include <mmoutputtypepage.hxx>
 #include <mmaddressblockpage.hxx>
 #include <mmpreparemergepage.hxx>
-#include <mmmergepage.hxx>
 #include <mmgreetingspage.hxx>
 #include <mmlayoutpage.hxx>
 #include <mmconfigitem.hxx>
@@ -74,7 +73,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
             MM_GREETINGSPAGE,
             MM_LAYOUTPAGE,
             MM_PREPAREMERGEPAGE,
-            MM_MERGEPAGE,
             WZS_INVALID_STATE
         );
     else
@@ -85,7 +83,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
             MM_GREETINGSPAGE,
             MM_LAYOUTPAGE,
             MM_PREPAREMERGEPAGE,
-            MM_MERGEPAGE,
             WZS_INVALID_STATE
         );
 
@@ -108,7 +105,6 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
         case MM_GREETINGSPAGE     : pRet = VclPtr<SwMailMergeGreetingsPage>::Create(this);      break;
         case MM_LAYOUTPAGE        : pRet = VclPtr<SwMailMergeLayoutPage>::Create(this);     break;
         case MM_PREPAREMERGEPAGE  : pRet = VclPtr<SwMailMergePrepareMergePage>::Create(this);   break;
-        case MM_MERGEPAGE         : pRet = VclPtr<SwMailMergeMergePage>::Create(this);          break;
     }
     OSL_ENSURE(pRet, "no page created in ::createPage");
     return pRet;
@@ -130,14 +126,8 @@ void SwMailMergeWizard::enterState( WizardState _nState )
         SwMailMergeLayoutPage::InsertAddressAndGreeting(m_rConfigItem.GetSourceView(),
                                 m_rConfigItem, Point(-1, -1), true);
     }
-    if(_nState >= MM_MERGEPAGE && !m_rConfigItem.GetTargetView())
-    {
-        CreateTargetDocument();
-        m_nRestartPage = _nState;
-        EndDialog(RET_TARGET_CREATED);
-        return;
-    }
-    else if(_nState < MM_MERGEPAGE && m_rConfigItem.GetTargetView())
+
+    if(m_rConfigItem.GetTargetView())
     {
         //close the dialog, remove the target view, show the source view
         m_nRestartPage = _nState;
@@ -156,7 +146,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
         case MM_ADDRESSBLOCKPAGE  :
             bEnableNext = m_rConfigItem.GetResultSet().is();
         break;
-        case MM_MERGEPAGE:
+        case MM_PREPAREMERGEPAGE:
             bEnableNext = false;
         break;
     }
@@ -183,8 +173,6 @@ OUString SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
             return m_sLayout;
         case MM_PREPAREMERGEPAGE:
             return m_sPrepareMerge;
-        case MM_MERGEPAGE:
-            return m_sMerge;
     }
     return OUString();
 }
@@ -202,7 +190,6 @@ void SwMailMergeWizard::UpdateRoadmap()
                                     or are already inserted into the source document
     MM_PREPAREMERGEPAGE         > only active if address data has been selected
                                     inactive after preparemerge page
-    MM_MERGEPAGE                > only active if address data has been selected
 */
 
     // enableState( <page id>, false );
@@ -221,7 +208,7 @@ void SwMailMergeWizard::UpdateRoadmap()
     bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
         static_cast<svt::OWizardPage*>(pCurPage)->commitPage( ::svt::WizardTypes::eValidate );
 
-    for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_MERGEPAGE; ++nPage)
+    for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_PREPAREMERGEPAGE; ++nPage)
     {
         bool bEnable = true;
         switch(nPage)
@@ -246,7 +233,6 @@ void SwMailMergeWizard::UpdateRoadmap()
                             (m_rConfigItem.IsGreetingLine(false) && !m_rConfigItem.IsGreetingInserted() ));
                 // fall-through
             case MM_PREPAREMERGEPAGE:
-            case MM_MERGEPAGE:
                 bEnable = bEnable && !m_bDocumentLoad && bEnableOutputTypePage &&
                             m_rConfigItem.GetResultSet().is() &&
                             bAddressFieldsConfigured &&
