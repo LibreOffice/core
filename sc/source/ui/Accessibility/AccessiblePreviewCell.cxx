@@ -40,7 +40,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-
+#include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -283,9 +283,7 @@ void ScAccessiblePreviewCell::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
-        ::std::unique_ptr < ScAccessibleTextData > pAccessiblePreviewCellTextData
-            (new ScAccessiblePreviewCellTextData(mpViewShell, maCellAddress));
-        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::move(pAccessiblePreviewCellTextData)));
+        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(o3tl::make_unique<ScAccessiblePreviewCellTextData>(mpViewShell, maCellAddress)));
 
         mpTextHelper = new ::accessibility::AccessibleTextHelper( std::move(pEditSource) );
         mpTextHelper->SetEventSource( this );
