@@ -160,7 +160,6 @@ bool SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPageReas
     if(::svt::WizardTypes::eTravelForward == _eReason && !rConfigItem.IsMergeDone())
     {
         m_pWizard->CreateTargetDocument();
-        m_pWizard->SetRestartPage(MM_MERGEPAGE);
         m_pWizard->EndDialog(RET_TARGET_CREATED);
     }
     return true;
