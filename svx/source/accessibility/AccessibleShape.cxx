@@ -179,6 +179,8 @@ void AccessibleShape::Init()
                     // non-empty text -> use full-fledged edit source right away
                     mpText = new AccessibleTextHelper( o3tl::make_unique<SvxTextEditSource >(*pSdrObject, nullptr, *pView, *pWindow) );
                 }
+                if( pWindow->HasFocus() )
+                    mpText->SetFocus();
 
                 if( bOwnParaObj )
                     delete pOutlinerParaObject;
