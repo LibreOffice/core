@@ -279,6 +279,12 @@ if (ENABLE_CATEGORY_B==YES && SYSTEM_COINMP!=YES)
     # URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
     URL1 = http://www.coin-or.org/download/source/CoinMP/$(name)
 
+if (WITH_CATB_FONTS==YES)
+    MD5 = c74b7223abe75949b4af367942d96c7a
+    name = crosextrafonts-carlito-20130920.tar.gz
+    URL1 = http://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+
 if (WITH_CATB_FONTS == YES)
     MD5 = 35efabc239af896dfb79be7ebdd6e6b9
     name = gentiumbasic-fonts-1.10.zip

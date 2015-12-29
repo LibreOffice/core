@@ -97,21 +97,17 @@ STD_FONT_FILE( gid_File_Fnt_Caladea_BoldItalic, Caladea-BoldItalic.ttf, Caladea 
 #endif // WITH_CATA_FONTS
 
 
-// fontconfig updates to allow proper use of local fonts
+#ifdef WITH_CATB_FONTS 
 
-#ifdef UNX
-File gid_File_FcLocal_Conf
-    Dir = gid_Dir_Fonts_Truetype;
-    USER_FILE_BODY;
-//  Styles = ();
-    Name = "fc_local.conf";
-End
-#endif
+// Carlito fonts
+
+STD_FONT_FILE( gid_File_Fnt_Carlito_Regular, Carlito-Regular.ttf, Carlito Regular)
+STD_FONT_FILE( gid_File_Fnt_Carlito_Bold, Carlito-Bold.ttf, Carlito Bold)
+STD_FONT_FILE( gid_File_Fnt_Carlito_Italic, Carlito-Italic.ttf, Carlito Italic)
+STD_FONT_FILE( gid_File_Fnt_Carlito_BoldItalic, Carlito-BoldItalic.ttf, Carlito Bold Italic)
 
 
 // Gentium fonts
-
-#ifdef WITH_CATB_FONTS 
 
 STD_FONT_FILE( gid_File_Fnt_GentiumBasicRegular, GenBasR.ttf, Gentium Basic)
 STD_FONT_FILE( gid_File_Fnt_GentiumBasicBold, GenBasB.ttf, Gentium Basic Bold)
@@ -123,5 +119,15 @@ STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBold, GenBkBasB.ttf, Gentium Book Ba
 STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicItalic, GenBkBasI.ttf, Gentium Book Basic Bold)
 STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium Book Basic Bold Italic)
 
-#endif
+#endif // WITH_CATB_FONTS
 
+// fontconfig updates to allow proper use of local fonts
+
+#ifdef UNX
+File gid_File_FcLocal_Conf
+    Dir = gid_Dir_Fonts_Truetype;
+    USER_FILE_BODY;
+//  Styles = ();
+    Name = "fc_local.conf";
+End
+#endif

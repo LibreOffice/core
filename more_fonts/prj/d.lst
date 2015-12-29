@@ -5,5 +5,6 @@ mkdir: %COMMON_DEST%\pck%_EXT%
 ..\%__SRC%\misc\build\dejavu-fonts-ttf-2.35\LICENSE		%COMMON_DEST%\pck%_EXT%\LICENSE_dejavu
 ..\%__SRC%\misc\build\croscorefonts-1.31.0\*.ttf	%COMMON_DEST%\pck%_EXT%\*.ttf
 ..\%__SRC%\misc\build\crosextrafonts-20130214\*.ttf	%COMMON_DEST%\pck%_EXT%\*.ttf
+..\%__SRC%\misc\build\crosextrafonts-carlito-20130920\*.ttf	%COMMON_DEST%\pck%_EXT%\*.ttf
 ..\%__SRC%\misc\build\gentiumbasic-fonts-1.10\*.ttf		%COMMON_DEST%\pck%_EXT%\*.ttf
 ..\%__SRC%\misc\build\gentiumbasic-fonts-1.10\OFL.txt	%COMMON_DEST%\pck%_EXT%\LICENSE_gentium
