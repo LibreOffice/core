@@ -1,5 +1,5 @@
---- misc/build/openssl-0.9.8zg/libcrypto_OOo_0_9_8zg.map	1970-01-01 01:00:00.000000000 +0100
-+++ misc/build/openssl-0.9.8zg/libcrypto_OOo_0_9_8zg.map	2007-10-16 15:44:13.000000000 +0200
+--- misc/build/openssl-0.9.8zh/libcrypto_OOo_0_9_8zg.map	1970-01-01 01:00:00.000000000 +0100
++++ misc/build/openssl-0.9.8zh/libcrypto_OOo_0_9_8zg.map	2007-10-16 15:44:13.000000000 +0200
 @@ -0,1 +1,3304 @@
 +LIBCRYPTO_OOO_0_9_8zg{
 +	global:
@@ -3304,8 +3304,8 @@
 +	local:
 +		*;
 +};
---- misc/build/openssl-0.9.8zg/libssl_OOo_0_9_8zg.map	1970-01-01 01:00:00.000000000 +0100
-+++ misc/build/openssl-0.9.8zg/libssl_OOo_0_9_8zg.map	2007-10-16 15:44:13.000000000 +0200
+--- misc/build/openssl-0.9.8zh/libssl_OOo_0_9_8zg.map	1970-01-01 01:00:00.000000000 +0100
++++ misc/build/openssl-0.9.8zh/libssl_OOo_0_9_8zg.map	2007-10-16 15:44:13.000000000 +0200
 @@ -0,0 +1,442 @@
 +LIBSSL_OOO_0_9_8zg{
 +	global:

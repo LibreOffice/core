@@ -1,5 +1,5 @@
---- misc/openssl-0.9.8zg/crypto/md32_common.h	2015-09-20 11:10:48.263008317 -0500
-+++ misc/build/openssl-0.9.8zg/crypto/md32_common.h	2015-09-20 11:11:50.047002757 -0500
+--- misc/openssl-0.9.8zh/crypto/md32_common.h	2015-09-20 11:10:48.263008317 -0500
++++ misc/build/openssl-0.9.8zh/crypto/md32_common.h	2015-09-20 11:11:50.047002757 -0500
 @@ -165,7 +165,7 @@
                                  asm (                   \
                                  "roll %1,%0"            \

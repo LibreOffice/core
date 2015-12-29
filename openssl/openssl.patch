@@ -1,5 +1,5 @@
---- misc/openssl-0.9.8zg/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
-+++ misc/build/openssl-0.9.8zg/crypto/x509v3/v3_pci.c	2010-03-26 12:04:20.961547300 +0100
+--- misc/openssl-0.9.8zh/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
++++ misc/build/openssl-0.9.8zh/crypto/x509v3/v3_pci.c	2010-03-26 12:04:20.961547300 +0100
 @@ -2,7 +2,7 @@
  /* Contributed to the OpenSSL Project 2004
   * by Richard Levitte (richard@levitte.org)
@@ -9,8 +9,8 @@
   * (Royal Institute of Technology, Stockholm, Sweden).
   * All rights reserved.
   *
---- misc/openssl-0.9.8zg/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
-+++ misc/build/openssl-0.9.8zg/crypto/x509v3/v3_pcia.c	2010-03-26 12:04:20.961547300 +0100
+--- misc/openssl-0.9.8zh/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
++++ misc/build/openssl-0.9.8zh/crypto/x509v3/v3_pcia.c	2010-03-26 12:04:20.961547300 +0100
 @@ -3,7 +3,7 @@
  /* Contributed to the OpenSSL Project 2004
   * by Richard Levitte (richard@levitte.org)
@@ -20,8 +20,8 @@
   * (Royal Institute of Technology, Stockholm, Sweden).
   * All rights reserved.
   *
---- misc/openssl-0.9.8zg/ms/do_ms.bat	2009-07-28 14:51:19.000000000 +0200
-+++ misc/build/openssl-0.9.8zg/ms/do_ms.bat	2010-03-26 12:19:19.399047300 +0100
+--- misc/openssl-0.9.8zh/ms/do_ms.bat	2009-07-28 14:51:19.000000000 +0200
++++ misc/build/openssl-0.9.8zh/ms/do_ms.bat	2010-03-26 12:19:19.399047300 +0100
 @@ -1,11 +1,11 @@
  
 -perl util\mkfiles.pl >MINFO
@@ -41,8 +41,8 @@
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
 +%1 util\mkdef.pl 32 libeay > ms\libeay32.def
 +%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
---- misc/openssl-0.9.8zg/util/mk1mf.pl	2009-09-20 14:46:42.000000000 +0200
-+++ misc/build/openssl-0.9.8zg/util/mk1mf.pl	2010-03-26 12:04:20.977172300 +0100
+--- misc/openssl-0.9.8zh/util/mk1mf.pl	2009-09-20 14:46:42.000000000 +0200
++++ misc/build/openssl-0.9.8zh/util/mk1mf.pl	2010-03-26 12:04:20.977172300 +0100
 @@ -128,7 +128,7 @@
  $inc_def="outinc";
  $tmp_def="tmp";
@@ -73,8 +73,8 @@
    #define PLATFORM "$platform"
  EOF
  printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
---- misc/openssl-0.9.8zg/util/pl/VC-32.pl	2010-02-04 02:10:24.000000000 +0100
-+++ misc/build/openssl-0.9.8zg/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
+--- misc/openssl-0.9.8zh/util/pl/VC-32.pl	2010-02-04 02:10:24.000000000 +0100
++++ misc/build/openssl-0.9.8zh/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
 @@ -32,7 +32,7 @@
  $l_flags =~ s/-L(\S+)/\/libpath:$1/g;
  

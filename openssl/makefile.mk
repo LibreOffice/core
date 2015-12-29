@@ -42,10 +42,10 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8zg
+OPENSSL_NAME=openssl-0.9.8zh
 
 TARFILE_NAME=$(OPENSSL_NAME)
-TARFILE_MD5=0a912b6623ac95a8627ea2bd0e0abf1b
+TARFILE_MD5=c813c065dd53d7bd0a560a870ddd0af5
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
@@ -159,7 +159,7 @@ OUT2BIN += out/libeay32.dll
     .ENDIF
 .ENDIF
 
-PATCH_FILES += openssl-0.9.8zg-clang.patch
+PATCH_FILES += openssl-0.9.8zh-clang.patch
 
 #set INCLUDE=D:\sol_temp\n\msvc7net3\PlatformSDK\include;D:\sol_temp\n\msvc7net3\include\ && set path=%path%;D:\sol_temp\r\btw\SRC680\perl\bin &&
 

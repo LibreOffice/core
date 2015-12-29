@@ -1,5 +1,5 @@
---- misc/build/openssl-0.9.8zg/Configure-old	2010-04-17 13:51:42.000000000 +0200
-+++ misc/build/openssl-0.9.8zg/Configure	2010-04-17 13:52:03.000000000 +0200
+--- misc/build/openssl-0.9.8zh/Configure-old	2010-04-17 13:51:42.000000000 +0200
++++ misc/build/openssl-0.9.8zh/Configure	2010-04-17 13:52:03.000000000 +0200
 @@ -392,6 +392,9 @@
  
  "bsdi-elf-gcc",     "gcc:-DPERL5 -DL_ENDIAN -fomit-frame-pointer -O3 -march=i486 -Wall::(unknown)::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
@@ -10,8 +10,8 @@
  "nextstep",	"cc:-O -Wall:<libc.h>:(unknown):::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:::",
  "nextstep3.3",	"cc:-O3 -Wall:<libc.h>:(unknown):::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:::",
  
---- misc/build/openssl-0.9.8zg/Makefile.org	2010-01-27 17:06:36.000000000 +0100
-+++ misc/build/openssl-0.9.8zg/Makefile.org	2010-09-20 09:24:00.000000000 +0100
+--- misc/build/openssl-0.9.8zh/Makefile.org	2010-01-27 17:06:36.000000000 +0100
++++ misc/build/openssl-0.9.8zh/Makefile.org	2010-09-20 09:24:00.000000000 +0100
 @@ -199,7 +199,7 @@
  
  BUILDENV=	PLATFORM='${PLATFORM}' PROCESSOR='${PROCESSOR}' \
@@ -21,8 +21,8 @@
  		AR='${AR}' PERL='${PERL}' RANLIB='${RANLIB}'	\
  		SDIRS='${SDIRS}' LIBRPATH='${INSTALLTOP}/$(LIBDIR)'	\
  		INSTALL_PREFIX='${INSTALL_PREFIX}'		\
---- misc/openssl-0.9.8zg/config	2009-02-16 09:43:41.000000000 +0100
-+++ misc/build/openssl-0.9.8zg/config	2009-03-30 08:59:09.588448000 +0200
+--- misc/openssl-0.9.8zh/config	2009-02-16 09:43:41.000000000 +0100
++++ misc/build/openssl-0.9.8zh/config	2009-03-30 08:59:09.588448000 +0200
 @@ -399,27 +399,21 @@
  # this is where the translation occurs into SSLeay terms
  # ---------------------------------------------------------------------------
@@ -66,8 +66,8 @@
  fi
  GCCVER=${GCCVER:-0}
  if [ "$SYSTEM" = "HP-UX" ];then
---- misc/openssl-0.9.8zg/libcrypto_OOo_0_9_8zg.map	2010-03-26 15:26:55.958495757 +0100
-+++ misc/build/openssl-0.9.8zg/libcrypto_OOo_0_9_8zg.map	2010-03-26 15:31:38.019501422 +0100
+--- misc/openssl-0.9.8zh/libcrypto_OOo_0_9_8zg.map	2010-03-26 15:26:55.958495757 +0100
++++ misc/build/openssl-0.9.8zh/libcrypto_OOo_0_9_8zg.map	2010-03-26 15:31:38.019501422 +0100
 @@ -1 +1,3295 @@
 -dummy
 +libcrypto_OOo_0_9_8zg {
@@ -3365,8 +3365,8 @@
 +	local:
 +		*;
 +};
---- misc/openssl-0.9.8zg/libssl_OOo_0_9_8zg.map	2010-03-26 15:26:55.966057991 +0100
-+++ misc/build/openssl-0.9.8zg/libssl_OOo_0_9_8zg.map	2010-03-26 15:31:58.552966503 +0100
+--- misc/openssl-0.9.8zh/libssl_OOo_0_9_8zg.map	2010-03-26 15:26:55.966057991 +0100
++++ misc/build/openssl-0.9.8zh/libssl_OOo_0_9_8zg.map	2010-03-26 15:31:58.552966503 +0100
 @@ -1 +1,445 @@
 -dummy
 +LIBSSL_OOO_0_9_8zg {
