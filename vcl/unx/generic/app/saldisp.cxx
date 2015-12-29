@@ -27,7 +27,6 @@
 #include <ctype.h>
 
 #if defined(SOLARIS) || defined(AIX)
-#include <sal/alloca.h>
 #include <osl/module.h>
 #endif
 
@@ -73,6 +72,7 @@
 #include <osl/socket.h>
 #include <poll.h>
 #include <memory>
+#include <vector>
 
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <officecfg/Office/Common.hxx>
@@ -211,7 +211,7 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
                                            &aVI, &nVisuals );
     // pVInfos should contain at least one visual, otherwise
     // we're in trouble
-    int* pWeight = static_cast<int*>(alloca( sizeof(int)*nVisuals ));
+    std::vector<int> aWeights(nVisuals);
     int i;
     for( i = 0; i < nVisuals; i++ )
     {
@@ -232,17 +232,17 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
         {
             bUsable = true;
         }
-        pWeight[ i ] = bUsable ? nTrueColor*pVInfos[i].depth : -1024;
-        pWeight[ i ] -= pVInfos[ i ].visualid;
+        aWeights[i] = bUsable ? nTrueColor*pVInfos[i].depth : -1024;
+        aWeights[i] -= pVInfos[ i ].visualid;
     }
 
     int nBestVisual = 0;
     int nBestWeight = -1024;
     for( i = 0; i < nVisuals; i++ )
     {
-        if( pWeight[ i ] > nBestWeight )
+        if (aWeights[i] > nBestWeight)
         {
-            nBestWeight = pWeight[ i ];
+            nBestWeight = aWeights[i];
             nBestVisual = i;
         }
     }
