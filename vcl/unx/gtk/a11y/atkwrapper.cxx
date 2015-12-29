@@ -56,7 +56,6 @@
 
 #include <rtl/ref.hxx>
 #include <osl/diagnose.h>
-#include <sal/alloca.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
@@ -66,6 +65,7 @@
 #include "atktextattributes.hxx"
 
 #include <string.h>
+#include <vector>
 
 using namespace ::com::sun::star;
 
@@ -502,18 +502,19 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
             {
                 accessibility::AccessibleRelation aRelation = xRelationSet->getRelation( n );
                 sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
-                AtkObject **pTargets = static_cast<AtkObject **>(alloca( nTargetCount * sizeof(AtkObject *) ));
 
-                for( sal_uInt32 i = 0; i < nTargetCount; i++ )
+                std::vector<AtkObject*> aTargets;
+
+                for (sal_uInt32 i = 0; i < nTargetCount; ++i)
                 {
                     uno::Reference< accessibility::XAccessible > xAccessible(
                             aRelation.TargetSet[i], uno::UNO_QUERY );
-                    pTargets[i] = atk_object_wrapper_ref( xAccessible );
+                    aTargets.push_back(atk_object_wrapper_ref(xAccessible));
                 }
 
                 AtkRelation *pRel =
                     atk_relation_new(
-                        pTargets, nTargetCount,
+                        aTargets.data(), nTargetCount,
                         mapRelationType( aRelation.RelationType )
                     );
                 atk_relation_set_add( pSet, pRel );
