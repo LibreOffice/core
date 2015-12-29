@@ -31,7 +31,7 @@ TARGET=ttf_crosextra
 .IF "$(WITH_CATA_FONTS)" != "YES"
 
 @all:
-    @echo "category A licensed CrossCore font is disabled."
+    @echo "category A licensed Caladea font is disabled."
 
 .ELSE
 
