@@ -42,6 +42,7 @@ DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder ) :
     pBuilder->get( m_pFTPort, "portLabel" );
     pBuilder->get( m_pEDRoot, "path" );
     pBuilder->get( m_pFTRoot, "pathLabel" );
+    m_pEDPort->SetUseThousandSep( false );
 }
 
 DetailsContainer::~DetailsContainer( )
@@ -104,9 +105,12 @@ void HostDetailsContainer::show( bool bShow )
 
     if ( bShow )
     {
-        m_pEDPort->SetValue( m_nDefaultPort );
+        if ( m_pEDPort->GetValue( ) == 0 )
+            m_pEDPort->SetValue( m_nDefaultPort );
         m_pEDHost->SetText( m_sHost );
     }
+    else
+        m_pEDPort->SetValue( 0 );
 }
 
 INetURLObject HostDetailsContainer::getUrl( )
@@ -163,10 +167,10 @@ void DavDetailsContainer::show( bool bShow )
 {
     HostDetailsContainer::show( bShow );
 
-    m_pCBDavs->Show( bShow );
-
-    if ( bShow )
+    if ( !bShow )
         m_pCBDavs->Check( false );
+
+    m_pCBDavs->Show( bShow );
 }
 
 bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
