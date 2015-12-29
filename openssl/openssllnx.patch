@@ -66,11 +66,11 @@
  fi
  GCCVER=${GCCVER:-0}
  if [ "$SYSTEM" = "HP-UX" ];then
---- misc/openssl-0.9.8zh/libcrypto_OOo_0_9_8zg.map	2010-03-26 15:26:55.958495757 +0100
-+++ misc/build/openssl-0.9.8zh/libcrypto_OOo_0_9_8zg.map	2010-03-26 15:31:38.019501422 +0100
+--- misc/openssl-0.9.8zh/libcrypto_OOo_0_9_8zh.map	2010-03-26 15:26:55.958495757 +0100
++++ misc/build/openssl-0.9.8zh/libcrypto_OOo_0_9_8zh.map	2010-03-26 15:31:38.019501422 +0100
 @@ -1 +1,3295 @@
 -dummy
-+libcrypto_OOo_0_9_8zg {
++libcrypto_OOo_0_9_8zh {
 +	global:
 +ACCESS_DESCRIPTION_free;
 +ACCESS_DESCRIPTION_it;
@@ -1389,7 +1389,7 @@
 +KRB5_TKTBODY_free;
 +KRB5_TKTBODY_it;
 +KRB5_TKTBODY_new;
-+libcrypto_OOo_0_9_8zg;
++libcrypto_OOo_0_9_8zh;
 +LONG_it;
 +MD2;
 +MD2_Final;
@@ -3365,11 +3365,11 @@
 +	local:
 +		*;
 +};
---- misc/openssl-0.9.8zh/libssl_OOo_0_9_8zg.map	2010-03-26 15:26:55.966057991 +0100
-+++ misc/build/openssl-0.9.8zh/libssl_OOo_0_9_8zg.map	2010-03-26 15:31:58.552966503 +0100
+--- misc/openssl-0.9.8zh/libssl_OOo_0_9_8zh.map	2010-03-26 15:26:55.966057991 +0100
++++ misc/build/openssl-0.9.8zh/libssl_OOo_0_9_8zh.map	2010-03-26 15:31:58.552966503 +0100
 @@ -1 +1,445 @@
 -dummy
-+LIBSSL_OOO_0_9_8zg {
++LIBSSL_OOO_0_9_8zh {
 +	global:
 +BIO_f_ssl;
 +BIO_new_buffer_ssl_connect;
@@ -3382,7 +3382,7 @@
 +DTLSv1_method;
 +DTLSv1_server_method;
 +ERR_load_SSL_strings;
-+LIBSSL_OOO_0_9_8zg;
++LIBSSL_OOO_0_9_8zh;
 +SSL_CIPHER_description;
 +SSL_CIPHER_get_bits;
 +SSL_CIPHER_get_name;

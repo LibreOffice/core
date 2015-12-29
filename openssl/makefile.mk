@@ -63,8 +63,8 @@ UNAME=$(shell uname)
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8zg.map \
-        libssl_OOo_0_9_8zg.map
+        libcrypto_OOo_0_9_8zh.map \
+        libssl_OOo_0_9_8zh.map
     .IF "$(CPU)" == "I"
         .IF "$(UNAME)" == "GNU/kFreeBSD"
             CONFIGURE_ACTION=Configure debian-kfreebsd-i386
@@ -87,8 +87,8 @@ UNAME=$(shell uname)
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES=opensslsol.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8zg.map \
-        libssl_OOo_0_9_8zg.map
+        libcrypto_OOo_0_9_8zh.map \
+        libssl_OOo_0_9_8zh.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
     # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
