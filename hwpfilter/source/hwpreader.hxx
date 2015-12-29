@@ -152,7 +152,7 @@ private:
 class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
 {
 public:
-    HwpImportFilter(const Reference< XMultiServiceFactory >& rFact);
+    explicit HwpImportFilter(const Reference< XMultiServiceFactory >& rFact);
     virtual ~HwpImportFilter();
 
 public:

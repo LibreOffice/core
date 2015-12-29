@@ -3132,7 +3132,7 @@ namespace detail
     private:
         ::cppu::OPropertyArrayHelper *m_pInfoHelper;
     public:
-        InfoHelperBuilder(const LayoutManager &rManager)
+        explicit InfoHelperBuilder(const LayoutManager &rManager)
         {
             uno::Sequence< beans::Property > aProperties;
             rManager.describeProperties(aProperties);

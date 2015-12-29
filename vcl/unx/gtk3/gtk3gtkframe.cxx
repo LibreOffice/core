@@ -339,7 +339,7 @@ namespace {
 /// Decouple SalFrame lifetime from damagetracker lifetime
 struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 {
-    DamageTracker(GtkSalFrame& rFrame) : m_rFrame(rFrame)
+    explicit DamageTracker(GtkSalFrame& rFrame) : m_rFrame(rFrame)
     {}
 
     virtual ~DamageTracker() {}

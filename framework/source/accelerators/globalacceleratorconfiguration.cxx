@@ -52,7 +52,7 @@ public:
         @param  xSMGR
                 reference to an uno service manager, which is used internally.
      */
-    GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
     /** TODO */
     virtual ~GlobalAcceleratorConfiguration() {}

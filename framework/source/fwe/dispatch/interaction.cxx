@@ -86,7 +86,7 @@ OUString SAL_CALL ContinuationFilterSelect::getFilter() throw( css::uno::Runtime
 class RequestFilterSelect_Impl : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
 public:
-    RequestFilterSelect_Impl( const OUString& sURL );
+    explicit RequestFilterSelect_Impl(const OUString& rURL);
     bool     isAbort  () const;
     OUString getFilter() const;
 

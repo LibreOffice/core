@@ -69,7 +69,7 @@ namespace framework
     class UndoActionWrapper : public SfxUndoAction
     {
     public:
-                            UndoActionWrapper(
+        explicit            UndoActionWrapper(
                                 Reference< XUndoAction > const& i_undoAction
                             );
         virtual             ~UndoActionWrapper();
@@ -138,7 +138,7 @@ namespace framework
     class UndoManagerRequest : public ::comphelper::AnyEvent
     {
     public:
-        UndoManagerRequest( ::std::function<void ()> const& i_request )
+        explicit UndoManagerRequest( ::std::function<void ()> const& i_request )
             :m_request( i_request )
             ,m_caughtException()
             ,m_finishCondition()
@@ -211,7 +211,7 @@ namespace framework
         ::osl::Mutex&   getMutex() { return m_aMutex; }
 
     public:
-        UndoManagerHelper_Impl( IUndoManagerImplementation& i_undoManagerImpl )
+        explicit UndoManagerHelper_Impl( IUndoManagerImplementation& i_undoManagerImpl )
             :m_aMutex()
             ,m_aQueueMutex()
             ,m_disposed( false )

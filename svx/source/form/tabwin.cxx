@@ -76,7 +76,7 @@ namespace {
 struct ColumnInfo
 {
     OUString sColumnName;
-    ColumnInfo(const OUString& i_sColumnName)
+    explicit ColumnInfo(const OUString& i_sColumnName)
         : sColumnName(i_sColumnName)
     {
     }

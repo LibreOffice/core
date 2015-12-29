@@ -1250,7 +1250,7 @@ class BinaryOutput
     Reference< io::XOutputStream >          m_xOutputStream;
 
 public:
-    BinaryOutput( Reference< XComponentContext > xContext );
+    explicit BinaryOutput( Reference< XComponentContext > xContext );
 
     Reference< io::XOutputStream > getOutputStream() const
         { return m_xOutputStream; }

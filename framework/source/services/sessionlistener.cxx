@@ -107,7 +107,7 @@ private:
     void QuitSessionQuietly();
 
 public:
-    SessionListener( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit SessionListener(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
     virtual ~SessionListener();
 

@@ -102,7 +102,7 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
 
     public:
 
-        LoadEnvListener(LoadEnv* pLoadEnv)
+        explicit LoadEnvListener(LoadEnv* pLoadEnv)
             : m_bWaitingResult(true)
             , m_pLoadEnv(pLoadEnv)
         {

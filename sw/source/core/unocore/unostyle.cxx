@@ -376,7 +376,7 @@ public:
                                 SwDoc*  pDoc,
                                 const OUString& rStyleName) :
         SwXStyle(&rPool, SFX_STYLE_FAMILY_FRAME, pDoc, rStyleName){}
-    SwXFrameStyle( SwDoc *pDoc );
+    explicit SwXFrameStyle(SwDoc *pDoc);
     virtual ~SwXFrameStyle();
 
     virtual void SAL_CALL acquire(  ) throw() override {SwXStyle::acquire();}
@@ -409,7 +409,7 @@ protected:
 public:
     SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, SfxStyleFamily eFam,
                                 const OUString& rStyleName);
-    SwXPageStyle(SwDocShell* pDocSh);
+    explicit SwXPageStyle(SwDocShell* pDocSh);
     virtual ~SwXPageStyle();
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;

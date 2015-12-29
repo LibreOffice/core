@@ -37,7 +37,7 @@ private:
 
 public:
     // XMLMetaImportComponent() throw();
-    XMLMetaImportComponent(
+    explicit XMLMetaImportComponent(
         const css::uno::Reference< css::uno::XComponentContext >& xContext
         ) throw();
 

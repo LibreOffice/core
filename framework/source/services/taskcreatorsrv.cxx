@@ -63,7 +63,7 @@ private:
 
 public:
 
-             TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~TaskCreatorService(                                                                   );
 
     virtual OUString SAL_CALL getImplementationName()

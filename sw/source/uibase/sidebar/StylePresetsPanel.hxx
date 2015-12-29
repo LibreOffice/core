@@ -58,7 +58,7 @@ public:
 private:
     struct TemplateEntry
     {
-        TemplateEntry(OUString& rURL)
+        explicit TemplateEntry(const OUString& rURL)
             : maURL(rURL)
         {}
 

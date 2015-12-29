@@ -62,7 +62,7 @@ private:
 
 public:
 
-    ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
     virtual ~ModuleManager();
 

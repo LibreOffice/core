@@ -48,7 +48,7 @@ namespace xmlscript
         bool                                                      m_bOasis;
 
     public:
-        XMLBasicExporterBase(bool bOasis );
+        explicit XMLBasicExporterBase(bool bOasis);
         virtual ~XMLBasicExporterBase();
 
         // XServiceInfo

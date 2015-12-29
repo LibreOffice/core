@@ -37,8 +37,8 @@ struct DocumentLinkManagerImpl : boost::noncopyable
     std::unique_ptr<DataStream> mpDataStream;
     std::unique_ptr<sfx2::LinkManager> mpLinkManager;
 
-    DocumentLinkManagerImpl( SfxObjectShell* pShell ) :
-        mpShell(pShell), mpDataStream(nullptr), mpLinkManager(nullptr) {}
+    explicit DocumentLinkManagerImpl(SfxObjectShell* pShell)
+        : mpShell(pShell), mpDataStream(nullptr), mpLinkManager(nullptr) {}
 
     ~DocumentLinkManagerImpl()
     {

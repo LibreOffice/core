@@ -56,7 +56,7 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
                                   css::lang::XEventListener>
 {
     public:
-        GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         virtual ~GlobalSettings_Access();
 
         // XComponent

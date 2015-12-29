@@ -43,7 +43,7 @@ class OpenGLFlushIdle : public Idle
 {
     OpenGLSalGraphicsImpl *m_pImpl;
 public:
-    OpenGLFlushIdle( OpenGLSalGraphicsImpl *pImpl )
+    explicit OpenGLFlushIdle( OpenGLSalGraphicsImpl *pImpl )
         : Idle( "gl idle swap" )
         , m_pImpl( pImpl )
     {

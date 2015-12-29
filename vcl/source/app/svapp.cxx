@@ -88,9 +88,10 @@ void InitSettings(ImplSVData* pSVData);
 class ImplReservedKey
 {
 public:
-    ImplReservedKey( vcl::KeyCode aKeyCode ) :
-      mKeyCode(aKeyCode)
-     {}
+    explicit ImplReservedKey( vcl::KeyCode aKeyCode )
+        : mKeyCode(aKeyCode)
+    {
+    }
 
     vcl::KeyCode mKeyCode;
 };

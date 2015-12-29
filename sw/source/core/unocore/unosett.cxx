@@ -1050,18 +1050,16 @@ OSL_FAIL("not implemented");
 
 static const char aInvalidStyle[] = "__XXX___invalid";
 
-
 class SwXNumberingRules::Impl : public SwClient
 {
 private:
     SwXNumberingRules& m_rParent;
 public:
-    Impl(SwXNumberingRules& rParent) : m_rParent(rParent) {}
+    explicit Impl(SwXNumberingRules& rParent) : m_rParent(rParent) {}
 protected:
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
-
 
 bool SwXNumberingRules::isInvalidStyle(const OUString &rName)
 {

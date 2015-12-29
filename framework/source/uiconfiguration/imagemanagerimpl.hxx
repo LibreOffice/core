@@ -76,7 +76,7 @@ namespace framework
     class GlobalImageList : public CmdImageList, public salhelper::SimpleReferenceObject
     {
         public:
-            GlobalImageList( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            explicit GlobalImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
             virtual ~GlobalImageList();
 
             virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL ) override;

@@ -57,7 +57,7 @@ struct TTabPageInfo
             , m_lProperties (         )
         {}
 
-        TTabPageInfo(::sal_Int32 nID)
+        explicit TTabPageInfo(::sal_Int32 nID)
             : m_nIndex      ( nID     )
             , m_bCreated    (false)
             , m_pPage       ( nullptr    )

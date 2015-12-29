@@ -144,7 +144,7 @@ class Frame :   // interfaces
 {
 public:
 
-             Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit Frame(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~Frame();
 
     /// Initialization function after having acquire()'d.

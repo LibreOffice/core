@@ -295,7 +295,7 @@ class SingleRangeEnumeration : public EnumerationHelper_BASE
     bool bHasMore;
 public:
 
-    SingleRangeEnumeration( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException ) : m_xRange( xRange ), bHasMore( true ) { }
+    explicit SingleRangeEnumeration( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException ) : m_xRange( xRange ), bHasMore( true ) { }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override { return bHasMore; }
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
     {
@@ -316,7 +316,7 @@ private:
     uno::Reference< table::XCellRange > m_xRange;
 
 public:
-    SingleRangeIndexAccess( const uno::Reference< table::XCellRange >& xRange ) : m_xRange( xRange ) {}
+    explicit SingleRangeIndexAccess( const uno::Reference< table::XCellRange >& xRange ) : m_xRange( xRange ) {}
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() throw (::uno::RuntimeException, std::exception) override { return 1; }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override

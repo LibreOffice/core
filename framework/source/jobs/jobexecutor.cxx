@@ -83,7 +83,7 @@ private:
 
 public:
 
-             JobExecutor( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit JobExecutor(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~JobExecutor();
 
     virtual OUString SAL_CALL getImplementationName()

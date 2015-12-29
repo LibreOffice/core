@@ -227,7 +227,7 @@ class SubstitutePathVariables : private cppu::BaseMutex,
 friend class SubstitutePathVariables_Impl;
 
 public:
-    SubstitutePathVariables( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit SubstitutePathVariables(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~SubstitutePathVariables();
 
     virtual OUString SAL_CALL getImplementationName()

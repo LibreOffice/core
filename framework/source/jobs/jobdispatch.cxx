@@ -76,7 +76,7 @@ private:
 
 public:
 
-             JobDispatch( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit JobDispatch(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~JobDispatch();
 
     void impl_dispatchEvent  ( const OUString&                                            sEvent    ,

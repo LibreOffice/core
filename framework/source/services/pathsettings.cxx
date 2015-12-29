@@ -180,7 +180,7 @@ public:
         Attention: It's necessary for right function of this class, that the order of base
         classes is the right one. Because we transfer information from one base to another
         during this ctor runs! */
-    PathSettings(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit PathSettings(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
     /** free all used resources ... if it was not already done. */
     virtual ~PathSettings();

@@ -3777,7 +3777,7 @@ void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 class SwXTableRows::Impl : public SwClient
 {
 public:
-    Impl(SwFrameFormat& rFrameFormat) : SwClient(&rFrameFormat) {}
+    explicit Impl(SwFrameFormat& rFrameFormat) : SwClient(&rFrameFormat) {}
 protected:
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
@@ -3944,10 +3944,10 @@ void SwXTableRows::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNe
 class SwXTableColumns::Impl : public SwClient
 {
 public:
-    Impl(SwFrameFormat& rFrameFormat) : SwClient(&rFrameFormat) {}
+    explicit Impl(SwFrameFormat& rFrameFormat) : SwClient(&rFrameFormat) {}
 protected:
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 
 OUString SwXTableColumns::getImplementationName() throw( uno::RuntimeException, std::exception )

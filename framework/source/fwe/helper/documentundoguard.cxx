@@ -51,7 +51,7 @@ namespace framework
     class UndoManagerContextListener : public UndoManagerContextListener_Base
     {
     public:
-        UndoManagerContextListener( const Reference< XUndoManager >& i_undoManager )
+        explicit UndoManagerContextListener( const Reference< XUndoManager >& i_undoManager )
             :m_xUndoManager( i_undoManager )
             ,m_nRelativeContextDepth( 0 )
             ,m_documentDisposed( false )
