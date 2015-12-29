@@ -127,6 +127,18 @@ chomp $system;
 
 sanity_checks ($system) unless($system eq 'Darwin');
 
+# If we are running in a LODE env, make sure we find the right aclocal
+# by making sure that LODE_HOME/opt/bin is in the PATH
+if (defined $ENV{LODE_HOME})
+{
+    my $lode_path = quotemeta "$ENV{LODE_HOME}/opt/bin";
+    if($ENV{PATH} !~ $lode_path)
+    {
+        $ENV{PATH}="$ENV{LODE_HOME}/opt/bin:$ENV{PATH}";
+        print STDERR "add LODE_HOME/opt/bin in PATH\n";
+    }
+}
+
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
 $aclocal_flags .= " -I $src_path/m4";
