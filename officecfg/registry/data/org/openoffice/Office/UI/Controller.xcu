@@ -911,6 +911,17 @@
           <value>starshapes;.uno:StarShapes.star5</value>
         </prop>
       </node>
+      <node oor:name="lo.writer.MMExcludeEntryController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:MailMergeExcludeEntry</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.MMExcludeEntryController</value>
+        </prop>
+      </node>
       <node oor:name="com.sun.star.svx.FindTextToolboxController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FindText</value>

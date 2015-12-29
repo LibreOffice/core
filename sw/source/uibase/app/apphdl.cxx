@@ -225,6 +225,12 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 }
             }
             break;
+            case FN_MAILMERGE_EXCLUDE_ENTRY:
+            {
+                // just trigger calling statusChanged() of MMExcludeEntryController
+                rSet.InvalidateItem(nWhich);
+            }
+            break;
             case FN_MAILMERGE_CREATE_DOCUMENTS:
             case FN_MAILMERGE_SAVE_DOCUMENTS:
             case FN_MAILMERGE_PRINT_DOCUMENTS:
@@ -784,6 +790,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             rBindings.Invalidate(FN_MAILMERGE_PREV_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_NEXT_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_LAST_ENTRY);
+            rBindings.Invalidate(FN_MAILMERGE_EXCLUDE_ENTRY);
             rBindings.Update();
         }
         break;
