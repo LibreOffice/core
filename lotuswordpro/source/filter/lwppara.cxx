@@ -247,6 +247,8 @@ void LwpPara::Parse(IXFStream* pOutputStream)
 {
     m_pXFContainer = new XFContentContainer;
     XFConvert(m_pXFContainer);
+    if (!m_pXFContainer)
+        return;
     m_pXFContainer->ToXml(pOutputStream);
     m_pXFContainer->Reset();
     delete m_pXFContainer;
