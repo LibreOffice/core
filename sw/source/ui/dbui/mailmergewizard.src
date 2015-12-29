@@ -59,9 +59,9 @@ String ST_MERGE
     Text [ en-US ] = "Personalize document";
 };
 
-String ST_OUTPUT
+String ST_EXCLUDE
 {
-    Text [ en-US ] = "Save, print or send";
+    Text [ en-US ] = "Exclude recipient";
 };
 
 String ST_FINISH

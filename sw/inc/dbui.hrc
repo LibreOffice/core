@@ -81,7 +81,7 @@
 #define ST_LAYOUT               (RC_DBUI_BEGIN + 56)
 #define ST_PREPAREMERGE         (RC_DBUI_BEGIN + 57)
 #define ST_MERGE                (RC_DBUI_BEGIN + 58)
-#define ST_OUTPUT               (RC_DBUI_BEGIN + 59)
+#define ST_EXCLUDE              (RC_DBUI_BEGIN + 59)
 #define ST_FINISH               (RC_DBUI_BEGIN + 60)
 #define ST_ADDRESSLIST          (RC_DBUI_BEGIN + 61)
 

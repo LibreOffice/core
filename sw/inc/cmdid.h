@@ -256,6 +256,7 @@
 #define FN_MAILMERGE_PREV_ENTRY (FN_INSERT + 71)    /* mail merge toolbar - go to the previous entry */
 #define FN_MAILMERGE_NEXT_ENTRY (FN_INSERT + 72)    /* mail merge toolbar - go to the next entry */
 #define FN_MAILMERGE_LAST_ENTRY (FN_INSERT + 73)    /* mail merge toolbar - go to the next entry */
+#define FN_MAILMERGE_EXCLUDE_ENTRY (FN_INSERT + 75) /* mail merge toolbar - checkbox to exclude the current entry */
 
 #define FN_DRAWTEXT_ATTR_DLG    (FN_INSERT + 76)    /* position DrawText */
 

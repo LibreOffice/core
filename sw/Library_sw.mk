@@ -767,6 +767,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/dbui/maildispatcher \
     sw/source/uibase/dbui/mailmergechildwindow \
     sw/source/uibase/dbui/mailmergehelper \
+    sw/source/uibase/dbui/mailmergetoolbarcontrols \
     sw/source/uibase/dbui/mmconfigitem \
     sw/source/uibase/uno/unomailmerge \
 ))
