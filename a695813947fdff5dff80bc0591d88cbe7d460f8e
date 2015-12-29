@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d2f167cf",
+        "filename": "starmath/qa/cppunit/test_starmath.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-12-29T12:48:53Z",
+      "side": 1,
+      "message": "This should be CPPUNIT_ASSERT_EQUAL_MESSAGE(\"Should be \u0027+a + b\u0027\", OUString(\"+a + b\"), sFinalText);",
+      "revId": "a695813947fdff5dff80bc0591d88cbe7d460f8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
