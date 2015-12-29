@@ -181,6 +181,8 @@ void AccessibleShape::Init()
                     ::std::unique_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, nullptr, *pView, *pWindow) );
                     mpText = new AccessibleTextHelper( std::move(pEditSource) );
                 }
+                if( pWindow->HasFocus() )
+                    mpText->SetFocus();
 
                 if( bOwnParaObj )
                     delete pOutlinerParaObject;
