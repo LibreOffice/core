@@ -73,7 +73,7 @@ public class SQLQueryComposer
         getFromClause();
 
         String sSelectBaseClause = "SELECT ";
-        String sSelectClause = sSelectBaseClause;
+        StringBuilder sb = new StringBuilder(sSelectBaseClause);
         for (int i = 0; i < CurDBMetaData.FieldColumns.length; i++)
         {
             if (addtoSelectClause(CurDBMetaData.FieldColumns[i].getDisplayFieldName()))
@@ -81,23 +81,24 @@ public class SQLQueryComposer
                 int iAggregate = CurDBMetaData.getAggregateIndex(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
                 if (iAggregate > -1)
                 {
-                    sSelectClause += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasDisplayName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
+                    sb.append(CurDBMetaData.AggregateFieldNames[iAggregate][1]).append("(").append(getComposedAliasDisplayName(CurDBMetaData.AggregateFieldNames[iAggregate][0])).append(")");
                     if (_baddAliasFieldNames)
                     {
-                        sSelectClause += getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]);
+                        sb.append(getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]));
                     }
                 }
                 else
                 {
-                    sSelectClause += getComposedAliasDisplayName(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
+                    sb.append(getComposedAliasDisplayName(CurDBMetaData.FieldColumns[i].getDisplayFieldName()));
                     if (_baddAliasFieldNames)
                     {
-                        sSelectClause += getAliasFieldNameClause(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
+                        sb.append(getAliasFieldNameClause(CurDBMetaData.FieldColumns[i].getDisplayFieldName()));
                     }
                 }
-                sSelectClause += ", ";
+                sb.append(", ");
             }
         }
+        String sSelectClause = sb.toString();
         // TODO: little bit unhandy version of remove the append 'comma' at the end
         if (sSelectClause.equals(sSelectBaseClause))
         {
