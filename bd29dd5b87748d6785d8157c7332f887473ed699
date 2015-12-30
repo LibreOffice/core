@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d22047fa",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2015-12-30T10:48:05Z",
+      "side": 1,
+      "message": "I\u0027ve override the initialize method of base class but still module name is calling when i quit to LibreOffice",
+      "range": {
+        "startLine": 60,
+        "startChar": 8,
+        "endLine": 60,
+        "endChar": 48
+      },
+      "revId": "bd29dd5b87748d6785d8157c7332f887473ed699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
