@@ -141,6 +141,7 @@ interface ViewShellBaseView
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
+        PseudoSlots = FALSE;
     ]
 }
 
