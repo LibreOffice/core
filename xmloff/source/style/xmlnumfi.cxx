@@ -102,6 +102,7 @@ struct SvXMLNumberInfo
     bool        bGrouping;
     bool        bDecReplace;
     bool        bExpSign;
+    bool        bDecAlign;
     double      fDisplayFactor;
     std::map<sal_Int32, OUString> m_EmbeddedElements;
 
@@ -109,7 +110,7 @@ struct SvXMLNumberInfo
     {
         nDecimals = nInteger = nExpDigits = nExpInterval = nNumerDigits = nDenomDigits =
             nFracDenominator = nMinDecimalDigits = -1;
-        bGrouping = bDecReplace = false;
+        bGrouping = bDecReplace = bDecAlign = false;
         bExpSign = true;
         fDisplayFactor = 1.0;
     }
@@ -940,10 +941,16 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                     aNumInfo.fDisplayFactor = fAttrDouble;
                 break;
             case XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT:
-                if ( !sValue.isEmpty() )
-                    aNumInfo.bDecReplace = true;    // only a default string is supported
+                if ( sValue == " " )
+                {
+                    aNumInfo.bDecAlign = true; // space replacement for "?"
+                    bVarDecimals = true;
+                }
                 else
-                    bVarDecimals = true;   // empty replacement string: variable decimals
+                    if ( sValue.isEmpty() )
+                        bVarDecimals = true;   // empty replacement string: variable decimals
+                    else                                // all other strings
+                        aNumInfo.bDecReplace = true;    // decimal replacement with dashes
                 break;
             case XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
@@ -1876,8 +1883,8 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
     if ( ( rInfo.bDecReplace || rInfo.nMinDecimalDigits < rInfo.nDecimals ) && nPrec )     // add decimal replacement (dashes)
     {
-        //  add dashes for explicit decimal replacement, # for variable decimals
-        sal_Unicode cAdd = rInfo.bDecReplace ? '-' : '#';
+        //  add dashes for explicit decimal replacement, # or ? for variable decimals
+        sal_Unicode cAdd = rInfo.bDecReplace ? '-' : ( rInfo.bDecAlign ? '?': '#' );
 
         if ( rInfo.nMinDecimalDigits == 0 )
             aFormatCode.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
