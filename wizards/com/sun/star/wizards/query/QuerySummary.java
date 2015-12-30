@@ -160,17 +160,17 @@ public class QuerySummary extends QueryMetaData
 
     private String ArrayFieldsToString(int _InitResID, String[] _FieldNames)
     {
-        String sReturn = oResource.getResText(_InitResID);
+        StringBuilder sReturn = new StringBuilder(oResource.getResText(_InitResID));
         int FieldCount = _FieldNames.length;
         for (int i = 0; i < FieldCount; i++)
         {
-            sReturn += this.getFieldColumnByDisplayName(_FieldNames[i]).getFieldTitle();
+            sReturn.append(this.getFieldColumnByDisplayName(_FieldNames[i]).getFieldTitle());
             if (i < FieldCount - 1)
             {
-                sReturn += sSeparator;
+                sReturn.append(sSeparator);
             }
         }
-        return sReturn;
+        return sReturn.toString();
     }
 
     private String combinePartString(int _InitResID, String[][] _FieldNames, int _AlternativeResID, int _BaseStringID, String[] _ReplaceTags)
