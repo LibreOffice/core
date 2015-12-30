@@ -849,12 +849,12 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pri
  *  SalPrinter
  */
 PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
- : m_bPdf( false ),
-   m_bIsPDFWriterJob( false ),
-   m_pGraphics( nullptr ),
-   m_nCopies( 1 ),
-   m_bCollate( false ),
-   m_pInfoPrinter( pInfoPrinter )
+    : m_pInfoPrinter( pInfoPrinter )
+    , m_pGraphics( nullptr )
+    , m_nCopies( 1 )
+    , m_bCollate( false )
+    , m_bPdf( false )
+    , m_bIsPDFWriterJob( false )
 {
 }
 

@@ -59,15 +59,15 @@ class VCL_DLLPUBLIC PspSalPrinter : public SalPrinter
 public:
     OUString                  m_aFileName;
     OUString                  m_aTmpFile;
-    bool                    m_bPdf:1;
-    bool                    m_bIsPDFWriterJob:1;
+    SalInfoPrinter*         m_pInfoPrinter;
     GenPspGraphics*         m_pGraphics;
     psp::PrinterJob         m_aPrintJob;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
     sal_uInt32              m_nCopies;
     bool                    m_bCollate;
-    SalInfoPrinter*         m_pInfoPrinter;
+    bool                    m_bPdf;
+    bool                    m_bIsPDFWriterJob;
 
     PspSalPrinter( SalInfoPrinter *pPrinter );
     virtual ~PspSalPrinter();
