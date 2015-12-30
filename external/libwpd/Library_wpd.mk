@@ -165,6 +165,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,wpd,\
 	UnpackedTarball/libwpd/src/lib/WP6Header \
 	UnpackedTarball/libwpd/src/lib/WP6HeaderFooterGroup \
 	UnpackedTarball/libwpd/src/lib/WP6HighlightGroup \
+	UnpackedTarball/libwpd/src/lib/WP6HyperlinkPacket \
 	UnpackedTarball/libwpd/src/lib/WP6Listener \
 	UnpackedTarball/libwpd/src/lib/WP6NumberingMethodGroup \
 	UnpackedTarball/libwpd/src/lib/WP6OutlineStylePacket \
