@@ -160,7 +160,7 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     if( pNewFontFace->GetFamilyName() == GetFamilyName() )
         pNewFontFace->SetFamilyName( GetFamilyName() );
 
-    // insert new physical font face into linked list
+    // add the new physical font face, replacing existing font face if necessary
     // TODO: get rid of linear search?
     for(std::vector< PhysicalFontFace* >::iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
     {
