@@ -65,7 +65,7 @@ public:
     psp::PrinterJob         m_aPrintJob;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
-    sal_uIntPtr                 m_nCopies;
+    sal_uInt32              m_nCopies;
     bool                    m_bCollate;
     SalInfoPrinter*         m_pInfoPrinter;
 
@@ -76,7 +76,7 @@ public:
     virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
-                                              sal_uIntPtr nCopies,
+                                              sal_uInt32 nCopies,
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData ) override;

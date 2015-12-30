@@ -536,18 +536,15 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     if ( IsJobActive() || IsPrinting() )
         return false;
 
-    sal_uLong   nCopies = mnCopyCount;
+    sal_uInt32 nCopies = mnCopyCount;
     bool    bCollateCopy = mbCollateCopy;
     bool    bUserCopy = false;
 
     if ( nCopies > 1 )
     {
-        sal_uLong nDevCopy;
-
-        if ( bCollateCopy )
-            nDevCopy = GetCapabilities( PrinterCapType::CollateCopies );
-        else
-            nDevCopy = GetCapabilities( PrinterCapType::Copies );
+        const sal_uInt32 nDevCopy = GetCapabilities( bCollateCopy
+            ? PrinterCapType::CollateCopies
+            : PrinterCapType::Copies );
 
         // need to do copies by hand ?
         if ( nCopies > nDevCopy )

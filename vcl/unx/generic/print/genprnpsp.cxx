@@ -875,7 +875,7 @@ bool PspSalPrinter::StartJob(
     const OUString* pFileName,
     const OUString& rJobName,
     const OUString& rAppName,
-    sal_uLong nCopies,
+    sal_uInt32 nCopies,
     bool bCollate,
     bool bDirect,
     ImplJobSetup* pJobSetup )
