@@ -147,14 +147,15 @@ public class QueryMetaData extends CommandMetaData
         ArrayList<String> CommandNames = new ArrayList<String>(1);
         for (int i = 0; i < _FieldNames.length; i++)
         {
-            String CurCommandName = PropertyNames.EMPTY_STRING;
             String[] MetaList = JavaTools.ArrayoutofString(_FieldNames[i], ".");
             if (MetaList.length > 1)
             {
+                StringBuilder sb = new StringBuilder(PropertyNames.EMPTY_STRING);
                 for (int a = 0; a < MetaList.length - 1; a++)
                 {
-                    CurCommandName += MetaList[a];
+                    sb.append(MetaList[a]);
                 }
+                String CurCommandName = sb.toString();
                 if (!CommandNames.contains(CurCommandName))
                 {
                     CommandNames.add(CurCommandName);
@@ -165,8 +166,6 @@ public class QueryMetaData extends CommandMetaData
         CommandNames.toArray(sIncludedCommandNames);
         return sIncludedCommandNames;
     }
-
-
 
     public void initializeFieldTitleSet()
     {
