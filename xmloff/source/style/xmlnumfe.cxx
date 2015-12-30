@@ -1178,6 +1178,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         bool bCurrFound  = false;
         bool bInInteger  = true;
         bool bExpSign = true;
+        bool bDecAlign   = false;               // decimal alignment with "?"
         sal_Int32 nExpDigits = 0;
         sal_Int32 nIntegerSymbols = 0;          // for embedded-text, including "#"
         sal_Int32 nTrailingThousands = 0;       // thousands-separators after all digits
@@ -1206,9 +1207,15 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     else if ( !bInInteger && pElemStr )
                     {
-                        for ( sal_Int32 i = pElemStr->getLength()-1; i >= 0 && (*pElemStr)[i] == '#'; i-- )
+                        for ( sal_Int32 i = pElemStr->getLength()-1; i >= 0 ; i-- )
                         {
-                            nMinDecimals --;
+                            sal_Unicode aChar = (*pElemStr)[i];
+                            if ( aChar == '#' || aChar == '?' )
+                            {
+                                nMinDecimals --;
+                                if ( aChar == '?' )
+                                    bDecAlign = true;
+                            }
                         }
                     }
                     if ( bInInteger && pElemStr )
@@ -1428,6 +1435,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     OUStringBuffer sDashStr;
                                     if (bDecDashes && nPrecision > 0)
                                         comphelper::string::padToLength(sDashStr, nPrecision, '-');
+                                    // "?" in decimal part are replaced by space character
+                                    if (bDecAlign && nPrecision > 0)
+                                        sDashStr = " ";
 
                                     WriteNumberElement_Impl(nDecimals, nMinDecimals, nInteger, sDashStr.makeStringAndClear(),
                                         bThousand, nTrailingThousands, aEmbeddedEntries);
