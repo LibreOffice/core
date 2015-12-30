@@ -298,7 +298,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
     //Get the properties being tested
     private void getPropsToTest(Property[] properties) {
 
-        String bound = "";
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < properties.length; i++) {
 
@@ -322,10 +322,12 @@ public class _XMultiPropertySet extends MultiMethodTest {
             boolean isVoid = util.utils.isVoid(values[0]);
 
             if ( isWritable && isNotNull && isBound && !isExcluded && !isVoid) {
-                bound+=name+";";
+                sb.append(name + ";");
             }
 
         } // endfor
+
+        String bound = sb.toString();
 
         //get a array of bound properties
         if (bound.equals("")) bound = "none";
