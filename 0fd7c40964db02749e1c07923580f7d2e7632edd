@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_529f3703",
+        "filename": "sd/source/ui/view/ViewShellBase.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-30T16:34:10Z",
+      "side": 0,
+      "message": "Would be great to take this whitespace change out of the patch.",
+      "revId": "0fd7c40964db02749e1c07923580f7d2e7632edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

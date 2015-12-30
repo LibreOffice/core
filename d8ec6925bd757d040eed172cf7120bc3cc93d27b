@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_f2990b21",
+        "filename": "include/svx/tbxctl.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-30T16:34:10Z",
+      "side": 1,
+      "message": "The base class has a m_sModuleName member already. No need to re-declare it here.",
+      "revId": "d8ec6925bd757d040eed172cf7120bc3cc93d27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_32a43356",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-30T16:34:10Z",
+      "side": 1,
+      "message": "As I mentioned in the header file, just reuse what you have already in the base class.",
+      "revId": "d8ec6925bd757d040eed172cf7120bc3cc93d27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_92899fcd",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-30T16:34:10Z",
+      "side": 1,
+      "message": "Please move all this to the initialize method. m_sToolboxName is also used in the StateChanged method, which is called before the Select method.",
+      "revId": "d8ec6925bd757d040eed172cf7120bc3cc93d27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_7286bbba",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-30T16:34:10Z",
+      "side": 1,
+      "message": "This is not enough. Writer has several variants like XML Form, Report, Master Document etc., and each one has a different module name. Instead of checking all of them, I suggest to check just for Impress/Draw, and put everything else in a plain \"else\".",
+      "revId": "d8ec6925bd757d040eed172cf7120bc3cc93d27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
