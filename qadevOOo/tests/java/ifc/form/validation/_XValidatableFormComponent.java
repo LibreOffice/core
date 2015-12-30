@@ -150,7 +150,7 @@ public class _XValidatableFormComponent extends MultiMethodTest
     //Get the properties being tested
     private void getPropsToTest(Property[] properties)
     {
-        String bound = "";
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < properties.length; i++)
         {
@@ -175,7 +175,7 @@ public class _XValidatableFormComponent extends MultiMethodTest
                     || name.equals("Date")
             )
             {
-                bound = (name + ";");
+                sb = new StringBuilder(name + ";");
             }
 
             if (
@@ -183,9 +183,11 @@ public class _XValidatableFormComponent extends MultiMethodTest
                     && !name.equals("Enabled")
             )
             {
-                bound += (name + ";");
+                sb.append(name + ";");
             }
         }
+
+        String bound = sb.toString();
          // endfor
 
         //get a array of bound properties
