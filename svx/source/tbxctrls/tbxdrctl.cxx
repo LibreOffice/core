@@ -41,27 +41,25 @@ using namespace ::com::sun::star::frame;
 
 
 SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-
     SfxToolBoxControl( nSlotId, nId, rTbx )
-
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::CHECKABLE | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
 
 void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
-    {
-        svt::ToolboxController::initialize(aArguments);
+{
+    svt::ToolboxController::initialize(aArguments);
     /*
      * Toolbar name is defined as "private:resource/toolbar/drawbar" in writer and calc,
      * "private:resource/toolbar/toolbar" in draw and impress. Control is added for this
      * difference.
      */
-    if (svt::ToolboxController::m_sModuleName=="com.sun.star.presentation.PresentationDocument" || svt::ToolboxController::m_sModuleName=="com.sun.star.drawing.DrawingDocument")
+    if ( m_sModuleName == "com.sun.star.presentation.PresentationDocument" || m_sModuleName == "com.sun.star.drawing.DrawingDocument" )
         m_sToolboxName="private:resource/toolbar/toolbar";
     else
         m_sToolboxName="private:resource/toolbar/drawbar";
-    }
+}
 
 
 
