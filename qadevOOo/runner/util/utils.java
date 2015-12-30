@@ -685,18 +685,19 @@ public class utils {
         appExecCommand = appExecCommand.replace("\"", "");
         appExecCommand = appExecCommand.replace("'", "");
         StringTokenizer commandTokens = new StringTokenizer(appExecCommand, " \t");
-        String officeExecutable = "";
         String officeExecCommand = "soffice";
+        StringBuilder sb = new StringBuilder();
         // is there a 'soffice' in the command? 2do: eliminate case sensitivity on windows
         int index = -1;
         while (commandTokens.hasMoreTokens() && index == -1) {
-            officeExecutable += commandTokens.nextToken() + " ";
-            index = officeExecutable.indexOf(officeExecCommand);
+            sb.append(commandTokens.nextToken()).append(" ");
+            index = sb.indexOf(officeExecCommand);
         }
         if (index == -1) {
             errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
                 "contain '" + officeExecCommand + "'.";
         } else {
+            String officeExecutable = sb.toString();
             // does the directory exist?
             officeExecutable = officeExecutable.trim();
             String officePath = officeExecutable.substring(0, index);
