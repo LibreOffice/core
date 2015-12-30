@@ -322,36 +322,36 @@ public class DBTools {
 
 
         for(int i = 0; i < DBTools.TST_TABLE_VALUES.length; i++) {
-            String query = "insert into " + tbl_name + " values (";
+            StringBuilder query = new StringBuilder("insert into " + tbl_name + " values (");
             int j = 0;
             while(j < DBTools.TST_TABLE_VALUES[i].length) {
                 if (j > 0) {
-                    query += ", ";
+                    query.append(", ");
                 }
                 Object value = DBTools.TST_TABLE_VALUES[i][j];
                 if (value instanceof String ||
                     value instanceof Date) {
-                    query += "'";
+                    query.append("'");
                 }
                 if (value instanceof Date) {
                     Date date = (Date)value;
-                    query += date.Year + "-" + date.Month +
-                        "-" + date.Day;
+                    query.append(date.Year).append("-").append(date.Month).append(
+                        "-").append(date.Day);
                 } else if (value instanceof Boolean) {
-                    query += (((Boolean)value).booleanValue())
-                        ? "1" : "0";
+                    query.append((((Boolean)value).booleanValue())
+                        ? "1" : "0");
                 } else {
-                    query += value;
+                    query.append(value);
                 }
 
                 if (value instanceof String ||
                     value instanceof Date) {
-                    query += "'";
+                    query.append("'");
                 }
                 j++;
             }
-            query += ")";
-            statement.executeUpdate(query);
+            query.append(")");
+            statement.executeUpdate(query.toString());
         }
     }
 
