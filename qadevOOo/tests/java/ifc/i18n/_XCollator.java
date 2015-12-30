@@ -408,12 +408,14 @@ public class _XCollator extends MultiMethodTest {
     */
     public String toUnicode(String str) {
         char[] chars = str.toCharArray() ;
-        String res = "" ;
+        StringBuilder res = new StringBuilder();
         for (int i = 0; i < chars.length; i++) {
-            if (i != 0) res += "," ;
-            res += Integer.toHexString(chars[i]) ;
+            if (i != 0) {
+                res.append(",");
+            }
+            res.append(Integer.toHexString(chars[i]));
         }
-        return res ;
+        return res.toString();
     }
 
 }
