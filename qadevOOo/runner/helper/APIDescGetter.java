@@ -392,7 +392,6 @@ public class APIDescGetter extends DescGetter
     private static String createClassName(String _ifc_name)
     {
         StringTokenizer st = new StringTokenizer(_ifc_name, ":");
-        String className = "";
 
         int count = 3;
 
@@ -400,6 +399,8 @@ public class APIDescGetter extends DescGetter
         {
             count = 4;
         }
+
+        StringBuilder className = new StringBuilder();
 
         for (int i = 0; st.hasMoreTokens(); i++)
         {
@@ -414,10 +415,10 @@ public class APIDescGetter extends DescGetter
                     token = "_" + token;
                 }
 
-                className += ("." + token);
+                className.append(".").append(token);
             }
         }
-        return className;
+        return className.toString();
     }
 
     private static String entryType;
