@@ -150,13 +150,15 @@ public class BuildEnvTools {
             separator = ";";
         }
 
-        String command = "";
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < commands.length; i++) {
             if (i != 0) {
-                command += separator;
+                sb.append(separator);
             }
-            command += commands[i];
+            sb.append(commands[i]);
         }
+
+        String command = sb.toString();
 
         if (mPlatform.equals(PropertyName.WNTMSCI)){
             if (mCygwin){
