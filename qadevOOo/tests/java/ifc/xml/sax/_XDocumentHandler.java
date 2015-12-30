@@ -241,20 +241,20 @@ public class _XDocumentHandler extends MultiMethodTest {
             log.println("StartElement Processing XML data ...") ;
             for(int i = 0; i < xmlData.length; i++) {
                 String[] elem = xmlData[i] ;
-                String xmlTag = "" ;
                 if ("start".equals(elem[0])) {
-                    xmlTag += "<" ;
+                    StringBuilder xmlTag = new StringBuilder();
+                    xmlTag.append("<");
                     String tagName = elem[1] ;
-                    xmlTag += tagName ;
+                    xmlTag.append(tagName);
                     XMLTools.AttributeList attr = new XMLTools.AttributeList() ;
                     for (int j = 2; j < elem.length; j+=3) {
                         attr.add(elem[j], elem[j+1], elem[j+2]);
-                        xmlTag += " " + elem[j] + "(" + elem[j+1] +
-                            ")=\"" + elem[j+2] + "\"" ;
+                        xmlTag.append(" ").append(elem[j]).append("(").append(elem[j+1]).append(
+                            ")=\"").append(elem[j+2]).append("\"");
                     }
-                    xmlTag += ">" ;
+                    xmlTag.append(">");
 
-                    log.println(xmlTag) ;
+                    log.println(xmlTag.toString()) ;
                     oObj.startElement(tagName, attr) ;
                 } else
                 if ("end".equals(elem[0])) {
