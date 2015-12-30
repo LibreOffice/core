@@ -185,7 +185,7 @@ public class QuerySummary extends QueryMetaData
     private String ArrayFieldsToString(int _InitResID, String[][] _FieldNames, int _BaseStringID, String[] _ReplaceTags)
     {
         String CurString = PropertyNames.EMPTY_STRING;
-        String sReturn = oResource.getResText(_InitResID);
+        StringBuilder sReturn = new StringBuilder(oResource.getResText(_InitResID));
         int FieldCount = _FieldNames.length;
         if (FieldCount > 0)
         {
@@ -213,13 +213,13 @@ public class QuerySummary extends QueryMetaData
                         CurString = JavaTools.replaceSubString(CurString, _FieldNames[i][a], _ReplaceTags[a]);
                     }
                 }
-                sReturn += CurString;
+                sReturn.append(CurString);
                 if (i < FieldCount - 1)
                 {
-                    sReturn += sSeparator;
+                    sReturn.append(sSeparator);
                 }
             }
         }
-        return sReturn;
+        return sReturn.toString();
     }
 }
