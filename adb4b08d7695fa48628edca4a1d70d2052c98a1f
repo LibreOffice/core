@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_32039375",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:31:21Z",
+      "side": 1,
+      "message": "This is C++, not C. If you don\u0027t want to init. the var. here, just move the whole decl. down.",
+      "revId": "adb4b08d7695fa48628edca4a1d70d2052c98a1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_72f51b82",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:31:21Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure that the boost::property_tree functions can throw an\nexception. So, to avoid leak of the cairoVisRegion, you should use std::shared_ptr with cairo_region_destroy as a deleter. Since we were leaking it before anyway, this can be done in a separate commit.",
+      "revId": "adb4b08d7695fa48628edca4a1d70d2052c98a1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
