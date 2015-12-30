@@ -419,10 +419,11 @@ public class _XURLTransformer extends MultiMethodTest {
         url.Complete = expectedCompleteFTP;
         log.println("getPresentation('" + expectedCompleteFTP + "', false): ");
         // the password must be masqurade with <****>
-        String asterisk = "";
+        StringBuilder sb = new StringBuilder();
         for (int n = 0 ; n < password.length(); n++){
-            asterisk += "*";
+            sb.append("*");
         }
+        String asterisk = sb.toString();
         asterisk = "<" + asterisk.substring(1,asterisk.length());
         asterisk = asterisk.substring(0,asterisk.length()-1) + ">";
 
