@@ -189,19 +189,19 @@ public class _XDocumentTemplates extends MultiMethodTest {
      */
     protected String getContentList(XContent content) {
         XResultSet statRes = getStatResultSet(content);
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
         try {
             statRes.first();
             XRow row = UnoRuntime.queryInterface(XRow.class, statRes);
             while(! statRes.isAfterLast()) {
-                ret += "\n    " + row.getString(1);
+                ret.append("\n    ").append(row.getString(1));
                 statRes.next();
             }
         } catch (com.sun.star.sdbc.SQLException e) {
             log.println("Exception occurred:" + e);
         }
 
-        return ret;
+        return ret.toString();
     }
 
     protected XResultSet getStatResultSet(XContent content) {
