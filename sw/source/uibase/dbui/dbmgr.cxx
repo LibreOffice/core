@@ -1048,7 +1048,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     if( createTempFile && ( 1 == nDocNo || !bCreateSingleFile ))
                         bNoError = CreateNewTemp(sPath, sAddress, aTempFile, rMergeDescriptor, pStoreToFilter);
 
-                    if( !bCancel )
+                    if (!bCancel && bNoError)
                     {
                         std::unique_ptr< INetURLObject > aTempFileURL;
                         if( createTempFile )
@@ -1226,7 +1226,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     FreezeLayouts(pTargetShell, true);
                     bFreezedLayouts = true;
                 }
-            } while( !bCancel &&
+            } while( !bCancel && bNoError &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
             FinishMailMergeFile(xWorkDocSh, pWorkView, pTargetDoc, pTargetShell, bCreateSingleFile, rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER,
@@ -1235,10 +1235,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             pProgressDlg.disposeAndClear();
 
             // save the single output document
-            bNoError = SavePrintDoc(xTargetDocShell, pTargetView, rMergeDescriptor, aTempFile,
-                                        pStoreToFilter, pStoreToFilterOptions,
-                                        bMergeShell, bCreateSingleFile, rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER);
-
+            if (bNoError)
+            {
+                bNoError = SavePrintDoc(xTargetDocShell, pTargetView, rMergeDescriptor, aTempFile,
+                                            pStoreToFilter, pStoreToFilterOptions,
+                                            bMergeShell, bCreateSingleFile, rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER);
+            }
 
             //remove the temporary files
             RemoveTmpFiles(aFilesToRemove);
