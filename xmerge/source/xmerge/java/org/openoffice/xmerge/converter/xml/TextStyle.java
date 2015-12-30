@@ -416,14 +416,17 @@ public class TextStyle extends Style implements Cloneable {
      * Dump this {@code Style} as a Comma Separated Value (CSV) line.
      */
     public void dumpCSV() {
-        String attributes = "";
+        StringBuilder attributes = new StringBuilder();
         for (int bitVal = 0x01; bitVal <= 0x20; bitVal = bitVal << 1) {
             if ((bitVal & mask) != 0) {
-                attributes += toCSV(((bitVal & values) != 0) ? "yes" : "no");
-            } else attributes += toCSV(null);  // unspecified
+                attributes.append(toCSV(((bitVal & values) != 0) ? "yes" : "no"));
+            }
+            else {
+                attributes.append(toCSV(null));  // unspecified
+            }
         }
         System.out.println(toCSV(name) + toCSV(family) + toCSV(parent)
-        + toCSV(fontName) + toCSV("" + sizeInPoints) + attributes + toLastCSV(null));
+        + toCSV(fontName) + toCSV("" + sizeInPoints) + attributes.toString() + toLastCSV(null));
     }
 
     /**
