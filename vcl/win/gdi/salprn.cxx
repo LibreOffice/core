@@ -457,7 +457,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 #define CHOOSE_DEVMODE(i)\
     (pDevModeW->i)
 
-static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData, sal_uLong nFlags )
+static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData, JobSetFlags nFlags )
 {
     if ( !pSetupData || !pSetupData->mpDriverData )
         return;
@@ -465,7 +465,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     DECLARE_DEVMODE( pSetupData );
 
     // Orientation
-    if ( nFlags & SAL_JOBSET_ORIENTATION )
+    if ( nFlags & JobSetFlags::ORIENTATION )
     {
         if ( CHOOSE_DEVMODE(dmOrientation) == DMORIENT_PORTRAIT )
             pSetupData->meOrientation = ORIENTATION_PORTRAIT;
@@ -474,7 +474,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 
     // PaperBin
-    if ( nFlags & SAL_JOBSET_PAPERBIN )
+    if ( nFlags & JobSetFlags::PAPERBIN )
     {
         sal_uLong nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
 
@@ -499,7 +499,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 
     // PaperSize
-    if ( nFlags & SAL_JOBSET_PAPERSIZE )
+    if ( nFlags & JobSetFlags::PAPERSIZE )
     {
         if( (CHOOSE_DEVMODE(dmFields) & (DM_PAPERWIDTH|DM_PAPERLENGTH)) == (DM_PAPERWIDTH|DM_PAPERLENGTH) )
         {
@@ -707,7 +707,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
         }
     }
 
-    if( nFlags & SAL_JOBSET_DUPLEXMODE )
+    if( nFlags & JobSetFlags::DUPLEXMODE )
     {
         DuplexMode eDuplex = DUPLEX_UNKNOWN;
         if( (CHOOSE_DEVMODE(dmFields) & DM_DUPLEX) )
@@ -731,7 +731,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     DECLARE_DEVMODE( pSetupData );
 
     // Orientation
-    if ( nFlags & SAL_JOBSET_ORIENTATION )
+    if ( nFlags & JobSetFlags::ORIENTATION )
     {
         CHOOSE_DEVMODE(dmFields) |= DM_ORIENTATION;
         if ( pSetupData->meOrientation == ORIENTATION_PORTRAIT )
@@ -741,7 +741,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 
     // PaperBin
-    if ( nFlags & SAL_JOBSET_PAPERBIN )
+    if ( nFlags & JobSetFlags::PAPERBIN )
     {
         sal_uLong nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
 
@@ -756,7 +756,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 
     // PaperSize
-    if ( nFlags & SAL_JOBSET_PAPERSIZE )
+    if ( nFlags & JobSetFlags::PAPERSIZE )
     {
         CHOOSE_DEVMODE(dmFields)        |= DM_PAPERSIZE;
         CHOOSE_DEVMODE(dmPaperWidth)     = 0;
@@ -986,7 +986,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             }
         }
     }
-    if( (nFlags & SAL_JOBSET_DUPLEXMODE) )
+    if( (nFlags & JobSetFlags::DUPLEXMODE) )
     {
         switch( pSetupData->meDuplexMode )
         {
@@ -1099,7 +1099,7 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     pPrinter->mhDC      = hDC;
     if ( !pSetupData->mpDriverData )
         ImplUpdateSalJobSetup( pPrinter, pSetupData, FALSE, NULL );
-    ImplDevModeToJobSetup( pPrinter, pSetupData, SAL_JOBSET_ALL );
+    ImplDevModeToJobSetup( pPrinter, pSetupData, JobSetFlags::ALL );
     pSetupData->mnSystem = JOBSETUP_SYSTEM_WINDOWS;
 
     return pPrinter;
@@ -1187,7 +1187,7 @@ bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
 {
     if ( ImplUpdateSalJobSetup( this, pSetupData, TRUE, static_cast<WinSalFrame*>(pFrame) ) )
     {
-        ImplDevModeToJobSetup( this, pSetupData, SAL_JOBSET_ALL );
+        ImplDevModeToJobSetup( this, pSetupData, JobSetFlags::ALL );
         return ImplUpdateSalPrnIC( this, pSetupData );
     }
 
@@ -1201,7 +1201,7 @@ bool WinSalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
     return ImplUpdateSalPrnIC( this, pSetupData );
 }
 
-bool WinSalInfoPrinter::SetData( sal_uLong nFlags, ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData )
 {
     ImplJobSetupToDevMode( this, pSetupData, nFlags );
     if ( ImplUpdateSalJobSetup( this, pSetupData, TRUE, NULL ) )

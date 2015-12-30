@@ -42,7 +42,7 @@ public:
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
     virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
     virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) override;
-    virtual bool                    SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData ) override;
+    virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) override;
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,

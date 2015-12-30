@@ -162,7 +162,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
 {
     // FIXME: implement driver data
     if( io_pSetupData && io_pSetupData->mpDriverData )
-        return SetData( ~0, io_pSetupData );
+        return SetData( JobSetFlags::ALL, io_pSetupData );
 
     bool bSuccess = true;
 
@@ -222,17 +222,17 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
     mePageOrientation = i_eSetOrientation;
 }
 
-bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupData )
+bool AquaSalInfoPrinter::SetData( JobSetFlags i_nFlags, ImplJobSetup* io_pSetupData )
 {
     if( ! io_pSetupData || io_pSetupData->mnSystem != JOBSETUP_SYSTEM_MAC )
         return false;
 
     if( mpPrintInfo )
     {
-        if( (i_nFlags & SAL_JOBSET_ORIENTATION) != 0 )
+        if( i_nFlags & JobSetFlags::ORIENTATION )
             mePageOrientation = io_pSetupData->meOrientation;
 
-        if( (i_nFlags & SAL_JOBSET_PAPERSIZE) !=  0)
+        if( i_nFlags & JobSetFlags::PAPERSIZE )
         {
             // set paper format
             long width = 21000, height = 29700;
@@ -371,7 +371,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
 
     // update job data
     if( i_pSetupData )
-        SetData( ~0, i_pSetupData );
+        SetData( JobSetFlags::ALL, i_pSetupData );
 
     // do we want a progress panel ?
     bool bShowProgressPanel = true;

@@ -72,7 +72,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     virtual void                ReleaseGraphics( SalGraphics* i_pGraphics ) override;
     virtual bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData ) override;
     virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) override;
-    virtual bool                SetData( sal_uLong i_nFlags, ImplJobSetup* i_pSetupData ) override;
+    virtual bool                SetData( JobSetFlags i_nFlags, ImplJobSetup* i_pSetupData ) override;
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
                                              long& o_rOutWidth, long& o_rOutHeight,
                                              long& o_rPageOffX, long& o_rPageOffY,

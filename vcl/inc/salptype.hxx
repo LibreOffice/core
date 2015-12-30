@@ -20,18 +20,27 @@
 #ifndef INCLUDED_VCL_INC_SALPTYPE_HXX
 #define INCLUDED_VCL_INC_SALPTYPE_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
-// - SalJobSetupFlags -
+enum class JobSetFlags : sal_uInt16;
 
-#define SAL_JOBSET_ORIENTATION                  ((sal_uLong)0x00000001)
-#define SAL_JOBSET_PAPERBIN                     ((sal_uLong)0x00000002)
-#define SAL_JOBSET_PAPERSIZE                    ((sal_uLong)0x00000004)
-#define SAL_JOBSET_DUPLEXMODE                   ((sal_uLong)0x00000008)
-#define SAL_JOBSET_ALL                          (SAL_JOBSET_ORIENTATION |\
-                                                 SAL_JOBSET_PAPERBIN    |\
-                                                 SAL_JOBSET_PAPERSIZE   |\
-                                                 SAL_JOBSET_DUPLEXMODE)
+inline SAL_CONSTEXPR JobSetFlags operator |(const JobSetFlags a, const JobSetFlags b)
+{
+    return static_cast<JobSetFlags>(static_cast<sal_uInt16>(a) & static_cast<sal_uInt16>(b));
+}
+
+inline SAL_CONSTEXPR bool operator &(const JobSetFlags a, const JobSetFlags b)
+{
+    return (static_cast<sal_uInt16>(a) & static_cast<sal_uInt16>(b)) != 0;
+}
+
+enum class JobSetFlags : sal_uInt16 {
+    ORIENTATION  = 1,
+    PAPERBIN     = 2,
+    PAPERSIZE    = 4,
+    DUPLEXMODE   = 8,
+    ALL          = ORIENTATION | PAPERBIN | PAPERSIZE | DUPLEXMODE
+};
 
 // - SalPrinterError -
 

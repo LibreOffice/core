@@ -557,7 +557,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
     PrinterInfo aInfo( rManager.getPrinterInfo( pJobSetup->maPrinterName ) );
     if ( pJobSetup->mpDriverData )
     {
-        SetData( ~0, pJobSetup );
+        SetData( JobSetFlags::ALL, pJobSetup );
         JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aInfo );
     }
     aInfo.m_bPapersizeFromSetup = pJobSetup->mbPapersizeFromSetup;
@@ -590,7 +590,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
     if( pJobSetup->mpDriverData )
-        return SetData( ~0, pJobSetup );
+        return SetData( JobSetFlags::ALL, pJobSetup );
 
     copyJobDataToJobSetup( pJobSetup, m_aJobData );
 
@@ -602,7 +602,7 @@ bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 // Only the data must be changed, where the bit
 // in nGetDataFlags is set
 bool PspSalInfoPrinter::SetData(
-    sal_uLong nSetDataFlags,
+    JobSetFlags nSetDataFlags,
     ImplJobSetup* pJobSetup )
 {
     JobData aData;
@@ -614,7 +614,7 @@ bool PspSalInfoPrinter::SetData(
         const PPDValue* pValue;
 
         // merge papersize if necessary
-        if( nSetDataFlags & SAL_JOBSET_PAPERSIZE )
+        if( nSetDataFlags & JobSetFlags::PAPERSIZE )
         {
             OUString aPaper;
 
@@ -644,7 +644,7 @@ bool PspSalInfoPrinter::SetData(
         }
 
         // merge paperbin if necessary
-        if( nSetDataFlags & SAL_JOBSET_PAPERBIN )
+        if( nSetDataFlags & JobSetFlags::PAPERBIN )
         {
             pKey = aData.m_pParser->getKey( OUString("InputSlot") );
             if( pKey )
@@ -664,11 +664,11 @@ bool PspSalInfoPrinter::SetData(
         }
 
         // merge orientation if necessary
-        if( nSetDataFlags & SAL_JOBSET_ORIENTATION )
+        if( nSetDataFlags & JobSetFlags::ORIENTATION )
             aData.m_eOrientation = pJobSetup->meOrientation == ORIENTATION_LANDSCAPE ? orientation::Landscape : orientation::Portrait;
 
         // merge duplex if necessary
-        if( nSetDataFlags & SAL_JOBSET_DUPLEXMODE )
+        if( nSetDataFlags & JobSetFlags::DUPLEXMODE )
         {
             pKey = aData.m_pParser->getKey( OUString("Duplex") );
             if( pKey )

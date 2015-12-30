@@ -26,6 +26,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 
+#include "salptype.hxx"
+
 #include <vector>
 
 class SalGraphics;
@@ -69,7 +71,7 @@ public:
     // and set the new indepen data in pSetupData
     // Only the data must changed, where the bit
     // in nFlags is set
-    virtual bool                    SetData( sal_uLong nFlags, ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) = 0;
 
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,

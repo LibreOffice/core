@@ -1251,7 +1251,7 @@ bool Printer::SetOrientation( Orientation eOrientation )
         }
 
         ReleaseGraphics();
-        if ( mpInfoPrinter->SetData( SAL_JOBSET_ORIENTATION, pSetupData ) )
+        if ( mpInfoPrinter->SetData( JobSetFlags::ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
             mbNewJobSetup = true;
@@ -1292,7 +1292,7 @@ bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
         }
 
         ReleaseGraphics();
-        if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERBIN, pSetupData ) )
+        if ( mpInfoPrinter->SetData( JobSetFlags::PAPERBIN, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
             mbNewJobSetup = true;
@@ -1430,7 +1430,7 @@ bool Printer::SetPaper( Paper ePaper )
         ReleaseGraphics();
         if ( ePaper == PAPER_USER )
             ImplFindPaperFormatForUserSize( aJobSetup, false );
-        if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
+        if ( mpInfoPrinter->SetData( JobSetFlags::PAPERSIZE | JobSetFlags::ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
             mbNewJobSetup = true;
@@ -1493,7 +1493,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
         ImplFindPaperFormatForUserSize( aJobSetup, bMatchNearest );
 
         // Changing the paper size can also change the orientation!
-        if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
+        if ( mpInfoPrinter->SetData( JobSetFlags::PAPERSIZE | JobSetFlags::ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
             mbNewJobSetup = true;
@@ -1587,7 +1587,7 @@ bool Printer::SetDuplexMode( DuplexMode eDuplex )
         }
 
         ReleaseGraphics();
-        if ( mpInfoPrinter->SetData( SAL_JOBSET_DUPLEXMODE, pSetupData ) )
+        if ( mpInfoPrinter->SetData( JobSetFlags::DUPLEXMODE, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
             mbNewJobSetup = true;
