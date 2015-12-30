@@ -461,18 +461,18 @@ public class XMLTools {
          */
         @Override
         public String toString() {
-            String ret = "<" + name ;
+            StringBuffer ret = new StringBuffer("<" + name);
             for (int i = 0; i < attrList.length; i++) {
-                ret += " " + attrList[i][0] + "=";
+                ret.append(" ").append(attrList[i][0]).append("=");
                 if (attrList[i][2] == null) {
-                    ret += "(not specified)";
+                    ret.append("(not specified)");
                 } else {
-                    ret += "\"" + attrList[i][2] + "\"";
+                    ret.append("\"").append(attrList[i][2]).append("\"");
                 }
             }
-            ret += ">";
+            ret.append(">");
 
-            return ret ;
+            return ret.toString();
         }
 
         private boolean checkAttr(int attrListIdx, XAttributeList list) {
