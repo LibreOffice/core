@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_f2c0ebe2",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2015-12-30T17:32:36Z",
+      "side": 1,
+      "message": "I hope this usage is true",
+      "range": {
+        "startLine": 60,
+        "startChar": 8,
+        "endLine": 60,
+        "endChar": 45
+      },
+      "revId": "c8790652178db666a6886475cc64d1da5405a761",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
