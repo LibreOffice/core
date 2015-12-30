@@ -58,7 +58,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFootnote"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertPlugin"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertScript" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>

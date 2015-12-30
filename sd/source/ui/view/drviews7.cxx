@@ -882,9 +882,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if ( GetDocSh()->IsUIActive() )
     {
         rSet.DisableItem( SID_INSERT_OBJECT );
-        rSet.DisableItem( SID_INSERT_PLUGIN );
-        rSet.DisableItem( SID_INSERT_SOUND );
-        rSet.DisableItem( SID_INSERT_VIDEO );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
         rSet.DisableItem( SID_INSERT_MATH );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
@@ -1001,9 +998,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_AVMEDIA );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
         rSet.DisableItem( SID_INSERT_OBJECT );
-        rSet.DisableItem( SID_INSERT_PLUGIN );
-        rSet.DisableItem( SID_INSERT_SOUND );
-        rSet.DisableItem( SID_INSERT_VIDEO );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
 
         rSet.DisableItem( SID_INSERT_MATH );

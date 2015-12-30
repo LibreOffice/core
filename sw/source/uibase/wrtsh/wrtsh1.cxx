@@ -366,7 +366,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 }
 
                 // TODO/LATER: recording! Convert properties to items
-                case SID_INSERT_PLUGIN:
                 case SID_INSERT_FLOATINGFRAME:
                 {
                     SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();

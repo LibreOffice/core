@@ -399,21 +399,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_INSERT_PLUGIN // ole : yes, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_INSERT_SOUND // ole : yes, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_INSERT_VIDEO // ole : yes, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_INSERT_FLOATINGFRAME // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;

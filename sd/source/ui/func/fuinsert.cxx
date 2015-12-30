@@ -482,7 +482,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     // intentionally no break!
                 }
-                case SID_INSERT_PLUGIN :
                 case SID_INSERT_FLOATINGFRAME :
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

@@ -277,18 +277,6 @@ interface BaseText
         StateMethod = StateInsert ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_INSERT_SOUND
-    [
-        ExecMethod = ExecInsert ;
-        StateMethod = StateInsert ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-    SID_INSERT_VIDEO
-    [
-        ExecMethod = ExecInsert ;
-        StateMethod = StateInsert ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
     FN_INSERT_SMA // status(final|play)
     [
         ExecMethod = ExecInsert ;
@@ -302,12 +290,6 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_INSERT_OBJECT  // status(final|play)
-    [
-        ExecMethod = ExecInsert ;
-        StateMethod = StateInsert ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-    SID_INSERT_PLUGIN  // status(final|play)
     [
         ExecMethod = ExecInsert ;
         StateMethod = StateInsert ;
