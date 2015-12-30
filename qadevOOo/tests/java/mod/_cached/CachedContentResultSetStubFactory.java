@@ -93,19 +93,19 @@ public class CachedContentResultSetStubFactory extends TestCase {
         XContentIdentifierFactory ciFac = UnoRuntime.queryInterface(XContentIdentifierFactory.class, oUCB) ;
 
         String url = util.utils.getFullTestURL("SwXTextEmbeddedObject.sxw") ;
-        String escUrl = "" ;
+        StringBuilder escUrl = new StringBuilder();
 
         // In base URL of a JAR file in content URL all directory
         // separators ('/') must be replaced with escape symbol '%2F'.
         int idx = url.indexOf("/") ;
         int lastIdx = -1 ;
         while (idx >= 0) {
-            escUrl += url.substring(lastIdx + 1, idx) + "%2F" ;
+            escUrl.append(url.substring(lastIdx + 1, idx)).append("%2F");
             lastIdx = idx ;
             idx = url.indexOf("/", idx + 1) ;
         }
-        escUrl += url.substring(lastIdx + 1) ;
-        String cntUrl = "vnd.sun.star.pkg://" + escUrl + "/" ;
+        escUrl.append(url.substring(lastIdx + 1));
+        String cntUrl = "vnd.sun.star.pkg://" + escUrl.toString() + "/" ;
         log.println("Getting Content of '" + cntUrl + "'") ;
 
         XContentIdentifier CI = ciFac.createContentIdentifier(cntUrl) ;
