@@ -231,7 +231,6 @@
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
-          <menu:menuitem menu:id=".uno:InsertPlugin"/>
           <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
           <menu:menuitem menu:id=".uno:InsertObjectChart"/>
         </menu:menupopup>

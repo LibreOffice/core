@@ -348,9 +348,9 @@
 
 #define SID_INSERT_OBJECT                   (SID_SFX_START + 561)
 #define SID_INSERT_FLOATINGFRAME            (SID_SFX_START + 563)
-#define SID_INSERT_PLUGIN                   (SID_SFX_START + 672)
-#define SID_INSERT_SOUND                    (SID_SFX_START + 676)
-#define SID_INSERT_VIDEO                    (SID_SFX_START + 677)
+// FREE                                     (SID_SFX_START + 672)
+// FREE                                     (SID_SFX_START + 676)
+// FREE                                     (SID_SFX_START + 677)
 
 #define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
 

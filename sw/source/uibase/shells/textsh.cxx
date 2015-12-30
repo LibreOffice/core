@@ -238,7 +238,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 #endif
 
     case SID_INSERT_OBJECT:
-    case SID_INSERT_PLUGIN:
     {
         const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
         SvGlobalName *pName = nullptr;
@@ -249,63 +248,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pName = &aName;
         }
 
-        const SfxStringItem* pClassLocationItem = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
-        const SfxStringItem* pCommandsItem = rReq.GetArg<SfxStringItem>(FN_PARAM_3);
-        //TODO/LATER: recording currently not working, need code for Commandlist
         svt::EmbeddedObjectRef xObj;
-        if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
-        {
-            OUString sClassLocation;
-            if(pClassLocationItem)
-                sClassLocation = pClassLocationItem->GetValue();
-
-            SvCommandList aCommandList;
-            if(pCommandsItem)
-            {
-                sal_Int32 nTemp;
-                aCommandList.AppendCommands( pCommandsItem->GetValue(), &nTemp );
-            }
-
-            {
-                comphelper::EmbeddedObjectContainer aCnt;
-                OUString sName;
-                xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), sName ),
-                            embed::Aspects::MSOLE_CONTENT );
-                svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
-                uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-                if ( xSet.is() )
-                {
-                    try
-                    {
-                        if ( !sClassLocation.isEmpty() )
-                            xSet->setPropertyValue("PluginURL",
-                                uno::makeAny(
-                                    OUString(
-                                        URIHelper::SmartRel2Abs(
-                                            INetURLObject(), sClassLocation,
-                                            URIHelper::GetMaybeFileHdl()) ) ) );
-                        uno::Sequence< beans::PropertyValue > aSeq;
-                        if ( aCommandList.size() )
-                        {
-                            aCommandList.FillSequence( aSeq );
-                            xSet->setPropertyValue("PluginCommands", uno::makeAny( aSeq ) );
-                        }
-                    }
-                    catch (const uno::Exception&)
-                    {
-                    }
-                }
-            }
-
-            if(xObj.is())
-                rSh.InsertOleObject( xObj );
-        }
-        else
-        {
-            OSL_ENSURE( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
-            rSh.InsertObject( xObj, pName, true, nSlot);
-            rReq.Done();
-        }
+        rSh.InsertObject( xObj, pName, true, nSlot);
+        rReq.Done();
         break;
     }
     case SID_INSERT_FLOATINGFRAME:
@@ -631,8 +576,6 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         switch ( nWhich )
         {
         case SID_INSERT_AVMEDIA:
-        case SID_INSERT_SOUND:
-        case SID_INSERT_VIDEO:
             if ( GetShell().IsSelFrameMode()
                  || GetShell().CursorInsideInputField()
                  || SfxObjectCreateMode::EMBEDDED == eCreateMode
@@ -664,7 +607,6 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
             case SID_INSERT_FLOATINGFRAME:
             case SID_INSERT_OBJECT:
-            case SID_INSERT_PLUGIN:
                 {
                     if( eCreateMode == SfxObjectCreateMode::EMBEDDED || bCursorInHidden )
                     {

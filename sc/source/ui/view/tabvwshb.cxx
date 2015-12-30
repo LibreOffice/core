@@ -295,9 +295,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             break;
 
         case SID_INSERT_OBJECT:
-        case SID_INSERT_PLUGIN:
-        case SID_INSERT_SOUND:
-        case SID_INSERT_VIDEO:
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
             FuInsertOLE(this, pWin, pView, pDrModel, rReq);
@@ -456,17 +453,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_OBJECT:
-            case SID_INSERT_PLUGIN:
             case SID_INSERT_FLOATINGFRAME:
-                if ( bOle || bTabProt || bShared )
-                    rSet.DisableItem( nWhich );
-                break;
-
-            case SID_INSERT_SOUND:
-            case SID_INSERT_VIDEO:
-                 /* #i102735# discussed with NN: removed for performance reasons
-                 || !SvxPluginFileDlg::IsAvailable(nWhich)
-                 */
                 if ( bOle || bTabProt || bShared )
                     rSet.DisableItem( nWhich );
                 break;
