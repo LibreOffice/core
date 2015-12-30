@@ -38,10 +38,10 @@ all:
 
 # --- Files --------------------------------------------------------
 
-LIBPNGVERSION=1.5.1
+LIBPNGVERSION=1.5.26
 
 TARFILE_NAME=$(PRJNAME)-$(LIBPNGVERSION)
-TARFILE_MD5=220035f111ea045a51e290906025e8b5
+TARFILE_MD5=3ca98347a5541a2dad55cd6d07ee60a9
 
 PATCH_FILES=$(PRJNAME)-$(LIBPNGVERSION).patch
 ADDITIONAL_FILES=makefile.mk pnglibconf.h
