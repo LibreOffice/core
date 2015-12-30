@@ -63,7 +63,7 @@ public class Summarizer
         }
         if (failures.size() > 0)
         {
-            String errMsg = "";
+            StringBuilder errMsg = new StringBuilder();
             String state = "COMPLETED.FAILED";
             for (int j = 0; j < failures.size(); j++)
             {
@@ -73,12 +73,11 @@ public class Summarizer
                 }
                 else
                 {
-                    errMsg +=
-                            failures.get(j) + " - " + states.get(j) + "\r\n";
+                    errMsg.append(failures.get(j)).append(" - ").append(states.get(j)).append("\r\n");
                 }
             }
             entry.hasErrorMsg = true;
-            entry.ErrorMsg = errMsg;
+            entry.ErrorMsg = errMsg.toString();
             entry.State = state;
         }
         else if (entry.EntryType.equals("component") && knownIssues > 0)
