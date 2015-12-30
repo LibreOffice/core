@@ -258,15 +258,15 @@ public class dbg {
     public static void getSuppServices (Object aObject) {
         XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class,aObject);
         printArray(xSI.getSupportedServiceNames());
-        String str="Therein not Supported Service";
+        StringBuilder str = new StringBuilder("Therein not Supported Service");
         boolean notSupportedServices = false;
         for (int i=0;i<xSI.getSupportedServiceNames().length;i++) {
             if (! xSI.supportsService(xSI.getSupportedServiceNames()[i])) {
                 notSupportedServices = true;
-                str+="\n" + xSI.getSupportedServiceNames()[i];
+                str.append("\n").append(xSI.getSupportedServiceNames()[i]);
             }
         }
         if (notSupportedServices)
-            System.out.println(str);
+            System.out.println(str.toString());
     }
 }
