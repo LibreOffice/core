@@ -92,12 +92,12 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
 :   maSearchName( rSearchName ),
     mnTypeFaces( 0 ),
-    mnMatchType( ImplFontAttrs::None ),
-    meMatchWeight( WEIGHT_DONTKNOW ),
-    meMatchWidth( WIDTH_DONTKNOW ),
     meFamily( FAMILY_DONTKNOW ),
     mePitch( PITCH_DONTKNOW ),
-    mnMinQuality( -1 )
+    mnMinQuality( -1 ),
+    mnMatchType( ImplFontAttrs::None ),
+    meMatchWeight( WEIGHT_DONTKNOW ),
+    meMatchWidth( WIDTH_DONTKNOW )
 {}
 
 PhysicalFontFamily::~PhysicalFontFamily()
