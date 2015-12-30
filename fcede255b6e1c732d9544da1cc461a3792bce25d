@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_923fdf24",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2494,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:46:29Z",
+      "side": 1,
+      "message": "Note for future: this function seems to be doing quite a lot of work. IMHO it would make sense to check if the zoom has actually changed.",
+      "revId": "fcede255b6e1c732d9544da1cc461a3792bce25d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
