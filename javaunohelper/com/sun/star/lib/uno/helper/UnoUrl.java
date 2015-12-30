@@ -250,19 +250,21 @@ public class UnoUrl {
 
         while (true) {
             char c = ',';
-            String aKey = "";
-            String aValue = "";
 
+            StringBuffer sb = new StringBuffer();
             while ((pos < paramString.length())
                 && ((c = paramString.charAt(pos++)) != '=')) {
-                aKey += c;
+                sb.append(c);
             }
+            String aKey = sb.toString();
 
+            sb = new StringBuffer();
             while ((pos < paramString.length())
                 && ((c = paramString.charAt(pos++)) != ',')
                 && c != ';') {
-                aValue += c;
+                sb.append(c);
             }
+            String aValue = sb.toString();
 
             if ((aKey.length() > 0) && (aValue.length() > 0)) {
 
