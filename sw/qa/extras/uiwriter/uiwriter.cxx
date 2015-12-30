@@ -178,6 +178,7 @@ public:
     void testTdf92648();
     void testTdf96515();
     void testTdf96536();
+    void testTdf96479();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -262,6 +263,7 @@ public:
     CPPUNIT_TEST(testTdf92648);
     CPPUNIT_TEST(testTdf96515);
     CPPUNIT_TEST(testTdf96536);
+    CPPUNIT_TEST(testTdf96479);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2964,6 +2966,101 @@ void SwUiWriterTest::testTdf96536()
     // This was 552, page did not shrink after deleting the second paragraph.
     // 276 is 12pt font size + default line spacing (15%).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(276), parseDump("/root/infos/bounds", "height").toInt32());
+}
+
+void SwUiWriterTest::testTdf96479()
+{
+    // We want to verify the empty input text field in the bookmark
+    static const OUString emptyInputTextField =
+        OUString(CH_TXT_ATR_INPUTFIELDSTART) + OUString(CH_TXT_ATR_INPUTFIELDEND);
+
+    SwDoc* pDoc = createDoc();
+    SwXTextDocument *xTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(xTextDoc);
+
+    // So we can clean up all references for reload
+    {
+        // Append bookmark
+        SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+        SwPaM aPaM(aIdx);
+        IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
+        sw::mark::IMark *pMark =
+            rIDMA.makeMark(aPaM, "original", IDocumentMarkAccess::MarkType::BOOKMARK);
+        CPPUNIT_ASSERT(!pMark->IsExpanded());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+
+        // Get helper objects
+        uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+
+        // Create cursor from bookmark
+        uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("original"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextCursor> xCursor(xRange->getText()->createTextCursorByRange(xRange), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xCursor->isCollapsed());
+
+        // Remove bookmark
+        xRange->getText()->removeTextContent(xTextContent);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rIDMA.getBookmarksCount());
+
+        // Insert replacement bookmark
+        uno::Reference<text::XTextContent> xBookmarkNew(xFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xBookmarkName(xBookmarkNew, uno::UNO_QUERY);
+        xBookmarkName->setName("replacement");
+        CPPUNIT_ASSERT(xCursor->isCollapsed());
+        // Force bookmark expansion
+        xCursor->getText()->insertString(xCursor, ".", true);
+        xCursor->getText()->insertTextContent(xCursor, xBookmarkNew, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+        auto mark = *(rIDMA.getBookmarksBegin());
+        CPPUNIT_ASSERT(mark->IsExpanded());
+
+        // Create and insert input textfield with some content
+        uno::Reference<text::XTextField> xTextField(xFactory->createInstance("com.sun.star.text.TextField.Input"), uno::UNO_QUERY);
+        uno::Reference<text::XTextCursor> xCursorNew(xBookmarkNew->getAnchor()->getText()->createTextCursorByRange(xBookmarkNew->getAnchor()));
+        CPPUNIT_ASSERT(!xCursorNew->isCollapsed());
+        xCursorNew->getText()->insertTextContent(xCursorNew, xTextField, true);
+        xBookmarkNew = uno::Reference<text::XTextContent>(xBookmarksSupplier->getBookmarks()->getByName("replacement"), uno::UNO_QUERY);
+        xCursorNew = uno::Reference<text::XTextCursor>(xBookmarkNew->getAnchor()->getText()->createTextCursorByRange(xBookmarkNew->getAnchor()));
+        CPPUNIT_ASSERT(!xCursorNew->isCollapsed());
+
+        // Can't check the actual content of the text node via UNO
+        mark = *(rIDMA.getBookmarksBegin());
+        CPPUNIT_ASSERT(mark->IsExpanded());
+        SwPaM pam(mark->GetMarkStart(), mark->GetMarkEnd());
+        // Check for the actual bug, which didn't include CH_TXT_ATR_INPUTFIELDEND in the bookmark
+        CPPUNIT_ASSERT_EQUAL(emptyInputTextField, pam.GetText());
+    }
+
+    {
+        // Save and load cycle
+        // Actually not needed, but the bug symptom of a missing bookmark
+        // occured because a broken bookmar was saved and loading silently
+        // dropped the broken bookmark!
+        utl::TempFile aTempFile;
+        save("writer8", aTempFile);
+        loadURL(aTempFile.GetURL(), nullptr);
+        xTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(xTextDoc);
+        pDoc = xTextDoc->GetDocShell()->GetDoc();
+
+        // Lookup "replacement" bookmark
+        IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+        uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xBookmarksSupplier->getBookmarks()->hasByName("replacement"));
+
+        uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("replacement"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<text::XTextCursor> xCursor(xRange->getText()->createTextCursorByRange(xRange), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(!xCursor->isCollapsed());
+
+        // Verify bookmark content via text node / PaM
+        auto mark = *(rIDMA.getBookmarksBegin());
+        CPPUNIT_ASSERT(mark->IsExpanded());
+        SwPaM pam(mark->GetMarkStart(), mark->GetMarkEnd());
+        CPPUNIT_ASSERT_EQUAL(emptyInputTextField, pam.GetText());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

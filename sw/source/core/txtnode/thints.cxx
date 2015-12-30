@@ -1507,16 +1507,15 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     if( !(SetAttrMode::NOTXTATRCHR & nMode) )
                     {
                         SwIndex aIdx( this, pAttr->GetStart() );
-                        InsertText( OUString(CH_TXT_ATR_INPUTFIELDSTART), aIdx, nInsertFlags );
-                        const OUString aContent = pTextInputField->GetFieldContent();
+                        const OUString aContent = OUString(CH_TXT_ATR_INPUTFIELDSTART)
+                            + pTextInputField->GetFieldContent() + OUString(CH_TXT_ATR_INPUTFIELDEND);
                         InsertText( aContent, aIdx, nInsertFlags );
-                        InsertText( OUString(CH_TXT_ATR_INPUTFIELDEND), aIdx, nInsertFlags );
 
                         sal_Int32* const pEnd(pAttr->GetEnd());
                         OSL_ENSURE( pEnd != nullptr, "<SwTextNode::InsertHint(..)> - missing end of RES_TXTATR_INPUTFIELD!" );
                         if ( pEnd != nullptr )
                         {
-                            *pEnd = *pEnd + 2 + aContent.getLength();
+                            *pEnd = *pEnd + aContent.getLength();
                             nEnd = *pEnd;
                         }
                     }
