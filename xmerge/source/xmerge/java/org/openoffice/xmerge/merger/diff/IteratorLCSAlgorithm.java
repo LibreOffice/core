@@ -66,14 +66,12 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
      */
     private void printDiffTable(int[][] diffTable) {
 
-        String tmpString = "";
-
         for (int i = 0; i < diffTable.length; i++) {
+            StringBuilder sb = new StringBuilder();
             for (int j = 0; j < diffTable[i].length; j++) {
-               tmpString = tmpString + " " + diffTable[i][j] +  " ";
+               sb.append(" ").append(diffTable[i][j]).append(" ");
             }
-            Debug.log(Debug.INFO, tmpString);
-            tmpString = "";
+            Debug.log(Debug.INFO, sb.toString());
         }
     }
 
