@@ -33,6 +33,7 @@ $(eval $(call gb_Library_add_defs,odfgen,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,odfgen,\
     UnpackedTarball/libodfgen/src/DocumentElement \
+    UnpackedTarball/libodfgen/src/FillManager \
     UnpackedTarball/libodfgen/src/FilterInternal \
     UnpackedTarball/libodfgen/src/FontStyle \
     UnpackedTarball/libodfgen/src/GraphicFunctions \
