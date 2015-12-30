@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_92d19ffe",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:22:09Z",
+      "side": 1,
+      "message": "Nitpick: I think the \"or not\" is superfluous.",
+      "revId": "63d0a230ef33f970a95bc8e489e2ddf7489fc18d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_12048f7c",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:22:09Z",
+      "side": 1,
+      "message": "Nitpick: since this function is only used internally and in a context that expects bool, it should return bool.",
+      "revId": "63d0a230ef33f970a95bc8e489e2ddf7489fc18d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_72cebb5b",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:22:09Z",
+      "side": 1,
+      "message": "Why not simply return the result of the comparison? The other 3 lines are completely superfluous here...",
+      "revId": "63d0a230ef33f970a95bc8e489e2ddf7489fc18d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_d2db271a",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2523,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:22:09Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to clamp the input value into the allowed interval? I.e., use MIN_ZOOM if the value is \u003cMIN_ZOOM and ditto for MAX_ZOOM.\n\nBtw, why aren\u0027t you using fZoom for the comparison, since the MIN/MAX constants are floating point anyway? You wouldn\u0027t even need the int values that way...",
+      "revId": "63d0a230ef33f970a95bc8e489e2ddf7489fc18d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b2d8231f",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2544,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:22:09Z",
+      "side": 1,
+      "message": "Again, code like\n\nif (condition)\n    foo \u003d true;\nelse\n    foo \u003d false;\n\nis unnecessarily verbose. Just do\n\npriv-\u003em_bCanZoomIn \u003d canZoomIn(priv-\u003em_fZoom);\n\nand you end up with 2 lines instead of 10...",
+      "revId": "63d0a230ef33f970a95bc8e489e2ddf7489fc18d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f208eb93",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2547,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-12-30T09:22:09Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the signal be emitted only if the property has changed?",
+      "revId": "63d0a230ef33f970a95bc8e489e2ddf7489fc18d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
