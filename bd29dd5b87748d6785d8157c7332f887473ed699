@@ -22,6 +22,30 @@
       "revId": "bd29dd5b87748d6785d8157c7332f887473ed699",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_5283b7cc",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-12-30T11:27:22Z",
+      "side": 1,
+      "message": "No, initialize is called at the right time. It\u0027s the output to console that doesn\u0027t show in realtime. Try adding std::endl (or at least std::flush) here to flush the stream.",
+      "parentUuid": "dab17558_d22047fa",
+      "range": {
+        "startLine": 60,
+        "startChar": 8,
+        "endLine": 60,
+        "endChar": 48
+      },
+      "revId": "bd29dd5b87748d6785d8157c7332f887473ed699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
