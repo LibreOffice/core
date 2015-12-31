@@ -1012,7 +1012,8 @@ bool OpenGLWrapper::isVCLOpenGLEnabled()
 
 void OpenGLHelper::debugMsgStream(std::ostringstream const &pStream)
 {
-    debugMsgPrint("%s", pStream.str().c_str());
+    debugMsgPrint ("%x: %s", osl_getThreadIdentifier(nullptr),
+                   pStream.str().c_str());
 }
 
 void OpenGLHelper::debugMsgPrint(const char *pFormat, ...)

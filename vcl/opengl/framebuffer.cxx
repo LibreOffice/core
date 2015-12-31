@@ -29,6 +29,7 @@ OpenGLFramebuffer::OpenGLFramebuffer() :
 OpenGLFramebuffer::~OpenGLFramebuffer()
 {
     glDeleteFramebuffers( 1, &mnId );
+    VCL_GL_INFO( "Deleted framebuffer " << (int)mnId );
     CHECK_GL_ERROR();
 }
 
