@@ -60,18 +60,6 @@ class SVT_DLLPUBLIC SvBaseEventDescriptor : public cppu::WeakImplHelper2
     css::lang::XServiceInfo
 >
 {
-    const OUString sEventType;
-    const OUString sMacroName;
-    const OUString sLibrary;
-    const OUString sStarBasic;
-    const OUString sJavaScript;
-    const OUString sScript;
-    const OUString sNone;
-
-
-    /// name of own service
-    const OUString sServiceName;
-
 protected:
     /// last element is 0, 0
     const SvEventDescription* mpSupportedMacroItems;

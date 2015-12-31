@@ -49,11 +49,12 @@ OleObjectInfo::OleObjectInfo() :
 {
 }
 
+static const char g_aEmbeddedObjScheme[] = "vnd.sun.star.EmbeddedObject:";
+
 OleObjectHelper::OleObjectHelper(
         const Reference< XMultiServiceFactory >& rxModelFactory,
         uno::Reference<frame::XModel> const& xModel)
     : m_xModel(xModel)
-    , maEmbeddedObjScheme("vnd.sun.star.EmbeddedObject:")
     , mnObjectId( 100 )
 {
     assert(m_xModel.is());
@@ -150,8 +151,8 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
                 rOleObject.mbShowAsIcon ? OUString("Icon") : OUString("Content"));
 
             OUString aUrl = mxResolver->resolveEmbeddedObjectURL( aObjectId );
-            OSL_ENSURE( aUrl.match( maEmbeddedObjScheme ), "OleObjectHelper::importOleObject - unexpected URL scheme" );
-            OUString aPersistName = aUrl.copy( maEmbeddedObjScheme.getLength() );
+            OSL_ENSURE( aUrl.match( g_aEmbeddedObjScheme ), "OleObjectHelper::importOleObject - unexpected URL scheme" );
+            OUString aPersistName = aUrl.copy( strlen(g_aEmbeddedObjScheme) );
             if( !aPersistName.isEmpty() )
             {
                 rPropMap.setProperty( PROP_PersistName, aPersistName);

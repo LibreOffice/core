@@ -111,7 +111,6 @@ class ScXMLExport : public SvXMLExport
     ScMyValidationsContainer*   pValidationsContainer;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
     const OUString         sLayerID;
-    const OUString         sCaptionShape;
     OUString               sExternalRefTabStyleName;
     OUString               sAttrName;
     OUString               sAttrStyleName;

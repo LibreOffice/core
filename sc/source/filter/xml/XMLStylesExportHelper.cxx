@@ -97,13 +97,7 @@ ScMyValidationsContainer::ScMyValidationsContainer()
     sINPTITLE(SC_UNONAME_INPTITLE),
     sINPMESS(SC_UNONAME_INPMESS),
     sERRTITLE(SC_UNONAME_ERRTITLE),
-    sERRMESS(SC_UNONAME_ERRMESS),
-    sOnError("OnError"),
-    sEventType("EventType"),
-    sStarBasic("StarBasic"),
-    sScript("Script"),
-    sLibrary("Library"),
-    sMacroName("MacroName")
+    sERRMESS(SC_UNONAME_ERRMESS)
 {
 }
 
@@ -423,17 +417,18 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                             // and the property name is "MacroName".
                             bool bScriptURL = SfxApplication::IsXScriptURL( aItr->sErrorTitle );
 
+                            const OUString sScript("Script");
                             uno::Sequence<beans::PropertyValue> aSeq(3);
                             beans::PropertyValue* pArr(aSeq.getArray());
-                            pArr[0].Name = sEventType;
-                            pArr[0].Value <<= bScriptURL ? sScript : sStarBasic;
-                            pArr[1].Name = sLibrary;
+                            pArr[0].Name = "EventType";
+                            pArr[0].Value <<= bScriptURL ? sScript : OUString("StarBasic");
+                            pArr[1].Name = "Library";
                             pArr[1].Value <<= sEmptyString;
-                            pArr[2].Name = bScriptURL ? sScript : sMacroName;
+                            pArr[2].Name = bScriptURL ? sScript : OUString("MacroName");
                             pArr[2].Value <<= aItr->sErrorTitle;
 
                             // 2) export the sequence
-                            rExport.GetEventExport().ExportSingleEvent( aSeq, sOnError);
+                            rExport.GetEventExport().ExportSingleEvent( aSeq, "OnError");
                         }
                     }
                     break;
