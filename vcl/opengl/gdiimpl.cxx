@@ -460,9 +460,9 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
         if( maOffscreenTex.GetWidth()  != GetWidth() ||
             maOffscreenTex.GetHeight() != GetHeight() )
         {
+            VCL_GL_INFO( "re-size offscreen texture " << maOffscreenTex.Id() );
             mpContext->ReleaseFramebuffer( maOffscreenTex );
             maOffscreenTex = OpenGLTexture();
-            VCL_GL_INFO( "re-size offscreen texture" );
         }
     }
 

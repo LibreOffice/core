@@ -1647,6 +1647,27 @@ void OpenGLContext::UnbindTextureFromFramebuffers( GLuint nTexture )
         }
         pFramebuffer = pFramebuffer->mpPrevFramebuffer;
     }
+
+    // Lets just check that no other context has a framebuffer
+    // with this texture - that would be bad ...
+    assert( !IsTextureAttachedAnywhere( nTexture ) );
+}
+
+/// Method for debugging; check texture is not already attached.
+bool OpenGLContext::IsTextureAttachedAnywhere( GLuint nTexture )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    for( auto *pCheck = pSVData->maGDIData.mpLastContext; pCheck;
+               pCheck = pCheck->mpPrevContext )
+    {
+        for( auto pBuffer = pCheck->mpLastFramebuffer; pBuffer;
+                  pBuffer = pBuffer->mpPrevFramebuffer )
+        {
+            if( pBuffer->IsAttached( nTexture ) )
+                return true;
+        }
+    }
+    return false;
 }
 
 void OpenGLContext::ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer )

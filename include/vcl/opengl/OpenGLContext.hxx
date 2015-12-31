@@ -156,6 +156,7 @@ public:
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     static void        ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
     void UnbindTextureFromFramebuffers( GLuint nTexture );
+    static bool        IsTextureAttachedAnywhere( GLuint nTexture );
 
     void               ReleaseFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffers();
