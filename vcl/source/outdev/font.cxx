@@ -1709,7 +1709,7 @@ void OutputDevice::SetFontOrientation( ImplFontEntry* const pFontEntry ) const
 
 bool ImplFontAttributes::CompareDeviceIndependentFontAttributes(const ImplFontAttributes& rOther) const
 {
-    if (maName != rOther.maName)
+    if (maFamilyName != rOther.maFamilyName)
         return false;
 
     if (maStyleName != rOther.maStyleName)

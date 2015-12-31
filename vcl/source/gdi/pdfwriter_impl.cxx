@@ -2262,9 +2262,9 @@ inline const ImplPdfBuiltinFontData* GetPdfFontData( const PhysicalFontFace* pFo
     return pFD;
 }
 
-static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
+static ImplFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
 {
-    ImplDevFontAttributes aDFA;
+    ImplFontAttributes aDFA;
     aDFA.SetFamilyName( OUString::createFromAscii( rBuiltin.m_pName ) );
     aDFA.SetStyleName( OUString::createFromAscii( rBuiltin.m_pStyleName ) );
     aDFA.SetFamilyType( rBuiltin.m_eFamily );

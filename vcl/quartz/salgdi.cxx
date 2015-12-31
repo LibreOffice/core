@@ -63,7 +63,7 @@ CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
         mpCharMap = rSrc.mpCharMap;
 }
 
-CoreTextFontData::CoreTextFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
+CoreTextFontData::CoreTextFontData( const ImplFontAttributes& rDFA, sal_IntPtr nFontId )
   : PhysicalFontFace( rDFA, 0 )
   , mnFontId( nFontId )
   , mbOs2Read( false )

@@ -835,7 +835,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
         ||  aDFA.GetFamilyName() == "Times"
         ||  aDFA.GetFamilyName() == "ZapfChancery"
         ||  aDFA.GetFamilyName() == "ZapfDingbats" )
-            aDFA.IncreaseQualityBy( 500 );
+            aDFA.mnQuality.IncreaseQualityBy( 500 );
     }
 
     // TODO: add alias names
@@ -1702,7 +1702,7 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     // get FontAttributes from a *fot file
     // TODO: use GetTTGlobalFontInfo() to access the font directly
     rDFA.SetQuality( 1000 );
-    rDFA.SetBuiltInFont( true );
+    rDFA.SetBuiltInFontFlag( true );
     rDFA.SetFamilyType(FAMILY_DONTKNOW);
     rDFA.SetWidthType(WIDTH_DONTKNOW);
     rDFA.SetWeight(WEIGHT_DONTKNOW);
