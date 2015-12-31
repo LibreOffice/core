@@ -26,25 +26,24 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-
 namespace abp
 {
-
     class OABSPilotUno;
-    typedef ::svt::OGenericUnoDialog                                OABSPilotUno_DBase;
     typedef ::cppu::ImplHelper1< css::task::XJob >     OABSPilotUno_JBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OABSPilotUno > OABSPilotUno_PBase;
     /// the UNO wrapper for the address book source pilot
     class OABSPilotUno
             :public OModuleResourceClient
-            ,public OABSPilotUno_DBase
+            ,public svt::OGenericUnoDialog
             ,public OABSPilotUno_JBase
             ,public OABSPilotUno_PBase
     {
         OUString m_sDataSourceName;
-        OABSPilotUno(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
     public:
+        OABSPilotUno(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+
+    private:
         // XInterface (disambiguation)
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL acquire(  ) throw () override;
@@ -57,12 +56,6 @@ namespace abp
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
-
-        // XServiceInfo - static methods
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
-        static css::uno::Reference< css::uno::XInterface >
-                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
@@ -77,17 +70,13 @@ namespace abp
         // XInitialisation
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
-        using OABSPilotUno_DBase::execute;
-    protected:
-    // OGenericUnoDialog overridables
+        using svt::OGenericUnoDialog::execute;
+        // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
         virtual void executedDialog(sal_Int16 _nExecutionResult) override;
     };
 
-
 }   // namespace abp
-
-extern "C" void SAL_CALL createRegistryInfo_OABSPilotUno();
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_UNODIALOGABP_HXX
 

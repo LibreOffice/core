@@ -30,7 +30,6 @@ $(eval $(call gb_Library_use_sdk_api,abp))
 
 $(eval $(call gb_Library_add_exception_objects,abp,\
 	extensions/source/abpilot/abpfinalpage \
-	extensions/source/abpilot/abpservices \
 	extensions/source/abpilot/abspage \
 	extensions/source/abpilot/abspilot \
 	extensions/source/abpilot/admininvokationimpl \

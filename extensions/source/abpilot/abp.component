@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="abp" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.openoffice.comp.abp.OAddressBookSourcePilot">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.openoffice.comp.abp.OAddressBookSourcePilot"
+      constructor="org_openoffice_comp_abp_OAddressBookSourcePilot">
     <service name="com.sun.star.ui.dialogs.AddressBookSourcePilot"/>
   </implementation>
 </component>

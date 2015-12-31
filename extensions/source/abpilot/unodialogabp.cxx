@@ -24,17 +24,10 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/msgbox.hxx>
 
-void SAL_CALL createRegistryInfo_OABSPilotUno()
-{
-    static ::abp::OMultiInstanceAutoRegistration< ::abp::OABSPilotUno > aAutoRegistration;
-}
-
 #define PROPERTY_ID_DATASOURCENAME  3
 
 namespace abp
 {
-
-
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -48,71 +41,44 @@ namespace abp
             &m_sDataSourceName, cppu::UnoType<decltype(m_sDataSourceName)>::get() );
     }
 
-
     Any SAL_CALL OABSPilotUno::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
     {
-        Any aReturn = OABSPilotUno_DBase::queryInterface( aType );
+        Any aReturn = svt::OGenericUnoDialog::queryInterface( aType );
         return aReturn.hasValue() ? aReturn : OABSPilotUno_JBase::queryInterface( aType );
     }
 
-
     void SAL_CALL OABSPilotUno::acquire(  ) throw ()
     {
-        OABSPilotUno_DBase::acquire();
+        svt::OGenericUnoDialog::acquire();
     }
-
 
     void SAL_CALL OABSPilotUno::release(  ) throw ()
     {
-        OABSPilotUno_DBase::release();
+        svt::OGenericUnoDialog::release();
     }
-
 
     Sequence< Type > SAL_CALL OABSPilotUno::getTypes(  ) throw (RuntimeException, std::exception)
     {
         return ::comphelper::concatSequences(
-            OABSPilotUno_DBase::getTypes(),
+            svt::OGenericUnoDialog::getTypes(),
             OABSPilotUno_JBase::getTypes()
         );
     }
-
 
     Sequence<sal_Int8> SAL_CALL OABSPilotUno::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
         return css::uno::Sequence<sal_Int8>();
     }
 
-
-    Reference< XInterface > SAL_CALL OABSPilotUno::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-    {
-        return *(new OABSPilotUno( comphelper::getComponentContext(_rxFactory) ));
-    }
-
-
     OUString SAL_CALL OABSPilotUno::getImplementationName() throw(RuntimeException, std::exception)
-    {
-        return getImplementationName_Static();
-    }
-
-
-    OUString OABSPilotUno::getImplementationName_Static() throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.abp.OAddressBookSourcePilot");
     }
 
-
     css::uno::Sequence<OUString> SAL_CALL OABSPilotUno::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_Static();
+        return { "com.sun.star.ui.dialogs.AddressBookSourcePilot" };
     }
-
-
-    css::uno::Sequence<OUString> OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
-    {
-        css::uno::Sequence<OUString> aSupported { "com.sun.star.ui.dialogs.AddressBookSourcePilot" };
-        return aSupported;
-    }
-
 
     Reference<XPropertySetInfo>  SAL_CALL OABSPilotUno::getPropertySetInfo() throw(RuntimeException, std::exception)
     {
@@ -145,7 +111,6 @@ namespace abp
             OGenericUnoDialog::initialize(aArguments);
         }
     }
-
 
     VclPtr<Dialog> OABSPilotUno::createDialog(vcl::Window* _pParent)
     {
@@ -180,5 +145,14 @@ namespace abp
 
 }   // namespace abp
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_openoffice_comp_abp_OAddressBookSourcePilot(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    abp::OModule::setResourceFilePrefix("abp");
+
+    return cppu::acquire(new abp::OABSPilotUno(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
