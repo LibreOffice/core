@@ -1065,12 +1065,6 @@ AC_ARG_ENABLE(directx,
          compile. (DirectX SDK, GDI+ libs)])
 )
 
-AC_ARG_ENABLE(activex,
-    AS_HELP_STRING([--disable-activex],
-        [Disable the use of ActiveX for a Windows build.
-        This switch is mandatory when using an Express edition of Visual Studio.])
-)
-
 AC_ARG_ENABLE(atl,
     AS_HELP_STRING([--disable-atl],
         [Disable the use of ATL for a Windows build.])
@@ -3714,15 +3708,6 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether to use ActiveX])
-    if test "$enable_activex" = "yes" -o "$enable_activex" = "" -a "$vcexpress" != Express; then
-        DISABLE_ACTIVEX=""
-        AC_MSG_RESULT([yes])
-    else
-        DISABLE_ACTIVEX="TRUE"
-        AC_MSG_RESULT([no])
-    fi
-
     AC_MSG_CHECKING([whether to use ATL])
     if test "$enable_atl" = "yes" -o "$enable_atl" = "" -a "$vcexpress" != Express; then
         DISABLE_ATL=""
@@ -3733,12 +3718,10 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     fi
 else
     ENABLE_DIRECTX=""
-    DISABLE_ACTIVEX="TRUE"
     DISABLE_ATL="TRUE"
 fi
 
 AC_SUBST(ENABLE_DIRECTX)
-AC_SUBST(DISABLE_ACTIVEX)
 AC_SUBST(DISABLE_ATL)
 
 #
