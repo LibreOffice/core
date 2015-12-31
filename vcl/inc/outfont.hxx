@@ -60,11 +60,8 @@ public:
     void            SetWeight(const FontWeight eWeight )       { meWeight = eWeight; }
     void            SetWidthType(const FontWidth eWidthType)   { meWidthType = eWidthType; }
     void            SetSymbolFlag(const bool bSymbolFlag )     { mbSymbolFlag = bSymbolFlag; }
-    bool operator==(const ImplFontAttributes& rOther) const;
-    bool operator!=(const ImplFontAttributes& rOther) const
-    {
-        return !(*this == rOther);
-    }
+
+    bool            CompareDeviceIndependentFontAttributes(const ImplFontAttributes& rOther) const;
 
 private:
     OUString        maName;         // Font Family Name

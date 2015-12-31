@@ -1142,7 +1142,7 @@ size_t FontSelectPatternAttributes::hashCode() const
 
 bool FontSelectPatternAttributes::operator==(const FontSelectPatternAttributes& rOther) const
 {
-    if (static_cast<const ImplFontAttributes&>(*this) != static_cast<const ImplFontAttributes&>(rOther))
+    if (!CompareDeviceIndependentFontAttributes(rOther))
         return false;
 
     if (maTargetName != rOther.maTargetName)
@@ -1707,7 +1707,7 @@ void OutputDevice::SetFontOrientation( ImplFontEntry* const pFontEntry ) const
     }
 }
 
-bool ImplFontAttributes::operator==(const ImplFontAttributes& rOther) const
+bool ImplFontAttributes::CompareDeviceIndependentFontAttributes(const ImplFontAttributes& rOther) const
 {
     if (maName != rOther.maName)
         return false;
