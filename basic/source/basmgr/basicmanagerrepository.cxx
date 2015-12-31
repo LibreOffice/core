@@ -599,7 +599,7 @@ namespace basic
 
     void BasicManagerRepository::resetApplicationBasicManager()
     {
-        return ImplRepository::Instance().setApplicationBasicManager( nullptr );
+        ImplRepository::Instance().setApplicationBasicManager( nullptr );
     }
 
 

@@ -48,9 +48,9 @@ namespace o3tl
 class SbiStream
 {
     SvStream* pStrm;
-    sal_uIntPtr  nExpandOnWriteTo;  // during writing access expand the stream to this size
+    sal_uInt64  nExpandOnWriteTo;  // during writing access expand the stream to this size
     OString aLine;
-    sal_uIntPtr  nLine;
+    sal_uInt64  nLine;
     short  nLen;                    // buffer length
     SbiStreamFlags  nMode;
     short  nChan;
@@ -73,8 +73,8 @@ public:
     bool IsAppend() const   { return bool(nMode & SbiStreamFlags::Append); }
     short GetBlockLen() const          { return nLen;           }
     SbiStreamFlags GetMode() const              { return nMode;          }
-    sal_uIntPtr GetLine() const            { return nLine;          }
-    void SetExpandOnWriteTo( sal_uIntPtr n ) { nExpandOnWriteTo = n;    }
+    sal_uInt64 GetLine() const            { return nLine;          }
+    void SetExpandOnWriteTo( sal_uInt64 n ) { nExpandOnWriteTo = n;    }
     void ExpandFile();
     SvStream* GetStrm()                { return pStrm;          }
 };
