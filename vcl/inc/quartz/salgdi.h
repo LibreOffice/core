@@ -46,7 +46,7 @@
 #include <unordered_map>
 
 class AquaSalFrame;
-class ImplDevFontAttributes;
+class ImplFontAttributes;
 class CoreTextStyle;
 class XorEmulation;
 
@@ -57,7 +57,7 @@ typedef std::vector<unsigned char> ByteVector;
 class CoreTextFontData : public PhysicalFontFace
 {
 public:
-                                    CoreTextFontData( const ImplDevFontAttributes&, sal_IntPtr nFontID );
+                                    CoreTextFontData( const ImplFontAttributes&, sal_IntPtr nFontID );
     virtual                         ~CoreTextFontData();
 
     PhysicalFontFace*               Clone() const override;

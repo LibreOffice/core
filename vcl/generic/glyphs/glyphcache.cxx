@@ -146,7 +146,7 @@ GlyphCache& GlyphCache::GetInstance()
 }
 
 void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
-    sal_IntPtr nFontId, const ImplDevFontAttributes& rDFA)
+    sal_IntPtr nFontId, const ImplFontAttributes& rDFA)
 {
     if( mpFtManager )
         mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, rDFA);

@@ -62,7 +62,7 @@ public:
     void                    AddFontFile(
                                 const OString& rNormalizedName,
                                 int nFaceNum, sal_IntPtr nFontId,
-                                const ImplDevFontAttributes&);
+                                const ImplFontAttributes&);
 
     void                    AnnounceFonts( PhysicalFontCollection* ) const;
 
