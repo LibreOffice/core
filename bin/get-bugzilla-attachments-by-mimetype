@@ -424,6 +424,7 @@ mimetypes = {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.template': 'dotx',
     'application/vnd.visio': 'vsd',
+    'application/visio.drawing': 'vsd',
     'application/vnd.visio.xml': 'vdx',
     'application/x-mspublisher': 'pub',
 # W3C
