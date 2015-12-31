@@ -55,9 +55,6 @@ private:
     Image       maImgPerspective;
     Image       maImgParallel;
 
-    const OUString msExtrusionDirection;
-    const OUString msExtrusionProjection;
-
     DECL_LINK_TYPED( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
     void SelectHdl(void*);
@@ -155,9 +152,6 @@ private:
     int     mnDirection;
     bool    mbDirectionEnabled;
 
-    const OUString msExtrusionLightingDirection;
-    const OUString msExtrusionLightingIntensity;
-
     void    implSetIntensity( int nLevel, bool bEnabled );
     void    implSetDirection( int nDirection, bool bEnabled );
 
@@ -204,8 +198,6 @@ private:
     Image maImgSurface2;
     Image maImgSurface3;
     Image maImgSurface4;
-
-    const OUString msExtrusionSurface;
 
     DECL_LINK_TYPED( SelectHdl, ToolbarMenu*, void );
 
