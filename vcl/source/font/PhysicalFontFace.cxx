@@ -158,7 +158,7 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
             nMatch += 600;
     }
 
-    if( mbDevice )
+    if( IsBuiltInFont() )
         nMatch += 1;
 
     int nHeightMatch = 0;
