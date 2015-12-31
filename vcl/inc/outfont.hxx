@@ -39,8 +39,6 @@ class ConvertChar;
 class OutputDevice;
 class Size;
 
-// - ImplFontAttributes -
-
 // device independent font properties
 
 class ImplFontAttributes
@@ -78,8 +76,6 @@ private:
     FontWidth       meWidthType;    // Width Type
     bool            mbSymbolFlag;
 };
-
-// - ImplDevFontAttributes -
 
 // device dependent font properties
 
