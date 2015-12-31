@@ -34,6 +34,7 @@ private:
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;
 
     VclPtr<Edit>         m_pEDUsername;
+    VclPtr<FixedText>    m_pFTUsernameLabel;
     VclPtr<CheckBox>     m_pCBPassword;
     VclPtr<Edit>         m_pEDPassword;
     VclPtr<FixedText>    m_pFTPasswordLabel;
