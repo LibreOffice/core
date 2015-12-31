@@ -116,10 +116,10 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     if( maFontFaces.empty() )
     {
         maFamilyName   = pNewFontFace->GetFamilyName();
-        maMapNames     = pNewFontFace->maMapNames;
+        maMapNames     = pNewFontFace->GetMapNames();
         meFamily       = pNewFontFace->GetFamilyType();
         mePitch        = pNewFontFace->GetPitch();
-        mnMinQuality   = pNewFontFace->mnQuality;
+        mnMinQuality   = pNewFontFace->GetQuality();
     }
     else
     {
@@ -127,8 +127,8 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
             meFamily = pNewFontFace->GetFamilyType();
         if( mePitch == PITCH_DONTKNOW )
             mePitch = pNewFontFace->GetPitch();
-        if( mnMinQuality > pNewFontFace->mnQuality )
-            mnMinQuality = pNewFontFace->mnQuality;
+        if( mnMinQuality > pNewFontFace->GetQuality() )
+            mnMinQuality = pNewFontFace->GetQuality();
     }
 
     // set attributes for attribute based font matching
@@ -172,11 +172,11 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
             break;
 
         // ignore duplicate if its quality is worse
-        if( pNewFontFace->mnQuality < pFoundFontFace->mnQuality )
+        if( pNewFontFace->GetQuality() < pFoundFontFace->GetQuality() )
             return false;
 
         // keep the device font if its quality is good enough
-        if( (pNewFontFace->mnQuality == pFoundFontFace->mnQuality) && (pFoundFontFace->mbDevice || !pNewFontFace->mbDevice) )
+        if( (pNewFontFace->GetQuality() == pFoundFontFace->GetQuality()) && (pFoundFontFace->IsBuiltInFont() || !pNewFontFace->IsBuiltInFont()) )
             return false;
 
         // replace existing font face with a better one
@@ -277,7 +277,7 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
 
         if( bScalable && !pFoundFontFace->IsScalable() )
             continue;
-        if( bEmbeddable && !pFoundFontFace->IsEmbeddable() && !pFoundFontFace->IsSubsettable() )
+        if( bEmbeddable && !pFoundFontFace->CanEmbed() && !pFoundFontFace->CanSubset() )
             continue;
 
         PhysicalFontFace* pClonedFace = pFoundFontFace->Clone();
