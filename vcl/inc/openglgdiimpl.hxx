@@ -111,7 +111,8 @@ public:
     bool UseSolid( SalColor nColor );
     bool UseSolidAA( SalColor nColor, double fTransparency );
     bool UseSolidAA( SalColor nColor );
-    bool UseInvert();
+    bool UseInvert50();
+    bool UseInvert(SalInvert nFlags);
 
     void DrawPoint( long nX, long nY );
     void DrawLine( double nX1, double nY1, double nX2, double nY2 );

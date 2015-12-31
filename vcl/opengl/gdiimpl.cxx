@@ -551,6 +551,13 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, double fTransparency )
     return true;
 }
 
+bool OpenGLSalGraphicsImpl::UseInvert50()
+{
+    if( !UseProgram( "dumbVertexShader", "invert50FragmentShader" ) )
+        return false;
+    return true;
+}
+
 bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor )
 {
     return UseSolid( nColor, 0.0f );
@@ -575,13 +582,24 @@ bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor )
     return UseSolidAA( nColor, 0.0 );
 }
 
-bool OpenGLSalGraphicsImpl::UseInvert()
+bool OpenGLSalGraphicsImpl::UseInvert( SalInvert nFlags )
 {
     OpenGLZone aZone;
 
-    if( !UseSolid( MAKE_SALCOLOR( 255, 255, 255 ) ) )
-        return false;
-    mpProgram->SetBlendMode( GL_ONE_MINUS_DST_COLOR, GL_ZERO );
+    if( ( nFlags & SAL_INVERT_50 ) ||
+        ( nFlags & SAL_INVERT_TRACKFRAME ) )
+    {
+        if( !UseInvert50() )
+            return false;
+        mpProgram->SetBlendMode( GL_ONE_MINUS_DST_COLOR,
+                                 GL_ONE_MINUS_SRC_COLOR );
+    }
+    else
+    {
+        if( !UseSolid( MAKE_SALCOLOR( 255, 255, 255 ) ) )
+            return false;
+        mpProgram->SetBlendMode( GL_ONE_MINUS_DST_COLOR, GL_ZERO );
+    }
     return true;
 }
 
@@ -1742,25 +1760,10 @@ void OpenGLSalGraphicsImpl::invert(
             long nWidth, long nHeight,
             SalInvert nFlags)
 {
-    // TODO Figure out what are those:
-    //   * SAL_INVERT_50 (50/50 pattern?)
-    //   * SAL_INVERT_TRACKFRAME (dash-line rectangle?)
-
     PreDraw();
 
-    if( nFlags & SAL_INVERT_TRACKFRAME )
-    {
-
-    }
-    else if( nFlags & SAL_INVERT_50 )
-    {
-
-    }
-    else // just invert
-    {
-        if( UseInvert() )
-            DrawRect( nX, nY, nWidth, nHeight );
-    }
+    if( UseInvert( nFlags ) )
+        DrawRect( nX, nY, nWidth, nHeight );
 
     PostDraw();
 }
@@ -1769,19 +1772,8 @@ void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, 
 {
     PreDraw();
 
-    if( nFlags & SAL_INVERT_TRACKFRAME )
-    {
-
-    }
-    else if( nFlags & SAL_INVERT_50 )
-    {
-
-    }
-    else // just invert
-    {
-        if( UseInvert() )
-            DrawPolygon( nPoints, pPtAry );
-    }
+    if( UseInvert( nFlags ) )
+        DrawPolygon( nPoints, pPtAry );
 
     PostDraw();
 }
