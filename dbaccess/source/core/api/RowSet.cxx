@@ -102,7 +102,7 @@ com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* co
     return cppu::acquire(new ORowSet(context));
 }
 
-#define NOTIFY_LISTERNERS_CHECK(_rListeners,T,method)                             \
+#define NOTIFY_LISTENERS_CHECK(_rListeners,T,method)                             \
     Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
                                                                                   \
     const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
@@ -1119,13 +1119,13 @@ void ORowSet::notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,
 bool ORowSet::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard)
 {
     EventObject aEvt(*m_pMySelf);
-    NOTIFY_LISTERNERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveCursorMove);
+    NOTIFY_LISTENERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveCursorMove);
     return bCheck;
 }
 
 void ORowSet::notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const RowChangeEvent &aEvt)
 {
-    NOTIFY_LISTERNERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveRowChange);
+    NOTIFY_LISTENERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveRowChange);
     if ( !bCheck )
         m_aErrors.raiseTypedException( sdb::ErrorCondition::ROW_SET_OPERATION_VETOED, *this, ::cppu::UnoType< RowSetVetoException >::get() );
 }
