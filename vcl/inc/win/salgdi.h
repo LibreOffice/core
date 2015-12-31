@@ -72,7 +72,7 @@ private:
 class ImplWinFontData : public PhysicalFontFace
 {
 public:
-    explicit                ImplWinFontData( const ImplDevFontAttributes&,
+    explicit                ImplWinFontData( const ImplFontAttributes&,
                                 int nFontHeight, BYTE eWinCharSet,
                                 BYTE nPitchAndFamily  );
     virtual                 ~ImplWinFontData();

@@ -835,7 +835,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
         ||  aDFA.GetFamilyName() == "Times"
         ||  aDFA.GetFamilyName() == "ZapfChancery"
         ||  aDFA.GetFamilyName() == "ZapfDingbats" )
-            aDFA.IncreaseQualityBy( 500 );
+            aDFA.mnQuality.IncreaseQualityBy( 500 );
     }
 
     // TODO: add alias names
