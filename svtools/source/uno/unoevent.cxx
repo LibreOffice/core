@@ -35,19 +35,18 @@ using css::lang::XServiceInfo;
 using css::beans::PropertyValue;
 
 
-const sal_Char sAPI_ServiceName[] = "com.sun.star.container.XNameReplace";
-const sal_Char sAPI_SvDetachedEventDescriptor[] = "SvDetachedEventDescriptor";
+static const char sAPI_ServiceName[] = "com.sun.star.container.XNameReplace";
+static const char sAPI_SvDetachedEventDescriptor[] = "SvDetachedEventDescriptor";
+static const char sEventType[] = "EventType";
+static const char sMacroName[] = "MacroName";
+static const char sLibrary[] = "Library";
+static const char sStarBasic[] = "StarBasic";
+static const char sJavaScript[] = "JavaScript";
+static const char sScript[] = "Script";
+static const char sNone[] = "None";
 
 
 SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupportedMacroItems ) :
-        sEventType("EventType"),
-        sMacroName("MacroName"),
-        sLibrary("Library"),
-        sStarBasic("StarBasic"),
-        sJavaScript("JavaScript"),
-        sScript("Script"),
-        sNone("None"),
-        sServiceName(sAPI_ServiceName),
         mpSupportedMacroItems(pSupportedMacroItems),
         mnMacroItems(0)
 {
@@ -151,7 +150,7 @@ sal_Bool SvBaseEventDescriptor::supportsService(const OUString& rServiceName)
 Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
-    Sequence<OUString> aSequence { sServiceName };
+    Sequence<OUString> aSequence { sAPI_ServiceName };
 
     return aSequence;
 }
@@ -194,7 +193,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 // create type
                 PropertyValue aTypeValue;
                 aTypeValue.Name = sEventType;
-                aTmp <<= sStarBasic;
+                aTmp <<= OUString(sStarBasic);
                 aTypeValue.Value = aTmp;
                 aSequence[0] = aTypeValue;
 
@@ -227,7 +226,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 // create type
                 PropertyValue aTypeValue;
                 aTypeValue.Name = sEventType;
-                aTmp <<= sScript;
+                aTmp <<= OUString(sScript);
                 aTypeValue.Value = aTmp;
                 aSequence[0] = aTypeValue;
 
@@ -259,7 +258,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
         PropertyValue aKindValue;
         aKindValue.Name = sEventType;
         Any aTmp;
-        aTmp <<= sNone;
+        aTmp <<= OUString(sNone);
         aKindValue.Value = aTmp;
         aSequence[0] = aKindValue;
 

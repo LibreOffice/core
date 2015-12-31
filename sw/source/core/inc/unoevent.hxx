@@ -34,8 +34,6 @@ class SwFormatINetFormat;
 
 class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 {
-    const OUString sImplName;
-
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
         throw( css::uno::RuntimeException, std::exception ) override;

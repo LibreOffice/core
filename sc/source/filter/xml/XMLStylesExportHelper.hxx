@@ -64,7 +64,7 @@ typedef std::vector<ScMyValidation>         ScMyValidationVec;
 class ScMyValidationsContainer
 {
 private:
-    ScMyValidationVec           aValidationVec;
+    ScMyValidationVec      aValidationVec;
     const OUString         sEmptyString;
     const OUString         sERRALSTY;
     const OUString         sIGNOREBL;
@@ -76,12 +76,6 @@ private:
     const OUString         sINPMESS;
     const OUString         sERRTITLE;
     const OUString         sERRMESS;
-    const OUString         sOnError;
-    const OUString         sEventType;
-    const OUString         sStarBasic;
-    const OUString         sScript;
-    const OUString         sLibrary;
-    const OUString         sMacroName;
 
 public:
                            ScMyValidationsContainer();

@@ -47,6 +47,8 @@
 using namespace utl;
 using namespace com::sun::star;
 
+static const char g_sIsVisible[] = "/IsVisible";
+
 
 namespace svtools
 {
@@ -66,7 +68,6 @@ class ColorConfig_Impl : public utl::ConfigItem
 {
     ColorConfigValue m_aConfigValues[ColorConfigEntryCount];
     bool             m_bEditMode;
-    OUString         m_sIsVisible;
     OUString         m_sLoadedScheme;
     bool             m_bAutoDetectSystemHC;
 
@@ -180,7 +181,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const OUString& rSch
         if(cNames[nPos].bCanBeVisible)
         {
             pNames[nIndex] += sBaseName;
-            pNames[nIndex++] += m_sIsVisible;
+            pNames[nIndex++] += g_sIsVisible;
         }
     }
     aNames.realloc(nIndex);
@@ -190,7 +191,6 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const OUString& rSch
 ColorConfig_Impl::ColorConfig_Impl(bool bEditMode) :
     ConfigItem("Office.UI/ColorScheme"),
     m_bEditMode(bEditMode),
-    m_sIsVisible("/IsVisible"),
     m_bAutoDetectSystemHC(true)
 {
     if(!m_bEditMode)
@@ -241,7 +241,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         if(nIndex >= aColors.getLength())
             break;
         //test for visibility property
-        if(pColorNames[nIndex].endsWith(m_sIsVisible))
+        if(pColorNames[nIndex].endsWith(g_sIsVisible))
              m_aConfigValues[i / 2].bIsVisible = Any2Bool(pColors[nIndex++]);
     }
     // fdo#71511: check if we are running in a11y autodetect
@@ -281,7 +281,7 @@ void ColorConfig_Impl::ImplCommit()
         if(nIndex >= aColorNames.getLength())
             break;
         //test for visibility property
-        if(pColorNames[nIndex].endsWith(m_sIsVisible))
+        if(pColorNames[nIndex].endsWith(g_sIsVisible))
         {
              pPropValues[nIndex].Name = pColorNames[nIndex];
              pPropValues[nIndex].Value.setValue(&m_aConfigValues[i/2].bIsVisible, rBoolType);

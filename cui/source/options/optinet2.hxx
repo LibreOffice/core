@@ -79,15 +79,6 @@ private:
     VclPtr<Edit>           m_pNoProxyForED;
     VclPtr<FixedText>      m_pNoProxyDescFT;
 
-    const OUString aProxyModePN;
-    const OUString aHttpProxyPN;
-    const OUString aHttpPortPN;
-    const OUString aHttpsProxyPN;
-    const OUString aHttpsPortPN;
-    const OUString aFtpProxyPN;
-    const OUString aFtpPortPN;
-    const OUString aNoProxyDescPN;
-
     css::uno::Reference< css::uno::XInterface > m_xConfigurationUpdateAccess;
 
     void EnableControls_Impl(bool bEnable);
