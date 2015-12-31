@@ -273,10 +273,10 @@ int CoreTextFontData::GetFontTable( const char pTagName[5], unsigned char* pResu
     return (int)nByteLength;
 }
 
-ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFontEnabled )
+ImplFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFontEnabled )
 {
     // all CoreText fonts are device fonts that can rotate just fine
-    ImplDevFontAttributes rDFA;
+    ImplFontAttributes rDFA;
     rDFA.SetOrientationFlag( true );
     rDFA.SetBuiltInFontFlag( true );
     rDFA.SetQuality( 0 );
@@ -414,7 +414,7 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
 
     bool bFontEnabled;
-    ImplDevFontAttributes rDFA = DevFontFromCTFontDescriptor( pFD, &bFontEnabled );
+    ImplFontAttributes rDFA = DevFontFromCTFontDescriptor( pFD, &bFontEnabled );
 
     if( bFontEnabled)
     {
