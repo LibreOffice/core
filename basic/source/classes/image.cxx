@@ -83,17 +83,17 @@ bool SbiGood( SvStream& r )
 }
 
 // Open Record
-sal_uIntPtr SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem )
+sal_uInt64 SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem )
 {
-    sal_Size nPos = r.Tell();
+    sal_uInt64 nPos = r.Tell();
     r.WriteUInt16( nSignature ).WriteInt32( 0 ).WriteUInt16( nElem );
     return nPos;
 }
 
 // Close Record
-void SbiCloseRecord( SvStream& r, sal_Size nOff )
+void SbiCloseRecord( SvStream& r, sal_uInt64 nOff )
 {
-    sal_Size nPos = r.Tell();
+    sal_uInt64 nPos = r.Tell();
     r.Seek( nOff + 2 );
     r.WriteInt32(nPos - nOff - 8 );
     r.Seek( nPos );
@@ -114,7 +114,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     Clear();
     // Read Master-Record
     r.ReadUInt16( nSign ).ReadUInt32( nLen ).ReadUInt16( nCount );
-    sal_Size nLast = r.Tell() + nLen;
+    sal_uInt64 nLast = r.Tell() + nLen;
     sal_uInt32 nCharSet;               // System charset
     sal_uInt32 lDimBase;
     sal_uInt16 nReserved1;
@@ -135,7 +135,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 
     bool bLegacy = ( nVersion < B_EXT_IMG_VERSION );
 
-    sal_Size nNext;
+    sal_uInt64 nNext;
     while( ( nNext = r.Tell() ) < nLast )
     {
 
@@ -160,7 +160,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             {
                 //assuming an empty string with just the lead 32bit/16bit len indicator
                 const size_t nMinStringSize = (eCharSet == RTL_TEXTENCODING_UNICODE) ? 4 : 2;
-                const size_t nMaxStrings = r.remainingSize() / nMinStringSize;
+                const sal_uInt64 nMaxStrings = r.remainingSize() / nMinStringSize;
                 if (nCount > nMaxStrings)
                 {
                     SAL_WARN("basic", "Parsing error: " << nMaxStrings <<
@@ -207,8 +207,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             {
                 if( bBadVer ) break;
                 //assuming an empty string with just the lead 32bit len indicator
-                const size_t nMinStringSize = 4;
-                const size_t nMaxStrings = r.remainingSize() / nMinStringSize;
+                const sal_uInt64 nMinStringSize = 4;
+                const sal_uInt64 nMaxStrings = r.remainingSize() / nMinStringSize;
                 if (nCount > nMaxStrings)
                 {
                     SAL_WARN("basic", "Parsing error: " << nMaxStrings <<
@@ -244,8 +244,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             {
                 //assuming an empty string with just the lead 32bit/16bit len indicator
                 const size_t nMinStringSize = (eCharSet == RTL_TEXTENCODING_UNICODE) ? 4 : 2;
-                const size_t nMinRecordSize = nMinStringSize + sizeof(sal_Int16);
-                const size_t nMaxRecords = r.remainingSize() / nMinRecordSize;
+                const sal_uInt64 nMinRecordSize = nMinStringSize + sizeof(sal_Int16);
+                const sal_uInt64 nMaxRecords = r.remainingSize() / nMinRecordSize;
                 if (nCount > nMaxRecords)
                 {
                     SAL_WARN("basic", "Parsing error: " << nMaxRecords <<
@@ -261,7 +261,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     sal_uInt16 nTypeMembers;
                     r.ReadUInt16(nTypeMembers);
 
-                    const size_t nMaxTypeMembers = r.remainingSize() / 8;
+                    const sal_uInt64 nMaxTypeMembers = r.remainingSize() / 8;
                     if (nTypeMembers > nMaxTypeMembers)
                     {
                         SAL_WARN("basic", "Parsing error: " << nMaxTypeMembers <<
@@ -375,8 +375,8 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         return true;
     }
     // First of all the header
-    sal_uIntPtr nStart = SbiOpenRecord( r, B_MODULE, 1 );
-    sal_uIntPtr nPos;
+    sal_uInt64 nStart = SbiOpenRecord( r, B_MODULE, 1 );
+    sal_uInt64 nPos;
 
     eCharSet = GetSOStoreTextEncoding( eCharSet );
     if ( bLegacy )
