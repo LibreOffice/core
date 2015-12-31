@@ -802,7 +802,7 @@ void SAL_CALL SearchFormattedToolboxController::statusChanged( const css::frame:
 FindAllToolboxController::FindAllToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : svt::ToolboxController( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
-            OUString( COMMAND_EXITSEARCH ) )
+            ".uno:FindAll" )
 {
 }
 
