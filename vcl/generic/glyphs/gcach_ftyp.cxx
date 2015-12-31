@@ -209,9 +209,9 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     mpGlyph2Char( nullptr )
 {
     // prefer font with low ID
-    maDevFontAttributes.mnQuality += 10000 - nFontId;
+    maDevFontAttributes.IncreaseQualityBy( 10000 - nFontId );
     // prefer font with matching file names
-    maDevFontAttributes.mnQuality += mpFontFile->GetLangBoost();
+    maDevFontAttributes.IncreaseQualityBy( mpFontFile->GetLangBoost() );
 }
 
 FtFontInfo::~FtFontInfo()
@@ -423,8 +423,8 @@ ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplDevFontAttributes& 
 :   PhysicalFontFace( rDFA, IFTSFONT_MAGIC ),
     mpFtFontInfo( pFI )
 {
-    mbDevice        = false;
-    mbOrientation   = true;
+    SetBuiltInFontFlag( false );
+    SetOrientationFlag( true );
 }
 
 ImplFontEntry* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const

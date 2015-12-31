@@ -416,7 +416,7 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
         // inform GlyphCache about this font provided by the PsPrint subsystem
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
-        aDFA.mnQuality += 4096;
+        aDFA.IncreaseQualityBy( 4096 );
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
    }
