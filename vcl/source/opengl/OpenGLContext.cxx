@@ -75,6 +75,10 @@ OpenGLContext::OpenGLContext():
 {
     VCL_GL_INFO("new context: " << this);
 
+    // It is important that there is either no current context,
+    // or that the current context is maGDIData.mpLastContext.
+    clearCurrent();
+
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maGDIData.mpLastContext )
     {
@@ -84,9 +88,6 @@ OpenGLContext::OpenGLContext():
     else
         pSVData->maGDIData.mpFirstContext = this;
     pSVData->maGDIData.mpLastContext = this;
-
-    // FIXME: better hope we call 'makeCurrent' soon to preserve
-    // the invariant that the last item is the current context.
 }
 
 OpenGLContext::~OpenGLContext()
