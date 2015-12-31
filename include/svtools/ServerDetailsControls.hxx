@@ -57,6 +57,8 @@ class DetailsContainer
         virtual void setUsername( const OUString& /*rUsername*/ ) { };
         virtual void setPassword( const OUString& ) { };
 
+        virtual bool enableUserCredentials( ) { return true; };
+
         void setActive( bool bActive = true );
 
     protected:
@@ -98,6 +100,7 @@ class DavDetailsContainer : public HostDetailsContainer
         virtual ~DavDetailsContainer( ) { };
 
         virtual void show( bool bShow = true ) override;
+        virtual bool enableUserCredentials( ) { return false; };
 
     protected:
         virtual bool verifyScheme( const OUString& rScheme ) override;
