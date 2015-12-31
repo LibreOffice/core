@@ -69,23 +69,6 @@ endif
 
 ifeq ($(OS),WNT)
 
-ifeq ($(COM),MSC)
-ifneq ($(DISABLE_ACTIVEX),TRUE)
-$(eval $(call gb_Module_add_targets,extensions,\
-	WinResTarget_activex \
-	Library_so_activex \
-	CustomTarget_so_activex_idl \
-))
-
-ifeq ($(BUILD_X64),TRUE)
-$(eval $(call gb_Module_add_targets,extensions,\
-	CustomTarget_so_activex_x64 \
-	Library_so_activex_x64 \
-))
-endif # BUILD_X64
-endif # DISABLE_ACTIVEX
-endif # COM=MSC
-
 ifeq ($(DISABLE_ATL),)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_oleautobridge \

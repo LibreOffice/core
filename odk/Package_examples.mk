@@ -358,22 +358,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/UCB/ResourceManager.java \
     DevelopersGuide/UCB/ResourceRemover.java \
     DevelopersGuide/UCB/data/data.txt \
-    OLE/activex/Makefile \
-    OLE/activex/README.txt \
-    OLE/activex/SOActiveX.cpp \
-    OLE/activex/SOActiveX.h \
-    OLE/activex/SOActiveX.rgs \
-    OLE/activex/SOComWindowPeer.cpp \
-    OLE/activex/SOComWindowPeer.h \
-    OLE/activex/SOComWindowPeer.rgs \
-    OLE/activex/StdAfx2.cpp \
-    OLE/activex/StdAfx2.h \
-    OLE/activex/example.html \
-    OLE/activex/resource.h \
-    OLE/activex/so_activex.cpp \
-    OLE/activex/so_activex.def \
-    OLE/activex/so_activex.idl \
-    OLE/activex/so_activex.rc \
     OLE/vbscript/WriterDemo.vbs \
     OLE/vbscript/readme.txt \
     basic/drawing/dirtree.txt \

@@ -23,7 +23,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	scp2/writer \
 	scp2/xsltfilter \
 	$(if $(filter WNT,$(OS)),\
-		$(if $(DISABLE_ACTIVEX),,scp2/activex) \
 		scp2/quickstart \
 		scp2/windows \
 		$(if $(filter MSC,$(COM)),\
