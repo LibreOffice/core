@@ -58,7 +58,7 @@ private:
 class FtFontInfo
 {
 public:
-                           FtFontInfo( const ImplDevFontAttributes&,
+                           FtFontInfo( const ImplFontAttributes&,
                                const OString& rNativeFileName,
                                int nFaceNum, sal_IntPtr nFontId);
                           ~FtFontInfo();
@@ -94,7 +94,7 @@ private:
     GraphiteFaceWrapper * mpGraphiteFace;
 #endif
     sal_IntPtr      mnFontId;
-    ImplDevFontAttributes maDevFontAttributes;
+    ImplFontAttributes maDevFontAttributes;
 
     FontCharMapPtr  mpFontCharMap;
 
@@ -133,7 +133,7 @@ public:
                         ~FreetypeManager();
 
     void                AddFontFile( const OString& rNormalizedName,
-                            int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&);
+                            int nFaceNum, sal_IntPtr nFontId, const ImplFontAttributes&);
     void                AnnounceFonts( PhysicalFontCollection* ) const;
     void                ClearFontList();
 
@@ -153,7 +153,7 @@ private:
     enum { IFTSFONT_MAGIC = 0x1F150A1C };
 
 public:
-                            ImplFTSFontData( FtFontInfo*, const ImplDevFontAttributes& );
+                            ImplFTSFontData( FtFontInfo*, const ImplFontAttributes& );
 
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const override;
     virtual PhysicalFontFace* Clone() const override   { return new ImplFTSFontData( *this ); }

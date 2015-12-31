@@ -63,7 +63,7 @@ public:
 //      Instead, the logical font names are mapped to physical fonts by
 //      the Java runtime environment.
 
-class VCL_PLUGIN_PUBLIC PhysicalFontFace : public ImplDevFontAttributes
+class VCL_PLUGIN_PUBLIC PhysicalFontFace : public ImplFontAttributes
 {
 public:
     // by using an PhysicalFontFace object as a factory for its corresponding
@@ -85,7 +85,7 @@ public:
     virtual PhysicalFontFace* Clone() const = 0;
 
 protected:
-    explicit                PhysicalFontFace( const ImplDevFontAttributes&, int nMagic );
+    explicit                PhysicalFontFace( const ImplFontAttributes&, int nMagic );
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
