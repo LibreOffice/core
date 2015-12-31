@@ -134,11 +134,14 @@ GLuint ImplOpenGLTexture::AddStencil()
     assert( mnOptStencil == 0 );
 
     glGenRenderbuffers( 1, &mnOptStencil );
+    CHECK_GL_ERROR();
     glBindRenderbuffer( GL_RENDERBUFFER, mnOptStencil );
     CHECK_GL_ERROR();
     VCL_GL_INFO( "Allocate stencil " << mnWidth << " x " << mnHeight );
     glRenderbufferStorage( GL_RENDERBUFFER, GL_STENCIL_INDEX,
                            mnWidth, mnHeight );
+    CHECK_GL_ERROR();
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
     CHECK_GL_ERROR();
 
     return mnOptStencil;
