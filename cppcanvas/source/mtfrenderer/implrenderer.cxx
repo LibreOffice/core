@@ -452,7 +452,7 @@ namespace cppcanvas
 
             // at least _one_ call to GDIMetaFile::NextAction() is
             // executed
-            sal_uIntPtr nPos( 1 );
+            size_t nPos( 1 );
 
             MetaAction* pCurrAct;
             while( (pCurrAct=rMtf.NextAction()) != nullptr )
