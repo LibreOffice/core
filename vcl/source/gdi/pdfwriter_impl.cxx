@@ -2274,11 +2274,11 @@ static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinF
     aDFA.SetItalic( rBuiltin.m_eItalic );
     aDFA.SetWidthType( rBuiltin.m_eWidthType );
 
-    aDFA.mbOrientation  = true;
-    aDFA.mbDevice       = true;
-    aDFA.mnQuality      = 50000;
-    aDFA.mbSubsettable  = false;
-    aDFA.mbEmbeddable   = false;
+    aDFA.SetOrientationFlag( true );
+    aDFA.SetBuiltInFontFlag( true );
+    aDFA.SetQuality( 50000 );
+    aDFA.SetSubsettableFlag( false );
+    aDFA.SetEmbeddableFlag( false );
     return aDFA;
 }
 
@@ -2982,7 +2982,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
 
     assert(pGraphics);
 
-    if( pFont->IsEmbeddable() )
+    if( pFont->CanEmbed() )
     {
         const unsigned char* pFontData = nullptr;
         long nFontLen = 0;
@@ -3004,7 +3004,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
             }
         }
     }
-    else if( pFont->mbSubsettable )
+    else if( pFont->CanSubset() )
     {
         aSubType = OString( "/TrueType" );
         Int32Vector aGlyphWidths;
@@ -8441,7 +8441,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
         const int nFontGlyphId = pGlyphs[i] & (GF_IDXMASK | GF_ISCHAR | GF_GSUB);
         const PhysicalFontFace* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
-        if( pCurrentFont->mbSubsettable )
+        if( pCurrentFont->CanSubset() )
         {
             FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
             // search for font specific glyphID
@@ -8485,7 +8485,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
                                                           bVertical,
                                                           pGraphics );
         }
-        else if( pCurrentFont->IsEmbeddable() )
+        else if( pCurrentFont->CanEmbed() )
         {
             sal_Int32 nFontID = 0;
             FontEmbedData::iterator it = m_aEmbeddedFonts.find( pCurrentFont );
