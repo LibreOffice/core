@@ -81,7 +81,7 @@ vcl::FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontInfo.SetWidthType( rData.GetWidthType() );
         if( rData.IsScalable() )
             aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
-        if( rData.mbDevice )
+        if( rData.IsBuiltInFont() )
             aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
     }
 
@@ -1782,7 +1782,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     {
         SetFamilyName( rFontSelData.mpFontData->GetFamilyName() );
         SetStyleName( rFontSelData.mpFontData->GetStyleName() );
-        mbDevice   = rFontSelData.mpFontData->mbDevice;
+        mbDevice   = rFontSelData.mpFontData->IsBuiltInFont();
         mbKernableFont = true;
     }
     else
