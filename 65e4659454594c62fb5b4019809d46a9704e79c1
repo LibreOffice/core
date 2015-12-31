@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_0d9bceca",
+        "filename": "vcl/inc/outfont.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-31T10:18:55Z",
+      "side": 1,
+      "message": "maybe update comment?",
+      "revId": "65e4659454594c62fb5b4019809d46a9704e79c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
