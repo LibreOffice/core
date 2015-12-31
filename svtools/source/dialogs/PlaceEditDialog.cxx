@@ -28,6 +28,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
     get( m_pEDUsername, "login" );
+    get( m_pFTUsernameLabel, "loginLabel" );
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
@@ -61,6 +62,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
     get( m_pEDUsername, "login" );
+    get( m_pFTUsernameLabel, "loginLabel" );
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
@@ -120,6 +122,7 @@ void PlaceEditDialog::dispose()
     m_pEDServerName.clear();
     m_pLBServerType.clear();
     m_pEDUsername.clear();
+    m_pFTUsernameLabel.clear();
     m_pBTOk.clear();
     m_pBTCancel.clear();
     m_pBTDelete.clear();
@@ -333,9 +336,11 @@ IMPL_LINK_NOARG_TYPED( PlaceEditDialog, SelectTypeHdl, ListBox&, void )
 
     m_xCurrentDetails->show();
 
-    m_pCBPassword->Show( m_bShowPassword );
-    m_pEDPassword->Show( m_bShowPassword );
-    m_pFTPasswordLabel->Show( m_bShowPassword );
+    m_pCBPassword->Show( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
+    m_pEDPassword->Show( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
+    m_pFTPasswordLabel->Show( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
+    m_pEDUsername->Show( m_xCurrentDetails->enableUserCredentials() );
+    m_pFTUsernameLabel->Show( m_xCurrentDetails->enableUserCredentials() );
 
     SetSizePixel(GetOptimalSize());
 
