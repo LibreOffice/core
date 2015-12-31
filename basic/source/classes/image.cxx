@@ -83,7 +83,7 @@ bool SbiGood( SvStream& r )
 }
 
 // Open Record
-sal_uIntPtr SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem )
+sal_Size SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem )
 {
     sal_Size nPos = r.Tell();
     r.WriteUInt16( nSignature ).WriteInt32( 0 ).WriteUInt16( nElem );
@@ -375,8 +375,8 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         return true;
     }
     // First of all the header
-    sal_uIntPtr nStart = SbiOpenRecord( r, B_MODULE, 1 );
-    sal_uIntPtr nPos;
+    sal_Size nStart = SbiOpenRecord( r, B_MODULE, 1 );
+    sal_Size nPos;
 
     eCharSet = GetSOStoreTextEncoding( eCharSet );
     if ( bLegacy )

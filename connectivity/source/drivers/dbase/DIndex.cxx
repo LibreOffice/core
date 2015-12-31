@@ -301,7 +301,7 @@ void ODbaseIndex::Release(bool bSave)
         m_aRoot.Clear();
     }
     // Release all references, before the FileStream will be closed
-    for (sal_uIntPtr i = 0; i < m_aCollector.size(); i++)
+    for (size_t i = 0; i < m_aCollector.size(); i++)
         m_aCollector[i]->QueryDelete();
 
     m_aCollector.clear();
