@@ -101,8 +101,7 @@ const struct SvEventDescription aFrameStyleEvents[] =
 };
 
 SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
-    SvDetachedEventDescriptor(aHyperlinkEvents),
-    sImplName("SwHyperlinkEventDescriptor")
+    SvDetachedEventDescriptor(aHyperlinkEvents)
 {
 }
 
@@ -113,7 +112,7 @@ SwHyperlinkEventDescriptor::~SwHyperlinkEventDescriptor()
 OUString SwHyperlinkEventDescriptor::getImplementationName()
     throw( RuntimeException, std::exception )
 {
-    return sImplName;
+    return OUString("SwHyperlinkEventDescriptor");
 }
 
 void SwHyperlinkEventDescriptor::copyMacrosFromINetFormat(

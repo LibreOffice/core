@@ -359,7 +359,6 @@ ScXMLExport::ScXMLExport(
     pValidationsContainer(nullptr),
     pChangeTrackingExportHelper(nullptr),
     sLayerID( SC_LAYERID ),
-    sCaptionShape("com.sun.star.drawing.CaptionShape"),
     nOpenRow(-1),
     nProgressCount(0),
     nCurrentTable(0),
@@ -3447,7 +3446,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             {
                 if (bNegativePage)
                     aPoint.X = 2 * aItr->xShape->getPosition().X + aItr->xShape->getSize().Width - aPoint.X;
-                if ( !aItr->xShape->getShapeType().equals(sCaptionShape) )
+                if ( aItr->xShape->getShapeType() != "com.sun.star.drawing.CaptionShape" )
                 {
                     OUString sEndAddress;
                     ScRangeStringConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc, FormulaGrammar::CONV_OOO);

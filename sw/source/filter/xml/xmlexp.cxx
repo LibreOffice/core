@@ -92,9 +92,7 @@ SwXMLExport::SwXMLExport(
     bBlock( false ),
     bShowProgress( true ),
     bSavedShowChanges( false ),
-    doc( nullptr ),
-    sNumberFormat("NumberFormat"),
-    sIsProtected("IsProtected")
+    doc( nullptr )
 {
     _InitItemExport();
 }

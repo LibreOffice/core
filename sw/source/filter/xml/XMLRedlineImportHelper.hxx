@@ -43,9 +43,6 @@ class XMLRedlineImportHelper
     const OUString sInsertion;
     const OUString sDeletion;
     const OUString sFormatChange;
-    const OUString sShowChanges;
-    const OUString sRecordChanges;
-    const OUString sRedlineProtectionKey;
 
     RedlineMapType aRedlineMap;
 
