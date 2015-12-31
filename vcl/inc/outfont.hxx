@@ -45,7 +45,7 @@ class Size;
 
 class ImplFontAttributes
 {
-public: // TODO: create matching interface class
+public:
     const OUString& GetFamilyName() const   { return maName; }
     const OUString& GetStyleName() const    { return maStyleName; }
     FontWeight      GetWeight() const       { return meWeight; }
