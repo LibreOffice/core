@@ -191,7 +191,7 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 }
 #endif
 
-FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
+FtFontInfo::FtFontInfo( const ImplFontAttributes& rDevFontAttributes,
     const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId)
 :
     maFaceFT( nullptr ),
@@ -367,7 +367,7 @@ FreetypeManager::~FreetypeManager()
 }
 
 void FreetypeManager::AddFontFile( const OString& rNormalizedName,
-    int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes& rDevFontAttr)
+    int nFaceNum, sal_IntPtr nFontId, const ImplFontAttributes& rDevFontAttr)
 {
     if( rNormalizedName.isEmpty() )
         return;
@@ -419,7 +419,7 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
     return pNew;
 }
 
-ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplDevFontAttributes& rDFA )
+ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplFontAttributes& rDFA )
 :   PhysicalFontFace( rDFA, IFTSFONT_MAGIC ),
     mpFtFontInfo( pFI )
 {

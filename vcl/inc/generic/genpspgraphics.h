@@ -34,7 +34,7 @@ class PhysicalFontCollection;
 namespace psp { struct JobData; class PrinterGfx; }
 
 class ServerFont;
-class ImplDevFontAttributes;
+class ImplFontAttributes;
 class SalInfoPrinter;
 class GlyphCache;
 
@@ -69,7 +69,7 @@ public:
                                               Int32Vector& rWidths,
                                               Ucs2UIntMap& rUnicodeEnc );
 
-    static ImplDevFontAttributes Info2DevFontAttributes( const psp::FastPrintFontInfo& );
+    static ImplFontAttributes Info2FontAttributes( const psp::FastPrintFontInfo& );
     static void             AnnounceFonts( PhysicalFontCollection*,
                                            const psp::FastPrintFontInfo& );
 
