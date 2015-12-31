@@ -97,10 +97,6 @@ class SwXMLExport : public SvXMLExport
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings ) override;
 
-    // string constants for table cell export
-    const OUString sNumberFormat;
-    const OUString sIsProtected;
-
     void setBlockMode();
 private:
     void DeleteTableLines();

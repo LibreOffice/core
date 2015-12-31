@@ -69,7 +69,6 @@ public:
 private:
     css::uno::Reference<css::frame::XModel> m_xModel;
     css::uno::Reference< css::document::XEmbeddedObjectResolver > mxResolver;
-    const OUString                                                maEmbeddedObjScheme;
     sal_Int32                                                     mnObjectId;
 };
 
