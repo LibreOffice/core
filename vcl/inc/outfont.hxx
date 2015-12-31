@@ -81,7 +81,7 @@ private:
 
 class ImplDevFontAttributes : public ImplFontAttributes
 {
-public: // TODO: create matching interface class
+public:
     bool               IsEmbeddable() const      { return mbEmbeddable; }
     bool               IsSubsettable() const     { return mbSubsettable; }
 
