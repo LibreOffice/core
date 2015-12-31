@@ -564,11 +564,20 @@ public:
     {
         RENDER_DETAILS(ellipse,KEY_E,5000)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
-                                  const RenderContext &) override
+                                  const RenderContext &rCtx) override
         {
             rDev.SetLineColor(Color(COL_RED));
             rDev.SetFillColor(Color(COL_GREEN));
             rDev.DrawEllipse(r);
+
+            if (rCtx.meStyle == RENDER_EXPANDED)
+            {
+                auto aRegions = partition(rCtx, 2, 2);
+                rDev.Invert(aRegions[0]);
+                rDev.Invert(aRegions[1], InvertFlags::N50);
+                rDev.Invert(aRegions[2], InvertFlags::Highlight);
+                rDev.Invert(aRegions[3], (InvertFlags)0xffff);
+            }
         }
     };
 
