@@ -878,7 +878,7 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
 
         // inform glyph cache of new font
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
-        aDFA.mnQuality += 5800;
+        aDFA.IncreaseQualityBy( 5800 );
 
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
@@ -921,7 +921,7 @@ void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
     {
         ImplDevFontAttributes aDFA = Info2DevFontAttributes( aInfo );
         static_cast<ImplFontAttributes&>(*pMetric) = aDFA;
-        pMetric->mbDevice       = aDFA.mbDevice;
+        pMetric->mbDevice       = aDFA.IsBuiltInFont();
         pMetric->mbScalableFont = true;
         pMetric->mbTrueTypeFont = false; // FIXME, needed?
 
@@ -1093,40 +1093,34 @@ ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPri
     aDFA.SetWidthType( rInfo.m_eWidth );
     aDFA.SetPitch( rInfo.m_ePitch );
     aDFA.SetSymbolFlag( (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL) );
-    aDFA.mbSubsettable  = rInfo.m_bSubsettable;
-    aDFA.mbEmbeddable   = rInfo.m_bEmbeddable;
+    aDFA.SetSubsettableFlag( rInfo.m_bSubsettable );
+    aDFA.SetEmbeddableFlag( rInfo.m_bEmbeddable );
 
     switch( rInfo.m_eType )
     {
         case psp::fonttype::TrueType:
-            aDFA.mnQuality       = 512;
-            aDFA.mbDevice        = false;
+            aDFA.SetQuality( 512 );
+            aDFA.SetBuiltInFontFlag( false );
             break;
         case psp::fonttype::Type1:
-            aDFA.mnQuality       = 0;
-            aDFA.mbDevice        = false;
+            aDFA.SetQuality( 0 );
+            aDFA.SetBuiltInFontFlag( false );
             break;
         default:
-            aDFA.mnQuality       = 0;
-            aDFA.mbDevice        = false;
+            aDFA.SetQuality( 0 );
+            aDFA.SetBuiltInFontFlag( false );
             break;
     }
 
-    aDFA.mbOrientation   = true;
+    aDFA.SetOrientationFlag( true );
 
     // add font family name aliases
     ::std::list< OUString >::const_iterator it = rInfo.m_aAliases.begin();
-    bool bHasMapNames = false;
     for(; it != rInfo.m_aAliases.end(); ++it )
-    {
-        if( bHasMapNames )
-            aDFA.maMapNames += ";";
-        aDFA.maMapNames += *it;
-        bHasMapNames = true;
-    }
+        aDFA.AddMapName( *it );
 
 #if OSL_DEBUG_LEVEL > 2
-    if( bHasMapNames )
+    if( aDFA.HasMapNames() )
     {
         OString aOrigName(OUStringToOString(aDFA.GetFamilyName(), osl_getThreadTextEncoding()));
         OString aAliasNames(OUStringToOString(aDFA.GetAliasNames(), osl_getThreadTextEncoding()));
@@ -1186,7 +1180,7 @@ void GenPspGraphics::AnnounceFonts( PhysicalFontCollection* pFontCollection, con
     }
 
     ImplPspFontData* pFD = new ImplPspFontData( aInfo );
-    pFD->mnQuality += nQuality;
+    pFD->IncreaseQualityBy( nQuality );
     pFontCollection->Add( pFD );
 }
 

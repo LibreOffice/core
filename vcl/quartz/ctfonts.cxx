@@ -277,9 +277,9 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
 {
     // all CoreText fonts are device fonts that can rotate just fine
     ImplDevFontAttributes rDFA;
-    rDFA.mbOrientation = true;
-    rDFA.mbDevice = true;
-    rDFA.mnQuality = 0;
+    rDFA.SetOrientationFlag( true );
+    rDFA.SetBuiltInFontFlag( true );
+    rDFA.SetQuality( 0 );
 
     // reset the font attributes
     rDFA.SetFamilyType( FAMILY_DONTKNOW );
@@ -290,8 +290,8 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     rDFA.SetSymbolFlag( false );
 
     // all scalable fonts on this platform are subsettable
-    rDFA.mbEmbeddable = false;
-    rDFA.mbSubsettable = true;
+    rDFA.SetEmbeddableFlag( false );
+    rDFA.SetSubsettableiFlag( true );
 
     // get font name
 #ifdef MACOSX

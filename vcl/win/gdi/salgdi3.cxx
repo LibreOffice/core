@@ -798,32 +798,32 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
         aDFA.SetStyleName(OUString(reinterpret_cast<const sal_Unicode*>(pStyleName)));
 
     // get device specific font attributes
-    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
-    aDFA.mbDevice       = (rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
+    aDFA.SetOrientationFlag( ((nFontType & RASTER_FONTTYPE) == 0) );
+    aDFA.SetBuiltInFontFlag( ((rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0) );
 
-    aDFA.mbEmbeddable   = false;
-    aDFA.mbSubsettable  = false;
+    aDFA.SetEmbeddableFlag( false );
+    aDFA.SetSubsettableFlag( false );
     if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE))
      || 0 != (rMetric.tmPitchAndFamily & TMPF_TRUETYPE))
-        aDFA.mbSubsettable = true;
+        aDFA.SetSubsettableFlag( true );
     else if( 0 != (rMetric.ntmFlags & NTM_TYPE1) ) // TODO: implement subsetting for type1 too
-        aDFA.mbEmbeddable = true;
+        aDFA.SetEmbeddableFlag( true );
 
     // heuristics for font quality
     // -   standard-type1 > opentypeTT > truetype > non-standard-type1 > raster
     // -   subsetting > embedding > none
-    aDFA.mnQuality = 0;
+    aDFA.SetQuality( 0 );
     if( rMetric.tmPitchAndFamily & TMPF_TRUETYPE )
-        aDFA.mnQuality += 50;
+        aDFA.IncreaseQualityBy( 50 );
     if( 0 != (rMetric.ntmFlags & (NTM_TT_OPENTYPE | NTM_PS_OPENTYPE)) )
-        aDFA.mnQuality += 10;
-    if( aDFA.mbSubsettable )
-        aDFA.mnQuality += 200;
-    else if( aDFA.mbEmbeddable )
-        aDFA.mnQuality += 100;
+        aDFA.IncreaseQualityBy( 10 );
+    if( aDFA.CanSubset() )
+        aDFA.IncreaseQualityBy( 200 );
+    else if( aDFA.CanEmbed() )
+        aDFA.IncreaseQualityBy( 100 );
 
     // #i38665# prefer Type1 versions of the standard postscript fonts
-    if( aDFA.mbEmbeddable )
+    if( aDFA.CanEmbed() )
     {
         if( aDFA.GetFamilyName() == "AvantGarde"
         ||  aDFA.GetFamilyName() == "Bookman"
