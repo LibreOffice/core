@@ -351,9 +351,9 @@
                     <property name="width_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="max_length">4</property>
+                    <property name="max_length">5</property>
                     <property name="invisible_char">●</property>
-                    <property name="max_width_chars">4</property>
+                    <property name="max_width_chars">5</property>
                     <property name="text" translatable="no">0</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="numeric">True</property>
