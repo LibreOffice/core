@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <unx/x11/xlimits.hxx>
 #if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
@@ -2954,7 +2955,7 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     pThis->m_bPaintsBlocked = false;
 
-    struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height );
+    struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height, OpenGLHelper::isVCLOpenGLEnabled() );
 
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
 
