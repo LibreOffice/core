@@ -13,6 +13,7 @@
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergeFirstEntry"/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergePrevEntry"/>
+  <toolbar:toolbaritem xlink:href=".uno:MailMergeCurrentEntry"/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergeNextEntry"/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergeLastEntry"/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergeExcludeEntry"/>
