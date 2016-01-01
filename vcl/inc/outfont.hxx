@@ -39,11 +39,10 @@ class ConvertChar;
 class OutputDevice;
 class Size;
 
-// device independent font properties
-
 class ImplFontAttributes
 {
 public:
+    // device independent font functions
     const OUString& GetFamilyName() const   { return maFamilyName; }
     FontFamily      GetFamilyType() const   { return meFamily; }
     const OUString& GetStyleName() const    { return maStyleName; }
@@ -104,6 +103,7 @@ public:
     void            SetOrientationFlag( bool bCanRotate )       { mbOrientation = bCanRotate; }
 
 private:
+    // device independent variables
     OUString        maFamilyName;       // Font Family Name
     OUString        maStyleName;        // Font Style Name
     FontWeight      meWeight;           // Weight Type
@@ -114,7 +114,6 @@ private:
     bool            mbSymbolFlag;       // Is font a symbol?
 
     // device dependent variables
-
     OUString        maMapNames;         // List of family name aliases separated with ';'
     int             mnQuality;          // Quality (used when similar fonts compete)
     bool            mbOrientation;      // true: physical font can be rotated
