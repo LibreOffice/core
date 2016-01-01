@@ -25,11 +25,10 @@
 
 #include "PhysicalFontFace.hxx"
 
-PhysicalFontFace::PhysicalFontFace( const ImplFontAttributes& rDFA, int nMagic )
+PhysicalFontFace::PhysicalFontFace( const ImplFontAttributes& rDFA )
     : ImplFontAttributes( rDFA )
     , mnWidth(0)
     , mnHeight(0)
-    , mnMagic( nMagic )
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !IsSymbolFont() )

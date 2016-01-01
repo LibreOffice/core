@@ -420,7 +420,7 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
 }
 
 ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplFontAttributes& rDFA )
-:   PhysicalFontFace( rDFA, IFTSFONT_MAGIC ),
+:   PhysicalFontFace( rDFA ),
     mpFtFontInfo( pFI )
 {
     SetBuiltInFontFlag( false );

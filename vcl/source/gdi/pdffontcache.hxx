@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_SOURCE_GDI_PDFFONTCACHE_HXX
 #define INCLUDED_VCL_SOURCE_GDI_PDFFONTCACHE_HXX
 
+#include <typeinfo>
+
 #include <sal/types.h>
 
 #include <sallayout.hxx>
@@ -32,22 +34,26 @@ namespace vcl
         struct FontIdentifier
         {
             sal_IntPtr      m_nFontId;
-            int             m_nMagic;
             bool            m_bVertical;
+            std::type_info* m_typeFontFace;
 
             FontIdentifier( const PhysicalFontFace*, bool bVertical );
-            FontIdentifier() : m_nFontId(0), m_nMagic(0), m_bVertical( false ) {}
+            FontIdentifier() : m_nFontId(0), m_bVertical( false ) {}
 
             bool operator==( const FontIdentifier& rRight ) const
             {
                 return m_nFontId == rRight.m_nFontId &&
-                       m_nMagic == rRight.m_nMagic &&
+                       m_typeFontFace == rRight.m_typeFontFace &&
                        m_bVertical == rRight.m_bVertical;
             }
+
+            // Less than needed for std::set and std::map
             bool operator<( const FontIdentifier& rRight ) const
             {
+                std::type_info *pType = rRight.m_typeFontFace;
+
                 return m_nFontId < rRight.m_nFontId ||
-                       m_nMagic < rRight.m_nMagic ||
+                       m_typeFontFace->before( *pType ) ||
                        m_bVertical < rRight.m_bVertical;
             }
         };

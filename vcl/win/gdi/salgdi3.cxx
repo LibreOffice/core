@@ -995,7 +995,7 @@ const void * GrFontData::getTable(unsigned int name, size_t *len) const
 
 ImplWinFontData::ImplWinFontData( const ImplFontAttributes& rDFS,
     int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
-:   PhysicalFontFace( rDFS, 0 ),
+:   PhysicalFontFace( rDFS ),
     mnId( 0 ),
     mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
