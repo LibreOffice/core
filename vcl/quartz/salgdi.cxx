@@ -64,7 +64,7 @@ CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
 }
 
 CoreTextFontData::CoreTextFontData( const ImplFontAttributes& rDFA, sal_IntPtr nFontId )
-  : PhysicalFontFace( rDFA, 0 )
+  : PhysicalFontFace( rDFA )
   , mnFontId( nFontId )
   , mbOs2Read( false )
   , mbHasOs2Table( false )
