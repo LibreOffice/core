@@ -150,7 +150,6 @@ class ImplFTSFontData : public PhysicalFontFace
 {
 private:
     FtFontInfo*             mpFtFontInfo;
-    enum { IFTSFONT_MAGIC = 0x1F150A1C };
 
 public:
                             ImplFTSFontData( FtFontInfo*, const ImplFontAttributes& );

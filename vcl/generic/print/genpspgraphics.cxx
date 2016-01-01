@@ -542,7 +542,6 @@ void GenPspGraphics::invert(long,long,long,long,SalInvert)
 class ImplPspFontData : public PhysicalFontFace
 {
 private:
-    enum { PSPFD_MAGIC = 0xb5bf01f0 };
     sal_IntPtr              mnFontId;
 
 public:
@@ -553,7 +552,7 @@ public:
 };
 
 ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
-:   PhysicalFontFace( GenPspGraphics::Info2FontAttributes(rInfo), PSPFD_MAGIC ),
+:   PhysicalFontFace( GenPspGraphics::Info2FontAttributes(rInfo) ),
     mnFontId( rInfo.m_nID )
 {}
 
