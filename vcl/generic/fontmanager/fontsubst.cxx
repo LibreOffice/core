@@ -37,7 +37,7 @@
 
 // platform specific font substitution hooks
 
-class FcPreMatchSubstititution
+class FcPreMatchSubstitution
 :   public ImplPreMatchFontSubstitution
 {
 public:
@@ -48,7 +48,7 @@ private:
     mutable CachedFontMapType maCachedFontMap;
 };
 
-class FcGlyphFallbackSubstititution
+class FcGlyphFallbackSubstitution
 :    public ImplGlyphFallbackFontSubstitution
 {
     // TODO: add a cache
@@ -95,14 +95,14 @@ void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFont
     // register font fallback substitutions (unless disabled by bit0)
     if( (nDisableBits & 1) == 0 )
     {
-        static FcPreMatchSubstititution aSubstPreMatch;
+        static FcPreMatchSubstitution aSubstPreMatch;
         pFontCollection->SetPreMatchHook( &aSubstPreMatch );
     }
 
     // register glyph fallback substitutions (unless disabled by bit1)
     if( (nDisableBits & 2) == 0 )
     {
-        static FcGlyphFallbackSubstititution aSubstFallback;
+        static FcGlyphFallbackSubstitution aSubstFallback;
         pFontCollection->SetFallbackHook( &aSubstFallback );
     }
 }
@@ -138,12 +138,12 @@ namespace
             : mrAttributes(rAttributes)
         {
         }
-        bool operator()(const FcPreMatchSubstititution::value_type& rOther) const
+        bool operator()(const FcPreMatchSubstitution::value_type& rOther) const
             { return rOther.first == mrAttributes; }
     };
 }
 
-bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
+bool FcPreMatchSubstitution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
 {
     // We don't actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
@@ -185,7 +185,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
         RTL_TEXTENCODING_UTF8));
     const OString aSubstName(OUStringToOString(aOut.maSearchName,
         RTL_TEXTENCODING_UTF8));
-    printf( "FcPreMatchSubstititution \"%s\" bipw=%d%d%d%d -> ",
+    printf( "FcPreMatchSubstitution \"%s\" bipw=%d%d%d%d -> ",
         aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlant(),
         rFontSelData.GetPitch(), rFontSelData.GetWidthType() );
     if( !bHaveSubstitute )
@@ -208,7 +208,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     return bHaveSubstitute;
 }
 
-bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData,
+bool FcGlyphFallbackSubstitution::FindFontSubstitute( FontSelectPattern& rFontSelData,
     OUString& rMissingCodes ) const
 {
     // We don't actually want to talk to Fontconfig at all for symbol fonts
@@ -233,7 +233,7 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
         RTL_TEXTENCODING_UTF8));
     const OString aSubstName(OUStringToOString(aOut.maSearchName,
         RTL_TEXTENCODING_UTF8));
-    printf( "FcGFSubstititution \"%s\" bipw=%d%d%d%d ->",
+    printf( "FcGFSubstitution \"%s\" bipw=%d%d%d%d ->",
         aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlant(),
         rFontSelData.GetPitch(), rFontSelData.GetWidthType() );
     if( !bHaveSubstitute )
