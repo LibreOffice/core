@@ -229,10 +229,11 @@ PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern&
 
     // TODO: linear search improve!
     PhysicalFontFace* pBestFontFace = maFontFaces[0];
+    FontMatchStatus aFontMatchStatus = {0,0,0, pTargetStyleName};
     for( std::vector< PhysicalFontFace* >::const_iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
     {
         PhysicalFontFace* pFoundFontFace = *it;
-        if( pFoundFontFace->IsBetterMatch( rFSD, pTargetStyleName ) )
+        if( pFoundFontFace->IsBetterMatch( rFSD, aFontMatchStatus ) )
             pBestFontFace = pFoundFontFace;
     }
 

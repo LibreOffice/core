@@ -84,11 +84,7 @@ sal_Int32 PhysicalFontFace::CompareWithSize( const PhysicalFontFace& rOther ) co
     return 0;
 }
 
-bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD,
-                                      const OUString* pTargetStyleName,
-                                      int nStatusFaceMatch,
-                                      int nStatusHeightMatch,
-                                      int nStatusWidthMatch ) const
+bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
 {
     int nMatch = 0;
 
@@ -96,8 +92,8 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD,
     if( rFontName.equalsIgnoreAsciiCase( GetFamilyName() ) )
         nMatch += 240000;
 
-    if( pTargetStyleName
-    &&  GetStyleName().equalsIgnoreAsciiCase( *pTargetStyleName ) )
+    if( rStatus.mpTargetStyleName
+    &&  GetStyleName().equalsIgnoreAsciiCase( *rStatus.mpTargetStyleName ) )
         nMatch += 120000;
 
     if( (rFSD.GetPitch() != PITCH_DONTKNOW) && (rFSD.GetPitch() == GetPitch()) )
@@ -202,31 +198,31 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD,
         }
     }
 
-    if( nStatusFaceMatch > nMatch )
+    if( rStatus.mnFaceMatch > nMatch )
         return false;
-    else if( nStatusFaceMatch < nMatch )
+    else if( rStatus.mnFaceMatch < nMatch )
     {
-        nStatusFaceMatch      = nMatch;
-        nStatusHeightMatch    = nHeightMatch;
-        nStatusWidthMatch     = nWidthMatch;
+        rStatus.mnFaceMatch      = nMatch;
+        rStatus.mnHeightMatch    = nHeightMatch;
+        rStatus.mnWidthMatch     = nWidthMatch;
         return true;
     }
 
     // when two fonts are still competing prefer the
     // one with the best matching height
-    if( nStatusHeightMatch > nHeightMatch )
+    if( rStatus.mnHeightMatch > nHeightMatch )
         return false;
-    else if( nStatusHeightMatch < nHeightMatch )
+    else if( rStatus.mnHeightMatch < nHeightMatch )
     {
-        nStatusHeightMatch    = nHeightMatch;
-        nStatusWidthMatch     = nWidthMatch;
+        rStatus.mnHeightMatch    = nHeightMatch;
+        rStatus.mnWidthMatch     = nWidthMatch;
         return true;
     }
 
-    if( nStatusWidthMatch > nWidthMatch )
+    if( rStatus.mnWidthMatch > nWidthMatch )
         return false;
 
-    nStatusWidthMatch = nWidthMatch;
+    rStatus.mnWidthMatch = nWidthMatch;
     return true;
 }
 
