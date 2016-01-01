@@ -86,7 +86,6 @@ protected:
     long                    mnHeight;   // Height (in pixels)
 
 private:
-friend class PhysicalFontFamily;
     const int               mnMagic;    // poor man's RTTI
 };
 
