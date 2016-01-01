@@ -1313,64 +1313,64 @@ void SwXStyle::ApplyDescriptorProperties()
 class SwStyleBase_Impl
 {
 private:
-    SwDoc& mrDoc;
-    const SwPageDesc* mpOldPageDesc;
-    rtl::Reference< SwDocStyleSheet > mxNewBase;
-    SfxItemSet* mpItemSet;
-    OUString mrStyleName;
-    const SwAttrSet*                    mpParentStyle;
+    SwDoc& m_rDoc;
+    const SwPageDesc* m_pOldPageDesc;
+    rtl::Reference<SwDocStyleSheet> m_xNewBase;
+    SfxItemSet* m_pItemSet;
+    OUString m_rStyleName;
+    const SwAttrSet* m_pParentStyle;
 
 public:
     SwStyleBase_Impl(SwDoc& rSwDoc, const OUString& rName, const SwAttrSet* pParentStyle)
-        : mrDoc(rSwDoc)
-        , mpOldPageDesc(nullptr)
-        , mpItemSet(nullptr)
-        , mrStyleName(rName)
-        , mpParentStyle(pParentStyle)
+        : m_rDoc(rSwDoc)
+        , m_pOldPageDesc(nullptr)
+        , m_pItemSet(nullptr)
+        , m_rStyleName(rName)
+        , m_pParentStyle(pParentStyle)
     {
     }
 
     ~SwStyleBase_Impl()
     {
-        delete mpItemSet;
+        delete m_pItemSet;
     }
 
-    rtl::Reference< SwDocStyleSheet >& getNewBase()
+    rtl::Reference<SwDocStyleSheet>& getNewBase()
     {
-        return mxNewBase;
+        return m_xNewBase;
     }
 
     void setNewBase(SwDocStyleSheet* pNew)
     {
-        mxNewBase = pNew;
+        m_xNewBase = pNew;
     }
 
     bool HasItemSet() const
     {
-        return mxNewBase.is();
+        return m_xNewBase.is();
     }
 
     SfxItemSet* replaceItemSet(SfxItemSet* pNew)
     {
-        SfxItemSet* pRetval = mpItemSet;
-        mpItemSet = pNew;
+        SfxItemSet* pRetval = m_pItemSet;
+        m_pItemSet = pNew;
         return pRetval;
     }
 
     SfxItemSet& GetItemSet()
     {
-        OSL_ENSURE(mxNewBase.is(), "no SwDocStyleSheet available");
-        if (!mpItemSet)
+        OSL_ENSURE(m_xNewBase.is(), "no SwDocStyleSheet available");
+        if(!m_pItemSet)
         {
-            mpItemSet = new SfxItemSet(mxNewBase->GetItemSet());
+            m_pItemSet = new SfxItemSet(m_xNewBase->GetItemSet());
 
             //UUUU set parent style to have the correct XFillStyle setting as XFILL_NONE
-            if(!mpItemSet->GetParent() && mpParentStyle)
+            if(!m_pItemSet->GetParent() && m_pParentStyle)
             {
-                mpItemSet->SetParent(mpParentStyle);
+                m_pItemSet->SetParent(m_pParentStyle);
             }
         }
-        return *mpItemSet;
+        return *m_pItemSet;
     }
 
     const SwPageDesc* GetOldPageDesc();
@@ -1378,25 +1378,25 @@ public:
 
 const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 {
-    if(!mpOldPageDesc)
+    if(!m_pOldPageDesc)
     {
-        SwPageDesc *pd = mrDoc.FindPageDesc( mrStyleName );
-        if( pd )
-            mpOldPageDesc = pd;
+        SwPageDesc *pd = m_rDoc.FindPageDesc(m_rStyleName);
+        if(pd)
+            m_pOldPageDesc = pd;
 
-        if(!mpOldPageDesc)
+        if(!m_pOldPageDesc)
         {
             for(sal_uInt16 i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
             {
-                if(SW_RESSTR(i) == mrStyleName)
+                if(SW_RESSTR(i) == m_rStyleName)
                 {
-                    mpOldPageDesc = mrDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast< sal_uInt16 >(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );
+                    m_pOldPageDesc = m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN));
                     break;
                 }
             }
         }
     }
-    return mpOldPageDesc;
+    return m_pOldPageDesc;
 }
 
 static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
