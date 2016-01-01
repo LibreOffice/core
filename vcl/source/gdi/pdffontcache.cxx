@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <typeinfo>
+
 #include <sal/types.h>
 
 #include "outfont.hxx"
@@ -30,8 +32,8 @@ using namespace vcl;
 
 PDFFontCache::FontIdentifier::FontIdentifier( const PhysicalFontFace* pFont, bool bVertical ) :
     m_nFontId( pFont->GetFontId() ),
-    m_nMagic( pFont->GetFontMagic() ),
-    m_bVertical( bVertical )
+    m_bVertical( bVertical ),
+    m_typeFontFace( const_cast<std::type_info*>(&typeid(pFont)) )
 {
 }
 
