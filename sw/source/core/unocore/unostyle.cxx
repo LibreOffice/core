@@ -359,11 +359,6 @@ public:
     void Invalidate();
     void ApplyDescriptorProperties();
     void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
-    virtual const SwTextFormatColl* GetFormatColl() const
-    {
-        assert(m_rEntry.m_eFamily == SFX_STYLE_FAMILY_PARA);
-        return m_pDoc->FindTextFormatCollByName(GetStyleName());
-    }
 };
 
 class SwXFrameStyle
