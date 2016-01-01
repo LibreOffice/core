@@ -2239,29 +2239,6 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
     return m_pReferenceDevice;
 }
 
-class ImplPdfBuiltinFontData : public PhysicalFontFace
-{
-private:
-    const PDFWriterImpl::BuiltinFont& mrBuiltin;
-
-public:
-    static int const PDF_FONT_MAGIC = int(0xBDFF0A1C);
-    explicit                            ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
-    const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
-
-    virtual PhysicalFontFace*           Clone() const override { return new ImplPdfBuiltinFontData(*this); }
-    virtual ImplFontEntry*              CreateFontInstance( FontSelectPattern& ) const override;
-    virtual sal_IntPtr                  GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
-};
-
-inline const ImplPdfBuiltinFontData* GetPdfFontData( const PhysicalFontFace* pFontData )
-{
-    const ImplPdfBuiltinFontData* pFD = nullptr;
-    if( pFontData && pFontData->CheckMagic( ImplPdfBuiltinFontData::PDF_FONT_MAGIC ) )
-        pFD = static_cast<const ImplPdfBuiltinFontData*>( pFontData );
-    return pFD;
-}
-
 static ImplFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
 {
     ImplFontAttributes aDFA;
@@ -2283,7 +2260,7 @@ static ImplFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont
 }
 
 ImplPdfBuiltinFontData::ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& rBuiltin )
-:   PhysicalFontFace( GetDevFontAttributes(rBuiltin), PDF_FONT_MAGIC ),
+:   PhysicalFontFace( GetDevFontAttributes(rBuiltin) ),
     mrBuiltin( rBuiltin )
 {}
 
@@ -2938,9 +2915,8 @@ bool PDFWriterImpl::emitTilings()
     return true;
 }
 
-sal_Int32 PDFWriterImpl::emitBuiltinFont( const PhysicalFontFace* pFont, sal_Int32 nFontObject )
+sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplPdfBuiltinFontData* pFD, sal_Int32 nFontObject )
 {
-    const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
     if( !pFD )
         return 0;
     const BuiltinFont& rBuiltinFont = pFD->GetBuiltinFont();
