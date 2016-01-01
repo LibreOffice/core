@@ -225,9 +225,11 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 }
             }
             break;
+            case FN_MAILMERGE_CURRENT_ENTRY:
             case FN_MAILMERGE_EXCLUDE_ENTRY:
             {
                 // just trigger calling statusChanged() of MMExcludeEntryController
+                // resp. MMCurrentEntryController
                 rSet.InvalidateItem(nWhich);
             }
             break;
@@ -751,6 +753,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case FN_MAILMERGE_PREV_ENTRY:
         case FN_MAILMERGE_NEXT_ENTRY:
         case FN_MAILMERGE_LAST_ENTRY:
+        case FN_MAILMERGE_CURRENT_ENTRY:
         {
             SwView* pView = ::GetActiveView();
             SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
@@ -764,6 +767,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 case FN_MAILMERGE_PREV_ENTRY:  pConfigItem->MoveResultSet(nPos - 1); break;
                 case FN_MAILMERGE_NEXT_ENTRY:  pConfigItem->MoveResultSet(nPos + 1); break;
                 case FN_MAILMERGE_LAST_ENTRY:  pConfigItem->MoveResultSet(-1); break;
+                case FN_MAILMERGE_CURRENT_ENTRY: /* don't move the result set, just update the document */ break;
                 default: break;
             }
 
@@ -790,6 +794,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             rBindings.Invalidate(FN_MAILMERGE_PREV_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_NEXT_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_LAST_ENTRY);
+            rBindings.Invalidate(FN_MAILMERGE_CURRENT_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_EXCLUDE_ENTRY);
             rBindings.Update();
         }

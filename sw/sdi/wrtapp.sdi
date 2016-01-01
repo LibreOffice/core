@@ -86,6 +86,12 @@ interface StarWriter
         StateMethod = StateOther ;
     ]
 
+    FN_MAILMERGE_CURRENT_ENTRY
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+    ]
+
     FN_MAILMERGE_EXCLUDE_ENTRY
     [
         StateMethod = StateOther ;
