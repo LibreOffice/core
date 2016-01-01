@@ -88,7 +88,8 @@ public:
                         {
                             maMapNames += ";";
                         }
-                        else
+
+                        if (aMapName.getLength() == 0)
                         {
                             SAL_WARN("vcl.fonts", "New map name is empty");
                             return;
