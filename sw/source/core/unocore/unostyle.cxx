@@ -1982,29 +1982,12 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
            lang::IllegalArgumentException, lang::WrappedTargetException,
            uno::RuntimeException, std::exception)
 {
-    if ( !m_pDoc )
+    if(!m_pDoc)
         throw uno::RuntimeException();
-
-    sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
-
-    switch(m_rEntry.m_eFamily)
-    {
-        case SFX_STYLE_FAMILY_PARA  : nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
-        case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
-        case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE  ;break;
-        case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE   ;break;
-        default: ;
-    }
-    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(m_rEntry.m_nPropMapType);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
-
     if(rPropertyNames.getLength() != rValues.getLength())
-    {
         throw lang::IllegalArgumentException();
-    }
-
-    const OUString* pNames = rPropertyNames.getConstArray();
-    const uno::Any* pValues = rValues.getConstArray();
 
     SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTextFormatColl()->GetAttrSet()); //UUUU add pDfltTextFormatColl as parent
     if(m_pBasePool)
@@ -2012,23 +1995,23 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
         const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
         m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
-        OSL_ENSURE(pBase, "where is the style?" );
+        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask);
+        OSL_ENSURE(pBase, "where is the style?");
         if(pBase)
             aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
         else
             throw uno::RuntimeException();
     }
 
+    const OUString* pNames = rPropertyNames.getConstArray();
+    const uno::Any* pValues = rValues.getConstArray();
     for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
     {
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pNames[nProp]);
-
-        if(!pEntry ||
-           (!m_bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
-            throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-        if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+        if(!pEntry || (!m_bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
+            throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast<cppu::OWeakObject*>(this));
+        if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast<cppu::OWeakObject*>(this));
         if(aBaseImpl.getNewBase().is())
         {
             lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_rEntry.m_eFamily);
