@@ -1880,7 +1880,7 @@ bool OpenGLSalGraphicsImpl::drawTransformedBitmap(
             const SalBitmap* pAlphaBitmap)
 {
     assert(dynamic_cast<const OpenGLSalBitmap*>(&rSrcBitmap));
-    assert(dynamic_cast<const OpenGLSalBitmap*>(pAlphaBitmap));
+    assert(!pAlphaBitmap || dynamic_cast<const OpenGLSalBitmap*>(pAlphaBitmap));
 
     OpenGLZone aZone;
 
