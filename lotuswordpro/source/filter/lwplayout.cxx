@@ -74,6 +74,7 @@
 LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
     , m_bGettingHonorProtection(false)
+    , m_bGettingMarginsSameAsParent(false)
     , m_bGettingHasProtection(false)
     , m_bGettingIsProtected(false)
     , m_bGettingMarginsValue(false)
@@ -700,7 +701,7 @@ bool LwpMiddleLayout::MarginsSameAsParent()
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(xBase.get()))
     {
-        pLay->MarginsSameAsParent();
+        pLay->GetMarginsSameAsParent();
     }
     return LwpVirtualLayout::MarginsSameAsParent();
 }
@@ -714,7 +715,7 @@ double LwpMiddleLayout::MarginsValue(const sal_uInt8 &nWhichSide)
     double fValue = 0;
     if((nWhichSide==MARGIN_LEFT)||(nWhichSide==MARGIN_RIGHT))
     {
-        if ( MarginsSameAsParent() )
+        if ( GetMarginsSameAsParent() )
         {
             rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
             if (xParent.is() && !xParent->IsHeader())
