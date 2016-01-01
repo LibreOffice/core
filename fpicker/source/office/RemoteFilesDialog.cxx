@@ -1327,16 +1327,21 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
 
     for( ::std::vector< SvtContentEntry >::size_type i = 0; i < rFolders.size(); i++ )
     {
-        int nTitleStart = rFolders[i].maURL.lastIndexOf( '/' );
+        //WebDAV folders path ends in '/', so strip it
+        OUString aFolderName = rFolders[i].maURL;
+        if( rFolders[i].mbIsFolder && ( ( aFolderName.lastIndexOf( '/' ) + 1 ) == aFolderName.getLength() ) )
+            aFolderName = aFolderName.copy( 0, aFolderName.getLength() - 1 );
+
+        int nTitleStart = aFolderName.lastIndexOf( '/' );
         if( nTitleStart != -1 )
         {
             OUString sTitle( INetURLObject::decode(
-                                rFolders[i].maURL.copy( nTitleStart + 1 ),
+                                aFolderName.copy( nTitleStart + 1 ),
                                 INetURLObject::DECODE_WITH_CHARSET ) );
 
             if( rFolders[i].mbIsFolder )
             {
-                aFolders.push_back( std::pair< OUString, OUString > ( sTitle, rFolders[i].maURL ) );
+                aFolders.push_back( std::pair< OUString, OUString > ( sTitle, aFolderName ) );
             }
 
             // add entries to the autocompletion mechanism
