@@ -25,18 +25,8 @@
 #include "outfont.hxx"
 
 class ImplFontEntry;
-struct FontMatchStatus;
 class FontSelectPattern;
 class PhysicalFontFamily;
-
-struct FontMatchStatus
-{
-public:
-    int                 mnFaceMatch;
-    int                 mnHeightMatch;
-    int                 mnWidthMatch;
-    const OUString*     mpTargetStyleName;
-};
 
 // - PhysicalFontFace -
 
@@ -78,7 +68,11 @@ public:
     bool                    IsScalable() const          { return (mnHeight == 0); }
     bool                    CheckMagic( int n ) const   { return (n == mnMagic); }
 
-    bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
+    bool                    IsBetterMatch( const FontSelectPattern& rFSD,
+                                           const OUString* pTargetStyleName,
+                                           int nStatusFaceMatch=0,
+                                           int nStatusHeightMatch=0,
+                                           int nStatusWidthMatch=0 ) const;
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;
     sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
     virtual                ~PhysicalFontFace() {}
