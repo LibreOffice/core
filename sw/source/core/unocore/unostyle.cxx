@@ -1317,6 +1317,7 @@ private:
     const SwPageDesc* m_pOldPageDesc;
     rtl::Reference<SwDocStyleSheet> m_xNewBase;
     SfxItemSet* m_pItemSet;
+    std::unique_ptr<SfxItemSet> m_pMyItemSet;
     OUString m_rStyleName;
     const SwAttrSet* m_pParentStyle;
 
@@ -1325,15 +1326,10 @@ public:
         : m_rDoc(rSwDoc)
         , m_pOldPageDesc(nullptr)
         , m_pItemSet(nullptr)
+        , m_pMyItemSet(nullptr)
         , m_rStyleName(rName)
         , m_pParentStyle(pParentStyle)
-    {
-    }
-
-    ~SwStyleBase_Impl()
-    {
-        delete m_pItemSet;
-    }
+    { }
 
     rtl::Reference<SwDocStyleSheet>& getNewBase()
     {
@@ -1359,16 +1355,15 @@ public:
 
     SfxItemSet& GetItemSet()
     {
-        OSL_ENSURE(m_xNewBase.is(), "no SwDocStyleSheet available");
+        assert(m_xNewBase.is());
         if(!m_pItemSet)
         {
-            m_pItemSet = new SfxItemSet(m_xNewBase->GetItemSet());
+            m_pMyItemSet.reset(new SfxItemSet(m_xNewBase->GetItemSet()));
+            m_pItemSet = m_pMyItemSet.get();
 
             //UUUU set parent style to have the correct XFillStyle setting as XFILL_NONE
             if(!m_pItemSet->GetParent() && m_pParentStyle)
-            {
                 m_pItemSet->SetParent(m_pParentStyle);
-            }
         }
         return *m_pItemSet;
     }
