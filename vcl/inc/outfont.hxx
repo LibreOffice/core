@@ -80,8 +80,8 @@ public:
     void            SetQuality( int nQuality )                  { mnQuality = nQuality; }
     void            IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
     void            DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
-    void            SetMapNames( OUString aMapNames )           { maMapNames = aMapNames; }
-    void            AddMapName( OUString aMapName )
+    void            SetMapNames( OUString const & aMapNames ) { maMapNames = aMapNames; }
+    void            AddMapName( OUString const & aMapName )
                     {
                         if( maMapNames.getLength() > 0 )
                         {
