@@ -62,9 +62,11 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed, DejaVuSerifCondensed.ttf, Deja
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Bold, DejaVuSerifCondensed-Bold.ttf, DejaVu Serif Condensed Bold) 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Italic, DejaVuSerifCondensed-Italic.ttf, DejaVu Serif Condensed Italic) 
 STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondensed-BoldItalic.ttf, DejaVu Serif Condensed Bold Italic) 
+#endif // WITH_CATA_FONTS
 
 
 // Google ChromeOS fonts
+#ifdef WITH_CATA_FONTS
 
 #ifndef WNT 
 
@@ -94,6 +96,17 @@ STD_FONT_FILE( gid_File_Fnt_Caladea_Bold, Caladea-Bold.ttf, Caladea Bold)
 STD_FONT_FILE( gid_File_Fnt_Caladea_Italic, Caladea-Italic.ttf, Caladea Italic)
 STD_FONT_FILE( gid_File_Fnt_Caladea_BoldItalic, Caladea-BoldItalic.ttf, Caladea Bold Italic)
 
+// fontconfig updates to allow proper use of local fonts
+
+#ifdef UNX
+File gid_File_FcLocal_Conf
+    Dir = gid_Dir_Fonts_Truetype;
+    USER_FILE_BODY;
+//  Styles = ();
+    Name = "fc_local.conf";
+End
+#endif
+
 #endif // WITH_CATA_FONTS
 
 
@@ -121,13 +134,3 @@ STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium 
 
 #endif // WITH_CATB_FONTS
 
-// fontconfig updates to allow proper use of local fonts
-
-#ifdef UNX
-File gid_File_FcLocal_Conf
-    Dir = gid_Dir_Fonts_Truetype;
-    USER_FILE_BODY;
-//  Styles = ();
-    Name = "fc_local.conf";
-End
-#endif
