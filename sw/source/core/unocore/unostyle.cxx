@@ -1546,6 +1546,57 @@ void SwXStyle::SetPropertyValue<RES_PAPER_BIN>(const SfxItemPropertySimpleEntry&
     rPropSet.setPropertyValue(rEntry, uno::makeAny(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
     rStyleSet.Put(aSet);
 }
+template<>
+void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(!rValue.has<uno::Reference<container::XIndexReplace>>() || !rValue.has<uno::Reference<lang::XUnoTunnel>>())
+        throw lang::IllegalArgumentException();
+    auto xNumberTunnel(rValue.get<uno::Reference<lang::XUnoTunnel>>());
+    SwXNumberingRules* pSwXRules = reinterpret_cast<SwXNumberingRules*>(sal::static_int_cast<sal_IntPtr>(xNumberTunnel->getSomething(SwXNumberingRules::getUnoTunnelId())));
+    if(!pSwXRules)
+        return;
+    SwNumRule aSetRule(*pSwXRules->GetNumRule());
+    for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
+    {
+        const SwNumFormat* pFormat = aSetRule.GetNumFormat(i);
+        if(!pFormat)
+            continue;
+        SwNumFormat aFormat(*pFormat);
+        const auto pCharName(pSwXRules->GetNewCharStyleNames()[i]);
+        if(!pCharName.isEmpty()
+               && !SwXNumberingRules::isInvalidStyle(pCharName)
+               && (!pFormat->GetCharFormat() || pFormat->GetCharFormat()->GetName() != pCharName))
+        {
+            auto pCharFormatIt(std::find_if(m_pDoc->GetCharFormats()->begin(), m_pDoc->GetCharFormats()->end(),
+                    [pCharName] (SwCharFormat* pF) { return pF->GetName() == pCharName; }));
+            if(pCharFormatIt != m_pDoc->GetCharFormats()->end())
+                aFormat.SetCharFormat(*pCharFormatIt);
+            else if(m_pBasePool)
+            {
+                auto pBase(static_cast<SfxStyleSheetBasePool*>(m_pBasePool)->Find(pCharName, SFX_STYLE_FAMILY_CHAR));
+                if(!pBase)
+                    pBase = &m_pBasePool->Make(pCharName, SFX_STYLE_FAMILY_CHAR);
+                aFormat.SetCharFormat(static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat());
+            }
+            else
+                aFormat.SetCharFormat(nullptr);
+        }
+        // same for fonts:
+        const auto pBulletName(pSwXRules->GetBulletFontNames()[i]);
+        if(!pBulletName.isEmpty()
+                && !SwXNumberingRules::isInvalidStyle(pBulletName)
+                && (!pFormat->GetBulletFont() || pFormat->GetBulletFont()->GetName() != pBulletName))
+        {
+            const auto pFontListItem(static_cast<const SvxFontListItem*>(m_pDoc->GetDocShell()->GetItem(SID_ATTR_CHAR_FONTLIST)));
+            const auto pList(pFontListItem->GetFontList());
+            FontMetric aFontInfo(pList->Get(pBulletName, WEIGHT_NORMAL, ITALIC_NONE));
+            vcl::Font aFont(aFontInfo);
+            aFormat.SetBulletFont(&aFont);
+        }
+        aSetRule.Set(i, &aFormat);
+    }
+    o_rStyleBase.getNewBase()->SetNumRule(aSetRule);
+}
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1587,91 +1638,10 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             SetPropertyValue<RES_PAPER_BIN>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        case  FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
-        {
-            if(aValue.getValueType() == cppu::UnoType<container::XIndexReplace>::get())
-            {
-                uno::Reference< container::XIndexReplace > const * pxRulesRef =
-                        static_cast<uno::Reference< container::XIndexReplace > const *>(aValue.getValue());
-
-                uno::Reference<lang::XUnoTunnel> xNumberTunnel( *pxRulesRef, uno::UNO_QUERY);
-
-                SwXNumberingRules* pSwXRules = nullptr;
-                if(xNumberTunnel.is())
-                {
-                    pSwXRules = reinterpret_cast< SwXNumberingRules * >(
-                            sal::static_int_cast< sal_IntPtr >(xNumberTunnel->getSomething( SwXNumberingRules::getUnoTunnelId()) ));
-                }
-                if(pSwXRules)
-                {
-                    const OUString* pCharStyleNames = pSwXRules->GetNewCharStyleNames();
-                    const OUString* pBulletFontNames = pSwXRules->GetBulletFontNames();
-
-                    SwNumRule aSetRule(*pSwXRules->GetNumRule());
-                    const SwCharFormats* pFormats = pDoc->GetCharFormats();
-                    const size_t nChCount = pFormats->size();
-                    for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-                    {
-
-                        const SwNumFormat* pFormat = aSetRule.GetNumFormat( i );
-                        if(pFormat)
-                        {
-                            SwNumFormat aFormat(*pFormat);
-                            if (!pCharStyleNames[i].isEmpty() &&
-                                !SwXNumberingRules::isInvalidStyle(pCharStyleNames[i]) &&
-                                (!pFormat->GetCharFormat() || pFormat->GetCharFormat()->GetName() != pCharStyleNames[i]) )
-                            {
-
-                                SwCharFormat* pCharFormat = nullptr;
-                                for(size_t j = 0; j< nChCount; ++j)
-                                {
-                                    SwCharFormat* pTmp = (*pFormats)[j];
-                                    if(pTmp->GetName() == pCharStyleNames[i])
-                                    {
-                                        pCharFormat = pTmp;
-                                        break;
-                                    }
-                                }
-                                if(!pCharFormat && pBasePool)
-                                {
-
-                                    SfxStyleSheetBase* pBase;
-                                    pBase = static_cast<SfxStyleSheetBasePool*>(pBasePool)->Find(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
-                                    if(!pBase)
-                                        pBase = &pBasePool->Make(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
-                                    pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
-
-                                }
-
-                                aFormat.SetCharFormat( pCharFormat );
-                            }
-                            // same for fonts:
-                            if (!pBulletFontNames[i].isEmpty() &&
-                                !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
-                                (!pFormat->GetBulletFont() || pFormat->GetBulletFont()->GetName() != pBulletFontNames[i]) )
-                            {
-                                const SvxFontListItem* pFontListItem =
-                                        static_cast<const SvxFontListItem*>(pDoc->GetDocShell()
-                                                            ->GetItem( SID_ATTR_CHAR_FONTLIST ));
-                                const FontList*  pList = pFontListItem->GetFontList();
-                                FontMetric aFontMetric = pList->Get(
-                                    pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
-                                vcl::Font aFont(aFontMetric);
-                                aFormat.SetBulletFont(&aFont);
-                            }
-                            aSetRule.Set( i, &aFormat );
-                        }
-                    }
-                    rBase.getNewBase()->SetNumRule(aSetRule);
-                }
-            }
-            else
-                throw lang::IllegalArgumentException();
-
+        case FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
+            SetPropertyValue<FN_UNO_NUM_RULES>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
-
         case RES_PARATR_OUTLINELEVEL:
         {
             sal_Int16 nLevel = 0;
