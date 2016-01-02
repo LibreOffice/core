@@ -243,6 +243,8 @@ namespace sw
     };
 
 }
+
+class SwStyleBase_Impl;
 class SwXStyle : public cppu::WeakImplHelper
     <
         css::style::XStyle,
@@ -269,6 +271,8 @@ protected:
     css::uno::Reference<css::container::XNameAccess> m_xStyleFamily;
     css::uno::Reference<css::beans::XPropertySet> m_xStyleData;
 
+    template<sal_uInt16>
+    void SetPropertyValue(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any&, SwStyleBase_Impl&);
     void SAL_CALL SetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues )
         throw (css::beans::UnknownPropertyException,
                css::beans::PropertyVetoException,
@@ -1399,6 +1403,28 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
     return m_pOldPageDesc;
 }
 
+static void lcl_SetDefaultWay(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    // default ItemSet handling
+    SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
+    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
+    aSet.SetParent(&rStyleSet);
+    rPropSet.setPropertyValue(rEntry, rValue, aSet);
+    rStyleSet.Put(aSet);
+}
+
+template<>
+void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    bool bHidden = false;
+    if(rValue >>= bHidden)
+    {
+        //make it a 'real' style - necessary for pooled styles
+        o_rStyleBase.getNewBase()->GetItemSet();
+        o_rStyleBase.getNewBase()->SetHidden(bHidden);
+    }
+    lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
+}
 
 static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         const SfxItemPropertySet& rPropSet,
@@ -1452,17 +1478,8 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
     switch(rEntry.nWID)
     {
         case FN_UNO_HIDDEN:
-        {
-            bool bHidden = false;
-            if ( rValue >>= bHidden )
-            {
-                //make it a 'real' style - necessary for pooled styles
-                rBase.getNewBase()->GetItemSet();
-                rBase.getNewBase()->SetHidden( bHidden );
-            }
-        }
-        break;
-
+            assert(false);
+            break;
         case FN_UNO_STYLE_INTEROP_GRAB_BAG:
         {
             rBase.getNewBase()->GetItemSet();
@@ -1942,6 +1959,26 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             break;
         }
+        case RES_PARATR_NUMRULE:
+        {
+            lcl_SetDefaultWay(rEntry, rPropSet, aValue, rBase);
+            // --> OD 2006-10-18 #i70223#
+            if ( SFX_STYLE_FAMILY_PARA == eFamily &&
+                    rBase.getNewBase().is() && rBase.getNewBase()->GetCollection() &&
+                    //rBase.getNewBase()->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */) //#outline level,removed by zhaojianwei
+                    rBase.getNewBase()->GetCollection()->IsAssignedToListLevelOfOutlineStyle() )       ////<-end,add by zhaojianwei
+            {
+                OUString sNewNumberingRuleName;
+                aValue >>= sNewNumberingRuleName;
+                if ( sNewNumberingRuleName.isEmpty() ||
+                     sNewNumberingRuleName != pDoc->GetOutlineNumRule()->GetName() )
+                {
+                    rBase.getNewBase()->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
+                }
+            }
+            bDone = true;
+            break;
+        }
         default:
         {
             // nothing to do
@@ -1950,30 +1987,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
     }
 
     if(!bDone)
-    {
-        // default ItemSet handling
-        SfxItemSet& rStyleSet = rBase.GetItemSet();
-        SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
-        aSet.SetParent(&rStyleSet);
-        rPropSet.setPropertyValue(rEntry, aValue, aSet);
-        rStyleSet.Put(aSet);
-
-        // --> OD 2006-10-18 #i70223#
-        if ( SFX_STYLE_FAMILY_PARA == eFamily &&
-                rEntry.nWID == RES_PARATR_NUMRULE &&
-                rBase.getNewBase().is() && rBase.getNewBase()->GetCollection() &&
-                //rBase.getNewBase()->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */) //#outline level,removed by zhaojianwei
-                rBase.getNewBase()->GetCollection()->IsAssignedToListLevelOfOutlineStyle() )       ////<-end,add by zhaojianwei
-        {
-            OUString sNewNumberingRuleName;
-            aValue >>= sNewNumberingRuleName;
-            if ( sNewNumberingRuleName.isEmpty() ||
-                 sNewNumberingRuleName != pDoc->GetOutlineNumRule()->GetName() )
-            {
-                rBase.getNewBase()->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
-            }
-        }
-    }
+        lcl_SetDefaultWay(rEntry, rPropSet, aValue, rBase);
 }
 
 void SAL_CALL SwXStyle::SetPropertyValues_Impl(
@@ -2015,7 +2029,13 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
             throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast<cppu::OWeakObject*>(this));
         if(aBaseImpl.getNewBase().is())
         {
-            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_rEntry.m_eFamily);
+            switch(pEntry->nWID)
+            {
+                case FN_UNO_HIDDEN:
+                    SetPropertyValue<FN_UNO_HIDDEN>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
+                default:
+                    lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_rEntry.m_eFamily);
+            }
         }
         else if(m_bIsDescriptor)
         {
