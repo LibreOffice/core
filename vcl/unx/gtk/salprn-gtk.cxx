@@ -1133,7 +1133,7 @@ const
     pItem->Commit();
 }
 
-sal_uLong
+sal_uInt32
 GtkSalInfoPrinter::GetCapabilities(
         const ImplJobSetup* const i_pSetupData,
         const PrinterCapType i_nType)

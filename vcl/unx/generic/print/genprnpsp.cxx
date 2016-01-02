@@ -781,7 +781,7 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
     return aRet;
 }
 
-sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, PrinterCapType nType )
+sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, PrinterCapType nType )
 {
     switch( nType )
     {

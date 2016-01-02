@@ -269,7 +269,7 @@ OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
     return OUString();
 }
 
-sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapType i_nType )
+sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapType i_nType )
 {
     switch( i_nType )
     {

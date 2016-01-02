@@ -1030,7 +1030,7 @@ void Printer::dispose()
     OutputDevice::dispose();
 }
 
-sal_uLong Printer::GetCapabilities( PrinterCapType nType ) const
+sal_uInt32 Printer::GetCapabilities( PrinterCapType nType ) const
 {
     if ( IsDisplayPrinter() )
         return 0;

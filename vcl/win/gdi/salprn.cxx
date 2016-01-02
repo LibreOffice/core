@@ -1239,7 +1239,7 @@ OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal
     return aPaperBinName;
 }
 
-sal_uLong WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType )
+sal_uInt32 WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType )
 {
     DWORD nRet;
 

@@ -306,7 +306,7 @@ public:
     bool                        IsDisplayPrinter() const    { return mpDisplayDev != nullptr; }
     bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
-    sal_uLong                   GetCapabilities( PrinterCapType nType ) const;
+    sal_uInt32                  GetCapabilities( PrinterCapType nType ) const;
     bool                        HasSupport( PrinterSupport eFeature ) const;
 
     bool                        SetJobSetup( const JobSetup& rSetup );

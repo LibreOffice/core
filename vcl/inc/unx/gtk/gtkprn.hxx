@@ -41,7 +41,7 @@ private:
 class VCL_DLLPUBLIC GtkSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
-    sal_uLong GetCapabilities(const ImplJobSetup* i_pSetupData, PrinterCapType i_nType) override;
+    sal_uInt32 GetCapabilities(const ImplJobSetup* i_pSetupData, PrinterCapType i_nType) override;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
