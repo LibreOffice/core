@@ -811,6 +811,84 @@ public:
                 }
                 rDev.Pop();
             }
+
+            {
+                sal_uInt16 nHue = 0;
+                Rectangle aOuter = aRegions[2];
+                std::vector<Rectangle> aPieces(DemoRenderer::partition(aOuter, 2, 2));
+                for (int j = 0; j < std::min(aOuter.GetWidth(), aOuter.GetHeight())/5; ++j)
+                {
+                    rDev.Push(PushFlags::CLIPREGION);
+
+                    vcl::Region aClipRegion;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        aPieces[i].expand(-1);
+                        aPieces[i].Move(2 - i/2, 2 - i/2);
+                        aClipRegion.Union(aPieces[i]);
+                    }
+                    assert (aClipRegion.getRegionBand());
+                    rDev.SetClipRegion(vcl::Region(aClipRegion));
+                    rDev.SetFillColor(Color::HSBtoRGB(nHue, 75, 75));
+                    nHue = (nHue + 97) % 360;
+                    rDev.DrawRect(aOuter);
+
+                    rDev.Pop();
+                }
+            }
+
+            {
+                sal_uInt16 nHue = 0;
+                Rectangle aOuter = aRegions[3];
+                std::vector<Rectangle> aPieces(DemoRenderer::partition(aOuter, 2, 2));
+                bool bDone = false;
+                for (int j = 0; !bDone; ++j)
+                {
+                    rDev.Push(PushFlags::CLIPREGION);
+
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        vcl::Region aClipRegion;
+                        tools::Polygon aPoly;
+                        switch (i) {
+                        case 3:
+                        case 0: // 45degree rectangle.
+                            aPoly = tools::Polygon(aPieces[i]);
+                            aPoly.Rotate(aPieces[i].Center(), 450);
+                            break;
+                        case 1: // arc
+                            aPoly = tools::Polygon(aPieces[i],
+                                                   aPieces[i].TopLeft(),
+                                                   aPieces[i].BottomRight());
+                            break;
+                        case 2:
+                            aPoly = tools::Polygon(aPieces[i],
+                                                   aPieces[i].GetWidth()/5,
+                                                   aPieces[i].GetHeight()/5);
+                            aPoly.Rotate(aPieces[i].Center(), 450);
+                            break;
+                        }
+                        aClipRegion = vcl::Region(aPoly);
+                        aPieces[i].expand(-1);
+                        aPieces[i].Move(2 - i/2, 2 - i/2);
+
+                        bDone = aPieces[i].GetWidth() < 4 ||
+                                aPieces[i].GetHeight() < 4;
+
+                        if (!bDone)
+                        {
+                            assert (!aClipRegion.getRegionBand());
+
+                            rDev.SetClipRegion(vcl::Region(aClipRegion));
+                            rDev.SetFillColor(Color::HSBtoRGB(nHue, 50, 75));
+                            nHue = (nHue + 97) % 360;
+                            rDev.DrawRect(aOuter);
+                        }
+                    }
+
+                    rDev.Pop();
+                }
+            }
         }
     };
 
