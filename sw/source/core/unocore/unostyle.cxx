@@ -1501,6 +1501,20 @@ void SwXStyle::SetPropertyValue<RES_BACKGROUND>(const SfxItemPropertySimpleEntry
 
     setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
 }
+template<>
+void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    drawing::BitmapMode eMode;
+    if(!(rValue >>= eMode))
+    {
+        if(!rValue.has<sal_Int32>())
+            throw lang::IllegalArgumentException();
+        eMode = ((drawing::BitmapMode)rValue.get<sal_Int32>());
+    }
+    SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
+    rStyleSet.Put(XFillBmpStretchItem(drawing::BitmapMode_STRETCH == eMode));
+    rStyleSet.Put(XFillBmpTileItem(drawing::BitmapMode_REPEAT == eMode));
+}
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1535,30 +1549,9 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             bDone = true;
             break;
         case OWN_ATTR_FILLBMP_MODE:
-        {
-            //UUUU
-            drawing::BitmapMode eMode;
-
-            if(!(aValue >>= eMode))
-            {
-                sal_Int32 nMode = 0;
-
-                if(!(aValue >>= nMode))
-                {
-                    throw lang::IllegalArgumentException();
-                }
-
-                eMode = (drawing::BitmapMode)nMode;
-            }
-
-            SfxItemSet& rStyleSet = rBase.GetItemSet();
-
-            rStyleSet.Put(XFillBmpStretchItem(drawing::BitmapMode_STRETCH == eMode));
-            rStyleSet.Put(XFillBmpTileItem(drawing::BitmapMode_REPEAT == eMode));
-
+            SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
         case RES_PAPER_BIN:
         {
             SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( true );
@@ -3312,7 +3305,6 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 }
                 default:
                 {
-                    //UUUU
                     SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                     break;
                 }
