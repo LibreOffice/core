@@ -89,6 +89,7 @@
 #include <cassert>
 #include <memory>
 #include <set>
+#include <limits>
 
 namespace
 {
@@ -1515,6 +1516,36 @@ void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertySimp
     rStyleSet.Put(XFillBmpStretchItem(drawing::BitmapMode_STRETCH == eMode));
     rStyleSet.Put(XFillBmpTileItem(drawing::BitmapMode_REPEAT == eMode));
 }
+template<>
+void SwXStyle::SetPropertyValue<RES_PAPER_BIN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(!rValue.has<OUString>())
+        throw lang::IllegalArgumentException();
+    SfxPrinter* pPrinter = m_pDoc->getIDocumentDeviceAccess().getPrinter(true);
+    OUString sValue(rValue.get<OUString>());
+    using printeridx_t = decltype(pPrinter->GetPaperBinCount());
+    printeridx_t nBin = std::numeric_limits<printeridx_t>::max();
+    if(sValue == "[From printer settings]")
+        nBin = std::numeric_limits<printeridx_t>::max()-1;
+    else if(pPrinter)
+    {
+        for(sal_uInt16 i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; ++i)
+        {
+            if (sValue == pPrinter->GetPaperBinName(i))
+            {
+                nBin = i;
+                break;
+            }
+        }
+    }
+    if(nBin == std::numeric_limits<printeridx_t>::max())
+        throw lang::IllegalArgumentException();
+    SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
+    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
+    aSet.SetParent(&rStyleSet);
+    rPropSet.setPropertyValue(rEntry, uno::makeAny(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
+    rStyleSet.Put(aSet);
+}
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1553,39 +1584,9 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             bDone = true;
             break;
         case RES_PAPER_BIN:
-        {
-            SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( true );
-            OUString sTmp;
-            sal_uInt16 nBin = USHRT_MAX;
-            if ( !( aValue >>= sTmp ) )
-                throw lang::IllegalArgumentException();
-            if ( sTmp == "[From printer settings]" )
-                nBin = USHRT_MAX-1;
-            else if ( pPrinter )
-            {
-                for (sal_uInt16 i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; i++ )
-                {
-                    if (sTmp == pPrinter->GetPaperBinName ( i ) )
-                    {
-                        nBin = i;
-                        break;
-                    }
-                }
-            }
-            if ( nBin == USHRT_MAX )
-                throw lang::IllegalArgumentException();
-            else
-            {
-                SfxItemSet& rStyleSet = rBase.GetItemSet();
-                SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
-                aSet.SetParent(&rStyleSet);
-                rPropSet.setPropertyValue(rEntry, uno::makeAny ( static_cast < sal_Int8 > ( nBin == USHRT_MAX-1 ? -1 : nBin ) ), aSet);
-                rStyleSet.Put(aSet);
-            }
-
+            SetPropertyValue<RES_PAPER_BIN>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
         case  FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
         {
             if(aValue.getValueType() == cppu::UnoType<container::XIndexReplace>::get())
