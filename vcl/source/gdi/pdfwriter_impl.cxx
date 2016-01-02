@@ -3531,9 +3531,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
             aErrorComment.append( "GetEmbedFontData failed for font \"" );
             aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
             aErrorComment.append( '\"' );
-            if( pFont->GetSlant() == ITALIC_NORMAL )
+            if( pFont->GetSlantType() == ITALIC_NORMAL )
                 aErrorComment.append( " italic" );
-            else if( pFont->GetSlant() == ITALIC_OBLIQUE )
+            else if( pFont->GetSlantType() == ITALIC_OBLIQUE )
                 aErrorComment.append( " oblique" );
             aErrorComment.append( " weight=" );
             aErrorComment.append( sal_Int32(pFont->GetWeight()) );
@@ -3601,7 +3601,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 pRef->SetMapMode( MapMode( MAP_PIXEL ) );
                 Font aFont( pFont->GetFamilyName(), pFont->GetStyleName(), Size( 0, 1000 ) );
                 aFont.SetWeight( pFont->GetWeight() );
-                aFont.SetItalic( pFont->GetSlant() );
+                aFont.SetItalic( pFont->GetSlantType() );
                 aFont.SetPitch( pFont->GetPitch() );
                 pRef->SetFont( aFont );
                 pRef->ImplNewFont();
@@ -3816,7 +3816,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
     // possibly characters outside Adobe standard encoding
     // so set Symbolic flag
     sal_Int32 nFontFlags = (1<<2);
-    if( pFont->GetSlant() == ITALIC_NORMAL || pFont->GetSlant() == ITALIC_OBLIQUE )
+    if( pFont->GetSlantType() == ITALIC_NORMAL || pFont->GetSlantType() == ITALIC_OBLIQUE )
         nFontFlags |= (1 << 6);
     if( pFont->GetPitch() == PITCH_FIXED )
         nFontFlags |= 1;
@@ -3846,7 +3846,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
     aLine.append( ' ' );
     aLine.append( (sal_Int32)(rInfo.m_aFontBBox.BottomRight().Y()+1) );
     aLine.append( "]/ItalicAngle " );
-    if( pFont->GetSlant() == ITALIC_OBLIQUE || pFont->GetSlant() == ITALIC_NORMAL )
+    if( pFont->GetSlantType() == ITALIC_OBLIQUE || pFont->GetSlantType() == ITALIC_NORMAL )
         aLine.append( "-30" );
     else
         aLine.append( "0" );
@@ -4121,9 +4121,9 @@ bool PDFWriterImpl::emitFonts()
                 aErrorComment.append( "CreateFontSubset failed for font \"" );
                 aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
                 aErrorComment.append( '\"' );
-                if( pFont->GetSlant() == ITALIC_NORMAL )
+                if( pFont->GetSlantType() == ITALIC_NORMAL )
                     aErrorComment.append( " italic" );
-                else if( pFont->GetSlant() == ITALIC_OBLIQUE )
+                else if( pFont->GetSlantType() == ITALIC_OBLIQUE )
                     aErrorComment.append( " oblique" );
                 aErrorComment.append( " weight=" );
                 aErrorComment.append( sal_Int32(pFont->GetWeight()) );
@@ -8869,8 +8869,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // perform artificial italics if necessary
     if( ( m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_NORMAL ||
           m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_OBLIQUE ) &&
-        !( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->GetSlant() == ITALIC_NORMAL ||
-           m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->GetSlant() == ITALIC_OBLIQUE )
+        !( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->GetSlantType() == ITALIC_NORMAL ||
+           m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->GetSlantType() == ITALIC_OBLIQUE )
         )
     {
         fSkew = M_PI/12.0;
@@ -9167,18 +9167,18 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         Point aOffset = Point(0,0);
 
         if ( nEmphMark & EMPHASISMARK_POS_BELOW )
-            aOffset.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnDescent + nEmphYOff;
+            aOffset.Y() += m_pReferenceDevice->mpFontEntry->maMetric.GetDescent() + nEmphYOff;
         else
-            aOffset.Y() -= m_pReferenceDevice->mpFontEntry->maMetric.mnAscent + nEmphYOff;
+            aOffset.Y() -= m_pReferenceDevice->mpFontEntry->maMetric.GetAscent() + nEmphYOff;
 
         long nEmphWidth2     = nEmphWidth / 2;
         long nEmphHeight2    = nEmphHeight / 2;
         aOffset += Point( nEmphWidth2, nEmphHeight2 );
 
         if ( eAlign == ALIGN_BOTTOM )
-            aOffset.Y() -= m_pReferenceDevice->mpFontEntry->maMetric.mnDescent;
+            aOffset.Y() -= m_pReferenceDevice->mpFontEntry->maMetric.GetDescent();
         else if ( eAlign == ALIGN_TOP )
-            aOffset.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnAscent;
+            aOffset.Y() += m_pReferenceDevice->mpFontEntry->maMetric.GetAscent();
 
         for( int nStart = 0;;)
         {
@@ -9496,17 +9496,17 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnd
 
     if ( bIsAbove )
     {
-        if ( !pFontEntry->maMetric.mnAboveWUnderlineSize )
+        if ( !pFontEntry->maMetric.GetAboveWavelineUnderlineSize() )
             m_pReferenceDevice->ImplInitAboveTextLineSize();
-        nLineHeight = HCONV( pFontEntry->maMetric.mnAboveWUnderlineSize );
-        nLinePos = HCONV( pFontEntry->maMetric.mnAboveWUnderlineOffset );
+        nLineHeight = HCONV( pFontEntry->maMetric.GetAboveWavelineUnderlineSize() );
+        nLinePos = HCONV( pFontEntry->maMetric.GetAboveWavelineUnderlineOffset() );
     }
     else
     {
-        if ( !pFontEntry->maMetric.mnWUnderlineSize )
+        if ( !pFontEntry->maMetric.GetWavelineUnderlineSize() )
             m_pReferenceDevice->ImplInitTextLineSize();
-        nLineHeight = HCONV( pFontEntry->maMetric.mnWUnderlineSize );
-        nLinePos = HCONV( pFontEntry->maMetric.mnWUnderlineOffset );
+        nLineHeight = HCONV( pFontEntry->maMetric.GetWavelineUnderlineSize() );
+        nLinePos = HCONV( pFontEntry->maMetric.GetWavelineUnderlineOffset() );
     }
     if ( (eTextLine == UNDERLINE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
@@ -9575,17 +9575,17 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
         case UNDERLINE_DASHDOTDOT:
             if ( bIsAbove )
             {
-                if ( !pFontEntry->maMetric.mnAboveUnderlineSize )
+                if ( !pFontEntry->maMetric.GetAboveUnderlineSize() )
                     m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveUnderlineOffset );
+                nLineHeight = HCONV( pFontEntry->maMetric.GetAboveUnderlineSize() );
+                nLinePos    = HCONV( pFontEntry->maMetric.GetAboveUnderlineOffset() );
             }
             else
             {
-                if ( !pFontEntry->maMetric.mnUnderlineSize )
+                if ( !pFontEntry->maMetric.GetUnderlineSize() )
                     m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnUnderlineOffset );
+                nLineHeight = HCONV( pFontEntry->maMetric.GetUnderlineSize() );
+                nLinePos    = HCONV( pFontEntry->maMetric.GetUnderlineOffset() );
             }
             break;
         case UNDERLINE_BOLD:
@@ -9596,36 +9596,36 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
         case UNDERLINE_BOLDDASHDOTDOT:
             if ( bIsAbove )
             {
-                if ( !pFontEntry->maMetric.mnAboveBUnderlineSize )
+                if ( !pFontEntry->maMetric.GetAboveBoldUnderlineSize() )
                     m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveBUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveBUnderlineOffset );
+                nLineHeight = HCONV( pFontEntry->maMetric.GetAboveBoldUnderlineSize() );
+                nLinePos    = HCONV( pFontEntry->maMetric.GetAboveBoldUnderlineOffset() );
             }
             else
             {
-                if ( !pFontEntry->maMetric.mnBUnderlineSize )
+                if ( !pFontEntry->maMetric.GetBoldUnderlineSize() )
                     m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnBUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnBUnderlineOffset );
+                nLineHeight = HCONV( pFontEntry->maMetric.GetBoldUnderlineSize() );
+                nLinePos    = HCONV( pFontEntry->maMetric.GetBoldUnderlineOffset() );
                 nLinePos += nLineHeight/2;
             }
             break;
         case UNDERLINE_DOUBLE:
             if ( bIsAbove )
             {
-                if ( !pFontEntry->maMetric.mnAboveDUnderlineSize )
+                if ( !pFontEntry->maMetric.GetAboveDoubleUnderlineSize() )
                     m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveDUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveDUnderlineOffset1 );
-                nLinePos2   = HCONV( pFontEntry->maMetric.mnAboveDUnderlineOffset2 );
+                nLineHeight = HCONV( pFontEntry->maMetric.GetAboveDoubleUnderlineSize() );
+                nLinePos    = HCONV( pFontEntry->maMetric.GetAboveDoubleUnderlineOffset1() );
+                nLinePos2   = HCONV( pFontEntry->maMetric.GetAboveDoubleUnderlineOffset2() );
             }
             else
             {
-                if ( !pFontEntry->maMetric.mnDUnderlineSize )
+                if ( !pFontEntry->maMetric.GetDoubleUnderlineSize() )
                     m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontEntry->maMetric.mnDUnderlineSize );
-                nLinePos    = HCONV( pFontEntry->maMetric.mnDUnderlineOffset1 );
-                nLinePos2   = HCONV( pFontEntry->maMetric.mnDUnderlineOffset2 );
+                nLineHeight = HCONV( pFontEntry->maMetric.GetDoubleUnderlineSize() );
+                nLinePos    = HCONV( pFontEntry->maMetric.GetDoubleUnderlineOffset1() );
+                nLinePos2   = HCONV( pFontEntry->maMetric.GetDoubleUnderlineOffset2() );
             }
             break;
         default:
@@ -9738,23 +9738,23 @@ void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontSt
     switch ( eStrikeout )
     {
         case STRIKEOUT_SINGLE:
-            if ( !pFontEntry->maMetric.mnStrikeoutSize )
+            if ( !pFontEntry->maMetric.GetStrikeoutSize() )
                 m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontEntry->maMetric.mnStrikeoutSize );
-            nLinePos    = HCONV( pFontEntry->maMetric.mnStrikeoutOffset );
+            nLineHeight = HCONV( pFontEntry->maMetric.GetStrikeoutSize() );
+            nLinePos    = HCONV( pFontEntry->maMetric.GetStrikeoutOffset() );
             break;
         case STRIKEOUT_BOLD:
-            if ( !pFontEntry->maMetric.mnBStrikeoutSize )
+            if ( !pFontEntry->maMetric.GetBoldStrikeoutSize() )
                 m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontEntry->maMetric.mnBStrikeoutSize );
-            nLinePos    = HCONV( pFontEntry->maMetric.mnBStrikeoutOffset );
+            nLineHeight = HCONV( pFontEntry->maMetric.GetBoldStrikeoutSize() );
+            nLinePos    = HCONV( pFontEntry->maMetric.GetBoldStrikeoutOffset() );
             break;
         case STRIKEOUT_DOUBLE:
-            if ( !pFontEntry->maMetric.mnDStrikeoutSize )
+            if ( !pFontEntry->maMetric.GetDoubleStrikeoutSize() )
                 m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontEntry->maMetric.mnDStrikeoutSize );
-            nLinePos    = HCONV( pFontEntry->maMetric.mnDStrikeoutOffset1 );
-            nLinePos2   = HCONV( pFontEntry->maMetric.mnDStrikeoutOffset2 );
+            nLineHeight = HCONV( pFontEntry->maMetric.GetDoubleStrikeoutSize() );
+            nLinePos    = HCONV( pFontEntry->maMetric.GetDoubleStrikeoutOffset1() );
+            nLinePos2   = HCONV( pFontEntry->maMetric.GetDoubleStrikeoutOffset2() );
             break;
         default:
             break;
@@ -9875,9 +9875,9 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     Point aPos( rPos );
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
     if( eAlign == ALIGN_TOP )
-        aPos.Y() += HCONV( pFontEntry->maMetric.mnAscent );
+        aPos.Y() += HCONV( pFontEntry->maMetric.GetAscent() );
     else if( eAlign == ALIGN_BOTTOM )
-        aPos.Y() -= HCONV( pFontEntry->maMetric.mnDescent );
+        aPos.Y() -= HCONV( pFontEntry->maMetric.GetDescent() );
 
     OStringBuffer aLine( 512 );
     // save GS
