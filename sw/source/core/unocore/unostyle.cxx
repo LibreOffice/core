@@ -1425,6 +1425,13 @@ void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry&
     }
     lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
 }
+template<>
+void SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    o_rStyleBase.getNewBase()->GetItemSet();
+    o_rStyleBase.getNewBase()->SetGrabBagItem(rValue);
+    lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
+}
 
 static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         const SfxItemPropertySet& rPropSet,
@@ -1478,15 +1485,9 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
     switch(rEntry.nWID)
     {
         case FN_UNO_HIDDEN:
+        case FN_UNO_STYLE_INTEROP_GRAB_BAG:
             assert(false);
             break;
-        case FN_UNO_STYLE_INTEROP_GRAB_BAG:
-        {
-            rBase.getNewBase()->GetItemSet();
-            rBase.getNewBase()->SetGrabBagItem(rValue);
-        }
-        break;
-
         case XATTR_FILLGRADIENT:
         case XATTR_FILLHATCH:
         case XATTR_FILLBITMAP:
@@ -2033,6 +2034,8 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
             {
                 case FN_UNO_HIDDEN:
                     SetPropertyValue<FN_UNO_HIDDEN>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
+                case FN_UNO_STYLE_INTEROP_GRAB_BAG:
+                    SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                 default:
                     lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_rEntry.m_eFamily);
             }
