@@ -22,6 +22,30 @@
       "revId": "4cc2113e7e824009469c33fc83769f3febfec179",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6d237a06",
+        "filename": "ucb/source/ucp/webdav-neon/webdavcontent.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3502,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-01-02T10:47:40Z",
+      "side": 1,
+      "message": "Nope, I left it as is because in case of SC_NOT_FOUND the networkAccessAllowed processing thing below is still needed.\nBy adding \u0027else if\u0027 after this \u0027if\u0027 clause the last \u0027else if\u0027 clause will be ignored.",
+      "parentUuid": "dab17558_4d0cb694",
+      "range": {
+        "startLine": 3502,
+        "startChar": 12,
+        "endLine": 3502,
+        "endChar": 13
+      },
+      "revId": "4cc2113e7e824009469c33fc83769f3febfec179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
