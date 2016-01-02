@@ -1616,7 +1616,43 @@ void SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySimple
     SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.m_aPoolId, true);
     o_rStyleBase.getNewBase()->SetFollow(aString);
 }
-
+template<>
+void SwXStyle::SetPropertyValue<RES_PAGEDESC>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
+    {
+        lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
+        return;
+    }
+    if(!rValue.has<OUString>())
+        throw lang::IllegalArgumentException();
+    // special handling for RES_PAGEDESC
+    SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
+    std::unique_ptr<SwFormatPageDesc> pNewDesc;
+    const SfxPoolItem* pItem;
+    if(SfxItemState::SET == rStyleSet.GetItemState(RES_PAGEDESC, true, &pItem))
+        pNewDesc.reset(new SwFormatPageDesc(*static_cast<const SwFormatPageDesc*>(pItem)));
+    else
+        pNewDesc.reset(new SwFormatPageDesc);
+    const auto sValue(rValue.get<OUString>());
+    OUString sDescName;
+    SwStyleNameMapper::FillUIName(sValue, sDescName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
+    if(pNewDesc->GetPageDesc() && pNewDesc->GetPageDesc()->GetName() == sDescName)
+        return;
+    if(sDescName.isEmpty())
+    {
+        rStyleSet.ClearItem(RES_BREAK);
+        rStyleSet.Put(SwFormatPageDesc());
+    }
+    else
+    {
+        SwPageDesc* pPageDesc(SwPageDesc::GetByName(*m_pDoc, sDescName));
+        if(!pPageDesc)
+            throw lang::IllegalArgumentException();
+        pNewDesc->RegisterToPageDesc(*pPageDesc);
+        rStyleSet.Put(*pNewDesc);
+    }
+}
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1670,55 +1706,10 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             SetPropertyValue<FN_UNO_FOLLOW_STYLE>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        case RES_PAGEDESC :
-        {
-            if (MID_PAGEDESC_PAGEDESCNAME != nMemberId)
-                break;
-            // special handling for RES_PAGEDESC
-            if(aValue.getValueType() != ::cppu::UnoType<OUString>::get())
-                throw lang::IllegalArgumentException();
-            SfxItemSet& rStyleSet = rBase.GetItemSet();
-
-            std::unique_ptr<SwFormatPageDesc> pNewDesc;
-            const SfxPoolItem* pItem;
-            if(SfxItemState::SET == rStyleSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
-            {
-                pNewDesc.reset( new SwFormatPageDesc(*static_cast<const SwFormatPageDesc*>(pItem)) );
-            }
-            else
-                pNewDesc.reset( new SwFormatPageDesc );
-            OUString uDescName;
-            aValue >>= uDescName;
-            OUString sDescName;
-            SwStyleNameMapper::FillUIName(uDescName, sDescName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
-            if(!pNewDesc->GetPageDesc() || pNewDesc->GetPageDesc()->GetName() != sDescName)
-            {
-                bool bPut = false;
-                if (!sDescName.isEmpty())
-                {
-                    SwPageDesc* pPageDesc = SwPageDesc::GetByName(*pDoc, sDescName);
-                    if(pPageDesc)
-                    {
-                        pNewDesc->RegisterToPageDesc( *pPageDesc );
-                        bPut = true;
-                    }
-                    else
-                    {
-                        throw lang::IllegalArgumentException();
-                    }
-                }
-                if(!bPut)
-                {
-                    rStyleSet.ClearItem(RES_BREAK);
-                    rStyleSet.Put(SwFormatPageDesc());
-                }
-                else
-                    rStyleSet.Put(*pNewDesc);
-
-            }
+        case RES_PAGEDESC:
+            SetPropertyValue<RES_PAGEDESC>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
         case RES_TEXT_VERT_ADJUST:
         {
             if( pDoc )
