@@ -26,6 +26,7 @@
 #include "rect.hxx"
 #include "format.hxx"
 
+#include <cassert>
 #include <memory>
 #include <vector>
 #include <deque>
@@ -1319,7 +1320,7 @@ public:
 
 inline SmNode* SmRootNode::Argument()
 {
-    OSL_ASSERT( GetNumSubNodes() > 0 );
+    assert( GetNumSubNodes() == 3 );
     return GetSubNode( 0 );
 }
 inline const SmNode* SmRootNode::Argument() const
@@ -1328,7 +1329,8 @@ inline const SmNode* SmRootNode::Argument() const
 }
 inline SmRootSymbolNode* SmRootNode::Symbol()
 {
-    OSL_ASSERT( GetNumSubNodes() > 1 && GetSubNode( 1 )->GetType() == NROOTSYMBOL );
+    assert( GetNumSubNodes() == 3 );
+    OSL_ASSERT( GetSubNode( 1 )->GetType() == NROOTSYMBOL );
     return static_cast< SmRootSymbolNode* >( GetSubNode( 1 ));
 }
 inline const SmRootSymbolNode* SmRootNode::Symbol() const
@@ -1337,7 +1339,7 @@ inline const SmRootSymbolNode* SmRootNode::Symbol() const
 }
 inline SmNode* SmRootNode::Body()
 {
-    OSL_ASSERT( GetNumSubNodes() > 2 );
+    assert( GetNumSubNodes() == 3 );
     return GetSubNode( 2 );
 }
 inline const SmNode* SmRootNode::Body() const
