@@ -1480,6 +1480,24 @@ void SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>(const SfxItemPropertySimpleE
     else
         lcl_SetDefaultWay(rEntry, rPropSet, aValue, o_rStyleBase);
 }
+template<>
+void SwXStyle::SetPropertyValue<RES_BACKGROUND>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
+    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, m_pDoc->IsInXMLImport()));
+    SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
+
+    uno::Any aValue(rValue);
+    const auto nMemberId(lcl_TranslateMetric(rEntry, m_pDoc, aValue));
+    aChangedBrushItem.PutValue(aValue, nMemberId);
+
+    // 0xff is already the default - but if BackTransparent is set
+    // to true, it must be applied in the item set on ODF import
+    // to potentially override parent style, which is unknown yet
+    if(aChangedBrushItem == aOriginalBrushItem && (MID_GRAPHIC_TRANSPARENT != nMemberId || !aValue.has<bool>() || !aValue.get<bool>()))
+        return;
+    setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
+}
 
 static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         const SfxItemPropertySet& rPropSet,
@@ -1508,29 +1526,9 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         case XATTR_FILLHATCH:
         case XATTR_FILLBITMAP:
         case XATTR_FILLFLOATTRANSPARENCE:
+        case RES_BACKGROUND:
             assert(false);
             break;
-        case RES_BACKGROUND:
-        {
-            //UUUU
-            SfxItemSet& rStyleSet = rBase.GetItemSet();
-            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, pDoc->IsInXMLImport()));
-            SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
-
-            aChangedBrushItem.PutValue(aValue, nMemberId);
-
-            if (!(aChangedBrushItem == aOriginalBrushItem) ||
-                // 0xff is already the default - but if BackTransparent is set
-                // to true, it must be applied in the item set on ODF import
-                // to potentially override parent style, which is unknown yet
-                (MID_GRAPHIC_TRANSPARENT == nMemberId && aValue.has<bool>() && aValue.get<bool>()))
-            {
-                setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
-            }
-
-            bDone = true;
-            break;
-        }
         case OWN_ATTR_FILLBMP_MODE:
         {
             //UUUU
@@ -2027,6 +2025,8 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
                 // case XATTR_LINEEND:
                 // case XATTR_LINEDASH:
                     SetPropertyValue<XATTR_FILLGRADIENT>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
+                case RES_BACKGROUND:
+                    SetPropertyValue<RES_BACKGROUND>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                 default:
                     lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_rEntry.m_eFamily);
             }
