@@ -48,7 +48,7 @@ public:
     const OUString& GetStyleName() const    { return maStyleName; }
 
     FontWeight      GetWeight() const       { return meWeight; }
-    FontItalic      GetSlant() const        { return meItalic; }
+    FontItalic      GetSlantType() const    { return meItalic; }
     FontPitch       GetPitch() const        { return mePitch; }
     FontWidth       GetWidthType() const    { return meWidthType; }
 
@@ -179,10 +179,45 @@ class ImplFontMetricData : public ImplFontAttributes
 public:
     explicit        ImplFontMetricData( const FontSelectPattern& );
 
+    // font instance attributes from the font request
+    long            GetWidth()              { return mnWidth; }
+    short           GetOrientation()        { return mnOrientation; }
+
+    void            SetWidth(long nWidth)   { mnWidth=nWidth; }
+    void            SetOrientation(short nOrientation) { mnOrientation=nOrientation; }
+
+    // font metrics measured for the font instance
+    long            GetAscent()             { return mnAscent; }
+    long            GetDescent()            { return mnDescent; }
+    long            GetInternalLeading()    { return mnIntLeading; }
+    long            GetExternalLeading()    { return mnExtLeading; }
+    int             GetSlant()              { return mnSlant; }
+    long            GetMinKashida()         { return mnMinKashida; }
+
+    void            SetAscent(long nAscent) { mnAscent=nAscent; }
+    void            SetDescent(long nDescent) { mnDescent=nDescent; }
+    void            SetInternalLeading(long nIntLeading) { mnIntLeading = nIntLeading; }
+    void            SetExternalLeading(long nExtLeading) { mnExtLeading = nExtLeading; }
+    void            SetSlant(int nSlant)    { mnSlant=nSlant; }
+    void            SetMinKashida( long nMinKashida ) { mnMinKashida=nMinKashida; }
+
+    // font attributes queried from the font instance
+    bool            IsScalable()            { return mbScalableFont; }
+    bool            IsTrueTypeFont()        { return mbTrueTypeFont; }
+    bool            IsKernable()            { return mbKernableFont; }
+    bool            IsFullstopCentered()    { return mbFullstopCentered; }
+    long            GetBulletOffset()       { return mnBulletOffset; }
+
+    void            SetScalableFlag(bool bScalable) { mbScalableFont = bScalable; }
+    void            SetTrueTypeFlag(bool bTrueTypeFont) { mbTrueTypeFont = bTrueTypeFont; }
+    void            SetKernableFlag(bool bKernable) { mbKernableFont = bKernable; }
+    void            SetFullstopCenteredFlag(bool bFullstopCentered) { mbFullstopCentered = bFullstopCentered; }
+    void            SetBulletOffset(long nBulletOffset) { mnBulletOffset = nBulletOffset; }
+
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();
 
-public: // TODO: hide members behind accessor methods
+private:
     // font instance attributes from the font request
     long            mnWidth;                    // Reference Width
     short           mnOrientation;              // Rotation in 1/10 degrees
@@ -196,14 +231,13 @@ public: // TODO: hide members behind accessor methods
     long            mnMinKashida;               // Minimal width of kashida (Arabic)
 
     // font attributes queried from the font instance
-    int             meFamilyType;               // Font Family Type
-    bool            mbDevice;                   // Flag for Device Fonts
     bool            mbScalableFont;
     bool            mbTrueTypeFont;
     bool            mbKernableFont;
     bool            mbFullstopCentered;
     long            mnBulletOffset;             // Offset to position non-print character
 
+public: // TODO: move the rest of these into accessor functions
     // font metrics that are usually derived from the measurements
     long            mnUnderlineSize;            // Lineheight of Underline
     long            mnUnderlineOffset;          // Offset from Underline to Baseline

@@ -801,7 +801,7 @@ sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLeve
     // determine which font attributes need to be emulated
     bool bArtItalic = false;
     bool bArtBold = false;
-    if( pEntry->GetSlant() == ITALIC_OBLIQUE || pEntry->GetSlant() == ITALIC_NORMAL )
+    if( pEntry->GetSlantType() == ITALIC_OBLIQUE || pEntry->GetSlantType() == ITALIC_NORMAL )
     {
         FontItalic eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
         if( eItalic != ITALIC_NORMAL && eItalic != ITALIC_OBLIQUE )
@@ -920,23 +920,23 @@ void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
     {
         ImplFontAttributes aDFA = Info2FontAttributes( aInfo );
         static_cast<ImplFontAttributes&>(*pMetric) = aDFA;
-        pMetric->mbDevice       = aDFA.IsBuiltInFont();
-        pMetric->mbScalableFont = true;
-        pMetric->mbTrueTypeFont = false; // FIXME, needed?
+        pMetric->SetBuiltInFontFlag( aDFA.IsBuiltInFont() );
+        pMetric->SetScalableFlag( true );
+        pMetric->SetTrueTypeFlag( false ); // FIXME, needed?
 
-        pMetric->mnOrientation  = m_pPrinterGfx->GetFontAngle();
-        pMetric->mnSlant        = 0;
+        pMetric->SetOrientation( m_pPrinterGfx->GetFontAngle() );
+        pMetric->SetSlant( 0 );
 
         sal_Int32 nTextHeight   = m_pPrinterGfx->GetFontHeight();
         sal_Int32 nTextWidth    = m_pPrinterGfx->GetFontWidth();
         if( ! nTextWidth )
             nTextWidth = nTextHeight;
 
-        pMetric->mnWidth        = nTextWidth;
-        pMetric->mnAscent       = ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000;
-        pMetric->mnDescent      = ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000;
-        pMetric->mnIntLeading   = ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
-        pMetric->mnExtLeading   = 0;
+        pMetric->SetWidth( nTextWidth );
+        pMetric->SetAscent( ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000 );
+        pMetric->SetDescent( ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000 );
+        pMetric->SetInternalLeading( ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000 );
+        pMetric->SetExternalLeading( 0 );
     }
 }
 

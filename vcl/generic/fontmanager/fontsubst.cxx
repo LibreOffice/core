@@ -123,7 +123,7 @@ namespace
           (
             rOrig.maTargetName == rNew.maSearchName &&
             rOrig.GetWeight() == rNew.GetWeight() &&
-            rOrig.GetSlant() == rNew.GetSlant() &&
+            rOrig.GetSlantType() == rNew.GetSlantType() &&
             rOrig.GetPitch() == rNew.GetPitch() &&
             rOrig.GetWidthType() == rNew.GetWidthType()
           );
@@ -186,13 +186,13 @@ bool FcPreMatchSubstitution::FindFontSubstitute( FontSelectPattern &rFontSelData
     const OString aSubstName(OUStringToOString(aOut.maSearchName,
         RTL_TEXTENCODING_UTF8));
     printf( "FcPreMatchSubstitution \"%s\" bipw=%d%d%d%d -> ",
-        aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlant(),
+        aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlantType(),
         rFontSelData.GetPitch(), rFontSelData.GetWidthType() );
     if( !bHaveSubstitute )
         printf( "no substitute available\n" );
     else
         printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.getStr(),
-        aOut.GetWeight(), aOut.GetSlant(), aOut.GetPitch(), aOut.GetWidthType() );
+        aOut.GetWeight(), aOut.GetSlantType(), aOut.GetPitch(), aOut.GetWidthType() );
 #endif
 
     if( bHaveSubstitute )
@@ -234,13 +234,13 @@ bool FcGlyphFallbackSubstitution::FindFontSubstitute( FontSelectPattern& rFontSe
     const OString aSubstName(OUStringToOString(aOut.maSearchName,
         RTL_TEXTENCODING_UTF8));
     printf( "FcGFSubstitution \"%s\" bipw=%d%d%d%d ->",
-        aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlant(),
+        aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlantType(),
         rFontSelData.GetPitch(), rFontSelData.GetWidthType() );
     if( !bHaveSubstitute )
         printf( "no substitute available\n" );
     else
         printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.getStr(),
-        aOut.GetWeight(), aOut.GetSlant(), aOut.GetPitch(), aOut.GetWidthType() );
+        aOut.GetWeight(), aOut.GetSlantType(), aOut.GetPitch(), aOut.GetWidthType() );
 #endif
 
     if( bHaveSubstitute )
