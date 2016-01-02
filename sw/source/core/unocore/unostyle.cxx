@@ -1320,7 +1320,6 @@ private:
     std::unique_ptr<SfxItemSet> m_pMyItemSet;
     OUString m_rStyleName;
     const SwAttrSet* m_pParentStyle;
-
 public:
     SwStyleBase_Impl(SwDoc& rSwDoc, const OUString& rName, const SwAttrSet* pParentStyle)
         : m_rDoc(rSwDoc)
@@ -1346,13 +1345,6 @@ public:
         return m_xNewBase.is();
     }
 
-    SfxItemSet* replaceItemSet(SfxItemSet* pNew)
-    {
-        SfxItemSet* pRetval = m_pItemSet;
-        m_pItemSet = pNew;
-        return pRetval;
-    }
-
     SfxItemSet& GetItemSet()
     {
         assert(m_xNewBase.is());
@@ -1369,6 +1361,19 @@ public:
     }
 
     const SwPageDesc* GetOldPageDesc();
+
+    // still a hack, but a bit more explicit and with a proper scope
+    struct ItemSetOverrider
+    {
+        SwStyleBase_Impl& m_rStyleBase;
+        SfxItemSet* m_pOldSet;
+        ItemSetOverrider(SwStyleBase_Impl& rStyleBase, SfxItemSet* pTemp)
+                : m_rStyleBase(rStyleBase)
+                , m_pOldSet(m_rStyleBase.m_pItemSet)
+        { m_rStyleBase.m_pItemSet = pTemp; }
+        ~ItemSetOverrider()
+        { m_rStyleBase.m_pItemSet = m_pOldSet; };
+    };
 };
 
 const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
@@ -1393,6 +1398,7 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
     }
     return m_pOldPageDesc;
 }
+
 
 static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         const SfxItemPropertySet& rPropSet,
@@ -3058,9 +3064,10 @@ static void lcl_putItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySe
 
     // replace the used SfxItemSet at the SwStyleBase_Impl temporarily and use the
     // default method to set the property
-    SfxItemSet* pRememberItemSet = rBaseImpl.replaceItemSet(&rSetSet);
-    lcl_SetStyleProperty(rEntry, rPropSet, rVal, rBaseImpl, pPool, pDoc, eFamily);
-    rBaseImpl.replaceItemSet(pRememberItemSet);
+    {
+        SwStyleBase_Impl::ItemSetOverrider o(rBaseImpl, &rSetSet);
+        lcl_SetStyleProperty(rEntry, rPropSet, rVal, rBaseImpl, pPool, pDoc, eFamily);
+    }
 
     // reset paret at ItemSet from SetItem
     rSetSet.SetParent(nullptr);
@@ -3261,9 +3268,10 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
 
                             // replace the used SfxItemSet at the SwStyleBase_Impl temporarily and use the
                             // default method to set the property
-                            SfxItemSet* pRememberItemSet = aBaseImpl.replaceItemSet(&rSetSet);
-                            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
-                            aBaseImpl.replaceItemSet(pRememberItemSet);
+                            {
+                                SwStyleBase_Impl::ItemSetOverrider o(aBaseImpl, &rSetSet);
+                                lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
+                            }
 
                             // reset paret at ItemSet from SetItem
                             rSetSet.SetParent(nullptr);
@@ -3452,9 +3460,10 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         {
                             // get from SfxItemSet of the corresponding SfxSetItem
                             const SfxItemSet& rSetSet = pSetItem->GetItemSet();
-                            SfxItemSet* pRememberItemSet = aBase.replaceItemSet(&const_cast< SfxItemSet& >(rSetSet));
-                            pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
-                            aBase.replaceItemSet(pRememberItemSet);
+                            {
+                                SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast< SfxItemSet& >(rSetSet));
+                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc());
+                            }
                         }
                         else if(pEntry->nWID == SID_ATTR_PAGE_ON)
                         {
@@ -3522,9 +3531,10 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         {
                             // set at SfxItemSet of the corresponding SfxSetItem
                             const SfxItemSet& rSetSet = pSetItem->GetItemSet();
-                            SfxItemSet* pRememberItemSet = aBase.replaceItemSet(&const_cast< SfxItemSet& >(rSetSet));
-                            pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
-                            aBase.replaceItemSet(pRememberItemSet);
+                            {
+                                SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast<SfxItemSet&>(rSetSet));
+                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc());
+                            }
                         }
                     }
                     else
