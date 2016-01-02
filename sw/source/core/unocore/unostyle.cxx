@@ -1653,6 +1653,15 @@ void SwXStyle::SetPropertyValue<RES_PAGEDESC>(const SfxItemPropertySimpleEntry& 
         rStyleSet.Put(*pNewDesc);
     }
 }
+template<>
+void SwXStyle::SetPropertyValue<RES_TEXT_VERT_ADJUST>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(!m_pDoc || !rValue.has<drawing::TextVerticalAdjust>() || !o_rStyleBase.GetOldPageDesc())
+        return;
+    SwPageDesc* pPageDesc = m_pDoc->FindPageDesc(o_rStyleBase.GetOldPageDesc()->GetName());
+    if(pPageDesc)
+        pPageDesc->SetVerticalAdjustment(rValue.get<drawing::TextVerticalAdjust>());
+}
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1711,21 +1720,9 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             bDone = true;
             break;
         case RES_TEXT_VERT_ADJUST:
-        {
-            if( pDoc )
-            {
-                const SwPageDesc* pOldPageDesc = rBase.GetOldPageDesc();
-                SwPageDesc* pPageDesc = pOldPageDesc ? pDoc->FindPageDesc(pOldPageDesc->GetName()) : nullptr;
-                if (pPageDesc)
-                {
-                    drawing::TextVerticalAdjust nVA;
-                    rValue >>= nVA;
-                    pPageDesc->SetVerticalAdjustment( nVA );
-                }
-            }
+            SetPropertyValue<RES_TEXT_VERT_ADJUST>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
         case FN_UNO_IS_AUTO_UPDATE:
         {
             bool bAuto = *static_cast<sal_Bool const *>(aValue.getValue());
