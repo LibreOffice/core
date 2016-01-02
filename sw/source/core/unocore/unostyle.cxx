@@ -1597,6 +1597,16 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEnt
     }
     o_rStyleBase.getNewBase()->SetNumRule(aSetRule);
 }
+template<>
+void SwXStyle::SetPropertyValue<RES_PARATR_OUTLINELEVEL>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(!rValue.has<sal_Int16>())
+        return;
+    const auto nLevel(rValue.get<sal_Int16>());
+    if(0 <= nLevel && nLevel <= MAXLEVEL)
+        o_rStyleBase.getNewBase()->GetCollection()->SetAttrOutlineLevel(nLevel);
+}
+
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1644,11 +1654,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             break;
         case RES_PARATR_OUTLINELEVEL:
         {
-            sal_Int16 nLevel = 0;
-            aValue >>= nLevel;
-            if( 0 <= nLevel && nLevel <= MAXLEVEL)
-                rBase.getNewBase()->GetCollection()->SetAttrOutlineLevel( nLevel );
-
+            SetPropertyValue<RES_PARATR_OUTLINELEVEL>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
         }
