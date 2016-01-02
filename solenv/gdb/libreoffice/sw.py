@@ -89,8 +89,8 @@ class SwRectPrinter(object):
         children = [ ( 'point', point), ( 'size', size ) ]
         return children.__iter__()
 
-class SwUnoMarkPrinter(object):
-    '''Prints sw::mark::UnoMark.'''
+class MarkBasePrinter(object):
+    '''Prints sw::mark::MarkBase.'''
 
     def __init__(self, typename, value):
         self.typename = typename
@@ -100,11 +100,9 @@ class SwUnoMarkPrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
-        unoMark = self.value.cast(self.value.dynamic_type)
-        pos1 = unoMark['m_pPos1']
-        pos2 = unoMark['m_pPos2']
-        children = [ ( 'pos1', pos1), ( 'pos2', pos2 ) ]
-        return children.__iter__()
+        m = self.value.cast(self.value.dynamic_type)
+        return [ ( v, m[ v ] )
+            for v in ( 'm_aName', 'm_pPos1', 'm_pPos2' ) ].__iter__()
 
 class SwXTextRangeImplPrinter(object):
     '''Prints SwXTextRange::Impl.'''
@@ -293,7 +291,10 @@ def build_pretty_printers():
     printer.add('SwPaM', SwPaMPrinter)
     printer.add('SwUnoCrsr', SwUnoCrsrPrinter)
     printer.add('SwRect', SwRectPrinter)
-    printer.add('sw::mark::UnoMark', SwUnoMarkPrinter)
+    printer.add('sw::mark::Bookmark', MarkBasePrinter)
+    printer.add('sw::mark::MarkBase', MarkBasePrinter)
+    printer.add('sw::mark::UnoMark', MarkBasePrinter)
+    printer.add('sw::mark::IMark', MarkBasePrinter)
     printer.add('SwXTextRange::Impl', SwXTextRangeImplPrinter)
     printer.add('sw::UnoImplPtr', SwUnoImplPtrPrinter)
     printer.add('SwXTextRange', SwXTextRangePrinter)
