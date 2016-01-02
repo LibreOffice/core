@@ -362,33 +362,6 @@ static const short yycheck[] = {    11,
   It was written by Richard Stallman by simplifying the hairy parser
   used when %semantic_parser is specified.  */
 
-#ifndef YYSTACK_USE_ALLOCA
-#ifdef alloca
-#define YYSTACK_USE_ALLOCA
-#else /* alloca not defined */
-#ifdef __GNUC__
-#define YYSTACK_USE_ALLOCA
-#define alloca __builtin_alloca
-#else /* not GNU C.  */
-#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || (defined (__sun) && defined (__i386))
-#define YYSTACK_USE_ALLOCA
-#include <sal/alloca.h>
-#else /* not sparc */
-#if defined(_AIX)
- #pragma alloca
-#define YYSTACK_USE_ALLOCA
-#endif /* not _AIX */
-#endif /* not sparc */
-#endif /* not GNU C */
-#endif /* alloca not defined */
-#endif /* YYSTACK_USE_ALLOCA not defined */
-
-#ifdef YYSTACK_USE_ALLOCA
-#define YYSTACK_ALLOC alloca
-#else
-#define YYSTACK_ALLOC malloc
-#endif
-
 /* Note: there must be only one dollar sign in this file.
    It is replaced by the list of actions, each action
    as one case of the switch.  */
@@ -612,17 +585,15 @@ yynewstate:
       yystacksize *= 2;
       if (yystacksize > YYMAXDEPTH)
     yystacksize = YYMAXDEPTH;
-#ifndef YYSTACK_USE_ALLOCA
       yyfree_stacks = 1;
-#endif
-      yyss = static_cast<short *>(YYSTACK_ALLOC (yystacksize * sizeof (*yyssp)));
+      yyss = static_cast<short *>(malloc (yystacksize * sizeof (*yyssp)));
       memcpy (yyss, yyss1,
            size * (unsigned int) sizeof (*yyssp));
-      yyvs = static_cast<YYSTYPE *>(YYSTACK_ALLOC (yystacksize * sizeof (*yyvsp)));
+      yyvs = static_cast<YYSTYPE *>(malloc (yystacksize * sizeof (*yyvsp)));
       memcpy (yyvs, yyvs1,
            size * (unsigned int) sizeof (*yyvsp));
 #ifdef YYLSP_NEEDED
-      yyls = (YYLTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yylsp));
+      yyls = (YYLTYPE *) malloc (yystacksize * sizeof (*yylsp));
       memcpy ((char *)yyls, (char *)yyls1,
            size * (unsigned int) sizeof (*yylsp));
 #endif

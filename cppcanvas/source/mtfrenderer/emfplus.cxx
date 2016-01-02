@@ -35,7 +35,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/alloca.h>
 
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
@@ -1180,14 +1179,16 @@ namespace cppcanvas
                 SAL_INFO("cppcanvas.emf", "EMF+\tfont\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " size: " << std::dec << emSize << " unit: 0x" << std::hex << sizeUnit << std::dec);
                 SAL_INFO("cppcanvas.emf", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << reserved << " length: 0x" << std::hex << length << std::dec);
 
-                if( length > 0 && length < 0x4000 ) {
-                    sal_Unicode *chars = static_cast<sal_Unicode *>(alloca( sizeof( sal_Unicode ) * length ));
+                if (length > 0 && length < 0x4000)
+                {
+                    rtl_uString *pStr = rtl_uString_alloc(length);
+                    sal_Unicode *chars = pStr->buffer;
 
-                    for( sal_uInt32 i = 0; i < length; i++ )
-                        s.ReadUtf16( chars[ i ] );
+                    for (sal_uInt32 i = 0; i < length; ++i)
+                        s.ReadUtf16(chars[i]);
 
-                    family = OUString( chars, length );
-                    SAL_INFO("cppcanvas.emf", "EMF+\tfamily: " << OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()); // TODO: can we just use family?
+                    family = OUString(pStr, SAL_NO_ACQUIRE);
+                    SAL_INFO("cppcanvas.emf", "EMF+\tfamily: " << family);
                 }
             }
         };
