@@ -1606,6 +1606,16 @@ void SwXStyle::SetPropertyValue<RES_PARATR_OUTLINELEVEL>(const SfxItemPropertySi
     if(0 <= nLevel && nLevel <= MAXLEVEL)
         o_rStyleBase.getNewBase()->GetCollection()->SetAttrOutlineLevel(nLevel);
 }
+template<>
+void SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(!rValue.has<OUString>())
+        return;
+    const auto sValue(rValue.get<OUString>());
+    OUString aString;
+    SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.m_aPoolId, true);
+    o_rStyleBase.getNewBase()->SetFollow(aString);
+}
 
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
@@ -1653,23 +1663,13 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             bDone = true;
             break;
         case RES_PARATR_OUTLINELEVEL:
-        {
             SetPropertyValue<RES_PARATR_OUTLINELEVEL>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
-
         case FN_UNO_FOLLOW_STYLE:
-        {
-            OUString sTmp;
-            aValue >>= sTmp;
-            OUString aString;
-            SwStyleNameMapper::FillUIName(sTmp, aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), true ) ;
-            rBase.getNewBase()->SetFollow( aString );
-
+            SetPropertyValue<FN_UNO_FOLLOW_STYLE>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
         case RES_PAGEDESC :
         {
             if (MID_PAGEDESC_PAGEDESCNAME != nMemberId)
