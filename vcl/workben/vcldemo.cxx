@@ -142,11 +142,9 @@ public:
         maIntroBW.Filter(BMP_FILTER_EMBOSS_GREY);
 
         InitRenderers();
-        mnSegmentsX = rtl::math::round(std::sqrt(maRenderers.size()), 0,
-                                       rtl_math_RoundingMode_Up);
         mnSegmentsY = rtl::math::round(std::sqrt(maRenderers.size()), 0,
                                        rtl_math_RoundingMode_Down);
-        mnSegmentsY = floor(std::sqrt(maRenderers.size()));
+        mnSegmentsX = (maRenderers.size() + mnSegmentsY - 1)/mnSegmentsY;
     }
 
     OUString getRendererList();
@@ -174,6 +172,15 @@ public:
 
     bool MouseButtonDown(const MouseEvent& rMEvt);
     void KeyInput(const KeyEvent& rKEvt);
+
+    static std::vector<Rectangle> partition(const Rectangle &rRect, int nX, int nY)
+    {
+        std::vector<Rectangle> aRegions = partition(rRect.GetSize(), nX, nY);
+        for (auto it = aRegions.begin(); it != aRegions.end(); ++it)
+            it->Move(rRect.Left(), rRect.Top());
+
+        return aRegions;
+    }
 
     static std::vector<Rectangle> partition(const RenderContext &rCtx, int nX, int nY)
     {
@@ -780,6 +787,33 @@ public:
         }
     };
 
+    struct DrawClipped : public RegionRenderer
+    {
+        RENDER_DETAILS(clip,KEY_D,100)
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) override
+        {
+            std::vector<Rectangle> aRegions(DemoRenderer::partition(r, 2, 2));
+            const int nLimits[] = { 4, -100 };
+            for (int i = 0; i < 2; ++i)
+            {
+                sal_uInt16 nHue = 0;
+                rDev.Push(PushFlags::CLIPREGION);
+                Rectangle aOuter = aRegions[i];
+                Rectangle aInner = aOuter;
+                while (aInner.GetWidth() > nLimits[i] && aInner.GetHeight() > nLimits[i])
+                {
+                    aInner.expand(-1);
+                    rDev.SetClipRegion(vcl::Region(aInner));
+                    rDev.SetFillColor(Color::HSBtoRGB(nHue, 75, 100));
+                    nHue = (nHue + 97) % 360;
+                    rDev.DrawRect(aOuter);
+                }
+                rDev.Pop();
+            }
+        }
+    };
+
     struct DrawToVirtualDevice : public RegionRenderer
     {
         RENDER_DETAILS(vdev,KEY_V,1)
@@ -1285,6 +1319,7 @@ void DemoRenderer::InitRenderers()
     maRenderers.push_back(new DrawBitmap());
     maRenderers.push_back(new DrawGradient());
     maRenderers.push_back(new DrawPolyPolygons());
+    maRenderers.push_back(new DrawClipped());
     maRenderers.push_back(new DrawToVirtualDevice());
     maRenderers.push_back(new DrawIcons());
     maRenderers.push_back(new FetchDrawBitmap());
