@@ -977,6 +977,8 @@ void SvTreeList::Expand( SvListView* pView, SvTreeListEntry* pEntry )
         return;
 
     DBG_ASSERT(!pEntry->m_Children.empty(), "SvTreeList::Expand: We expected to have child entries.");
+    if (pEntry->m_Children.empty())
+        return;
 
     SvViewDataEntry* pViewData = pView->GetViewData(pEntry);
     pViewData->SetExpanded(true);
