@@ -85,7 +85,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
     nHash   += size_t(rFontSelData.mbVertical);
-    nHash   += rFontSelData.GetSlant();
+    nHash   += rFontSelData.GetSlantType();
     nHash   += rFontSelData.GetWeight();
 #if ENABLE_GRAPHITE
     nHash   += rFontSelData.meLanguage;
@@ -108,7 +108,7 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
     ||  (rA.mbNonAntialiased != rB.mbNonAntialiased) )
         return false;
 
-    if( (rA.GetSlant() != rB.GetSlant())
+    if( (rA.GetSlantType() != rB.GetSlantType())
     ||  (rA.GetWeight() != rB.GetWeight()) )
         return false;
 

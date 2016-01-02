@@ -100,7 +100,7 @@ private:
     long                mnExtLeading;  // External Leading
     long                mnLineHeight;  // Ascent+Descent+EmphasisMark
     long                mnSlant;       // Slant
-    long                mnBulletOffset;// Offset for non-priting character
+    long                mnBulletOffset;// Offset for non-printing character
     sal_uInt16          mnMiscFlags;   // Misc Flags
     sal_uInt32          mnRefCount;    // Reference Counter
 

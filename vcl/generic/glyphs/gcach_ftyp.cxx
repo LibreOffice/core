@@ -510,7 +510,7 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mnLoadFlags |= FT_LOAD_IGNORE_TRANSFORM;
 #endif
 
-    mbArtItalic = (rFSD.GetSlant() != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
+    mbArtItalic = (rFSD.GetSlantType() != ITALIC_NONE && pFI->GetFontAttributes().GetSlantType() == ITALIC_NONE);
     mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
     if( mbArtBold )
     {
@@ -612,11 +612,11 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
     static_cast<ImplFontAttributes&>(rTo) = mpFontInfo->GetFontAttributes();
 
-    rTo.mbScalableFont  = true; // FIXME: Shouldn't this check FT_IS_SCALABLE( maFaceFT )?
-    rTo.mbTrueTypeFont  = FT_IS_SFNT( maFaceFT ) != 0;
-    rTo.mbDevice        = true;
-    rTo.mbKernableFont  = FT_HAS_KERNING( maFaceFT ) != 0;
-    rTo.mnOrientation = GetFontSelData().mnOrientation;
+    rTo.SetScalableFlag( true ); // FIXME: Shouldn't this check FT_IS_SCALABLE( maFaceFT )?
+    rTo.SetTrueTypeFlag( FT_IS_SFNT( maFaceFT ) != 0 );
+    rTo.SetBuiltInFontFlag( true );
+    rTo.SetKernableFlag( FT_HAS_KERNING( maFaceFT ) != 0 );
+    rTo.SetOrientation( GetFontSelData().mnOrientation );
 
     //Always consider [star]symbol as symbol fonts
     if ( IsStarSymbol( rTo.GetFamilyName() ) )
@@ -629,11 +629,11 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     const TT_OS2* pOS2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 ));
     const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
 
-    rTo.mnAscent = 0;
-    rTo.mnDescent = 0;
-    rTo.mnExtLeading = 0;
-    rTo.mnSlant = 0;
-    rTo.mnWidth = mnWidth;
+    rTo.SetAscent( 0 );
+    rTo.SetDescent( 0 );
+    rTo.SetExternalLeading( 0 );
+    rTo.SetSlant( 0 );
+    rTo.SetWidth( mnWidth );
 
     // Calculating ascender and descender:
     // FreeType >= 2.4.6 does the right thing, so we just use what it gives us,
@@ -644,49 +644,49 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     if (nFTVERSION >= 2406)
     {
         const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-        rTo.mnAscent = (rMetrics.ascender + 32) >> 6;
-        rTo.mnDescent = (-rMetrics.descender + 32) >> 6;
-        rTo.mnExtLeading = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
+        rTo.SetAscent( (rMetrics.ascender + 32) >> 6 );
+        rTo.SetDescent( (-rMetrics.descender + 32) >> 6 );
+        rTo.SetExternalLeading( ((rMetrics.height + 32) >> 6) - (rTo.GetAscent() + rTo.GetDescent()) );
     }
     else
     {
         const TT_HoriHeader* pHHea = static_cast<const TT_HoriHeader*>(FT_Get_Sfnt_Table(maFaceFT, ft_sfnt_hhea));
         if (pHHea)
         {
-            rTo.mnAscent = pHHea->Ascender * fScale + 0.5;
-            rTo.mnDescent = -pHHea->Descender * fScale + 0.5;
-            rTo.mnExtLeading = pHHea->Line_Gap * fScale + 0.5;
+            rTo.SetAscent( pHHea->Ascender * fScale + 0.5 );
+            rTo.SetDescent( -pHHea->Descender * fScale + 0.5 );
+            rTo.SetExternalLeading( pHHea->Line_Gap * fScale + 0.5 );
         }
 
-        if (!(rTo.mnAscent || rTo.mnDescent))
+        if (!(rTo.GetAscent() || rTo.GetDescent()))
         {
             if (pOS2 && (pOS2->version != 0xFFFF))
             {
                 if (pOS2->sTypoAscender || pOS2->sTypoDescender)
                 {
-                    rTo.mnAscent = pOS2->sTypoAscender * fScale + 0.5;
-                    rTo.mnDescent = -pOS2->sTypoDescender * fScale + 0.5;
-                    rTo.mnExtLeading = pOS2->sTypoLineGap * fScale + 0.5;
+                    rTo.SetAscent( pOS2->sTypoAscender * fScale + 0.5 );
+                    rTo.SetDescent( -pOS2->sTypoDescender * fScale + 0.5 );
+                    rTo.SetExternalLeading( pOS2->sTypoLineGap * fScale + 0.5 );
                 }
                 else
                 {
-                    rTo.mnAscent = pOS2->usWinAscent * fScale + 0.5;
-                    rTo.mnDescent = pOS2->usWinDescent * fScale + 0.5;
-                    rTo.mnExtLeading = 0;
+                    rTo.SetAscent( pOS2->usWinAscent * fScale + 0.5 );
+                    rTo.SetDescent( pOS2->usWinDescent * fScale + 0.5 );
+                    rTo.SetExternalLeading( 0 );
                 }
             }
         }
 
-        if (!(rTo.mnAscent || rTo.mnDescent))
+        if (!(rTo.GetAscent() || rTo.GetDescent()))
         {
             const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-            rTo.mnAscent = (rMetrics.ascender + 32) >> 6;
-            rTo.mnDescent = (-rMetrics.descender + 32) >> 6;
-            rTo.mnExtLeading = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
+            rTo.SetAscent( (rMetrics.ascender + 32) >> 6 );
+            rTo.SetDescent( (-rMetrics.descender + 32) >> 6 );
+            rTo.SetExternalLeading( ((rMetrics.height + 32) >> 6) - (rTo.GetAscent() + rTo.GetDescent() ) );
         }
     }
 
-    rTo.mnIntLeading = rTo.mnAscent + rTo.mnDescent - (maFaceFT->units_per_EM * fScale + 0.5);
+    rTo.SetInternalLeading( rTo.GetAscent() + rTo.GetDescent() - (maFaceFT->units_per_EM * fScale + 0.5) );
 
     if( pOS2 && (pOS2->version != 0xFFFF) )
     {
@@ -700,7 +700,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
             case 5: rTo.SetFamilyType( FAMILY_DECORATIVE ); break;
             // TODO: is it reasonable to override the attribute with DONTKNOW?
             case 0: // fall through
-            default: rTo.meFamilyType = FAMILY_DONTKNOW; break;
+            default: rTo.SetFamilyType( FAMILY_DONTKNOW ); break;
         }
 
         switch( pOS2->panose[3] )
@@ -727,7 +727,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     {
         GlyphData aGlyphData;
         InitGlyphData( nKashidaGlyphId, aGlyphData );
-        rTo.mnMinKashida = aGlyphData.GetMetric().GetCharWidth();
+        rTo.SetMinKashida( aGlyphData.GetMetric().GetCharWidth() );
     }
 }
 

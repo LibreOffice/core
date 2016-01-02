@@ -245,7 +245,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
             // It is possible that it still may be needed to do at least some checks here
             // for some encodings (can one font have more font files for more encodings?).
             if(( family == FAMILY_DONTKNOW || f->GetFamilyType() == family )
-                && ( italic == ITALIC_DONTKNOW || f->GetSlant() == italic )
+                && ( italic == ITALIC_DONTKNOW || f->GetSlantType() == italic )
                 && ( weight == WEIGHT_DONTKNOW || f->GetWeight() == weight )
                 && ( pitch == PITCH_DONTKNOW || f->GetPitch() == pitch ))
             { // Exact match, return it immediately.
@@ -253,7 +253,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
                 break;
             }
             if(( f->GetFamilyType() == FAMILY_DONTKNOW || family == FAMILY_DONTKNOW || f->GetFamilyType() == family )
-                && ( f->GetSlant() == ITALIC_DONTKNOW || italic == ITALIC_DONTKNOW || f->GetSlant() == italic )
+                && ( f->GetSlantType() == ITALIC_DONTKNOW || italic == ITALIC_DONTKNOW || f->GetSlantType() == italic )
                 && ( f->GetWeight() == WEIGHT_DONTKNOW || weight == WEIGHT_DONTKNOW || f->GetWeight() == weight )
                 && ( f->GetPitch() == PITCH_DONTKNOW || pitch == PITCH_DONTKNOW || f->GetPitch() == pitch ))
             { // Some fonts specify 'DONTKNOW' for some things, still a good match, if we don't find a better one.

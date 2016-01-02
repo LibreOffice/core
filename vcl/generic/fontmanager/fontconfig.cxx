@@ -990,7 +990,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
     if (!aLangAttrib.isEmpty())
         FcPatternAddString(pPattern, FC_LANG, reinterpret_cast<FcChar8 const *>(aLangAttrib.getStr()));
 
-    addtopattern(pPattern, rPattern.GetSlant(), rPattern.GetWeight(),
+    addtopattern(pPattern, rPattern.GetSlantType(), rPattern.GetWeight(),
         rPattern.GetWidthType(), rPattern.GetPitch());
 
     // query fontconfig for a substitute
