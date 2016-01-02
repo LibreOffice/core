@@ -327,8 +327,6 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
             aPos.X() = rRect.GetItalicCenterX() - GetItalicWidth() / 2
                        + GetItalicLeftSpace();
             break;
-        default :
-            SAL_WARN("starmath", "unknown case");
     }
 
     // check if horizontal position is already set
@@ -364,8 +362,6 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
             case RVA_ATTRIBUT_LO :
                 aPos.Y() += rRect.GetLoAttrFence() - GetTop();
                 break;
-        default :
-                SAL_WARN("starmath", "unknown case");
         }
 
     // check if vertical position is already set
@@ -381,8 +377,6 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
             case RHA_RIGHT :
                 aPos.X() += rRect.GetItalicRight() - GetItalicRight();
                 break;
-            default :
-                SAL_WARN("starmath", "unknown case");
         }
 
     return aPos;
@@ -472,8 +466,6 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
                 if (!HasBaseline())
                     CopyMBL(rRect);
                 break;
-            default :
-                SAL_WARN("starmath", "unknown case");
         }
     }
 
