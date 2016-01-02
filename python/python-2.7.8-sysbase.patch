@@ -1,8 +1,9 @@
---- misc/Python-2.7.6/configure	2012-04-09 18:07:36.000000000 -0500
-+++ misc/build/Python-2.7.6/configure	2012-07-22 15:01:20.000000000 -0500
-@@ -2982,7 +2982,9 @@
- if test -z "$MACHDEP"
- then
+diff -ruN misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
+--- misc/Python-2.7.8/configure	2014-06-29 21:05:48.000000000 -0500
++++ misc/build/Python-2.7.8/configure	2016-01-01 15:18:37.398344671 -0500
+@@ -3191,7 +3191,9 @@
+ 	ac_sys_release=
+     else
  	ac_sys_system=`uname -s`
 -	if test "$ac_sys_system" = "AIX" \
 +	if test -n "$OOO_SYSBASE_SYS_RELEASE"; then

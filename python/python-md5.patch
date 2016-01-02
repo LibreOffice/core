@@ -1,7 +1,7 @@
-diff -ru misc/Python-2.7.6/Modules/Setup.dist misc/build/Python-2.7.6/Modules/Setup.dist
---- misc/Python-2.7.6/Modules/Setup.dist	2012-04-09 18:07:33.000000000 -0500
-+++ misc/build/Python-2.7.6/Modules/Setup.dist	2012-07-24 17:08:56.000000000 -0500
-@@ -248,14 +248,14 @@
+diff -ru misc/Python-2.7.8/Modules/Setup.dist misc/build/Python-2.7.8/Modules/Setup.dist
+--- misc/Python-2.7.8/Modules/Setup.dist	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.8/Modules/Setup.dist	2012-07-24 17:08:56.000000000 -0500
+@@ -252,14 +252,14 @@
  # Message-Digest Algorithm, described in RFC 1321.  The necessary files
  # md5.c and md5.h are included here.
  
