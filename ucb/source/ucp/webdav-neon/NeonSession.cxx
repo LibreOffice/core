@@ -1746,6 +1746,7 @@ void NeonSession::HandleError( int nError,
                                     m_aProxyName, m_nProxyPort ) );
 
         case NE_CONNECT:      // Could not connect to server
+            SAL_WARN( "ucb.ucp.webdav", "DAVException::DAV_HTTP_CONNECT" );
             throw DAVException( DAVException::DAV_HTTP_CONNECT,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
