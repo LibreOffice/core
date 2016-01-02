@@ -440,7 +440,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
             << " for "    << pReqFont->GetFamilyName()
             << ", "       << pReqFont->GetStyleName()
             << " weight=" << pReqFont->GetWeight()
-            << " slant="  << pReqFont->GetSlant()
+            << " slant="  << pReqFont->GetSlantType()
             << " size="   << pReqFont->mnHeight << "x" << pReqFont->mnWidth
             << " orientation=" << pReqFont->mnOrientation
             );
