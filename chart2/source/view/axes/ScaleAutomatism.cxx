@@ -99,8 +99,7 @@ ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale, const Date& rNu
                     , m_nTimeResolution(::com::sun::star::chart::TimeUnit::DAY)
                     , m_aNullDate(rNullDate)
 {
-    ::rtl::math::setNan( &m_fValueMinimum );
-    ::rtl::math::setNan( &m_fValueMaximum );
+    resetValueRange();
 
     double fExplicitOrigin = 0.0;
     if( m_aSourceScale.Origin >>= fExplicitOrigin )
@@ -110,8 +109,19 @@ ScaleAutomatism::~ScaleAutomatism()
 {
 }
 
+void ScaleAutomatism::resetValueRange( )
+{
+    ::rtl::math::setNan( &m_fValueMinimum );
+    ::rtl::math::setNan( &m_fValueMaximum );
+}
+
 void ScaleAutomatism::expandValueRange( double fMinimum, double fMaximum )
 {
+    // if m_fValueMinimum and m_fValueMaximum == 0, it means that they were not determined.
+    // m_fValueMinimum == 0 makes impossible to determine real minimum,
+    // so they need to be reseted tdf#96807
+    if( (m_fValueMinimum == 0.0) && (m_fValueMaximum == 0.0) )
+        resetValueRange();
     if( (fMinimum < m_fValueMinimum) || ::rtl::math::isNan( m_fValueMinimum ) )
         m_fValueMinimum = fMinimum;
     if( (fMaximum > m_fValueMaximum) || ::rtl::math::isNan( m_fValueMaximum ) )

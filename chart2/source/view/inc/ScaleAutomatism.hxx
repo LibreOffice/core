@@ -53,6 +53,7 @@ public:
      *  undefined (that is empty `uno::Any` objects).
      */
     void                expandValueRange( double fMinimum, double fMaximum );
+    void                resetValueRange();
 
     /** Sets additional auto scaling options.
         @param bExpandBorderToIncrementRhythm  If true, expands automatic
