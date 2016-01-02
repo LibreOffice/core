@@ -332,7 +332,7 @@ void OpenGLSalGraphicsImpl::ImplInitClipRegion()
         if( mbUseScissor )
         {
             Rectangle aRect( maClipRegion.GetBoundRect() );
-            glScissor( aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth() + 1, aRect.GetHeight() + 1 );
+            glScissor( aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth(), aRect.GetHeight() );
             CHECK_GL_ERROR();
         }
         else if( !maClipRegion.IsEmpty() )
