@@ -652,8 +652,8 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     Rectangle aPixelRect;
     aPixelRect.Left() = nBaseX+mnTextOffX;
     aPixelRect.Right() = aPixelRect.Left()+nWidth;
-    aPixelRect.Bottom() = nBaseY+mpFontEntry->maMetric.mnDescent;
-    aPixelRect.Top() = nBaseY-mpFontEntry->maMetric.mnAscent;
+    aPixelRect.Bottom() = nBaseY+mpFontEntry->maMetric.GetDescent();
+    aPixelRect.Top() = nBaseY-mpFontEntry->maMetric.GetAscent();
 
     if (mpFontEntry->mnOrientation)
     {

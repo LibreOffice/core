@@ -1272,7 +1272,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByFont( FontSelectPatt
 
     PhysicalFontFamily::CalcType( nSearchType, eSearchWeight, eSearchWidth, rFSD.GetFamilyType(), pFontAttr );
     PhysicalFontFamily* pFoundData = FindFontFamilyByAttributes( nSearchType,
-        eSearchWeight, eSearchWidth, rFSD.GetSlant(), aSearchFamilyName );
+        eSearchWeight, eSearchWidth, rFSD.GetSlantType(), aSearchFamilyName );
 
     if( pFoundData )
     {
@@ -1292,8 +1292,8 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByFont( FontSelectPatt
         }
 
         if( (nSearchType & ImplFontAttrs::Italic) &&
-            ((rFSD.GetSlant() == ITALIC_DONTKNOW) ||
-             (rFSD.GetSlant() == ITALIC_NONE)) &&
+            ((rFSD.GetSlantType() == ITALIC_DONTKNOW) ||
+             (rFSD.GetSlantType() == ITALIC_NONE)) &&
             (pFoundData->GetTypeFaces() & FONT_FAMILY_ITALIC) )
         {
             rFSD.SetItalic( ITALIC_NORMAL );
