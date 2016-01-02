@@ -363,6 +363,8 @@ public:
     void Invalidate();
     void ApplyDescriptorProperties();
     void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
+    void SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
+    void PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl);
 };
 
 class SwXFrameStyle
@@ -1496,38 +1498,41 @@ void SwXStyle::SetPropertyValue<RES_BACKGROUND>(const SfxItemPropertySimpleEntry
     // to potentially override parent style, which is unknown yet
     if(aChangedBrushItem == aOriginalBrushItem && (MID_GRAPHIC_TRANSPARENT != nMemberId || !aValue.has<bool>() || !aValue.get<bool>()))
         return;
+
     setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
 }
 
-static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
-                        const SfxItemPropertySet& rPropSet,
-                        const uno::Any& rValue,
-                        SwStyleBase_Impl& rBase,
-                        SfxStyleSheetBasePool* pBasePool,
-                        SwDoc* pDoc,
-                        SfxStyleFamily eFamily)
-                            throw(beans::PropertyVetoException, lang::IllegalArgumentException,
-                                  lang::WrappedTargetException, uno::RuntimeException,
-                                  std::exception)
-
+void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
+    SfxStyleSheetBasePool* pBasePool = m_pBasePool;
+    SfxStyleFamily eFamily = m_rEntry.m_eFamily;
+    SwDoc* pDoc(m_pDoc);
     //UUUU adapted switch logic to a more readable state; removed goto's and made
     // execution of standard setting of proerty in ItemSet dependent of this variable
     bool bDone(false);
     uno::Any aValue(rValue);
     const auto nMemberId(lcl_TranslateMetric(rEntry, pDoc, aValue));
 
-
     switch(rEntry.nWID)
     {
         case FN_UNO_HIDDEN:
+            SetPropertyValue<FN_UNO_HIDDEN>(rEntry, rPropSet, rValue, rBase);
+            bDone = true;
+            break;
         case FN_UNO_STYLE_INTEROP_GRAB_BAG:
+            SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(rEntry, rPropSet, rValue, rBase);
+            bDone = true;
+            break;
         case XATTR_FILLGRADIENT:
         case XATTR_FILLHATCH:
         case XATTR_FILLBITMAP:
         case XATTR_FILLFLOATTRANSPARENCE:
+            SetPropertyValue<XATTR_FILLGRADIENT>(rEntry, rPropSet, rValue, rBase);
+            bDone = true;
+            break;
         case RES_BACKGROUND:
-            assert(false);
+            SetPropertyValue<RES_BACKGROUND>(rEntry, rPropSet, rValue, rBase);
+            bDone = true;
             break;
         case OWN_ATTR_FILLBMP_MODE:
         {
@@ -1966,7 +1971,6 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             break;
         }
     }
-
     if(!bDone)
         lcl_SetDefaultWay(rEntry, rPropSet, aValue, rBase);
 }
@@ -2010,26 +2014,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
             throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast<cppu::OWeakObject*>(this));
         if(aBaseImpl.getNewBase().is())
         {
-            switch(pEntry->nWID)
-            {
-                case FN_UNO_HIDDEN:
-                    SetPropertyValue<FN_UNO_HIDDEN>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-                case FN_UNO_STYLE_INTEROP_GRAB_BAG:
-                    SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-                case XATTR_FILLGRADIENT:
-                case XATTR_FILLHATCH:
-                case XATTR_FILLBITMAP:
-                case XATTR_FILLFLOATTRANSPARENCE:
-                // not yet needed; activate when LineStyle support may be added
-                // case XATTR_LINESTART:
-                // case XATTR_LINEEND:
-                // case XATTR_LINEDASH:
-                    SetPropertyValue<XATTR_FILLGRADIENT>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-                case RES_BACKGROUND:
-                    SetPropertyValue<RES_BACKGROUND>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-                default:
-                    lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_rEntry.m_eFamily);
-            }
+            SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
         }
         else if(m_bIsDescriptor)
         {
@@ -3067,20 +3052,20 @@ SwXPageStyle::~SwXPageStyle()
 
 }
 
-static void lcl_putItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl, SfxStyleSheetBasePool* pPool, SwDoc *pDoc, SfxStyleFamily eFamily)
+void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
 {
     // create a new SvxSetItem and get it's ItemSet as new target
     SvxSetItem* pNewSetItem = static_cast< SvxSetItem* >(pSetItem->Clone());
     SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
 
     // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
-    rSetSet.SetParent(&pDoc->GetDfltFrameFormat()->GetAttrSet());
+    rSetSet.SetParent(&m_pDoc->GetDfltFrameFormat()->GetAttrSet());
 
     // replace the used SfxItemSet at the SwStyleBase_Impl temporarily and use the
     // default method to set the property
     {
         SwStyleBase_Impl::ItemSetOverrider o(rBaseImpl, &rSetSet);
-        lcl_SetStyleProperty(rEntry, rPropSet, rVal, rBaseImpl, pPool, pDoc, eFamily);
+        SetStyleProperty(rEntry, rPropSet, rVal, rBaseImpl);
     }
 
     // reset paret at ItemSet from SetItem
@@ -3169,7 +3154,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                         if (lcl_GetHeaderFooterItem(aBaseImpl.GetItemSet(),
                                     rPropName, bFooter, pSetItem))
                         {
-                            lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
+                            PutItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl);
 
                             if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
                             {
@@ -3178,7 +3163,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                                             bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
                                             false, reinterpret_cast<const SfxPoolItem**>(&pSetItem)))
                                 {
-                                    lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
+                                    PutItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl);
                                 }
                             }
                         }
@@ -3233,7 +3218,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                             default:
                             {
                                 // part of PageStyle, fallback to default
-                                lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
+                                SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                             }
                         }
                     }
@@ -3284,7 +3269,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                             // default method to set the property
                             {
                                 SwStyleBase_Impl::ItemSetOverrider o(aBaseImpl, &rSetSet);
-                                lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
+                                SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                             }
 
                             // reset paret at ItemSet from SetItem
@@ -3298,7 +3283,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     else
                     {
                         // part of PageStyle, fallback to default
-                        lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
+                        SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                     }
 
                     break;
@@ -3328,7 +3313,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 default:
                 {
                     //UUUU
-                    lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, GetDoc(), GetFamily());
+                    SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                     break;
                 }
             }
