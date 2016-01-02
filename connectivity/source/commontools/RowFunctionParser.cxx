@@ -247,8 +247,8 @@ class UnaryFunctionFunctor
 
 public:
 
-    UnaryFunctionFunctor( const ParserContextSharedPtr& rContext ) :
-        mpContext( rContext )
+    explicit UnaryFunctionFunctor(const ParserContextSharedPtr& rContext)
+        : mpContext(rContext)
     {
     }
     void operator()( StringIteratorT, StringIteratorT ) const

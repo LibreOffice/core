@@ -65,9 +65,11 @@ struct DataSupplier_Impl
     rtl::Reference< ODocumentContainer >         m_xContent;
     bool                                         m_bCountFinal;
 
-    DataSupplier_Impl( const rtl::Reference< ODocumentContainer >& rContent )
-    : m_xContent(rContent)
-    , m_bCountFinal( false ) {}
+    explicit DataSupplier_Impl(const rtl::Reference< ODocumentContainer >& rContent)
+        : m_xContent(rContent)
+        , m_bCountFinal(false)
+    {
+    }
     ~DataSupplier_Impl();
 };
 

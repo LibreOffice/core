@@ -166,7 +166,7 @@ struct SvxGeneralTabPage::Row
     unsigned nFirstField, nLastField;
 
 public:
-    Row (FixedText *pLabel_)
+    explicit Row (FixedText *pLabel_)
         : pLabel(pLabel_)
         , nFirstField(0)
         , nLastField(0)

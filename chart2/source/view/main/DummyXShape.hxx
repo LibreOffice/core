@@ -276,7 +276,7 @@ public:
 class DummyLine3D : public DummyXShape
 {
 public:
-    DummyLine3D(const VLineProperties& rProperties);
+    explicit DummyLine3D(const VLineProperties& rProperties);
 };
 
 class DummyLine2D : public DummyXShape
