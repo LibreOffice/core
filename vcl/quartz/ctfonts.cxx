@@ -86,9 +86,9 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     }
 
     // fake italic
-    if (((pReqFont->GetSlant() == ITALIC_NORMAL) ||
-         (pReqFont->GetSlant() == ITALIC_OBLIQUE)) &&
-        (mpFontData->GetSlant() == ITALIC_NONE))
+    if (((pReqFont->GetSlantType() == ITALIC_NORMAL) ||
+         (pReqFont->GetSlantType() == ITALIC_OBLIQUE)) &&
+        (mpFontData->GetSlantType() == ITALIC_NONE))
     {
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, toRadian(120), 1, 0, 0));
     }
@@ -124,20 +124,20 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
 
     const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
     const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
-    rMetric.mnAscent       = lrint( fAscent );
-    rMetric.mnDescent      = lrint( CTFontGetDescent( aCTFontRef ));
-    rMetric.mnExtLeading   = lrint( CTFontGetLeading( aCTFontRef ));
-    rMetric.mnIntLeading   = lrint( fAscent - fCapHeight );
+    rMetric.SetAscent( lrint( fAscent ) );
+    rMetric.SetDescent( lrint( CTFontGetDescent( aCTFontRef )) );
+    rMetric.SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
+    rMetric.SetInternalLeading( lrint( fAscent - fCapHeight ) );
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
-    rMetric.mnWidth        = lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch);
+    rMetric.SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
 
     // all CoreText fonts are scalable
-    rMetric.mbScalableFont = true;
-    rMetric.mbTrueTypeFont = true; // Not sure, but this field is used only for Windows so far
-    rMetric.mbKernableFont = true;
+    rMetric.SetScalableFlag( true );
+    rMetric.SetTrueTypeFontFlag( true ); // Not sure, but this field is used only for Windows so far
+    rMetric.SetKernableFlag( true );
 }
 
 bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const
