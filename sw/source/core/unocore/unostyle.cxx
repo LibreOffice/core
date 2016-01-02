@@ -1096,7 +1096,7 @@ static uno::Reference<beans::XPropertySet> lcl_InitStandardStyle(const SfxStyleF
     if(eFamily != SFX_STYLE_FAMILY_PARA && eFamily != SFX_STYLE_FAMILY_PAGE)
         return {};
     auto aResult(rxStyleFamily->getByName("Standard"));
-    if(!aResult.isExtractableTo(cppu::UnoType<return_t>::get()))
+    if(!aResult.has<return_t>())
         return {};
     return aResult.get<return_t>();
 }
@@ -1112,7 +1112,7 @@ static uno::Reference<container::XNameAccess> lcl_InitStyleFamily(SwDoc* pDoc, c
     uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xModel, uno::UNO_QUERY);
     auto xFamilies = xFamilySupplier->getStyleFamilies();
     auto aResult(xFamilies->getByName(rEntry.m_sName));
-    if(!aResult.isExtractableTo(cppu::UnoType<return_t>::get()))
+    if(!aResult.has<return_t>())
         return {};
     return aResult.get<return_t>();
 }
@@ -1421,7 +1421,7 @@ sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* p
     // exception: If these ItemTypes are used, do not convert when these are negative
     // since this means they are intended as percent values
     if((XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
-            && o_aValue.isExtractableTo(cppu::UnoType<sal_Int32>::get())
+            && o_aValue.has<sal_Int32>()
             && o_aValue.get<sal_Int32>() < 0)
         return rEntry.nMemberId;
     if(!pDoc)
@@ -1461,7 +1461,7 @@ void SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>(const SfxItemPropertySimpleE
     {
         // add set commands for FillName items
         SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-        if(!aValue.isExtractableTo(cppu::UnoType<OUString>::get()))
+        if(!aValue.has<OUString>())
             throw lang::IllegalArgumentException();
         SvxShape::SetFillAttribute(rEntry.nWID, aValue.get<OUString>(), rStyleSet);
     }
