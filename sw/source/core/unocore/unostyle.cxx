@@ -1413,6 +1413,26 @@ static void lcl_SetDefaultWay(const SfxItemPropertySimpleEntry& rEntry, const Sf
     rStyleSet.Put(aSet);
 }
 
+sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* pDoc, uno::Any& o_aValue)
+{
+    // check for needed metric translation
+    if(!(rEntry.nMemberId & SFX_METRIC_ITEM))
+        return rEntry.nMemberId;
+    // exception: If these ItemTypes are used, do not convert when these are negative
+    // since this means they are intended as percent values
+    if((XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
+            && o_aValue.isExtractableTo(cppu::UnoType<sal_Int32>::get())
+            && o_aValue.get<sal_Int32>() < 0)
+        return rEntry.nMemberId;
+    if(!pDoc)
+        return rEntry.nMemberId & (~SFX_METRIC_ITEM);
+
+    const SfxItemPool& rPool = pDoc->GetAttrPool();
+    const SfxMapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
+    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+        SvxUnoConvertFromMM(eMapUnit, o_aValue);
+    return rEntry.nMemberId & (~SFX_METRIC_ITEM);
+}
 template<>
 void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
@@ -1432,6 +1452,34 @@ void SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemProp
     o_rStyleBase.getNewBase()->SetGrabBagItem(rValue);
     lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
 }
+template<>
+void SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    uno::Any aValue(rValue);
+    const auto nMemberId(lcl_TranslateMetric(rEntry, m_pDoc, aValue));
+    if(MID_NAME == nMemberId)
+    {
+        // add set commands for FillName items
+        SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
+        if(!aValue.isExtractableTo(cppu::UnoType<OUString>::get()))
+            throw lang::IllegalArgumentException();
+        SvxShape::SetFillAttribute(rEntry.nWID, aValue.get<OUString>(), rStyleSet);
+    }
+    else if(MID_GRAFURL == nMemberId)
+    {
+        if(XATTR_FILLBITMAP == rEntry.nWID)
+        {
+            // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
+            const Graphic aNullGraphic;
+            SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
+            XFillBitmapItem aXFillBitmapItem(rStyleSet.GetPool(), aNullGraphic);
+            aXFillBitmapItem.PutValue(aValue, nMemberId);
+            rStyleSet.Put(aXFillBitmapItem);
+        }
+    }
+    else
+        lcl_SetDefaultWay(rEntry, rPropSet, aValue, o_rStyleBase);
+}
 
 static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         const SfxItemPropertySet& rPropSet,
@@ -1448,86 +1496,20 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
     //UUUU adapted switch logic to a more readable state; removed goto's and made
     // execution of standard setting of proerty in ItemSet dependent of this variable
     bool bDone(false);
-
-    //UUUU
-    const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
     uno::Any aValue(rValue);
+    const auto nMemberId(lcl_TranslateMetric(rEntry, pDoc, aValue));
 
-    //UUUU check for needed metric translation
-    if(rEntry.nMemberId & SFX_METRIC_ITEM)
-    {
-        bool bDoIt(true);
-
-        if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
-        {
-            // exception: If these ItemTypes are used, do not convert when these are negative
-            // since this means they are intended as percent values
-            sal_Int32 nValue = 0;
-
-            if(aValue >>= nValue)
-            {
-                bDoIt = nValue > 0;
-            }
-        }
-
-        if(bDoIt && pDoc)
-        {
-            const SfxItemPool& rPool = pDoc->GetAttrPool();
-            const SfxMapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
-
-            if(eMapUnit != SFX_MAPUNIT_100TH_MM)
-            {
-                SvxUnoConvertFromMM(eMapUnit, aValue);
-            }
-        }
-    }
 
     switch(rEntry.nWID)
     {
         case FN_UNO_HIDDEN:
         case FN_UNO_STYLE_INTEROP_GRAB_BAG:
-            assert(false);
-            break;
         case XATTR_FILLGRADIENT:
         case XATTR_FILLHATCH:
         case XATTR_FILLBITMAP:
         case XATTR_FILLFLOATTRANSPARENCE:
-        // not yet needed; activate when LineStyle support may be added
-        // case XATTR_LINESTART:
-        // case XATTR_LINEEND:
-        // case XATTR_LINEDASH:
-        {
-            if(MID_NAME == nMemberId)
-            {
-                //UUUU add set commands for FillName items
-                OUString aTempName;
-                SfxItemSet& rStyleSet = rBase.GetItemSet();
-
-                if(!(aValue >>= aTempName))
-                {
-                    throw lang::IllegalArgumentException();
-                }
-
-                SvxShape::SetFillAttribute(rEntry.nWID, aTempName, rStyleSet);
-                bDone = true;
-            }
-            else if(MID_GRAFURL == nMemberId)
-            {
-                if(XATTR_FILLBITMAP == rEntry.nWID)
-                {
-                    //UUUU Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
-                    const Graphic aNullGraphic;
-                    SfxItemSet& rStyleSet = rBase.GetItemSet();
-                    XFillBitmapItem aXFillBitmapItem(rStyleSet.GetPool(), aNullGraphic);
-
-                    aXFillBitmapItem.PutValue(aValue, nMemberId);
-                    rStyleSet.Put(aXFillBitmapItem);
-                    bDone = true;
-                }
-            }
-
+            assert(false);
             break;
-        }
         case RES_BACKGROUND:
         {
             //UUUU
@@ -2036,6 +2018,15 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
                     SetPropertyValue<FN_UNO_HIDDEN>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                 case FN_UNO_STYLE_INTEROP_GRAB_BAG:
                     SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
+                case XATTR_FILLGRADIENT:
+                case XATTR_FILLHATCH:
+                case XATTR_FILLBITMAP:
+                case XATTR_FILLFLOATTRANSPARENCE:
+                // not yet needed; activate when LineStyle support may be added
+                // case XATTR_LINESTART:
+                // case XATTR_LINEEND:
+                // case XATTR_LINEDASH:
+                    SetPropertyValue<XATTR_FILLGRADIENT>(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
                 default:
                     lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, m_pBasePool, m_pDoc, m_rEntry.m_eFamily);
             }
