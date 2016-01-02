@@ -42,6 +42,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include "svx/svdstr.hrc"
+#include <vcl/svapp.hxx>
 #include <algorithm>
 
 using namespace ::accessibility;
@@ -466,24 +467,24 @@ void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& 
     }
 }
 
-void SAL_CALL AccessibleControlShape::modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::modeChanged(const ModeChangeEvent& rSource) throw (RuntimeException, std::exception)
 {
     // did it come from our inner context (the real one, not it's proxy!)?
-    OSL_TRACE ("AccessibleControlShape::modeChanged");
-    Reference< XControl > xSource( _rSource.Source, UNO_QUERY );    // for faster compare
-    if ( xSource.get() == m_xUnoControl.get() )
+    SAL_INFO("sw.uno", "AccessibleControlShape::modeChanged");
+    Reference<XControl> xSource(rSource.Source, UNO_QUERY); // for faster compare
+    if(xSource.get() != m_xUnoControl.get())
     {
-        // If our "pseudo-aggregated" inner context does not live anymore,
-        // we don't want to live, too.  This is accomplished by asking our
-        // parent to replace this object with a new one.  Disposing this
-        // object and sending notifications about the replacement are in
-        // the responsibility of our parent.
-        OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, mnIndex, maShapeTreeInfo ) );
+        SAL_WARN("sw.uno", "AccessibleControlShape::modeChanged: where did this come from?");
+        return;
     }
-#if OSL_DEBUG_LEVEL > 0
-    else
-        OSL_FAIL( "AccessibleControlShape::modeChanged: where did this come from?" );
-#endif
+    SolarMutexGuard g;
+    // If our "pseudo-aggregated" inner context does not live anymore,
+    // we don't want to live, too.  This is accomplished by asking our
+    // parent to replace this object with a new one.  Disposing this
+    // object and sending notifications about the replacement are in
+    // the responsibility of our parent.
+    const bool bReplaced = mpParent->ReplaceChild(this, mxShape, mnIndex, maShapeTreeInfo);
+    SAL_WARN_IF(!bReplaced, "sw.uno", "AccessibleControlShape::modeChanged: replacing ourselves away did fail");
 }
 
 void SAL_CALL AccessibleControlShape::disposing (const EventObject& _rSource) throw (RuntimeException, std::exception)
