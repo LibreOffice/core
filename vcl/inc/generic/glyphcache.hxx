@@ -160,7 +160,7 @@ public:
 
     const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
 
-    void                    FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
+    void                    FetchFontMetric( ImplFontAttributes&, long& rFactor ) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
     int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
     double                  GetStretch() { return mfStretch; }
