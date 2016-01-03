@@ -126,18 +126,18 @@ class GlyphData
 public:
                             GlyphData() : mnLruValue(0) {}
 
-    const GlyphMetric&      GetMetric() const           { return maMetric; }
+    const GlyphMetric&      GetMetric() const           { return maFontAttributes; }
 
-    void                    SetSize( const Size& s)     { maMetric.SetSize( s ); }
-    void                    SetOffset( int nX, int nY ) { maMetric.SetOffset( nX, nY ); }
-    void                    SetDelta( int nX, int nY )  { maMetric.SetDelta( nX, nY ); }
-    void                    SetCharWidth( long nW )     { maMetric.SetCharWidth( nW ); }
+    void                    SetSize( const Size& s)     { maFontAttributes.SetSize( s ); }
+    void                    SetOffset( int nX, int nY ) { maFontAttributes.SetOffset( nX, nY ); }
+    void                    SetDelta( int nX, int nY )  { maFontAttributes.SetDelta( nX, nY ); }
+    void                    SetCharWidth( long nW )     { maFontAttributes.SetCharWidth( nW ); }
 
     void                    SetLruValue( int n ) const  { mnLruValue = n; }
     long                    GetLruValue() const         { return mnLruValue;}
 
 private:
-    GlyphMetric             maMetric;
+    GlyphMetric             maFontAttributes;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnLruValue;
@@ -160,7 +160,7 @@ public:
 
     const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
 
-    void                    FetchFontMetric( ImplFontAttributes&, long& rFactor ) const;
+    void                    FetchFontAttributes( ImplFontAttributes&, long& rFactor ) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
     int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
     double                  GetStretch() { return mfStretch; }

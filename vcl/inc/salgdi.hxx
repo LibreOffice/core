@@ -145,7 +145,7 @@ public:
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
 
     // get the current font's metrics
-    virtual void                GetFontMetric( ImplFontAttributes*, int nFallbackLevel = 0 ) = 0;
+    virtual void                GetFontAttributes( ImplFontAttributes*, int nFallbackLevel = 0 ) = 0;
 
     // get the repertoire of the current font
     virtual const FontCharMapPtr GetFontCharMap() const = 0;

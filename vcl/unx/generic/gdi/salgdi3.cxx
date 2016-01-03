@@ -135,9 +135,9 @@ void X11SalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 }
 
 void
-X11SalGraphics::GetFontMetric( ImplFontAttributes *pMetric, int nFallbackLevel )
+X11SalGraphics::GetFontAttributes( ImplFontAttributes *pFontAttributes, int nFallbackLevel )
 {
-    mxTextRenderImpl->GetFontMetric(pMetric, nFallbackLevel);
+    mxTextRenderImpl->GetFontAttributes(pFontAttributes, nFallbackLevel);
 }
 
 bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )

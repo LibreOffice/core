@@ -94,7 +94,7 @@ public:
 
     SalLayout* GetTextLayout( void ) const;
 
-    void       GetFontMetric( ImplFontAttributes& ) const;
+    void       GetFontAttributes( ImplFontAttributes& ) const;
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
