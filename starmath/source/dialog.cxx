@@ -2327,7 +2327,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
 void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyleName)
 {
     // get Font (FontInfo) matching name and style
-    vcl::FontInfo aFI;
+    FontMetric aFI;
     if (pFontList)
         aFI = pFontList->Get(rFontName, WEIGHT_NORMAL, ITALIC_NONE);
     SetFontStyle(rStyleName, aFI);

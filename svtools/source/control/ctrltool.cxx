@@ -69,18 +69,18 @@ const sal_IntPtr FontList::aStdSizeAry[] =
     0
 };
 
-class ImplFontListFontInfo : public vcl::FontInfo
+class ImplFontListFontMetric : public FontMetric
 {
     friend class FontList;
 
 private:
     VclPtr<OutputDevice>    mpDevice;
-    ImplFontListFontInfo*   mpNext;
+    ImplFontListFontMetric*   mpNext;
 
 public:
-                            ImplFontListFontInfo( const vcl::FontInfo& rInfo,
+                            ImplFontListFontMetric( const FontMetric& rInfo,
                                                   OutputDevice* pDev ) :
-                                vcl::FontInfo( rInfo ), mpNext(nullptr)
+                                FontMetric( rInfo ), mpNext(nullptr)
                             {
                                 mpDevice = pDev;
                             }
@@ -105,7 +105,7 @@ class ImplFontListNameInfo
 
 private:
     OUString                maSearchName;
-    ImplFontListFontInfo*   mpFirst;
+    ImplFontListFontMetric*   mpFirst;
     FontListFontNameType    mnType;
 
     explicit ImplFontListNameInfo(const OUString& rSearchName)
@@ -126,8 +126,8 @@ static int sortWeightValue(FontWeight eWeight)
     return 0; // eWeight == WEIGHT_NORMAL
 }
 
-static sal_Int32 ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
-                                          ImplFontListFontInfo* pInfo2 )
+static sal_Int32 ImplCompareFontMetric( ImplFontListFontMetric* pInfo1,
+                                          ImplFontListFontMetric* pInfo2 )
 {
     //Sort non italic before italics
     if ( pInfo1->GetItalic() < pInfo2->GetItalic() )
@@ -253,13 +253,13 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
     sal_uInt16  i;
     for( i = 0; i < n; i++ )
     {
-        vcl::FontInfo aFontInfo = pDevice->GetDevFont( i );
+        FontMetric aFontMetric = pDevice->GetDevFont( i );
 
         // ignore raster-fonts if they are not to be displayed
-        if ( !bAll && (aFontInfo.GetType() == TYPE_RASTER) )
+        if ( !bAll && (aFontMetric.GetType() == TYPE_RASTER) )
             continue;
 
-        OUString aSearchName(aFontInfo.GetName());
+        OUString aSearchName(aFontMetric.GetName());
         ImplFontListNameInfo*   pData;
         sal_uLong                   nIndex;
         aSearchName = ImplMakeSearchString(aSearchName);
@@ -269,7 +269,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
         {
             if ( bInsertData )
             {
-                ImplFontListFontInfo* pNewInfo = new ImplFontListFontInfo( aFontInfo, pDevice );
+                ImplFontListFontMetric* pNewInfo = new ImplFontListFontMetric( aFontMetric, pDevice );
                 pData = new ImplFontListNameInfo( aSearchName );
                 pData->mpFirst      = pNewInfo;
                 pNewInfo->mpNext    = nullptr;
@@ -286,12 +286,12 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
             if ( bInsertData )
             {
                 bool                    bInsert = true;
-                ImplFontListFontInfo*   pPrev = nullptr;
-                ImplFontListFontInfo*   pTemp = pData->mpFirst;
-                ImplFontListFontInfo*   pNewInfo = new ImplFontListFontInfo( aFontInfo, pDevice );
+                ImplFontListFontMetric*   pPrev = nullptr;
+                ImplFontListFontMetric*   pTemp = pData->mpFirst;
+                ImplFontListFontMetric*   pNewInfo = new ImplFontListFontMetric( aFontMetric, pDevice );
                 while ( pTemp )
                 {
-                    sal_Int32 eComp = ImplCompareFontInfo( pNewInfo, pTemp );
+                    sal_Int32 eComp = ImplCompareFontMetric( pNewInfo, pTemp );
                     if ( eComp <= 0 )
                     {
                         if ( eComp == 0 )
@@ -301,8 +301,8 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
                             if ( (pTemp->GetCharSet() != eSystemEncoding) &&
                                  (pNewInfo->GetCharSet() == eSystemEncoding) )
                             {
-                                ImplFontListFontInfo* pTemp2 = pTemp->mpNext;
-                                *static_cast<vcl::FontInfo*>(pTemp) = *static_cast<vcl::FontInfo*>(pNewInfo);
+                                ImplFontListFontMetric* pTemp2 = pTemp->mpNext;
+                                *static_cast<FontMetric*>(pTemp) = *static_cast<FontMetric*>(pNewInfo);
                                 pTemp->mpNext = pTemp2;
                             }
                             delete pNewInfo;
@@ -370,8 +370,8 @@ FontList::~FontList()
     // delete SizeArray if required
     delete[] mpSizeAry;
 
-    // delete FontInfos
-    ImplFontListFontInfo *pTemp, *pInfo;
+    // delete FontMetrics
+    ImplFontListFontMetric *pTemp, *pInfo;
     for (auto const& it : m_Entries)
     {
         pInfo = it->mpFirst;
@@ -430,7 +430,7 @@ const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) c
     }
 }
 
-OUString FontList::GetStyleName(const vcl::FontInfo& rInfo) const
+OUString FontList::GetStyleName(const FontMetric& rInfo) const
 {
     OUString aStyleName = rInfo.GetStyleName();
     FontWeight eWeight = rInfo.GetWeight();
@@ -481,7 +481,7 @@ OUString FontList::GetStyleName(const vcl::FontInfo& rInfo) const
     return aStyleName;
 }
 
-OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
+OUString FontList::GetFontMapText( const FontMetric& rInfo ) const
 {
     if ( rInfo.GetName().isEmpty() )
     {
@@ -505,17 +505,17 @@ OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
         bool                    bNotSynthetic = false;
         FontWeight              eWeight = rInfo.GetWeight();
         FontItalic              eItalic = rInfo.GetItalic();
-        ImplFontListFontInfo*   pFontInfo = pData->mpFirst;
-        while ( pFontInfo )
+        ImplFontListFontMetric*   pFontMetric = pData->mpFirst;
+        while ( pFontMetric )
         {
-            if ( (eWeight == pFontInfo->GetWeight()) &&
-                 (eItalic == pFontInfo->GetItalic()) )
+            if ( (eWeight == pFontMetric->GetWeight()) &&
+                 (eItalic == pFontMetric->GetItalic()) )
             {
                 bNotSynthetic = true;
                 break;
             }
 
-            pFontInfo = pFontInfo->mpNext;
+            pFontMetric = pFontMetric->mpNext;
         }
 
         if ( !bNotSynthetic )
@@ -551,10 +551,10 @@ OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
 
 namespace
 {
-    vcl::FontInfo makeMissing(ImplFontListFontInfo* pFontNameInfo, const OUString &rName,
+    FontMetric makeMissing(ImplFontListFontMetric* pFontNameInfo, const OUString &rName,
         FontWeight eWeight, FontItalic eItalic)
     {
-        vcl::FontInfo aInfo;
+        FontMetric aInfo;
         // if the fontname matches, we copy as much as possible
         if (pFontNameInfo)
         {
@@ -574,21 +574,21 @@ namespace
     }
 }
 
-vcl::FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) const
+FontMetric FontList::Get(const OUString& rName, const OUString& rStyleName) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
-    ImplFontListFontInfo* pFontInfo = nullptr;
-    ImplFontListFontInfo* pFontNameInfo = nullptr;
+    ImplFontListFontMetric* pFontMetric = nullptr;
+    ImplFontListFontMetric* pFontNameInfo = nullptr;
     if ( pData )
     {
-        ImplFontListFontInfo* pSearchInfo = pData->mpFirst;
+        ImplFontListFontMetric* pSearchInfo = pData->mpFirst;
         pFontNameInfo = pSearchInfo;
         pSearchInfo = pData->mpFirst;
         while ( pSearchInfo )
         {
             if (rStyleName.equalsIgnoreAsciiCase(GetStyleName(*pSearchInfo)))
             {
-                pFontInfo = pSearchInfo;
+                pFontMetric = pSearchInfo;
                 break;
             }
 
@@ -597,8 +597,8 @@ vcl::FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) c
     }
 
     // reproduce attributes if data could not be found
-    vcl::FontInfo aInfo;
-    if ( !pFontInfo )
+    FontMetric aInfo;
+    if ( !pFontMetric )
     {
         FontWeight eWeight = WEIGHT_DONTKNOW;
         FontItalic eItalic = ITALIC_NONE;
@@ -646,7 +646,7 @@ vcl::FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) c
         aInfo = makeMissing(pFontNameInfo, rName, eWeight, eItalic);
     }
     else
-        aInfo = *pFontInfo;
+        aInfo = *pFontMetric;
 
     // set Fontname to keep FontAlias
     aInfo.SetName( rName );
@@ -655,22 +655,22 @@ vcl::FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) c
     return aInfo;
 }
 
-vcl::FontInfo FontList::Get(const OUString& rName,
+FontMetric FontList::Get(const OUString& rName,
                         FontWeight eWeight, FontItalic eItalic) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
-    ImplFontListFontInfo* pFontInfo = nullptr;
-    ImplFontListFontInfo* pFontNameInfo = nullptr;
+    ImplFontListFontMetric* pFontMetric = nullptr;
+    ImplFontListFontMetric* pFontNameInfo = nullptr;
     if ( pData )
     {
-        ImplFontListFontInfo* pSearchInfo = pData->mpFirst;
+        ImplFontListFontMetric* pSearchInfo = pData->mpFirst;
         pFontNameInfo = pSearchInfo;
         while ( pSearchInfo )
         {
             if ( (eWeight == pSearchInfo->GetWeight()) &&
                  (eItalic == pSearchInfo->GetItalic()) )
             {
-                pFontInfo = pSearchInfo;
+                pFontMetric = pSearchInfo;
                 break;
             }
 
@@ -679,11 +679,11 @@ vcl::FontInfo FontList::Get(const OUString& rName,
     }
 
     // reproduce attributes if data could not be found
-    vcl::FontInfo aInfo;
-    if ( !pFontInfo )
+    FontMetric aInfo;
+    if ( !pFontMetric )
         aInfo = makeMissing(pFontNameInfo, rName, eWeight, eItalic);
     else
-        aInfo = *pFontInfo;
+        aInfo = *pFontMetric;
 
     // set Fontname to keep FontAlias
     aInfo.SetName( rName );
@@ -696,14 +696,14 @@ bool FontList::IsAvailable(const OUString& rName) const
     return (ImplFindByName( rName ) != nullptr);
 }
 
-const vcl::FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
+const FontMetric& FontList::GetFontName( sal_uInt16 nFont ) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontName(): nFont >= Count" );
 
     return *(m_Entries[nFont]->mpFirst);
 }
 
-sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
+sal_Handle FontList::GetFirstFontMetric(const OUString& rName) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
     if ( !pData )
@@ -712,19 +712,19 @@ sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
         return static_cast<sal_Handle>(pData->mpFirst);
 }
 
-sal_Handle FontList::GetNextFontInfo( sal_Handle hFontInfo )
+sal_Handle FontList::GetNextFontMetric( sal_Handle hFontMetric )
 {
-    ImplFontListFontInfo* pInfo = static_cast<ImplFontListFontInfo*>(hFontInfo);
+    ImplFontListFontMetric* pInfo = static_cast<ImplFontListFontMetric*>(hFontMetric);
     return static_cast<sal_Handle>(pInfo->mpNext);
 }
 
-const vcl::FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo )
+const FontMetric& FontList::GetFontMetric( sal_Handle hFontMetric )
 {
-    ImplFontListFontInfo* pInfo = static_cast<ImplFontListFontInfo*>(hFontInfo);
+    ImplFontListFontMetric* pInfo = static_cast<ImplFontListFontMetric*>(hFontMetric);
     return *pInfo;
 }
 
-const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
+const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const
 {
     // first delete Size-Array
     if ( mpSizeAry )

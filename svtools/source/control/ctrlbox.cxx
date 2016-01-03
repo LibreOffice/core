@@ -1037,16 +1037,16 @@ void FontNameBox::Fill( const FontList* pList )
     sal_uInt16 nFontCount = pList->GetFontNameCount();
     for ( sal_uInt16 i = 0; i < nFontCount; i++ )
     {
-        const vcl::FontInfo& rFontInfo = pList->GetFontName( i );
-        sal_uLong nIndex = InsertEntry( rFontInfo.GetName() );
+        const FontMetric& rFontMetric = pList->GetFontName( i );
+        sal_uLong nIndex = InsertEntry( rFontMetric.GetName() );
         if ( nIndex != LISTBOX_ERROR )
         {
             if ( nIndex < mpFontList->size() ) {
                 ImplFontList::iterator it = mpFontList->begin();
                 ::std::advance( it, nIndex );
-                mpFontList->insert( it, rFontInfo );
+                mpFontList->insert( it, rFontMetric );
             } else {
-                mpFontList->push_back( rFontInfo );
+                mpFontList->push_back( rFontMetric );
             }
         }
     }
@@ -1117,7 +1117,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
     assert( mpFontList );
 
-    vcl::FontInfo& rInfo = (*mpFontList)[ rUDEvt.GetItemId() ];
+    FontMetric& rInfo = (*mpFontList)[ rUDEvt.GetItemId() ];
     Point aTopLeft = rUDEvt.GetRect().TopLeft();
     long nX = aTopLeft.X();
     long nH = rUDEvt.GetRect().GetHeight();
@@ -1384,8 +1384,8 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
     Clear();
 
     // does a font with this name already exist?
-    sal_Handle hFontInfo = pList->GetFirstFontInfo( rName );
-    if ( hFontInfo )
+    sal_Handle hFontMetric = pList->GetFirstFontMetric( rName );
+    if ( hFontMetric )
     {
         OUString aStyleText;
         FontWeight  eLastWeight = WEIGHT_DONTKNOW;
@@ -1396,10 +1396,10 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
         bool        bBold = false;
         bool        bBoldItalic = false;
         bool        bInsert = false;
-        vcl::FontInfo    aInfo;
-        while ( hFontInfo )
+        FontMetric    aInfo;
+        while ( hFontMetric )
         {
-            aInfo = FontList::GetFontInfo( hFontInfo );
+            aInfo = FontList::GetFontMetric( hFontMetric );
 
             FontWeight  eWeight = aInfo.GetWeight();
             FontItalic  eItalic = aInfo.GetItalic();
@@ -1464,7 +1464,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
             else if ( !bBoldItalic && (aStyleText == pList->GetBoldItalicStr()) )
                 bBoldItalic = true;
 
-            hFontInfo = FontList::GetNextFontInfo( hFontInfo );
+            hFontMetric = FontList::GetNextFontMetric( hFontMetric );
         }
 
         if ( bInsert )
@@ -1616,7 +1616,7 @@ void FontSizeBox::Modify()
     }
 }
 
-void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
+void FontSizeBox::Fill( const FontMetric* pInfo, const FontList* pList )
 {
     // remember for relative mode
     pFontList = pList;
@@ -1631,7 +1631,7 @@ void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
 
     if( pInfo )
     {
-        aFontInfo = *pInfo;
+        aFontMetric = *pInfo;
         pAry = pList->GetSizeAry( *pInfo );
     }
     else
@@ -1778,7 +1778,7 @@ void FontSizeBox::SetRelative( bool bNewRelative )
             SetMax( 9999 );
             SetUnit( FUNIT_POINT );
             if ( pFontList )
-                Fill( &aFontInfo, pFontList );
+                Fill( &aFontMetric, pFontList );
         }
 
         SetText( aStr );

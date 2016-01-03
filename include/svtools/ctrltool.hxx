@@ -73,28 +73,28 @@ With sal_False vectorized and scalable fonts will be queried.
 
 --------------------------------------------------------------------------
 
-String FontList::GetStyleName( const vcl::FontInfo& rInfo ) const;
+String FontList::GetStyleName( const FontMetric& rInfo ) const;
 
-This method returns the StyleName of a vcl::FontInfo.
+This method returns the StyleName of a FontMetric.
 If no StyleName is set, a name will be generated from the set attributes.
 
 --------------------------------------------------------------------------
 
-OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const;
+OUString FontList::GetFontMapText( const FontMetric& rInfo ) const;
 
 This method returns a Matchstring which indicates the problem that could
 arise when using a font. This string should be displayed to the user.
 
 --------------------------------------------------------------------------
 
-vcl::FontInfo FontList::Get( const String& rName, const String& rStyleName ) const;
+FontMetric FontList::Get( const String& rName, const String& rStyleName ) const;
 
-This method search a vcl::FontInfo for the given name and the given style name.
+This method search a FontMetric for the given name and the given style name.
 The Stylename can also be a synthetic one.
-In that case the relevant vcl::FontInfo fields will be set.
-If a StyleName is provided, a vcl::FontInfo structure without a Stylename can be
+In that case the relevant FontMetric fields will be set.
+If a StyleName is provided, a FontMetric structure without a Stylename can be
 returned. To get a representation of the StyleName for displaying it to the user,
-call GetStyleName() on this vcl::FontInfo structure.
+call GetStyleName() on this FontMetric structure.
 
 Links:
 
@@ -102,13 +102,13 @@ FontList::GetStyleName()
 
 --------------------------------------------------------------------------
 
-vcl::FontInfo FontList::Get( const String& rName, FontWeight eWeight,
+FontMetric FontList::Get( const String& rName, FontWeight eWeight,
                         FontItalic eItalic ) const;
 
-This method search a vcl::FontInfo structure for a provided name and styles.
-This method can also return a vcl::FontInfo without a Stylename.
+This method search a FontMetric structure for a provided name and styles.
+This method can also return a FontMetric without a Stylename.
 To get a representation of the StyleName to be presented to the user
-call GetStyleName() with this vcl::FontInfo.
+call GetStyleName() with this FontMetric.
 
 Links:
 
@@ -116,7 +116,7 @@ FontList::GetStyleName()
 
 --------------------------------------------------------------------------
 
-const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const;
+const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const;
 
 This method returns the available sizes for the given font.
 If it is a scalable font, standard sizes are returned.
@@ -166,18 +166,18 @@ public:
 
     FontList*               Clone() const;
 
-    OUString                GetFontMapText( const vcl::FontInfo& rInfo ) const;
+    OUString                GetFontMapText( const FontMetric& rInfo ) const;
 
     const OUString&         GetNormalStr() const { return maNormal; }
     const OUString&         GetItalicStr() const { return maNormalItalic; }
     const OUString&         GetBoldStr() const { return maBold; }
     const OUString&         GetBoldItalicStr() const { return maBoldItalic; }
     const OUString&         GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
-    OUString                GetStyleName( const vcl::FontInfo& rInfo ) const;
+    OUString                GetStyleName( const FontMetric& rInfo ) const;
 
-    vcl::FontInfo           Get( const OUString& rName,
+    FontMetric           Get( const OUString& rName,
                                  const OUString& rStyleName ) const;
-    vcl::FontInfo           Get( const OUString& rName,
+    FontMetric           Get( const OUString& rName,
                                  FontWeight eWeight,
                                  FontItalic eItalic ) const;
 
@@ -186,12 +186,12 @@ public:
     {
         return (sal_uInt16)m_Entries.size();
     }
-    const vcl::FontInfo&    GetFontName( sal_uInt16 nFont ) const;
-    sal_Handle              GetFirstFontInfo( const OUString& rName ) const;
-    static sal_Handle           GetNextFontInfo( sal_Handle hFontInfo );
-    static const vcl::FontInfo& GetFontInfo( sal_Handle hFontInfo );
+    const FontMetric&    GetFontName( sal_uInt16 nFont ) const;
+    sal_Handle              GetFirstFontMetric( const OUString& rName ) const;
+    static sal_Handle           GetNextFontMetric( sal_Handle hFontMetric );
+    static const FontMetric& GetFontMetric( sal_Handle hFontMetric );
 
-    const sal_IntPtr*       GetSizeAry( const vcl::FontInfo& rInfo ) const;
+    const sal_IntPtr*       GetSizeAry( const FontMetric& rInfo ) const;
     static const sal_IntPtr* GetStdSizeAry() { return aStdSizeAry; }
 
 private:

@@ -68,25 +68,23 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
     return true;
 }
 
-namespace vcl {
-
-FontInfo::FontInfo()
+FontMetric::FontMetric()
 :   mpImplMetric( new ImplFontMetric )
 {}
 
-FontInfo::FontInfo( const FontInfo& rInfo )
+FontMetric::FontMetric( const FontMetric& rInfo )
 :  Font( rInfo )
 {
     mpImplMetric = rInfo.mpImplMetric;
     mpImplMetric->AddReference();
 }
 
-FontInfo::~FontInfo()
+FontMetric::~FontMetric()
 {
     mpImplMetric->DeReference();
 }
 
-FontInfo& FontInfo::operator=( const FontInfo& rInfo )
+FontMetric& FontMetric::operator=( const FontMetric& rInfo )
 {
     Font::operator=( rInfo );
 
@@ -100,7 +98,7 @@ FontInfo& FontInfo::operator=( const FontInfo& rInfo )
     return *this;
 }
 
-bool FontInfo::operator==( const FontInfo& rInfo ) const
+bool FontMetric::operator==( const FontMetric& rInfo ) const
 {
     if( !Font::operator==( rInfo ) )
         return false;
@@ -111,16 +109,10 @@ bool FontInfo::operator==( const FontInfo& rInfo ) const
     return false;
 }
 
-FontType FontInfo::GetType() const
+FontType FontMetric::GetType() const
 {
     return (mpImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
 }
-
-}
-
-FontMetric::FontMetric( const FontMetric& rMetric ):
-    vcl::FontInfo( rMetric )
-{}
 
 long FontMetric::GetAscent() const
 {
@@ -160,17 +152,6 @@ bool FontMetric::IsFullstopCentered() const
 long FontMetric::GetBulletOffset() const
 {
     return mpImplMetric->GetBulletOffset();
-}
-
-FontMetric& FontMetric::operator =( const FontMetric& rMetric )
-{
-    vcl::FontInfo::operator=( rMetric );
-    return *this;
-}
-
-bool FontMetric::operator==( const FontMetric& rMetric ) const
-{
-    return vcl::FontInfo::operator==( rMetric );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
