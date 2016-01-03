@@ -698,7 +698,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/gdi/salbmp \
     vcl/win/gdi/salgdi \
     vcl/win/gdi/salgdi2 \
-    vcl/win/gdi/salgdi3 \
+    vcl/win/gdi/salfont \
     vcl/win/gdi/salgdi_gdiplus \
     vcl/win/gdi/salnativewidgets-luna \
     vcl/win/gdi/salprn \
