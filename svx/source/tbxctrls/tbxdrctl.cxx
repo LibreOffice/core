@@ -40,7 +40,7 @@ using namespace ::com::sun::star::frame;
 
 
 
-SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ):
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::CHECKABLE | rTbx.GetItemBits( nId ) );
@@ -50,15 +50,6 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
 void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     svt::ToolboxController::initialize(aArguments);
-    /*
-     * Toolbar name is defined as "private:resource/toolbar/drawbar" in writer and calc,
-     * "private:resource/toolbar/toolbar" in draw and impress. Control is added for this
-     * difference.
-     */
-    if ( m_sModuleName == "com.sun.star.presentation.PresentationDocument" || m_sModuleName == "com.sun.star.drawing.DrawingDocument" )
-        m_sToolboxName="private:resource/toolbar/toolbar";
-    else
-        m_sToolboxName="private:resource/toolbar/drawbar";
 }
 
 
@@ -66,6 +57,24 @@ void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< css::uno::Any
 void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
+
+    switch(nSID){
+        case SID_TRACK_CHANGES_BAR:
+            m_sToolboxName="private:resource/toolbar/changes";
+        default:
+            /*
+             * Toolbar name is defined as "private:resource/toolbar/drawbar" in writer and calc,
+             * "private:resource/toolbar/toolbar" in draw and impress. Control is added for this
+             * difference.
+             */
+            if ( m_sModuleName == "com.sun.star.presentation.PresentationDocument" || m_sModuleName == "com.sun.star.drawing.DrawingDocument" )
+                m_sToolboxName="private:resource/toolbar/toolbar";
+            else
+                m_sToolboxName="private:resource/toolbar/drawbar";
+    }
+
+    if (nSID == SID_TRACK_CHANGES_BAR)
+        m_sToolboxName="private:resource/toolbar/changes";
     GetToolBox().EnableItem( GetId(), ( eState != SfxItemState::DISABLED ) );
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 

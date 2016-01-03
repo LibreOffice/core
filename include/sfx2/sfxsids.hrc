@@ -257,6 +257,7 @@
 #define SID_SHOWLINES                       (SID_SFX_START + 1725)
 #define SID_BLUETOOTH_SENDDOC               (SID_SFX_START + 1726)
 #define SID_TEMPLATE_MANAGER                (SID_SFX_START + 1727)
+#define SID_TRACK_CHANGES_BAR               (SID_SFX_START + 1729)
 
 //      SID_SFX_free_START                  (SID_SFX_START + 1728)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
