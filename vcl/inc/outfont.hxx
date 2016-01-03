@@ -38,10 +38,14 @@ namespace vcl { class Font; }
 class ConvertChar;
 class OutputDevice;
 class Size;
+class FontSelectPattern;
 
 class ImplFontAttributes
 {
 public:
+    explicit        ImplFontAttributes() {}
+    explicit        ImplFontAttributes( const FontSelectPattern& );
+
     // device independent font functions
     const OUString& GetFamilyName() const   { return maFamilyName; }
     FontFamily      GetFamilyType() const   { return meFamily; }
@@ -102,82 +106,7 @@ public:
     void            SetSubsettableFlag( bool bSubsettable )     { mbSubsettable = bSubsettable; }
     void            SetOrientationFlag( bool bCanRotate )       { mbOrientation = bCanRotate; }
 
-private:
-    // device independent variables
-    OUString        maFamilyName;               // Font Family Name
-    OUString        maStyleName;                // Font Style Name
-    FontWeight      meWeight;                   // Weight Type
-    FontItalic      meItalic;                   // Slant Type
-    FontFamily      meFamily;                   // Family Type
-    FontPitch       mePitch;                    // Pitch Type
-    FontWidth       meWidthType;                // Width Type
-    bool            mbSymbolFlag;               // Is font a symbol?
-
-    // device dependent variables
-    OUString        maMapNames;                 // List of family name aliases separated with ';'
-    int             mnQuality;                  // Quality (used when similar fonts compete)
-    bool            mbOrientation;              // true: physical font can be rotated
-    bool            mbDevice;                   // true: built in font
-    bool            mbSubsettable;              // true: a subset of the font can be created
-    bool            mbEmbeddable;               // true: the font can be embedded
-};
-
-class FontSelectPatternAttributes : public ImplFontAttributes
-{
-public:
-                    FontSelectPatternAttributes( const vcl::Font&, const OUString& rSearchName,
-                                                 const Size&, float fExactHeight );
-#ifdef WNT
-                    FontSelectPatternAttributes( const PhysicalFontFace&, const Size&,
-                                                 float fExactHeight, int nOrientation, bool bVertical );
-#endif
-
-    size_t          hashCode() const;
-    bool operator==(const FontSelectPatternAttributes& rOther) const;
-    bool operator!=(const FontSelectPatternAttributes& rOther) const
-    {
-        return !(*this == rOther);
-    }
-
-public:
-    OUString        maTargetName;               // name of the font name token that is chosen
-    OUString        maSearchName;               // name of the font that matches best
-    int             mnWidth;                    // width of font in pixel units
-    int             mnHeight;                   // height of font in pixel units
-    float           mfExactHeight;              // requested height (in pixels with subpixel details)
-    int             mnOrientation;              // text orientation in 3600 system
-    LanguageType    meLanguage;                 // text language
-    bool            mbVertical;                 // vertical mode of requested font
-    bool            mbNonAntialiased;           // true if antialiasing is disabled
-
-    bool            mbEmbolden;                 // Force emboldening
-    ItalicMatrix    maItalicMatrix;             // Force matrix for slant
-};
-
-class FontSelectPattern : public FontSelectPatternAttributes
-{
-public:
-                    FontSelectPattern( const vcl::Font&, const OUString& rSearchName,
-                                       const Size&, float fExactHeight );
-#ifdef WNT
-// ifdeffed to prevent it going into unusedcode.easy
-                    FontSelectPattern( const PhysicalFontFace&, const Size&,
-                                       float fExactHeight, int nOrientation, bool bVertical );
-#endif
-
-public: // TODO: change to private
-    const PhysicalFontFace* mpFontData;         // a matching PhysicalFontFace object
-    ImplFontEntry*  mpFontEntry;                // pointer to the resulting FontCache entry
-
-    void            copyAttributes(const FontSelectPatternAttributes &rAttributes);
-};
-
-// - ImplFontMetricData -
-
-class ImplFontMetricData : public ImplFontAttributes
-{
-public:
-    explicit        ImplFontMetricData( const FontSelectPattern& );
+    // Font metrics below
 
     // font instance attributes from the font request
     long            GetWidth()              { return mnWidth; }
@@ -241,10 +170,31 @@ public:
     long            GetDoubleStrikeoutOffset1()         { return mnDStrikeoutOffset1; }
     long            GetDoubleStrikeoutOffset2()         { return mnDStrikeoutOffset2; }
 
+
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();
 
 private:
+    // device independent variables
+    OUString        maFamilyName;               // Font Family Name
+    OUString        maStyleName;                // Font Style Name
+    FontWeight      meWeight;                   // Weight Type
+    FontItalic      meItalic;                   // Slant Type
+    FontFamily      meFamily;                   // Family Type
+    FontPitch       mePitch;                    // Pitch Type
+    FontWidth       meWidthType;                // Width Type
+    bool            mbSymbolFlag;               // Is font a symbol?
+
+    // device dependent variables
+    OUString        maMapNames;                 // List of family name aliases separated with ';'
+    int             mnQuality;                  // Quality (used when similar fonts compete)
+    bool            mbOrientation;              // true: physical font can be rotated
+    bool            mbDevice;                   // true: built in font
+    bool            mbSubsettable;              // true: a subset of the font can be created
+    bool            mbEmbeddable;               // true: the font can be embedded
+
+    // Font metrics below
+
     // font instance attributes from the font request
     long            mnWidth;                    // Reference Width
     short           mnOrientation;              // Rotation in 1/10 degrees
@@ -290,6 +240,57 @@ private:
     long            mnDStrikeoutSize;           // Height of double strike-out
     long            mnDStrikeoutOffset1;        // Offset of double strike-out to baseline
     long            mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
+
+};
+
+class FontSelectPatternAttributes : public ImplFontAttributes
+{
+public:
+                    FontSelectPatternAttributes( const vcl::Font&, const OUString& rSearchName,
+                                                 const Size&, float fExactHeight );
+#ifdef WNT
+                    FontSelectPatternAttributes( const PhysicalFontFace&, const Size&,
+                                                 float fExactHeight, int nOrientation, bool bVertical );
+#endif
+
+    size_t          hashCode() const;
+    bool operator==(const FontSelectPatternAttributes& rOther) const;
+    bool operator!=(const FontSelectPatternAttributes& rOther) const
+    {
+        return !(*this == rOther);
+    }
+
+public:
+    OUString        maTargetName;               // name of the font name token that is chosen
+    OUString        maSearchName;               // name of the font that matches best
+    int             mnWidth;                    // width of font in pixel units
+    int             mnHeight;                   // height of font in pixel units
+    float           mfExactHeight;              // requested height (in pixels with subpixel details)
+    int             mnOrientation;              // text orientation in 3600 system
+    LanguageType    meLanguage;                 // text language
+    bool            mbVertical;                 // vertical mode of requested font
+    bool            mbNonAntialiased;           // true if antialiasing is disabled
+
+    bool            mbEmbolden;                 // Force emboldening
+    ItalicMatrix    maItalicMatrix;             // Force matrix for slant
+};
+
+class FontSelectPattern : public FontSelectPatternAttributes
+{
+public:
+                    FontSelectPattern( const vcl::Font&, const OUString& rSearchName,
+                                       const Size&, float fExactHeight );
+#ifdef WNT
+// ifdeffed to prevent it going into unusedcode.easy
+                    FontSelectPattern( const PhysicalFontFace&, const Size&,
+                                       float fExactHeight, int nOrientation, bool bVertical );
+#endif
+
+public: // TODO: change to private
+    const PhysicalFontFace* mpFontData;         // a matching PhysicalFontFace object
+    ImplFontEntry*  mpFontEntry;                // pointer to the resulting FontCache entry
+
+    void            copyAttributes(const FontSelectPatternAttributes &rAttributes);
 };
 
 // - ImplFontEntry -
@@ -306,7 +307,7 @@ public:
 public: // TODO: make data members private
     ImplFontCache * m_pFontCache;
     FontSelectPattern  maFontSelData;           // FontSelectionData
-    ImplFontMetricData  maMetric;               // Font Metric
+    ImplFontAttributes  maMetric;               // Font Metric
     const ConvertChar*  mpConversion;           // used e.g. for StarBats->StarSymbol
 
     long            mnLineHeight;

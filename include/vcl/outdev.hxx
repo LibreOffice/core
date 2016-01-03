@@ -94,7 +94,7 @@ struct SalTwoRect;
 class VirtualDevice;
 class Printer;
 class FontSelectPattern;
-class ImplFontMetricData;
+class ImplFontAttributes;
 class VCLXGraphics;
 class OutDevStateStack;
 struct BitmapSystemData;

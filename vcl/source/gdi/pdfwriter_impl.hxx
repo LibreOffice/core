@@ -47,7 +47,7 @@
 
 class StyleSettings;
 class FontSelectPattern;
-class ImplFontMetricData;
+class ImplFontAttributes;
 class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;

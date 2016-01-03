@@ -41,7 +41,7 @@
 class PhysicalFontCollection;
 class SalBitmap;
 class FontSelectPattern;
-class ImplFontMetricData;
+class ImplFontAttributes;
 class PhysicalFontFace;
 class SalLayout;
 class ImplLayoutArgs;
@@ -145,7 +145,7 @@ public:
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
 
     // get the current font's metrics
-    virtual void                GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
+    virtual void                GetFontMetric( ImplFontAttributes*, int nFallbackLevel = 0 ) = 0;
 
     // get the repertoire of the current font
     virtual const FontCharMapPtr GetFontCharMap() const = 0;

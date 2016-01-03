@@ -188,7 +188,7 @@ FontMetric OutputDevice::GetFontMetric() const
         return aMetric;
 
     ImplFontEntry*      pEntry = mpFontEntry;
-    ImplFontMetricData* pMetric = &(pEntry->maMetric);
+    ImplFontAttributes* pMetric = &(pEntry->maMetric);
 
     // prepare metric
     aMetric.Font::operator=( maFont );
@@ -484,7 +484,7 @@ FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const vcl::Font& rFont 
 long OutputDevice::GetFontExtLeading() const
 {
     ImplFontEntry*      pEntry = mpFontEntry;
-    ImplFontMetricData* pMetric = &(pEntry->maMetric);
+    ImplFontAttributes* pMetric = &(pEntry->maMetric);
 
     return pMetric->GetExternalLeading();
 }
@@ -1739,9 +1739,8 @@ bool ImplFontAttributes::CompareDeviceIndependentFontAttributes(const ImplFontAt
     return true;
 }
 
-ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
-    : ImplFontAttributes( rFontSelData )
-    , mnWidth ( rFontSelData.mnWidth)
+ImplFontAttributes::ImplFontAttributes( const FontSelectPattern& rFontSelData )
+    : mnWidth ( rFontSelData.mnWidth)
     , mnOrientation( (short)(rFontSelData.mnOrientation))
     , mnAscent( 0 )
     , mnDescent( 0 )
@@ -1798,7 +1797,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
 }
 
 
-void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
+void ImplFontAttributes::ImplInitTextLineSize( const OutputDevice* pDev )
 {
     long nDescent = mnDescent;
     if ( nDescent <= 0 )
@@ -1899,7 +1898,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 
 }
 
-void ImplFontMetricData::ImplInitAboveTextLineSize()
+void ImplFontAttributes::ImplInitAboveTextLineSize()
 {
     long nIntLeading = mnIntLeading;
     // TODO: assess usage of nLeading below (changed in extleading CWS)
@@ -2199,7 +2198,7 @@ long OutputDevice::GetMinKashida() const
         return 0;
 
     ImplFontEntry*      pEntry = mpFontEntry;
-    ImplFontMetricData* pMetric = &(pEntry->maMetric);
+    ImplFontAttributes* pMetric = &(pEntry->maMetric);
     return ImplDevicePixelToLogicWidth( pMetric->GetMinKashida() );
 }
 
