@@ -45,6 +45,8 @@
 
 #include "pyuno_impl.hxx"
 
+typedef long Py_hash_t;
+
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
