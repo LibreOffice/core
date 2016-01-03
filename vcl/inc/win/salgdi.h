@@ -363,7 +363,7 @@ public:
     // set the font
     virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontAttributes*, int nFallbackLevel ) override;
+    virtual void            GetFontAttributes( ImplFontAttributes*, int nFallbackLevel ) override;
     // get the repertoire of the current font
     virtual const FontCharMapPtr GetFontCharMap() const override;
     // get the layout capabilities of the current font

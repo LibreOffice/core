@@ -116,7 +116,7 @@ CoreTextStyle::~CoreTextStyle()
         CFRelease( mpStyleDict );
 }
 
-void CoreTextStyle::GetFontMetric( ImplFontAttributes& rMetric ) const
+void CoreTextStyle::GetFontAttributes( ImplFontAttributes& rFontAttributes ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
@@ -124,20 +124,20 @@ void CoreTextStyle::GetFontMetric( ImplFontAttributes& rMetric ) const
 
     const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
     const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
-    rMetric.SetAscent( lrint( fAscent ) );
-    rMetric.SetDescent( lrint( CTFontGetDescent( aCTFontRef )) );
-    rMetric.SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
-    rMetric.SetInternalLeading( lrint( fAscent - fCapHeight ) );
+    rFontAttributes.SetAscent( lrint( fAscent ) );
+    rFontAttributes.SetDescent( lrint( CTFontGetDescent( aCTFontRef )) );
+    rFontAttributes.SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
+    rFontAttributes.SetInternalLeading( lrint( fAscent - fCapHeight ) );
 
     // since ImplFontAttributes::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
-    rMetric.SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
+    rFontAttributes.SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
 
     // all CoreText fonts are scalable
-    rMetric.SetScalableFlag( true );
-    rMetric.SetTrueTypeFlag( true ); // Not sure, but this field is used only for Windows so far
-    rMetric.SetKernableFlag( true );
+    rFontAttributes.SetScalableFlag( true );
+    rFontAttributes.SetTrueTypeFlag( true ); // Not sure, but this field is used only for Windows so far
+    rFontAttributes.SetKernableFlag( true );
 }
 
 bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const

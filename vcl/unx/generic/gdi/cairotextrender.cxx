@@ -452,7 +452,7 @@ FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttribut
 }
 
 void
-CairoTextRender::GetFontMetric( ImplFontAttributes *pMetric, int nFallbackLevel )
+CairoTextRender::GetFontAttributes( ImplFontAttributes *pFontAttributes, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
@@ -460,7 +460,7 @@ CairoTextRender::GetFontMetric( ImplFontAttributes *pMetric, int nFallbackLevel 
     if( mpServerFont[nFallbackLevel] != nullptr )
     {
         long rDummyFactor;
-        mpServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
+        mpServerFont[nFallbackLevel]->FetchFontAttributes( *pFontAttributes, rDummyFactor );
     }
 }
 
