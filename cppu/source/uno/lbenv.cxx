@@ -21,7 +21,6 @@
 
 #include "cppu/EnvDcp.hxx"
 
-#include "sal/alloca.h"
 #include "sal/log.hxx"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
@@ -79,7 +78,7 @@ struct ObjectEntry
 {
     OUString oid;
     sal_Int32 nRef;
-    ::std::vector< InterfaceEntry > aInterfaces;
+    std::vector< InterfaceEntry > aInterfaces;
     bool mixedObject;
 
     explicit inline ObjectEntry( const OUString & rOId_ );
@@ -90,15 +89,15 @@ struct ObjectEntry
         uno_freeProxyFunc fpFreeProxy );
     inline InterfaceEntry * find(
         typelib_InterfaceTypeDescription * pTypeDescr );
-    inline sal_Int32 find( void * iface_ptr, ::std::size_t pos );
+    inline sal_Int32 find( void * iface_ptr, std::size_t pos );
 };
 
 
 struct FctPtrHash :
-    public ::std::unary_function< const void *, ::std::size_t >
+    public std::unary_function< const void *, std::size_t >
 {
-    ::std::size_t operator () ( const void * pKey ) const
-        { return reinterpret_cast< ::std::size_t>( pKey ); }
+    std::size_t operator () ( const void * pKey ) const
+        { return reinterpret_cast< std::size_t>( pKey ); }
 };
 
 
@@ -109,7 +108,7 @@ typedef std::unordered_map<
 // mapping from ptr to object entry
 typedef std::unordered_map<
     void *, ObjectEntry *, FctPtrHash,
-    ::std::equal_to< void * > > Ptr2ObjectMap;
+    std::equal_to< void * > > Ptr2ObjectMap;
 // mapping from oid to object entry
 typedef std::unordered_map<
     OUString, ObjectEntry *, OUStringHash > OId2ObjectMap;
@@ -172,7 +171,7 @@ inline void ObjectEntry::append(
     typelib_typedescription_acquire( &pTypeDescr->aBase );
     aNewEntry.pTypeDescr = pTypeDescr;
 
-    ::std::pair< Ptr2ObjectMap::iterator, bool > i(
+    std::pair< Ptr2ObjectMap::iterator, bool > i(
         pEnv->aPtr2ObjectMap.insert( Ptr2ObjectMap::value_type(
                                          pInterface, this ) ) );
     SAL_WARN_IF(
@@ -199,8 +198,8 @@ inline InterfaceEntry * ObjectEntry::find(
         return &aInterfaces[ 0 ];
     }
 
-    ::std::size_t nSize = aInterfaces.size();
-    for ( ::std::size_t nPos = 0; nPos < nSize; ++nPos )
+    std::size_t nSize = aInterfaces.size();
+    for ( std::size_t nPos = 0; nPos < nSize; ++nPos )
     {
         typelib_InterfaceTypeDescription * pITD =
             aInterfaces[ nPos ].pTypeDescr;
@@ -216,9 +215,9 @@ inline InterfaceEntry * ObjectEntry::find(
 
 
 inline sal_Int32 ObjectEntry::find(
-    void * iface_ptr, ::std::size_t pos )
+    void * iface_ptr, std::size_t pos )
 {
-    ::std::size_t size = aInterfaces.size();
+    std::size_t size = aInterfaces.size();
     for ( ; pos < size; ++pos )
     {
         if (aInterfaces[ pos ].pInterface == iface_ptr)
@@ -408,7 +407,7 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
                     {
                         // proxy ptr not registered for another interface:
                         // remove from ptr map
-                        ::std::size_t erased =
+                        std::size_t erased =
                               that->aPtr2ObjectMap.erase( pInterface );
                         OSL_ASSERT( erased == 1 );
                     }
@@ -733,7 +732,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
         buf.append( '\"' );
         writeLine( stream, buf.makeStringAndClear(), pFilter );
 
-        for ( ::std::size_t nPos = 0;
+        for ( std::size_t nPos = 0;
               nPos < pOEntry->aInterfaces.size(); ++nPos )
         {
             const InterfaceEntry & rIEntry = pOEntry->aInterfaces[nPos];
@@ -756,7 +755,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 
             if (pOEntry->find( rIEntry.pInterface, nPos + 1 ) < 0)
             {
-                ::std::size_t erased = ptr2obj.erase( rIEntry.pInterface );
+                std::size_t erased = ptr2obj.erase( rIEntry.pInterface );
                 if (erased != 1)
                 {
                     buf.append( " (ptr not found in map!)" );
@@ -959,7 +958,7 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
     if (iFind == aName2EnvMap.end())
     {
         (*pEnv->acquireWeak)( pEnv );
-        ::std::pair< OUString2EnvironmentMap::iterator, bool > insertion (
+        std::pair< OUString2EnvironmentMap::iterator, bool > insertion (
             aName2EnvMap.insert(
                 OUString2EnvironmentMap::value_type( aKey, pEnv ) ) );
         SAL_WARN_IF( !insertion.second, "cppu", "key " << aKey << " already in env map" );
@@ -991,8 +990,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     assert(pppEnvs && pnLen && memAlloc && "### null ptr!");
 
     // max size
-    uno_Environment ** ppFound = static_cast<uno_Environment **>(alloca(
-        sizeof(uno_Environment *) * aName2EnvMap.size() ));
+    std::vector<uno_Environment*> aFounds(aName2EnvMap.size());
     sal_Int32 nSize = 0;
 
     // find matching environment
@@ -1003,9 +1001,9 @@ inline void EnvironmentsData::getRegisteredEnvironments(
         if (rEnvDcp.isEmpty() ||
             rEnvDcp.equals( pWeak->pTypeName ))
         {
-            ppFound[nSize] = nullptr;
-            (*pWeak->harden)( &ppFound[nSize], pWeak );
-            if (ppFound[nSize])
+            aFounds[nSize] = nullptr;
+            (*pWeak->harden)( &aFounds[nSize], pWeak );
+            if (aFounds[nSize])
                 ++nSize;
         }
     }
@@ -1018,7 +1016,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
         OSL_ASSERT( *pppEnvs );
         while (nSize--)
         {
-            (*pppEnvs)[nSize] = ppFound[nSize];
+            (*pppEnvs)[nSize] = aFounds[nSize];
         }
     }
     else

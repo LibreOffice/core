@@ -31,7 +31,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sal/alloca.h>
 #include <new>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
@@ -384,10 +383,10 @@ static inline void typelib_typedescription_initTables(
 {
     typelib_InterfaceTypeDescription * pITD = reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD);
 
-    sal_Bool * pReadWriteAttributes = static_cast<sal_Bool *>(alloca( pITD->nAllMembers ));
+    std::vector<sal_Bool> aReadWriteAttributes(pITD->nAllMembers);
     for ( sal_Int32 i = pITD->nAllMembers; i--; )
     {
-        pReadWriteAttributes[i] = sal_False;
+        aReadWriteAttributes[i] = sal_False;
         if( typelib_TypeClass_INTERFACE_ATTRIBUTE == pITD->ppAllMembers[i]->eTypeClass )
         {
             typelib_TypeDescription * pM = nullptr;
@@ -395,7 +394,7 @@ static inline void typelib_typedescription_initTables(
             OSL_ASSERT( pM );
             if (pM)
             {
-                pReadWriteAttributes[i] = !reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(pM)->bReadOnly;
+                aReadWriteAttributes[i] = !reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(pM)->bReadOnly;
                 TYPELIB_DANGER_RELEASE( pM );
             }
 #if OSL_DEBUG_LEVEL > 1
@@ -420,7 +419,7 @@ static inline void typelib_typedescription_initTables(
             // index to the get method of the attribute
             pITD->pMapMemberIndexToFunctionIndex[i] = i + nAdditionalOffset;
             // extra offset if it is a read/write attribute?
-            if( pReadWriteAttributes[i] )
+            if (aReadWriteAttributes[i])
             {
                 // a read/write attribute
                 nAdditionalOffset++;
@@ -435,7 +434,7 @@ static inline void typelib_typedescription_initTables(
             // index to the get method of the attribute
             pITD->pMapFunctionIndexToMemberIndex[i + nAdditionalOffset] = i;
             // extra offset if it is a read/write attribute?
-            if( pReadWriteAttributes[i] )
+            if (aReadWriteAttributes[i])
             {
                 // a read/write attribute
                 pITD->pMapFunctionIndexToMemberIndex[i + ++nAdditionalOffset] = i;
