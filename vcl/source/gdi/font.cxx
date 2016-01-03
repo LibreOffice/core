@@ -28,6 +28,7 @@
 
 #include "impfont.hxx"
 #include "outfont.hxx"
+#include "fontattributes.hxx"
 #include "sft.hxx"
 
 #include <sal/macros.h>

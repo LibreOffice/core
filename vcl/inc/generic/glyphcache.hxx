@@ -34,6 +34,7 @@
 
 #include <outfont.hxx>
 #include <sallayout.hxx>
+#include "fontattributes.hxx"
 
 #include <unordered_map>
 

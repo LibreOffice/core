@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <outfont.hxx>
+#include <fontattributes.hxx>
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE

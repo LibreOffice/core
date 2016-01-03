@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 
 #include "outfont.hxx"
+#include "fontattributes.hxx"
 
 class ImplFontEntry;
 struct FontMatchStatus;

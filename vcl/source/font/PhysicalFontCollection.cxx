@@ -33,6 +33,7 @@
 #include "magic.h"
 #include "outdev.h"
 #include "outfont.hxx"
+#include "fontattributes.hxx"
 #include "PhysicalFontFace.hxx"
 
 #include "PhysicalFontCollection.hxx"
