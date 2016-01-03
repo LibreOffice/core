@@ -1514,10 +1514,8 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             default:
                 meVectorState = FormulaVectorDisabled;
         }
-        return;
     }
-
-    if (eOp == ocPush)
+    else if (eOp == ocPush)
     {
         // This is a stack variable.  See if this is a reference.
 
@@ -1557,28 +1555,23 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             default:
                 ;
         }
-        return;
     }
-
-    if (eOp >= SC_OPCODE_START_BIN_OP &&
+    else if (eOp >= SC_OPCODE_START_BIN_OP &&
         eOp <= SC_OPCODE_STOP_UN_OP &&
         ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
         ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())
     {
         meVectorState = FormulaVectorDisabled;
-        return;
     }
-
     // only when openCL interpreter is not enabled - the assumption is that
     // the S/W interpreter blacklist is more strict
-    if (eOp >= SC_OPCODE_START_BIN_OP &&
+    else if (eOp >= SC_OPCODE_START_BIN_OP &&
         eOp <= SC_OPCODE_STOP_UN_OP &&
         ScCalcConfig::isSwInterpreterEnabled() &&
         (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) &&
         ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
     {
         meVectorState = FormulaVectorDisabled;
-        return;
     }
 }
 
