@@ -27,6 +27,7 @@
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
@@ -291,7 +292,7 @@ void SubToolBarController::updateImage()
         sal_uInt16 nId = 0;
         if ( getToolboxId( nId, &pToolBox ) )
         {
-            Image aImage = framework::GetImageFromURL( getFrameInterface(), m_aLastCommand, pToolBox->GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE );
+            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( m_aLastCommand, pToolBox->GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE, getFrameInterface() );
             if ( !!aImage )
                 pToolBox->SetItemImage( nId, aImage );
         }
