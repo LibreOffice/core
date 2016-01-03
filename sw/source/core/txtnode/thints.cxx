@@ -1507,8 +1507,8 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     if( !(SetAttrMode::NOTXTATRCHR & nMode) )
                     {
                         SwIndex aIdx( this, pAttr->GetStart() );
-                        const OUString aContent = OUString(CH_TXT_ATR_INPUTFIELDSTART)
-                            + pTextInputField->GetFieldContent() + OUString(CH_TXT_ATR_INPUTFIELDEND);
+                        const OUString aContent = OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>()
+                            + pTextInputField->GetFieldContent() + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>();
                         InsertText( aContent, aIdx, nInsertFlags );
 
                         sal_Int32* const pEnd(pAttr->GetEnd());
