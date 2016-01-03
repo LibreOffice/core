@@ -23,6 +23,7 @@
 #include <svx/fmmodel.hxx>
 #include <sot/exchange.hxx>
 #include <svx/sdrundomanager.hxx>
+#include <tools/globname.hxx>
 #include <editeng/outliner.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 

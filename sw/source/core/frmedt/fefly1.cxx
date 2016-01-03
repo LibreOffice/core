@@ -25,6 +25,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
+#include <tools/globname.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <fmtanchr.hxx>

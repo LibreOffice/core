@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/object.hxx>
+#include <sal/config.h>
+
 #include <editeng/eeitem.hxx>
 #include <vcl/waitobj.hxx>
-
 #include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
@@ -36,7 +36,6 @@
 #include <svx/svxids.hrc>
 #include <svx/obj3d.hxx>
 #include <svx/polysc3d.hxx>
-
 #include <sfx2/viewfrm.hxx>
 
 #include "anminfo.hxx"

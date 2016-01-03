@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <sal/config.h>
+
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -35,6 +35,10 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
+
+#include <factory.hxx>
+#include <sotdata.hxx>
+
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -51,7 +55,7 @@ public:
 
 SotFactory * SotStorageStream::ClassFactory()
 {
-    SotFactory **ppFactory = GetFactoryAdress();
+    SotFactory **ppFactory = &(SOTDATA()->pSotStorageStreamFactory);
     if( !*ppFactory )
     {
         *ppFactory = new SotStorageStreamFactory(
@@ -300,7 +304,7 @@ public:
 
 SotFactory * SotStorage::ClassFactory()
 {
-    SotFactory **ppFactory = GetFactoryAdress();
+    SotFactory **ppFactory = &(SOTDATA()->pSotStorageFactory);
     if( !*ppFactory )
     {
         *ppFactory = new SotStorageFactory(

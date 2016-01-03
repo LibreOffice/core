@@ -26,12 +26,12 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <sot/object.hxx>
-#include <sot/factory.hxx>
 #include <tools/stream.hxx>
 #include <tools/errcode.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 
+class SotFactory;
 class SotStorage;
 
 enum class SotClipboardFormatId : sal_uLong;
@@ -56,10 +56,6 @@ public:
                         SotStorageStream( BaseStorageStream *pStm );
                         SotStorageStream();
 
-private:
-    static SotFactory **       GetFactoryAdress()
-                              { return &(SOTDATA()->pSotStorageStreamFactory); }
-public:
     static SotFactory *        ClassFactory();
     virtual void *             Cast( const SotFactory * ) override;
 
@@ -108,10 +104,6 @@ public:
                         SotStorage( SvStream * pStm, bool bDelete );
                         SotStorage();
 
-private:
-    static SotFactory **       GetFactoryAdress()
-                              { return &(SOTDATA()->pSotStorageFactory); }
-public:
     static SotFactory *        ClassFactory();
     virtual void *             Cast( const SotFactory * ) override;
 

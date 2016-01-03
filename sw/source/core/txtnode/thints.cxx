@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <hintids.hxx>
-#include <sot/factory.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itemiter.hxx>

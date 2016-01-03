@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <tools/globname.hxx>
-#include <sot/sotdata.hxx>
+#include <sotdata.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sysformats.hxx>
@@ -28,10 +30,6 @@
 #include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/documentconstants.hxx>
-
-#ifdef GetObject
-#undef GetObject
-#endif
 
 using namespace::com::sun::star::uno;
 using namespace::com::sun::star::datatransfer;

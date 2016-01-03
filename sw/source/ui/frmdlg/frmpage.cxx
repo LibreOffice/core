@@ -37,8 +37,8 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/swframevalidation.hxx>
 #include <comphelper/classids.hxx>
-
 #include <sfx2/viewfrm.hxx>
+#include <tools/globname.hxx>
 #include <fmturl.hxx>
 #include <fmteiro.hxx>
 #include <fmtcnct.hxx>

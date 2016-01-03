@@ -33,6 +33,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/globname.hxx>
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
 

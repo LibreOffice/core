@@ -33,6 +33,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/globname.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>

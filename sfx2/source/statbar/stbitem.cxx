@@ -46,6 +46,7 @@
 #include <svl/intitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <tools/globname.hxx>
 #include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star;

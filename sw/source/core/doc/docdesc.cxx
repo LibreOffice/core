@@ -25,6 +25,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
+#include <tools/globname.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>

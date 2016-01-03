@@ -71,6 +71,7 @@
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
+#include <tools/globname.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <memory>

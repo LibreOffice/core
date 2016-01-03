@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/factory.hxx>
+#include <factory.hxx>
+
 #include <tools/debug.hxx>
 #include <sot/object.hxx>
-#include <sot/sotdata.hxx>
+#include <sotdata.hxx>
 #include <comphelper/classids.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>

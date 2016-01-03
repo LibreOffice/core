@@ -31,6 +31,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/globname.hxx>
 #include <hintids.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>

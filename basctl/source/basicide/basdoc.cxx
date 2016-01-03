@@ -28,6 +28,7 @@
 #include <basslots.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svx/svxids.hrc>
+#include <tools/globname.hxx>
 
 namespace basctl
 {

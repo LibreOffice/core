@@ -18,7 +18,8 @@
  */
 
 #include <sot/object.hxx>
-#include <sot/factory.hxx>
+#include <factory.hxx>
+#include <sotdata.hxx>
 
 /************** class SotObject ******************************************/
 class SotObjectFactory : public SotFactory
@@ -32,7 +33,7 @@ public:
 
 SotFactory * SotObject::ClassFactory()
 {
-    SotFactory **ppFactory = GetFactoryAdress();
+    SotFactory **ppFactory = &(SOTDATA()->pSotObjectFactory);
     if( !*ppFactory )
     {
         *ppFactory = new SotObjectFactory(
