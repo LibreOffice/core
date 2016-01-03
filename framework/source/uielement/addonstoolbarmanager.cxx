@@ -56,6 +56,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 //  namespaces
 
@@ -121,14 +122,14 @@ static Image RetrieveImage( Reference< css::frame::XFrame >& rFrame,
         if ( !!aImage )
             return aImage;
         else
-            aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
+            aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, bBigImage, rFrame );
         if ( !!aImage )
             return aImage;
     }
 
     aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
     if ( !aImage )
-        aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
+        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, bBigImage, rFrame );
 
     return aImage;
 }

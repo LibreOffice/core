@@ -1297,7 +1297,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         if ( bItemShowMenuImages && !pPopup->GetItemImage( ITEMID_ADDONLIST ))
                         {
                             Reference< XFrame > xTemp( rFrame );
-                            Image aImage = GetImageFromURL( xTemp, aItemCommand, false );
+                            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aItemCommand, false, xTemp );
                             if ( !!aImage )
                                    pPopup->SetItemImage( ITEMID_ADDONLIST, aImage );
                         }
@@ -1326,12 +1326,12 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
                     {
                         // Retrieve image id from menu attributes
-                        aImage = GetImageFromURL( m_xFrame, aImageId, false );
+                        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aImageId, false, m_xFrame );
                     }
 
                     if ( !aImage )
                     {
-                        aImage = GetImageFromURL( m_xFrame, aItemCommand, false );
+                        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aItemCommand, false, m_xFrame );
                         if ( !aImage )
                             aImage = AddonsOptions().GetImageFromURL( aItemCommand, false );
                     }

@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 #include <svtools/menuoptions.hxx>
@@ -89,7 +90,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
 
                 if ( !aImageId.isEmpty() )
                 {
-                    aImage = GetImageFromURL( xFrame, aImageId, false );
+                    aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aImageId, false, xFrame );
                     if ( !!aImage )
                     {
                         bImageSet = true;
@@ -101,7 +102,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
                 {
                     OUString aCmd( pPopupMenu->GetItemCommand( nItemId ) );
                     if ( !aCmd.isEmpty() )
-                        aImage = GetImageFromURL( xFrame, aCmd, false );
+                        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aCmd, false, xFrame );
 
                     if ( !!aImage )
                         pPopupMenu->SetItemImage( nItemId, aImage );

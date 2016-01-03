@@ -34,6 +34,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <svtools/menuoptions.hxx>
 
@@ -144,7 +145,7 @@ void BmkMenu::Initialize()
 
                 if ( !aImageId.isEmpty() )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aImageId, false );
+                    Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aImageId, false, m_xFrame );
                     if ( !!aImage )
                     {
                         bImageSet = true;
@@ -154,7 +155,7 @@ void BmkMenu::Initialize()
 
                 if ( !bImageSet )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aURL, false );
+                    Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aURL, false, m_xFrame );
                     if ( !aImage )
                         InsertItem( nId, aTitle );
                     else

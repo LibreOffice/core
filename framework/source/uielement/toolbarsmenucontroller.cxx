@@ -48,6 +48,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -175,7 +176,7 @@ void ToolbarsMenuController::addCommand(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = GetImageFromURL( m_xFrame, rCommandURL, false );
+        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( rCommandURL, false, m_xFrame );
 
     VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( rPopupMenu ));
     if ( pPopupMenu )
