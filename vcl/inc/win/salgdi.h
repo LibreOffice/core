@@ -24,6 +24,7 @@
 #include "salgeom.hxx"
 #include "salgdi.hxx"
 #include "outfont.hxx"
+#include "fontattributes.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
 #include <vcl/fontcapabilities.hxx>
