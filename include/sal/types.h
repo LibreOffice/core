@@ -612,6 +612,26 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #define SAL_WARN_UNUSED
 #endif
 
+#if defined(__GNUC__) && defined(__OPTIMIZE__)
+#define _SAL_BOOLEAN_EXPR(expr)                   \
+ __extension__ ({                               \
+   int _sal_boolean_var_;                         \
+   if (expr)                                    \
+      _sal_boolean_var_ = 1;                      \
+   else                                         \
+      _sal_boolean_var_ = 0;                      \
+   _sal_boolean_var_;                             \
+})
+#define SAL_LIKELY(expr) (__builtin_expect (_SAL_BOOLEAN_EXPR(expr), 1))
+#define SAL_UNLIKELY(expr) (__builtin_expect (_SAL_BOOLEAN_EXPR(expr), 0))
+#define SAL_HOT __attribute__((hot))
+#define SAL_COLD __attribute__((cold))
+#else
+#define SAL_LIKELY(expr) (expr)
+#define SAL_UNLIKELY(expr) (expr)
+#define SAL_HOT
+#define SAL_COLD
+#endif
 #endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

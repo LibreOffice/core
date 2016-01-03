@@ -60,7 +60,6 @@
 #   define SAL_STRINGIFY_ARG(x) #x
 #   define SAL_STRINGIFY(x) SAL_STRINGIFY_ARG(x)
 #endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
