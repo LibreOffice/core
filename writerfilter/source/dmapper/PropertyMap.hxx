@@ -233,12 +233,28 @@ class SectionPropertyMap : public PropertyMap
     sal_Int32                               m_ndxaLnn;
     sal_Int32                               m_nLnnMin;
 
+    // The "Link To Previous" flag indicates whether the header/footer
+    // content should be taken from the previous section
+    bool                                    m_bDefaultHeaderLinkToPrevious;
+    bool                                    m_bEvenPageHeaderLinkToPrevious;
+    bool                                    m_bFirstPageHeaderLinkToPrevious;
+    bool                                    m_bDefaultFooterLinkToPrevious;
+    bool                                    m_bEvenPageFooterLinkToPrevious;
+    bool                                    m_bFirstPageFooterLinkToPrevious;
+
     void _ApplyProperties(css::uno::Reference<css::beans::XPropertySet> const& xStyle);
     css::uno::Reference<css::text::XTextColumns> ApplyColumnProperties(css::uno::Reference<css::beans::XPropertySet> const& xFollowPageStyle,
                                                                        DomainMapper_Impl& rDM_Impl);
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
-    static void CopyHeaderFooter(css::uno::Reference<css::beans::XPropertySet> xPrevStyle,
-                          css::uno::Reference<css::beans::XPropertySet> xStyle);
+    static void CopyHeaderFooter(
+        css::uno::Reference<css::beans::XPropertySet> xPrevStyle,
+        css::uno::Reference<css::beans::XPropertySet> xStyle,
+        bool bOmitRightHeader=false, bool bOmitLeftHeader=false,
+        bool bOmitRightFooter=false, bool bOmitLeftFooter=false);
+    static void CopyHeaderFooterTextProperty(
+        css::uno::Reference<css::beans::XPropertySet> xPrevStyle,
+        css::uno::Reference<css::beans::XPropertySet> xStyle,
+        PropertyIds ePropId );
     void PrepareHeaderFooterProperties( bool bFirstPage );
     bool HasHeader( bool bFirstPage ) const;
     bool HasFooter( bool bFirstPage ) const;
@@ -317,6 +333,7 @@ public:
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
     /// Handling of margins, header and footer for any kind of sections breaks.
     void HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl);
+    void ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType );
 };
 
 
