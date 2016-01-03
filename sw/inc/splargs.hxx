@@ -155,8 +155,10 @@ public:
 
 namespace sw {
 
+typedef std::function<SwTextFrame*()> Creator;
+
 SwTextFrame *
-SwHyphIterCacheLastTextFrame(SwTextNode *, std::function<SwTextFrame * ()>);
+SwHyphIterCacheLastTextFrame(SwTextNode *, const Creator& rCreator);
 
 }
 
