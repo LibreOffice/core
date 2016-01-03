@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <sot/factory.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svl/imageitm.hxx>

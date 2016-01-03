@@ -18,8 +18,6 @@
  */
 
 #include <comphelper/string.hxx>
-#include <sot/object.hxx>
-#include <sot/factory.hxx>
 #include <tools/debug.hxx>
 #include <tools/bigint.hxx>
 

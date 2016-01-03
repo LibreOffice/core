@@ -66,6 +66,7 @@
 #include <framework/sfxhelperfunctions.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/globname.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 

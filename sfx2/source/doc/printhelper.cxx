@@ -38,6 +38,7 @@
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
+#include <tools/globname.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

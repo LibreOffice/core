@@ -20,7 +20,8 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 
-#include <sot/object.hxx>
+#include <sal/config.h>
+
 #include <vcl/graph.hxx>
 #include <basegfx/tools/b2dclipstate.hxx>
 #include <vcl/font.hxx>

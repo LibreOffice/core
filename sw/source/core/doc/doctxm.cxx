@@ -72,6 +72,7 @@
 #include <ToxTextGenerator.hxx>
 #include <ToxTabStopTokenHandler.hxx>
 #include <tools/datetimeutils.hxx>
+#include <tools/globname.hxx>
 
 #include <memory>
 

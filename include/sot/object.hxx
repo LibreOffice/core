@@ -20,10 +20,12 @@
 #ifndef INCLUDED_SOT_OBJECT_HXX
 #define INCLUDED_SOT_OBJECT_HXX
 
-#include <sot/sotdata.hxx>
-#include <tools/globname.hxx>
+#include <sal/config.h>
+
 #include <tools/ref.hxx>
 #include <sot/sotdllapi.h>
+
+class SotFactory;
 
 class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
@@ -35,13 +37,10 @@ friend class SotFactory;
 protected:
     virtual             ~SotObject();
     virtual bool        Close();
+
 public:
                         SotObject();
 
-private:
-    static SotFactory **       GetFactoryAdress()
-                              { return &(SOTDATA()->pSotObjectFactory); }
-public:
     static SotFactory *        ClassFactory();
     virtual void *             Cast( const SotFactory * );
 
@@ -58,6 +57,6 @@ private:
     SotObject( const SotObject & ) = delete;
 };
 
-#endif // _IFACE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

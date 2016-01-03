@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <vcl/wrkwin.hxx>
-#include <sot/factory.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>

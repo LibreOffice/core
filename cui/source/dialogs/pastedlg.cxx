@@ -28,8 +28,8 @@
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sot/stg.hxx>
 #include <svtools/sores.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

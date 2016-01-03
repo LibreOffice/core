@@ -507,7 +507,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/object.hxx>
-#include <sot/sotdata.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>

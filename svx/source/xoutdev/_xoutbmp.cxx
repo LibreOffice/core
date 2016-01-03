@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/factory.hxx>
+#include <sal/config.h>
+
 #include <tools/poly.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>

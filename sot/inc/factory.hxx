@@ -20,20 +20,13 @@
 #ifndef INCLUDED_SOT_FACTORY_HXX
 #define INCLUDED_SOT_FACTORY_HXX
 
+#include <sal/config.h>
+
 #include <tools/globname.hxx>
-#include <sot/sotdllapi.h>
-#include <vector>
 
-/*************************************************************************
-*************************************************************************/
 class SotObject;
-class SotFactory;
 
-typedef ::std::vector< SotFactory* > SotFactoryList;
-typedef void * (*CreateInstanceType)( SotObject ** );
-
-//==================class SotFactory=======================================
-class SOT_DLLPUBLIC SotFactory : public SvGlobalName
+class SotFactory : public SvGlobalName
 {
     sal_uInt16          nSuperCount;    // Anzahl der Superklassen
     const SotFactory ** pSuperClasses;  // Superklassen
@@ -59,6 +52,6 @@ private:
     SotFactory &        operator = ( const SotFactory & ) = delete;
 };
 
-#endif // _FACTORY_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

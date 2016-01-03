@@ -28,6 +28,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/globname.hxx>
 
 using namespace css;
 

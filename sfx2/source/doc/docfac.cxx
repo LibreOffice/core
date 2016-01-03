@@ -49,6 +49,7 @@
 #include "doc.hrc"
 
 #include <rtl/strbuf.hxx>
+#include <tools/globname.hxx>
 
 #include <assert.h>
 

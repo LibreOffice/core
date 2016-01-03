@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SOT_SOTDATA_HXX
 #define INCLUDED_SOT_SOTDATA_HXX
 
-#include <sot/sotdllapi.h>
+#include <sal/config.h>
+
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <vector>
 #include <list>
@@ -45,7 +46,7 @@ struct SotData_Impl
     ~SotData_Impl();
 };
 
-SOT_DLLPUBLIC SotData_Impl* SOTDATA();
+SotData_Impl* SOTDATA();
 
 #endif
 

@@ -300,7 +300,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sot/formats.hxx>
 #include <sot/object.hxx>
-#include <sot/sotdata.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>

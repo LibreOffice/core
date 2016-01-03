@@ -32,6 +32,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
+#include <tools/globname.hxx>
 #include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/container/XChild.hpp>

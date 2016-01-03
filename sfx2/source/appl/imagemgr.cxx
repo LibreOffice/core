@@ -25,6 +25,7 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 
+#include <tools/globname.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>

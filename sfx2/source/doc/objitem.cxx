@@ -22,6 +22,8 @@
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
+#include <tools/globname.hxx>
+
 
 SfxPoolItem* SfxObjectShellItem::CreateDefault() { return new SfxObjectShellItem; }
 

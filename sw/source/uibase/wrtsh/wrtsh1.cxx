@@ -30,12 +30,11 @@
 
 #include <math.h>
 #include <hintids.hxx>
+#include <sot/exchange.hxx>
 #include <svx/hdft.hxx>
 #include <svx/svdview.hxx>
-#include <sot/factory.hxx>
 #include <svl/itemiter.hxx>
 #include <tools/bigint.hxx>
-#include <sot/storage.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/ipclient.hxx>
