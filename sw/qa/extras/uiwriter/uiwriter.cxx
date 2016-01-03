@@ -2972,7 +2972,7 @@ void SwUiWriterTest::testTdf96479()
 {
     // We want to verify the empty input text field in the bookmark
     static const OUString emptyInputTextField =
-        OUString(CH_TXT_ATR_INPUTFIELDSTART) + OUString(CH_TXT_ATR_INPUTFIELDEND);
+        OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>() + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>();
 
     SwDoc* pDoc = createDoc();
     SwXTextDocument *xTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
