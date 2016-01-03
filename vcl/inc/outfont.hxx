@@ -306,16 +306,16 @@ public:
 
 public: // TODO: make data members private
     ImplFontCache * m_pFontCache;
-    FontSelectPattern  maFontSelData;           // FontSelectionData
-    ImplFontAttributes  maMetric;               // Font Metric
-    const ConvertChar*  mpConversion;           // used e.g. for StarBats->StarSymbol
+    FontSelectPattern  maFontSelData;          // FontSelectionData
+    ImplFontAttributes  maFontAttributes;       // Font attributes
+    const ConvertChar* mpConversion;           // used e.g. for StarBats->StarSymbol
 
     long            mnLineHeight;
     sal_uLong       mnRefCount;
-    sal_uInt16      mnSetFontFlags;             // Flags returned by SalGraphics::SetFont()
-    short           mnOwnOrientation;           // text angle if lower layers don't rotate text themselves
-    short           mnOrientation;              // text angle in 3600 system
-    bool            mbInit;                     // true if maMetric member is valid
+    sal_uInt16      mnSetFontFlags;         // Flags returned by SalGraphics::SetFont()
+    short           mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
+    short           mnOrientation;          // text angle in 3600 system
+    bool            mbInit;                 // true if maFontAttributes member is valid
 
     void            AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
     bool            GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;

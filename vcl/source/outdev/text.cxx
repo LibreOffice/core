@@ -174,7 +174,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     mpGraphics->SetFillColor( ImplColorToSal( GetTextFillColor() ) );
     mbInitFillColor = true;
 
-    ImplDrawTextRect( nX, nY, 0, -(mpFontEntry->maMetric.GetAscent() + mnEmphasisAscent),
+    ImplDrawTextRect( nX, nY, 0, -(mpFontEntry->maFontAttributes.GetAscent() + mnEmphasisAscent),
                       nWidth,
                       mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
 }
@@ -188,7 +188,7 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
     long nWidth = rSalLayout.GetTextWidth();
     long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
-    nY -= mpFontEntry->maMetric.GetAscent() + mnEmphasisAscent;
+    nY -= mpFontEntry->maFontAttributes.GetAscent() + mnEmphasisAscent;
 
     if ( mpFontEntry->mnOrientation )
     {
@@ -229,7 +229,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     {
         // guess vertical text extents if GetBoundRect failed
         int nRight = rSalLayout.GetTextWidth();
-        int nTop = mpFontEntry->maMetric.GetAscent() + mnEmphasisAscent;
+        int nTop = mpFontEntry->maFontAttributes.GetAscent() + mnEmphasisAscent;
         long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
         aBoundRect = Rectangle( 0, -nTop, nRight, nHeight - nTop );
     }
@@ -2618,7 +2618,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
         Point aTopLeft( nLeft, nTop );
         aTopLeft -= aOffset;
         // adjust to text alignment
-        aTopLeft.Y()+= mnTextOffY - (mpFontEntry->maMetric.GetAscent() + mnEmphasisAscent);
+        aTopLeft.Y()+= mnTextOffY - (mpFontEntry->maFontAttributes.GetAscent() + mnEmphasisAscent);
         // convert to logical coordinates
         aSize = PixelToLogic( aSize );
         aTopLeft.X() = ImplDevicePixelToLogicWidth( aTopLeft.X() );

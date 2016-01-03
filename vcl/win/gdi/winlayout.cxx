@@ -1846,7 +1846,7 @@ bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
 
     if (mbUseGLyphy)
     {
-        if (!mrWinFontEntry.maMetric.IsTrueTypeFont())
+        if (!mrWinFontEntry.maFontAttributes.IsTrueTypeFont())
             return false;
 
         mrWinFontEntry.setupGLyphy(mhDC);
