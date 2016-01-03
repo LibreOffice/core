@@ -1091,11 +1091,11 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                     sal_Handle hFont = pFList->GetFirstFontMetric( aIdent );
                     if( nullptr != hFont )
                     {
-                        const FontMetric& rFInfo = FontList::GetFontMetric( hFont );
-                        if( RTL_TEXTENCODING_DONTKNOW != rFInfo.GetCharSet() )
+                        const FontMetric& rFMetric = FontList::GetFontMetric( hFont );
+                        if( RTL_TEXTENCODING_DONTKNOW != rFMetric.GetCharSet() )
                         {
                             bFound = true;
-                            if( RTL_TEXTENCODING_SYMBOL == rFInfo.GetCharSet() )
+                            if( RTL_TEXTENCODING_SYMBOL == rFMetric.GetCharSet() )
                                 eEnc = RTL_TEXTENCODING_SYMBOL;
                         }
                     }

@@ -1213,8 +1213,8 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
         const SfxMapUnit eUnit = rSet.GetPool()->GetMetric( *pWhich );
         nHeight = OutputDevice::LogicToLogic( nHeight * 10, (MapUnit)eUnit, MAP_POINT );
 
-        FontMetric aFontInfo = pFontList->Get( pFontItem->GetFamilyName(), pFontItem->GetStyleName() );
-        const sal_IntPtr* pAry = pFontList->GetSizeAry( aFontInfo );
+        FontMetric aFontMetric = pFontList->Get( pFontItem->GetFamilyName(), pFontItem->GetStyleName() );
+        const sal_IntPtr* pAry = pFontList->GetSizeAry( aFontMetric );
 
         if( bGrow )
         {

@@ -828,29 +828,29 @@ void SwXLineNumberingProperties::setPropertyValue(
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
                 throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            SwLineNumberInfo  aInfo(pDoc->GetLineNumberInfo());
+            SwLineNumberInfo  aFontMetric(pDoc->GetLineNumberInfo());
             switch(pEntry->nWID)
             {
                 case WID_NUM_ON:
                 {
                     bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
-                    aInfo.SetPaintLineNumbers(bVal);
+                    aFontMetric.SetPaintLineNumbers(bVal);
                 }
                 break;
                 case WID_CHARACTER_STYLE :
                 {
                     SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
                     if(pFormat)
-                        aInfo.SetCharFormat(pFormat);
+                        aFontMetric.SetCharFormat(pFormat);
                 }
                 break;
                 case WID_NUMBERING_TYPE  :
                 {
-                    SvxNumberType aNumType(aInfo.GetNumType());
+                    SvxNumberType aNumType(aFontMetric.GetNumType());
                     sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     aNumType.SetNumberingType(nTmp);
-                    aInfo.SetNumType(aNumType);
+                    aFontMetric.SetNumType(aNumType);
                 }
                 break;
                 case WID_NUMBER_POSITION :
@@ -860,16 +860,16 @@ void SwXLineNumberingProperties::setPropertyValue(
                     switch(nTmp)
                     {
                         case  style::LineNumberPosition::LEFT:
-                             aInfo.SetPos(LINENUMBER_POS_LEFT); ;
+                             aFontMetric.SetPos(LINENUMBER_POS_LEFT); ;
                         break;
                         case style::LineNumberPosition::RIGHT :
-                             aInfo.SetPos(LINENUMBER_POS_RIGHT);       ;
+                             aFontMetric.SetPos(LINENUMBER_POS_RIGHT);       ;
                         break;
                         case  style::LineNumberPosition::INSIDE:
-                            aInfo.SetPos(LINENUMBER_POS_INSIDE);      ;
+                            aFontMetric.SetPos(LINENUMBER_POS_INSIDE);      ;
                         break;
                         case  style::LineNumberPosition::OUTSIDE:
-                            aInfo.SetPos(LINENUMBER_POS_OUTSIDE);
+                            aFontMetric.SetPos(LINENUMBER_POS_OUTSIDE);
                         break;
                     }
                 }
@@ -881,7 +881,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                     sal_Int32 nTmp = convertMm100ToTwip(nVal);
                     if (nTmp > USHRT_MAX)
                         nTmp = USHRT_MAX;
-                    aInfo.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
+                    aFontMetric.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
                 }
                 break;
                 case WID_INTERVAL   :
@@ -889,14 +889,14 @@ void SwXLineNumberingProperties::setPropertyValue(
                     sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     if( nTmp > 0)
-                        aInfo.SetCountBy(nTmp);
+                        aFontMetric.SetCountBy(nTmp);
                 }
                 break;
                 case WID_SEPARATOR_TEXT  :
                 {
                     OUString uTmp;
                     aValue >>= uTmp;
-                    aInfo.SetDivider(uTmp);
+                    aFontMetric.SetDivider(uTmp);
                 }
                 break;
                 case WID_SEPARATOR_INTERVAL:
@@ -904,29 +904,29 @@ void SwXLineNumberingProperties::setPropertyValue(
                     sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     if( nTmp >= 0)
-                        aInfo.SetDividerCountBy(nTmp);
+                        aFontMetric.SetDividerCountBy(nTmp);
                 }
                 break;
                 case WID_COUNT_EMPTY_LINES :
                 {
                     bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
-                    aInfo.SetCountBlankLines(bVal);
+                    aFontMetric.SetCountBlankLines(bVal);
                 }
                 break;
                 case WID_COUNT_LINES_IN_FRAMES :
                 {
                     bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
-                    aInfo.SetCountInFlys(bVal);
+                    aFontMetric.SetCountInFlys(bVal);
                 }
                 break;
                 case WID_RESTART_AT_EACH_PAGE :
                 {
                     bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
-                    aInfo.SetRestartEachPage(bVal);
+                    aFontMetric.SetRestartEachPage(bVal);
                 }
                 break;
             }
-            pDoc->SetLineNumberInfo(aInfo);
+            pDoc->SetLineNumberInfo(aFontMetric);
         }
         else
             throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -1929,9 +1929,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                                 static_cast<const SvxFontListItem* >(pLclDocShell
                                                     ->GetItem( SID_ATTR_CHAR_FONTLIST ));
                         const FontList*  pList = pFontListItem->GetFontList();
-                        FontMetric aInfo = pList->Get(
+                        FontMetric aFontMetric = pList->Get(
                             sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE);
-                        vcl::Font aFont(aInfo);
+                        vcl::Font aFont(aFontMetric);
                         aFormat.SetBulletFont(&aFont);
                     }
                     else if (pBulletFontName)

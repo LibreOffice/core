@@ -73,14 +73,14 @@ With sal_False vectorized and scalable fonts will be queried.
 
 --------------------------------------------------------------------------
 
-String FontList::GetStyleName( const FontMetric& rInfo ) const;
+String FontList::GetStyleName( const FontMetric& rFontMetric ) const;
 
 This method returns the StyleName of a FontMetric.
 If no StyleName is set, a name will be generated from the set attributes.
 
 --------------------------------------------------------------------------
 
-OUString FontList::GetFontMapText( const FontMetric& rInfo ) const;
+OUString FontList::GetFontMapText( const FontMetric& rFontMetric ) const;
 
 This method returns a Matchstring which indicates the problem that could
 arise when using a font. This string should be displayed to the user.
@@ -116,7 +116,7 @@ FontList::GetStyleName()
 
 --------------------------------------------------------------------------
 
-const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const;
+const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rFontMetric ) const;
 
 This method returns the available sizes for the given font.
 If it is a scalable font, standard sizes are returned.
@@ -166,14 +166,14 @@ public:
 
     FontList*               Clone() const;
 
-    OUString                GetFontMapText( const FontMetric& rInfo ) const;
+    OUString                GetFontMapText( const FontMetric& rFontMetric ) const;
 
     const OUString&         GetNormalStr() const { return maNormal; }
     const OUString&         GetItalicStr() const { return maNormalItalic; }
     const OUString&         GetBoldStr() const { return maBold; }
     const OUString&         GetBoldItalicStr() const { return maBoldItalic; }
     const OUString&         GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
-    OUString                GetStyleName( const FontMetric& rInfo ) const;
+    OUString                GetStyleName( const FontMetric& rFontMetric ) const;
 
     FontMetric           Get( const OUString& rName,
                                  const OUString& rStyleName ) const;
@@ -191,7 +191,7 @@ public:
     static sal_Handle           GetNextFontMetric( sal_Handle hFontMetric );
     static const FontMetric& GetFontMetric( sal_Handle hFontMetric );
 
-    const sal_IntPtr*       GetSizeAry( const FontMetric& rInfo ) const;
+    const sal_IntPtr*       GetSizeAry( const FontMetric& rFontMetric ) const;
     static const sal_IntPtr* GetStdSizeAry() { return aStdSizeAry; }
 
 private:

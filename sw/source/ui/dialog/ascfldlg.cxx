@@ -190,8 +190,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
             int nFontNames = pPrt->GetDevFontCount();
             for( int i = 0; i < nFontNames; i++ )
             {
-                FontMetric aInf( pPrt->GetDevFont( i ) );
-                aFontNames.insert( aInf.GetName() );
+                FontMetric aFontMetric( pPrt->GetDevFont( i ) );
+                aFontNames.insert( aFontMetric.GetName() );
             }
 
             // insert into listbox

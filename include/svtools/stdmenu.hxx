@@ -132,7 +132,7 @@ public:
     virtual void    Select() override;
     virtual void    Highlight() override;
 
-    void            Fill( const FontMetric& rInfo, const FontList* pList );
+    void            Fill( const FontMetric& rFontMetric, const FontList* pList );
 
     void            SetCurHeight( long nHeight );
     long            GetCurHeight() const { return mnCurHeight; }

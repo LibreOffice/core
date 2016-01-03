@@ -474,7 +474,7 @@ const FontList* SvxCharNamePage::GetFontList() const
 
 namespace
 {
-    FontMetric calcFontInfo(  SvxFont& _rFont,
+    FontMetric calcFontMetrics(  SvxFont& _rFont,
                     SvxCharNamePage* _pPage,
                     const FontNameBox* _pFontNameLB,
                     const FontStyleBox* _pFontStyleLB,
@@ -486,11 +486,11 @@ namespace
     {
         Size aSize = _rFont.GetSize();
         aSize.Width() = 0;
-        FontMetric aFontInfo;
+        FontMetric aFontMetrics;
         OUString sFontName(_pFontNameLB->GetText());
         bool bFontAvailable = _pFontList->IsAvailable( sFontName );
         if (bFontAvailable  || _pFontNameLB->IsValueChangedFromSaved())
-            aFontInfo = _pFontList->Get( sFontName, _pFontStyleLB->GetText() );
+            aFontMetrics = _pFontList->Get( sFontName, _pFontStyleLB->GetText() );
         else
         {
             //get the font from itemset
@@ -498,11 +498,11 @@ namespace
             if ( eState >= SfxItemState::DEFAULT )
             {
                 const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(&( _pPage->GetItemSet().Get( _nFontWhich ) ));
-                aFontInfo.SetName(pFontItem->GetFamilyName());
-                aFontInfo.SetStyleName(pFontItem->GetStyleName());
-                aFontInfo.SetFamily(pFontItem->GetFamily());
-                aFontInfo.SetPitch(pFontItem->GetPitch());
-                aFontInfo.SetCharSet(pFontItem->GetCharSet());
+                aFontMetrics.SetName(pFontItem->GetFamilyName());
+                aFontMetrics.SetStyleName(pFontItem->GetStyleName());
+                aFontMetrics.SetFamily(pFontItem->GetFamily());
+                aFontMetrics.SetPitch(pFontItem->GetPitch());
+                aFontMetrics.SetCharSet(pFontItem->GetCharSet());
             }
         }
         if ( _pFontSizeLB->IsRelative() )
@@ -525,20 +525,20 @@ namespace
             aSize.Height() = PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );
         else
             aSize.Height() = 200;   // default 10pt
-        aFontInfo.SetSize( aSize );
+        aFontMetrics.SetSize( aSize );
 
         _rFont.SetLanguage(_pLanguageLB->GetSelectLanguage());
 
-        _rFont.SetFamily( aFontInfo.GetFamily() );
-        _rFont.SetName( aFontInfo.GetName() );
-        _rFont.SetStyleName( aFontInfo.GetStyleName() );
-        _rFont.SetPitch( aFontInfo.GetPitch() );
-        _rFont.SetCharSet( aFontInfo.GetCharSet() );
-        _rFont.SetWeight( aFontInfo.GetWeight() );
-        _rFont.SetItalic( aFontInfo.GetItalic() );
-        _rFont.SetSize( aFontInfo.GetSize() );
+        _rFont.SetFamily( aFontMetrics.GetFamily() );
+        _rFont.SetName( aFontMetrics.GetName() );
+        _rFont.SetStyleName( aFontMetrics.GetStyleName() );
+        _rFont.SetPitch( aFontMetrics.GetPitch() );
+        _rFont.SetCharSet( aFontMetrics.GetCharSet() );
+        _rFont.SetWeight( aFontMetrics.GetWeight() );
+        _rFont.SetItalic( aFontMetrics.GetItalic() );
+        _rFont.SetSize( aFontMetrics.GetSize() );
 
-        return aFontInfo;
+        return aFontMetrics;
     }
 }
 
@@ -559,23 +559,26 @@ void SvxCharNamePage::UpdatePreview_Impl()
     // Font
     const FontList* pFontList = GetFontList();
 
-    FontMetric aWestFontInfo = calcFontInfo(rFont, this, m_pWestFontNameLB,
+    FontMetric aWestFontMetric = calcFontMetrics(rFont, this, m_pWestFontNameLB,
         m_pWestFontStyleLB, m_pWestFontSizeLB, m_pWestFontLanguageLB,
         pFontList, GetWhich(SID_ATTR_CHAR_FONT),
         GetWhich(SID_ATTR_CHAR_FONTHEIGHT));
-    m_pWestFontTypeFT->SetText(pFontList->GetFontMapText(aWestFontInfo));
 
-    FontMetric aEastFontInfo = calcFontInfo(rCJKFont, this, m_pEastFontNameLB,
+    m_pWestFontTypeFT->SetText(pFontList->GetFontMapText(aWestFontMetric));
+
+    FontMetric aEastFontMetric = calcFontMetrics(rCJKFont, this, m_pEastFontNameLB,
         m_pEastFontStyleLB, m_pEastFontSizeLB, m_pEastFontLanguageLB,
         pFontList, GetWhich(SID_ATTR_CHAR_CJK_FONT),
         GetWhich(SID_ATTR_CHAR_CJK_FONTHEIGHT));
-    m_pEastFontTypeFT->SetText(pFontList->GetFontMapText(aEastFontInfo));
 
-    FontMetric aCTLFontInfo = calcFontInfo(rCTLFont,
+    m_pEastFontTypeFT->SetText(pFontList->GetFontMapText(aEastFontMetric));
+
+    FontMetric aCTLFontMetric = calcFontMetrics(rCTLFont,
         this, m_pCTLFontNameLB, m_pCTLFontStyleLB, m_pCTLFontSizeLB,
         m_pCTLFontLanguageLB, pFontList, GetWhich(SID_ATTR_CHAR_CTL_FONT),
         GetWhich(SID_ATTR_CHAR_CTL_FONTHEIGHT));
-    m_pCTLFontTypeFT->SetText(pFontList->GetFontMapText(aCTLFontInfo));
+
+    m_pCTLFontTypeFT->SetText(pFontList->GetFontMapText(aCTLFontMetric));
 
     m_pPreviewWin->Invalidate();
 }
@@ -648,8 +651,8 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
         return;
     }
 
-    FontMetric _aFontInfo( pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) );
-    pSizeBox->Fill( &_aFontInfo, pFontList );
+    FontMetric _aFontMetric( pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) );
+    pSizeBox->Fill( &_aFontMetric, pFontList );
 }
 
 
@@ -759,8 +762,8 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     // currently chosen font
     if ( bStyle && pFontItem )
     {
-        FontMetric aInfo = pFontList->Get( pFontItem->GetFamilyName(), eWeight, eItalic );
-        pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
+        FontMetric aFontMetric = pFontList->Get( pFontItem->GetFamilyName(), eWeight, eItalic );
+        pStyleBox->SetText( pFontList->GetStyleName( aFontMetric ) );
     }
     else if ( !m_pImpl->m_bInSearchMode || !bStyle )
     {
@@ -768,8 +771,8 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     else if ( bStyle )
     {
-        FontMetric aInfo = pFontList->Get( OUString(), eWeight, eItalic );
-        pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
+        FontMetric aFontMetric = pFontList->Get( OUString(), eWeight, eItalic );
+        pStyleBox->SetText( pFontList->GetStyleName( aFontMetric ) );
     }
     if (!bStyleAvailable)
     {

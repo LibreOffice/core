@@ -1140,15 +1140,15 @@ void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
              fontName = GetEntry(rUDEvt.GetItemId());
         }
         Sequence< PropertyValue > aArgs( 1 );
-        FontMetric aInfo( pFontList->Get( fontName,
+        FontMetric aFontMetric( pFontList->Get( fontName,
             aCurFont.GetWeight(),
             aCurFont.GetItalic() ) );
 
-        SvxFontItem aFontItem( aInfo.GetFamily(),
-            aInfo.GetName(),
-            aInfo.GetStyleName(),
-            aInfo.GetPitch(),
-            aInfo.GetCharSet(),
+        SvxFontItem aFontItem( aFontMetric.GetFamily(),
+            aFontMetric.GetName(),
+            aFontMetric.GetStyleName(),
+            aFontMetric.GetPitch(),
+            aFontMetric.GetCharSet(),
             SID_ATTR_CHAR_FONT );
         aFontItem.QueryValue( aArgs[0].Value );
         aArgs[0].Name   = "CharPreviewFontName";
@@ -1166,16 +1166,16 @@ void SvxFontNameBox_Impl::Select()
     std::unique_ptr<SvxFontItem> pFontItem;
     if ( pFontList )
     {
-        FontMetric aInfo( pFontList->Get( GetText(),
+        FontMetric aFontMetric( pFontList->Get( GetText(),
             aCurFont.GetWeight(),
             aCurFont.GetItalic() ) );
-        aCurFont = aInfo;
+        aCurFont = aFontMetric;
 
-        pFontItem.reset( new SvxFontItem( aInfo.GetFamily(),
-            aInfo.GetName(),
-            aInfo.GetStyleName(),
-            aInfo.GetPitch(),
-            aInfo.GetCharSet(),
+        pFontItem.reset( new SvxFontItem( aFontMetric.GetFamily(),
+            aFontMetric.GetName(),
+            aFontMetric.GetStyleName(),
+            aFontMetric.GetPitch(),
+            aFontMetric.GetCharSet(),
             SID_ATTR_CHAR_FONT ) );
 
         Any a;

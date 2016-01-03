@@ -1215,8 +1215,8 @@ static char* getFonts (const char* pCommand)
         for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
             boost::property_tree::ptree aChildren;
-            const FontMetric& rInfo = pList->GetFontName(i);
-            const sal_IntPtr* pAry = pList->GetSizeAry(rInfo);
+            const FontMetric& rFontMetric = pList->GetFontName(i);
+            const sal_IntPtr* pAry = pList->GetSizeAry(rFontMetric);
             sal_uInt16 nSizeCount = 0;
             while (pAry[nSizeCount])
             {
@@ -1225,7 +1225,7 @@ static char* getFonts (const char* pCommand)
                 aChildren.push_back(std::make_pair("", aChild));
                 nSizeCount++;
             }
-            aValues.add_child(rInfo.GetName().toUtf8().getStr(), aChildren);
+            aValues.add_child(rFontMetric.GetName().toUtf8().getStr(), aChildren);
         }
     }
     aTree.add_child("commandValues", aValues);
@@ -1529,8 +1529,8 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
         sal_uInt16 nFontCount = pList->GetFontNameCount();
         for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
-            const FontMetric& rInfo = pList->GetFontName(i);
-            OUString aFontName = rInfo.GetName();
+            const FontMetric& rFontMetric = pList->GetFontName(i);
+            OUString aFontName = rFontMetric.GetName();
             if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
                 continue;
 
@@ -1538,7 +1538,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
                 VclPtr<VirtualDevice>::Create(
                     nullptr, Size(1, 1), DeviceFormat::DEFAULT));
             ::Rectangle aRect;
-            vcl::Font aFont(rInfo);
+            vcl::Font aFont(rFontMetric);
             aFont.SetSize(Size(0, 25));
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aFontName);

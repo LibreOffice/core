@@ -122,9 +122,9 @@ void SvxFontSizeMenuControl::StateChanged(
 
                     if ( pList )
                     {
-                        FontMetric aFntInf = pList->Get( pItem->GetFamilyName(),
+                        FontMetric aFontMetric = pList->Get( pItem->GetFamilyName(),
                                                        pItem->GetStyleName() );
-                        pMenu->Fill( aFntInf, pList );
+                        pMenu->Fill( aFontMetric, pList );
                     }
                     // else manche Shells haben keine Fontliste (z.B. Image)
                 }

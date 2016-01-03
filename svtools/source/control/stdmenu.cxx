@@ -125,7 +125,7 @@ void FontSizeMenu::Highlight()
 {
 }
 
-void FontSizeMenu::Fill( const FontMetric& rInfo, const FontList* pList )
+void FontSizeMenu::Fill( const FontMetric& rFontMetric, const FontList* pList )
 {
     Clear();
 
@@ -134,7 +134,7 @@ void FontSizeMenu::Fill( const FontMetric& rInfo, const FontList* pList )
         delete[] mpHeightAry;
 
     const sal_IntPtr* pTempAry;
-    const sal_IntPtr* pAry = pList->GetSizeAry( rInfo );
+    const sal_IntPtr* pAry = pList->GetSizeAry( rFontMetric );
     sal_uInt16 nSizeCount = 0;
     while ( pAry[nSizeCount] )
         nSizeCount++;

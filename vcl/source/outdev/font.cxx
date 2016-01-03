@@ -64,7 +64,7 @@ using namespace ::utl;
 
 FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
-    FontMetric aFontInfo;
+    FontMetric aFontMetric;
 
     ImplInitFontList();
 
@@ -72,21 +72,21 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
     if( nDevFontIndex < nCount )
     {
         const PhysicalFontFace& rData = *mpDeviceFontList->Get( nDevFontIndex );
-        aFontInfo.SetName( rData.GetFamilyName() );
-        aFontInfo.SetStyleName( rData.GetStyleName() );
-        aFontInfo.SetCharSet( rData.IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        aFontInfo.SetFamily( rData.GetFamilyType() );
-        aFontInfo.SetPitch( rData.GetPitch() );
-        aFontInfo.SetWeight( rData.GetWeight() );
-        aFontInfo.SetItalic( rData.GetSlantType() );
-        aFontInfo.SetWidthType( rData.GetWidthType() );
+        aFontMetric.SetName( rData.GetFamilyName() );
+        aFontMetric.SetStyleName( rData.GetStyleName() );
+        aFontMetric.SetCharSet( rData.IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+        aFontMetric.SetFamily( rData.GetFamilyType() );
+        aFontMetric.SetPitch( rData.GetPitch() );
+        aFontMetric.SetWeight( rData.GetWeight() );
+        aFontMetric.SetItalic( rData.GetSlantType() );
+        aFontMetric.SetWidthType( rData.GetWidthType() );
         if( rData.IsScalable() )
-            aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
+            aFontMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
         if( rData.IsBuiltInFont() )
-            aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
+            aFontMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
     }
 
-    return aFontInfo;
+    return aFontMetric;
 }
 
 int OutputDevice::GetDevFontCount() const

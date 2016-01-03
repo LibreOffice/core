@@ -195,11 +195,11 @@ void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFo
 
     if ( !rCurrentFont.Name.isEmpty() )
     {
-        FontMetric _aFontInfo;
-        _aFontInfo.SetName( rCurrentFont.Name );
-        _aFontInfo.SetStyleName( rCurrentFont.StyleName );
-        _aFontInfo.SetHeight( rCurrentFont.Height );
-        Fill( &_aFontInfo, _pFontList );
+        FontMetric _aFontMetric;
+        _aFontMetric.SetName( rCurrentFont.Name );
+        _aFontMetric.SetStyleName( rCurrentFont.StyleName );
+        _aFontMetric.SetHeight( rCurrentFont.Height );
+        Fill( &_aFontMetric, _pFontList );
     }
     else
     {

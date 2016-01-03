@@ -462,7 +462,7 @@ public:
     void            Reformat() override;
     void            Modify() override;
 
-    void            Fill( const FontMetric* pInfo, const FontList* pList );
+    void            Fill( const FontMetric* pFontMetric, const FontList* pList );
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );

@@ -1117,7 +1117,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
     assert( mpFontList );
 
-    FontMetric& rInfo = (*mpFontList)[ rUDEvt.GetItemId() ];
+    FontMetric& rFontMetric = (*mpFontList)[ rUDEvt.GetItemId() ];
     Point aTopLeft = rUDEvt.GetRect().TopLeft();
     long nX = aTopLeft.X();
     long nH = rUDEvt.GetRect().GetHeight();
@@ -1126,14 +1126,14 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     {
         nX += IMGOUTERTEXTSPACE;
 
-        const bool bSymbolFont = isSymbolFont(rInfo);
+        const bool bSymbolFont = isSymbolFont(rFontMetric);
         vcl::RenderContext* pRenderContext = rUDEvt.GetRenderContext();
 
         Color aTextColor = pRenderContext->GetTextColor();
         vcl::Font aOldFont(pRenderContext->GetFont());
         Size aSize( aOldFont.GetSize() );
         aSize.Height() += EXTRAFONTSIZE;
-        vcl::Font aFont( rInfo );
+        vcl::Font aFont( rFontMetric );
         aFont.SetSize( aSize );
         pRenderContext->SetFont(aFont);
         pRenderContext->SetTextColor(aTextColor);
@@ -1142,7 +1142,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         Rectangle aTextRect;
 
         // Preview the font name
-        OUString sFontName = rInfo.GetName();
+        OUString sFontName = rFontMetric.GetName();
 
         //If it shouldn't or can't draw its own name because it doesn't have the glyphs
         if (!canRenderNameOfSelectedFont(*pRenderContext))
@@ -1173,7 +1173,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
         if (!bSymbolFont)
         {
-            const bool bNameBeginsWithLatinText = rInfo.GetName()[0] <= 'z';
+            const bool bNameBeginsWithLatinText = rFontMetric.GetName()[0] <= 'z';
 
             if (bNameBeginsWithLatinText || !bUsingCorrectFont)
                 sSampleText = makeShortRepresentativeTextForSelectedFont(*pRenderContext);
@@ -1396,14 +1396,14 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
         bool        bBold = false;
         bool        bBoldItalic = false;
         bool        bInsert = false;
-        FontMetric    aInfo;
+        FontMetric    aFontMetric;
         while ( hFontMetric )
         {
-            aInfo = FontList::GetFontMetric( hFontMetric );
+            aFontMetric = FontList::GetFontMetric( hFontMetric );
 
-            FontWeight  eWeight = aInfo.GetWeight();
-            FontItalic  eItalic = aInfo.GetItalic();
-            FontWidth   eWidth = aInfo.GetWidthType();
+            FontWeight  eWeight = aFontMetric.GetWeight();
+            FontItalic  eItalic = aFontMetric.GetItalic();
+            FontWidth   eWidth = aFontMetric.GetWidthType();
             // Only if the attributes are different, we insert the
             // Font to avoid double Entries in different languages
             if ( (eWeight != eLastWeight) || (eItalic != eLastItalic) ||
@@ -1428,7 +1428,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
                 }
 
                 // For wrong StyleNames we replace this with the correct once
-                aStyleText = pList->GetStyleName( aInfo );
+                aStyleText = pList->GetStyleName( aFontMetric );
                 bInsert = GetEntryPos( aStyleText ) == LISTBOX_ENTRY_NOTFOUND;
                 if ( !bInsert )
                 {
@@ -1449,7 +1449,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
                     const OUString& rAttrStyleText = pList->GetStyleName( eWeight, eItalic );
                     if (rAttrStyleText != aStyleText)
                     {
-                        OUString aTempStyleText = pList->GetStyleName( aInfo );
+                        OUString aTempStyleText = pList->GetStyleName( aFontMetric );
                         if (rAttrStyleText == aTempStyleText)
                             aStyleText = rAttrStyleText;
                         bInsert = GetEntryPos( aStyleText ) == LISTBOX_ENTRY_NOTFOUND;
@@ -1616,7 +1616,7 @@ void FontSizeBox::Modify()
     }
 }
 
-void FontSizeBox::Fill( const FontMetric* pInfo, const FontList* pList )
+void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
 {
     // remember for relative mode
     pFontList = pList;
@@ -1629,10 +1629,10 @@ void FontSizeBox::Fill( const FontMetric* pInfo, const FontList* pList )
     const sal_IntPtr* pTempAry;
     const sal_IntPtr* pAry = nullptr;
 
-    if( pInfo )
+    if( pFontMetric )
     {
-        aFontMetric = *pInfo;
-        pAry = pList->GetSizeAry( *pInfo );
+        aFontMetric = *pFontMetric;
+        pAry = pList->GetSizeAry( *pFontMetric );
     }
     else
     {

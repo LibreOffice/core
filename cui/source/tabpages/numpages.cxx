@@ -736,9 +736,9 @@ IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                     }
                     if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
                     {
-                        FontMetric aInfo = pList->Get(
+                        FontMetric aFontMetric = pList->Get(
                             pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
-                        vcl::Font aFont(aInfo);
+                        vcl::Font aFont(aFontMetric);
                         aFmt.SetBulletFont(&aFont);
                     }
                     else

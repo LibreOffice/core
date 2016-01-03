@@ -359,9 +359,9 @@ IMPL_LINK_TYPED(SvxFontSubstTabPage, NonPropFontsHdl, Button*, pBox, void)
     sal_uInt16 nFontCount = aFntLst.GetFontNameCount();
     for(sal_uInt16 nFont = 0; nFont < nFontCount; nFont++)
     {
-        const FontMetric& rInfo = aFntLst.GetFontName( nFont );
-        if(!bNonPropOnly || rInfo.GetPitch() == PITCH_FIXED)
-            m_pFontNameLB->InsertEntry(rInfo.GetName());
+        const FontMetric& rFontMetric = aFntLst.GetFontName( nFont );
+        if(!bNonPropOnly || rFontMetric.GetPitch() == PITCH_FIXED)
+            m_pFontNameLB->InsertEntry(rFontMetric.GetName());
     }
     m_pFontNameLB->SelectEntry(sFontName);
 }

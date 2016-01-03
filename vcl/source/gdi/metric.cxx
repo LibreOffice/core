@@ -72,10 +72,10 @@ FontMetric::FontMetric()
 :   mpImplMetric( new ImplFontMetric )
 {}
 
-FontMetric::FontMetric( const FontMetric& rInfo )
-:  Font( rInfo )
+FontMetric::FontMetric( const FontMetric& rFontMetric )
+:  Font( rFontMetric )
 {
-    mpImplMetric = rInfo.mpImplMetric;
+    mpImplMetric = rFontMetric.mpImplMetric;
     mpImplMetric->AddReference();
 }
 
@@ -84,27 +84,27 @@ FontMetric::~FontMetric()
     mpImplMetric->DeReference();
 }
 
-FontMetric& FontMetric::operator=( const FontMetric& rInfo )
+FontMetric& FontMetric::operator=( const FontMetric& rFontMetric )
 {
-    Font::operator=( rInfo );
+    Font::operator=( rFontMetric );
 
-    if( mpImplMetric != rInfo.mpImplMetric )
+    if( mpImplMetric != rFontMetric.mpImplMetric )
     {
         mpImplMetric->DeReference();
-        mpImplMetric = rInfo.mpImplMetric;
+        mpImplMetric = rFontMetric.mpImplMetric;
         mpImplMetric->AddReference();
     }
 
     return *this;
 }
 
-bool FontMetric::operator==( const FontMetric& rInfo ) const
+bool FontMetric::operator==( const FontMetric& rFontMetric ) const
 {
-    if( !Font::operator==( rInfo ) )
+    if( !Font::operator==( rFontMetric ) )
         return false;
-    if( mpImplMetric == rInfo.mpImplMetric )
+    if( mpImplMetric == rFontMetric.mpImplMetric )
         return true;
-    if( *mpImplMetric == *rInfo.mpImplMetric  )
+    if( *mpImplMetric == *rFontMetric.mpImplMetric  )
         return true;
     return false;
 }

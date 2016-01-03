@@ -207,9 +207,9 @@ void XclImpFont::SetFontData( const XclFontData& rFontData, bool bHasCharSet )
             {
                 if( const FontList* pFontList = pInfoItem->GetFontList() )
                 {
-                    FontMetric aFontInfo( pFontList->Get( maData.maName, maData.maStyle ) );
-                    maData.SetScWeight( aFontInfo.GetWeight() );
-                    maData.SetScPosture( aFontInfo.GetItalic() );
+                    FontMetric aFontMetric( pFontList->Get( maData.maName, maData.maStyle ) );
+                    maData.SetScWeight( aFontMetric.GetWeight() );
+                    maData.SetScPosture( aFontMetric.GetItalic() );
                 }
             }
         }

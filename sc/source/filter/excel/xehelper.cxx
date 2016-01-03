@@ -740,11 +740,11 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     aParaText = "&\"" + OUString(aNewData.maName);
                     if( pFontList )
                     {
-                        FontMetric aFontInfo( pFontList->Get(
+                        FontMetric aFontMetric( pFontList->Get(
                             aNewData.maName,
                             (aNewData.mnWeight > EXC_FONTWGHT_NORMAL) ? WEIGHT_BOLD : WEIGHT_NORMAL,
                             aNewData.mbItalic ? ITALIC_NORMAL : ITALIC_NONE ) );
-                        aNewData.maStyle = pFontList->GetStyleName( aFontInfo );
+                        aNewData.maStyle = pFontList->GetStyleName( aFontMetric );
                         if( !aNewData.maStyle.isEmpty() )
                             aParaText += "," + aNewData.maStyle;
                     }
