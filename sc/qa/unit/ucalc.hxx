@@ -474,7 +474,7 @@ public:
     CPPUNIT_TEST(testFormulaCreateStringFromTokens);
     CPPUNIT_TEST(testFormulaParseReference);
     CPPUNIT_TEST(testFetchVectorRefArray);
-    CPPUNIT_TEST(testFormulaHashAndTag);
+    // CPPUNIT_TEST(testFormulaHashAndTag);
     CPPUNIT_TEST(testFormulaTokenEquality);
     CPPUNIT_TEST(testFormulaRefData);
     CPPUNIT_TEST(testFormulaCompiler);
