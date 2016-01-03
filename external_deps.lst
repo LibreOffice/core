@@ -204,9 +204,9 @@ if (ENABLE_MEDIAWIKI == YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_PYTHON != YES)
-    MD5 = d4bca0159acb0b44a781292b5231936f
-    name = Python-2.7.8.tgz
-    URL1 = http://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz
+    MD5 = 1d8728eb0dfcac72a0fd99c17ec7f386
+    name = Python-2.7.6.tgz
+    URL1 = http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_BOOST != YES)

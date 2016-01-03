@@ -1,5 +1,5 @@
---- misc/Python-2.7.8/setup.py	2013-07-01 17:51:46.237674580 +0200
-+++ misc/build/Python-2.7.8/setup.py	2013-07-01 17:51:24.230453108 +0200
+--- misc/Python-2.7.6/setup.py	2013-07-01 17:51:46.237674580 +0200
++++ misc/build/Python-2.7.6/setup.py	2013-07-01 17:51:24.230453108 +0200
 @@ -80,61 +80,62 @@
          # system, but with only header files and libraries.
          sysroot = macosx_sdk_root()
@@ -79,7 +79,7 @@
      else:
          assert False, "Internal error: Path not found in std_dirs or paths"
  
-@@ -808,6 +809,7 @@
+@@ -819,6 +820,7 @@
              exts.append( Extension('_ssl', ['_ssl.c'],
                                     include_dirs = ssl_incs,
                                     library_dirs = ssl_libs,
@@ -87,7 +87,7 @@
                                     libraries = ['ssl', 'crypto'],
                                     depends = ['socketmodule.h']), )
          else:
-@@ -847,6 +849,7 @@
+@@ -858,6 +860,7 @@
                  exts.append( Extension('_hashlib', ['_hashopenssl.c'],
                                         include_dirs = ssl_incs,
                                         library_dirs = ssl_libs,

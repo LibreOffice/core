@@ -1,18 +1,18 @@
-diff -ruN misc/Python-2.7.8/PCbuild/build_ssl.py misc/build/Python-2.7.8/PCbuild/build_ssl.py
---- misc/Python-2.7.8/PCbuild/build_ssl.py	2014-06-29 21:05:46.000000000 -0500
-+++ misc/build/Python-2.7.8/PCbuild/build_ssl.py	2016-01-01 15:15:32.256357072 -0500
-@@ -229,4 +229,4 @@
+diff -ru misc/Python-2.7.6/PCbuild/build_ssl.py misc/build/Python-2.7.6/PCbuild/build_ssl.py
+--- misc/Python-2.7.6/PCbuild/build_ssl.py	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.6/PCbuild/build_ssl.py	2012-07-25 14:37:37.000000000 -0500
+@@ -253,4 +253,4 @@
      sys.exit(rc)
  
  if __name__=='__main__':
 -    main()
 +    sys.exit(0)
-diff -ruN misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
---- misc/Python-2.7.8/setup.py	2014-06-29 21:05:48.000000000 -0500
-+++ misc/build/Python-2.7.8/setup.py	2016-01-01 15:15:32.258356209 -0500
-@@ -786,7 +786,15 @@
-                                depends=['socketmodule.h'],
-                                libraries=math_libs) )
+diff -ru misc/Python-2.7.6/setup.py misc/build/Python-2.7.6/setup.py
+--- misc/Python-2.7.6/setup.py	2012-04-09 18:07:36.000000000 -0500
++++ misc/build/Python-2.7.6/setup.py	2012-07-25 14:37:37.000000000 -0500
+@@ -702,7 +702,15 @@
+         exts.append( Extension('_socket', ['socketmodule.c'],
+                                depends = ['socketmodule.h']) )
          # Detect SSL support for the socket module (via _ssl)
 +        UPDMINOR = os.environ.get('UPDMINOREXT')
 +        ooosslinc = os.environ.get('SOLARVERSION') + '/' + \
@@ -26,7 +26,7 @@ diff -ruN misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
                                '/usr/local/ssl/include',
                                '/usr/contrib/ssl/include/'
                               ]
-@@ -798,8 +806,15 @@
+@@ -714,8 +722,15 @@
                                 ['/usr/kerberos/include'])
              if krb5_h:
                  ssl_incs += krb5_h
