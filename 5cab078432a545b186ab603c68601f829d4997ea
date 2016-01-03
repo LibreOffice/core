@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_8d585dfc",
+        "filename": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-03T18:30:38Z",
+      "side": 1,
+      "message": "This button is dimmed. I couldn\u0027t find thats why",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 55
+      },
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
