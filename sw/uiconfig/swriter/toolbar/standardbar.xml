@@ -69,6 +69,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowTrackedChanges" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:TrackChanges"/>
+ <toolbar:toolbaritem xlink:href=".uno:TrackChangesBar"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002"/>

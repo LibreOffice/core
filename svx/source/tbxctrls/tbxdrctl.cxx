@@ -55,10 +55,17 @@ void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< css::uno::Any
      * "private:resource/toolbar/toolbar" in draw and impress. Control is added for this
      * difference.
      */
-    if ( m_sModuleName == "com.sun.star.presentation.PresentationDocument" || m_sModuleName == "com.sun.star.drawing.DrawingDocument" )
-        m_sToolboxName="private:resource/toolbar/toolbar";
+    if( m_aCommandURL==".uno:TrackChangesBar")
+    {
+        m_sToolboxName="private:resource/toolbar/changes";
+    }
     else
-        m_sToolboxName="private:resource/toolbar/drawbar";
+    {
+        if ( m_sModuleName == "com.sun.star.presentation.PresentationDocument" || m_sModuleName == "com.sun.star.drawing.DrawingDocument" )
+            m_sToolboxName="private:resource/toolbar/toolbar";
+        else
+            m_sToolboxName="private:resource/toolbar/drawbar";
+    }
 }
 
 

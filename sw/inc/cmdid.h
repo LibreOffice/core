@@ -701,6 +701,7 @@
 #define FN_SELECTION_MODE_DEFAULT   (FN_SELECTION + 90)   /* use default selection mode - not block mode */
 #define FN_SELECTION_MODE_BLOCK     (FN_SELECTION + 91)   /* switch on block selection */
 #define SID_JUMP_TO_SPECIFIC_PAGE    (FN_SELECTION + 92)
+#define SID_TRACK_CHANGES_BAR       (FN_SELECTION + 93)   /* shows/hides track changes bar */
 
 // QUERY-Block
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribut */
