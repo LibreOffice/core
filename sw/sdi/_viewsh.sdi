@@ -803,6 +803,11 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_TRACK_CHANGES_BAR
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
 }
 
 interface GlobalContents

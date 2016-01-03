@@ -91,6 +91,30 @@ SfxBoolItem TrackChanges FN_REDLINE_ON
     GroupId = GID_EDIT;
 ]
 
+SfxAllEnumItem TrackChangesBar SID_TRACK_CHANGES_BAR
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
 SfxVoidItem AddAllUnknownWords FN_ADD_UNKNOWN
 ()
 [
