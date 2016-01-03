@@ -828,7 +828,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         int nFontNames = m_pPrt->GetDevFontCount();
         for( int i = 0; i < nFontNames; i++ )
         {
-            vcl::FontInfo aInf( m_pPrt->GetDevFont( i ) );
+            FontMetric aInf( m_pPrt->GetDevFont( i ) );
             aFontNames.insert( aInf.GetName() );
         }
 
@@ -944,7 +944,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     m_pLabelBox->SetText(sCapBackup );
     m_pIdxBox->SetText(sIdxBackup );
 
-    vcl::FontInfo aFontInfo( m_pFontList->Get(sStdBackup, sStdBackup) );
+    FontMetric aFontInfo( m_pFontList->Get(sStdBackup, sStdBackup) );
     m_pStandardHeightLB->Fill( &aFontInfo, m_pFontList );
     aFontInfo = m_pFontList->Get(sOutBackup, sOutBackup );
     m_pTitleHeightLB->Fill( &aFontInfo, m_pFontList );
@@ -1083,7 +1083,7 @@ IMPL_LINK_TYPED( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )
     {
         pHeightLB = m_pIndexHeightLB;
     }
-    vcl::FontInfo aFontInfo( m_pFontList->Get(sEntry, sEntry) );
+    FontMetric aFontInfo( m_pFontList->Get(sEntry, sEntry) );
     pHeightLB->Fill( &aFontInfo, m_pFontList );
 }
 

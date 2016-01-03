@@ -38,7 +38,7 @@ class ImpLineListData;
 
 typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
-typedef ::std::vector< vcl::FontInfo         > ImplFontList;
+typedef ::std::vector< FontMetric         > ImplFontList;
 
 /*************************************************************************
 
@@ -131,7 +131,7 @@ Additionally it supports an relative mod, which allows entering
 percentage values. This, eg., can be useful for template dialogs.
 This mode can only be enabled, but not disabled again.
 
-For DontKnow the FontSizeBox should be filled FontInfo(), so it will
+For DontKnow the FontSizeBox should be filled FontMetric(), so it will
 contain an list with the standard sizes. Th currently shown size
 probably needs to be reset by the application.
 
@@ -437,7 +437,7 @@ inline void FontStyleBox::SetText( const OUString& rText )
 
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
-    vcl::FontInfo       aFontInfo;
+    FontMetric       aFontMetric;
     const FontList* pFontList;
     sal_uInt16          nRelMin;
     sal_uInt16          nRelMax;
@@ -462,7 +462,7 @@ public:
     void            Reformat() override;
     void            Modify() override;
 
-    void            Fill( const vcl::FontInfo* pInfo, const FontList* pList );
+    void            Fill( const FontMetric* pInfo, const FontList* pList );
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );

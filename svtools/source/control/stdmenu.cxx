@@ -125,7 +125,7 @@ void FontSizeMenu::Highlight()
 {
 }
 
-void FontSizeMenu::Fill( const vcl::FontInfo& rInfo, const FontList* pList )
+void FontSizeMenu::Fill( const FontMetric& rInfo, const FontList* pList )
 {
     Clear();
 

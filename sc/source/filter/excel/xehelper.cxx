@@ -740,7 +740,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     aParaText = "&\"" + OUString(aNewData.maName);
                     if( pFontList )
                     {
-                        vcl::FontInfo aFontInfo( pFontList->Get(
+                        FontMetric aFontInfo( pFontList->Get(
                             aNewData.maName,
                             (aNewData.mnWeight > EXC_FONTWGHT_NORMAL) ? WEIGHT_BOLD : WEIGHT_NORMAL,
                             aNewData.mbItalic ? ITALIC_NORMAL : ITALIC_NONE ) );

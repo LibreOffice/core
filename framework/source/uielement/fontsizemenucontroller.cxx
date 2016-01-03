@@ -152,7 +152,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         if ( !pFontList )
             pFontList.reset(new FontList( Application::GetDefaultDevice() ));
 
-        vcl::FontInfo aFntInfo = pFontList->Get( m_aFontDescriptor.Name, m_aFontDescriptor.StyleName );
+        FontMetric aFntInfo = pFontList->Get( m_aFontDescriptor.Name, m_aFontDescriptor.StyleName );
 
         // setup font size array
         delete m_pHeightArray;

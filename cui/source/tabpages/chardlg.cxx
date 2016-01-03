@@ -474,7 +474,7 @@ const FontList* SvxCharNamePage::GetFontList() const
 
 namespace
 {
-    vcl::FontInfo calcFontInfo(  SvxFont& _rFont,
+    FontMetric calcFontInfo(  SvxFont& _rFont,
                     SvxCharNamePage* _pPage,
                     const FontNameBox* _pFontNameLB,
                     const FontStyleBox* _pFontStyleLB,
@@ -486,7 +486,7 @@ namespace
     {
         Size aSize = _rFont.GetSize();
         aSize.Width() = 0;
-        vcl::FontInfo aFontInfo;
+        FontMetric aFontInfo;
         OUString sFontName(_pFontNameLB->GetText());
         bool bFontAvailable = _pFontList->IsAvailable( sFontName );
         if (bFontAvailable  || _pFontNameLB->IsValueChangedFromSaved())
@@ -559,19 +559,19 @@ void SvxCharNamePage::UpdatePreview_Impl()
     // Font
     const FontList* pFontList = GetFontList();
 
-    vcl::FontInfo aWestFontInfo = calcFontInfo(rFont, this, m_pWestFontNameLB,
+    FontMetric aWestFontInfo = calcFontInfo(rFont, this, m_pWestFontNameLB,
         m_pWestFontStyleLB, m_pWestFontSizeLB, m_pWestFontLanguageLB,
         pFontList, GetWhich(SID_ATTR_CHAR_FONT),
         GetWhich(SID_ATTR_CHAR_FONTHEIGHT));
     m_pWestFontTypeFT->SetText(pFontList->GetFontMapText(aWestFontInfo));
 
-    vcl::FontInfo aEastFontInfo = calcFontInfo(rCJKFont, this, m_pEastFontNameLB,
+    FontMetric aEastFontInfo = calcFontInfo(rCJKFont, this, m_pEastFontNameLB,
         m_pEastFontStyleLB, m_pEastFontSizeLB, m_pEastFontLanguageLB,
         pFontList, GetWhich(SID_ATTR_CHAR_CJK_FONT),
         GetWhich(SID_ATTR_CHAR_CJK_FONTHEIGHT));
     m_pEastFontTypeFT->SetText(pFontList->GetFontMapText(aEastFontInfo));
 
-    vcl::FontInfo aCTLFontInfo = calcFontInfo(rCTLFont,
+    FontMetric aCTLFontInfo = calcFontInfo(rCTLFont,
         this, m_pCTLFontNameLB, m_pCTLFontStyleLB, m_pCTLFontSizeLB,
         m_pCTLFontLanguageLB, pFontList, GetWhich(SID_ATTR_CHAR_CTL_FONT),
         GetWhich(SID_ATTR_CHAR_CTL_FONTHEIGHT));
@@ -648,7 +648,7 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
         return;
     }
 
-    vcl::FontInfo _aFontInfo( pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) );
+    FontMetric _aFontInfo( pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) );
     pSizeBox->Fill( &_aFontInfo, pFontList );
 }
 
@@ -759,7 +759,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     // currently chosen font
     if ( bStyle && pFontItem )
     {
-        vcl::FontInfo aInfo = pFontList->Get( pFontItem->GetFamilyName(), eWeight, eItalic );
+        FontMetric aInfo = pFontList->Get( pFontItem->GetFamilyName(), eWeight, eItalic );
         pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
     }
     else if ( !m_pImpl->m_bInSearchMode || !bStyle )
@@ -768,7 +768,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     else if ( bStyle )
     {
-        vcl::FontInfo aInfo = pFontList->Get( OUString(), eWeight, eItalic );
+        FontMetric aInfo = pFontList->Get( OUString(), eWeight, eItalic );
         pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
     }
     if (!bStyleAvailable)
@@ -930,7 +930,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     sal_Int32 nEntryPos = pStyleBox->GetEntryPos( aStyleBoxText );
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         aStyleBoxText.clear();
-    vcl::FontInfo aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
+    FontMetric aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
     SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetName(), aInfo.GetStyleName(),
                            aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );
     pOld = GetOldItem( rSet, nSlot );

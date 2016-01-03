@@ -34,37 +34,17 @@ typedef sal_uInt32 sal_UCS4;
 typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
 typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
 
-namespace vcl {
-
-// avoid problems where poppler's FontInfo is picked up
-class VCL_DLLPUBLIC FontInfo : public vcl::Font
+class VCL_DLLPUBLIC FontMetric : public vcl::Font
 {
+
     friend class ::OutputDevice;
 
-protected:
-    ImplFontMetric*     mpImplMetric;    // Implementation
-
 public:
-                        FontInfo();
-                        FontInfo( const FontInfo& );
-                        ~FontInfo();
+                        FontMetric();
+                        FontMetric( const FontMetric& );
+                        ~FontMetric();
 
     FontType            GetType() const;
-
-    FontInfo&           operator=( const FontInfo& );
-    bool                operator==( const FontInfo& ) const;
-    bool                operator!=( const FontInfo& rInfo ) const
-                            { return !operator==( rInfo ); }
-};
-
-}
-
-class VCL_DLLPUBLIC FontMetric : public vcl::FontInfo
-{
-public:
-                        FontMetric() {}
-                        FontMetric( const FontMetric& );
-                        ~FontMetric() {}
 
     long                GetAscent() const;
     long                GetDescent() const;
@@ -79,6 +59,8 @@ public:
     bool                operator==( const FontMetric& rMetric ) const;
     bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
+protected:
+    ImplFontMetric*     mpImplMetric;    // Implementation
 };
 
 template< typename charT, typename traits >

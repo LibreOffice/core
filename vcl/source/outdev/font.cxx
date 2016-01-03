@@ -62,9 +62,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::utl;
 
-vcl::FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
+FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
-    vcl::FontInfo aFontInfo;
+    FontMetric aFontInfo;
 
     ImplInitFontList();
 
