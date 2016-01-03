@@ -38,10 +38,76 @@ namespace vcl { class Font; }
 class ConvertChar;
 class OutputDevice;
 class Size;
+class FontSelectPattern;
 
 class ImplFontAttributes
 {
 public:
+    explicit        ImplFontAttributes() {}
+    explicit        ImplFontAttributes( const FontSelectPattern& );
+
+    // font instance attributes from the font request
+    long            GetWidth()              { return mnWidth; }
+    short           GetOrientation()        { return mnOrientation; }
+
+    void            SetWidth(long nWidth)   { mnWidth=nWidth; }
+    void            SetOrientation(short nOrientation) { mnOrientation=nOrientation; }
+
+    // font metrics measured for the font instance
+    long            GetAscent()             { return mnAscent; }
+    long            GetDescent()            { return mnDescent; }
+    long            GetInternalLeading()    { return mnIntLeading; }
+    long            GetExternalLeading()    { return mnExtLeading; }
+    int             GetSlant()              { return mnSlant; }
+    long            GetMinKashida()         { return mnMinKashida; }
+
+    void            SetAscent(long nAscent) { mnAscent=nAscent; }
+    void            SetDescent(long nDescent) { mnDescent=nDescent; }
+    void            SetInternalLeading(long nIntLeading) { mnIntLeading = nIntLeading; }
+    void            SetExternalLeading(long nExtLeading) { mnExtLeading = nExtLeading; }
+    void            SetSlant(int nSlant)    { mnSlant=nSlant; }
+    void            SetMinKashida( long nMinKashida ) { mnMinKashida=nMinKashida; }
+
+    // font attributes queried from the font instance
+    bool            IsScalable()            { return mbScalableFont; }
+    bool            IsTrueTypeFont()        { return mbTrueTypeFont; }
+    bool            IsKernable()            { return mbKernableFont; }
+    bool            IsFullstopCentered()    { return mbFullstopCentered; }
+    long            GetBulletOffset()       { return mnBulletOffset; }
+
+    void            SetScalableFlag(bool bScalable) { mbScalableFont = bScalable; }
+    void            SetTrueTypeFlag(bool bTrueTypeFont) { mbTrueTypeFont = bTrueTypeFont; }
+    void            SetKernableFlag(bool bKernable) { mbKernableFont = bKernable; }
+    void            SetFullstopCenteredFlag(bool bFullstopCentered) { mbFullstopCentered = bFullstopCentered; }
+    void            SetBulletOffset(long nBulletOffset) { mnBulletOffset = nBulletOffset; }
+
+    // font metrics that are usually derived from the measurements
+    long            GetUnderlineSize()                  { return mnUnderlineSize; }
+    long            GetUnderlineOffset()                { return mnUnderlineOffset; }
+    long            GetBoldUnderlineSize()              { return mnBUnderlineSize; }
+    long            GetBoldUnderlineOffset()            { return mnBUnderlineOffset; }
+    long            GetDoubleUnderlineSize()            { return mnDUnderlineSize; }
+    long            GetDoubleUnderlineOffset1()         { return mnDUnderlineOffset1; }
+    long            GetDoubleUnderlineOffset2()         { return mnDUnderlineOffset2; }
+    long            GetWavelineUnderlineSize()          { return mnWUnderlineSize; }
+    long            GetWavelineUnderlineOffset()        { return mnWUnderlineOffset; }
+    long            GetAboveUnderlineSize()             { return mnAboveUnderlineSize; }
+    long            GetAboveUnderlineOffset()           { return mnAboveUnderlineOffset; }
+    long            GetAboveBoldUnderlineSize()         { return mnAboveBUnderlineSize; }
+    long            GetAboveBoldUnderlineOffset()       { return mnAboveBUnderlineOffset; }
+    long            GetAboveDoubleUnderlineSize()       { return mnAboveDUnderlineSize; }
+    long            GetAboveDoubleUnderlineOffset1()    { return mnAboveDUnderlineOffset1; }
+    long            GetAboveDoubleUnderlineOffset2()    { return mnAboveDUnderlineOffset2; }
+    long            GetAboveWavelineUnderlineSize()     { return mnAboveWUnderlineSize; }
+    long            GetAboveWavelineUnderlineOffset()   { return mnAboveWUnderlineOffset; }
+    long            GetStrikeoutSize()                  { return mnStrikeoutSize; }
+    long            GetStrikeoutOffset()                { return mnStrikeoutOffset; }
+    long            GetBoldStrikeoutSize()              { return mnBStrikeoutSize; }
+    long            GetBoldStrikeoutOffset()            { return mnBStrikeoutOffset; }
+    long            GetDoubleStrikeoutSize()            { return mnDStrikeoutSize; }
+    long            GetDoubleStrikeoutOffset1()         { return mnDStrikeoutOffset1; }
+    long            GetDoubleStrikeoutOffset2()         { return mnDStrikeoutOffset2; }
+
     // device independent font functions
     const OUString& GetFamilyName() const   { return maFamilyName; }
     FontFamily      GetFamilyType() const   { return meFamily; }
@@ -102,7 +168,55 @@ public:
     void            SetSubsettableFlag( bool bSubsettable )     { mbSubsettable = bSubsettable; }
     void            SetOrientationFlag( bool bCanRotate )       { mbOrientation = bCanRotate; }
 
+    void            ImplInitTextLineSize( const OutputDevice* pDev );
+    void            ImplInitAboveTextLineSize();
+
 private:
+    // font instance attributes from the font request
+    long            mnWidth;                    // Reference Width
+    short           mnOrientation;              // Rotation in 1/10 degrees
+
+    // font metrics measured for the font instance
+    long            mnAscent;                   // Ascent
+    long            mnDescent;                  // Descent
+    long            mnIntLeading;               // Internal Leading
+    long            mnExtLeading;               // External Leading
+    int             mnSlant;                    // Slant (Italic/Oblique)
+    long            mnMinKashida;               // Minimal width of kashida (Arabic)
+
+    // font attributes queried from the font instance
+    bool            mbScalableFont;
+    bool            mbTrueTypeFont;
+    bool            mbKernableFont;
+    bool            mbFullstopCentered;
+    long            mnBulletOffset;             // Offset to position non-print character
+
+    // font metrics that are usually derived from the measurements
+    long            mnUnderlineSize;            // Lineheight of Underline
+    long            mnUnderlineOffset;          // Offset from Underline to Baseline
+    long            mnBUnderlineSize;           // Height of bold underline
+    long            mnBUnderlineOffset;         // Offset from bold underline to baseline
+    long            mnDUnderlineSize;           // Height of double underline
+    long            mnDUnderlineOffset1;        // Offset from double underline to baseline
+    long            mnDUnderlineOffset2;        // Offset from double underline to baseline
+    long            mnWUnderlineSize;           // Height of WaveLine underline
+    long            mnWUnderlineOffset;         // Offset from WaveLine underline to baseline, but centrered to WaveLine
+    long            mnAboveUnderlineSize;       // Height of single underline (for Vertical Right)
+    long            mnAboveUnderlineOffset;     // Offset from single underline to baseline (for Vertical Right)
+    long            mnAboveBUnderlineSize;      // Height of bold underline (for Vertical Right)
+    long            mnAboveBUnderlineOffset;    // Offset from bold underline to baseline (for Vertical Right)
+    long            mnAboveDUnderlineSize;      // Height of double underline (for Vertical Right)
+    long            mnAboveDUnderlineOffset1;   // Offset from double underline to baseline (for Vertical Right)
+    long            mnAboveDUnderlineOffset2;   // Offset from double underline to baseline (for Vertical Right)
+    long            mnAboveWUnderlineSize;      // Height of WaveLine-strike-out (for Vertical Right)
+    long            mnAboveWUnderlineOffset;    // Offset from WaveLine-strike-out to baseline, but centrered to the WaveLine (for Vertical Right)
+    long            mnStrikeoutSize;            // Height of single strike-out
+    long            mnStrikeoutOffset;          // Offset from single strike-out to baseline
+    long            mnBStrikeoutSize;           // Height of bold strike-out
+    long            mnBStrikeoutOffset;         // Offset of bold strike-out to baseline
+    long            mnDStrikeoutSize;           // Height of double strike-out
+    long            mnDStrikeoutOffset1;        // Offset of double strike-out to baseline
+    long            mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
     // device independent variables
     OUString        maFamilyName;               // Font Family Name
     OUString        maStyleName;                // Font Style Name
@@ -172,126 +286,6 @@ public: // TODO: change to private
     void            copyAttributes(const FontSelectPatternAttributes &rAttributes);
 };
 
-// - ImplFontMetricData -
-
-class ImplFontMetricData : public ImplFontAttributes
-{
-public:
-    explicit        ImplFontMetricData( const FontSelectPattern& );
-
-    // font instance attributes from the font request
-    long            GetWidth()              { return mnWidth; }
-    short           GetOrientation()        { return mnOrientation; }
-
-    void            SetWidth(long nWidth)   { mnWidth=nWidth; }
-    void            SetOrientation(short nOrientation) { mnOrientation=nOrientation; }
-
-    // font metrics measured for the font instance
-    long            GetAscent()             { return mnAscent; }
-    long            GetDescent()            { return mnDescent; }
-    long            GetInternalLeading()    { return mnIntLeading; }
-    long            GetExternalLeading()    { return mnExtLeading; }
-    int             GetSlant()              { return mnSlant; }
-    long            GetMinKashida()         { return mnMinKashida; }
-
-    void            SetAscent(long nAscent) { mnAscent=nAscent; }
-    void            SetDescent(long nDescent) { mnDescent=nDescent; }
-    void            SetInternalLeading(long nIntLeading) { mnIntLeading = nIntLeading; }
-    void            SetExternalLeading(long nExtLeading) { mnExtLeading = nExtLeading; }
-    void            SetSlant(int nSlant)    { mnSlant=nSlant; }
-    void            SetMinKashida( long nMinKashida ) { mnMinKashida=nMinKashida; }
-
-    // font attributes queried from the font instance
-    bool            IsScalable()            { return mbScalableFont; }
-    bool            IsTrueTypeFont()        { return mbTrueTypeFont; }
-    bool            IsKernable()            { return mbKernableFont; }
-    bool            IsFullstopCentered()    { return mbFullstopCentered; }
-    long            GetBulletOffset()       { return mnBulletOffset; }
-
-    void            SetScalableFlag(bool bScalable) { mbScalableFont = bScalable; }
-    void            SetTrueTypeFlag(bool bTrueTypeFont) { mbTrueTypeFont = bTrueTypeFont; }
-    void            SetKernableFlag(bool bKernable) { mbKernableFont = bKernable; }
-    void            SetFullstopCenteredFlag(bool bFullstopCentered) { mbFullstopCentered = bFullstopCentered; }
-    void            SetBulletOffset(long nBulletOffset) { mnBulletOffset = nBulletOffset; }
-
-    // font metrics that are usually derived from the measurements
-    long            GetUnderlineSize()                  { return mnUnderlineSize; }
-    long            GetUnderlineOffset()                { return mnUnderlineOffset; }
-    long            GetBoldUnderlineSize()              { return mnBUnderlineSize; }
-    long            GetBoldUnderlineOffset()            { return mnBUnderlineOffset; }
-    long            GetDoubleUnderlineSize()            { return mnDUnderlineSize; }
-    long            GetDoubleUnderlineOffset1()         { return mnDUnderlineOffset1; }
-    long            GetDoubleUnderlineOffset2()         { return mnDUnderlineOffset2; }
-    long            GetWavelineUnderlineSize()          { return mnWUnderlineSize; }
-    long            GetWavelineUnderlineOffset()        { return mnWUnderlineOffset; }
-    long            GetAboveUnderlineSize()             { return mnAboveUnderlineSize; }
-    long            GetAboveUnderlineOffset()           { return mnAboveUnderlineOffset; }
-    long            GetAboveBoldUnderlineSize()         { return mnAboveBUnderlineSize; }
-    long            GetAboveBoldUnderlineOffset()       { return mnAboveBUnderlineOffset; }
-    long            GetAboveDoubleUnderlineSize()       { return mnAboveDUnderlineSize; }
-    long            GetAboveDoubleUnderlineOffset1()    { return mnAboveDUnderlineOffset1; }
-    long            GetAboveDoubleUnderlineOffset2()    { return mnAboveDUnderlineOffset2; }
-    long            GetAboveWavelineUnderlineSize()     { return mnAboveWUnderlineSize; }
-    long            GetAboveWavelineUnderlineOffset()   { return mnAboveWUnderlineOffset; }
-    long            GetStrikeoutSize()                  { return mnStrikeoutSize; }
-    long            GetStrikeoutOffset()                { return mnStrikeoutOffset; }
-    long            GetBoldStrikeoutSize()              { return mnBStrikeoutSize; }
-    long            GetBoldStrikeoutOffset()            { return mnBStrikeoutOffset; }
-    long            GetDoubleStrikeoutSize()            { return mnDStrikeoutSize; }
-    long            GetDoubleStrikeoutOffset1()         { return mnDStrikeoutOffset1; }
-    long            GetDoubleStrikeoutOffset2()         { return mnDStrikeoutOffset2; }
-
-    void            ImplInitTextLineSize( const OutputDevice* pDev );
-    void            ImplInitAboveTextLineSize();
-
-private:
-    // font instance attributes from the font request
-    long            mnWidth;                    // Reference Width
-    short           mnOrientation;              // Rotation in 1/10 degrees
-
-    // font metrics measured for the font instance
-    long            mnAscent;                   // Ascent
-    long            mnDescent;                  // Descent
-    long            mnIntLeading;               // Internal Leading
-    long            mnExtLeading;               // External Leading
-    int             mnSlant;                    // Slant (Italic/Oblique)
-    long            mnMinKashida;               // Minimal width of kashida (Arabic)
-
-    // font attributes queried from the font instance
-    bool            mbScalableFont;
-    bool            mbTrueTypeFont;
-    bool            mbKernableFont;
-    bool            mbFullstopCentered;
-    long            mnBulletOffset;             // Offset to position non-print character
-
-    // font metrics that are usually derived from the measurements
-    long            mnUnderlineSize;            // Lineheight of Underline
-    long            mnUnderlineOffset;          // Offset from Underline to Baseline
-    long            mnBUnderlineSize;           // Height of bold underline
-    long            mnBUnderlineOffset;         // Offset from bold underline to baseline
-    long            mnDUnderlineSize;           // Height of double underline
-    long            mnDUnderlineOffset1;        // Offset from double underline to baseline
-    long            mnDUnderlineOffset2;        // Offset from double underline to baseline
-    long            mnWUnderlineSize;           // Height of WaveLine underline
-    long            mnWUnderlineOffset;         // Offset from WaveLine underline to baseline, but centrered to WaveLine
-    long            mnAboveUnderlineSize;       // Height of single underline (for Vertical Right)
-    long            mnAboveUnderlineOffset;     // Offset from single underline to baseline (for Vertical Right)
-    long            mnAboveBUnderlineSize;      // Height of bold underline (for Vertical Right)
-    long            mnAboveBUnderlineOffset;    // Offset from bold underline to baseline (for Vertical Right)
-    long            mnAboveDUnderlineSize;      // Height of double underline (for Vertical Right)
-    long            mnAboveDUnderlineOffset1;   // Offset from double underline to baseline (for Vertical Right)
-    long            mnAboveDUnderlineOffset2;   // Offset from double underline to baseline (for Vertical Right)
-    long            mnAboveWUnderlineSize;      // Height of WaveLine-strike-out (for Vertical Right)
-    long            mnAboveWUnderlineOffset;    // Offset from WaveLine-strike-out to baseline, but centrered to the WaveLine (for Vertical Right)
-    long            mnStrikeoutSize;            // Height of single strike-out
-    long            mnStrikeoutOffset;          // Offset from single strike-out to baseline
-    long            mnBStrikeoutSize;           // Height of bold strike-out
-    long            mnBStrikeoutOffset;         // Offset of bold strike-out to baseline
-    long            mnDStrikeoutSize;           // Height of double strike-out
-    long            mnDStrikeoutOffset1;        // Offset of double strike-out to baseline
-    long            mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
-};
-
 // - ImplFontEntry -
 
 // TODO: rename ImplFontEntry to LogicalFontInstance
@@ -306,7 +300,7 @@ public:
 public: // TODO: make data members private
     ImplFontCache * m_pFontCache;
     FontSelectPattern  maFontSelData;           // FontSelectionData
-    ImplFontMetricData  maMetric;               // Font Metric
+    ImplFontAttributes  maMetric;               // Font Metric
     const ConvertChar*  mpConversion;           // used e.g. for StarBats->StarSymbol
 
     long            mnLineHeight;

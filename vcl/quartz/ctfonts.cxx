@@ -116,7 +116,7 @@ CoreTextStyle::~CoreTextStyle()
         CFRelease( mpStyleDict );
 }
 
-void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
+void CoreTextStyle::GetFontMetric( ImplFontAttributes& rMetric ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
@@ -129,7 +129,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
     rMetric.SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
     rMetric.SetInternalLeading( lrint( fAscent - fCapHeight ) );
 
-    // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
+    // since ImplFontAttributes::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
     rMetric.SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );

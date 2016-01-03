@@ -45,7 +45,7 @@ public:
 
     virtual void                    SetTextColor( SalColor nSalColor ) = 0;
     virtual sal_uInt16              SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
-    virtual void                    GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) = 0;
+    virtual void                    GetFontMetric( ImplFontAttributes*, int nFallbackLevel ) = 0;
     virtual const FontCharMapPtr    GetFontCharMap() const = 0;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
     virtual void                    GetDevFontList( PhysicalFontCollection* ) = 0;

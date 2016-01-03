@@ -452,7 +452,7 @@ FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttribut
 }
 
 void
-CairoTextRender::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
+CairoTextRender::GetFontMetric( ImplFontAttributes *pMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
