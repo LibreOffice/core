@@ -1091,7 +1091,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                     sal_Handle hFont = pFList->GetFirstFontInfo( aIdent );
                     if( nullptr != hFont )
                     {
-                        const vcl::FontInfo& rFInfo = FontList::GetFontInfo( hFont );
+                        const FontMetric& rFInfo = FontList::GetFontInfo( hFont );
                         if( RTL_TEXTENCODING_DONTKNOW != rFInfo.GetCharSet() )
                         {
                             bFound = true;

@@ -1215,7 +1215,7 @@ static char* getFonts (const char* pCommand)
         for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
             boost::property_tree::ptree aChildren;
-            const vcl::FontInfo& rInfo = pList->GetFontName(i);
+            const FontMetric& rInfo = pList->GetFontName(i);
             const sal_IntPtr* pAry = pList->GetSizeAry(rInfo);
             sal_uInt16 nSizeCount = 0;
             while (pAry[nSizeCount])
@@ -1529,7 +1529,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
         sal_uInt16 nFontCount = pList->GetFontNameCount();
         for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
-            const vcl::FontInfo& rInfo = pList->GetFontName(i);
+            const FontMetric& rInfo = pList->GetFontName(i);
             OUString aFontName = rInfo.GetName();
             if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
                 continue;

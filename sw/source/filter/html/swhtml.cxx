@@ -3793,7 +3793,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
                     sal_Handle hFont = pFList->GetFirstFontInfo( aFName );
                     if( nullptr != hFont )
                     {
-                        const vcl::FontInfo& rFInfo = FontList::GetFontInfo( hFont );
+                        const FontMetric& rFInfo = FontList::GetFontInfo( hFont );
                         if( RTL_TEXTENCODING_DONTKNOW != rFInfo.GetCharSet() )
                         {
                             bFound = true;
