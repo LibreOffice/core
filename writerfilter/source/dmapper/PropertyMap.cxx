@@ -423,6 +423,12 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     ,m_nLnc( 0 )
     ,m_ndxaLnn( 0 )
     ,m_nLnnMin( 0 )
+    ,m_bDefaultHeaderLinkToPrevious(true)
+    ,m_bEvenPageHeaderLinkToPrevious(true)
+    ,m_bFirstPageHeaderLinkToPrevious(true)
+    ,m_bDefaultFooterLinkToPrevious(true)
+    ,m_bEvenPageFooterLinkToPrevious(true)
+    ,m_bFirstPageFooterLinkToPrevious(true)
 {
     static sal_Int32 nNumber = 0;
     nSectionNumber = nNumber++;
@@ -798,72 +804,97 @@ bool SectionPropertyMap::HasFooter(bool bFirstPage) const
 
 #define MIN_HEAD_FOOT_HEIGHT 100 //minimum header/footer height
 
-void SectionPropertyMap::CopyHeaderFooter( uno::Reference< beans::XPropertySet > xPrevStyle,
-    uno::Reference< beans::XPropertySet > xStyle )
+void SectionPropertyMap::CopyHeaderFooterTextProperty (
+    uno::Reference< beans::XPropertySet > xPrevStyle,
+    uno::Reference< beans::XPropertySet > xStyle,
+    PropertyIds ePropId )
 {
     try {
-        // Loop over the Header and Footer properties to copy them
-        static const PropertyIds aProperties[] =
-        {
-            PROP_HEADER_TEXT,
-            PROP_FOOTER_TEXT,
-        };
+        OUString sName = getPropertyName( ePropId );
 
-        bool bHasPrevHeader = false;
-        bool bHasHeader = false;
-
-        OUString sHeaderIsOn = getPropertyName( PROP_HEADER_IS_ON );
-        if (xPrevStyle.is())
-            xPrevStyle->getPropertyValue( sHeaderIsOn ) >>= bHasPrevHeader;
+        SAL_INFO("writerfilter", "Copying " << sName);
+        uno::Reference< text::XTextCopy > xTxt;
         if (xStyle.is())
-            xStyle->getPropertyValue( sHeaderIsOn ) >>= bHasHeader;
-        bool bCopyHeader = bHasPrevHeader && !bHasHeader;
+            xTxt.set(xStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
 
-        if ( bCopyHeader )
-            xStyle->setPropertyValue( sHeaderIsOn, uno::makeAny( sal_True ) );
-
-        bool bHasPrevFooter = false;
-        bool bHasFooter = false;
-
-        OUString sFooterIsOn = getPropertyName( PROP_FOOTER_IS_ON );
+        uno::Reference< text::XTextCopy > xPrevTxt;
         if (xPrevStyle.is())
-            xPrevStyle->getPropertyValue( sFooterIsOn ) >>= bHasPrevFooter;
-        if (xStyle.is())
-            xStyle->getPropertyValue( sFooterIsOn ) >>= bHasFooter;
-        bool bCopyFooter = bHasPrevFooter && !bHasFooter;
+            xPrevTxt.set(xPrevStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
 
-        if ( bCopyFooter && xStyle.is() )
-            xStyle->setPropertyValue( sFooterIsOn, uno::makeAny( sal_True ) );
-
-        // Copying the text properties
-        for ( int i = 0, nNbProps = 2; i < nNbProps; i++ )
-        {
-            bool bIsHeader = ( i < nNbProps / 2 );
-            PropertyIds aPropId = aProperties[i];
-            OUString sName = getPropertyName( aPropId );
-
-            if ( ( bIsHeader && bCopyHeader ) || ( !bIsHeader && bCopyFooter ) )
-            {
-                SAL_INFO("writerfilter", "Copying " << sName);
-                // TODO has to be copied
-                uno::Reference< text::XTextCopy > xTxt;
-                if (xStyle.is())
-                    xTxt.set(xStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
-
-                uno::Reference< text::XTextCopy > xPrevTxt;
-                if (xPrevStyle.is())
-                    xPrevTxt.set(xPrevStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
-
-                xTxt->copyText( xPrevTxt );
-            }
-        }
+        xTxt->copyText( xPrevTxt );
     }
     catch ( const uno::Exception& e )
     {
-        SAL_INFO("writerfilter", "An exception occurred in SectionPropertyMap::CopyHeaderFooter( ) - " << e.Message);
+        SAL_INFO("writerfilter", "An exception occurred in SectionPropertyMap::CopyHeaderFooterTextProperty( ) - " << e.Message);
     }
 }
 
+// Copy headers and footers from the previous page style.
+void SectionPropertyMap::CopyHeaderFooter(
+    uno::Reference< beans::XPropertySet > xPrevStyle,
+    uno::Reference< beans::XPropertySet > xStyle,
+    bool bOmitRightHeader, bool bOmitLeftHeader,
+    bool bOmitRightFooter, bool bOmitLeftFooter)
+{
+    bool bHasPrevHeader = false;
+    bool bHeaderIsShared = true;
+    OUString sHeaderIsOn = getPropertyName( PROP_HEADER_IS_ON );
+    OUString sHeaderIsShared = getPropertyName( PROP_HEADER_IS_SHARED );
+    if ( xPrevStyle.is() )
+    {
+        xPrevStyle->getPropertyValue( sHeaderIsOn ) >>= bHasPrevHeader;
+        xPrevStyle->getPropertyValue( sHeaderIsShared ) >>= bHeaderIsShared;
+    }
+
+    if ( bHasPrevHeader )
+    {
+        xStyle->setPropertyValue( sHeaderIsOn, uno::makeAny( sal_True ) );
+        xStyle->setPropertyValue( sHeaderIsShared, uno::makeAny(bHeaderIsShared));
+        if ( !bOmitRightHeader )
+        {
+            CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
+                    PROP_HEADER_TEXT );
+        }
+        if ( !bHeaderIsShared && !bOmitLeftHeader )
+        {
+            CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
+                    PROP_HEADER_TEXT_LEFT );
+        }
+    }
+
+    bool bHasPrevFooter = false;
+    bool bFooterIsShared = true;
+    OUString sFooterIsOn = getPropertyName( PROP_FOOTER_IS_ON );
+    OUString sFooterIsShared = getPropertyName( PROP_FOOTER_IS_SHARED );
+    if ( xPrevStyle.is() )
+    {
+        xPrevStyle->getPropertyValue( sFooterIsOn ) >>= bHasPrevFooter;
+        xPrevStyle->getPropertyValue( sFooterIsShared ) >>= bFooterIsShared;
+    }
+
+    if ( bHasPrevFooter )
+    {
+        xStyle->setPropertyValue( sFooterIsOn, uno::makeAny( sal_True ) );
+        xStyle->setPropertyValue( sFooterIsShared, uno::makeAny(bFooterIsShared) );
+        if ( !bOmitRightFooter )
+        {
+            CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
+                    PROP_FOOTER_TEXT );
+        }
+        if ( !bFooterIsShared && !bOmitLeftFooter )
+        {
+            CopyHeaderFooterTextProperty( xPrevStyle, xStyle,
+                    PROP_FOOTER_TEXT_LEFT );
+        }
+    }
+}
+
+// Copy header and footer content from the previous docx section as needed.
+//
+// Any headers and footers which were not defined in this docx section
+// should be "linked" with the corresponding header or footer from the
+// previous section.  LO does not support linking of header/footer content
+// across page styles so we just copy the content from the previous section.
 void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl )
 {
     SAL_INFO("writerfilter", "START>>> SectionPropertyMap::CopyLastHeaderFooter()");
@@ -878,7 +909,21 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
                 rDM_Impl.GetPageStyles(),
                 rDM_Impl.GetTextFactory(),
                 bFirstPage );
-        CopyHeaderFooter( xPrevStyle, xStyle );
+
+        if (bFirstPage)
+        {
+            CopyHeaderFooter( xPrevStyle, xStyle,
+                    !m_bFirstPageHeaderLinkToPrevious, true,
+                    !m_bFirstPageFooterLinkToPrevious, true);
+        }
+        else
+        {
+            CopyHeaderFooter( xPrevStyle, xStyle,
+                    !m_bDefaultHeaderLinkToPrevious,
+                    !m_bEvenPageHeaderLinkToPrevious,
+                    !m_bDefaultFooterLinkToPrevious,
+                    !m_bEvenPageFooterLinkToPrevious);
+        }
     }
     SAL_INFO("writerfilter", "END>>> SectionPropertyMap::CopyLastHeaderFooter()");
 }
@@ -1289,6 +1334,30 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     }
     rDM_Impl.SetIsLastSectionGroup(false);
     rDM_Impl.SetIsFirstParagraphInSection(true);
+}
+
+// Clear the flag that says we should take the header/footer content from
+// the previous section.  This should be called when we encounter a header
+// or footer definition for this section.
+void SectionPropertyMap::ClearHeaderFooterLinkToPrevious(
+        bool bHeader, PageType eType )
+{
+    if( bHeader ) {
+        switch( eType ) {
+            case PAGE_FIRST: m_bFirstPageHeaderLinkToPrevious = false; break;
+            case PAGE_LEFT:  m_bEvenPageHeaderLinkToPrevious = false; break;
+            case PAGE_RIGHT: m_bDefaultHeaderLinkToPrevious = false; break;
+            // no default case as all enumeration values have been covered
+        }
+    }
+    else
+    {
+        switch( eType ) {
+            case PAGE_FIRST: m_bFirstPageFooterLinkToPrevious = false; break;
+            case PAGE_LEFT:  m_bEvenPageFooterLinkToPrevious = false; break;
+            case PAGE_RIGHT: m_bDefaultFooterLinkToPrevious = false; break;
+        }
+    }
 }
 
 class NamedPropertyValue {

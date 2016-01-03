@@ -1476,6 +1476,10 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     if(pSectionContext)
     {
+        // clear the "Link To Previous" flag so that the header/footer
+        // content is not copied from the previous section
+        pSectionContext->ClearHeaderFooterLinkToPrevious(bHeader, eType);
+
         uno::Reference< beans::XPropertySet > xPageStyle =
             pSectionContext->GetPageStyle(
                 GetPageStyles(),
