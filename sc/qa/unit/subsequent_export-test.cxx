@@ -351,13 +351,13 @@ void ScExportTest::testPasswordExport()
 
 void ScExportTest::testConditionalFormatExportODS()
 {
-    ScDocShellRef xShell = loadDoc("new_cond_format_test.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc("new_cond_format_test_export.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.Is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFile("new_cond_format_test.");
+    OUString aCSVFile("new_cond_format_test_export.");
     OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, &rDoc, 0);
@@ -367,14 +367,14 @@ void ScExportTest::testConditionalFormatExportODS()
 
 void ScExportTest::testConditionalFormatExportXLSX()
 {
-    ScDocShellRef xShell = loadDoc("new_cond_format_test.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc("new_cond_format_test_export.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     {
-        OUString aCSVFile("new_cond_format_test.");
+        OUString aCSVFile("new_cond_format_test_export.");
         OUString aCSVPath;
         createCSVPath( aCSVFile, aCSVPath );
         testCondFile(aCSVPath, &rDoc, 0);
