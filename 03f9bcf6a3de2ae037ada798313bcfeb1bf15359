@@ -34,6 +34,24 @@
       "revId": "03f9bcf6a3de2ae037ada798313bcfeb1bf15359",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2dc171e5",
+        "filename": "svtools/source/dialogs/ServerDetailsControls.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2016-01-04T14:14:46Z",
+      "side": 1,
+      "message": "It works for me (famous last words). I\u0027ve tested with kde, gtk and gen. -1 \u003d\u003e 0 and 80000 \u003d\u003e 65535.\n\nThat\u0027s why I pointed you to the ui file. If you search for \"adjustment1\" in the file, you can see it\u0027s attached to the port GtkSpinButton.",
+      "parentUuid": "dab17558_cd02653e",
+      "revId": "03f9bcf6a3de2ae037ada798313bcfeb1bf15359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
