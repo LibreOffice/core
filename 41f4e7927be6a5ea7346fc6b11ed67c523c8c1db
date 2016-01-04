@@ -1,0 +1,361 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_9020769d",
+        "filename": "chart2/source/inc/ExponentialRegressionCurveCalculator.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value \u003d0.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_302b8a84",
+        "filename": "chart2/source/inc/LogarithmicRegressionCurveCalculator.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value \u003d0.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_50260ebb",
+        "filename": "chart2/source/inc/MeanValueRegressionCurveCalculator.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value \u003d 0.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f01aa26d",
+        "filename": "chart2/source/inc/MovingAverageRegressionCurveCalculator.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value \u003d 0.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b0101a50",
+        "filename": "chart2/source/inc/PolynomialRegressionCurveCalculator.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value \u003d0.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_d0131e5b",
+        "filename": "chart2/source/inc/PotentialRegressionCurveCalculator.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value \u003d0.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_30042a14",
+        "filename": "chart2/source/inc/RegressionCurveCalculator.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value \u003d0.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9009962f",
+        "filename": "chart2/source/inc/RegressionCurveCalculator.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value \u003d0.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_0d074d1d",
+        "filename": "chart2/source/tools/LogarithmicRegressionCurveCalculator.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "How can aValueString be \"1\"?",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ad09e133",
+        "filename": "chart2/source/tools/MeanValueRegressionCurveCalculator.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Special value.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_cd0c2545",
+        "filename": "chart2/source/tools/PolynomialRegressionCurveCalculator.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Same problem with 0 as special value.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6d17f951",
+        "filename": "chart2/source/tools/PolynomialRegressionCurveCalculator.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "How can aValueString be \"1\" here?",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2d1df173",
+        "filename": "chart2/source/tools/PotentialRegressionCurveCalculator.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Again a case where \u003d0 has some special undocumented meaning.\n\nAlso ::sal_Int32 is unnecessary, use sal_Int32 directly.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8d121d61",
+        "filename": "chart2/source/tools/PotentialRegressionCurveCalculator.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "How can aValueString be \"1\" here? We already know that fabs(m_fIntercept) is not close to 1.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_0d30ed00",
+        "filename": "chart2/source/tools/RegressionCurveCalculator.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "This looks strange. We are using two different numbeer formats. rtl_math_StringFormat_G1 to round and nNumberFormatKey to generate the final string. Are these two always the same length?",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_cd2545c3",
+        "filename": "chart2/source/tools/RegressionCurveCalculator.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "This behavior is really not obvious and at least missing in the IDL documentation. I\u0027m not sure if I really like that special case here.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2d369103",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "This variable should be defined later.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4d31550b",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "I\u0027m a bit concerned that this might lead to a infinite loop. I\u0027d prefer if we have an upper bound for the number of iterations.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8d3b3deb",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Please follow the chart2/calc coding style which uses SvNumberFormatter* a; instead of SvNumberFormatter *a;",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ed55a91d",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Wow. This needs to be fixed as fast as possible in master and release branches.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6d409957",
+        "filename": "offapi/com/sun/star/chart2/XRegressionCurveCalculator.idl",
+        "patchSetId": 8
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-04T15:54:01Z",
+      "side": 1,
+      "message": "Typo.",
+      "revId": "41f4e7927be6a5ea7346fc6b11ed67c523c8c1db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
