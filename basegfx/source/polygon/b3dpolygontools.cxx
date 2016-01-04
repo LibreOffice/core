@@ -386,7 +386,7 @@ namespace basegfx
                     else if(fTools::equal(fY, fOne))
                     {
                         // point is a south polar point, no useful X-coordinate can be created. Set
-                        // Y-coordinte, though
+                        // Y-coordinate, though
                         if(bChangeY)
                         {
                             aTexCoor.setY(fOne);

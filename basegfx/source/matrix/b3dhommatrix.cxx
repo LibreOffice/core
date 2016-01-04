@@ -351,7 +351,7 @@ namespace basegfx
         aVUV.normalize();
         aVPN.normalize();
 
-        // build x-axis as peroendicular fron aVUV and aVPN
+        // build x-axis as perpendicular fron aVUV and aVPN
         B3DVector aRx(aVUV.getPerpendicular(aVPN));
         aRx.normalize();
 

@@ -617,7 +617,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
 
         Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
         //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
-        Log.d(LOGTAG, "savedInstanceSate");
+        Log.d(LOGTAG, "savedInstanceState");
     }
 
     @Override

@@ -1158,7 +1158,7 @@ struct ImplBitmapDevice
         clip masks/alpha masks/bitmaps that don't match our exact
         bitmap format.
 
-        This is to avoid the combinatorical explosion when dealing
+        This is to avoid the combinatorial explosion when dealing
         with n bitmap formats, which could be combined with n clip
         masks, alpha masks and bitmap masks (yielding a total of n^4
         combinations). Since each BitmapRenderer is specialized for

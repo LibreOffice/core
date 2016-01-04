@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 MacroChooser::MacroChooser( vcl::Window* pParnt, bool bCreateEntries )
     : SfxModalDialog(pParnt, "BasicMacroDialog", "modules/BasicIDE/ui/basicmacrodialog.ui")
     , bNewDelIsDel(true)
-    // the Sfx doesn't ask the BasicManger whether modified or not
+    // the Sfx doesn't ask the BasicManager whether modified or not
     // => start saving in case of a change without a into the BasicIDE.
     , bForceStoreBasic(false)
     , nMode(All)

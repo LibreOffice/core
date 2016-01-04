@@ -206,7 +206,7 @@ get-submodules:
 ifneq ($(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git),$(wildcard $(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git)))
 	cd $(SRCDIR) && ./g -f clone
 endif
-	@cd $(SRCDIR) && ./g -z # make sure the git hooks are in place enen if no submodules are needed
+	@cd $(SRCDIR) && ./g -z # make sure the git hooks are in place even if no submodules are needed
 
 else # these sources are from a tarball, so get the other source tarballs
 gb_LO_VER := $(shell . $(SRCDIR)/sources.ver && echo $$lo_sources_ver)
