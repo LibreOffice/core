@@ -28,6 +28,7 @@
 #include "svdata.hxx"
 #include "salgdi.hxx"
 #include "vcleventlisteners.hxx"
+#include "vcl/lazydelete.hxx"
 
 #include "opengl/zone.hxx"
 #include "opengl/program.hxx"
@@ -97,7 +98,8 @@ sal_uInt16 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
     return 0;
 }
 
-static std::vector<std::unique_ptr<FixedTextureAtlasManager>> sTextureAtlases;
+typedef std::vector<std::unique_ptr< FixedTextureAtlasManager > > TextureAtlasVector;
+static vcl::DeleteOnDeinit< TextureAtlasVector > gTextureAtlases(new TextureAtlasVector());
 
 }
 
@@ -381,6 +383,7 @@ void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int 
 {
     if (nWidth == nHeight)
     {
+        TextureAtlasVector &sTextureAtlases = *gTextureAtlases.get();
         if (sTextureAtlases.empty())
         {
             sTextureAtlases.push_back(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 16)));
@@ -582,8 +585,10 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
 {
     OUString FragShader("areaHashCRC64TFragmentShader");
 
-    static const OpenGLTexture aCRCTableTexture(512, 1, GL_RGBA, GL_UNSIGNED_BYTE,
-            vcl_get_crc64_table());
+    static vcl::DeleteOnDeinit<OpenGLTexture> gCRCTableTexture(
+        new OpenGLTexture(512, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                           vcl_get_crc64_table()));
+    OpenGLTexture &rCRCTableTexture = *gCRCTableTexture.get();
 
     // First Pass
 
@@ -603,7 +608,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
     pProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
 
-    pProgram->SetTexture("crc_table", (OpenGLTexture&)(aCRCTableTexture));
+    pProgram->SetTexture("crc_table", rCRCTableTexture);
     pProgram->SetTexture("sampler", rInputTexture);
     pProgram->DrawTexture(rInputTexture);
     pProgram->Clean();
@@ -631,7 +636,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
     pProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
 
-    pProgram->SetTexture("crc_table", (OpenGLTexture&)(aCRCTableTexture));
+    pProgram->SetTexture("crc_table", rCRCTableTexture);
     pProgram->SetTexture("sampler", aFirstPassTexture);
     pProgram->DrawTexture(aFirstPassTexture);
     pProgram->Clean();
