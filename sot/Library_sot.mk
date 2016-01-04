@@ -56,7 +56,6 @@ $(eval $(call gb_Library_add_exception_objects,sot,\
     sot/source/base/object \
     sot/source/base/exchange \
     sot/source/base/filelist \
-    sot/source/base/factory \
     sot/source/sdstor/stg \
     sot/source/sdstor/stgavl \
     sot/source/sdstor/stgcache \
