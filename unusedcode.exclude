@@ -30,4 +30,5 @@ comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::share
 FontCharMap::GetDefaultMap(bool)
 OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
 SvpSalFrame::enableDamageTracker(bool)
+SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 
