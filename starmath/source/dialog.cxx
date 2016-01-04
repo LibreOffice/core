@@ -36,6 +36,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfx.hrc>
 #include <osl/diagnose.h>

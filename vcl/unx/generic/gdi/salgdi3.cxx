@@ -40,6 +40,7 @@
 #include <vcl/printerinfomanager.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/fontcharmap.hxx>
 
 #include "fontmanager.hxx"
 #include "impfont.hxx"

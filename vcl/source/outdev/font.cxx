@@ -26,6 +26,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/fontcharmap.hxx>
 
 #include "sallayout.hxx"
 #include "svdata.hxx"

@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <rtl/textenc.h>
