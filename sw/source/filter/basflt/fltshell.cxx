@@ -81,11 +81,14 @@ static SwContentNode* GetContentNode(SwDoc* pDoc, SwNodeIndex& rIdx, bool bNext)
     return pCNd;
 }
 
-static OUString lcl_getTypePath(const OUString& rType)
+static OUString lcl_getTypePath(OUString& rType)
 {
     OUString aRet;
-    if (rType == "urn:tscp:names:baf:1.1")
-        aRet = "tscp/baf.rdf";
+    if (rType.startsWith("urn:bails"))
+    {
+        rType = "urn:bails";
+        aRet = "tscp/bails.rdf";
+    }
     return aRet;
 }
 
@@ -634,11 +637,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
                     for (const std::pair<OUString, OUString>& rAttribute : pMark->GetAttributes())
                     {
-                        sal_Int32 nIndex = rAttribute.first.indexOf('#');
-                        if (nIndex == -1)
-                            continue;
-
-                        OUString aTypeNS = rAttribute.first.copy(0, nIndex);
+                        OUString aTypeNS = rAttribute.first;
                         OUString aMetadataFilePath = lcl_getTypePath(aTypeNS);
                         if (aMetadataFilePath.isEmpty())
                             continue;

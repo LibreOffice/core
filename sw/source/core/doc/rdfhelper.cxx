@@ -9,6 +9,7 @@
 
 #include <rdfhelper.hxx>
 
+#include <com/sun/star/rdf/Literal.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
@@ -68,7 +69,7 @@ void SwRDFHelper::addTextNodeStatement(const OUString& rType, const OUString& rP
     uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
     uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(*rTextNode.GetDoc(), &rTextNode), uno::UNO_QUERY);
     uno::Reference<rdf::XURI> xKey = rdf::URI::create(xComponentContext, rKey);
-    uno::Reference<rdf::XURI> xValue = rdf::URI::create(xComponentContext, rValue);
+    uno::Reference<rdf::XLiteral> xValue = rdf::Literal::create(xComponentContext, rValue);
     xGraph->addStatement(xSubject, xKey, xValue);
 }
 
