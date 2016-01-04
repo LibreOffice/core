@@ -79,7 +79,7 @@ public:
     void writeModifications();
 
     void flushModifications();
-        // must be called with configmgr::lock unaquired; must be called before
+        // must be called with configmgr::lock unacquired; must be called before
         // shutdown if writeModifications has ever been called (probably
         // indirectly, via removeExtensionXcuFile)
 

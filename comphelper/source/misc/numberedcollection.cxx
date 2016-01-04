@@ -75,7 +75,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
         sal_IntPtr pComponent = reinterpret_cast<sal_IntPtr>( xComponent.get() );
         TNumberedItemHash::const_iterator pIt = m_lComponents.find (pComponent);
 
-        // a) component already exists - return it's number directly
+        // a) component already exists - return its number directly
         if (pIt != m_lComponents.end())
             return pIt->second.nNumber;
 

@@ -348,7 +348,7 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException, std::
     case Node::KIND_GROUP:
         //TODO: Should a specific type be returned for a non-extensible group
         // with homogeneous members or for an extensible group that currently
-        // has only homegeneous members?
+        // has only homogeneous members?
         return cppu::UnoType<void>::get();
     case Node::KIND_SET:
         return cppu::UnoType<void>::get(); //TODO: correct?

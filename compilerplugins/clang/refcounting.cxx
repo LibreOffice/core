@@ -159,7 +159,7 @@ bool containsXInterfaceSubclass(const Type* pType0) {
     const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
     if (pRecordDecl) {
         pRecordDecl = pRecordDecl->getCanonicalDecl();
-        // these classes override acquire/release and forwards to it's parent
+        // these classes override acquire/release and forwards to its parent
         if (isDerivedFrom(pRecordDecl, "ListenerMultiplexerBase")) { // module UnoTools
             return false;
         }

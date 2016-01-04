@@ -122,7 +122,7 @@ namespace
 
         @return
             <TRUE/> if and only if the client could be found and
-            <arg>rPos</arg> has been filled with it's position
+            <arg>rPos</arg> has been filled with its position
     */
     static bool implLookupClient(
             const AccessibleEventNotifier::TClientId nClient,
@@ -157,8 +157,8 @@ namespace comphelper
             new ::cppu::OInterfaceContainerHelper( lclMutex::get() );
             // note that we're using our own mutex here, so the listener containers for all
             // our clients share this same mutex.
-            // this is a reminiscense to the days where the notifier was asynchronous. Today this is
-            // completely nonsense, and potentially slowing down the Office me thinks ...
+            // this is a reminiscence to the days where the notifier was asynchronous. Today this is
+            // completely nonsense, and potentially slowing down the Office me thinks...
 
         // add the client
         Clients::get().insert( ClientMap::value_type( nNewClientId, pNewListeners ) );
