@@ -317,7 +317,7 @@ abstract class Axis {
 
         // if overscroll is disabled and we're trying to overscroll, reset the displacement
         // to remove any excess. Using getExcess alone isn't enough here since it relies on
-        // getOverscroll which doesn't take into account any new displacment being applied
+        // getOverscroll which doesn't take into account any new displacement being applied
         if (getOverScrollMode() == View.OVER_SCROLL_NEVER) {
             if (mDisplacement + getOrigin() < getPageStart()) {
                 mDisplacement = getPageStart() - getOrigin();

@@ -294,7 +294,7 @@ namespace basegfx
                 }
                 else
                 {
-                    // stop recustion
+                    // stop recursion
                     nMaxRecursionDepth = 0;
                 }
             }

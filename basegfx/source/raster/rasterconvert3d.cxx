@@ -61,7 +61,7 @@ namespace basegfx
             OSL_ENSURE(nStopLine >= nStartLine, "nStopLine is bigger than nStartLine (!)");
 
             // sort global entries by Y, X once. After this, the vector
-            // is seen as frozen. Pointers to it's entries will be used in the following code.
+            // is seen as frozen. Pointers to its entries will be used in the following code.
             ::std::sort(maLineEntries.begin(), maLineEntries.end());
 
             // local parameters

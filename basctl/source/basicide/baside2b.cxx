@@ -713,7 +713,7 @@ void EditorWindow::HandleAutoCloseParen()
     if( aLine.getLength() > 0 && aLine[aSel.GetEnd().GetIndex()-1] != '(' )
     {
         GetEditView()->InsertText(")");
-        //leave the cursor on it's place: inside the parenthesis
+        //leave the cursor on its place: inside the parenthesis
         TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
         GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
     }
@@ -734,7 +734,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
     if( aLine.getLength() > 0 && !aLine.endsWith("\"") && (aPortions.back().tokenType != TT_STRING) )
     {
         GetEditView()->InsertText("\"");
-        //leave the cursor on it's place: inside the two double quotes
+        //leave the cursor on its place: inside the two double quotes
         TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
         GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
     }
