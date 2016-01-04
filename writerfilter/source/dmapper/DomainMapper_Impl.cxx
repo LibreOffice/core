@@ -3163,17 +3163,37 @@ uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyper
 {
     //create a copy of the level and add two new entries - hyperlink start and end
     bool bChapterNoSeparator  = !sChapterNoSeparator.isEmpty();
-    sal_Int32 nAdd = (bHyperlinks && bChapterNoSeparator) ? 4 : 2;
-    uno::Sequence< beans::PropertyValues > aNewLevel( aLevel.getLength() + nAdd);
-    beans::PropertyValues* pNewLevel = aNewLevel.getArray();
+    std::vector< beans::PropertyValues > copiedLevel;
+    const OUString& rLinkStart = getPropertyName(PROP_TOKEN_HYPERLINK_START);
+    const OUString& rLinkEnd = getPropertyName(PROP_TOKEN_HYPERLINK_END);
+    const beans::PropertyValues* pTokens = aLevel.getConstArray();
+    for (sal_Int32 nEntry = 0; nEntry < aLevel.getLength(); ++nEntry)
+    {
+        const beans::PropertyValue* pProperties = pTokens[nEntry].getConstArray();
+        const sal_Int32 nProperties = pTokens[nEntry].getLength();
+        for (sal_Int32 j = 0; j < nProperties; j++)
+        {
+            if (pProperties[j].Name == "TokenType")
+            {
+                OUString sTokenType;
+                pProperties[j].Value >>= sTokenType;
+                if(sTokenType != rLinkStart && sTokenType != rLinkEnd)
+                {
+                    copiedLevel.push_back(pTokens[nEntry]);
+                    break;
+                }
+            }
+        }
+    }
+
     if( bHyperlinks )
     {
         beans::PropertyValues aHyperlink(1);
         aHyperlink[0].Name = getPropertyName( PROP_TOKEN_TYPE );
-        aHyperlink[0].Value <<= getPropertyName( PROP_TOKEN_HYPERLINK_START );
-        pNewLevel[0] = aHyperlink;
-        aHyperlink[0].Value <<= getPropertyName( PROP_TOKEN_HYPERLINK_END );
-        pNewLevel[aNewLevel.getLength() -1] = aHyperlink;
+        aHyperlink[0].Value <<= rLinkStart;
+        copiedLevel.insert((copiedLevel.begin()), aHyperlink);
+        aHyperlink[0].Value <<= rLinkEnd;
+        copiedLevel.insert(copiedLevel.end(), aHyperlink);
     }
     if( bChapterNoSeparator )
     {
@@ -3183,24 +3203,25 @@ uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyper
         aChapterNo[1].Name = getPropertyName( PROP_CHAPTER_FORMAT );
         //todo: is ChapterFormat::Number correct?
         aChapterNo[1].Value <<= (sal_Int16)text::ChapterFormat::NUMBER;
-        pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
+        std::vector< beans::PropertyValues >::iterator chapterIt = copiedLevel.end();
+        --chapterIt;
+        copiedLevel.insert(chapterIt, aChapterNo);
 
         beans::PropertyValues aChapterSeparator(2);
         aChapterSeparator[0].Name = getPropertyName( PROP_TOKEN_TYPE );
         aChapterSeparator[0].Value <<= getPropertyName( PROP_TOKEN_TEXT );
         aChapterSeparator[1].Name = getPropertyName( PROP_TEXT );
         aChapterSeparator[1].Value <<= sChapterNoSeparator;
-        pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
+        copiedLevel.insert(chapterIt, aChapterSeparator);
     }
     //copy the 'old' entries except the last (page no)
-    for( sal_Int32 nToken = 0; nToken < aLevel.getLength() - 1; ++nToken)
-    {
-        pNewLevel[nToken + 1] = aLevel[nToken];
-    }
-    //copy page no entry (last or last but one depending on bHyperlinks
-    sal_Int32 nPageNo = aNewLevel.getLength() - (bHyperlinks ? 2 : 3);
-    pNewLevel[nPageNo] = aLevel[aLevel.getLength() - 1];
-
+    uno::Sequence< beans::PropertyValues > aNewLevel(copiedLevel.size());
+    beans::PropertyValues* pNewLevel = aNewLevel.getArray();
+    sal_Int32 nToken = 0;
+    for( std::vector< beans::PropertyValues >::const_iterator it = copiedLevel.begin(); it != copiedLevel.end(); ++it, ++nToken)
+     {
+        pNewLevel[nToken] = *it;
+     }
     return aNewLevel;
 }
 

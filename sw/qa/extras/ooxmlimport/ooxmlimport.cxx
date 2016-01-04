@@ -3011,6 +3011,52 @@ DECLARE_OOXMLIMPORT_TEST(testTdf94043, "tdf94043.docx")
     // This was 0, the separator line was not visible due to 0 width.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), getProperty<sal_Int32>(xTextColumns, "SeparatorLineWidth"));
 }
+sal_Int32 getUrlTokenCount(uno::Reference<lang::XComponent> xComponent )
+{
+    sal_Int32 linkCount = 0;
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(xComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes( ), uno::UNO_QUERY);
+    uno::Reference<text::XDocumentIndex> xTOC(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTOCProp(xTOC, uno::UNO_QUERY);
+    uno::Reference< container::XIndexReplace> xLevelFormats;
+    xTOCProp->getPropertyValue("LevelFormat") >>= xLevelFormats;
+    uno::Sequence< beans::PropertyValues > aLevel;
+    xLevelFormats->getByIndex( 0 ) >>= aLevel;
+    const beans::PropertyValues* pTokens = aLevel.getConstArray();
+    OUString rLinkStart = "TokenHyperlinkStart";
+    OUString rLinkEnd = "TokenHyperlinkEnd";
+
+    for (sal_Int32 nEntry = 0; nEntry < aLevel.getLength(); ++nEntry)
+    {
+        const beans::PropertyValue* pProperties = pTokens[nEntry].getConstArray();
+        const sal_Int32 nProperties = pTokens[nEntry].getLength();
+        for (sal_Int32 j = 0; j < nProperties; j++)
+        {
+            if (pProperties[j].Name == "TokenType")
+            {
+                OUString sTokenType;
+                pProperties[j].Value >>= sTokenType;
+                if(sTokenType == rLinkStart || sTokenType == rLinkEnd)
+                {
+                    ++linkCount;
+                }
+            }
+        }
+    }
+    return linkCount;
+}
+DECLARE_OOXMLIMPORT_TEST(testTdf95768a, "tdf95768_withURLTOX.docx")
+{
+    sal_Int32 linkCount = getUrlTokenCount( mxComponent );
+    CPPUNIT_ASSERT_EQUAL(linkCount, sal_Int32(0));
+}
+DECLARE_OOXMLIMPORT_TEST(testTdf95768b, "tdf95768_withoutURLTOX.docx")
+{
+    sal_Int32 linkCount = getUrlTokenCount( mxComponent );
+    CPPUNIT_ASSERT_EQUAL(linkCount, sal_Int32(2));
+}
+
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
