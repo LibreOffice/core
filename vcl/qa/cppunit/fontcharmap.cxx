@@ -12,7 +12,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 
-#include <vcl/metric.hxx>
+#include <vcl/fontcharmap.hxx>
 
 class VclFontCharMapTest : public test::BootstrapFixture
 {

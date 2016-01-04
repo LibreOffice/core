@@ -32,6 +32,7 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <vcl/textrectinfo.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>

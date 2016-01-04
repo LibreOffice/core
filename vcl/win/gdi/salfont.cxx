@@ -40,6 +40,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/fontcharmap.hxx>
 
 #include "fontsubset.hxx"
 #include "outdev.h"

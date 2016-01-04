@@ -40,6 +40,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <config_cairo_canvas.h>
 
 #include "fontsubset.hxx"
