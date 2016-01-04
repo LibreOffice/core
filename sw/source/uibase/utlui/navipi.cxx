@@ -735,7 +735,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
         FloatingWindow* pFloat =  pDockingParent->GetFloatingWindow();
         Size aMinSize(pFloat ? m_nWishWidth : 0, pFloat ? m_nZoomOutInit : 0);
         pDockingParent->SetMinOutputSizePixel(aMinSize);
-        SetOutputSizePixel( Size( m_nWishWidth, m_nZoomOutInit));
+        SetOutputSizePixel( Size( m_nWishWidth, m_nZoomOutInit*2));
 
         SfxDockingWindow* pSfxDockingParent = dynamic_cast<SfxDockingWindow*>(pParent);
         if (pSfxDockingParent != nullptr)
