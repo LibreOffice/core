@@ -700,7 +700,7 @@ void PieChart::createShapes()
                     awt::Point aMaximumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
                         aNewOrigin, m_xLogicTarget, m_pShapeFactory, m_nDimension ) );
 
-                    //enable draging of piesegments
+                    //enable dragging of piesegments
                     OUString aPointCIDStub( ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT
                         , pSeries->getSeriesParticle()
                         , ObjectIdentifier::getPieSegmentDragMethodServiceName()

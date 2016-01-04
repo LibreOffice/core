@@ -304,7 +304,7 @@ drawing::CameraGeometry ThreeDHelper::getDefaultCameraGeometry( bool bPie )
 
     if( bPie )
     {
-        vrp = drawing::Position3D( 0.0, 0.0, 87591.2408759124 );//--> 5 percent perspecitve
+        vrp = drawing::Position3D( 0.0, 0.0, 87591.2408759124 );//--> 5 percent perspective
         vpn = drawing::Direction3D( 0.0, 0.0, 1.0 );
         vup = drawing::Direction3D( 0.0, 1.0, 0.0 );
     }

@@ -23,7 +23,7 @@ namespace chart
 {
 
 #define CHART_3DOBJECT_SEGMENTCOUNT ((sal_Int32)32)
-//There needs to be a little distance betweengrid lines and walls in 3D, otherwise the lines are partly hidden by the walls
+//There needs to be a little distance between grid lines and walls in 3D, otherwise the lines are partly hidden by the walls
 #define GRID_TO_WALL_DISTANCE (1.0)
 
 const double    ZDIRECTION = 1.0;

@@ -766,7 +766,7 @@ void Chart2ImportTest::testAxisTextRotationXLSX()
 /* TODO : temporarily disabled.
 void Chart2ImportTest::testTextCanOverlapXLSX()
 {
-    // fdo#84647 : To check textoverlap value is imported correclty.
+    // fdo#84647 : To check textoverlap value is imported correctly.
     load("/chart2/qa/extras/data/xlsx/", "chart-text-can-overlap.xlsx");
     uno::Reference< chart::XDiagram > mxDiagram;
     uno::Reference< beans::XPropertySet > xAxisProp;
