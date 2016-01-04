@@ -1395,7 +1395,7 @@ void Window::ImplSetReallyVisible()
     }
 }
 
-void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
+void Window::ImplAddDel( ImplDelData* pDel ) const
 {
     if ( IsDisposed() )
     {
@@ -1406,13 +1406,13 @@ void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompat
     DBG_ASSERT( !pDel->mpWindow, "Window::ImplAddDel(): cannot add ImplDelData twice !" );
     if( !pDel->mpWindow )
     {
-        pDel->mpWindow = this;  // #112873# store ref to this window, so pDel can remove itself
+        pDel->mpWindow = const_cast<vcl::Window*>(this);  // #112873# store ref to this window, so pDel can remove itself
         pDel->mpNext = mpWindowImpl->mpFirstDel;
         mpWindowImpl->mpFirstDel = pDel;
     }
 }
 
-void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
+void Window::ImplRemoveDel( ImplDelData* pDel ) const
 {
     pDel->mpWindow = nullptr;      // #112873# pDel is not associated with a Window anymore
 
