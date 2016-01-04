@@ -1168,7 +1168,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
             ID_FUNCTION_GRP_DATETIME;
             U2S( HID_FUNC_KALENDERWOCHE );
-            2;  0;  0;
+            2;  0;  1;
             0;
         };
         String 2 // Name of Parameter 1
