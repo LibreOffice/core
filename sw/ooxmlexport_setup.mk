@@ -33,7 +33,12 @@ define sw_ooxmlexport_components
 	dbaccess/util/dba \
 	drawinglayer/drawinglayer \
 	embeddedobj/util/embobj \
-	embeddedobj/source/msole/emboleobj$(if $(filter WNT,$(OS)),.windows) \
+	$(if $(filter WNT,$(OS)), \
+		$(if $(DISABLE_ATL),, \
+			embeddedobj/source/msole/emboleobj.windows \
+		), \
+		embeddedobj/source/msole/emboleobj \
+	) \
 	filter/source/config/cache/filterconfig1 \
 	filter/source/odfflatxml/odfflatxml \
 	filter/source/xmlfilterdetect/xmlfd \
