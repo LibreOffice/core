@@ -78,31 +78,31 @@ SwAutoFormatGetDocNode::SwAutoFormatGetDocNode( const SwNodes* pNds )
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
-    bDelSet( false ),
-    pChgSet( &rSet ),
-    pTheChgdSet( &rTheSet )
+    m_bDelSet( false ),
+    m_pChgSet( &rSet ),
+    m_pTheChgdSet( &rTheSet )
 {
 }
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSetChg& rChgSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
-    bDelSet( true ),
-    pTheChgdSet( rChgSet.pTheChgdSet )
+    m_bDelSet( true ),
+    m_pTheChgdSet( rChgSet.m_pTheChgdSet )
 {
-    pChgSet = new SwAttrSet( *rChgSet.pChgSet );
+    m_pChgSet = new SwAttrSet( *rChgSet.m_pChgSet );
 }
 
 SwAttrSetChg::~SwAttrSetChg()
 {
-    if( bDelSet )
-        delete pChgSet;
+    if( m_bDelSet )
+        delete m_pChgSet;
 }
 
 #ifdef DBG_UTIL
 void SwAttrSetChg::ClearItem( sal_uInt16 nWhch )
 {
-    OSL_ENSURE( bDelSet, "The Set may not be changed!" );
-    pChgSet->ClearItem( nWhch );
+    OSL_ENSURE( m_bDelSet, "The Set may not be changed!" );
+    m_pChgSet->ClearItem( nWhch );
 }
 #endif
 
