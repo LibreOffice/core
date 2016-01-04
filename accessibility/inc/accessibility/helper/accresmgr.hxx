@@ -42,7 +42,7 @@ private:
     ~TkResMgr() { }
 
     // we'll instantiate one static member of the following class,
-    // which in it's dtor ensures that m_pImpl will be deleted
+    // which in its dtor ensures that m_pImpl will be deleted
     class EnsureDelete
     {
     public:

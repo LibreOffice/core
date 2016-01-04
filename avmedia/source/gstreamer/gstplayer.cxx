@@ -212,7 +212,7 @@ void MissingPluginInstaller::detach(Player const * source) {
         }
     }
     if (join.is()) {
-        // missing cancelability of gst_install_plugins_sync
+        // missing cancellability of gst_install_plugins_sync
         join->join();
     }
 }
