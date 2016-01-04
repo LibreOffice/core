@@ -31,8 +31,8 @@
 
 class ImplOpenGLTexture
 {
-public:
     int    mnRefCount;
+public:
     GLuint mnTexture;
     int    mnWidth;
     int    mnHeight;
@@ -47,6 +47,7 @@ public:
     ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
     ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight );
     ~ImplOpenGLTexture();
+    void Dispose();
 
     bool InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
 
@@ -70,11 +71,14 @@ public:
             if (mpSlotReferences->at(nSlotNumber) == 0)
                 mnFreeSlots++;
         }
+
+        if (mnRefCount <= 0)
+            delete this;
     }
 
-    bool ExistRefs()
+    bool IsUnique()
     {
-        return mnRefCount > 0;
+        return mnRefCount == 1;
     }
 
     bool InitializeSlots(int nSlotSize);
