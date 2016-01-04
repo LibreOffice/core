@@ -336,7 +336,7 @@ struct TxtBox: public FBox
 
     short     dummy1;                             // to not change structure size */
     short     cap_len;
-    short     next;
+    short     next_box;
     short     dummy2;                             // to not change structure size */
     unsigned char reserved1;
 /**
