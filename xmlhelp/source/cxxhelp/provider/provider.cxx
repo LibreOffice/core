@@ -20,16 +20,14 @@
 #include <config_folders.h>
 
 #include <stdio.h>
+#include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
 #include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
-#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -259,175 +257,38 @@ void ContentProvider::init()
     osl::MutexGuard aGuard( m_aMutex );
 
     isInitialized = true;
-    uno::Reference< lang::XMultiServiceFactory > sProvider(
-        getConfiguration() );
-    uno::Reference< container::XHierarchicalNameAccess > xHierAccess(
-        getHierAccess( sProvider,
-                       "org.openoffice.Office.Common" ) );
 
-    OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
+    OUString instPath(
+        officecfg::Office::Common::Path::Current::Help::get(m_xContext));
     if( instPath.isEmpty() )
         // try to determine path from default
         instPath = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
     // replace anything like $(instpath);
     subst( instPath );
 
-    OUString stylesheet( getKey( xHierAccess,"Help/HelpStyleSheet" ) );
-    try
-    {
-        // now adding as configuration change listener for the stylesheet
-        uno::Reference< container::XNameAccess> xAccess(
-            xHierAccess, uno::UNO_QUERY );
-        if( xAccess.is() )
-        {
-            uno::Any aAny =
-                xAccess->getByName("Help");
-            aAny >>= m_xContainer;
-            if( m_xContainer.is() )
-                m_xContainer->addContainerListener( this );
-        }
-    }
-    catch( uno::Exception const & )
-    {
-    }
+    OUString stylesheet(
+        officecfg::Office::Common::Help::HelpStyleSheet::get(m_xContext));
 
-    xHierAccess = getHierAccess( sProvider, "org.openoffice.Setup" );
+    // now adding as configuration change listener for the stylesheet
+    m_xContainer.set(
+        officecfg::Office::Common::Help::get(m_xContext),
+        css::uno::UNO_QUERY_THROW);
+    m_xContainer->addContainerListener( this );
 
     OUString setupversion(
-        getKey( xHierAccess,"Product/ooSetupVersion" ) );
-    OUString setupextension;
-
-    try
-    {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
-              configuration::theDefaultProvider::get( m_xContext );
-
-        uno::Sequence < uno::Any > lParams(1);
-        beans::PropertyValue                       aParam ;
-        aParam.Name    = "nodepath";
-        aParam.Value <<= OUString("/org.openoffice.Setup/Product");
-        lParams[0] = uno::makeAny(aParam);
-
-        // open it
-        uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess",
-                    lParams) );
-
-        uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
-        uno::Any aRet = xDirectAccess->getByName("ooSetupExtension");
-
-        aRet >>= setupextension;
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
+        officecfg::Setup::Product::ooSetupVersion::get(m_xContext));
+    OUString setupextension(
+        officecfg::Setup::Product::ooSetupExtension::get(m_xContext));
     OUString productversion( setupversion + " " + setupextension );
 
-    xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );
-    bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
+    bool showBasic = officecfg::Office::Common::Help::ShowBasic::get(
+        m_xContext);
     m_pDatabases = new Databases( showBasic,
                                   instPath,
                                   utl::ConfigManager::getProductName(),
                                   productversion,
                                   stylesheet,
                                   m_xContext );
-}
-
-uno::Reference< lang::XMultiServiceFactory >
-ContentProvider::getConfiguration() const
-{
-    uno::Reference< lang::XMultiServiceFactory > xProvider;
-    if( m_xContext.is() )
-    {
-        try
-        {
-            xProvider = configuration::theDefaultProvider::get( m_xContext );
-        }
-        catch( const uno::Exception& )
-        {
-            OSL_ENSURE( xProvider.is(), "can not instantiate configuration" );
-        }
-    }
-
-    return xProvider;
-}
-
-uno::Reference< container::XHierarchicalNameAccess >
-ContentProvider::getHierAccess(
-    const uno::Reference< lang::XMultiServiceFactory >& sProvider,
-    const char* file )
-{
-    uno::Reference< container::XHierarchicalNameAccess > xHierAccess;
-
-    if( sProvider.is() )
-    {
-        uno::Sequence< uno::Any > seq( 1 );
-        OUString sReaderService(
-            OUString(
-                "com.sun.star.configuration.ConfigurationAccess" ) );
-
-        seq[ 0 ] <<= OUString::createFromAscii( file );
-
-        try
-        {
-            xHierAccess =
-                uno::Reference< container::XHierarchicalNameAccess >(
-                    sProvider->createInstanceWithArguments(
-                        sReaderService, seq ),
-                    uno::UNO_QUERY );
-        }
-        catch( const uno::Exception& )
-        {
-        }
-    }
-    return xHierAccess;
-}
-
-OUString
-ContentProvider::getKey(
-    const uno::Reference< container::XHierarchicalNameAccess >& xHierAccess,
-    const char* key )
-{
-    OUString instPath;
-    if( xHierAccess.is() )
-    {
-        uno::Any aAny;
-        try
-        {
-            aAny =
-                xHierAccess->getByHierarchicalName(
-                    OUString::createFromAscii( key ) );
-        }
-        catch( const container::NoSuchElementException& )
-        {
-        }
-        aAny >>= instPath;
-    }
-    return instPath;
-}
-
-bool
-ContentProvider::getBooleanKey(
-    const uno::Reference< container::XHierarchicalNameAccess >& xHierAccess,
-    const char* key )
-{
-  bool ret = false;
-  if( xHierAccess.is() )
-  {
-      uno::Any aAny;
-      try
-      {
-          aAny =
-            xHierAccess->getByHierarchicalName(
-                OUString::createFromAscii( key ) );
-      }
-      catch( const container::NoSuchElementException& )
-      {
-      }
-      aAny >>= ret;
-  }
-  return ret;
 }
 
 void ContentProvider::subst( OUString& instpath )

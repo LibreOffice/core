@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <ucbhelper/providerhelper.hxx>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -155,22 +154,6 @@ namespace chelp {
         // private methods
 
         void init();
-
-        css::uno::Reference< css::lang::XMultiServiceFactory >
-        getConfiguration() const;
-
-        static css::uno::Reference< css::container::XHierarchicalNameAccess >
-        getHierAccess( const css::uno::Reference<  css::lang::XMultiServiceFactory >& sProvider,
-                       const char* file );
-
-        static OUString
-        getKey( const css::uno::Reference< css::container::XHierarchicalNameAccess >& xHierAccess,
-                const char* key );
-
-        static bool
-        getBooleanKey(
-                    const css::uno::Reference< css::container::XHierarchicalNameAccess >& xHierAccess,
-                    const char* key);
 
         static void subst( OUString& instpath );
     };
