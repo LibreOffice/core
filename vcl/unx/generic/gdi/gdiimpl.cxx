@@ -603,7 +603,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
 
         if( !xDDB )
         {
-            stderr0( "SalGraphics::CopyBits !pSrcGraphics->GetBitmap()\n" );
+            SAL_WARN( "vcl", "SalGraphics::CopyBits !pSrcGraphics->GetBitmap()" );
             return;
         }
 
@@ -613,7 +613,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         drawBitmap( aPosAry, *xDDB );
     }
     else {
-        stderr0( "X11SalGraphicsImpl::CopyBits from Printer not yet implemented\n" );
+        SAL_WARN( "vcl", "X11SalGraphicsImpl::CopyBits from Printer not yet implemented" );
     }
 }
 
@@ -1667,7 +1667,7 @@ SalColor X11SalGraphicsImpl::getPixel( long nX, long nY )
         XGetWindowAttributes( mrParent.GetXDisplay(), mrParent.GetDrawable(), &aAttrib );
         if( aAttrib.map_state != IsViewable )
         {
-            stderr0( "X11SalGraphics::GetPixel drawable not viewable\n" );
+            SAL_WARN( "vcl", "X11SalGraphics::GetPixel drawable not viewable" );
             return 0;
         }
     }
@@ -1680,7 +1680,7 @@ SalColor X11SalGraphicsImpl::getPixel( long nX, long nY )
                                  ZPixmap );
     if( !pXImage )
     {
-        stderr0( "X11SalGraphics::GetPixel !XGetImage()\n" );
+        SAL_WARN( "vcl", "X11SalGraphics::GetPixel !XGetImage()" );
         return 0;
     }
 

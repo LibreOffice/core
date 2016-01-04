@@ -351,12 +351,6 @@ inline Display *X11SalGraphics::GetXDisplay() const
 inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 { return GetColormap().GetPixel( nSalColor ); }
 
-#ifdef DBG_UTIL
-#define stderr0( s )            fprintf( stderr, s )
-#else
-#define stderr0( s )            ;
-#endif
-
 #endif // INCLUDED_VCL_INC_UNX_SALGDI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

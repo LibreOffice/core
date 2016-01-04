@@ -1996,7 +1996,7 @@ void X11SalFrame::Minimize()
 
     if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
     {
-        stderr0( "X11SalFrame::Minimize on withdrawn window\n" );
+        SAL_WARN( "vcl", "X11SalFrame::Minimize on withdrawn window" );
         return;
     }
 
@@ -2028,7 +2028,7 @@ void X11SalFrame::Restore()
 
     if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
     {
-        stderr0( "X11SalFrame::Restore on withdrawn window\n" );
+        SAL_WARN( "vcl", "X11SalFrame::Restore on withdrawn window" );
         return;
     }
 
@@ -3802,7 +3802,7 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
 #endif
     else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::SAL_QUITEVENT ) )
     {
-        stderr0( "X11SalFrame::Dispatch Quit\n" );
+        SAL_WARN( "vcl", "X11SalFrame::Dispatch Quit" );
         Close(); // ???
         return 1;
     }
