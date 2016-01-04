@@ -569,7 +569,7 @@ public:
 
     struct DrawEllipse : public RegionRenderer
     {
-        RENDER_DETAILS(ellipse,KEY_E,5000)
+        RENDER_DETAILS(ellipse,KEY_E,500)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) override
         {
@@ -789,7 +789,7 @@ public:
 
     struct DrawClipped : public RegionRenderer
     {
-        RENDER_DETAILS(clip,KEY_D,100)
+        RENDER_DETAILS(clip,KEY_D,10)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) override
         {
