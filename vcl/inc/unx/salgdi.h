@@ -47,8 +47,6 @@ class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class X11OpenGLSalGraphicsImpl;
 class X11OpenGLSalVirtualDevice;
-class PspSalPrinter;
-class PspSalInfoPrinter;
 class ServerFont;
 class ImplLayoutArgs;
 class ServerFontLayout;

@@ -30,9 +30,6 @@
 #include "fontsubset.hxx"
 #include <config_cairo_canvas.h>
 
-class PspSalPrinter;
-class PspSalInfoPrinter;
-class ServerFont;
 class ImplLayoutArgs;
 class ServerFontLayout;
 class PhysicalFontCollection;
