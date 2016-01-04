@@ -394,7 +394,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
         chart2::StackingDirection eCommonDirection = chart2::StackingDirection_NO_STACKING;
         bool bDirectionInitialized = false;
 
-        // first series is irrelvant for stacking, start with second, unless
+        // first series is irrelevant for stacking, start with second, unless
         // there is only one series
         const sal_Int32 nSeriesCount = aSeries.getLength();
         sal_Int32 i = (nSeriesCount == 1) ? 0: 1;
@@ -1360,7 +1360,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                     for( sal_Int32 nS = 0; !bFound && nS < aSeriesList.getLength(); ++nS )
                     {
 
-                        // We found the series we are interrested in !
+                        // We found the series we are interested in!
                         if( xGivenDataSeries==aSeriesList[nS] )
                         {
                             sal_Int32 nOldSeriesIndex = nS;

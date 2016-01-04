@@ -63,7 +63,7 @@ private:
 };
 
 /** A guard which, in its destructor, restores the model state it found in the constructor. If
-    <member>commitAction</member> is called inbetween, the restouration is not performed.
+    <member>commitAction</member> is called inbetween, the restoration is not performed.
  */
 class UndoLiveUpdateGuard : public UndoGuard
 {

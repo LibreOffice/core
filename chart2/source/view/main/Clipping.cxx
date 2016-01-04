@@ -69,7 +69,7 @@ bool lcl_CLIPt(double fDenom,double fNum, double & fTE, double & fTL)
     return true;
 }
 
-/** @descr  The line given by it's two endpoints rP0 and rP1 is clipped at the rectangle
+/** @descr  The line given by its two endpoints rP0 and rP1 is clipped at the rectangle
             rRectangle.  If there is at least a part of it visible then sal_True is returned and
             the endpoints of that part are stored in rP0 and rP1.  The points rP0 and rP1
             may have the same coordinates.

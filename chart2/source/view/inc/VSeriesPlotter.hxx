@@ -147,7 +147,7 @@ public:
     (0==AttachedAxisIndex or a not set AttachedAxisIndex property indicates that this series should be scaled at the main y-axis;
     1==AttachedAxisIndex indicates that the series should be scaled at the first secondary axis if there is any otherwise at the main y axis
     and so on.
-    The parameter nAxisIndex matches this DataSereis property 'AttachedAxisIndex'.
+    The parameter nAxisIndex matches this DataSeries property 'AttachedAxisIndex'.
     nAxisIndex must be greater than 0. nAxisIndex==1 referres to the first secondary axis.
     )
     */
