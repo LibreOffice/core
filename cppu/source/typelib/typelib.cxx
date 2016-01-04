@@ -383,10 +383,10 @@ static inline void typelib_typedescription_initTables(
 {
     typelib_InterfaceTypeDescription * pITD = reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD);
 
-    std::vector<sal_Bool> aReadWriteAttributes(pITD->nAllMembers);
+    std::vector<bool> aReadWriteAttributes(pITD->nAllMembers);
     for ( sal_Int32 i = pITD->nAllMembers; i--; )
     {
-        aReadWriteAttributes[i] = sal_False;
+        aReadWriteAttributes[i] = false;
         if( typelib_TypeClass_INTERFACE_ATTRIBUTE == pITD->ppAllMembers[i]->eTypeClass )
         {
             typelib_TypeDescription * pM = nullptr;
