@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <vcl/fontcharmap.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include "headless/svpgdi.hxx"
 #include <config_cairo_canvas.h>

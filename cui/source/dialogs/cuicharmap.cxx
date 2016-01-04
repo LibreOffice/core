@@ -31,6 +31,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <svl/stritem.hxx>
 
 #include <cuires.hrc>

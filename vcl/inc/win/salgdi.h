@@ -28,6 +28,7 @@
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
 #include <vcl/fontcapabilities.hxx>
+#include <vcl/fontcharmap.hxx>
 
 #include <memory>
 #include <unordered_set>

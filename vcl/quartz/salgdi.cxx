@@ -33,6 +33,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <vcl/metric.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 

@@ -24,6 +24,7 @@
 #include <brdwin.hxx>
 #include <window.h>
 
+#include <vcl/textrectinfo.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

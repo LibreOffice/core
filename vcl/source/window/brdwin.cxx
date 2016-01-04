@@ -22,6 +22,7 @@
 #include <brdwin.hxx>
 #include <window.h>
 
+#include <vcl/textrectinfo.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/syswin.hxx>
