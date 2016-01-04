@@ -1866,7 +1866,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             // SbxVariable* defaultProp = NULL; unused variable
             // LHS try determine if a default prop exists
             // again like in StepPUT (see there too ) we are tweaking the
-            // heursitics again for when to assign an object reference or
+            // heuristics again for when to assign an object reference or
             // use default memebers if they exists
             // #FIXME we really need to get to the bottom of this mess
             bool bObjAssign = false;

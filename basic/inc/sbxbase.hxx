@@ -43,7 +43,7 @@ struct SbxAppData
     SbxBasicFormater   *pBasicFormater;    // Pointer to Format()-Command helper class
 
     LanguageType        eBasicFormaterLangType;
-    // It might be useful to store this class 'global' because some string reosurces are saved here
+    // It might be useful to store this class 'global' because some string resources are saved here
 
     SbxAppData();
     ~SbxAppData();

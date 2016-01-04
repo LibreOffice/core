@@ -303,7 +303,7 @@ namespace vclcanvas
             else
             {
                 // mixed open/closed state. Cannot render open polygon
-                // via DrawPolyPolygon(), since that implicitley
+                // via DrawPolyPolygon(), since that implicitly
                 // closed every polygon. OTOH, no need to distinguish
                 // further and render closed polygons via
                 // DrawPolygon(), and open ones via DrawPolyLine():

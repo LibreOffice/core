@@ -1636,7 +1636,7 @@ void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
-    // intantiate the help class
+    // instantiate the help class
     BasResId aId( RID_BASIC_START );
     BasicStringList_Impl aMyStringList( aId, sal_uInt16(nId & ERRCODE_RES_MASK) );
 

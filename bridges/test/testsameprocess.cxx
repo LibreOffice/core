@@ -112,7 +112,7 @@ int main( int argc, char *argv[] )
 {
     if( argc < 2 )
     {
-        printf( "usage : testsamprocess host:port\n" );
+        printf( "usage : testsameprocess host:port\n" );
         return 0;
     }
 

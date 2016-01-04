@@ -1238,7 +1238,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
       /** Returns the visibility of the tool function bar.
 
-           This method works independently from a conneiction or loaded document.
+           This method works independently from a connection or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
