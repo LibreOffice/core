@@ -207,9 +207,10 @@ void ScInterpreter::ScGetDayOfWeek()
 
 void ScInterpreter::ScGetWeekOfYear()
 {
-    if ( MustHaveParamCount( GetByte(), 2 ) )
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        short nFlag = (short) ::rtl::math::approxFloor(GetDouble());
+        short nFlag = (nParamCount == 1) ? 1 : (short) ::rtl::math::approxFloor(GetDouble());
 
         Date aDate = *(pFormatter->GetNullDate());
         aDate += (long)::rtl::math::approxFloor(GetDouble());
