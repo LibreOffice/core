@@ -54,7 +54,7 @@ extern "C" {
 // * The names of set element nodes are encoded as dconf path segments as
 //   follows: each occurrence of U+0000 NULL is replace by the three characters
 //   "\00", each occurrence of U+002F SOLIDUS is replaced by the three
-//   characters "\2F", and each ocurrence of U+005C REVERSE SOLIDUS is replaced
+//   characters "\2F", and each occurrence of U+005C REVERSE SOLIDUS is replaced
 //   by the three characters "\5C".
 //
 // * Set elements (which must themselves be either sets or groups) map to

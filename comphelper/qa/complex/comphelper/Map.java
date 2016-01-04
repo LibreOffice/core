@@ -313,7 +313,7 @@ public class Map
         // - if a map's value type is a scalar type, or a string, then nothing but this
         //   type should be accepted
         // - if a map's value type is an interface type, then values should be accepted if
-        //   they contain a derived interface, or the interrface itself, or if they can be
+        //   they contain a derived interface, or the interface itself, or if they can be
         //   queried for this interface (actually, the latter rule is not tested with the
         //   above matrix)
         // - if a map's value type is a struct or exception, then values should be accepted

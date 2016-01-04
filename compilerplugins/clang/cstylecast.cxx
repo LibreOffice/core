@@ -142,7 +142,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_ToVoid ) {
         return true;
     }
-    // ignore integral-type conversions for now, there is unsufficient agreement about
+    // ignore integral-type conversions for now, there is insufficient agreement about
     // the merits of C++ style casting in this case
     if( expr->getCastKind() == CK_IntegralCast ) {
         return true;

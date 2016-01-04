@@ -120,7 +120,7 @@ bool MergeClasses::VisitCXXConstructExpr( const CXXConstructExpr* pCXXConstructE
     if (ignoreLocation(pCXXConstructExpr)) {
         return true;
     }
-    // ignore calls when a sub-class is constructing it's superclass
+    // ignore calls when a sub-class is constructing its superclass
     if (pCXXConstructExpr->getConstructionKind() != CXXConstructExpr::ConstructionKind::CK_Complete) {
         return true;
     }

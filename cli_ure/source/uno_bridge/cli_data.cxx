@@ -1428,7 +1428,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
 
 /**
    @param info
-       The expected target type. Currently info is provdided when this method is called
+       The expected target type. Currently info is provided when this method is called
        to convert the in/out and out parameters of a call from cli to uno. Then info
        is always a byref type, e.g. "System.String&". info is used for Any and Enum conversion.
    @param bDontCreateObj
@@ -1537,7 +1537,7 @@ void Bridge::map_to_cli(
         //create the type
         System::Type^ cliType= loadCliType(td.get()->pTypeName);
         //detect if we recursivly convert inherited structures
-        //If this point is reached because of a recursive call during convering a
+        //If this point is reached because of a recursive call during covering a
         //struct then we must not create a new object rather we use the one in
         // cli_data argument.
         System::Object^ cliObj;

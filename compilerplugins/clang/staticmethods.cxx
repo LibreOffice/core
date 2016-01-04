@@ -138,7 +138,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (startsWith(aFilename, SRCDIR "/include/canvas") || startsWith(aFilename, SRCDIR "/canvas")) {
         return true;
     }
-    // classes that have static data and some kind of weird reference-counting trick in it's constructor
+    // classes that have static data and some kind of weird reference-counting trick in its constructor
     if (aParentName == "LinguOptions" || aParentName == "svtools::EditableExtendedColorConfig"
         || aParentName == "svtools::ExtendedColorConfig" || aParentName == "SvtMiscOptions"
         || aParentName == "SvtAccessibilityOptions" || aParentName == "svtools::ColorConfig"

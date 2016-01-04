@@ -268,7 +268,7 @@ struct CliProxy: public uno_Interface
 
        If the interface has more than one interface in its inheritance chain,
        that is Type.GetInterfaces return more than one Type, then the mapping
-       table is partially initiallized. On the first call the mappings for the
+       table is partially initialized. On the first call the mappings for the
        methods of the belonging interface are created.
 
        The implementation assumes that the order of interface methods as

@@ -68,7 +68,7 @@ Step 4: Changing the versions in the cli_ure module.
 
 Open the file cli_ure\version\version.txt.
 The file contains name/value pairs, such as:CLI_URETYPES_NEW_VERSION=1.0.3.0.
-The first part of the names represent the assemly which they are referring to. So obviously 
+The first part of the names represent the assembly which they are referring to. So obviously
 entries starting with CLI_URETYPES refer to the cli_uretypes.dll. Entries which contain the part "POLICY" refer
 to the policy assembly. For example:
 CLI_URETYPES_POLICY_VERSION refers to the policy assembly for cli_uretypes which is named 
