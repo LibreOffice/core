@@ -147,9 +147,9 @@ public:
     bool            operator == (const SmFormat &rFormat) const;
     inline bool     operator != (const SmFormat &rFormat) const;
 
-    void RequestApplyChanges() const
+    void RequestApplyChanges()
     {
-        const_cast<SmFormat *>(this)->Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
+        Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
     }
 
 };
