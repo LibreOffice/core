@@ -11,6 +11,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <i18nutil/unicode.hxx>
 
 // This should only be used when a commonly used font incorrectly declares its

@@ -23,6 +23,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/fontcharmap.hxx>
 
 #include "generic/printergfx.hxx"
 #include "generic/genpspgraphics.h"

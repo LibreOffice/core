@@ -34,6 +34,7 @@
 #include "vcl/strhelper.hxx"
 #include "vcl/ppdparser.hxx"
 #include <vcl/embeddedfontshelper.hxx>
+#include <vcl/fontcharmap.hxx>
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"

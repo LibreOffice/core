@@ -37,6 +37,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
+#include <vcl/fontcharmap.hxx>
 
 // MS Windows defines
 
