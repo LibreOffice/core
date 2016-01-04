@@ -42,35 +42,45 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
+VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXWindow )
     : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     , OAccessibleImplementationAccess( )
 {
-    mpVCLXindow = pVCLXindow;
-    mxWindow = pVCLXindow;
+    m_xVCLXWindow = pVCLXWindow;
 
     m_pSolarLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
 
-    DBG_ASSERT( pVCLXindow->GetWindow(), "VCLXAccessibleComponent - no window!" );
-    if ( pVCLXindow->GetWindow() )
+    DBG_ASSERT( pVCLXWindow->GetWindow(), "VCLXAccessibleComponent - no window!" );
+    m_xEventSource = pVCLXWindow->GetWindow();
+    if ( m_xEventSource )
     {
-      pVCLXindow->GetWindow()->AddEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
-      pVCLXindow->GetWindow()->AddChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
+        m_xEventSource->AddEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
+        m_xEventSource->AddChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
     }
 
     // announce the XAccessible of our creator to the base class
-    lateInit( pVCLXindow );
+    lateInit( pVCLXWindow );
+}
+
+VCLXWindow* VCLXAccessibleComponent::GetVCLXWindow() const
+{
+    return m_xVCLXWindow.get();
+}
+
+void VCLXAccessibleComponent::DisconnectEvents()
+{
+    if ( m_xEventSource )
+    {
+        m_xEventSource->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
+        m_xEventSource->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
+        m_xEventSource.clear();
+    }
 }
 
 VCLXAccessibleComponent::~VCLXAccessibleComponent()
 {
     ensureDisposed();
-
-    if ( mpVCLXindow && mpVCLXindow->GetWindow() )
-    {
-        mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
-        mpVCLXindow->GetWindow()->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
-    }
+    DisconnectEvents();
 
     delete m_pSolarLock;
     m_pSolarLock = NULL;
@@ -104,13 +114,11 @@ uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() th
 
 IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-
-        /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
-         * might have been destroyed by the previous VCLEventListener (if no AT tool
-         * is running), e.g. sub-toolbars in impress.
-         */
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #122218# */ && (pEvent->GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
+    /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
+     * might have been destroyed by the previous VCLEventListener (if no AT tool
+     * is running), e.g. sub-toolbars in impress.
+     */
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) && m_xVCLXWindow.is() /* #122218# */ && (pEvent->GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
     {
         DBG_ASSERT( static_cast<VclWindowEvent*>(pEvent)->GetWindow(), "Window???" );
         if( !static_cast<VclWindowEvent*>(pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
@@ -123,8 +131,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
 
 IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #i68079# */ )
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) && m_xVCLXWindow.is() /* #i68079# */ )
     {
         DBG_ASSERT( static_cast<VclWindowEvent*>(pEvent)->GetWindow(), "Window???" );
         if( !static_cast<VclWindowEvent*>(pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
@@ -192,10 +199,8 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
     {
         case VCLEVENT_OBJECT_DYING:
         {
-            pAccWindow->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
-            pAccWindow->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
-            mxWindow.clear();
-            mpVCLXindow = NULL;
+            DisconnectEvents();
+            m_xVCLXWindow.clear();
         }
         break;
         case VCLEVENT_WINDOW_CHILDDESTROYED:
@@ -344,16 +349,11 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
 
 void VCLXAccessibleComponent::disposing()
 {
-    if ( mpVCLXindow && mpVCLXindow->GetWindow() )
-    {
-        mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
-        mpVCLXindow->GetWindow()->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
-    }
+    DisconnectEvents();
 
     AccessibleExtendedComponentHelper_BASE::disposing();
 
-    mxWindow.clear();
-    mpVCLXindow = NULL;
+    m_xVCLXWindow.clear();
 }
 
 VclPtr<vcl::Window> VCLXAccessibleComponent::GetWindow() const
@@ -770,8 +770,8 @@ void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException, std::e
     OExternalLockGuard aGuard( this );
 
     uno::Reference< accessibility::XAccessibleStateSet > xStates = getAccessibleStateSet();
-    if ( mxWindow.is() && xStates.is() && xStates->contains( accessibility::AccessibleStateType::FOCUSABLE ) )
-        mxWindow->setFocus();
+    if ( m_xVCLXWindow.is() && xStates.is() && xStates->contains( accessibility::AccessibleStateType::FOCUSABLE ) )
+        m_xVCLXWindow->setFocus();
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::RuntimeException, std::exception)
