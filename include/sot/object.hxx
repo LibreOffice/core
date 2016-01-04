@@ -25,11 +25,8 @@
 #include <tools/ref.hxx>
 #include <sot/sotdllapi.h>
 
-class SotFactory;
-
 class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
-friend class SotFactory;
     sal_uInt16  nOwnerLockCount;
     bool        bOwner;
     bool        bInClose;         // TRUE, in DoClose
@@ -40,9 +37,6 @@ protected:
 
 public:
                         SotObject();
-
-    static SotFactory *        ClassFactory();
-    virtual void *             Cast( const SotFactory * );
 
     bool                Owner() const { return bOwner; }
 

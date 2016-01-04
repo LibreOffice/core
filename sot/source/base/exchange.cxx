@@ -22,14 +22,16 @@
 #include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <tools/globname.hxx>
-#include <sotdata.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sysformats.hxx>
 #include <comphelper/classids.hxx>
 #include <rtl/instance.hxx>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/documentconstants.hxx>
+
+#include <vector>
 
 using namespace::com::sun::star::uno;
 using namespace::com::sun::star::datatransfer;
@@ -208,11 +210,35 @@ namespace
     struct FormatArray_Impl
         : public rtl::StaticAggregate<
             const DataFlavorRepresentation, ImplFormatArray_Impl > {};
+
+
+    typedef std::vector<css::datatransfer::DataFlavor*> tDataFlavorList;
+
+    struct SotData_Impl
+    {
+        tDataFlavorList* pDataFlavorList;
+
+        SotData_Impl(): pDataFlavorList(nullptr) {}
+        ~SotData_Impl()
+        {
+            if (pDataFlavorList)
+            {
+                for( tDataFlavorList::iterator aI = pDataFlavorList->begin(),
+                     aEnd = pDataFlavorList->end(); aI != aEnd; ++aI)
+                {
+                    delete *aI;
+                }
+                delete pDataFlavorList;
+            }
+        }
+    };
+
+    struct ImplData : public rtl::Static<SotData_Impl, ImplData> {};
 }
 
 static tDataFlavorList& InitFormats_Impl()
 {
-    SotData_Impl * pSotData = SOTDATA();
+    SotData_Impl *pSotData = &ImplData::get();
     if( !pSotData->pDataFlavorList )
         pSotData->pDataFlavorList = new tDataFlavorList();
     return *pSotData->pDataFlavorList;

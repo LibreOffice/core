@@ -18,60 +18,16 @@
  */
 
 #include <sot/object.hxx>
-#include <factory.hxx>
-#include <sotdata.hxx>
 
-/************** class SotObject ******************************************/
-class SotObjectFactory : public SotFactory
-{
-public:
-    explicit SotObjectFactory(const SvGlobalName& rName)
-        : SotFactory( rName )
-    {
-    }
-};
-
-SotFactory * SotObject::ClassFactory()
-{
-    SotFactory **ppFactory = &(SOTDATA()->pSotObjectFactory);
-    if( !*ppFactory )
-    {
-        *ppFactory = new SotObjectFactory(
-                           SvGlobalName( 0xf44b7830, 0xf83c, 0x11d0,
-                               0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) );
-    }
-    return *ppFactory;
-}
-
-void * SotObject::Cast( const SotFactory * pFact )
-{
-    void * pRet = nullptr;
-    if( !pFact || pFact == ClassFactory() )
-        pRet = this;
-    return pRet;
-}
-
-/*************************************************************************
-|*    SotObject::SotObject()
-|*
-|*    Beschreibung
-*************************************************************************/
 SotObject::SotObject()
     : nOwnerLockCount( 0 )
     , bOwner      ( true )
     , bInClose    ( false )
 {
-    SotFactory::IncSvObjectCount( this );
 }
 
-/*************************************************************************
-|*
-|*    SotObject::~SotObject()
-|*
-*************************************************************************/
 SotObject::~SotObject()
 {
-    SotFactory::DecSvObjectCount( this );
 }
 
 void SotObject::OwnerLock

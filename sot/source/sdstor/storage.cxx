@@ -36,45 +36,9 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <factory.hxx>
-#include <sotdata.hxx>
-
 #include <memory>
 
 using namespace ::com::sun::star;
-
-/************** class SotStorageStream ***********************************/
-class SotStorageStreamFactory : public SotFactory
-{
-public:
-    explicit SotStorageStreamFactory(const SvGlobalName& rName)
-        : SotFactory(rName)
-    {
-    }
-};
-
-SotFactory * SotStorageStream::ClassFactory()
-{
-    SotFactory **ppFactory = &(SOTDATA()->pSotStorageStreamFactory);
-    if( !*ppFactory )
-    {
-        *ppFactory = new SotStorageStreamFactory(
-                            SvGlobalName( 0xd7deb420, 0xf902, 0x11d0,
-                                0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) );
-        (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
-    }
-    return *ppFactory;
-}
-
-void * SotStorageStream::Cast( const SotFactory * pFact )
-{
-    void * pRet = nullptr;
-    if( !pFact || pFact == ClassFactory() )
-        pRet = this;
-    if( !pRet )
-        pRet = SotObject::Cast( pFact );
-    return pRet;
-}
 
 SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
 {
@@ -289,40 +253,6 @@ bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& 
         OSL_FAIL("Not implemented!");
         return false;
     }
-}
-
-/************** class SotStorage ******************************************
-*************************************************************************/
-class SotStorageFactory : public SotFactory
-{
-public:
-    explicit SotStorageFactory(const SvGlobalName & rName)
-        : SotFactory(rName)
-    {
-    }
-};
-
-SotFactory * SotStorage::ClassFactory()
-{
-    SotFactory **ppFactory = &(SOTDATA()->pSotStorageFactory);
-    if( !*ppFactory )
-    {
-        *ppFactory = new SotStorageFactory(
-                               SvGlobalName( 0x980ce7e0, 0xf905, 0x11d0,
-                                        0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) );
-        (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
-    }
-    return *ppFactory;
-}
-
-void * SotStorage::Cast( const SotFactory * pFact )
-{
-    void * pRet = nullptr;
-    if( !pFact || pFact == ClassFactory() )
-        pRet = this;
-    if( !pRet )
-        pRet = SotObject::Cast( pFact );
-    return pRet;
 }
 
 /************************************************************************
