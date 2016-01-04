@@ -287,41 +287,41 @@ void SvBaseEventDescriptor::getMacroFromAny(
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         PropertyValue& aValue = aSequence[i];
-        if (aValue.Name.equals(sEventType))
+        if (aValue.Name == sEventType)
         {
             OUString sTmp;
             aValue.Value >>= sTmp;
-            if (sTmp.equals(sStarBasic))
+            if (sTmp == sStarBasic)
             {
                 eType = STARBASIC;
                 bTypeOK = true;
             }
-            else if (sTmp.equals(sJavaScript))
+            else if (sTmp == sJavaScript)
             {
                 eType = JAVASCRIPT;
                 bTypeOK = true;
             }
-            else if (sTmp.equals(sScript))
+            else if (sTmp == sScript)
             {
                 eType = EXTENDED_STYPE;
                 bTypeOK = true;
             }
-            else if (sTmp.equals(sNone))
+            else if (sTmp == sNone)
             {
                 bNone = true;
                 bTypeOK = true;
             }
             // else: unknown script type
         }
-        else if (aValue.Name.equals(sMacroName))
+        else if (aValue.Name == sMacroName)
         {
             aValue.Value >>= sMacroVal;
         }
-        else if (aValue.Name.equals(sLibrary))
+        else if (aValue.Name == sLibrary)
         {
             aValue.Value >>= sLibVal;
         }
-        else if (aValue.Name.equals(sScript))
+        else if (aValue.Name == sScript)
         {
             aValue.Value >>= sScriptVal;
         }
