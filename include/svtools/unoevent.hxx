@@ -150,19 +150,6 @@ protected:
 
     /// get the event ID for the name; return 0 if not supported
     sal_uInt16 getMacroID(const OUString& rName) const;
-
-    /// create PropertyValues and Any from macro
-    void getAnyFromMacro(
-        css::uno::Any& aAny,   // Any to be filled by Macro values
-        const SvxMacro& rMacro);
-
-    /// create macro from PropertyValues (in an Any)
-    void getMacroFromAny(
-        SvxMacro& aMacro,       // reference to be filled by Any
-        const css::uno::Any& rAny)
-            throw (
-                css::lang::IllegalArgumentException);
-
 };
 
 
