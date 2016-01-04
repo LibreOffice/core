@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_add8c1f0",
+        "filename": "svtools/source/dialogs/ServerDetailsControls.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2016-01-04T12:47:00Z",
+      "side": 1,
+      "message": "Min defaults to 0 and max is already set in the UI file, so you don\u0027t need to set them again.\n\nsvtools/uiconfig/ui/placeedit.ui:6",
+      "revId": "03f9bcf6a3de2ae037ada798313bcfeb1bf15359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
