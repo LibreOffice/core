@@ -620,7 +620,9 @@ Any ComponentContext::lookupMap( OUString const & rName )
             ret = pEntry->value;
     }
     guard.clear();
-    try_dispose( xInstance );
+    if (ret != xInstance) {
+        try_dispose( xInstance );
+    }
     return ret;
 }
 
