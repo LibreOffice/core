@@ -199,10 +199,6 @@
               test="preceding-sibling::value[((not($lang) and not(@xml:lang)) or $lang=@xml:lang) and ((not($module) and not(@install:module)) or $module=@install:module)]">
             <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has values with matching xml:lang attribute <xsl:value-of select="$lang"/> and inconsistent install:module attributes.</xsl:message>
           </xsl:when>
-          <xsl:when
-              test="preceding-sibling::value[((not($lang) and not(@xml:lang)) or $lang=@xml:lang) and (($module and not(@install:module)) or (not($module) and @install:module) or $module!=@install:module)]">
-            <xsl:message>ATTENTION: Property '<xsl:value-of select="$path"/>' has different values for different modules. Make sure the modules are mutually exclusive!</xsl:message>
-          </xsl:when>
         </xsl:choose>
 	</xsl:template>
 
