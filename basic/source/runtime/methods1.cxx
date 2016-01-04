@@ -896,7 +896,7 @@ RTLFUNC(DimArray)
 /*
  * FindObject and FindPropertyObject make it possible to
  * address objects and properties of the type Object with
- * their name as string-pararmeters at the runtime.
+ * their name as string-parameters at the runtime.
  *
  * Example:
  * MyObj.Prop1.Bla = 5

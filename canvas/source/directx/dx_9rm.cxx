@@ -731,7 +731,7 @@ namespace dxcanvas
 
             // we need to use D3DSWAPEFFECT_COPY here since the canvas-api has
             // basically nothing to do with efficient resource handling. it tries
-            // to avoid drawing whenevery possible, which is simply not the most
+            // to avoid drawing whenever possible, which is simply not the most
             // efficient way we could leverage the hardware in this case. it would
             // be far better to redraw the backbuffer each time we would like to
             // display the content of the backbuffer, but we need to face reality

@@ -10,7 +10,7 @@
 #check that zzuf is installed
 hash zzuf &> /dev/null
 if [ $? -eq 1 ];then
-    echo >&2 "zzuf not found. Please install and/or fix the PATH environement variable. Aborting"
+    echo >&2 "zzuf not found. Please install and/or fix the PATH environment variable. Aborting"
     exit -1
 fi
 

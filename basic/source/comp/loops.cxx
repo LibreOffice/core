@@ -209,7 +209,7 @@ void SbiParser::For()
     {
         TestToken( _IN_ );
         SbiExpression aCollExpr( this, SbOPERAND );
-        aCollExpr.Gen();    // Colletion var to for stack
+        aCollExpr.Gen();    // Collection var to for stack
         TestEoln();
         aGen.Gen( _INITFOREACH );
     }

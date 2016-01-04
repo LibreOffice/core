@@ -307,7 +307,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_TRACE("Failed to get documument object for %s", OUStringToOString( aElementName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    OSL_TRACE("Failed to get document object for %s", OUStringToOString( aElementName, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
             }
         }
