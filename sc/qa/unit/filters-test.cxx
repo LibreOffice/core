@@ -181,7 +181,7 @@ void ScFiltersTest::testRangeNameODS()
 {
     ScDocShellRef xDocSh = loadDoc("named-ranges-global.", FORMAT_ODS);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.*", xDocSh.Is());
 
     xDocSh->DoHardRecalc(true);
 
