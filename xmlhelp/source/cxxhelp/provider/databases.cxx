@@ -316,8 +316,6 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
         osl::DirectoryItem aDirItem;
         osl::FileStatus    aStatus( osl_FileStatus_Mask_FileName );
 
-        sal_Int32 idx;
-
         if( osl::FileBase::E_None != dirFile.open() )
             return m_avModules;
 
@@ -330,22 +328,17 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
             fileName = aStatus.getFileName();
 
             // Check, whether fileName is of the form *.cfg
-            idx = fileName.lastIndexOf( '.' );
-
-            if( idx == -1 )
+            if (!fileName.endsWithIgnoreAsciiCase(".cfg", &fileName)) {
                 continue;
-
-            const sal_Unicode* str = fileName.getStr();
-
-            if( fileName.getLength() == idx + 4                   &&
-                ( str[idx + 1] == 'c' || str[idx + 1] == 'C' )    &&
-                ( str[idx + 2] == 'f' || str[idx + 2] == 'F' )    &&
-                ( str[idx + 3] == 'g' || str[idx + 3] == 'G' )    &&
-                ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ) != "picture" ) {
-              if(! m_bShowBasic && fileName == "sbasic" )
-                continue;
-              m_avModules.push_back( fileName );
             }
+            fileName = fileName.toAsciiLowerCase();
+            if (fileName == "picture"
+                || (!m_bShowBasic && fileName == "sbasic"))
+            {
+                continue;
+            }
+
+            m_avModules.push_back( fileName );
         }
     }
     return m_avModules;
