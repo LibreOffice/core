@@ -103,10 +103,10 @@ DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
 DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
 {
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
-    uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, "urn:tscp:names:baf:1.1");
+    uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, "urn:bails");
     uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent, uno::UNO_QUERY);
     uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
-    // This failed, no graphs had the urn:tscp:names:baf:1.1 type.
+    // This failed, no graphs had the urn:bails type.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aGraphNames.getLength());
     uno::Reference<rdf::XURI> xGraphName = aGraphNames[0];
     uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
@@ -118,10 +118,11 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
 
     // 3 RDF statements on the second paragraph.
     xParagraph.set(getParagraph(2), uno::UNO_QUERY);
-    std::map<OUString, OUString> aExpectedStatements = {
-        {"urn:tscp:names:baf:1.1#BusinessAuthorization", "urn:example:tscp:1"},
-        {"urn:tscp:names:baf:1.1#BusinessAuthorizationCategory", "urn:example:tscp:1:confidential"},
-        {"urn:tscp:names:baf:1.1#BusinessAuthorizationDate", "2015-11-27T11:45:00"}
+    std::map<OUString, OUString> aExpectedStatements =
+    {
+        {"urn:bails:ExportControl:BusinessAuthorization:Identifier", "urn:example:tscp:1"},
+        {"urn:bails:ExportControl:BusinessAuthorizationCategory:Identifier", "urn:example:tscp:1:confidential"},
+        {"urn:bails:ExportControl:Authorization:StartValidity", "2015-11-27"}
     };
     std::map<OUString, OUString> aActualStatements;
     xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
