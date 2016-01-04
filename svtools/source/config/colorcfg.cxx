@@ -71,8 +71,6 @@ class ColorConfig_Impl : public utl::ConfigItem
     OUString         m_sLoadedScheme;
     bool             m_bAutoDetectSystemHC;
 
-    uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
-
     virtual void                    ImplCommit() override;
 
 public:
@@ -106,7 +104,9 @@ public:
     void ImplUpdateApplicationSettings();
 };
 
-uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const OUString& rScheme)
+namespace {
+
+uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
 {
     uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
     OUString* pNames = aNames.getArray();
@@ -186,6 +186,8 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const OUString& rSch
     }
     aNames.realloc(nIndex);
     return aNames;
+}
+
 }
 
 ColorConfig_Impl::ColorConfig_Impl(bool bEditMode) :
