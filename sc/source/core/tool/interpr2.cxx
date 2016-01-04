@@ -220,15 +220,21 @@ void ScInterpreter::ScGetWeekOfYear()
         switch ( nFlag )
         {
             case   1 :
-            case  11 :
+                eFirstDayOfWeek = SUNDAY;
+                nMinimumNumberOfDaysInWeek = 1;
+                break;
             case   2 :
+                eFirstDayOfWeek = MONDAY;
+                nMinimumNumberOfDaysInWeek = 1;
+                break;
+            case  11 :
             case  12 :
             case  13 :
             case  14 :
             case  15 :
             case  16 :
             case  17 :
-                eFirstDayOfWeek = (DayOfWeek) ( ( nFlag - 1 )  % 10 );
+                eFirstDayOfWeek = static_cast<DayOfWeek>( nFlag - 11 ); // MONDAY := 0
                 nMinimumNumberOfDaysInWeek = 1; //the week containing January 1 is week 1
                 break;
             case  21 :
