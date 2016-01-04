@@ -24,11 +24,21 @@ FixedTextureAtlasManager::FixedTextureAtlasManager(int nWidthFactor, int nHeight
 {
 }
 
+FixedTextureAtlasManager::~FixedTextureAtlasManager()
+{
+    for (auto i = mpTextures.begin(); i != mpTextures.end(); ++i)
+    {
+        // Free texture early in VCL shutdown while we have a context.
+        (*i)->Dispose();
+        (*i)->DecreaseRefCount(0);
+    }
+}
+
 void FixedTextureAtlasManager::CreateNewTexture()
 {
     int nTextureWidth = mWidthFactor  * mSubTextureSize;
     int nTextureHeight = mHeightFactor * mSubTextureSize;
-    mpTextures.push_back(std::unique_ptr<ImplOpenGLTexture>(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true)));
+    mpTextures.push_back(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true));
     mpTextures.back()->InitializeSlots(mWidthFactor * mHeightFactor);
 }
 
@@ -36,21 +46,21 @@ OpenGLTexture FixedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, in
 {
     ImplOpenGLTexture* pTexture = nullptr;
 
-    auto funFreeSlot = [] (std::unique_ptr<ImplOpenGLTexture>& mpTexture)
+    auto funFreeSlot = [] (ImplOpenGLTexture *mpTexture)
     {
         return mpTexture->mnFreeSlots > 0;
     };
 
-    auto aIterator = std::find_if(mpTextures.begin(), mpTextures.end(), funFreeSlot);
+    auto it = std::find_if(mpTextures.begin(), mpTextures.end(), funFreeSlot);
 
-    if (aIterator != mpTextures.end())
+    if (it != mpTextures.end())
     {
-        pTexture = (*aIterator).get();
+        pTexture = *it;
     }
     else
     {
         CreateNewTexture();
-        pTexture = mpTextures.back().get();
+        pTexture = mpTextures.back();
     }
 
     int nSlot = pTexture->FindFreeSlot();

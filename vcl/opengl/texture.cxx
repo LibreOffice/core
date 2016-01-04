@@ -154,6 +154,11 @@ GLuint ImplOpenGLTexture::AddStencil()
 ImplOpenGLTexture::~ImplOpenGLTexture()
 {
     VCL_GL_INFO( "~OpenGLTexture " << mnTexture );
+    Dispose();
+}
+
+void ImplOpenGLTexture::Dispose()
+{
     if( mnTexture != 0 )
     {
         OpenGLVCLContextZone aContextZone;
@@ -170,8 +175,12 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
         }
 
         if( mnOptStencil != 0 )
+        {
             glDeleteRenderbuffers( 1, &mnOptStencil );
+            mnOptStencil = 0;
+        }
         glDeleteTextures( 1, &mnTexture );
+        mnTexture = 0;
     }
 }
 
@@ -282,16 +291,12 @@ OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture,
 OpenGLTexture::~OpenGLTexture()
 {
     if (mpImpl)
-    {
         mpImpl->DecreaseRefCount(mnSlotNumber);
-        if (!mpImpl->ExistRefs())
-            delete mpImpl;
-    }
 }
 
 bool OpenGLTexture::IsUnique() const
 {
-    return ( mpImpl == nullptr || mpImpl->mnRefCount == 1 );
+    return mpImpl == nullptr || mpImpl->IsUnique();
 }
 
 GLuint OpenGLTexture::Id() const
@@ -486,11 +491,7 @@ OpenGLTexture&  OpenGLTexture::operator=( const OpenGLTexture& rTexture )
     }
 
     if (mpImpl)
-    {
         mpImpl->DecreaseRefCount(mnSlotNumber);
-        if (!mpImpl->ExistRefs())
-            delete mpImpl;
-    }
 
     maRect = rTexture.maRect;
     mpImpl = rTexture.mpImpl;
