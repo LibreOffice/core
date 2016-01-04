@@ -33,6 +33,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -79,34 +80,24 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     bool                                               m_bConfigRead;
-    ConfigurationAccess_FactoryManager*                    m_pConfigAccess;
+    rtl::Reference<ConfigurationAccess_FactoryManager> m_pConfigAccess;
 };
 
 WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
     WindowContentFactoryManager_BASE(m_aMutex),
     m_xContext( rxContext ),
-    m_bConfigRead( false )
-{
-    m_pConfigAccess = new ConfigurationAccess_FactoryManager( m_xContext,
-            "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" );
-    m_pConfigAccess->acquire();
-}
+    m_bConfigRead( false ),
+    m_pConfigAccess(
+        new ConfigurationAccess_FactoryManager(
+            m_xContext,
+            "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories"))
+{}
 
-WindowContentFactoryManager::~WindowContentFactoryManager()
-{
-    disposing();
-}
+WindowContentFactoryManager::~WindowContentFactoryManager() {}
 
 void SAL_CALL WindowContentFactoryManager::disposing()
 {
-    osl::MutexGuard g(rBHelper.rMutex);
-
-    if (m_pConfigAccess)
-    {
-        // reduce reference count
-        m_pConfigAccess->release();
-        m_pConfigAccess = nullptr;
-    }
+    m_pConfigAccess.clear();
 }
 
 // XSingleComponentFactory
@@ -165,6 +156,10 @@ throw (uno::Exception, uno::RuntimeException, std::exception)
         // module identifier, user interface element type and name
         { // SAFE
         osl::MutexGuard g(rBHelper.rMutex);
+        if (rBHelper.bDisposed) {
+            throw css::lang::DisposedException(
+                "disposed", static_cast<OWeakObject *>(this));
+        }
         if ( !m_bConfigRead )
         {
             m_bConfigRead = true;
