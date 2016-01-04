@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,tdeab1,\
 	dbtools \
 	sal \
 	salhelper \
+	tl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tdeab1,\

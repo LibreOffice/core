@@ -44,10 +44,7 @@ void KabCatalog::refreshTables()
     TStringVector aVector;
     Sequence< OUString > aTypes { "%" };
     Reference< XResultSet > xResult = m_xMetaData->getTables(
-        Any(),
-        OUString("%"),
-        OUString("%"),
-        aTypes);
+        Any(), "%", "%", aTypes);
 
     if (xResult.is())
     {

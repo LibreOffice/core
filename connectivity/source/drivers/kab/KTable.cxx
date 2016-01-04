@@ -58,17 +58,17 @@ void KabTable::refreshColumns()
 
     if (!isNew())
     {
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(
-                Any(),
-                m_SchemaName,
-                m_Name,
-                OUString("%"));
+        Reference< XResultSet > xResult =
+            m_pConnection->getMetaData()->getColumns(
+                Any(), m_SchemaName, m_Name, "%");
 
         if (xResult.is())
         {
-        Reference< XRow > xRow(xResult, UNO_QUERY);
-        while (xResult->next())
+            Reference< XRow > xRow(xResult, UNO_QUERY);
+            while (xResult->next())
+            {
                 aVector.push_back(xRow->getString(4));
+            }
         }
     }
 
