@@ -63,15 +63,16 @@ class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
         ,public VCLXAccessibleComponent_BASE
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> mxWindow;
-    VCLXWindow*                         mpVCLXindow;
+    rtl::Reference<VCLXWindow>      m_xVCLXWindow;
+    VclPtr<vcl::Window>             m_xEventSource;
 
     VCLExternalSolarLock*           m_pSolarLock;
 
-protected:
-     DECL_LINK( WindowEventListener, VclSimpleEvent* );
-     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
+    DECL_LINK( WindowEventListener, VclSimpleEvent* );
+    DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
+    void            DisconnectEvents();
 
+protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
@@ -80,10 +81,10 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent );
 
 public:
-    VCLXAccessibleComponent( VCLXWindow* pVCLXindow );
+    VCLXAccessibleComponent( VCLXWindow* pVCLXWindow );
     virtual ~VCLXAccessibleComponent();
 
-    VCLXWindow*    GetVCLXWindow() const { return mpVCLXindow; }
+    VCLXWindow*    GetVCLXWindow() const;
     VclPtr<vcl::Window> GetWindow() const;
     template< class derived_type > VclPtr< derived_type > GetAs() const {
         return VclPtr< derived_type >( static_cast< derived_type * >( GetWindow().get() ) ); }
