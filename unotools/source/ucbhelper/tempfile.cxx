@@ -227,7 +227,7 @@ OUString lcl_createName(
     const OUString& rLeadingChars, Tokens & tokens, const OUString* pExtension,
     const OUString* pParent, bool bDirectory, bool bKeep, bool bLock)
 {
-    OUString aName = ConstructTempDir_Impl( pParent ) + rLeadingChars;;
+    OUString aName = ConstructTempDir_Impl( pParent ) + rLeadingChars;
     OUString token;
     while (tokens.next(&token))
     {
