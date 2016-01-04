@@ -323,6 +323,8 @@ void ContentProvider::init()
     }
 
     OUString productversion( setupversion + " " + setupextension );
+
+    xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );
     bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
     m_pDatabases = new Databases( showBasic,
                                   instPath,
