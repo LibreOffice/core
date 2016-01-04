@@ -80,6 +80,8 @@
 
 #include <svx/unoshape.hxx>
 #include <comphelper/sequence.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <functional>
 #include <map>
@@ -413,7 +415,11 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
     }
     else
     {
-        sal_Unicode cDecSeparator = '.';//@todo get this locale dependent
+
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+        OUString aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
+        assert(aNumDecimalSep.getLength() > 0);
+        sal_Unicode cDecSeparator = aNumDecimalSep.getStr()[0];
         aNumber = ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G /*rtl_math_StringFormat*/
             , 3/*DecPlaces*/ , cDecSeparator );
     }
@@ -1269,7 +1275,10 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             }
             else
             {
-                sal_Unicode aDecimalSep( '.' );//@todo get this locale dependent
+                const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+                OUString aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
+                assert(aNumDecimalSep.getLength() > 0);
+                sal_Unicode aDecimalSep = aNumDecimalSep.getStr()[0];
                 aFormula.append( ::rtl::math::doubleToUString(
                                      fR*fR, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
             }
