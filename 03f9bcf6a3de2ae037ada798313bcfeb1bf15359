@@ -52,6 +52,24 @@
       "revId": "03f9bcf6a3de2ae037ada798313bcfeb1bf15359",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ed7e49ad",
+        "filename": "svtools/source/dialogs/ServerDetailsControls.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-01-04T14:47:59Z",
+      "side": 1,
+      "message": "Change done, removed the min and max limit from code.",
+      "parentUuid": "dab17558_2dc171e5",
+      "revId": "03f9bcf6a3de2ae037ada798313bcfeb1bf15359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
