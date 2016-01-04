@@ -1501,7 +1501,7 @@ void WW8Export::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos
 
 void WW8Export::AppendSmartTags(const SwTextNode& rTextNode)
 {
-    std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements("urn:tscp:names:baf:1.1", rTextNode);
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements("urn:bails", rTextNode);
     if (!aStatements.empty())
     {
         WW8_CP nCP = Fc2Cp(Strm().Tell());

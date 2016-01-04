@@ -9,17 +9,21 @@
 
 #include <SmartTagHandler.hxx>
 
+#include <com/sun/star/rdf/Literal.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 
 #include <ooxml/resourceids.hxx>
 
 namespace
 {
-OUString lcl_getTypePath(const OUString& rType)
+OUString lcl_getTypePath(OUString& rType)
 {
     OUString aRet;
-    if (rType == "urn:tscp:names:baf:1.1")
-        aRet = "tscp/baf.rdf";
+    if (rType.startsWith("urn:bails"))
+    {
+        rType = "urn:bails";
+        aRet = "tscp/bails.rdf";
+    }
     return aRet;
 }
 }
@@ -91,11 +95,7 @@ void SmartTagHandler::handle(const uno::Reference<text::XTextRange>& xParagraph)
 
         for (const std::pair<OUString, OUString>& rAttribute : m_aAttributes)
         {
-            sal_Int32 nIndex = rAttribute.first.indexOf('#');
-            if (nIndex == -1)
-                continue;
-
-            OUString aTypeNS = rAttribute.first.copy(0, nIndex);
+            OUString aTypeNS = rAttribute.first;
             OUString aMetadataFilePath = lcl_getTypePath(aTypeNS);
             if (aMetadataFilePath.isEmpty())
                 continue;
@@ -112,7 +112,7 @@ void SmartTagHandler::handle(const uno::Reference<text::XTextRange>& xParagraph)
             }
             uno::Reference<rdf::XNamedGraph> xGraph = m_xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
             uno::Reference<rdf::XURI> xKey = rdf::URI::create(m_xComponentContext, rAttribute.first);
-            uno::Reference<rdf::XURI> xValue = rdf::URI::create(m_xComponentContext, rAttribute.second);
+            uno::Reference<rdf::XLiteral> xValue = rdf::Literal::create(m_xComponentContext, rAttribute.second);
             xGraph->addStatement(xSubject, xKey, xValue);
         }
 
