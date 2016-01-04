@@ -462,7 +462,6 @@ void SfxAppData_Impl::DeInitDDE()
 #if defined( WNT )
 void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 {
-    DBG_ASSERT( pAppData_Impl->pDocTopics, "There is no Dde-Service" );
     //OV: DDE is disconnected in server mode!
     if( !pAppData_Impl->pDocTopics )
         return;
@@ -495,7 +494,6 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 {
 #if defined WNT
-    DBG_ASSERT( pAppData_Impl->pDocTopics, "There is no Dde-Service" );
     //OV: DDE is disconnected in server mode!
     if( !pAppData_Impl->pDocTopics )
         return;
