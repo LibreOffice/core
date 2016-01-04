@@ -27,8 +27,6 @@
 
 typedef struct FT_FaceRec_* FT_Face;
 
-class PspSalPrinter;
-class PspSalInfoPrinter;
 class ServerFont;
 class GlyphCache;
 class ImplLayoutArgs;
