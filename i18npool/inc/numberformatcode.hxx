@@ -54,6 +54,7 @@ public:
                 throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
+    osl::Mutex maMutex;
     css::lang::Locale aLocale;
     css::uno::Reference < css::uno::XComponentContext > mxContext;
     css::uno::Sequence< css::i18n::FormatElement > aFormatSeq;
