@@ -16,6 +16,24 @@
       "revId": "03f9bcf6a3de2ae037ada798313bcfeb1bf15359",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_cd02653e",
+        "filename": "svtools/source/dialogs/ServerDetailsControls.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-01-04T13:42:46Z",
+      "side": 1,
+      "message": "Without min and max limits set here the limits of 0 and 65535 will be in use?\nIf I got it correctly for a 5 char size GtkSpinButton the top limit is 99999. And I think it spins down to less then 0?\nBy looking at the code I thought it is 5 chars for numbers, general.\n\nUnless there is a way to set the limits in ui file. Didn\u0027t check that possibility.",
+      "parentUuid": "dab17558_add8c1f0",
+      "revId": "03f9bcf6a3de2ae037ada798313bcfeb1bf15359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
