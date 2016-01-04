@@ -869,7 +869,7 @@ void SAL_CALL ChartController::dispose()
 
             //the accessible view is disposed within window destructor of m_pChartWindow
             m_pChartWindow->clear();
-            m_pChartWindow = nullptr;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (trigerred by Framework (Controller pretends to be XWindow also))
+            m_pChartWindow = nullptr;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (triggered by Framework (Controller pretends to be XWindow also))
             m_xViewWindow->dispose();
             m_xChartView.clear();
         }
@@ -964,7 +964,7 @@ void SAL_CALL ChartController::queryClosing(
         return;
     }
 
-    if( !m_bCanClose )//@todo tryaqcuire mutex
+    if( !m_bCanClose )//@todo try acquire mutex
     {
         if( bGetsOwnership )
         {
@@ -1416,7 +1416,7 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
 
     //get selected series
     OUString aObjectCID(m_aSelection.getSelectedCID());
-    uno::Reference< XDataSeries > xGivenDataSeries( ObjectIdentifier::getDataSeriesForCID( //yyy todo also legendentries and labels?
+    uno::Reference< XDataSeries > xGivenDataSeries( ObjectIdentifier::getDataSeriesForCID( //yyy todo also legend entries and labels?
             aObjectCID, getModel() ) );
 
     UndoGuardWithSelection aUndoGuard(

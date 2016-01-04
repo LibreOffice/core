@@ -364,7 +364,7 @@ sal_Int32 XMLFilter::impl_Import(
 
         // Set base URI and Hierarchical Name
         OUString aHierarchName, aBaseUri;
-        // why retrieve this from the model when it's availabe as rMediaDescriptor?
+        // why retrieve this from the model when it's available as rMediaDescriptor?
         uno::Reference<frame::XModel> const xModel(m_xTargetDoc, uno::UNO_QUERY);
         if( xModel.is() )
         {

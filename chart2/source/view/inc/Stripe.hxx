@@ -26,7 +26,7 @@
 namespace chart
 {
 
-/** A Stripe represents a 2 dimensional foursquare plane in a 3 dimaensional room.
+/** A Stripe represents a 2 dimensional foursquare plane in a 3 dimensional room.
 
 @todo could: it is not necessary to have 4 point members here; it would be sufficient to have one point and 2 directions
 */

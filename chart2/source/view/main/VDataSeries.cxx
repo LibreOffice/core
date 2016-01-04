@@ -893,7 +893,7 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
 
 bool VDataSeries::isAttributedDataPoint( sal_Int32 index ) const
 {
-    //returns true if the data point assigned by the given index has set it's own properties
+    //returns true if the data point assigned by the given index has set its own properties
     if( index>=m_nPointCount || m_nPointCount==0)
         return false;
     for(sal_Int32 nN=m_aAttributedDataPointIndexList.getLength();nN--;)

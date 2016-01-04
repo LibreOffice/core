@@ -252,7 +252,7 @@ bool RelativePositionHelper::centerGrow(
     const double fPosCheckThreshold = 0.02;
     const double fSizeCheckThreshold = 0.1;
 
-    // grow/shrink, back to relaative
+    // grow/shrink, back to relative
     aSize.Primary += fAmountX;
     aSize.Secondary += fAmountY;
 

@@ -146,7 +146,7 @@ protected:
 
     // Methods for creating the diagram piecewise
 
-    /** Allows derived classes to manipulate the diagramas whole, like changing
+    /** Allows derived classes to manipulate the diagrams whole, like changing
         the wall color. The default implementation is empty. It is called by
         FillDiagram which is called by createDiagramByDataSource and
         changeDiagram
