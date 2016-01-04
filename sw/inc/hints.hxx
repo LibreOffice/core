@@ -192,27 +192,27 @@ public:
  */
 class SwAttrSetChg: public SwMsgPoolItem
 {
-    bool bDelSet;
-    SwAttrSet* pChgSet;           ///< what has changed
-    const SwAttrSet* pTheChgdSet; ///< is only used to compare
+    bool m_bDelSet;
+    SwAttrSet* m_pChgSet;           ///< what has changed
+    const SwAttrSet* m_pTheChgdSet; ///< is only used to compare
 public:
     SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet );
     SwAttrSetChg( const SwAttrSetChg& );
     virtual ~SwAttrSetChg();
 
     /// What has changed
-    const SwAttrSet* GetChgSet() const     { return pChgSet; }
-          SwAttrSet* GetChgSet()           { return pChgSet; }
+    const SwAttrSet* GetChgSet() const     { return m_pChgSet; }
+          SwAttrSet* GetChgSet()           { return m_pChgSet; }
 
     /// Where it has changed
-    const SwAttrSet* GetTheChgdSet() const { return pTheChgdSet; }
+    const SwAttrSet* GetTheChgdSet() const { return m_pTheChgdSet; }
 
-    sal_uInt16 Count() const { return pChgSet->Count(); }
+    sal_uInt16 Count() const { return m_pChgSet->Count(); }
     void ClearItem( sal_uInt16 nWhichL = 0 )
 #ifdef DBG_UTIL
         ;
 #else
-    { pChgSet->ClearItem( nWhichL ); }
+    { m_pChgSet->ClearItem( nWhichL ); }
 #endif
 };
 
