@@ -98,7 +98,8 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
             if (
                 (sURL.match("BID", nLastSlash+1)) ||
                 (sURL.match("CVE", nLastSlash+1)) ||
-                (sURL.match("EDB", nLastSlash+1))
+                (sURL.match("EDB", nLastSlash+1)) ||
+                (sURL.match("RC4", nLastSlash+1)) // just means "encrypted"
                )
             {
                 bEncrypted = true;
