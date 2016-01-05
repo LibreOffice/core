@@ -27,6 +27,10 @@ worrying about compatibility.
 </p>
 </description>
 <url type="homepage">http://www.libreoffice.org/discover/writer/</url>
+<url type="bugtracker">https://bugs.documentfoundation.org/</url>
+<url type="donation">https://donate.libreoffice.org/</url>
+<url type="faq">https://wiki.documentfoundation.org/Faq</url>
+<url type="help">http://www.libreoffice.org/get-help/documentation/</url>
 <screenshots>
 <screenshot type="default">http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-02-Table-of-Contents-Getting-Started-Guide-4-2.png</screenshot>
 <screenshot>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-03-Technical-Doc-fdo83524.png</screenshot>
