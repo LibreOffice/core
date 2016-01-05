@@ -900,6 +900,63 @@ FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken*
     }
 }
 
+sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
+{
+    if (nOffset < nLen)
+    {
+        SAL_WARN_IF( nOffset + nCount > nLen, "formula.core",
+                "FormulaTokenArray::RemoveToken - nOffset " << nOffset << " + nCount " << nCount << " > nLen " << nLen);
+        const sal_uInt16 nStop = ::std::min( static_cast<sal_uInt16>(nOffset + nCount), nLen);
+        nCount = nStop - nOffset;
+        for (sal_uInt16 j = nOffset; j < nStop; ++j)
+        {
+            FormulaToken* p = pCode[j];
+            if (p->GetRef() > 1)
+            {
+                for (sal_uInt16 i=0; i < nRPN; ++i)
+                {
+                    if (pRPN[i] == p)
+                    {
+                        // Shift remaining tokens in pRPN down.
+                        for (sal_uInt16 x=i+1; x < nRPN; ++x)
+                        {
+                            pRPN[x-1] = pRPN[x];
+                        }
+                        --nRPN;
+
+                        p->DecRef();
+                        if (p->GetRef() == 1)
+                            break;  // for
+                    }
+                }
+            }
+            p->DecRef();    // may be dead now
+        }
+
+        // Shift remaining tokens in pCode down.
+        for (sal_uInt16 x = nStop; x < nLen; ++x)
+        {
+            pCode[x-nCount] = pCode[x];
+        }
+        nLen -= nCount;
+
+        if (nIndex >= nOffset)
+        {
+            if (nIndex < nStop)
+                nIndex = nOffset + 1;
+            else
+                nIndex -= nStop - nOffset;
+        }
+
+        return nCount;
+    }
+    else
+    {
+        SAL_WARN("formula.core","FormulaTokenArray::RemoveToken - nOffset " << nOffset << " >= nLen " << nLen);
+        return 0;
+    }
+}
+
 FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 {
     if( !pCode )
