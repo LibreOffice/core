@@ -1808,7 +1808,7 @@ void ImplDelData::AttachToWindow( const vcl::Window* pWindow )
         if( pWindow->IsDisposed() )
             mbDel = true;
         else
-            const_cast<vcl::Window*>(pWindow)->ImplAddDel( this );
+            pWindow->ImplAddDel( this );
     }
 }
 
