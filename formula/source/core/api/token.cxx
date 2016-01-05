@@ -395,11 +395,11 @@ bool FormulaTokenArray::AddFormulaToken(
                 // long is svIndex, used for name / database area, or "byte" for spaces
                 sal_Int32 nValue = rToken.Data.get<sal_Int32>();
                 if ( eOpCode == ocDBArea )
-                    AddToken( formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
+                    Add( new formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
                 else if ( eOpCode == ocTableRef )
                     bError = true;  /* TODO: implementation */
                 else if ( eOpCode == ocSpaces )
-                    AddToken( formula::FormulaByteToken( ocSpaces, static_cast<sal_uInt8>(nValue) ) );
+                    Add( new formula::FormulaByteToken( ocSpaces, static_cast<sal_uInt8>(nValue) ) );
                 else
                     bError = true;
             }
@@ -414,7 +414,7 @@ bool FormulaTokenArray::AddFormulaToken(
                 else if ( eOpCode == ocStringXML )
                     AddStringXML( aStrVal );
                 else if ( eOpCode == ocExternal || eOpCode == ocMacro )
-                    AddToken( formula::FormulaExternalToken( eOpCode, aStrVal ) );
+                    Add( new formula::FormulaExternalToken( eOpCode, aStrVal ) );
                 else
                     bError = true;      // unexpected string: don't know what to do with it
             }
@@ -1600,7 +1600,7 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
             pRet = new FormulaByteToken( eOp, 0, false );
             break;
     }
-    return AddToken( *pRet );
+    return Add( pRet );
 }
 
 void FormulaTokenArray::ReinternStrings( svl::SharedStringPool& rPool )

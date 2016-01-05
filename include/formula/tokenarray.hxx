@@ -296,7 +296,12 @@ public:
      */
     virtual void CheckToken( const FormulaToken& t );
 
+    /** Clones the token and then adds the clone to the pCode array.
+        For just new'ed tokens use Add() instead of cloning it again.
+        Use this AddToken() when adding a token from another origin.
+     */
     FormulaToken* AddToken( const FormulaToken& );
+
     FormulaToken* AddString( const svl::SharedString& rStr );
     FormulaToken* AddDouble( double fVal );
     FormulaToken* AddExternal( const sal_Unicode* pStr );
