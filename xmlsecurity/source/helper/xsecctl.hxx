@@ -371,6 +371,7 @@ private:
     void setDigestValue( OUString& ouDigestValue );
 
     void setDate( OUString& ouDate );
+    void setDescription(const OUString& rDescription);
 
     void setId( OUString& ouId );
     void setPropertyId( OUString& ouPropertyId );

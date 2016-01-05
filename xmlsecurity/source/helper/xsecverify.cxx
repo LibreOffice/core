@@ -262,6 +262,15 @@ void XSecController::setDate( OUString& ouDate )
     isi.signatureInfor.ouDateTime = ouDate;
 }
 
+void XSecController::setDescription(const OUString& rDescription)
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.ouDescription = rDescription;
+}
+
 void XSecController::setId( OUString& ouId )
 {
     if (m_vInternalSignatureInformations.empty())
