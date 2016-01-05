@@ -221,7 +221,7 @@ private:
     // Flag decides if TextScroll alternates. Default is sal_False.
     bool                                        mbAlternate;
 
-    // Flag to remember if this is a simple scrollin text
+    // Flag to remember if this is a simple scrolling text
     bool                                        mbScrollIn;
 
     // start time for this animation

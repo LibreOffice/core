@@ -113,7 +113,7 @@ void main( void )
     vec4 v = vec4(a_position, 1.0);
     vec4 normal = vec4(a_normal, 1.0);
 
-    // Each tile moves during only half of the transition. The letmost
+    // Each tile moves during only half of the transition. The leftmost
     // tiles start moving at the start and arrive at their end
     // position around time=0.5, when the tiles there (the rightmost
     // ones) start moving. (The exact time each tile is moving is

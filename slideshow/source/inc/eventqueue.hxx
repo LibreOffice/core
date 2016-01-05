@@ -62,7 +62,7 @@ namespace slideshow
             bool addEventForNextRound( const EventSharedPtr& event );
 
             /** Another way to control the order of asynchronous event
-                exeqution.  Use this method to schedule events that are to
+                execution.  Use this method to schedule events that are to
                 be executed after all regular events that have no delay,
                 even when they schedule new regular events without delay.
             */
