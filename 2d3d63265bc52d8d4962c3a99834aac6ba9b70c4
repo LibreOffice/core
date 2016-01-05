@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_73ecfcc7",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2016-01-05T17:42:54Z",
+      "side": 1,
+      "message": "currently it results in “OS Version: Mac OS X 10;”\n“Mac OS X 10” says nothing about version of OS X\nso consider removing this part of patch to get full version string like 10.5.8",
+      "range": {
+        "startLine": 999,
+        "startChar": 8,
+        "endLine": 1001,
+        "endChar": 48
+      },
+      "revId": "2d3d63265bc52d8d4962c3a99834aac6ba9b70c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
