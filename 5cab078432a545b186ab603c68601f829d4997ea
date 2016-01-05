@@ -2,6 +2,142 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_90999671",
+        "filename": "include/sfx2/sfxsids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "Given that it\u0027s a Writer only feature, why not define it in a Writer header rather than in sfx2?",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b0a01a92",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "IMHO it\u0027s better to leave it in initialize. StatusChanged can be executed several times during the button\u0027s life, which will make this check run again and again without any benefit. Inside initialize you can check for the .uno command name using m_aCommandURL, rather than the SID.",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_70b512cc",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "I think we can kill 1 indentation level by making this check part of the \"if\" structure.",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_10ae4685",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "This seems to be already handled above.",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_10c5a63b",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "Why SfxAllEnumItem? This patch doesn\u0027t seem to use the SfxAllEnumItem type in any way, so I guess SfxVoidItem will also do the job.",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_50dd6e13",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "Since the button is implemented inside the toolbox controller, I see no point in making it recordable.",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_30e26ad6",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "Since the button is implemented inside the toolbox controller, it won\u0027t work in the menu. So this should be FALSE.",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_90e7d6e3",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "Why introduce PseudoSlots here?",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_8d585dfc",
         "filename": "sw/uiconfig/swriter/toolbar/standardbar.xml",
         "patchSetId": 1
@@ -13,6 +149,30 @@
       "writtenOn": "2016-01-03T18:30:38Z",
       "side": 1,
       "message": "This button is dimmed. I couldn\u0027t find thats why",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 55
+      },
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_70ecf2c7",
+        "filename": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T07:30:23Z",
+      "side": 1,
+      "message": "The button is dimmed because it\u0027s not registered in the appropriate shell .sdi file inside sw/sdi. (swriter.sdi isn\u0027t enough)",
+      "parentUuid": "dab17558_8d585dfc",
       "range": {
         "startLine": 72,
         "startChar": 0,
