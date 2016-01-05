@@ -49,16 +49,6 @@ String ST_LAYOUT
     Text [ en-US ] = "Adjust layout";
 };
 
-String ST_PREPAREMERGE
-{
-    Text [ en-US ] = "Edit document";
-};
-
-String ST_MERGE
-{
-    Text [ en-US ] = "Personalize document";
-};
-
 String ST_EXCLUDE
 {
     Text [ en-US ] = "Exclude recipient";

@@ -21,7 +21,6 @@
 #include <mmdocselectpage.hxx>
 #include <mmoutputtypepage.hxx>
 #include <mmaddressblockpage.hxx>
-#include <mmpreparemergepage.hxx>
 #include <mmgreetingspage.hxx>
 #include <mmlayoutpage.hxx>
 #include <mmconfigitem.hxx>
@@ -51,8 +50,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
         m_sAddressList(     SW_RES( ST_ADDRESSLIST )),
         m_sGreetingsLine(   SW_RES( ST_GREETINGSLINE   )),
         m_sLayout(          SW_RES( ST_LAYOUT        )),
-        m_sPrepareMerge(    SW_RES( ST_PREPAREMERGE )),
-        m_sMerge(           SW_RES( ST_MERGE        )),
         m_sFinish(          SW_RES( ST_FINISH       )),
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
@@ -72,7 +69,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
             MM_ADDRESSBLOCKPAGE,
             MM_GREETINGSPAGE,
             MM_LAYOUTPAGE,
-            MM_PREPAREMERGEPAGE,
             WZS_INVALID_STATE
         );
     else
@@ -82,7 +78,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
             MM_ADDRESSBLOCKPAGE,
             MM_GREETINGSPAGE,
             MM_LAYOUTPAGE,
-            MM_PREPAREMERGEPAGE,
             WZS_INVALID_STATE
         );
 
@@ -104,7 +99,6 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
         case MM_ADDRESSBLOCKPAGE  : pRet = VclPtr<SwMailMergeAddressBlockPage>::Create(this);     break;
         case MM_GREETINGSPAGE     : pRet = VclPtr<SwMailMergeGreetingsPage>::Create(this);      break;
         case MM_LAYOUTPAGE        : pRet = VclPtr<SwMailMergeLayoutPage>::Create(this);     break;
-        case MM_PREPAREMERGEPAGE  : pRet = VclPtr<SwMailMergePrepareMergePage>::Create(this);   break;
     }
     OSL_ENSURE(pRet, "no page created in ::createPage");
     return pRet;
@@ -140,14 +134,14 @@ void SwMailMergeWizard::enterState( WizardState _nState )
     bool bEnableNext = true;
     switch(_nState)
     {
-        case MM_DOCUMENTSELECTPAGE :
-            bEnablePrev = false;
+        case MM_DOCUMENTSELECTPAGE:
+            bEnablePrev = false; // the first page
         break;
         case MM_ADDRESSBLOCKPAGE  :
             bEnableNext = m_rConfigItem.GetResultSet().is();
         break;
-        case MM_PREPAREMERGEPAGE:
-            bEnableNext = false;
+        case MM_LAYOUTPAGE:
+            bEnableNext = false; // the last page
         break;
     }
     enableButtons( WizardButtonFlags::PREVIOUS, bEnablePrev);
@@ -171,8 +165,6 @@ OUString SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
             return m_sGreetingsLine;
         case MM_LAYOUTPAGE:
             return m_sLayout;
-        case MM_PREPAREMERGEPAGE:
-            return m_sPrepareMerge;
     }
     return OUString();
 }
@@ -188,8 +180,6 @@ void SwMailMergeWizard::UpdateRoadmap()
     MM_LAYOUTPAGE               >   inactive after the layoutpage
                                     inactive if address block and greeting are switched off
                                     or are already inserted into the source document
-    MM_PREPAREMERGEPAGE         > only active if address data has been selected
-                                    inactive after preparemerge page
 */
 
     // enableState( <page id>, false );
@@ -203,12 +193,20 @@ void SwMailMergeWizard::UpdateRoadmap()
     bool bGreetingFieldsConfigured = !m_rConfigItem.IsGreetingLine(false) ||
             !m_rConfigItem.IsIndividualGreeting(false)||
                     m_rConfigItem.IsGreetingFieldsAssigned();
+
     //#i97436# if a document has to be loaded then enable output type page only
     m_bDocumentLoad = false;
     bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
         static_cast<svt::OWizardPage*>(pCurPage)->commitPage( ::svt::WizardTypes::eValidate );
 
-    for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_PREPAREMERGEPAGE; ++nPage)
+    // handle the Finish button
+    bool bCanFinish = !m_bDocumentLoad && bEnableOutputTypePage &&
+        m_rConfigItem.GetResultSet().is() &&
+        bAddressFieldsConfigured &&
+        bGreetingFieldsConfigured;
+    enableButtons(WizardButtonFlags::FINISH, (nCurPage != MM_DOCUMENTSELECTPAGE) && bCanFinish);
+
+    for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_LAYOUTPAGE; ++nPage)
     {
         bool bEnable = true;
         switch(nPage)
@@ -228,15 +226,9 @@ void SwMailMergeWizard::UpdateRoadmap()
                             bAddressFieldsConfigured;
             break;
             case MM_LAYOUTPAGE:
-                bEnable =
+                bEnable = bCanFinish &&
                         ((m_rConfigItem.IsAddressBlock() && !m_rConfigItem.IsAddressInserted()) ||
                             (m_rConfigItem.IsGreetingLine(false) && !m_rConfigItem.IsGreetingInserted() ));
-                // fall-through
-            case MM_PREPAREMERGEPAGE:
-                bEnable = bEnable && !m_bDocumentLoad && bEnableOutputTypePage &&
-                            m_rConfigItem.GetResultSet().is() &&
-                            bAddressFieldsConfigured &&
-                            bGreetingFieldsConfigured;
             break;
         }
         enableState( nPage, bEnable );
