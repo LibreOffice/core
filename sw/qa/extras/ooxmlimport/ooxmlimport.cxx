@@ -2859,6 +2859,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf78902, "tdf78902.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf96674, "tdf96674.docx")
+{
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    awt::Size aActualSize(xShape->getSize());
+    // This was 3493: the vertical line was horizontal.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aActualSize.Width);
+    CPPUNIT_ASSERT(aActualSize.Height > 0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
