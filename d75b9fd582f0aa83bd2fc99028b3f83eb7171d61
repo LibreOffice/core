@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_b0093a34",
+        "filename": "sw/source/core/text/blink.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-05T12:49:31Z",
+      "side": 1,
+      "message": "this looks like a bug: the old code dereferenced iterator \"it\" before erasing \"it\", the new code dereferences invalid \"it\" after erasing \"it\"",
+      "revId": "d75b9fd582f0aa83bd2fc99028b3f83eb7171d61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
