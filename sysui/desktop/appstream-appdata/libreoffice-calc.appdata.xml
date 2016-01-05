@@ -20,6 +20,10 @@ worrying about compatibility.
 </p>
 </description>
 <url type="homepage">http://www.libreoffice.org/discover/calc/</url>
+<url type="bugtracker">https://bugs.documentfoundation.org/</url>
+<url type="donation">https://donate.libreoffice.org/</url>
+<url type="faq">https://wiki.documentfoundation.org/Faq</url>
+<url type="help">http://www.libreoffice.org/get-help/documentation/</url>
 <screenshots>
 <screenshot type="default">http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Calc-02-exemple-ods.png</screenshot>
 </screenshots>
