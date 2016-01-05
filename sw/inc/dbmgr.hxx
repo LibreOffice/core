@@ -287,13 +287,13 @@ friend class SwConnectionDisposedListener_Impl;
                                          long nStartRow, sal_uInt16 nStartingPageNo, int &targetDocPageCount, const bool bMergeShell,
                                          const SwMergeDescriptor& rMergeDescriptor, sal_Int32 nMaxDumpDocs);
 
-    SAL_DLLPRIVATE void ResetWorkDoc(SwDoc *pWorkDoc, SfxObjectShellLock &xWorkDocSh, SwDBManager *pOldDBManager);
+    SAL_DLLPRIVATE void CloseWorkDoc(SwDoc *pWorkDoc, SfxObjectShellLock &xWorkDocSh, SwDBManager *pOldDBManager);
 
     SAL_DLLPRIVATE void FreezeLayouts(SwWrtShell *pTargetShell, bool freeze);
 
     SAL_DLLPRIVATE void FinishMailMergeFile(SfxObjectShellLock &xWorkDocSh, SwView *pWorkView, SwDoc *pTargetDoc,
                                              SwWrtShell *pTargetShell, bool bCreateSingleFile, bool bPrinter,
-                                             SwDoc *pWorkDoc, SwDBManager *pOldDBManager);
+                                             SwDoc *pWorkDoc, SwDBManager *pOldDBManager, const bool bIsPDFeport);
 
     SAL_DLLPRIVATE bool SavePrintDoc(SfxObjectShellRef xTargetDocShell, SwView *pTargetView,
                                      const SwMergeDescriptor &rMergeDescriptor,
