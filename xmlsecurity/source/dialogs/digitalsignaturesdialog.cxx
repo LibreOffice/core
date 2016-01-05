@@ -201,11 +201,13 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     m_pSignaturesLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
     // #i48253# the tablistbox needs its own unique id
     m_pSignaturesLB->Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
-    static long aTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };
+    // Give the first column 6 percent, try to distribute the rest equally.
+    static long aTabs[] = { 5, 0, 6*nControlWidth/100, 30*nControlWidth/100, 54*nControlWidth/100, 78*nControlWidth/100 };
     m_pSignaturesLB->SetTabs(aTabs);
 
     m_pSignaturesLB->InsertHeaderEntry("\t" + get<FixedText>("signed")->GetText() + "\t"
-               + get<FixedText>("issued")->GetText() + "\t" + get<FixedText>("date")->GetText());
+               + get<FixedText>("issued")->GetText() + "\t" + get<FixedText>("date")->GetText() + "\t"
+               + get<FixedText>("description")->GetText());
 
     mbVerifySignatures = true;
     mbSignaturesChanged = false;
@@ -618,6 +620,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             OUString aSubject;
             OUString aIssuer;
             OUString aDateTimeStr;
+            OUString aDescription;
 
             bool bSigValid = false;
             bool bCertValid = false;
@@ -641,6 +644,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 aIssuer = XmlSec::GetContentPart( xCert->getIssuerName() );
                 // String with date and time information (#i20172#)
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
+                aDescription = rInfo.ouDescription;
             }
             bSigValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
@@ -687,6 +691,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             m_pSignaturesLB->SetEntryText( aSubject, pEntry, 1 );
             m_pSignaturesLB->SetEntryText( aIssuer, pEntry, 2 );
             m_pSignaturesLB->SetEntryText( aDateTimeStr, pEntry, 3 );
+            m_pSignaturesLB->SetEntryText(aDescription, pEntry, 4);
             pEntry->SetUserData( reinterpret_cast<void*>(n) );     // missuse user data as index
         }
     }
