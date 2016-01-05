@@ -166,110 +166,111 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
     return OUString();
 }
 
-    class DocumentInfo
-    {
-        private:
-            sal_uInt16 mnGeneratorVersion;
+class DocumentInfo
+{
+private:
+    sal_uInt16 mnGeneratorVersion;
 
-        public:
-            explicit DocumentInfo( const SvXMLImport& rImport )
-                : mnGeneratorVersion( SvXMLImport::ProductVersionUnknown )
+public:
+    explicit DocumentInfo( const SvXMLImport& rImport )
+        : mnGeneratorVersion( SvXMLImport::ProductVersionUnknown )
+    {
+        OUString const buildIds(
+                getBuildIdsProperty(rImport.getImportInfo()));
+        if (!buildIds.isEmpty())
+        {
+            sal_Int32 const ix = buildIds.indexOf(';');
+            if (-1 != ix)
             {
-                OUString const buildIds(
-                        getBuildIdsProperty(rImport.getImportInfo()));
-                if (!buildIds.isEmpty())
+                OUString const loVersion(buildIds.copy(ix + 1));
+                if (!loVersion.isEmpty())
                 {
-                    sal_Int32 const ix = buildIds.indexOf(';');
-                    if (-1 != ix)
+                    if ('3' == loVersion[0])
                     {
-                        OUString const loVersion(buildIds.copy(ix + 1));
-                        if (!loVersion.isEmpty())
+                        mnGeneratorVersion = SvXMLImport::LO_3x;
+                    }
+                    else if ('4' == loVersion[0])
+                    {
+                        if (loVersion.getLength() > 1
+                            && (loVersion[1] == '0' || loVersion[1] == '1'))
                         {
-                            if ('3' == loVersion[0])
-                            {
-                                mnGeneratorVersion = SvXMLImport::LO_3x;
-                            }
-                            else if ('4' == loVersion[0])
-                            {
-                                if (loVersion.getLength() > 1
-                                    && (loVersion[1] == '0' || loVersion[1] == '1'))
-                                {
-                                    mnGeneratorVersion = SvXMLImport::LO_41x; // 4.0/4.1
-                                }
-                                else if (loVersion.getLength() > 1 && '2' == loVersion[1])
-                                {
-                                    mnGeneratorVersion = SvXMLImport::LO_42x; // 4.2
-                                }
-                                else if (loVersion.getLength() > 1 && '3' == loVersion[1])
-                                {
-                                    mnGeneratorVersion = SvXMLImport::LO_43x; // 4.3
-                                }
-                                else if (loVersion.getLength() > 1 && '4' == loVersion[1])
-                                {
-                                    mnGeneratorVersion = SvXMLImport::LO_44x; // 4.4
-                                }
-                            }
-                            else
-                            {
-                                SAL_INFO_IF('5' != loVersion[0], "xmloff.core", "unknown LO version: " << loVersion);
-                                mnGeneratorVersion = SvXMLImport::LO_5x;
-                            }
-                            return; // ignore buildIds
+                            mnGeneratorVersion = SvXMLImport::LO_41x; // 4.0/4.1
+                        }
+                        else if (loVersion.getLength() > 1 && '2' == loVersion[1])
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_42x; // 4.2
+                        }
+                        else if (loVersion.getLength() > 1 && '3' == loVersion[1])
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_43x; // 4.3
+                        }
+                        else if (loVersion.getLength() > 1 && '4' == loVersion[1])
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_44x; // 4.4
                         }
                     }
-                }
-                sal_Int32 nUPD, nBuild;
-                if ( rImport.getBuildIds( nUPD, nBuild ) )
-                {
-                    if ( nUPD >= 640 && nUPD <= 645 )
+                    else
                     {
-                        mnGeneratorVersion = SvXMLImport::OOo_1x;
+                        SAL_INFO_IF('5' != loVersion[0], "xmloff.core", "unknown LO version: " << loVersion);
+                        mnGeneratorVersion = SvXMLImport::LO_5x;
                     }
-                    else if ( nUPD == 680 )
-                    {
-                        mnGeneratorVersion = SvXMLImport::OOo_2x;
-                    }
-                    else if ( nUPD == 300 && nBuild <= 9379 )
-                    {
-                        mnGeneratorVersion = SvXMLImport::OOo_30x;
-                    }
-                    else if ( nUPD == 310 )
-                    {
-                        mnGeneratorVersion = SvXMLImport::OOo_31x;
-                    }
-                    else if ( nUPD == 320 )
-                    {
-                        mnGeneratorVersion = SvXMLImport::OOo_32x;
-                    }
-                    else if ( nUPD == 330 )
-                    {
-                        mnGeneratorVersion = SvXMLImport::OOo_33x;
-                    }
-                    else if ( nUPD == 340 )
-                    {
-                        mnGeneratorVersion = SvXMLImport::OOo_34x;
-                    }
-                    else if (nUPD == 400)
-                    {
-                        mnGeneratorVersion = SvXMLImport::AOO_40x;
-                    }
-                    else if (nUPD >= 410)
-                    {
-                        // effectively this means "latest", see use
-                        // in XMLGraphicsDefaultStyle::SetDefaults()!
-                        mnGeneratorVersion = SvXMLImport::AOO_4x;
-                    }
+                    return; // ignore buildIds
                 }
             }
-
-            ~DocumentInfo()
-            {}
-
-            sal_uInt16 getGeneratorVersion() const
+        }
+        sal_Int32 nUPD, nBuild;
+        if ( rImport.getBuildIds( nUPD, nBuild ) )
+        {
+            if ( nUPD >= 640 && nUPD <= 645 )
             {
-                return mnGeneratorVersion;
+                mnGeneratorVersion = SvXMLImport::OOo_1x;
             }
-    };
+            else if ( nUPD == 680 )
+            {
+                mnGeneratorVersion = SvXMLImport::OOo_2x;
+            }
+            else if ( nUPD == 300 && nBuild <= 9379 )
+            {
+                mnGeneratorVersion = SvXMLImport::OOo_30x;
+            }
+            else if ( nUPD == 310 )
+            {
+                mnGeneratorVersion = SvXMLImport::OOo_31x;
+            }
+            else if ( nUPD == 320 )
+            {
+                mnGeneratorVersion = SvXMLImport::OOo_32x;
+            }
+            else if ( nUPD == 330 )
+            {
+                mnGeneratorVersion = SvXMLImport::OOo_33x;
+            }
+            else if ( nUPD == 340 )
+            {
+                mnGeneratorVersion = SvXMLImport::OOo_34x;
+            }
+            else if (nUPD == 400)
+            {
+                mnGeneratorVersion = SvXMLImport::AOO_40x;
+            }
+            else if (nUPD >= 410)
+            {
+                // effectively this means "latest", see use
+                // in XMLGraphicsDefaultStyle::SetDefaults()!
+                mnGeneratorVersion = SvXMLImport::AOO_4x;
+            }
+        }
+    }
+
+    ~DocumentInfo()
+    {}
+
+    sal_uInt16 getGeneratorVersion() const
+    {
+        return mnGeneratorVersion;
+    }
+};
+
 }
 
 class SvXMLImport_Impl
