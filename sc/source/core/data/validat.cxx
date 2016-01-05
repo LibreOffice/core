@@ -572,19 +572,19 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             break;
             case SC_COND_BETWEEN:
             if (nComp2 < nComp1) // time wraparound
-            bOk = ( nInVal >= nComp1 || nInVal <= nComp2 ) ||
-                ::rtl::math::approxEqual( nInVal, nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp2 );
+                bOk = ( nInVal >= nComp1 || nInVal <= nComp2 ) ||
+                    ::rtl::math::approxEqual( nInVal, nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp2 );
             else
-            bOk = ( nInVal >= nComp1 && nInVal <= nComp2 ) ||
-                ::rtl::math::approxEqual( nInVal, nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp2 );
+                bOk = ( nInVal >= nComp1 && nInVal <= nComp2 ) ||
+                    ::rtl::math::approxEqual( nInVal, nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp2 );
             break;
             case SC_COND_NOTBETWEEN:
             if (nComp2 < nComp1) // time wraparound
-            bOk = ( nInVal < nComp1 && nInVal > nComp2 ) &&
-                !::rtl::math::approxEqual( nInVal, nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp2 );
+                bOk = ( nInVal < nComp1 && nInVal > nComp2 ) &&
+                    !::rtl::math::approxEqual( nInVal, nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp2 );
             else
-            bOk = ( nInVal < nComp1 || nInVal > nComp2 ) &&
-                !::rtl::math::approxEqual( nInVal, nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp2 );
+                bOk = ( nInVal < nComp1 || nInVal > nComp2 ) &&
+                    !::rtl::math::approxEqual( nInVal, nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp2 );
             break;
             default:
             SAL_WARN("sc", "unknown operation at ScValidationData::IsDataValid()");
