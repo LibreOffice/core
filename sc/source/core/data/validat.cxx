@@ -543,54 +543,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             OSL_FAIL("not yet done");
             break;
     }
-    if (eDataMode == SC_VALID_TIME) {
-        // consider only time portion (i.e. decimal)
-        double nComp1 = (nVal1 - floor(nVal1));
-        double nComp2 = (nVal2 - floor(nVal2));
-        double nInVal = (nVal  - floor(nVal ));
-        switch (eOp)
-        {
-            case SC_COND_NONE:
-            break;                  // Always sal_False
-            case SC_COND_EQUAL:
-            bOk = ::rtl::math::approxEqual( nInVal, nComp1 );
-            break;
-            case SC_COND_NOTEQUAL:
-            bOk = !::rtl::math::approxEqual( nInVal, nComp1 );
-            break;
-            case SC_COND_GREATER:
-            bOk = ( nInVal > nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp1 );
-            break;
-            case SC_COND_EQGREATER:
-            bOk = ( nInVal >= nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp1 );
-            break;
-            case SC_COND_LESS:
-            bOk = ( nInVal < nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp1 );
-            break;
-            case SC_COND_EQLESS:
-            bOk = ( nInVal <= nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp1 );
-            break;
-            case SC_COND_BETWEEN:
-            if (nComp2 < nComp1) // time wraparound
-            bOk = ( nInVal >= nComp1 || nInVal <= nComp2 ) ||
-                ::rtl::math::approxEqual( nInVal, nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp2 );
-            else
-            bOk = ( nInVal >= nComp1 && nInVal <= nComp2 ) ||
-                ::rtl::math::approxEqual( nInVal, nComp1 ) || ::rtl::math::approxEqual( nInVal, nComp2 );
-            break;
-            case SC_COND_NOTBETWEEN:
-            if (nComp2 < nComp1) // time wraparound
-            bOk = ( nInVal < nComp1 && nInVal > nComp2 ) &&
-                !::rtl::math::approxEqual( nInVal, nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp2 );
-            else
-            bOk = ( nInVal < nComp1 || nInVal > nComp2 ) &&
-                !::rtl::math::approxEqual( nInVal, nComp1 ) && !::rtl::math::approxEqual( nInVal, nComp2 );
-            break;
-            default:
-            SAL_WARN("sc", "unknown operation at ScValidationData::IsDataValid()");
-            break;
-        }
-    }
+
     return bOk;
 }
 
