@@ -68,8 +68,7 @@ using ::rtl::Reference;
 #define HKEY_SUN_SDK L"Software\\JavaSoft\\Java Development Kit"
 #endif
 
-#ifdef UNX
-#if !(defined MACOSX && defined X86_64)
+#if defined( UNX ) && !defined( MACOSX )
 namespace {
 char const *g_arJavaNames[] = {
     "",
@@ -82,6 +81,7 @@ char const *g_arJavaNames[] = {
     "Home",
     "IBMJava2-ppc-142"
 };
+
 /* These are directory names which could contain multiple java installations.
  */
 char const *g_arCollectDirs[] = {
@@ -101,11 +101,6 @@ char const *g_arCollectDirs[] = {
    looked for.
 */
 char const *g_arSearchPaths[] = {
-#ifdef MACOSX
-    "",
-    "Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin",
-    "System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/"
-#else
 #ifndef JVM_ONE_PATH_CHECK
     "",
     "usr/",
@@ -120,11 +115,9 @@ char const *g_arSearchPaths[] = {
 #else
     JVM_ONE_PATH_CHECK
 #endif
-#endif
 };
 }
-#endif
-#endif //  UNX
+#endif //  UNX && !MACOSX
 
 namespace jfw_plugin
 {
