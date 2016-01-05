@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_73e23c05",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/util.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2016-01-05T16:03:47Z",
+      "side": 1,
+      "message": "I dunno what to do with this and IBMJava2-ppc-142, maybe remove these entries too?",
+      "range": {
+        "startLine": 109,
+        "startChar": 15,
+        "endLine": 109,
+        "endChar": 25
+      },
+      "revId": "c584945166709af886e4dd1a5ffebde30fa673b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
