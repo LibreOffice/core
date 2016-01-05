@@ -249,7 +249,6 @@
 #define FN_MAILMERGE_WIZARD     (FN_INSERT + 64)    /* mail merge wizard */
 #define FN_TOOL_ANCHOR_FRAME    (FN_INSERT + 66)    /* anchor Draw-Object to frame*/
 #define FN_QRY_MERGE            (FN_INSERT + 67)    /* insert record (serial letter) */
-#define FN_MAILMERGE_CHILDWINDOW (FN_INSERT + 68)   /* back-to-mail-merge-wizard child window*/
 #define FN_INSERT_SMA           (FN_INSERT + 69)    /* insert StarMath  */
 
 #define FN_MAILMERGE_FIRST_ENTRY (FN_INSERT + 70)   /* mail merge toolbar - go to the first entry */

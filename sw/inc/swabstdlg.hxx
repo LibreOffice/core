@@ -300,8 +300,6 @@ public:
 };
 
 #define RET_LOAD_DOC            100
-#define RET_EDIT_DOC            101
-#define RET_EDIT_RESULT_DOC     102
 #define RET_TARGET_CREATED      103
 #define RET_REMOVE_TARGET       104
 

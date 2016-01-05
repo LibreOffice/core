@@ -83,7 +83,6 @@
 #include <uinums.hxx>
 #include <dbconfig.hxx>
 #include <mmconfigitem.hxx>
-#include <mailmergechildwindow.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -381,25 +380,8 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
     // keep self alive until done.
     acquire();
 
-    // if called from the child window - get the config item and close the ChildWindow, then restore
-    // the wizard
-    SwMailMergeChildWindow* pChildWin =
-        static_cast<SwMailMergeChildWindow*>(m_pView->GetViewFrame()->GetChildWindow(FN_MAILMERGE_CHILDWINDOW));
-    bool bRestoreWizard = false;
-    sal_uInt16 nRestartPage = 0;
-
-    SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
-    if (pChildWin && pChildWin->IsVisible())
-    {
-        nRestartPage = m_pView->GetMailMergeRestartPage();
-        if (m_pView->IsMailMergeSourceView())
-            pMMConfig->SetSourceView(m_pView);
-        SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
-        pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, false);
-        bRestoreWizard = true;
-    }
-
     // create if it does not exist yet
+    SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
     if (!pMMConfig)
     {
         pMMConfig = new SwMailMergeConfigItem;
@@ -458,11 +440,6 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *pMMConfig);
-
-    if (bRestoreWizard)
-    {
-        m_pWizard->ShowPage(nRestartPage);
-    }
 
     ExecuteWizard();
 }
@@ -541,21 +518,6 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                 // should not happen - just in case no target view has been created
                 ExecutionFinished();
             }
-            break;
-        }
-    case RET_EDIT_DOC:
-    case RET_EDIT_RESULT_DOC:
-        {
-            //create a non-modal dialog that allows to return to the wizard
-            //the ConfigItem ownership moves to this dialog
-            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
-            bool bResult = nRet == RET_EDIT_RESULT_DOC && pMMConfig->GetTargetView();
-            SwView* pTempView = bResult ? pMMConfig->GetTargetView() : pMMConfig->GetSourceView();
-            pTempView->SetMailMergeConfigItem(pMMConfig, m_pWizard->GetRestartPage(), !bResult);
-            SfxViewFrame* pViewFrame = pTempView->GetViewFrame();
-            pViewFrame->GetDispatcher()->Execute(
-                FN_MAILMERGE_CHILDWINDOW, SfxCallMode::SYNCHRON);
-            ExecutionFinished();
             break;
         }
     case RET_REMOVE_TARGET:

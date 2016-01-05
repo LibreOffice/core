@@ -395,14 +395,6 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
             break;
-#if HAVE_FEATURE_DBCONNECTIVITY
-            case FN_MAILMERGE_CHILDWINDOW:
-            {
-                if(!GetMailMergeConfigItem())
-                    rSet.DisableItem(nWhich);
-            }
-            break;
-#endif
             case SID_ALIGN_ANY_LEFT :
             case SID_ALIGN_ANY_HCENTER  :
             case SID_ALIGN_ANY_RIGHT    :
