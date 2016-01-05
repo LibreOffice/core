@@ -341,8 +341,8 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
     for ( int i = sigInfo.vSignatureReferenceInfors.size(); i; )
     {
         const SignatureReferenceInformation& rInf = sigInfo.vSignatureReferenceInfors[--i];
-        // There is also an extra entry of type TYPE_SAMEDOCUMENT_REFERENCE because of signature date.
-        if ( ( rInf.nType == TYPE_BINARYSTREAM_REFERENCE ) || ( rInf.nType == TYPE_XMLSTREAM_REFERENCE ) )
+        // There is also an extra entry of type SignatureReferenceType::SAMEDOCUMENT because of signature date.
+        if ( ( rInf.nType == SignatureReferenceType::BINARYSTREAM ) || ( rInf.nType == SignatureReferenceType::XMLSTREAM ) )
         {
             OUString sReferenceURI = rInf.ouURI;
             if (alg == OOo2Document)

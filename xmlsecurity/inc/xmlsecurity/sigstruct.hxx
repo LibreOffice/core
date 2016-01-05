@@ -29,17 +29,20 @@
 /*
  * type of reference
  */
-#define TYPE_SAMEDOCUMENT_REFERENCE 1
-#define TYPE_BINARYSTREAM_REFERENCE 2
-#define TYPE_XMLSTREAM_REFERENCE    3
+enum class SignatureReferenceType
+{
+    SAMEDOCUMENT = 1,
+    BINARYSTREAM = 2,
+    XMLSTREAM = 3
+};
 
 struct SignatureReferenceInformation
 {
-    sal_Int32  nType;
+    SignatureReferenceType  nType;
     OUString   ouURI;
     OUString   ouDigestValue;
 
-    SignatureReferenceInformation( sal_Int32 type, const OUString& uri )
+    SignatureReferenceInformation( SignatureReferenceType type, const OUString& uri )
     {
         nType = type;
         ouURI = uri;
