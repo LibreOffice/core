@@ -290,7 +290,17 @@ void XSecController::setPropertyId( OUString& ouPropertyId )
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
-    isi.signatureInfor.ouPropertyId = ouPropertyId;
+
+    if (isi.signatureInfor.ouPropertyId.isEmpty())
+    {
+        // <SignatureProperty> ID attribute is for the date.
+        isi.signatureInfor.ouPropertyId = ouPropertyId;
+    }
+    else
+    {
+        // <SignatureProperty> ID attribute is for the description.
+        isi.signatureInfor.ouDescriptionPropertyId = ouPropertyId;
+    }
 }
 
 /* public: for signature verify */

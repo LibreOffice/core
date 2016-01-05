@@ -168,6 +168,14 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     internalSignatureInfor.addReference(TYPE_SAMEDOCUMENT_REFERENCE, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
     size++;
 
+    if (!internalSignatureInfor.signatureInfor.ouDescription.isEmpty())
+    {
+        // Only mention the hash of the description in the signature if it's non-empty.
+        internalSignatureInfor.signatureInfor.ouDescriptionPropertyId = createId();
+        internalSignatureInfor.addReference(TYPE_SAMEDOCUMENT_REFERENCE, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1);
+        size++;
+    }
+
     /*
      * replace both digestValues and signatueValue to " "
      */
