@@ -2020,7 +2020,7 @@
       </node>
       <node oor:name=".uno:RowMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Row</value>
+          <value xml:lang="en-US">Ro~w</value>
         </prop>
       </node>
       <node oor:name=".uno:ColumnMenu" oor:op="replace">
@@ -2045,7 +2045,7 @@
       </node>
       <node oor:name=".uno:PrintRangesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Pri~nt Ranges</value>
+          <value xml:lang="en-US">Prin~t Ranges</value>
         </prop>
       </node>
       <node oor:name=".uno:ToggleFormula" oor:op="replace">
