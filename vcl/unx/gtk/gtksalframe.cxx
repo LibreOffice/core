@@ -83,8 +83,8 @@
 
 #include <config_folders.h>
 
-#define IS_WIDGET_REALIZED gtk_widget_get_realized
-#define IS_WIDGET_MAPPED   gtk_widget_get_mapped
+#define IS_WIDGET_REALIZED GTK_WIDGET_REALIZED
+#define IS_WIDGET_MAPPED   GTK_WIDGET_MAPPED
 
 using namespace com::sun::star;
 
