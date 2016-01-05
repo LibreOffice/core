@@ -37,7 +37,6 @@ class   BitmapPalette;
 class VCL_PLUGIN_PUBLIC OpenGLSalBitmap : public SalBitmap
 {
 private:
-    rtl::Reference<OpenGLContext>       mpContext;
     OpenGLTexture                       maTexture;
     bool                                mbDirtyTexture;
     BitmapPalette                       maPalette;
@@ -50,7 +49,6 @@ private:
     int                                 mnBufHeight;
     std::deque< OpenGLSalBitmapOp* >    maPendingOps;
 
-    void makeSomeOpenGLContextCurrent();
     virtual void updateChecksum() const override;
 
     bool calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType& rChecksum) const;
@@ -98,10 +96,11 @@ private:
 
 private:
 
-    bool ImplScaleFilter( const double& rScaleX, const double& rScaleY, GLenum nFilter );
+    bool ImplScaleFilter( const rtl::Reference< OpenGLContext > &xContext, const double& rScaleX, const double& rScaleY, GLenum nFilter );
     static void ImplCreateKernel( const double& fScale, const vcl::Kernel& rKernel, GLfloat*& pWeights, sal_uInt32& aKernelSize );
-    bool ImplScaleConvolution(const double& rScaleX, const double& rScaleY, const vcl::Kernel& rKernel);
-    bool ImplScaleArea( double rScaleX, double rScaleY );
+    bool ImplScaleConvolution(const rtl::Reference< OpenGLContext > &xContext, const double& rScaleX, const double& rScaleY, const vcl::Kernel& rKernel);
+    bool ImplScaleArea( const rtl::Reference< OpenGLContext > &xContext,
+                        double rScaleX, double rScaleY );
 
 public:
 

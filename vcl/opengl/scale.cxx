@@ -37,6 +37,7 @@ using vcl::BilinearKernel;
 using vcl::BoxKernel;
 
 bool OpenGLSalBitmap::ImplScaleFilter(
+    const rtl::Reference< OpenGLContext > &xContext,
     const double& rScaleX,
     const double& rScaleY,
     GLenum        nFilter )
@@ -47,13 +48,13 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     int nNewWidth( mnWidth * rScaleX );
     int nNewHeight( mnHeight * rScaleY );
 
-    pProgram = mpContext->UseProgram( "textureVertexShader",
-                                      "textureFragmentShader" );
+    pProgram = xContext->UseProgram( "textureVertexShader",
+                                     "textureFragmentShader" );
     if( !pProgram )
         return false;
 
     OpenGLTexture aNewTex(nNewWidth, nNewHeight);
-    pFramebuffer = mpContext->AcquireFramebuffer( aNewTex );
+    pFramebuffer = xContext->AcquireFramebuffer( aNewTex );
 
     pProgram->SetTexture( "sampler", maTexture );
     nOldFilter = maTexture.GetFilter();
@@ -112,6 +113,7 @@ void OpenGLSalBitmap::ImplCreateKernel(
 }
 
 bool OpenGLSalBitmap::ImplScaleConvolution(
+    const rtl::Reference< OpenGLContext > &xContext,
     const double& rScaleX,
     const double& rScaleY,
     const Kernel& aKernel )
@@ -126,7 +128,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
 
     // TODO Make sure the framebuffer is alright
 
-    pProgram = mpContext->UseProgram( "textureVertexShader",
+    pProgram = xContext->UseProgram( "textureVertexShader",
                                       "convolutionFragmentShader" );
     if( pProgram == nullptr )
         return false;
@@ -136,7 +138,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     {
         OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
 
-        pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
+        pFramebuffer = xContext->AcquireFramebuffer( aScratchTex );
 
         for( sal_uInt32 i = 0; i < 16; i++ )
         {
@@ -159,7 +161,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     {
         OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
 
-        pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
+        pFramebuffer = xContext->AcquireFramebuffer( aScratchTex );
 
         for( sal_uInt32 i = 0; i < 16; i++ )
         {
@@ -192,7 +194,8 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
  the generic case needs to also consider that some source pixels contribute
  only partially to their resulting pixels (because of non-integer multiples).
 */
-bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
+bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xContext,
+                                     double rScaleX, double rScaleY )
 {
     int nNewWidth( mnWidth * rScaleX );
     int nNewHeight( mnHeight * rScaleY );
@@ -213,14 +216,14 @@ bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
 
     // TODO Make sure the framebuffer is alright
 
-    OpenGLProgram* pProgram = mpContext->UseProgram( "textureVertexShader",
+    OpenGLProgram* pProgram = xContext->UseProgram( "textureVertexShader",
         fast ? OUString( "areaScaleFastFragmentShader" ) : OUString( "areaScaleFragmentShader" ));
     if( pProgram == nullptr )
         return false;
 
     OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
 
-    OpenGLFramebuffer* pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
+    OpenGLFramebuffer* pFramebuffer = xContext->AcquireFramebuffer( aScratchTex );
 
     // NOTE: This setup is also done in OpenGLSalGraphicsImpl::DrawTransformedTexture().
     if( fast )
@@ -263,31 +266,32 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
     VCL_GL_INFO( "::ImplScale" );
 
     maUserBuffer.reset();
-    makeSomeOpenGLContextCurrent();
+    OpenGLVCLContextZone aContextZone;
+    rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
 
     if( nScaleFlag == BmpScaleFlag::Fast )
     {
-        return ImplScaleFilter( rScaleX, rScaleY, GL_NEAREST );
+        return ImplScaleFilter( xContext, rScaleX, rScaleY, GL_NEAREST );
     }
     if( nScaleFlag == BmpScaleFlag::BiLinear )
     {
-        return ImplScaleFilter( rScaleX, rScaleY, GL_LINEAR );
+        return ImplScaleFilter( xContext, rScaleX, rScaleY, GL_LINEAR );
     }
     else if( nScaleFlag == BmpScaleFlag::Super || nScaleFlag == BmpScaleFlag::Default )
     {
         const Lanczos3Kernel aKernel;
 
-        return ImplScaleConvolution( rScaleX, rScaleY, aKernel );
+        return ImplScaleConvolution( xContext, rScaleX, rScaleY, aKernel );
     }
     else if( nScaleFlag == BmpScaleFlag::BestQuality && rScaleX <= 1 && rScaleY <= 1 )
     { // Use are scaling for best quality, but only if downscaling.
-        return ImplScaleArea( rScaleX, rScaleY );
+        return ImplScaleArea( xContext, rScaleX, rScaleY );
     }
     else if( nScaleFlag == BmpScaleFlag::Lanczos || nScaleFlag == BmpScaleFlag::BestQuality  )
     {
         const Lanczos3Kernel aKernel;
 
-        return ImplScaleConvolution( rScaleX, rScaleY, aKernel );
+        return ImplScaleConvolution( xContext, rScaleX, rScaleY, aKernel );
     }
 
     SAL_WARN( "vcl.opengl", "Invalid flag for scaling operation" );
@@ -296,7 +300,7 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
 
 bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
-    OpenGLZone aZone;
+    OpenGLVCLContextZone aContextZone;
 
     VCL_GL_INFO("::Scale " << int(nScaleFlag)
              << " from " << mnWidth << "x" << mnHeight
@@ -309,7 +313,6 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpSc
         nScaleFlag == BmpScaleFlag::Default ||
         nScaleFlag == BmpScaleFlag::BestQuality )
     {
-        makeSomeOpenGLContextCurrent();
         ImplScale( rScaleX, rScaleY, nScaleFlag );
         return true;
     }
