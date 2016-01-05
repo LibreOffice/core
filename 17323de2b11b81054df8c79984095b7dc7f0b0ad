@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_33d8b453",
+        "filename": "include/svtools/ServerDetailsControls.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-05T16:00:26Z",
+      "side": 1,
+      "message": "this should be marked \"override\"",
+      "revId": "17323de2b11b81054df8c79984095b7dc7f0b0ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
