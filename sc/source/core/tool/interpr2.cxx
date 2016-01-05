@@ -207,9 +207,12 @@ void ScInterpreter::ScGetDayOfWeek()
 
 void ScInterpreter::ScGetWeekOfYear()
 {
-    if ( MustHaveParamCount( GetByte(), 2 ) )
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        short nFlag = (short) ::rtl::math::approxFloor(GetDouble());
+        // Without mode parameter calculate ISO 8601 week starting on Monday
+        // like ISOWEEKNUM(), which this is loaded from.
+        short nFlag = (nParamCount == 1) ? 0 : (short) ::rtl::math::approxFloor(GetDouble());
 
         Date aDate = *(pFormatter->GetNullDate());
         aDate += (long)::rtl::math::approxFloor(GetDouble());
