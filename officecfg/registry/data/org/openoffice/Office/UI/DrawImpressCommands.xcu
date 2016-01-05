@@ -943,7 +943,7 @@
       </node>
       <node oor:name=".uno:Dismantle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Split</value>
+          <value xml:lang="en-US">Spl~it</value>
         </prop>
       </node>
       <node oor:name=".uno:PageStatus" oor:op="replace">

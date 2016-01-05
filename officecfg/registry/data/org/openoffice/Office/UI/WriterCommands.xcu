@@ -109,7 +109,7 @@
       </node>
       <node oor:name=".uno:InsertSection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Section...</value>
+          <value xml:lang="en-US">Se~ction...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -544,7 +544,7 @@
       </node>
       <node oor:name=".uno:FormatObjectMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Text Box and Shape</value>
+          <value xml:lang="en-US">Text Box and Shap~e</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertFieldCtrl" oor:op="replace">

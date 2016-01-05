@@ -2405,7 +2405,7 @@
       </node>
       <node oor:name=".uno:InsertDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Document...</value>
+          <value xml:lang="en-US">Doc~ument...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3244,7 +3244,7 @@
       </node>
       <node oor:name=".uno:InsertFootnotesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Footnote and En~dnote</value>
+          <value xml:lang="en-US">Footnote and Endno~te</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3270,7 +3270,7 @@
       </node>
       <node oor:name=".uno:FormatTextMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Text</value>
+          <value xml:lang="en-US">Te~xt</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4458,7 +4458,7 @@
       </node>
       <node oor:name=".uno:RubyDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">As~ian phonetic guide...</value>
+          <value xml:lang="en-US">Asian phonetic g~uide...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>8</value>
@@ -4505,7 +4505,7 @@
       </node>
       <node oor:name=".uno:ExportToPDF" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Export as P~DF...</value>
+          <value xml:lang="en-US">~Export as PDF...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5832,17 +5832,17 @@
       </node>
       <node oor:name=".uno:FlipMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Flip</value>
+          <value xml:lang="en-US">F~lip</value>
         </prop>
       </node>
       <node oor:name=".uno:RotateMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Ro~tate</value>
+          <value xml:lang="en-US">Rot~ate</value>
         </prop>
       </node>
       <node oor:name=".uno:AnchorMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">A~nchor</value>
+          <value xml:lang="en-US">Anc~hor</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
