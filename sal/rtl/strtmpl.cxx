@@ -1214,7 +1214,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( acquire )( IMPL_RTL_STRINGDATA* pThis )
 void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
     SAL_THROW_EXTERN_C()
 {
-    if (SAL_STRING_IS_STATIC (pThis))
+    if (SAL_UNLIKELY(SAL_STRING_IS_STATIC (pThis)))
         return;
 
 /* OString doesn't have an 'intern' */

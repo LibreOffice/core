@@ -270,7 +270,7 @@ rtl_cache_slab_create (
 
     size = cache->m_slab_size;
     addr = rtl_arena_alloc (cache->m_source, &size);
-    if (addr != nullptr)
+    if (SAL_LIKELY(addr != nullptr))
     {
         assert(size >= cache->m_slab_size);
 
@@ -286,7 +286,7 @@ rtl_cache_slab_create (
             slab = RTL_CACHE_SLAB(addr, cache->m_slab_size);
             (void) rtl_cache_slab_constructor (slab, nullptr);
         }
-        if (slab != nullptr)
+        if (SAL_LIKELY(slab != nullptr))
         {
             slab->m_data = reinterpret_cast<sal_uIntPtr>(addr);
 
@@ -1146,7 +1146,7 @@ SAL_CALL rtl_cache_alloc (
     }
 
     RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
-    if (cache->m_cpu_curr != nullptr)
+    if (SAL_LIKELY(cache->m_cpu_curr != nullptr))
     {
         for (;;)
         {

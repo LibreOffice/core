@@ -68,19 +68,19 @@ typedef struct _rtl_StandardModuleCount
 
     @deprecated Do not use.
 */
-SAL_DLLPUBLIC void rtl_moduleCount_acquire(rtl_ModuleCount * that );
+SAL_DLLPUBLIC void rtl_moduleCount_acquire(rtl_ModuleCount * that ) SAL_COLD;
 
 /** Backwards-compatibility remainder of a removed library unloading feature.
 
     @deprecated Do not use.
 */
-SAL_DLLPUBLIC void rtl_moduleCount_release( rtl_ModuleCount * that );
+SAL_DLLPUBLIC void rtl_moduleCount_release( rtl_ModuleCount * that ) SAL_COLD;
 
 /** Backwards-compatibility remainder of a removed library unloading feature.
 
     @deprecated Do not use.
 */
-SAL_DLLPUBLIC sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue* libUnused);
+SAL_DLLPUBLIC sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue* libUnused) SAL_COLD;
 
 #ifdef __cplusplus
 }

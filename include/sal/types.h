@@ -612,26 +612,81 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #define SAL_WARN_UNUSED
 #endif
 
-#if defined(__GNUC__) && defined(__OPTIMIZE__)
-#define _SAL_BOOLEAN_EXPR(expr)                   \
- __extension__ ({                               \
-   int _sal_boolean_var_;                         \
-   if (expr)                                    \
-      _sal_boolean_var_ = 1;                      \
-   else                                         \
-      _sal_boolean_var_ = 0;                      \
-   _sal_boolean_var_;                             \
-})
-#define SAL_LIKELY(expr) (__builtin_expect (_SAL_BOOLEAN_EXPR(expr), 1))
-#define SAL_UNLIKELY(expr) (__builtin_expect (_SAL_BOOLEAN_EXPR(expr), 0))
-#define SAL_HOT __attribute__((hot))
-#define SAL_COLD __attribute__((cold))
+// for internal optimization
+#if LIBO_INTERNAL_ONLY
+
+#if defined(__GNUC__)
+// Macro to try to catch and warn on assignments inside expr.
+#    define _SAL_BOOLEAN_EXPR(expr)                   \
+     __extension__ ({                               \
+       int _sal_boolean_var_;                         \
+       if (expr)                                    \
+          _sal_boolean_var_ = 1;                      \
+       else                                         \
+          _sal_boolean_var_ = 0;                      \
+       _sal_boolean_var_;                             \
+    })
+
+/** An optimization annotation: denotes that expression is likely to be true.
+
+    Use it to annotate paths that we think are likely eg.
+    if (SAL_LIKELY(ptr != nullptr))
+       // this path is the one that is ~always taken.
+
+    @since LibreOffice 5.2
+
+    Returns: the boolean value of expr (expressed as either int 1 or 0)
+ */
+#    define SAL_LIKELY(expr) (__builtin_expect (_SAL_BOOLEAN_EXPR(expr), 1))
+
+/** An optimization annotation: denotes that expression is unlikely to be true.
+
+    Use it to annotate paths that we think are likely eg.
+    if (SAL_UNLIKELY(ptr != nullptr))
+       // this path is the one that is ~never taken.
+
+    @since LibreOffice 5.2
+
+    Returns: the boolean value of expr (expressed as either int 1 or 0)
+ */
+#    define SAL_UNLIKELY(expr) (__builtin_expect (_SAL_BOOLEAN_EXPR(expr), 0))
+
+/** An optimization annotation: tells the compiler to work harder at this code
+
+    If the SAL_HOT annotation is present on a function or a label then
+    subsequent code statements may have more aggressive compiler
+    optimization and in-lining work performed on them.
+
+    In addition this code can end up in a special section, to be
+    grouped with other frequently used code.
+
+    @since LibreOffice 5.2
+ */
+#    define SAL_HOT __attribute__((hot))
+
+/** An optimization annotation: tells the compiler to work less on this code
+
+    If the SAL_COLD annotation is present on a function or a label then
+    subsequent code statements are unlikely to be performed except in
+    exceptional circumstances, and optimizing for code-size rather
+    than performance is preferable.
+
+    In addition this code can end up in a special section, to be grouped
+    with (and away from) other more frequently used code, to improve
+    locality of reference.
+
+    @since LibreOffice 5.2
+ */
+#    define SAL_COLD __attribute__((cold))
 #else
-#define SAL_LIKELY(expr) (expr)
-#define SAL_UNLIKELY(expr) (expr)
-#define SAL_HOT
-#define SAL_COLD
+#    define SAL_LIKELY(expr) (expr)
+#    define SAL_UNLIKELY(expr) (expr)
+#    define SAL_HOT
+#    define SAL_COLD
 #endif
+
+#endif // LIBO_INTERNAL_ONLY
+
 #endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

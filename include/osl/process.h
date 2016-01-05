@@ -275,7 +275,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_terminateProcess(
     @return the process handle on success, NULL in all other cases
  */
 SAL_DLLPUBLIC oslProcess SAL_CALL osl_getProcess(
-        oslProcessIdentifier Ident);
+        oslProcessIdentifier Ident) SAL_COLD;
 
 
 /** Free the specified process-handle.

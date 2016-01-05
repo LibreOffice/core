@@ -1193,7 +1193,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _rtl_uString
     a string.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_acquire(
-        rtl_uString * str ) SAL_THROW_EXTERN_C();
+        rtl_uString * str ) SAL_THROW_EXTERN_C() SAL_HOT;
 
 /** Decrement the reference count of a string.
 
@@ -1203,7 +1203,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_acquire(
     a string.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_release(
-        rtl_uString * str ) SAL_THROW_EXTERN_C();
+        rtl_uString * str ) SAL_THROW_EXTERN_C() SAL_HOT;
 
 /** Allocate a new string containing no characters.
 
