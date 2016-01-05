@@ -44,10 +44,7 @@ DoubleSequenceContext::DoubleSequenceContext( ContextHandler2Helper& rParent, Da
 
 DoubleSequenceContext::~DoubleSequenceContext()
 {
-    if( mpNumberFormatter != nullptr )
-    {
-        delete mpNumberFormatter;
-    }
+    delete mpNumberFormatter;
 }
 
 ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
