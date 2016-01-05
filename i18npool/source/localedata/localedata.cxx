@@ -816,40 +816,6 @@ LocaleDataImpl::getAllCurrencies( const Locale& rLocale ) throw(RuntimeException
 }
 
 
-// return a static (!) string resulting from replacing all occurrences of
-// 'oldStr' string in 'formatCode' string with 'newStr' string
-static const sal_Unicode * replace( sal_Unicode const * const formatCode, sal_Unicode const * const oldStr, sal_Unicode const * const newStr)
-{
-    // make reasonable assumption of maximum length of formatCode.
-#define MAX_FORMATCODE_LENTH 512
-    static sal_Unicode str[MAX_FORMATCODE_LENTH];
-
-    if (oldStr[0] == 0) // no replacement requires
-        return formatCode;
-
-    sal_Int32 i = 0, k = 0;
-    while (formatCode[i] > 0 && k < MAX_FORMATCODE_LENTH) {
-        sal_Int32 j = 0, last = k;
-        // search oldStr in formatCode
-        while (formatCode[i] > 0 && oldStr[j] > 0 && k < MAX_FORMATCODE_LENTH) {
-            str[k++] = formatCode[i];
-            if (formatCode[i++] != oldStr[j++])
-                break;
-        }
-        if (oldStr[j] == 0) {
-            // matched string found, do replacement
-            k = last; j = 0;
-            while (newStr[j] > 0 && k < MAX_FORMATCODE_LENTH)
-                str[k++] = newStr[j++];
-        }
-    }
-    if (k >= MAX_FORMATCODE_LENTH) // could not complete replacement, return original formatCode
-        return formatCode;
-
-    str[k] = 0;
-    return str;
-}
-
 Sequence< FormatElement > SAL_CALL
 LocaleDataImpl::getAllFormats( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
@@ -886,7 +852,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale ) throw(RuntimeException, s
             for (int i = 0, nOff = 0; i < section[s].formatCount; ++i, nOff += 7, ++f)
             {
                 FormatElement elem(
-                        replace( formatArray[nOff], section[s].from, section[s].to),
+                        OUString(formatArray[nOff]).replaceAll(section[s].from, section[s].to),
                         formatArray[nOff + 1],
                         formatArray[nOff + 2],
                         formatArray[nOff + 3],
