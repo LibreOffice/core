@@ -79,7 +79,7 @@
 #define TAG_SIGNATUREPROPERTY       "SignatureProperty"
 #define TAG_TIMESTAMP           "timestamp"
 #define TAG_DATE            "date"
-//#define TAG_TIME          "time"
+#define TAG_DESCRIPTION "description"
 
 #define ATTR_XMLNS          "xmlns"
 #define ATTR_ALGORITHM          "Algorithm"
@@ -450,6 +450,7 @@ public:
     void setDate(
         sal_Int32 nSecurityId,
         const ::com::sun::star::util::DateTime& rDateTime );
+    void setDescription(sal_Int32 nSecurityId, const OUString& rDescription);
 
 
     bool WriteSignature(

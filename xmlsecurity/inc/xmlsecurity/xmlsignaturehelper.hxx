@@ -164,6 +164,7 @@ public:
         const OUString& ouX509SerialNumber, const OUString& ouX509Cert);
 
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const tools::Time& rTime );
+    void SetDescription(sal_Int32 nSecurityId, const OUString& rDescription);
 
     void        AddForSigning( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool bBinary );
     bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );

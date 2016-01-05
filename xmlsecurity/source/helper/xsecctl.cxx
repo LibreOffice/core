@@ -37,6 +37,7 @@ namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 namespace cssxw = com::sun::star::xml::wrapper;
+using namespace com::sun::star;
 
 /* bridge component names */
 #define XMLSIGNATURE_COMPONENT "com.sun.star.xml.crypto.XMLSignature"
@@ -725,6 +726,7 @@ void XSecController::exportSignature(
     OUString tag_SignatureProperties(TAG_SIGNATUREPROPERTIES);
     OUString tag_SignatureProperty(TAG_SIGNATUREPROPERTY);
     OUString tag_Date(TAG_DATE);
+    OUString tag_Description(TAG_DESCRIPTION);
 
     const SignatureReferenceInformations& vReferenceInfors = signatureInfo.vSignatureReferenceInfors;
     SvXMLAttributeList *pAttributeList;
@@ -944,6 +946,29 @@ void XSecController::exportSignature(
                 }
                 xDocumentHandler->endElement( tag_SignatureProperty );
             }
+
+            // Write signature description.
+            if (!signatureInfo.ouDescription.isEmpty())
+            {
+                // SignatureProperty element.
+                pAttributeList = new SvXMLAttributeList();
+                pAttributeList->AddAttribute(ATTR_ID, signatureInfo.ouDescriptionPropertyId);
+                pAttributeList->AddAttribute(ATTR_TARGET, CHAR_FRAGMENT + signatureInfo.ouSignatureId);
+                xDocumentHandler->startElement(tag_SignatureProperty, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
+
+                {
+                    // Description element.
+                    pAttributeList = new SvXMLAttributeList();
+                    pAttributeList->AddAttribute(ATTR_XMLNS ":" NSTAG_DC, NS_DC);
+
+                    xDocumentHandler->startElement(NSTAG_DC ":" + tag_Description, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
+                    xDocumentHandler->characters(signatureInfo.ouDescription);
+                    xDocumentHandler->endElement(NSTAG_DC ":" + tag_Description);
+                }
+
+                xDocumentHandler->endElement(tag_SignatureProperty);
+            }
+
             xDocumentHandler->endElement( tag_SignatureProperties );
         }
         xDocumentHandler->endElement( tag_Object );
