@@ -988,29 +988,27 @@ AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
 //If current active cell is in editing, the focus state should be set to internal text
 bool AccessibleTableShape::SetState (sal_Int16 aState)
 {
-    AccessibleCell* pActiveAccessibleCell = GetActiveAccessibleCell();
-    bool bStateHasChanged = false;
-    if (aState == AccessibleStateType::FOCUSED && pActiveAccessibleCell != nullptr)
+    if( aState == AccessibleStateType::FOCUSED )
     {
-        return pActiveAccessibleCell->SetState(aState);
+        AccessibleCell* pActiveAccessibleCell = GetActiveAccessibleCell();
+        if( pActiveAccessibleCell != nullptr )
+            return pActiveAccessibleCell->SetState(aState);
     }
-    else
-        bStateHasChanged = AccessibleShape::SetState (aState);
-    return bStateHasChanged;
+
+    return AccessibleShape::SetState (aState);
 }
 
 //If current active cell is in editing, the focus state should be reset to internal text
 bool AccessibleTableShape::ResetState (sal_Int16 aState)
 {
-    AccessibleCell* pActiveAccessibleCell = GetActiveAccessibleCell();
-    bool bStateHasChanged = false;
-    if (aState == AccessibleStateType::FOCUSED && pActiveAccessibleCell != nullptr)
+    if( aState == AccessibleStateType::FOCUSED )
     {
-        return pActiveAccessibleCell->ResetState(aState);
+        AccessibleCell* pActiveAccessibleCell = GetActiveAccessibleCell();
+        if( pActiveAccessibleCell != nullptr )
+            return pActiveAccessibleCell->ResetState(aState);
     }
-    else
-        bStateHasChanged = AccessibleShape::ResetState (aState);
-    return bStateHasChanged;
+
+    return AccessibleShape::ResetState (aState);
 }
 
 bool AccessibleTableShape::SetStateDirectly (sal_Int16 aState)
