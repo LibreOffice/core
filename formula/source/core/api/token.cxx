@@ -1513,7 +1513,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
             {
                 FormulaToken *pToken = new FormulaToken( svByte,
                         ( pCur->GetOpCode() == ocCeil ? ocCeil_Math : ocFloor_Math ) );
-                pNewArr->AddToken( *pToken );
+                pNewArr->Add( pToken );
             }
             else if (pCur->GetOpCode() == ocWeeknumOOo &&
                     rConv.getConvention() == MissingConvention::FORMULA_MISSING_CONVENTION_ODFF)
@@ -1529,7 +1529,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                  * formula/source/core/resource/core_resource.src
                  * SC_OPCODE_WEEKNUM_OOO */
                 FormulaToken *pToken = new FormulaByteToken( ocIsoWeeknum, pCur->GetByte(), pCur->IsInForceArray());
-                pNewArr->AddToken( *pToken );
+                pNewArr->Add( pToken );
             }
             else
                 pNewArr->AddToken( *pCur );
