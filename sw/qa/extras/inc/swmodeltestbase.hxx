@@ -390,6 +390,12 @@ protected:
         xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
         xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
         xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+        if (xmlXPathNodeSetGetLength(pXmlNodes) != 1)
+        {
+            SAL_DEBUG(reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer)));
+            SAL_DEBUG("XPath: " << aXPath);
+        }
+
         CPPUNIT_ASSERT_EQUAL_MESSAGE("parsing dump failed", 1, xmlXPathNodeSetGetLength(pXmlNodes));
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
         OUString aRet;
