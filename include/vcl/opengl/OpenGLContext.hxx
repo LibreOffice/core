@@ -174,6 +174,11 @@ public:
     static void prepareForYield();
     /// Is there a current GL context ?
     static bool hasCurrent();
+
+    /// make a VCL context (any context) current, create it if necessary.
+    static void makeVCLCurrent();
+    /// fetch any VCL context, creating one if @bMakeIfNecessary is set.
+    static rtl::Reference<OpenGLContext> getVCLContext(bool bMakeIfNecessary = true);
     /// make this GL context current - so it is implicit in subsequent GL calls
     void makeCurrent();
     /// Put this GL context to the end of the context list.
