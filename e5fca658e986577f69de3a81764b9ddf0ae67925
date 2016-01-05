@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_102126fc",
+        "filename": "include/sal/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-05T09:19:39Z",
+      "side": 1,
+      "message": "please add some documentation, including a \"@since LibreOffice 5.2\" tag",
+      "revId": "e5fca658e986577f69de3a81764b9ddf0ae67925",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_701192ac",
+        "filename": "include/sal/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-05T09:19:39Z",
+      "side": 1,
+      "message": "why restrict this to __OPTIMIZE__?  Enabling these macros for non-optimized builds should be harmless, and might help catch errors caused by the macro expansions earlier.",
+      "revId": "e5fca658e986577f69de3a81764b9ddf0ae67925",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_50128eb5",
+        "filename": "include/sal/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-05T09:19:39Z",
+      "side": 1,
+      "message": "identifiers starting with an underscore followed by an uppercase letter are reserved to the C/C++ implementations; we should never introduce such identifiers",
+      "revId": "e5fca658e986577f69de3a81764b9ddf0ae67925",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_d03f9e23",
+        "filename": "include/sal/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-05T09:19:39Z",
+      "side": 1,
+      "message": "please keep an empty line between these unrelated #endifs",
+      "revId": "e5fca658e986577f69de3a81764b9ddf0ae67925",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

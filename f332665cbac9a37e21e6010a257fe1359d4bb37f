@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_703a3238",
+        "filename": "include/sal/macros.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-05T09:19:39Z",
+      "side": 0,
+      "message": "why remove this empty line between unrelated #endifs?",
+      "revId": "f332665cbac9a37e21e6010a257fe1359d4bb37f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
