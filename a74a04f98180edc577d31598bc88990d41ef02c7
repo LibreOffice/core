@@ -16,6 +16,24 @@
       "revId": "a74a04f98180edc577d31598bc88990d41ef02c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_53a1f8a8",
+        "filename": "vcl/inc/outfont.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-05T16:28:07Z",
+      "side": 1,
+      "message": "ah nevermind, i\u0027ve noticed 38e6383009aba9ff779ad9d0b4d9c94ed2bce347 by now :)",
+      "parentUuid": "dab17558_f3174ceb",
+      "revId": "a74a04f98180edc577d31598bc88990d41ef02c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
