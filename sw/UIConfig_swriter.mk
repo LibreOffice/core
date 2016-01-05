@@ -196,7 +196,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/mmlayoutpage \
 	sw/uiconfig/swriter/ui/mmmailbody \
 	sw/uiconfig/swriter/ui/mmoutputtypepage \
-	sw/uiconfig/swriter/ui/mmpreparepage \
 	sw/uiconfig/swriter/ui/mmresultemaildialog \
 	sw/uiconfig/swriter/ui/mmresultprintdialog \
 	sw/uiconfig/swriter/ui/mmresultsavedialog \

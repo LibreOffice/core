@@ -30,7 +30,6 @@ class SwMailMergeConfigItem;
 #define MM_ADDRESSBLOCKPAGE     2
 #define MM_GREETINGSPAGE        3
 #define MM_LAYOUTPAGE           4
-#define MM_PREPAREMERGEPAGE     5
 
 class SwMailMergeWizard : public ::svt::RoadmapWizard
 {
