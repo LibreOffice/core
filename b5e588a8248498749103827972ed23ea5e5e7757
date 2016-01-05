@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_33943436",
+        "filename": "include/o3tl/make_unique.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-05T17:15:15Z",
+      "side": 1,
+      "message": "the C++14 counterpart uses std::size_t as argument, so should better use that, too\n\nthe C++14 counterpart \"shall not participate in overload resolution unless T is an array of unknown bound\"; there\u0027s std::extent to check for unknown bound (and C++14 also has a deleted overload of makeUnique(Args\u0026\u0026) that \"shall not participate in overload resolution unless T is an array of known bound\"",
+      "revId": "b5e588a8248498749103827972ed23ea5e5e7757",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
