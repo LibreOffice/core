@@ -33,6 +33,8 @@ worrying about compatibility.
 <updatecontact>libreoffice_at_lists.freedesktop.org</updatecontact>
 <kudos>
   <kudo>HiDpiIcon</kudo>
+  <kudo>HighContrast</kudo>
   <kudo>ModernToolkit</kudo>
+  <kudo>UserDocs</kudo>
 </kudos>
 </component>
