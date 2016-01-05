@@ -539,7 +539,7 @@ namespace slideshow
             }
 
             // return identity transform for un-attributed
-            // shapes. This renders the sprite as-is, in it's
+            // shapes. This renders the sprite as-is, in its
             // document-supplied size.
             return aTransform;
         }

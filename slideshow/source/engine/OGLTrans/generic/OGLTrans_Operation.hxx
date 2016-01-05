@@ -43,7 +43,7 @@ public:
     virtual ~Operation(){}
 
 protected:
-    /** Should this operation be interpolated . If TRUE, the transform will smoothly move from making no difference from t = 0.0 to mnT0 to being completely transformed from t = mnT1 to 1. If FALSE, the transform will be inneffectual from t = 0 to mnT0, and completely transformed from t = mnT0 to 1.
+    /** Should this operation be interpolated . If TRUE, the transform will smoothly move from making no difference from t = 0.0 to mnT0 to being completely transformed from t = mnT1 to 1. If FALSE, the transform will be ineffectual from t = 0 to mnT0, and completely transformed from t = mnT0 to 1.
     */
     bool mbInterpolate;
 

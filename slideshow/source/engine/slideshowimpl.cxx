@@ -884,7 +884,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
 
 PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage)
 {
-    // TODO(P2) : Optimze research in the map.
+    // TODO(P2): optimize research in the map.
     PolygonMap::iterator aEnd = maPolygons.end();
     for( PolygonMap::iterator aIter = maPolygons.begin();
          aIter != aEnd;

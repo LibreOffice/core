@@ -33,7 +33,7 @@ namespace slideshow
 
             This interface is a specialization of the Animation
             interface, and is used to animate attributes representable
-            by a set of constant values, such as UNO constantsm, or enums.
+            by a set of constant values, such as UNO constants, or enums.
          */
         class EnumAnimation : public Animation
         {

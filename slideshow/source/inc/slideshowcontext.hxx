@@ -46,7 +46,7 @@ namespace slideshow
         /** Common arguments for slideshow objects.
 
             This struct combines a number of object references
-            ubiquituously needed throughout the slideshow.
+            ubiquitously needed throughout the slideshow.
          */
         struct SlideShowContext
         {

@@ -64,7 +64,7 @@ namespace slideshow
 
             // perform general transformations _before_ the reverse
             // mode changes. This allows the Transition table to be
-            // filled more constitently (otherwise, when e.g. rotating
+            // filled more consistently (otherwise, when e.g. rotating
             // a clip 90 degrees, the REVERSEMETHOD_FLIP_X becomes
             // REVERSEMETHOD_FLIP_Y instead)
             if (rTransitionInfo.mnRotationAngle != 0.0 ||

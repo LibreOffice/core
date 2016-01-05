@@ -538,7 +538,7 @@ void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
 
         // xxx todo:
         // think about set node, anim base node!
-        // if anim base node has no activity, this is called to schedule deactivatiion,
+        // if anim base node has no activity, this is called to schedule deactivation,
         // but what if it does not schedule anything?
 
         // TODO(F2): Handle end time attribute, too
