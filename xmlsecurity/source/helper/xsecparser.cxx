@@ -35,6 +35,7 @@ XSecParser::XSecParser(XSecController* pXSecController,
     , m_bInDigestValue(false)
     , m_bInSignatureValue(false)
     , m_bInDate(false)
+    , m_bInDescription(false)
     , m_pXSecController(pXSecController)
     , m_xNextHandler(xNextHandler)
     , m_bReferenceUnresolved(false)
@@ -65,6 +66,7 @@ void SAL_CALL XSecParser::startDocument(  )
     m_bInSignatureValue = false;
     m_bInDigestValue = false;
     m_bInDate = false;
+    m_bInDescription = false;
 
     if (m_xNextHandler.is())
     {
@@ -176,6 +178,11 @@ void SAL_CALL XSecParser::startElement(
             m_ouDate.clear();
                 m_bInDate = true;
             }
+            else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
+            {
+                m_ouDescription.clear();
+                m_bInDescription = true;
+            }
 
         if (m_xNextHandler.is())
         {
@@ -248,6 +255,11 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setDate( m_ouDate );
                 m_bInDate = false;
         }
+            else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
+            {
+                m_pXSecController->setDescription( m_ouDescription );
+                m_bInDescription = false;
+            }
 
         if (m_xNextHandler.is())
         {
@@ -295,6 +307,10 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     else if (m_bInDate)
     {
         m_ouDate += aChars;
+    }
+    else if (m_bInDescription)
+    {
+        m_ouDescription += aChars;
     }
 
     if (m_xNextHandler.is())
