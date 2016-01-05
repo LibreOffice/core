@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_73735cb2",
+        "filename": "include/sfx2/sfxsids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-05T14:09:03Z",
+      "side": 1,
+      "message": "Maxim when i define it in sw/inc/cmdid.h i need to move cmdid.h and unomid.h into include/ .What do you think about it? Is it true way?",
+      "parentUuid": "dab17558_90999671",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_b0a01a92",
         "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-05T07:30:23Z",
       "side": 1,
       "message": "IMHO it\u0027s better to leave it in initialize. StatusChanged can be executed several times during the button\u0027s life, which will make this check run again and again without any benefit. Inside initialize you can check for the .uno command name using m_aCommandURL, rather than the SID.",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_53829853",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-05T14:09:03Z",
+      "side": 1,
+      "message": "I\u0027ve tried it but because of initialize method is working one time at the opening writer, m_aCommandURL is .uno:InsertDraw and it doesn\u0027t changes when i click the trackchangesbar button. I couldn\u0027t find a way to control in initialize method.\n\nMaybe it would be better to write a new Controller class in writer component (ex: SwTbxCtlTrack). What about?",
+      "parentUuid": "dab17558_b0a01a92",
       "revId": "5cab078432a545b186ab603c68601f829d4997ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
