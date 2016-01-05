@@ -292,7 +292,7 @@ bool SplitDriverVersion(const char *aSource, char *aAStr, char *aBStr, char *aCS
 
     for (int i = 0; i < len; i++)
     {
-        if (destIdx > ArrayLength(dest))
+        if (destIdx >= ArrayLength(dest))
         {
             // Invalid format found. Ensure we don't access dest beyond bounds.
             return false;
