@@ -991,6 +991,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         pStoreToFilterOptions = &rMergeDescriptor.sSaveToFilterOptions;
                 }
             }
+            const bool bIsPDFeport = pStoreToFilter && pStoreToFilter->GetFilterName() == "writer_pdf_Export";
+
             bCancel = false;
 
             // in case of creating a single resulting file this has to be created here
@@ -1176,7 +1178,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         // Create a copy of the source document and work with that one instead of the source.
                         // If we're not in the single file mode (which requires modifying the document for the merging),
                         // it is enough to do this just once.
-                        if( 1 == nDocNo || bCreateSingleFile )
+                        if( 1 == nDocNo || bCreateSingleFile || bIsPDFeport )
                         {
                             assert( !xWorkDocSh.Is());
                             // copy the source document
@@ -1336,7 +1338,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             //convert fields to text if we are exporting to PDF
                             //this prevents a second merge while updating the fields in SwXTextDocument::getRendererCount()
-                            if( pStoreToFilter && pStoreToFilter->GetFilterName() == "writer_pdf_Export")
+                            if( bIsPDFeport )
                                 rWorkShell.ConvertFieldsToText();
                             xWorkDocSh->DoSaveAs(*pDstMed);
                             xWorkDocSh->DoSaveCompleted(pDstMed);
@@ -1425,7 +1427,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 }
                             }
                         }
-                        if( bCreateSingleFile )
+                        if( bCreateSingleFile || bIsPDFeport )
                         {
                             pWorkDoc->SetDBManager( pOldDBManager );
                             xWorkDocSh->DoClose();
@@ -1462,8 +1464,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     psp::PrinterInfoManager::get().flushBatchPrint();
 #endif
                 }
-                pWorkDoc->SetDBManager( pOldDBManager );
-                xWorkDocSh->DoClose();
+                if( !bIsPDFeport )
+                {
+                    pWorkDoc->SetDBManager( pOldDBManager );
+                    xWorkDocSh->DoClose();
+                }
             }
 
             if (bCreateSingleFile)
