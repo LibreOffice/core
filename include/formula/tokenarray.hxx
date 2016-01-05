@@ -148,6 +148,22 @@ protected:
      */
     FormulaToken*           ReplaceToken( sal_uInt16 nOffset, FormulaToken*, ReplaceMode eMode );
 
+    /** Remove a sequence of tokens from pCode array, and pRPN array if the
+        tokens are referenced there.
+
+        This' nLen and nRPN are adapted, as is nIndex if it points behind
+        nOffset. If nIndex points into the to be removed range
+        (nOffset < nIndex < nOffset+nCount) it is set to nOffset+1.
+
+        @param  nOffset
+                Start offset into pCode.
+        @param  nCount
+                Count of tokens to remove.
+
+        @return The actual number of tokens removed from pCode array.
+     */
+    sal_uInt16              RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount );
+
     inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
                                 { nMode |= (nBits & ~RECALCMODE_EMASK); }
     inline  ScRecalcMode    GetCombinedBitsRecalcMode() const

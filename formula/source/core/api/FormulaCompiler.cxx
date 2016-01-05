@@ -1271,6 +1271,7 @@ void FormulaCompiler::Factor()
                 else
                     SetError( errPairExpected);
                 sal_uInt8 nSepCount = 0;
+                const sal_uInt16 nSepPos = pArr->nIndex - 1;    // separator position, if any
                 if( !bNoParam )
                 {
                     nSepCount++;
@@ -1289,7 +1290,30 @@ void FormulaCompiler::Factor()
                 pFacToken->SetByte( nSepCount );
                 if (nSepCount == 2)
                 {
-                    pFacToken->NewOpCode( ocWeek, FormulaToken::PrivateAccess());
+                    // An old mode!=1 indicates ISO week, remove argument if
+                    // literal double value and keep function. Anything else
+                    // can not be resolved, there exists no "like ISO but week
+                    // starts on Sunday" mode in WEEKNUM and for an expression
+                    // we can't determine, so let ISOWEEKNUM generate an error
+                    // for two arguments in these cases.
+                    if (pc >= 2 && pArr->nIndex == nSepPos + 3 &&
+                            pArr->pCode[nSepPos+1]->GetType() == svDouble &&
+                            pArr->pCode[nSepPos+1]->GetDouble() != 1.0 &&
+                            pArr->RemoveToken( nSepPos, 2) == 2)
+                    {
+                        // Remove the ocPush/svDouble just removed also from
+                        // the compiler local RPN array.
+                        --pCode, --pc;
+                        (*pCode)->DecRef(); // may be dead now
+                        pFacToken->SetByte( nSepCount - 1 );
+                    }
+                    else
+                    {
+                        /* FIXME: introduce (hidden?) compatibility function? */
+#if 0
+                        pFacToken->NewOpCode( ocWeeknumCompat, FormulaToken::PrivateAccess());
+#endif
+                    }
                 }
                 PutCode( pFacToken );
             }
