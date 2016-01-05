@@ -20,6 +20,7 @@
 
 #include <cstddef>
 #include <cstdio>
+#include <algorithm>
 
 #include <string.h>
 #include <limits.h>
