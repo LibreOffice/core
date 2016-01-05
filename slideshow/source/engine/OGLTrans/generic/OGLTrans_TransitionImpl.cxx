@@ -1557,11 +1557,11 @@ public:
 private:
     virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
 
-    virtual void finish( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
-
     virtual GLuint makeShader() const override;
 
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
+
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 
     GLint mnTileInfoLocation;
     GLuint mnTileInfoBuffer;
@@ -1573,8 +1573,6 @@ private:
 
 void VortexTransition::prepare( double, double, double, double, double )
 {
-    glDisable(GL_CULL_FACE);
-
     glBindBuffer(GL_ARRAY_BUFFER, mnTileInfoBuffer);
     CHECK_GL_ERROR();
     glEnableVertexAttribArray(mnTileInfoLocation);
@@ -1586,14 +1584,9 @@ void VortexTransition::prepare( double, double, double, double, double )
     CHECK_GL_ERROR();
 }
 
-void VortexTransition::finish( double, double, double, double, double )
-{
-    glEnable(GL_CULL_FACE);
-}
-
 GLuint VortexTransition::makeShader() const
 {
-    return OpenGLHelper::LoadShaders( "vortexVertexShader", "vortexFragmentShader" );
+    return OpenGLHelper::LoadShaders( "vortexVertexShader", "basicFragmentShader" );
 }
 
 void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
@@ -1643,6 +1636,26 @@ void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32
     CHECK_GL_ERROR();
 }
 
+void VortexTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+{
+    CHECK_GL_ERROR();
+    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
+
+    GLint location = glGetUniformLocation( m_nProgramObject, "time" );
+    if( location != -1 )
+        glUniform1f( location, nTime );
+
+    location = glGetUniformLocation( m_nProgramObject, "slide" );
+
+    if( location != -1 )
+        glUniform1f( location, 0.0 );
+    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+    if( location != -1 )
+        glUniform1f( location, 1.0 );
+    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
+}
+
 std::shared_ptr<OGLTransitionImpl>
 makeVortexTransition(const Primitives_t& rLeavingSlidePrimitives,
                      const Primitives_t& rEnteringSlidePrimitives,
@@ -1659,7 +1672,7 @@ makeVortexTransition(const Primitives_t& rLeavingSlidePrimitives,
 
 std::shared_ptr<OGLTransitionImpl> makeVortex()
 {
-    const int NX = 40, NY = 40;
+    const int NX = 64, NY = 64;
     Primitive Slide;
 
     for (int x = 0; x < NX; x++)
@@ -1696,8 +1709,10 @@ public:
 private:
     virtual GLuint makeShader() const override;
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
+    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
 
     glm::vec2 maCenter;
+    GLint maSlideRatioLocation = -1;
 };
 
 GLuint RippleTransition::makeShader() const
@@ -1712,6 +1727,15 @@ void RippleTransition::prepareTransition( sal_Int32, sal_Int32 )
 
     glUniform2fv(nCenterLocation, 1, glm::value_ptr(maCenter));
     CHECK_GL_ERROR();
+
+    maSlideRatioLocation = glGetUniformLocation(m_nProgramObject, "slideRatio");
+    CHECK_GL_ERROR();
+}
+
+void RippleTransition::prepare( double /* nTime */, double SlideWidth, double SlideHeight, double /* DispWidth */, double /* DispHeight */ )
+{
+    if( maSlideRatioLocation != -1 )
+        glUniform1f( maSlideRatioLocation, SlideWidth / SlideHeight );
 }
 
 std::shared_ptr<OGLTransitionImpl>

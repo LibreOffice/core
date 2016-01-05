@@ -1042,11 +1042,17 @@ void OpenGLContext::InitGLEWDebugging()
         {
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
             glDebugMessageCallbackARB(&debug_callback, nullptr);
+
+            // Ignore i965’s shader compiler notification flood.
+            glDebugMessageControlARB(GL_DEBUG_SOURCE_SHADER_COMPILER_ARB, GL_DEBUG_TYPE_OTHER_ARB, GL_DEBUG_SEVERITY_NOTIFICATION_ARB, 0, nullptr, true);
         }
         else if ( glDebugMessageCallback )
         {
             glEnable(GL_DEBUG_OUTPUT);
             glDebugMessageCallback(&debug_callback, nullptr);
+
+            // Ignore i965’s shader compiler notification flood.
+            glDebugMessageControl(GL_DEBUG_SOURCE_SHADER_COMPILER, GL_DEBUG_TYPE_OTHER, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, true);
         }
     }
 
