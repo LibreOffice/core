@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="sot" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.embed.OLESimpleStorage">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.embed.OLESimpleStorage"
+      constructor="com_sun_star_comp_embed_OLESimpleStorage">
     <service name="com.sun.star.embed.OLESimpleStorage"/>
   </implementation>
 </component>
