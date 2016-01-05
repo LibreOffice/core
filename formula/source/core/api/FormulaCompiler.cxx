@@ -1294,8 +1294,7 @@ void FormulaCompiler::Factor()
                     // literal double value and keep function. Anything else
                     // can not be resolved, there exists no "like ISO but week
                     // starts on Sunday" mode in WEEKNUM and for an expression
-                    // we can't determine, so let ISOWEEKNUM generate an error
-                    // for two arguments in these cases.
+                    // we can't determine.
                     if (pc >= 2 && pArr->nIndex == nSepPos + 3 &&
                             pArr->pCode[nSepPos+1]->GetType() == svDouble &&
                             pArr->pCode[nSepPos+1]->GetDouble() != 1.0 &&
@@ -1309,10 +1308,9 @@ void FormulaCompiler::Factor()
                     }
                     else
                     {
-                        /* FIXME: introduce (hidden?) compatibility function? */
-#if 0
-                        pFacToken->NewOpCode( ocWeeknumCompat, FormulaToken::PrivateAccess());
-#endif
+                        // For the remaining two arguments cases use the
+                        // compatibility function.
+                        pFacToken->NewOpCode( ocWeeknumOOo, FormulaToken::PrivateAccess());
                     }
                 }
                 PutCode( pFacToken );

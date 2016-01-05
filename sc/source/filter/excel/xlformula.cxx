@@ -587,7 +587,8 @@ static const XclFunctionInfo saFuncTable_Odf[] =
 static const XclFunctionInfo saFuncTable_OOoLO[] =
 {
     EXC_FUNCENTRY_OOO( ocConvert,       3,  3,  0,  "ORG.OPENOFFICE.CONVERT" ),
-    EXC_FUNCENTRY_OOO( ocColor,         3,  4,  0,  "ORG.LIBREOFFICE.COLOR" )
+    EXC_FUNCENTRY_OOO( ocColor,         3,  4,  0,  "ORG.LIBREOFFICE.COLOR" ),
+    EXC_FUNCENTRY_OOO( ocWeeknumOOo,    2,  2,  0,  "ORG.LIBREOFFICE.WEEKNUM_OOO" )
 };
 
 #undef EXC_FUNCENTRY_OOO

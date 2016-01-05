@@ -391,6 +391,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_BETA_INV_MS { Text = "COM.MICROSOFT.BETA.INV" ; };
     String SC_OPCODE_WEEK { Text = "WEEKNUM" ; };
     String SC_OPCODE_ISOWEEKNUM { Text = "ISOWEEKNUM" ; };
+    /* WEEKNUM_OOO currently (5.1) not written, see
+     * formula/source/core/api/token.cxx FormulaTokenArray::RewriteMissing() */
+    String SC_OPCODE_WEEKNUM_OOO { Text = "ORG.LIBREOFFICE.WEEKNUM_OOO" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "ORG.OPENOFFICE.EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
     String SC_OPCODE_NETWORKDAYS { Text = "NETWORKDAYS" ; };
@@ -813,6 +816,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_BETA_INV_MS { Text = "_xlfn.BETA.INV" ; };
     String SC_OPCODE_WEEK { Text = "WEEKNUM" ; };
     String SC_OPCODE_ISOWEEKNUM { Text = "_xlfn.ISOWEEKNUM" ; };
+    String SC_OPCODE_WEEKNUM_OOO { Text = "_xlfn.ORG.LIBREOFFICE.WEEKNUM_OOO" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
     String SC_OPCODE_NETWORKDAYS { Text = "NETWORKDAYS" ; };
@@ -1237,6 +1241,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_BETA_INV_MS { Text = "BETA.INV" ; };
     String SC_OPCODE_WEEK { Text = "WEEKNUM" ; };
     String SC_OPCODE_ISOWEEKNUM { Text = "ISOWEEKNUM" ; };
+    String SC_OPCODE_WEEKNUM_OOO { Text = "WEEKNUM_OOO" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
     String SC_OPCODE_NETWORKDAYS { Text = "NETWORKDAYS" ; };
@@ -2704,6 +2709,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_ISOWEEKNUM
     {
         Text [ en-US ] = "ISOWEEKNUM" ;
+    };
+    String SC_OPCODE_WEEKNUM_OOO
+    {
+        Text [ en-US ] = "WEEKNUM_OOO" ;
     };
     String SC_OPCODE_EASTERSUNDAY
     {

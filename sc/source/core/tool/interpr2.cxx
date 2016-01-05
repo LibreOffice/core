@@ -205,6 +205,18 @@ void ScInterpreter::ScGetDayOfWeek()
     }
 }
 
+void ScInterpreter::ScWeeknumOOo()
+{
+    if ( MustHaveParamCount( GetByte(), 2 ) )
+    {
+        short nFlag = (short) ::rtl::math::approxFloor(GetDouble());
+
+        Date aDate = *(pFormatter->GetNullDate());
+        aDate += (long)::rtl::math::approxFloor(GetDouble());
+        PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
+    }
+}
+
 void ScInterpreter::ScGetWeekOfYear()
 {
     sal_uInt8 nParamCount = GetByte();
