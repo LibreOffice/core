@@ -146,20 +146,20 @@ OdfFlatXml::importer(
     inputSource.aInputStream = inputStream;
     saxParser->setDocumentHandler(docHandler);
     try
-        {
-            css::uno::Reference< css::io::XSeekable > xSeekable( inputStream, css::uno::UNO_QUERY );
-            if ( xSeekable.is() )
-                xSeekable->seek( 0 );
+    {
+        css::uno::Reference< css::io::XSeekable > xSeekable( inputStream, css::uno::UNO_QUERY );
+        if ( xSeekable.is() )
+            xSeekable->seek( 0 );
 
-            saxParser->parseStream(inputSource);
-        }
+        saxParser->parseStream(inputSource);
+    }
     catch (const Exception &exc)
-        {
-            SAL_WARN(
-                "filter.odfflatxml",
-                "caught exception \"" << exc.Message << "\"");
-            return sal_False;
-        }
+    {
+        SAL_WARN(
+            "filter.odfflatxml",
+            "caught exception \"" << exc.Message << "\"");
+        return sal_False;
+    }
     return sal_True;
 }
 
