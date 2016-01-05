@@ -125,64 +125,64 @@ void SAL_CALL XSecParser::startElement(
                 m_bReferenceUnresolved = true;
             }
         }
-            else if (aName == TAG_TRANSFORM)
-            {
+        else if (aName == TAG_TRANSFORM)
+        {
             if ( m_bReferenceUnresolved )
             {
                 OUString ouAlgorithm = xAttribs->getValueByName(ATTR_ALGORITHM);
 
                 if (ouAlgorithm != nullptr && ouAlgorithm == ALGO_C14N)
-                /*
-                * a xml stream
-                */
+                    /*
+                     * a xml stream
+                     */
                 {
                     m_pXSecController->addStreamReference( m_currentReferenceURI, false);
                     m_bReferenceUnresolved = false;
                 }
             }
-            }
-            else if (aName == TAG_X509ISSUERNAME)
-            {
+        }
+        else if (aName == TAG_X509ISSUERNAME)
+        {
             m_ouX509IssuerName.clear();
             m_bInX509IssuerName = true;
-            }
-            else if (aName == TAG_X509SERIALNUMBER)
-            {
+        }
+        else if (aName == TAG_X509SERIALNUMBER)
+        {
             m_ouX509SerialNumber.clear();
             m_bInX509SerialNumber = true;
-            }
-            else if (aName == TAG_X509CERTIFICATE)
-            {
+        }
+        else if (aName == TAG_X509CERTIFICATE)
+        {
             m_ouX509Certificate.clear();
             m_bInX509Certificate = true;
-            }
-            else if (aName == TAG_SIGNATUREVALUE)
-            {
+        }
+        else if (aName == TAG_SIGNATUREVALUE)
+        {
             m_ouSignatureValue.clear();
-                m_bInSignatureValue = true;
-            }
-            else if (aName == TAG_DIGESTVALUE)
-            {
-                m_ouDigestValue.clear();
-                m_bInDigestValue = true;
-            }
-            else if ( aName == TAG_SIGNATUREPROPERTY )
+            m_bInSignatureValue = true;
+        }
+        else if (aName == TAG_DIGESTVALUE)
+        {
+            m_ouDigestValue.clear();
+            m_bInDigestValue = true;
+        }
+        else if ( aName == TAG_SIGNATUREPROPERTY )
         {
             if (ouIdAttr != nullptr)
             {
                 m_pXSecController->setPropertyId( ouIdAttr );
             }
         }
-            else if (aName == NSTAG_DC ":" TAG_DATE)
-            {
+        else if (aName == NSTAG_DC ":" TAG_DATE)
+        {
             m_ouDate.clear();
-                m_bInDate = true;
-            }
-            else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
-            {
-                m_ouDescription.clear();
-                m_bInDescription = true;
-            }
+            m_bInDate = true;
+        }
+        else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
+        {
+            m_ouDescription.clear();
+            m_bInDescription = true;
+        }
 
         if (m_xNextHandler.is())
         {
@@ -235,31 +235,31 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setSignatureValue( m_ouSignatureValue );
                 m_bInSignatureValue = false;
         }
-            else if (aName == TAG_X509ISSUERNAME)
-            {
+        else if (aName == TAG_X509ISSUERNAME)
+        {
             m_pXSecController->setX509IssuerName( m_ouX509IssuerName );
             m_bInX509IssuerName = false;
-            }
-            else if (aName == TAG_X509SERIALNUMBER)
-            {
+        }
+        else if (aName == TAG_X509SERIALNUMBER)
+        {
             m_pXSecController->setX509SerialNumber( m_ouX509SerialNumber );
             m_bInX509SerialNumber = false;
-            }
-            else if (aName == TAG_X509CERTIFICATE)
-            {
+        }
+        else if (aName == TAG_X509CERTIFICATE)
+        {
             m_pXSecController->setX509Certificate( m_ouX509Certificate );
             m_bInX509Certificate = false;
-            }
-            else if (aName == NSTAG_DC ":" TAG_DATE)
+        }
+        else if (aName == NSTAG_DC ":" TAG_DATE)
         {
             m_pXSecController->setDate( m_ouDate );
                 m_bInDate = false;
         }
-            else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
-            {
-                m_pXSecController->setDescription( m_ouDescription );
-                m_bInDescription = false;
-            }
+        else if (aName == NSTAG_DC ":" TAG_DESCRIPTION)
+        {
+            m_pXSecController->setDescription( m_ouDescription );
+            m_bInDescription = false;
+        }
 
         if (m_xNextHandler.is())
         {
@@ -316,7 +316,7 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     if (m_xNextHandler.is())
     {
         m_xNextHandler->characters(aChars);
-        }
+    }
 }
 
 void SAL_CALL XSecParser::ignorableWhitespace( const OUString& aWhitespaces )
@@ -325,7 +325,7 @@ void SAL_CALL XSecParser::ignorableWhitespace( const OUString& aWhitespaces )
     if (m_xNextHandler.is())
     {
         m_xNextHandler->ignorableWhitespace( aWhitespaces );
-        }
+    }
 }
 
 void SAL_CALL XSecParser::processingInstruction( const OUString& aTarget, const OUString& aData )
@@ -334,7 +334,7 @@ void SAL_CALL XSecParser::processingInstruction( const OUString& aTarget, const 
     if (m_xNextHandler.is())
     {
         m_xNextHandler->processingInstruction(aTarget, aData);
-        }
+    }
 }
 
 void SAL_CALL XSecParser::setDocumentLocator( const cssu::Reference< cssxs::XLocator >& xLocator )
@@ -343,7 +343,7 @@ void SAL_CALL XSecParser::setDocumentLocator( const cssu::Reference< cssxs::XLoc
     if (m_xNextHandler.is())
     {
         m_xNextHandler->setDocumentLocator( xLocator );
-        }
+    }
 }
 
 /*
