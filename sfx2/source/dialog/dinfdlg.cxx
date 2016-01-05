@@ -1208,18 +1208,18 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
         {
             OUString aLastName( aURL.GetLastName() );
             if ( !aLastName.isEmpty() )
-                aTitle += aLastName;
+                aTitle = aTitle.replaceFirst("%1", aLastName);
             else
-                aTitle += aFile;
+                aTitle = aTitle.replaceFirst("%1", aFile);
         }
         else
-            aTitle += SfxResId( STR_NONAME ).toString();
+            aTitle = aTitle.replaceFirst("%1", SfxResId( STR_NONAME ).toString());
     }
     else
     {
         DBG_ASSERT( dynamic_cast<const SfxStringItem *>(pItem) != nullptr,
                     "SfxDocumentInfoDialog:<SfxStringItem> expected" );
-        aTitle += static_cast<const SfxStringItem*>(pItem)->GetValue();
+        aTitle = aTitle.replaceFirst("%1", static_cast<const SfxStringItem*>(pItem)->GetValue());
     }
     SetText( aTitle );
 
