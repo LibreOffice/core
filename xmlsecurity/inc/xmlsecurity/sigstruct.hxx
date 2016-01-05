@@ -74,6 +74,10 @@ struct SignatureInformation
     OUString ouDateTime;
     OUString ouSignatureId;
     OUString ouPropertyId;
+    /// Characters of the <dc:description> element inside the signature.
+    OUString ouDescription;
+    /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
+    OUString ouDescriptionPropertyId;
 
     SignatureInformation( sal_Int32 nId )
     {

@@ -258,6 +258,23 @@ void XSecController::setDate(
     }
 }
 
+void XSecController::setDescription(sal_Int32 nSecurityId, const OUString& rDescription)
+{
+    int nIndex = findSignatureInfor(nSecurityId);
+
+    if (nIndex == -1)
+    {
+        InternalSignatureInformation aInformation(nSecurityId, nullptr);
+        aInformation.signatureInfor.ouDescription = rDescription;
+        m_vInternalSignatureInformations.push_back(aInformation);
+    }
+    else
+    {
+        SignatureInformation& rInformation = m_vInternalSignatureInformations[nIndex].signatureInfor;
+        rInformation.ouDescription = rDescription;
+    }
+}
+
 bool XSecController::WriteSignature(
     const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler )
 {
