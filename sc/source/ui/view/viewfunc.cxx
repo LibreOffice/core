@@ -2412,7 +2412,15 @@ void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
 
     nNumberFormat = pNumberFormatter->GetStandardFormat( nFormatType, eLanguage ) + nAdd;
 
+    SvxCellHorJustify eCurrentHorJustify = (SvxCellHorJustify) static_cast<const SvxHorJustifyItem*>( pDoc->GetAttr(
+                                               rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo(),
+                                               ATTR_HOR_JUSTIFY ) )->GetValue();
+
     SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    if ( nFormatType == css::util::NumberFormat::TEXT )
+        rSet.Put( SvxHorJustifyItem ( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ));
+    else if ( ( nCurrentNumberFormat == css::util::NumberFormat::TEXT ) && ( eCurrentHorJustify == SVX_HOR_JUSTIFY_LEFT ) )
+        rSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY ));
     rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
     //  ATTR_LANGUAGE_FORMAT not
     ApplySelectionPattern( aNewAttrs, true );

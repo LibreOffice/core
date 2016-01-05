@@ -1386,7 +1386,7 @@ bool beginsWithRTLCharacter(const OUString& rStr)
 static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
         bool bCellIsValue, const OUString& rText,
         const ScPatternAttr& rPattern, const SfxItemSet* pCondSet,
-        const ScDocument* pDoc, SCTAB nTab )
+        const ScDocument* pDoc, SCTAB nTab, const bool  bNumberFormatIsText )
 {
     SvxCellHorJustify eHorJustContext = eInHorJust;
     bool bUseWritingDirection = false;
@@ -1394,16 +1394,18 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
     {
         // fdo#32530: Default alignment depends on value vs
         // string, and the direction of the 1st letter.
-        if (beginsWithRTLCharacter( rText))
-            eHorJustContext = bCellIsValue ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
-        else if (bCellIsValue)
-            eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
+        if (beginsWithRTLCharacter( rText))         //If language is RTL
+        {
+            if (bCellIsValue)
+               eHorJustContext = bNumberFormatIsText ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+            else
+                eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
+        }else if (bCellIsValue)                     //If language is not RTL
+                eHorJustContext = bNumberFormatIsText ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
         else
             bUseWritingDirection = true;
     }
-
-    if (bUseWritingDirection ||
-            eInHorJust == SVX_HOR_JUSTIFY_BLOCK || eInHorJust == SVX_HOR_JUSTIFY_REPEAT)
+    if (bUseWritingDirection || eInHorJust == SVX_HOR_JUSTIFY_BLOCK || eInHorJust == SVX_HOR_JUSTIFY_REPEAT)
     {
         sal_uInt16 nDirection = lcl_GetValue<SvxFrameDirectionItem, sal_uInt16>( rPattern, ATTR_WRITINGDIR, pCondSet);
         if (nDirection == FRMDIR_HORI_LEFT_TOP || nDirection == FRMDIR_VERT_TOP_LEFT)
@@ -1688,8 +1690,17 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
                     }
 
+                    sal_uInt32 nCurrentNumberFormat;
+                    mpDoc->GetNumberFormat( nCellX, nCellY, nTab, nCurrentNumberFormat);
+                    SvNumberFormatter* pNumberFormatter = mpDoc->GetFormatTable();
+                    LanguageType eLanguage = ScGlobal::eLnge;
+                    const SvNumberformat* pEntry = pNumberFormatter->GetEntry( nCurrentNumberFormat );
+                    if ( pEntry )
+                        eLanguage = pEntry->GetLanguage();
+                    const sal_uInt32 nNumberFormatText = pNumberFormatter->GetStandardFormat ( css::util::NumberFormat::TEXT, eLanguage );
+                    const bool bNumberFormatIsText = ( nNumberFormatText == nCurrentNumberFormat );
                     eOutHorJust = getAlignmentFromContext( aVars.GetHorJust(), bCellIsValue, aVars.GetString(),
-                            *pPattern, pCondSet, mpDoc, nTab);
+                            *pPattern, pCondSet, mpDoc, nTab, bNumberFormatIsText );
 
                     bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
@@ -4566,10 +4577,18 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         OUString aStr = mpDoc->GetString(nCellX, nCellY, nTab);
 
                         DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(aCell));
-                        aParam.meHorJustContext = getAlignmentFromContext( aParam.meHorJustAttr,
-                                aParam.mbCellIsValue, aStr, *pPattern, pCondSet, mpDoc, nTab);
-                        aParam.meHorJustResult = (aParam.meHorJustAttr == SVX_HOR_JUSTIFY_BLOCK) ?
-                                SVX_HOR_JUSTIFY_BLOCK : aParam.meHorJustContext;
+
+                        sal_uInt32 nCurrentNumberFormat;
+                        mpDoc->GetNumberFormat( nCellX, nCellY, nTab, nCurrentNumberFormat);
+                        SvNumberFormatter* pNumberFormatter = mpDoc->GetFormatTable();
+                        LanguageType eLanguage = ScGlobal::eLnge;
+                        const SvNumberformat* pEntry = pNumberFormatter->GetEntry( nCurrentNumberFormat );
+                        if ( pEntry )
+                        eLanguage = pEntry->GetLanguage();
+                        const sal_uInt32 nNumberFormatText = pNumberFormatter->GetStandardFormat ( css::util::NumberFormat::TEXT, eLanguage );
+                        const bool bNumberFormatIsText = ( nNumberFormatText == nCurrentNumberFormat );
+                        aParam.meHorJustContext = getAlignmentFromContext( aParam.meHorJustAttr, aParam.mbCellIsValue, aStr, *pPattern, pCondSet, mpDoc, nTab, bNumberFormatIsText);
+                        aParam.meHorJustResult = (aParam.meHorJustAttr == SVX_HOR_JUSTIFY_BLOCK) ? SVX_HOR_JUSTIFY_BLOCK : aParam.meHorJustContext;
                         aParam.mbPixelToLogic = bPixelToLogic;
                         aParam.mbHyphenatorSet = bHyphenatorSet;
                         aParam.mpEngine = pEngine.get();
