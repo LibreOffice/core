@@ -165,14 +165,14 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
     internalSignatureInfor.signatureInfor.ouSignatureId = createId();
     internalSignatureInfor.signatureInfor.ouPropertyId = createId();
-    internalSignatureInfor.addReference(TYPE_SAMEDOCUMENT_REFERENCE, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
+    internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
     size++;
 
     if (!internalSignatureInfor.signatureInfor.ouDescription.isEmpty())
     {
         // Only mention the hash of the description in the signature if it's non-empty.
         internalSignatureInfor.signatureInfor.ouDescriptionPropertyId = createId();
-        internalSignatureInfor.addReference(TYPE_SAMEDOCUMENT_REFERENCE, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1);
         size++;
     }
 
@@ -192,7 +192,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
 void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, const OUString& /*objectURL*/, bool isBinary)
 {
-    sal_Int32 type = isBinary ? TYPE_BINARYSTREAM_REFERENCE : TYPE_XMLSTREAM_REFERENCE;
+    SignatureReferenceType type = isBinary ? SignatureReferenceType::BINARYSTREAM : SignatureReferenceType::XMLSTREAM;
 
     int index = findSignatureInfor( securityId );
 

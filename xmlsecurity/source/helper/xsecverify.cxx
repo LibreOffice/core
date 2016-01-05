@@ -119,14 +119,14 @@ void XSecController::addReference( const OUString& ouUri)
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
-    isi.addReference(TYPE_SAMEDOCUMENT_REFERENCE,ouUri, -1 );
+    isi.addReference(SignatureReferenceType::SAMEDOCUMENT,ouUri, -1 );
 }
 
 void XSecController::addStreamReference(
     const OUString& ouUri,
     bool isBinary )
 {
-        sal_Int32 type = (isBinary?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);
+        SignatureReferenceType type = (isBinary?SignatureReferenceType::BINARYSTREAM:SignatureReferenceType::XMLSTREAM);
 
     if (m_vInternalSignatureInformations.empty())
     {
@@ -173,7 +173,7 @@ void XSecController::setReferenceCount() const
 
         for(int i=0 ; i<refNum; ++i)
         {
-            if (refInfors[i].nType == TYPE_SAMEDOCUMENT_REFERENCE )
+            if (refInfors[i].nType == SignatureReferenceType::SAMEDOCUMENT )
             /*
              * same-document reference
              */

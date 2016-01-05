@@ -778,7 +778,7 @@ void XSecController::exportSignature(
                 const SignatureReferenceInformation& refInfor = vReferenceInfors[j];
 
                 pAttributeList = new SvXMLAttributeList();
-                if ( refInfor.nType != TYPE_SAMEDOCUMENT_REFERENCE )
+                if ( refInfor.nType != SignatureReferenceType::SAMEDOCUMENT )
                 /*
                  * stream reference
                  */
@@ -800,7 +800,7 @@ void XSecController::exportSignature(
                 xDocumentHandler->startElement( tag_Reference, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
                 {
                     /* Write Transforms element */
-                    if (refInfor.nType == TYPE_XMLSTREAM_REFERENCE)
+                    if (refInfor.nType == SignatureReferenceType::XMLSTREAM)
                     /*
                      * xml stream, so c14n transform is needed
                      */
