@@ -4320,15 +4320,19 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 aCorrectedFormula += mxSymbols->getSymbol(ocArrayClose);
         }
 
-        FormulaByteToken aToken( ocClose );
-        while( nBrackets-- )
+        if (nBrackets)
         {
-            if( !pArr->AddToken( aToken ) )
+            FormulaByteToken aToken( ocClose );
+            while( nBrackets-- )
             {
-                SetError(errCodeOverflow); break;
+                if( !pArr->AddToken( aToken ) )
+                {
+                    SetError(errCodeOverflow);
+                    break;  // while
+                }
+                if ( bAutoCorrect )
+                    aCorrectedFormula += mxSymbols->getSymbol(ocClose);
             }
-            if ( bAutoCorrect )
-                aCorrectedFormula += mxSymbols->getSymbol(ocClose);
         }
     }
     if ( nForced >= 2 )
