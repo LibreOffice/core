@@ -279,6 +279,19 @@ bool lcl_GetBoolValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const Sf
 
 }
 
+bool lcl_isNumberFormatText(const ScDocument* pDoc, SCCOL nCellX, SCROW nCellY, SCTAB nTab )
+{
+    sal_uInt32 nCurrentNumberFormat;
+    pDoc->GetNumberFormat( nCellX, nCellY, nTab, nCurrentNumberFormat);
+    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+    LanguageType eLanguage = ScGlobal::eLnge;
+    const SvNumberformat* pEntry = pNumberFormatter->GetEntry( nCurrentNumberFormat );
+    if ( pEntry )
+        eLanguage = pEntry->GetLanguage();
+    const sal_uInt32 nNumberFormatText = pNumberFormatter->GetStandardFormat ( css::util::NumberFormat::TEXT, eLanguage );
+    return ( nNumberFormatText == nCurrentNumberFormat );
+}
+
 void ScDrawStringsVars::SetPattern(
     const ScPatternAttr* pNew, const SfxItemSet* pSet, const ScRefCellValue& rCell,
     SvtScriptType nScript )
@@ -1386,7 +1399,7 @@ bool beginsWithRTLCharacter(const OUString& rStr)
 static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
         bool bCellIsValue, const OUString& rText,
         const ScPatternAttr& rPattern, const SfxItemSet* pCondSet,
-        const ScDocument* pDoc, SCTAB nTab )
+        const ScDocument* pDoc, SCTAB nTab, const bool  bNumberFormatIsText )
 {
     SvxCellHorJustify eHorJustContext = eInHorJust;
     bool bUseWritingDirection = false;
@@ -1394,10 +1407,14 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
     {
         // fdo#32530: Default alignment depends on value vs
         // string, and the direction of the 1st letter.
-        if (beginsWithRTLCharacter( rText))
-            eHorJustContext = bCellIsValue ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
-        else if (bCellIsValue)
-            eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
+        if (beginsWithRTLCharacter( rText)) //If language is RTL
+        {
+            if (bCellIsValue)
+               eHorJustContext = bNumberFormatIsText ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+            else
+                eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
+        }else if (bCellIsValue) //If language is not RTL
+            eHorJustContext = bNumberFormatIsText ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
         else
             bUseWritingDirection = true;
     }
@@ -1688,8 +1705,9 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
                     }
 
+                    const bool bNumberFormatIsText = lcl_isNumberFormatText( mpDoc, nCellX, nCellY, nTab );
                     eOutHorJust = getAlignmentFromContext( aVars.GetHorJust(), bCellIsValue, aVars.GetString(),
-                            *pPattern, pCondSet, mpDoc, nTab);
+                            *pPattern, pCondSet, mpDoc, nTab, bNumberFormatIsText );
 
                     bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
@@ -4566,8 +4584,9 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         OUString aStr = mpDoc->GetString(nCellX, nCellY, nTab);
 
                         DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(aCell));
+                        const bool bNumberFormatIsText = lcl_isNumberFormatText( mpDoc, nCellX, nCellY, nTab );
                         aParam.meHorJustContext = getAlignmentFromContext( aParam.meHorJustAttr,
-                                aParam.mbCellIsValue, aStr, *pPattern, pCondSet, mpDoc, nTab);
+                                aParam.mbCellIsValue, aStr, *pPattern, pCondSet, mpDoc, nTab, bNumberFormatIsText);
                         aParam.meHorJustResult = (aParam.meHorJustAttr == SVX_HOR_JUSTIFY_BLOCK) ?
                                 SVX_HOR_JUSTIFY_BLOCK : aParam.meHorJustContext;
                         aParam.mbPixelToLogic = bPixelToLogic;
