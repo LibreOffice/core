@@ -368,14 +368,15 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
                                 .getNonReferenceType());
                         if (t2 != nullptr) {
                             //TODO: fix this superficial nonsense check:
-                            ASTTemplateArgumentListInfo const & ai
-                                = dr->getExplicitTemplateArgs();
-                            if (ai.NumTemplateArgs == 1
-                                && (ai[0].getArgument().getKind()
-                                    == TemplateArgument::Type)
-                                && isBool(ai[0].getTypeSourceInfo()->getType()))
-                            {
-                                continue;
+                            if (dr->getNumTemplateArgs() == 1) {
+                                auto const ta = dr->getTemplateArgs();
+                                if ((ta[0].getArgument().getKind()
+                                     == TemplateArgument::Type)
+                                    && isBool(
+                                        ta[0].getTypeSourceInfo()->getType()))
+                                {
+                                    continue;
+                                }
                             }
                         }
                     }
