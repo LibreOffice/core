@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="DocumentPropertiesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Properties of </property>
+    <property name="title" translatable="yes">Properties of %1</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
