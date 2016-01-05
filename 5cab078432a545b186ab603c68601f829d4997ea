@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_b348242f",
+        "filename": "include/sfx2/sfxsids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T15:40:50Z",
+      "side": 1,
+      "message": "I don\u0027t understand why there is a need to have the SID_* in include/ - since you can just check the .uno command name, as I mentioned previously. (Or maybe I\u0027m missing something?)",
+      "parentUuid": "dab17558_73735cb2",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_b0a01a92",
         "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I\u0027ve tried it but because of initialize method is working one time at the opening writer, m_aCommandURL is .uno:InsertDraw and it doesn\u0027t changes when i click the trackchangesbar button. I couldn\u0027t find a way to control in initialize method.\n\nMaybe it would be better to write a new Controller class in writer component (ex: SwTbxCtlTrack). What about?",
       "parentUuid": "dab17558_b0a01a92",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_135650d2",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T15:40:50Z",
+      "side": 1,
+      "message": "initialize method is working one time _per button_ (each button has its own instance of the class, e.g. if you have 2 .uno:InsertDraw buttons on the toolbar, you\u0027ll have 2 separate SvxTbxCtlDraw objects). If you don\u0027t get into initialize method with m_aCommandURL \u003d\u003d \".uno:TrackChangesBar\", then probably there is a problem somewhere else (see my comment about SfxAllEnumItem for a guess).",
+      "parentUuid": "dab17558_53829853",
       "revId": "5cab078432a545b186ab603c68601f829d4997ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -117,6 +153,24 @@
       "writtenOn": "2016-01-05T07:30:23Z",
       "side": 1,
       "message": "Why SfxAllEnumItem? This patch doesn\u0027t seem to use the SfxAllEnumItem type in any way, so I guess SfxVoidItem will also do the job.",
+      "revId": "5cab078432a545b186ab603c68601f829d4997ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_530578c0",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-05T15:40:50Z",
+      "side": 1,
+      "message": "Oh, now I see why we need SfxAllEnumItem here. That\u0027s because of the registration macro in tbxdrctl.cxx#36. So to make life easier, let\u0027s just go with SfxAllEnumItem. Sorry for the noise.",
+      "parentUuid": "dab17558_10c5a63b",
       "revId": "5cab078432a545b186ab603c68601f829d4997ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
