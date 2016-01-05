@@ -131,7 +131,7 @@ void OOXMLOLEHandler::attribute(Id name, Value & val)
         catch (const ::css::uno::Exception&)
         {
             // Can't resolve OLE stream
-            SAL_WARN("OOXMLOLEHandler::attribute", "Failed to open OLE stream!");
+            SAL_WARN("writerfilter.ooxml", "Failed to open OLE stream!");
         }
         break;
     default:
