@@ -1113,6 +1113,7 @@ inline bool MissingConventionODF::isRewriteNeeded( OpCode eOp ) const
         case ocAddress:
         case ocLogNormDist:
         case ocNormDist:
+        case ocWeeknumOOo:
             return true;
         case ocMissing:
         case ocLog:
@@ -1512,6 +1513,22 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
             {
                 FormulaToken *pToken = new FormulaToken( svByte,
                         ( pCur->GetOpCode() == ocCeil ? ocCeil_Math : ocFloor_Math ) );
+                pNewArr->AddToken( *pToken );
+            }
+            else if (pCur->GetOpCode() == ocWeeknumOOo &&
+                    rConv.getConvention() == MissingConvention::FORMULA_MISSING_CONVENTION_ODFF)
+            {
+                /* XXX TODO FIXME: Remove this special handling (also
+                 * ocWeeknumOOo in MissingConventionODF::isRewriteNeeded()
+                 * above) in 5.3 or later, this still abuses the ODFF
+                 * ISOWEEKNUM function to store the old WEEKNUM (now
+                 * WEEKNUM_OOO) cases that can't be mapped to the new WEEKNUM
+                 * or ISOWEEKNUM, as 5.0 and earlier always stored the old
+                 * WEEKNUM as ISOWEEKNUM. Ugly nasty ...
+                 * Later write ORG.LIBREOFFICE.WEEKNUM_OOO, see
+                 * formula/source/core/resource/core_resource.src
+                 * SC_OPCODE_WEEKNUM_OOO */
+                FormulaToken *pToken = new FormulaByteToken( ocIsoWeeknum, pCur->GetByte(), pCur->IsInForceArray());
                 pNewArr->AddToken( *pToken );
             }
             else

@@ -3701,6 +3701,7 @@ StackVar ScInterpreter::Interpret()
                 case ocGetDayOfWeek     : ScGetDayOfWeek();             break;
                 case ocWeek             : ScGetWeekOfYear();            break;
                 case ocIsoWeeknum       : ScGetIsoWeekOfYear();         break;
+                case ocWeeknumOOo       : ScWeeknumOOo();               break;
                 case ocEasterSunday     : ScEasterSunday();             break;
                 case ocNetWorkdays      : ScNetWorkdays( false);        break;
                 case ocNetWorkdays_MS   : ScNetWorkdays( true );        break;

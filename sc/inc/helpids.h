@@ -627,5 +627,6 @@
 #define HID_FUNC_FLOOR_MATH                                     "SC_HID_FUNC_FLOOR_MATH"
 #define HID_FUNC_FLOOR_PRECISE                                  "SC_HID_FUNC_FLOOR_PRECISE"
 #define HID_FUNC_RAWSUBTRACT                                    "SC_HID_FUNC_RAWSUBTRACT"
+#define HID_FUNC_WEEKNUM_OOO                                    "SC_HID_FUNC_WEEKNUM_OOO"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

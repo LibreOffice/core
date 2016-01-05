@@ -620,6 +620,7 @@ void ScGetDay();
 void ScGetDayOfWeek();
 void ScGetWeekOfYear();
 void ScGetIsoWeekOfYear();
+void ScWeeknumOOo();
 void ScEasterSunday();
 sal_uInt16 GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
         ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
