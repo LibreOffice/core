@@ -921,7 +921,7 @@ void GenPspGraphics::GetFontAttributes( ImplFontAttributes *pFontAttributes, int
     if (rMgr.getFontInfo (m_pPrinterGfx->GetFontID(), aInfo))
     {
         ImplFontAttributes aDFA = Info2FontAttributes( aInfo );
-        static_cast<ImplFontAttributes&>(*pFontAttributes) = aDFA;
+        *pFontAttributes = aDFA;
         pFontAttributes->SetBuiltInFontFlag( aDFA.IsBuiltInFont() );
         pFontAttributes->SetScalableFlag( true );
         pFontAttributes->SetTrueTypeFlag( false ); // FIXME, needed?
