@@ -85,6 +85,8 @@ void AccessibleCell::Init()
             // non-empty text -> use full-fledged edit source right away
             ::std::unique_ptr<SvxEditSource> pEditSource( new SvxTextEditSource( mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
             mpText = new AccessibleTextHelper( std::move(pEditSource) );
+            if( mxCell.is() && mxCell.get()->IsActiveCell() )
+                mpText->SetFocus();
             mpText->SetEventSource(this);
         }
 
