@@ -800,7 +800,6 @@ void SwView::Execute(SfxRequest &rReq)
             }
         break;
         case FN_SYNC_LABELS:
-        case FN_MAILMERGE_CHILDWINDOW:
             GetViewFrame()->ShowChildWindow(nSlot);
         break;
         case FN_ESCAPE:

@@ -6863,24 +6863,6 @@ SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
         GroupId = GID_FORMAT;
 ]
 
-SfxBoolItem MailmergeChildWindow FN_MAILMERGE_CHILDWINDOW
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
 SfxVoidItem WordCountDialog FN_WORDCOUNT_DIALOG
 ()
 [

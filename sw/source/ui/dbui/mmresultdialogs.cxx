@@ -20,7 +20,6 @@
 #include <mmresultdialogs.hxx>
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
-#include <mailmergechildwindow.hxx>
 #include <mailconfigpage.hxx>
 #include <swmessdialog.hxx>
 #include <cmdid.h>

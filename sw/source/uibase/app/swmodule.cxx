@@ -95,7 +95,6 @@
 #include <fldwrap.hxx>
 #include <redlndlg.hxx>
 #include <syncbtn.hxx>
-#include <mailmergechildwindow.hxx>
 #include <modcfg.hxx>
 #include <fontcfg.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
@@ -342,7 +341,6 @@ void SwDLL::RegisterControls()
     SwInputChild::RegisterChildWindow( false, pMod, SfxChildWindowFlags::FORCEDOCK );
     SwRedlineAcceptChild::RegisterChildWindow( false, pMod );
     SwSyncChildWin::RegisterChildWindow( true, pMod );
-    SwMailMergeChildWindow::RegisterChildWindow( false, pMod );
     SwInsertIdxMarkWrapper::RegisterChildWindow( false, pMod );
     SwInsertAuthMarkWrapper::RegisterChildWindow( false, pMod );
     SwWordCountWrapper::RegisterChildWindow( false, pMod );

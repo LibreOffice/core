@@ -569,11 +569,6 @@ interface BaseTextEditView
     [
         ExecMethod = Execute ;
     ]
-    FN_MAILMERGE_CHILDWINDOW
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState;
-    ]
 
     FN_MAILMERGE_SENDMAIL_CHILDWINDOW
     [
