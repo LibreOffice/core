@@ -41,13 +41,10 @@
 #include <vector>
 #include <set>
 
-struct SalPaintEvent;
 struct ImplDelData;
-struct ImplAccessibleInfos;
 
 namespace vcl {
     class Window;
-    struct ControlLayoutData;
 }
 
 class FixedText;
