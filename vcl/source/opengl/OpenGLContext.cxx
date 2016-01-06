@@ -728,10 +728,8 @@ bool OpenGLContext::ImplInit()
     {
         int best_fbc = -1;
         GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering, false);
-        if (!pFBC)
-            return false;
 
-        if (best_fbc != -1)
+        if (pFBC && best_fbc != -1)
         {
             int pContextAttribs[] =
             {
