@@ -9,8 +9,4 @@
 
 $(eval $(call gb_Package_Package,shell_scripts_kde,$(SRCDIR)/shell/source/unix/misc))
 
-ifeq ($(ENABLE_KDE4),TRUE)
-$(eval $(call gb_Package_add_file,shell_scripts_kde,$(LIBO_BIN_FOLDER)/kde4-open-url,kde4-open-url.sh))
-endif
-
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
