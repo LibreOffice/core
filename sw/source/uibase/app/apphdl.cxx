@@ -55,6 +55,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
 
+#include <edtwin.hxx>
 #include <view.hxx>
 #include <pview.hxx>
 #include <srcview.hxx>
@@ -779,6 +780,8 @@ void SwModule::ExecOther(SfxRequest& rReq)
             aDescriptor[ svx::daSelection ]   <<= pConfigItem->GetSelection();
 
             SwWrtShell& rSh = pView->GetWrtShell();
+            pConfigItem->SetTargetView(nullptr);
+
             SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
             aMergeDesc.pMailMergeConfigItem = pConfigItem;
             aMergeDesc.bCreateSingleFile = true;
@@ -789,21 +792,28 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 pConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
         }
         case FN_MAILMERGE_SAVE_DOCUMENTS:
-        {
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            pFact->ExecuteMMResultSaveDialog();
-        }
-        break;
         case FN_MAILMERGE_PRINT_DOCUMENTS:
-        {
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            pFact->ExecuteMMResultPrintDialog();
-        }
-        break;
         case FN_MAILMERGE_EMAIL_DOCUMENTS:
         {
+            SwView* pView = ::GetActiveView();
+            SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+            if (!pConfigItem)
+                return;
+
+            if (!pConfigItem->GetTargetView())
+            {
+                SwView* pSourceView = pConfigItem->GetSourceView();
+                assert(pSourceView);
+                pConfigItem->SetTargetView(SwDBManager::CreateTargetDocShell(true, &pSourceView->GetEditWin(), pSourceView->GetWrtShellPtr(), pSourceView->GetDocShell()));
+            }
+
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            pFact->ExecuteMMResultEmailDialog();
+            switch (nWhich)
+            {
+                case FN_MAILMERGE_SAVE_DOCUMENTS: pFact->ExecuteMMResultSaveDialog(); break;
+                case FN_MAILMERGE_PRINT_DOCUMENTS: pFact->ExecuteMMResultPrintDialog(); break;
+                case FN_MAILMERGE_EMAIL_DOCUMENTS: pFact->ExecuteMMResultEmailDialog(); break;
+            }
         }
         break;
 #endif
