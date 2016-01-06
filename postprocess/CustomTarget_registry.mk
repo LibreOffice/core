@@ -579,7 +579,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
 	$(call gb_Helper_abbreviate_dirs,\
-	    find $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/)\
+	    $(FIND) $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/) \
 	         -name *.xcu -size +0c \
 	        | $(gb_AWK) 'BEGIN{print "<list>"} \
 	                    {print "<filename>"$$0"</filename>"} \
@@ -589,7 +589,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
 	$(call gb_Helper_abbreviate_dirs,\
-	    find $(call gb_XcuResTarget_get_target,registry/$*/)\
+	    $(FIND) $(call gb_XcuResTarget_get_target,registry/$*/) \
 	         $(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
 	             $(foreach driver,$(postprocess_DRIVERS),\
 	                 $(call gb_XcuResTarget_get_target,$(driver)/$*/)))\

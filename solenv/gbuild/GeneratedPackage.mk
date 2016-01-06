@@ -33,7 +33,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	rm -rf $(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) && \
 	$(foreach pair,$(PACKAGE_DIRS),\
 		$(call gb_GeneratedPackage__command_cp,$(call gb_GeneratedPackage__get_srcdir,$(pair)),$(call gb_GeneratedPackage__get_destdir,$(pair))) &&) \
-	find \
+	$(FIND) \
 		$(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) \
 		\( -type f -o -type l \) -print \
 		> $(1) \
