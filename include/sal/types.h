@@ -636,7 +636,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
     Returns: the boolean value of expr (expressed as either int 1 or 0)
  */
-#    define SAL_LIKELY(expr) (__builtin_expect(SAL_DETAIL_BOOLEAN_EXPR(expr), 1))
+#    define SAL_LIKELY(expr) __builtin_expect(SAL_DETAIL_BOOLEAN_EXPR((expr)), 1)
 
 /** An optimization annotation: denotes that expression is unlikely to be true.
 
@@ -648,7 +648,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
     Returns: the boolean value of expr (expressed as either int 1 or 0)
  */
-#    define SAL_UNLIKELY(expr) (__builtin_expect(SAL_DETAIL_BOOLEAN_EXPR(expr), 0))
+#    define SAL_UNLIKELY(expr) __builtin_expect(SAL_DETAIL_BOOLEAN_EXPR((expr)), 0)
 
 /** An optimization annotation: tells the compiler to work harder at this code
 
