@@ -35,6 +35,7 @@
 #include <sfx2/printer.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdotable.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/svditer.hxx>
 #include <comphelper/extract.hxx>
@@ -590,6 +591,8 @@ void Outliner::Initialize (bool bDirectionIsForward)
 
 bool Outliner::SearchAndReplaceAll()
 {
+    DetectChange();
+
     bool bRet = true;
     // Save the current position to be restored after having replaced all
     // matches.
@@ -615,12 +618,13 @@ bool Outliner::SearchAndReplaceAll()
     {
         // Go to beginning/end of document.
         maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
-        // Switch to the current object only if it is a valid text object.
-        ::sd::outliner::IteratorPosition aNewPosition (*maObjectIterator);
-        if (IsValidTextObject (aNewPosition))
+        // Switch to the first object which contains the search string.
+        ProvideNextTextObject();
+        if( !mbStringFound  )
         {
-            maCurrentPosition = aNewPosition;
-            SetObject (maCurrentPosition);
+            RestoreStartPosition ();
+            mnStartPageIndex = (sal_uInt16)-1;
+            return true;
         }
 
         // Search/replace until the end of the document is reached.
@@ -1219,6 +1223,11 @@ bool Outliner::ShowWrapArroundDialog()
 
 bool Outliner::IsValidTextObject (const ::sd::outliner::IteratorPosition& rPosition)
 {
+    // TODO implement iteration through table cells and remove this workaround
+    ::sdr::table::SdrTableObj* pTableObject = dynamic_cast< ::sdr::table::SdrTableObj* >( rPosition.mxObject.get() );
+    if( pTableObject != nullptr )
+        return false;
+
     SdrTextObj* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get() );
     return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj();
 }
