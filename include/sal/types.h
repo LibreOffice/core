@@ -616,15 +616,15 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 #if defined(__GNUC__)
 // Macro to try to catch and warn on assignments inside expr.
-#    define _SAL_BOOLEAN_EXPR(expr)                   \
-     __extension__ ({                               \
-       int _sal_boolean_var_;                         \
-       if (expr)                                    \
-          _sal_boolean_var_ = 1;                      \
-       else                                         \
-          _sal_boolean_var_ = 0;                      \
-       _sal_boolean_var_;                             \
-    })
+#    define SAL_DETAIL_BOOLEAN_EXPR(expr)   \
+        __extension__ ({                    \
+            int sal_boolean_var_;           \
+            if (expr)                       \
+               sal_boolean_var_ = 1;        \
+            else                            \
+               sal_boolean_var_ = 0;        \
+            sal_boolean_var_;               \
+        })
 
 /** An optimization annotation: denotes that expression is likely to be true.
 
@@ -636,7 +636,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
     Returns: the boolean value of expr (expressed as either int 1 or 0)
  */
-#    define SAL_LIKELY(expr) (__builtin_expect (_SAL_BOOLEAN_EXPR(expr), 1))
+#    define SAL_LIKELY(expr) (__builtin_expect(SAL_DETAIL_BOOLEAN_EXPR(expr), 1))
 
 /** An optimization annotation: denotes that expression is unlikely to be true.
 
@@ -648,7 +648,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
     Returns: the boolean value of expr (expressed as either int 1 or 0)
  */
-#    define SAL_UNLIKELY(expr) (__builtin_expect (_SAL_BOOLEAN_EXPR(expr), 0))
+#    define SAL_UNLIKELY(expr) (__builtin_expect(SAL_DETAIL_BOOLEAN_EXPR(expr), 0))
 
 /** An optimization annotation: tells the compiler to work harder at this code
 
