@@ -146,12 +146,32 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         }
         else
         {
-            Size aSize( 14100, 200 );
+            Size aSize( 14100, 2000 );
 
             Point aPos;
             Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
+            aWinRect = GetActiveWindow()->PixelToLogic(aWinRect);
+
+            // make sure that the default size of the table fits on the paper and is inside the viewing area.
+            // if zoomed in close, don't make the table bigger than the viewing window.
+            Size aMaxSize = getCurrentPage()->GetSize();
+            if( aMaxSize.Height() > aWinRect.getHeight() )
+                aMaxSize.setHeight( aWinRect.getHeight() );
+            if( aMaxSize.Width() > aWinRect.getWidth() )
+                aMaxSize.setWidth( aWinRect.getWidth() );
+
+            if( aSize.Width() > aMaxSize.getWidth() )
+                aSize.setWidth( aMaxSize.getWidth() );
+
+            // adjust height based on # of rows.
+            if( nRows > 0 )
+            {
+                aSize.setHeight( aSize.Height() * nRows );
+                if( aSize.Height() > aMaxSize.getHeight() )
+                    aSize.setHeight( aMaxSize.getHeight() );
+            }
+
             aPos = aWinRect.Center();
-            aPos = GetActiveWindow()->PixelToLogic(aPos);
             aPos.X() -= aSize.Width() / 2;
             aPos.Y() -= aSize.Height() / 2;
             aRect = Rectangle(aPos, aSize);
