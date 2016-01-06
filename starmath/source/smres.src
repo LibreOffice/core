@@ -20,7 +20,6 @@
 #include <sfx2/sfx.hrc>
 #include <svx/globlmn.hrc>
 #include "starmath.hrc"
-#include "toolbox.hrc"
 #include "smcommands.h"
 
 String RID_FONTREGULAR
