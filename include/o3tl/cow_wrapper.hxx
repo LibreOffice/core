@@ -22,7 +22,7 @@
 
 #include <osl/interlck.h>
 
-#include <algorithm>
+#include <utility>
 
 namespace o3tl
 {
