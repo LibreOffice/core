@@ -88,7 +88,7 @@ private:
 class CEnumFormatEtc : public IEnumFORMATETC
 {
 public:
-    CEnumFormatEtc( LPUNKNOWN pUnkDataObj );
+    explicit CEnumFormatEtc( LPUNKNOWN pUnkDataObj );
 
     // IUnknown
     STDMETHODIMP           QueryInterface( REFIID iid, LPVOID* ppvObject );

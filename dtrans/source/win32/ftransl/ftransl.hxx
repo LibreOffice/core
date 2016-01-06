@@ -47,7 +47,7 @@ class CDataFormatTranslator : public
 {
 
 public:
-    CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XDataFormatTranslator
 
