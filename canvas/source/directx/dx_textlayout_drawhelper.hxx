@@ -43,7 +43,7 @@ namespace dxcanvas
     class TextLayoutDrawHelper
     {
     public:
-        TextLayoutDrawHelper(
+        explicit TextLayoutDrawHelper(
             const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice);
         ~TextLayoutDrawHelper();
 

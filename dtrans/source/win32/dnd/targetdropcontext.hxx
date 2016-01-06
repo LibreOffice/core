@@ -40,7 +40,7 @@ class TargetDropContext: public WeakImplHelper<XDropTargetDropContext>
     TargetDropContext( const TargetDropContext&);
     TargetDropContext &operator= ( const TargetDropContext&);
 public:
-    TargetDropContext( DropTarget* pTarget);
+    explicit TargetDropContext(DropTarget* pTarget);
     ~TargetDropContext();
 
     // XDropTargetDragContext

@@ -42,7 +42,7 @@ class CFormatEtc
 {
 public:
     CFormatEtc( );
-    CFormatEtc( const FORMATETC& aFormatEtc );
+    explicit CFormatEtc( const FORMATETC& aFormatEtc );
     CFormatEtc( CLIPFORMAT cf, DWORD tymed = TYMED_HGLOBAL, DVTARGETDEVICE* ptd = NULL, DWORD dwAspect = DVASPECT_CONTENT, LONG lindex = -1 );
     CFormatEtc( const CFormatEtc& theOther );
 

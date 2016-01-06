@@ -32,8 +32,8 @@
 class CAPNDataObject : public IDataObject
 {
 public:
-    CAPNDataObject( IDataObjectPtr rIDataObject );
-    virtual ~CAPNDataObject( );
+    explicit CAPNDataObject(IDataObjectPtr rIDataObject);
+    virtual ~CAPNDataObject();
 
     //IUnknown interface methods
 

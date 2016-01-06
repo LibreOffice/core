@@ -111,7 +111,7 @@ private:
     DropTarget &operator= (DropTarget&);
 
 public:
-    DropTarget(const Reference<XComponentContext>& rxContext);
+    explicit DropTarget(const Reference<XComponentContext>& rxContext);
     virtual ~DropTarget();
 
     // Overrides WeakComponentImplHelper::disposing which is called by

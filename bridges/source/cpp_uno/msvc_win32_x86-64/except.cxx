@@ -578,7 +578,7 @@ struct RaiseInfo
     unsigned char *        _code;
     sal_uInt64         _codeBase;
 
-    RaiseInfo( typelib_TypeDescription * pTD ) throw ();
+    explicit RaiseInfo(typelib_TypeDescription * pTD) throw ();
 
     ~RaiseInfo() throw ();
 };

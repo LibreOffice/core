@@ -86,7 +86,7 @@ public:
     sal_Int8 m_sourceActions;
 
 public:
-    DragSource(const Reference<XComponentContext>& rxContext);
+    explicit DragSource(const Reference<XComponentContext>& rxContext);
     virtual ~DragSource();
 
   // XInitialization
