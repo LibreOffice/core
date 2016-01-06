@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d613165b",
+        "filename": "svx/source/table/accessibletableshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-01-06T05:22:35Z",
+      "side": 1,
+      "message": "Perhaps we could check the TABLE for IsTextEditActive instead of the cell if we really need to ensure getActiveCell returns editActive-only cells.",
+      "range": {
+        "startLine": 993,
+        "startChar": 53,
+        "endLine": 993,
+        "endChar": 66
+      },
+      "revId": "3e274397b71e37df55aae5ce70eeb8d2996879b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_96098e2f",
+        "filename": "svx/source/table/accessibletableshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-01-06T05:22:35Z",
+      "side": 1,
+      "message": "Probably the whole \"if(bCellEditing)\" could disappear - the else really doesn\u0027t do anything less, but I left it in just to minimize code change in case I am missing something.  The only difference I see is that if it is possible for the accessible cell to NOT be cached and yet be editActive, then it will fail to return anything valid.",
+      "range": {
+        "startLine": 1004,
+        "startChar": 15,
+        "endLine": 1004,
+        "endChar": 20
+      },
+      "revId": "3e274397b71e37df55aae5ce70eeb8d2996879b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_161e3e63",
+        "filename": "svx/source/table/cell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-01-06T05:22:35Z",
+      "side": 1,
+      "message": "perhaps could add \u0026\u0026 rTableObj.IsTextEditActive() to ensure that the table itself is active.",
+      "range": {
+        "startLine": 572,
+        "startChar": 4,
+        "endLine": 572,
+        "endChar": 7
+      },
+      "revId": "3e274397b71e37df55aae5ce70eeb8d2996879b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
