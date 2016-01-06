@@ -131,11 +131,7 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
                 url.c_str(),
                 curl_easy_strerror(cc));
 #endif
-    /*
-     * TODO
-    if (error_description != NULL)
-        *error_description = curl_easy_strerror(cc);
-    */
+    const char* error_description = curl_easy_strerror(cc);
 
     if (formpost != NULL)
     {
@@ -146,7 +142,7 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
         curl_slist_free_all(headerlist);
     }
 
-    std::cerr << response_body << std::endl;
+    std::cerr << response_body << " " << error_description << std::endl;
 
 
     if( CURLE_OK != cc )
