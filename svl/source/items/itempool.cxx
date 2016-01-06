@@ -29,6 +29,7 @@
 #include "poolio.hxx"
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 
@@ -401,35 +402,32 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
     if ( pImp->mpSecondary )
     {
 #ifdef DBG_UTIL
-        SAL_INFO( "svl.items", "for Image: there are not statics; this is a bug" );
-        if ( pImp->ppStaticDefaults )
+        // Delete() did not yet run?
+        if ( !pImp->maPoolItems.empty() && !pImp->mpSecondary->pImp->maPoolItems.empty() )
         {
-            // Delete() did not yet run?
-            if ( !pImp->maPoolItems.empty() && !pImp->mpSecondary->pImp->maPoolItems.empty() )
-            {
                 // Does the Master have SetItems?
-                bool bHasSetItems = false;
-                for ( sal_uInt16 i = 0; !bHasSetItems && i < pImp->mnEnd - pImp->mnStart; ++i )
-                    bHasSetItems = dynamic_cast<const SfxSetItem *>(pImp->ppStaticDefaults[i]) != nullptr;
+            bool bHasSetItems = false;
+            assert(pImp->ppStaticDefaults);
+            for ( sal_uInt16 i = 0; !bHasSetItems && i < pImp->mnEnd - pImp->mnStart; ++i )
+                bHasSetItems = dynamic_cast<const SfxSetItem *>(pImp->ppStaticDefaults[i]) != nullptr;
 
-                // Detached Pools must be empty
-                bool bOK = bHasSetItems;
-                for ( sal_uInt16 n = 0;
-                      bOK && n <= pImp->mpSecondary->pImp->mnEnd - pImp->mpSecondary->pImp->mnStart;
-                      ++n )
+            // Detached Pools must be empty
+            bool bOK = bHasSetItems;
+            for ( sal_uInt16 n = 0;
+                  bOK && n <= pImp->mpSecondary->pImp->mnEnd - pImp->mpSecondary->pImp->mnStart;
+                  ++n )
+            {
+                SfxPoolItemArray_Impl* pItemArr = pImp->mpSecondary->pImp->maPoolItems[n];
+                if ( pItemArr )
                 {
-                    SfxPoolItemArray_Impl* pItemArr = pImp->mpSecondary->pImp->maPoolItems[n];
-                    if ( pItemArr )
-                    {
-                        SfxPoolItemArrayBase_Impl::iterator ppHtArr =   pItemArr->begin();
-                        for( size_t i = pItemArr->size(); i; ++ppHtArr, --i )
-                            if ( !(*ppHtArr) )
-                            {
-                                OSL_FAIL( "old secondary pool must be empty" );
-                                bOK = false;
-                                break;
-                            }
-                    }
+                    SfxPoolItemArrayBase_Impl::iterator ppHtArr =   pItemArr->begin();
+                    for( size_t i = pItemArr->size(); i; ++ppHtArr, --i )
+                        if ( !(*ppHtArr) )
+                        {
+                            OSL_FAIL( "old secondary pool must be empty" );
+                            bOK = false;
+                            break;
+                        }
                 }
             }
         }
@@ -519,38 +517,35 @@ void SfxItemPool::Delete()
     sal_uInt16 nArrCnt;
 
     // Collect the SetItems first
-    SAL_INFO( "svl.items", "for Image: there are not statics there yet; this is a bug" );
-    if ( pImp->ppStaticDefaults )
+    assert(pImp->ppStaticDefaults);
+    for ( nArrCnt = GetSize_Impl();
+          nArrCnt;
+          --nArrCnt, ++itrItemArr, ++ppDefaultItem, ++ppStaticDefaultItem )
     {
-        for ( nArrCnt = GetSize_Impl();
-                nArrCnt;
-                --nArrCnt, ++itrItemArr, ++ppDefaultItem, ++ppStaticDefaultItem )
+        // *ppStaticDefaultItem could've already been deleted in a class derived
+        // from SfxItemPool
+        // This causes chaos in Itempool!
+        if ( *ppStaticDefaultItem && dynamic_cast< const SfxSetItem* >(*ppStaticDefaultItem) !=  nullptr )
         {
-            // *ppStaticDefaultItem could've already been deleted in a class derived
-            // from SfxItemPool
-            // This causes chaos in Itempool!
-            if ( *ppStaticDefaultItem && dynamic_cast< const SfxSetItem* >(*ppStaticDefaultItem) !=  nullptr )
+            if ( *itrItemArr )
             {
-                if ( *itrItemArr )
-                {
-                    SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
-                    for ( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
-                        if (*ppHtArr)
-                        {
+                SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
+                for ( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
+                    if (*ppHtArr)
+                    {
 #ifdef DBG_UTIL
-                            ReleaseRef( **ppHtArr, (*ppHtArr)->GetRefCount() );
+                        ReleaseRef( **ppHtArr, (*ppHtArr)->GetRefCount() );
 #endif
-                            delete *ppHtArr;
-                        }
-                    DELETEZ( *itrItemArr );
-                }
-                if ( *ppDefaultItem )
-                {
+                        delete *ppHtArr;
+                    }
+                DELETEZ( *itrItemArr );
+            }
+            if ( *ppDefaultItem )
+            {
 #ifdef DBG_UTIL
-                    SetRefCount( **ppDefaultItem, 0 );
+                SetRefCount( **ppDefaultItem, 0 );
 #endif
-                    DELETEZ( *ppDefaultItem );
-                }
+                DELETEZ( *ppDefaultItem );
             }
         }
     }
