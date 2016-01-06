@@ -1274,6 +1274,11 @@ bool Outliner::ShowWrapArroundDialog()
 
 bool Outliner::IsValidTextObject (const ::sd::outliner::IteratorPosition& rPosition)
 {
+    // TODO implement iteration through table cells and remove this workaround
+    ::sdr::table::SdrTableObj* pTableObject = dynamic_cast< ::sdr::table::SdrTableObj* >( rPosition.mxObject.get() );
+    if( pTableObject != nullptr )
+        return false;
+
     SdrTextObj* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get() );
     return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj();
 }
