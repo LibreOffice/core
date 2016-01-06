@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_1678fef1",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-06T15:19:26Z",
+      "side": 1,
+      "message": "this introduces a dependency from sw/inc to sw/source/uibase/inc - circular dependencies are most likely a bad idea",
+      "revId": "d8ff907197037045fd0cb173e341f515968b65b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
