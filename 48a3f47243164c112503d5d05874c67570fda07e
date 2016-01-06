@@ -1,0 +1,363 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_5618c684",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "lets not clear here, and then re-assign later",
+      "range": {
+        "startLine": 735,
+        "startChar": 12,
+        "endLine": 735,
+        "endChar": 17
+      },
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_361d4274",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "so lets drop this - no need for a new assignment \u003d)",
+      "range": {
+        "startLine": 745,
+        "startChar": 17,
+        "endLine": 745,
+        "endChar": 18
+      },
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f62c5aad",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "No need to clear - as this goes out of scope it will be cleared as it is destroyed \u003d)",
+      "range": {
+        "startLine": 759,
+        "startChar": 16,
+        "endLine": 759,
+        "endChar": 21
+      },
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1630fe00",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "Can we just use an xDialogParent instead - ie. swap the vcl::Window for a safe VclPtr to it ? \u003d)",
+      "range": {
+        "startLine": 873,
+        "startChar": 17,
+        "endLine": 873,
+        "endChar": 30
+      },
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_96122e61",
+        "filename": "vcl/source/window/dndevdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "again no need to clear this here \u003d)",
+      "range": {
+        "startLine": 430,
+        "startChar": 19,
+        "endLine": 430,
+        "endChar": 20
+      },
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_16075e1d",
+        "filename": "vcl/source/window/event.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "Can\u0027t we just make the iteration here re-use the existing xWindow variable instead of pWindow - rename that and all its uses to xWindow - that should leave us with a single variable and cleaner code ? \u003d)",
+      "range": {
+        "startLine": 233,
+        "startChar": 17,
+        "endLine": 233,
+        "endChar": 24
+      },
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f603ba0d",
+        "filename": "vcl/source/window/event.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "no need to clear. The assignment below will do that for us when it operates on xWindow instead \u003d)",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_810e6632",
+        "filename": "vcl/source/window/event.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "I think this is mistaken; we want to remove the \u0027maDelData\u0027 element from the pSVEvent piece we already have a reference there on the mpWindow. So we can drop this line, and also the clear below; neither are necessary \u003d)\n\nNice !",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e113f25a",
+        "filename": "vcl/source/window/event.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "This is redundant - either have the clear or the assign to nullptr - either is fine; best not both.",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c1106e51",
+        "filename": "vcl/source/window/event.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "no need to clear I think.",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_211e9a63",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "This clear looks wrong - we don\u0027t want to clear the window element here.",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_412bde82",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "This is good like-for-like code. But could we switch \u0027pMouseMoveWin\u0027 above to be a VclPtr and then drop \u0027xWindow1\u0027 - which is an alias of it ? code would read more easily I think \u003d) Thanks !",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e13ad2cc",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "clearly if we do that rename, we don\u0027t want to clear pMouseMoveWin \u003d)",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c137cee1",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "no need -will be cleared as we go out of scope \u003d)",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2135fad9",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "good - isDisposed is a superset of IsDisposed \u003d) nice work.",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_013276f1",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "this is correct - as you see we already have a VclPtr on pChild \u003d)",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_614d4272",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "In several of these instances just passing in a VclPtr\u003c\u003e reference to the method might be more elegant - though it involves changing the signature: \"const VclPtr\u003c\u003e \u0026xWindow\" in this case ...",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4152be14",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "this looks wrong; we don\u0027t want to clear the pWindow - and there is no real need; ImplRemoveDel is not really necessary to map to much in the new world in most cases \u003d)",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a1572a01",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2001,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-06T22:12:30Z",
+      "side": 1,
+      "message": "Again - lets not clear those existing members; I\u0027m amazed no unit test catches that.",
+      "revId": "48a3f47243164c112503d5d05874c67570fda07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
