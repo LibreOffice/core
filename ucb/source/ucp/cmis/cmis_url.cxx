@@ -61,13 +61,21 @@ namespace cmis
     OUString URL::asString( )
     {
         OUString sUrl;
+        // Related tdf#96174, can no longer save on Google Drive
+        // the user field may contain characters that need to be escaped according to
+        // RFC3896 userinfo URI field
+        // see <https://tools.ietf.org/html/rfc3986#section-3.2.1>
+        OUString sEncodedUser = ( m_sUser.isEmpty() ?
+                                   OUString() :
+                                   rtl::Uri::encode( m_sUser, rtl_UriCharClassUserinfo,
+                                                     rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8) );
         OUString sEncodedBinding = rtl::Uri::encode(
                 m_sBindingUrl + "#" + m_sRepositoryId,
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis://" +
-                ( m_sUser.isEmpty() ? OUString( ) : (m_sUser + "@") ) +
+                ( sEncodedUser.isEmpty() ? OUString( ) : (sEncodedUser + "@") ) +
                 sEncodedBinding;
 
         if ( !m_sPath.isEmpty( ) )

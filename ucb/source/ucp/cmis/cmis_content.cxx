@@ -366,6 +366,7 @@ namespace cmis
 
             string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
+            SAL_WARN( "ucb.ucp.cmis", "m_aURL.getUsername( ): " << m_aURL.getUsername( ) );
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
                 // Initiate a CMIS session and register it as we found nothing
