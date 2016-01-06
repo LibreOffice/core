@@ -413,8 +413,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
 
         // window may be destroyed in drop event handler
-        ImplDelData         aDelData;
-        pWindow->ImplAddDel( &aDelData );
+        VclPtr<vcl::Window> xWindow = pWindow;
 
         if( xDropTarget.is() )
         {
@@ -426,9 +425,9 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
                 xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, xTransferable );
         }
 
-        if ( !aDelData.IsDead() )
+        if ( !xWindow->IsDisposed() )
         {
-            pWindow->ImplRemoveDel( &aDelData );
+            xWindow.clear();
             // release UI lock
             pWindow->DecrementLockCount();
         }

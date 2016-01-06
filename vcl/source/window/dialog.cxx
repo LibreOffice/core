@@ -728,12 +728,11 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool Dialog::Close()
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
     CallEventListeners( VCLEVENT_WINDOW_CLOSE );
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return false;
-    ImplRemoveDel( &aDelData );
+    xWindow.clear();
 
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
         return false;
@@ -743,7 +742,7 @@ bool Dialog::Close()
     if ( !(GetStyle() & WB_CLOSEABLE) )
     {
         bool bRet = true;
-        ImplAddDel( &aDelData );
+        xWindow = this;
         PushButton* pButton = ImplGetCancelButton( this );
         if ( pButton )
             pButton->Click();
@@ -755,9 +754,9 @@ bool Dialog::Close()
             else
                 bRet = false;
         }
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return true;
-        ImplRemoveDel( &aDelData );
+        xWindow.clear();
         return bRet;
     }
 
@@ -867,19 +866,18 @@ short Dialog::Execute()
     if ( !ImplStartExecuteModal() )
         return 0;
 
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
 #ifdef DBG_UTIL
-    ImplDelData aParentDelData;
+    VclPtr<vcl::Window> xParentWindow;
     vcl::Window* pDialogParent = mpDialogParent;
     if( pDialogParent )
-        pDialogParent->ImplAddDel( &aParentDelData );
+        xParentWindow = pDialogParent
 #endif
 
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
-    while ( !aDelData.IsDead() && mbInExecute )
+    while ( !xWindow->IsDisposed() && mbInExecute )
         Application::Yield();
 
     ImplEndExecuteModal();
@@ -887,14 +885,14 @@ short Dialog::Execute()
 #ifdef DBG_UTIL
     if( pDialogParent  )
     {
-        if( ! aParentDelData.IsDead() )
-            pDialogParent->ImplRemoveDel( &aParentDelData );
+        if( ! xParentWindow->IsDisposed() )
+            xParentWindow.clear();
         else
             OSL_FAIL( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
     }
 #endif
-    if ( !aDelData.IsDead() )
-        ImplRemoveDel( &aDelData );
+    if ( !xWindow->IsDisposed() )
+        xWindow.clear();
 #ifdef DBG_UTIL
     else
     {

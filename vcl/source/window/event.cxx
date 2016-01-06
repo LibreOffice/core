@@ -205,13 +205,12 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
 {
     VclWindowEvent aEvent( this, nEvent, pData );
 
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
     Application::ImplCallEventListeners( aEvent );
 
-    if ( aDelData.IsDead() )
-        return;
+    if( xWindow->IsDisposed() )
+      return;
 
     if (!mpWindowImpl->maEventListeners.empty())
     {
@@ -219,25 +218,25 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
         std::vector<Link<VclWindowEvent&,void>> aCopy( mpWindowImpl->maEventListeners );
         for ( Link<VclWindowEvent&,void>& rLink : aCopy )
         {
-            if (aDelData.IsDead()) break;
+            if( xWindow->IsDisposed() )break;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
             if( std::find(mpWindowImpl->maEventListeners.begin(), mpWindowImpl->maEventListeners.end(), rLink) != mpWindowImpl->maEventListeners.end() )
                 rLink.Call( aEvent );
         }
     }
 
-    if ( aDelData.IsDead() )
-        return;
+    if( xWindow->IsDisposed() )
+      return;
 
-    ImplRemoveDel( &aDelData );
+    xWindow.clear();
 
     vcl::Window* pWindow = this;
     while ( pWindow )
     {
-        pWindow->ImplAddDel( &aDelData );
+        xWindow = pWindow;
 
-        if ( aDelData.IsDead() )
-            return;
+        if( xWindow->IsDisposed() )
+          return;
 
         auto& rWindowImpl = *pWindow->mpWindowImpl;
         if (!rWindowImpl.maChildEventListeners.empty())
@@ -256,18 +255,18 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
             );
             for ( Link<VclWindowEvent&,void>& rLink : aCopy )
             {
-                if (aDelData.IsDead())
-                    return;
+                if( xWindow->IsDisposed() )
+                  return;
                 // Check this hasn't been removed in some re-enterancy scenario fdo#47368.
                 if( rWindowImpl.maChildEventListenersDeleted.find(rLink) == rWindowImpl.maChildEventListenersDeleted.end() )
                     rLink.Call( aEvent );
             }
         }
 
-        if ( aDelData.IsDead() )
-            return;
+        if( xWindow->IsDisposed() )
+          return;
 
-        pWindow->ImplRemoveDel( &aDelData );
+        xWindow.clear();
 
         pWindow = pWindow->GetParent();
     }
@@ -324,10 +323,11 @@ ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCalle
         pSVEvent->mpInstanceRef = static_cast<vcl::Window *>(rLink.GetInstance());
     }
 
-    ImplAddDel( &(pSVEvent->maDelData) );
+    VclPtr<vcl::Window> xWindow = pSVEvent->mpWindow;
+
     if ( !mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
     {
-        ImplRemoveDel( &(pSVEvent->maDelData) );
+        xWindow.clear();
         delete pSVEvent;
         pSVEvent = nullptr;
     }
@@ -343,7 +343,7 @@ void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 
     if ( nUserEvent->mpWindow )
     {
-        nUserEvent->mpWindow->ImplRemoveDel( &(nUserEvent->maDelData) );
+        nUserEvent->mpWindow.clear();
         nUserEvent->mpWindow = nullptr;
     }
 
@@ -397,8 +397,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
     // this allows for processing those events internally first and pass it to
     // the toolkit later
 
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
     if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
     {
@@ -450,9 +449,9 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
             CallEventListeners( VCLEVENT_WINDOW_KEYUP, const_cast<KeyEvent *>(rNEvt.GetKeyEvent()) );
     }
 
-    if ( aDelData.IsDead() )
-        return;
-    ImplRemoveDel( &aDelData );
+    if( xWindow->IsDisposed() )
+      return;
+    xWindow.clear();
 
     // #106721# check if we're part of a compound control and notify
     vcl::Window *pParent = ImplGetParent();
