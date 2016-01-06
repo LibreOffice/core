@@ -425,6 +425,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
                         for( size_t i = pItemArr->size(); i; ++ppHtArr, --i )
                             if ( !(*ppHtArr) )
                             {
+                                OSL_FAIL( "old secondary pool must be empty" );
                                 bOK = false;
                                 break;
                             }
