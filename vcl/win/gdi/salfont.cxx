@@ -1817,8 +1817,6 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     if( !ImplAddTempFont( *GetSalData(), rFontFileURL ) )
         return false;
 
-    UINT nPreferredCharSet = DEFAULT_CHARSET;
-
     // create matching FontData struct
     aDFA.SetSymbolFlag(false); // TODO: how to know it without accessing the font?
     aDFA.SetFamilyType(FAMILY_DONTKNOW);
@@ -1837,7 +1835,7 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     */
 
     ImplWinFontData* pFontData = new ImplWinFontData( aDFA, 0,
-        sal::static_int_cast<BYTE>(nPreferredCharSet),
+        sal::static_int_cast<BYTE>(DEFAULT_CHARSET),
         sal::static_int_cast<BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
     pFontData->SetFontId( reinterpret_cast<sal_IntPtr>(pFontData) );
     pFontCollection->Add( pFontData );
