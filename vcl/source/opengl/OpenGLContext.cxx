@@ -1478,7 +1478,7 @@ rtl::Reference<OpenGLContext> OpenGLContext::getVCLContext(bool bMakeIfNecessary
  */
 void OpenGLContext::makeVCLCurrent()
 {
-    getVCLContext(true);
+    getVCLContext();
 }
 
 void OpenGLContext::registerAsCurrent()

@@ -112,7 +112,7 @@ bool OpenGLSalGraphicsImpl::AcquireContext( bool bForceCreate )
     }
 
     if( !mpContext.is() )
-        mpContext = OpenGLContext::getVCLContext( true );
+        mpContext = OpenGLContext::getVCLContext();
 
     return mpContext.is();
 }
