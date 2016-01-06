@@ -1021,11 +1021,16 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     pSourceWindow, pProgressDlg, bMergeShell, pSourceShell, pParent);
             }
 
-            if(bCreateSingleFile)
+            if (bCreateSingleFile)
             {
-                bPageStylesWithHeaderFooter = CreateTargetDocShell(nMaxDumpDocs, bMergeShell, pSourceWindow, pSourceShell,
-                                                                   pSourceDocSh, xTargetDocShell, pTargetDoc, pTargetShell,
-                                                                   pTargetView, nStartingPageNo, sStartingPageDesc);
+                CreateTargetDocShell(nMaxDumpDocs, bMergeShell, pSourceWindow, pSourceShell,
+                        pSourceDocSh, xTargetDocShell, pTargetDoc, pTargetShell,
+                        pTargetView, nStartingPageNo, sStartingPageDesc);
+
+                // #i72517#
+                const SwPageDesc* pSourcePageDesc = pSourceShell->FindPageDescByName(sStartingPageDesc);
+                const SwFrameFormat& rMaster = pSourcePageDesc->GetMaster();
+                bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive() || rMaster.GetFooter().IsActive();
 
                 sModifiedStartingPageDesc = sStartingPageDesc;
             }
@@ -1356,11 +1361,8 @@ bool SwDBManager::CreateNewTemp(OUString &sPath, const OUString &sAddress,
     return bErr;
 }
 
-bool SwDBManager::CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
-                                       SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh,
-                                       SfxObjectShellRef &xTargetDocShell, SwDoc *&pTargetDoc,
-                                       SwWrtShell *&pTargetShell, SwView  *&pTargetView,
-                                       sal_uInt16 &nStartingPageNo, OUString &sStartingPageDesc)
+SwView* SwDBManager::CreateTargetDocShell(bool bMergeShell, vcl::Window *pSourceWindow,
+        SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh)
 {
     // create a target docshell to put the merged document into
     xTargetDocShell = new SwDocShell( SfxObjectCreateMode::STANDARD );
@@ -1392,20 +1394,12 @@ bool SwDBManager::CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell,
     sStartingPageDesc = pSourceShell->GetPageDesc(
         pSourceShell->GetCurPageDesc()).GetName();
 
-    // #i72517#
-    const SwPageDesc* pSourcePageDesc = pSourceShell->FindPageDescByName( sStartingPageDesc );
-    const SwFrameFormat& rMaster = pSourcePageDesc->GetMaster();
-    bool bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive()  ||
-                                       rMaster.GetFooter().IsActive();
-
     // copy compatibility options
     pTargetShell->GetDoc()->ReplaceCompatibilityOptions( *pSourceShell->GetDoc());
     // #72821# copy dynamic defaults
     pTargetShell->GetDoc()->ReplaceDefaults( *pSourceShell->GetDoc());
 
     pTargetShell->GetDoc()->ReplaceDocumentProperties( *pSourceShell->GetDoc());
-
-    return bPageStylesWithHeaderFooter;
 }
 
 void SwDBManager::LockUnlockDisp(bool bLock, SwDocShell *pSourceDocSh)
