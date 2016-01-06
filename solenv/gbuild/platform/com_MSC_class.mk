@@ -578,7 +578,7 @@ define gb_UIConfig__command
 $(call gb_Helper_abbreviate_dirs,\
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(if $(UI_IMAGELISTS),$(strip $(UI_IMAGELISTS)),/dev/null)) \
 	&& tr " " "\000" < $$RESPONSEFILE | tr -d "\r\n" > $$RESPONSEFILE.0 \
-	&& sort -u --files0-from=$$RESPONSEFILE.0 > $@ \
+	&& $(SORT) -u --files0-from=$$RESPONSEFILE.0 > $@ \
 	&& rm $$RESPONSEFILE $$RESPONSEFILE.0 \
 )
 

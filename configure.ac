@@ -12826,19 +12826,26 @@ if test "$build_os" = "cygwin"; then
     if test "$BITNESS_OVERRIDE" = 64; then
         ATL_LIB="$ATL_LIB/amd64"
     fi
+    # sort.exe and find.exe also exist in C:/Windows/system32 so need /usr/bin/
+    PathFormat "/usr/bin/find.exe"
+    FIND="$formatted_path"
+    PathFormat "/usr/bin/sort.exe"
+    SORT="$formatted_path"
     PathFormat "/usr/bin/grep.exe"
     WIN_GREP="$formatted_path"
-    PathFormat "/usr/bin/find.exe"
-    WIN_FIND="$formatted_path"
     PathFormat "/usr/bin/ls.exe"
     WIN_LS="$formatted_path"
     PathFormat "/usr/bin/touch.exe"
     WIN_TOUCH="$formatted_path"
+else
+    FIND=find
+    SORT=sort
 fi
 
 AC_SUBST(ATL_INCLUDE)
 AC_SUBST(ATL_LIB)
-AC_SUBST(WIN_FIND)
+AC_SUBST(FIND)
+AC_SUBST(SORT)
 AC_SUBST(WIN_GREP)
 AC_SUBST(WIN_LS)
 AC_SUBST(WIN_TOUCH)

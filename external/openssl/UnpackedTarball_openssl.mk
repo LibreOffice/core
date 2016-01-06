@@ -16,7 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL),,openssl
 ifeq ($(OS_FOR_BUILD),WNT)
 $(eval $(call gb_UnpackedTarball_set_pre_action,openssl,\
 	cd include/openssl && \
-	for header in `find . -type l` \; do \
+	for header in `$(FIND) . -type l` \; do \
 		cp --remove-destination `readlink $$$$header` $$$$header \; \
 	done && cd -))
 endif
