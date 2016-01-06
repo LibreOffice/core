@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_5660c635",
+        "filename": "connectivity/source/drivers/dbase/DIndex.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-06T15:36:57Z",
+      "side": 1,
+      "message": "beware this needlessly creates copies of the members (and the new loplugin:rangedforcopy will warn about that in builds with Clang plugins enabled), better use\n\n  auto \u0026 i: ...",
+      "revId": "80240a59a1ab510881709957117916b9ec950510",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
