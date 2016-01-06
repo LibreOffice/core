@@ -251,8 +251,7 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE void CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
                                              SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh,
                                              SfxObjectShellRef &xTargetDocShell, SwDoc *&pTargetDoc,
-                                             SwWrtShell *&pTargetShell, SwView  *&pTargetView,
-                                             sal_uInt16 &nStartingPageNo, OUString &sStartingPageDesc);
+                                             SwWrtShell *&pTargetShell, SwView  *&pTargetView);
 
     SAL_DLLPRIVATE void LockUnlockDisp(bool bLock, SwDocShell *pSourceDocSh);
 
