@@ -439,7 +439,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
     if ( aSignatureHelper.Init() )
         xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
-    ScopedVclPtrInstance< CertificateChooser > aChooser( nullptr, mxCtx, xSecEnv, aSignatureHelper.GetSignatureInformations());
+    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecEnv);
 
     if (aChooser->Execute() != RET_OK)
         return Reference< css::security::XCertificate >(nullptr);
