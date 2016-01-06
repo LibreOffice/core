@@ -95,14 +95,14 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
 
     // create an XProperty set to configure the exporter for pretty printing
     PropertyMapEntry aImportInfoMap[] =
-     {
+    {
         { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
-         { OUString(), 0, css::uno::Type(), 0, 0 }
-     };
+        { OUString(), 0, css::uno::Type(), 0, 0 }
+    };
 
-     Reference< XPropertySet > xInfoSet(
-        GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-     xInfoSet->setPropertyValue( "BaseURI", makeAny( aBaseURI ));
+    Reference< XPropertySet > xInfoSet(
+            GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
+    xInfoSet->setPropertyValue( "BaseURI", makeAny( aBaseURI ));
     aAnys[0] <<= xInfoSet;
 
 
