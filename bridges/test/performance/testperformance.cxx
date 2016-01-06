@@ -72,15 +72,15 @@ static inline sal_uInt32 getSystemTicks()
 class MyTimer
 {
 public:
-    MyTimer(  const OString &descString ) :
-        nStart( getSystemTicks() ),
-        m_descString( descString )
-        {
-        }
+    explicit MyTimer(const OString &descString)
+        : nStart(getSystemTicks())
+        , m_descString(descString)
+    {
+    }
     ~MyTimer( )
-        {
-            printf( "%f s : %s\n", (getSystemTicks() -nStart) / 1000., m_descString.getStr() );
-        }
+    {
+        printf( "%f s : %s\n", (getSystemTicks() -nStart) / 1000., m_descString.getStr() );
+    }
 private:
     sal_uInt32 nStart;
     OString m_descString;

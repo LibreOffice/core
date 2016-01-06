@@ -44,7 +44,7 @@ class DropTargetListener: public WeakImplHelper<XDropTargetListener>
     // this is a window where dropped data are shown as text (only text)
     HWND m_hEdit;
 public:
-    DropTargetListener( HWND hEdit);
+    explicit DropTargetListener(HWND hEdit);
     ~DropTargetListener();
 
     virtual void SAL_CALL disposing( const EventObject& Source )

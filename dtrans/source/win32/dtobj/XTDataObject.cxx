@@ -58,7 +58,7 @@ class CInvalidFormatEtcException
 {
 public:
     HRESULT m_hr;
-    CInvalidFormatEtcException( HRESULT hr ) : m_hr( hr ) {};
+    explicit CInvalidFormatEtcException( HRESULT hr ) : m_hr( hr ) {};
 };
 
 // ctor

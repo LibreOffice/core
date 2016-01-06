@@ -41,7 +41,7 @@ class CFormatEtc;
 class CDataFormatTranslator
 {
 public:
-    CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     CFormatEtc getFormatEtcFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor ) const;
     css::datatransfer::DataFlavor getDataFlavorFromFormatEtc(

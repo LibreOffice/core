@@ -124,7 +124,7 @@ class OInstanceProvider :
 {
 public:
     OInstanceProvider( ){}
-    OInstanceProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & r ) :
+    explicit OInstanceProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & r ) :
         m_rSMgr( r )
         {}
     ~OInstanceProvider(){ printf( "instance provider dies\n" );}

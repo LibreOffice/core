@@ -41,7 +41,7 @@ class TargetDragContext: public WeakImplHelper<XDropTargetDragContext>
     TargetDragContext( const TargetDragContext&);
     TargetDragContext &operator= ( const TargetDragContext&);
 public:
-    TargetDragContext( DropTarget* pTarget);
+    explicit TargetDragContext(DropTarget* pTarget);
     ~TargetDragContext();
 
     virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation )

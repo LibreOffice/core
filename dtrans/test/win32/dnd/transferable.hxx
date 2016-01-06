@@ -70,7 +70,7 @@ class CTransferable : public WeakImplHelper< XClipboardOwner, XTransferable >
 {
 public:
     CTransferable( ){};
-    CTransferable( wchar_t* dataString);
+    explicit CTransferable( wchar_t* dataString);
 
     // XTransferable
 

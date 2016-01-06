@@ -31,7 +31,7 @@ class IDropTargetImpl: public IDropTarget
     IDropTargetImpl( const IDropTargetImpl& );
     IDropTargetImpl& operator=( const IDropTargetImpl& );
 public:
-    IDropTargetImpl( DropTarget& pTarget);
+    explicit IDropTargetImpl(DropTarget& rTarget);
 
        // IDropTarget
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
