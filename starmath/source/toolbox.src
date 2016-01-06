@@ -20,7 +20,6 @@
 #include <sfx2/sfx.hrc>
 #include <svx/globlmn.hrc>
 #include "starmath.hrc"
-#include "toolbox.hrc"
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
 
