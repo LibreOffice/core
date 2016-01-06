@@ -2275,12 +2275,11 @@ void RadioButton::ImplUncheckAllOther()
         RadioButton *pWindow = *aI;
         if ( pWindow->IsChecked() )
         {
-            ImplDelData aDelData;
-            pWindow->ImplAddDel( &aDelData );
+            VclPtr<vcl::Window> xWindow = pWindow;
             pWindow->SetState( false );
-            if ( aDelData.IsDead() )
+            if ( xWindow->IsDisposed() )
                 return;
-            pWindow->ImplRemoveDel( &aDelData );
+            xWindow.clear();
         }
 
         // not inside if clause to always remove wrongly set WB_TABSTOPS
@@ -2295,24 +2294,23 @@ void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
     mpWindowImpl->mnStyle |= WB_TABSTOP;
     Invalidate();
     Update();
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
     if ( mbRadioCheck )
         ImplUncheckAllOther();
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
     if ( bGrabFocus )
         ImplGrabFocus( nFocusFlags );
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
     if ( mbStateChanged )
         Toggle();
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
     Click();
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
-    ImplRemoveDel( &aDelData );
+    xWindow.clear();
     mbStateChanged = false;
 }
 
@@ -2737,17 +2735,16 @@ void RadioButton::Check( bool bCheck )
     if ( mbChecked != bCheck )
     {
         mbChecked = bCheck;
-        ImplDelData aDelData;
-        ImplAddDel( &aDelData );
+        VclPtr<vcl::Window> xWindow = this;
         CompatStateChanged( StateChangedType::State );
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return;
         if ( bCheck && mbRadioCheck )
             ImplUncheckAllOther();
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return;
         Toggle();
-        ImplRemoveDel( &aDelData );
+        xWindow.clear();
     }
 }
 
@@ -3231,17 +3228,16 @@ void CheckBox::ImplCheck()
         eNewState = TRISTATE_FALSE;
     meState = eNewState;
 
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
     if( (GetStyle() & WB_EARLYTOGGLE) )
         Toggle();
     Invalidate();
     Update();
     if( ! (GetStyle() & WB_EARLYTOGGLE) )
         Toggle();
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
-    ImplRemoveDel( &aDelData );
+    xWindow.clear();
     Click();
 }
 
