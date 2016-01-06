@@ -10,7 +10,7 @@
 #include <rtfsprm.hxx>
 #include <ooxml/resourceids.hxx>
 #include <ooxml/QNameToString.hxx>
-
+#include <rtl/strbuf.hxx>
 
 namespace writerfilter
 {
