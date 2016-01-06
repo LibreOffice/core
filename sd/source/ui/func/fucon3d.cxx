@@ -238,7 +238,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 
 void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene)
 {
-    Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
+    Camera3D aCamera  = pScene->GetCamera ();
 
     // get transformed BoundVolume of the new object
     basegfx::B3DRange aBoundVol;

@@ -574,7 +574,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pRet = pScene;
 
             // Camera settings, Perspective ...
-            Camera3D& rCamera = (Camera3D&)pScene->GetCamera();
+            Camera3D rCamera = pScene->GetCamera();
             const basegfx::B3DRange& rVolume = pScene->GetBoundVolume();
             pScene->NbcSetSnapRect( aSnapRect );
 

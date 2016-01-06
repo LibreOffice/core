@@ -103,7 +103,7 @@ void Svx3DPreviewControl::Construct()
     SetObjectType(SvxPreviewObjectType::SPHERE);
 
     // camera and perspective
-    Camera3D& rCamera  = (Camera3D&) mpScene->GetCamera();
+    Camera3D rCamera  = mpScene->GetCamera();
     const basegfx::B3DRange& rVolume = mpScene->GetBoundVolume();
     double fW = rVolume.getWidth();
     double fH = rVolume.getHeight();
@@ -341,7 +341,7 @@ void Svx3DLightControl::Construct2()
 
     {
         // change camera settings
-        Camera3D& rCamera  = (Camera3D&) mpScene->GetCamera();
+        Camera3D rCamera  = mpScene->GetCamera();
         const basegfx::B3DRange& rVolume = mpScene->GetBoundVolume();
         double fW = rVolume.getWidth();
         double fH = rVolume.getHeight();

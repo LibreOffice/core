@@ -330,31 +330,27 @@ void E3dScene::NbcResize(const Point& rRef, const Fraction& rXFact,
 
 void E3dScene::SetCamera(const Camera3D& rNewCamera)
 {
-    // Set old camera
     aCamera = rNewCamera;
     static_cast<sdr::properties::E3dSceneProperties&>(GetProperties()).SetSceneItemsFromCamera();
 
     SetRectsDirty();
 
-    // Fill new camera from old
-    Camera3D& rCam = (Camera3D&)GetCamera();
-
     // Turn off ratio
-    if(rCam.GetAspectMapping() == AS_NO_MAPPING)
+    if(aCamera.GetAspectMapping() == AS_NO_MAPPING)
         GetCameraSet().SetRatio(0.0);
 
     // Set Imaging geometry
-    basegfx::B3DPoint aVRP(rCam.GetViewPoint());
-    basegfx::B3DVector aVPN(aVRP - rCam.GetVRP());
-    basegfx::B3DVector aVUV(rCam.GetVUV());
+    basegfx::B3DPoint aVRP(aCamera.GetViewPoint());
+    basegfx::B3DVector aVPN(aVRP - aCamera.GetVRP());
+    basegfx::B3DVector aVUV(aCamera.GetVUV());
 
     // use SetViewportValues() to set VRP, VPN and VUV as vectors, too.
     // Else these values would not be exported/imported correctly.
     GetCameraSet().SetViewportValues(aVRP, aVPN, aVUV);
 
     // Set perspective
-    GetCameraSet().SetPerspective(rCam.GetProjection() == PR_PERSPECTIVE);
-    GetCameraSet().SetViewportRectangle((Rectangle&)rCam.GetDeviceWindow());
+    GetCameraSet().SetPerspective(aCamera.GetProjection() == PR_PERSPECTIVE);
+    GetCameraSet().SetViewportRectangle((Rectangle&)aCamera.GetDeviceWindow());
 
     ImpCleanup3DDepthMapper();
 }
@@ -646,8 +642,7 @@ void E3dScene::RecalcSnapRect()
     {
         // The Scene is used as a 2D-Objekt, take the SnapRect from the
         // 2D Display settings
-        Camera3D& rCam = (Camera3D&)pScene->GetCamera();
-        maSnapRect = rCam.GetDeviceWindow();
+        maSnapRect = pScene->aCamera.GetDeviceWindow();
     }
     else
     {

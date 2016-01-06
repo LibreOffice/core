@@ -126,7 +126,7 @@ public:
 
     virtual E3dScene* GetScene() const override;
     void SetCamera(const Camera3D& rNewCamera);
-    const Camera3D& GetCamera() const { return aCamera; }
+    Camera3D GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();
 
     virtual E3dScene* Clone() const override;
