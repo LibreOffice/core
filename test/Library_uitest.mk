@@ -10,7 +10,7 @@
 $(eval $(call gb_Library_Library,uitest))
 
 $(eval $(call gb_Library_add_defs,uitest,\
-    -DOOO_DLLIMPLEMENTATION_UITEST \
+    -DDLLIMPLEMENTATION_UITEST \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,uitest))

@@ -9,12 +9,19 @@
 
 #include <rtl/ustring.hxx>
 #include <map>
+#include <memory>
+
+#include <vcl/window.hxx>
+#include <test/testdllapi.hxx>
 
 enum class UIObjectType
 {
+    WINDOW,
     DIALOG,
     UNKNOWN
 };
+
+typedef std::map<const OUString, OUString> StringMap;
 
 /**
  * This class wraps a UI object like vcl::Window and provides
@@ -22,7 +29,7 @@ enum class UIObjectType
  *
  * This class should only have virtual methods.
  */
-class UIObject
+class UITEST_DLLPUBLIC UIObject
 {
 public:
 
@@ -31,16 +38,36 @@ public:
     /**
      * returns the state of the wrapped UI object
      */
-    virtual std::map<const OUString, OUString> get_state();
+    virtual StringMap get_state();
 
     /**
      * executes an action on the wrapped UI object,
      * possibly with some additional parameters
      */
     virtual void execute(const OUString& rAction,
-            const std::map<const OUString, OUString>& rParameters);
+            const StringMap& rParameters);
 
-    virtual UIObjectType getType();
+    virtual UIObjectType getType() const;
+
+    virtual std::unique_ptr<UIObject> get_child(const OUString& rID);
+};
+
+class WindowUIObject : public UIObject
+{
+    VclPtr<vcl::Window> mxWindow;
+
+public:
+
+    WindowUIObject(VclPtr<vcl::Window> xWindow);
+
+    virtual StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual UIObjectType getType() const override;
+
+    virtual std::unique_ptr<UIObject> get_child(const OUString& rID);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
