@@ -54,6 +54,7 @@ CertificateChooser::CertificateChooser( vcl::Window* _pParent, uno::Reference< u
 {
     get(m_pOKBtn, "ok");
     get(m_pViewBtn, "viewcert");
+    get(m_pDescriptionED, "description");
 
     Size aControlSize(275, 122);
     const long nControlWidth = aControlSize.Width();
@@ -199,11 +200,17 @@ uno::Reference< css::security::XCertificate > CertificateChooser::GetSelectedCer
     return xCert;
 }
 
+OUString CertificateChooser::GetDescription()
+{
+    return m_pDescriptionED->GetText();
+}
+
 IMPL_LINK_NOARG_TYPED(CertificateChooser, CertificateHighlightHdl, SvTreeListBox*, void)
 {
     bool bEnable = GetSelectedCertificate().is();
     m_pViewBtn->Enable( bEnable );
     m_pOKBtn->Enable( bEnable );
+    m_pDescriptionED->Enable(bEnable);
 }
 
 IMPL_LINK_NOARG_TYPED(CertificateChooser, CertificateSelectHdl, SvTreeListBox*, bool)

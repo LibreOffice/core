@@ -51,6 +51,7 @@ private:
     VclPtr<SvSimpleTable>   m_pCertLB;
     VclPtr<PushButton>      m_pViewBtn;
     VclPtr<OKButton>        m_pOKBtn;
+    VclPtr<Edit> m_pDescriptionED;
 
     bool                    mbInitialized;
 
@@ -71,6 +72,8 @@ public:
     short Execute() override;
 
     css::uno::Reference< css::security::XCertificate > GetSelectedCertificate();
+    /// Gets the description string provided when selecting the certificate.
+    OUString GetDescription();
 
 };
 

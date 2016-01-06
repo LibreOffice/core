@@ -469,6 +469,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
             }
 
             maSignatureHelper.SetDateTime( nSecurityId, Date( Date::SYSTEM ), tools::Time( tools::Time::SYSTEM ) );
+            maSignatureHelper.SetDescription(nSecurityId, aChooser->GetDescription());
 
             // We open a signature stream in which the existing and the new
             //signature is written. ImplGetSignatureInformation (later in this function) will
