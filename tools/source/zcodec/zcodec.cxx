@@ -82,17 +82,20 @@ long ZCodec::EndCompression()
 {
     long retvalue = 0;
 
-    if (mbStatus && meState != STATE_INIT)
+    if (meState != STATE_INIT)
     {
         if (meState == STATE_COMPRESS)
         {
-            do
+            if (mbStatus)
             {
+                do
+                {
+                    ImplWriteBack();
+                }
+                while ( deflate( PZSTREAM, Z_FINISH ) != Z_STREAM_END );
+
                 ImplWriteBack();
             }
-            while ( deflate( PZSTREAM, Z_FINISH ) != Z_STREAM_END );
-
-            ImplWriteBack();
 
             retvalue = PZSTREAM->total_in;
             deflateEnd( PZSTREAM );
