@@ -236,7 +236,7 @@ friend class SwConnectionDisposedListener_Impl;
         GetRowSet(css::uno::Reference< css::sdbc::XConnection>,
         const OUString& rTableOrQuery, SwDBSelect   eTableOrQuery);
 
-    SAL_DLLPRIVATE void CreateDumpDocs(sal_Int32 &nMaxDumpDocs);
+    SAL_DLLPRIVATE static sal_Int32 GetMaxDumpDocs();
 
     SAL_DLLPRIVATE void SetSourceProp(SwDocShell* pSourceDocSh);
 
@@ -247,11 +247,6 @@ friend class SwConnectionDisposedListener_Impl;
                                       std::unique_ptr< utl::TempFile > &aTempFile,
                                       const SwMergeDescriptor& rMergeDescriptor,  std::shared_ptr<const SfxFilter> pStoreToFilter);
 
-
-    SAL_DLLPRIVATE void CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
-                                             SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh,
-                                             SfxObjectShellRef &xTargetDocShell, SwDoc *&pTargetDoc,
-                                             SwWrtShell *&pTargetShell, SwView  *&pTargetView);
 
     SAL_DLLPRIVATE void LockUnlockDisp(bool bLock, SwDocShell *pSourceDocSh);
 
@@ -495,6 +490,10 @@ public:
     SwDoc* getDoc() const;
     /// Stop reacting to removed database registrations.
     void releaseRevokeListener();
+
+    /// Creates & sets up the target docshell.
+    static SwView* CreateTargetDocShell(bool bMergeShell, vcl::Window *pSourceWindow,
+            SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh);
 };
 
 #endif

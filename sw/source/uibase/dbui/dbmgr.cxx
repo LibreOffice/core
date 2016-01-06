@@ -947,9 +947,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     OUString sBodyMimeType;
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
 
-    static sal_Int32 nMaxDumpDocs = 0;
-
-    CreateDumpDocs(nMaxDumpDocs);
+    const sal_Int32 nMaxDumpDocs = GetMaxDumpDocs();
 
     if(bEMail)
     {
@@ -999,12 +997,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             bCancel = false;
 
             // in case of creating a single resulting file this has to be created here
+            SwView* pTargetView = rMergeDescriptor.pMailMergeConfigItem->GetTargetView();
             SwWrtShell* pTargetShell = nullptr;
             SwDoc* pTargetDoc = nullptr;
+            SfxObjectShellRef xTargetDocShell = nullptr;
 
-            SfxObjectShellRef xTargetDocShell;
-
-            SwView* pTargetView = nullptr;
             std::unique_ptr< utl::TempFile > aTempFile;
             bool createTempFile = ( bEMail || rMergeDescriptor.nMergeType == DBMGR_MERGE_FILE );
             OUString sModifiedStartingPageDesc;
@@ -1021,12 +1018,20 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     pSourceWindow, pProgressDlg, bMergeShell, pSourceShell, pParent);
             }
 
+            if (bCreateSingleFile && !pTargetView)
+            {
+                pTargetView = CreateTargetDocShell(bMergeShell, pSourceWindow, pSourceShell, pSourceDocSh);
+            }
+
+            if (pTargetView)
+            {
+                pTargetShell = pTargetView->GetWrtShellPtr();
+                pTargetDoc = pTargetShell->GetDoc();
+                xTargetDocShell = pTargetView->GetDocShell();
+            }
+
             if (bCreateSingleFile)
             {
-                CreateTargetDocShell(nMaxDumpDocs, bMergeShell, pSourceWindow, pSourceShell,
-                        pSourceDocSh, xTargetDocShell, pTargetDoc,
-                        pTargetShell, pTargetView);
-
                 // determine the page style and number used at the start of the source document
                 pSourceShell->SttEndDoc(true);
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
@@ -1298,8 +1303,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     return bNoError;
 }
 
-void SwDBManager::CreateDumpDocs(sal_Int32 &nMaxDumpDocs)
+sal_Int32 SwDBManager::GetMaxDumpDocs()
 {
+    static sal_Int32 nMaxDumpDocs = 0;
     static const char *sMaxDumpDocs = nullptr;
 
     if (!sMaxDumpDocs)
@@ -1310,6 +1316,8 @@ void SwDBManager::CreateDumpDocs(sal_Int32 &nMaxDumpDocs)
         else
             nMaxDumpDocs = rtl_ustr_toInt32(reinterpret_cast<const sal_Unicode*>( sMaxDumpDocs ), 10);
     }
+
+    return nMaxDumpDocs;
 }
 
 void SwDBManager::SetSourceProp(SwDocShell* pSourceDocSh)
@@ -1370,10 +1378,13 @@ SwView* SwDBManager::CreateTargetDocShell(bool bMergeShell, vcl::Window *pSource
         SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh)
 {
     // create a target docshell to put the merged document into
-    xTargetDocShell = new SwDocShell( SfxObjectCreateMode::STANDARD );
+    SfxObjectShellRef xTargetDocShell = new SwDocShell( SfxObjectCreateMode::STANDARD );
     xTargetDocShell->DoInitNew( );
+
+    const sal_Int32 nMaxDumpDocs = GetMaxDumpDocs();
     if (nMaxDumpDocs)
-        lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
+        lcl_SaveDoc(xTargetDocShell, "MergeDoc");
+
     SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
     if (bMergeShell && pSourceWindow)
     {
@@ -1382,12 +1393,12 @@ SwView* SwDBManager::CreateTargetDocShell(bool bMergeShell, vcl::Window *pSource
         rTargetWindow.SetPosPixel(pSourceWindow->GetPosPixel());
     }
 
-    pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
+    SwView *pTargetView = static_cast<SwView*>(pTargetFrame->GetViewShell());
 
     //initiate SelectShell() to create sub shells
     pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
-    pTargetShell = pTargetView->GetWrtShellPtr();
-    pTargetDoc = pTargetShell->GetDoc();
+    SwWrtShell *pTargetShell = pTargetView->GetWrtShellPtr();
+    SwDoc *pTargetDoc = pTargetShell->GetDoc();
     pTargetDoc->SetInMailMerge(true);
 
     //copy the styles from the source to the target document
@@ -1399,6 +1410,8 @@ SwView* SwDBManager::CreateTargetDocShell(bool bMergeShell, vcl::Window *pSource
     pTargetShell->GetDoc()->ReplaceDefaults( *pSourceShell->GetDoc());
 
     pTargetShell->GetDoc()->ReplaceDocumentProperties( *pSourceShell->GetDoc());
+
+    return pTargetView;
 }
 
 void SwDBManager::LockUnlockDisp(bool bLock, SwDocShell *pSourceDocSh)
