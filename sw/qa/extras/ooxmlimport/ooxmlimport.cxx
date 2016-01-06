@@ -3027,6 +3027,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf96674, "tdf96674.docx")
     CPPUNIT_ASSERT(aActualSize.Height > 0);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf92045, "tdf92045.docx")
+{
+    // This was true, <w:effect w:val="none"/> resulted in setting the blinking font effect.
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getRun(getParagraph(1), 1), "CharFlash"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
