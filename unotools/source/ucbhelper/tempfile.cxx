@@ -38,6 +38,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#elif defined( WNT )
+#include <process.h>
 #endif
 
 using namespace osl;
@@ -298,6 +300,10 @@ OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = t
     static const OUString aPidString = OUString::number(pid);
     aEyeCatcher += aPidString;
 #endif
+#elif defined(WNT)
+    static const int pid = _getpid();
+    static const OUString aPidString = OUString::number(pid);
+    aEyeCatcher += aPidString;
 #endif
     UniqueTokens t;
     return lcl_createName(aEyeCatcher, t, nullptr, pParent, bDir, bKeep, false);
