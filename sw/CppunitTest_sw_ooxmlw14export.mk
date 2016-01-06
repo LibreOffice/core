@@ -30,7 +30,6 @@ $(eval $(call gb_CppunitTest_set_include,sw_ooxmlw14export,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
 	-I$(SRCDIR)/sw/qa/extras/inc \
-    -I$(SRCDIR)/sw/source/uibase/inc \
     $$(INCLUDE) \
 ))
 

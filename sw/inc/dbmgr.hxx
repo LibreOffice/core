@@ -34,7 +34,6 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <unotools/tempfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <dbui.hxx>
 
 #include <memory>
 #include <vector>
@@ -257,9 +256,6 @@ friend class SwConnectionDisposedListener_Impl;
                                       std::unique_ptr< utl::TempFile > &aTempFile,
                                       const SwMergeDescriptor& rMergeDescriptor,  const SfxFilter* pStoreToFilter);
 
-    SAL_DLLPRIVATE void UpdateProgressDlg(bool bMergeShell,  VclPtr<CancelableDialog> pProgressDlg, bool createTempFile,
-                                          std::unique_ptr< INetURLObject > &aTempFileURL,
-                                          SwDocShell *pSourceDocSh, sal_Int32 nDocNo);
 
     SAL_DLLPRIVATE bool CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
                                              SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh,
@@ -268,9 +264,6 @@ friend class SwConnectionDisposedListener_Impl;
                                              sal_uInt16 &nStartingPageNo, OUString &sStartingPageDesc);
 
     SAL_DLLPRIVATE void LockUnlockDisp(bool bLock, SwDocShell *pSourceDocSh);
-
-    SAL_DLLPRIVATE void CreateProgessDlg(vcl::Window *&pSourceWindow, VclPtr<CancelableDialog> &pProgressDlg,
-                                         bool bMergeShell, SwWrtShell *pSourceShell, vcl::Window *pParent);
 
     SAL_DLLPRIVATE void CreateWorkDoc(SfxObjectShellLock &xWorkDocSh, SwView *&pWorkView, SwDoc *&pWorkDoc, SwDBManager *&pOldDBManager,
                                       SwDocShell *pSourceDocSh, sal_Int32 nMaxDumpDocs,  sal_Int32 nDocNo);

@@ -80,6 +80,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <swwait.hxx>
 #include <swunohelper.hxx>
+#include <dbui.hxx>
 #include <dbui.hrc>
 #include <globals.hrc>
 #include <statstr.hrc>
@@ -892,6 +893,52 @@ static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
     delete pDstMed;
 }
 
+static void lcl_CreateProgessDlg(Link<Button*, void> const& rPrtCancelHdl,
+        vcl::Window *&pSourceWindow, VclPtr<CancelableDialog> &pProgressDlg,
+        bool bMergeShell, SwWrtShell *pSourceShell, vcl::Window *pParent)
+{
+    pSourceWindow = &pSourceShell->GetView().GetEditWin();
+    if (!pParent)
+        pParent = pSourceWindow;
+    if (bMergeShell)
+        pProgressDlg = VclPtr<CreateMonitor>::Create(pParent, pParent != pSourceWindow);
+    else
+    {
+        pProgressDlg = VclPtr<PrintMonitor>::Create(pParent, pParent != pSourceWindow, PrintMonitor::MONITOR_TYPE_PRINT);
+        static_cast<PrintMonitor*>( pProgressDlg.get() )->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
+    }
+    pProgressDlg->SetCancelHdl(rPrtCancelHdl);
+    pProgressDlg->Show();
+
+    for (sal_uInt16 i = 0; i < 25; ++i)
+        Application::Reschedule();
+}
+
+static void lcl_UpdateProgressDlg(
+        bool bMergeShell, VclPtr<CancelableDialog> pProgressDlg,
+        bool createTempFile, std::unique_ptr<INetURLObject> & pTempFileURL,
+        SwDocShell *pSourceDocSh, sal_Int32 nDocNo)
+{
+    if (bMergeShell)
+        static_cast<CreateMonitor*>( pProgressDlg.get() )->SetCurrentPosition( nDocNo );
+    else
+    {
+        PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>(pProgressDlg.get());
+        pPrintMonDlg->m_pPrinter->SetText(createTempFile ? pTempFileURL->GetBase() : OUString(pSourceDocSh->GetTitle(22)));
+        OUString sStat(SW_RES(STR_STATSTR_LETTER));
+        sStat += " ";
+        sStat += OUString::number( nDocNo );
+        pPrintMonDlg->m_pPrintInfo->SetText( sStat );
+    }
+
+    pProgressDlg->Update();
+
+    // Computation time for the GUI
+    for (sal_uInt16 i = 0; i < 25; ++i)
+        Application::Reschedule();
+}
+
+
 bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                  const SwMergeDescriptor& rMergeDescriptor,
                                  vcl::Window* pParent)
@@ -995,7 +1042,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             vcl::Window *pSourceWindow = nullptr;
             VclPtr<CancelableDialog> pProgressDlg;
 
-            CreateProgessDlg(pSourceWindow, pProgressDlg, bMergeShell, pSourceShell, pParent);
+            if (!IsMergeSilent())
+            {
+                lcl_CreateProgessDlg(LINK(this, SwDBManager, PrtCancelHdl),
+                    pSourceWindow, pProgressDlg, bMergeShell, pSourceShell, pParent);
+            }
 
             if(bCreateSingleFile)
             {
@@ -1055,8 +1106,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         if( createTempFile )
                             aTempFileURL.reset( new INetURLObject(aTempFile->GetURL()));
 
-                        UpdateProgressDlg(bMergeShell, pProgressDlg, createTempFile, aTempFileURL, pSourceDocSh, nDocNo);
-
+                        if (!IsMergeSilent())
+                        {
+                            lcl_UpdateProgressDlg(bMergeShell, pProgressDlg,
+                                createTempFile, aTempFileURL, pSourceDocSh, nDocNo);
+                        }
 
                         // Create a copy of the source document and work with that one instead of the source.
                         // If we're not in the single file mode (which requires modifying the document for the merging),
@@ -1330,32 +1384,6 @@ bool SwDBManager::CreateNewTemp(OUString &sPath, const OUString &sAddress,
     return bErr;
 }
 
-void SwDBManager::UpdateProgressDlg(bool bMergeShell, VclPtr<CancelableDialog> pProgressDlg, bool createTempFile,
-                                    std::unique_ptr< INetURLObject > &aTempFileURL,
-                                    SwDocShell *pSourceDocSh, sal_Int32 nDocNo)
-{
-    if (!IsMergeSilent())
-    {
-        if( bMergeShell )
-            static_cast<CreateMonitor*>( pProgressDlg.get() )->SetCurrentPosition( nDocNo );
-        else
-        {
-            PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>( pProgressDlg.get() );
-            pPrintMonDlg->m_pPrinter->SetText( createTempFile ? aTempFileURL->GetBase() : OUString( pSourceDocSh->GetTitle( 22 )));
-            OUString sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
-            sStat += " ";
-            sStat += OUString::number( nDocNo );
-            pPrintMonDlg->m_pPrintInfo->SetText( sStat );
-        }
-
-        pProgressDlg->Update();
-
-        // Computation time for the GUI
-        for( sal_uInt16 i = 0; i < 25; i++ )
-            Application::Reschedule();
-    }
-}
-
 bool SwDBManager::CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
                                        SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh,
                                        SfxObjectShellRef &xTargetDocShell, SwDoc *&pTargetDoc,
@@ -1415,29 +1443,6 @@ void SwDBManager::LockUnlockDisp(bool bLock, SwDocShell *pSourceDocSh)
     {
         pViewFrame->GetDispatcher()->Lock(bLock);
         pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pSourceDocSh);
-    }
-}
-
-void SwDBManager::CreateProgessDlg(vcl::Window *&pSourceWindow, VclPtr<CancelableDialog> &pProgressDlg, bool bMergeShell,
-                                   SwWrtShell *pSourceShell, vcl::Window *pParent)
-{
-    if (!IsMergeSilent())
-    {
-        pSourceWindow = &pSourceShell->GetView().GetEditWin();
-        if( ! pParent )
-            pParent = pSourceWindow;
-        if( bMergeShell )
-            pProgressDlg = VclPtr<CreateMonitor>::Create( pParent, pParent != pSourceWindow );
-        else
-        {
-            pProgressDlg = VclPtr<PrintMonitor>::Create( pParent, pParent != pSourceWindow, PrintMonitor::MONITOR_TYPE_PRINT );
-            static_cast<PrintMonitor*>( pProgressDlg.get() )->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
-        }
-        pProgressDlg->SetCancelHdl( LINK(this, SwDBManager, PrtCancelHdl) );
-        pProgressDlg->Show();
-
-        for( sal_uInt16 i = 0; i < 25; i++)
-            Application::Reschedule();
     }
 }
 
