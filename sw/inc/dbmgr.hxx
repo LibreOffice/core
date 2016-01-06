@@ -248,7 +248,7 @@ friend class SwConnectionDisposedListener_Impl;
                                       const SwMergeDescriptor& rMergeDescriptor,  std::shared_ptr<const SfxFilter> pStoreToFilter);
 
 
-    SAL_DLLPRIVATE bool CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
+    SAL_DLLPRIVATE void CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
                                              SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh,
                                              SfxObjectShellRef &xTargetDocShell, SwDoc *&pTargetDoc,
                                              SwWrtShell *&pTargetShell, SwView  *&pTargetView,
