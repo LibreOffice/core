@@ -8,6 +8,7 @@
  */
 
 #include <vcl/salbtype.hxx>
+#include <vcl/lazydelete.hxx>
 
 #include <svdata.hxx>
 
@@ -105,7 +106,7 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
 typedef typename std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
 typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
 
-ControlCacheType gTextureCache(200);
+vcl::DeleteOnDeinit<ControlCacheType> gTextureCache(new ControlCacheType(200));
 
 bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo)
 {
@@ -190,12 +191,12 @@ bool X11OpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rCo
 {
     static bool gbCacheEnabled = !getenv("SAL_WITHOUT_WIDGET_CACHE");
 
-    if (!gbCacheEnabled)
+    if (!gbCacheEnabled || !gTextureCache.get())
         return false;
 
-    ControlCacheType::const_iterator iterator = gTextureCache.find(rControlCacheKey);
+    ControlCacheType::const_iterator iterator = gTextureCache.get()->find(rControlCacheKey);
 
-    if (iterator == gTextureCache.end())
+    if (iterator == gTextureCache.get()->end())
         return false;
 
     const std::unique_ptr<TextureCombo>& pCombo = iterator->second;
@@ -229,7 +230,8 @@ bool X11OpenGLSalGraphicsImpl::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X
         return true;
 
     ControlCachePair pair(aControlCacheKey, std::move(pCombo));
-    gTextureCache.insert(std::move(pair));
+    if (gTextureCache.get())
+        gTextureCache.get()->insert(std::move(pair));
 
     return bResult;
 }
