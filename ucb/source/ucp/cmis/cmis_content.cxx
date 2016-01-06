@@ -2019,7 +2019,7 @@ namespace cmis
                     // TODO Cache the objects
 
                     INetURLObject aURL( m_sURL );
-                    OUString sUser = aURL.GetUser( INetURLObject::NO_DECODE );
+                    OUString sUser = aURL.GetUser( INetURLObject::DECODE_WITH_CHARSET );
 
                     URL aUrl( m_sURL );
                     OUString sPath( m_sObjectPath );
