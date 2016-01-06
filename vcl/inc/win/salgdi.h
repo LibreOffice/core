@@ -89,11 +89,8 @@ public:
 
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
-    bool                    SupportsKorean() const      { return mbHasKoreanRange; }
     bool                    SupportsCJK() const         { return mbHasCJKSupport; }
     bool                    SupportsArabic() const      { return mbHasArabicSupport; }
-    bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
-    bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 #if ENABLE_GRAPHITE
     bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
     const gr_face*          GraphiteFace() const;
@@ -112,7 +109,6 @@ private:
     sal_IntPtr              mnId;
 
     // some members that are initalized lazily when the font gets selected into a HDC
-    mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
 #if ENABLE_GRAPHITE
     mutable GrFontData*             mpGraphiteData;

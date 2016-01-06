@@ -998,7 +998,6 @@ ImplWinFontData::ImplWinFontData( const ImplFontAttributes& rDFS,
     int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   PhysicalFontFace( rDFS ),
     mnId( 0 ),
-    mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
 #if ENABLE_GRAPHITE
     mpGraphiteData(NULL),
@@ -1244,8 +1243,6 @@ void ImplWinFontData::GetFontCapabilities( HDC hDC ) const
             sal_uInt32 ulUnicodeRange2 = GetUInt( pTable + 46 );
 
             mbHasCJKSupport = (ulUnicodeRange2 & 0x2DF00000);
-            mbHasKoreanRange= (ulUnicodeRange1 & 0x10000000)
-                            | (ulUnicodeRange2 & 0x01100000);
             mbHasArabicSupport = (ulUnicodeRange1 & 0x00002000);
         }
     }
