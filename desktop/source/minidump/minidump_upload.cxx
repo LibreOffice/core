@@ -68,15 +68,16 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
     if (!curl)
         return false;
 
-    std::string proxy, proxy_user_pwd, ca_certificate_file, file;
-
-    std::string url = "http://libreofficecrash.org/submit";
+    std::string proxy, proxy_user_pwd, ca_certificate_file, file, url;
 
     getProperty("Proxy", proxy, parameters);
     getProperty("ProxyUserPW", proxy_user_pwd, parameters);
     getProperty("CAFile", ca_certificate_file, parameters);
 
     getProperty("DumpFile", file, parameters);
+    getProperty("URL", file, parameters);
+    if (url.empty())
+        return false;
 
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_USERAGENT, kUserAgent);
