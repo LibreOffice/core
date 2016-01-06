@@ -430,7 +430,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
 
         uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
-        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations );
+        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnv );
         if ( aChooser->Execute() == RET_OK )
         {
             uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser->GetSelectedCertificate();

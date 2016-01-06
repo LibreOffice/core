@@ -46,7 +46,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
-    SignatureInformations   maCertsToIgnore;
 
     VclPtr<SvSimpleTable>   m_pCertLB;
     VclPtr<PushButton>      m_pViewBtn;
@@ -65,7 +64,7 @@ private:
     void ImplInitialize();
 
 public:
-    CertificateChooser( vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
+    CertificateChooser(vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
     virtual ~CertificateChooser();
     virtual void dispose() override;
 
