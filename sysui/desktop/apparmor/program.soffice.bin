@@ -124,7 +124,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   INSTDIR-**.so                     rm,
   INSTDIR-program/soffice.bin       rmix,
   INSTDIR-program/xpdfimport        rPx,
-  INSTDIR-program/open-url          rPx,
+  /usr/bin/xdg-open                 rPUx,
   INSTDIR-program/senddoc           rPx,
 
   /usr/share/java/**.jar                r,

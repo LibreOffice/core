@@ -9,8 +9,4 @@
 
 $(eval $(call gb_Package_Package,shell_scripts_tde,$(SRCDIR)/shell/source/unix/misc))
 
-ifeq ($(ENABLE_TDE),TRUE)
-$(eval $(call gb_Package_add_file,shell_scripts_tde,$(LIBO_BIN_FOLDER)/tde-open-url,tde-open-url.sh))
-endif
-
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

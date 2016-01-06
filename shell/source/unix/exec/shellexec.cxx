@@ -155,52 +155,9 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         //  the CWD) on stderr and SystemShellExecuteException.
         aBuffer.append("open --");
 #else
-        // The url launchers are expected to be in the $BRAND_BASE_DIR/LIBO_LIBEXEC_FOLDER
-        // directory:
-        css::uno::Reference< css::util::XMacroExpander > exp = css::util::theMacroExpander::get(m_xContext);
-        OUString aProgramURL;
-        try {
-            aProgramURL = exp->expandMacros( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/");
-        } catch (css::lang::IllegalArgumentException &)
-        {
-            throw SystemShellExecuteException(
-                "Could not expand $BRAND_BASE_DIR path",
-                static_cast < XSystemShellExecute * > (this), ENOENT );
-        }
+        // Just use xdg-open on non-Mac
 
-        OUString aProgram;
-        if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
-        {
-            throw SystemShellExecuteException(
-                "Cound not convert executable path",
-                static_cast < XSystemShellExecute * > (this), ENOENT );
-        }
-
-        OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
-        escapeForShell(aBuffer, aTmp);
-
-#ifdef SOLARIS
-        if ( m_aDesktopEnvironment.getLength() == 0 )
-             m_aDesktopEnvironment = OString("GNOME");
-#endif
-
-        // Respect the desktop environment - if there is an executable named
-        // <desktop-environement-is>-open-url, pass the url to this one instead
-        // of the default "open-url" script.
-        if ( !m_aDesktopEnvironment.isEmpty() )
-        {
-            OString aDesktopEnvironment(m_aDesktopEnvironment.toAsciiLowerCase());
-            OStringBuffer aCopy(aTmp);
-
-            aCopy.append(aDesktopEnvironment + "-open-url");
-
-            if ( 0 == access( aCopy.getStr(), X_OK) )
-            {
-                aBuffer.append(aDesktopEnvironment + "-");
-            }
-        }
-
-        aBuffer.append("open-url");
+        aBuffer.append("/usr/bin/xdg-open");
 #endif
         aBuffer.append(" ");
         escapeForShell(aBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
