@@ -16,6 +16,24 @@
       "revId": "d8ff907197037045fd0cb173e341f515968b65b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_164f5ebe",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-06T15:59:01Z",
+      "side": 1,
+      "message": "was pretty easy to avoid it, see 4b01af28e6fee1ec3096ed713d1db832b3508420\n\nit\u0027s a bit questionable to have this many implementation details like private methods in a header file anyway, maybe consider to move all of that to a pImpl, see http://herbsutter.com/gotw/_100/",
+      "parentUuid": "dab17558_1678fef1",
+      "revId": "d8ff907197037045fd0cb173e341f515968b65b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
