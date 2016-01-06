@@ -61,7 +61,7 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    SAL_WARN_IF( aLocalizedStrings.Count() < 18, "starmath", "resource incomplete" );
+    SAL_WARN_IF( aLocalizedStrings.Count() < 9, "starmath", "resource incomplete" );
     if( aLocalizedStrings.Count() < 9 ) // bad resource ?
         return;
 
