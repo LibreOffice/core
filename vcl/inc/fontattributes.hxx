@@ -43,7 +43,7 @@ class FontSelectPattern;
 class ImplFontAttributes
 {
 public:
-    explicit        ImplFontAttributes() {}
+    explicit        ImplFontAttributes();
     explicit        ImplFontAttributes( const FontSelectPattern& );
 
     // device independent font functions
