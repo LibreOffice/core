@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_3309d496",
+        "filename": "basic/source/classes/image.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1001171
+      },
+      "writtenOn": "2016-01-06T10:45:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_5388d822",
+      "revId": "1f87766c3d2beabfc14a5c261591de818b8acbec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_d395e840",
         "filename": "connectivity/source/drivers/dbase/DIndex.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_b3f5c484",
+        "filename": "connectivity/source/drivers/dbase/DIndex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1001171
+      },
+      "writtenOn": "2016-01-06T10:45:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_d395e840",
+      "revId": "1f87766c3d2beabfc14a5c261591de818b8acbec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_93ab6089",
         "filename": "cppcanvas/source/mtfrenderer/implrenderer.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2016-01-05T16:42:54Z",
       "side": 1,
       "message": "GDIMetaFile (include/vcl/gdimtf.hxx) uses size_t to count actions (e.g., as argument to GetAction), so that might be a more natural choice here",
+      "revId": "1f87766c3d2beabfc14a5c261591de818b8acbec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_13f3f09f",
+        "filename": "cppcanvas/source/mtfrenderer/implrenderer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1001171
+      },
+      "writtenOn": "2016-01-06T10:45:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_93ab6089",
       "revId": "1f87766c3d2beabfc14a5c261591de818b8acbec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
