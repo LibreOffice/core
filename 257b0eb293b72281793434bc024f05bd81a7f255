@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_56c72612",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-06T16:50:21Z",
+      "side": 1,
+      "message": "There should be an\n\n else\n     break;\n\nhere, like the original code stopped on the first character !\u003d \u0027#\u0027, otherwise we\u0027re looping unnecessarily for \"000\" decimals. Also, that would catch a \"0.#0\" ill-constructed format code that would otherwise lead to nMinDecimals\u003d1.",
+      "revId": "257b0eb293b72281793434bc024f05bd81a7f255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
