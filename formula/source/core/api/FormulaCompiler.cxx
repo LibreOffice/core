@@ -1290,6 +1290,12 @@ void FormulaCompiler::Factor()
                 pFacToken->SetByte( nSepCount );
                 if (nSepCount == 2)
                 {
+                    /* XXX TODO FIXME: activate this conversion to ISOWEEKNUM
+                     * when at least two releases can actually handle the real
+                     * ISOWEEKNUM with one parameter, i.e. for 5.3 or 5.2 if
+                     * 5.0.5 is patched. Until then unconditionally use the
+                     * WEEKNUM_OOO compatibility function. */
+#if 0
                     // An old mode!=1 indicates ISO week, remove argument if
                     // literal double value and keep function. Anything else
                     // can not be resolved, there exists no "like ISO but week
@@ -1312,6 +1318,11 @@ void FormulaCompiler::Factor()
                         // compatibility function.
                         pFacToken->NewOpCode( ocWeeknumOOo, FormulaToken::PrivateAccess());
                     }
+#else
+                    (void) nSepPos;
+                    // Use compatibility function.
+                    pFacToken->NewOpCode( ocWeeknumOOo, FormulaToken::PrivateAccess());
+#endif
                 }
                 PutCode( pFacToken );
             }
