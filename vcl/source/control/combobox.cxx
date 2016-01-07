@@ -1319,7 +1319,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
 
 }
 
-void::ComboBox::Impl::ImplUserDrawHandler( UserDrawEvent* pEvent )
+void ComboBox::Impl::ImplUserDrawHandler( UserDrawEvent* pEvent )
 {
     m_rThis.UserDraw(*pEvent);
 }
