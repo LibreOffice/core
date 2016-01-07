@@ -266,7 +266,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
         }
 
-        if (!sOut.isEmpty())
+        if (!sOut.isEmpty() && SVX_NUM_BITMAP != eType)  // second condition to avoid adding extra ul, already done before.
             rWrt.Strm().WriteOString( sOut );
 
         if( rWrt.m_bCfgOutStyles )
