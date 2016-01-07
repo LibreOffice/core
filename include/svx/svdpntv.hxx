@@ -168,6 +168,7 @@ protected:
     SvtOptionsDrawinglayer      maDrawinglayerOpt;
 
     bool                        bPageVisible : 1;
+    bool                        mbPageShadowVisible : 1;
     bool                        bPageBorderVisible : 1;
     bool                        bBordVisible : 1;
     bool                        bGridVisible : 1;
@@ -399,6 +400,9 @@ protected:
 
 public:
     bool IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht
+    /// Draw Page shadow or not
+    bool IsPageShadowVisible() const { return mbPageShadowVisible; }
+
     bool IsPageBorderVisible() const { return bPageBorderVisible; } // Seite (weisse Flaeche) malen oder nicht
     bool IsBordVisible() const { return bBordVisible; }             // Seitenrandlinie malen oder nicht
     bool IsGridVisible() const { return bGridVisible; }             // Rastergitter malen oder nicht
@@ -408,6 +412,7 @@ public:
     bool IsGlueVisible() const { return bGlueVisible; }             // Konnektoren der objekte sichtbar oder nicht
     Color GetGridColor() const { return maGridColor;}
     void SetPageVisible(bool bOn = true) { bPageVisible=bOn; InvalidateAllWin(); }
+    void SetPageShadowVisible(bool bOn = true) { mbPageShadowVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { bPageBorderVisible=bOn; InvalidateAllWin(); }
     void SetBordVisible(bool bOn = true) { bBordVisible=bOn; InvalidateAllWin(); }
     void SetGridVisible(bool bOn = true) { bGridVisible=bOn; InvalidateAllWin(); }
