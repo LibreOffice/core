@@ -46,7 +46,7 @@ bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const
     // compare mime content types
     Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
     Reference< datatransfer::XMimeContentTypeFactory >
-        xMCntTypeFactory = MimeContentTypeFactory::create(xContext);;
+        xMCntTypeFactory = MimeContentTypeFactory::create(xContext);
 
     // compare full media types
     Reference< datatransfer::XMimeContentType > xLType = xMCntTypeFactory->createMimeContentType( lFlavor.MimeType );

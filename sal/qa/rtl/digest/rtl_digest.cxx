@@ -400,7 +400,7 @@ public:
 #if 0 // Don't remove, but instead fix the test or something
 
             // With this test case rtl_digest_SHA1 computes the wrong sum. This was confirmed
-            // by decrytion of a MSO encrypted document. Replacing the rtl_digest_SHA1 calculation
+            // by decryption of a MSO encrypted document. Replacing the rtl_digest_SHA1 calculation
             // with sha1 calculation from NSS was able to decrypt the document.
 
             const unsigned char aData[] = {

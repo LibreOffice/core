@@ -228,7 +228,7 @@ namespace cppu_threadpool
             if( (*ii).second.first )
             {
                 // all oneway request have been processed, now
-                // synchronus requests may go on
+                // synchronous requests may go on
                 (*ii).second.first->resume();
             }
         }

@@ -1209,7 +1209,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
     }
 
-    // If a Follow sits next to it's Master and doesn't fit, we know it can
+    // If a Follow sits next to its Master and doesn't fit, we know it can
     // be moved right now.
     if ( lcl_Prev( this ) && static_cast<SwTextFrame*>(this)->IsFollow() && IsMoveable() )
     {
@@ -1821,7 +1821,7 @@ bool SwContentFrame::_WouldFit( SwTwips nSpace,
                             bool bTstMove,
                             const bool bObjsInNewUpper )
 {
-    // To have the footnote select it's place carefully, it needs
+    // To have the footnote select its place carefully, it needs
     // to be moved in any case if there is at least one page/column
     // between the footnote and the new Upper.
     SwFootnoteFrame* pFootnoteFrame = nullptr;

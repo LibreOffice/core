@@ -461,8 +461,8 @@ namespace pcr
         }
 
         // disallow for some types
-        // TODO: shouldn't the XBindableValue supply a list of supported types, and we can distingusih
-        // using this list? The current behavior below is somewhat hackish ...
+        // TODO: shouldn't the XBindableValue supply a list of supported types, and we can distinguish
+        // using this list? The current behavior below is somewhat hackish...
         if ( bAllow )
         {
             try

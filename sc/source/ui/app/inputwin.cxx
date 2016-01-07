@@ -236,7 +236,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         // If the input row was hidden while editing (e.g. when editing a formula
         // and then switching to another document or the help), display the text
         // we just edited from the InputHandler
-        aTextWindow.SetTextString( pInputHdl->GetEditString() ); // Dispaly text
+        aTextWindow.SetTextString( pInputHdl->GetEditString() ); // Display text
         if ( pInputHdl->IsTopMode() )
             pInputHdl->SetMode( SC_INPUT_TABLE ); // Focus ends up at the bottom anyways
     }

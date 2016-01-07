@@ -87,7 +87,7 @@ void InterceptedInteraction::impl_handleDefault(const css::uno::Reference< css::
         case E_NO_CONTINUATION_FOUND:
         {
             // Runtime error! The defined continuation could not be located
-            // inside the set of available containuations of the incoming request.
+            // inside the set of available continuations of the incoming request.
             // Whats wrong - the interception list or the request?
             OSL_FAIL("InterceptedInteraction::handle()\nCould intercept this interaction request - but can't locate the right continuation!");
         }

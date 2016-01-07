@@ -292,7 +292,7 @@ protected:
     /** Reads fil data, line data, and frame flags. */
     void                ReadFrameData( XclImpStream& rStrm );
 
-    /** Converts fill formatting, line formattind, and frame style. */
+    /** Converts fill formatting, line formatting, and frame style. */
     void                ConvertRectStyle( SdrObject& rSdrObj ) const;
 
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */

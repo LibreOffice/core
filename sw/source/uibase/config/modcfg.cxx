@@ -1362,7 +1362,7 @@ void SwCompareConfig::Load()
 
             switch(nProp)
             {
-                case 0 : eCmpMode = (SvxCompareMode) nVal; break;;
+                case 0 : eCmpMode = (SvxCompareMode) nVal; break;
                 case 1 : bUseRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
                 case 2 : bIgnorePieces = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
                 case 3 : nPieceLen = nVal; break;

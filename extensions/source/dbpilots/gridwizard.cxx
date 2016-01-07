@@ -437,7 +437,7 @@ namespace dbp
         // preserve it's "relative position" entry data
         rMoveTo.SetEntryData(nInsertPos, reinterpret_cast<void*>(nRelativeIndex));
 
-        // remove the entry from it's old list
+        // remove the entry from its old list
         if (bMoveRight)
         {
             sal_Int32 nSelectPos = m_pExistFields->GetSelectEntryPos();

@@ -340,7 +340,7 @@ public:
     // #i72889# used from CompleteRedraw() implementation internally, added to be able to do a complete redraw in single steps
 
     // BeginCompleteRedraw returns (or even creates) a SdrPaintWindow which will then be used as the
-    // target for paints. Since paints may be buffered, use it's GetTargetOutputDevice() method which will
+    // target for paints. Since paints may be buffered, use its GetTargetOutputDevice() method which will
     // return the buffer in case it's buffered.
     //
     // DoCompleteRedraw then draws the DrawingLayer hierarchy

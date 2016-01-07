@@ -4343,7 +4343,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
     OUString url = pToolbar->GetCommand();
 
     // Restore of toolbar is done by removing it from
-    // it's configuration manager and then getting it again
+    // its configuration manager and then getting it again
     bool bParentToolbar = pToolbar->IsParentData();
 
     // Cannot restore parent toolbar

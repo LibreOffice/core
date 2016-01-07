@@ -80,7 +80,7 @@ namespace comphelper
     */
     COMPHELPER_DLLPUBLIC css::awt::FontDescriptor    getDefaultFont();
 
-    /** examine a sequence for the com.sun.star.uno::Type of it's elements.
+    /** examine a sequence for the com.sun.star.uno::Type of its elements.
     */
     COMPHELPER_DLLPUBLIC css::uno::Type getSequenceElementType(const css::uno::Type& _rSequenceType);
 

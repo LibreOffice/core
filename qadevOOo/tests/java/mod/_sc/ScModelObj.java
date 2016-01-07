@@ -95,7 +95,7 @@ public class ScModelObj extends TestCase {
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Disposes the spreadsheet documents if they was created already.
-    * Creates two spreadsheet documents. Rertieves the current controller for
+    * Creates two spreadsheet documents. Retrieves the current controller for
     * each of them. Obtains the collection of spreadsheets, takes one of them
     * and takes some cell from the spreadsheet. The created documents are the instances
     * of the service <code>com.sun.star.sheet.SpreadsheetDocument</code>.

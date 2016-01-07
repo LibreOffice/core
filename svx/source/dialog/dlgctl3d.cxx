@@ -591,7 +591,7 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
 
             if(mbMouseMoved)
             {
-                // was change dinteractively
+                // was change interactively
             }
             else
             {

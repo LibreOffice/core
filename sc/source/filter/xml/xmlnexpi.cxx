@@ -218,7 +218,7 @@ SvXMLImportContext *ScXMLNamedExpressionContext::CreateChildContext( sal_uInt16 
                                             const css::uno::Reference<
                                         css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLNamedExpressionContext::EndElement()

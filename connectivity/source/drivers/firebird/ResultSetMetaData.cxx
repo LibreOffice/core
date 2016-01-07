@@ -64,7 +64,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     // Firebird is generally case sensitive when using quoted identifiers.
-    // IF THIS CHANGES make ResultSet::findColumn to be case-insenstive as needed.
+    // IF THIS CHANGES make ResultSet::findColumn to be case-insensitive as needed.
     // Generally names that are entirely UPPERCASE are case insensitive, however
     // there remains some ambiguity if there is another mixed-case-named column
     // of the same name. For safety always assume case insensitive.

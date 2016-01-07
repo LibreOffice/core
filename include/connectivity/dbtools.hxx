@@ -376,7 +376,7 @@ namespace dbtools
                                     , const OUString& _rName
                                     ,EComposeRule _eComposeRule);
 
-    /** split a fully qualified table name (including catalog and schema, if appliable) into it's component parts.
+    /** split a fully qualified table name (including catalog and schema, if applicable) into its component parts.
         @param  _rxConnMetaData     meta data describing the connection where you got the table name from
         @param  _rQualifiedName     fully qualified table name
         @param  _rCatalog           (out parameter) upon return, contains the catalog name
@@ -439,7 +439,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS bool canDelete(const css::uno::Reference< css::beans::XPropertySet>& _rxCursorSet);
 
 
-    /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
+    /** compose a complete table name from its up to three parts, regarding to the database meta data composing rules
     */
     OOO_DLLPUBLIC_DBTOOLS OUString composeTableName( const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxMetaData,
                             const OUString& _rCatalog,
@@ -720,7 +720,7 @@ namespace dbtools
         @param  _rxContext
             Used to create the drivermanager.
         @return
-            The datadefintion object.
+            The datadefinition object.
     */
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbcx::XTablesSupplier> getDataDefinitionByURLAndConnection(
             const OUString& _rsUrl,

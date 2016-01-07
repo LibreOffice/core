@@ -52,7 +52,7 @@ public class OfficeConnect
 
     /**
      * At first call we create static connection object and open connection to an
-     * office - anew offic einstance is started if necessary
+     * office - a new office instance is started if necessary
      * Then - and for all further requests we return these static connection member.
      */
     public static synchronized void createConnection()

@@ -99,7 +99,7 @@ class SwFramePage: public SfxTabPage
     bool            m_bNew;
     bool            m_bNoModifyHdl;
     bool            m_bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
-    // --> OD 2009-08-31 #mongolianlayou#
+    // --> OD 2009-08-31 #mongolianlayout#
     bool            m_bIsVerticalL2R;
     bool            m_bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
     bool            m_bHtmlMode;

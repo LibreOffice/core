@@ -377,7 +377,7 @@ public:
     // SdrPageView, which should be defined correctly always.
     // Alternatively a gluepoint may be characterized by a SdrHdl.
     // In this case the SdrHdl instance consists of all required information.
-    // And in this case, the glue point are always is marked by enforcment
+    // And in this case, the glue point are always is marked by enforcement
     // (Handlers are just situated at marked gluepoints )
     // Attention: With each change of the glue point status the handle list is re-calculated.
     // All previously saved SdrHdl* became invalid by this, the same with the point IDs!

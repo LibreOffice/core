@@ -36,7 +36,7 @@ namespace drawinglayer
         /** MediaPrimitive2D class
 
             This is a unified primitive for Media visualisation, e.g. animations
-            or sounds. It's geometry is defined by Transform. For conveinience,
+            or sounds. It's geometry is defined by Transform. For convenience,
             it also contains a discrete border size (aka Pixels) which will be added
             if used. This makes it a view-dependent primitive. It also gets a filled
             background and the decomposition will try to create a graphic representation

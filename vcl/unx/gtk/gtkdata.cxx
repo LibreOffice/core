@@ -733,7 +733,7 @@ void GtkData::Init()
 #if !GTK_CHECK_VERSION(3,0,0)
     /*
      * if a -display switch was used, we need
-     * to set the environment accoringly since
+     * to set the environment accordingly since
      * the clipboard build another connection
      * to the xserver using $DISPLAY
      */

@@ -511,7 +511,7 @@ namespace
     Reference< XModel> lcl_getXModel(const Reference< XInterface>& _xIface)
     {
         Reference< XInterface > xParent = _xIface;
-        Reference< XModel > xModel(xParent,UNO_QUERY);;
+        Reference< XModel > xModel(xParent,UNO_QUERY);
         while( xParent.is() && !xModel.is() )
         {
             Reference<XChild> xChild(xParent,UNO_QUERY);

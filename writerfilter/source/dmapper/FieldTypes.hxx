@@ -136,7 +136,7 @@ enum FieldId
      */
     ,FIELD_MACROBUTTON
     /* MERGEFIELD ColumName \b prefix \f suffix \* MERGEFORMAT ->
-        ww8filterimprovement: column-only API now upporterd
+        ww8filterimprovement: column-only API now supported
      */
     ,FIELD_MERGEFIELD
     /* MERGEREC \* MERGEFORMAT ->

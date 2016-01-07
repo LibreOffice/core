@@ -119,7 +119,7 @@ void OCurrencyModel::implConstruct()
 
 OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, false, true )
-    // use the old control name for compaytibility reasons
+    // use the old control name for compatibility reasons
 {
 
     m_nClassId = FormComponentType::CURRENCYFIELD;

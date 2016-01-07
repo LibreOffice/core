@@ -74,7 +74,7 @@ public class FilePicker extends TestCase {
     * <ul>
     *  <li> <code>'XInitialization.args'</code> for
     *      {@link ifc.lang._XInitialization} : argument
-    *    for creating dialog from teamplate. </li>
+    *    for creating dialog from template. </li>
     *  <li> <code>'XFilePickerControlAccess.ControlID'</code> for
     *      {@link ifc.ui.dialogs._XFilePickerControlAccess} : here
     *    it is identifier of check box.</li>

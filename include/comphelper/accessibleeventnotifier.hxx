@@ -109,7 +109,7 @@ namespace comphelper
                         const css::uno::Reference< css::accessibility::XAccessibleEventListener >& _rxListener
                     );
 
-        /** adds an event, which is to be braodcasted, to the queue
+        /** adds an event, which is to be broadcasted, to the queue
 
             @param _nClient
                 the id of the client which needs to broadcast the event

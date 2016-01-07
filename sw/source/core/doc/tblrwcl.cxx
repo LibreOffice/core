@@ -1026,7 +1026,7 @@ bool SwTable::DeleteSel(
         size_t const nIdx = rBoxes.size() - 1 - n;
 
         // First adapt the data-sequence for chart if necessary
-        // (needed to move the implementation cursor properly to it's new
+        // (needed to move the implementation cursor properly to its new
         // position which can't be done properly if the cell is already gone)
         if (pPCD && pTableNd)
             pPCD->DeleteBox( &pTableNd->GetTable(), *rBoxes[nIdx] );

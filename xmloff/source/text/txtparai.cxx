@@ -2268,7 +2268,7 @@ XMLNumberedParaContext::XMLNumberedParaContext(
                 break;
             case XML_TOK_TEXT_NUMBERED_PARAGRAPH_CONTINUE_NUMBERING:
                 // this attribute is deprecated
-//                ContinuteNumbering = IsXMLToken(rValue, XML_TRUE);
+//                ContinueNumbering = IsXMLToken(rValue, XML_TRUE);
                 break;
             case XML_TOK_TEXT_NUMBERED_PARAGRAPH_START_VALUE:
                 {

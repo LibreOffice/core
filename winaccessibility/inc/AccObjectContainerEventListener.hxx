@@ -41,7 +41,7 @@ public:
     virtual void HandleStateChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue) override;
 
-    //for visible data changed event, for shapes, the visiabledatachanged should be mapped to LOCATION_CHANGED
+    //for visible data changed event, for shapes, the visibledatachanged should be mapped to LOCATION_CHANGED
     virtual void HandleVisibleDataChangedEvent() override;
 };
 

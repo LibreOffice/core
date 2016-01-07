@@ -134,7 +134,7 @@ public class ORadioButtonModel extends GenericModelTest {
     }
 
     /**
-     * calls <CODE>createTestEnvironment()</CODE> from it's super class
+     * calls <CODE>createTestEnvironment()</CODE> from its super class
      * @param Param the test parameter
      * @param log the log writer
      * @return lib.TestEnvironment

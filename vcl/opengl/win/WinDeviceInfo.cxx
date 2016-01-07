@@ -621,7 +621,7 @@ void WinOpenGLDeviceInfo::GetData()
 
     /* DeviceKey is "reserved" according to MSDN so we'll be careful with it */
     /* check that DeviceKey begins with DEVICE_KEY_PREFIX */
-    /* some systems have a DeviceKey starting with \REGISTRY\Machine\ so we need to compare case insenstively */
+    /* some systems have a DeviceKey starting with \REGISTRY\Machine\ so we need to compare case insensitively */
     if (_wcsnicmp(displayDevice.DeviceKey, DEVICE_KEY_PREFIX, ArrayLength(DEVICE_KEY_PREFIX)-1) != 0)
     {
         SAL_WARN("vcl.opengl", "incorrect DeviceKey");

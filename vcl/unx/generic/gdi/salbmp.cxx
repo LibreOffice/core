@@ -980,7 +980,7 @@ bool ImplSalDDB::ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRe
            && rTwoRect.mnDestHeight == maTwoRect.mnDestHeight
            )
         {
-            // absolutely indentically
+            // absolutely identically
             bRet = true;
         }
         else if(  rTwoRect.mnSrcWidth   == rTwoRect.mnDestWidth

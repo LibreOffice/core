@@ -66,7 +66,7 @@ namespace drawinglayer
 
             This processor renders all feeded primitives to a 2D raster where for all
             primitives the two basic methods rasterconvertB3DPolygon for hairlines and
-            rasterconvertB3DPolyPolygon for filled geometry is called. It is a beseclass to
+            rasterconvertB3DPolyPolygon for filled geometry is called. It is a baseclass to
             e.g. base a Z-Buffer supported renderer on the 3D primitive processing.
          */
         class DefaultProcessor3D : public BaseProcessor3D

@@ -448,7 +448,7 @@ namespace svgio
                     || TextDecoration_overline == aDeco
                     || TextDecoration_line_through == aDeco)
                 {
-                    // get the fill for decroation as described by SVG. We cannot
+                    // get the fill for decoration as described by SVG. We cannot
                     // have different stroke colors/definitions for those, though
                     const SvgStyleAttributes* pDecoDef = rSvgStyleAttributes.getTextDecorationDefiningSvgStyleAttributes();
                     const basegfx::BColor aDecoColor(pDecoDef && pDecoDef->getFill() ? *pDecoDef->getFill() : aFill);

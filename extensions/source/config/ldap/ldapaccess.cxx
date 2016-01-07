@@ -97,7 +97,7 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
 void  LdapConnection::connectSimple(const LdapDefinition& aDefinition)
    throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
-    OSL_ENSURE(!isValid(), "Recoonecting an LDAP connection that is already established");
+    OSL_ENSURE(!isValid(), "Re-connecting to an LDAP connection that is already established");
     if (isValid()) disconnect();
 
     mLdapDefinition = aDefinition;

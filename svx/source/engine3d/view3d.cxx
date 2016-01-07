@@ -271,7 +271,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && dynamic_cast< const E3dCompoundObject*>(pObj) !=  nullptr)
             {
-                // relatated scene
+                // related scene
                 pScene = static_cast<E3dCompoundObject*>(pObj)->GetScene();
                 if(pScene)
                     pScene->SetSelected(false);

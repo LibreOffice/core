@@ -189,12 +189,12 @@ public:
     bool IsSetPageOrg() const { return (nullptr != mpPageOriginOverlay); }
 
     // HitTest. If sal_True, in rnHelpLineNum is the number of the auxiliary line and in rpPv
-    // the appendend PageView.
+    // the appended PageView.
     bool PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const;
 
     // Move of an available auxiliary line. Use nHelpLineNum and pPV from PickHelpLine.
     bool BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV);
-    // interactive insertionof a new auxiliary line
+    // interactive insertion of a new auxiliary line
     bool BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind);
     Pointer GetDraggedHelpLinePointer() const;
 

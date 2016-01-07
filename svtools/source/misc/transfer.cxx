@@ -1585,7 +1585,7 @@ bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rSt
             const sal_Char* pChars = reinterpret_cast< const sal_Char* >( aSeq.getConstArray() );
             sal_Int32       nLen = aSeq.getLength();
 
-            //JP 10.10.2001: 92930 - don't copy the last zero characterinto the string.
+            //JP 10.10.2001: 92930 - don't copy the last zero character into the string.
             //DVO 2002-05-27: strip _all_ trailing zeros
             while( nLen && ( 0 == *( pChars + nLen - 1 ) ) )
                 --nLen;

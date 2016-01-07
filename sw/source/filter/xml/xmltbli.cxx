@@ -2259,7 +2259,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             }
             else
             {
-                // No subtabels: We use the new table model.
+                // No subtables: we use the new table model.
                 SwXMLTableCell_Impl *pCell = GetCell(nTopRow,nCol);
 
                 // #i95726# - some fault tolerance
@@ -2332,7 +2332,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     // column, and the remaining fragment could be divided
                     // into lines. Anyway, it could be that this applies to
                     // the next column, too. That for, we check the next
-                    // column but rememeber the current one as a good place to
+                    // column but remember the current one as a good place to
                     // split.
                     nSplitCol = nCol + 1UL;
                 }

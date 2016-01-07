@@ -491,7 +491,7 @@ void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const bool skipFirst)
  * The \<class T> parameter is for the type of the points
  * nStartIndex: which is the starting index in the polygon of the first point read
  * nPoints: number of points
- * pWMF: the stream containings the polygons
+ * pWMF: the stream containing the polygons
  * */
 template <class T>
 tools::Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)

@@ -67,7 +67,7 @@ namespace sdext { namespace presenter {
 
 /** A simple tool bar that can display bitmapped buttons and labels.  At the
     moment there are buttons for moving to the next and previous slide and
-    to the next effect.  A label displayes the index of the current slide
+    to the next effect.  A label displays the index of the current slide
     and the total number of slides.
 */
 class PresenterToolBar

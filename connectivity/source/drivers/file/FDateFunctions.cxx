@@ -254,7 +254,7 @@ ORowSetValue OOp_CurDate::operate(const ::std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     Date aCurDate( Date::SYSTEM );
-    return aCurDate.GetUNODate();;
+    return aCurDate.GetUNODate();
 }
 
 ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
@@ -263,7 +263,7 @@ ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     tools::Time aCurTime( tools::Time::SYSTEM );
-    return aCurTime.GetUNOTime();;
+    return aCurTime.GetUNOTime();
 }
 
 ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const

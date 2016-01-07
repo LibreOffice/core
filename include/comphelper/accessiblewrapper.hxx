@@ -337,7 +337,7 @@ namespace comphelper
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
-        /** specifies if the children are to be consideren transient (i.e.: not cached)
+        /** specifies if the children are to be considered transient (i.e.: not cached)
             <p>to be called only once per lifetime</p>
         */
         void    setTransientChildren( bool _bSet = true );

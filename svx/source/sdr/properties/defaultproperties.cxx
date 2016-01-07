@@ -55,7 +55,7 @@ namespace sdr
             {
                 mpItemSet = rProps.mpItemSet->Clone();
 
-                // do not keep parent info, this may be changed by later construrtors.
+                // do not keep parent info, this may be changed by later constructors.
                 // This class just copies the ItemSet, ignore parent.
                 if(mpItemSet && mpItemSet->GetParent())
                 {

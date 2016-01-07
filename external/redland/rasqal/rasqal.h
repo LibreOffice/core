@@ -1491,10 +1491,10 @@ int rasqal_data_graph_print(rasqal_data_graph* dg, FILE* fh);
 
 /**
  * rasqal_compare_flags:
- * @RASQAL_COMPARE_NOCASE: String comparisons are case independent.
- * @RASQAL_COMPARE_XQUERY: XQuery comparsion rules apply.
- * @RASQAL_COMPARE_RDF:    RDF Term comparsion rules apply.
- * @RASQAL_COMPARE_URI:    Allow comparison of URIs and allow strings to have a boolean value (unused; was for RDQL)
+ * @RASQAL_COMPARE_NOCASE: String comparisions are case independent.
+ * @RASQAL_COMPARE_XQUERY: XQuery comparision rules apply.
+ * @RASQAL_COMPARE_RDF:    RDF Term comparision rules apply.
+ * @RASQAL_COMPARE_URI:    Allow comparision of URIs and allow strings to have a boolean value (unused; was for RDQL)
  * @RASQAL_COMPARE_SAMETERM: SPARQL sameTerm() builtin rules apply.
  *
  * Flags for rasqal_expression_evaluate(), rasqal_literal_compare() or
