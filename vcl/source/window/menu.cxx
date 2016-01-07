@@ -2973,17 +2973,14 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
     // could be useful during debugging.
     // nPopupModeFlags |= FloatWinPopupFlags::NoFocusClose;
 
-    ImplDelData aDelData;
-    pW->ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = pW;
 
     bInCallback = true; // set it here, if Activate overridden
     Activate();
     bInCallback = false;
 
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return 0;   // Error
-
-    pW->ImplRemoveDel( &aDelData );
 
     if ( bCanceled || bKilled )
         return 0;
@@ -3136,20 +3133,19 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
     }
     if ( bRealExecute )
     {
-        pWin->ImplAddDel( &aDelData );
+        xWindow = pWin;
 
-        ImplDelData aModalWinDel;
-        pW->ImplAddDel( &aModalWinDel );
+        VclPtr<vcl::Window> xModalWinDel = pW;
         pW->ImplIncModalCount();
 
         pWin->Execute();
 
-        DBG_ASSERT( ! aModalWinDel.IsDead(), "window for popup died, modal count incorrect !" );
-        if( ! aModalWinDel.IsDead() )
+        DBG_ASSERT( ! xModalWinDel->IsDisposed(), "window for popup died, modal count incorrect !" );
+        if( ! xModalWinDel->IsDisposed() )
             pW->ImplDecModalCount();
 
-        if ( !aDelData.IsDead() )
-            pWin->ImplRemoveDel( &aDelData );
+        if ( !xWindow->IsDisposed() )
+            xWindow.clear();
         else
             return 0;
 
