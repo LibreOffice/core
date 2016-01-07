@@ -1924,16 +1924,14 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
 struct DelayedCloseEvent
 {
     VclPtr<vcl::Window> pWindow;
-    ImplDelData     aDelData;
 };
 
 static void DelayedCloseEventLink( void* pCEvent, void* )
 {
     DelayedCloseEvent* pEv = static_cast<DelayedCloseEvent*>(pCEvent);
 
-    if( ! pEv->aDelData.IsDead() )
+    if( ! pEv->pWindow->IsDisposed() )
     {
-        pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
         // dispatch to correct window type
         if( pEv->pWindow->IsSystemWindow() )
             static_cast<SystemWindow*>(pEv->pWindow.get())->Close();
@@ -1993,7 +1991,6 @@ void ImplHandleClose( vcl::Window* pWindow )
     {
         DelayedCloseEvent* pEv = new DelayedCloseEvent;
         pEv->pWindow = pWin;
-        pWin->ImplAddDel( &pEv->aDelData );
         Application::PostUserEvent( Link<void*,void>( pEv, DelayedCloseEventLink ) );
     }
 }
@@ -2006,7 +2003,6 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
         {
             if ( pSVEvent->mpWindow )
             {
-                pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
                 pSVEvent->maLink.Call( pSVEvent->mpData );
             }
             else
