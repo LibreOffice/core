@@ -90,6 +90,8 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID)
         if (pResult)
             return pResult;
     }
+
+    return nullptr;
 }
 
 }
@@ -100,6 +102,8 @@ std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
 
     if (pWindow)
         return std::unique_ptr<UIObject>(new WindowUIObject(pWindow));
+
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
