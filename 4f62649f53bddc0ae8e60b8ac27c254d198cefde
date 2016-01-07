@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_6179c2fc",
+        "filename": "basic/source/classes/sbxmod.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-07T12:18:38Z",
+      "side": 1,
+      "message": "i\u0027d prefer \"pModule\" here since it is ultimately a pointer on which you need to use \"-\u003e\" not \".\"",
+      "revId": "4f62649f53bddc0ae8e60b8ac27c254d198cefde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
