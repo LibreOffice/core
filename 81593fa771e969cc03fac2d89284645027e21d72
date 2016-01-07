@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_818826e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-01-07T12:14:58Z",
+      "side": 1,
+      "message": "Another thing: Can you please use your full name as git author in future?",
+      "revId": "81593fa771e969cc03fac2d89284645027e21d72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_417e3ee5",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 1
