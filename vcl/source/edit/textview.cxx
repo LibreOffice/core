@@ -58,8 +58,6 @@
 
 #include <algorithm>
 
-using namespace ::com::sun::star;
-
 class TETextDataObject :    public css::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
 
@@ -94,17 +92,17 @@ TETextDataObject::~TETextDataObject()
 {
 }
 
-// uno::XInterface
-uno::Any TETextDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
+// css::uno::XInterface
+css::uno::Any TETextDataObject::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-    uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< datatransfer::XTransferable* >(this)) );
+    css::uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< css::datatransfer::XTransferable* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// datatransfer::XTransferable
-uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
+// css::datatransfer::XTransferable
+css::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFlavor& rFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
+    css::uno::Any aAny;
 
     SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SotClipboardFormatId::STRING )
@@ -117,29 +115,29 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
         sal_uLong nLen = GetHTMLStream().Tell();
         GetHTMLStream().Seek(0);
 
-        uno::Sequence< sal_Int8 > aSeq( nLen );
+        css::uno::Sequence< sal_Int8 > aSeq( nLen );
         memcpy( aSeq.getArray(), GetHTMLStream().GetData(), nLen );
         aAny <<= aSeq;
     }
     else
     {
-        throw datatransfer::UnsupportedFlavorException();
+        throw css::datatransfer::UnsupportedFlavorException();
     }
     return aAny;
 }
 
-uno::Sequence< datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException, std::exception)
+css::uno::Sequence< css::datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  ) throw(css::uno::RuntimeException, std::exception)
 {
     GetHTMLStream().Seek( STREAM_SEEK_TO_END );
     bool bHTML = GetHTMLStream().Tell() > 0;
-    uno::Sequence< datatransfer::DataFlavor > aDataFlavors( bHTML ? 2 : 1 );
+    css::uno::Sequence< css::datatransfer::DataFlavor > aDataFlavors( bHTML ? 2 : 1 );
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[0] );
     if ( bHTML )
         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::HTML, aDataFlavors.getArray()[1] );
     return aDataFlavors;
 }
 
-sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException, std::exception)
+sal_Bool TETextDataObject::isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) throw(css::uno::RuntimeException, std::exception)
 {
     SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
     return ( nT == SotClipboardFormatId::STRING );
@@ -224,12 +222,12 @@ TextView::TextView( TextEngine* pEng, vcl::Window* pWindow ) :
         vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
         mpImpl->mxDnDListener = pDnDWrapper;
 
-        uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mpImpl->mxDnDListener, uno::UNO_QUERY );
+        css::uno::Reference< css::datatransfer::dnd::XDragGestureListener> xDGL( mpImpl->mxDnDListener, css::uno::UNO_QUERY );
         pWindow->GetDragGestureRecognizer()->addDragGestureListener( xDGL );
-        uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
+        css::uno::Reference< css::datatransfer::dnd::XDropTargetListener> xDTL( xDGL, css::uno::UNO_QUERY );
         pWindow->GetDropTarget()->addDropTargetListener( xDTL );
         pWindow->GetDropTarget()->setActive( true );
-        pWindow->GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
+        pWindow->GetDropTarget()->setDefaultActions( css::datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
     }
 }
 
@@ -632,7 +630,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
                     if ( aCurSel.HasRange() ) {
-                        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+                        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
                         Copy( aSelection );
                     }
                     bMoved = true;
@@ -809,14 +807,14 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
-        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
         Paste( aSelection );
         if ( mpImpl->mpTextEngine->IsModified() )
             mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
     }
     else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
-        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
         Copy( aSelection );
     }
 }
@@ -854,8 +852,8 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
             {
                 HideSelection();
                 TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[  mpImpl->maSelection.GetEnd().GetPara() ];
-                uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-                i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
+                css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
+                css::i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
                 TextSelection aNewSel( mpImpl->maSelection );
                 aNewSel.GetStart().GetIndex() = aBoundary.startPos;
                 aNewSel.GetEnd().GetIndex() = aBoundary.endPos;
@@ -1115,7 +1113,7 @@ void TextView::Cut()
     mpImpl->mpTextEngine->UndoActionEnd();
 }
 
-void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard )
 {
     if ( rxClipboard.is() )
     {
@@ -1130,7 +1128,7 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
         {
             rxClipboard->setContents( pDataObj, nullptr );
 
-            uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
+            css::uno::Reference< css::datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, css::uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
         }
@@ -1142,15 +1140,15 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
 
 void TextView::Copy()
 {
-    uno::Reference<datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
     Copy( aClipboard );
 }
 
-void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard )
 {
     if ( rxClipboard.is() )
     {
-        uno::Reference< datatransfer::XTransferable > xDataObj;
+        css::uno::Reference< css::datatransfer::XTransferable > xDataObj;
 
         try
             {
@@ -1163,13 +1161,13 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
 
         if ( xDataObj.is() )
         {
-            datatransfer::DataFlavor aFlavor;
+            css::datatransfer::DataFlavor aFlavor;
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 try
                 {
-                    uno::Any aData = xDataObj->getTransferData( aFlavor );
+                    css::uno::Any aData = xDataObj->getTransferData( aFlavor );
                     OUString aText;
                     aData >>= aText;
                     bool bWasTruncated = false;
@@ -1191,7 +1189,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
 
 void TextView::Paste()
 {
-    uno::Reference<datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
     Paste( aClipboard );
 }
 
@@ -1260,9 +1258,9 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case KEY_PAGEDOWN:  aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM );
                             break;
-        case KEY_LEFT:      aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (sal_uInt16)i18n::CharacterIteratorMode::SKIPCHARACTER : (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
+        case KEY_LEFT:      aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCHARACTER : (sal_uInt16)css::i18n::CharacterIteratorMode::SKIPCELL );
                             break;
-        case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (sal_uInt16)i18n::CharacterIteratorMode::SKIPCHARACTER : (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
+        case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCHARACTER : (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCELL );
                             break;
         case css::awt::Key::SELECT_WORD_FORWARD:
                             bSelect = true; // fallthrough intentional
@@ -1362,7 +1360,7 @@ TextPaM TextView::CursorLeft( const TextPaM& rPaM, sal_uInt16 nCharacterIterator
     if ( aPaM.GetIndex() )
     {
         TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[ aPaM.GetPara() ];
-        uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
+        css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
         sal_Int32 nCount = 1;
         aPaM.GetIndex() = xBI->previousCharacters( pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), nCharacterIteratorMode, nCount, nCount );
     }
@@ -1382,7 +1380,7 @@ TextPaM TextView::CursorRight( const TextPaM& rPaM, sal_uInt16 nCharacterIterato
     TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[ aPaM.GetPara() ];
     if ( aPaM.GetIndex() < pNode->GetText().getLength() )
     {
-        uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
+        css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
         sal_Int32 nCount = 1;
         aPaM.GetIndex() = xBI->nextCharacters( pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), nCharacterIteratorMode, nCount, nCount );
     }
@@ -1402,10 +1400,10 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
     if ( aPaM.GetIndex() )
     {
         TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[ aPaM.GetPara() ];
-        uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-        i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
+        css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
+        css::i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
         if ( aBoundary.startPos >= rPaM.GetIndex() )
-            aBoundary = xBI->previousWord( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+            aBoundary = xBI->previousWord( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
         aPaM.GetIndex() = ( aBoundary.startPos != -1 ) ? aBoundary.startPos : 0;
     }
     else if ( aPaM.GetPara() )
@@ -1424,8 +1422,8 @@ TextPaM TextView::CursorWordRight( const TextPaM& rPaM )
     TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[ aPaM.GetPara() ];
     if ( aPaM.GetIndex() < pNode->GetText().getLength() )
     {
-        uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-        i18n::Boundary aBoundary = xBI->nextWord(  pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+        css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
+        css::i18n::Boundary aBoundary = xBI->nextWord(  pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
         aPaM.GetIndex() = aBoundary.startPos;
     }
     else if ( aPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->GetNodes().size()-1) )
@@ -1448,15 +1446,15 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
     {
         if ( nDelMode == DELMODE_SIMPLE )
         {
-            aEndPaM = CursorLeft( aEndPaM, (sal_uInt16)i18n::CharacterIteratorMode::SKIPCHARACTER );
+            aEndPaM = CursorLeft( aEndPaM, (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCHARACTER );
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
             TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[  aEndPaM.GetPara() ];
-            uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-            i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
+            css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
+            css::i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
             if ( aBoundary.startPos == mpImpl->maSelection.GetEnd().GetIndex() )
-                aBoundary = xBI->previousWord( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                aBoundary = xBI->previousWord( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
             // #i63506# startPos is -1 when the paragraph starts with a tab
             aEndPaM.GetIndex() = std::max<sal_Int32>(aBoundary.startPos, 0);
         }
@@ -1476,13 +1474,13 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
     {
         if ( nDelMode == DELMODE_SIMPLE )
         {
-            aEndPaM = CursorRight( aEndPaM, (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
+            aEndPaM = CursorRight( aEndPaM, (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCELL );
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
             TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[  aEndPaM.GetPara() ];
-            uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-            i18n::Boundary aBoundary = xBI->nextWord( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+            css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
+            css::i18n::Boundary aBoundary = xBI->nextWord( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
             aEndPaM.GetIndex() = aBoundary.startPos;
         }
         else    // DELMODE_RESTOFCONTENT
@@ -1715,7 +1713,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
             }
             else
             {
-                TextPaM aNext = CursorRight( TextPaM( aPaM.GetPara(), aPaM.GetIndex() ), (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
+                TextPaM aNext = CursorRight( TextPaM( aPaM.GetPara(), aPaM.GetIndex() ), (sal_uInt16) css::i18n::CharacterIteratorMode::SKIPCELL );
                 aEditCursor.Right() = mpImpl->mpTextEngine->GetEditCursor( aNext, true ).Left();
             }
         }
@@ -1999,9 +1997,9 @@ void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureE
 
         mpImpl->mpCursor->Hide();
 
-        sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
+        sal_Int8 nActions = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
         if ( !IsReadOnly() )
-            nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;
+            nActions |= css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
         rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mpImpl->mxDnDListener );
     }
 }
@@ -2038,14 +2036,14 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) 
         mpImpl->mpTextEngine->UndoActionStart();
 
         OUString aText;
-        uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+        css::uno::Reference< css::datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
         if ( xDataObj.is() )
         {
-            datatransfer::DataFlavor aFlavor;
+            css::datatransfer::DataFlavor aFlavor;
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
-                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                css::uno::Any aData = xDataObj->getTransferData( aFlavor );
                 OUString aOUString;
                 aData >>= aOUString;
                 aText = convertLineEnd(aOUString, LINEEND_LF);
@@ -2068,7 +2066,7 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) 
 
         if ( aPrevSel.HasRange() &&
                 !mpImpl->mbSupportProtectAttribute && // don't remove currently selected element
-                (( rDTDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD) )
+                (( rDTDE.DropAction & css::datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD) )
         {
             // adjust selection if necessary
             if ( ( mpImpl->mpDDInfo->maDropPos.GetPara() < aPrevSel.GetStart().GetPara() ) ||
