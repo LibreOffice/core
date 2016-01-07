@@ -3543,12 +3543,10 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
                     if ( !(pItem->mnBits & ToolBoxItemBits::REPEAT) )
                     {
                         // prevent from being destroyed in the select handler
-                        ImplDelData aDelData;
-                        ImplAddDel( &aDelData );
+                        VclPtr<vcl::Window> xWindow = this;
                         Select();
-                        if ( aDelData.IsDead() )
+                        if ( xWindow->IsDisposed() )
                             return true;
-                        ImplRemoveDel( &aDelData );
                     }
                 }
 
@@ -4048,18 +4046,16 @@ void ToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ToolBox::Tracking( const TrackingEvent& rTEvt )
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
     if ( rTEvt.IsTrackingEnded() )
         ImplHandleMouseButtonUp( rTEvt.GetMouseEvent(), rTEvt.IsTrackingCanceled() );
     else
         ImplHandleMouseMove( rTEvt.GetMouseEvent(), rTEvt.IsTrackingRepeat() );
 
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         // toolbox was deleted
         return;
-    ImplRemoveDel( &aDelData );
     DockingWindow::Tracking( rTEvt );
 }
 
@@ -5044,12 +5040,10 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
             Click();
 
             // #107776# we might be destroyed in the selecthandler
-            ImplDelData aDelData;
-            ImplAddDel( &aDelData );
+            VclPtr<vcl::Window> xWindow = this;
             Select();
-            if ( aDelData.IsDead() )
+            if ( xWindow->IsDisposed() )
                 return bRet;
-            ImplRemoveDel( &aDelData );
 
             Deactivate();
             mbIsKeyEvent = false;
@@ -5140,8 +5134,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     bool bGrabFocusToDocument = false;
 
     // #107776# we might be destroyed in the keyhandler
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
     switch ( nCode )
     {
@@ -5288,9 +5281,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
-    ImplRemoveDel( &aDelData );
 
     // #107251# move focus away if this toolbox was disabled during keyinput
     if (HasFocus() && mpData->mbKeyInputDisabled && bParentIsContainer)
