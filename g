@@ -213,7 +213,7 @@ local module
 	elif [ "$cmd" = "-b" ] ; then
 	    create_branch=1
 	elif [ "$create_branch" = "1" ] ; then
-	    branch="$arg"
+	    branch="$cmd"
 	    create_branch=0
 	fi
     done
