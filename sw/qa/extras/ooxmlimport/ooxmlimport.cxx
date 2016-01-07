@@ -3033,6 +3033,20 @@ DECLARE_OOXMLIMPORT_TEST(testTdf92045, "tdf92045.docx")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getRun(getParagraph(1), 1), "CharFlash"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf95213, "tdf95213.docx")
+{
+    // Get the second paragraph's numbering style's 2nd level's character style name.
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
+    auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
+    uno::Sequence<beans::PropertyValue> aLevel;
+    xLevels->getByIndex(1) >>= aLevel; // 2nd level
+    OUString aName = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "CharStyleName"; })->Value.get<OUString>();
+
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aName), uno::UNO_QUERY);
+    // This was awt::FontWeight::BOLD.
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xStyle, "CharWeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

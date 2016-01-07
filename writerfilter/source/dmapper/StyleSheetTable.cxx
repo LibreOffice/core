@@ -1519,11 +1519,12 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
 }
 
 
-OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
+OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
 {
     //find out if any of the styles already has the required properties then return its name
     OUString sListLabel = m_pImpl->HasListCharStyle(rCharProperties);
-    if( !sListLabel.isEmpty() )
+    // Don't try to reuse an existing character style if requested.
+    if( !sListLabel.isEmpty() && !bAlwaysCreate)
         return sListLabel;
     const char cListLabel[] = "ListLabel ";
     uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );

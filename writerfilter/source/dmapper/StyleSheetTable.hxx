@@ -102,7 +102,7 @@ public:
 
     OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );
 
-    OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
+    OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
 
     /// Returns the default character properties.
     PropertyMapPtr GetDefaultCharProps();
