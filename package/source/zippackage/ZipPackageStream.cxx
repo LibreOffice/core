@@ -816,7 +816,8 @@ bool ZipPackageStream::saveChild(
             }
             else
             {
-                bParallelDeflate = true;
+                // tdf#89236 Encrypting in parallel does not work
+                bParallelDeflate = !bToBeEncrypted;
                 // Do not deflate small streams in a thread
                 if (xSeek.is() && xSeek->getLength() < 100000)
                     bParallelDeflate = false;
