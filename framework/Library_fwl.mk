@@ -59,6 +59,7 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/recording/dispatchrecorder \
     framework/source/recording/dispatchrecordersupplier \
     framework/source/register/registertemp \
+    framework/source/dispatch/dispatchdisabler \
     framework/source/services/dispatchhelper \
     framework/source/services/mediatypedetectionhelper \
     framework/source/services/uriabbreviation \
