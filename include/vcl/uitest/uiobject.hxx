@@ -52,22 +52,4 @@ public:
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID);
 };
 
-class WindowUIObject : public UIObject
-{
-    VclPtr<vcl::Window> mxWindow;
-
-public:
-
-    WindowUIObject(VclPtr<vcl::Window> xWindow);
-
-    virtual StringMap get_state() override;
-
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
-
-    virtual UIObjectType getType() const override;
-
-    virtual std::unique_ptr<UIObject> get_child(const OUString& rID);
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
