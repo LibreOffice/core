@@ -630,19 +630,17 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
     // handle FloatingMode
     if ( !pSVData->maWinData.mpTrackWin && pSVData->maWinData.mpFirstFloat )
     {
-        ImplDelData aDelData;
-        pChild->ImplAddDel( &aDelData );
+        VclPtr<vcl::Window> xWindow = pChild;
         if ( ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave ) )
         {
-            if ( !aDelData.IsDead() )
+            if ( !xWindow->IsDisposed() )
             {
-                pChild->ImplRemoveDel( &aDelData );
                 pChild->ImplGetFrameData()->mbStartDragCalled = true;
             }
             return true;
         }
         else
-            pChild->ImplRemoveDel( &aDelData );
+            xWindow.clear();
     }
 
     // call handler
@@ -653,9 +651,8 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
     if (!pChild)
         return false;
 
-    ImplDelData aDelData;
     NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
-    pChild->ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = pChild;
     if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         pChild->ImplGetFrameData()->mbInMouseMove = true;
 
@@ -665,11 +662,11 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         if( !pSVData->maWinData.mpFirstFloat && // totop for floating windows in popup would change the focus and would close them immediately
             !(pChild->ImplGetFrameWindow()->GetStyle() & WB_OWNERDRAWDECORATION) )    // ownerdrawdecorated windows must never grab focus
             pChild->ToTop();
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return true;
     }
 
-    if ( ImplCallPreNotify( aNEvt ) || aDelData.IsDead() )
+    if ( ImplCallPreNotify( aNEvt ) || xWindow->IsDisposed() )
         bRet = true;
     else
     {
@@ -680,7 +677,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
             {
                 TrackingEvent aTEvt( aMEvt );
                 pChild->Tracking( aTEvt );
-                if ( !aDelData.IsDead() )
+                if ( !xWindow->IsDisposed() )
                 {
                     // When ScrollRepeat, we restart the timer
                     if ( pSVData->maWinData.mpTrackTimer &&
@@ -697,7 +694,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                      (pChild->GetSettings().GetMouseSettings().GetOptions() & MouseSettingsOptions::AutoFocus) )
                     pChild->ToTop( ToTopFlags::NoGrabFocus );
 
-                if( aDelData.IsDead() )
+                if( xWindow->IsDisposed() )
                     bCallHelpRequest = false;
                 else
                 {
@@ -738,11 +735,11 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
 
         assert(aNEvt.GetWindow() == pChild);
 
-        if (!pChild->isDisposed() || !aDelData.IsDead())
+        if (!pChild->isDisposed())
             pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
 
-    if (pChild->isDisposed() || aDelData.IsDead())
+    if (pChild->isDisposed())
         return true;
 
     if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
@@ -768,7 +765,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         }
     }
 
-    pChild->ImplRemoveDel( &aDelData );
+    xWindow.clear();
 
     if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
     {
@@ -813,7 +810,6 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                             ContextMenuEvent* pEv = new ContextMenuEvent;
                             pEv->pWindow = pChild;
                             pEv->aChildPos = aChildPos;
-                            pChild->ImplAddDel( &pEv->aDelData );
                             Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
                         }
                         else
