@@ -177,6 +177,7 @@ public:
     void testTdf77014();
     void testTdf92648();
     void testTdf96515();
+    void testTdf96943();
     void testTdf96536();
     void testTdf96479();
 
@@ -262,6 +263,7 @@ public:
     CPPUNIT_TEST(testTdf77014);
     CPPUNIT_TEST(testTdf92648);
     CPPUNIT_TEST(testTdf96515);
+    CPPUNIT_TEST(testTdf96943);
     CPPUNIT_TEST(testTdf96536);
     CPPUNIT_TEST(testTdf96479);
     CPPUNIT_TEST_SUITE_END();
@@ -2942,6 +2944,23 @@ void SwUiWriterTest::testTdf96515()
     calcLayout();
 
     // This was 2, a new page was created for the new paragraph.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+void SwUiWriterTest::testTdf96943()
+{
+    // Enable hide whitespace mode.
+    SwDoc* pDoc = createDoc("tdf96943.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // Insert a new character at the end of the document.
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert("d");
+
+    // This was 2, a new page was created for the new layout line.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
