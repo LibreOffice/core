@@ -115,7 +115,9 @@ shopt -s nullglob
 DOXYGEN_PROJECT_PREFIX="LibreOffice"
 
 # get list of modules
-INPUT_PROJECTS="`ls */Module_*.mk | sed 's#/.*##'`"
+if [ -z "$INPUT_PROJECTS" ]; then
+    INPUT_PROJECTS="`ls */Module_*.mk | sed 's#/.*##'`"
+fi
 
 # output directory for generated documentation
 BASE_OUTPUT="$1"
