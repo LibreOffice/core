@@ -28,7 +28,7 @@ class FileViewContainer : public vcl::Window
     VclPtr<vcl::Window> m_pFocusWidgets[FocusState::FocusCount];
 
     public:
-    FileViewContainer( vcl::Window *pParent )
+    explicit FileViewContainer( vcl::Window *pParent )
         : Window( pParent, WB_TABSTOP )
         , m_pFileView( nullptr )
         , m_pTreeView( nullptr )

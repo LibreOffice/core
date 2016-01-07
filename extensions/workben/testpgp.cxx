@@ -64,7 +64,7 @@ class DataSource_Impl :
     int                m_fd;
 
 public:
-    DataSource_Impl (int fd = 0);
+    explicit DataSource_Impl(int fd = 0);
     virtual ~DataSource_Impl();
 
     void setBuffer (const Sequence<sal_Int8> &rBuffer);

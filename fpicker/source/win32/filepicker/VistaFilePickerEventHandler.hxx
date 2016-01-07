@@ -61,7 +61,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         // ctor/dtor
 
 
-                 VistaFilePickerEventHandler(IVistaFilePickerInternalNotify* pInternalNotify);
+        explicit VistaFilePickerEventHandler(IVistaFilePickerInternalNotify* pInternalNotify);
         virtual ~VistaFilePickerEventHandler();
 
 

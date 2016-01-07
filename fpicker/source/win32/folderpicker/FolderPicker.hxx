@@ -43,7 +43,7 @@ class CFolderPicker :
 public:
 
     // ctor/dtor
-    CFolderPicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceMgr );
+    explicit CFolderPicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceMgr );
 
 
     // XExecutableDialog

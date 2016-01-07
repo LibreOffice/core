@@ -157,7 +157,7 @@ private:
     Image           GetBubbleImage( OUString &rURL );
 
 public:
-                    UpdateCheckUI(const uno::Reference<uno::XComponentContext>&);
+    explicit        UpdateCheckUI(const uno::Reference<uno::XComponentContext>&);
     virtual        ~UpdateCheckUI();
 
     // XServiceInfo

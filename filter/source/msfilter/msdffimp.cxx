@@ -154,8 +154,10 @@ static sal_uInt32 nMSOleObjCntr = 0;
 struct SvxMSDffBLIPInfo
 {
     sal_uLong  nFilePos;    ///< offset of the BLIP in data strem
-    SvxMSDffBLIPInfo(sal_uLong nFPos):
-        nFilePos( nFPos ) {}
+    explicit SvxMSDffBLIPInfo(sal_uLong nFPos)
+        : nFilePos(nFPos)
+    {
+    }
 };
 
 /// the following will be sorted by the order of their appearance:

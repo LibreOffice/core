@@ -56,7 +56,7 @@ public:
     CComPtr< ITypeInfo > m_pTypeInfo;
     VARDESC* m_pVarDesc;
 
-    VarDesc(ITypeInfo* pTypeInfo) :
+    explicit VarDesc(ITypeInfo* pTypeInfo) :
       m_pTypeInfo(pTypeInfo),
       m_pVarDesc(NULL)
    {
@@ -96,7 +96,7 @@ class FuncDesc
 
 public:
 
-    FuncDesc(ITypeInfo * pTypeInfo) :
+    explicit FuncDesc(ITypeInfo * pTypeInfo) :
         m_pTypeInfo(pTypeInfo),
         m_pFuncDesc(NULL)
         {
@@ -174,7 +174,7 @@ public:
     CComPtr< ITypeInfo > m_pTypeInfo;
     TYPEATTR* m_pTypeAttr;
 
-    TypeAttr(ITypeInfo* pTypeInfo) :
+    explicit TypeAttr(ITypeInfo* pTypeInfo) :
       m_pTypeInfo( pTypeInfo ),
       m_pTypeAttr( NULL )
    {

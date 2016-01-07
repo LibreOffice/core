@@ -50,7 +50,7 @@ public:
             m_pInterface->AddRef();
     }
 
-    ComSmart( T* pInterface )
+    explicit ComSmart( T* pInterface )
     : m_pInterface( pInterface )
     {
          if ( m_pInterface != NULL )
@@ -136,7 +136,7 @@ class CSGuard
     CRITICAL_SECTION* m_pCriticalSection;
 
 public:
-    CSGuard( CRITICAL_SECTION* pCS )
+    explicit CSGuard( CRITICAL_SECTION* pCS )
     : m_pCriticalSection( pCS )
     {
         if ( m_pCriticalSection )
@@ -155,7 +155,7 @@ class ULONGGuard
     ULONG* m_pValue;
 
 public:
-    ULONGGuard( ULONG* pValue )
+    explicit ULONGGuard( ULONG* pValue )
     : m_pValue( pValue )
     {
         if ( m_pValue )

@@ -181,7 +181,7 @@ public:
     // remember sizes
     OUString                        _aIniKey;
 
-                            SvtExpFileDlg_Impl( WinBits nBits );
+    explicit                SvtExpFileDlg_Impl( WinBits nBits );
                             ~SvtExpFileDlg_Impl();
 
 

@@ -48,7 +48,7 @@ class MainThreadExecutor : public ::cppu::WeakImplHelper<
 
 {
 public:
-    MainThreadExecutor(
+    explicit MainThreadExecutor(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     {}
 

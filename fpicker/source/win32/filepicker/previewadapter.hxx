@@ -50,7 +50,7 @@ class CPreviewAdapter
 public:
 
     // ctor
-    CPreviewAdapter(HINSTANCE instance);
+    explicit CPreviewAdapter(HINSTANCE instance);
 
     ~CPreviewAdapter();
 

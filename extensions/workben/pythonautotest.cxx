@@ -214,7 +214,7 @@ public:
     }
 
 
-    TestListener( XDebuggingRef *p )
+    explicit TestListener( XDebuggingRef *p )
     {
         attach( p  );
     }

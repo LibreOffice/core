@@ -31,7 +31,7 @@
 class CControlCommandResult
 {
 public:
-    CControlCommandResult( sal_Bool bResult = sal_False ) :
+    explicit CControlCommandResult( sal_Bool bResult = sal_False ) :
         m_bResult( bResult )
     {
     }
