@@ -336,7 +336,6 @@ void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 
     if ( nUserEvent->mpWindow )
     {
-        nUserEvent->mpWindow->ImplRemoveDel( &(nUserEvent->maDelData) );
         nUserEvent->mpWindow = nullptr;
     }
 
@@ -390,8 +389,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
     // this allows for processing those events internally first and pass it to
     // the toolkit later
 
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
     if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
     {
@@ -443,9 +441,8 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
             CallEventListeners( VCLEVENT_WINDOW_KEYUP, const_cast<KeyEvent *>(rNEvt.GetKeyEvent()) );
     }
 
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
-    ImplRemoveDel( &aDelData );
 
     // #106721# check if we're part of a compound control and notify
     vcl::Window *pParent = ImplGetParent();
