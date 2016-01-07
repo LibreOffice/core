@@ -37,10 +37,7 @@
 #include "itrtxt.hxx"
 #include "sectfrm.hxx"
 #include "ftnfrm.hxx"
-#include "rootfrm.hxx"
-#include "viewopt.hxx"
 #include "pagefrm.hxx"
-#include "fmtfsize.hxx"
 
 #undef WIDOWTWIPS
 
@@ -132,19 +129,9 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
             (*fnRect->fnYDiff)( (m_pFrame->GetUpper()->*fnRect->fnGetPrtBottom)(), m_nOrigin );
         SwTwips nDiff = nHeight - nLineHeight;
 
-        SwViewShell* pShell = m_pFrame->getRootFrame()->GetCurrShell();
-        if (pShell && pShell->GetViewOptions()->IsWhitespaceHidden())
-        {
-            if (nDiff < 0)
-            {
-                SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
-                const SwFrameFormat* pPageFormat = static_cast<const SwFrameFormat*>(pPageFrame->GetRegisteredIn());
-                const Size& rPageSize = pPageFormat->GetFrameSize().GetSize();
-                long nWhitespace = rPageSize.getHeight() - pPageFrame->Frame().Height();
-                if (nWhitespace > -nDiff)
-                    nDiff = 0;
-            }
-        }
+        // Hide whitespace may require not to insert a new page.
+        SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
+        pPageFrame->HandleWhitespaceHiddenDiff(nDiff);
 
         // If everything is inside the existing frame the result is true;
         bFit = nDiff >= 0;
