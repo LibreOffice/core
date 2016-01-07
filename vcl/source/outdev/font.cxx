@@ -979,66 +979,6 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
     return aFont;
 }
 
-ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
-    : m_pFontCache(nullptr)
-    , maFontSelData( rFontSelData )
-    , maFontAttributes( rFontSelData )
-    , mpConversion( nullptr )
-    , mnLineHeight( 0 )
-    , mnRefCount( 1 )
-    , mnSetFontFlags( 0 )
-    , mnOwnOrientation( 0 )
-    , mnOrientation( 0 )
-    , mbInit( false )
-    , mpUnicodeFallbackList( nullptr )
-{
-    maFontSelData.mpFontEntry = this;
-}
-
-ImplFontEntry::~ImplFontEntry()
-{
-    delete mpUnicodeFallbackList;
-    m_pFontCache = nullptr;
-}
-
-size_t ImplFontEntry::GFBCacheKey_Hash::operator()( const GFBCacheKey& rData ) const
-{
-    boost::hash<sal_UCS4> a;
-    boost::hash<int > b;
-    return a(rData.first) ^ b(rData.second);
-}
-
-void ImplFontEntry::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
-{
-    if( !mpUnicodeFallbackList )
-        mpUnicodeFallbackList = new UnicodeFallbackList;
-    (*mpUnicodeFallbackList)[ GFBCacheKey(cChar,eWeight) ] = rFontName;
-}
-
-bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, OUString* pFontName ) const
-{
-    if( !mpUnicodeFallbackList )
-        return false;
-
-    UnicodeFallbackList::const_iterator it = mpUnicodeFallbackList->find( GFBCacheKey(cChar,eWeight) );
-    if( it == mpUnicodeFallbackList->end() )
-        return false;
-
-    *pFontName = (*it).second;
-    return true;
-}
-
-void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
-{
-//  DBG_ASSERT( mpUnicodeFallbackList, "ImplFontEntry::IgnoreFallbackForUnicode no list" );
-    UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( GFBCacheKey(cChar,eWeight) );
-//  DBG_ASSERT( it != mpUnicodeFallbackList->end(), "ImplFontEntry::IgnoreFallbackForUnicode no match" );
-    if( it == mpUnicodeFallbackList->end() )
-        return;
-    if( (*it).second == rFontName )
-        mpUnicodeFallbackList->erase( it );
-}
-
 FontSelectPatternAttributes::FontSelectPatternAttributes( const vcl::Font& rFont,
     const OUString& rSearchName, const Size& rSize, float fExactHeight )
     : maSearchName( rSearchName )

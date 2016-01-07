@@ -61,9 +61,7 @@ private:
     // cache of Unicode characters and replacement font names
     // TODO: a fallback map can be shared with many other ImplFontEntries
     // TODO: at least the ones which just differ in orientation, stretching or height
-    typedef ::std::pair<sal_UCS4,FontWeight> GFBCacheKey;
-    struct GFBCacheKey_Hash{ size_t operator()( const GFBCacheKey& ) const; };
-    typedef ::std::unordered_map<GFBCacheKey,OUString,GFBCacheKey_Hash> UnicodeFallbackList;
+    typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
     UnicodeFallbackList* mpUnicodeFallbackList;
 };
 
