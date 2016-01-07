@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/uiobject.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <iostream>
 
@@ -38,7 +38,6 @@ std::unique_ptr<UIObject> UIObject::get_child(const OUString&)
 {
     return std::unique_ptr<UIObject>();
 }
-
 
 WindowUIObject::WindowUIObject(VclPtr<vcl::Window> xWindow):
     mxWindow(xWindow)
