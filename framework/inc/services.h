@@ -44,6 +44,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_MAILTODISPATCHER                     "com.sun.star.comp.framework.MailToDispatcher"
 #define IMPLEMENTATIONNAME_SERVICEHANDLER                       "com.sun.star.comp.framework.ServiceHandler"
 #define IMPLEMENTATIONNAME_DISPATCHHELPER                       "com.sun.star.comp.framework.services.DispatchHelper"
+#define IMPLEMENTATIONNAME_DISPATCHDISABLER                     "com.sun.star.comp.framework.services.DispatchDisabler"
 #define IMPLEMENTATIONNAME_MACROSMENUCONTROLLER                 "com.sun.star.comp.framework.MacrosMenuController"
 #define IMPLEMENTATIONNAME_FONTMENUCONTROLLER                   "com.sun.star.comp.framework.FontMenuController"
 #define IMPLEMENTATIONNAME_FONTSIZEMENUCONTROLLER               "com.sun.star.comp.framework.FontSizeMenuController"
