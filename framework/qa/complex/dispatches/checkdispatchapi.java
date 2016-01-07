@@ -29,6 +29,8 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
+import com.sun.star.awt.XReschedule;
+import com.sun.star.awt.XToolkitExperimental;
 import java.util.HashMap;
 
 import org.junit.After;
@@ -188,7 +190,7 @@ public class checkdispatchapi
         impl_checkDispatchInfo(aComponent);
     }
 
-    public void checkInterceptorLifeTime() throws Exception
+    @Test public void checkInterceptorLifeTime() throws Exception
     {
         // Note: It's important for the following test, that aInterceptor will be hold alive by the uno reference
         // xInterceptor. Otherwhise we can't check some internal states of aInterceptor at the end of this method, because
@@ -222,7 +224,7 @@ public class checkdispatchapi
         System.out.println("Destruction of interception chain works as designed .-)");
     }
 
-    public void checkInterception() throws Exception
+    @Test public void checkInterception() throws Exception
     {
         String[] lDisabledURLs = new String[] { ".uno:Open" };
 
@@ -234,12 +236,24 @@ public class checkdispatchapi
 
         System.out.println("create and initialize frame ...");
         XFrame xFrame = impl_createNewFrame();
-        impl_loadIntoFrame(xFrame, "private:factory/swriter", null);
 
         XDispatchProviderInterception xInterception = UnoRuntime.queryInterface(XDispatchProviderInterception.class, xFrame);
-
         System.out.println("register interceptor ...");
         xInterception.registerDispatchProviderInterceptor(xInterceptor);
+
+        impl_loadIntoFrame(xFrame, "private:factory/swriter", null);
+
+        // Framework dispatcher update is on a ~50ms wait.
+        Thread.sleep(100);
+
+        XReschedule m_xReschedule = UnoRuntime.queryInterface(
+            XReschedule.class, m_xMSF.createInstance("com.sun.star.awt.Toolkit"));
+        // queryDispatch for toolbars etc. happens asynchronously.
+        System.out.println("process deferred events ...");
+        m_xReschedule.reschedule();
+        XToolkitExperimental m_xIdles = UnoRuntime.queryInterface(
+            XToolkitExperimental.class, m_xReschedule);
+        m_xIdles.processEventsToIdle();
 
         System.out.println("deregister interceptor ...");
         xInterception.releaseDispatchProviderInterceptor(xInterceptor);
