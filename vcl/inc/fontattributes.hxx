@@ -20,14 +20,12 @@
 #ifndef INCLUDED_VCL_INC_FONTSELECT_HXX
 #define INCLUDED_VCL_INC_FONTSELECT_HXX
 
-#include <rtl/ustring.hxx>
-#include <sal/log.hxx>
-#include <sal/types.h>
 #include <i18nlangtag/lang.h>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <unotools/fontdefs.hxx>
 #include <vcl/vclenum.hxx>
+
+#include "outfont.hxx"
 
 #include <unordered_map>
 
