@@ -36,7 +36,7 @@
 #include <vcl/settings.hxx>
 
 #include <window.h>
-#include <outfont.hxx>
+#include <fontentry.hxx>
 #include <outdev.h>
 #include <svdata.hxx>
 #include <impbmp.hxx>

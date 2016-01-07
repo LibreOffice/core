@@ -20,7 +20,7 @@
 #include "vcl/ctrl.hxx"
 #include "vcl/outdev.hxx"
 
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "textlayout.hxx"
 
 #include <com/sun/star/i18n/ScriptDirection.hpp>

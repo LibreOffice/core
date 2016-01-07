@@ -50,7 +50,7 @@
 #include "generic/printergfx.hxx"
 #include "impfont.hxx"
 #include "langboost.hxx"
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "PhysicalFontFace.hxx"

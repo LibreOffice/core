@@ -31,7 +31,7 @@
 #include "osx/saldata.hxx"
 #include "osx/salinst.h"
 #endif
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "quartz/salgdi.h"

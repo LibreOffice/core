@@ -32,7 +32,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/metric.hxx>
 
-#include <outfont.hxx>
+#include <fontentry.hxx>
 #include <sallayout.hxx>
 #include "fontattributes.hxx"
 
