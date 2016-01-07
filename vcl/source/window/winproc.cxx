@@ -216,19 +216,19 @@ static bool ImplCallCommand( vcl::Window* pChild, CommandEventId nEvt, void* pDa
 
     CommandEvent    aCEvt( aPos, nEvt, bMouse, pData );
     NotifyEvent     aNCmdEvt( MouseNotifyEvent::COMMAND, pChild, &aCEvt );
-    ImplDelData     aDelData( pChild );
+    VclPtr<vcl::Window> xWindow = pChild;
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return false;
     if ( !bPreNotify )
     {
         pChild->ImplGetWindowImpl()->mbCommand = false;
         pChild->Command( aCEvt );
 
-        if( aDelData.IsDead() )
+        if( xWindow->IsDisposed() )
             return false;
         pChild->ImplNotifyKeyMouseCommandEventListeners( aNCmdEvt );
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return false;
         if ( pChild->ImplGetWindowImpl()->mbCommand )
             return true;
