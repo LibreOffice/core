@@ -54,20 +54,18 @@ namespace oglcanvas
 
         // delete already "old" textures, mark "new" entries "old"
         const TextureCacheMapT::const_iterator aEnd = maCache.end();
-        TextureCacheMapT::iterator aNext = maCache.begin();
-        ++aNext;
-        for( auto aCurr = maCache.begin(); aCurr != aEnd; ++aNext )
+        for( auto aCurr = maCache.begin(); aCurr != aEnd; /* increment managed in loop */)
         {
             if( aCurr->second.bOld )
             {
                 glDeleteTextures( 1, &aCurr->second.nTexture );
-                maCache.erase( aCurr );
+                aCurr = maCache.erase( aCurr );
             }
             else
             {
                 aCurr->second.bOld = true;
+                ++aCurr;
             }
-            aCurr = aNext;
         }
 
         mnMissCount = 0;
