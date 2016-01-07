@@ -67,7 +67,7 @@ public:
     // ctor/dtor
 
 
-             VistaFilePicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+    explicit VistaFilePicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
     virtual ~VistaFilePicker();
 
 

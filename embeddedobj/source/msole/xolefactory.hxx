@@ -35,7 +35,7 @@ class OleEmbeddedObjectFactory : public ::cppu::WeakImplHelper<
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
 public:
-    OleEmbeddedObjectFactory(
+    explicit OleEmbeddedObjectFactory(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
     {

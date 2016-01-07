@@ -101,7 +101,7 @@ template< class >
 class UnoConversionUtilities
 {
 public:
-    UnoConversionUtilities( const Reference<XMultiServiceFactory> & smgr):
+    explicit UnoConversionUtilities( const Reference<XMultiServiceFactory> & smgr):
         m_nUnoWrapperClass( INTERFACE_OLE_WRAPPER_IMPL),
         m_nComWrapperClass( IUNKNOWN_WRAPPER_IMPL),
         m_smgr( smgr)

@@ -65,7 +65,7 @@ namespace
 
     struct SvtSimpleResId : public ResId
     {
-        SvtSimpleResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
+        explicit SvtSimpleResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
     };
 }
 

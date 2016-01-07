@@ -118,7 +118,7 @@ class GridWindow : public vcl::Window
     virtual Size GetOptimalSize() const override;
     void drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2);
 public:
-    GridWindow(vcl::Window* pParent);
+    explicit GridWindow(vcl::Window* pParent);
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
     virtual ~GridWindow();
     virtual void dispose() override;

@@ -1018,7 +1018,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdw
         ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
         if ( SUCCEEDED( hr ) && pOleObject )
         {
-            ComSmart< OleWrapperAdviseSink > pOwnAdvise( new OleWrapperAdviseSink( pAdvSink ) );
+            ComSmart<IAdviseSink> aListener(pAdvSink);
+            ComSmart<OleWrapperAdviseSink> pOwnAdvise(new OleWrapperAdviseSink(aListener));
             DWORD nRegID = 0;
 
             if ( SUCCEEDED( pOleObject->Advise( pOwnAdvise, &nRegID ) ) && nRegID > 0 )
@@ -1450,7 +1451,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD aspects, DWORD advf, IAd
         ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
         if ( SUCCEEDED( hr ) && pIViewObject )
         {
-            ComSmart< OleWrapperAdviseSink > pOwnAdvise( new OleWrapperAdviseSink( pAdvSink, aspects, advf ) );
+            ComSmart<IAdviseSink> aListener(pAdvSink);
+            ComSmart<OleWrapperAdviseSink> pOwnAdvise(new OleWrapperAdviseSink(aListener, aspects, advf));
 
             if ( SUCCEEDED( pIViewObject->SetAdvise( aspects, advf, pOwnAdvise ) ) )
             {

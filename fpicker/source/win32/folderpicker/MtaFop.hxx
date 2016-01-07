@@ -51,7 +51,7 @@
 class CAutoPathBuff
 {
 public:
-    CAutoPathBuff( size_t size = 0 )
+    explicit CAutoPathBuff( size_t size = 0 )
     {
         if (0 == size)
             size = 32000; // max path length under Win2000
@@ -96,7 +96,7 @@ private:
 class CMtaFolderPicker
 {
 public:
-    CMtaFolderPicker( sal_uInt32 Flags );
+    explicit CMtaFolderPicker( sal_uInt32 Flags );
     virtual ~CMtaFolderPicker( );
 
     // shell functions

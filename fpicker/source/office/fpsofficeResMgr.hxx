@@ -33,7 +33,7 @@ namespace fpicker
 
     struct SvtResId : public ResId
     {
-        SvtResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
+        explicit SvtResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
     };
 }
 

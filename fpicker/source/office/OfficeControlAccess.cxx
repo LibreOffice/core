@@ -153,11 +153,14 @@ namespace svt
         struct ControlPropertyLookup
         {
             OUString m_sLookup;
-            ControlPropertyLookup( const OUString& _rLookup ) : m_sLookup( _rLookup ) { }
-
-            bool operator()( const ControlProperty& _rProp )
+            explicit ControlPropertyLookup(const OUString& rLookup)
+                : m_sLookup(rLookup)
             {
-                return m_sLookup.equalsAscii( _rProp.pPropertyName );
+            }
+
+            bool operator()(const ControlProperty& rProp)
+            {
+                return m_sLookup.equalsAscii(rProp.pPropertyName);
             }
         };
 

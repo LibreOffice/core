@@ -80,7 +80,7 @@ class InputStreamWrapper : public ::cppu::WeakImplHelper< io::XInputStream >
     uno::Reference< io::XInputStream > m_xStream;
 
 public:
-    InputStreamWrapper(const uno::Reference< io::XInputStream >& rxStream) :
+    explicit InputStreamWrapper(const uno::Reference< io::XInputStream >& rxStream) :
         m_xStream(rxStream) {};
 
     virtual sal_Int32 SAL_CALL readBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -296,7 +296,7 @@ private:
 class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 public:
-    SingleUpdateInformationEnumeration(const uno::Reference< xml::dom::XElement >& xElement)
+    explicit SingleUpdateInformationEnumeration(const uno::Reference< xml::dom::XElement >& xElement)
         : m_nCount(0) { m_aEntry.UpdateDocument = xElement; };
     virtual ~SingleUpdateInformationEnumeration() {};
 

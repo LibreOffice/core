@@ -34,7 +34,7 @@ class UNOMainThreadExecutor : public ::cppu::WeakImplHelper< css::task::XJob,
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
 public:
-    UNOMainThreadExecutor(
+    explicit UNOMainThreadExecutor(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
     {

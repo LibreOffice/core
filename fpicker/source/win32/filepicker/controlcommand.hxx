@@ -32,14 +32,10 @@ class CFilePickerState;
 class CControlCommandRequest;
 class CControlCommandResult;
 
-
-
-
-
 class CControlCommand
 {
 public:
-    CControlCommand( sal_Int16 aControlId );
+    explicit CControlCommand( sal_Int16 aControlId );
     virtual ~CControlCommand( );
 
     virtual void SAL_CALL exec( CFilePickerState* aFilePickerState ) = 0;

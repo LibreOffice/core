@@ -54,7 +54,7 @@ struct OutData
     osl::Condition& StopCondition;
     CURL *curl;
 
-    OutData(osl::Condition& rCondition) : FileHandle(nullptr), Offset(0), StopCondition(rCondition), curl(nullptr) {};
+    explicit OutData(osl::Condition& rCondition) : FileHandle(nullptr), Offset(0), StopCondition(rCondition), curl(nullptr) {};
 };
 
 
