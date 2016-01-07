@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/uitest/uiobject.hxx>
+#include "uitest/uiobject_impl.hxx"
 
 #include <iostream>
 
