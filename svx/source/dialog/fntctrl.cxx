@@ -1139,7 +1139,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     {
         const SvxEscapementItem& rItem = static_cast<const SvxEscapementItem&>( rSet.Get( nWhich ) );
         nEsc = rItem.GetEsc();
-        nEscProp = rItem.GetProp();
+        nEscProp = rItem.GetProportionalHeight();
 
         if( nEsc == DFLT_ESC_AUTO_SUPER )
             nEsc = DFLT_ESC_SUPER;
@@ -1387,7 +1387,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     {
         const SvxEscapementItem& rItem = static_cast<const SvxEscapementItem&>( rSet.Get( nWhich ) );
         nEsc = rItem.GetEsc();
-        nEscProp = rItem.GetProp();
+        nEscProp = rItem.GetProportionalHeight();
 
         if( nEsc == DFLT_ESC_AUTO_SUPER )
             nEsc = DFLT_ESC_SUPER;

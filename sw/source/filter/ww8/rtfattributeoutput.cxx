@@ -2228,7 +2228,7 @@ void RtfAttributeOutput::CharCrossedOut(const SvxCrossedOutItem& rCrossedOut)
 void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEsc)
 {
     short nEsc = rEsc.GetEsc();
-    if (rEsc.GetProp() == DFLT_ESC_PROP)
+    if (rEsc.GetProportionalHeight() == DFLT_ESC_PROP)
     {
         if (DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUB);
@@ -2251,15 +2251,15 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEsc)
     else
         return;
 
-    short nProp = rEsc.GetProp() * 100;
+    short nProp = rEsc.GetProportionalHeight() * 100;
     if (DFLT_ESC_AUTO_SUPER == nEsc)
     {
-        nEsc = 100 - rEsc.GetProp();
+        nEsc = 100 - rEsc.GetProportionalHeight();
         ++nProp;
     }
     else if (DFLT_ESC_AUTO_SUB == nEsc)
     {
-        nEsc = - 100 + rEsc.GetProp();
+        nEsc = - 100 + rEsc.GetProportionalHeight();
         ++nProp;
     }
 

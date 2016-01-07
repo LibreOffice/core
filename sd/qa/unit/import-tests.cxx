@@ -291,7 +291,7 @@ void SdImportTest::testN862510_1()
         for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
         {
             const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>( (*it).pAttr );
-            CPPUNIT_ASSERT_MESSAGE( "Baseline attribute not handled properly", !( pFontEscapement && pFontEscapement->GetProp() != 100 ) );
+            CPPUNIT_ASSERT_MESSAGE( "Baseline attribute not handled properly", !(pFontEscapement && pFontEscapement->GetProportionalHeight() != 100) );
         }
     }
 

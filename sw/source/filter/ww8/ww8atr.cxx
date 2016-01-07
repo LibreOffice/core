@@ -1315,7 +1315,7 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 {
     sal_uInt8 b = 0xFF;
-    short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProp();
+    short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProportionalHeight();
     if ( !nEsc )
     {
         b = 0;

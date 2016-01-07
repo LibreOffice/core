@@ -6184,7 +6184,7 @@ void DocxAttributeOutput::CharCrossedOut( const SvxCrossedOutItem& rCrossedOut )
 void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 {
     OString sIss;
-    short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProp();
+    short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProportionalHeight();
     if ( !nEsc )
     {
         sIss = OString( "baseline" );

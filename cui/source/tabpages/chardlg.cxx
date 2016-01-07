@@ -2758,18 +2758,18 @@ void SvxCharPositionPage::SetEscapement_Impl( sal_uInt16 nEsc )
     if ( SVX_ESCAPEMENT_SUPERSCRIPT == nEsc )
     {
         aEscItm.GetEsc() = m_nSuperEsc;
-        aEscItm.GetProp() = m_nSuperProp;
+        aEscItm.GetProportionalHeight() = m_nSuperProp;
     }
     else if ( SVX_ESCAPEMENT_SUBSCRIPT == nEsc )
     {
         aEscItm.GetEsc() = m_nSubEsc;
-        aEscItm.GetProp() = m_nSubProp;
+        aEscItm.GetProportionalHeight() = m_nSubProp;
     }
 
     short nFac = aEscItm.GetEsc() < 0 ? -1 : 1;
 
     m_pHighLowMF->SetValue( aEscItm.GetEsc() * nFac );
-    m_pFontSizeMF->SetValue( aEscItm.GetProp() );
+    m_pFontSizeMF->SetValue( aEscItm.GetProportionalHeight() );
 
     if ( SVX_ESCAPEMENT_OFF == nEsc )
     {
@@ -2794,7 +2794,7 @@ void SvxCharPositionPage::SetEscapement_Impl( sal_uInt16 nEsc )
             AutoPositionHdl_Impl( m_pHighLowRB );
     }
 
-    UpdatePreview_Impl( 100, aEscItm.GetProp(), aEscItm.GetEsc() );
+    UpdatePreview_Impl( 100, aEscItm.GetProportionalHeight(), aEscItm.GetEsc() );
 }
 
 
@@ -3036,7 +3036,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     {
         const SvxEscapementItem& rItem = static_cast<const SvxEscapementItem&>(rSet->Get( nWhich ));
         nEsc = rItem.GetEsc();
-        nEscProp = rItem.GetProp();
+        nEscProp = rItem.GetProportionalHeight();
 
         if ( nEsc != 0 )
         {
@@ -3273,7 +3273,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     if ( pOld )
     {
         const SvxEscapementItem& rItem = *static_cast<const SvxEscapementItem*>(pOld);
-        if ( rItem.GetEsc() == nEsc && rItem.GetProp() == nEscProp  )
+        if (rItem.GetEsc() == nEsc && rItem.GetProportionalHeight() == nEscProp)
             bChanged = false;
     }
 

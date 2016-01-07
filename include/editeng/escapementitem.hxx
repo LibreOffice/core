@@ -80,13 +80,13 @@ public:
     inline short &GetEsc() { return nEsc; }
     inline short GetEsc() const { return nEsc; }
 
-    inline sal_uInt8 &GetProp() { return nProp; }
-    inline sal_uInt8 GetProp() const { return nProp; }
+    inline sal_uInt8 &GetProportionalHeight() { return nProp; }
+    inline sal_uInt8  GetProportionalHeight() const { return nProp; }
 
     inline SvxEscapementItem& operator=(const SvxEscapementItem& rEsc)
         {
             nEsc  = rEsc.GetEsc();
-            nProp = rEsc.GetProp();
+            nProp = rEsc.GetProportionalHeight();
             return *this;
         }
 

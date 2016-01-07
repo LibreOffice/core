@@ -2068,7 +2068,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
     {
         const SvxEscapementItem& rEsc = static_cast<const SvxEscapementItem&>( rSet.Get( EE_CHAR_ESCAPEMENT ) );
 
-        sal_uInt16 nProp = rEsc.GetProp();
+        sal_uInt16 const nProp = rEsc.GetProportionalHeight();
         rFont.SetPropr( (sal_uInt8)nProp );
 
         short nEsc = rEsc.GetEsc();

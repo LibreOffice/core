@@ -642,7 +642,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             const SvxEscapementItem *pEsc = static_cast<const SvxEscapementItem *>(pItem);
             SetEscapement( pEsc->GetEsc() );
             if( m_aSub[SW_LATIN].IsEsc() )
-                SetProportion( pEsc->GetProp() );
+                SetProportion( pEsc->GetProportionalHeight() );
         }
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_CASEMAP,
             true, &pItem ))
@@ -835,7 +835,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     const SvxEscapementItem &rEsc = pAttrSet->GetEscapement();
     SetEscapement( rEsc.GetEsc() );
     if( m_aSub[SW_LATIN].IsEsc() )
-        SetProportion( rEsc.GetProp() );
+        SetProportion( rEsc.GetProportionalHeight() );
     SetCaseMap( pAttrSet->GetCaseMap().GetCaseMap() );
     SetFixKerning( pAttrSet->GetKerning().GetValue() );
     const SfxPoolItem* pItem;

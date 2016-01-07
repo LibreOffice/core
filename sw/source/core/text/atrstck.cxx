@@ -650,7 +650,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             break;
         case RES_CHRATR_ESCAPEMENT :
             rFnt.SetEscapement( static_cast<const SvxEscapementItem&>(rItem).GetEsc() );
-            rFnt.SetProportion( static_cast<const SvxEscapementItem&>(rItem).GetProp() );
+            rFnt.SetProportion( static_cast<const SvxEscapementItem&>(rItem).GetProportionalHeight() );
             break;
         case RES_CHRATR_FONT :
             rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SW_LATIN );

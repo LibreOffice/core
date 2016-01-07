@@ -731,7 +731,7 @@ void ScExportTest::testRichTextExportODS()
                     continue;
 
                 const SvxEscapementItem* pItem = static_cast<const SvxEscapementItem*>(p);
-                return ((pItem->GetEsc() == nEsc) && (pItem->GetProp() == nRelSize));
+                return ((pItem->GetEsc() == nEsc) && (pItem->GetProportionalHeight() == nRelSize));
             }
             return false;
         }

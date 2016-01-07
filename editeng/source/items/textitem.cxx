@@ -2339,7 +2339,7 @@ SvStream& SvxEscapementItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*
         else if( DFLT_ESC_AUTO_SUB == _nEsc )
             _nEsc = DFLT_ESC_SUB;
     }
-    rStrm.WriteUChar( GetProp() )
+    rStrm.WriteUChar( GetProportionalHeight() )
          .WriteInt16( _nEsc );
     return rStrm;
 }

@@ -265,7 +265,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             aDebStr.append("Escape=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxEscapementItem&>(rItem).GetEsc()));
             aDebStr.append(", ");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxEscapementItem&>(rItem).GetProp()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxEscapementItem&>(rItem).GetProportionalHeight()));
         break;
         case EE_CHAR_PAIRKERNING:
             aDebStr.append("PairKerning=");

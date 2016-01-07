@@ -343,7 +343,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             mpEditEngine->SeekCursor(aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont);
             nEsc = nEsc * 100 / aFont.GetSize().Height();
 
-            SvxEscapementItem aEscItem( (short) nEsc, static_cast<const SvxEscapementItem*>(pItem)->GetProp(), EE_CHAR_ESCAPEMENT );
+            SvxEscapementItem aEscItem( (short) nEsc, static_cast<const SvxEscapementItem*>(pItem)->GetProportionalHeight(), EE_CHAR_ESCAPEMENT );
             rSet.GetAttrSet().Put( aEscItem );
         }
     }

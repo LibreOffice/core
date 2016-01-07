@@ -580,7 +580,7 @@ SET_FONTALIGNMENT:
                     if( DFLT_ESC_AUTO_SUPER == rOld.GetEsc() )
                     {
                         nEs = DFLT_ESC_AUTO_SUB;
-                        nProp = rOld.GetProp();
+                        nProp = rOld.GetProportionalHeight();
                     }
                     else
                     {
@@ -927,7 +927,7 @@ ATTR_SETOVERLINE:
                     if( DFLT_ESC_AUTO_SUB == rOld.GetEsc() )
                     {
                         nEs = DFLT_ESC_AUTO_SUPER;
-                        nProp = rOld.GetProp();
+                        nProp = rOld.GetProportionalHeight();
                     }
                     else
                     {

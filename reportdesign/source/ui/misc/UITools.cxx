@@ -553,7 +553,7 @@ namespace
         {
             const SvxEscapementItem* pFontItem = static_cast<const SvxEscapementItem*>(pItem);
             lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENT, uno::makeAny( pFontItem->GetEsc() ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENTHEIGHT, uno::makeAny( (sal_Int8)pFontItem->GetProp() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENTHEIGHT, uno::makeAny(static_cast<sal_Int8>(pFontItem->GetProportionalHeight())) );
         }
     }
 
