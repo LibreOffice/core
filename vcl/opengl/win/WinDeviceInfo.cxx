@@ -910,10 +910,10 @@ namespace {
 
 OUString getBlacklistFile()
 {
-    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/config/opengl_blacklist_windows.xml");
+    OUString url("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER);
     rtl::Bootstrap::expandMacros(url);
 
-    return url;
+    return url + "/opengl/opengl_blacklist_windows.xml";
 }
 
 
