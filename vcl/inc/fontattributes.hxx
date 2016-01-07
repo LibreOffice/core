@@ -38,44 +38,44 @@ public:
     explicit        ImplFontAttributes( const FontSelectPattern& );
 
     // device independent font functions
-    const OUString& GetFamilyName() const   { return maFamilyName; }
-    FontFamily      GetFamilyType() const   { return meFamily; }
-    const OUString& GetStyleName() const    { return maStyleName; }
+    const OUString& GetFamilyName() const                       { return maFamilyName; }
+    FontFamily      GetFamilyType() const                       { return meFamily; }
+    const OUString& GetStyleName() const                        { return maStyleName; }
 
-    FontWeight      GetWeight() const       { return meWeight; }
-    FontItalic      GetSlantType() const    { return meItalic; }
-    FontPitch       GetPitch() const        { return mePitch; }
-    FontWidth       GetWidthType() const    { return meWidthType; }
+    FontWeight      GetWeight() const                           { return meWeight; }
+    FontItalic      GetSlantType() const                        { return meItalic; }
+    FontPitch       GetPitch() const                            { return mePitch; }
+    FontWidth       GetWidthType() const                        { return meWidthType; }
 
-    bool            IsSymbolFont() const    { return mbSymbolFlag; }
+    bool            IsSymbolFont() const                        { return mbSymbolFlag; }
 
     void            SetFamilyName(const OUString& sFamilyName)  { maFamilyName = sFamilyName; }
     void            SetStyleName( const OUString& sStyleName)   { maStyleName = sStyleName; }
     void            SetFamilyType(const FontFamily eFontFamily) { meFamily = eFontFamily; }
 
-    void            SetPitch(const FontPitch ePitch )          { mePitch = ePitch; }
-    void            SetItalic(const FontItalic eItalic )       { meItalic = eItalic; }
-    void            SetWeight(const FontWeight eWeight )       { meWeight = eWeight; }
-    void            SetWidthType(const FontWidth eWidthType)   { meWidthType = eWidthType; }
+    void            SetPitch(const FontPitch ePitch )           { mePitch = ePitch; }
+    void            SetItalic(const FontItalic eItalic )        { meItalic = eItalic; }
+    void            SetWeight(const FontWeight eWeight )        { meWeight = eWeight; }
+    void            SetWidthType(const FontWidth eWidthType)    { meWidthType = eWidthType; }
 
-    void            SetSymbolFlag(const bool bSymbolFlag )     { mbSymbolFlag = bSymbolFlag; }
+    void            SetSymbolFlag(const bool bSymbolFlag )      { mbSymbolFlag = bSymbolFlag; }
 
     bool            CompareDeviceIndependentFontAttributes(const ImplFontAttributes& rOther) const;
 
     // Device dependent functions
-    int             GetQuality() const      { return mnQuality; }
-    OUString        GetMapNames() const     { return maMapNames; }
+    int             GetQuality() const                          { return mnQuality; }
+    OUString        GetMapNames() const                         { return maMapNames; }
 
-    bool            IsBuiltInFont() const   { return mbDevice; }
-    bool            CanEmbed() const        { return mbEmbeddable; }
-    bool            CanSubset() const       { return mbSubsettable; }
-    bool            CanRotate() const       { return mbOrientation; }
-    bool            HasMapNames() const     { return (maMapNames.getLength() > 0); }
+    bool            IsBuiltInFont() const                       { return mbDevice; }
+    bool            CanEmbed() const                            { return mbEmbeddable; }
+    bool            CanSubset() const                           { return mbSubsettable; }
+    bool            CanRotate() const                           { return mbOrientation; }
+    bool            HasMapNames() const                         { return (maMapNames.getLength() > 0); }
 
     void            SetQuality( int nQuality )                  { mnQuality = nQuality; }
     void            IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
     void            DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
-    void            SetMapNames( OUString const & aMapNames ) { maMapNames = aMapNames; }
+    void            SetMapNames( OUString const & aMapNames )   { maMapNames = aMapNames; }
     void            AddMapName( OUString const & aMapName )
                     {
                         if( maMapNames.getLength() > 0 )
@@ -100,66 +100,66 @@ public:
     // Font metrics below
 
     // font instance attributes from the font request
-    long            GetWidth()              { return mnWidth; }
-    short           GetOrientation()        { return mnOrientation; }
+    long            GetWidth()                                  { return mnWidth; }
+    short           GetOrientation()                            { return mnOrientation; }
 
-    void            SetWidth(long nWidth)   { mnWidth=nWidth; }
-    void            SetOrientation(short nOrientation) { mnOrientation=nOrientation; }
+    void            SetWidth(long nWidth)                       { mnWidth=nWidth; }
+    void            SetOrientation(short nOrientation)          { mnOrientation=nOrientation; }
 
     // font metrics measured for the font instance
-    long            GetAscent()             { return mnAscent; }
-    long            GetDescent()            { return mnDescent; }
-    long            GetInternalLeading()    { return mnIntLeading; }
-    long            GetExternalLeading()    { return mnExtLeading; }
-    int             GetSlant()              { return mnSlant; }
-    long            GetMinKashida()         { return mnMinKashida; }
+    long            GetAscent()                                 { return mnAscent; }
+    long            GetDescent()                                { return mnDescent; }
+    long            GetInternalLeading()                        { return mnIntLeading; }
+    long            GetExternalLeading()                        { return mnExtLeading; }
+    int             GetSlant()                                  { return mnSlant; }
+    long            GetMinKashida()                             { return mnMinKashida; }
 
-    void            SetAscent(long nAscent) { mnAscent=nAscent; }
-    void            SetDescent(long nDescent) { mnDescent=nDescent; }
-    void            SetInternalLeading(long nIntLeading) { mnIntLeading = nIntLeading; }
-    void            SetExternalLeading(long nExtLeading) { mnExtLeading = nExtLeading; }
-    void            SetSlant(int nSlant)    { mnSlant=nSlant; }
-    void            SetMinKashida( long nMinKashida ) { mnMinKashida=nMinKashida; }
+    void            SetAscent(long nAscent)                     { mnAscent=nAscent; }
+    void            SetDescent(long nDescent)                   { mnDescent=nDescent; }
+    void            SetInternalLeading(long nIntLeading)        { mnIntLeading = nIntLeading; }
+    void            SetExternalLeading(long nExtLeading)        { mnExtLeading = nExtLeading; }
+    void            SetSlant(int nSlant)                        { mnSlant=nSlant; }
+    void            SetMinKashida( long nMinKashida )           { mnMinKashida=nMinKashida; }
 
     // font attributes queried from the font instance
-    bool            IsScalable()            { return mbScalableFont; }
-    bool            IsTrueTypeFont()        { return mbTrueTypeFont; }
-    bool            IsKernable()            { return mbKernableFont; }
-    bool            IsFullstopCentered()    { return mbFullstopCentered; }
-    long            GetBulletOffset()       { return mnBulletOffset; }
+    bool            IsScalable()                                { return mbScalableFont; }
+    bool            IsTrueTypeFont()                            { return mbTrueTypeFont; }
+    bool            IsKernable()                                { return mbKernableFont; }
+    bool            IsFullstopCentered()                        { return mbFullstopCentered; }
+    long            GetBulletOffset()                           { return mnBulletOffset; }
 
-    void            SetScalableFlag(bool bScalable) { mbScalableFont = bScalable; }
-    void            SetTrueTypeFlag(bool bTrueTypeFont) { mbTrueTypeFont = bTrueTypeFont; }
-    void            SetKernableFlag(bool bKernable) { mbKernableFont = bKernable; }
+    void            SetScalableFlag(bool bScalable)             { mbScalableFont = bScalable; }
+    void            SetTrueTypeFlag(bool bTrueTypeFont)         { mbTrueTypeFont = bTrueTypeFont; }
+    void            SetKernableFlag(bool bKernable)             { mbKernableFont = bKernable; }
     void            SetFullstopCenteredFlag(bool bFullstopCentered) { mbFullstopCentered = bFullstopCentered; }
-    void            SetBulletOffset(long nBulletOffset) { mnBulletOffset = nBulletOffset; }
+    void            SetBulletOffset(long nBulletOffset)         { mnBulletOffset = nBulletOffset; }
 
     // font metrics that are usually derived from the measurements
-    long            GetUnderlineSize()                  { return mnUnderlineSize; }
-    long            GetUnderlineOffset()                { return mnUnderlineOffset; }
-    long            GetBoldUnderlineSize()              { return mnBUnderlineSize; }
-    long            GetBoldUnderlineOffset()            { return mnBUnderlineOffset; }
-    long            GetDoubleUnderlineSize()            { return mnDUnderlineSize; }
-    long            GetDoubleUnderlineOffset1()         { return mnDUnderlineOffset1; }
-    long            GetDoubleUnderlineOffset2()         { return mnDUnderlineOffset2; }
-    long            GetWavelineUnderlineSize()          { return mnWUnderlineSize; }
-    long            GetWavelineUnderlineOffset()        { return mnWUnderlineOffset; }
-    long            GetAboveUnderlineSize()             { return mnAboveUnderlineSize; }
-    long            GetAboveUnderlineOffset()           { return mnAboveUnderlineOffset; }
-    long            GetAboveBoldUnderlineSize()         { return mnAboveBUnderlineSize; }
-    long            GetAboveBoldUnderlineOffset()       { return mnAboveBUnderlineOffset; }
-    long            GetAboveDoubleUnderlineSize()       { return mnAboveDUnderlineSize; }
-    long            GetAboveDoubleUnderlineOffset1()    { return mnAboveDUnderlineOffset1; }
-    long            GetAboveDoubleUnderlineOffset2()    { return mnAboveDUnderlineOffset2; }
-    long            GetAboveWavelineUnderlineSize()     { return mnAboveWUnderlineSize; }
-    long            GetAboveWavelineUnderlineOffset()   { return mnAboveWUnderlineOffset; }
-    long            GetStrikeoutSize()                  { return mnStrikeoutSize; }
-    long            GetStrikeoutOffset()                { return mnStrikeoutOffset; }
-    long            GetBoldStrikeoutSize()              { return mnBStrikeoutSize; }
-    long            GetBoldStrikeoutOffset()            { return mnBStrikeoutOffset; }
-    long            GetDoubleStrikeoutSize()            { return mnDStrikeoutSize; }
-    long            GetDoubleStrikeoutOffset1()         { return mnDStrikeoutOffset1; }
-    long            GetDoubleStrikeoutOffset2()         { return mnDStrikeoutOffset2; }
+    long            GetUnderlineSize()                          { return mnUnderlineSize; }
+    long            GetUnderlineOffset()                        { return mnUnderlineOffset; }
+    long            GetBoldUnderlineSize()                      { return mnBUnderlineSize; }
+    long            GetBoldUnderlineOffset()                    { return mnBUnderlineOffset; }
+    long            GetDoubleUnderlineSize()                    { return mnDUnderlineSize; }
+    long            GetDoubleUnderlineOffset1()                 { return mnDUnderlineOffset1; }
+    long            GetDoubleUnderlineOffset2()                 { return mnDUnderlineOffset2; }
+    long            GetWavelineUnderlineSize()                  { return mnWUnderlineSize; }
+    long            GetWavelineUnderlineOffset()                { return mnWUnderlineOffset; }
+    long            GetAboveUnderlineSize()                     { return mnAboveUnderlineSize; }
+    long            GetAboveUnderlineOffset()                   { return mnAboveUnderlineOffset; }
+    long            GetAboveBoldUnderlineSize()                 { return mnAboveBUnderlineSize; }
+    long            GetAboveBoldUnderlineOffset()               { return mnAboveBUnderlineOffset; }
+    long            GetAboveDoubleUnderlineSize()               { return mnAboveDUnderlineSize; }
+    long            GetAboveDoubleUnderlineOffset1()            { return mnAboveDUnderlineOffset1; }
+    long            GetAboveDoubleUnderlineOffset2()            { return mnAboveDUnderlineOffset2; }
+    long            GetAboveWavelineUnderlineSize()             { return mnAboveWUnderlineSize; }
+    long            GetAboveWavelineUnderlineOffset()           { return mnAboveWUnderlineOffset; }
+    long            GetStrikeoutSize()                          { return mnStrikeoutSize; }
+    long            GetStrikeoutOffset()                        { return mnStrikeoutOffset; }
+    long            GetBoldStrikeoutSize()                      { return mnBStrikeoutSize; }
+    long            GetBoldStrikeoutOffset()                    { return mnBStrikeoutOffset; }
+    long            GetDoubleStrikeoutSize()                    { return mnDStrikeoutSize; }
+    long            GetDoubleStrikeoutOffset1()                 { return mnDStrikeoutOffset1; }
+    long            GetDoubleStrikeoutOffset2()                 { return mnDStrikeoutOffset2; }
 
 
     void            ImplInitTextLineSize( const OutputDevice* pDev );
