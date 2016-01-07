@@ -62,21 +62,19 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/imageManager/_XUIConfigurationPersistence \
     framework/qa/complex/imageManager/_XUIConfiguration \
     framework/qa/complex/api_internal/CheckAPI \
+	framework/qa/complex/dispatches/checkdispatchapi \
     framework/qa/complex/dispatches/Interceptor \
     framework/qa/complex/ModuleManager/CheckXModuleManager \
 ))
 
-# does not build
-#	framework/qa/complex/dispatches/checkdispatchapi \
-
 $(eval $(call gb_JunitTest_add_classes,framework_complex,\
+    complex.dispatches.checkdispatchapi \
 ))
 # these were disabled in the old build system too, please check
 # carefully before reenabling
 #	complex.ModuleManager.CheckXModuleManager \
     complex.XUserInputInterception.EventTest \
     complex.accelerators.AcceleratorsConfigurationTest \
-    complex.dispatches.checkdispatchapi \
     complex.api_internal.CheckAPI \
     complex.broken_document.LoadDocument \
     complex.desktop.DesktopTerminate \
