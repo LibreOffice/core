@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_417e3ee5",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-01-07T12:14:03Z",
+      "side": 1,
+      "message": "Not sure if a . as accelerator is a good idea",
+      "revId": "81593fa771e969cc03fac2d89284645027e21d72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
