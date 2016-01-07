@@ -364,7 +364,25 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.Tell() );
     OUStringBuffer aStrBuffer;
     ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
-    rOUString = aMimeType + ";base64," + aStrBuffer.makeStringAndClear();
+    OUString aEncodedBase64Image = aStrBuffer.makeStringAndClear();
+    if( aLink.GetType() == GFX_LINK_TYPE_NATIVE_SVG )
+    {
+      sal_Int32 ite(8);
+      sal_Int32 nBufferLength(aOStmSeq.getLength());
+      const sal_Int8* pBuffer = aOStmSeq.getConstArray();
+      css::uno::Sequence<sal_Int8> newTempSeq = aOStmSeq;        // creates new Sequence to remove front 8 bits of garbage and encodes in base64
+      sal_Int8 *pOutBuffer = newTempSeq.getArray();
+      while(ite < nBufferLength)
+      {
+        *pOutBuffer++ = pBuffer[ite];
+        ite++;
+      }
+      ::sax::Converter::encodeBase64(aStrBuffer, newTempSeq);
+      aEncodedBase64Image = aStrBuffer.makeStringAndClear();
+      sal_Int32 SVGFixLength = aEncodedBase64Image.getLength();
+      aEncodedBase64Image = aEncodedBase64Image.replaceAt(SVGFixLength - 12, SVGFixLength, "") + "PC9zdmc+Cg=="; // removes rear 12 bits of garbage and adds svg closing tag in base64
+    }
+    rOUString = aMimeType + ";base64," + aEncodedBase64Image;
     return true;
 }
 
