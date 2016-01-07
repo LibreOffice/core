@@ -7,12 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/testdllapi.hxx>
+#include <vcl/dllapi.h>
 
 class UITEST_DLLPUBLIC UITest
 {
 public:
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,7 +12,7 @@
 #include <memory>
 
 #include <vcl/window.hxx>
-#include <test/testdllapi.hxx>
+#include <vcl/dllapi.h>
 
 enum class UIObjectType
 {
