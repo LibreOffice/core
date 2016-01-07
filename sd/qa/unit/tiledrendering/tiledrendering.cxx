@@ -73,7 +73,7 @@ public:
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchAll);
-    CPPUNIT_TEST(testSearchAllSelections);
+    //CPPUNIT_TEST(testSearchAllSelections);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
