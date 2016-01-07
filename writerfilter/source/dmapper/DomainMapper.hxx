@@ -104,7 +104,7 @@ public:
     css::uno::Reference<css::lang::XMultiServiceFactory> GetTextFactory() const;
     css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
-    OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
+    OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
     std::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
     GraphicZOrderHelper* graphicZOrderHelper();
 
