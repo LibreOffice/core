@@ -2590,7 +2590,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd
         if ( pAttr )
         {
             // Remove attribute....
-            rAttrList.Release(pAttr);
+            rAttrList.Remove(pAttr);
         }
 
         // check whether 'the same' attribute exist at this place.
@@ -2916,16 +2916,6 @@ void CharAttribList::Remove(sal_Int32 nPos)
         return;
 
     aAttribs.erase(aAttribs.begin()+nPos);
-}
-
-void CharAttribList::Release(const EditCharAttrib* p)
-{
-    AttribsType::iterator it = std::find_if(aAttribs.begin(), aAttribs.end(), FindByAddress(p));
-    if (it != aAttribs.end())
-    {
-        it->release();
-        aAttribs.erase(it);
-    }
 }
 
 void CharAttribList::SetHasEmptyAttribs(bool b)
