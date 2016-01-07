@@ -21,13 +21,17 @@
 #define INCLUDED_VCL_INC_FONTSELECT_HXX
 
 #include <vcl/dllapi.h>
+
 #include "fontattributes.hxx"
+#include "fontentry.hxx"
 
 #include <unordered_map>
 
 class PhysicalFontFace;
 class ImplFontEntry;
 class ImplFontCache;
+class ImplFontAttributes;
+class FontSelectPattern;
 namespace vcl { class Font; }
 class ConvertChar;
 class OutputDevice;

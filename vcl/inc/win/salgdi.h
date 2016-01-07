@@ -20,15 +20,16 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALGDI_H
 #define INCLUDED_VCL_INC_WIN_SALGDI_H
 
+#include <vcl/fontcapabilities.hxx>
+#include <vcl/fontcharmap.hxx>
+
 #include "sallayout.hxx"
 #include "salgeom.hxx"
 #include "salgdi.hxx"
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
-#include <vcl/fontcapabilities.hxx>
-#include <vcl/fontcharmap.hxx>
 
 #include <memory>
 #include <unordered_set>

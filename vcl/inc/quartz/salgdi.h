@@ -21,8 +21,9 @@
 #define INCLUDED_VCL_INC_QUARTZ_SALGDI_H
 
 #include <vector>
+#include <unordered_map>
 
-#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include "premac.h"
 #ifdef MACOSX
@@ -38,12 +39,11 @@
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/metric.hxx>
 
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "PhysicalFontFace.hxx"
 #include "salgdi.hxx"
 
 #include "quartz/salgdicommon.hxx"
-#include <unordered_map>
 
 class AquaSalFrame;
 class ImplFontAttributes;

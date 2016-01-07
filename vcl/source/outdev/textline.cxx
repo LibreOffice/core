@@ -31,6 +31,7 @@
 #include "salgdi.hxx"
 #include "impfont.hxx"
 #include "outdata.hxx"
+#include "fontentry.hxx"
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE

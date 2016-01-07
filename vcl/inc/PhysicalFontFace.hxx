@@ -22,7 +22,7 @@
 
 #include <vcl/dllapi.h>
 
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
 #include "fontselect.hxx"
 
@@ -30,6 +30,7 @@ class ImplFontEntry;
 struct FontMatchStatus;
 class FontSelectPattern;
 class PhysicalFontFamily;
+class ImplFontAttributes;
 
 struct FontMatchStatus
 {

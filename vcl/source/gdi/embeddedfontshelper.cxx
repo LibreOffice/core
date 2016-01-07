@@ -17,7 +17,6 @@
 
 #include "fontsubset.hxx"
 #include "outdev.h"
-#include "outfont.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "salgdi.hxx"
 #include "sft.hxx"

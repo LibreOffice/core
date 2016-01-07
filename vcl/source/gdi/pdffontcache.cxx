@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 
-#include "outfont.hxx"
 #include "PhysicalFontFace.hxx"
 #include "salgdi.hxx"
 #include "sallayout.hxx"

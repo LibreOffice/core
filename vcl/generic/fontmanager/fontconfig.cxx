@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fontcache.hxx"
-#include "impfont.hxx"
-#include "fontmanager.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/wrkwin.hxx>
-#include "outfont.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
+
+#include "fontcache.hxx"
+#include "impfont.hxx"
+#include "fontmanager.hxx"
 
 using namespace psp;
 

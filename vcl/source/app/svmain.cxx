@@ -24,26 +24,38 @@
 #include <osl/file.hxx>
 #include <osl/signal.h>
 
-#include "tools/debug.hxx"
-#include "tools/resmgr.hxx"
+#include <tools/debug.hxx>
+#include <tools/resmgr.hxx>
 
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
-#include "unotools/syslocaleoptions.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/wrkwin.hxx"
-#include "vcl/cvtgrf.hxx"
-#include "vcl/scheduler.hxx"
-#include "vcl/image.hxx"
-#include "vcl/implimagetree.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/unowrap.hxx"
-#include "vcl/commandinfoprovider.hxx"
-#include "vcl/configsettings.hxx"
-#include "vcl/lazydelete.hxx"
-#include "vcl/embeddedfontshelper.hxx"
-#include "vcl/debugevent.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/svmain.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <vcl/scheduler.hxx>
+#include <vcl/image.hxx>
+#include <vcl/implimagetree.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/unowrap.hxx>
+#include <vcl/commandinfoprovider.hxx>
+#include <vcl/configsettings.hxx>
+#include <vcl/lazydelete.hxx>
+#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/debugevent.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
+#include <osl/process.h>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+
+#include <cppuhelper/implbase.hxx>
+#include <uno/current_context.hxx>
+#include <unotools/syslocaleoptions.hxx>
+
+#include <opengl/zone.hxx>
+#include <opengl/watchdog.hxx>
 #ifdef WNT
 #include <svsys.h>
 #include <process.h>
@@ -58,12 +70,10 @@
 #include "salinst.hxx"
 #include "salwtype.hxx"
 #include "svdata.hxx"
-#include "vcl/svmain.hxx"
 #include "dbggui.hxx"
 #include "accmgr.hxx"
 #include "idlemgr.hxx"
 #include "outdev.h"
-#include "outfont.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "print.h"
 #include "salgdi.hxx"
@@ -72,22 +82,9 @@
 #include "salimestatus.hxx"
 #include "xconnection.hxx"
 
-#include "vcl/opengl/OpenGLContext.hxx"
-
-#include "osl/process.h"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/frame/Desktop.hpp"
-
-#include <cppuhelper/implbase.hxx>
-#include "uno/current_context.hxx"
-
-#include "opengl/zone.hxx"
-#include "opengl/watchdog.hxx"
-
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 #endif
 
 using namespace ::com::sun::star;

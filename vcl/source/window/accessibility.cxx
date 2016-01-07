@@ -21,41 +21,41 @@
 
 #include <i18nlangtag/mslangid.hxx>
 
-#include "tools/time.hxx"
-#include "tools/debug.hxx"
-#include "tools/rc.h"
+#include <tools/time.hxx>
+#include <tools/debug.hxx>
+#include <tools/rc.h>
 
-#include "unotools/fontcfg.hxx"
-#include "unotools/confignode.hxx"
+#include <unotools/fontcfg.hxx>
+#include <unotools/confignode.hxx>
 
-#include "vcl/layout.hxx"
-#include "vcl/salgtype.hxx"
-#include "vcl/event.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/help.hxx"
-#include "vcl/cursor.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/window.hxx"
-#include "vcl/syswin.hxx"
-#include "vcl/syschild.hxx"
-#include "vcl/dockwin.hxx"
-#include "vcl/menu.hxx"
-#include "vcl/wrkwin.hxx"
-#include "vcl/wall.hxx"
-#include "vcl/gradient.hxx"
-#include "vcl/button.hxx"
-#include "vcl/taskpanelist.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/unowrap.hxx"
-#include "vcl/gdimtf.hxx"
-#include "vcl/pdfextoutdevdata.hxx"
-#include "vcl/popupmenuwindow.hxx"
-#include "vcl/lazydelete.hxx"
-#include "vcl/virdev.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/layout.hxx>
+#include <vcl/salgtype.hxx>
+#include <vcl/event.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/help.hxx>
+#include <vcl/cursor.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
+#include <vcl/syswin.hxx>
+#include <vcl/syschild.hxx>
+#include <vcl/dockwin.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/wall.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/button.hxx>
+#include <vcl/taskpanelist.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/unowrap.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/popupmenuwindow.hxx>
+#include <vcl/lazydelete.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
 
 // declare system types in sysdata.hxx
-#include "vcl/sysdata.hxx"
+#include <vcl/sysdata.hxx>
 
 #include "salframe.hxx"
 #include "salobj.hxx"
@@ -63,7 +63,6 @@
 #include "salgdi.hxx"
 #include "svdata.hxx"
 #include "dbggui.hxx"
-#include "outfont.hxx"
 #include "window.h"
 #include "toolbox.h"
 #include "outdev.h"

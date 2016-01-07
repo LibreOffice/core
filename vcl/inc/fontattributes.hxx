@@ -27,6 +27,7 @@
 #include <vcl/vclenum.hxx>
 
 #include "fontselect.hxx"
+#include "fontentry.hxx"
 
 class OutputDevice;
 class FontSelectPattern;

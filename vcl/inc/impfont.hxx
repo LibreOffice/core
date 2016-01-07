@@ -27,11 +27,12 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/fntstyle.hxx>
-#include <outfont.hxx>
+#include <vcl/font.hxx>
 
 #include <boost/intrusive_ptr.hpp>
 
 class ImplFontCharMap;
+class OutputDevice;
 typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
 
 // - Impl_Font -

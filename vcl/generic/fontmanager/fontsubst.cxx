@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
+#include <vcl/sysdata.hxx>
+#include <unotools/fontdefs.hxx>
+
 #include "generic/geninst.h"
 #include "generic/genpspgraphics.h"
 #include "generic/glyphcache.hxx"
-
-#include "vcl/sysdata.hxx"
-#include "outfont.hxx"
-
 #include "generic/printergfx.hxx"
 #include "salbmp.hxx"
 #include "impfont.hxx"
@@ -32,7 +32,6 @@
 #include "fontsubset.hxx"
 #include "salprn.hxx"
 
-#include <unotools/fontdefs.hxx>
 #include <list>
 
 // platform specific font substitution hooks

@@ -35,15 +35,14 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/settings.hxx>
 
-#include <window.h>
-#include <outfont.hxx>
-#include <outdev.h>
-#include <svdata.hxx>
-#include <impbmp.hxx>
-#include <salbmp.hxx>
-#include <salgdi.hxx>
-#include <salframe.hxx>
-#include <scrwnd.hxx>
+#include "window.h"
+#include "outdev.h"
+#include "svdata.hxx"
+#include "impbmp.hxx"
+#include "salbmp.hxx"
+#include "salgdi.hxx"
+#include "salframe.hxx"
+#include "scrwnd.hxx"
 
 using namespace com::sun::star;
 

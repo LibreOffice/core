@@ -18,13 +18,13 @@
  */
 
 #include <sal/types.h>
-
 #include <tools/fontenum.hxx>
 
-#include "outfont.hxx"
 #include "fontattributes.hxx"
-
+#include "fontselect.hxx"
 #include "PhysicalFontFace.hxx"
+
+class FontSelectPattern;
 
 PhysicalFontFace::PhysicalFontFace( const ImplFontAttributes& rDFA )
     : ImplFontAttributes( rDFA )

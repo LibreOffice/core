@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unotools/fontcfg.hxx"
+#include <sal/macros.h>
 
-#include "tools/stream.hxx"
-#include "tools/vcompat.hxx"
-#include "tools/debug.hxx"
+#include <unotools/fontcfg.hxx>
+
+#include <tools/stream.hxx>
+#include <tools/vcompat.hxx>
+#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 
-#include "vcl/font.hxx"
+#include <vcl/font.hxx>
 
 #include "impfont.hxx"
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
 #include "sft.hxx"
-
-#include <sal/macros.h>
 
 #include <algorithm>
 

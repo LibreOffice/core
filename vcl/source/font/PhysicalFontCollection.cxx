@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-
 #include <vector>
 
+#include <sal/types.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/debug.hxx>
@@ -32,7 +31,6 @@
 
 #include "magic.h"
 #include "outdev.h"
-#include "outfont.hxx"
 #include "fontattributes.hxx"
 #include "PhysicalFontFace.hxx"
 

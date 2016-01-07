@@ -27,14 +27,15 @@
 #include FT_GLYPH_H
 
 #include <basebmp/bitmapdevice.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/metric.hxx>
 
-#include <outfont.hxx>
-#include <sallayout.hxx>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
+#include "sallayout.hxx"
 
 #include <unordered_map>
 
