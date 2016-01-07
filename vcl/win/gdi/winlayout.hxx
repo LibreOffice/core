@@ -68,6 +68,51 @@ public:
     WinFontInstance&   mrWinFontEntry;
 };
 
+class SimpleWinLayout : public WinLayout
+{
+public:
+                    SimpleWinLayout(HDC, BYTE nCharSet, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
+    virtual         ~SimpleWinLayout();
+
+    virtual bool    LayoutText( ImplLayoutArgs& ) override;
+    virtual void    AdjustLayout( ImplLayoutArgs& ) override;
+    virtual bool    DrawTextImpl(HDC hDC, const Rectangle* pRectToErase, Point* pPos, int* pGetNextGlypInfo) const override;
+
+    virtual bool    CacheGlyphs(SalGraphics& rGraphics) const override;
+    virtual bool    DrawCachedGlyphs(SalGraphics& rGraphics) const override;
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+                                   DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
+                                   const PhysicalFontFace** pFallbackFonts = NULL ) const override;
+
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
+
+    // for glyph+font+script fallback
+    virtual void    MoveGlyph( int nStart, long nNewXPos ) override;
+    virtual void    DropGlyph( int nStart ) override;
+    virtual void    Simplify( bool bIsBase ) override;
+
+protected:
+    void            Justify( DeviceCoordinate nNewWidth );
+    void            ApplyDXArray( const ImplLayoutArgs& );
+
+private:
+    int             mnGlyphCount;
+    int             mnCharCount;
+    WCHAR*          mpOutGlyphs;
+    int*            mpGlyphAdvances;    // if possible this is shared with mpGlyphAdvances[]
+    int*            mpGlyphOrigAdvs;
+    int*            mpCharWidths;       // map rel char pos to char width
+    int*            mpChars2Glyphs;     // map rel char pos to abs glyph pos
+    int*            mpGlyphs2Chars;     // map abs glyph pos to abs char pos
+    bool*           mpGlyphRTLFlags;    // BiDi status for glyphs: true=>RTL
+    mutable long    mnWidth;
+
+    int             mnNotdefWidth;
+    BYTE            mnCharSet;
+};
+
 class UniscribeLayout : public WinLayout
 {
 public:
