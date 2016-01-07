@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_214fbabe",
+        "filename": "starmath/source/rect.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-01-07T12:32:10Z",
+      "side": 0,
+      "message": "What\u0027s wrong with these default cases?",
+      "revId": "6cf667cc94262b563869e851b01c3c49fe98c6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
