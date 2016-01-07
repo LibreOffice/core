@@ -2280,6 +2280,34 @@ bool SwPageFrm::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rCon
     return false;
 }
 
+void SwPageFrm::HandleWhitespaceHiddenDiff(SwTwips& nDiff)
+{
+    SwViewShell* pShell = getRootFrm()->GetCurrShell();
+    if (pShell && pShell->GetViewOptions()->IsWhitespaceHidden())
+    {
+        // When whitespace is hidden, the page frame has two heights: the
+        // nominal (defined by the frame format), and the actual (which is
+        // at most the nominal height, but can be smaller in case there is
+        // no content for the whole page).
+        // The layout size is the actual one, but we want to move the
+        // content frame to a new page only in case it doesn't fit the
+        // nominal size.
+        if (nDiff < 0)
+        {
+            // Content frame doesn't fit the actual size, check if it fits the nominal one.
+            const SwFrameFormat* pPageFormat = static_cast<const SwFrameFormat*>(GetRegisteredIn());
+            const Size& rPageSize = pPageFormat->GetFrmSize().GetSize();
+            long nWhitespace = rPageSize.getHeight() - Frm().Height();
+            if (nWhitespace > -nDiff)
+            {
+                // It does: don't move it and invalidate our page frame so
+                // that it gets a larger height.
+                nDiff = 0;
+            }
+        }
+    }
+}
+
 SwTextGridItem const* GetGridItem(SwPageFrm const*const pPage)
 {
     if (pPage && pPage->HasGrid())

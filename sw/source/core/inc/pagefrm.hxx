@@ -339,6 +339,9 @@ public:
     static const vcl::Font& GetEmptyPageFont();
 
     static SwTwips GetSidebarBorderWidth( const SwViewShell* );
+
+    /// Adjust a bottom-of-page-frame - bottom-of-text-frame difference in case whitespace is hidden.
+    void HandleWhitespaceHiddenDiff(SwTwips& nDiff);
 };
 
 inline SwContentFrm *SwPageFrm::FindFirstBodyContent()
