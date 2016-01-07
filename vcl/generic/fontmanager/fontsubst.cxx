@@ -42,7 +42,7 @@ class FcPreMatchSubstitution
 {
 public:
     bool FindFontSubstitute( FontSelectPattern& ) const override;
-    typedef ::std::pair<FontSelectPatternAttributes, FontSelectPatternAttributes> value_type;
+    typedef ::std::pair<FontSelectPattern, FontSelectPattern> value_type;
 private:
     typedef ::std::list<value_type> CachedFontMapType;
     mutable CachedFontMapType maCachedFontMap;
@@ -132,9 +132,9 @@ namespace
     class equal
     {
     private:
-        const FontSelectPatternAttributes& mrAttributes;
+        const FontSelectPattern& mrAttributes;
     public:
-        explicit equal(const FontSelectPatternAttributes& rAttributes)
+        explicit equal(const FontSelectPattern& rAttributes)
             : mrAttributes(rAttributes)
         {
         }
@@ -157,7 +157,7 @@ bool FcPreMatchSubstitution::FindFontSubstitute( FontSelectPattern &rFontSelData
     //different fonts depending on fontsize, bold, etc settings so don't cache
     //just on the name, cache map all the input and all the output not just map
     //from original selection to output fontname
-    FontSelectPatternAttributes& rPatternAttributes = rFontSelData;
+    FontSelectPattern& rPatternAttributes = rFontSelData;
     CachedFontMapType &rCachedFontMap = const_cast<CachedFontMapType &>(maCachedFontMap);
     CachedFontMapType::iterator itr = std::find_if(rCachedFontMap.begin(), rCachedFontMap.end(), equal(rPatternAttributes));
     if (itr != rCachedFontMap.end())
