@@ -28,13 +28,13 @@
 class GraphiteFaceWrapper;
 #endif
 
-// FtFontFile has the responsibility that a font file is only mapped once.
+// FreetypeFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped
 // in up to nTTC*nSizes*nOrientation*nSynthetic times
-class FtFontFile
+class FreetypeFontFile
 {
 public:
-    static FtFontFile*      FindFontFile( const OString& rNativeFileName );
+    static FreetypeFontFile*      FindFontFile( const OString& rNativeFileName );
 
     bool                    Map();
     void                    Unmap();
@@ -45,7 +45,7 @@ public:
     int                     GetLangBoost() const { return mnLangBoost; }
 
 private:
-    explicit                FtFontFile( const OString& rNativeFileName );
+    explicit                FreetypeFontFile( const OString& rNativeFileName );
 
     const OString    maNativeFileName;
     unsigned char*   mpFileMap;
@@ -54,14 +54,14 @@ private:
     int                     mnLangBoost;
 };
 
-// FtFontInfo corresponds to an unscaled font face
-class FtFontInfo
+// FreetypeFontInfo corresponds to an unscaled font face
+class FreetypeFontInfo
 {
 public:
-                           FtFontInfo( const ImplFontAttributes&,
+                           FreetypeFontInfo( const ImplFontAttributes&,
                                const OString& rNativeFileName,
                                int nFaceNum, sal_IntPtr nFontId);
-                          ~FtFontInfo();
+                          ~FreetypeFontInfo();
 
     const unsigned char*  GetTable( const char*, sal_uLong* pLength=nullptr ) const;
 
@@ -86,7 +86,7 @@ public:
 
 private:
     FT_FaceRec_*    maFaceFT;
-    FtFontFile*     mpFontFile;
+    FreetypeFontFile*     mpFontFile;
     const int       mnFaceNum;
     int             mnRefCount;
 #if ENABLE_GRAPHITE
@@ -108,7 +108,7 @@ private:
 
 // these two inlines are very important for performance
 
-inline int FtFontInfo::GetGlyphIndex( sal_UCS4 cChar ) const
+inline int FreetypeFontInfo::GetGlyphIndex( sal_UCS4 cChar ) const
 {
     if( !mpChar2Glyph )
         return -1;
@@ -118,7 +118,7 @@ inline int FtFontInfo::GetGlyphIndex( sal_UCS4 cChar ) const
     return it->second;
 }
 
-inline void FtFontInfo::CacheGlyphIndex( sal_UCS4 cChar, int nIndex ) const
+inline void FreetypeFontInfo::CacheGlyphIndex( sal_UCS4 cChar, int nIndex ) const
 {
     if( !mpChar2Glyph )
         InitHashes();
@@ -140,7 +140,7 @@ public:
     ServerFont* CreateFont( const FontSelectPattern& );
 
 private:
-    typedef std::unordered_map<sal_IntPtr,FtFontInfo*> FontList;
+    typedef std::unordered_map<sal_IntPtr,FreetypeFontInfo*> FontList;
     FontList            maFontList;
 
     sal_IntPtr          mnMaxFontId;
@@ -149,14 +149,14 @@ private:
 class ImplFTSFontData : public PhysicalFontFace
 {
 private:
-    FtFontInfo*             mpFtFontInfo;
+    FreetypeFontInfo*             mpFreetypeFontInfo;
 
 public:
-                            ImplFTSFontData( FtFontInfo*, const ImplFontAttributes& );
+                            ImplFTSFontData( FreetypeFontInfo*, const ImplFontAttributes& );
 
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const override;
     virtual PhysicalFontFace* Clone() const override   { return new ImplFTSFontData( *this ); }
-    virtual sal_IntPtr      GetFontId() const override { return mpFtFontInfo->GetFontId(); }
+    virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 };
 
 #endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX

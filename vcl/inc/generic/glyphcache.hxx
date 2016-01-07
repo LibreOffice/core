@@ -39,7 +39,7 @@
 #include <unordered_map>
 
 class FreetypeManager;
-class FtFontInfo;
+class FreetypeFontInfo;
 class GlyphData;
 class GraphiteFaceWrapper;
 class FontConfigFontOptions;
@@ -147,7 +147,7 @@ private:
 class VCL_DLLPUBLIC ServerFont
 {
 public:
-                            ServerFont( const FontSelectPattern&, FtFontInfo* );
+                            ServerFont( const FontSelectPattern&, FreetypeFontInfo* );
     virtual                 ~ServerFont();
 
     const OString&          GetFontFileName() const;
@@ -223,7 +223,7 @@ private:
     int                     mnPrioEmbedded;
     int                     mnPrioAntiAlias;
     int                     mnPrioAutoHint;
-    FtFontInfo*             mpFontInfo;
+    FreetypeFontInfo*             mpFontInfo;
     FT_Int                  mnLoadFlags;
     double                  mfStretch;
     FT_FaceRec_*            maFaceFT;

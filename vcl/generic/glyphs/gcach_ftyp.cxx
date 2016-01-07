@@ -74,7 +74,7 @@ static FT_Library aLibFT = nullptr;
 // enable linking with old FT versions
 static int nFTVERSION = 0;
 
-typedef std::unordered_map<const char*, std::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
+typedef std::unordered_map<const char*, std::shared_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
@@ -91,7 +91,7 @@ static int nDefaultPrioAntiAlias   = 1;
 
 // FreetypeManager
 
-FtFontFile::FtFontFile( const OString& rNativeFileName )
+FreetypeFontFile::FreetypeFontFile( const OString& rNativeFileName )
 :   maNativeFileName( rNativeFileName ),
     mpFileMap( nullptr ),
     mnFileSize( 0 ),
@@ -117,7 +117,7 @@ FtFontFile::FtFontFile( const OString& rNativeFileName )
     }
 }
 
-FtFontFile* FtFontFile::FindFontFile( const OString& rNativeFileName )
+FreetypeFontFile* FreetypeFontFile::FindFontFile( const OString& rNativeFileName )
 {
     // font file already known? (e.g. for ttc, synthetic, aliased fonts)
     const char* pFileName = rNativeFileName.getStr();
@@ -127,13 +127,13 @@ FtFontFile* FtFontFile::FindFontFile( const OString& rNativeFileName )
         return it->second.get();
 
     // no => create new one
-    FtFontFile* pFontFile = new FtFontFile( rNativeFileName );
+    FreetypeFontFile* pFontFile = new FreetypeFontFile( rNativeFileName );
     pFileName = pFontFile->maNativeFileName.getStr();
     rFontFileList[pFileName].reset(pFontFile);
     return pFontFile;
 }
 
-bool FtFontFile::Map()
+bool FreetypeFontFile::Map()
 {
     if( mnRefCount++ <= 0 )
     {
@@ -160,7 +160,7 @@ bool FtFontFile::Map()
     return (mpFileMap != nullptr);
 }
 
-void FtFontFile::Unmap()
+void FreetypeFontFile::Unmap()
 {
     if( (--mnRefCount > 0) || (mpFileMap == nullptr) )
         return;
@@ -170,10 +170,10 @@ void FtFontFile::Unmap()
 }
 
 #if ENABLE_GRAPHITE
-// wrap FtFontInfo's table function
+// wrap FreetypeFontInfo's table function
 const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, size_t *len)
 {
-    const FtFontInfo * pFontInfo = static_cast<const FtFontInfo*>(appFaceHandle);
+    const FreetypeFontInfo * pFontInfo = static_cast<const FreetypeFontInfo*>(appFaceHandle);
     typedef union {
         char m_c[5];
         unsigned int m_id;
@@ -196,11 +196,11 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 }
 #endif
 
-FtFontInfo::FtFontInfo( const ImplFontAttributes& rDevFontAttributes,
+FreetypeFontInfo::FreetypeFontInfo( const ImplFontAttributes& rDevFontAttributes,
     const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId)
 :
     maFaceFT( nullptr ),
-    mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
+    mpFontFile( FreetypeFontFile::FindFontFile( rNativeFileName ) ),
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
 #if ENABLE_GRAPHITE
@@ -219,7 +219,7 @@ FtFontInfo::FtFontInfo( const ImplFontAttributes& rDevFontAttributes,
     maDevFontAttributes.IncreaseQualityBy( mpFontFile->GetLangBoost() );
 }
 
-FtFontInfo::~FtFontInfo()
+FreetypeFontInfo::~FreetypeFontInfo()
 {
     if( mpFontCharMap )
         mpFontCharMap = nullptr;
@@ -230,14 +230,14 @@ FtFontInfo::~FtFontInfo()
 #endif
 }
 
-void FtFontInfo::InitHashes() const
+void FreetypeFontInfo::InitHashes() const
 {
     // TODO: avoid pointers when empty stl::hash_* objects become cheap
     mpChar2Glyph = new Int2IntMap();
     mpGlyph2Char = new Int2IntMap();
 }
 
-FT_FaceRec_* FtFontInfo::GetFaceFT()
+FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
 {
     if (!maFaceFT && mpFontFile->Map())
     {
@@ -253,7 +253,7 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
 }
 
 #if ENABLE_GRAPHITE
-GraphiteFaceWrapper * FtFontInfo::GetGraphiteFace()
+GraphiteFaceWrapper * FreetypeFontInfo::GetGraphiteFace()
 {
     if (mbCheckedGraphite)
         return mpGraphiteFace;
@@ -275,7 +275,7 @@ GraphiteFaceWrapper * FtFontInfo::GetGraphiteFace()
 }
 #endif
 
-void FtFontInfo::ReleaseFaceFT()
+void FreetypeFontInfo::ReleaseFaceFT()
 {
     if (--mnRefCount <= 0)
     {
@@ -293,7 +293,7 @@ static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
 static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
 static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 
-const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength ) const
+const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pLength ) const
 {
     const unsigned char* pBuffer = mpFontFile->GetBuffer();
     int nFileSize = mpFontFile->GetFileSize();
@@ -329,7 +329,7 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength 
     return nullptr;
 }
 
-void FtFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
+void FreetypeFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
 {
     ImplFTSFontData* pFD = new ImplFTSFontData( this, maDevFontAttributes );
     pFontCollection->Add( pFD );
@@ -380,7 +380,7 @@ void FreetypeManager::AddFontFile( const OString& rNormalizedName,
     if( maFontList.find( nFontId ) != maFontList.end() )
         return;
 
-    FtFontInfo* pFontInfo = new FtFontInfo( rDevFontAttr,
+    FreetypeFontInfo* pFontInfo = new FreetypeFontInfo( rDevFontAttr,
         rNormalizedName, nFaceNum, nFontId);
     maFontList[ nFontId ] = pFontInfo;
     if( mnMaxFontId < nFontId )
@@ -391,8 +391,8 @@ void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
 {
     for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
     {
-        FtFontInfo* pFtFontInfo = it->second;
-        pFtFontInfo->AnnounceFont( pToAdd );
+        FreetypeFontInfo* pFreetypeFontInfo = it->second;
+        pFreetypeFontInfo->AnnounceFont( pToAdd );
     }
 }
 
@@ -400,15 +400,15 @@ void FreetypeManager::ClearFontList( )
 {
     for( FontList::iterator it = maFontList.begin(); it != maFontList.end(); ++it )
     {
-        FtFontInfo* pFtFontInfo = it->second;
-        delete pFtFontInfo;
+        FreetypeFontInfo* pFreetypeFontInfo = it->second;
+        delete pFreetypeFontInfo;
     }
     maFontList.clear();
 }
 
 ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
 {
-    FtFontInfo* pFontInfo = nullptr;
+    FreetypeFontInfo* pFontInfo = nullptr;
 
     // find a FontInfo matching to the font id
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFSD.mpFontData );
@@ -424,9 +424,9 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
     return pNew;
 }
 
-ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplFontAttributes& rDFA )
+ImplFTSFontData::ImplFTSFontData( FreetypeFontInfo* pFI, const ImplFontAttributes& rDFA )
 :   PhysicalFontFace( rDFA ),
-    mpFtFontInfo( pFI )
+    mpFreetypeFontInfo( pFI )
 {
     SetBuiltInFontFlag( false );
     SetOrientationFlag( true );
@@ -440,7 +440,7 @@ ImplFontEntry* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) co
 
 // ServerFont
 
-ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
+ServerFont::ServerFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI )
 :   maGlyphList( 0),
     maFontSelData(rFSD),
     mnRefCount(1),
@@ -976,7 +976,7 @@ const FontCharMapPtr ServerFont::GetFontCharMap() const
     return pFCMap;
 }
 
-const FontCharMapPtr FtFontInfo::GetFontCharMap()
+const FontCharMapPtr FreetypeFontInfo::GetFontCharMap()
 {
     // check if the charmap is already cached
     if( mpFontCharMap )
@@ -1000,7 +1000,7 @@ const FontCharMapPtr FtFontInfo::GetFontCharMap()
 }
 
 // TODO: merge into method GetFontCharMap()
-bool FtFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
+bool FreetypeFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
 {
     rResult.mbSymbolic = IsSymbolFont();
 
