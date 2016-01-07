@@ -273,7 +273,7 @@ static oslThread osl_thread_create_Impl (
 
 #if defined OPENBSD || ((defined MACOSX || defined LINUX) && !ENABLE_RUNTIME_OPTIMIZATIONS)
     if (pthread_attr_init(&attr) != 0)
-        return 0;
+        return nullptr;
 
 #if defined OPENBSD
     stacksize = 262144;
@@ -284,7 +284,7 @@ static oslThread osl_thread_create_Impl (
 #endif
     if (pthread_attr_setstacksize(&attr, stacksize) != 0) {
         pthread_attr_destroy(&attr);
-        return 0;
+        return nullptr;
     }
 #endif
 
