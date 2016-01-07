@@ -550,6 +550,12 @@ void ScUndoAutoFill::Undo()
         rDoc.DeleteAreaTab( aWorkRange, IDF_AUTOFILL );
         pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, false, &rDoc );
 
+        // Actually we'd only need to broadcast the cells inserted during
+        // CopyToDocument(), as DeleteAreaTab() broadcasts deleted cells. For
+        // this we'd need to either record the span sets or let
+        // CopyToDocument() broadcast.
+        BroadcastChanges( aWorkRange);
+
         rDoc.ExtendMerge( aWorkRange, true );
         pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
     }
