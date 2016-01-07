@@ -156,20 +156,20 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 aBuf.append("get_").append(rLocale.Language).append("_");
                 if ( rLocale.Language == "zh" ) {
                     OUString func_base = aBuf.makeStringAndClear();
-                    OUString funclen_base = func_base + "_length";
+                    OUString funclen_base = func_base;
                     if (OUString("TW HK MO").indexOf(rLocale.Country) >= 0)
                     {
                         func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(hModule,
                                     OUString(func_base + "TW_" + rAlgorithm).pData));
                         funclen = reinterpret_cast<size_t (*)()>(osl_getFunctionSymbol(hModule,
-                                    OUString(funclen_base + "TW_" + rAlgorithm).pData));
+                                    OUString(funclen_base + "TW_" + rAlgorithm + "_length").pData));
                     }
                     if (!func)
                     {
                         func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(
                                 hModule, OUString(func_base + rAlgorithm).pData));
                         funclen = reinterpret_cast<size_t (*)()>(osl_getFunctionSymbol(
-                                hModule, OUString(funclen_base + rAlgorithm).pData));
+                                hModule, OUString(funclen_base + rAlgorithm + "_length").pData));
                     }
                 } else {
                     if ( rLocale.Language == "ja" ) {
