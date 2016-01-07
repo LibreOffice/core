@@ -3426,10 +3426,10 @@ uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
     return m_pImpl->GetTopTextAppend()->getEnd();
 }
 
-OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
+OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
 {
     StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
-    return pStyleSheets->getOrCreateCharStyle( rCharProperties );
+    return pStyleSheets->getOrCreateCharStyle( rCharProperties, bAlwaysCreate );
 }
 
 StyleSheetTablePtr DomainMapper::GetStyleSheetTable( )
