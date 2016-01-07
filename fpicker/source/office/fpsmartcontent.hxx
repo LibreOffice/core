@@ -66,7 +66,7 @@ namespace svt
 
     public:
         SmartContent();
-        SmartContent( const OUString& _rInitialURL );
+        explicit SmartContent( const OUString& _rInitialURL );
         ~SmartContent();
 
     public:

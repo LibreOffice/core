@@ -122,7 +122,7 @@ struct ElementEntry_Impl
     bool        m_bHasLabel     : 1;
     bool        m_bHasEnabled   : 1;
 
-                    ElementEntry_Impl( sal_Int16 nId );
+    explicit        ElementEntry_Impl( sal_Int16 nId );
 
     void            setValue( const Any& rVal ) { m_aValue = rVal; m_bHasValue = true; }
     void            setAction( sal_Int16 nAction ) { m_nControlAction = nAction; }
@@ -337,7 +337,7 @@ namespace {
         const OUString& rTitle;
 
     public:
-        FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
+        explicit FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
 
         bool operator () ( const FilterEntry& _rEntry )

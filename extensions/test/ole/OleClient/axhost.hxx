@@ -32,7 +32,7 @@ class HostWin: public CWindowImpl<HostWin, CWindow,
     CComBSTR controlName;
     CComPtr<IUnknown> spControl;
 public:
-    HostWin(LPWSTR progid);
+    explicit HostWin(LPWSTR progid);
 
     ~HostWin();
 

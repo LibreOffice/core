@@ -33,7 +33,7 @@ class VCLBitmapCreator : public ::cppu::WeakImplHelper<
 
 {
 public:
-    VCLBitmapCreator(
+    explicit VCLBitmapCreator(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     {}
 

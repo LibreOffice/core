@@ -58,7 +58,7 @@ class CFilePicker :
 public:
 
     // ctor
-    CFilePicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceMgr );
+    explicit CFilePicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceMgr );
 
     // XFilePickerNotifier
 

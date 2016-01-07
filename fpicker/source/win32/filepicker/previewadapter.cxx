@@ -44,7 +44,7 @@ using namespace ::com::sun::star::lang;
 class CPreviewAdapterImpl
 {
 public:
-    CPreviewAdapterImpl(HINSTANCE instance);
+    explicit CPreviewAdapterImpl(HINSTANCE instance);
 
     virtual ~CPreviewAdapterImpl();
 
@@ -402,7 +402,7 @@ HWND SAL_CALL CPreviewAdapterImpl::findFileListbox() const
 class CWin95NTPreviewAdapterImpl : public CPreviewAdapterImpl
 {
 public:
-    CWin95NTPreviewAdapterImpl(HINSTANCE instance);
+    explicit CWin95NTPreviewAdapterImpl(HINSTANCE instance);
 
     virtual void SAL_CALL notifyParentShow(sal_Bool bShow);
 };

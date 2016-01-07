@@ -33,7 +33,7 @@ class CFolderPicker;
 class CWinFolderPickerImpl : public CMtaFolderPicker
 {
 public:
-    CWinFolderPickerImpl( CFolderPicker* aFolderPicker );
+    explicit CWinFolderPickerImpl( CFolderPicker* aFolderPicker );
 
 
     // XExecutableDialog

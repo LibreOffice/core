@@ -169,7 +169,7 @@ class OleConverter_Impl2 : public WeakImplHelper<XBridgeSupplier2, XInitializati
                             public UnoConversionUtilities<OleConverter_Impl2>
 {
 public:
-    OleConverter_Impl2( const Reference<XMultiServiceFactory>& smgr);
+    explicit OleConverter_Impl2( const Reference<XMultiServiceFactory>& smgr);
     OleConverter_Impl2( const  Reference<XMultiServiceFactory>& smgr, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass );
     virtual ~OleConverter_Impl2();
 
@@ -214,7 +214,7 @@ class OleClient_Impl : public WeakImplHelper<XMultiServiceFactory, css::lang::XS
                        public UnoConversionUtilities<OleClient_Impl>
 {
 public:
-    OleClient_Impl( const Reference<XMultiServiceFactory>& smgr);
+    explicit OleClient_Impl( const Reference<XMultiServiceFactory>& smgr);
     ~OleClient_Impl();
 
     // XMultiServiceFactory
@@ -253,7 +253,7 @@ protected:
 class OleServer_Impl : public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
-    OleServer_Impl( const Reference<XMultiServiceFactory> &smgr);
+    explicit OleServer_Impl( const Reference<XMultiServiceFactory> &smgr);
     ~OleServer_Impl();
 
     OUString SAL_CALL getImplementationName()

@@ -140,7 +140,7 @@ class InprocEmbedProvider_Impl : public IClassFactory, public InprocCountedObjec
 {
 public:
 
-    InprocEmbedProvider_Impl( const GUID& guid );
+    explicit InprocEmbedProvider_Impl( const GUID& guid );
     virtual ~InprocEmbedProvider_Impl();
 
     /* IUnknown methods */

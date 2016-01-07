@@ -35,7 +35,7 @@ public:
     typedef void (SAL_CALL css::ui::dialogs::XFilePickerListener::*EventListenerMethod_t)();
 
 public:
-    CFilePickerEventNotification(EventListenerMethod_t EventListenerMethod);
+    explicit CFilePickerEventNotification(EventListenerMethod_t EventListenerMethod);
 
     virtual void SAL_CALL notifyEventListener( css::uno::Reference< css::uno::XInterface > xListener );
 
@@ -52,7 +52,7 @@ class CFilePickerParamEventNotification : public CEventNotification
 public:
     typedef void (SAL_CALL css::ui::dialogs::XFilePickerListener::*EventListenerMethod_t)(const css::ui::dialogs::FilePickerEvent&);
 
-    CFilePickerParamEventNotification(EventListenerMethod_t EventListenerMethod, const css::ui::dialogs::FilePickerEvent& FilePickerEvent);
+    explicit CFilePickerParamEventNotification(EventListenerMethod_t EventListenerMethod, const css::ui::dialogs::FilePickerEvent& FilePickerEvent);
 
     virtual void SAL_CALL notifyEventListener( css::uno::Reference< css::uno::XInterface > xListener );
 

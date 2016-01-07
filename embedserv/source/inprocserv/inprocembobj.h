@@ -94,7 +94,7 @@ class InprocEmbedDocument_Impl : public InprocCountedObject_Impl
         InprocEmbedDocument_Impl& m_rOwnDocument;
 
         public:
-        InternalCacheWrapper( InprocEmbedDocument_Impl& rOwnDocument )
+        explicit InternalCacheWrapper( InprocEmbedDocument_Impl& rOwnDocument )
         : m_rOwnDocument( rOwnDocument )
         {}
 
@@ -120,7 +120,7 @@ class InprocEmbedDocument_Impl : public InprocCountedObject_Impl
 
 public:
 
-    InprocEmbedDocument_Impl( const GUID& guid )
+    explicit InprocEmbedDocument_Impl( const GUID& guid )
     : m_refCount( 0 )
     , m_bDeleted( FALSE )
     , m_guid( guid )
