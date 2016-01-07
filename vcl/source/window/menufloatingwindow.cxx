@@ -977,8 +977,7 @@ void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
 
 void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
     sal_uInt16 nCode = rKEvent.GetKeyCode().GetCode();
     bKeyInput = true;
@@ -1135,9 +1134,8 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
         }
     }
     // #105474# check if menu window was not destroyed
-    if ( !aDelData.IsDead() )
+    if ( !xWindow->IsDisposed() )
     {
-        ImplRemoveDel( &aDelData );
         bKeyInput = false;
     }
 }
