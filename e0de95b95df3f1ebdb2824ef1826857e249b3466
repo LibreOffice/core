@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_0156f628",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-07T16:45:13Z",
+      "side": 1,
+      "message": "ugh, that sounds rather sub-optimal...",
+      "revId": "e0de95b95df3f1ebdb2824ef1826857e249b3466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
