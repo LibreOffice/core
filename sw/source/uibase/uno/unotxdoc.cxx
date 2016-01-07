@@ -3225,6 +3225,8 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         const beans::PropertyValue& rValue = rArguments[i];
         if (rValue.Name == ".uno:HideWhitespace" && rValue.Value.has<bool>())
             aViewOption.SetHideWhitespaceMode(rValue.Value.get<bool>());
+        else if (rValue.Name == ".uno:ShowBorderShadow" && rValue.Value.has<bool>())
+            SwViewOption::SetAppearanceFlag(VIEWOPT_SHADOW , rValue.Value.get<bool>(), /*bSaveInConfig = */ true);
     }
     pViewShell->ApplyViewOptions(aViewOption);
 
