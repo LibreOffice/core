@@ -323,12 +323,10 @@ IMPL_LINK_NOARG_TYPED(ListBox, ImplPopupModeEndHdl, FloatingWindow*, void)
             bool bTravelSelect = mpImplLB->IsTravelSelect();
             mpImplLB->SetTravelSelect( true );
 
-            ImplDelData aCheckDelete;
-            ImplAddDel( &aCheckDelete );
+            VclPtr<vcl::Window> xWindow = this;
             Select();
-            if ( aCheckDelete.IsDead() )
+            if ( xWindow->IsDisposed() )
                 return;
-            ImplRemoveDel( &aCheckDelete );
 
             mpImplLB->SetTravelSelect( bTravelSelect );
         }
