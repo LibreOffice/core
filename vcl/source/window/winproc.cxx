@@ -244,7 +244,6 @@ static bool ImplCallCommand( vcl::Window* pChild, CommandEventId nEvt, void* pDa
 struct ContextMenuEvent
 {
     VclPtr<vcl::Window>  pWindow;
-    ImplDelData     aDelData;
     Point           aChildPos;
 };
 
@@ -252,9 +251,8 @@ static void ContextMenuEventLink( void* pCEvent, void* )
 {
     ContextMenuEvent* pEv = static_cast<ContextMenuEvent*>(pCEvent);
 
-    if( ! pEv->aDelData.IsDead() )
+    if( ! pEv->pWindow->IsDisposed() )
     {
-        pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
         ImplCallCommand( pEv->pWindow, CommandEventId::ContextMenu, nullptr, true, &pEv->aChildPos );
     }
     delete pEv;
@@ -309,11 +307,11 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         pWinFrameData->mbMouseIn = false;
         if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
         {
-            ImplDelData aDelData( pWindow );
+            VclPtr<vcl::Window> xWindow = pWindow;
 
             ImplDestroyHelpWindow( true );
 
-            if ( aDelData.IsDead() )
+            if ( xWindow->IsDisposed() )
                 return true; // pWindow is dead now - avoid crash! (#122045#)
         }
     }
@@ -813,7 +811,6 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                             ContextMenuEvent* pEv = new ContextMenuEvent;
                             pEv->pWindow = pChild;
                             pEv->aChildPos = aChildPos;
-                            pChild->ImplAddDel( &pEv->aDelData );
                             Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
                         }
                         else
