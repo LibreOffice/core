@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,readlicense_oo))
 $(eval $(call gb_Module_add_targets,readlicense_oo,\
     CustomTarget_readme \
     Package_files \
+    Package_readlicense_oo_readmes \
 ))
 
 ifeq (WNT,$(OS))
