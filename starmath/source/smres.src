@@ -34,14 +34,6 @@ String RID_FONTBOLD
 {
     Text [ en-US ] = "Bold" ;
 };
-String RID_OBJECTNAME
-{
-    Text = "SMath3" ;
-};
-String RID_UNDOEDITNAME
-{
-    Text = "Edit" ;
-};
 String RID_UNDOFORMATNAME
 {
     Text = "Format" ;
@@ -223,16 +215,6 @@ String STR_MATH_DOCUMENT_FULLTYPE_CURRENT
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Formula";
 };
 
-String RID_SYMBOLFILESSTR
-{
-    Text [ en-US ] = "Symbol files (*.sms)" ;
-};
-
-String RID_ALLFILESSTR
-{
-    Text [ en-US ] = "All files" ;
-};
-
 String RID_ERR_IDENT
 {
     Text [ en-US ] = "ERROR : " ;
@@ -246,11 +228,6 @@ String RID_ERR_UNKNOWN
 String RID_ERR_UNEXPECTEDCHARACTER
 {
     Text [ en-US ] = "Unexpected character" ;
-};
-
-String RID_ERR_OVERFLOW
-{
-    Text [ en-US ] = "Formula entry too complex" ;
 };
 
 String RID_ERR_LGROUPEXPECTED
