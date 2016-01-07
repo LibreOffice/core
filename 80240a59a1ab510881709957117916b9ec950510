@@ -16,6 +16,24 @@
       "revId": "80240a59a1ab510881709957117916b9ec950510",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c1c7ce43",
+        "filename": "connectivity/source/drivers/dbase/DIndex.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1001171
+      },
+      "writtenOn": "2016-01-07T09:26:57Z",
+      "side": 1,
+      "message": "Good point, thanks",
+      "parentUuid": "dab17558_5660c635",
+      "revId": "80240a59a1ab510881709957117916b9ec950510",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
