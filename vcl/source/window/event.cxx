@@ -205,12 +205,11 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
 {
     VclWindowEvent aEvent( this, nEvent, pData );
 
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
     Application::ImplCallEventListeners( aEvent );
 
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
 
     if (!mpWindowImpl->maEventListeners.empty())
@@ -219,27 +218,23 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
         std::vector<Link<VclWindowEvent&,void>> aCopy( mpWindowImpl->maEventListeners );
         for ( Link<VclWindowEvent&,void>& rLink : aCopy )
         {
-            if (aDelData.IsDead()) break;
+            if (xWindow->IsDisposed()) break;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
             if( std::find(mpWindowImpl->maEventListeners.begin(), mpWindowImpl->maEventListeners.end(), rLink) != mpWindowImpl->maEventListeners.end() )
                 rLink.Call( aEvent );
         }
     }
 
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
 
-    ImplRemoveDel( &aDelData );
-
-    vcl::Window* pWindow = this;
-    while ( pWindow )
+    while ( xWindow )
     {
-        pWindow->ImplAddDel( &aDelData );
 
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return;
 
-        auto& rWindowImpl = *pWindow->mpWindowImpl;
+        auto& rWindowImpl = *xWindow->mpWindowImpl;
         if (!rWindowImpl.maChildEventListeners.empty())
         {
             // Copy the list, because this can be destroyed when calling a Link...
@@ -256,7 +251,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
             );
             for ( Link<VclWindowEvent&,void>& rLink : aCopy )
             {
-                if (aDelData.IsDead())
+                if (xWindow->IsDisposed())
                     return;
                 // Check this hasn't been removed in some re-enterancy scenario fdo#47368.
                 if( rWindowImpl.maChildEventListenersDeleted.find(rLink) == rWindowImpl.maChildEventListenersDeleted.end() )
@@ -264,12 +259,10 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
             }
         }
 
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return;
 
-        pWindow->ImplRemoveDel( &aDelData );
-
-        pWindow = pWindow->GetParent();
+        xWindow = xWindow->GetParent();
     }
 }
 
