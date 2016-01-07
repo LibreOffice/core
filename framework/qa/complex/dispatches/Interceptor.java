@@ -160,8 +160,6 @@ public class Interceptor implements XDispatch,
      */
     public void checkNoSolarMutexHeld()
     {
-/*      disabled until the bugs here are fixed.
-
         try
         {
             if (m_xToolkit == null)
@@ -170,10 +168,12 @@ public class Interceptor implements XDispatch,
                     m_xMSF.createInstance("com.sun.star.awt.Toolkit"));
 
             // A Method notable only for taking the solar mutex.
+            System.out.println("Check solarmutex not held - if so deadlock");
             m_xToolkit.getDragSource( null );
+            System.out.println("Solarmutex not held.");
         } catch (java.lang.Throwable ex) {
-                System.out.println("Failed to createa and invoke toolkit method " + ex.toString());
-        } */
+                System.out.println("Failed to create and invoke toolkit method " + ex.toString());
+        }
     }
 
     /** XDispatchProvider
@@ -185,8 +185,6 @@ public class Interceptor implements XDispatch,
         System.out.println("Interceptor.queryDispatch('"+aURL.Complete+"', '"+sTargetFrameName+"', "+nSearchFlags+") called");
 
         checkNoSolarMutexHeld();
-
-        System.out.println("Interceptor.queryDispatch - re-entered successfully");
 
         if (impl_isBlockedURL(aURL.Complete))
         {
