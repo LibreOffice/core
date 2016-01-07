@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,vcl_opengl_blacklist,$(SRCDIR)/vcl/opengl))
 
-$(eval $(call gb_Package_add_files,vcl_opengl_blacklist,$(LIBO_SHARE_PRESETS_FOLDER)/config,\
+$(eval $(call gb_Package_add_files,vcl_opengl_blacklist,$(LIBO_SHARE_FOLDER)/opengl,\
 	opengl_blacklist_windows.xml \
 ))
 
