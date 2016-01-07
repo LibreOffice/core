@@ -27,7 +27,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/fntstyle.hxx>
-#include <outfont.hxx>
+#include <fontentry.hxx>
 
 #include <boost/intrusive_ptr.hpp>
 

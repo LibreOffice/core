@@ -27,7 +27,7 @@
 #include "vcl/font.hxx"
 
 #include "impfont.hxx"
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
 #include "sft.hxx"
 

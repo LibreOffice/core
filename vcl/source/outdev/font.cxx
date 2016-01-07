@@ -33,7 +33,7 @@
 
 #include "impfont.hxx"
 #include "outdata.hxx"
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
 
 #include "outdev.h"

@@ -21,7 +21,7 @@
 
 #include <tools/fontenum.hxx>
 
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "fontattributes.hxx"
 
 #include "PhysicalFontFace.hxx"

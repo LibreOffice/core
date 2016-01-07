@@ -38,7 +38,7 @@
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/metric.hxx>
 
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "PhysicalFontFace.hxx"
 #include "salgdi.hxx"
 
