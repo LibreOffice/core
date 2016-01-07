@@ -433,15 +433,13 @@ void ToolBox::Highlight()
 
 void ToolBox::Select()
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
 
     CallEventListeners( VCLEVENT_TOOLBOX_SELECT );
     maSelectHdl.Call( this );
 
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return;
-    ImplRemoveDel( &aDelData );
 
     // TODO: GetFloatingWindow in DockingWindow is currently inline, change it to check dockingwrapper
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
@@ -1893,12 +1891,10 @@ void ToolBox::ImplExecuteCustomMenu()
             GetMenu()->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
         // toolbox might be destroyed during execute
-        ImplDelData aDelData;
-        ImplAddDel( &aDelData );
-        ImplDelData aBorderDel;
+        VclPtr<vcl::Window> xWindow = this;
         bool bBorderDel = false;
 
-        vcl::Window *pWin = this;
+        VclPtr<vcl::Window> pWin = this;
         Rectangle aMenuRect = mpData->maMenubuttonItem.maRect;
         if( IsFloatingMode() )
         {
@@ -1908,7 +1904,6 @@ void ToolBox::ImplExecuteCustomMenu()
             {
                 pWin = pBorderWin;
                 aMenuRect = pBorderWin->GetMenuRect();
-                pWin->ImplAddDel( &aBorderDel );
                 bBorderDel = true;
             }
         }
@@ -1916,17 +1911,15 @@ void ToolBox::ImplExecuteCustomMenu()
         sal_uInt16 uId = GetMenu()->Execute( pWin, Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
                                 PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
 
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return;
-        ImplRemoveDel( &aDelData );
 
         if( GetMenu() )
             GetMenu()->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
         if( bBorderDel )
         {
-            if( aBorderDel.IsDead() )
+            if( pWin->IsDisposed() )
                 return;
-            pWin->ImplRemoveDel( &aBorderDel );
         }
 
         pWin->Invalidate( aMenuRect );
