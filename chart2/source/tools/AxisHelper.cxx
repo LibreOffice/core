@@ -889,7 +889,7 @@ Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Refe
         if( xGridProperties.is() )
             aGridVector.push_back( xGridProperties );
 
-        Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );;
+        Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
         sal_Int32 nSubGrid = 0;
         for( nSubGrid = 0; nSubGrid < aSubGrids.getLength(); ++nSubGrid )
         {

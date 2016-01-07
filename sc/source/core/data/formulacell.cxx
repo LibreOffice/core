@@ -3791,7 +3791,7 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
     if ( GetMatrixFlag() != MM_NONE )
         return NotEqual;
 
-    // are these formule at all similar ?
+    // are these formulas at all similar ?
     if ( GetHash() != rOther.GetHash() )
         return NotEqual;
 

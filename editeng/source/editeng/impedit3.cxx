@@ -4340,7 +4340,7 @@ OUString ImpEditEngine::convertDigits(const OUString &rString, sal_Int32 nStt, s
 // Either sets the digit mode at the output device
 void ImpEditEngine::ImplInitDigitMode(OutputDevice* pOutDev, LanguageType eCurLang)
 {
-    assert(pOutDev); //persumably there isn't any case where pOutDev should be NULL ?
+    assert(pOutDev); //presumably there isn't any case where pOutDev should be NULL?
     if (pOutDev)
         pOutDev->SetDigitLanguage(ImplCalcDigitLang(eCurLang));
 }

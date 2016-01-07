@@ -111,7 +111,7 @@ public class _XUnoUrlResolver extends MultiMethodTest {
             try {
                 // create a connection
                 XConnection xCon = xAcc.accept(connectString);
-                // create a bridge over that conmnection
+                // create a bridge over that connection
                 xBridge = xBrdgFctr.createBridge(
                                     "MyBridge", "urp", xCon, xInstProv);
             } catch (com.sun.star.lang.IllegalArgumentException e) {

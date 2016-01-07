@@ -752,7 +752,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 );
             }
 
-            // Distance of Textbox to it's surrounding Autoshape
+            // Distance of Textbox to its surrounding Autoshape
             sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
             sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
             sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
@@ -6293,7 +6293,7 @@ bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
     if (rReader.m_pStg)
     {
         // Via the TextBox-PLCF we get the right char Start-End positions
-        // We should then find the EmbedField and the corresponding Sprms
+        // We should then find the EmbeddedField and the corresponding Sprms
         // in that Area.
         // We only need the Sprm for the Picture Id.
         long nOldPos = rReader.m_pStrm->Tell();

@@ -2576,7 +2576,7 @@ emeGraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFil
     {
         // #i121267# It is necessary to prepare the metafile since the export does *not* support
         // clip regions. This tooling method clips the geometry content of the metafile internally
-        // against it's own clip regions, so that the export is safe to ignore clip regions
+        // against its own clip regions, so that the export is safe to ignore clip regions
         clipMetafileContentAgainstOwnRegions(aMetafile);
     }
 

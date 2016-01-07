@@ -783,7 +783,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     _rxOutStream->writeLong(nLen);
     for (sal_Int32 i = 0; i < nLen; i++)
     {
-        // first the service name for the unerlying model
+        // first the service name for the underlying model
         OGridColumn* pCol = getColumnImplementation(m_aItems[i]);
         DBG_ASSERT(pCol != nullptr, "OGridControlModel::write : such items should never reach it into my container !");
         _rxOutStream << pCol->getModelName();

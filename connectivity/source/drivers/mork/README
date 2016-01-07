@@ -7,7 +7,7 @@ Description
 Cross Platform Mozilla Mork format reader.
 
 
-Compillation
+Compilation
 ------------
 
 g++ -o MorkParser main.cpp MorkParser.cpp

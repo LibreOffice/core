@@ -538,7 +538,7 @@ void DeInitVCL()
 
     ResMgr::DestroyAllResMgr();
 
-    // destroy all Sal interfaces before destorying the instance
+    // destroy all Sal interfaces before destroying the instance
     // and thereby unloading the plugin
     delete pSVData->mpSalSystem;
     pSVData->mpSalSystem = nullptr;

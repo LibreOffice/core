@@ -36,7 +36,7 @@ namespace drawinglayer
 
             This primitive is defined to fill the whole visible Viewport with
             the given color (and thus decomposes to a filled polygon). This
-            makes it a view-depnendent primitive by definition. It only has
+            makes it a view-dependent primitive by definition. It only has
             a valid decomposition if a valid Viewport is given in the
             ViewInformation2D at decomposition time.
 

@@ -789,9 +789,9 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
 {
     basegfx::B2DPolyPolygon aRetPolyPoly;
     // 70 100mm = 2pt = 40 twip. In MS, line width less than 2pt has the same size arrow as 2pt
-    //If the unit is twip. Make all use this unit especailly the critical value 70/40.
+    //If the unit is twip. Make all use this unit especially the critical value 70/40.
     sal_Int32   nLineWidthCritical = bScaleArrow ? 40 : 70;
-    double      fLineWidth = nLineWidth < nLineWidthCritical ? nLineWidthCritical : nLineWidth;;
+    double      fLineWidth = nLineWidth < nLineWidthCritical ? nLineWidthCritical : nLineWidth;
 
     double      fLengthMul, fWidthMul;
     sal_Int32   nLineNumber;
@@ -1282,7 +1282,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             break;
             case mso_fillShadeCenter :      // Shade from bounding rectangle to end point
             {
-                //If it is imported as a bitmap, it will not work well with transparecy especially 100
+                //If it is imported as a bitmap, it will not work well with transparency especially 100
                 //But the gradient look well comparing with imported as gradient. And rotate with shape
                 //also works better. So here just keep it.
                 if ( rObjData.aBoundRect.IsEmpty() )// size of object needed to be able
@@ -2846,7 +2846,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     aGrad.SetStartIntens( 100 );
     aGrad.SetEndIntens( 100 );
     aSet.Put( XFillGradientItem( OUString(), aGrad ) );
-    //Construct tranparency item. This item can coodinate with both solid and gradient.
+    //Construct tranparency item. This item can coordinate with both solid and gradient.
     if ( dTrans < 1.0 || dBackTrans < 1.0 )
     {
         sal_uInt8 nStartCol = (sal_uInt8)( (1 - dTrans )* 255 );
@@ -5054,7 +5054,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 pObj = pOrgObj = nullptr;
             }
 
-            // Distance of Textbox to it's surrounding Customshape
+            // Distance of Textbox to its surrounding Customshape
             sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
             sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
             sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );

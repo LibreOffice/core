@@ -318,7 +318,7 @@ public class EventTest {
 
         XUserInputInterception xUII = UnoRuntime.queryInterface(XUserInputInterception.class, xController);
         if (xUII == null) {
-            fail("could not get XUserInputInterception from XContoller");
+            fail("could not get XUserInputInterception from XController");
         }
          return xUII;
     }

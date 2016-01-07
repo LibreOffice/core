@@ -44,7 +44,7 @@
       </prop>
       <prop oor:name="Locales" oor:type="oor:string-list">
         <info>
-          <desc>Bind a dictionary to it's supported list of locales.</desc>
+          <desc>Bind a dictionary to its supported list of locales.</desc>
           <label>Dictionary locales</label>
         </info>
       </prop>

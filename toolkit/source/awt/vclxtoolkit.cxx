@@ -1010,7 +1010,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXRadioButton;
 
                 // by default, disable RadioCheck
-                // Since the VCLXRadioButton really cares for it's RadioCheck settings, this is important:
+                // Since the VCLXRadioButton really cares for its RadioCheck settings, this is important:
                 // if we enable it, the VCLXRadioButton will use RadioButton::Check instead of RadioButton::SetState
                 // This leads to a strange behaviour if the control is newly created: when settings the initial
                 // state to "checked", the RadioButton::Check (called because RadioCheck=sal_True) will uncheck

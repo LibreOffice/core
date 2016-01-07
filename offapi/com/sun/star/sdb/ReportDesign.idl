@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module sdb {
 
 
 /**
-  This interface could be incomplete since I derived it from it's sole place of use.
+  This interface could be incomplete since I derived it from its sole place of use.
 
   @since LibreOffice 4.1
 */

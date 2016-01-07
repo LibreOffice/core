@@ -1445,7 +1445,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
 
             // Actually only certain characters allowed.
             // Netscape only looks for "=" and white space (c.f.
-            // Mozilla: PA_FetchRequestedNameValues in lipparse/pa_mdl.c)
+            // Mozilla: PA_FetchRequestedNameValues in libparse/pa_mdl.c)
             while( nPos < aToken.getLength() && '=' != (cChar=aToken[nPos]) &&
                    HTML_ISPRINTABLE(cChar) && !HTML_ISSPACE(cChar) )
                 nPos++;

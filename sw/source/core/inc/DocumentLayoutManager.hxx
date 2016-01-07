@@ -38,7 +38,7 @@ public:
     DocumentLayoutManager( SwDoc& i_rSwdoc );
 
     virtual const SwViewShell *GetCurrentViewShell() const override;
-    virtual SwViewShell *GetCurrentViewShell() override; //< It must be able to communicate to a SwViewShell.This is going to be removed later.
+    virtual SwViewShell *GetCurrentViewShell() override; // It must be able to communicate to a SwViewShell.This is going to be removed later.
     virtual void SetCurrentViewShell( SwViewShell* pNew ) override;
 
     virtual const SwRootFrame *GetCurrentLayout() const override;

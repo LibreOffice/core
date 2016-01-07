@@ -119,7 +119,7 @@ ContentInfo::ContentInfo( SfxItemPool& rPool ) :
 {
 }
 
-// the real Copy constructor is nonsens, since I have to work with another Pool!
+// the real Copy constructor is nonsense, since I have to work with another Pool!
 ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse ) :
     maText(rCopyFrom.maText),
     aStyle(rCopyFrom.aStyle),
@@ -419,7 +419,7 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     if ( rIStream.GetError() )
         return nullptr;
 
-    EditTextObject* pTxtObj = new EditTextObject(pGlobalTextObjectPool);;
+    EditTextObject* pTxtObj = new EditTextObject(pGlobalTextObjectPool);
     pTxtObj->CreateData(rIStream);
 
     // Make sure that the stream is left at the correct place.

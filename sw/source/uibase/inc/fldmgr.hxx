@@ -190,7 +190,7 @@ public:
     sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter, double* pVal = nullptr);
 
     // turn off evaluation of expression fields for insertation
-    // of many expressino fields (see labels)
+    // of many expression fields (see labels)
 
     inline void     SetEvalExpFields(bool bEval);
     void            EvalExpFields(SwWrtShell* pSh = nullptr);

@@ -1013,7 +1013,7 @@ void SfxObjectShell::SetProgress_Impl
 {
     DBG_ASSERT( ( !pImp->pProgress && pProgress ) ||
                 ( pImp->pProgress && !pProgress ),
-                "Progress activation/deacitivation mismatch" );
+                "Progress activation/deactivation mismatch" );
     pImp->pProgress = pProgress;
 }
 
@@ -1303,7 +1303,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
         else
         {
             // !TODO/LATER: what's this?!
-            // Interactiv ( DClick, Contextmenu ) no long name is included
+            // Interactive ( DClick, Contextmenu ) no long name is included
             aTemplateName = getDocProperties()->getTitle();
             if ( aTemplateName.isEmpty() )
             {
@@ -1410,7 +1410,7 @@ bool SfxObjectShell::IsLoading() const
 void SfxObjectShell::CancelTransfers()
 /*  [Description]
 
-    Here can Transfers get canceled, which were not regestered
+    Here can Transfers get canceled, which were not registered
     by RegisterTransfer.
 */
 {

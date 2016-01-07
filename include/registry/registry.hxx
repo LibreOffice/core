@@ -93,7 +93,7 @@ public:
      */
     inline Registry();
 
-    /// Copy constructcor
+    /// Copy constructor
     inline Registry(const Registry& toCopy);
 
     /// Destructor. The Destructor close the registry if it is open.
@@ -144,7 +144,7 @@ public:
     /** destroys a registry.
 
         @param registryName specifies a registry name, if the name is an empty string the registry
-                            itselfs will be destroyed.
+                            itself will be destroyed.
         @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError destroy(const rtl::OUString& registryName);

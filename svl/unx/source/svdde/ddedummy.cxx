@@ -91,7 +91,7 @@ const OUString DdeConnection::GetServiceName()
 
 const OUString DdeConnection::GetTopicName()
 {
-    return OUString();;
+    return OUString();
 }
 
 DdeTransaction::DdeTransaction( DdeConnection& rConnection, const OUString&, long )

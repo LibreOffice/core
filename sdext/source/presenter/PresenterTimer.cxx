@@ -219,7 +219,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
             mpCurrentTask->mbIsCanceled = true;
     }
 
-    // Let the main-loop cleanup in it's own time
+    // Let the main-loop cleanup in its own time
 }
 
 void SAL_CALL TimerScheduler::run()

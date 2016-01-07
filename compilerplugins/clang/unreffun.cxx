@@ -74,7 +74,7 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     }
 
     //TODO, filtering out any functions relating to (class) templates for now:
-    CXXRecordDecl const * r = dyn_cast<CXXRecordDecl>(decl->getDeclContext());;
+    CXXRecordDecl const * r = dyn_cast<CXXRecordDecl>(decl->getDeclContext());
     if (r != nullptr
         && (r->getTemplateSpecializationKind() != TSK_Undeclared
             || r->isDependentContext()))

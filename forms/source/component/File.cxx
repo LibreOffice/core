@@ -247,7 +247,7 @@ void SAL_CALL OFileControlModel::reset() throw ( css::uno::RuntimeException, std
     if (bContinue)
     {
         {
-            // If Models are threadSave
+            // If Models are threadSafe
             ::osl::MutexGuard aGuard(m_aMutex);
             _reset();
         }

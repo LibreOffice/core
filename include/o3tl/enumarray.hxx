@@ -33,7 +33,7 @@ class enumarray_iterator;
 ///
 /// This assumes that the 'enum class' definition
 ///  - starts at zero
-///  - has no holes in it's sequence of values
+///  - has no holes in its sequence of values
 ///  - defines a value called LAST which refers to the greatest constant.
 ///
 /// \param E the 'enum class' type.

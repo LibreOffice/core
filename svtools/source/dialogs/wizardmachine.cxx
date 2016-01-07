@@ -357,7 +357,7 @@ namespace svt
         // reset the WB_DEFBUTTON for every window which is a button
         implResetDefault(this);
 
-        // set it's new style
+        // set its new style
         if (_pNewDefButton)
             _pNewDefButton->SetStyle(_pNewDefButton->GetStyle() | WB_DEFBUTTON);
     }

@@ -145,7 +145,7 @@ Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
         }
     }
 
-    // now, we need to sort the maVector by it's members minimal depth. The
+    // now, we need to sort the maVector by its members minimal depth. The
     // smaller, the nearer to the viewer.
     ::std::sort(maVector.begin(), maVector.end());
 }

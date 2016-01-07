@@ -596,7 +596,7 @@ bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMouseP
     }
     if (!bResizingCol)
     {
-        // force the base class to end it's drag mode
+        // force the base class to end its drag mode
         EndTracking(TrackingEventFlags::Cancel | TrackingEventFlags::End);
 
         // because we have 3d-buttons the select handler is called from MouseButtonUp, but StartDrag

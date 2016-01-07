@@ -155,7 +155,7 @@ SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 }
 
 /**
- * Constcurts an SfxUShortRanges-instance from an sorted ranges of sal_uInt16s,
+ * Constructs an SfxUShortRanges-instance from an sorted ranges of sal_uInt16s,
  * terminates with on 0.
  *
  * Precondition: for each n >= 0 && n < (sizeof(pArr)-1)
@@ -486,7 +486,7 @@ SfxUShortRanges& SfxUShortRanges::operator -=
             // right side
             if( u1 > u2 ) // anything left at all
             {
-                // reduce minuend interval, try again (minuend might be affected by other subtrahend itnervals )
+                // reduce minuend interval, try again (minuend might be affected by other subtrahend intervals )
                 _pRanges[ nPos1 ] = u2 + 1;
             }
 

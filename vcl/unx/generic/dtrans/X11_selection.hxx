@@ -263,7 +263,7 @@ namespace x11 {
 
         // contains the XdndEnterEvent of a drop action running
         // with one of our targets. The data.l[0] member
-        // (conatining the drag source ::Window) is set
+        // (containing the drag source ::Window) is set
         // to None while that is not the case
         XClientMessageEvent         m_aDropEnterEvent;
         // set to false on XdndEnter

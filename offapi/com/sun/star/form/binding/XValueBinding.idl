@@ -68,7 +68,7 @@ interface XValueBinding : com::sun::star::uno::XInterface
             fully operational. Possible reasons for this include the binding being
             readonly, or the target of the binding not being present.
         @throws com::sun::star::lang::NoSupportException
-            if the binding in general does not support write access to it's binding
+            if the binding in general does not support write access to its binding
 
         @see getSupportedValueTypes
         @see supportsType

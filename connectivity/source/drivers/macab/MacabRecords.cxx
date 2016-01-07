@@ -447,7 +447,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         {
             /* The order of these matters (we want all address properties
              * before any phone properties, or else things will look weird),
-             * so we get all possibilitities for each property, going through
+             * so we get all possibilities for each property, going through
              * each record, and then go onto the next property.
              * (Note: the reason that we have to go through all records
              * in the first place is that properties like address, phone, and

@@ -99,7 +99,7 @@ namespace utl
             If the object represents a set node, this method may be used to create a new child. For non-set-nodes, the
             method will fail.<br/>
             Unless the respective operations on the pure configuration API, the to-be-created node immediately
-            becomes a part of it's hierarchy, no explicit insertion is necessary.
+            becomes a part of its hierarchy, no explicit insertion is necessary.
             @param      _rName      name for the new child. Must be level-1-depth.
         */
         OConfigurationNode  createNode(const OUString& _rName) const throw();

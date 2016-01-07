@@ -1611,7 +1611,7 @@ uno::Sequence < beans::NamedValue > AssistentDlgImpl::GetPassword( const OUStrin
         if(pEntry->maPath == rPath)
             return pEntry->aEncryptionData;
     }
-    return uno::Sequence < beans::NamedValue > ();;
+    return uno::Sequence < beans::NamedValue > ();
 }
 
 void AssistentDlgImpl::DeletePasswords()

@@ -77,7 +77,7 @@ namespace ww8
         In word all frames are effectively anchored to character or as
         character. This is nice and simple, writer is massively complex in this
         area, so this ww8::Frame simplifies matters by providing a single unified
-        view of the multitute of elements in writer and their differing quirks.
+        view of the multitude of elements in writer and their differing quirks.
 
         A ww8::Frame wraps a writer frame and is guaranteed to have a suitable
         anchor position available from it. It hides much of the needless

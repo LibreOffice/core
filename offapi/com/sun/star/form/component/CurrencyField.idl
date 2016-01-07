@@ -39,7 +39,7 @@ published service CurrencyField
 
     service com::sun::star::form::FormControlModel;
 
-    /** can be used to reset the control to it's default state.
+    /** can be used to reset the control to its default state.
 
         @see CurrencyField::DefaultValue
     */

@@ -289,7 +289,7 @@ void ScTabControl::Select()
 
         // SetReference onlw when the consolidate dialog is open
         // (for referenzes over multiple sheets)
-        // for others this is only uneeded fidgeting
+        // for others this is only needed fidgeting
 
     if ( bRefMode && pViewData->GetRefType() == SC_REFTYPE_REF )
         if ( pViewData->GetViewShell()->GetViewFrame()->HasChildWindow(SID_OPENDLG_CONSOLIDATE) )

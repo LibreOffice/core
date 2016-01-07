@@ -487,7 +487,7 @@ bool SwOLENode::IsInGlobalDocSection() const
     }
 
     // pAnchorNd contains the most recently found Section Node, which
-    // now must fulfill the prerequesites for the GlobalDoc
+    // now must fulfill the prerequisites for the GlobalDoc
     pSectNd = static_cast<const SwSectionNode*>(pAnchorNd);
     return FILE_LINK_SECTION == pSectNd->GetSection().GetType() &&
             pSectNd->GetIndex() > nEndExtraIdx;

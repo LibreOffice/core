@@ -167,7 +167,7 @@ BackingComp::~BackingComp()
     Some interfaces are supported by his class directly, but some other ones are
     used by aggregation. An instance of this class must provide some window interfaces.
     But it must represent a VCL window behind such interfaces too! So we use an internal
-    saved window member to ask it for it's interfaces and return it. But we must be aware then,
+    saved window member to ask it for its interfaces and return it. But we must be aware then,
     that it can be destroyed from outside too ...
 
     @param  aType
@@ -348,7 +348,7 @@ css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
             xBackingComp);
 
         // attach controller to the frame
-        // We will use it's container window, to create
+        // We will use its container window, to create
         // the component window. From now we offer the window interfaces!
         xBackingComp.attachFrame(xFrame);
 

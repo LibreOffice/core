@@ -182,7 +182,7 @@ namespace vcl
         sal_uInt16 macStyle;      /**< macstyle bits from 'HEAD' table */
         int   weight;             /**< value of WeightClass or 0 if can't be determined        */
         int   width;              /**< value of WidthClass or 0 if can't be determined         */
-        int   pitch;              /**< 0: proportianal font, otherwise: monospaced             */
+        int   pitch;              /**< 0: proportional font, otherwise: monospaced             */
         int   italicAngle;        /**< in counter-clockwise degrees * 65536                    */
         int   xMin;               /**< global bounding box: xMin                               */
         int   yMin;               /**< global bounding box: yMin                               */
@@ -196,7 +196,7 @@ namespace vcl
         int   vdescent;           /**< typographic descent for vertical writing mode           */
         int   typoAscender;       /**< OS/2 portable typographic ascender                      */
         int   typoDescender;      /**< OS/2 portable typographic descender                     */
-        int   typoLineGap;        /**< OS/2 portable typographc line gap                       */
+        int   typoLineGap;        /**< OS/2 portable typographic line gap                       */
         int   winAscent;          /**< ascender metric for Windows                             */
         int   winDescent;         /**< descender metric for Windows                            */
         bool  symbolEncoded;      /**< true: MS symbol encoded */

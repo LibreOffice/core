@@ -64,7 +64,7 @@ namespace sdr
                 {
                     // text range needs to be corrected by
                     // aObjectRange.getCenter() - aRotObjectRange.getCenter() since it's
-                    // defined differenly by using rotation around object center. Start
+                    // defined differently by using rotation around object center. Start
                     // with positive part
                     basegfx::B2DVector aTranslation(aObjectRange.getCenter());
 

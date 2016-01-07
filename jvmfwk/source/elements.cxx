@@ -273,7 +273,7 @@ void NodeJava::load()
             sNil = xmlGetNsProp(
                 cur, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE));
             if (sNil == nullptr)
-                throw FrameworkException(JFW_E_ERROR, sExcMsg);;
+                throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
             {
                 CXmlCharPtr sEnabled( xmlNodeListGetString(

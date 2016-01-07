@@ -136,7 +136,7 @@ protected:
            next layer.  If it is negative then select a previous one.  An
            offset or zero does not change the current layer.  If the
            resulting index lies outside the valid range of indices then it
-           is set to either the minimal or maximal valid index, whitchever
+           is set to either the minimal or maximal valid index, whichever
            is nearer.
     */
     void SwitchLayer (sal_Int32 nOffset);

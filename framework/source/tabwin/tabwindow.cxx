@@ -254,7 +254,7 @@ IMPL_LINK_TYPED( TabWindow, Deactivate, TabControl*, pTabControl, bool )
     return true;
 }
 
-// XInitilization
+// XInitialization
 
 void SAL_CALL TabWindow::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 throw (css::uno::Exception, css::uno::RuntimeException, std::exception)

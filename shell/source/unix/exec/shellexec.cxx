@@ -185,7 +185,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 #endif
 
         // Respect the desktop environment - if there is an executable named
-        // <desktop-environement-is>-open-url, pass the url to this one instead
+        // <desktop-environment-is>-open-url, pass the url to this one instead
         // of the default "open-url" script.
         if ( !m_aDesktopEnvironment.isEmpty() )
         {

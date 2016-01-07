@@ -25,7 +25,7 @@
 
 // The two following are not implemented yet!
 // Nail text down to a fix angle.
-// The text angle is independet of the dimension line.
+// The text angle is independent of the dimension line.
 // Abrogate TextUpsideDown, TextRota90 and TextAutoAngle. (n.i.)
 class SVX_DLLPUBLIC SdrMeasureTextIsFixedAngleItem: public SdrYesNoItem {
 public:

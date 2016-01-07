@@ -88,7 +88,7 @@ Sub getInfoFromDialog
  oDocument = StarDesktop.ActiveFrame.Controller.Model
  oSearch = oDocument.createSearchDescriptor
 
- &apos; Replace all instances of the search string with the replavce string
+ &apos; Replace all instances of the search string with the replace string
  oSearch.SearchString = getSearchKey()
  oSearch.ReplaceString = getReplaceKey()
  oDocument.replaceAll(oSearch)

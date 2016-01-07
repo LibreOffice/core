@@ -116,7 +116,7 @@ private:
     o3tl::cow_wrapper< cow_wrapper_client2_impl, o3tl::ThreadSafeRefCountingPolicy > maImpl;
 };
 
-/** test default-object comparison - have default-ctored-client4 share
+/** test default-object comparison - have default-stored-client4 share
     the same static impl instance, check if isDefault does the right
     thing
  */

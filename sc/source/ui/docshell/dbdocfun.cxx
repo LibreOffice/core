@@ -1176,7 +1176,7 @@ bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNe
     const ScSheetSourceDesc* pSheetDesc = rDPObj.GetSheetDesc();
     if (pSheetDesc && pSheetDesc->GetSourceRange().Intersects(rNewOut))
     {
-        // New output range intersepts with the source data. Move it up to
+        // New output range intersteps with the source data. Move it up to
         // where the old range is and see if that works.
         ScRange aOldRange = rDPObj.GetOutRange();
         SCsROW nDiff = aOldRange.aStart.Row() - rNewOut.aStart.Row();

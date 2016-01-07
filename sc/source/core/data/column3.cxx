@@ -65,7 +65,7 @@
 
 using ::com::sun::star::i18n::LocaleDataItem;
 
-// Err527 Workaroand
+// Err527 Workaround
 extern const ScFormulaCell* pLastFormulaTreeTop; // in cellform.cxx
 using namespace formula;
 

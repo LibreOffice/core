@@ -1010,7 +1010,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
 IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);;
+    Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
 
     OUString sOldFolder;
     if ( m_pPathList->GetSelectEntryCount() > 0 )

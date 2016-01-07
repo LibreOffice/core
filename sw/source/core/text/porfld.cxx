@@ -409,7 +409,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
             SetHasFollow( true );
 
             // For a newly created field, nNextOffset contains the Offset
-            // of it's start of the original string
+            // of its start of the original string
             // If a FollowField is created when formatting, this FollowField's
             // Offset is being held in nNextOffset
             nNextOffset = nNextOffset + nNextOfst;

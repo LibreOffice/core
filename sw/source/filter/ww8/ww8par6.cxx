@@ -2522,7 +2522,7 @@ void SwWW8ImplReader::StopApo()
             {
                 //If the last anchor pos is here, then clear the anchor pos.
                 //This "last anchor pos" is only used for fixing up the
-                //postions of things anchored to page breaks and here
+                //positions of things anchored to page breaks and here
                 //we are removing the last paragraph of a frame, so there
                 //cannot be a page break at this point so we can
                 //safely reset m_pLastAnchorPos to avoid any dangling
