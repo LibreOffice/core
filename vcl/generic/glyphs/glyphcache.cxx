@@ -23,7 +23,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
-#include <outfont.hxx>
+#include <fontentry.hxx>
 #include <fontattributes.hxx>
 
 #include <config_graphite.h>

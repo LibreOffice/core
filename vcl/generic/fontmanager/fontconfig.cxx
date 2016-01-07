@@ -24,7 +24,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/wrkwin.hxx>
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>

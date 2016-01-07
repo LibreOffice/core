@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:45 using:
+ Generated on 2016-01-07 18:28:08 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <climits>
+#include <cmath>
 #include <config_features.h>
 #include <config_folders.h>
 #include <config_global.h>
@@ -128,12 +130,12 @@
 #include <salsys.hxx>
 #include <saltimer.hxx>
 #include <salvd.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
@@ -216,6 +218,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -257,19 +260,21 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <dndlcon.hxx>
+#include <fontentry.hxx>
 #include <helpwin.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <impbmp.hxx>
+#include <impfont.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
 #include <outdata.hxx>
-#include <outfont.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <svdata.hxx>
+#include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <tools/color.hxx>
 #include <tools/date.hxx>

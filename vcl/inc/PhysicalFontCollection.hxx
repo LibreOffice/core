@@ -22,7 +22,7 @@
 
 #include <vcl/dllapi.h>
 
-#include "outfont.hxx"
+#include "fontentry.hxx"
 #include "PhysicalFontFamily.hxx"
 
 class ImplGlyphFallbackFontSubstitution;
