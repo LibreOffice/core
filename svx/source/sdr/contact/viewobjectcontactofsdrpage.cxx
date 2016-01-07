@@ -266,6 +266,11 @@ bool ViewObjectContactOfPageShadow::isPrimitiveVisible(const DisplayInfo& rDispl
         return false;
     }
 
+    if(!pSdrPageView->GetView().IsPageShadowVisible())
+    {
+        return false;
+    }
+
     // no page shadow for preview renderers
     if(GetObjectContact().IsPreviewRenderer())
     {

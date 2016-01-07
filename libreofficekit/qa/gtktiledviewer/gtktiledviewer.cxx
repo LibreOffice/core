@@ -32,8 +32,9 @@ static int help()
 {
     fprintf(stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install's-program-directory> <path-to-document> [<options> ... ]\n\n");
     fprintf(stderr, "Options:\n\n");
-    fprintf(stderr, "--hide-whitespace: Hide whitespace between pages in text documents.\n");
     fprintf(stderr, "--background-color <color>: Set custom background color, e.g. 'yellow'.\n");
+    fprintf(stderr, "--hide-page-shadow: Hide page/slide shadow.\n");
+    fprintf(stderr, "--hide-whitespace: Hide whitespace between pages in text documents.\n");
     return 1;
 }
 
@@ -507,12 +508,7 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
     for (size_t i = 0; i < rArguments.size(); ++i)
     {
         const std::string& rArgument = rArguments[i];
-        if (rArgument == "--hide-whitespace")
-        {
-            aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/type", '/'), "boolean");
-            aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
-        }
-        else if (rArgument == "--background-color" && i + 1 < rArguments.size())
+        if (rArgument == "--background-color" && i + 1 < rArguments.size())
         {
             GdkRGBA color;
             gdk_rgba_parse(&color, rArguments[i + 1].c_str());
@@ -520,7 +516,18 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
             gtk_widget_override_background_color(gtk_widget_get_toplevel(pDocView), GTK_STATE_FLAG_NORMAL, &color);
             SAL_WNODEPRECATED_DECLARATIONS_POP
         }
+        else if (rArgument == "--hide-page-shadow")
+        {
+            aTree.put(boost::property_tree::ptree::path_type(".uno:ShowBorderShadow/type", '/'), "boolean");
+            aTree.put(boost::property_tree::ptree::path_type(".uno:ShowBorderShadow/value", '/'), false);
+        }
+        else if (rArgument == "--hide-whitespace")
+        {
+            aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/type", '/'), "boolean");
+            aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
+        }
     }
+
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     std::string aArguments = aStream.str();
