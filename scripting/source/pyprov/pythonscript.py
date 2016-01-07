@@ -81,7 +81,7 @@ def getLogTarget():
                 systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
                 ret = open( systemPath , "a" )
         except:
-            print("Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n")
+            print("Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delegating log to stdout\n")
     return ret
 
 class Logger(LogLevel):

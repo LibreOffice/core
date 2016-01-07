@@ -58,7 +58,7 @@ namespace pcr
         /** determines whether the given model is a spreadsheet document model
 
             <p>If this method returns <FALSE/>, you cannot instantiate a CellBindingHelper with
-            the document, since then no of it's functionality will be available.</p>
+            the document, since then no of its functionality will be available.</p>
         */
         static  bool    isSpreadsheetDocument(
                                 const css::uno::Reference< css::frame::XModel >& _rxContextDocument

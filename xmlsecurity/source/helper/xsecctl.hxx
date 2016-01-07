@@ -217,7 +217,7 @@ private:
     com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > m_xPreviousNodeOnSAXChain;
     /*
-     * whether the previous node can provide an XInitiazlize interface,
+     * whether the previous node can provide an XInitialize interface,
      * use this variable in order to typecast the XInterface to the
      * correct interface type.
      */

@@ -141,7 +141,7 @@ namespace // private
     }
 
 
-    // calc the dimemsions so that a given picture fits into a
+    // calc the dimensions so that a given picture fits into a
     // given window, if the picture fits into the given window
     // the original CDimension will be returned
 

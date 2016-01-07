@@ -434,7 +434,7 @@ namespace rptui
             const UndoContext aUndoContext( m_rController.getUndoManager(), sUndoAction );
             try
             {
-                sal_Int32 j(0), i(0);;
+                sal_Int32 j(0), i(0);
                 for (   Conditions::const_iterator cond = m_aConditions.begin();
                         cond != m_aConditions.end();
                         ++cond, ++i

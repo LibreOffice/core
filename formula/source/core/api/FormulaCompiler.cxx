@@ -1253,7 +1253,7 @@ void FormulaCompiler::Factor()
             if (eOp == ocIsoWeeknum && FormulaGrammar::isODFF( meGrammar ))
             {
                 // tdf#50950 ocIsoWeeknum can have 2 arguments when saved by older versions of Calc;
-                // the opcode then has to be changed to ocWeek for backward compatibilty
+                // the opcode then has to be changed to ocWeek for backward compatibility
                 pFacToken = mpToken;
                 eOp = NextToken();
                 bool bNoParam = false;

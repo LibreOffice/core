@@ -344,7 +344,7 @@ _HashStr::_HashStr( const OUString& rName, const OUString& rText,
     pNext = pNxt;
 }
 
-/// Look up the Name, if it is present, return it's String, otherwise return an empty String
+/// Look up the Name, if it is present, return its String, otherwise return an empty String
 OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName,
                      sal_uInt16* pPos )
 {

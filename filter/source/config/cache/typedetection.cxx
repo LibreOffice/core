@@ -431,7 +431,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // flat detection failed
         // pure deep detection failed
         // => ask might existing InteractionHandler
-        // means: ask user for it's decision
+        // means: ask user for its decision
         if (sType.isEmpty())
             sType = impl_askUserForTypeAndFilterIfAllowed(stlDescriptor);
 
@@ -641,7 +641,7 @@ bool TypeDetection::impl_getPreselectionForType(
     bool bMatchByPattern = false;
 
     // And we must know if a preselection must be preferred, because
-    // it matches by it's extension too.
+    // it matches by its extension too.
     bool bMatchByExtension = false;
 
     // validate type
@@ -1100,7 +1100,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
 
     try
     {
-        // create a new request to ask user for it's decision about the usable filter
+        // create a new request to ask user for its decision about the usable filter
         ::framework::RequestFilterSelect aRequest(sURL);
         xInteraction->handle(aRequest.GetRequest());
 

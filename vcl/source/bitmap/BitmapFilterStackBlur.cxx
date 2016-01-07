@@ -521,7 +521,7 @@ void centerExtendBitmap(Bitmap& rBitmap, sal_Int32 nExtendSize, Color aColor)
  * Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
  * (http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html)
  *
- * Additionally eferences and implementations:
+ * Additionally references and implementations:
  * - Blur.js by Jacob Kelley
  *   (http://www.blurjs.com)
  * - BlurEffectForAndroidDesign by Nicolas Pomepuy

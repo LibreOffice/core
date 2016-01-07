@@ -304,7 +304,7 @@ public class CheckContentProvider {
         xChild.oObj = UnoRuntime.queryInterface(XChild.class, xContent);
         // hasParent determines if this content has a parent
         assertNotNull("getParent()", xChild._getParent(hasParent));
-        // parameter does dermine, if this function is supported: generally not supported with tdcp content
+        // parameter does determine, if this function is supported: generally not supported with tdcp content
         assertNotNull("setParent()", xChild._setParent(false));
 
         // check the XPropertyChangeNotifier interface

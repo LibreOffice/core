@@ -382,7 +382,7 @@
 // id for thesaurus entry in context menu
 #define SID_THES                            (SID_SFX_START + 698)
 
-// default-ids for editing, cursor travellung and selection
+// default-ids for editing, cursor travelling and selection
 #define SID_REDO                            (SID_SFX_START + 700)
 #define SID_UNDO                            (SID_SFX_START + 701)
 #define SID_REPEAT                          (SID_SFX_START + 702)

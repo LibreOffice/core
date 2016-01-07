@@ -766,7 +766,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     // #i76307# always paint the preview in LTR, because this is what the document does
     m_pCtlXRectPreview->EnableRTL(false);
 
-    // Calcualte size of dropdown listboxes
+    // Calculate size of dropdown listboxes
     Size aSize = LogicToPixel(Size(108, 103), MAP_APPFONT);
 
     m_pLbColor->set_width_request(aSize.Width());

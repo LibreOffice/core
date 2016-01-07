@@ -679,7 +679,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desk
 }
 
 /*-************************************************************************************************************
-    @interface  XDipsatchProviderInterception
+    @interface  XDispatchProviderInterception
     @short      supports registration/deregistration of interception objects, which
                 are interested on special dispatches.
 
@@ -1193,7 +1193,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     // get packed request and work on it first
     // Attention: Don't set it on internal member BEFORE interaction is finished - because
     // "loadComponentFromURL()" yield tills this member is changed. If we do it before
-    // interaction finish we can't guarantee right functionality. May be we cancel load process to earliear...
+    // interaction finish we can't guarantee right functionality. May be we cancel load process to earlier...
     css::uno::Any aRequest = xRequest->getRequest();
 
     // extract continuations from request

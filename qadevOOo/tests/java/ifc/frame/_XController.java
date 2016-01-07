@@ -95,7 +95,7 @@ public class _XController extends MultiMethodTest {
     /**
     * At first object relation 'FirstModel' is gotten. Then test calls the
     * method. <p>
-    * Has <b> OK </b> status if string repersentation of an object, returned by
+    * Has <b> OK </b> status if string rapresentation of an object, returned by
     * the method is equal to string representation of corresponding object
     * relation.
     */

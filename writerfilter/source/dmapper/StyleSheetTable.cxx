@@ -180,7 +180,7 @@ beans::PropertyValue StyleSheetEntry::GetInteropGrabBag()
     beans::PropertyValue aRet;
     aRet.Name = sStyleIdentifierI;
 
-    beans::PropertyValues aSeq = GetInteropGrabBagSeq();;
+    beans::PropertyValues aSeq = GetInteropGrabBagSeq();
     aRet.Value = uno::makeAny(aSeq);
     return aRet;
 }
@@ -1433,7 +1433,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     {
         //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
         std::vector< StyleSheetEntryPtr >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
-        //TODO: performance issue - put styles list into a map sorted by it's sStyleIdentifierD members
+        //TODO: performance issue - put styles list into a map sorted by its sStyleIdentifierD members
         while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
         {
             if( rWWName == ( *aIt )->sStyleIdentifierD )

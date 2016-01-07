@@ -48,7 +48,7 @@
 
 	<!-- The key function "nestedContent" returns all ODF elements that are children of the current heading (i.e. text:h) or their parent office:body in case there is no text:h.
 		It works by matching all ODF elements, that text:h refer to (it's sibling or office:body childring)
-		Various keyed element sets of these matched elements are being generated. A set is identified by having the same last (closest) preceding text:h or if none exisitent the parent document.
+		Various keyed element sets of these matched elements are being generated. A set is identified by having the same last (closest) preceding text:h or if none existent the parent document.
 		All those elements, that have the current heading as last preceding heading (text:h) are returned as a nodeset.
 	-->
 	<xsl:key name="nestedContent"

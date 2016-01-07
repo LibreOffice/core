@@ -273,7 +273,7 @@ void* data;
 
 
 /* ===============================================
- * Hash implementation custumized to be just tracking
+ * Hash implementation customized to be just tracking
  * a unique list of string (i.e no data associated
  * with the key, no need for retrieval, etc..
  *

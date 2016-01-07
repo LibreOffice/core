@@ -72,7 +72,7 @@ css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormatte
     osl_atomic_increment(&pRef->m_refCount);
 
     if (pRef->m_xAggregate.is())
-    {   // has to be in it's own block because of the temporary variable created by *this
+    {   // has to be in its own block because of the temporary variable created by *this
         pRef->m_xAggregate->setDelegator(static_cast<XWeak*>(pRef));
     }
 
@@ -111,7 +111,7 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone() throw (Ru
     }
 
     if ( xRef->m_xAggregate.is() )
-    {   // has to be in it's own block because of the temporary variable created by *this
+    {   // has to be in its own block because of the temporary variable created by *this
         xRef->m_xAggregate->setDelegator(static_cast< XWeak* >(xRef.get()));
     }
 
@@ -299,7 +299,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
     // do the aggregation
     osl_atomic_increment(&m_refCount);
     if (m_xAggregate.is())
-    {   // has to be in it's own block because of the temporary variable created by *this
+    {   // has to be in its own block because of the temporary variable created by *this
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
     osl_atomic_decrement(&m_refCount);
@@ -336,7 +336,7 @@ void OFormattedFieldWrapper::ensureAggregate()
 
     osl_atomic_increment(&m_refCount);
     if (m_xAggregate.is())
-    {   // has to be in it's own block because of the temporary variable created by *this
+    {   // has to be in its own block because of the temporary variable created by *this
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
     osl_atomic_decrement(&m_refCount);

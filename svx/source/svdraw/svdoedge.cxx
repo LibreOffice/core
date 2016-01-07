@@ -571,7 +571,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         {
             // #i123048# If layouting was ever suppressed, it needs to be done once
             // and the attr need to be set at EdgeInfo, else these attr *will be lost*
-            // in the following call to ImpSetEdgeInfoToAttr() sice they were never
+            // in the following call to ImpSetEdgeInfoToAttr() since they were never
             // set before (!)
             *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
             ImpSetAttrToEdgeInfo();

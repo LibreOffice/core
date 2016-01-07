@@ -52,7 +52,7 @@ namespace drawinglayer
             return false;
         }
 
-        /// default: just return children, so all renderers not supporting group will use it's content
+        /// default: just return children, so all renderers not supporting group will use its content
         Primitive2DContainer GroupPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             return getChildren();

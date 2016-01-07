@@ -89,7 +89,7 @@ class DocumentViewHelper
 
         // go get the current view
         XController xController = get( XController.class );
-        // go get the dispatch provider of it's frame
+        // go get the dispatch provider of its frame
         XDispatchProvider xProvider = UnoRuntime.queryInterface(
             XDispatchProvider.class, xController.getFrame() );
         if ( null != xProvider )

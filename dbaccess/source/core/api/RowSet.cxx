@@ -869,7 +869,7 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException, std::
     // insertRow is not allowed when
     // standing not on the insert row nor
     // when the row isn't modified
-    // or the concurency is read only
+    // or the concurrency is read only
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     if(!m_pCache || !m_bNew || !m_bModified || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)

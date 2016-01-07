@@ -108,7 +108,7 @@ namespace {
 
     @descr  Because some operations are forced to be executed asynchronously
             (e.g. requested by our CreashSave/Recovery dialog) ... we must make sure
-            that these information wont be set as "normal" members of our AtoRecovery
+            that these information wont be set as "normal" members of our AutoRecovery
             instance. Otherwise they can disturb our normal AutoSave-timer handling.
             e.g. it can be unclear then, which progress has to be used for storing documents ...
  */
@@ -662,7 +662,7 @@ private:
         @param  bStopListening
                 sal_False: must be used in case this method is called within disposing() of the document,
                        where it make no sense to deregister our listener. The container dies...
-                sal_True : must be used in case this method is used on "dergistration" of this document, where
+                sal_True : must be used in case this method is used on "deregistration" of this document, where
                        we must deregister our listener .-)
 
         @threadsafe
@@ -988,7 +988,7 @@ private:
 
         Every URL supported by our UCB component can be used here.
         Further it doesn't matter if the file really exists or not.
-        Because removing a non exsistent file will have the same
+        Because removing a non existent file will have the same
         result at the end... a non existing file .-)
 
         On the other side removing of files from disc is an optional
@@ -3728,7 +3728,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // That is normally done by recalling it from a timer.
     // Here we must do it immediately!
     // Of course this method returns the right state -
-    // because it knows, that we are running in ERMERGENCY SAVE mode .-)
+    // because it knows, that we are running in EMERGENCY SAVE mode .-)
 
     bool                 bAllowUserIdleLoop = false; // not allowed to change that .-)
     AutoRecovery::ETimerType eSuggestedTimer    = AutoRecovery::E_DONT_START_TIMER;
@@ -4145,7 +4145,7 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
             // insert model into cache ...
             // If the model is already well known inside cache
             // it's information set will be updated by asking the
-            // model again for it's new states.
+            // model again for its new states.
             implts_registerDocument(xModel);
         }
     }

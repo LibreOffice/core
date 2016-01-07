@@ -82,7 +82,7 @@ public class ProviderBrowseNode extends PropertySet implements
                 creatable = false;
             }
         }
-        // TODO propage errors
+        // TODO propagate errors
         catch (com.sun.star.uno.Exception e) {
             LogUtils.DEBUG("Caught exception in creation of ProviderBrowseNode ");
             LogUtils.DEBUG(LogUtils.getTrace(e));

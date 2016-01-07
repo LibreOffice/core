@@ -30,7 +30,7 @@ from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO, DEF_YES
 # uses a renderer method geMessageFor(Exception, Object, int, int)
 # (in this class still abstract...)
 # to render the errors, and displays
-# error messeges.
+# error messages.
 class AbstractErrorHandler(ErrorHandler):
 
     xmsf = None

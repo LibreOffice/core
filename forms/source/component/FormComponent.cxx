@@ -2332,7 +2332,7 @@ void OBoundControlModel::reset() throw (RuntimeException, std::exception)
         {
             if ( bIsNewRecord )
             {
-                // reset the control to it's default
+                // reset the control to its default
                 resetNoBroadcast();
                 // and immediately commit the changes to the DB column, to keep consistency
                 commitControlValueToDbColumn( true );

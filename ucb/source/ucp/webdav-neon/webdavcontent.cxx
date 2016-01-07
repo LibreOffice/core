@@ -2998,7 +2998,7 @@ void Content::lock(
                 // since it mostly happens on read/only part of webdav, this appears to be the most correct exception available
                 throw
                     ucb::InteractiveNetworkWriteException(
-                        OUString( "Authentication error while tring to lock! Write only WebDAV perhaps?" ),
+                        OUString( "Authentication error while trying to lock! Write only WebDAV perhaps?" ),
                         static_cast< cppu::OWeakObject * >( this ),
                         task::InteractionClassification_ERROR,
                         e.getData() );

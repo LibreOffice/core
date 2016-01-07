@@ -285,7 +285,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_freeProcessHandle(
         oslProcess Process);
 
 
-/** Wait for completation of the specified childprocess.
+/** Wait for completion of the specified childprocess.
     @param Process [in]
     @return ols_Process_E_None
     @see osl_executeProcess
@@ -363,7 +363,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getCommandArg(
 /** Set the command-line arguments as passed to the main-function of this process.
 
     Deprecated: This function is only for internal use. Passing the args from main will
-    only work for Unix, on Windows there's no effect, the full command line will automtically
+    only work for Unix, on Windows there's no effect, the full command line will automatically
     be taken. This is due to Windows 9x/ME limitation that don't allow UTF-16 wmain to provide
     a osl_setCommandArgsU( int argc, sal_Unicode **argv );
 

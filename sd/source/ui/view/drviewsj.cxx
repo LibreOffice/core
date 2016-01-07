@@ -279,7 +279,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     // multi-selection
     else if( nMarkCount > 1 )
     {
-        // distribure dialog for 3+n objects
+        // distribute dialog for 3+n objects
         if(nMarkCount <= 2)
             rSet.DisableItem(SID_DISTRIBUTE_DLG);
 

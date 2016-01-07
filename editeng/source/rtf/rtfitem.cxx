@@ -663,7 +663,7 @@ SET_FONTALIGNMENT:
                         nTokenValue *= 10;
 // #i66167#
 // for the SwRTFParser 'IsCalcValue' will be false and for the EditRTFParser
-// the converiosn takes now place in EditRTFParser since for other reasons
+// the conversion takes now place in EditRTFParser since for other reasons
 // the wrong MapUnit might still be use there
 //                   if( IsCalcValue() )
 //                       CalcValue();

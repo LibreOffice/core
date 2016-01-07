@@ -684,7 +684,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
                 SAL_INFO("sw.ww8","cmt is cmtAllocated [???] 0x" << std::hex << arg2);
                 break;
             case 7:
-                SAL_INFO("sw.ww8","cmt is cmNill no-phing 0x" << std::hex << arg2);
+                SAL_INFO("sw.ww8","cmt is cmNill no-thing 0x" << std::hex << arg2);
                 break;
             default:
                 SAL_INFO("sw.ww8","illegal 0x" << std::hex << cmt);

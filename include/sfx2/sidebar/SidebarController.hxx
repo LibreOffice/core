@@ -192,7 +192,7 @@ private:
     bool mbCanDeckBeOpened;
 
     /** Before the deck is closed the sidebar width is saved into this variable,
-        so that it can be restored when the deck is reopended.
+        so that it can be restored when the deck is reopened.
     */
     sal_Int32 mnSavedSidebarWidth;
     FocusManager maFocusManager;

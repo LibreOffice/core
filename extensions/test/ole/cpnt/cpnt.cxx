@@ -783,7 +783,7 @@ void SAL_CALL OComponent::setALong( ::sal_Int32 _along ) throw (RuntimeException
 
 ::sal_uInt32 SAL_CALL OComponent::getAULong() throw (RuntimeException)
 {
-    return m_attr_uint32;;
+    return m_attr_uint32;
 }
 
 void SAL_CALL OComponent::setAULong( ::sal_uInt32 _aulong ) throw (RuntimeException)

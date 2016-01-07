@@ -49,7 +49,7 @@ namespace drawinglayer
                 aNormalsKind = css::drawing::NormalsKind_SPHERE;
             }
 
-            // get NoermalsInvert flag
+            // get NormalsInvert flag
             const bool bInvertNormals(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue());
 
             // get TextureProjectionX

@@ -33,7 +33,7 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        // create a mating VCL-Provessor for given OutputDevice. This includes
+        // create a mating VCL-Processor for given OutputDevice. This includes
         // looking for MetaFile-recording. The returned renderer changes owner,
         // deletion is duty of the caller
         DRAWINGLAYER_DLLPUBLIC drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(

@@ -685,7 +685,7 @@ void SAL_CALL AccessibleControlShape::disposing()
 
     m_xUnoControl.clear();
 
-    // let the base do it's stuff
+    // let the base do its stuff
     AccessibleShape::disposing();
 }
 

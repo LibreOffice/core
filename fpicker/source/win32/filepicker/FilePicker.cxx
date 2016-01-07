@@ -193,7 +193,7 @@ OUString SAL_CALL CFilePicker::helpRequested(FilePickerEvent aEvent) const
                 /*
                   if there are multiple listeners responding
                   to this notification the next response
-                  overwrittes  the one before if it is not empty
+                  overwrites the one before if it is not empty
                 */
 
                 OUString temp;

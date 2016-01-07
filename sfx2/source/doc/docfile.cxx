@@ -3466,7 +3466,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
 
         if ( !bTransferSuccess && pImp->m_pInStream )
         {
-            // the case when there is no URL-access available or this is a remote protocoll
+            // the case when there is no URL-access available or this is a remote protocol
             // but there is an input stream
             GetOutStream();
             if ( pImp->m_pOutStream )

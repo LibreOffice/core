@@ -33,7 +33,7 @@ typedef std::list< sal_Int32 > PositionList;
 
 #define SPACING_PRECISION_FACTOR 100
 
-// encapsultes information about script changes
+// encapsulates information about script changes
 class SwScriptInfo
 {
 public:

@@ -2108,7 +2108,7 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
     return false;
 }
 
-/// Find the next row that has some real content in one of it's columns.
+/// Find the next row that has some real content in one of its columns.
 SCROW ScHorizontalCellIterator::FindNextNonEmptyRow()
 {
     size_t nNextRow = MAXROW+1;

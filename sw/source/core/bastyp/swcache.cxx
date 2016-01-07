@@ -302,7 +302,7 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
          (nCurMax <= (m_aCacheObjects.size() - aFreePositions.size())) )
     {
         // Shrink if possible.To do so we need enough free positions.
-        // Unpleasent side effect: positions will be moved and the owner of
+        // Unpleasant side effect: positions will be moved and the owner of
         // these might not find them afterwards
         for ( size_t i = 0; i < m_aCacheObjects.size(); ++i )
         {

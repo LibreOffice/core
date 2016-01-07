@@ -517,7 +517,7 @@ namespace pcr
 
     IMPL_LINK_NOARG_TYPED(OPropertyEditor, OnPageDeactivate, TabControl *, bool)
     {
-        // commit the data on the current (to-be-decativated) tab page
+        // commit the data on the current (to-be-deactivated) tab page
         // (79404)
         sal_Int32 nCurrentId = m_aTabControl->GetCurPageId();
         OBrowserPage* pCurrentPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage((sal_uInt16)nCurrentId));

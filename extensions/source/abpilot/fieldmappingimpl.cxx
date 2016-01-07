@@ -156,7 +156,7 @@ namespace abp
                     // but this list above is the intersection)
 
 
-                // access the configuration information which the driver uses for determining it's column names
+                // access the configuration information which the driver uses for determining its column names
                 OUString sDriverAliasesNodeName(
                     OUStringLiteral(sDriverSettingsNodeName)
                     + "/ColumnAliases");
@@ -212,7 +212,7 @@ namespace abp
             // want to have a non-const map for easier handling
             MapString2String aFieldAssignment( _rFieldAssignment );
 
-            // access the configuration information which the driver uses for determining it's column names
+            // access the configuration information which the driver uses for determining its column names
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
@@ -288,7 +288,7 @@ namespace abp
         void writeTemplateAddressSource( const Reference< XComponentContext >& _rxContext,
             const OUString& _rDataSourceName, const OUString& _rTableName )
         {
-            // access the configuration information which the driver uses for determining it's column names
+            // access the configuration information which the driver uses for determining its column names
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
@@ -305,7 +305,7 @@ namespace abp
 
         void markPilotSuccess( const Reference< XComponentContext >& _rxContext )
         {
-            // access the configuration information which the driver uses for determining it's column names
+            // access the configuration information which the driver uses for determining its column names
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(

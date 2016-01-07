@@ -1373,7 +1373,7 @@ void StatusBar::StartProgressMode( const OUString& rText )
 
 void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
 {
-    DBG_ASSERT( mbProgressMode, "StatusBar::SetProgressValue(): no progrss mode" );
+    DBG_ASSERT( mbProgressMode, "StatusBar::SetProgressValue(): no progress mode" );
     SAL_WARN_IF( nNewPercent > 100, "vcl", "StatusBar::SetProgressValue(): nPercent > 100" );
 
     if ( mbProgressMode

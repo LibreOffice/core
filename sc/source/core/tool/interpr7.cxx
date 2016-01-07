@@ -227,7 +227,7 @@ void ScInterpreter::ScEncodeURL()
 
         OString aUtf8Str( aStr.toUtf8());
         const sal_Int32 nLen = aUtf8Str.getLength();
-        OStringBuffer aUrlBuf( nLen );;
+        OStringBuffer aUrlBuf( nLen );
         for ( int i = 0; i < nLen; i++ )
         {
             sal_Char c = aUtf8Str[ i ];

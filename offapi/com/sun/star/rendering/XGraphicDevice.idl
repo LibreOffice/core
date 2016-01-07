@@ -45,7 +45,7 @@ interface XBufferController;
     rendered.
 
     For a typical windowing system, the graphic device is equivalent
-    to a distinct OS window, with it's own clipped output area,
+    to a distinct OS window, with its own clipped output area,
     fullscreen and double-buffering attributes. That is, even if one
     can have multiple canvases per system window, they all share the
     same graphic device and thus e.g. fullscreen state. If the OS

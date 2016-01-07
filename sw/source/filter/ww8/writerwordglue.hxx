@@ -94,7 +94,7 @@ namespace sw
             else is the same.
 
             So this function compares two writer page fmts and sees if the
-            follow frame and the title frame are the same from word persecptive
+            follow frame and the title frame are the same from word perspective
             except for the content of their headers.
 
             @return true if the rTitleFormat followed by rFollowFormat could be

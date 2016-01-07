@@ -77,7 +77,7 @@ namespace basegfx
             hole. The result is a depth which e.g. is -1 for holes
             outside everything, 1 for a polygon covered by another
             polygon and zero for e.g. holes in a polygon or polygons
-            outside everythig else.  In the 2nd step, all polygons
+            outside everything else.  In the 2nd step, all polygons
             with depth other than zero are removed. If bKeepAboveZero
             is used, all polygons < 1 are removed. The bKeepAboveZero
             mode is useful for clipping, e.g. just append one polygon

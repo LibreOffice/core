@@ -528,7 +528,7 @@ public:
  *
  * This node is used with commands: oper, uoper and boper.
  * E.g. in "A boper op B", "op" will be an instance of SmGlyphSpecialNode.
- * "boper" simply inteprets "op", the following token, as an binary operator.
+ * "boper" simply interprets "op", the following token, as an binary operator.
  * The command "uoper" interprets the following token as unary operator.
  * For these commands an instance of SmGlyphSpecialNode is used for the
  * operator token, following the command.

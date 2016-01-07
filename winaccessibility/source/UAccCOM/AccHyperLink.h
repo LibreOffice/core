@@ -106,7 +106,7 @@ public:
     // hyperlink (group) starts.
     STDMETHOD(get_startIndex)(/* [retval][out] */ long __RPC_FAR *index);
 
-    // Returns the index at which the textual rerpesentation of the
+    // Returns the index at which the textual rapresentation of the
     // hyperlink (group) ends.
     STDMETHOD(get_endIndex)(/* [retval][out] */ long __RPC_FAR *index);
 

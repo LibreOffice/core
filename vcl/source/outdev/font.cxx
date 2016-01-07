@@ -1450,7 +1450,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         if( nFallbackLevel < MAX_FALLBACK-1)
         {
             // ignore fallback font if it is the same as the original font
-            // unless we are looking for a substituion for 0x202F, in which
+            // unless we are looking for a substitution for 0x202F, in which
             // case we'll just use a normal space
             if( mpFontEntry->maFontSelData.mpFontData == aFontSelData.mpFontData &&
                 aMissingCodes.indexOf(0x202F) == -1 )

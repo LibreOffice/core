@@ -8,7 +8,7 @@ cli_cppuhelper.dll.
 
 
 When an office is properly installed then these assemblies can be found in the 
-global assebly cache (GAC), for example in c:\windows\assembly.
+global assembly cache (GAC), for example in c:\windows\assembly.
 
 When the test is run then the assemblies are used from the GAC. That is 
 one has to make sure that one has the respective office installed.
@@ -21,6 +21,6 @@ However, if for some reason an assembly remains in the GAC than it is used no ma
 what.
 
 
-The qa test simply executes the cli_bridgetest_inprocess.exe. All console output is decarded.
+The qa test simply executes the cli_bridgetest_inprocess.exe. All console output is descarded.
 When the test fails one should directly run that executable. Then one may see the cause 
 of the failure in the console.

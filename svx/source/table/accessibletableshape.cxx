@@ -434,7 +434,7 @@ void SAL_CALL AccessibleTableShape::disposing()
 {
     mxImpl->dispose();
 
-    // let the base do it's stuff
+    // let the base do its stuff
     AccessibleShape::disposing();
 }
 

@@ -820,7 +820,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             {
                 sal_uInt32 nBackgroundColor = 0xffffff;
 
-                if ( !nCharColor )          // special threatment for
+                if ( !nCharColor )          // special treatment for
                     nCharColor = 0xffffff;  // black fontcolor
 
                 css::uno::Any aAny;
@@ -3006,7 +3006,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mpExEmbed->WriteUInt32( EPP_ExEmbedAtom << 16 )
                                .WriteUInt32( 8 )
                                .WriteUInt32( 0 )    // follow colorscheme : 0->do not follow
-                                                    //                      1->follow collorscheme
+                                                    //                      1->follow colorscheme
                                                     //                      2->follow text and background scheme
                                .WriteUChar( 1 )     // (bool)set if embedded server can not be locked
                                .WriteUChar( 0 )     // (bool)do not need to send dimension

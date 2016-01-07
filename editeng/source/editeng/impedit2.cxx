@@ -2527,7 +2527,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
         aSel.Max().SetIndex( aAuto.GetCursor() );
 
         // #i78661 since the SvxAutoCorrect object used here is
-        // shared we need to reset the value to it's original state.
+        // shared we need to reset the value to its original state.
         pAutoCorrect->SetAutoCorrFlag( CapitalStartSentence, bOldCapitalStartSentence );
     }
     return aSel.Max();
@@ -4060,7 +4060,7 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
                 const SvxULSpaceItem& rPrevULItem = static_cast<const SvxULSpaceItem&>(pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE ));
                 const SvxLineSpacingItem& rPrevLSItem = static_cast<const SvxLineSpacingItem&>(pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
 
-                // In realation between WinWord6/Writer3:
+                // In relation between WinWord6/Writer3:
                 // With a proportional line spacing the paragraph spacing is
                 // also manipulated.
                 // Only Writer3: Do not add up, but minimum distance.

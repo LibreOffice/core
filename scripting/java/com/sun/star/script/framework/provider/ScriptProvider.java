@@ -243,7 +243,7 @@ public abstract class ScriptProvider implements
             LogUtils.DEBUG("isPkgProvider is: " + isPkgProvider);
 
             // TODO should all be done in this class instead of
-            // deleagation????
+            // delegation????
             m_xBrowseNodeProxy =
                 new ProviderBrowseNode(this, m_container, m_xContext);
 

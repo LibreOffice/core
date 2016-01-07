@@ -117,7 +117,7 @@ namespace comphelper
 
         /** terminates the thread
 
-            Note that this is a cooporative termination - if you call this from a thread different
+            Note that this is a cooperative termination - if you call this from a thread different
             from the notification thread itself, then it will block until the notification thread
             finished processing the current event. If you call it from the notification thread
             itself, it will return immediately, and the thread will be terminated as soon as

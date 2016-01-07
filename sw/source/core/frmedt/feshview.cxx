@@ -697,7 +697,7 @@ long SwFEShell::EndDrag( const Point *, bool )
 
         // #50778# Bug during dragging: In StartAction a HideShowXor is called.
         // In EndDragObj() this is reversed, for no reason and even wrong.
-        // To restore consistancy we should bring up the Xor again.
+        // To restore consistency we should bring up the Xor again.
 
         // Reanimation from the hack #50778 to fix bug #97057
         // May be not the best solution, but the one with lowest risc at the moment.

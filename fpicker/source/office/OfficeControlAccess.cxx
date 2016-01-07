@@ -425,7 +425,7 @@ namespace svt
                     case LISTBOX_FILTER:
                         if ( ControlActions::GET_SELECTED_ITEM == _nControlAction )
                         {
-                            aRet <<= OUString( m_pFilePickerController->getCurFilter() );;
+                            aRet <<= OUString( m_pFilePickerController->getCurFilter() );
                         }
                         else
                         {
