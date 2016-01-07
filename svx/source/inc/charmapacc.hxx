@@ -120,7 +120,7 @@ namespace svx
 
     // - SvxShowCharSetAcc -
 
-    /** The table implemtentation of the vcl control.
+    /** The table implementation of the vcl control.
     */
 
     class SvxShowCharSetAcc : public ::comphelper::OAccessibleSelectionHelper,

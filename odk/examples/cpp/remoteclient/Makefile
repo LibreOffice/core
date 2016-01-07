@@ -110,12 +110,12 @@ $(COMP_SERVICES) :
 #CppClientExample : $(COMP_IMPL) $(COMP_ENV_FLAG)
 CppClientExample : $(COMP_IMPL) $(COMP_SERVICES)
 	@echo --------------------------------------------------------------------------------
-	@echo The remoteclient C++ component can be used by using the uno binary. Use the 
-	@echo the follwong command to start the example. The run target starts a remote 
+	@echo The remoteclient C++ component can be used by using the uno binary. Use the
+	@echo the following command to start the example. The run target starts a remote
 	@echo server and connect with the client to this server.
-	@echo - 
+	@echo -
 	@echo $(MAKE) remoteclient.run
-	@echo - 
+	@echo -
 	@echo NOTE: The example uses the $(QM)uno$(QM) tool to prepare a working UNO environment.
 	@echo $(SQM)      $(SQM)The example component is made available via -env:URE_MORE_SERVICES=...
 	@echo $(SQM)      $(SQM)Please check the generated $(QM)$(COMP_SERVICES)$(QM) to see how you can specify your own components in such an environment

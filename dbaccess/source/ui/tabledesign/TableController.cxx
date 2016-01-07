@@ -636,7 +636,7 @@ void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(R
 
 void OTableController::losingConnection( )
 {
-    // let the base class do it's reconnect
+    // let the base class do its reconnect
     OTableController_BASE::losingConnection( );
 
     // remove from the table

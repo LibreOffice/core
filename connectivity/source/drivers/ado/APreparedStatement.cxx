@@ -263,7 +263,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
         m_RecordSet.Close();
     m_RecordSet.clear();
 
-    // the create the new onces
+    // then create the new ones
     m_RecordSet.Create();
     OLEVariant aCmd;
     aCmd.setIDispatch(m_Command);

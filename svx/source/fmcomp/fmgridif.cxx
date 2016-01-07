@@ -495,7 +495,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
 
         // consider the following ugly scenario: updateFromModel leads to a propertiesChanges on the Control,
         // which determines, dat a "critical" property has changed (e.g. "Border") and therefore starts a new
-        // Peer, which lands again here in createPeerm we also start a second FmXGridPeer and initialise it.
+        // Peer, which lands again here in createPeer we also start a second FmXGridPeer and initialise it.
         // Then we exit from the first incarnation's updateFromModel and continue working with the pPeer,
         // that is in fact now already obsolete (as another peer is being started in the second incarnation).
         // Therefore the effort with the PeerCreationLevel, which ensures that we really use the Peer
@@ -1776,7 +1776,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     // set the model of the new column
     DbGridColumn* pCol = pGrid->GetColumns().at( nNewPos );
 
-    // for initializong this grid column, we need the fields of the grid's data source
+    // for initializing this grid column, we need the fields of the grid's data source
     Reference< XColumnsSupplier > xSuppColumns;
     CursorWrapper* pGridDataSource = pGrid->getDataSource();
     if ( pGridDataSource )
@@ -2093,7 +2093,7 @@ void FmXGridPeer::dispose() throw( RuntimeException, std::exception )
         // tell the interceptor it has a new (means no) predecessor
         xInterceptor->setMasterDispatchProvider( nullptr );
 
-        // ask for it's successor
+        // ask for its successor
         Reference< XDispatchProvider > xSlave = xInterceptor->getSlaveDispatchProvider();
         // and give it the new (means no) successoert
         xInterceptor->setSlaveDispatchProvider( nullptr );

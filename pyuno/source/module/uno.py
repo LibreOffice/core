@@ -190,7 +190,7 @@ class Char:
 #    def __repr__(self):
 #        return "<ByteSequence instance %s>" % str.__repr__(self)
 
-    # for a little bit compatitbility; setting value is not possible as
+    # for a little bit compatibility; setting value is not possible as
     # strings are immutable
 #    def _get_value(self):
 #        return self

@@ -111,7 +111,7 @@ SFX_IMPL_CHILDWINDOW(SwFieldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
 SfxChildWinInfo SwFieldDataOnlyDlgWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-// prevent instatiation of dialog other than by calling
+// prevent instantiation of dialog other than by calling
 // the mail merge dialog
     aInfo.bVisible = false;
     return aInfo;

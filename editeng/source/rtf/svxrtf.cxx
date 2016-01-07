@@ -226,7 +226,7 @@ INSINGLECHAR:
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // First overwrite all (all have to be in one group!!)
-    // Could also appear in the RTF-filewithout the IGNORE-Flag; all Groups
+    // Could also appear in the RTF-file without the IGNORE-Flag; all Groups
     // with the IGNORE-Flag are overwritten in the default branch.
 
     case RTF_SWG_PRTDATA:

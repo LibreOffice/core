@@ -102,7 +102,7 @@ namespace mozilla {
  * and move-assigned, not only from itself but from "derived" UniquePtr<U, E>
  * instantiations where U converts to T and E converts to D.  If you want to use
  * this, you're going to have to specify a deletion policy for both UniquePtr
- * instantations, and T pretty much has to have a virtual destructor.  In other
+ * instantiations, and T pretty much has to have a virtual destructor.  In other
  * words, this doesn't work:
  *
  *   struct Base { virtual ~Base() {} };

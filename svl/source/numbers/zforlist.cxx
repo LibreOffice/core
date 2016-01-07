@@ -3492,7 +3492,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
             if ( ppEntry )
             {
                 bool bFoundBank = false;
-                // we definiteley need an entry matching the format code string
+                // we definitely need an entry matching the format code string
                 const NfCurrencyEntry* pFoundEntry = GetCurrencyEntry(
                     bFoundBank, aSymbol, aExtension, pFormat->GetLanguage(),
                     true );

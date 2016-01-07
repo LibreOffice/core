@@ -520,7 +520,7 @@ namespace sfx2
             FillClassGroup( rGlobalFilters, _rGlobalClassesRef )
         );
             // now we have:
-            // in rGlobalFilters: a list of FilterDescriptor's, where each's discriptor's display name is set to the name of a class
+            // in rGlobalFilters: a list of FilterDescriptor's, where each's descriptor's display name is set to the name of a class
             // in aGlobalClassesRef: a mapping from logical filter names to positions within rGlobalFilters
             //  this way, if we encounter an arbitrary filter, we can easily (and efficient) check if it belongs to a global class
             //  and modify the descriptor for this class accordingly
@@ -672,7 +672,7 @@ namespace sfx2
             );
 
 
-            // add the filter to it's group
+            // add the filter to its group
 
             // for this, check if the filter is part of a local filter
             FilterGroupEntryReferrer::iterator aBelongsToLocal = aLocalClassesRef.find( sFilterName );

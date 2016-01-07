@@ -261,7 +261,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
         DBG_ASSERT(false, "Error, no XStorage provided");
         return Sequence<css::security::DocumentSignatureInformation>();
     }
-    // First check for the InputStream, to avoid unnecessary initialization of the security environemnt...
+    // First check for the InputStream, to avoid unnecessary initialization of the security environment...
     SignatureStreamHelper aStreamHelper;
     Reference< io::XInputStream > xInputStream = xSignStream;
 

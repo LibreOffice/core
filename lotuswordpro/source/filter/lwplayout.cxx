@@ -1307,7 +1307,7 @@ bool LwpMiddleLayout::HonorProtection()
 }
 
 /**
-* @descr:   Whether it is pretected
+* @descr:   Whether it is protected
 *
 */
 bool LwpMiddleLayout::IsProtected()

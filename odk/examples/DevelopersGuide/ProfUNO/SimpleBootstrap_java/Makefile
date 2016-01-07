@@ -79,7 +79,7 @@ SimpleBootstrapJavaExample : $(COMPONENT_JAR)
 	@echo --------------------------------------------------------------------------------
 
 # Setting the optional system property "com.sun.star.lib.loader.unopath" to the office
-# program path ensures that the conmfigured SDK office is used. If the system property
+# program path ensures that the configured SDK office is used. If the system property
 # is not specified, the default office installation is used.
 %.run: $(COMPONENT_JAR)
 	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $(COMPONENT_JAR)

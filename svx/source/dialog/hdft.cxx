@@ -643,7 +643,7 @@ IMPL_LINK_NOARG_TYPED(SvxHFPage, BackgroundHdl, Button*, void)
         if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
         {
             // If a SfxItemSet from the SetItem for SID_ATTR_PAGE_HEADERSET or
-            // SID_ATTR_PAGE_FOOTERSET exists, use it's content
+            // SID_ATTR_PAGE_FOOTERSET exists, use its content
             pBBSet->Put(static_cast<const SvxSetItem*>(pItem)->GetItemSet());
         }
         else

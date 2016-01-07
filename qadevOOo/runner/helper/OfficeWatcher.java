@@ -79,7 +79,7 @@ public class OfficeWatcher extends Thread implements share.Watcher {
                 " seconds, it probably hangs and is killed NOW.");
             ph.kill();
         } else {
-            dbg("reaeched timeout but ProcessHandler is NULL");
+            dbg("reached timeout but ProcessHandler is NULL");
         }
         util.utils.pause(timeOut == 0 ? 30000 : timeOut);
         dbg("finished");

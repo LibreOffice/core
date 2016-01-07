@@ -217,7 +217,7 @@ public class XMLTools {
 
         /**
          * Reset all values. This is important e.g. for test of XFilter
-         * interface, where 'filter()' method istbstarted twice.
+         * interface, where 'filter()' method is started twice.
          */
         void reset() {
             docStarted = false ;

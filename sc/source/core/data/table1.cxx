@@ -807,7 +807,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     // Flags as modifiers:
     //
     //     bIncludeOld = true ensure that the returned area contains at least the initial area,
-    //                   independently of the emptniess of rows / columns (i.e. does not allow shrinking)
+    //                   independently of the emptiness of rows / columns (i.e. does not allow shrinking)
     //     bOnlyDown = true means extend / shrink the inputed area only down, i.e modifiy only rEndRow
 
     bool bLeft = false;

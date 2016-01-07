@@ -59,7 +59,7 @@ published interface XStorage
     /** allows to control and track lifetime of the storage.
 
         <p>
-        In case a storage is disposed any call to it's methods should result
+        In case a storage is disposed any call to its methods should result
         in com::sun::star::lang::DisposedException.
         </p>
      */
@@ -311,7 +311,7 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    /** allows to get copy of this storage at the state of it's last commit.
+    /** allows to get copy of this storage at the state of its last commit.
 
         <p>
         This method makes sense only for services implementations that allow
@@ -340,7 +340,7 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    /** allows to get copy of a child storage at the state of it's last commit.
+    /** allows to get copy of a child storage at the state of its last commit.
 
         <p>
         This method makes sense only for services implementations that allow

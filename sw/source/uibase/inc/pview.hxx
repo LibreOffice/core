@@ -163,7 +163,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     // ViewWindow and handle to core
     // current dispatcher shell
     VclPtr<SwPagePreviewWin> pViewWin;
-    //viewdata of the previous SwView and the new crsrposition
+    //viewdata of the previous SwView and the new cursor position
     OUString sSwViewData;
     //and the new cursor position if the user double click in the PagePreview
     OUString sNewCursorPos;

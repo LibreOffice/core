@@ -2,7 +2,7 @@
 This extension is a Proof of concept on implementing Toolpanel in Python
 
 - make will create the oxt
-    - provided sdk environnement is set 
+    - provided sdk environment is set
     - alternatively zip the files and name it toolpanel.oxt
 - install it
 - activate Task Panes in menu (check View > Task Pane menu)

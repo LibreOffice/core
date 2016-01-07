@@ -87,7 +87,7 @@ private:
 
 public:
     /**
-     * @param ppConnection The piece of memory, pConnection points to, is accessisble
+     * @param ppConnection The piece of memory, pConnection points to, is accessible
      *                     as long as a reference to paramenter con is held.
      */
     Statement( const rtl::Reference< RefCountedMutex > & refMutex,

@@ -163,7 +163,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
             // in framework!
             aURL.Protocol   = aProtocol;
             aURL.Main       = aURL.Complete;
-            aURL.Path       = aURL.Complete.copy( nURLIndex+1 );;
+            aURL.Path       = aURL.Complete.copy( nURLIndex+1 );
 
             // Return "URL is parsed".
             return sal_True;

@@ -37,7 +37,7 @@ namespace osl { class Mutex; }
     LocaleDataWrapper and <type>CharClass</type> which always
     follow the locale as it is currently configured by the user. You may use
     it anywhere to access the locale data elements like decimal separator and
-    simple date formatting and so on. Contructing and destructing a
+    simple date formatting and so on. Constructing and destructing a
     SvtSysLocale is not expensive as long as there is at least one instance
     left.
  */

@@ -189,7 +189,7 @@ public class FormLayer
         // insert the text field control
         XPropertySet xFieldModel = createControlAndShape( sControlType, nXPos + 26, nYPos, 40, nHeight );
         xFieldModel.setPropertyValue( "DataField", sFieldName );
-        // knit it to it's label component
+        // knit it to its label component
         xFieldModel.setPropertyValue( "LabelControl", xLabelModel );
 
         // some names, so later on we can find them

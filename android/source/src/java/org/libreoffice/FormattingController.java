@@ -34,7 +34,7 @@ public class FormattingController implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         ImageButton button = (ImageButton) view;
-        boolean selected = button.isSelected();;
+        boolean selected = button.isSelected();
         button.setSelected(selected);
 
         if (selected) {

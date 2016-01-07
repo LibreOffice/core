@@ -239,7 +239,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
         return;
     }
     //we only read four modifiers, in these modifiers,CodePage and LangOverride are not styles,
-    //so we can only handle fontid and characstyle, if others ,we should not reg style
+    //so we can only handle fontid and charstyle, if others ,we should not reg style
     //note by ,1-27
     rtl::Reference<XFFont> pFont;
     XFTextStyle* pStyle = nullptr;

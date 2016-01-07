@@ -502,7 +502,7 @@ void ScCondFormatDlg::RefInputDone( bool bForced )
     ScAnyRefDlg::RefInputDone(bForced);
 
     // ScAnyRefModalDlg::RefInputDone resets the title back
-    // to it's original state.
+    // to its original state.
     // I.e. if we open the dialog normally, and then click into the sheet
     // to modify the selection, the title is updated such that the range
     // is only a single cell (e.g. $A$1), after which the dialog switches

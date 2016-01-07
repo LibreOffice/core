@@ -212,7 +212,7 @@ namespace connectivity
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
 
         protected:
-            /** will return the EBookQuery representing the stamement's WHERE condition, or throw
+            /** will return the EBookQuery representing the statement WHERE condition, or throw
 
                 Also, all statement dependent members (such as the parser/iterator) will be inited afterwards.
             */

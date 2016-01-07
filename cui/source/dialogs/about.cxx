@@ -76,7 +76,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     m_aVersionTextStr = m_pVersion->GetText();
     m_aBasedTextStr = get<FixedText>("libreoffice")->GetText();
     m_aBasedDerivedTextStr = get<FixedText>("derived")->GetText();
-    m_aLocaleStr = get<FixedText>("locale")->GetText();;
+    m_aLocaleStr = get<FixedText>("locale")->GetText();
 
     m_pVersion->SetText(GetVersionString());
 

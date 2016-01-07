@@ -969,7 +969,7 @@ namespace osl_FileBase
         checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
         checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
      }
-         // start with "~user", not impletment
+         // start with "~user", not implement
     //      void SystemPath_FileURL::getFileURLFromSystemPath_006()
 
     // testing the method

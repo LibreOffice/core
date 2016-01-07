@@ -3060,7 +3060,7 @@ bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         nEndCnt != pAttr->GetSttCnt() )
     {
         bInsert = true;
-        // We do some optimization for script depenedent attributes here.
+        // We do some optimization for script dependent attributes here.
         if( *pEndIdx == pAttr->GetSttPara() )
         {
             bool bFont = false;

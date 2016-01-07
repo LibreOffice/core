@@ -2495,7 +2495,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, OUString& )
 /*
     EQ , only the usage for
     a. Combined Characters supported, must be exactly in the form that word
-    only accepts as combined charactersm, i.e.
+    only accepts as combined characters, i.e.
     eq \o(\s\up Y(XXX),\s\do Y(XXX))
     b. Ruby Text supported, must be in the form that word recognizes as being
     ruby text

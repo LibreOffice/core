@@ -270,7 +270,7 @@ void DisplayModeController::setToolboxItemImage( sal_uInt16 nImage )
 
 OUString SAL_CALL DisplayModeController::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return OUString( "com.sun.star.comp.sd.DisplayModeController" );;
+    return OUString( "com.sun.star.comp.sd.DisplayModeController" );
 }
 
 Sequence< OUString > SAL_CALL DisplayModeController::getSupportedServiceNames(  ) throw( RuntimeException, std::exception )

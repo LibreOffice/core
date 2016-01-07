@@ -91,7 +91,7 @@ namespace
     #define HTML_PARSPACE   GetMetricVal( CM_05 )
 
     static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
-        // we do everything procentual now:
+        // we do everything percentual now:
         130, 115, 101, 95, 85,
         85,   80,  80, 75, 75,  // normal
         PT_24, PT_18, PT_14, PT_12, PT_10,

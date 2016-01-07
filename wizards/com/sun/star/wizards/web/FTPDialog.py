@@ -43,7 +43,7 @@ from com.sun.star.ucb.OpenMode import FOLDERS
 # (*) choosing a directory on the server.
 # If a connection was established successfully, the user may
 # press OK, which will change
-# the CGPublish object propertiers according the user's input.
+# the CGPublish object properties according the user's input.
 # If no connection was established. the OK and Choose-Dir button are disabled.
 # See the method "disconnect()" which disables them.
 #

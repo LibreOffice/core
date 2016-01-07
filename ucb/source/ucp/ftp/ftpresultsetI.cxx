@@ -47,7 +47,7 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
     for( size_t i = 0; i < dirvec.size(); ++i)
         m_aPath.push_back(dirvec[i].m_aURL);
 
-    // m_aIdents holds the contentidentifiers
+    // m_aIdents holds the content identifiers
 
     m_aItems.resize( m_aPath.size() );
     m_aIdents.resize( m_aPath.size() );

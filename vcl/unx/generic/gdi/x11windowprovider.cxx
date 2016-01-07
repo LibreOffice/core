@@ -45,7 +45,7 @@ Display *OpenX11Display(OString& rDisplay)
             {
                 /*
                  * if a -display switch was used, we need
-                 * to set the environment accoringly since
+                 * to set the environment accordingly since
                  * the clipboard build another connection
                  * to the xserver using $DISPLAY
                  */

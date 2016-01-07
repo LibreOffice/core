@@ -410,7 +410,7 @@ Registration::~Registration()
 // static
 TypeNameMapEntry * Registration::getExtensionEntry(OUString const & rTypeName)
 {
-    OUString aTheTypeName = rTypeName.toAsciiLowerCase();;
+    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
     Registration &rRegistration = theRegistration::get();
     TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     if (it != rRegistration.m_aTypeNameMap.end())

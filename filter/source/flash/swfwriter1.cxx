@@ -839,7 +839,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     }
 
     // Figure out JPEG size
-    const sal_uInt8* pJpgData = nullptr;;
+    const sal_uInt8* pJpgData = nullptr;
     sal_uInt32 nJpgDataLength = 0xffffffff;
 
     Graphic aGraphic( bmpSource );
@@ -891,8 +891,8 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 
         // AS: Christian, my scaling factors are different than yours, and work better for me.
         //  However, I can't explain why exactly.  I got some of this by trial and error.
-        double XScale = destRect.GetWidth() ? static_cast<double>(originalPixelRect.GetWidth())/destRect.GetWidth() : 1.0;;
-        double YScale = destRect.GetHeight() ? static_cast<double>(originalPixelRect.GetHeight())/destRect.GetHeight() : 1.0;;
+        double XScale = destRect.GetWidth() ? static_cast<double>(originalPixelRect.GetWidth())/destRect.GetWidth() : 1.0;
+        double YScale = destRect.GetHeight() ? static_cast<double>(originalPixelRect.GetHeight())/destRect.GetHeight() : 1.0;
 
         // AS: If rClipRect has a value set, then we need to crop the bmp appropriately.
         //  If a map event already occurred in the metafile, then we do not need to map

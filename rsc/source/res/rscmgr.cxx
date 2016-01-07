@@ -225,7 +225,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
             }
 
             /*
-            // structure definitoin from which the resource is built
+            // structure definition from which the resource is built
             struct RSHEADER_TYPE{
                 RESOURCE_TYPE   nRT;        // resource type
                 sal_uInt32          nRT;        // resource type

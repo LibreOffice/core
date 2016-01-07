@@ -178,7 +178,7 @@ namespace svt { namespace table
                 the row position which should be visibleMust be non-negative, and smaller
                 than the row count.
             @param _bAcceptPartialVisibility
-                <TRUE/> if it's okay that the given cooordinate is only partially visible
+                <TRUE/> if it's okay that the given coordinate is only partially visible
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
 

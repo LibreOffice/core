@@ -33,8 +33,8 @@ public class EvalElement {
    * NO minValue   maxValue : THE ELEMENT OF BasicBound
    * 1  MINDOUBLE, MINDOUBLE: the minimize objective
    * 2  MAXDOUBLE, MAXDOUBLE: the maximize objective
-   * 3  MINDOUBLE, v        : the lessthan constraint  {@literal (<v)}
-   * 4  v        , MAXDOUBLE: the largethan constraint {@literal (>v)}
+   * 3  MINDOUBLE, v        : the less than constraint  {@literal (<v)}
+   * 4  v        , MAXDOUBLE: the larger than constraint {@literal (>v)}
    * 5  v1       , v2       : the region constraint, i.e. belongs to [v1, v2]
    *
    * OPTIM type: the No.1 and No.2

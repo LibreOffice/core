@@ -68,7 +68,7 @@ SdrObject* SdrObjectPrimitiveHit(
             }
             else
             {
-                // not a single 3D object; Check in first PageWindow using prmitives (only SC
+                // not a single 3D object; Check in first PageWindow using primitives (only SC
                 // with split views uses multiple PageWindows nowadays)
                 if(rSdrPageView.PageWindowCount())
                 {

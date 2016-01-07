@@ -2143,7 +2143,7 @@ void WW8TabDesc::CalcDefaults()
     // 2. pass: Detect number of writer columns. This can exceed the count
     // of columns in WW by 2, because SW in constrast to WW does not provide
     // fringed left and right borders and has to fill with empty boxes.
-    // Non exisitent cells can reduce the number of columns.
+    // Non existent cells can reduce the number of columns.
 
     // 3. pass: Replace border with defaults if needed
     nConvertedLeft = nMinLeft;
@@ -2884,7 +2884,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
             pIo->SetLowerSpacing(*pIo->m_pPaM, 0);
 
         //We need to set the pPaM on the first cell, invalid
-        //or not so that we can collect paragraph proproties over
+        //or not so that we can collect paragraph properties over
         //all the cells, but in that case on the valid cell we do not
         //want to reset the fmt properties
         sal_uLong nSttNd = pTabBox->GetSttIdx() + 1,

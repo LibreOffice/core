@@ -227,7 +227,7 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 		oLocObject.DefaultTime = CurDefaultValue
 &apos; Todo: Property TimeFormat? from where?
 	ElseIf CurControlType = cCheckBox Then
-&apos; Todo Why does this not work?:		oLocObject.DefautState = CurDefaultValue
+&apos; Todo Why does this not work?:		oLocObject.DefaultState = CurDefaultValue
 	End If
 	If oLocObject.PropertySetInfo.HasPropertybyName(&quot;FormatKey&quot;) Then
 		On Local Error Resume Next

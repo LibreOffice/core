@@ -462,7 +462,7 @@ void SchXMLAxisContext::CreateAxis()
         // Compatibility option: starting from LibreOffice 5.1 the rotated
         // layout is preferred to staggering for axis labels.
         // So the import default value for having compatibility with ODF
-        // documents created with erlier LibreOffice versions is `true`.
+        // documents created with earlier LibreOffice versions is `true`.
         if( GetImport().getGeneratorVersion() != SvXMLImport::ProductVersionUnknown )
             m_xAxisProps->setPropertyValue("TryStaggeringFirst", aTrueBool );
 

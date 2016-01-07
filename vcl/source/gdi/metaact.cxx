@@ -3274,7 +3274,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
     }
 }
 
-// SJ: 25.07.06 #i56656# we are not able to mirrorcertain kind of
+// SJ: 25.07.06 #i56656# we are not able to mirror certain kind of
 // comments properly, especially the XPATHSTROKE and XPATHFILL lead to
 // problems, so it is better to remove these comments when mirroring
 // FIXME: fake comment to apply the next hunk in the right location

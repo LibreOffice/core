@@ -92,7 +92,7 @@ public class ScHeaderFieldsObj extends TestCase {
      * using the property <code>'RightPageHeaderContent'</code>. Creates the
      * instance of the service <code>com.sun.star.text.TextField.Time</code> .
      * Obtains the text (the interface <code>XText</code>) which is printed in
-     * the left part of the header or footer and inserts in it's content
+     * the left part of the header or footer and inserts in its content
      * the created field instance. Then the tested component is obtained
      * through <code>XTextFieldsSupplier</code> interface of a text.
      *
