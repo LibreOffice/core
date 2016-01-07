@@ -186,6 +186,7 @@ class WinSalGraphics : public SalGraphics
     friend class ScopedFont;
     friend class OpenGLCompatibleDC;
     friend class WinLayout;
+    friend class SimpleWinLayout;
     friend class UniscribeLayout;
 
 protected:
@@ -213,6 +214,9 @@ private:
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     ImplFontAttrCache*      mpFontAttrCache;    // Cache font attributes from files in so/share/fonts
+    bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
+    KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
+    sal_uIntPtr             mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite
 
 public:
@@ -328,6 +332,12 @@ protected:
                            const SalBitmap& rSourceBitmap,
                            const SalBitmap* pAlphaBitmap) override;
     virtual bool       drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency ) override;
+
+private:
+    // local helpers
+
+    // get kernign pairs of the current font
+    sal_uLong               GetKernPairs();
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part
@@ -448,7 +458,7 @@ void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
 
 // #102411# Win's GCP mishandles kerning => we need to do it ourselves
-// kerning pairs is sorted by
+// SalGraphicsData::mpFontKernPairs is sorted by
 inline bool ImplCmpKernData( const KERNINGPAIR& a, const KERNINGPAIR& b )
 {
     if( a.wFirst < b.wFirst )
