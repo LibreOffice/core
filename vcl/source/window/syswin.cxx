@@ -219,12 +219,10 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
 
 bool SystemWindow::Close()
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
     CallEventListeners( VCLEVENT_WINDOW_CLOSE );
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return false;
-    ImplRemoveDel( &aDelData );
 
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
         return false;
