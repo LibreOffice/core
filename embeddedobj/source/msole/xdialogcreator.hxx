@@ -35,7 +35,7 @@ class MSOLEDialogObjectCreator : public ::cppu::WeakImplHelper<
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
 public:
-    MSOLEDialogObjectCreator(
+    explicit MSOLEDialogObjectCreator(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
     {

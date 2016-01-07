@@ -49,7 +49,7 @@ public:
     OleWrapperAdviseSink();
 
     // an AdviseSink for IOleObject interface
-    OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener );
+    explicit OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener );
 
     // an AdviseSink for IDataObject interface
     OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener, FORMATETC* pFormatEtc, DWORD nDataRegFlag );

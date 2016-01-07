@@ -946,7 +946,7 @@ class LockingGuard
 {
     BOOL& mbLocked;
 public:
-    LockingGuard( BOOL& bLocked )
+    explicit LockingGuard( BOOL& bLocked )
     : mbLocked( bLocked )
     {
         mbLocked = TRUE;

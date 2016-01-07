@@ -366,7 +366,7 @@ class CustomContainer : public vcl::Window
     VclPtr<vcl::Window> m_pFocusWidgets[FocusState::FocusCount];
 
 public:
-    CustomContainer(vcl::Window *pParent)
+    explicit CustomContainer(vcl::Window *pParent)
         : Window(pParent)
         , _pImp(nullptr)
         , _pFileView(nullptr)
@@ -1696,7 +1696,7 @@ private:
     VclPtr<vcl::Window> _pOld;
 
 public:
-    SvtDefModalDialogParent_Impl( vcl::Window *pNew ) :
+    explicit SvtDefModalDialogParent_Impl( vcl::Window *pNew ) :
         _pOld( Application::GetDefDialogParent() )
         { Application::SetDefDialogParent( pNew ); }
 

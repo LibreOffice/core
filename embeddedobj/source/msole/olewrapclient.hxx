@@ -32,7 +32,7 @@ class OleWrapperClientSite : public IOleClientSite
     OleComponent* m_pOleComp;
 
 public:
-    OleWrapperClientSite( OleComponent* pOleComp );
+    explicit OleWrapperClientSite(OleComponent* pOleComp);
     virtual ~OleWrapperClientSite();
 
     void disconnectOleComponent();

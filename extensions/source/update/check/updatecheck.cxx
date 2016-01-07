@@ -303,7 +303,7 @@ public:
 class MenuBarButtonJob : public ::cppu::WeakImplHelper< task::XJob >
 {
 public:
-    MenuBarButtonJob(const rtl::Reference< UpdateCheck >& rUpdateCheck);
+    explicit MenuBarButtonJob(const rtl::Reference< UpdateCheck >& rUpdateCheck);
 
     // XJob
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
@@ -341,7 +341,7 @@ private:
 class ShutdownThread :  public osl::Thread
 {
 public:
-    ShutdownThread( const uno::Reference<uno::XComponentContext>& xContext );
+    explicit ShutdownThread(const uno::Reference<uno::XComponentContext>& xContext);
 
     virtual void SAL_CALL run() override;
     virtual void SAL_CALL onTerminated() override;
