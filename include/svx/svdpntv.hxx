@@ -162,6 +162,7 @@ protected:
     SvtOptionsDrawinglayer      maDrawinglayerOpt;
 
     bool                        mbPageVisible : 1;
+    bool                        mbPageShadowVisible : 1;
     bool                        mbPageBorderVisible : 1;
     bool                        mbBordVisible : 1;
     bool                        mbGridVisible : 1;
@@ -372,6 +373,9 @@ public:
     /// Draw Page as a white area or not
     bool IsPageVisible() const { return mbPageVisible; }
 
+    /// Draw Page shadow or not
+    bool IsPageShadowVisible() const { return mbPageShadowVisible; }
+
     /// Draw Page as a white area or not
     bool IsPageBorderVisible() const { return mbPageBorderVisible; }
 
@@ -392,6 +396,7 @@ public:
 
     Color GetGridColor() const { return maGridColor;}
     void SetPageVisible(bool bOn = true) { mbPageVisible=bOn; InvalidateAllWin(); }
+    void SetPageShadowVisible(bool bOn = true) { mbPageShadowVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { mbPageBorderVisible=bOn; InvalidateAllWin(); }
     void SetBordVisible(bool bOn = true) { mbBordVisible=bOn; InvalidateAllWin(); }
     void SetGridVisible(bool bOn = true) { mbGridVisible=bOn; InvalidateAllWin(); }

@@ -163,6 +163,7 @@ void SdrPaintView::ImpClearVars()
     mpItemBrowser=nullptr;
 #endif
     mbPageVisible=true;
+    mbPageShadowVisible=true;
     mbPageBorderVisible=true;
     mbBordVisible=true;
     mbGridVisible=true;

@@ -2359,7 +2359,7 @@ Size SdXImpressDocument::getDocumentSize()
     return Size(convertMm100ToTwip(aSize.getWidth()), convertMm100ToTwip(aSize.getHeight()));
 }
 
-void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
+void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -2371,6 +2371,13 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
 
     if (DrawViewShell* pViewShell = GetViewShell())
     {
+        DrawView* pDrawView = pViewShell->GetDrawView();
+        for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
+        {
+            const beans::PropertyValue& rValue = rArguments[i];
+            if (rValue.Name == ".uno:ShowBorderShadow" && rValue.Value.has<bool>())
+                pDrawView->SetPageShadowVisible(rValue.Value.get<bool>());
+        }
         // Disable map mode, so that it's possible to send mouse event coordinates
         // in logic units.
         if (sd::Window* pWindow = pViewShell->GetActiveWindow())
@@ -2383,7 +2390,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
         // (whereas with async loading images start being loaded after
         //  we have painted the tile, resulting in an invalidate, followed
         //  by the tile being rerendered - which is wasteful and ugly).
-        pViewShell->GetDrawView()->SetSwapAsynchron(false);
+        pDrawView->SetSwapAsynchron(false);
     }
 }
 
