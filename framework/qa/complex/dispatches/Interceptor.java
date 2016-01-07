@@ -1,4 +1,4 @@
-/*
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -30,11 +30,12 @@ import com.sun.star.frame.XDispatchProviderInterceptor;
 import com.sun.star.frame.XInterceptorInfo;
 import com.sun.star.frame.XStatusListener;
 
-// interfaces
-
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.awt.XDataTransferProviderAccess;
 
 // helper
 import com.sun.star.util.URL;
+import com.sun.star.uno.UnoRuntime;
 
 // __________ Implementation __________
 
@@ -45,8 +46,6 @@ public class Interceptor implements XDispatch,
                                     XDispatchProviderInterceptor,
                                     XInterceptorInfo
 {
-
-
     /** contains the list of interception URL schema's (wildcards are allowed there!)
         supported by this interceptor. It can be set from outside.
         If no external URLs are set, the default "*" is used instead.
@@ -93,7 +92,13 @@ public class Interceptor implements XDispatch,
      */
     private boolean m_bIsRegistered = false;
 
+    /** points to the global uno service manager. */
+    private XMultiServiceFactory m_xMSF = null;
 
+    public Interceptor(XMultiServiceFactory xMSF)
+    {
+        m_xMSF = xMSF;
+    }
 
 
     /** XInterceptorInfo */
@@ -140,8 +145,6 @@ public class Interceptor implements XDispatch,
         m_xSlave = xSlave;
     }
 
-
-
     /** XDispatchProviderInterceptor */
     public synchronized void setMasterDispatchProvider(XDispatchProvider xMaster)
     {
@@ -149,15 +152,41 @@ public class Interceptor implements XDispatch,
         m_xMaster = xMaster;
     }
 
+    private XDataTransferProviderAccess m_xToolkit = null;
 
+    /** A beautiful method whose only purpose is to take and release a
+     * solar mutex. If this hangs - you can see a beautiful deadlock
+     * when you attach your debugger to the main process.
+     */
+    public void checkNoSolarMutexHeld()
+    {
+/*      disabled until the bugs here are fixed.
+
+        try
+        {
+            if (m_xToolkit == null)
+                m_xToolkit = UnoRuntime.queryInterface(
+                    XDataTransferProviderAccess.class,
+                    m_xMSF.createInstance("com.sun.star.awt.Toolkit"));
+
+            // A Method notable only for taking the solar mutex.
+            m_xToolkit.getDragSource( null );
+        } catch (java.lang.Throwable ex) {
+                System.out.println("Failed to createa and invoke toolkit method " + ex.toString());
+        } */
+    }
 
     /** XDispatchProvider
      */
-    public synchronized XDispatch queryDispatch(URL aURL            ,
-                                                                   String                sTargetFrameName,
-                                                                   int                   nSearchFlags    )
+    public synchronized XDispatch queryDispatch(URL    aURL,
+                                                String sTargetFrameName,
+                                                int    nSearchFlags)
     {
         System.out.println("Interceptor.queryDispatch('"+aURL.Complete+"', '"+sTargetFrameName+"', "+nSearchFlags+") called");
+
+        checkNoSolarMutexHeld();
+
+        System.out.println("Interceptor.queryDispatch - re-entered successfully");
 
         if (impl_isBlockedURL(aURL.Complete))
         {
@@ -307,3 +336,5 @@ public class Interceptor implements XDispatch,
         return sVal1.equals(sVal2);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
