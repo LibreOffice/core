@@ -22,7 +22,7 @@
 #include "generic/glyphcache.hxx"
 
 #include "vcl/sysdata.hxx"
-#include "outfont.hxx"
+#include "fontentry.hxx"
 
 #include "generic/printergfx.hxx"
 #include "salbmp.hxx"

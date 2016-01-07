@@ -23,7 +23,7 @@
 #include "gcach_ftyp.hxx"
 
 #include "vcl/svapp.hxx"
-#include <outfont.hxx>
+#include <fontentry.hxx>
 #include <impfont.hxx>
 #include "fontattributes.hxx"
 
