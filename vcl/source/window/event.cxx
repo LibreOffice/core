@@ -324,10 +324,8 @@ ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCalle
         pSVEvent->mpInstanceRef = static_cast<vcl::Window *>(rLink.GetInstance());
     }
 
-    ImplAddDel( &(pSVEvent->maDelData) );
     if ( !mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
     {
-        ImplRemoveDel( &(pSVEvent->maDelData) );
         delete pSVEvent;
         pSVEvent = nullptr;
     }
