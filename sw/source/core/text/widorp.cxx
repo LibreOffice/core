@@ -37,6 +37,7 @@
 #include "itrtxt.hxx"
 #include "sectfrm.hxx"
 #include "ftnfrm.hxx"
+#include "pagefrm.hxx"
 
 #undef WIDOWTWIPS
 
@@ -126,8 +127,14 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
         // The Frame has a height to fit on the page.
         SwTwips nHeight =
             (*fnRect->fnYDiff)( (m_pFrame->GetUpper()->*fnRect->fnGetPrtBottom)(), m_nOrigin );
+        SwTwips nDiff = nHeight - nLineHeight;
+
+        // Hide whitespace may require not to insert a new page.
+        SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
+        pPageFrame->HandleWhitespaceHiddenDiff(nDiff);
+
         // If everything is inside the existing frame the result is true;
-        bFit = nHeight >= nLineHeight;
+        bFit = nDiff >= 0;
 
         // --> OD #i103292#
         if ( !bFit )
