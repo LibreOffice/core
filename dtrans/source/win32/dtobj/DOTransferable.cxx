@@ -150,7 +150,7 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 }
 
 // helper function
-// the list of datafalvors currently on the clipboard will be initialized
+// the list of dataflavors currently on the clipboard will be initialized
 // only once; if the client of this Transferable will hold a reference
 // to it und the underlying clipboard content changes, the client does
 // possible operate on a invalid list
@@ -263,7 +263,7 @@ LCID SAL_CALL CDOTransferable::getLocaleFromClipboard( )
     return lcid;
 }
 
-// i think it's not necessary to call ReleaseStgMedium
+// I think it's not necessary to call ReleaseStgMedium
 // in case of failures because nothing should have been
 // allocated etc.
 

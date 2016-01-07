@@ -106,7 +106,7 @@ extern "C" {
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
     -register ....
     </p>
-    <p>Additionall parameters for the Java VM can be provided. For every parameter
+    <p>Additional parameters for the Java VM can be provided. For every parameter
     a separate bootstrap parameter must be specified. The names are
     <code>UNO_JAVA_JFW_PARAMETER_X</code>, where X is 1,2, .. n. For example:</p>
     <p>

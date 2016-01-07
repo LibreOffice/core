@@ -46,7 +46,7 @@ published service RadioButton
 
     service com::sun::star::form::FormControlModel;
 
-    /** can be used to reset the control to it's default text.
+    /** can be used to reset the control to its default text.
 
         @see RadioButton::DefaultState
     */

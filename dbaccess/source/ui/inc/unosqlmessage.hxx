@@ -67,7 +67,7 @@ protected:
     virtual void SAL_CALL initialize(css::uno::Sequence< css::uno::Any > const & args) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
 // OPropertySetHelper overridables
-    // (overwrittin these three, because we have some special handling for our property)
+    // (overwriting these three, because we have some special handling for our property)
     virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue) throw(css::lang::IllegalArgumentException) override;
 
 // OGenericUnoDialog overridables

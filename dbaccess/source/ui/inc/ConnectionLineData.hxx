@@ -36,7 +36,7 @@ namespace dbaui
 
     /**
         the class OConnectionLineData contains the data of a connection
-        e.g. the source and the destanation field
+        e.g. the source and the destination field
     **/
     class OConnectionLineData : public ::salhelper::SimpleReferenceObject
     {

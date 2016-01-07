@@ -44,7 +44,7 @@ public:
     sal_Int32 getLength() const;
     /// Writes the contents of the buffer directly to the supplied stream.
     void makeStringAndClear(RtfAttributeOutput* pAttributeOutput);
-    /// Returns the bufferent strings as a string (ignores graphic elements!)
+    /// Returns the buffered strings as a string (ignores graphic elements!)
     OString makeStringAndClear();
     /// Access to the last buffer.
     OStringBuffer& getLastBuffer();

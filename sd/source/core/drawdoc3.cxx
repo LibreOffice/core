@@ -1467,7 +1467,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             DBG_ASSERT(pMaster, "MasterPage (Standard page) not found");
             DBG_ASSERT(pNotesMaster, "MasterPage (Notes page) not found");
 
-            // this should not happen, but looking at crashreports, it does
+            // this should not happen, but looking at crash reports, it does
             if( (pMaster == nullptr) || (pNotesMaster == nullptr) )
             {
                 // so take the first MasterPage

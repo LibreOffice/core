@@ -458,7 +458,7 @@ IMPL_LINK_TYPED( DlgFilterCrit, PredicateLoseFocus, Control&, rControl, void )
     Edit* _pField = static_cast<Edit*>(&rControl);
     // retrieve the field affected
     Reference< XPropertySet> xColumn( getMatchingColumn( *_pField ) );
-    // and normalize it's content
+    // and normalize its content
     if ( xColumn.is() )
     {
         OUString sText( _pField->GetText() );

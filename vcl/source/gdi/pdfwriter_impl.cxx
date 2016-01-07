@@ -3768,7 +3768,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     }
     aContents.append( "endbfchar\n"
                       "endcmap\n"
-                      "CMapName currentdict /CMap defineresource pop\n"
+                      "CMapName currentdict /CMap define resource pop\n"
                       "end\n"
                       "end\n" );
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
@@ -5570,7 +5570,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             else if( rWidget.m_nTextStyle & DrawTextFlags::Right )
                 aLine.append( "/Q 2\n" );
         }
-        // appearance charactristics for terminal fields
+        // appearance characteristics for terminal fields
         // which are supposed to have an appearance constructed
         // by the viewer application
         if( !rWidget.m_aMKDict.isEmpty() )
@@ -7772,7 +7772,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     appendLiteralStringEncrypt( aComment ,nOIObject, aLine );
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
-    aLine.append( " 0 R>>\nendobj\n\n" );;
+    aLine.append( " 0 R>>\nendobj\n\n" );
     if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
 
     return nOIObject;
@@ -12257,7 +12257,7 @@ sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
     if (!m_xTrans.is())
     {
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        m_xTrans = util::URLTransformer::create(xContext);;
+        m_xTrans = util::URLTransformer::create(xContext);
     }
 
     util::URL aURL;

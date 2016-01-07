@@ -326,7 +326,7 @@ void ConfigurationUpdater::CheckPureAnchors (
 
         if (bDeactiveCurrentResource)
         {
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": deactiving pure anchor " <<
+            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": deactivating pure anchor " <<
                 OUStringToOString(
                     FrameworkHelper::ResourceIdToString(xResourceId),
                     RTL_TEXTENCODING_UTF8).getStr() << "because it has no children");

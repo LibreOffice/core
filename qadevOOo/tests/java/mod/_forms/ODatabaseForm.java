@@ -793,7 +793,7 @@ public class ODatabaseForm extends TestCase {
         }
 
         /**
-         * Dummy implemetnation. Do nothing, just log
+         * Dummy implementation. Do nothing, just log
          * @param o Ignore.
          */
         public void disposing(EventObject o) {

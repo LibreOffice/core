@@ -1427,7 +1427,7 @@ void ToolBarShellList::UpdateShells (
             rpManager->ActivateSubShell(*rpMainViewShell, iShell->mnId);
         }
 
-        // The maNewList now refelects the current state and thus is made
+        // The maNewList now reflects the current state and thus is made
         // maCurrentList.
         maCurrentList = maNewList;
     }

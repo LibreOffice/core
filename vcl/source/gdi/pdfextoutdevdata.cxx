@@ -670,7 +670,7 @@ void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_u
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
 }
 
-/* local (page), actions have to be played synchroniously to the actions of
+/* local (page), actions have to be played synchronously to the actions of
    of the recorded metafile (created by each xRenderable->render()) */
    sal_Int32 PDFExtOutDevData::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
 {

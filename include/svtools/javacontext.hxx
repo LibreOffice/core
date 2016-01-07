@@ -39,7 +39,7 @@ namespace svt
 
     public:
         /** The parameter bShowErrorsOnce controls whether a message box is
-            only displayed once for a reocurring Java error. That is only
+            only displayed once for a recurring Java error. That is only
             the first time JavaInteractionHandler.handle is called with a
             particular Request then the message box is shown. Afterwards
             nothing happens.

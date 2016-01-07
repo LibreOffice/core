@@ -847,11 +847,11 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
         xMeta = xConn->getMetaData();
     OSL_ENSURE( xMeta.is(), "FmSearchEngine::Init: very strange cursor (could not derive connection meta data from it)!" );
 
-    bool bCaseSensitiveIdentifiers = true;  // assume case sensivity
+    bool bCaseSensitiveIdentifiers = true;  // assume case sensitivity
     if ( xMeta.is() )
         bCaseSensitiveIdentifiers = xMeta->supportsMixedCaseQuotedIdentifiers();
 
-    // now that we have this information, we need a collator which is able to case (in)sentively compare strings
+    // now that we have this information, we need a collator which is able to case (in)sensitivity compare strings
     m_aStringCompare.loadDefaultCollator( SvtSysLocale().GetLanguageTag().getLocale(),
         bCaseSensitiveIdentifiers ? 0 : css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
 

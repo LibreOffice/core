@@ -73,7 +73,7 @@ namespace vcl
     - The class <T> of which objects are to be destroyed needs a virtual
     destructor or must be final, else the wrong type will be destroyed.
     - The destructor of <T> should call LazyDeletor<T>::Undelete( this ). This
-    prevents duplicate deletionin case someone destroys the object prematurely.
+    prevents duplicate deletion in case someone destroys the object prematurely.
     */
 
     class LazyDeletorBase;

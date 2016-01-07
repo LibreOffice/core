@@ -138,7 +138,7 @@ namespace sdr
             }
         }
 
-        // Process the whole displaying. Only use given DsiplayInfo, do not access other
+        // Process the whole displaying. Only use given DisplayInfo, do not access other
         // OutputDevices then the given ones.
         void ObjectContactOfPageView::DoProcessDisplay(DisplayInfo& rDisplayInfo)
         {

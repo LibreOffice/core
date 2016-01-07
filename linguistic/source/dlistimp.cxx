@@ -696,7 +696,7 @@ void DicList::SaveDics()
     {
         // save (modified) dictionaries
         DictionaryVec_t& rDicList = GetOrCreateDicList();
-        size_t nCount = rDicList.size();;
+        size_t nCount = rDicList.size();
         for (size_t i = 0;  i < nCount;  i++)
         {
             // save (modified) dictionaries

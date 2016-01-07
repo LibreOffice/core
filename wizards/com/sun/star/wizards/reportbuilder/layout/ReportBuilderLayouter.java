@@ -1561,7 +1561,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
     /**
-     * load the given string as a template and use it's content to paint the other
+     * load the given string as a template and use its content to paint the other
      */
     public void loadAndSetBackgroundTemplate(String LayoutTemplatePath)
     {

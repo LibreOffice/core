@@ -171,7 +171,7 @@ namespace pcr
             If the component is a RowSet itself, it's returned directly. Else, the parent
             is examined for the XRowSet interface. If the parent is no XRowSet, then
             a check is made whether our component is a grid control column, and if so,
-            the parent of the grid control is examined for the XRowSet interace.
+            the parent of the grid control is examined for the XRowSet interface.
 
             Normally, at least one of those methods should succeed.
         */
@@ -320,7 +320,7 @@ namespace pcr
             @precond
                 our component actually has a Font property
             @param _out_rNewValue
-                a value desribing the new font, as <code>Sequence&lt; NamedValue &gt;</code>
+                a value describing the new font, as <code>Sequence&lt; NamedValue &gt;</code>
             @return
                 <TRUE/> if and only if the user successfully changed the font of our component
         */

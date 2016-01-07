@@ -918,7 +918,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
 
     // ... restore redline mode
     // (First set bogus mode to make sure the mode in getIDocumentRedlineAccess().SetRedlineMode()
-    //  is different from it's previous mode.)
+    //  is different from its previous mode.)
     rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( ~nRedlineMode ));
     rDoc.getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)( nRedlineMode ));
 

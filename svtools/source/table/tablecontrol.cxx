@@ -315,7 +315,7 @@ namespace svt { namespace table
                 aRetText = "ColumnHeaderBar";
                 break;
             case TCTYPE_TABLECELL:
-                //the name of the cell constists of column name and row name if defined
+                //the name of the cell consists of column name and row name if defined
                 //if the name is equal to cell content, it'll be read twice
                 if(GetModel()->hasColumnHeaders())
                 {

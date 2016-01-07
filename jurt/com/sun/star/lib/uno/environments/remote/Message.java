@@ -163,7 +163,7 @@ public class Message {
      *
      * @return the in and in&ndash; {
      * }out arguments for a request (possibly
-     * <code>null</code> for a paramterless function), the out and in&ndash; {
+     * <code>null</code> for a parameterless function), the out and in&ndash; {
      * }out
      * arguments for a reply that represents normal termination (possibly
      * <code>null</code> for a parameterless function), <code>null</code> for a

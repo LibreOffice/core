@@ -149,7 +149,7 @@ protected:
 
     SdrHdlKind                  eKind;
 
-    long                        nRotationAngle; // turn handle or mouspointer
+    long                        nRotationAngle; // turn handle or mousepointer
     sal_uInt32                  nObjHdlNum;     // required by MarkView
     sal_uInt32                  nPolyNum;       // Polygonpoint
     sal_uInt32                  nPPntNum;       // Point number of the polygon

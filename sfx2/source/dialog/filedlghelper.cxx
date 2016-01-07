@@ -788,7 +788,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 
     // rhbz#1079672 do not return maGraphic, it need not be the selected file
 
-    OUString aPath;;
+    OUString aPath;
     Sequence<OUString> aPathSeq = mxFileDlg->getFiles();
 
     if (aPathSeq.getLength() == 1)
@@ -2131,7 +2131,7 @@ void FileDialogHelper_Impl::loadConfig()
 
 void FileDialogHelper_Impl::setDefaultValues()
 {
-    // when no filter is set, we set the curentFilter to <all>
+    // when no filter is set, we set the currentFilter to <all>
     if ( maCurFilter.isEmpty() && !maSelectFilter.isEmpty() )
     {
         uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );

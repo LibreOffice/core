@@ -3338,7 +3338,7 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
             BYTE vkeycode   = LOBYTE(scan);
             BYTE shiftstate = HIBYTE(scan);
 
-            // Last argument is set to FALSE, because there's no decission made
+            // Last argument is set to FALSE, because there's no decision made
             // yet which key should be assigned to MOD3 modifier on Windows.
             // Windows key - user's can be confused, because it should display
             //               Windows menu (applies to both left/right key)

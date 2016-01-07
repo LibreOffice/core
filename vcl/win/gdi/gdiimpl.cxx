@@ -520,7 +520,7 @@ void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
 
                     // by excluding hInvalidateRgn from the system's clip region
                     // we will prevent bitblt from copying useless data
-                    // epsecially now shadows from overlapping windows will appear (#i36344)
+                    // especially now shadows from overlapping windows will appear (#i36344)
                     hOldClipRgn = CreateRectRgn( 0, 0, 0, 0 );
                     nOldClipRgnType = GetClipRgn( mrParent.getHDC(), hOldClipRgn );
 

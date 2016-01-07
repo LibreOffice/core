@@ -223,7 +223,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         sOut.append("<" OOO_STRING_SVTOOLS_HTML_style " "
                     OOO_STRING_SVTOOLS_HTML_O_type "=\"text/css\">");
     //  Optional CSS2 code for dot leaders (dotted line between the Table of Contents titles and page numbers):
-    //  (More inforation: http://www.w3.org/Style/Examples/007/leaders.en.html)
+    //  (More information: http://www.w3.org/Style/Examples/007/leaders.en.html)
     //
     //  p.leaders {
     //      /* FIXME:
@@ -2723,7 +2723,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
         break;
     case WEIGHT_ULTRABOLD:  pStr = sCSS1_PV_extra_bold;     break;
     default:
-        pStr = sCSS1_PV_normal;;
+        pStr = sCSS1_PV_normal;
     }
 
     if( pStr )

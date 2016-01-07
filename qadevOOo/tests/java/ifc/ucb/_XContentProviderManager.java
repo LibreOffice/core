@@ -132,7 +132,7 @@ public class _XContentProviderManager extends MultiMethodTest {
      * @see #_queryContentProvider
      */
     public void _registerContentProvider() {
-        // querying providfers info before inserting them, to verify results
+        // querying providers info before inserting them, to verify results
         initialProvidersInfo = oObj.queryContentProviders();
 
         // GnomeVFSContentProvider or GIOContentProvider ?, typically null

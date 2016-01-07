@@ -256,7 +256,7 @@ SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32
 
 // This constructor uses the textattribute to get the right brackets.
 // The textattribute could be a 2-line-attribute or a character- or
-// internetstyle, which contains the 2-line-attribute.
+// internet style, which contains the 2-line-attribute.
 SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int32 nEnd)
     : SwMultiPortion(nEnd)
     , pBracket(new SwBracket())
@@ -1599,7 +1599,7 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpField
 }
 
 // If a multi portion completely has to go to the
-// next line, this function is called to trunctate
+// next line, this function is called to truncate
 // the rest of the remaining multi portion
 static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTextFormatInfo& rInf,
                                sal_Int32 nStartIdx )

@@ -102,7 +102,7 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
         rSet.Put( rItem, nWhCTL );
 }
 
-/// Return the AutoCollection by it's Id. If it doesn't
+/// Return the AutoCollection by its Id. If it doesn't
 /// exist yet, create it.
 /// If the String pointer is defined, then only query for
 /// the Attribute descriptions. It doesn't create a style!

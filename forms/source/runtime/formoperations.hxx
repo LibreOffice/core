@@ -298,7 +298,7 @@ namespace frm
             and rethrows them
 
             @param f
-                a fuctionoid with no arguments to do the work
+                a functionoid with no arguments to do the work
             @param _nErrorResourceId
                 the id of the resources string to use as error message
         */

@@ -57,7 +57,7 @@ public class _XInputStream extends MultiMethodTest {
     int bytesReady = 0 ;
 
     /**
-     * Before the test, the stream writer and the data are ecxtracted from
+     * Before the test, the stream writer and the data are extracted from
      * the object relations and the data is written to the stream.
      */
     @Override

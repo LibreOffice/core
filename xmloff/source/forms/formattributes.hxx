@@ -253,7 +253,7 @@ namespace xmloff
 
             // entries which are special to some value types
             const SvXMLEnumMapEntry*        pEnumMap;               // the enum map, if appliable
-            bool                        bInverseSemantics;      // for booleanss: attribute and property value have the same or an inverse semantics?
+            bool                        bInverseSemantics;      // for booleans: attribute and property value have the same or an inverse semantics?
 
             AttributeAssignment() : pEnumMap(nullptr), bInverseSemantics(false) { }
         };

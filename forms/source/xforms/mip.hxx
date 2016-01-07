@@ -86,7 +86,7 @@ public:
     void setRelevant( bool );
     void resetRelevant();
 
-    // - constraing (computed XPath; default: true)
+    // - constraint (computed XPath; default: true)
     bool hasConstraint() const { return mbHasConstraint; }
     bool isConstraint() const { return mbConstraint; }
     void setConstraint( bool );

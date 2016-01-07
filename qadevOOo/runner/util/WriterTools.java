@@ -104,7 +104,7 @@ public class WriterTools {
                                                                  oGObject);
             the_name.setName(name);
         } catch (Exception ex) {
-            System.out.println("Exception while insertin TextGraphic");
+            System.out.println("Exception while inserting TextGraphic");
             ex.printStackTrace();
         }
     }

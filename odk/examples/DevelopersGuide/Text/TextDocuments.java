@@ -1406,7 +1406,7 @@ public class TextDocuments {
             // Select the last paragraph in the document
             xParaCursor.gotoNextParagraph ( true );
 
-            // And reset it's style to 'Standard' (the programmatic name for
+            // And reset its style to 'Standard' (the programmatic name for
             // the default style)
             xCursorProps.setPropertyValue ( "ParaStyleName", "Standard" );
         }

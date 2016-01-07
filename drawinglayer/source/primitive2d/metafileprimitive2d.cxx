@@ -1025,7 +1025,7 @@ namespace
     /** helper to handle the change of RasterOp. It takes care of encapsulating all current
         geometry to the current RasterOp (if changed) and needs to be called on any RasterOp
         change. It will also start a new geometry target to embrace to the new RasterOp if
-        a changuing RasterOp is used. Currently, ROP_XOR and ROP_INVERT are supported using
+        a changing RasterOp is used. Currently, ROP_XOR and ROP_INVERT are supported using
         InvertPrimitive2D, and ROP_0 by using a ModifiedColorPrimitive2D to force to black paint
      */
     void HandleNewRasterOp(
@@ -2105,7 +2105,7 @@ namespace
                         // VCL AFAP.
                         // Since AddTextRectActions is the only way as long as we do not have
                         // a simple text layouter available, i will try to add it to the
-                        // TextLayouterDevice isloation.
+                        // TextLayouterDevice isolation.
                         drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
                         aTextLayouterDevice.setFont(rPropertyHolders.Current().getFont());
                         GDIMetaFile aGDIMetaFile;
@@ -3003,7 +3003,7 @@ namespace
                                 // apply general current transformation
                                 aSubTransform = rPropertyHolders.Current().getTransformation() * aSubTransform;
 
-                                // evtl. embed sub-content to it's transformation
+                                // evtl. embed sub-content to its transformation
                                 if(!aSubTransform.isIdentity())
                                 {
                                     const drawinglayer::primitive2d::Primitive2DReference aEmbeddedTransform(
@@ -3098,7 +3098,7 @@ namespace
                     {
                         // XGRAD_SEQ_BEGIN, XGRAD_SEQ_END should be supported since the
                         // pure recorded paint of the gradients uses the XOR paint functionality
-                        // ('trick'). This is (and will be) broblematic with AntAliasing, so it's
+                        // ('trick'). This is (and will be) problematic with AntAliasing, so it's
                         // better to use this info
                         const MetaGradientExAction* pMetaGradientExAction = nullptr;
                         bool bDone(false);

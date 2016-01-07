@@ -34,7 +34,7 @@ namespace framework{
     @descr  The protocol between job executor/dispatch and jobs is fix and well defined.
             But why every implemented job should write such constant values directly into
             it's code. Typos can occur or code will be changed by new developers ...
-            Shared set of constant values can help to improve the mentainance of this code.
+            Shared set of constant values can help to improve the maintenance of this code.
  */
 class FWI_DLLPUBLIC JobConst
 {

@@ -315,7 +315,7 @@ private:
     ScFormulaCell*      pFormulaTree;                   // formula tree (start)
     ScFormulaCell*      pEOFormulaTree;                 // formula tree (end), last cell
     ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack (start)
-    ScFormulaCell*      pEOFormulaTrack;                // BrodcastTrack (end), last cell
+    ScFormulaCell*      pEOFormulaTrack;                // BroadcastTrack (end), last cell
     ScBroadcastAreaSlotMachine* pBASM;                  // BroadcastAreas
     ScChartListenerCollection* pChartListenerCollection;
     SvMemoryStream*     pClipData;

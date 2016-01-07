@@ -1206,7 +1206,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     // get the property set for the default style data
     // First get the model
     uno::Reference < XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
-    // Ask the model for it's family supplier interface
+    // Ask the model for its family supplier interface
     uno::Reference < XStyleFamiliesSupplier > xFamilySupplier ( xModel, uno::UNO_QUERY );
     // Get the style families
     uno::Reference < XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
@@ -3560,7 +3560,7 @@ void SAL_CALL SwXTextEmbeddedObject::release()throw()
 ::uno::Any SAL_CALL SwXTextEmbeddedObject::queryInterface( const uno::Type& aType )
     throw( uno::RuntimeException, std::exception)
 {
-    ::uno::Any aRet = SwXFrame::queryInterface(aType);;
+    ::uno::Any aRet = SwXFrame::queryInterface(aType);
     if(aRet.getValueType() == cppu::UnoType<void>::get())
         aRet = SwXTextEmbeddedObjectBaseClass::queryInterface(aType);
     return aRet;

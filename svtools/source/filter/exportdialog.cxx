@@ -586,7 +586,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     GetGraphicSource();
 
     get(mpInfo, "information");
-    get(mpFtEstimatedSize, "estsizeft");;
+    get(mpFtEstimatedSize, "estsizeft");
 
     get(mpBtnOK, "ok");
 

@@ -224,7 +224,7 @@ public:
     {
         /*
             we only call CoUninitialize when
-            CoInitailize returned S_FALSE, what
+            CoInitialize returned S_FALSE, what
             means that com was already initialize
             for that thread so we keep the balance
             if CoInitialize returned S_OK what means

@@ -145,7 +145,7 @@ namespace abp
         */
         bool    connect( vcl::Window* _pMessageParent );
 
-        /// returns <TRUE/> if the object has a valid connection, obtained from it's data source
+        /// returns <TRUE/> if the object has a valid connection, obtained from its data source
         bool    isConnected( ) const;
 
         /// disconnects from the data source (i.e. disposes the UNO connection hold internally)

@@ -344,7 +344,7 @@ protected:
         FmFormArray& _out_rForms,
         ::std::vector< OUString >& _out_rNames );
 
-    /** checks whether the instance is already disposed, if so, this is reported as assertion error (debug
+    /** checks whenever the instance is already disposed, if so, this is reported as assertion error (debug
         builds only) and <TRUE/> is returned.
     */
     SAL_DLLPRIVATE bool    impl_checkDisposed() const;
@@ -422,7 +422,7 @@ public:
     SAL_DLLPRIVATE static PopupMenu* GetConversionMenu();
         // ein Menue, das alle ControlConversion-Eintraege enthaelt
 
-    /// checks whethere a given control conversion slot can be applied to the current selection
+    /// checks whether a given control conversion slot can be applied to the current selection
     SAL_DLLPRIVATE        bool canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot );
     /// enables or disables all conversion slots in a menu, according to the current selection
     SAL_DLLPRIVATE        void checkControlConversionSlotsForCurrentSelection( Menu& rMenu );
