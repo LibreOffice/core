@@ -23,16 +23,6 @@
 #include <vcl/dllapi.h>
 #include <sal/types.h>
 
-#include <unordered_map>
-
-class PhysicalFontFace;
-class ImplFontEntry;
-class ImplFontCache;
-namespace vcl { class Font; }
-class ConvertChar;
-class OutputDevice;
-class Size;
-
 class ImplTextLineInfo
 {
 private:

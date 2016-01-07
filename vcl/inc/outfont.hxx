@@ -28,7 +28,6 @@
 
 #include <unordered_map>
 
-namespace vcl { class Font; }
 class ImplFontCache;
 class ConvertChar;
 

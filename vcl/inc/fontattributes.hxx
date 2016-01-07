@@ -20,22 +20,15 @@
 #ifndef INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 #define INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 
+#include <sal/types.h>
 #include <i18nlangtag/lang.h>
-#include <vcl/dllapi.h>
 #include <unotools/fontdefs.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
 
 #include "fontselect.hxx"
 
-#include <unordered_map>
-
-class PhysicalFontFace;
-class ImplFontEntry;
-class ImplFontCache;
-namespace vcl { class Font; }
-class ConvertChar;
 class OutputDevice;
-class Size;
 class FontSelectPattern;
 
 class ImplFontAttributes
