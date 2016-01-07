@@ -999,15 +999,14 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         aKeyCode = vcl::KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
     // call handler
-    ImplDelData aDelData;
-    pChild->ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = pChild;
 
     KeyEvent    aKeyEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     NotifyEvent aNotifyEvt( nSVEvent, pChild, &aKeyEvt );
     bool bKeyPreNotify = ImplCallPreNotify( aNotifyEvt );
     bool bRet = true;
 
-    if ( !bKeyPreNotify && !aDelData.IsDead() )
+    if ( !bKeyPreNotify && !xWindow->IsDisposed() )
     {
         if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
         {
@@ -1019,14 +1018,14 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
             pChild->ImplGetWindowImpl()->mbKeyUp = false;
             pChild->KeyUp( aKeyEvt );
         }
-        if( !aDelData.IsDead() )
+        if( !xWindow->IsDisposed() )
             aNotifyEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNotifyEvt );
     }
 
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return true;
 
-    pChild->ImplRemoveDel( &aDelData );
+    xWindow.clear();
 
     if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
     {
@@ -1319,21 +1318,20 @@ static bool ImplHandleInputContextChange( vcl::Window* pWindow, LanguageType eNe
     return !ImplCallCommand( pChild, CommandEventId::InputContextChange, &aData );
 }
 
-static bool ImplCallWheelCommand( vcl::Window* pWindow, const Point& rPos,
+static bool ImplCallWheelCommand( const VclPtr<vcl::Window>& pWindow, const Point& rPos,
                                   const CommandWheelData* pWheelData )
 {
     Point               aCmdMousePos = pWindow->ImplFrameToOutput( rPos );
     CommandEvent        aCEvt( aCmdMousePos, CommandEventId::Wheel, true, pWheelData );
     NotifyEvent         aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
-    ImplDelData         aDelData( pWindow );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
-    if ( aDelData.IsDead() )
+    if ( pWindow->IsDisposed() )
         return false;
     if ( !bPreNotify )
     {
         pWindow->ImplGetWindowImpl()->mbCommand = false;
         pWindow->Command( aCEvt );
-        if ( aDelData.IsDead() )
+        if ( pWindow->IsDisposed() )
             return false;
         if ( pWindow->ImplGetWindowImpl()->mbCommand )
             return true;
