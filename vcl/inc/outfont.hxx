@@ -20,18 +20,10 @@
 #ifndef INCLUDED_VCL_INC_OUTFONT_HXX
 #define INCLUDED_VCL_INC_OUTFONT_HXX
 
-#include <rtl/ustring.hxx>
-#include <sal/log.hxx>
-#include <sal/types.h>
-#include <i18nlangtag/lang.h>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <unotools/fontdefs.hxx>
-#include <vcl/vclenum.hxx>
+#include "fontattributes.hxx"
 
 #include <unordered_map>
-
-#include "fontattributes.hxx"
 
 class PhysicalFontFace;
 class ImplFontEntry;
