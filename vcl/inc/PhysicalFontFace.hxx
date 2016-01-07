@@ -24,6 +24,7 @@
 
 #include "outfont.hxx"
 #include "fontattributes.hxx"
+#include "fontselect.hxx"
 
 class ImplFontEntry;
 struct FontMatchStatus;

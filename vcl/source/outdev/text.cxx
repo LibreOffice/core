@@ -47,6 +47,8 @@
 #include <svdata.hxx>
 #include <textlayout.hxx>
 
+#include "textlineinfo.hxx"
+
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
 #include "graphite_features.hxx"

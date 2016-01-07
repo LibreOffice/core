@@ -67,6 +67,7 @@
 #include "salgdi.hxx"
 #include "sallayout.hxx"
 #include "textlayout.hxx"
+#include "textlineinfo.hxx"
 
 #include "pdfwriter_impl.hxx"
 
