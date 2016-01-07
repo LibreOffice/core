@@ -2994,7 +2994,7 @@ void  DomainMapper_Impl::handleRubyEQField( FieldContextPtr pContext)
             pRubyContext->Insert(PROP_CHAR_HEIGHT_ASIAN, aVal);
         }
         PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pRubyContext->GetPropertyValues());
-        aInfo.sRubyStyle = m_rDMapper.getOrCreateCharStyle(aProps);
+        aInfo.sRubyStyle = m_rDMapper.getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
         PropertyMapPtr pCharContext(new PropertyMap());
         if (m_pLastCharacterContext.get())
             pCharContext->InsertProps(m_pLastCharacterContext);

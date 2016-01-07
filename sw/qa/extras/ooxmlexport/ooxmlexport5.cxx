@@ -501,7 +501,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
         return;
 
     // Ensure that after fix LO is preserving AutoSpacing property in styles.xml
-    assertXPath ( pXmlDoc, "/w:styles[1]/w:style[36]/w:pPr[1]/w:spacing[1]", "beforeAutospacing", "1" );
+    assertXPath ( pXmlDoc, "/w:styles[1]/w:style[@w:styleId='Title']/w:pPr[1]/w:spacing[1]", "beforeAutospacing", "1" );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79540, "fdo79540.docx")

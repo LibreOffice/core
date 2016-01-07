@@ -3081,7 +3081,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         PropertyMapPtr pContext = m_pImpl->GetTopContext();
         PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pContext->GetPropertyValues());
-        OUString sStyle = getOrCreateCharStyle(aProps);
+        OUString sStyle = getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
         m_pImpl->SetRubyText(sText,sStyle);
         return;
     }
@@ -3542,10 +3542,10 @@ uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
     return m_pImpl->GetTopTextAppend()->getEnd();
 }
 
-OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
+OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
 {
     StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
-    return pStyleSheets->getOrCreateCharStyle( rCharProperties );
+    return pStyleSheets->getOrCreateCharStyle( rCharProperties, bAlwaysCreate );
 }
 
 StyleSheetTablePtr DomainMapper::GetStyleSheetTable( )
