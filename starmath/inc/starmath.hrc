@@ -81,20 +81,13 @@
 
 #define RID_MATH_TOOLBOX            (RID_APP_START + 50)
 
-#define RID_OBJECTNAME              (RID_APP_START + 501)
-    // free
-#define RID_UNDOEDITNAME            (RID_APP_START + 503)
 #define RID_UNDOFORMATNAME          (RID_APP_START + 504)
 #define RID_COMMANDMENU             (RID_APP_START + 701)
 #define RID_VIEWMENU                (RID_APP_START + 702)
-#define RID_TOOLBOXWINDOW           (RID_APP_START + 801)
-#define RID_CMDBOXWINDOW            (RID_APP_START + 802)
 #define RID_FONTREGULAR             (RID_APP_START + 804)
 #define RID_FONTITALIC              (RID_APP_START + 805)
 #define RID_FONTBOLD                (RID_APP_START + 806)
 #define RID_DOCUMENTSTR             (RID_APP_START + 808)
-#define RID_SYMBOLFILESSTR          (RID_APP_START + 809)
-#define RID_ALLFILESSTR             (RID_APP_START + 810)
 #define RID_STATUSBAR               (RID_APP_START + 816)
 
 #define STR_MATH_DOCUMENT_FULLTYPE_CURRENT  (RID_APP_START + 821)
@@ -142,11 +135,8 @@
 #define RID_ERR_LPARENTEXPECTED     (RID_APP_START + 934)
 #define RID_ERR_RPARENTEXPECTED     (RID_APP_START + 935)
 #define RID_ERR_RIGHTEXPECTED       (RID_APP_START + 936)
-#define RID_ERR_OVERFLOW            (RID_APP_START + 937)
 
 // toolbox image lists for 'Selection' window
-#define RID_IL_CATALOG                  (RID_APP_START + 950)
-#define RID_IL_UNBINOPS                 (RID_APP_START + 952)
 #define RID_IL_RELATIONS                (RID_APP_START + 954)
 #define RID_IL_SETOPERATIONS            (RID_APP_START + 956)
 #define RID_IL_FUNCTIONS                (RID_APP_START + 958)
@@ -155,16 +145,6 @@
 #define RID_IL_BRACKETS                 (RID_APP_START + 964)
 #define RID_IL_FORMAT                   (RID_APP_START + 966)
 #define RID_IL_MISC                     (RID_APP_START + 968)
-
-#define RID_UNBINOPS_CAT                (RID_APP_START + 1101)
-#define RID_RELATIONS_CAT               (RID_APP_START + 1102)
-#define RID_SETOPERATIONS_CAT           (RID_APP_START + 1103)
-#define RID_FUNCTIONS_CAT               (RID_APP_START + 1104)
-#define RID_OPERATORS_CAT               (RID_APP_START + 1105)
-#define RID_ATTRIBUTES_CAT              (RID_APP_START + 1106)
-#define RID_BRACKETS_CAT                (RID_APP_START + 1107)
-#define RID_FORMAT_CAT                  (RID_APP_START + 1108)
-#define RID_MISC_CAT                    (RID_APP_START + 1117)
 
 // new resource ID's
 #define RID_PLUSX                   (RID_APP_START + 1201)
