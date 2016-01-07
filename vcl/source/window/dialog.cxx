@@ -728,12 +728,10 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool Dialog::Close()
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
+    VclPtr<vcl::Window> xWindow = this;
     CallEventListeners( VCLEVENT_WINDOW_CLOSE );
-    if ( aDelData.IsDead() )
+    if ( xWindow->IsDisposed() )
         return false;
-    ImplRemoveDel( &aDelData );
 
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
         return false;
@@ -743,7 +741,6 @@ bool Dialog::Close()
     if ( !(GetStyle() & WB_CLOSEABLE) )
     {
         bool bRet = true;
-        ImplAddDel( &aDelData );
         PushButton* pButton = ImplGetCancelButton( this );
         if ( pButton )
             pButton->Click();
@@ -755,9 +752,8 @@ bool Dialog::Close()
             else
                 bRet = false;
         }
-        if ( aDelData.IsDead() )
+        if ( xWindow->IsDisposed() )
             return true;
-        ImplRemoveDel( &aDelData );
         return bRet;
     }
 
