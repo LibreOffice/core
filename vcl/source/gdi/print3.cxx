@@ -55,11 +55,11 @@ class ImplPageCache
         PrinterController::PageSize aSize;
     };
 
-    std::vector< CacheEntry >  maPages;
+    std::vector< CacheEntry >   maPages;
     std::vector< sal_Int32 >    maPageNumbers;
     std::vector< sal_Int32 >    maCacheRanking;
 
-    static const sal_Int32 nCacheSize = 6;
+    static const sal_Int32      nCacheSize = 6;
 
     void updateRanking( sal_Int32 nLastHit )
     {
@@ -138,18 +138,18 @@ public:
     typedef std::unordered_map< OUString, css::uno::Sequence< sal_Bool >, OUStringHash > ChoiceDisableMap;
 
     VclPtr< Printer >                                           mxPrinter;
-    css::uno::Sequence< css::beans::PropertyValue >                                   maUIOptions;
-    std::vector< css::beans::PropertyValue >                                maUIProperties;
+    css::uno::Sequence< css::beans::PropertyValue >             maUIOptions;
+    std::vector< css::beans::PropertyValue >                    maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
     PropertyToIndexMap                                          maPropertyToIndex;
     ControlDependencyMap                                        maControlDependencies;
     ChoiceDisableMap                                            maChoiceDisableMap;
-    bool                                                    mbFirstPage;
-    bool                                                    mbLastPage;
-    bool                                                    mbReversePageOrder;
-    bool                                                    mbPapersizeFromSetup;
-    bool                                                    mbPrinterModified;
-    css::view::PrintableState                                        meJobState;
+    bool                                                        mbFirstPage;
+    bool                                                        mbLastPage;
+    bool                                                        mbReversePageOrder;
+    bool                                                        mbPapersizeFromSetup;
+    bool                                                        mbPrinterModified;
+    css::view::PrintableState                                   meJobState;
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
 
