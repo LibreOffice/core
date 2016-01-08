@@ -21,7 +21,7 @@
 
 #include <vcl/gfxlink.hxx>
 
-#include "filter/Exif.hxx"
+#include "jpeg/Exif.hxx"
 #include <memory>
 
 GraphicNativeMetadata::GraphicNativeMetadata() :

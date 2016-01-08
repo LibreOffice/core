@@ -19,8 +19,9 @@
 
 #include <sal/config.h>
 
-#include "filter/jpeg.h"
-#include "filter/JpegTransform.hxx"
+#include "jpeg.h"
+
+#include "JpegTransform.hxx"
 
 JpegTransform::JpegTransform(SvStream& rInputStream, SvStream& rOutputStream) :
     maRotate       ( 0 ),

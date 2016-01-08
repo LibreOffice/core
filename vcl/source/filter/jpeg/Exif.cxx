@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "filter/Exif.hxx"
+#include "Exif.hxx"
 #include <memory>
 
 Exif::Exif() :

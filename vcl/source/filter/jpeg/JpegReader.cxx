@@ -19,11 +19,11 @@
 
 #include <sal/config.h>
 
-#include "filter/jpeg.h"
+#include "jpeg.h"
 #include <jpeglib.h>
 #include <jerror.h>
 
-#include "filter/JpegReader.hxx"
+#include "JpegReader.hxx"
 #include <vcl/bmpacc.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -20,7 +20,7 @@
 #include <tools/poly.hxx>
 #include <memory>
 
-#include "filter/sgvspln.hxx"
+#include <sgvspln.hxx>
 #include <cmath>
 
 #if defined(ANDROID)

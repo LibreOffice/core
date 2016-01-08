@@ -16,11 +16,11 @@
 
 #include <sal/config.h>
 
-#include "filter/jinclude.h"
+#include "jinclude.h"
 #include "jerror.h"
 #include "jpeglib.h"
-#include "filter/transupp.h"       /* My own external interface */
-#include "filter/jpegcomp.h"
+#include "transupp.h"       /* My own external interface */
+#include "jpegcomp.h"
 #include <ctype.h>      /* to declare isdigit() */
 
 /* Definition of jdiv_round_up is copied here from jutils.c in jpeg-8c.tar.gz,
