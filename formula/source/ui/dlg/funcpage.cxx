@@ -108,8 +108,9 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
     for(sal_uInt32 i = 0 ; i < nCount; ++i)
     {
         TFunctionDesc pDesc(_pCategory->getFunction(i));
-        m_pLbFunction->SetEntryData(
-            m_pLbFunction->InsertEntry(pDesc->getFunctionName() ),const_cast<IFunctionDescription *>(pDesc) );
+        if (!pDesc->isHidden())
+            m_pLbFunction->SetEntryData(
+                    m_pLbFunction->InsertEntry(pDesc->getFunctionName() ),const_cast<IFunctionDescription *>(pDesc) );
     }
 }
 
