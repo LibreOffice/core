@@ -598,8 +598,8 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
         return;
 
     // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
-                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
+    pViewData->SetZoom(Fraction(mnTilePixelWidth * TWIPS_PER_PIXEL, mnTileTwipWidth),
+                       Fraction(mnTilePixelHeight * TWIPS_PER_PIXEL, mnTileTwipHeight), true);
 
     // Calc operates in pixels...
     Point aPos(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
@@ -646,8 +646,8 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     ScDrawView* pDrawView = pViewData->GetScDrawView();
 
     // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
-                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
+    pViewData->SetZoom(Fraction(mnTilePixelWidth * TWIPS_PER_PIXEL, mnTileTwipWidth),
+                       Fraction(mnTilePixelHeight * TWIPS_PER_PIXEL, mnTileTwipHeight), true);
 
     bool bHandled = false;
 
@@ -816,8 +816,8 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
     // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
-                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
+    pViewData->SetZoom(Fraction(mnTilePixelWidth * TWIPS_PER_PIXEL, mnTileTwipWidth),
+                       Fraction(mnTilePixelHeight * TWIPS_PER_PIXEL, mnTileTwipHeight), true);
 
     int nPixelX = nX * pViewData->GetPPTX();
     int nPixelY = nY * pViewData->GetPPTY();
@@ -893,10 +893,10 @@ bool ScModelObj::isMimeTypeSupported()
 
 void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)
 {
-    nTilePixelWidth = nTilePixelWidth_;
-    nTilePixelHeight = nTilePixelHeight_;
-    nTileTwipWidth = nTileTwipWidth_;
-    nTileTwipHeight = nTileTwipHeight_;
+    mnTilePixelWidth = nTilePixelWidth_;
+    mnTilePixelHeight = nTilePixelHeight_;
+    mnTileTwipWidth = nTileTwipWidth_;
+    mnTileTwipHeight = nTileTwipHeight_;
 }
 
 OUString ScModelObj::getRowColumnHeaders(const Rectangle& rRectangle)
@@ -907,8 +907,8 @@ OUString ScModelObj::getRowColumnHeaders(const Rectangle& rRectangle)
         return OUString();
 
     // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
-                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
+    pViewData->SetZoom(Fraction(mnTilePixelWidth * TWIPS_PER_PIXEL, mnTileTwipWidth),
+                       Fraction(mnTilePixelHeight * TWIPS_PER_PIXEL, mnTileTwipHeight), true);
 
     ScTabView* pTabView = pViewData->GetView();
     if (!pTabView)
@@ -967,11 +967,11 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     SvtSaveOptions().SetWarnAlienFormat(false);
 
     // default tile size in pixels
-    nTilePixelWidth = 256;
-    nTilePixelHeight = 256;
+    mnTilePixelWidth = 256;
+    mnTilePixelHeight = 256;
     // the default zoom level will be 1
-    nTileTwipWidth = nTilePixelWidth * TWIPS_PER_PIXEL;
-    nTileTwipHeight = nTilePixelHeight * TWIPS_PER_PIXEL;
+    mnTileTwipWidth = mnTilePixelWidth * TWIPS_PER_PIXEL;
+    mnTileTwipHeight = mnTilePixelHeight * TWIPS_PER_PIXEL;
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
