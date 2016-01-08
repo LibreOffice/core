@@ -155,7 +155,9 @@ void FuncPage::UpdateFunctionList()
 
 
     m_pLbFunction->SetUpdateMode( true );
-    m_pLbFunction->SelectEntryPos(0);
+    // Ensure no function is selected so the Next button doesn't overwrite a
+    // function that is not in the list with an arbitrary selected one.
+    m_pLbFunction->SetNoSelection();
 
     if(IsVisible()) SelHdl(*m_pLbFunction);
 }
@@ -198,7 +200,10 @@ sal_Int32 FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
 
 void FuncPage::SetFunction(sal_Int32 nFunc)
 {
-    m_pLbFunction->SelectEntryPos(nFunc);
+    if (nFunc == LISTBOX_ENTRY_NOTFOUND)
+        m_pLbFunction->SetNoSelection();
+    else
+        m_pLbFunction->SelectEntryPos(nFunc);
 }
 
 void FuncPage::SetFocus()
