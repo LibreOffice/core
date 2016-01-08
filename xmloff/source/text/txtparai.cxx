@@ -53,7 +53,6 @@
 #include "txtlists.hxx"
 
 #include <txtparaimphint.hxx>
-class XMLHints_Impl : public boost::ptr_vector<XMLHint_Impl> {};
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -65,6 +64,29 @@ using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 
 TYPEINIT1( XMLCharContext, SvXMLImportContext );
+
+class XMLHints_Impl
+{
+private:
+    boost::ptr_vector<XMLHint_Impl> m_Hints;
+    uno::Reference<uno::XInterface> m_xCrossRefHeadingBookmark;
+
+public:
+    void push_back(XMLHint_Impl * pHint)
+    {
+        m_Hints.push_back(pHint);
+    }
+
+    boost::ptr_vector<XMLHint_Impl> & GetHints()
+    {
+        return m_Hints;
+    }
+
+    uno::Reference<uno::XInterface> & GetCrossRefHeadingBookmark()
+    {
+        return m_xCrossRefHeadingBookmark;
+    }
+};
 
 XMLCharContext::XMLCharContext(
         SvXMLImport& rImport,
@@ -252,10 +274,10 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     if (XMLStartReferenceContext_Impl::FindName(GetImport(), xAttrList, sName))
     {
         // search for reference start
-        sal_uInt16 nCount = rHints.size();
+        sal_uInt16 nCount = rHints.GetHints().size();
         for(sal_uInt16 nPos = 0; nPos < nCount; nPos++)
         {
-            XMLHint_Impl *pHint = &rHints[nPos];
+            XMLHint_Impl *pHint = &rHints.GetHints()[nPos];
             if ( pHint->IsReference() &&
                  sName.equals( static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName()) )
             {
@@ -1120,10 +1142,10 @@ void XMLIndexMarkImportContext_Impl::StartElement(
             if (!sID.isEmpty())
             {
                 // if we have an ID, find the hint and set the end position
-                sal_uInt16 nCount = rHints.size();
+                sal_uInt16 nCount = rHints.GetHints().size();
                 for(sal_uInt16 nPos = 0; nPos < nCount; nPos++)
                 {
-                    XMLHint_Impl *pHint = &rHints[nPos];
+                    XMLHint_Impl *pHint = &rHints.GetHints()[nPos];
                     if ( pHint->IsIndexMark() &&
                          sID.equals(
                              static_cast<XMLIndexMarkHint_Impl *>(pHint)->GetID()) )
@@ -1655,6 +1677,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXT_BOOKMARK_END:
         pContext = new XMLTextMarkImportContext( rImport,
                                                  *rImport.GetTextImport().get(),
+                                                 rHints.GetCrossRefHeadingBookmark(),
                                                  nPrefix, rLocalName );
         break;
 
@@ -1663,6 +1686,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXT_FIELDMARK_END:
         pContext = new XMLTextMarkImportContext( rImport,
                                                  *rImport.GetTextImport().get(),
+                                                 rHints.GetCrossRefHeadingBookmark(),
                                                  nPrefix, rLocalName );
         break;
 
@@ -2072,11 +2096,11 @@ XMLParaContext::~XMLParaContext()
         }
     }
 
-    if( pHints && !pHints->empty() )
+    if (pHints && !pHints->GetHints().empty())
     {
-        for( sal_uInt16 i=0; i<pHints->size(); i++ )
+        for( sal_uInt16 i=0; i < pHints->GetHints().size(); i++ )
         {
-            XMLHint_Impl *pHint = &(*pHints)[i];
+            XMLHint_Impl *pHint = &pHints->GetHints()[i];
             xAttrCursor->gotoRange( pHint->GetStart(), sal_False );
             xAttrCursor->gotoRange( pHint->GetEnd(), sal_True );
             switch( pHint->GetType() )
