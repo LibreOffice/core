@@ -865,10 +865,6 @@ short Dialog::Execute()
 
     VclPtr<vcl::Window> xWindow = this;
 
-#ifdef DBG_UTIL
-    VclPtr<vcl::Window> xDialogParent = mpDialogParent;
-#endif
-
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
     while ( !xWindow->IsDisposed() && mbInExecute )
@@ -879,8 +875,8 @@ short Dialog::Execute()
 #ifdef DBG_UTIL
     if( xDialogParent  )
     {
-        if( ! xDialogParent->IsDisposed() )
-            xDialogParent.clear();
+        if( ! mpDialogParent->IsDisposed() )
+            mpDialogParent.clear();
         else
             OSL_FAIL( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
     }
