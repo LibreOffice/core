@@ -106,6 +106,16 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual SwDocUpdateField& GetUpdateFields() const = 0;
 
+    /* How many DB records are needed to fill the document
+
+       Counts the fields, which advance the DB cursor, + 1.
+       Result is always > 0, as even a document without fields will
+       advance the cursor in mail merge.
+
+       @return amount of needed DB records
+     */
+    virtual sal_uInt16 WantedDBrecords() const = 0;
+
     /*  @@@MAINTAINABILITY-HORROR@@@
         SwNode (see parameter pChk) is (?) part of the private
         data structure of SwDoc and should not be exposed
