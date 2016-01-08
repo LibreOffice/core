@@ -395,6 +395,8 @@ public:
     /// Get the default parser state.
     RTFParserState& getDefaultState();
     oox::GraphicHelper& getGraphicHelper();
+    /// Are we inside the stylesheet table?
+    bool isStyleSheetImport();
 
 private:
     SvStream& Strm();
