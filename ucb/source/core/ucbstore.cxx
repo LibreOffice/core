@@ -115,7 +115,7 @@ class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
     PersistentPropertySet*            m_pOwner;
 
 public:
-    PropertySetInfo_Impl( PersistentPropertySet* pOwner );
+    explicit PropertySetInfo_Impl(PersistentPropertySet* pOwner);
     virtual ~PropertySetInfo_Impl();
 
     // XPropertySetInfo

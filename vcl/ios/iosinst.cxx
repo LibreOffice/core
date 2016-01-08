@@ -36,7 +36,10 @@ static int viewWidth = 1, viewHeight = 1;
 class IosSalData : public SalGenericData
 {
 public:
-    IosSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_IOS, pInstance ) {}
+    explicit IosSalData(SalInstance *pInstance)
+        : SalGenericData(SAL_DATA_IOS, pInstance)
+    {
+    }
     virtual void ErrorTrapPush() {}
     virtual bool ErrorTrapPop( bool ) { return false; }
 };

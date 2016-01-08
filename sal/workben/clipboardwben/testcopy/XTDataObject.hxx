@@ -35,7 +35,7 @@ class EnumFormatEtc;
 class CXTDataObject : public IDataObject
 {
 public:
-    CXTDataObject( LONG nRefCntInitVal = 0);
+    explicit CXTDataObject(LONG nRefCntInitVal = 0);
     ~CXTDataObject( );
 
     // ole interface implementation
@@ -80,7 +80,7 @@ private:
 class CEnumFormatEtc : public IEnumFORMATETC
 {
 public:
-    CEnumFormatEtc( LPUNKNOWN pUnkDataObj );
+    explicit CEnumFormatEtc(LPUNKNOWN pUnkDataObj);
     ~CEnumFormatEtc( );
 
     // IUnknown

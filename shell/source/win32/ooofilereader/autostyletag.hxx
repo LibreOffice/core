@@ -37,25 +37,25 @@
 class CAutoStyleTag : public ITag
 {
     public:
-        CAutoStyleTag():m_CurrentStyleLocalePair( EMPTY_STYLELOCALE_PAIR ){};
-        CAutoStyleTag( const XmlTagAttributes_t& attributes );
+        CAutoStyleTag():m_CurrentStyleLocalePair( EMPTY_STYLELOCALE_PAIR ){}
+        explicit CAutoStyleTag(const XmlTagAttributes_t& attributes);
 
         virtual void startTag();
         virtual void endTag();
         virtual void addCharacters(const std::wstring& characters);
         virtual void addAttributes(const XmlTagAttributes_t& attributes);
         virtual std::wstring getTagContent(){ return EMPTY_STRING; };
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring() ; };
+        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring() ; }
 
         void setStyle( ::std::wstring const & Style );
         void setLocale(const LocaleSet_t& Locale);
         void clearStyleLocalePair();
-        inline StyleLocalePair_t getStyleLocalePair() const{ return m_CurrentStyleLocalePair; };
+        inline StyleLocalePair_t getStyleLocalePair() const{ return m_CurrentStyleLocalePair; }
         inline bool isFull() const
         {
             return (( m_CurrentStyleLocalePair.first != EMPTY_STRING )&&
                    ( m_CurrentStyleLocalePair.second != EMPTY_LOCALE));
-        };
+        }
 
     private:
         StyleLocalePair_t m_CurrentStyleLocalePair;

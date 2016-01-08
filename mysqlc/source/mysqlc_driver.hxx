@@ -76,7 +76,7 @@ namespace connectivity
 
         public:
 
-            MysqlCDriver(const Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+            explicit MysqlCDriver(const Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
             void SAL_CALL disposing() SAL_OVERRIDE;

@@ -43,7 +43,7 @@ namespace {
 struct Library {
     HMODULE module;
 
-    Library(HMODULE theModule): module(theModule) {}
+    explicit Library(HMODULE theModule): module(theModule) {}
 
     ~Library() { if (module) FreeLibrary(module); }
 };

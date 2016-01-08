@@ -32,7 +32,7 @@ class CSimpleTag : public ITag
 {
     public:
         CSimpleTag(){};
-        CSimpleTag( const XmlTagAttributes_t& attributes ):m_SimpleAttributes(attributes){};
+        explicit CSimpleTag( const XmlTagAttributes_t& attributes ):m_SimpleAttributes(attributes){}
 
         virtual void startTag();
         virtual void endTag();

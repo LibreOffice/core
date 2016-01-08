@@ -120,7 +120,7 @@ namespace internal
 class StreamOnZipBuffer final : public IStream
 {
 public:
-    StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buffer);
+    explicit StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buffer);
 
     // IUnknown
     virtual ULONG STDMETHODCALLTYPE AddRef();

@@ -74,7 +74,7 @@ class LongPathBuffer
     LongPathBuffer& operator=( const LongPathBuffer& );
 
 public:
-    LongPathBuffer( sal_uInt32 nCharNum )
+    explicit LongPathBuffer( sal_uInt32 nCharNum )
     : m_pBuffer( reinterpret_cast<T*>( rtl_allocateMemory( nCharNum * sizeof( T ) ) ) )
     , m_nCharNum( nCharNum )
     {

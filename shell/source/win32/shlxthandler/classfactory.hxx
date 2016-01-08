@@ -31,7 +31,7 @@
 class CClassFactory : public IClassFactory
 {
 public:
-    CClassFactory(const CLSID& clsid);
+    explicit CClassFactory(const CLSID& clsid);
     virtual ~CClassFactory();
 
 

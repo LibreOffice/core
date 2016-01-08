@@ -46,7 +46,7 @@ class CSysShExec :
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
-    CSysShExec(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit CSysShExec(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
 
     // XSystemShellExecute

@@ -331,7 +331,7 @@ namespace internal
 /* for case in-sensitive string comparison */
 struct stricmp : public std::unary_function<std::string, bool>
 {
-    stricmp(const std::string &str) : str_(str)
+    explicit stricmp(const std::string &str) : str_(str)
     {}
 
     bool operator() (const std::string &other)
