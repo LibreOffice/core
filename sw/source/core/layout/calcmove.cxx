@@ -738,7 +738,8 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                 }
                 assert(pAttrs);
 
-                SwViewShell *pSh = getRootFrm()->GetCurrShell();
+                SwRootFrm* pRootFrame = getRootFrm();
+                SwViewShell* pSh = pRootFrame->GetCurrShell();
                 if (pSh && pSh->GetViewOptions()->getBrowseMode())
                 {
                     // In BrowseView, we use fixed settings
@@ -785,7 +786,7 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                     mbValidSize = mbValidPrtArea = true;
                     continue;
                 }
-                else if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
+                else if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden() && pRootFrame->GetLastPage() != this)
                 {
                     long height = 0;
                     SwLayoutFrm *pBody = FindBodyCont();

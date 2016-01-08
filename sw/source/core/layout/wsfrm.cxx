@@ -2947,11 +2947,25 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     if ( mbValidPrtArea && mbValidSize )
         return;
 
+    bool bHideWhitespace = false;
+    if (IsPageFrm())
+    {
+        SwViewShell* pShell = getRootFrm()->GetCurrShell();
+        if (pShell && pShell->GetViewOptions()->IsWhitespaceHidden())
+        {
+            // This is needed so that no space is reserved for the margin on
+            // the last page of the document. Other pages would have no margin
+            // set even without this, as their frame height is the content
+            // height already.
+            bHideWhitespace = true;
+        }
+    }
+
     const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft(this);
-    const sal_uInt16 nUpper = pAttrs->CalcTop();
+    const sal_uInt16 nUpper = bHideWhitespace ? 0 : pAttrs->CalcTop();
 
     const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight(this);
-    const sal_uInt16 nLower = pAttrs->CalcBottom();
+    const sal_uInt16 nLower = bHideWhitespace ? 0 : pAttrs->CalcBottom();
 
     const bool bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
