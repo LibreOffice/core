@@ -23,7 +23,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
-#include <fontentry.hxx>
+#include <fontinstance.hxx>
 #include <fontattributes.hxx>
 
 #include <config_graphite.h>
@@ -354,7 +354,7 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
 }
 
 ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )
-:   ImplFontEntry( rFSD )
+:   LogicalFontInstance( rFSD )
 ,   mpServerFont( nullptr )
 ,   mbGotFontOptions( false )
 {}

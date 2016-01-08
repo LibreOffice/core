@@ -509,10 +509,10 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
     // the reference device should have only scalable fonts
     // => clean up the original font lists before getting new ones
-    if ( mpFontEntry )
+    if ( mpFontInstance )
     {
-        mpFontCache->Release( mpFontEntry );
-        mpFontEntry = nullptr;
+        mpFontCache->Release( mpFontInstance );
+        mpFontInstance = nullptr;
     }
     if ( mpDeviceFontList )
     {
@@ -563,8 +563,8 @@ long VirtualDevice::GetFontExtLeading() const
         return 0;
 #endif
 
-    ImplFontEntry*      pEntry = mpFontEntry;
-    ImplFontAttributes* pFontAttributes = &(pEntry->maFontAttributes);
+    LogicalFontInstance* pFontInstance = mpFontInstance;
+    ImplFontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
 
     return pFontAttributes->GetExternalLeading();
 }

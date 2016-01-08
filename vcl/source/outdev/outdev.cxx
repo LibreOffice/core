@@ -93,7 +93,7 @@ OutputDevice::OutputDevice() :
     mpPrevGraphics                  = nullptr;
     mpNextGraphics                  = nullptr;
     mpMetaFile                      = nullptr;
-    mpFontEntry                     = nullptr;
+    mpFontInstance                     = nullptr;
     mpFontCache                     = nullptr;
     mpFontCollection                = nullptr;
     mpDeviceFontList                = nullptr;
@@ -234,8 +234,8 @@ void OutputDevice::dispose()
     mpOutDevStateStack = nullptr;
 
     // release the active font instance
-    if( mpFontEntry )
-        mpFontCache->Release( mpFontEntry );
+    if( mpFontInstance )
+        mpFontCache->Release( mpFontInstance );
 
     // remove cached results of GetDevFontList/GetDevSizeList
     // TODO: use smart pointers for them
