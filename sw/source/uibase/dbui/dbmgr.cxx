@@ -954,12 +954,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     const bool bNeedsTempFiles = ( bMT_EMAIL || bMT_FILE );
     const bool bCreateSingleFile = rMergeDescriptor.bCreateSingleFile;
 
-    ::rtl::Reference< MailDispatcher >          xMailDispatcher;
-    OUString sMailBodyMimeType;
-    rtl_TextEncoding sMailEncoding = ::osl_getThreadTextEncoding();
-
-    bool bNoError = true;
-
     // Setup for dumping debugging documents
     static const char *sMaxDumpDocs = nullptr;
     static sal_Int32 nMaxDumpDocs = 0;
@@ -972,27 +966,23 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             nMaxDumpDocs = rtl_ustr_toInt32(reinterpret_cast<const sal_Unicode*>( sMaxDumpDocs ), 10);
     }
 
-    if( bMT_EMAIL )
-    {
-        xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer));
-        if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
-        {
-            sMailBodyMimeType = "text/html; charset=";
-            sMailBodyMimeType += OUString::createFromAscii(
-                    rtl_getBestMimeCharsetFromTextEncoding( sMailEncoding ));
-            SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-            sMailEncoding = rHtmlOptions.GetTextEncoding();
-        }
-        else
-            sMailBodyMimeType = "text/plain; charset=UTF-8; format=flowed";
-    }
+    ::rtl::Reference< MailDispatcher >  xMailDispatcher;
+    OUString                            sMailBodyMimeType;
+    rtl_TextEncoding                    sMailEncoding = ::osl_getThreadTextEncoding();
+
+    bool bNoError = true;
 
     uno::Reference< beans::XPropertySet > xColumnProp;
     {
         // Check for (mandatory) email or (optional) filename column
         SwDBFormatData aColumnDBFormat;
         bool bColumnName = !rMergeDescriptor.sDBcolumn.isEmpty();
-        if( bColumnName )
+        if( ! bColumnName )
+        {
+            if( bMT_EMAIL )
+                return false;
+        }
+        else
         {
             uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
             uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
@@ -1003,6 +993,21 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             aColumnDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
             aColumnDBFormat.aNullDate  = pImpl->pMergeData->aNullDate;
+
+            if( bMT_EMAIL )
+            {
+                xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer));
+                if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
+                {
+                    sMailBodyMimeType = "text/html; charset=";
+                    sMailBodyMimeType += OUString::createFromAscii(
+                                        rtl_getBestMimeCharsetFromTextEncoding( sMailEncoding ));
+                    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+                    sMailEncoding = rHtmlOptions.GetTextEncoding();
+                }
+                else
+                    sMailBodyMimeType = "text/plain; charset=UTF-8; format=flowed";
+            }
         }
 
         // Try saving the source document
