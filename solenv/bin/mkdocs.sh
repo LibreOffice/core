@@ -169,6 +169,10 @@ do
       PROJECT_INCLUDE="$PROJECT_INCLUDE include/$PROJECT"
   fi
 
+  if [ "$PROJECT" == "vcl" ]; then
+      PROJECT_INCLUDE="$PROJECT_INCLUDE $PROJECT/source/filter/igif/ $PROJECT/source/filter/ixbm $PROJECT/source/filter/igif/ $PROJECT/source/filter/jpeg"
+  fi
+
   DOXYGEN_INPUT=`printf "%s" "$PROJECT/source $PROJECT_INCLUDE"`
 
   DOXYGEN_OUTPUT="$BASE_OUTPUT/$PROJECT"
