@@ -160,7 +160,7 @@ void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nF
     return StartPresentationMode( bPresentation, nFlags, GetScreenNumber());
 }
 
-void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nFlags, sal_Int32 nDisplayScreen )
+void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nFlags, sal_uInt32 nDisplayScreen )
 {
     if ( !bPresentation == !mbPresentationMode )
         return;

@@ -90,7 +90,7 @@ public:
 
     void            StartPresentationMode( bool   bPresentation,
                                            PresentationFlags nFlags,
-                                           sal_Int32  nDisplayScreen );
+                                           sal_uInt32  nDisplayScreen );
     /**
      @overload void StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, sal_uInt32 nDisplayScreen)
     */
