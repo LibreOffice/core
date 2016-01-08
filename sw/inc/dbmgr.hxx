@@ -149,8 +149,9 @@ struct SwMergeDescriptor
     OUString                                            sSaveToFilterOptions;
     css::uno::Sequence< css::beans::PropertyValue >     aSaveToFilterData;
 
+    OUString                                            sPath;
+
     OUString                                            sSubject;
-    OUString                                            sAddressFromColumn;
     OUString                                            sMailBody;
     OUString                                            sAttachmentName;
     css::uno::Sequence< OUString >                      aCopiesTo;
@@ -163,7 +164,8 @@ struct SwMergeDescriptor
 
     bool                                            bPrintAsync;
     bool                                            bCreateSingleFile;
-    bool                                            bSubjectIsFilename;
+
+    OUString                                            sDBcolumn;
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
@@ -179,7 +181,6 @@ struct SwMergeDescriptor
         bSendAsAttachment( false ),
         bPrintAsync( false ),
         bCreateSingleFile( false ),
-        bSubjectIsFilename( false ),
         pMailMergeConfigItem(nullptr)
         {}
 
@@ -194,8 +195,6 @@ class SW_DLLPUBLIC SwDBManager
 {
 friend class SwConnectionDisposedListener_Impl;
 
-    OUString            sEMailAddrField;      ///< Mailing: Column name of email address.
-    OUString            sSubject;           ///< Mailing: Subject
     bool            m_bCancel;            ///< Mail merge canceled.
     bool            bInitDBFields : 1;
     bool            bInMerge    : 1;    ///< merge process active
@@ -258,10 +257,6 @@ public:
     /// Initialize data fields that lack name of database.
     inline bool     IsInitDBFields() const  { return bInitDBFields; }
     inline void     SetInitDBFields(bool b) { bInitDBFields = b;    }
-
-    /// Mailing: Set email data.
-    inline void     SetEMailColumn(const OUString& sColName) { sEMailAddrField = sColName; }
-    inline void     SetSubject(const OUString& sSbj) { sSubject = sSbj; }
 
     /// Fill listbox with all table names of a database.
     bool            GetTableNames(ListBox* pListBox, const OUString& rDBName );

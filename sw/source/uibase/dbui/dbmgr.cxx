@@ -991,14 +991,14 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     {
         // Check for (mandatory) email or (optional) filename column
         SwDBFormatData aColumnDBFormat;
-        bool bColumnName = !sEMailAddrField.isEmpty();
+        bool bColumnName = !rMergeDescriptor.sDBcolumn.isEmpty();
         if( bColumnName )
         {
             uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
             uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
-            if(!xCols->hasByName(sEMailAddrField))
+            if( !xCols->hasByName( rMergeDescriptor.sDBcolumn ) )
                 return false;
-            uno::Any aCol = xCols->getByName(sEMailAddrField);
+            uno::Any aCol = xCols->getByName( rMergeDescriptor.sDBcolumn );
             aCol >>= xColumnProp;
 
             aColumnDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
@@ -1169,7 +1169,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
                 {
-                    OUString sPath(sSubject);
+                    OUString sPath = rMergeDescriptor.sPath;
                     OUString sColumnData;
 
                     // Read the indicated data column, which should contain a valid mail
@@ -1209,8 +1209,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
                         aTempFile.reset(
                             new utl::TempFile(sLeading, true, &sExt, &sPath));
-                        if( rMergeDescriptor.bSubjectIsFilename )
-                            aTempFile->EnableKillingFile();
                         if( !aTempFile->IsValid() )
                         {
                             ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
@@ -1509,7 +1507,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 {
                     // save merged document
                     assert( aTempFile.get() );
-                    INetURLObject aTempFileURL( rMergeDescriptor.bSubjectIsFilename ? sSubject : aTempFile->GetURL());
+                    INetURLObject aTempFileURL;
+                    if( rMergeDescriptor.sPath.isEmpty() )
+                        aTempFileURL.SetURL( aTempFile->GetURL() );
+                    else
+                    {
+                        aTempFileURL.SetURL( rMergeDescriptor.sPath );
+                        // remove the unneeded temporary file
+                        aTempFile->EnableKillingFile();
+                    }
                     bNoError = lcl_SaveDoc( &aTempFileURL, pStoreToFilter,
                             pStoreToFilterOptions, &rMergeDescriptor.aSaveToFilterData,
                             bIsPDFexport, xTargetDocShell, *pTargetShell );
@@ -2871,12 +2877,11 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
 
                     SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
                     aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
-                    aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc() && pImpl->pMergeDialog->GetMergeType() != DBMGR_MERGE_PRINTER;
-                    aMergeDesc.bSubjectIsFilename = aMergeDesc.bCreateSingleFile;
+                    aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc();
+                    aMergeDesc.sPath = pImpl->pMergeDialog->GetTargetURL();
                     if( !aMergeDesc.bCreateSingleFile && pImpl->pMergeDialog->IsGenerateFromDataBase() )
                     {
-                        aMergeDesc.sAddressFromColumn = pImpl->pMergeDialog->GetColumnName();
-                        aMergeDesc.sSubject = pImpl->pMergeDialog->GetPath();
+                        aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
                     }
 
                     MergeNew(aMergeDesc);
