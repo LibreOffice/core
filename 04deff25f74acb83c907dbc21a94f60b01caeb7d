@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_6788b223",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T16:05:54Z",
+      "side": 1,
+      "message": "Again - can we make pChild itself a VclPtr if it is not already - and avoid needing the xWindow ? \u003d)",
+      "revId": "04deff25f74acb83c907dbc21a94f60b01caeb7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_478dae30",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T16:05:54Z",
+      "side": 1,
+      "message": "And of course avoid the clear here too \u003d)",
+      "revId": "04deff25f74acb83c907dbc21a94f60b01caeb7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
