@@ -322,7 +322,7 @@ public:
                                       OUString &rResult, double *pNumber);
     bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
                                           sal_uInt16 nLanguage, SwCalc &aCalc);
-    bool            ToNextMergeRecord();
+    bool            ToNextMergeRecord(const sal_uInt16 nSkip = 0);
     bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery);
 
     bool            ExistsNextRecord()const;
