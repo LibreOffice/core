@@ -570,7 +570,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     ForcePointer(&rMEvt);
 
-    pWindow->ReleaseMouse();
+    if (pWindow->IsMouseCaptured())
+        pWindow->ReleaseMouse();
 
     //  Command-Handler fuer Kontext-Menue kommt erst nach MouseButtonUp,
     //  darum hier die harte IsLeft-Abfrage
