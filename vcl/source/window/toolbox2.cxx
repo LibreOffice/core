@@ -42,7 +42,6 @@
 #include <unotools/confignode.hxx>
 
 using namespace vcl;
-using namespace com::sun::star;
 
 #define TB_SEP_SIZE     8  // Separator size
 
@@ -595,7 +594,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText, ToolBoxItem
     CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits,
+void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame, ToolBoxItemBits nBits,
                          const Size& rRequestedSize, sal_uInt16 nPos)
 {
     OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(rCommand, rFrame));
