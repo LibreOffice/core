@@ -482,6 +482,8 @@ namespace vcl
  *
  * @param ttf         pointer to the TrueTypeFont structure
  * @param ch          Unicode (UCS-2) character
+ * @param bvertical   flag to function that we want to find the vertical
+ *                    GlobalSUBstitution attribute
  * @return glyph ID, if the character is missing in the font, the return value is 0.
  * @ingroup sft
  */
@@ -492,6 +494,8 @@ namespace vcl
  * Returns 0 when the font does not substitute vertical glyphs
  *
  * @param ttf         pointer to the TrueTypeFont structure
+ * @param bvertical   flag to function that we want to find the vertical
+ *                    GlobalSUBstitution attribute
  */
     int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical);
 
