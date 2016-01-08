@@ -23,7 +23,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include "graphicfilter_internal.hxx"
+#include "filter/graphicfilter_internal.hxx"
 
 #define DATA_SIZE           640
 

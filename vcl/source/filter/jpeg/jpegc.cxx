@@ -29,12 +29,12 @@
 #include <osl/diagnose.h>
 
 extern "C" {
-#include "transupp.h"
+#include "filter/transupp.h"
 }
 
-#include "jpeg.h"
-#include <JpegReader.hxx>
-#include <JpegWriter.hxx>
+#include "filter/jpeg.h"
+#include "filter/JpegReader.hxx"
+#include "filter/JpegWriter.hxx"
 #include <memory>
 
 #ifdef _MSC_VER

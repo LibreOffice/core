@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "winmtf.hxx"
+#include "filter/winmtf.hxx"
 
 #include <memory>
 #include <boost/optional.hpp>

@@ -20,7 +20,7 @@
 #define _XBMPRIVATE
 #include <ctype.h>
 #include <comphelper/string.hxx>
-#include "xbmread.hxx"
+#include "filter/xbmread.hxx"
 
 XBMReader::XBMReader( SvStream& rStm ) :
             rIStm           ( rStm ),

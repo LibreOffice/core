@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "winmtf.hxx"
-#include "emfwr.hxx"
-#include "wmfwr.hxx"
+#include "filter/winmtf.hxx"
+#include "filter/emfwr.hxx"
+#include "filter/wmfwr.hxx"
 #include <vcl/wmf.hxx>
 #include <vcl/gdimetafiletools.hxx>
 #include <comphelper/scopeguard.hxx>

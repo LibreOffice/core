@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include "emfwr.hxx"
+#include "filter/emfwr.hxx"
 #include <rtl/strbuf.hxx>
 #include <tools/helpers.hxx>
 #include <tools/fract.hxx>

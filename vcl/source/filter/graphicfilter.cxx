@@ -40,12 +40,11 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/settings.hxx>
-#include "igif/gifread.hxx"
-#include "jpeg/jpeg.hxx"
-#include "ixbm/xbmread.hxx"
-#include "ixpm/xpmread.hxx"
-#include "sgffilt.hxx"
-#include "osl/module.hxx"
+#include <unotools/ucbstreamhelper.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/instance.hxx>
+#include <vcl/metaact.hxx>
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -59,15 +58,19 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <unotools/ucbstreamhelper.hxx>
-#include <rtl/bootstrap.hxx>
-#include <rtl/instance.hxx>
-#include <vcl/metaact.hxx>
+
 #include <vector>
 #include <memory>
 
-#include "FilterConfigCache.hxx"
-#include "graphicfilter_internal.hxx"
+#include "filter/gifread.hxx"
+#include "filter/jpeg.hxx"
+#include "filter/xbmread.hxx"
+#include "filter/xpmread.hxx"
+#include "filter/sgffilt.hxx"
+#include "osl/module.hxx"
+
+#include "filter/FilterConfigCache.hxx"
+#include "filter/graphicfilter_internal.hxx"
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
