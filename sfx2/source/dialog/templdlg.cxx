@@ -341,7 +341,7 @@ std::unique_ptr<PopupMenu> SfxActionListBox::CreateContextMenu()
 }
 
 SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Window* pParentWindow)
-    : DockingWindow(pParentWindow, SfxResId(DLG_STYLE_DESIGNER))
+    : Window(pParentWindow)
     , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
     , mpBindings(pBindings)
 {
@@ -360,7 +360,7 @@ SfxTemplatePanelControl::~SfxTemplatePanelControl()
 void SfxTemplatePanelControl::dispose()
 {
     pImpl.reset();
-    DockingWindow::dispose();
+    Window::dispose();
 }
 
 void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
@@ -372,19 +372,14 @@ void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
         pImpl->updateNonFamilyImages();
     }
 
-    DockingWindow::DataChanged( _rDCEvt );
+    Window::DataChanged( _rDCEvt );
 }
 
 void SfxTemplatePanelControl::Resize()
 {
     if(pImpl)
         pImpl->Resize();
-    DockingWindow::Resize();
-}
-
-void SfxTemplatePanelControl::FreeResource()
-{
-    DockingWindow::FreeResource();
+    Window::Resize();
 }
 
 void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
@@ -403,7 +398,7 @@ void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
         // SetFloatingPos( aPoint );
     }
 
-    DockingWindow::StateChanged( nStateChange );
+    Window::StateChanged( nStateChange );
 }
 
 void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries_t& rEntries) const
@@ -2258,7 +2253,6 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     {
     }
 
-    pDlgWindow->FreeResource();
     Initialize();
 }
 

@@ -45,22 +45,4 @@ String STR_STYLE_FILTER_HIERARCHICAL
     Text [ en-US ] = "Hierarchical" ;
 };
 
- // DLG_STYLE_DESIGNER ----------------------------------------------------
-DockingWindow DLG_STYLE_DESIGNER
-{
-    HelpId = CMD_SID_STYLE_DESIGNER ;
-    OutputSize = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 116 , 215 ) ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Sizeable = TRUE ;
-    Dockable = TRUE ;
-    EnableResizing = TRUE ;
-    Border = TRUE ;
-    Moveable = TRUE ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,17 +38,16 @@ namespace SfxTemplate
 
 class SfxTemplateDialog_Impl;
 
-class SFX2_DLLPUBLIC SfxTemplatePanelControl : public DockingWindow
+class SFX2_DLLPUBLIC SfxTemplatePanelControl : public vcl::Window
 {
 public:
-    SfxTemplatePanelControl (SfxBindings* pBindings, vcl::Window* pParentWindow);
+    SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Window* pParentWindow);
     virtual ~SfxTemplatePanelControl();
     virtual void dispose() override;
 
     virtual void DataChanged( const DataChangedEvent& _rDCEvt ) override;
     virtual void Resize() override;
     virtual void StateChanged( StateChangedType nStateChange ) override;
-    void FreeResource();
 
 private:
     std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
