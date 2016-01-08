@@ -338,7 +338,7 @@ public:
         @param bInvert
         If true, invert the channel values with the logical 'not' operator
 
-        @param msoFormula
+        @param msoBrightness
         Use the same formula for brightness as used by MSOffice.
 
         @return true, if the operation was completed successfully.

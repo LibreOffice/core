@@ -605,9 +605,18 @@ protected:
 
     /** Render solid rectangle with given transparency
 
-        @param nTransparency
-        Transparency value (0-255) to use. 0 blits and opaque, 255 a
-        fully transparent rectangle
+      @param nX             Top left coordinate of rectangle
+
+      @param nY             Bottom right coordinate of rectangle
+
+      @param nWidth         Width of rectangle
+
+      @param nHeight        Height of rectangle
+
+      @param nTransparency  Transparency value (0-255) to use. 0 blits and opaque, 255 a
+                            fully transparent rectangle
+
+      @returns true if successfully drawn, false if not able to draw rectangle
      */
     virtual bool                drawAlphaRect(
                                     long nX, long nY,
