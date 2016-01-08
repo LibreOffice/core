@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_c7923e57",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T16:04:33Z",
+      "side": 1,
+      "message": "Can we make pChild a VclPtr instead ?",
+      "revId": "ae5478a33b6dbfc5d8fa3a3aad564e90e340e63a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_27a06a9f",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T16:04:33Z",
+      "side": 1,
+      "message": "if we have a pChild here - we won\u0027t want to clear it of course.\nThanks !",
+      "revId": "ae5478a33b6dbfc5d8fa3a3aad564e90e340e63a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_87b036f6",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T16:04:33Z",
+      "side": 1,
+      "message": "love it \u003d)",
+      "revId": "ae5478a33b6dbfc5d8fa3a3aad564e90e340e63a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
