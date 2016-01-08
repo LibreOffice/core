@@ -244,7 +244,6 @@ static bool ImplCallCommand( vcl::Window* pChild, CommandEventId nEvt, void* pDa
 struct ContextMenuEvent
 {
     VclPtr<vcl::Window>  pWindow;
-    ImplDelData     aDelData;
     Point           aChildPos;
 };
 
@@ -252,15 +251,14 @@ static void ContextMenuEventLink( void* pCEvent, void* )
 {
     ContextMenuEvent* pEv = static_cast<ContextMenuEvent*>(pCEvent);
 
-    if( ! pEv->aDelData.IsDead() )
+    if( ! pEv->pWindow->IsDisposed() )
     {
-        pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
         ImplCallCommand( pEv->pWindow, CommandEventId::ContextMenu, nullptr, true, &pEv->aChildPos );
     }
     delete pEv;
 }
 
-bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
+bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
                            long nX, long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode )
 {
@@ -269,7 +267,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
     vcl::Window*     pChild(nullptr);
     bool        bRet(false);
     sal_uInt16  nClicks(0);
-    ImplFrameData* pWinFrameData = pWindow->ImplGetFrameData();
+    ImplFrameData* pWinFrameData = xWindow->ImplGetFrameData();
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
 
     // we need a mousemove event, before we get a mousebuttondown or a
@@ -280,10 +278,10 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
             Help::EndExtHelp();
         if ( pSVData->maHelpData.mpHelpWin )
         {
-            if( pWindow->ImplGetWindow() == pSVData->maHelpData.mpHelpWin )
+            if( xWindow->ImplGetWindow() == pSVData->maHelpData.mpHelpWin )
             {
                 ImplDestroyHelpWindow( false );
-                return true; // pWindow is dead now - avoid crash!
+                return true; // xWindow is dead now - avoid crash!
             }
             else
                 ImplDestroyHelpWindow( true );
@@ -292,7 +290,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         if ( (pWinFrameData->mnLastMouseX != nX) ||
              (pWinFrameData->mnLastMouseY != nY) )
         {
-            ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, false, nX, nY, nMsgTime, nCode, nMode );
+            ImplHandleMouseEvent( xWindow, MouseNotifyEvent::MOUSEMOVE, false, nX, nY, nMsgTime, nCode, nMode );
         }
     }
 
@@ -309,12 +307,10 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         pWinFrameData->mbMouseIn = false;
         if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
         {
-            ImplDelData aDelData( pWindow );
-
             ImplDestroyHelpWindow( true );
 
-            if ( aDelData.IsDead() )
-                return true; // pWindow is dead now - avoid crash! (#122045#)
+            if ( xWindow->IsDisposed() )
+                return true; // xWindow is dead now - avoid crash! (#122045#)
         }
     }
     else
@@ -336,11 +332,11 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
     {
         pChild = pSVData->maWinData.mpCaptureWin;
 
-        DBG_ASSERT( pWindow == pChild->ImplGetFrameWindow(),
+        DBG_ASSERT( xWindow == pChild->ImplGetFrameWindow(),
                     "ImplHandleMouseEvent: mouse event is not sent to capture window" );
 
         // java client cannot capture mouse correctly
-        if ( pWindow != pChild->ImplGetFrameWindow() )
+        if ( xWindow != pChild->ImplGetFrameWindow() )
             return false;
 
         if ( bMouseLeave )
@@ -351,7 +347,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         if ( bMouseLeave )
             pChild = nullptr;
         else
-            pChild = pWindow->ImplFindWindow( aMousePos );
+            pChild = xWindow->ImplFindWindow( aMousePos );
     }
 
     // test this because mouse events are buffered in the remote version
@@ -813,7 +809,6 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                             ContextMenuEvent* pEv = new ContextMenuEvent;
                             pEv->pWindow = pChild;
                             pEv->aChildPos = aChildPos;
-                            pChild->ImplAddDel( &pEv->aDelData );
                             Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
                         }
                         else
