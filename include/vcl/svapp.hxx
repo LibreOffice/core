@@ -735,7 +735,7 @@ public:
 
     /** Send event to all VCL application event listeners
 
-     @param     pEvent          Pointer to VclSimpleEvent
+     @param     rEvent          Reference to VclSimpleEvent
 
      @see ImplCallEventListeners(sal_uLong nEvent, Windows* pWin, void* pData);
     */
@@ -765,7 +765,7 @@ public:
 
      @param     nEvent          Event ID for mouse event
      @param     pWin            Pointer to window to which the event is sent
-     @param     pKeyEvent       Mouse event to send
+     @param     pMouseEvent     Mouse event to send
     */
     static ImplSVEvent *        PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent );
 
@@ -802,7 +802,7 @@ public:
      If the idle event manager doesn't exist, then initialize it.
 
      @param     rLink           const reference to the idle handler
-     @param     nPrio           The priority of the idle handler - idle handlers of a higher
+     @param     nPriority       The priority of the idle handler - idle handlers of a higher
                                 priority will be processed before this handler.
 
      @return true if the handler was inserted successfully, false if it couldn't be inserted.
@@ -1398,6 +1398,9 @@ public:
      @param     rMimeType       The mime content type of the document specified by aFileUrl.
                                 If an empty string will be provided "application/octet-stream"
                                 will be used.
+
+     @param     rDocumentService The app (or "document service") you will be adding the file to
+                                e.g. com.sun.star.text.TextDocument
     */
     static void                 AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
 
