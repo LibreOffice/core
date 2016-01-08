@@ -88,6 +88,7 @@ namespace formula
         virtual void initArgumentInfo() const = 0;
         virtual OUString getSignature() const = 0;
         virtual OString getHelpId() const = 0;
+        virtual bool isHidden() const = 0;
 
         // parameter
         virtual sal_uInt32 getParameterCount() const = 0;

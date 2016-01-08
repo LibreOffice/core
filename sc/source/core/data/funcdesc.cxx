@@ -69,7 +69,8 @@ ScFuncDesc::ScFuncDesc() :
         nArgCount       (0),
         nVarArgsStart   (0),
         bIncomplete     (false),
-        bHasSuppressedArgs(false)
+        bHasSuppressedArgs(false),
+        mbHidden        (false)
 {}
 
 ScFuncDesc::~ScFuncDesc()
@@ -105,6 +106,7 @@ void ScFuncDesc::Clear()
     sHelpId.clear();
     bIncomplete = false;
     bHasSuppressedArgs = false;
+    mbHidden = false;
 }
 
 OUString ScFuncDesc::GetParamList() const
@@ -352,6 +354,11 @@ void ScFuncDesc::initArgumentInfo()  const
 OString ScFuncDesc::getHelpId() const
 {
     return sHelpId;
+}
+
+bool ScFuncDesc::isHidden() const
+{
+    return mbHidden;
 }
 
 sal_uInt32 ScFuncDesc::getParameterCount() const
@@ -799,7 +806,11 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
 ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
  : Resource(aRes)
 {
-    rbSuppressed = (bool)GetNum();
+    sal_uInt16 nFunctionFlags = GetNum();
+    // Bit 1: entirely suppressed
+    // Bit 2: hidden unless used
+    rbSuppressed = ((nFunctionFlags & 1) != 0);
+    pDesc->mbHidden = ((nFunctionFlags & 2) != 0);
     pDesc->nCategory = GetNum();
     pDesc->sHelpId = ReadByteStringRes();
     pDesc->nArgCount = GetNum();

@@ -31,11 +31,17 @@
  *
  *      ExtraData block with:
  *
- *          Boolean flag whether function is suppressed. Usually 0. This may be
- *          used to add UI string resources before UI freeze if implementation
- *          isn't ready yet without displaying them in the function wizard,
- *          most recent used list and other UI elements. Also not available via
- *          API then.
+ *          16-bit value:
+ *
+ *          Bit 1: boolean flag whether function is suppressed. Usually 0. This
+ *          may be used to add UI string resources before UI freeze if
+ *          implementation isn't ready yet without displaying them in the
+ *          function wizard, most recent used list and other UI elements. Also
+ *          not available via API then.
+ *
+ *          Bit 2: boolean flag whether function is hidden in the Function
+ *          Wizard unless used in an expression.
+ *
  *
  *          Function group (text, math, ...), one of ID_FUNCTION_GRP_...
  *

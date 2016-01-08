@@ -44,6 +44,7 @@ namespace formula
             virtual void initArgumentInfo()  const override {}
             virtual OUString getSignature() const override { return OUString(); }
             virtual OString getHelpId() const override { return ""; }
+            virtual bool isHidden() const override { return false; }
             virtual sal_uInt32 getParameterCount() const override { return 0; }
             virtual sal_uInt32 getVarArgsStart() const override { return 0; }
             virtual OUString getParameterName(sal_uInt32 ) const override { return OUString(); }

@@ -71,6 +71,7 @@ public:
     virtual void initArgumentInfo()  const override;
     virtual OUString getSignature() const override ;
     virtual OString getHelpId() const override ;
+    virtual bool isHidden() const override;
     virtual sal_uInt32 getParameterCount() const override ;
     virtual sal_uInt32 getVarArgsStart() const override;
     virtual OUString getParameterName(sal_uInt32 _nPos) const override ;

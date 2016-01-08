@@ -193,6 +193,11 @@ OString FunctionDescription::getHelpId() const
     return OString();
 }
 
+bool FunctionDescription::isHidden() const
+{
+    return false;
+}
+
 sal_uInt32 FunctionDescription::getParameterCount() const
 {
     return m_aParameter.getLength();
