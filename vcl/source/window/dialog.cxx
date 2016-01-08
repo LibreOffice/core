@@ -884,7 +884,7 @@ short Dialog::Execute()
     if( xDialogParent  )
     {
         if( ! xDialogParent->IsDisposed() )
-            xDialogParent.clear()
+            xDialogParent.clear();
         else
             OSL_FAIL( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
     }
