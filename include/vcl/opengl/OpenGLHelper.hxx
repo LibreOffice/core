@@ -66,8 +66,8 @@ public:
      * @param nWidth                Width of frame
      * @param nHeight               Height of frame
      * @param nFramebufferId        FrameBuffer ID
-     * @param nRenderbufferDepthID  RenderBuffer's depth ID
-     * @param nRenderbufferColorID  RenderBuffer's color ID
+     * @param nRenderbufferDepthId  RenderBuffer's depth ID
+     * @param nRenderbufferColorId  RenderBuffer's color ID
      * @param bRenderbuffer         true => off-screen rendering, false => rendering to texture
      *          This also affects whether to free with glDeleteRenderbuffers or glDeleteTextures
      */
