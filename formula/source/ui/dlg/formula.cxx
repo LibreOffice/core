@@ -1041,7 +1041,16 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
     }
     else if ( pBtn == m_pBtnForward )
     {
-        const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
+        const IFunctionDescription* pDesc;
+        sal_Int32 nSelFunc = pFuncPage->GetFunction();
+        if (nSelFunc != LISTBOX_ENTRY_NOTFOUND)
+            pDesc = pFuncPage->GetFuncDesc( nSelFunc );
+        else
+        {
+            // Do not overwrite the selected formula expression, just edit the
+            // unlisted function.
+            pFuncDesc = pDesc = nullptr;
+        }
 
         if(pDesc==pFuncDesc || !pFuncPage->IsVisible())
             EditNextFunc( true );
@@ -1963,7 +1972,7 @@ void FormEditData::Reset()
     nMode = 0;
     nFStart = 0;
     nCatSel = 1;        //! oder 0 (zuletzt benutzte)
-    nFuncSel = 0;
+    nFuncSel = LISTBOX_ENTRY_NOTFOUND;
     nOffset = 0;
     nEdFocus = 0;
     bMatrix = false;
