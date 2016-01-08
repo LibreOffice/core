@@ -142,7 +142,7 @@ typedef std::vector<std::unique_ptr<SwDSParam>> SwDSParams_t;
 
 struct SwMergeDescriptor
 {
-    DBManagerOptions                                    nMergeType;
+    const DBManagerOptions                              nMergeType;
     SwWrtShell&                                         rSh;
     const svx::ODataAccessDescriptor&                 rDescriptor;
     OUString                                            sSaveToFilter; ///< export filter to save resulting files
@@ -169,7 +169,9 @@ struct SwMergeDescriptor
 
     css::uno::Sequence<  css::beans::PropertyValue >  aPrintOptions;
 
-    SwMergeDescriptor( DBManagerOptions nType, SwWrtShell& rShell, svx::ODataAccessDescriptor& rDesc ) :
+    SwMergeDescriptor( const DBManagerOptions nType,
+                       SwWrtShell& rShell,
+                       const svx::ODataAccessDescriptor& rDesc ) :
         nMergeType(nType),
         rSh(rShell),
         rDescriptor(rDesc),
@@ -194,7 +196,7 @@ friend class SwConnectionDisposedListener_Impl;
 
     OUString            sEMailAddrField;      ///< Mailing: Column name of email address.
     OUString            sSubject;           ///< Mailing: Subject
-    bool            bCancel;            ///< Mail merge canceled.
+    bool            m_bCancel;            ///< Mail merge canceled.
     bool            bInitDBFields : 1;
     bool            bInMerge    : 1;    ///< merge process active
     bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
@@ -221,8 +223,9 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
     /// merge to file _and_ merge to e-Mail
-    SAL_DLLPRIVATE bool          MergeMailFiles(SwWrtShell* pSh,
-                                        const SwMergeDescriptor& rMergeDescriptor, vcl::Window* pParent );
+    SAL_DLLPRIVATE bool MergeMailFiles( SwWrtShell* pSh,
+                                        const SwMergeDescriptor& rMergeDescriptor,
+                                        vcl::Window* pParent );
 
     SwDBManager(SwDBManager const&) = delete;
     SwDBManager& operator=(SwDBManager const&) = delete;
