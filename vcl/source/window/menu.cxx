@@ -2928,7 +2928,7 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Rectangle& rRect,
     return ImplExecute( pExecWindow, rRect, nPopupModeFlags, nullptr, false );
 }
 
-sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst )
+sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst )
 {
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
         return 0;
@@ -2972,17 +2972,12 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
     // could be useful during debugging.
     // nPopupModeFlags |= FloatWinPopupFlags::NoFocusClose;
 
-    ImplDelData aDelData;
-    pW->ImplAddDel( &aDelData );
-
     bInCallback = true; // set it here, if Activate overridden
     Activate();
     bInCallback = false;
 
-    if ( aDelData.IsDead() )
+    if ( pW->IsDisposed() )
         return 0;   // Error
-
-    pW->ImplRemoveDel( &aDelData );
 
     if ( bCanceled || bKilled )
         return 0;
@@ -3135,20 +3130,16 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
     }
     if ( bRealExecute )
     {
-        pWin->ImplAddDel( &aDelData );
-
-        ImplDelData aModalWinDel;
-        pW->ImplAddDel( &aModalWinDel );
         pW->ImplIncModalCount();
 
         pWin->Execute();
 
-        DBG_ASSERT( ! aModalWinDel.IsDead(), "window for popup died, modal count incorrect !" );
-        if( ! aModalWinDel.IsDead() )
+        DBG_ASSERT( ! pW->IsDisposed(), "window for popup died, modal count incorrect !" );
+        if( ! pW->IsDisposed() )
             pW->ImplDecModalCount();
 
-        if ( !aDelData.IsDead() )
-            pWin->ImplRemoveDel( &aDelData );
+        if ( !pWin->IsDisposed() )
+            return 0;
         else
             return 0;
 
