@@ -1394,7 +1394,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 m_bCancel = true;
                                 bNoError = false;
                             }
-                            if( bMT_EMAIL )
+                            if( bMT_EMAIL && bNoError )
                             {
                                 if( !SwMailMergeHelper::CheckMailAddress( sColumnData ) )
                                 {
