@@ -2987,6 +2987,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             // We are still in a table.
             m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_inTbl, std::make_shared<RTFValue>(1));
+            // Ideally getDefaultSPRM() would take care of this, but it would not when we're buffering.
+            m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_tabs, std::make_shared<RTFValue>());
         }
         m_aStates.top().resetFrame();
 
