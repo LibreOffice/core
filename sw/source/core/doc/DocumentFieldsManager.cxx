@@ -829,6 +829,23 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     delete pCalc;
 }
 
+sal_uInt16 DocumentFieldsManager::WantedDBrecords() const
+{
+    sal_uInt16 nMaxDBrecods = 1;
+    sal_uInt16 aTypes[2] = { RES_DBNEXTSETFLD, RES_DBNUMSETFLD };
+
+    for( sal_uInt16 n = 0; n < 2; ++n )
+    {
+        SwFieldType* pFieldType = GetSysFieldType( aTypes[ n ] );
+        SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
+        for( const SwFormatField* pFormatField = aIter.First();
+                pFormatField; pFormatField = aIter.Next() )
+            nMaxDBrecods++;
+    }
+
+    return nMaxDBrecods;
+}
+
 void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUpdRefFields )
 {
     if( IsExpFieldsLocked() || m_rDoc.IsInReading() )

@@ -54,6 +54,7 @@ public:
     virtual void UnlockExpFields() override;
     virtual bool IsExpFieldsLocked() const override;
     virtual SwDocUpdateField& GetUpdateFields() const override;
+    virtual sal_uInt16 WantedDBrecords() const override;
     virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) override;
     virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) override;
     virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) override;
