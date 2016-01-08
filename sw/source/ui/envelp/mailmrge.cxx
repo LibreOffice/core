@@ -486,12 +486,16 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeDlg, ModifyHdl, Edit&, void)
     m_pFromRB->Check();
 }
 
+bool SwMailMergeDlg::AskUserFilename() const
+{
+    return (m_pSaveSingleDocRB->IsChecked() || !m_pGenerateFromDataBaseCB->IsChecked());
+}
+
 bool SwMailMergeDlg::ExecQryShell()
 {
     if(pImpl->xSelSupp.is()) {
         pImpl->xSelSupp->removeSelectionChangeListener(  pImpl->xChgLstnr );
     }
-    SwDBManager* pMgr = rSh.GetDBManager();
 
     if (m_pPrinterRB->IsChecked())
         nMergeType = DBMGR_MERGE_PRINTER;
@@ -501,33 +505,27 @@ bool SwMailMergeDlg::ExecQryShell()
         INetURLObject aAbs;
         if( pMedium )
             aAbs = pMedium->GetURLObject();
-        OUString sPath(
+        pModOpt->SetMailingPath(
             URIHelper::SmartRel2Abs(
                 aAbs, m_pPathED->GetText(), URIHelper::GetMaybeFileHdl()));
-        pModOpt->SetMailingPath(sPath);
-
-        if (!sPath.endsWith("/"))
-            sPath += "/";
 
         pModOpt->SetIsNameFromColumn(m_pGenerateFromDataBaseCB->IsChecked());
 
-        if (m_pGenerateFromDataBaseCB->IsEnabled() && m_pGenerateFromDataBaseCB->IsChecked()) {
-            pMgr->SetEMailColumn(m_pColumnLB->GetSelectEntry());
+        if (!AskUserFilename()) {
             pModOpt->SetNameFromColumn(m_pColumnLB->GetSelectEntry());
             if( m_pFilterLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
                 m_sSaveFilter = *static_cast<const OUString*>(m_pFilterLB->GetSelectEntryData());
+            m_sFilename = OUString();
         } else {
             //#i97667# reset column name - otherwise it's remembered from the last run
-            pMgr->SetEMailColumn(OUString());
+            pModOpt->SetNameFromColumn(OUString());
             //start save as dialog
             OUString sFilter;
-            sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
-            if (sPath.isEmpty())
+            m_sFilename = SwMailMergeHelper::CallSaveAsDialog(sFilter);
+            if (m_sFilename.isEmpty())
                 return false;
             m_sSaveFilter = sFilter;
         }
-
-        pMgr->SetSubject(sPath);
     }
 
     if (m_pFromRB->IsChecked()) {  // Insert list
@@ -577,6 +575,20 @@ bool SwMailMergeDlg::ExecQryShell()
         nMailingMode |= MailTextFormats::RTF;
     pModOpt->SetMailingFormats(nMailingMode);
     return true;
+}
+
+OUString SwMailMergeDlg::GetTargetURL() const
+{
+    if( AskUserFilename() )
+        return m_sFilename;
+    OUString sPath( pModOpt->GetMailingPath() );
+    if( sPath.isEmpty() ) {
+        SvtPathOptions aPathOpt;
+        sPath = aPathOpt.GetWorkPath();
+    }
+    if( !sPath.endsWith("/") )
+        sPath += "/";
+    return sPath;
 }
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeDlg, InsertPathHdl, Button*, void)

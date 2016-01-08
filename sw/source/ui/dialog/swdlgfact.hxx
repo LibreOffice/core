@@ -284,7 +284,7 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
     virtual bool IsSaveSingleDoc() const override;
     virtual bool IsGenerateFromDataBase() const override;
     virtual OUString GetColumnName() const override;
-    virtual OUString GetPath() const override;
+    virtual OUString GetTargetURL() const override;
 };
 
 class SwMailMergeCreateFromDlg;
