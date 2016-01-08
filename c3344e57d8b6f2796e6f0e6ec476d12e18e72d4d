@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_27918a9a",
+        "filename": "editeng/source/items/paraitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-08T12:07:34Z",
+      "side": 1,
+      "message": "copy-paste error: the assertion should check SfxPoolItem::operator\u003d\u003d which only compares the WhichId, but other superclasses like SfxStringItem must actually be invoked here for the return value, not just in an assertion.",
+      "revId": "c3344e57d8b6f2796e6f0e6ec476d12e18e72d4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
