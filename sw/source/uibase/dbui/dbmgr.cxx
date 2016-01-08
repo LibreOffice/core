@@ -952,7 +952,19 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     //check if the doc is synchronized and contains at least one linked section
     const bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFormatCount() > 1;
     const bool bNeedsTempFiles = ( bMT_EMAIL || bMT_FILE );
-    const bool bCreateSingleFile = rMergeDescriptor.bCreateSingleFile;
+
+    bool bCheckSingleFile_ = rMergeDescriptor.bCreateSingleFile;
+    if( bMT_EMAIL )
+    {
+        assert( bMT_EMAIL && !bCheckSingleFile_ );
+        bCheckSingleFile_ = false;
+    }
+    else if( bMT_SHELL )
+    {
+        assert( bMT_SHELL && bCheckSingleFile_ );
+        bCheckSingleFile_ = true;
+    }
+    const bool bCreateSingleFile = bCheckSingleFile_;
 
     // Setup for dumping debugging documents
     static const char *sMaxDumpDocs = nullptr;

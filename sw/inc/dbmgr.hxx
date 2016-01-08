@@ -182,8 +182,10 @@ struct SwMergeDescriptor
         bPrintAsync( false ),
         bCreateSingleFile( false ),
         pMailMergeConfigItem(nullptr)
-        {}
-
+    {
+        if( nType == DBMGR_MERGE_SHELL )
+            bCreateSingleFile = true;
+    }
 };
 
 struct SwDBManager_Impl;
