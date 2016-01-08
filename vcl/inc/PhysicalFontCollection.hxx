@@ -47,7 +47,7 @@ public:
     // find the device font family
     PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
     PhysicalFontFamily*     FindOrCreateFontFamily( const OUString &rFamilyName );
-    PhysicalFontFamily*     FindFontFamilyByFont( FontSelectPattern& ) const;
+    PhysicalFontFamily*     FindFontFamily( FontSelectPattern& ) const;
     PhysicalFontFamily*     FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
     PhysicalFontFamily*     FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;

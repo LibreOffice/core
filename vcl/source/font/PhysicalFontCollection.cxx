@@ -986,7 +986,7 @@ ImplDeviceFontSizeList* PhysicalFontCollection::GetDeviceFontSizeList( const OUS
     return pDeviceFontSizeList;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByFont( FontSelectPattern& rFSD ) const
+PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& rFSD ) const
 {
     // give up if no fonts are available
     if( !Count() )
