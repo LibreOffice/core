@@ -174,18 +174,6 @@ public:
                 const SalBitmap& rMaskBitmap,
                 const SalBitmap& rAlphaBitmap ) = 0;
 
-    /** Render bitmap with alpha channel
-
-        @param rSourceBitmap
-        Source bitmap to blit
-
-        @param rAlphaBitmap
-        Alpha channel to use for blitting
-
-        @return true, if the operation succeeded, and false
-        otherwise. In this case, clients should try to emulate alpha
-        compositing themselves
-     */
     virtual bool drawAlphaBitmap(
                 const SalTwoRect&,
                 const SalBitmap& rSourceBitmap,
