@@ -80,6 +80,8 @@ protected:
     bool mbUseScissor;
     bool mbUseStencil;
 
+    bool mbXORMode;
+
     /**
      * All rendering happens to this off-screen texture. For
      * non-virtual devices, ie. windows - we will blit it and
@@ -152,8 +154,11 @@ public:
      */
     bool IsOffscreen() const { return mpProvider == nullptr || mpProvider->IsOffScreen(); }
 
+    /// Oddly not all operations obey the XOR option.
+    enum XOROption { IGNORE_XOR, IMPLEMENT_XOR };
+
     // operations to do before painting
-    void PreDraw();
+    void PreDraw(XOROption eOpt = IGNORE_XOR);
 
     // operations to do after painting
     void PostDraw();
