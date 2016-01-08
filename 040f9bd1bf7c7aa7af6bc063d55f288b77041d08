@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_dc0cd544",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2976,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T10:06:04Z",
+      "side": 1,
+      "message": "Can we make \u0027pW\u0027 a VclPtr if it is not already ? and drop xWindow ?",
+      "revId": "040f9bd1bf7c7aa7af6bc063d55f288b77041d08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_bc091134",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3136,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T10:06:04Z",
+      "side": 1,
+      "message": "can we make pWin a VclPtr and drop xWindow ? \u003d)",
+      "revId": "040f9bd1bf7c7aa7af6bc063d55f288b77041d08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1c077d1d",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3138,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T10:06:04Z",
+      "side": 1,
+      "message": "above comment should also make xModalWinDel not needed if pW is a VclPtr \u003d)",
+      "revId": "040f9bd1bf7c7aa7af6bc063d55f288b77041d08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_fc03990d",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3148,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T10:06:04Z",
+      "side": 1,
+      "message": "and then we can drop this path too \u003d) just if (pWin-\u003eIsDisposed()) return 0;",
+      "revId": "040f9bd1bf7c7aa7af6bc063d55f288b77041d08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
