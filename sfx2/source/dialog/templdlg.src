@@ -19,7 +19,6 @@
 
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
-#include "templdlg.hrc"
 #include "helpid.hrc"
 
 ImageList DLG_STYLE_DESIGNER
@@ -49,8 +48,6 @@ String STR_STYLE_FILTER_HIERARCHICAL
  // DLG_STYLE_DESIGNER ----------------------------------------------------
 DockingWindow DLG_STYLE_DESIGNER
 {
-    Text [ en-US ] = "Styles and Formatting" ;
-
     HelpId = CMD_SID_STYLE_DESIGNER ;
     OutputSize = TRUE ;
     Hide = TRUE ;
@@ -64,35 +61,6 @@ DockingWindow DLG_STYLE_DESIGNER
     EnableResizing = TRUE ;
     Border = TRUE ;
     Moveable = TRUE ;
-    ToolBox TB_ACTION
-    {
-        Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( 57 , 42 ) ;
-        LineCount = 1 ;
-        ItemImageList = DLG_STYLE_DESIGNER ;
-        HelpId = HID_TEMPLDLG_TOOLBOX_RIGHT ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                HelpId = HID_TEMPLDLG_WATERCAN ;
-                Identifier = SID_STYLE_WATERCAN ;
-                Text [ en-US ] = "Fill Format Mode" ;
-            };
-            ToolBoxItem
-            {
-                HelpId = HID_TEMPLDLG_NEWBYEXAMPLE ;
-                Identifier = SID_STYLE_NEW_BY_EXAMPLE ;
-                Text [ en-US ] = "New Style from Selection" ;
-            };
-            ToolBoxItem
-            {
-                HelpId = HID_TEMPLDLG_UPDATEBYEXAMPLE ;
-                Identifier = SID_STYLE_UPDATE_BY_EXAMPLE ;
-                Text [ en-US ] = "Update Style" ;
-            };
-        };
-    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

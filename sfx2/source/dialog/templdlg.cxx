@@ -50,7 +50,6 @@
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include "templdlg.hrc"
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 #include "arrdecl.hxx"
@@ -2200,13 +2199,65 @@ std::unique_ptr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
     return pMenu;
 }
 
+static OUString lcl_GetLabel(uno::Any& rAny)
+{
+    OUString sRet;
+    uno::Sequence< beans::PropertyValue >aPropSeq;
+    if ( rAny >>= aPropSeq )
+    {
+        for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+        {
+            if ( aPropSeq[i].Name == "Label" )
+            {
+                aPropSeq[i].Value >>= sRet;
+                break;
+            }
+        }
+    }
+    return sRet;
+}
+
 SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
     : SfxCommonTemplateDialog_Impl(pB, pDlgWindow, true)
     , m_pFloat(pDlgWindow)
     , m_bZoomIn(false)
     , m_aActionTbL(VclPtrInstance<DropToolBox_Impl>(pDlgWindow, this))
-    , m_aActionTbR(VclPtrInstance<ToolBox> (pDlgWindow, SfxResId(TB_ACTION)))
+    , m_aActionTbR(VclPtrInstance<ToolBox>(pDlgWindow))
 {
+    try
+    {
+        uno::Reference< container::XNameAccess > xNameAccess(
+                frame::theUICommandDescription::get(
+                    ::comphelper::getProcessComponentContext()) );
+        uno::Reference< container::XNameAccess > xUICommands;
+        OUString sTextDoc("com.sun.star.text.TextDocument");
+        if(xNameAccess->hasByName(sTextDoc))
+        {
+            uno::Any a = xNameAccess->getByName( sTextDoc );
+            a >>= xUICommands;
+        }
+        if (xUICommands.is())
+        {
+            uno::Any aCommand = xUICommands->getByName(".uno:StyleApply");
+            OUString sLabel = lcl_GetLabel( aCommand );
+            m_aActionTbR->InsertItem( SID_STYLE_WATERCAN, sLabel );
+            m_aActionTbR->SetHelpId(SID_STYLE_WATERCAN, HID_TEMPLDLG_WATERCAN);
+
+            aCommand = xUICommands->getByName(".uno:StyleNewByExample");
+            sLabel = lcl_GetLabel( aCommand );
+            m_aActionTbR->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
+            m_aActionTbR->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
+
+            aCommand = xUICommands->getByName(".uno:StyleUpdateByExample");
+            sLabel = lcl_GetLabel( aCommand );
+            m_aActionTbR->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
+            m_aActionTbR->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
     pDlgWindow->FreeResource();
     Initialize();
 }
@@ -2443,24 +2494,6 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox, void )
     FamilySelect(nEntry);
 }
 
-static OUString lcl_GetLabel(uno::Any& rAny)
-{
-    OUString sRet;
-    uno::Sequence< beans::PropertyValue >aPropSeq;
-    if ( rAny >>= aPropSeq )
-    {
-        for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-        {
-            if ( aPropSeq[i].Name == "Label" )
-            {
-                aPropSeq[i].Value >>= sRet;
-                break;
-            }
-        }
-    }
-    return sRet;
-}
-
 IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox, void )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
@@ -2513,7 +2546,7 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
                             PopupMenuFlags::ExecuteDown );
             pBox->EndSelection();
         }
-        catch(uno::Exception&)
+        catch (const uno::Exception&)
         {
         }
         pBox->Invalidate();
