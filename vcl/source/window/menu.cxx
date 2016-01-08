@@ -82,7 +82,6 @@ struct MenuLayoutData : public ControlLayoutData
 
 }
 
-using namespace ::com::sun::star;
 using namespace vcl;
 
 #define EXTRAITEMHEIGHT     4
@@ -526,7 +525,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     delete mpLayoutData, mpLayoutData = nullptr;
 }
 
-void Menu::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame,
+void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame,
                       MenuItemBits nBits, const OString &rIdent, sal_uInt16 nPos)
 {
     OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
