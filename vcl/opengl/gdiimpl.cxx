@@ -68,6 +68,7 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
     , mpFlush(new OpenGLFlushIdle(this))
     , mbUseScissor(false)
     , mbUseStencil(false)
+    , mbXORMode(false)
     , mnLineColor(SALCOLOR_NONE)
     , mnFillColor(SALCOLOR_NONE)
 #ifdef DBG_UTIL
@@ -176,7 +177,7 @@ void OpenGLSalGraphicsImpl::DeInit()
     mpContext.clear();
 }
 
-void OpenGLSalGraphicsImpl::PreDraw()
+void OpenGLSalGraphicsImpl::PreDraw(XOROption eOpt)
 {
     OpenGLZone::enter();
 
@@ -196,13 +197,27 @@ void OpenGLSalGraphicsImpl::PreDraw()
 
     glViewport( 0, 0, GetWidth(), GetHeight() );
     CHECK_GL_ERROR();
-    ImplInitClipRegion();
 
+    ImplInitClipRegion();
     CHECK_GL_ERROR();
+
+    if (eOpt == IMPLEMENT_XOR && mbXORMode)
+    {
+        glEnable(GL_COLOR_LOGIC_OP);
+        CHECK_GL_ERROR();
+
+        glLogicOp(GL_XOR);
+    }
 }
 
 void OpenGLSalGraphicsImpl::PostDraw()
 {
+    if (mbXORMode)
+    {
+        glDisable(GL_COLOR_LOGIC_OP);
+        CHECK_GL_ERROR();
+    }
+
     if( mbUseScissor )
     {
         glDisable( GL_SCISSOR_TEST );
@@ -404,8 +419,9 @@ void OpenGLSalGraphicsImpl::SetFillColor( SalColor nSalColor )
 }
 
 // enable/disable XOR drawing
-void OpenGLSalGraphicsImpl::SetXORMode( bool /*bSet*/, bool /*bInvertOnly*/ )
+void OpenGLSalGraphicsImpl::SetXORMode( bool bSet, bool )
 {
+    mbXORMode = bSet;
 }
 
 // set line color for raster operations
@@ -503,6 +519,7 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, sal_uInt8 nTransparency )
 #endif
     mProgramSolidColor = nColor;
     mProgramSolidTransparency = nTransparency / 100.0;
+
     return true;
 }
 
@@ -1331,7 +1348,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY )
     VCL_GL_INFO( "::drawPixel" );
     if( mnLineColor != SALCOLOR_NONE )
     {
-        PreDraw();
+        PreDraw( XOROption::IMPLEMENT_XOR );
         if( UseSolid( mnLineColor ) )
             DrawPoint( nX, nY );
         PostDraw();
@@ -1343,7 +1360,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
     VCL_GL_INFO( "::drawPixel" );
     if( nSalColor != SALCOLOR_NONE )
     {
-        PreDraw();
+        PreDraw( XOROption::IMPLEMENT_XOR );
         if( UseSolid( nSalColor ) )
             DrawPoint( nX, nY );
         PostDraw();
@@ -1355,7 +1372,7 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
     VCL_GL_INFO( "::drawLine" );
     if( mnLineColor != SALCOLOR_NONE )
     {
-        PreDraw();
+        PreDraw( XOROption::IMPLEMENT_XOR );
         if( UseSolidAA( mnLineColor ) )
             DrawLineAA( nX1, nY1, nX2, nY2 );
         PostDraw();
@@ -1365,7 +1382,7 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     VCL_GL_INFO( "::drawRect" );
-    PreDraw();
+    PreDraw( XOROption::IMPLEMENT_XOR );
 
     if( UseSolid( mnFillColor ) )
         DrawRect( nX, nY, nWidth, nHeight );
@@ -1403,7 +1420,7 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
 
     if( mnLineColor != SALCOLOR_NONE && nPoints > 1 )
     {
-        PreDraw();
+        PreDraw( XOROption::IMPLEMENT_XOR );
         if( UseSolidAA( mnLineColor ) )
             DrawLinesAA( nPoints, pPtAry, false );
         PostDraw();
@@ -1427,7 +1444,7 @@ void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
         return;
     }
 
-    PreDraw();
+    PreDraw( XOROption::IMPLEMENT_XOR );
 
     if( UseSolid( mnFillColor ) )
         DrawPolygon( nPoints, pPtAry );
@@ -1444,7 +1461,7 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
     if( nPoly <= 0 )
         return;
 
-    PreDraw();
+    PreDraw( XOROption::IMPLEMENT_XOR );
 
     if( UseSolid( mnFillColor ) )
     {
@@ -1481,7 +1498,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
     if( rPolyPolygon.count() <= 0 )
         return true;
 
-    PreDraw();
+    PreDraw( XOROption::IMPLEMENT_XOR );
 
     if( UseSolid( mnFillColor, fTransparency ) )
         DrawPolyPolygon( rPolyPolygon );
@@ -1555,7 +1572,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
     }
 
-    PreDraw();
+    PreDraw( XOROption::IMPLEMENT_XOR );
     if( UseSolid( mnLineColor, fTransparency ) )
     {
         for( sal_uInt32 i = 0; i < aAreaPolyPoly.count(); i++ )
@@ -1722,7 +1739,7 @@ SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
 {
     char pixel[3] = { 0, 0, 0 };
 
-    PreDraw();
+    PreDraw( XOROption::IMPLEMENT_XOR );
     nY = GetHeight() - nY - 1;
     glReadPixels( nX, nY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
     CHECK_GL_ERROR();
@@ -1920,7 +1937,7 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     aBoundRect.Right()++;
     aBoundRect.Bottom()++;
 
-    PreDraw();
+    PreDraw( XOROption::IMPLEMENT_XOR );
 
 #define FIXME_BROKEN_STENCIL_FOR_GRADIENTS 0
 #if FIXME_BROKEN_STENCIL_FOR_GRADIENTS
