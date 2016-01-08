@@ -1444,26 +1444,26 @@ const PropertyValue* PrinterController::getValue( const OUString& i_rProperty ) 
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : nullptr;
 }
 
-void PrinterController::setValue( const OUString& i_rName, const Any& i_rValue )
+void PrinterController::setValue( const OUString& i_rPropertyName, const Any& i_rValue )
 {
     PropertyValue aVal;
-    aVal.Name = i_rName;
+    aVal.Name = i_rPropertyName;
     aVal.Value = i_rValue;
 
     setValue( aVal );
 }
 
-void PrinterController::setValue( const PropertyValue& i_rValue )
+void PrinterController::setValue( const PropertyValue& i_rPropertyValue )
 {
     std::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
-        mpImplData->maPropertyToIndex.find( i_rValue.Name );
+        mpImplData->maPropertyToIndex.find( i_rPropertyValue.Name );
     if( it != mpImplData->maPropertyToIndex.end() )
-        mpImplData->maUIProperties[ it->second ] = i_rValue;
+        mpImplData->maUIProperties[ it->second ] = i_rPropertyValue;
     else
     {
         // insert correct index into property map
-        mpImplData->maPropertyToIndex[ i_rValue.Name ] = mpImplData->maUIProperties.size();
-        mpImplData->maUIProperties.push_back( i_rValue );
+        mpImplData->maPropertyToIndex[ i_rPropertyValue.Name ] = mpImplData->maUIProperties.size();
+        mpImplData->maUIProperties.push_back( i_rPropertyValue );
         mpImplData->maUIPropertyEnabled.push_back( true );
     }
 }
