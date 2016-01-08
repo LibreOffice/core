@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_1c301d01",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T10:02:10Z",
+      "side": 1,
+      "message": "Can we not make the RadioButton *pWindow above a VclPtr ? \u003d) would save some lines.",
+      "revId": "c198fb2511609c1de9701fcfacc179c96157226b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
