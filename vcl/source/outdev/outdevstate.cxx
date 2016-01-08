@@ -633,10 +633,10 @@ void OutputDevice::ImplReleaseFonts()
     mbNewFont = true;
     mbInitFont = true;
 
-    if ( mpFontEntry )
+    if ( mpFontInstance )
     {
-        mpFontCache->Release( mpFontEntry );
-        mpFontEntry = nullptr;
+        mpFontCache->Release( mpFontInstance );
+        mpFontInstance = nullptr;
     }
 
     if ( mpDeviceFontList )

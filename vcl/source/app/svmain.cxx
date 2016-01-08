@@ -63,7 +63,7 @@
 #include "accmgr.hxx"
 #include "idlemgr.hxx"
 #include "outdev.h"
-#include "fontentry.hxx"
+#include "fontinstance.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "print.h"
 #include "salgdi.hxx"

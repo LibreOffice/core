@@ -50,7 +50,7 @@
 #include "generic/printergfx.hxx"
 #include "impfont.hxx"
 #include "langboost.hxx"
-#include "fontentry.hxx"
+#include "fontinstance.hxx"
 #include "fontattributes.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "PhysicalFontFace.hxx"
@@ -550,7 +550,7 @@ public:
     explicit ImplPspFontData( const psp::FastPrintFontInfo& );
     virtual sal_IntPtr      GetFontId() const override { return mnFontId; }
     virtual PhysicalFontFace*   Clone() const override { return new ImplPspFontData( *this ); }
-    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const override;
+    virtual LogicalFontInstance*  CreateFontInstance( FontSelectPattern& ) const override;
 };
 
 ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
@@ -558,7 +558,7 @@ ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
     mnFontId( rInfo.m_nID )
 {}
 
-ImplFontEntry* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
     return pEntry;
