@@ -176,6 +176,7 @@ public:
     void testTdf96943();
     void testTdf96479();
     void testTdf96536();
+    void testTdf96961();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -260,6 +261,7 @@ public:
     CPPUNIT_TEST(testTdf96943);
     CPPUNIT_TEST(testTdf96479);
     CPPUNIT_TEST(testTdf96536);
+    CPPUNIT_TEST(testTdf96961);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3031,7 +3033,11 @@ void SwUiWriterTest::testTdf96536()
     aViewOptions.SetHideWhitespaceMode(true);
     pWrtShell->ApplyViewOptions(aViewOptions);
 
-    // Insert a new paragraph at the end of the document, and then delete it.
+    // Insert a page break and go back to the first page.
+    pWrtShell->InsertPageBreak();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+
+    // Insert a new paragraph at the end of the page, and then delete it.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XParagraphAppend> xParagraphAppend(xTextDocument->getText(), uno::UNO_QUERY);
     xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
@@ -3043,7 +3049,27 @@ void SwUiWriterTest::testTdf96536()
     // This was 552, page did not shrink after deleting the second paragraph.
     // Expected 276, which is 12pt font size + default line spacing (15%), but
     // tolerate some difference to that.
-    CPPUNIT_ASSERT(parseDump("/root/infos/bounds", "height").toInt32() <= 276);
+    CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds", "height").toInt32() <= 276);
+}
+
+void SwUiWriterTest::testTdf96961()
+{
+    // Insert a page break.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+
+    // Enable hide whitespace mode.
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    calcLayout();
+
+    // Assert that the height of the last page is larger than the height of other pages.
+    sal_Int32 nOther = parseDump("/root/page[1]/infos/bounds", "height").toInt32();
+    sal_Int32 nLast = parseDump("/root/page[2]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT(nLast > nOther);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

@@ -131,7 +131,8 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
 
         // Hide whitespace may require not to insert a new page.
         SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
-        pPageFrame->HandleWhitespaceHiddenDiff(nDiff);
+        if (!pPageFrame->CheckPageHeightValidForHideWhitespace(nDiff))
+            nDiff = 0;
 
         // If everything is inside the existing frame the result is true;
         bFit = nDiff >= 0;

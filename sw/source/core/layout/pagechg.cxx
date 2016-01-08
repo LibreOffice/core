@@ -2287,7 +2287,7 @@ bool SwPageFrame::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rC
     return false;
 }
 
-void SwPageFrame::HandleWhitespaceHiddenDiff(SwTwips& nDiff)
+bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
 {
     SwViewShell* pShell = getRootFrame()->GetCurrShell();
     if (pShell && pShell->GetViewOptions()->IsWhitespaceHidden())
@@ -2309,10 +2309,12 @@ void SwPageFrame::HandleWhitespaceHiddenDiff(SwTwips& nDiff)
             {
                 // It does: don't move it and invalidate our page frame so
                 // that it gets a larger height.
-                nDiff = 0;
+                return false;
             }
         }
     }
+
+    return true;
 }
 
 SwTextGridItem const* GetGridItem(SwPageFrame const*const pPage)
