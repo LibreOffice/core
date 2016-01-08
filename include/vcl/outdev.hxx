@@ -584,7 +584,7 @@ public:
     ///@}
 
 
-    /** @Name Direct OutputDevice drawing functions
+    /** @name Direct OutputDevice drawing functions
      */
     ///@{
 

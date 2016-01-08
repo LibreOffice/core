@@ -112,10 +112,10 @@ void Scheduler::ImplDeInitScheduler()
 }
 
 /**
- * Start a new timer if we need to for @nMS duration.
+ * Start a new timer if we need to for nMS duration.
  *
  * if this is longer than the existing duration we're
- * waiting for, do nothing - unless @bForce - which means
+ * waiting for, do nothing - unless bForce - which means
  * to reset the minimum period; used by the scheduled itself.
  */
 void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce)

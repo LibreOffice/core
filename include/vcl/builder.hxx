@@ -47,7 +47,7 @@ class VCL_DLLPUBLIC VclBuilder
 {
 public:
     typedef std::map<OString, OString> stringmap;
-    /// These functions create a new widget with parent @pParent and return it in @rRet
+    /// These functions create a new widget with parent pParent and return it in rRet
     typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
 public:

@@ -131,9 +131,9 @@ public:
     virtual bool            CheckYieldMutex() = 0;
 
     /**
-     * Wait for the next event (if @bWait) and dispatch it,
+     * Wait for the next event (if bWait) and dispatch it,
      * includes posted events, and timers.
-     * If @bHandleAllCurrentEvents - dispatch multiple posted
+     * If bHandleAllCurrentEvents - dispatch multiple posted
      * user events. Returns true if events needed processing.
      */
     virtual SalYieldResult  DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) = 0;

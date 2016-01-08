@@ -177,7 +177,7 @@ public:
 
     /// make a VCL context (any context) current, create it if necessary.
     static void makeVCLCurrent();
-    /// fetch any VCL context, creating one if @bMakeIfNecessary is set.
+    /// fetch any VCL context, creating one if bMakeIfNecessary is set.
     static rtl::Reference<OpenGLContext> getVCLContext(bool bMakeIfNecessary = true);
     /// make this GL context current - so it is implicit in subsequent GL calls
     void makeCurrent();

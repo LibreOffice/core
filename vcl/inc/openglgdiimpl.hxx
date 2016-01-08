@@ -59,11 +59,11 @@ class VCL_DLLPUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
     friend class OpenGLTests;
 protected:
 
-    /// This context is solely for blitting @maOffscreenTex
+    /// This context is solely for blitting maOffscreenTex
     rtl::Reference<OpenGLContext> mpWindowContext;
 
     /// This context is whatever is most convenient to render
-    /// to @maOffscreenTex with.
+    /// to maOffscreenTex with.
     rtl::Reference<OpenGLContext> mpContext;
 
     SalGraphics& mrParent;
