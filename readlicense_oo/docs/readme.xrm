@@ -41,7 +41,7 @@
 			<div class="WIN" id="SystemRequirements_WIN">
 				<ul>
 					<li>
-						<p id="s2s3sdf21" xml:lang="en-US">Microsoft Windows XP SP2, Vista, Windows 7, or Windows 8</p>
+						<p id="s2s3sdf21" xml:lang="en-US">Microsoft Windows XP SP3, Vista, 7, 8, or 10</p>
 					</li>
 				</ul>
 				<p class="note" id="edssc3d" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
