@@ -100,10 +100,12 @@ TYPEINIT1( XMLTextMarkImportContext, SvXMLImportContext);
 XMLTextMarkImportContext::XMLTextMarkImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
+    uno::Reference<uno::XInterface> & io_rxCrossRefHeadingBookmark,
     sal_uInt16 nPrefix,
     const OUString& rLocalName )
     : SvXMLImportContext(rImport, nPrefix, rLocalName)
     , m_rHelper(rHlp)
+    , m_rxCrossRefHeadingBookmark(io_rxCrossRefHeadingBookmark)
     , m_bHaveAbout(false)
 {
 }
@@ -203,8 +205,22 @@ void XMLTextMarkImportContext::EndElement()
                         OUString());
                     break;
 
-                case TypeFieldmark:
                 case TypeBookmark:
+                    {
+                        // tdf#94804: detect duplicate heading cross reference bookmarks
+                        if (m_sBookmarkName.startsWith("__RefHeading__"))
+                        {
+                            if (m_rxCrossRefHeadingBookmark.is())
+                            {
+                                uno::Reference<container::XNamed> const xNamed(
+                                    m_rxCrossRefHeadingBookmark, uno::UNO_QUERY);
+                                m_rHelper.AddCrossRefHeadingMapping(
+                                    m_sBookmarkName, xNamed->getName());
+                                break; // don't insert
+                            }
+                        }
+                    } // fall through
+                case TypeFieldmark:
                     {
                         const char *formFieldmarkName=lcl_getFormFieldmarkName(m_sFieldName);
                         bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmark && formFieldmarkName!=NULL); //@TODO handle abbreviation cases..
@@ -225,6 +241,12 @@ void XMLTextMarkImportContext::EndElement()
                                 }
                             }
                             m_rHelper.popFieldCtx();
+                        }
+                        if (TypeBookmark == nTmp
+                            && m_sBookmarkName.startsWith("__RefHeading__"))
+                        {
+                            assert(xContent.is());
+                            m_rxCrossRefHeadingBookmark = xContent;
                         }
                     }
                     break;
@@ -250,8 +272,22 @@ void XMLTextMarkImportContext::EndElement()
                     }
                     break;
 
-                case TypeFieldmarkEnd:
                 case TypeBookmarkEnd:
+                    {
+                        // tdf#94804: detect duplicate heading cross reference bookmarks
+                        if (m_sBookmarkName.startsWith("__RefHeading__"))
+                        {
+                            if (m_rxCrossRefHeadingBookmark.is())
+                            {
+                                uno::Reference<container::XNamed> const xNamed(
+                                    m_rxCrossRefHeadingBookmark, uno::UNO_QUERY);
+                                m_rHelper.AddCrossRefHeadingMapping(
+                                    m_sBookmarkName, xNamed->getName());
+                                break; // don't insert
+                            }
+                        }
+                    } // fall through
+                case TypeFieldmarkEnd:
                 {
                     // get old range, and construct
                     Reference<XTextRange> xStartRange;
@@ -333,6 +369,12 @@ void XMLTextMarkImportContext::EndElement()
                                     }
                                 }
                                 m_rHelper.popFieldCtx();
+                            }
+                            if (TypeBookmarkEnd == nTmp
+                                && m_sBookmarkName.startsWith("__RefHeading__"))
+                            {
+                                assert(xContent.is());
+                                m_rxCrossRefHeadingBookmark = xContent;
                             }
                         }
                         // else: beginning/end in different XText -> ignore!
