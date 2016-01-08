@@ -2391,6 +2391,22 @@ DECLARE_RTFIMPORT_TEST(testTdf96308Deftab, "tdf96308-deftab.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(284)), getProperty<sal_Int32>(xDefaults, "TabStopDistance"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf96308Tabpos, "tdf96308-tabpos.rtf")
+{
+    // Get the tab stops of the second para in the B1 cell of the first table in the document.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    auto aTabStops = getProperty< uno::Sequence<style::TabStop> >(xPara, "ParaTabStops");
+    // This failed: tab stops were not deleted as direct formatting on the paragraph.
+    CPPUNIT_ASSERT(!aTabStops.hasElements());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
