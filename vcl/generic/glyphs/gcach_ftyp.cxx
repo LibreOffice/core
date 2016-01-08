@@ -23,7 +23,7 @@
 #include "gcach_ftyp.hxx"
 
 #include "vcl/svapp.hxx"
-#include <fontentry.hxx>
+#include <fontinstance.hxx>
 #include <impfont.hxx>
 #include "fontattributes.hxx"
 
@@ -432,7 +432,7 @@ ImplFTSFontData::ImplFTSFontData( FreetypeFontInfo* pFI, const ImplFontAttribute
     SetOrientationFlag( true );
 }
 
-ImplFontEntry* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
     return pEntry;
@@ -462,9 +462,9 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI )
     mbUseGamma( false ),
     mpLayoutEngine( nullptr )
 {
-    // TODO: move update of mpFontEntry into FontEntry class when
+    // TODO: move update of mpFontInstance into FontEntry class when
     // it becomes responsible for the ServerFont instantiation
-    static_cast<ImplServerFontEntry*>(rFSD.mpFontEntry)->SetServerFont( this );
+    static_cast<ImplServerFontEntry*>(rFSD.mpFontInstance)->SetServerFont( this );
 
     maFaceFT = pFI->GetFaceFT();
 

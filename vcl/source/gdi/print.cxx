@@ -630,10 +630,10 @@ void Printer::ImplReleaseFonts()
     mbNewFont = true;
     mbInitFont = true;
 
-    if ( mpFontEntry )
+    if ( mpFontInstance )
     {
-        mpFontCache->Release( mpFontEntry );
-        mpFontEntry = nullptr;
+        mpFontCache->Release( mpFontInstance );
+        mpFontInstance = nullptr;
     }
 
     if ( mpDeviceFontList )
@@ -1008,10 +1008,10 @@ void Printer::dispose()
         // OutputDevice Dtor is trying the same thing; that why we need to set
         // the FontEntry to NULL here
         // TODO: consolidate duplicate cleanup by Printer and OutputDevice
-        if ( mpFontEntry )
+        if ( mpFontInstance )
         {
-            mpFontCache->Release( mpFontEntry );
-            mpFontEntry = nullptr;
+            mpFontCache->Release( mpFontInstance );
+            mpFontInstance = nullptr;
         }
         if ( mpDeviceFontList )
         {
@@ -1162,10 +1162,10 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         {
             ReleaseGraphics();
             pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
-            if ( mpFontEntry )
+            if ( mpFontInstance )
             {
-                mpFontCache->Release( mpFontEntry );
-                mpFontEntry = nullptr;
+                mpFontCache->Release( mpFontInstance );
+                mpFontInstance = nullptr;
             }
             if ( mpDeviceFontList )
             {
@@ -1205,10 +1205,10 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         {
             pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
 
-            if ( mpFontEntry )
+            if ( mpFontInstance )
             {
-                mpFontCache->Release( mpFontEntry );
-                mpFontEntry = nullptr;
+                mpFontCache->Release( mpFontInstance );
+                mpFontInstance = nullptr;
             }
             if ( mpDeviceFontList )
             {
@@ -1804,18 +1804,18 @@ void Printer::InitFont() const
 {
     DBG_TESTSOLARMUTEX();
 
-    if (!mpFontEntry)
+    if (!mpFontInstance)
         return;
 
     if ( mbInitFont )
     {
         // select font in the device layers
-        mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData), 0 );
+        mpFontInstance->mnSetFontFlags = mpGraphics->SetFont( &(mpFontInstance->maFontSelData), 0 );
         mbInitFont = false;
     }
 }
 
-void Printer::SetFontOrientation( ImplFontEntry* const pFontEntry ) const
+void Printer::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const
 {
     pFontEntry->mnOrientation = pFontEntry->maFontAttributes.GetOrientation();
 }

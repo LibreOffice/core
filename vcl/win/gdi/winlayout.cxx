@@ -86,7 +86,7 @@ struct OpenGLGlyphCacheChunk
 };
 
 // win32 specific physical font instance
-class ImplWinFontEntry : public ImplFontEntry
+class ImplWinFontEntry : public LogicalFontInstance
 {
 public:
     explicit                ImplWinFontEntry( FontSelectPattern& );
@@ -2951,7 +2951,7 @@ int    WinSalGraphics::GetMinKashidaWidth()
 }
 
 ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
-:   ImplFontEntry( rFSD )
+:   LogicalFontInstance( rFSD )
 ,    mpGLyphyAtlas( nullptr )
 ,    mpGLyphyFont( nullptr )
 ,    mnMinKashidaWidth( -1 )
@@ -3001,10 +3001,10 @@ PhysicalFontFace* ImplWinFontData::Clone() const
     return pClone;
 }
 
-ImplFontEntry* ImplWinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* ImplWinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
-    ImplFontEntry* pEntry = new ImplWinFontEntry( rFSD );
-    return pEntry;
+    LogicalFontInstance* pFontInstance = new ImplWinFontEntry( rFSD );
+    return pFontInstance;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

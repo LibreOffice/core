@@ -31,14 +31,13 @@
 class ImplFontCache;
 class ConvertChar;
 
-// TODO: rename ImplFontEntry to LogicalFontInstance
 // TODO: allow sharing of metrics for related fonts
 
-class VCL_PLUGIN_PUBLIC ImplFontEntry
+class VCL_PLUGIN_PUBLIC LogicalFontInstance
 {
 public:
-    explicit        ImplFontEntry( const FontSelectPattern& );
-    virtual         ~ImplFontEntry();
+    explicit        LogicalFontInstance( const FontSelectPattern& );
+    virtual         ~LogicalFontInstance();
 
 public: // TODO: make data members private
     ImplFontCache * m_pFontCache;
