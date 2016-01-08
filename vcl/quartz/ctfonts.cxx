@@ -240,9 +240,9 @@ PhysicalFontFace* CoreTextFontData::Clone() const
     return new CoreTextFontData( *this);
 }
 
-ImplFontEntry* CoreTextFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
+LogicalFontInstance* CoreTextFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
 {
-    return new ImplFontEntry( rFSD);
+    return new LogicalFontInstance( rFSD);
 }
 
 int CoreTextFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const

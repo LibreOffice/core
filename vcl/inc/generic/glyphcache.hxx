@@ -243,7 +243,7 @@ private:
 };
 
 // a class for cache entries for physical font instances that are based on serverfonts
-class VCL_DLLPUBLIC ImplServerFontEntry : public ImplFontEntry
+class VCL_DLLPUBLIC ImplServerFontEntry : public LogicalFontInstance
 {
 public:
                             ImplServerFontEntry( FontSelectPattern& );

@@ -354,7 +354,7 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
 }
 
 ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )
-:   ImplFontEntry( rFSD )
+:   LogicalFontInstance( rFSD )
 ,   mpServerFont( nullptr )
 ,   mbGotFontOptions( false )
 {}
