@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_bc5bd153",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T09:57:24Z",
+      "side": 1,
+      "message": "Again - since the member pWindow is a VclPtr itself \u003d) we don\u0027t need to have another VclPtr here.\n\nCan you remove this one ? lets rename the pWindow member to xWindow to make it clear it is a reference though (?)\n\nRe-submitting like that would be great.",
+      "range": {
+        "startLine": 309,
+        "startChar": 9,
+        "endLine": 310,
+        "endChar": 39
+      },
+      "revId": "db311d5555f089666d6a82cba7db9fe959b011f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
