@@ -60,8 +60,11 @@ public:
  */
 class XMLTextMarkImportContext : public SvXMLImportContext
 {
-
+private:
     XMLTextImportHelper & m_rHelper;
+
+    css::uno::Reference<css::uno::XInterface> & m_rxCrossRefHeadingBookmark;
+
     OUString m_sBookmarkName;
     OUString m_sFieldName;
     OUString m_sXmlId;
@@ -74,10 +77,10 @@ class XMLTextMarkImportContext : public SvXMLImportContext
 
 public:
 
-
     XMLTextMarkImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
+        css::uno::Reference<css::uno::XInterface> & io_rxCrossRefHeadingBookmark,
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
