@@ -71,8 +71,6 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
-using namespace ::com::sun::star;
-
 using comphelper::string::getTokenCount;
 
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
@@ -1348,7 +1346,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         {
             if ( (*pFilterData)[ i ].Name == "PreviewSizeHint" )
             {
-                awt::Size aSize;
+                css::awt::Size aSize;
                 if ( (*pFilterData)[ i ].Value >>= aSize )
                 {
                     aPreviewSizeHint = Size( aSize.Width, aSize.Height );
@@ -1789,7 +1787,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 }
 
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
-    sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
+    sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
 #ifdef DISABLE_EXPORT
     (void) rGraphic;
@@ -1832,7 +1830,7 @@ extern "C" bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterCo
 #endif
 
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
-    SvStream& rOStm, sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
+    SvStream& rOStm, sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
 #ifdef DISABLE_EXPORT
     (void) rGraphic;
@@ -1866,7 +1864,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
     if( nFormat >= nFormatCount )
         return (sal_uInt16) ImplSetError( GRFILTER_FORMATERROR );
 
-    FilterConfigItem aConfigItem( const_cast<uno::Sequence< beans::PropertyValue >*>(pFilterData) );
+    FilterConfigItem aConfigItem( const_cast<css::uno::Sequence< css::beans::PropertyValue >*>(pFilterData) );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
 #ifndef DISABLE_DYNLOADING
     OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));
@@ -2065,7 +2063,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                         css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
                         css::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
-                            xml::sax::Writer::create( xContext ), uno::UNO_QUERY_THROW);
+                            css::xml::sax::Writer::create( xContext ), css::uno::UNO_QUERY_THROW);
                         css::uno::Sequence< css::uno::Any > aArguments( 1 );
                         aArguments[ 0 ] <<= aConfigItem.GetFilterData();
                         css::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
@@ -2298,7 +2296,7 @@ sal_uInt16 GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutp
 {
     nCompression = MinMax(nCompression, 0, 100);
 
-    uno::Sequence<beans::PropertyValue> aFilterData(1);
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData(1);
     aFilterData[0].Name = "Compression";
     aFilterData[0].Value <<= nCompression;
 
