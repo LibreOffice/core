@@ -40,6 +40,7 @@ enum class PresentationFlags
     NoFullScreen   = 0x0002,
     NoAutoShow     = 0x0004,
 };
+
 namespace o3tl
 {
     template<> struct typed_flags<PresentationFlags> : is_typed_flags<PresentationFlags, 0x0007> {};
@@ -92,7 +93,7 @@ public:
                                            PresentationFlags nFlags,
                                            sal_uInt32  nDisplayScreen );
     /**
-     @overload void StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, sal_uInt32 nDisplayScreen)
+     @overload void StartPresentationMode( bool bPresentation, PresentationFlags nFlags, sal_uInt32 nDisplayScreen)
     */
     void            StartPresentationMode( bool   bPresentation = true,
                                            PresentationFlags nFlags = PresentationFlags::NONE );
