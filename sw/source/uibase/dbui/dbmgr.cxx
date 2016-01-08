@@ -1473,50 +1473,35 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     xWorkDocSh->DoClose();
                 }
             }
-
-            if (bCreateSingleFile)
+            else if( !m_bCancel ) // && bCreateSingleFile
             {
+                RESCHEDULE_GUI;
+
                 // sw::DocumentLayoutManager::CopyLayoutFormat() did not generate
                 // unique fly names, do it here once.
                 pTargetDoc->SetInMailMerge(false);
                 pTargetDoc->SetAllUniqueFlyNames();
-            }
 
-            RESCHEDULE_GUI;
-
-            // Unfreeze target document layouts and correct all PageDescs.
-            if(bCreateSingleFile)
-            {
+                // Unfreeze target document layouts and correct all PageDescs.
                 pTargetShell->CalcLayout();
                 for ( auto aLayout : pTargetShell->GetDoc()->GetAllLayouts() )
                 {
                     aLayout->FreezeLayout(false);
                     aLayout->AllCheckPageDescs();
                 }
-            }
 
-            pProgressDlg.disposeAndClear();
+                RESCHEDULE_GUI;
 
-            // save the single output document
-            if( bMT_SHELL )
-            {
-                rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
-            }
-            else if(bCreateSingleFile)
-            {
-                if( !bMT_PRINTER )
+                if( !m_bCancel && bMT_FILE )
                 {
-                    if( !m_bCancel )
-                    {
-                        // save merged document
-                        assert( aTempFile.get() );
-                        INetURLObject aTempFileURL( rMergeDescriptor.bSubjectIsFilename ? sSubject : aTempFile->GetURL());
-                        bNoError = lcl_SaveDoc( &aTempFileURL, pStoreToFilter,
-                                pStoreToFilterOptions, &rMergeDescriptor.aSaveToFilterData,
-                                bIsPDFexport, xTargetDocShell, *pTargetShell );
-                    }
+                    // save merged document
+                    assert( aTempFile.get() );
+                    INetURLObject aTempFileURL( rMergeDescriptor.bSubjectIsFilename ? sSubject : aTempFile->GetURL());
+                    bNoError = lcl_SaveDoc( &aTempFileURL, pStoreToFilter,
+                            pStoreToFilterOptions, &rMergeDescriptor.aSaveToFilterData,
+                            bIsPDFexport, xTargetDocShell, *pTargetShell );
                 }
-                else if( pTargetView ) // must be available!
+                else if( !m_bCancel && bMT_PRINTER )
                 {
                     // print the target document
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
@@ -1524,12 +1509,16 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     pTargetView->ExecPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
                 }
 
-                // Leave docshell available for caller (e.g. MM wizard)
-                if( !bMT_SHELL )
+                if( !m_bCancel && bMT_SHELL )
+                    // leave docshell available for caller (e.g. MM wizard)
+                    rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
+                else
                     xTargetDocShell->DoClose();
             }
 
-            //remove the temporary files
+            pProgressDlg.disposeAndClear();
+
+            // remove the temporary files
             ::std::vector<OUString>::iterator aFileIter;
             for(aFileIter = aFilesToRemove.begin();
                         aFileIter != aFilesToRemove.end(); ++aFileIter)
