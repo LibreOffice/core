@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a7b61a88",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T21:28:24Z",
+      "side": 1,
+      "message": "no need for (nullptr) \u003d) just drop the brackets - VclPtr\u0027s are null by default ...",
+      "revId": "2ac2f501cc4692515f481b2ecb887162d807a820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_47c12ee4",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T21:28:24Z",
+      "side": 1,
+      "message": "Do we really want to clear pChild here ? that\u0027s rather different to the previous behavior.",
+      "revId": "2ac2f501cc4692515f481b2ecb887162d807a820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_87bb1672",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T21:28:24Z",
+      "side": 1,
+      "message": "Likewise - this does something different to the old code; we don\u0027t want to clear pChild.",
+      "revId": "2ac2f501cc4692515f481b2ecb887162d807a820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e7b0228e",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T21:28:24Z",
+      "side": 1,
+      "message": "much nicer \u003d)",
+      "revId": "2ac2f501cc4692515f481b2ecb887162d807a820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
