@@ -1393,7 +1393,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 m_bCancel = true;
                                 bNoError = false;
                             }
-                            if( bMT_EMAIL )
+                            if( bMT_EMAIL && bNoError )
                             {
                                 {
                                     SwMailMessage* pMessage = new SwMailMessage;
