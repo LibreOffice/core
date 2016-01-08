@@ -30,7 +30,9 @@ AVAILABLE TARGETS
        all                  build product and run unit tests (default goal)
        clean                remove all generated files
        debugrun             starts the INSTDIR instance and allows tests to
-                            be run against it
+                            be run against it. You can provide additional
+                            arguments to soffice.bin using the gb_DBGARGS
+                            variable.
        check                run unit tests and if in toplevel subsequentcheck
        unitcheck            run unit tests
        slowcheck            run slow unit tests
@@ -139,3 +141,5 @@ INTERACTIVE VARIABLES:
        gb_Side         Either "host" or "build" (default to "host").
                        determine if config_host.mk or config_build.mk is used to
                        set the build environment.
+       gb_DBGARGS      Append these arguments to GDBs "set args" command for
+                       debugrun. Double quotes will be automatically escaped.
