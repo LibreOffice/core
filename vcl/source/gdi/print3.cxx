@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/layout.hxx"
-#include "vcl/print.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/metaact.hxx"
-#include "vcl/configsettings.hxx"
-#include "vcl/unohelp.hxx"
+#include <vcl/layout.hxx>
+#include <vcl/print.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/configsettings.hxx>
+#include <vcl/unohelp.hxx>
+#include <tools/urlobj.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "printdlg.hxx"
 #include "svdata.hxx"
@@ -30,17 +32,14 @@
 #include "salprn.hxx"
 #include "svids.hrc"
 
-#include "tools/urlobj.hxx"
-
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/ui/dialogs/FilePicker.hpp"
-#include "com/sun/star/ui/dialogs/XFilterManager.hpp"
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
-#include "com/sun/star/view/DuplexMode.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/awt/Size.hpp"
-#include "comphelper/processfactory.hxx"
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/view/DuplexMode.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/awt/Size.hpp>
 
 #include <unordered_map>
 #include <unordered_set>
