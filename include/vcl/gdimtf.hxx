@@ -172,6 +172,7 @@ public:
     void            push_back( MetaAction* pAction );
     /**
      * @param pAction takes ownership
+     * @param nAction the action to replace
      */
     MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
 
