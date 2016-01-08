@@ -14,8 +14,8 @@ index f1c874d..3ad1b3f 100644
      fTypes = breakTypes;
 +    fViramaSet.applyPattern(UNICODE_STRING_SIMPLE("[[:ccc=VR:]]"), status);
 +
-+    fSkipStartSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=OP:][:lb=QU:]]"), status);
-+    fSkipEndSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CP:][:lb=QU:][:lb=EX:][:lb=CL:]]"), status);
++    fSkipStartSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=OP:][:lb=QU:]]\\u200C\\u200D\\u2060"), status);
++    fSkipEndSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CP:][:lb=QU:][:lb=EX:][:lb=CL:]]\\u200C\\u200D\\u2060"), status);
 +    fNBeforeSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CR:][:lb=LF:][:lb=NL:][:lb=SP:][:lb=ZW:][:lb=IS:][:lb=BA:][:lb=NS:]]"), status);
  }
  
@@ -473,7 +473,7 @@ index f1c874d..3ad1b3f 100644
          // Look ahead for possible suffixes if a dictionary word does not follow.
          // We do this in code rather than using a rule so that the heuristic
          // resynch continues to function. For example, one of the suffix characters
-@@ -828,51 +993,29 @@ foundBest:
+@@ -828,51 +993,28 @@ foundBest:
   * KhmerBreakEngine
   */
  
@@ -506,7 +506,7 @@ index f1c874d..3ad1b3f 100644
          setCharacters(fKhmerWordSet);
      }
      fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]&[:M:]]"), status);
-     fMarkSet.add(0x0020);
+-    fMarkSet.add(0x0020);
 -    fEndWordSet = fKhmerWordSet;
 -    fBeginWordSet.add(0x1780, 0x17B3);
 -    //fBeginWordSet.add(0x17A3, 0x17A4);      // deprecated vowels
@@ -522,7 +522,7 @@ index f1c874d..3ad1b3f 100644
 -//    fSuffixSet.add(THAI_MAIYAMOK);
 +    fIgnoreSet.add(0x2060);         // WJ
 +    fIgnoreSet.add(0x200C, 0x200D); // ZWJ, ZWNJ
-+    fBaseSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:^M:]]"), status);
++    fBaseSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:lb=SA:]&[:^M:]]"), status);
 +    fPuncSet.applyPattern(UNICODE_STRING_SIMPLE("[\\u17D4\\u17D5\\u17D6\\u17D7\\u17D9:]"), status);
  
      // Compact for caching.
@@ -750,7 +750,7 @@ index f1c874d..3ad1b3f 100644
 -                if (cuWordLength <= 0) {
 -                    wordsFound += 1;
 -                }
-+                } while (fMarkSet.contains(c));
++                } while (fMarkSet.contains(c) || fIgnoreSet.contains(c));
 +                values.setElementAt(BADSNLP, count);
 +                lengths.setElementAt(utext_getNativeIndex(text) - currix, count++);
 +            } else {
@@ -775,7 +775,7 @@ index f1c874d..3ad1b3f 100644
 -            else {
 -                // Back up to where we were for next iteration
 -                utext_setNativeIndex(text, current+cuWordLength);
-+            int32_t ln_j_i = ln + i;
++            int32_t ln_j_i = ln + i;   // yes really i!
 +            if (newSnlp < bestSnlp.elementAti(ln_j_i)) {
 +                if (v == BADSNLP) {
 +                    int32_t p = prev.elementAti(i);
@@ -1395,7 +1395,7 @@ index 816c82d..c637d70 100644
 +#$(MAINBUILDDIR)/khmerdict.stamp: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(BRKSRCDIR)/khmerdict.txt build-local
 +# 	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(BRKSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
 +$(MAINBUILDDIR)/khmerdict.stamp: $(BRKSRCDIR)/khmerdict.dict build-local
-+	cp $< $(MAINBUILDDIR)
++	cp $< $(BRKBLDDIR)
 +	echo "timestamp" > $@
 
  ####################################################    CFU
