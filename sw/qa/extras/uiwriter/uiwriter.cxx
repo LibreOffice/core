@@ -1202,7 +1202,11 @@ void SwUiWriterTest::testTdf96536()
     aViewOptions.SetHideWhitespaceMode(true);
     pWrtShell->ApplyViewOptions(aViewOptions);
 
-    // Insert a new paragraph at the end of the document, and then delete it.
+    // Insert a page break and go back to the first page.
+    pWrtShell->InsertPageBreak();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+
+    // Insert a new paragraph at the end of the page, and then delete it.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XParagraphAppend> xParagraphAppend(xTextDocument->getText(), uno::UNO_QUERY);
     xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
@@ -1214,7 +1218,7 @@ void SwUiWriterTest::testTdf96536()
     // This was 552, page did not shrink after deleting the second paragraph.
     // Expected 276, which is 12pt font size + default line spacing (15%), but
     // tolerate some difference to that.
-    CPPUNIT_ASSERT(parseDump("/root/infos/bounds", "height").toInt32() <= 276);
+    CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds", "height").toInt32() <= 276);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
