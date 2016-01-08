@@ -2383,6 +2383,14 @@ DECLARE_RTFIMPORT_TEST(testTdf54584, "tdf54584.rtf")
                                     xFields->nextElement());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf96308Deftab, "tdf96308-deftab.rtf")
+{
+    uno::Reference<lang::XMultiServiceFactory> xTextFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDefaults(xTextFactory->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
+    // This was 1270 as \deftab was ignored on import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(284)), getProperty<sal_Int32>(xDefaults, "TabStopDistance"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

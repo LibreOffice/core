@@ -704,6 +704,14 @@ oox::GraphicHelper& RTFDocumentImpl::getGraphicHelper()
     return *m_pGraphicHelper;
 }
 
+bool RTFDocumentImpl::isStyleSheetImport()
+{
+    if (m_aStates.empty())
+        return false;
+    Destination eDestination = m_aStates.top().eDestination;
+    return eDestination == Destination::STYLESHEET || eDestination == Destination::STYLEENTRY;
+}
+
 void RTFDocumentImpl::resolve(Stream& rMapper)
 {
     m_pMapperStream = &rMapper;
@@ -6328,7 +6336,7 @@ RTFFrame::RTFFrame(RTFParserState* pParserState)
 
 void RTFFrame::setSprm(Id nId, Id nValue)
 {
-    if (m_pParserState->m_pDocumentImpl->getFirstRun())
+    if (m_pParserState->m_pDocumentImpl->getFirstRun() && !m_pParserState->m_pDocumentImpl->isStyleSheetImport())
     {
         m_pParserState->m_pDocumentImpl->checkFirstRun();
         m_pParserState->m_pDocumentImpl->setNeedPar(false);
