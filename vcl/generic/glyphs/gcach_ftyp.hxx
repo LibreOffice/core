@@ -154,7 +154,7 @@ private:
 public:
                             ImplFTSFontData( FreetypeFontInfo*, const ImplFontAttributes& );
 
-    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const override;
+    virtual LogicalFontInstance*  CreateFontInstance( FontSelectPattern& ) const override;
     virtual PhysicalFontFace* Clone() const override   { return new ImplFTSFontData( *this ); }
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 };
