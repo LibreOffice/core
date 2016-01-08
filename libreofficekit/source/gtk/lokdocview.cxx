@@ -1678,7 +1678,7 @@ openDocumentInThread (gpointer data)
     if ( !priv->m_pDocument )
     {
         char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
-        g_task_return_new_error(task, 0, 0, "%s", pError);
+        g_task_return_new_error(task, g_quark_from_static_string ("LOK error"), 0, "%s", pError);
     }
     else
     {
