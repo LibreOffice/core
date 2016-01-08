@@ -72,7 +72,7 @@ public:
 
     /** Create a virtual device of size 1x1
 
-        @param nBitCount
+        @param eFormat
         Device format of the generated virtual device. Use DeviceFormat::DEFAULT here, to
         indicate: take default screen depth. Only DeviceFormat::BITMASK
         is the other possibility to denote a binary mask.
