@@ -266,7 +266,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
 {
     ImplSVData* pSVData = ImplGetSVData();
     Point       aMousePos( nX, nY );
-    vcl::Window*     pChild(nullptr);
+    VclPtr<vcl::Window> pChild = nullptr;
     bool        bRet(false);
     sal_uInt16  nClicks(0);
     ImplFrameData* pWinFrameData = pWindow->ImplGetFrameData();
@@ -519,7 +519,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         }
 
         // test for mouseleave and mouseenter
-        vcl::Window* pMouseMoveWin = pWinFrameData->mpMouseMoveWin;
+        VclPtr<vcl::Window> pMouseMoveWin = pWinFrameData->mpMouseMoveWin;
         if ( pChild != pMouseMoveWin )
         {
             if ( pMouseMoveWin )
@@ -527,19 +527,14 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                 Point       aLeaveMousePos = pMouseMoveWin->ImplFrameToOutput( aMousePos );
                 MouseEvent  aMLeaveEvt( aLeaveMousePos, nClicks, nMode | MouseEventModifiers::LEAVEWINDOW, nCode, nCode );
                 NotifyEvent aNLeaveEvt( MouseNotifyEvent::MOUSEMOVE, pMouseMoveWin, &aMLeaveEvt );
-                ImplDelData aDelData;
-                ImplDelData aDelData2;
                 pWinFrameData->mbInMouseMove = true;
                 pMouseMoveWin->ImplGetWinData()->mbMouseOver = false;
-                pMouseMoveWin->ImplAddDel( &aDelData );
 
                 // A MouseLeave can destroy this window
-                if ( pChild )
-                    pChild->ImplAddDel( &aDelData2 );
                 if ( !ImplCallPreNotify( aNLeaveEvt ) )
                 {
                     pMouseMoveWin->MouseMove( aMLeaveEvt );
-                    if( !aDelData.IsDead() )
+                    if( !pMouseMoveWin->isDisposed() )
                         aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNLeaveEvt );
                 }
 
@@ -548,14 +543,13 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
 
                 if ( pChild )
                 {
-                    if ( aDelData2.IsDead() )
+                    if ( pChild->IsDisposed() )
                         pChild = nullptr;
                     else
-                        pChild->ImplRemoveDel( &aDelData2 );
+                        pChild.clear();
                 }
-                if ( aDelData.IsDead() )
+                if ( pMouseMoveWin->IsDisposed() )
                     return true;
-                pMouseMoveWin->ImplRemoveDel( &aDelData );
             }
 
             nMode |= MouseEventModifiers::ENTERWINDOW;
