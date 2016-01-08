@@ -708,9 +708,6 @@ public:
         @param pFilterParam
         Various parameter for the different bitmap filter algorithms
 
-        @param pProgress
-        A callback for showing the progress of the vectorization
-
         @return true, if the operation was completed successfully.
      */
     bool                    Filter(
