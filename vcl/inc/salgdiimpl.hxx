@@ -187,12 +187,6 @@ public:
                 const SalBitmap& rSourceBitmap,
                 const SalBitmap* pAlphaBitmap) = 0;
 
-    /** Render solid rectangle with given transparency
-
-        @param nTransparency
-        Transparency value (0-255) to use. 0 blits and opaque, 255 a
-        fully transparent rectangle
-     */
     virtual bool drawAlphaRect(
                     long nX, long nY,
                     long nWidth, long nHeight,
