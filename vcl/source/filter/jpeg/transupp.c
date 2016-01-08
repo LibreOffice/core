@@ -16,7 +16,7 @@
 
 #include <sal/config.h>
 
-#include "jinclude.h"
+#include "filter/jinclude.h"
 #include "jerror.h"
 #include "jpeglib.h"
 #include "filter/transupp.h"       /* My own external interface */
