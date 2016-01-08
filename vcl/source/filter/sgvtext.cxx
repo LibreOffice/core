@@ -25,9 +25,9 @@
 #include <tools/config.hxx>
 #include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
-#include "filter/sgffilt.hxx"
-#include "filter/sgfbram.hxx"
-#include "filter/sgvmain.hxx"
+#include "sgffilt.hxx"
+#include "sgfbram.hxx"
+#include "sgvmain.hxx"
 #include <memory>
 #include <cstdlib>
 

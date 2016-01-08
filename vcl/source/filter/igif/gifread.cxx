@@ -19,8 +19,8 @@
 
 #define _GIFPRIVATE
 
-#include "filter/decode.hxx"
-#include "filter/gifread.hxx"
+#include "decode.hxx"
+#include "gifread.hxx"
 #include <memory>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )

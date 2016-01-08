@@ -19,9 +19,9 @@
 
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
-#include "filter/rgbtable.hxx"
+#include "rgbtable.hxx"
 #define _XPMPRIVATE
-#include "filter/xpmread.hxx"
+#include "xpmread.hxx"
 #include <cstring>
 
 XPMReader::XPMReader(SvStream& rStm)

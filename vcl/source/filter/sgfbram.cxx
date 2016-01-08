@@ -24,8 +24,8 @@
 #include <vcl/gdimtf.hxx>
 #include <tools/color.hxx>
 #include <vcl/virdev.hxx>
-#include "filter/sgffilt.hxx"
-#include "filter/sgfbram.hxx"
+#include "sgffilt.hxx"
+#include "sgfbram.hxx"
 #include <memory>
 
 SgfHeader::SgfHeader()

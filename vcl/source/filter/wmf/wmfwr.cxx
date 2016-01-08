@@ -21,10 +21,9 @@
 
 #include <algorithm>
 
-#include "filter/wmfwr.hxx"
-#include "filter/emfwr.hxx"
-
+#include "wmfwr.hxx"
 #include <unotools/fontcvt.hxx>
+#include "emfwr.hxx"
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>

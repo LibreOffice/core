@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "filter/JpegReader.hxx"
-#include "filter/JpegWriter.hxx"
-#include "filter/jpeg.hxx"
+#include "JpegReader.hxx"
+#include "JpegWriter.hxx"
+#include "jpeg.hxx"
 
 #include <vcl/bmpacc.hxx>
 #include <vcl/FilterConfigItem.hxx>

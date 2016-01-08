@@ -52,10 +52,10 @@
 #include <osl/file.hxx>
 #include <signal.h>
 
-#include "filter/gifread.hxx"
-#include "filter/xbmread.hxx"
-#include "filter/xpmread.hxx"
-#include "filter/jpeg.hxx"
+#include <../source/filter/igif/gifread.hxx>
+#include <../source/filter/ixbm/xbmread.hxx>
+#include <../source/filter/ixpm/xpmread.hxx>
+#include <../source/filter/jpeg/jpeg.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

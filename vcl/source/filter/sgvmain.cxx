@@ -23,10 +23,10 @@
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
-#include "filter/sgffilt.hxx"
-#include "filter/sgfbram.hxx"
-#include "filter/sgvmain.hxx"
-#include "filter/sgvspln.hxx"
+#include "sgffilt.hxx"
+#include "sgfbram.hxx"
+#include "sgvmain.hxx"
+#include "sgvspln.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #if defined OSL_BIGENDIAN
