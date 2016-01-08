@@ -99,7 +99,7 @@ public:
      * Registers a callback that will be invoked whenever the tiled renderer
      * wants to notify the client about an event.
      *
-     * @param pCallBack is the callback function
+     * @param pCallback is the callback function
      * @param pData is private data of the client that will be sent back when the callback is invoked
      */
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) = 0;
@@ -158,8 +158,9 @@ public:
      * @param rRectangle - if not empty, then limit the output only to the area of this rectangle
      * @return a JSON describing position/content of rows/columns
      */
-    virtual OUString getRowColumnHeaders(const Rectangle& /*rRectangle*/)
+    virtual OUString getRowColumnHeaders(const Rectangle& rRectangle)
     {
+        (void) rRectangle;
         return OUString();
     }
 
@@ -191,11 +192,15 @@ public:
      * @param nTileTwipWidth - tile width in twips
      * @param nTileTwipHeight - tile height in twips
      */
-    virtual void setClientZoom(int /*nTilePixelWidth*/,
-                               int /*nTilePixelHeight*/,
-                               int /*nTileTwipWidth*/,
-                               int /*nTileTwipHeight*/)
+    virtual void setClientZoom(int nTilePixelWidth,
+                               int nTilePixelHeight,
+                               int nTileTwipWidth,
+                               int nTileTwipHeight)
     {
+        (void) nTilePixelWidth;
+        (void) nTilePixelHeight;
+        (void) nTileTwipWidth;
+        (void) nTileTwipHeight;
     }
 };
 
