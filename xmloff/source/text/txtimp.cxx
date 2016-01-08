@@ -25,7 +25,9 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
@@ -575,6 +577,8 @@ struct XMLTextImportHelper::Impl
     field_stack_t m_FieldStack;
 
     OUString m_sCellParaStyleDefault;
+
+    std::unique_ptr<std::map<OUString, OUString>> m_pCrossRefHeadingBookmarkMap;
 
     Impl(       uno::Reference<frame::XModel> const& rModel,
                 SvXMLImport & rImport,
@@ -2796,6 +2800,62 @@ XMLTextImportHelper::SetCellParaStyleDefault(OUString const& rNewValue)
 OUString const& XMLTextImportHelper::GetCellParaStyleDefault()
 {
     return m_xImpl->m_sCellParaStyleDefault;
+}
+
+void XMLTextImportHelper::AddCrossRefHeadingMapping(OUString const& rFrom, OUString const& rTo)
+{
+    if (!m_xImpl->m_pCrossRefHeadingBookmarkMap)
+    {
+        m_xImpl->m_pCrossRefHeadingBookmarkMap.reset(new std::map<OUString, OUString>);
+    }
+    m_xImpl->m_pCrossRefHeadingBookmarkMap->insert(std::make_pair(rFrom, rTo));
+}
+
+// tdf#94804: hack to map cross reference fiels that reference duplicate marks
+// note that we can't really check meta:generator for this since the file might
+// be round-tripped by different versions preserving duplicates => always map
+void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
+{
+    if (!m_xImpl->m_pCrossRefHeadingBookmarkMap)
+    {
+        return;
+    }
+
+    uno::Reference<text::XTextFieldsSupplier> const xFieldsSupplier(
+            m_xImpl->m_rSvXMLImport.GetModel(), uno::UNO_QUERY);
+    if (!xFieldsSupplier.is())
+    {
+        return;
+    }
+    uno::Reference<container::XEnumerationAccess> const xFieldsEA(
+            xFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> const xFields(
+            xFieldsEA->createEnumeration());
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<lang::XServiceInfo> const xFieldInfo(
+                xFields->nextElement(), uno::UNO_QUERY);
+        if (!xFieldInfo->supportsService("com.sun.star.text.textfield.GetReference"))
+        {
+            continue;
+        }
+        uno::Reference<beans::XPropertySet> const xField(
+                xFieldInfo, uno::UNO_QUERY);
+        sal_uInt16 nType(0);
+        xField->getPropertyValue("ReferenceFieldSource") >>= nType;
+        if (text::ReferenceFieldSource::BOOKMARK != nType)
+        {
+            continue;
+        }
+        OUString name;
+        xField->getPropertyValue("SourceName") >>= name;
+        auto const iter(m_xImpl->m_pCrossRefHeadingBookmarkMap->find(name));
+        if (iter == m_xImpl->m_pCrossRefHeadingBookmarkMap->end())
+        {
+            continue;
+        }
+        xField->setPropertyValue("SourceName", uno::makeAny(iter->second));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

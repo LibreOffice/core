@@ -421,9 +421,7 @@ DECLARE_ODFEXPORT_TEST(testDuplicateCrossRefHeadingBookmark, "CrossRefHeadingBoo
     uno::Reference<text::XTextContent> xBookmark1(
         xBookmarks->getByName("__RefHeading__8284_1826734303"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBookmark1.is());
-    uno::Reference<text::XTextContent> xBookmark2(
-        xBookmarks->getByName("__RefHeading__1673_25705824"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xBookmark2.is());
+    CPPUNIT_ASSERT_THROW(xBookmarks->getByName("__RefHeading__1673_25705824"), container::NoSuchElementException);
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();

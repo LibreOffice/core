@@ -713,6 +713,9 @@ public:
 
     void SetCellParaStyleDefault(OUString const& rNewValue);
     OUString const& GetCellParaStyleDefault();
+
+    void AddCrossRefHeadingMapping(OUString const& rFrom, OUString const& rTo);
+    void MapCrossRefHeadingFieldsHorribly();
 };
 
 #endif

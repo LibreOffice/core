@@ -545,6 +545,8 @@ void SAL_CALL SvXMLImport::endDocument()
     //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,
     //  because the SvXMLImport dtor might not be called until after the document has been closed.
 
+    GetTextImport()->MapCrossRefHeadingFieldsHorribly();
+
     if (mpImpl->mpRDFaHelper.get())
     {
         const uno::Reference<rdf::XRepositorySupplier> xRS(mxModel,
