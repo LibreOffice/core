@@ -90,7 +90,7 @@ namespace sw
     };
 }
 // SwClient
-class SW_DLLPUBLIC SwClient : ::sw::WriterListener
+class SW_DLLPUBLIC SwClient : public ::sw::WriterListener
 {
     // avoids making the details of the linked list and the callback method public
     friend class SwModify;
@@ -297,7 +297,7 @@ public:
             return static_cast<TElementType*>(Sync());
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
-        if(dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) != nullptr)
+        if(dynamic_cast<const TElementType *>(m_pPosition) != nullptr)
             return static_cast<TElementType*>(Sync());
         return Previous();
     }
@@ -305,14 +305,14 @@ public:
     {
         if(!IsChanged())
             m_pPosition = GetRightOfPos();
-        while(m_pPosition && dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) == nullptr)
+        while(m_pPosition && dynamic_cast<const TElementType *>(m_pPosition) == nullptr)
             m_pPosition = GetRightOfPos();
         return static_cast<TElementType*>(Sync());
     }
     TElementType* Previous()
     {
         m_pPosition = GetLeftOfPos();
-        while(m_pPosition && dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) == nullptr)
+        while(m_pPosition && dynamic_cast<const TElementType *>(m_pPosition) == nullptr)
             m_pPosition = GetLeftOfPos();
         return static_cast<TElementType*>(Sync());
     }
