@@ -30,7 +30,7 @@
 class RuntimeException : public std::exception
 {
 public:
-    RuntimeException(int Error);
+    explicit RuntimeException(int Error);
     virtual ~RuntimeException() throw();
 
     int GetErrorCode() const;
@@ -45,7 +45,7 @@ private:
 class ZipException : public RuntimeException
 {
 public:
-    ZipException(int Error);
+    explicit ZipException(int Error);
 
     virtual const char* what() const throw();
 };
@@ -56,7 +56,7 @@ public:
 class Win32Exception : public RuntimeException
 {
 public:
-    Win32Exception(int Error);
+    explicit Win32Exception(int Error);
     virtual ~Win32Exception() throw();
 
     virtual const char* what() const throw();
@@ -71,7 +71,7 @@ private:
 class ZipContentMissException : public ZipException
 {
 public:
-    ZipContentMissException(int Error);
+    explicit ZipContentMissException(int Error);
 };
 
 
@@ -80,7 +80,7 @@ public:
 class AccessViolationException : public Win32Exception
 {
 public:
-    AccessViolationException(int Error);
+    explicit AccessViolationException(int Error);
 };
 
 
@@ -89,7 +89,7 @@ public:
 class IOException : public Win32Exception
 {
 public:
-    IOException(int Error);
+    explicit IOException(int Error);
 };
 
 #endif

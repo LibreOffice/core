@@ -123,7 +123,7 @@ private:
 #ifdef WNT
 struct VersionW
 {
-  VersionW(const wchar_t* aVersionStringW)
+  explicit VersionW(const wchar_t* aVersionStringW)
   {
     versionContentW =
       reinterpret_cast<wchar_t*>(wcsdup(aVersionStringW));
