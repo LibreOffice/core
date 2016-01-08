@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_9c6d2d07",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T09:52:39Z",
+      "side": 1,
+      "message": "Looks good; but I think that mpDialogParent is itself a VclPtr so I\u0027m not sure that we need another VclPtr here \u003d) but the code is fine. Thanks !",
+      "revId": "3f0f646c81bb0d4d4ce87fc3778fd145f753a6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
