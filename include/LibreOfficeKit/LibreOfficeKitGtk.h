@@ -24,6 +24,13 @@ G_BEGIN_DECLS
 #define LOK_IS_DOC_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  LOK_TYPE_DOC_VIEW))
 #define LOK_DOC_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  LOK_TYPE_DOC_VIEW, LOKDocViewClass))
 
+/**
+ * LOK_ERROR:
+ *
+ * Error domain for LibreOffceKit.
+ */
+#define LOK_ERROR (LOKErrorQuark())
+
 typedef struct _LOKDocView        LOKDocView;
 typedef struct _LOKDocViewClass   LOKDocViewClass;
 typedef struct _LOKDocViewPrivate LOKDocViewPrivate;
