@@ -903,7 +903,7 @@ public:
         };
 
         static void SizeAndRender(OutputDevice &rDev, const Rectangle& r, RenderType eType,
-                           const RenderContext &rCtx)
+                                  const RenderContext &rCtx)
         {
             ScopedVclPtr<VirtualDevice> pNested;
 
@@ -955,6 +955,29 @@ public:
             }
             else
                 SizeAndRender(rDev, r, RENDER_AS_BITMAP, rCtx);
+        }
+    };
+
+    struct DrawXOR : public RegionRenderer
+    {
+        RENDER_DETAILS(xor,KEY_X,1)
+
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &rCtx) override
+        {
+            // avoid infinite recursion
+            if (rCtx.mbVDev)
+                return;
+
+            rDev.Push();
+
+            AntialiasingFlags nFlags = rDev.GetAntialiasing();
+            rDev.SetAntialiasing(nFlags & ~AntialiasingFlags::EnableB2dDraw);
+            rDev.SetRasterOp( ROP_XOR );
+
+            rCtx.mpDemoRenderer->drawThumbs(rDev, r, true);
+
+            rDev.Pop();
         }
     };
 
@@ -1207,10 +1230,44 @@ public:
         }
     };
 
+    void drawThumbs(vcl::RenderContext& rDev, Rectangle aRect, bool bVDev)
+    {
+        RenderContext aCtx;
+        aCtx.meStyle = RENDER_THUMB;
+        aCtx.mbVDev = bVDev;
+        aCtx.mpDemoRenderer = this;
+        aCtx.maSize = aRect.GetSize();
+        std::vector<Rectangle> aRegions(partition(aRect, mnSegmentsX, mnSegmentsY));
+        DemoRenderer::clearRects(rDev, aRegions);
+        for (size_t i = 0; i < maRenderers.size(); i++)
+        {
+            RegionRenderer * r = maRenderers[i];
+
+            rDev.SetClipRegion( vcl::Region( aRegions[i] ) );
+
+            // profiling?
+            if (getIterCount() > 0)
+            {
+                if (!bVDev)
+                {
+                    double nStartTime = getTimeNow();
+                    for (int j = 0; j < r->getTestRepeatCount() * THUMB_REPEAT_FACTOR; j++)
+                        r->RenderRegion(rDev, aRegions[i], aCtx);
+                    addTime(i, (getTimeNow() - nStartTime) / THUMB_REPEAT_FACTOR);
+                } else
+                    for (int j = 0; j < r->getTestRepeatCount(); j++)
+                        r->RenderRegion(rDev, aRegions[i], aCtx);
+            }
+            else
+                r->RenderRegion(rDev, aRegions[i], aCtx);
+
+            rDev.SetClipRegion();
+        }
+    }
+
     void drawToDevice(vcl::RenderContext& rDev, Size aSize, bool bVDev)
     {
         RenderContext aCtx;
-        double mnStartTime;
         aCtx.mbVDev = bVDev;
         aCtx.mpDemoRenderer = this;
         aCtx.maSize = aSize;
@@ -1226,45 +1283,15 @@ public:
             // profiling?
             if (getIterCount() > 0)
             {
-                mnStartTime = getTimeNow();
+                double nStartTime = getTimeNow();
                 for (int i = 0; i < r->getTestRepeatCount(); i++)
                     r->RenderRegion(rDev, aWholeWin, aCtx);
-                addTime(mnSelectedRenderer, getTimeNow() - mnStartTime);
+                addTime(mnSelectedRenderer, getTimeNow() - nStartTime);
             } else
                 r->RenderRegion(rDev, aWholeWin, aCtx);
         }
         else
-        {
-            aCtx.meStyle = RENDER_THUMB;
-            std::vector<Rectangle> aRegions(partition(aSize, mnSegmentsX, mnSegmentsY));
-            DemoRenderer::clearRects(rDev, aRegions);
-            for (size_t i = 0; i < maRenderers.size(); i++)
-            {
-                RegionRenderer * r = maRenderers[i];
-
-                rDev.SetClipRegion( vcl::Region( aRegions[i] ) );
-
-                // profiling?
-                if (getIterCount() > 0)
-                {
-                    if (!bVDev)
-                    {
-                        mnStartTime = getTimeNow();
-                        for (int j = 0; j < r->getTestRepeatCount() * THUMB_REPEAT_FACTOR; j++)
-                            r->RenderRegion(rDev, aRegions[i], aCtx);
-                        addTime(i, (getTimeNow() - mnStartTime) / THUMB_REPEAT_FACTOR);
-                    } else
-                        for (int j = 0; j < r->getTestRepeatCount(); j++)
-                            r->RenderRegion(rDev, aRegions[i], aCtx);
-                }
-                else
-                {
-                    r->RenderRegion(rDev, aRegions[i], aCtx);
-                }
-
-                rDev.SetClipRegion();
-            }
-        }
+            drawThumbs(rDev, aWholeWin, bVDev);
     }
     std::vector<VclPtr<vcl::Window> > maInvalidates;
     void addInvalidate(vcl::Window *pWindow) { maInvalidates.push_back(pWindow); };
@@ -1399,6 +1426,7 @@ void DemoRenderer::InitRenderers()
     maRenderers.push_back(new DrawPolyPolygons());
     maRenderers.push_back(new DrawClipped());
     maRenderers.push_back(new DrawToVirtualDevice());
+    maRenderers.push_back(new DrawXOR());
     maRenderers.push_back(new DrawIcons());
     maRenderers.push_back(new FetchDrawBitmap());
 }
