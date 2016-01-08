@@ -180,6 +180,7 @@ public:
     void testTdf96943();
     void testTdf96536();
     void testTdf96479();
+    void testTdf96961();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -266,6 +267,7 @@ public:
     CPPUNIT_TEST(testTdf96943);
     CPPUNIT_TEST(testTdf96536);
     CPPUNIT_TEST(testTdf96479);
+    CPPUNIT_TEST(testTdf96961);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3085,6 +3087,26 @@ void SwUiWriterTest::testTdf96479()
         SwPaM pam(mark->GetMarkStart(), mark->GetMarkEnd());
         CPPUNIT_ASSERT_EQUAL(emptyInputTextField, pam.GetText());
     }
+}
+
+void SwUiWriterTest::testTdf96961()
+{
+    // Insert a page break.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+
+    // Enable hide whitespace mode.
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    calcLayout();
+
+    // Assert that the height of the last page is larger than the height of other pages.
+    sal_Int32 nOther = parseDump("/root/page[1]/infos/bounds", "height").toInt32();
+    sal_Int32 nLast = parseDump("/root/page[2]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT(nLast > nOther);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
