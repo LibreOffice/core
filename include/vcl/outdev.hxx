@@ -1077,7 +1077,7 @@ public:
         aDevice.SetFont(aFont);
         aDevice.Erase();
 
-        ::Rectangle aRect;
+        tools::Rectangle aRect;
         aDevice.GetTextBoundRect(aRect, aText);
         aDevice.SetOutputSize(Size(aRect.BottomRight().X() + 1, aRect.BottomRight().Y() + 1));
         aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
@@ -1803,7 +1803,7 @@ public:
 
     /** Convert a logical rectangle to a rectangle in physical device pixel units.
 
-     @param         rLogicSize  Const reference to a rectangle in logical units
+     @param         rLogicRect  Const reference to a rectangle in logical units
 
      @returns Rectangle based on physical device pixel coordinates and units.
      */
@@ -1837,7 +1837,7 @@ protected:
      *
      * @param pRectangle If 0, that means the whole area, otherwise the area in logic coordinates.
      */
-    virtual void LogicInvalidate(const Rectangle* /*pRectangle*/) { }
+    virtual void LogicInvalidate(const Rectangle* pRectangle) { (void)pRectangle; }
 
 private:
 
@@ -1906,11 +1906,11 @@ private:
      To get the \em exact pixel height, it must calculate the Y-DPI of the device and the
      map scaling factor.
 
-     @param         nHeight     Exact height in logical units.
+     @param         fLogicHeight     Exact height in logical units.
 
      @returns Exact height in pixels - returns as a float to provide for subpixel value.
      */
-    SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float ) const;
+    SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float fLogicHeight ) const;
 
     /** Convert a logical size to the size on the physical device.
 
@@ -1954,7 +1954,7 @@ private:
 
     /** Convert a region in pixel units to a region in device pixel units and coords.
 
-     @param         rPixelRect  Const reference to region.
+     @param         rRegion  Const reference to region.
 
      @returns vcl::Region based on device pixel coordinates and units.
      */
