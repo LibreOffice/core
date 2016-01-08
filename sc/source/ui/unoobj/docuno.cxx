@@ -603,8 +603,8 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
         return;
 
     // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
-                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
+    pViewData->SetZoom(Fraction(mnTilePixelWidth * TWIPS_PER_PIXEL, mnTileTwipWidth),
+                       Fraction(mnTilePixelHeight * TWIPS_PER_PIXEL, mnTileTwipHeight), true);
 
     // Calc operates in pixels...
     MouseEvent aEvent(Point(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY()), nCount,
