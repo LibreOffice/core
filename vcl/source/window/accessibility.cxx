@@ -63,7 +63,7 @@
 #include "salgdi.hxx"
 #include "svdata.hxx"
 #include "dbggui.hxx"
-#include "fontentry.hxx"
+#include "fontinstance.hxx"
 #include "window.h"
 #include "toolbox.h"
 #include "outdev.h"

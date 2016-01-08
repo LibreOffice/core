@@ -90,7 +90,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         mpServerFont[ nFallbackLevel ] = pServerFont;
 
         // apply font specific-hint settings
-        ImplServerFontEntry* pSFE = static_cast<ImplServerFontEntry*>( pEntry->mpFontEntry );
+        ImplServerFontEntry* pSFE = static_cast<ImplServerFontEntry*>( pEntry->mpFontInstance );
         pSFE->HandleFontOptions();
 
         return true;

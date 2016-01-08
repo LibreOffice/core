@@ -38,7 +38,7 @@
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/metric.hxx>
 
-#include "fontentry.hxx"
+#include "fontinstance.hxx"
 #include "PhysicalFontFace.hxx"
 #include "salgdi.hxx"
 
@@ -61,7 +61,7 @@ public:
     virtual                         ~CoreTextFontData();
 
     PhysicalFontFace*               Clone() const override;
-    ImplFontEntry*                  CreateFontInstance( FontSelectPattern& ) const override;
+    LogicalFontInstance*            CreateFontInstance( FontSelectPattern& ) const override;
     sal_IntPtr                      GetFontId() const override;
 
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;

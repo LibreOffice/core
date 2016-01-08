@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vcl/fontcharmap.hxx>
-#include <fontentry.hxx>
+#include <fontinstance.hxx>
 #include <impfont.hxx>
 
 #include <vector>

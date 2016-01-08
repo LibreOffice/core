@@ -33,7 +33,7 @@
 
 #include "impfont.hxx"
 #include "outdata.hxx"
-#include "fontentry.hxx"
+#include "fontinstance.hxx"
 #include "fontattributes.hxx"
 
 #include "outdev.h"
@@ -67,7 +67,7 @@ FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     const OUString& rSearchName, const Size& rSize, float fExactHeight)
     : FontSelectPatternAttributes(rFont, rSearchName, rSize, fExactHeight)
     , mpFontData( nullptr )
-    , mpFontEntry( nullptr )
+    , mpFontInstance( nullptr )
 {
 }
 
@@ -93,7 +93,7 @@ FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
     : FontSelectPatternAttributes(rFontData, rSize, fExactHeight, nOrientation, bVertical)
     , mpFontData( &rFontData )
-    , mpFontEntry( NULL )
+    , mpFontInstance( NULL )
 {
 }
 #endif
