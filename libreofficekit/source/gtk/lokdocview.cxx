@@ -1678,7 +1678,7 @@ openDocumentInThread (gpointer data)
     if ( !priv->m_pDocument )
     {
         char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
-        g_task_return_new_error(task, g_quark_from_static_string ("LOK error"), 0, "%s", pError);
+        g_task_return_new_error(task, LOK_ERROR, 0, "%s", pError);
     }
     else
     {
@@ -2015,7 +2015,7 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     if (priv->m_pOffice == nullptr)
     {
         g_set_error (error,
-                     g_quark_from_static_string ("LOK initialization error"), 0,
+                     LOK_ERROR, 0,
                      "Failed to get LibreOfficeKit context. Make sure path (%s) is correct",
                      priv->m_aLOPath);
         return FALSE;
@@ -2756,6 +2756,12 @@ lok_doc_view_twip_to_pixel (LOKDocView* pDocView, float fInput)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     return twipToPixel(fInput, priv->m_fZoom);
+}
+
+SAL_DLLPUBLIC_EXPORT GQuark
+LOKErrorQuark(void)
+{
+    return g_quark_from_static_string("lok-error");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
