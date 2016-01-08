@@ -47,7 +47,6 @@ class SvTreeListBox ;
 class StyleTreeListBox_Impl;
 class SfxTemplateDialog_Impl;
 class SfxCommonTemplateDialog_Impl;
-class SfxDockingWindow;
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XModuleManager2;

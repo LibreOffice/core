@@ -2366,15 +2366,6 @@ void SfxTemplateDialog_Impl::LoadedFamilies()
 // The size of the Listboxen is adjusted
 void SfxTemplateDialog_Impl::Resize()
 {
-    SfxDockingWindow* pDockingWindow = dynamic_cast<SfxDockingWindow*>(m_pFloat.get());
-    FloatingWindow *pF = pDockingWindow!=nullptr ? pDockingWindow->GetFloatingWindow() : nullptr;
-    if (pF)
-    {
-        m_bZoomIn = pF->IsRollUp();
-        if (m_bZoomIn)
-            return;
-    }
-
     if (m_pFloat == nullptr)
         return;
     Size aDlgSize=m_pFloat->PixelToLogic(m_pFloat->GetOutputSizePixel());
