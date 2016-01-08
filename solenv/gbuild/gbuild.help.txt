@@ -30,7 +30,8 @@ AVAILABLE TARGETS
        all                  build product and run unit tests (default goal)
        clean                remove all generated files
        debugrun             starts the INSTDIR instance and allows tests to
-                            be run against it
+                            be run against it. You can provide additional
+                            arguments to soffice.bin using the DBGARGS variable
        check                run unit tests and if in toplevel subsequentcheck
        unitcheck            run unit tests
        slowcheck            run slow unit tests
@@ -117,6 +118,8 @@ INTERACTIVE VARIABLES:
                        3... = debugging information + no optimizations + extra
                               debug output (usually extremely verbose). Levels
                               > 2 are not used very much.
+       DBGARGS         Append these arguments to GDBs set-args string for debugrun.
+                       Be aware that you have to escape double quotes!
        PARALLELISM     If not empty, pass argument on as the -j switch
                        to recursive make invocations. Useful to
                        lower/increase build parallelism individually.
