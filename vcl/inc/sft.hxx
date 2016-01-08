@@ -246,8 +246,11 @@ namespace vcl
 /**
  * TrueTypeFont constructor.
  * The font file has to be provided as a memory buffer and length
+ * @param  pBuffer - memory buffer
+ * @param  nLen    - size of memory buffer
  * @param  facenum - logical font number within a TTC file. This value is ignored
  *                   for TrueType fonts
+ * @param  ttf     - array of TrueTypeFonts
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
@@ -257,8 +260,10 @@ namespace vcl
  * TrueTypeFont constructor.
  * Reads the font file and allocates the memory for the structure.
  * on WIN32 the font has to be provided as a memory buffer and length
+ * @param  fname   - name of TrueType font file
  * @param  facenum - logical font number within a TTC file. This value is ignored
  *                   for TrueType fonts
+ * @param  ttf     - array of TrueTypeFonts
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
@@ -457,6 +462,7 @@ namespace vcl
  * @param str         pointer to a UCS-2 string
  * @param nchars      number of characters in <b>str</b>
  * @param glyphArray  pointer to the glyph array where glyph IDs are to be recorded.
+ * @param bvertical   vertical text
  *
  * @return MapString() returns -1 if the TrueType font has no usable 'cmap' tables.
  *         Otherwise it returns the number of characters processed: <b>nChars</b>
