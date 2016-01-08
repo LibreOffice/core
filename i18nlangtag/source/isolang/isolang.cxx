@@ -498,6 +498,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_LATIN_LSO,                   "la", ""  , 0     },
     { LANGUAGE_USER_ESPERANTO,              "eo", ""  , 0     },
     { LANGUAGE_USER_INTERLINGUA,            "ia", ""  , 0     },
+    { LANGUAGE_USER_INTERLINGUE,            "ie", ""  , 0     },
     { LANGUAGE_MAORI_NEW_ZEALAND,           "mi", "NZ", 0     },
     { LANGUAGE_OBSOLETE_USER_MAORI,         "mi", "NZ", 0     },
     { LANGUAGE_KINYARWANDA_RWANDA,          "rw", "RW", 0     },
@@ -1116,6 +1117,7 @@ css::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
                     case LANGUAGE_BASQUE:
                     case LANGUAGE_USER_ESPERANTO:
                     case LANGUAGE_USER_INTERLINGUA:
+                    case LANGUAGE_USER_INTERLINGUE:
                     case LANGUAGE_USER_LOJBAN:
                     case LANGUAGE_KASHMIRI:
                     case LANGUAGE_USER_KEYID:
