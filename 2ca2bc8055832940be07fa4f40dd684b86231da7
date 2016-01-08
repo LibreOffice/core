@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_9c440d75",
+        "filename": "vcl/source/window/winproc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-08T09:55:03Z",
+      "side": 1,
+      "message": "Would be nice to just ensure that pChild is a VclPtr itself - so we don\u0027t need this new xWindow variable \u003d) but - perhaps a follow-on cleanup ?",
+      "revId": "2ca2bc8055832940be07fa4f40dd684b86231da7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
