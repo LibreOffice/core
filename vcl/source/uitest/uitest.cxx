@@ -9,4 +9,11 @@
 
 #include <vcl/uitest/uitest.hxx>
 
+#include <comphelper/dispatchcommand.hxx>
+
+void UITest::executeCommand(const OUString& rCommand)
+{
+    comphelper::dispatchCommand(rCommand, css::uno::Sequence<css::beans::PropertyValue>());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
