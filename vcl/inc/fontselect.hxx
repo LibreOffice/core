@@ -26,7 +26,7 @@
 #include <unordered_map>
 
 class PhysicalFontFace;
-class ImplFontEntry;
+class LogicalFontInstance;
 class ImplFontCache;
 namespace vcl { class Font; }
 class ConvertChar;
@@ -78,7 +78,7 @@ public:
 
 public: // TODO: change to private
     const PhysicalFontFace* mpFontData;         // a matching PhysicalFontFace object
-    ImplFontEntry*  mpFontEntry;                // pointer to the resulting FontCache entry
+    LogicalFontInstance*  mpFontEntry;                // pointer to the resulting FontCache entry
 
     void            copyAttributes(const FontSelectPatternAttributes &rAttributes);
 };

@@ -63,7 +63,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::utl;
 
-// extend std namespace to add custom hash needed for ImplFontEntry
+// extend std namespace to add custom hash needed for LogicalFontInstance
 
 namespace std
 {
@@ -79,7 +79,7 @@ namespace std
 }
 
 
-ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
+LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData )
     : m_pFontCache(nullptr)
     , maFontSelData( rFontSelData )
     , maFontAttributes( rFontSelData )
@@ -95,20 +95,20 @@ ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
     maFontSelData.mpFontEntry = this;
 }
 
-ImplFontEntry::~ImplFontEntry()
+LogicalFontInstance::~LogicalFontInstance()
 {
     delete mpUnicodeFallbackList;
     m_pFontCache = nullptr;
 }
 
-void ImplFontEntry::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
+void LogicalFontInstance::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
 {
     if( !mpUnicodeFallbackList )
         mpUnicodeFallbackList = new UnicodeFallbackList;
     (*mpUnicodeFallbackList)[ std::pair< sal_UCS4, FontWeight >(cChar,eWeight) ] = rFontName;
 }
 
-bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, OUString* pFontName ) const
+bool LogicalFontInstance::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, OUString* pFontName ) const
 {
     if( !mpUnicodeFallbackList )
         return false;
@@ -121,7 +121,7 @@ bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, O
     return true;
 }
 
-void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
+void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
 {
     UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( std::pair< sal_UCS4,FontWeight >(cChar,eWeight) );
     if( it == mpUnicodeFallbackList->end() )

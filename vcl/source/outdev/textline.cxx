@@ -215,7 +215,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
                                          Color aColor,
                                          bool bIsAbove )
 {
-    ImplFontEntry*  pFontEntry = mpFontEntry;
+    LogicalFontInstance*  pFontEntry = mpFontEntry;
     long            nLineHeight;
     long            nLinePos;
 
@@ -283,7 +283,7 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                                              Color aColor,
                                              bool bIsAbove )
 {
-    ImplFontEntry*  pFontEntry = mpFontEntry;
+    LogicalFontInstance*  pFontEntry = mpFontEntry;
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
@@ -525,7 +525,7 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
-    ImplFontEntry*  pFontEntry = mpFontEntry;
+    LogicalFontInstance*  pFontEntry = mpFontEntry;
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
@@ -1042,7 +1042,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     }
 
     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
-    ImplFontEntry* pFontEntry = mpFontEntry;
+    LogicalFontInstance* pFontEntry = mpFontEntry;
     if( nWaveHeight > pFontEntry->maFontAttributes.GetWavelineUnderlineSize() )
     {
         nWaveHeight = pFontEntry->maFontAttributes.GetWavelineUnderlineSize();

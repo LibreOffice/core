@@ -285,7 +285,7 @@ protected:
                                     sal_uInt16 nTransparencePercent ) override;
 
     virtual void                InitFont() const override;
-    virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const override;
+    virtual void                SetFontOrientation( LogicalFontInstance* const pFontEntry ) const override;
 
 public:
                                 Printer();

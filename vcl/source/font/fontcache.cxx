@@ -135,12 +135,12 @@ ImplFontCache::~ImplFontCache()
     FontInstanceList::iterator it = maFontInstanceList.begin();
     for(; it != maFontInstanceList.end(); ++it )
     {
-        ImplFontEntry* pEntry = (*it).second;
+        LogicalFontInstance* pEntry = (*it).second;
         delete pEntry;
     }
 }
 
-ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
+LogicalFontInstance* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     const vcl::Font& rFont, const Size& rSize, float fExactHeight )
 {
     OUString aSearchName = rFont.GetName();
@@ -150,12 +150,12 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     return GetFontEntry( pFontList, aFontSelData );
 }
 
-ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
+LogicalFontInstance* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     FontSelectPattern& aFontSelData )
 {
     // check if a directly matching logical font instance is already cached,
     // the most recently used font usually has a hit rate of >50%
-    ImplFontEntry *pEntry = nullptr;
+    LogicalFontInstance *pEntry = nullptr;
     PhysicalFontFamily* pFontFamily = nullptr;
     IFSD_Equal aIFSD_Equal;
     if( mpFirstEntry && aIFSD_Equal( aFontSelData, mpFirstEntry->maFontSelData ) )
@@ -247,7 +247,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     return pEntry;
 }
 
-ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFontCollection,
+LogicalFontInstance* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFontCollection,
     FontSelectPattern& rFontSelData, int nFallbackLevel, OUString& rMissingCodes )
 {
     // get a candidate font for glyph fallback
@@ -278,11 +278,11 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFon
         rFontSelData.maSearchName.clear();
     }
 
-    ImplFontEntry* pFallbackFont = GetFontEntry( pFontCollection, rFontSelData );
+    LogicalFontInstance* pFallbackFont = GetFontEntry( pFontCollection, rFontSelData );
     return pFallbackFont;
 }
 
-void ImplFontCache::Acquire(ImplFontEntry* pEntry)
+void ImplFontCache::Acquire(LogicalFontInstance* pEntry)
 {
     assert(pEntry->m_pFontCache == this);
 
@@ -290,7 +290,7 @@ void ImplFontCache::Acquire(ImplFontEntry* pEntry)
         --mnRef0Count;
 }
 
-void ImplFontCache::Release(ImplFontEntry* pEntry)
+void ImplFontCache::Release(LogicalFontInstance* pEntry)
 {
     static const int FONTCACHE_MAX = getenv("LO_TESTNAME") ? 1 : 50;
 
@@ -308,7 +308,7 @@ void ImplFontCache::Release(ImplFontEntry* pEntry)
     while( it_next != maFontInstanceList.end() )
     {
         FontInstanceList::iterator it = it_next++;
-        ImplFontEntry* pFontEntry = (*it).second;
+        LogicalFontInstance* pFontEntry = (*it).second;
         if( pFontEntry->mnRefCount > 0 )
             continue;
 
@@ -331,7 +331,7 @@ int ImplFontCache::CountUnreferencedEntries() const
     for (FontInstanceList::const_iterator it = maFontInstanceList.begin();
          it != maFontInstanceList.end(); ++it)
     {
-        const ImplFontEntry* pFontEntry = it->second;
+        const LogicalFontInstance* pFontEntry = it->second;
         if (pFontEntry->mnRefCount > 0)
             continue;
         ++nCount;
@@ -347,7 +347,7 @@ void ImplFontCache::Invalidate()
     FontInstanceList::iterator it = maFontInstanceList.begin();
     for(; it != maFontInstanceList.end(); ++it )
     {
-        ImplFontEntry* pFontEntry = (*it).second;
+        LogicalFontInstance* pFontEntry = (*it).second;
         if( pFontEntry->mnRefCount > 0 )
             continue;
 

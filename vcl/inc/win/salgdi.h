@@ -80,7 +80,7 @@ public:
     virtual                 ~ImplWinFontData();
 
     virtual PhysicalFontFace*   Clone() const override;
-    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const override;
+    virtual LogicalFontInstance*  CreateFontInstance( FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;

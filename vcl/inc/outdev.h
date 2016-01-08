@@ -129,13 +129,13 @@ public:
 class ImplFontCache
 {
 private:
-    ImplFontEntry*      mpFirstEntry;
+    LogicalFontInstance*      mpFirstEntry;
     int                 mnRef0Count;    // number of unreferenced ImplFontEntries
 
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
-    typedef std::unordered_map<FontSelectPattern,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
+    typedef std::unordered_map<FontSelectPattern,LogicalFontInstance*,IFSD_Hash,IFSD_Equal > FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
     int                 CountUnreferencedEntries() const;
@@ -144,16 +144,16 @@ public:
                         ImplFontCache();
                         ~ImplFontCache();
 
-    ImplFontEntry*      GetFontEntry( PhysicalFontCollection*,
+    LogicalFontInstance*      GetFontEntry( PhysicalFontCollection*,
                              const vcl::Font&, const Size& rPixelSize, float fExactHeight);
-    ImplFontEntry*      GetFontEntry( PhysicalFontCollection*, FontSelectPattern& );
-    ImplFontEntry*      GetGlyphFallbackFont( PhysicalFontCollection*, FontSelectPattern&,
+    LogicalFontInstance*      GetFontEntry( PhysicalFontCollection*, FontSelectPattern& );
+    LogicalFontInstance*      GetGlyphFallbackFont( PhysicalFontCollection*, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
 
-    /// Increase the refcount of the given ImplFontEntry.
-    void                Acquire(ImplFontEntry*);
+    /// Increase the refcount of the given LogicalFontInstance.
+    void                Acquire(LogicalFontInstance*);
     /// Decrease the refcount and potentially cleanup the entries with zero refcount from the cache.
-    void                Release(ImplFontEntry*);
+    void                Release(LogicalFontInstance*);
 
     void                Invalidate();
 };

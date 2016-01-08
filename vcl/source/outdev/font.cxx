@@ -189,7 +189,7 @@ FontMetric OutputDevice::GetFontMetric() const
     if( mbNewFont && !ImplNewFont() )
         return aMetric;
 
-    ImplFontEntry*      pEntry = mpFontEntry;
+    LogicalFontInstance*      pEntry = mpFontEntry;
     ImplFontAttributes* pFontAttributes = &(pEntry->maFontAttributes);
 
     // prepare metric
@@ -485,7 +485,7 @@ FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const vcl::Font& rFont 
 
 long OutputDevice::GetFontExtLeading() const
 {
-    ImplFontEntry*      pEntry = mpFontEntry;
+    LogicalFontInstance*      pEntry = mpFontEntry;
     ImplFontAttributes* pFontAttributes = &(pEntry->maFontAttributes);
 
     return pFontAttributes->GetExternalLeading();
@@ -921,7 +921,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
 
                     // get the name of the first available font
                     float fExactHeight = static_cast<float>(aSize.Height());
-                    ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontCollection, aFont, aSize, fExactHeight );
+                    LogicalFontInstance* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontCollection, aFont, aSize, fExactHeight );
                     if (pEntry)
                     {
                         if( pEntry->maFontSelData.mpFontData )
@@ -1106,16 +1106,16 @@ bool OutputDevice::ImplNewFont() const
         aSize.Width() = 1;
 
     // get font entry
-    ImplFontEntry* pOldEntry = mpFontEntry;
+    LogicalFontInstance* pOldEntry = mpFontEntry;
     mpFontEntry = mpFontCache->GetFontEntry( mpFontCollection, maFont, aSize, fExactHeight );
     if( pOldEntry )
         mpFontCache->Release( pOldEntry );
 
-    ImplFontEntry* pFontEntry = mpFontEntry;
+    LogicalFontInstance* pFontEntry = mpFontEntry;
 
     if (!pFontEntry)
     {
-        SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no ImplFontEntry, no Font");
+        SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no LogicalFontInstance, no Font");
         return false;
     }
 
@@ -1233,7 +1233,7 @@ bool OutputDevice::ImplNewFont() const
     return true;
 }
 
-void OutputDevice::SetFontOrientation( ImplFontEntry* const pFontEntry ) const
+void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const
 {
     if( pFontEntry->maFontSelData.mnOrientation && !pFontEntry->maFontAttributes.GetOrientation() )
     {
@@ -1374,7 +1374,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     mpMetaFile = pOldMetaFile;
 }
 
-SalLayout* OutputDevice::getFallbackFont(ImplFontEntry &rFallbackFont,
+SalLayout* OutputDevice::getFallbackFont(LogicalFontInstance &rFallbackFont,
     FontSelectPattern &rFontSelData, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs) const
 {
@@ -1440,7 +1440,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         // if the system-specific glyph fallback is active
         aFontSelData.mpFontEntry = mpFontEntry; // reset the fontentry to base-level
 
-        ImplFontEntry* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontCollection,
+        LogicalFontInstance* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontCollection,
             aFontSelData, nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
             break;
@@ -1495,7 +1495,7 @@ long OutputDevice::GetMinKashida() const
     if( mbNewFont && !ImplNewFont() )
         return 0;
 
-    ImplFontEntry*      pEntry = mpFontEntry;
+    LogicalFontInstance*      pEntry = mpFontEntry;
     ImplFontAttributes* pFontAttributes = &(pEntry->maFontAttributes);
     return ImplDevicePixelToLogicWidth( pFontAttributes->GetMinKashida() );
 }

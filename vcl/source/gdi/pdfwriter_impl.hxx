@@ -1266,7 +1266,7 @@ public:
     const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
 
     virtual PhysicalFontFace*           Clone() const override { return new ImplPdfBuiltinFontData(*this); }
-    virtual ImplFontEntry*              CreateFontInstance( FontSelectPattern& ) const override;
+    virtual LogicalFontInstance*              CreateFontInstance( FontSelectPattern& ) const override;
     virtual sal_IntPtr                  GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
 };
 

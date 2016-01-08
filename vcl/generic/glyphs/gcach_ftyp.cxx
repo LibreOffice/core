@@ -432,7 +432,7 @@ ImplFTSFontData::ImplFTSFontData( FreetypeFontInfo* pFI, const ImplFontAttribute
     SetOrientationFlag( true );
 }
 
-ImplFontEntry* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
     return pEntry;

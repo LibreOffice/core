@@ -563,7 +563,7 @@ long VirtualDevice::GetFontExtLeading() const
         return 0;
 #endif
 
-    ImplFontEntry*      pEntry = mpFontEntry;
+    LogicalFontInstance*      pEntry = mpFontEntry;
     ImplFontAttributes* pFontAttributes = &(pEntry->maFontAttributes);
 
     return pFontAttributes->GetExternalLeading();

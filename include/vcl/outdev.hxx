@@ -58,7 +58,7 @@
 #include <vector>
 
 struct ImplOutDevData;
-class ImplFontEntry;
+class LogicalFontInstance;
 class OutDevState;
 struct SystemGraphicsData;
 struct SystemFontData;
@@ -356,7 +356,7 @@ private:
     mutable VclPtr<OutputDevice>    mpPrevGraphics;     ///< Previous output device in list
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
-    mutable ImplFontEntry*          mpFontEntry;
+    mutable LogicalFontInstance*          mpFontEntry;
     mutable ImplFontCache*          mpFontCache;
     mutable PhysicalFontCollection* mpFontCollection;
     mutable ImplDeviceFontList*     mpDeviceFontList;
@@ -1322,7 +1322,7 @@ public:
 protected:
 
     virtual void                InitFont() const;
-    virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
+    virtual void                SetFontOrientation( LogicalFontInstance* const pFontEntry ) const;
     virtual long                GetFontExtLeading() const;
 
 
@@ -1371,7 +1371,7 @@ public:
                                                          vcl::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
-    SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,
+    SAL_DLLPRIVATE SalLayout*   getFallbackFont(LogicalFontInstance &rFallbackFont,
                                     FontSelectPattern &rFontSelData, int nFallbackLevel,
                                     ImplLayoutArgs& rLayoutArgs) const;
 
