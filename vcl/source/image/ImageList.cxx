@@ -37,8 +37,6 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-using namespace ::com::sun::star;
-
 ImageList::ImageList( sal_uInt16 nInit, sal_uInt16 nGrow ) :
     mpImplData( nullptr ),
     mnInitSize( nInit ),
@@ -92,7 +90,7 @@ ImageList::ImageList( const ResId& rResId ) :
     }
 }
 
-ImageList::ImageList( const ::std::vector< OUString >& rNameVector,
+ImageList::ImageList( const std::vector< OUString >& rNameVector,
                       const OUString& rPrefix) :
     mpImplData( nullptr ),
     mnInitSize( 1 ),
@@ -391,11 +389,11 @@ OUString ImageList::GetImageName( sal_uInt16 nPos ) const
     return OUString();
 }
 
-void ImageList::GetImageNames( ::std::vector< OUString >& rNames ) const
+void ImageList::GetImageNames( std::vector< OUString >& rNames ) const
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::GetImageNames" );
 
-    rNames = ::std::vector< OUString >();
+    rNames = std::vector< OUString >();
 
     if( mpImplData )
     {
