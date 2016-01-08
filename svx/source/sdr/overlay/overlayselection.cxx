@@ -107,16 +107,7 @@ namespace sdr
                 if(bInvert)
                 {
                     // force color to white for invert to get a full invert
-#ifdef WNT
-                    // tdf#96257: For likely separate reasons, neither the non-OpenGL nor the OpenGL
-                    // code path produces what we actually want here (a line drawn in 'invert' mode
-                    // if white is used, as happens on X11). In the non-OpenGL case we get a black
-                    // line, in the OpenGL case a white one. So let's use grey and at least get the
-                    // same on both.
-                    aRGBColor = basegfx::BColor(0.5, 0.5, 0.5);
-#else
                     aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
-#endif
                 }
 
                 for(sal_uInt32 a(0);a < nCount; a++)

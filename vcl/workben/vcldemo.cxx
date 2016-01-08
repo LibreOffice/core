@@ -1014,7 +1014,9 @@ public:
                 "cmd/lc_marks.png",
                 "cmd/lc_fieldnames.png",
                 "cmd/lc_hyperlinkdialog.png",
-              };
+                "cmd/lc_basicshapes.rectangle.png",
+                "cmd/lc_basicshapes.round-rectangle.png"
+            };
             for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
             {
                 maIconNames.push_back(OUString::createFromAscii(pNames[i]));
