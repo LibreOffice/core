@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-07 18:28:08 using:
+ Generated on 2016-01-08 23:14:46 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,6 +27,7 @@
 #include <config_features.h>
 #include <config_folders.h>
 #include <config_global.h>
+#include <config_graphite.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -35,7 +36,6 @@
 #include <functional>
 #include <iomanip>
 #include <limits.h>
-#include <map>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -56,7 +56,6 @@
 #include <window.h>
 #include <boost/dynamic_bitset.hpp>
 #include <boost/functional/hash.hpp>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
@@ -130,12 +129,14 @@
 #include <salsys.hxx>
 #include <saltimer.hxx>
 #include <salvd.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
@@ -147,10 +148,13 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
+#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
@@ -178,6 +182,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
@@ -194,6 +199,7 @@
 #include <GL/glew.h>
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
+#include <PhysicalFontFamily.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -215,6 +221,10 @@
 #include <brdwin.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
@@ -225,6 +235,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -260,7 +271,8 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <dndlcon.hxx>
-#include <fontentry.hxx>
+#include <fontattributes.hxx>
+#include <fontinstance.hxx>
 #include <helpwin.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>

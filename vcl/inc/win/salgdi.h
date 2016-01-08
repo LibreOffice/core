@@ -23,7 +23,7 @@
 #include "sallayout.hxx"
 #include "salgeom.hxx"
 #include "salgdi.hxx"
-#include "fontentry.hxx"
+#include "fontinstance.hxx"
 #include "fontattributes.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
@@ -79,8 +79,8 @@ public:
                                 BYTE nPitchAndFamily  );
     virtual                 ~ImplWinFontData();
 
-    virtual PhysicalFontFace*   Clone() const override;
-    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const override;
+    virtual PhysicalFontFace* Clone() const override;
+    virtual LogicalFontInstance* CreateFontInstance( FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;

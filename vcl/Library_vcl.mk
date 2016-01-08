@@ -395,7 +395,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/font/PhysicalFontFamily \
     vcl/source/font/fontattributes \
     vcl/source/font/fontselect \
-    vcl/source/font/fontentry \
+    vcl/source/font/fontinstance \
     vcl/source/font/fontcache \
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \

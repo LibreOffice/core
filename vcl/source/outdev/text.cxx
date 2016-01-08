@@ -109,7 +109,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
     long nX = nDistX;
     long nY = nDistY;
 
-    short nOrientation = mpFontEntry->mnOrientation;
+    short nOrientation = mpFontInstance->mnOrientation;
     if ( nOrientation )
     {
         // Rotate rect without rounding problems for 90 degree rotations
@@ -150,7 +150,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
             // inflate because polygons are drawn smaller
             Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             tools::Polygon   aPoly( aRect );
-            aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontEntry->mnOrientation );
+            aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->mnOrientation );
             ImplDrawPolygon( aPoly );
             return;
         }
@@ -177,9 +177,9 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     mpGraphics->SetFillColor( ImplColorToSal( GetTextFillColor() ) );
     mbInitFillColor = true;
 
-    ImplDrawTextRect( nX, nY, 0, -(mpFontEntry->maFontAttributes.GetAscent() + mnEmphasisAscent),
+    ImplDrawTextRect( nX, nY, 0, -(mpFontInstance->maFontAttributes.GetAscent() + mnEmphasisAscent),
                       nWidth,
-                      mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
+                      mpFontInstance->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
 }
 
 Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
@@ -189,21 +189,21 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
     long nY = aPoint.Y();
 
     long nWidth = rSalLayout.GetTextWidth();
-    long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
-    nY -= mpFontEntry->maFontAttributes.GetAscent() + mnEmphasisAscent;
+    nY -= mpFontInstance->maFontAttributes.GetAscent() + mnEmphasisAscent;
 
-    if ( mpFontEntry->mnOrientation )
+    if ( mpFontInstance->mnOrientation )
     {
         long nBaseX = nX, nBaseY = nY;
-        if ( !(mpFontEntry->mnOrientation % 900) )
+        if ( !(mpFontInstance->mnOrientation % 900) )
         {
             long nX2 = nX+nWidth;
             long nY2 = nY+nHeight;
 
             Point aBasePt( nBaseX, nBaseY );
-            aBasePt.RotateAround( nX, nY, mpFontEntry->mnOrientation );
-            aBasePt.RotateAround( nX2, nY2, mpFontEntry->mnOrientation );
+            aBasePt.RotateAround( nX, nY, mpFontInstance->mnOrientation );
+            aBasePt.RotateAround( nX2, nY2, mpFontInstance->mnOrientation );
             nWidth = nX2-nX;
             nHeight = nY2-nY;
         }
@@ -212,7 +212,7 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
             // inflate by +1+1 because polygons are drawn smaller
             Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             tools::Polygon   aPoly( aRect );
-            aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontEntry->mnOrientation );
+            aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->mnOrientation );
             return aPoly.GetBoundRect();
         }
     }
@@ -232,8 +232,8 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     {
         // guess vertical text extents if GetBoundRect failed
         int nRight = rSalLayout.GetTextWidth();
-        int nTop = mpFontEntry->maFontAttributes.GetAscent() + mnEmphasisAscent;
-        long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+        int nTop = mpFontInstance->maFontAttributes.GetAscent() + mnEmphasisAscent;
+        long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
         aBoundRect = Rectangle( 0, -nTop, nRight, nHeight - nTop );
     }
 
@@ -248,7 +248,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     vcl::Font aFont( GetFont() );
     aFont.SetOrientation( 0 );
-    aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
+    aFont.SetSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
     pVDev->SetFont( aFont );
     pVDev->SetTextColor( Color( COL_BLACK ) );
     pVDev->SetTextFillColor();
@@ -261,12 +261,12 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     rSalLayout.DrawText( *static_cast<OutputDevice*>(pVDev)->mpGraphics );
 
     Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
-    if ( !aBmp || !aBmp.Rotate( mpFontEntry->mnOwnOrientation, COL_WHITE ) )
+    if ( !aBmp || !aBmp.Rotate( mpFontInstance->mnOwnOrientation, COL_WHITE ) )
         return false;
 
     // calculate rotation offset
     tools::Polygon aPoly( aBoundRect );
-    aPoly.Rotate( Point(), mpFontEntry->mnOwnOrientation );
+    aPoly.Rotate( Point(), mpFontInstance->mnOwnOrientation );
     Point aPoint = aPoly.GetBoundRect().TopLeft();
     aPoint += Point( nX, nY );
 
@@ -295,7 +295,7 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
                                        bool bTextLines,
                                        sal_uInt32 flags )
 {
-    if( mpFontEntry->mnOwnOrientation )
+    if( mpFontInstance->mnOwnOrientation )
         if( ImplDrawRotateText( rSalLayout ) )
             return true;
 
@@ -415,7 +415,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     {
         if ( maFont.IsShadow() )
         {
-            long nOff = 1 + ((mpFontEntry->mnLineHeight-24)/24);
+            long nOff = 1 + ((mpFontInstance->mnLineHeight-24)/24);
             if ( maFont.IsOutline() )
                 nOff++;
             SetTextLineColor();
@@ -947,7 +947,7 @@ long OutputDevice::GetTextHeight() const
         if( !ImplNewFont() )
             return 0;
 
-    long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
     if ( mbMap )
         nHeight = ImplDevicePixelToLogicHeight( nHeight );
@@ -1315,7 +1315,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     // set layout options
     ImplLayoutArgs aLayoutArgs(rStr, nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache);
 
-    int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
+    int nOrientation = mpFontInstance ? mpFontInstance->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );
 
     aLayoutArgs.SetLayoutWidth( nPixelWidth );
@@ -1355,8 +1355,8 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     // convert from logical units to physical units
     // recode string if needed
-    if( mpFontEntry->mpConversion ) {
-        mpFontEntry->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
+    if( mpFontInstance->mpConversion ) {
+        mpFontInstance->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
         pLayoutCache = nullptr; // don't use cache with modified string!
     }
     DeviceCoordinate nPixelWidth = (DeviceCoordinate)nLogicalWidth;
@@ -1414,7 +1414,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
-    if (aLayoutArgs.NeedFallback() && mpFontEntry->maFontSelData.mnHeight >= 3)
+    if (aLayoutArgs.NeedFallback() && mpFontInstance->maFontSelData.mnHeight >= 3)
         pSalLayout = ImplGlyphFallbackLayout(pSalLayout, aLayoutArgs);
 
     // position, justify, etc. the layout
@@ -2518,7 +2518,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
         pSalLayout->Release();
     }
 
-    if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontEntry )
+    if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontInstance )
         return bRet;
 
     // fall back to bitmap method to get the bounding rectangle,
@@ -2529,7 +2529,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     aFont.SetOutline( false );
     aFont.SetRelief( RELIEF_NONE );
     aFont.SetOrientation( 0 );
-    aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
+    aFont.SetSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
     aVDev->SetFont( aFont );
     aVDev->SetTextAlign( ALIGN_TOP );
 
@@ -2541,7 +2541,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     // make the bitmap big enough
     // TODO: use factors when it would get too big
     long nWidth = pSalLayout->GetTextWidth();
-    long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
     Point aOffset( nWidth/2, 8 );
     Size aOutSize( nWidth + 2*aOffset.X(), nHeight + 2*aOffset.Y() );
     if( !nWidth || !aVDev->SetOutputSizePixel( aOutSize ) )
@@ -2621,7 +2621,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
         Point aTopLeft( nLeft, nTop );
         aTopLeft -= aOffset;
         // adjust to text alignment
-        aTopLeft.Y()+= mnTextOffY - (mpFontEntry->maFontAttributes.GetAscent() + mnEmphasisAscent);
+        aTopLeft.Y()+= mnTextOffY - (mpFontInstance->maFontAttributes.GetAscent() + mnEmphasisAscent);
         // convert to logical coordinates
         aSize = PixelToLogic( aSize );
         aTopLeft.X() = ImplDevicePixelToLogicWidth( aTopLeft.X() );
@@ -2648,7 +2648,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
         ImplNewFont();
     if( mbInitFont )
         InitFont();
-    if( !mpFontEntry )
+    if( !mpFontInstance )
         return false;
 
     bool bRet = false;
@@ -2728,7 +2728,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
-    if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontEntry )
+    if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontInstance )
         return bRet;
 
     // reset work done (tdf#81876)
@@ -2743,7 +2743,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     if (pSalLayout == nullptr)
         return false;
     long nOrgWidth = pSalLayout->GetTextWidth();
-    long nOrgHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent
+    long nOrgHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent
         + mnEmphasisDescent;
     pSalLayout->Release();
 
@@ -2768,7 +2768,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     if (pSalLayout == nullptr)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
-    long nHeight = aVDev->mpFontEntry->mnLineHeight + aVDev->mnEmphasisAscent +
+    long nHeight = aVDev->mpFontInstance->mnLineHeight + aVDev->mnEmphasisAscent +
                    aVDev->mnEmphasisDescent;
     pSalLayout->Release();
 
