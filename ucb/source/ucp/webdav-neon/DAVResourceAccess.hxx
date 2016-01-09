@@ -86,13 +86,11 @@ public:
 
     // DAV methods
 
-
-#if 0 // currently not used, but please don't remove code
     void
-    OPTIONS(  DAVCapabilities & rCapabilities,
-              const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+    OPTIONS( DAVOptions & rOptions,
+             const css::uno::Reference<
+             css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
-#endif
 
     // allprop & named
     void
