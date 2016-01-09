@@ -772,7 +772,7 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
     if( !xOLERef.is() )
     {
         SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
-        OSL_ENSURE( p, "No SvPersist present" );
+        assert(p && "No SvPersist present");
 
         uno::Reference < embed::XEmbeddedObject > xObj = p->GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
         OSL_ENSURE( !xOLERef.is(), "Calling GetOleRef() recursively is not permitted" );
