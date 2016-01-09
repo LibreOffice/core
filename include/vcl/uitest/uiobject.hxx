@@ -37,23 +37,46 @@ public:
     virtual ~UIObject();
 
     /**
-     * returns the state of the wrapped UI object
+     * Returns the state of the wrapped UI object as a
+     * string key value map.
      */
     virtual StringMap get_state();
 
     /**
-     * executes an action on the wrapped UI object,
+     * Executes an action on the wrapped UI object,
      * possibly with some additional parameters
      */
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters);
 
+    /**
+     * Returns the type of the UIObject. Additional information might
+     * be available through UIObject::get_state().
+     *
+     */
     virtual UIObjectType getType() const;
 
+    /**
+     * Returns the child of the current UIObject with the corresponding id.
+     * If no object with that id is being found returns a nullptr.
+     *
+     */
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID);
 
+    /**
+     * Currently an internal method to dump the state of the current UIObject as represented by get_state().
+     *
+     * This method should not be exposed to the outside world.
+     *
+     */
     virtual void dumpState() const;
 
+    /**
+     * Currently an internal method to dump the parent-child relationship starting from the current top focus window.
+     *
+     * This method should not be exposed to the outside world.
+     *
+     */
     virtual void dumpHierarchy() const;
 };
 
