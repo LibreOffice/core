@@ -353,13 +353,13 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
     }
 }
 
-ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )
+ServerFontInstance::ServerFontInstance( FontSelectPattern& rFSD )
 :   LogicalFontInstance( rFSD )
 ,   mpServerFont( nullptr )
 ,   mbGotFontOptions( false )
 {}
 
-void ImplServerFontEntry::SetServerFont(ServerFont* p)
+void ServerFontInstance::SetServerFont(ServerFont* p)
 {
     if (p == mpServerFont)
         return;
@@ -370,7 +370,7 @@ void ImplServerFontEntry::SetServerFont(ServerFont* p)
         mpServerFont->AddRef();
 }
 
-ImplServerFontEntry::~ImplServerFontEntry()
+ServerFontInstance::~ServerFontInstance()
 {
     // TODO: remove the ServerFont here instead of in the GlyphCache
     if (mpServerFont)

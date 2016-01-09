@@ -185,7 +185,7 @@ public:
 private:
     friend class GlyphCache;
     friend class ServerFontLayout;
-    friend class ImplServerFontEntry;
+    friend class ServerFontInstance;
     friend class X11SalGraphics;
     friend class CairoTextRender;
 
@@ -243,11 +243,11 @@ private:
 };
 
 // a class for cache entries for physical font instances that are based on serverfonts
-class VCL_DLLPUBLIC ImplServerFontEntry : public LogicalFontInstance
+class VCL_DLLPUBLIC ServerFontInstance : public LogicalFontInstance
 {
 public:
-                            ImplServerFontEntry( FontSelectPattern& );
-    virtual                 ~ImplServerFontEntry();
+                            ServerFontInstance( FontSelectPattern& );
+    virtual                 ~ServerFontInstance();
 
     void                    SetServerFont(ServerFont* p);
     void                    HandleFontOptions();

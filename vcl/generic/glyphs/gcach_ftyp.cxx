@@ -434,7 +434,7 @@ ImplFTSFontData::ImplFTSFontData( FreetypeFontInfo* pFI, const ImplFontAttribute
 
 LogicalFontInstance* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
-    ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
+    ServerFontInstance* pEntry = new ServerFontInstance( rFSD );
     return pEntry;
 }
 
@@ -464,7 +464,7 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI )
 {
     // TODO: move update of mpFontInstance into FontEntry class when
     // it becomes responsible for the ServerFont instantiation
-    static_cast<ImplServerFontEntry*>(rFSD.mpFontInstance)->SetServerFont( this );
+    static_cast<ServerFontInstance*>(rFSD.mpFontInstance)->SetServerFont( this );
 
     maFaceFT = pFI->GetFaceFT();
 
