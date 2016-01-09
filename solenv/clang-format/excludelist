@@ -14002,6 +14002,7 @@ ucb/source/ucp/webdav-curl/DAVResourceAccess.cxx
 ucb/source/ucp/webdav-curl/DAVResourceAccess.hxx
 ucb/source/ucp/webdav-curl/DAVSession.hxx
 ucb/source/ucp/webdav-curl/DAVSessionFactory.cxx
+ucb/source/ucp/webdav-curl/DAVTypes.cxx
 ucb/source/ucp/webdav-curl/DAVTypes.hxx
 ucb/source/ucp/webdav-curl/DateTimeHelper.cxx
 ucb/source/ucp/webdav-curl/DateTimeHelper.hxx
