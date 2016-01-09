@@ -7,20 +7,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_ui_test_XUIObject_idl__
-#define __com_sun_star_ui_test_XUIObject_idl__
+#ifndef __com_sun_star_ui_UIElementFactory_idl__
+#define __com_sun_star_ui_UIElementFactory_idl__
+
+#include <com/sun/star/ui/test/XUITest.idl>
+
 
 module com { module sun { module star { module ui { module test {
 
-interface XUIObject
-{
-    XUIObject getChild([in] string id);
 
-    void executeAction([in] string action);
+service UITest
+{
+    interface com::sun::star::ui::test::XUITest;
 };
 
 }; }; }; }; };
 
 #endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
