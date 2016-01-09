@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-neon/DAVProperties \
 	ucb/source/ucp/webdav-neon/DAVResourceAccess \
 	ucb/source/ucp/webdav-neon/DAVSessionFactory \
+	ucb/source/ucp/webdav-neon/DAVTypes \
 	ucb/source/ucp/webdav-neon/LinkSequence \
 	ucb/source/ucp/webdav-neon/LockEntrySequence \
 	ucb/source/ucp/webdav-neon/LockSequence \
