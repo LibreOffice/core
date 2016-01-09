@@ -1077,7 +1077,7 @@ bool   SwDocStyleSheet::SetParent( const OUString& rStr)
             break;
 
         case SFX_STYLE_FAMILY_PARA :
-            OSL_ENSURE( pColl, "Collektion missing!");
+            OSL_ENSURE( pColl, "Collection missing!");
             if( nullptr != ( pFormat = pColl ) && !rStr.isEmpty() )
                 pParent = lcl_FindParaFormat( rDoc, rStr );
             break;

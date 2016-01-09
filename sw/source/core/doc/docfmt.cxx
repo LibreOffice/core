@@ -1991,7 +1991,7 @@ namespace docfunc
 {
     bool HasOutlineStyleToBeWrittenAsNormalListStyle( SwDoc& rDoc )
     {
-        // If a parent paragraph style of one of the parargraph styles, which
+        // If a parent paragraph style of one of the paragraph styles, which
         // are assigned to the list levels of the outline style, has a list style
         // set or inherits a list style from its parent style, the outline style
         // has to be written as a normal list style to the OpenDocument file

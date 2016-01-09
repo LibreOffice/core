@@ -37,7 +37,7 @@ const int TAG_CLOSING = 1 << 30;
 
  A part of an XML file can be parsed and stored in this stream, from which it can be read
  as if parsed linearly. The purpose of this class is to allow simpler handling of XML
- files, unlike the usual LO way of using callbacks, context handlers and similar needlesly
+ files, unlike the usual LO way of using callbacks, context handlers and similar needlessly
  complicated stuff (YMMV).
 
  The advantages of this approach is easy to read and debug code (as it is just functions

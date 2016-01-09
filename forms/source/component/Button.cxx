@@ -182,7 +182,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         case 0x0003:
         {
             OStreamSection aSection( _rxInStream.get() );
-            // this will skip any unknown bytes in it's dtor
+            // this will skip any unknown bytes in its dtor
 
             // button type
             m_eButtonType = (FormButtonType)_rxInStream->readShort();

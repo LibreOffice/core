@@ -429,7 +429,7 @@ public:
         throw(css::uno::RuntimeException);
 
     /**
-       Send a disposing notification to the listeners in the conatiners aBoundLC
+       Send a disposing notification to the listeners in the containers aBoundLC
        and aVetoableLC.
 
        @see OComponentHelper

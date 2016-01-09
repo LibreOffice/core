@@ -35,7 +35,7 @@
 <!ENTITY % layerName "CDATA">
 <!ENTITY % table-background "table:table-background (true | false) #IMPLIED">
 
-<!-- commont presentation shape attributes -->
+<!-- common presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
 <!ENTITY % presentation-classes "(title|outline|subtitle|text|graphic|object|chart|table|orgchart|page|notes)" >
 <!-- ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED" -->

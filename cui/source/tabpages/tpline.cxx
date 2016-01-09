@@ -636,7 +636,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         {
             if( m_nPageType == 2 ) // 1
             {
-                m_pLbLineStyle->SelectEntryPos( *m_pPosDashLb + 2 ); // +2 due to SOLID and INVLISIBLE
+                m_pLbLineStyle->SelectEntryPos( *m_pPosDashLb + 2 ); // +2 due to SOLID and INVISIBLE
                 ChangePreviewHdl_Impl( nullptr );
             }
             if( m_nPageType == 3 )

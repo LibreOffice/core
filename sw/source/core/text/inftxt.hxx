@@ -689,7 +689,7 @@ public:
  * For the text replacement and restoration of SwTextSizeInfo.
  * The way this is done is a bit of a hack: Although rInf is const we change it
  * anyway.
- * Because rInf is restorated again in the DTOR, we can do this.
+ * Because rInf is restored again in the DTOR, we can do this.
  * You could call it a "logical const", if you wish.
  */
 class SwTextSlot

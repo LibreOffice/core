@@ -1653,7 +1653,7 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj
 
     pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
 
-    // No Undo componding needed.
+    // No Undo compounding needed.
     EditPaM aPaM( pImpEditEngine->InsertParagraph( nPara ) );
     // When InsertParagraph from the outside, no hard attributes
     // should be taken over!

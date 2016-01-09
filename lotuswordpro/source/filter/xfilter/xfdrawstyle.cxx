@@ -295,7 +295,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         aStr.clear();
         switch (m_pFontWorkStyle->GetAdjustType())
         {
-        default: // fall througth
+        default: // fall through
         case enumXFFWAdjustAutosize:
             aStr = "autosize";
             break;

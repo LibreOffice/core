@@ -1898,7 +1898,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL SvxShape::getPropertyValues( const 
     const OUString* pNames = aPropertyNames.getConstArray();
 
     uno::Sequence< uno::Any > aRet( nCount );
-    uno::Any* pValue = aRet.getArray();;
+    uno::Any* pValue = aRet.getArray();
 
     if( mpImpl->mpMaster )
     {

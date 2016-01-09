@@ -339,7 +339,7 @@ public class DocumentView extends    JFrame
         maInterceptor = null;
 
         // close the frame and his document
-        // Relaesing of our listener connections for disposing()
+        // Releasing of our listener connections for disposing()
         // will be forced automatically then. Because the frame
         // will call us back ...
         if (mxFrame!=null)

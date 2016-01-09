@@ -112,7 +112,7 @@ IXFStyleRet XFStyleContainer::AddStyle(IXFStyle *pStyle)
         delete pStyle;
         aRet.m_pStyle = pConStyle;
         aRet.m_bOrigDeleted = true;
-        return aRet;;
+        return aRet;
     }
     else
     {

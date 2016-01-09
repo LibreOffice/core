@@ -216,7 +216,7 @@ protected:
     // helper
     virtual void SAL_CALL disposing() override;
 
-    /** create a object from it's persistent data within the configuration. To be overwritten by derived classes.
+    /** create a object from its persistent data within the configuration. To be overwritten by derived classes.
         @param      _rName          the name the object has within the container
         @return                     the newly created object or an empty reference if something went wrong
     */

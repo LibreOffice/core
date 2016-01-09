@@ -148,7 +148,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
                 *aIt = static_cast< sal_uInt16 >( rPassword[nInd] );
 
             uno::Sequence< sal_Int8 > aDocId = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
-            OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the senquence!" );
+            OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the sequence!" );
 
             ::msfilter::MSCodec_Std97 aCodec97;
             aCodec97.InitKey( &aPassVect.front(), reinterpret_cast<sal_uInt8 const *>(aDocId.getConstArray()) );

@@ -92,7 +92,7 @@ public class _XActiveDataControl extends MultiMethodTest {
 
     /**
      * XStreamListener implementation. Sets variables
-     * (<cod>estartedCalled</code>, <code>terminatedCalled</code>, etc.) to
+     * (<cod>startedCalled</code>, <code>terminatedCalled</code>, etc.) to
      * <tt>true</tt> if the appropriate method was called (for example, if
      * <code>started()</code> was called, the <code>startedCalled</code>
      * field is set).

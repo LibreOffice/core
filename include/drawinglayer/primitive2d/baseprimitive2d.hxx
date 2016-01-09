@@ -104,7 +104,7 @@ namespace drawinglayer
             default implementation returns an empty sequence. The idea is that processors
             using this primitive and do not know it, may get the decomposition and process
             these instead. An example is e.g. a fat line, who's decomposition may contain
-            the geometric representation of that line using filled polygon prmimitives. When
+            the geometric representation of that line using filled polygon primitives. When
             the renderer knows how to handle fat lines, he may process this primitive directly;
             if not he can use the decomposition. With this functionality, renderers may operate by
             knowing only a small set of primitives.

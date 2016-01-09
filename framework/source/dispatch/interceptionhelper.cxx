@@ -120,8 +120,8 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     SolarMutexClearableGuard aWriteLock;
 
     // a) no interceptor at all - set this instance as master for given interceptor
-    //    and set our slave as it's slave - and put this interceptor to the list.
-    //    It's place there doesn matter. Because this list is currently empty.
+    //    and set our slave as its slave - and put this interceptor to the list.
+    //    Its place there doesn't matter. Because this list is currently empty.
     if (m_lInterceptionRegs.empty())
     {
         xInterceptor->setMasterDispatchProvider(xThis   );
@@ -186,7 +186,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
 
     // search this interceptor ...
     // If it could be located inside cache -
-    // use it's slave/master relations to update the interception list;
+    // use its slave/master relations to update the interception list;
     // set empty references for it as new master and slave;
     // and relase it from out cache.
     InterceptorList::iterator pIt = m_lInterceptionRegs.findByReference(xInterceptor);

@@ -715,7 +715,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     // The calculation of nDataSize is considering the size of the whole data.
     nDataSize = 0;
 
-    // condionally skip BaseAddr
+    // conditionally skip BaseAddr
     if ( bBaseAddr )
     {
         pPict->SeekRel( 4 );

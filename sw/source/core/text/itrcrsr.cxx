@@ -655,7 +655,7 @@ void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                         {
                              pLastBidiPor = static_cast<SwBidiPortion*>(pPor);
                              nLastBidiPorWidth = pLastBidiPor->Width() +
-                                                 pLastBidiPor->CalcSpacing( nSpaceAdd, aInf );;
+                                                 pLastBidiPor->CalcSpacing( nSpaceAdd, aInf );
                         }
                     }
 

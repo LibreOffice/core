@@ -291,7 +291,7 @@ namespace drawinglayer
             // PolyPolygons where each one describes a 'ring' for the gradient such
             // that the rings will not overlap. This is useful for the old XOR-paint
             // 'trick' of VCL which is recorded in Metafiles; so this version may be
-            // used from the MetafilePrimitive2D in it's decomposition.
+            // used from the MetafilePrimitive2D in its decomposition.
 
             if(!getFillGradient().isDefault())
             {

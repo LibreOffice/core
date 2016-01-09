@@ -758,7 +758,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 
         // when for instance a search dialog is open, don't put the cursor behind the dialog
         // if possible, put the row with the cursor above or below the dialog
-        //! not if already complelely visible
+        //! not if already completely visible
 
         if ( eMode == SC_FOLLOW_JUMP )
         {

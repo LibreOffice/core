@@ -68,7 +68,7 @@ namespace svt
         @param _bAutoStoreState
             Set this to <TRUE/> if you want the instance to automatically store the state of the template folders upon
             destruction.<br/>
-            If set to <FALSE/>, you would epplicitly need to call <method>storeState</method> to do this.<br/>
+            If set to <FALSE/>, you would explicitly need to call <method>storeState</method> to do this.<br/>
             If the current state is not known (e.g. because you did not call needsUpdate, which retrieves it),
             it is not retrieved in the dtor, regardless of the <arg>_bAutoStoreState</arg> flag.
         */

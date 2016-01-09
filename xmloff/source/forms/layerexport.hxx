@@ -267,7 +267,7 @@ namespace xmloff
 
         /** ensures that the number format of the given control exist in our own formats supplier.
 
-            <p>The given control is examined for it's format (i.e. it's FormatKey/FormatsSupplier properties),
+            <p>The given control is examined for its format (i.e. it's FormatKey/FormatsSupplier properties),
             and the format is added (if necessary) to m_xControlNumberFormats</p>.
 
             @return

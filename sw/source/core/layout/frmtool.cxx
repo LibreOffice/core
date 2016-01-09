@@ -1231,7 +1231,7 @@ void _InsertCnt( SwLayoutFrame *pLay, SwDoc *pDoc,
 
     //In the generation of the Layout bPages=true will be handed over.
     //Then will be new pages generated all x paragraphs already times in advance.
-    //On breaks and/or pagedescriptorchanges the correspondig will be generated
+    //On breaks and/or pagedescriptorchanges the corresponding will be generated
     //immediately.
     //The advantage is, that on one hand already a nearly realistic number of
     //pages are created, but above all there are no almost endless long chain

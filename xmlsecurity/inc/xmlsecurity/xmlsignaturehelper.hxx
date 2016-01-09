@@ -134,7 +134,7 @@ public:
                 // Get the security environment
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > GetSecurityEnvironment();
 
-                // After signing/veryfieng, get information about signatures
+                // After signing/verifying, get information about signatures
     SignatureInformation  GetSignatureInformation( sal_Int32 nSecurityId ) const;
     SignatureInformations GetSignatureInformations() const;
 

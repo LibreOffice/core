@@ -876,7 +876,7 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
  *
  *   INPUTS
  *  nSecurityId -   the security Id of the new ElementCollector
- *  nPriority -     the prirority of the new ElementCollector
+ *  nPriority -     the priority of the new ElementCollector
  *  bModifyElement -whether this BufferNode will modify the content of
  *                  the corresponding element it works on
  *  xReferenceResolvedListener - the listener for the new ElementCollector.

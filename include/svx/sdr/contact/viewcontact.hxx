@@ -99,7 +99,7 @@ public:
     bool HasViewObjectContacts(bool bExcludePreviews = false) const;
 
     // Check if this primitive is animated in any OC (View) which means it has
-    // generated a PrimitiveAnimation in it's VOC
+    // generated a PrimitiveAnimation in its VOC
     bool isAnimatedInAnyViewObjectContact() const;
 
     // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L

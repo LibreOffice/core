@@ -498,7 +498,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         return;
 
     case RES_COL:
-        // Is handeled by the Layout, if appropriate
+        // Is handled by the Layout, if appropriate
         break;
 
     case RES_FTN_AT_TXTEND:

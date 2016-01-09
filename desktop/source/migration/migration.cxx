@@ -337,7 +337,7 @@ bool MigrationImpl::checkMigrationCompleted()
         aPropertySet->getPropertyValue("MigrationCompleted") >>= bMigrationCompleted;
 
         if( !bMigrationCompleted && getenv("SAL_DISABLE_USERMIGRATION" ) ) {
-            // migration prevented - fake it's success
+            // migration prevented - fake its success
             setMigrationCompleted();
             bMigrationCompleted = true;
         }

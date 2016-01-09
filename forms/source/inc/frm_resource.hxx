@@ -38,7 +38,7 @@ namespace frm
         ResourceManager() { }
         ~ResourceManager() { }
 
-        // we'll instantiate one static member of the following class, which, in it's dtor,
+        // we'll instantiate one static member of the following class, which, in its dtor,
         // ensures that m_pImpl will be deleted
         class EnsureDelete
         {

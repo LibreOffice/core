@@ -900,7 +900,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const OUString& rCode )
     {
         if (areChecksEnabled())
         {
-            OUString aMsg( "LocaleDataWrapper::scanDateFormat: no magic applycable" );
+            OUString aMsg( "LocaleDataWrapper::scanDateFormat: no magic applicable" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         return DMY;

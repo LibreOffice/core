@@ -52,7 +52,7 @@ namespace pcr
     //= helper
 
     // small helper to make the "swap" call on an STL container a single-line call, which
-    // in it's canonic form "aFoo.swap( Container() )" doesn't compile with GCC
+    // in its canonic form "aFoo.swap( Container() )" doesn't compile with GCC
     template< class CONTAINER >
     void clearContainer( CONTAINER& _rContainer )
     {

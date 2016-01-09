@@ -382,7 +382,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /** checks if a given table exists.
 
         <p>The check is made using a SELECT statement, so even if the connection
-        is a n SDB-level connection, which may filter tables in it's table
+        is a n SDB-level connection, which may filter tables in its table
         supplier, the result may be reliable ....</p>
     */
     protected boolean existsInvisibleTable( XConnection xConn, String sTableName ) throws java.lang.Exception

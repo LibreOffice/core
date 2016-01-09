@@ -77,7 +77,7 @@ namespace comphelper
         */
         css::beans::PropertyState  getPropertyStateByHandle( sal_Int32 _nHandle );
 
-        /** set the property denoted by the given handle to it's default value
+        /** set the property denoted by the given handle to its default value
 
             <p>Already implemented by this base class, no need to override</p>
             @precond <arg>_nHandle</arg> is a valid property handle

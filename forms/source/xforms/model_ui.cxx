@@ -829,7 +829,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
     xTextInputStream->setInputStream( aSerialization.getInputStream() );
 
     /* WORK AROUND for problem in serialization: currently, multiple
-      XML delarations (<?xml...?>) are being written out and we don't
+      XML declarations (<?xml...?>) are being written out and we don't
       want them. When this is fixed, the code below is nice and
       simple. The current code filters out the declarations.
     OUString sResult = xTextInputStream->readString( Sequence<sal_Unicode>(),

@@ -314,7 +314,7 @@ SvXMLImportContext* XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPr
 {
     // no need for a custom context or indeed a SvXMLTokenMap to grab just the
     // single attribute ( href ) that we are interested in.
-    // still though, we will check namesspaces etc.
+    // still though, we will check namespaces etc.
     if ( ( XML_NAMESPACE_STYLE == nPrefix) &&
         IsXMLToken(rLocalName, XML_HYPERLINK ) )
     {

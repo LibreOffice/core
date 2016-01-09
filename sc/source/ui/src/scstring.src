@@ -848,7 +848,7 @@ String STR_DEL_AUTOFORMAT_TITLE
 
 String STR_DEL_AUTOFORMAT_MSG
 {
-    Text [ en-US ] = "Do you really want to delete the # AutoFomat?" ;
+    Text [ en-US ] = "Do you really want to delete the # AutoFormat?" ;
 };
 
 String STR_BTN_AUTOFORMAT_CLOSE

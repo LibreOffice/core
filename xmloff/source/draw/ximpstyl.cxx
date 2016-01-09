@@ -448,7 +448,7 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID),
     mnTypeId( 20 ) // AUTOLAYOUT_NONE
 {
-    // set family to somethiong special at SvXMLStyleContext
+    // set family to something special at SvXMLStyleContext
     // for differences in search-methods
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1269,7 +1269,7 @@ static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pProp
                     bool bNewStyleTextAutoGrowHeight(false);
                     property->maValue >>= bNewStyleTextAutoGrowHeight;
                     if (bNewStyleTextAutoGrowHeight == bOldStyleTextAutoGrowHeight)
-                        bCanSkipReset = true;;
+                        bCanSkipReset = true;
                     break;
                 }
             }

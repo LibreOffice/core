@@ -702,7 +702,7 @@ DECLARE_OOXMLEXPORT_TEST(testCellGridSpan, "cell-grid-span.docx")
 {
     // The problem was during export gridSpan value for 1st & 2nd cells for test document
     // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
-    // Varifying gridSpan element is not present in RoundTriped Document (As it's Default value is 1).
+    // Varifying gridSpan element is not present in RoundTripped Document (As it's Default value is 1).
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
@@ -759,7 +759,7 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
 #if !defined(MACOSX)
     /* The problem was image cropping information was not getting saved
      * after roundtrip.
-     * Check for presenece of cropping parameters in exported file.
+     * Check for presence of cropping parameters in exported file.
      */
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);

@@ -1343,7 +1343,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
 
         // Force (well, request) a synchronous update of the configuration.
         // In a better world we would handle the asynchronous view update
-        // instead.  But that would involve major restucturing of the
+        // instead.  But that would involve major restructuring of the
         // Outliner code.
         framework::FrameworkHelper::Instance(rBase)->RequestSynchronousUpdate();
         SetViewShell(rBase.GetMainViewShell());

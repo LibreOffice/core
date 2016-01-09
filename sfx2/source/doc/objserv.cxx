@@ -563,7 +563,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         rReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
                 }
 
-                // TODO/LATER: do the following GUI related actions in standalown method
+                // TODO/LATER: do the following GUI related actions in standalone method
 
                 // Introduce a status indicator for GUI operation
                 const SfxUnoAnyItem* pStatusIndicatorItem = rReq.GetArg<SfxUnoAnyItem>(SID_PROGRESS_STATUSBAR_CONTROL);

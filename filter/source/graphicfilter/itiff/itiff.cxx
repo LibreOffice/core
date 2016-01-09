@@ -345,7 +345,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             SAL_INFO("filter.tiff","Compression: " << nCompression);
             break;
 
-        case 0x0106:   // Photometric Interpreation
+        case 0x0106:   // Photometric Interpretation
             nPhotometricInterpretation = ReadIntData();
             SAL_INFO("filter.tiff","PhotometricInterpretation: " << nPhotometricInterpretation);
             break;

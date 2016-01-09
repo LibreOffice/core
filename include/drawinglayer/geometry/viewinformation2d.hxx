@@ -78,7 +78,7 @@ namespace drawinglayer
                 everything is visible. The data is in World coordinates.
 
                 @param rxDrawPage
-                The currently displaqyed page. This information is needed e.g. due to existing PageNumber
+                The currently displayed page. This information is needed e.g. due to existing PageNumber
                 fields which need to be interpreted.
 
                 @param fViewTime

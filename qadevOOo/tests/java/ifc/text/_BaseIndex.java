@@ -89,7 +89,7 @@ public class _BaseIndex extends MultiPropertyTest {
      *
      * Comparing of set and got <code>PropertyValue</code> arrays
      * is difficult because values can be changed after setting
-     * by service miplementation. <p>
+     * by service implementation. <p>
      *
      * Has <b>OK</b> status if the collection again gotten, has a
      * new first element (i.e. lengths of the old array and the array

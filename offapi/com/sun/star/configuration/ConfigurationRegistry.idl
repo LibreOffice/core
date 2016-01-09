@@ -50,7 +50,7 @@ module com { module sun { module star { module configuration {
     </p><p>
     Thus anybody using this service is strongly advised to read and understand the specification
     of an configuration provider (com.sun.star.configuration::ConfigurationProvider)
-    and all of it's aspects.
+    and all of its aspects.
     </p>
 
     @author Frank Schoenheit

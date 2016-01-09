@@ -162,7 +162,7 @@ throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
-        m_pStatusBar->SetItemText( m_nId, rText );;
+        m_pStatusBar->SetItemText( m_nId, rText );
 }
 
 OUString SAL_CALL StatusbarItem::getHelpText()
@@ -180,7 +180,7 @@ throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
-        m_pStatusBar->SetHelpText( m_nId, rHelpText );;
+        m_pStatusBar->SetHelpText( m_nId, rHelpText );
 }
 
 OUString SAL_CALL StatusbarItem::getQuickHelpText()

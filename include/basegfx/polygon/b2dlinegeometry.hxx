@@ -115,7 +115,7 @@ namespace basegfx
 
             @param fMaxPartOfEdge
             Allows to influence from with relative length of a control vector
-            compared to it's edge a split is forced. The smaller, the more
+            compared to its edge a split is forced. The smaller, the more
             subdivisions will be needed to create the filled geometry. Allowed
             range is cropped to [1.0 .. 0.01]
 

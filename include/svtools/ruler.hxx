@@ -432,7 +432,7 @@ Tips for the use of the ruler:
   is pressed during the drag. Maybe, this setting should be configurable
   always and possibly the measuring arrows always be shown while
   dragging. For all settings, the values should always be rounded to the
-  multiple of one value because the screen resolution is very unprecise.
+  multiple of one value because the screen resolution is very imprecise.
 
 - DoubleClicks should be handled in the following way (GetClickType()):
     - RULER_TYPE_DONTKNOW
@@ -567,7 +567,7 @@ struct RulerSelection
 
 struct RulerUnitData
 {
-    MapUnit         eMapUnit;           // MAP_UNIT for calculaion
+    MapUnit         eMapUnit;           // MAP_UNIT for calculation
     long            nTickUnit;          // Unit divider
     double          nTick1;             // Minimal step
     double          nTick2;             // Tick quarter unit

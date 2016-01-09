@@ -1355,7 +1355,7 @@ bool BasicManager::LoadLib( sal_uInt16 nLib )
         {
             OUString aLibName = rLibInfo.GetLibName();
             xLibContainer->loadLibrary( aLibName );
-            bDone = xLibContainer->isLibraryLoaded( aLibName );;
+            bDone = xLibContainer->isLibraryLoaded( aLibName );
         }
         else
         {
