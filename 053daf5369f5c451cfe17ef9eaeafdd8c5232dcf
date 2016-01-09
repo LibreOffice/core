@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_82b944ec",
+        "filename": "vcl/source/window/toolbox2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-09T12:19:19Z",
+      "side": 1,
+      "message": "And surely this should be a VclPtr\u003c\u003e to the ImplBorderWindow (assuming we can have one ?).",
+      "revId": "053daf5369f5c451cfe17ef9eaeafdd8c5232dcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a2b448f2",
+        "filename": "vcl/source/window/toolbox2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-09T12:19:19Z",
+      "side": 1,
+      "message": "Surely this should be pBorderWin ?",
+      "revId": "053daf5369f5c451cfe17ef9eaeafdd8c5232dcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
