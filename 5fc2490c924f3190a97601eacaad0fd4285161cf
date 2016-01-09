@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_82eca4c8",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2173,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-09T19:59:41Z",
+      "side": 1,
+      "message": "I think the solution must be here. SID_VIEWSHELL0 is calling when closed print preview isn\u0027t it?",
+      "range": {
+        "startLine": 2173,
+        "startChar": 13,
+        "endLine": 2173,
+        "endChar": 28
+      },
+      "revId": "5fc2490c924f3190a97601eacaad0fd4285161cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e2d130fd",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2175,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-09T19:59:41Z",
+      "side": 1,
+      "message": "This method was written here http://opengrok.libreoffice.org/xref/core/svx/source/sidebar/paragraph/ParaPropertyPanel.cxx#203 \n\nIs there any convenient way for calling this initial method from here? Is it true way for solution?",
+      "range": {
+        "startLine": 2175,
+        "startChar": 19,
+        "endLine": 2175,
+        "endChar": 47
+      },
+      "revId": "5fc2490c924f3190a97601eacaad0fd4285161cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
