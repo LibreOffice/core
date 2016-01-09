@@ -19,6 +19,7 @@ enum class UIObjectType
     WINDOW,
     DIALOG,
     BUTTON,
+    EDIT,
     UNKNOWN
 };
 
