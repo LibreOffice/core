@@ -10,7 +10,10 @@
 #include "uitest/uiobject_impl.hxx"
 #include "uitest/factory.hxx"
 
+#include <vcl/event.hxx>
+
 #include <iostream>
+#include <vector>
 
 #define DUMP_UITEST(x) SAL_INFO("vcl.uitest", x)
 
@@ -241,6 +244,22 @@ EditUIObject::EditUIObject(VclPtr<Edit> xEdit):
 {
 }
 
+namespace {
+
+std::vector<KeyEvent> generate_key_events_from_text(const OUString& rStr)
+{
+    std::vector<KeyEvent> aEvents;
+    vcl::KeyCode aCode;
+    for (sal_Int32 i = 0, n = rStr.getLength();
+            i != n; ++i)
+    {
+        aEvents.push_back(KeyEvent(rStr[i], aCode));
+    }
+    return aEvents;
+}
+
+}
+
 void EditUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
@@ -249,7 +268,13 @@ void EditUIObject::execute(const OUString& rAction,
         if (rParameters.find("TEXT") != rParameters.end())
         {
             assert(rParameters.size() == 1); // only the text
-            mxEdit->SetText(rParameters.find("TEXT")->second);
+            const OUString& rText = rParameters.find("TEXT")->second;
+            auto aKeyEvents = generate_key_events_from_text(rText);
+            for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
+                    itr != itrEnd; ++itr)
+            {
+                mxEdit->KeyInput(*itr);
+            }
         }
         else if (rParameters.find("SELECTION") != rParameters.end())
         {
