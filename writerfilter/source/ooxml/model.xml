@@ -9299,7 +9299,7 @@
           <value>thinThick</value>
           <!-- Thick Line Outside Thin Line -->
           <value>thickThin</value>
-          <!-- Thck Line Between Thin Lines -->
+          <!-- Thick Line Between Thin Lines -->
           <value>thickBetweenThin</value>
         </choice>
       </define>

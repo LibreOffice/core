@@ -288,7 +288,7 @@ void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* /* pExcPtrs */)
         case EXCEPTION_FLT_UNDERFLOW:            pSEHName = "SEH Exception: FLOAT UNDERFLOW"; break;
         case EXCEPTION_INT_DIVIDE_BY_ZERO:       pSEHName = "SEH Exception: INTEGER DIVIDE_BY_ZERO"; break;
         case EXCEPTION_INT_OVERFLOW:             pSEHName = "SEH Exception: INTEGER OVERFLOW"; break;
-        case EXCEPTION_PRIV_INSTRUCTION:         pSEHName = "SEH Exception: PRIVILEDGED INSTRUCTION"; break;
+        case EXCEPTION_PRIV_INSTRUCTION:         pSEHName = "SEH Exception: PRIVILEGED INSTRUCTION"; break;
         case EXCEPTION_IN_PAGE_ERROR:            pSEHName = "SEH Exception: IN_PAGE_ERROR"; break;
         case EXCEPTION_ILLEGAL_INSTRUCTION:      pSEHName = "SEH Exception: ILLEGAL INSTRUCTION"; break;
         case EXCEPTION_NONCONTINUABLE_EXCEPTION: pSEHName = "SEH Exception: NONCONTINUABLE EXCEPTION"; break;

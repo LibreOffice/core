@@ -650,7 +650,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                     translit->loadModuleByImplName(transliteration, aLocale);
                     result += translit->transliterateString2String(tmp, 0, tmp.getLength());
                } catch (Exception& ) {
-                    // When translteration property is missing, return default number (bug #101141#)
+                    // When transliteration property is missing, return default number (bug #101141#)
                     result += OUString::number( number );
                     // OSL_ASSERT(0);
                     // throw IllegalArgumentException();

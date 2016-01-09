@@ -52,7 +52,7 @@ namespace sd { namespace framework {
     instance. For resources, like panes, that are unique with respect to an
     application frame, that does not mean much of a difference. For other
     resources like views, that may have more than one instance per
-    application frame, this is different. To identify them unambigously a
+    application frame, this is different. To identify them unambiguously a
     second URL, one of a unique resource, is necessary. This second URL is
     called the anchor of the first. The two types of resources are called
     unique and linked respectively.

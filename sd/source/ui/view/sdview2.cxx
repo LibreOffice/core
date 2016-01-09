@@ -933,7 +933,7 @@ void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )
 
 SdrModel* View::GetMarkedObjModel() const
 {
-    return FmFormView::GetMarkedObjModel();;
+    return FmFormView::GetMarkedObjModel();
 }
 
 bool View::Paste(

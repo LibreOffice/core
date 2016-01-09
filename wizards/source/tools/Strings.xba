@@ -214,7 +214,7 @@ Dim a as Integer
 End Sub
 
 
-&apos; Searches for a String in a two-dimensional Array by querying all Searchindexex of the second dimension 
+&apos; Searches for a String in a two-dimensional Array by querying all Searchindexes of the second dimension
 &apos; and delivers the specific String of the ReturnIndex in the second dimension of the Searchlist()
 Function StringInMultiArray(SearchList(), SearchString as String, SearchIndex as Integer, ReturnIndex as Integer, Optional MaxIndex as Integer) as String
 Dim i as integer

@@ -32,7 +32,7 @@ class SfxItemPool;
     It works on the SfxItemPool from the given model and the global
     draw object item pool.
     The class can work in a read only mode without a model. Derivated
-    classes can set a model on demand by overiding getModelPool().
+    classes can set a model on demand by overriding getModelPool().
 */
 class SVX_DLLPUBLIC SvxUnoDrawPool :    public ::cppu::OWeakAggObject,
                         public css::lang::XServiceInfo,

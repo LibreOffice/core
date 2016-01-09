@@ -357,7 +357,7 @@ namespace drawinglayer
                     // range by half line width will not work, so use decomposition. Interestingly,
                     // the grow method below works perfectly for LineCap_ROUND since the grow is in
                     // all directions and the rounded cap needs the same grow in all directions independent
-                    // from it's orientation. Unfortunately this is not the case for drawing::LineCap_SQUARE
+                    // from its orientation. Unfortunately this is not the case for drawing::LineCap_SQUARE
                     bUseDecomposition = true;
                 }
 

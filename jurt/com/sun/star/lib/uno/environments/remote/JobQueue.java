@@ -360,7 +360,7 @@ public class JobQueue {
     }
 
     /**
-     * If the given disposeId is registered, interrups the worker thread.
+     * If the given disposeId is registered, interrupts the worker thread.
      *
      * @param disposeId    the dispose id.
      */

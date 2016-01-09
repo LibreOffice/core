@@ -379,7 +379,7 @@ public:
 #endif
 
     /**
-       Returns string repesentation of sprm.
+       Returns string representation of sprm.
      */
 #ifdef DEBUG_WRITERFILTER
     virtual std::string toString() const = 0;

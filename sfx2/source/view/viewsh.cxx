@@ -1355,7 +1355,7 @@ SdrView* SfxViewShell::GetDrawView() const
 
 /*  [Description]
 
-    This virtual Method has to be overloded by the sub classes, to be able
+    This virtual Method has to be overloaded by the sub classes, to be able
     make the Property-Editor available.
 
     The default implementation does always return zero.

@@ -2127,7 +2127,7 @@ void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
 
 /* Calculates Z = R * B
  * R is given in matrix A and vector VecR as obtained from the QR
- * decompostion in lcl_CalculateQRdecomposition. B and Z are column vectors
+ * decomposition in lcl_CalculateQRdecomposition. B and Z are column vectors
  * given as matrix with at least index 0 to K-1; elements on index>=K are
  * not used.
  */

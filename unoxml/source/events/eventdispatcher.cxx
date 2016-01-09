@@ -204,7 +204,7 @@ namespace DOM { namespace events {
         }
 
         // the capture vector now holds the node path from target to root
-        // first we must search for capture listernes in order root to
+        // first we must search for capture listeners in order root to
         // to target. after that, any target listeners have to be called
         // then bubbeling phase listeners are called in target to root
         // order

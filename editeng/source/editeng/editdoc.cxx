@@ -2328,7 +2328,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     // for a new paragraph we like to have the bullet/numbering visible by default
     aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true), EE_PARA_BULLETSTATE );
 
-    // ContenNode constructor copies also the paragraph attributes
+    // ContentNode constructor copies also the paragraph attributes
     ContentNode* pNode = new ContentNode( aStr, aContentAttribs );
 
     // Copy the Default Font

@@ -424,7 +424,7 @@ void XMLRedlineImportHelper::Add(
     {
         // 3b) we already have a redline with this name: hierarchical redlines
         // insert pInfo as last element in the chain.
-        // (hierarchy sanity checking happens on insertino into the document)
+        // (hierarchy sanity checking happens on inserting into the document)
 
         // find last element
         RedlineInfo* pInfoChain;

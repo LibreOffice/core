@@ -422,7 +422,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     if ( !_rxMeta.is() )
         return nullptr;
 
-    // split the complete name into it's components
+    // split the complete name into its components
     OUString sCatalog, sSchema, sName;
     qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
 
@@ -594,7 +594,7 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
         if ( !impl_getAndAssertMetaData( xMeta ) )
             return nullptr;
 
-        // split the complete name into it's components
+        // split the complete name into its components
         OUString sCatalog, sSchema, sName;
         qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
 

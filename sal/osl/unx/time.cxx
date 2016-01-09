@@ -226,7 +226,7 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal
 
     atime = (time_t) pLocalTimeVal->Seconds;
 
-    /* Convert atime, which is a local time, to it's GMT equivalent. Then, get
+    /* Convert atime, which is a local time, to its GMT equivalent. Then, get
      * the timezone offset for the local time for the GMT equivalent time. Note
      * that we cannot directly use local time to determine the timezone offset
      * because GMT is the only reliable time that we can determine timezone

@@ -3877,7 +3877,7 @@ bool ScDocument::CompileErrorCells(sal_uInt16 nErrCode)
 void ScDocument::CalcAfterLoad( bool bStartListening )
 {
     if (bIsClip)    // Excel data is loaded from the Clipboard to a Clip-Doc
-        return;     // the clculation is then only perfromed when inserting into the real document
+        return;     // the calculation is then only performed when inserting into the real document
 
     bCalcingAfterLoad = true;
     sc::CompileFormulaContext aCxt(this);
@@ -6134,7 +6134,7 @@ void ScDocument::RestorePrintRanges( const ScPrintRangeSaver& rSaver )
 bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 {
     // The page number count restarts at a sheet, if another template is set at
-    // the preseding one (oly compare names) and if a pagenumber is specified (not 0)
+    // the preceding one (only compare names) and if a pagenumber is specified (not 0)
 
     if ( nTab + 1 < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab+1] )
     {

@@ -597,13 +597,13 @@ Private Function _PercentEncode(ByVal psChar As String) As String
 
 Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 	lChar = Asc(psChar)
-	
+
 	Select Case lChar
 		Case 48 To 57, 65 To 90, 97 To 122		&apos;	0-9, A-Z, a-z
 			_PercentEncode = psChar
 		Case Asc(&quot;-&quot;), Asc(&quot;.&quot;), Asc(&quot;_&quot;), Asc(&quot;~&quot;)
 			_PercentEncode = psChar
-		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimitors in query strings
+		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimiters in query strings
 			_PercentEncode = psChar
 		Case Asc(&quot; &quot;), Asc(&quot;%&quot;)
 			_PercentEncode = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(lChar), 2)

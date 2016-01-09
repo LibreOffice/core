@@ -164,7 +164,7 @@ SAXHelper::SAXHelper( )
 /**
  * Destructor
  *
- * In this destructor, a libxml sax parser context is desturcted. The XML tree
+ * In this destructor, a libxml sax parser context is destructed. The XML tree
  * in the context is not deallocated because the tree is bind with a document
  * model by the setTargetDocument method, which delegate the target document to
  * destruct the xml tree.
@@ -341,7 +341,7 @@ void SAXHelper::ignorableWhitespace( const OUString& aWhitespaces )
 }
 
 /**
- * XDocumentHandler -- preaorocessing instruction
+ * XDocumentHandler -- preprocessing instruction
  */
 void SAXHelper::processingInstruction(
     const OUString& aTarget,

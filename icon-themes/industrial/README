@@ -15,7 +15,7 @@ It was drawn by the heroic effort of:
 Update 2015-10-05:
 The industrial icon theme is now obsolete. There are still some icons remaining which are not yet in tango. During build these icons are integrated in the tango theme as a fallback.
 
-TODO: Recreate the icons listed bewlow in tango, then this folder can be removed completely:
+TODO: Recreate the icons listed below in tango, then this folder can be removed completely:
 
 cmd/lc_arrowstoolbox.png
 cmd/lc_autocontrolfocus.png

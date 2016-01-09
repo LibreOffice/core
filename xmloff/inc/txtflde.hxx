@@ -190,7 +190,7 @@ public:
         const css::uno::Reference < css::text::XText > & rText);
 
     /// export all field declarations, or only those that have been used?
-    /// Calling this method will reset the list of used field declataions.
+    /// Calling this method will reset the list of used field declarations.
     void SetExportOnlyUsedFieldDeclarations(
         bool bExportOnlyUsed = true);
 

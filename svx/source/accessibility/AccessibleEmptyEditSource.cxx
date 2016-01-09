@@ -153,7 +153,7 @@ namespace accessibility
         // a switch to a real EditSource, too. Fortunately, the
         // AccessibleEditableTextPara implementation currently always
         // calls GetEditViewForwarder(true) before doing
-        // changes. Thus, we rely on this behabviour here (problem
+        // changes. Thus, we rely on this behaviour here (problem
         // when that changes: via accessibility API, it would no
         // longer be possible to enter text in previously empty
         // shapes).

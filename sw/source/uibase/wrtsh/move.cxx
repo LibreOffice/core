@@ -550,7 +550,7 @@ bool SwWrtShell::PageCursor(SwTwips lOffset, bool bSelect)
         // no updating of the display of the cursor position takes place.
         // The CursorShell-Actionparentheses cannot be used, because it
         // always leads to displaying the cursor, thus also,
-        // if after the scroll scrolled in a region without a valid postition.
+        // if after the scroll scrolled in a region without a valid position.
         // SwViewShell::StartAction();
     PageMove eDir = lOffset > 0? MV_PAGE_DOWN: MV_PAGE_UP;
         // Change of direction and stack present

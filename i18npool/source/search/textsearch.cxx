@@ -799,7 +799,7 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions& rOptions)
     // assumption: transliteration didn't mangle regexp control chars
     IcuUniString aIcuSearchPatStr( reinterpret_cast<const UChar*>(rPatternStr.getStr()), rPatternStr.getLength());
 #ifndef DISABLE_WORDBOUND_EMULATION
-    // for conveniance specific syntax elements of the old regex engine are emulated
+    // for convenience specific syntax elements of the old regex engine are emulated
     // - by replacing \< with "word-break followed by a look-ahead word-char"
     static const IcuUniString aChevronPatternB( "\\\\<", -1, IcuUniString::kInvariant);
     static const IcuUniString aChevronReplaceB( "\\\\b(?=\\\\w)", -1, IcuUniString::kInvariant);

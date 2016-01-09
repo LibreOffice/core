@@ -152,7 +152,7 @@ throw (uno::Exception, uno::RuntimeException, std::exception)
         OUString                   aImplementationName;
         uno::Reference< uno::XInterface > xHolder( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
 
-        // Detetmine the implementation name of the window content factory dependent on the
+        // Determine the implementation name of the window content factory dependent on the
         // module identifier, user interface element type and name
         { // SAFE
         osl::MutexGuard g(rBHelper.rMutex);

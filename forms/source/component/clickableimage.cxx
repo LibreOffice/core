@@ -747,7 +747,7 @@ namespace frm
             }
 
             // Search for the Object shell by iterating over all Object shells
-            // and comparing their XModel to our´s.
+            // and comparing their XModel to ours.
             // As an optimization, we try the current Object shell first.
             SfxObjectShell *pObjSh = nullptr;
 

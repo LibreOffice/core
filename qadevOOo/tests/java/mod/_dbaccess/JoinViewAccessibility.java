@@ -81,7 +81,7 @@ public class JoinViewAccessibility extends TestCase {
      * creates two tables in database.
      * Creates a new query and adds it to DefinitionContainer.
      * Opens the QueryComponent.with loadComponentFromURL
-     * and gets the object with the role UNKNOWN and the Impplementation
+     * and gets the object with the role UNKNOWN and the implementation
      * name that contains ConnectionLine
      * @param Param test parameters
      * @param log writer to log information while testing

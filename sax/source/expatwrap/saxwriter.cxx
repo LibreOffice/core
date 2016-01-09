@@ -120,7 +120,7 @@ public:
     ~SaxWriterHelper()
     {
         OSL_ENSURE(!nCurrentPos, "cached Sequence not written");
-        OSL_ENSURE(m_bStartElementFinished, "StartElement not complettly written");
+        OSL_ENSURE(m_bStartElementFinished, "StartElement not completely written");
     }
 
     inline void insertIndentation(sal_uInt32 m_nLevel)  throw( SAXException );

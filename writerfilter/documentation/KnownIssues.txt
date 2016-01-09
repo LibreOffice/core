@@ -16,12 +16,12 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-- foonotes/endnotes: font index cannot be applied to Writer's footnote symbol 
+- footnotes/endnotes: font index cannot be applied to Writer's footnote symbol
 in the footnote area
-- border types: width of border lines are changed to fit Writer's defaults, 
+- border types: width of border lines are changed to fit Writer's defaults,
 triple borders unsupported
-- there are no unlocked (writeable) sections within a read only document in 
+- there are no unlocked (writeable) sections within a read only document in
 Writer
-- multiple fields are either unsupported or drastically converted (see 
+- multiple fields are either unsupported or drastically converted (see
 DomainMapper_Impl.cxx)
 - borders cannot be applied to whole document (from sections)

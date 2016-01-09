@@ -422,7 +422,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
 
     if ( xReturn.is() )
     {
-        // we have to check the result columns for the tables privleges
+        // we have to check the result columns for the tables privileges
         Reference< XResultSetMetaDataSupplier > xMetaSup(xReturn,UNO_QUERY);
         if ( xMetaSup.is() )
         {

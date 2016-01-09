@@ -20,7 +20,7 @@
 /*
     TODO:
         - delete anchor in SelectionEngine when selecting manually
-        - SelectAll( false ) => only repaint the delselected entries
+        - SelectAll( false ) => only repaint the deselected entries
 */
 
 #include <svtools/treelistbox.hxx>

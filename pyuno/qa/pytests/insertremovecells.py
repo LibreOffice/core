@@ -39,7 +39,7 @@ class InsertRemoveCells(unittest.TestCase):
         addr = area.getRangeAddress()
 
         # 2 = intended to shift cells right, but I don't know where to find
-        # the ENUM to put in it's place.  Corrections welcome.
+        # the ENUM to put in its place.  Corrections welcome.
         sheet.insertCells( addr, 2 )
 
         # basically, the insertCells call is the test: it should not crash

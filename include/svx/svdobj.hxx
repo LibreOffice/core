@@ -302,7 +302,7 @@ protected:
     SdrPage*                    pPage;
     SdrModel*                   pModel;
     SdrObjUserCall*             pUserCall;
-    SdrObjPlusData*             pPlusData;    // Broadcaster, UserData, connektors, ... (this is the Bitsack)
+    SdrObjPlusData*             pPlusData;    // Broadcaster, UserData, connectors, ... (this is the Bitsack)
 
     sal_uInt32                  nOrdNum;      // order number of the object in the list
 

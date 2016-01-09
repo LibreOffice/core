@@ -405,7 +405,7 @@ public class FunctionHelper
         {
             // "createInstance()" method of used service manager can throw it.
             // If it occurred during creation of desktop service the frame already was created.
-            // Free it by decresing his refcount. Changes on the desktop tree couldn't exist.
+            // Free it by decreasing his refcount. Changes on the desktop tree couldn't exist.
             // Without the desktop service that wasn't possible. So no further rollbacks must follow.
             if(xFrame!=null)
             {
@@ -741,7 +741,7 @@ public class FunctionHelper
 
 
 
-    /**
+    /*
      * Try to close the frame instead of the document.
      * It shows the possible interface to do so.
      *

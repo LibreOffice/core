@@ -5712,7 +5712,7 @@ void Test::testCondFormatInsertDeleteSheets()
     ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
     const ScConditionalFormat* pCheck = pList->GetFormat(nKey);
-    CPPUNIT_ASSERT_MESSAGE("Wrong condntional format instance.", pCheck == pFormat);
+    CPPUNIT_ASSERT_MESSAGE("Wrong conditional format instance.", pCheck == pFormat);
 
     // ... and its range is B2:B4.
     ScRangeList aCheckRange = pCheck->GetRange();

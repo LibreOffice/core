@@ -1448,7 +1448,7 @@ interface BaseText
     ]
     SID_ATTR_CHAR_LANGUAGE // status(final|play)
     [
-        ExecMethod = ExecTextCtrl;;
+        ExecMethod = ExecTextCtrl;
         StateMethod = GetTextFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]

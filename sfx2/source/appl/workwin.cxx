@@ -769,7 +769,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
         // First, we assume that there is room for the window.
         pCli->nVisible |= SfxChildVisibility::FITS_IN;
 
-        // Skip invisiable windows
+        // Skip invisible windows
         if (pCli->nVisible != SfxChildVisibility::VISIBLE)
             continue;
 
@@ -2305,7 +2305,7 @@ bool SfxWorkWindow::RequestTopToolSpacePixel_Impl( SvBorder aBorder )
             aClientArea.GetHeight() < aBorder.Top() + aBorder.Bottom() )
         return false;
     else
-        return true;;
+        return true;
 }
 
 void SfxWorkWindow::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInfo &rInfo)

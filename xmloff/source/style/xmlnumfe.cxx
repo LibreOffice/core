@@ -980,7 +980,7 @@ static bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, bool bSystem
 void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,
                                             sal_uInt16 nPart, bool bDefPart )
 {
-    //! for the default part, pass the coditions from the other parts!
+    //! for the default part, pass the conditions from the other parts!
 
     //  element name
 

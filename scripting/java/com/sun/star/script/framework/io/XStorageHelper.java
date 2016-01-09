@@ -241,7 +241,7 @@ public class XStorageHelper implements XEventListener {
             try {
                 xTrans.commit();
             } catch (Exception e) {
-                LogUtils.DEBUG("Something went bellyup exception: " + e);
+                LogUtils.DEBUG("Something went belly up exception: " + e);
             }
         }
     }

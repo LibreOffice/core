@@ -757,7 +757,7 @@ public:
        to economize notifications */
     bool IsNotificationEnabled() const;
 
-    /// Checks a temporary notification blocker and the global conditons of IsNotificationEnabled()
+    /// Checks a temporary notification blocker and the global conditions of IsNotificationEnabled()
     bool IsNotifiable() const;
 
     void SetListRestart( bool bRestart );

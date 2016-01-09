@@ -94,7 +94,7 @@ public:
             nothing is done.
         @param pDocument
             When given a pointer to a document then tell it to reformat all
-            text objects.  This refromatting is necessary for the new values
+            text objects.  This refomatting is necessary for the new values
             to take effect.
     */
     void Update (OutputDevice* pDevice, SdDrawDocument* pDocument=nullptr) const;
@@ -125,7 +125,7 @@ private:
     tWindowList maWindowList;
 
     /** The central method of this class.  Update the given output device.
-        It is the task of the caller to initiate a refrormatting of the
+        It is the task of the caller to initiate a reformatting of the
         document that is rendered on this device to reflect the changes.
         @param pWindow
             The output device to update.  When it is <null/> then the call

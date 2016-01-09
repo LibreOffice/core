@@ -1212,7 +1212,7 @@ void XclImpDocProtectBuffer::Apply() const
 
     if (mnPassHash)
     {
-        // 16-bit password pash.
+        // 16-bit password hash.
         Sequence<sal_Int8> aPass(2);
         aPass[0] = (mnPassHash >> 8) & 0xFF;
         aPass[1] = mnPassHash & 0xFF;

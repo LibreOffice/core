@@ -203,7 +203,7 @@ ScVbaWindow::init()
         still zero. The implementation of ActivePane() uses a UNO reference of
         this (to set this window as parent of the pane object). This requires
         the own refcount to be non-zero, otherwise this instance will be
-        desctructed immediately! Guard the call to ActivePane() in try/catch to
+        destructed immediately! Guard the call to ActivePane() in try/catch to
         not miss the decrementation of the reference count on exception. */
     osl_atomic_increment( &m_refCount );
     try

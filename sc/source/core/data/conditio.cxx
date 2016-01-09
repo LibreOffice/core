@@ -781,7 +781,7 @@ void ScConditionEntry::FillCache() const
             SCROW nRowStart = aRange->aStart.Row();
             SCTAB nTab = aRange->aStart.Tab();
 
-            // temporary fix to workaorund slow duplicate entry
+            // temporary fix to workaround slow duplicate entry
             // conditions, prevent to use a whole row
             if(nRow == MAXROW)
             {
