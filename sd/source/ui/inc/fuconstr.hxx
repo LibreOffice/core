@@ -51,7 +51,7 @@ public:
     void SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj);
 
     // SJ: setting stylesheet, the use of a filled or unfilled style
-    // is determinded by the parameters bUseFillStyle and bUseNoFillStyle :
+    // is determined by the parameters bUseFillStyle and bUseNoFillStyle :
     void SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             const bool bUseFillStyle, const bool bUseNoFillStyle );
 

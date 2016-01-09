@@ -88,7 +88,7 @@ protected:
 };
 
 
-// class NestedKeyImpl the implenetation of interface XRegistryKey
+// class NestedKeyImpl the implementation of interface XRegistryKey
 
 class NestedKeyImpl : public WeakImplHelper< XRegistryKey >
 {

@@ -66,14 +66,14 @@ published service FileSystemStorage
                     <dt>XStorage::copyLastCommitTo()</dt>
                     <dd>
                         Since this service implementation supports no transaction
-                        this method just creates a copy of the storage in it's
+                        this method just creates a copy of the storage in its
                         current state.
                     </dd>
 
                     <dt>XStorage::copyStorageElementLastCommitTo()</dt>
                     <dd>
                         Since this service implementation supports no transaction
-                        this method just creates a copy of the storage in it's
+                        this method just creates a copy of the storage in its
                         current state.
                     </dd>
 

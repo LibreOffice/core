@@ -1784,7 +1784,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
                 // the process of saving a file
                 rSrcMedium.DisableUnlockWebDAV();
                 rSrcMedium.Close();
-                // see comment on the previou third row
+                // see comment on the previous third row
                 rSrcMedium.DisableUnlockWebDAV( false );
 
                 // now try to create the backup
@@ -1926,7 +1926,7 @@ bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, bool bCommit )
         }
         catch( uno::Exception& )
         {
-            SAL_WARN( "sfx.doc", "The strotage was not committed on DoSaveAs!" );
+            SAL_WARN( "sfx.doc", "The storage was not committed on DoSaveAs!" );
         }
     }
 

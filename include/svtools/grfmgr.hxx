@@ -487,7 +487,7 @@ public:
     static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'
     // properties and return these in a vector. Note: this implementation
-    // will cater for XNameContainer objects and deepinspect any containees
+    // will cater for XNameContainer objects and deep inspect any containers
     // if they exist
     static void InspectForGraphicObjectImageURL( const css::uno::Reference< css::uno::XInterface >& rxIf, std::vector< OUString >& rvEmbedImgUrls );
 

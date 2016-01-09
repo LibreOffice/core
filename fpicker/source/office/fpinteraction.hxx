@@ -40,7 +40,7 @@ namespace svt
     {
     public:
         /** flags, which indicates special handled interactions
-            These values will be used combained as flags - so they must
+            These values will be used combined as flags - so they must
             in range [2^n]!
          */
         enum EInterceptedInteractions

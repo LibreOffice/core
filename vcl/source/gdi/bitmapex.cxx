@@ -989,7 +989,7 @@ BitmapEx BitmapEx::getTransformed(
         aTransform.scale(fReduceFactor, fReduceFactor);
     }
 
-    // invert to get transformation from target pixel coordiates to source pixels
+    // invert to get transformation from target pixel coordinates to source pixels
     aTransform.invert();
 
     // create bitmap using source, destination and linear back-transformation

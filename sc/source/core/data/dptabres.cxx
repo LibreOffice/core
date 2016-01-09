@@ -258,7 +258,7 @@ void ScDPInitState::AddMember( long nSourceIndex, SCROW nMember )
 
 void ScDPInitState::RemoveMember()
 {
-    OSL_ENSURE(!maMembers.empty(), "ScDPInitState::RemoveMember: Attempt to remmove member while empty.");
+    OSL_ENSURE(!maMembers.empty(), "ScDPInitState::RemoveMember: Attempt to remove member while empty.");
     if (!maMembers.empty())
         maMembers.pop_back();
 }

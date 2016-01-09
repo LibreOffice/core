@@ -247,7 +247,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
          *  to address it.
          *
          *  Internal new controls will be added to the dialog. Every control can be accessed
-         *  by it's own control id. Those control ID must be one of the const set
+         *  by its own control id. Those control ID must be one of the const set
          *  css::ui::dialogs::ExtendedFilePickerElementIds.
          *
          *  @see setControlValue()
@@ -266,7 +266,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
          *  COM dialog.
          *
          *  Because we use two member (open/save dialog) internally, this method
-         *  ask the current active one for it's customization interface.
+         *  ask the current active one for its customization interface.
          *
          *  @return the customization interface for the current used dialog.
          *          Must not be null.

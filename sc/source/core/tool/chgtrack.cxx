@@ -3472,7 +3472,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 {
                     // Cut off inserted ranges, if Start/End is within the Delete,
                     // but the Insert is not completely within the Delete or
-                    // the Delete is not completelty within the Insert.
+                    // the Delete is not completely within the Insert.
                     // The Delete remembers which Insert it has cut off from;
                     // it can also just be a single Insert (because Delete has
                     // a single column/is a single row).

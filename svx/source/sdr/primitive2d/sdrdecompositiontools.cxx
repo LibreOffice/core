@@ -434,7 +434,7 @@ namespace drawinglayer
 
                     if(0.0 != aAnimationList.getDuration())
                     {
-                        // create a new Primitive2DContainer containing the animated text in it's scaled only state.
+                        // create a new Primitive2DContainer containing the animated text in its scaled only state.
                         // use the decomposition to force to simple text primitives, those will no longer
                         // need the outliner for formatting (alternatively it is also possible to just add
                         // pNew to aNewPrimitiveSequence)

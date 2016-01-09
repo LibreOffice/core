@@ -1746,7 +1746,7 @@ SfxDocumentMetaData::setDocumentStatistics(
     std::vector<std::pair<const char *, OUString> > attributes;
     for (sal_Int32 i = 0; i < the_value.getLength(); ++i) {
         const OUString name = the_value[i].Name;
-        // inefficently search for matching attribute
+        // inefficiently search for matching attribute
         for (size_t j = 0; s_stdStats[j] != nullptr; ++j) {
             if (name.equalsAscii(s_stdStats[j])) {
                 const css::uno::Any any = the_value[i].Value;

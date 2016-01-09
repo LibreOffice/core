@@ -399,7 +399,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
                 // the environment of the ole object does not have to be valid
                 // at this moment, or even worse, it does not have to have a
                 // reasonable size. In this case we do not want to change to
-                // attributes permanentely. Maybe one day somebody dares to remove
+                // attributes permanently. Maybe one day somebody dares to remove
                 // this code.
                 if ( aFrameRect.HasArea() &&
                      static_cast<SwContentFrame*>(Lower())->GetNode()->GetOLENode() &&

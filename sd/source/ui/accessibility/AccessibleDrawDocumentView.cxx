@@ -694,7 +694,7 @@ bool
     return bRet;
 }
 
-/** Select or delselect the specified shapes.  The corresponding accessible
+/** Select or deselect the specified shapes.  The corresponding accessible
     shapes are notified over the selection change listeners registered with
     the XSelectionSupplier of the controller.
 */

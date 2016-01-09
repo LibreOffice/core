@@ -329,7 +329,7 @@ private:
     /** Patch a line list after modification, merge SmTextNode, remove SmPlaceNode etc.
      *
      * @param pLineList The line list to patch
-     * @param aIter     Iterator pointing to the element that needs to be patched with it's previous.
+     * @param aIter     Iterator pointing to the element that needs to be patched with its previous.
      *
      * When the list is patched text nodes before and after aIter will be merged.
      * If there's an, in the context, inappropriate SmPlaceNode before or after aIter it will also be

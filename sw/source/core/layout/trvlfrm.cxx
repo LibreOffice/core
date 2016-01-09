@@ -267,7 +267,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         else
         {
             /* In order to provide a selection as accurable as possible when we have both
-             * text and brackground object, then we compute the distance between both
+             * text and background object, then we compute the distance between both
              * would-be positions and the click point. The shortest distance wins.
              */
             double nTextDistance = 0;

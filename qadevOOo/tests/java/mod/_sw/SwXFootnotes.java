@@ -101,7 +101,7 @@ public class SwXFootnotes extends TestCase {
         oInterface = UnoRuntime.queryInterface(XFootnotesSupplier.class, xTextDoc);
         oObj = oInterface.getFootnotes();
 
-        log.println( "creating a new environment for Foontnotes object" );
+        log.println( "creating a new environment for Footnotes object" );
         TestEnvironment tEnv = new TestEnvironment(oObj);
         return tEnv;
     }

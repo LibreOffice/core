@@ -47,7 +47,7 @@ published service ResultSet
     interface XRowLocate;
 
 
-    /** is the interface for deleting more than one row, identified by it's bookmark.
+    /** is the interface for deleting more than one row, identified by its bookmark.
               The implementation is optional.
      */
     [optional] interface XDeleteRows;

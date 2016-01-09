@@ -112,7 +112,7 @@ class OWeakRefListener implements XReference
     /**
      * Method of <code>com.sun.star.uno.XReference</code>.
      *
-     * <p>When called, it deregisteres this object with the adapter and releases
+     * <p>When called, it deregisters this object with the adapter and releases
      * the reference to it.</p>
      */
     synchronized public void dispose()

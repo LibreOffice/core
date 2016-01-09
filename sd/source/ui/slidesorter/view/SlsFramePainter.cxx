@@ -208,7 +208,7 @@ void FramePainter::OffsetBitmap::PaintSide (
     }
     else
     {
-        // Diagonal sides indicatee an error.
+        // Diagonal sides indicates an error.
         OSL_ASSERT(false);
     }
 }

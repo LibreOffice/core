@@ -326,7 +326,7 @@ SfxDispatcher* SfxFrame::GetDispatcher_Impl() const
 
 bool SfxFrame::IsAutoLoadLocked_Impl() const
 {
-    // Its own Docucument is locked?
+    // Its own Document is locked?
     const SfxObjectShell* pObjSh = GetCurrentDocument();
     if ( !pObjSh || !pObjSh->IsAutoLoadLocked() )
         return false;

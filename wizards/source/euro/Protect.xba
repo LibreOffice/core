@@ -133,7 +133,7 @@ End Sub
 
 
 &apos; Reprotects the previousliy protected sheets
-&apos; The passwordinformation is stored in the List &apos;UnProtectList()&apos;
+&apos; The password information is stored in the List &apos;UnProtectList()&apos;
 Sub ReprotectSheets()
 Dim i as Integer
 Dim oProtectSheet as Object

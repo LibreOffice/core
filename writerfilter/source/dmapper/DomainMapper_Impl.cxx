@@ -2058,7 +2058,7 @@ void DomainMapper_Impl::PopShapeContext()
 
 bool DomainMapper_Impl::IsSdtEndBefore()
 {
-    bool bIsSdtEndBefore = false;;
+    bool bIsSdtEndBefore = false;
     PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
     if(pContext)
     {

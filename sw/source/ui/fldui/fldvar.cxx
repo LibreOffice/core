@@ -864,7 +864,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldVarPage, ModifyHdl, Edit&, void)
     case TYP_DDEFLD:
         if( nLen )
         {
-            // is there already a corrensponding type
+            // is there already a corresponding type
             bInsert = bApply = true;
 
             SwFieldType* pType = GetFieldMgr().GetFieldType(RES_DDEFLD, sName);

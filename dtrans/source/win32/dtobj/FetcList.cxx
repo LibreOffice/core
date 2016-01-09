@@ -336,7 +336,7 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleAnsiCodePage( LCID lcid, sal_uInt32 
 
 BOOL CALLBACK CFormatRegistrar::EnumLocalesProc( LPSTR lpLocaleStr )
 {
-    // the lpLocaleStr parametere is hexadecimal
+    // the lpLocaleStr parameter is hexadecimal
     LCID lcid = strtol( lpLocaleStr, NULL, 16 );
 
     if ( isLocaleAnsiCodePage( lcid, CFormatRegistrar::m_TxtCodePage ) ||

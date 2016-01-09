@@ -1467,7 +1467,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
         {
             if (pCtx[ pOcas[ i ] ].mnCurArg == nOmitAddressArg)
             {
-                // Omit erverything except a trailing separator, the leading
+                // Omit everything except a trailing separator, the leading
                 // separator is omitted below. The other way around would leave
                 // an extraneous separator if no parameter followed.
                 if (!(pOcas[ i ] == nFn && pCur->GetOpCode() == ocSep))

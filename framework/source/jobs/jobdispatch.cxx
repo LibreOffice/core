@@ -157,7 +157,7 @@ JobDispatch::~JobDispatch()
 }
 
 /**
-    @short  implementation of XInitalization
+    @short  implementation of XInitialization
     @descr  A protocol handler can provide this functionality, if it wish to get additional information
             about the context it runs. In this case the frame reference would be given by the outside code.
 
@@ -247,7 +247,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobD
     @short  implementation of XNotifyingDispatch::dispatchWithNotification()
     @descr  It creates the job service implementation and call execute on it.
             Further it starts the life time control of it. (important for async job)
-            For synchonrous job we react for the returned result directly ... for asynchronous
+            For synchronous job we react for the returned result directly ... for asynchronous
             ones we do it later inside our callback method. But we use the same impl method
             doing that to share the code. (see impl_finishJob())
 

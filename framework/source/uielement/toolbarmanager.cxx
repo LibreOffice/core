@@ -182,7 +182,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     idx++; // will become 0 if '/' not found: use full string
     OString  aHelpIdAsString( HELPID_PREFIX_TESTTOOL );
     OUString  aToolbarName = rResourceName.copy( idx );
-    aHelpIdAsString += OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );;
+    aHelpIdAsString += OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );
     m_pToolBar->SetHelpId( aHelpIdAsString );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );

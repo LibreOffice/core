@@ -94,7 +94,7 @@ class WWD_Startup(WWD_General):
     check the content (documents) specified in the default session.<br/>
     fill the list boxes (saved sessions, styles, combobox save session). <br/>
     make data aware. <br/>
-    updateUI (refreshes the display to crrespond to the data in
+    updateUI (refreshes the display to correspond to the data in
     the default session.)<br/>
     fill the documents listbox. <br/>
     if proxies are set, disable the ftp controls in step 7.

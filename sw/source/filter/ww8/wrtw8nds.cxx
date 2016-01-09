@@ -2164,7 +2164,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
         AppendAnnotationMarks( rNode, nAktPos, nNextAttr - nAktPos );
 
         // At the moment smarttags are only written for paragraphs, at the
-        // begining of the paragraph.
+        // beginning of the paragraph.
         if (nAktPos == 0)
             AppendSmartTags(rNode);
 

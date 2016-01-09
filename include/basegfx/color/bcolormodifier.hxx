@@ -399,7 +399,7 @@ namespace basegfx
             return maBColorModifiers[nIndex];
         }
 
-        // get the color in it's modified form by applying all existing BColorModifiers,
+        // get the color in its modified form by applying all existing BColorModifiers,
         // from back to front (the newest first)
         ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& rSource) const;
 

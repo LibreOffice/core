@@ -1711,7 +1711,7 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
         pImp->nCachedFunc1 = 0;
         pImp->nCachedFunc2 = 0;
 
-        // Mark if the all of the Caches have dissapered.
+        // Mark if the all of the Caches have disappeared.
         pImp->bCtrlReleased = false;
     }
 

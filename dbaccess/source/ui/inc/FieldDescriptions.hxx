@@ -83,7 +83,7 @@ namespace dbaui
         void SetPrimaryKey(bool _bPKey);
         void SetCurrency(bool _bIsCurrency);
 
-        /** copies the content of the field eescription into the column
+        /** copies the content of the field description into the column
             @param  _rxColumn the dest
         */
         void copyColumnSettingsTo(const css::uno::Reference< css::beans::XPropertySet >& _rxColumn);

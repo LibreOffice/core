@@ -295,7 +295,7 @@ namespace dbaui
 
             if (_bUpdateListBox)
             {
-                // selecte the normalized statement in the list box
+                // select the normalized statement in the list box
                 m_pSQLHistory->SelectEntryPos((sal_uInt16)_nHistoryPos);
                 OSL_ENSURE(m_pSQLHistory->GetSelectEntry() == m_aNormalizedHistory[_nHistoryPos],
                     "DirectSQLDialog::switchToHistory: inconsistent listbox entries!");

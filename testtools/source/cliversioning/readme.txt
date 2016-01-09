@@ -25,7 +25,7 @@ GAC and if the policy files are correct. The office must be installed with compl
 system integration. That is, one does not use setup /a for starting the
 installation.
 
-In OOo 3.0 there was a breanking change so that the test created for previous
+In OOo 3.0 there was a breaking change so that the test created for previous
 version do not work anymore. To use these old tests one needs to install a
 version of OOo less than v 3.0. Then one needs to check out the cli_ure module
 for that version. The tests are contained in cli_ure/qa/versioning.
@@ -86,7 +86,7 @@ because it puts out more information.
 Creating a new version_xxx.dll
 ==============================
 When a version of our assemblies changes then one should provide a new version dll which test exactly the assemblies with the changed version. This is easily done:
-1. set the build environment in which the new versions are effectiv.
+1. set the build environment in which the new versions are effective.
 2  call: dmake name=version_xxx.dll
 3. copy the new version dll from the output tree into qa/versioning/version_libs
 4. commit the new version.dll using the -kb switch (only when creating the new file : cvs new -kb version_3_1_0.dll)

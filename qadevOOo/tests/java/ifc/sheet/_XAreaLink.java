@@ -68,7 +68,7 @@ public class _XAreaLink extends MultiMethodTest {
     }
 
     /**
-    * Creates a new desination CellRange address and sets it for
+    * Creates a new destination CellRange address and sets it for
     * the link object. <p>
     * After setting the DestArea, the link is refreshed and the area is
     * adjusted to the size of the source data.

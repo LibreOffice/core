@@ -161,7 +161,7 @@ public class CustomizeView extends    JPanel
 
 
 
-    /**
+    /*
      * react for click events of the used check boxes
      * We use our internal set dispatch objects to
      * call it. This calls toogle the menu/object- or toolbar.

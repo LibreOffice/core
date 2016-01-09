@@ -68,7 +68,7 @@ namespace drawinglayer
             virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
-            /// construcor
+            /// constructor
             TextEffectPrimitive2D(
                 const Primitive2DContainer& rTextContent,
                 const basegfx::B2DPoint& rRotationCenter,

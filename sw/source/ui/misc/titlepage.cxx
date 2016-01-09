@@ -85,7 +85,7 @@ namespace
             }
         }
 
-        // If we want a new descriptior then set it, otherwise reuse the existing one
+        // If we want a new descriptor then set it, otherwise reuse the existing one
         if (!pNewDesc)
         {
             SwFormatPageDesc aPageFormatDesc(pPageFormatDesc ? *pPageFormatDesc : &rCurrentDesc);

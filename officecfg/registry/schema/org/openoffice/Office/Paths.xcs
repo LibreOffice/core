@@ -24,7 +24,7 @@
   <templates>
     <group oor:name="MultiPath">
       <info>
-        <desc>Describe a path in it's details.</desc>
+        <desc>Describe a path in its details.</desc>
       </info>
       <prop oor:name="Unused" oor:type="xs:string">
         <info>

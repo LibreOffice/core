@@ -284,7 +284,7 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     // At first not only possible, because the creation of a group of
     // 2D polygons would be required which need to be sorted by depth,
     // ie at intersections be cut relative to each other. Also the texture
-    // coorinates were an unsolved problem.
+    // coordinates were an unsolved problem.
     rInfo.bCanConvToPoly = false;
     rInfo.bCanConvToContour = false;
     rInfo.bCanConvToPathLineToArea = false;
@@ -453,7 +453,7 @@ void E3dObject::RecalcSnapRect()
 }
 
 // Inform the parent about insertion of a 3D object, so that the parent is able
-// treat the particualar objects in a special way (eg Light / Label in E3dScene)
+// treat the particular objects in a special way (eg Light / Label in E3dScene)
 
 void E3dObject::NewObjectInserted(const E3dObject* p3DObj)
 {

@@ -104,7 +104,7 @@ SdIOCompat::SdIOCompat(SvStream& rNewStream, StreamMode nNewMode, sal_uInt16 nVe
     if (nNewMode == StreamMode::WRITE)
     {
         DBG_ASSERT(nVer != SDIOCOMPAT_VERSIONDONTKNOW,
-                   "can´t write unknown version");
+                   "can't write unknown version");
         rNewStream.WriteUInt16( nVersion );
     }
     else if (nNewMode == StreamMode::READ)

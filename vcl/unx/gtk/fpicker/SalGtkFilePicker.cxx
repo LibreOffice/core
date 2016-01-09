@@ -707,7 +707,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::Runtim
     uno::Sequence< OUString > aFiles = getSelectedFiles();
     /*
       The previous multiselection API design was completely broken
-      and unimplementable for some hetrogenous pseudo-URIs eg. search:
+      and unimplementable for some heterogeneous pseudo-URIs eg. search:
       Thus crop unconditionally to a single selection.
     */
     aFiles.realloc (1);

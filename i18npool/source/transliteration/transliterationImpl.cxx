@@ -628,7 +628,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
         for (sal_Int16 i = 0; i < 3; i++) {
             if (implName.equalsAscii(TMlist[i].implName)) {
                 if (i == 0) // current module is caseignore
-                    body->loadModule(TMlist[0].tm, rLocale); // caseingore need to setup module name
+                    body->loadModule(TMlist[0].tm, rLocale); // caseignore need to setup module name
                 if (! caseignore.is()) {
                     OUString bname = TRLT_IMPLNAME_PREFIX +
                                 OUString::createFromAscii(TMlist[0].implName);

@@ -163,7 +163,7 @@ namespace dbaui
                 The EndPosition after resizing.
         */
         void                        setSizingFlag(const Point& _rPos);
-        /** set the rsizing flag to NONE.
+        /** set the resizing flag to NONE.
         */
         void                        resetSizingFlag() { m_nSizingFlags = SIZING_NONE; }
 

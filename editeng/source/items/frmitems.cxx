@@ -3933,7 +3933,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
             }
         }
 
-        // tdf#94088 if no succeeded, try if the string (which is not epty) contains
+        // tdf#94088 if no succeeded, try if the string (which is not empty) contains
         // a 'data:' scheme url and try to load that (embedded graphics)
         if(!bGraphicLoaded)
         {

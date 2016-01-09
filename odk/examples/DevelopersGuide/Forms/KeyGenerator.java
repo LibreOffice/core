@@ -97,7 +97,7 @@ class UniqueColumnValue
 
         @returns
             a String which can be used as statement to retrieve a unique value for the given column.
-            The result set resulting from such a execution contains the value in it's first column.
+            The result set resulting from such a execution contains the value in its first column.
     */
     private String composeUniqueyKeyStatement( XPropertySet xForm, String sFieldName ) throws com.sun.star.uno.Exception
     {

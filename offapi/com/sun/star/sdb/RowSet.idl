@@ -58,7 +58,7 @@ published interface XParametersSupplier;
     </p>
 
     <h3>Notifications</h3>
-    <p>A row set is able to be operated in various ways, and additionally it notifies various changes in it's
+    <p>A row set is able to be operated in various ways, and additionally it notifies various changes in its
     state. Clients of this service can rely on a fixed order of notifications, depending on how they operate
     on the component.<br>
     The following describes the general order of all possible notifications which you can encounter when
@@ -228,7 +228,7 @@ published service RowSet
      */
     [optional] interface com::sun::star::sdbc::XResultSetUpdate;
 
-    /** is the interface for deleting more than one row, identified by it's bookmark.
+    /** is the interface for deleting more than one row, identified by its bookmark.
 
         <p>The optional support of this interface is already implied with the support of the com::sun::star::sdbcx::ResultSet service.</p>
 

@@ -797,7 +797,7 @@ namespace drawinglayer
             // to primitives) it is necessary to reduce maximum pixel size by 1 in X and Y and to use
             // the inner pixel bounds accordingly (ceil resp. floor). This will also be done for logic
             // units e.g. when creating a new MetaFile, but since much huger value ranges are used
-            // there typically will be okay for this compromize.
+            // there typically will be okay for this compromise.
             Rectangle aDestRectView(
                 // !!CAUTION!! Here, ceil and floor are exchanged BY PURPOSE, do NOT copy when
                 // looking for a standard conversion to rectangle (!)

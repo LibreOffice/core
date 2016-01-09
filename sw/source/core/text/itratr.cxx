@@ -706,7 +706,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                             if( RES_FLYFRMFMT == pFrameFormat->Which()
                                 && rTmpSize.GetWidthPercent() )
                             {
-                                // This is a hack for the wollowing situation: In the paragraph there's a
+                                // This is a hack for the following situation: In the paragraph there's a
                                 // text frame with relative size. Then let's take 0.5 cm as minimum width
                                 // and USHRT_MAX as maximum width
                                 // It were cleaner and maybe necessary later on to iterate over the content

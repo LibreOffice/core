@@ -4209,7 +4209,7 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame 
                 if  (   ( pCheckFrame->GetCurrentViewFrame() != nullptr )
                     ||  ( pCheckFrame->GetCurrentDocument() != nullptr )
                     )
-                    // Note that it is perfectly letgitimate that during loading into an XFrame which already contains
+                    // Note that it is perfectly legitimate that during loading into an XFrame which already contains
                     // a document, there exist two SfxFrame instances bound to this XFrame - the old one, which will be
                     // destroyed later, and the new one, which we're going to create
                     continue;

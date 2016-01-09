@@ -242,7 +242,7 @@ void SdExportTest::testBnc870233_1()
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
-    // The problem was all shapes had the same font (the last parsed font attribues overwrote all previous ones)
+    // The problem was all shapes had the same font (the last parsed font attributes overwrote all previous ones)
 
     // First shape has red, bold font
     {

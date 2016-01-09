@@ -1839,7 +1839,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
         }
         rF.nLen = rF.nLRes - rF.nSCode + 2;         // nLRes is still the final position
         rF.nLRes -= rF.nSRes;                       // now: nLRes = length
-        rF.nSRes++;                                 // Endpos encluding Markers
+        rF.nSRes++;                                 // Endpos including Markers
         rF.nLRes--;
     }else{
         rF.nLRes = 0;                               // no result found
@@ -6856,7 +6856,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
         nMax = nCalcMax;
     else
     {
-        //newer versions include purportive count of fonts, so take min of that
+        //newer versions include supportive count of fonts, so take min of that
         //and calced max
         nMax = std::min(nMax, nCalcMax);
     }

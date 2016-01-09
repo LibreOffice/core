@@ -559,7 +559,7 @@ void SwRootFrame::DestroyImpl()
     // Object ownership in writer and esp. in layout are a mess: Before the
     // document/layout split SwDoc and SwRootFrame were essentially one object
     // and magically/uncleanly worked around their common destruction by call
-    // to SwDoc::IsInDtor() -- even from the layout. As of now destuction of
+    // to SwDoc::IsInDtor() -- even from the layout. As of now destruction of
     // the layout proceeds forward through the frames. Since SwTextFootnote::DelFrames
     // also searches backwards to find the master of footnotes, they must be
     // considered to be owned by the SwRootFrame and also be destroyed here,
