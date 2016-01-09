@@ -1621,7 +1621,7 @@ void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
             // OOXTODO: XML_relativeIndent,     mnIndent?
             // OOXTODO: XML_justifyLastLine,
             XML_shrinkToFit,        XclXmlUtils::ToPsz( mbShrink ),
-            XML_readingOrder, mnTextDir == EXC_XF_TEXTDIR_CONTEXT ? NULL : OString::number(  mnTextDir ).getStr(),
+            XML_readingOrder, mnTextDir == EXC_XF_TEXTDIR_CONTEXT ? nullptr : OString::number(  mnTextDir ).getStr(),
             FSEND );
 }
 
