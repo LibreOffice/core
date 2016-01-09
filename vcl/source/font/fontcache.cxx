@@ -217,7 +217,7 @@ LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection* pFo
     {
         // create a new logical font instance from this physical font face
         pFontInstance = pFontData->CreateFontInstance( aFontSelData );
-        pFontInstance->m_pFontCache = this;
+        pFontInstance->mpFontCache = this;
 
         // if we're subtituting from or to a symbol font we may need a symbol
         // conversion table
@@ -284,7 +284,7 @@ LogicalFontInstance* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection
 
 void ImplFontCache::Acquire(LogicalFontInstance* pFontInstance)
 {
-    assert(pFontInstance->m_pFontCache == this);
+    assert(pFontInstance->mpFontCache == this);
 
     if (0 == pFontInstance->mnRefCount++)
         --mnRef0Count;

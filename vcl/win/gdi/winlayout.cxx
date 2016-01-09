@@ -518,12 +518,12 @@ WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWF
     mrWinFontEntry(rWFE)
 {
     // keep mrWinFontEntry alive
-    mrWinFontEntry.m_pFontCache->Acquire(&mrWinFontEntry);
+    mrWinFontEntry.mpFontCache->Acquire(&mrWinFontEntry);
 }
 
 WinLayout::~WinLayout()
 {
-    mrWinFontEntry.m_pFontCache->Release(&mrWinFontEntry);
+    mrWinFontEntry.mpFontCache->Release(&mrWinFontEntry);
 }
 
 void WinLayout::InitFont() const

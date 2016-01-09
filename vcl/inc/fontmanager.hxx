@@ -244,28 +244,26 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     };
 
     fontID                                      m_nNextFontID;
-    std::unordered_map< fontID, PrintFont* >       m_aFonts;
-    std::unordered_map< int, FontFamily >        m_aFamilyTypes;
-    std::list< OString >               m_aFontDirectories;
+    std::unordered_map< fontID, PrintFont* >    m_aFonts;
+    std::unordered_map< int, FontFamily >       m_aFamilyTypes;
+    std::list< OString >                        m_aFontDirectories;
     std::list< int >                            m_aPrivateFontDirectories;
-    utl::MultiAtomProvider*                   m_pAtoms;
+    utl::MultiAtomProvider*                     m_pAtoms;
     // for speeding up findFontFileID
     std::unordered_map< OString, std::set< fontID >, OStringHash >
                                                 m_aFontFileToFontID;
 
     std::unordered_map< OString, int, OStringHash >
     m_aDirToAtom;
-    std::unordered_map< int, OString >     m_aAtomToDir;
-    int                                        m_nNextDirAtom;
+    std::unordered_map< int, OString >          m_aAtomToDir;
+    int                                         m_nNextDirAtom;
 
-    std::unordered_multimap< OString, sal_Unicode, OStringHash >
-        m_aAdobenameToUnicode;
-    std::unordered_multimap< sal_Unicode, OString >
-        m_aUnicodeToAdobename;
+    std::unordered_multimap< OString, sal_Unicode, OStringHash > m_aAdobenameToUnicode;
+    std::unordered_multimap< sal_Unicode, OString > m_aUnicodeToAdobename;
     std::unordered_multimap< sal_Unicode, sal_uInt8 > m_aUnicodeToAdobecode;
     std::unordered_multimap< sal_uInt8, sal_Unicode > m_aAdobecodeToUnicode;
 
-    mutable FontCache*                                                        m_pFontCache;
+    mutable FontCache*                         m_pFontCache;
 
     OString getAfmFile( PrintFont* pFont ) const;
     OString getFontFile( PrintFont* pFont ) const;
