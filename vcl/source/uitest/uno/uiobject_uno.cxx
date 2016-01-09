@@ -1,0 +1,58 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "uiobject_uno.hxx"
+#include <vcl/svapp.hxx>
+
+UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
+    UIObjectBase(m_aMutex),
+    mpObj(std::move(pObj))
+{
+}
+
+UIObjectUnoObj::~UIObjectUnoObj()
+{
+}
+
+css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(const OUString& rID)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    std::unique_ptr<UIObject> pObj = mpObj->get_child(rID);
+    return new UIObjectUnoObj(std::move(pObj));
+}
+
+void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    mpObj->execute(rAction, StringMap());
+}
+
+OUString SAL_CALL UIObjectUnoObj::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("org.libreoffice.uitest.UIObject");
+}
+
+sal_Bool UIObjectUnoObj::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> UIObjectUnoObj::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Sequence<OUString> aServiceNames(1);
+    aServiceNames[0] = "com.sun.star.ui.test.UIObject";
+    return aServiceNames;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
