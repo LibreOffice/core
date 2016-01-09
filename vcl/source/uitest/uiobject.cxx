@@ -220,7 +220,6 @@ DialogUIObject::DialogUIObject(VclPtr<Dialog> xDialog):
 StringMap DialogUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    // Move that to a Contrl base class
     aMap["Modal"] = OUString::boolean(mxDialog->IsModalInputMode());
 
     return aMap;
