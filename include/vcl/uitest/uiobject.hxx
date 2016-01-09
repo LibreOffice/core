@@ -55,7 +55,7 @@ public:
      * be available through UIObject::get_state().
      *
      */
-    virtual UIObjectType getType() const;
+    virtual UIObjectType get_type() const;
 
     /**
      * Returns the child of the current UIObject with the corresponding id.
