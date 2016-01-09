@@ -560,7 +560,7 @@ ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
 
 LogicalFontInstance* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
-    ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
+    ServerFontInstance* pEntry = new ServerFontInstance( rFSD );
     return pEntry;
 }
 
