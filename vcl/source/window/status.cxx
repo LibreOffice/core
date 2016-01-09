@@ -698,7 +698,7 @@ void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if (mbFormat)
         ImplFormat();
@@ -737,10 +737,11 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
             if( OpenGLWrapper::isVCLOpenGLEnabled() )
                 bOffscreen = false;
 
+            if (!bOffscreen)
+                rRenderContext.Erase(rRect);
+
             for (sal_uInt16 i = 0; i < nItemCount; i++)
-            {
                 ImplDrawItem(rRenderContext, bOffscreen, i, true, true);
-            }
         }
     }
 
