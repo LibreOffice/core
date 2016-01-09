@@ -159,6 +159,8 @@ void OutputDevice::Invert( const Rectangle& rRect, InvertFlags nFlags )
         nSalFlags |= SAL_INVERT_HIGHLIGHT;
     if ( nFlags & InvertFlags::N50 )
         nSalFlags |= SAL_INVERT_50;
+    if ( nFlags == (InvertFlags) 0xffff ) // vcldemo trackframe test
+        nSalFlags = SAL_INVERT_TRACKFRAME;
     mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
 }
 
