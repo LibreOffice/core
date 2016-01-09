@@ -809,7 +809,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
 
             if( nSrcBitCount > nDstBitCount )
             {
-                long nNextIndex = 0L;
+                int nNextIndex = 0;
 
                 if( ( nSrcBitCount == 24 ) && ( nDstBitCount < 24 ) )
                     Convert( BMP_CONVERSION_24BIT );
@@ -831,16 +831,16 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
 
                     if( pSrcAcc && pDstAcc )
                     {
-                        const long      nSrcCount = pDstAcc->GetPaletteEntryCount();
-                        const long      nDstCount = 1 << nDstBitCount;
+                        const int nSrcCount = pDstAcc->GetPaletteEntryCount();
+                        const int nDstCount = 1 << nDstBitCount;
 
-                        for( long i = 0L; ( i < nSrcCount ) && ( nNextIndex < nSrcCount ); i++ )
+                        for (int i = 0; ( i < nSrcCount ) && ( nNextIndex < nSrcCount ); ++i)
                         {
                             const BitmapColor& rSrcCol = pSrcAcc->GetPaletteColor( (sal_uInt16) i );
 
                             bool bFound = false;
 
-                            for( long j = 0L; j < nDstCount; j++ )
+                            for (int j = 0; j < nDstCount; ++j)
                             {
                                 if( rSrcCol == pDstAcc->GetPaletteColor( (sal_uInt16) j ) )
                                 {
