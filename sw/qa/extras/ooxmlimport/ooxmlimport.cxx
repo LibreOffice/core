@@ -2885,6 +2885,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf78902, "tdf78902.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf92157, "tdf92157.docx")
+{
+    // A graphic with dimensions 0,0 should not fail on load
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf96674, "tdf96674.docx")
 {
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
