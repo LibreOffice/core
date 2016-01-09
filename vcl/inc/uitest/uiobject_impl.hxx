@@ -11,6 +11,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/edit.hxx>
 
 class WindowUIObject : public UIObject
 {
@@ -69,6 +70,26 @@ public:
     virtual UIObjectType getType() const override;
 
     virtual StringMap get_state() override;
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
+class EditUIObject : public WindowUIObject
+{
+    VclPtr<Edit> mxEdit;
+
+public:
+
+    EditUIObject(VclPtr<Edit> xEdit);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    virtual UIObjectType getType() const override;
 
 protected:
 

@@ -235,4 +235,53 @@ UIObjectType DialogUIObject::getType() const
     return UIObjectType::DIALOG;
 }
 
+EditUIObject::EditUIObject(VclPtr<Edit> xEdit):
+    WindowUIObject(xEdit),
+    mxEdit(xEdit)
+{
+}
+
+void EditUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SET")
+    {
+        if (rParameters.find("TEXT") != rParameters.end())
+        {
+            assert(rParameters.size() == 1); // only the text
+            mxEdit->SetText(rParameters.find("TEXT")->second);
+        }
+        else if (rParameters.find("SELECTION") != rParameters.end())
+        {
+            // TODO: moggi: add code
+        }
+        else
+            SAL_WARN("vcl.uitest", "unkown set parameters for EditUIObject");
+    }
+    else
+    {
+        SAL_WARN("vcl.uitest", "unknown action for EditUIObject: " << rAction);
+    }
+}
+
+StringMap EditUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["MaxTextLength"] = OUString::number(mxEdit->GetMaxTextLen());
+    aMap["SelectedText"] = mxEdit->GetSelected();
+    aMap["Text"] = mxEdit->GetText();
+
+    return aMap;
+}
+
+UIObjectType EditUIObject::getType() const
+{
+    return UIObjectType::EDIT;
+}
+
+OUString EditUIObject::get_name() const
+{
+    return OUString("EditUIObject");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
