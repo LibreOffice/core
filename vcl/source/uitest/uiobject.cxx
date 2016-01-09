@@ -77,6 +77,18 @@ vcl::Window* get_dialog_parent(vcl::Window* pWindow)
     return get_dialog_parent(pParent);
 }
 
+std::vector<KeyEvent> generate_key_events_from_text(const OUString& rStr)
+{
+    std::vector<KeyEvent> aEvents;
+    vcl::KeyCode aCode;
+    for (sal_Int32 i = 0, n = rStr.getLength();
+            i != n; ++i)
+    {
+        aEvents.push_back(KeyEvent(rStr[i], aCode));
+    }
+    return aEvents;
+}
+
 }
 
 WindowUIObject::WindowUIObject(VclPtr<vcl::Window> xWindow):
@@ -104,6 +116,17 @@ void WindowUIObject::execute(const OUString& rAction,
         for (auto itr = rParameters.begin(); itr != rParameters.end(); ++itr)
         {
             std::cout << itr->first;
+        }
+    }
+    else if (rAction == "TYPE")
+    {
+        assert(rParameters.find("TEXT") != rParameters.end());
+        const OUString& rText = rParameters.find("TEXT")->second;
+        auto aKeyEvents = generate_key_events_from_text(rText);
+        for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
+                itr != itrEnd; ++itr)
+        {
+            mxWindow->KeyInput(*itr);
         }
     }
 }
@@ -242,22 +265,6 @@ EditUIObject::EditUIObject(VclPtr<Edit> xEdit):
     WindowUIObject(xEdit),
     mxEdit(xEdit)
 {
-}
-
-namespace {
-
-std::vector<KeyEvent> generate_key_events_from_text(const OUString& rStr)
-{
-    std::vector<KeyEvent> aEvents;
-    vcl::KeyCode aCode;
-    for (sal_Int32 i = 0, n = rStr.getLength();
-            i != n; ++i)
-    {
-        aEvents.push_back(KeyEvent(rStr[i], aCode));
-    }
-    return aEvents;
-}
-
 }
 
 void EditUIObject::execute(const OUString& rAction,
