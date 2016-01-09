@@ -1600,7 +1600,7 @@ static void ImplHandlePaint( vcl::Window* pWindow, const Rectangle& rBoundRect, 
         // #i87663# trigger possible pending resize notifications
         // (GetSizePixel does that for us)
         pWindow->GetSizePixel();
-        // force drawing inmmediately
+        // force drawing immediately
         pWindow->Update();
     }
 }

@@ -1559,7 +1559,7 @@ static bool lcl_parseDate(
 
     {
         // While W3C XMLSchema specifies years with a minimum of 4 digits, be
-        // leninent in what we accept for years < 1000. One digit is acceptable
+        // lenient in what we accept for years < 1000. One digit is acceptable
         // if the remainders match.
         bSuccess = readDateTimeComponent(string, nPos, nYear, 1, false);
         if (!bIgnoreInvalidOrMissingDate)

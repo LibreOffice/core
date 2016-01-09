@@ -812,7 +812,7 @@ IMPL_LINK_TYPED( SfxVirtualMenu, Activate, Menu *, pMenu, bool )
         {
             // update window list
             ::std::vector< OUString > aNewWindowListVector;
-            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );;
+            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
             sal_uInt16  nActiveItemId = 0;
             sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;

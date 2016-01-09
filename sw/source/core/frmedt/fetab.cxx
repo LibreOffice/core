@@ -1333,7 +1333,7 @@ size_t SwFEShell::GetCurTabColNum() const
         {
             long nX = (pFrame->Frame().*fnRect->fnGetRight)() - (pPage->Frame().*fnRect->fnGetLeft)();
 
-            const long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();;
+            const long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();
 
             if ( !::IsSame( nX, nRight ) )
             {

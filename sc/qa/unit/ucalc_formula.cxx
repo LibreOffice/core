@@ -4194,7 +4194,7 @@ void Test::testFuncLEN()
 
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
     CPPUNIT_ASSERT(pFC);
-    CPPUNIT_ASSERT_MESSAGE("This formulashould be a matrix origin.",
+    CPPUNIT_ASSERT_MESSAGE("This formula should be a matrix origin.",
                            pFC->GetMatrixFlag() == MM_FORMULA);
 
     // This should be a 1x3 matrix.

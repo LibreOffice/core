@@ -106,7 +106,7 @@ namespace drawinglayer
             virtual ~BasePrimitive3D();
 
             /** the ==operator is mainly needed to allow testing newly-created high level primitives against their last
-                incarnation which buffers/holds the decompositionsThe default implementation
+                incarnation which buffers/holds the decompositions. The default implementation
                 uses getPrimitive3DID()-calls to test if it's the same ID at last.
                 Overridden implementation are then based on this implementation.
              */

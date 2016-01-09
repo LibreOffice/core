@@ -1414,7 +1414,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                     if (m_aCurToken.eType != TNUMBER &&
                         m_aCurToken.eType != TIDENT)
                     {
-                        // Neither a number nor an indentifier. We just moved to
+                        // Neither a number nor an identifier. We just moved to
                         // the next token, so no need to do that again.
                         moveToNextToken = false;
                         break;
@@ -1737,7 +1737,7 @@ void SmParser::DoUnOper()
         pSNode->SetScaleMode(SCALE_HEIGHT);
 
         // build nodes for left & right lines
-        // (text, group, level of the used token are of no interrest here)
+        // (text, group, level of the used token are of no interest here)
         // we'll use row & column of the keyword for abs
         aNodeToken.eType = TABS;
 

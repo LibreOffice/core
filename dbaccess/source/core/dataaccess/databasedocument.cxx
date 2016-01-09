@@ -609,7 +609,7 @@ namespace
                 continue;
             }
 
-            // TODO: clarify: anything else to care for? Both the sub componbents with and without model
+            // TODO: clarify: anything else to care for? Both the sub components with and without model
             // should support the XModifiable interface, so I think nothing more is needed here.
             OSL_FAIL( "lcl_hasAnyModifiedSubComponent_throw: anything left to do here?" );
         }
@@ -974,7 +974,7 @@ OUString SAL_CALL ODatabaseDocument::getLocation(  ) throw (RuntimeException, st
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     return m_pImpl->getURL();
         // both XStorable::getLocation and XModel::getURL have to return the URL of the document, *not*
-        // the location of the file which the docunment was possibly recovered from (which would be getDocFileLocation)
+        // the location of the file which the document was possibly recovered from (which would be getDocFileLocation)
 }
 
 sal_Bool SAL_CALL ODatabaseDocument::isReadonly(  ) throw (RuntimeException, std::exception)

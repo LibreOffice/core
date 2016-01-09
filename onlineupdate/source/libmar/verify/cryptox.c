@@ -143,7 +143,7 @@ CyprtoAPI_VerifySignature(HCRYPTHASH *hash,
 /**
  * Obtains the public key for the passed in cert data
  *
- * @param provider        The cryto provider
+ * @param provider        The crypto provider
  * @param certData        Data of the certificate to extract the public key from
  * @param sizeOfCertData  The size of the certData buffer
  * @param certStore       Pointer to the handle of the certificate store to use

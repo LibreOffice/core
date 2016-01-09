@@ -1922,7 +1922,7 @@ namespace accessibility
                 //the text value doesn't contain the bullet characters. all of the bullet and numbering info are exposed
                 //by the IAText::attributes(). So here must do special support for bullet line.
                 sal_Int32 nCurIndex=0, nLastIndex=0, nCurLineLen=0;
-                sal_Int32 nLastLineLen = 0, nBulletLen = 0;;
+                sal_Int32 nLastLineLen = 0, nBulletLen = 0;
                 // get the line before the line the index points into
                 for( nLine=0, nCurIndex=0, nLastIndex=0; nLine<nLineCount; ++nLine )
                 {

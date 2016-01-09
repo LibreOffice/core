@@ -205,7 +205,7 @@ inline bool SwLayAction::_PaintContent( const SwContentFrame *pContent,
 }
 
 /**
- * Depending of the type, the Content is output according to it's changes, or the area
+ * Depending of the type, the Content is output according to its changes, or the area
  * to be outputted is registered with the region, respectively.
  */
 void SwLayAction::PaintContent( const SwContentFrame *pCnt,

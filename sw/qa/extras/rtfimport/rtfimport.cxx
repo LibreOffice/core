@@ -1553,7 +1553,7 @@ DECLARE_RTFIMPORT_TEST(testFdo69384, "hello.rtf")
     paste("fdo69384-paste.rtf", xEnd);
 
     // Import got interrupted in the middle of style sheet table import,
-    // resuling in missing styles and text.
+    // resulting in missing styles and text.
     getStyles("ParagraphStyles")->getByName("Text body justified");
 }
 

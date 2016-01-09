@@ -50,7 +50,7 @@ static const sal_Int32 CONTINUATION_DISAPPROVE = 8;
   * with XInteractionContinuations directly, but can use constants that are
   * mapped internally to the according objects. This class encapsulates the
   * standard Interaction Continuations "Abort", "Retry", "Approve" and
-  * "Disaprrove". Instances can be passed directly to
+  * "Disapprove". Instances can be passed directly to
   * XInteractionHandler::handle(...).
   *
   * @see InteractionRequest

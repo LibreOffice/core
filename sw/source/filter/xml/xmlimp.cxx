@@ -860,7 +860,7 @@ void SwXMLImport::endDocument()
 
     GetTextImport()->ResetCursor();
 
-    m_pSttNdIdx.reset();;
+    m_pSttNdIdx.reset();
 
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )

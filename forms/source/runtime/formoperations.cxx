@@ -1590,7 +1590,7 @@ namespace frm
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "FormOperations::impl_executeAutoSort_throw: could not reset the form to it's original state!" );
+                    OSL_FAIL( "FormOperations::impl_executeAutoSort_throw: could not reset the form to its original state!" );
                 }
 
             }
@@ -1659,7 +1659,7 @@ namespace frm
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "FormOperations::impl_executeAutoFilter_throw: could not reset the form to it's original state!" );
+                    OSL_FAIL( "FormOperations::impl_executeAutoFilter_throw: could not reset the form to its original state!" );
                 }
 
             }

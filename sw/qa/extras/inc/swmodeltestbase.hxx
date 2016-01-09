@@ -375,7 +375,7 @@ protected:
         if (!mpXmlBuffer)
             dumpLayout();
 
-        return xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer)), xmlBufferLength(mpXmlBuffer));;
+        return xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer)), xmlBufferLength(mpXmlBuffer));
     }
 
     /**

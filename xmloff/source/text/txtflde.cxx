@@ -2638,7 +2638,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     OUStringBuffer aBuffer;
     if (bIsDuration)
     {
-        // date/time durationM handle bOmitDurationIfZero
+        // date/time duration handle bOmitDurationIfZero
         if (!bOmitDurationIfZero || !::rtl::math::approxEqual(dValue, 0.0))
         {
             ::sax::Converter::convertDuration(aBuffer, dValue);

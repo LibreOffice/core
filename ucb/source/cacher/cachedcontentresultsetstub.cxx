@@ -350,7 +350,7 @@ void SAL_CALL CachedContentResultSetStub
     ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
         throw ( RuntimeException )
 {
-    //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResulSets
+    //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResultSets
 
     //we do not propagate the property 'FetchSize' or 'FetchDirection' via 'setPropertyValue' from the above CachedContentResultSet to save remote calls
 

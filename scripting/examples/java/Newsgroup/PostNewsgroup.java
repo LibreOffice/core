@@ -92,7 +92,7 @@ public class PostNewsgroup extends JFrame {
         });
 
         Container container = getContentPane();
-        container.setLayout(new GridBagLayout());;
+        container.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
 

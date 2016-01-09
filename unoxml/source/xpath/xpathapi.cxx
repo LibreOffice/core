@@ -220,7 +220,7 @@ namespace XPath
     }
 
     /**
-     * same as selectNodeList but registers all name space decalratiosn found on namespaceNode
+     * same as selectNodeList but registers all name space declarations found on namespaceNode
      */
     Reference< XNodeList > SAL_CALL CXPathAPI::selectNodeListNS(
             const Reference< XNode >&  contextNode,

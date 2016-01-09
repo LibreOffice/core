@@ -30,7 +30,7 @@ It is used as listener on UI events, to keep the DataObject up to date.
 This class, as a base abstract class, sets a frame of functionality,
 delegating the data Object get/set methods to a Value object,
 and leaving the UI get/set methods abstract.
-Note that event listenning is *not* a part of this model.
+Note that event listening is *not* a part of this model.
 the updateData() or updateUI() methods should be porogramatically called.
 in child classes, the updateData() will be binded to UI event calls.
 <br><br>

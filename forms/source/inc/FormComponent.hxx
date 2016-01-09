@@ -1171,7 +1171,7 @@ private:
 
     /** connects to an external value binding
 
-        <p>Note that by definition, external data bindings superseede the SQL data binding which
+        <p>Note that by definition, external data bindings supersede the SQL data binding which
         is defined by our RowSet-column-related properties. This means that in case we're currently
         connected to a database column when this is called, this connection is suspended.</p>
 

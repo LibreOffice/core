@@ -106,7 +106,7 @@ public:
 
         Third, this function checks if the input stream of the media descriptor
         contains an OLE package. If yes, it checks the existence of the streams
-        'EncryptionInfo' and 'EncyptedPackage' and tries to decrypt the package
+        'EncryptionInfo' and 'EncryptedPackage' and tries to decrypt the package
         into a temporary file. This may include requesting a password from the
         media descriptor property 'Password' or from the user, using the
         interaction handler provided by the descriptor. On success, and if the

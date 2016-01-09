@@ -919,7 +919,7 @@ void SAL_CALL PresenterCustomSprite::move (
         mpCanvas->MergeViewState(rViewState, mpCanvas->GetOffset(mxBaseWindow)),
         rRenderState);
     // Clip sprite against window bounds.  This call is necessary because
-    // sprite clipping is done in the corrdinate system of the sprite.
+    // sprite clipping is done in the coordinate system of the sprite.
     // Therefore, after each change of the sprites location the window
     // bounds have to be transformed into the sprites coordinate system.
     clip(nullptr);

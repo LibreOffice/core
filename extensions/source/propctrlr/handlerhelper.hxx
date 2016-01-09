@@ -173,7 +173,7 @@ namespace pcr
 
         /** gets the window of the ObjectInspector in which an property handler lives
 
-            The method looks up a value called "DialogParentWindow" in the given UNO copmonent context,
+            The method looks up a value called "DialogParentWindow" in the given UNO component context,
             queries it for XWindow, and returns the respective vcl::Window*. If either of those steps fails,
             this is asserted in a non-product version, and silently ignore otherwise.
 

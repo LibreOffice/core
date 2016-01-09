@@ -241,7 +241,7 @@ public class LinguisticExamples
             else
             {
                 if (xHyphWord.isAlternativeSpelling())
-                    System.out.println( "alternative spelling detectetd!" );
+                    System.out.println( "alternative spelling detected!" );
                 System.out.println( "valid hyphenation pos found at "
                                     + xHyphWord.getHyphenationPos()
                         + " in " + xHyphWord.getWord() );

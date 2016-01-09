@@ -45,7 +45,7 @@ bool create_ucb_content(
     bool throw_exc )
 {
     try {
-        // Existense check...
+        // Existence check...
         // content ctor/isFolder() will throw exception in case the resource
         // does not exist.
 

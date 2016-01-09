@@ -739,7 +739,7 @@ void SAL_CALL SlideShow::end()
             if( pViewShell )
             {
                 // invalidate the view shell so the presentation slot will be re-enabled
-                // and the rehersing will be updated
+                // and the rehearsing will be updated
                 pViewShell->Invalidate();
 
                 if( xController->meAnimationMode ==ANIMATIONMODE_SHOW )

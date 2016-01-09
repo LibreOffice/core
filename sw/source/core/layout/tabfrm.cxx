@@ -3297,7 +3297,7 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat
                     // the tabfrm may not have a correct position. Therefore
                     // it is possible that pNewUpper->Prt().Height == 0. In this
                     // case the above calculation of nSpace might give wrong
-                    // results and we really do not want to MoveBackwrd into a
+                    // results and we really do not want to MoveBackward into a
                     // 0 height frame. If nTmpSpace is already <= 0, we take this
                     // value:
                     const SwTwips nTmpSpace = (aRect.*fnRectX->fnGetHeight)();

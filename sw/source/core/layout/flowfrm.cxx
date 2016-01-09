@@ -1087,7 +1087,7 @@ bool SwFlowFrame::IsPrevObjMove() const
 |*      If bAct is set to true, this function returns true if
 |*      there's a PageBreak.
 |*      Of course, we don't evaluate the hard page break for follows.
-|*      The page break is in it's own FrameFormat (BEFORE) or in the FrameFormat of the
+|*      The page break is in its own FrameFormat (BEFORE) or in the FrameFormat of the
 |*      predecessor (AFTER). If there's no predecessor on the page, we don't
 |*      need to think further.
 |*      Also, a page break (or the need for one) is also present if
@@ -1146,7 +1146,7 @@ bool SwFlowFrame::IsPageBreak( bool bAct ) const
 |*      If bAct is set to true, we return true if there's a ColBreak.
 |*      Of course, we don't evaluate the hard column break for follows.
 |*
-|*      The column break is in it's own FrameFormat (BEFORE) or in the FrameFormat of the
+|*      The column break is in its own FrameFormat (BEFORE) or in the FrameFormat of the
 |*      predecessor (AFTER). If there's no predecessor in the column, we don't
 |*      need to think further.
 |*      The implementation works only on ContentFrames! - the definition
@@ -1561,7 +1561,7 @@ SwTwips SwFlowFrame::_GetUpperSpaceAmountConsideredForPageGrid(
     return nUpperSpaceAmountConsideredForPageGrid;
 }
 
-/** method to determent the upper space amount, which is considered for
+/** method to determine the upper space amount, which is considered for
     the previous frame
 
     OD 2004-03-11 #i11860#

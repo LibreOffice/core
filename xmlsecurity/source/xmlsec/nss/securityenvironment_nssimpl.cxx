@@ -707,7 +707,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         cvout[1].value.pointer.log = &log;
         cvout[2].type = cert_po_end;
 
-        // We check SSL server certificates, CA certificates and signing sertificates.
+        // We check SSL server certificates, CA certificates and signing certificates.
         //
         // ToDo check keyusage, looking at CERT_KeyUsageAndTypeForCertUsage (
         // mozilla/security/nss/lib/certdb/certdb.c indicates that

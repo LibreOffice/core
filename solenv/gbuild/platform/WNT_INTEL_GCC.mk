@@ -28,7 +28,7 @@ include $(GBUILDDIR)/platform/windows.mk
 ifeq ($(COM_IS_CLANG),)
 # This has to do something with calling conventions, which are different
 # for x86 and x64. Don't put it in the common part since it is breaking
-# and conde that uses boost::bind
+# any code that uses boost::bind
 gb_GccLess470 := $(shell expr $(GCC_VERSION) \< 407)
 
 # Until GCC 4.6, MinGW used __cdecl by default, and BOOST_MEM_FN_ENABLE_CDECL

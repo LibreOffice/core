@@ -25,7 +25,7 @@
 // define for cursor travelling normally in western text cells and chars do
 // the same, but in complex text cell skip over legatures and char skip
 // into it.
-// These defines exist only to cut off the dependicies to I18N project.
+// These defines exist only to cut off the dependencies to I18N project.
 const sal_uInt16 CRSR_SKIP_CHARS  = 0;
 const sal_uInt16 CRSR_SKIP_CELLS  = 1;
 const sal_uInt16 CRSR_SKIP_HIDDEN = 2;

@@ -957,7 +957,7 @@ IMPL_LINK_NOARG_TYPED(FmXFormView, OnAutoFocus, void*, void)
 {
     m_nAutoFocusEvent = nullptr;
 
-    // go to the first form of our page, examine it's TabController, go to it's first (in terms of the tab order)
+    // go to the first form of our page, examine it's TabController, go to its first (in terms of the tab order)
     // control, give it the focus
 
     SdrPageView *pPageView = m_pView ? m_pView->GetSdrPageView() : nullptr;
@@ -1110,7 +1110,7 @@ IMPL_LINK_NOARG_TYPED( FmXFormView, OnStartControlWizard, void*, void )
         try
         {
             Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-            xWizard.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii(pWizardAsciiName), aWizardArgs.getWrappedPropertyValues(), xContext ), UNO_QUERY);;
+            xWizard.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii(pWizardAsciiName), aWizardArgs.getWrappedPropertyValues(), xContext ), UNO_QUERY);
         }
         catch (const Exception&)
         {

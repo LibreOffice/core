@@ -1596,7 +1596,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 
     if ( m_bIsLink )
     {
-        // TODO: just store the document to it's location
+        // TODO: just store the document to its location
         uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
         if ( !xStorable.is() )
             throw uno::RuntimeException(); // TODO

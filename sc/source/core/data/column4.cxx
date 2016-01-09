@@ -903,7 +903,7 @@ private:
 
         sc::CellTextAttr& rAttr = sc::celltextattr_block::at(*aAttrPos.first->data, aAttrPos.second);
         if (rAttr.mnScriptType != SvtScriptType::UNKNOWN)
-            // Script type already deteremined.  Skip it.
+            // Script type already determined.  Skip it.
             return;
 
         const ScPatternAttr* pPat = mrCol.GetPattern(nRow);

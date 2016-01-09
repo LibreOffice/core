@@ -2303,7 +2303,7 @@ namespace {
 
 void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, const SCTAB nTab, OUString& rTabName, sal_uInt16& rFileId)
 {
-    OUString aFileName = pOldDoc->GetFileURL();;
+    OUString aFileName = pOldDoc->GetFileURL();
     rFileId = pNewDoc->GetExternalRefManager()->getExternalFileId(aFileName);
     rTabName = pOldDoc->GetCopyTabName(nTab);
     if (rTabName.isEmpty())

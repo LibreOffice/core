@@ -732,7 +732,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
     {
         if (( i != PREDEFVAR_WORKDIRURL ) && ( i != PREDEFVAR_PATH ))
         {
-            // Special path variables, don't include into automatic resubstituion search!
+            // Special path variables, don't include into automatic resubstitution search!
             // $(workdirurl) is not allowed to resubstitute! This variable is the value of path settings entry
             // and it could be possible that it will be resubstituted by itself!!
             // Example: WORK_PATH=c:\test, $(workdirurl)=WORK_PATH => WORK_PATH=$(workdirurl) and this cannot be substituted!
@@ -800,7 +800,7 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
     if (!x)
     {
         // fallback to $HOME in case platform dependent config layer does not return
-        // an usuable work dir value.
+        // an usable work dir value.
         osl::Security aSecurity;
         aSecurity.getHomeDir( aWorkPath );
     }
@@ -917,7 +917,7 @@ throw ( NoSuchElementException, RuntimeException )
                     bWorkDirURLRetrieved = true;
                 }
 
-                // Check preconditions to substitue path variables.
+                // Check preconditions to substitute path variables.
                 // 1. A path variable can only be substituted if it follows a ';'!
                 // 2. It's located exactly at the start of the string being substituted!
                 if (( aFixedVarTable[ int( nIndex ) ].bAbsPath && (( nPosition == 0 ) || (( nPosition > 0 ) && ( aWorkText[nPosition-1] == ';')))) ||
@@ -1121,7 +1121,7 @@ throw ( RuntimeException )
             }
         }
 
-        // This part can be iteratered more than one time as variables can contain variables again!
+        // This part can be iterated more than one time as variables can contain variables again!
         for (ReSubstUserVarOrderVector::const_iterator i(
                  m_aReSubstUserVarOrder.begin());
              i != m_aReSubstUserVarOrder.end(); ++i)

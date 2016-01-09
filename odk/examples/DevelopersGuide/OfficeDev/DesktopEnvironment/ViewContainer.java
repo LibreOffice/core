@@ -212,7 +212,7 @@ public class ViewContainer extends Thread
                 break;
 
             aListener.shutdown();
-            // May this listener has dergeistered himself.
+            // May this listener has deregistered himself.
             // But if not we must do it for him. Our own
             // method "removeListener()" ignore requests for
             // already gone listener objects.

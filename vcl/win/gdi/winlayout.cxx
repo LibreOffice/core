@@ -861,7 +861,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // prepare layout
-    // TODO: fix case when recyclying old UniscribeLayout object
+    // TODO: fix case when recycling old UniscribeLayout object
     mnMinCharPos = rArgs.mnMinCharPos;
     mnEndCharPos = rArgs.mnEndCharPos;
 

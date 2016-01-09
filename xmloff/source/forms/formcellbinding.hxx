@@ -46,7 +46,7 @@ namespace xmloff
     public:
         /** determines whether the given control model lives in a spreadsheet document
             <p>If this method returns <FALSE/>, you cannot instantiate a CellBindingHelper with
-            this model, since then no of it's functionality will be available.</p>
+            this model, since then no of its functionality will be available.</p>
         */
         static  bool    livesInSpreadsheetDocument(
                                 const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel

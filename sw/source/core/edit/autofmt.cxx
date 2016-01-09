@@ -1353,7 +1353,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     bool bBreak = true;
 
     // first, determine current indentation and frame width
-    SwTwips nFrameWidth = m_pCurTextFrame->Prt().Width();;
+    SwTwips nFrameWidth = m_pCurTextFrame->Prt().Width();
     SwTwips nLeftTextPos;
     {
         sal_Int32 nPos(0);
@@ -2244,7 +2244,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
                         ( 0 != (nSz = pLRSpace->GetTextFirstLineOfst()) ||
                             0 != pLRSpace->GetTextLeft() ) )
                     {
-                        // exception: numbering/enumation can have an indentation
+                        // exception: numbering/enumeration can have an indentation
                         if( IsEnumericChar( *m_pCurTextNd ))
                         {
                             nLevel = CalcLevel( *m_pCurTextNd, &nDigitLvl );

@@ -115,7 +115,7 @@ void Options_Impl::printUsage_Impl() const
             "     |S<name>   is specified the comparison starts with the root key.\n"
             "    -x<name>  = name specifies the name of a key which won't be compared. All\n"
             "     |X<name>   subkeys won't be compared also. This option can be used more than once.\n"
-            "    -f|F      = force the detailed output of any diffenrences. Default\n"
+            "    -f|F      = force the detailed output of any differences. Default\n"
             "                is that only the number of differences is returned.\n"
             "    -c|C      = make a complete check, that means any differences will be\n"
             "                detected. Default is only a compatibility check that means\n"

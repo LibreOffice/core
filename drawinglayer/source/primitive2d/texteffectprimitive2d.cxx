@@ -54,7 +54,7 @@ namespace drawinglayer
                         -getRotationCenter().getX(), -getRotationCenter().getY()));
                     aBackTransform.rotate(-getDirection());
 
-                    // prepare transform of sub-group back to it's position and rotation
+                    // prepare transform of sub-group back to its position and rotation
                     basegfx::B2DHomMatrix aForwardTransform(basegfx::tools::createRotateB2DHomMatrix(getDirection()));
                     aForwardTransform.translate(getRotationCenter().getX(), getRotationCenter().getY());
 

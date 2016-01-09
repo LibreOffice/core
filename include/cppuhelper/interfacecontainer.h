@@ -69,7 +69,7 @@ class CPPUHELPER_DLLPUBLIC OInterfaceIteratorHelper
 public:
     /**
        Create an iterator over the elements of the container. The iterator
-       copies the elements of the conatainer. A change to the container
+       copies the elements of the container. A change to the container
        during the lifetime of an iterator is allowed and does not
        affect the iterator-instance. The iterator and the container take cares
        themself for concurrent access, no additional guarding is necessary.
@@ -253,7 +253,7 @@ friend class OInterfaceIteratorHelper;
         SAL_DELETED_FUNCTION;
 
     /*
-      Duplicate content of the conaitner and release the old one without destroying.
+      Duplicate content of the container and release the old one without destroying.
       The mutex must be locked and the memberbInUse must be true.
      */
     void copyAndResetInUse();

@@ -619,7 +619,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
         try
         {
             Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-            xFolderPicker = FolderPicker::create(xContext);;
+            xFolderPicker = FolderPicker::create(xContext);
 
             INetURLObject aURL( sWritable, INetProtocol::File );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );

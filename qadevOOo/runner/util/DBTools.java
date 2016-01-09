@@ -37,7 +37,7 @@ import java.sql.DriverManager;
 
 /**
 * Provides useful methods for working with SOffice databases.
-* Database creation, data transferring, outputting infromation.
+* Database creation, data transferring, outputting information.
 */
 public class DBTools {
 

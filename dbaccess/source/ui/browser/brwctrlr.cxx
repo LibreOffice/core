@@ -2092,7 +2092,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 break;
 
             bool bNeedPostReload = preReloadForm();
-            // reset the filter and the sort property simutaneously so only _one_ new statement has to be
+            // reset the filter and the sort property simultaneously so only _one_ new statement has to be
             // sent
             Reference< XPropertySet >  xSet(getRowSet(), UNO_QUERY);
             if ( xSet.is() )
@@ -2287,7 +2287,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTime
     InvalidateFeature(ID_BROWSER_COPY);
 
     // if the invalidation was triggered by the timer, we do not need to invalidate PASTE.
-    // The timer is only for checking the CUT/COPY slots regulariry, which depend on the
+    // The timer is only for checking the CUT/COPY slots regulary, which depend on the
     // selection state of the active cell
     // TODO: get a callback at the Edit which allows to be notified when the selection
     // changes. This would be much better than this cycle-eating polling mechanism here ....
@@ -2375,7 +2375,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation
     // move the cursor
     xCursor->moveToBookmark(rInfo.aPosition);
 
-    // let the grid snyc it's display with the cursor
+    // let the grid sync its display with the cursor
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
     Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
@@ -2500,7 +2500,7 @@ void SbaXDataBrowserController::initializeParser() const
 void SbaXDataBrowserController::loaded(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
 {
     // not interested in
-    // we're loading within an separate thread and have a handling  for it's "finished event"
+    // we're loading within an separate thread and have a handling for its "finished event"
 }
 
 void SbaXDataBrowserController::unloading(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )

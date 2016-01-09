@@ -282,7 +282,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                             basegfx::B2DPolygon aDash = aDashed.getB2DPolygon(i);
                             if (bIsHairline)
                             {
-                                // Convert a rectanglar polygon into a line.
+                                // Convert a rectangular polygon into a line.
                                 basegfx::B2DPolygon aDash2;
                                 basegfx::B2DRange aRange = aDash.getB2DRange();
                                 aDash2.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));

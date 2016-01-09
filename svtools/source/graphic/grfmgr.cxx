@@ -823,7 +823,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 && aSrcSizePixel.Width())
             {
                 // the size in pixels calculated from Graphic's internal MapMode (aTransGraphic.GetPrefMapMode())
-                // and it's internal size (aTransGraphic.GetPrefSize()) is different from it's real pixel size.
+                // and it's internal size (aTransGraphic.GetPrefSize()) is different from its real pixel size.
                 // This can be interpreted as this values to be set wrong, but needs to be corrected since e.g.
                 // existing cropping is calculated based on this logic values already.
                 // aBitmapEx.Scale(aSrcSizePixel);

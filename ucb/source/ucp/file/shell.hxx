@@ -546,7 +546,7 @@ namespace fileaccess {
         css::uno::Sequence< css::ucb::CommandInfo >   m_sCommandInfo;
 
     public:
-        // Misceancellous:
+        // Miscellaneous:
         // Methods for "writeComponentInfo" and "createComponentFactory"
 
         static void SAL_CALL getScheme( OUString& Scheme );

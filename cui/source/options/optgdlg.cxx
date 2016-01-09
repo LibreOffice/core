@@ -1095,7 +1095,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     }
     catch (const Exception &e)
     {
-        // we'll just leave the box in it's default setting and won't
+        // we'll just leave the box in its default setting and won't
         // even give it event handler...
         SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
     }
@@ -1278,7 +1278,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     }
     catch (const Exception& e)
     {
-        // we'll just leave the box in it's default setting and won't
+        // we'll just leave the box in its default setting and won't
         // even give it event handler...
         SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
     }

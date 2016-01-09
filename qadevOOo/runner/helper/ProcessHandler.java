@@ -28,7 +28,7 @@ import lib.TestParameters;
 import util.PropertyName;
 import util.utils;
 
-/**
+/*
  * Class collect information from input stream in
  * background (separate thread) and outputs it to
  * some log stream. I helps to avoid buffer overflow
@@ -36,7 +36,7 @@ import util.utils;
  * in case when handling stdout from external
  * <code>Process</code>)
  *
- * This class is currently used by ProcesHandler
+ * This class is currently used by ProcessHandler
  * internally only.
  */
 class Pump extends Thread
@@ -161,7 +161,7 @@ public class ProcessHandler
      * @param envVars       The specified environment variables are
      *                      set for the new process.
      *                      If log stream is null, logging is printed to stdout.
-     * @param  timeOut      When started sychronisly, the maximum time the
+     * @param  timeOut      When started synchronously, the maximum time the
      *                      process will live. When the process being destroyed
      *                      a log will be written out. It can be asked on
      *                      <code>isTimedOut()</code> if it has been terminated.

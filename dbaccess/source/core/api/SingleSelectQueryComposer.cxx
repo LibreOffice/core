@@ -897,7 +897,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             }
             else if ( aRealFind == aSelectColumns->get().end() )
             {
-                // we can now only look if we found it under the realname propertery
+                // we can now only look if we found it under the realname property
                 // here we have to make the assumption that the position is correct
                 OSQLColumns::Vector::iterator aFind2 = aSelectColumns->get().begin() + i-1;
                 Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);

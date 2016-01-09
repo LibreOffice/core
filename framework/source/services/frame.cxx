@@ -3219,7 +3219,7 @@ void Frame::impl_checkMenuCloser()
 
 //  debug methods
 
-// Its allowed to reset the active frame membervariable with a NULL-css::uno::Reference but not with a NULL-pointer!
+// Its allowed to reset the active frame member variable with a NULL-css::uno::Reference but not with a NULL-pointer!
 // And we accept frames only! No tasks and desktops!
 bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {

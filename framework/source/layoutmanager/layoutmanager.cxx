@@ -2803,7 +2803,7 @@ throw( RuntimeException, std::exception )
 
         setDockingAreaAcceptor( Reference< ui::XDockingAreaAcceptor >() );
 
-        // destroy all elements, it's possible that dettaching is NOT called!
+        // destroy all elements, it's possible that detaching is NOT called!
         implts_destroyElements();
         impl_clearUpMenuBar();
         m_xMenuBar.clear();

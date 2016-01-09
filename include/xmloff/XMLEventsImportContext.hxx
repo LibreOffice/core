@@ -96,7 +96,7 @@ public:
     void SetEvents(
         const css::uno::Reference<css::container::XNameReplace> & xNameRepl);
 
-    /// if the import operates indelayed mode, you can use this method
+    /// if the import operates in delayed mode, you can use this method
     /// to obtain the value sequence for a specific event
     bool GetEventSequence(
         const OUString& rName,

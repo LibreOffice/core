@@ -153,7 +153,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
     {
         switch( getId() )
         {
-            case 0x0000: // Begginning of file
+            case 0x0000: // Beginning of file
                 mpStream->ReadUInt16( nVersion );
                 break;
 

@@ -57,7 +57,7 @@ SwContentNode* SwTextNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) cons
     // the Copy-Textnode is the Node with the Text, the Copy-Attrnode is the
     // node with the collection and hard attributes. Normally is the same
     // node, but if insert a glossary without formatting, then the Attrnode
-    // is the prev node of the destionation position in dest. document.
+    // is the prev node of the destination position in dest. document.
     SwTextNode* pCpyTextNd = const_cast<SwTextNode*>(this);
     SwTextNode* pCpyAttrNd = pCpyTextNd;
 

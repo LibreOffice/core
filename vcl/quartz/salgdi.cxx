@@ -502,7 +502,7 @@ static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
 }
 
 // fake a TTF or CFF font as directly accessing font file is not possible
-// when only the fontid is known. This approach also handles *.dfont fonts.
+// when only the fontid is known. This approach also handles *.font fonts.
 bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
                                       ByteVector& rBuffer, bool* pJustCFF )
 {
