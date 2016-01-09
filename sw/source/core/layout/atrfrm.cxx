@@ -282,10 +282,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     aTmp.Height() = convertMm100ToTwip(aTmp.Height());
                     aTmp.Width() = convertMm100ToTwip(aTmp.Width());
                 }
-                if(aTmp.Height() || aTmp.Width())
-                    m_aSize = aTmp;
-                else
-                    bRet = false;
+                m_aSize = aTmp;
             }
         }
         break;
