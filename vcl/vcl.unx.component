@@ -34,4 +34,8 @@
   <implementation name="vcl::FontIdentificator">
     <service name="com.sun.star.awt.FontIdentificator"/>
   </implementation>
+  <implementation name="org.libreoffice.uitest.UITest"
+      constructor="UITest_get_implementation">
+    <service name="com.sun.star.ui.test.UITest"/>
+  </implementation>
 </component>

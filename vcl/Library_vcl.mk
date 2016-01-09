@@ -396,6 +396,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/uitest/factory \
     vcl/source/uitest/uiobject \
     vcl/source/uitest/uitest \
+    vcl/source/uitest/uno/uiobject_uno \
+    vcl/source/uitest/uno/uitest_uno \
 ))
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
