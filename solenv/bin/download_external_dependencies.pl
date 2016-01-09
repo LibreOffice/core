@@ -85,15 +85,7 @@ use File::Basename;
 use Digest::MD5;
 use Digest::SHA;
 use URI;
-my $simple = 1;
-if ($simple)
-{
-    use LWP::Simple;
-}
-else
-{
-    use LWP::UserAgent;
-}
+use LWP::UserAgent;
 
 my $Debug = 1;
 
@@ -538,54 +530,25 @@ sub DownloadFile ($$$)
 
     # Download the extension.
     my $success = 0;
-    if ($simple)
-    {
-    my $content = LWP::Simple::get($URL);
-    $success = defined $content;
+
+    my $agent = LWP::UserAgent->new();
+    $agent->env_proxy;
+    my $response = $agent->get($URL);
+
+    $success = $response->is_success;
     if ($success)
     {
+        my $content = $response->content;
         open $out, ">$temporary_filename";
         binmode($out);
         print $out $content;
-        close($out);
         $digest->add($content);
     }
     else
     {
         print "download from $URL failed\n";
     }
-    }
-    else
-    {
-    my $agent = LWP::UserAgent->new();
-    $agent->timeout(120);
-    $agent->env_proxy;
-    $agent->show_progress(1);
-    my $last_was_redirect = 0;
-    $agent->add_handler('response_redirect'
-                => sub{
-                $last_was_redirect = 1;
-                return;
-                });
-    $agent->add_handler('response_data'
-                => sub{
-                if ($last_was_redirect)
-                {
-                    $last_was_redirect = 0;
-                    # Throw away the data we got so far.
-                    $digest->reset();
-                    close $out;
-                    open $out, ">$temporary_filename";
-                    binmode($out);
-                }
-                my($response,$agent,$h,$data)=@_;
-                print $out $data;
-                $digest->add($data);
-                });
-
-    $success = $agent->get($URL)->is_success();
-    close $out;
-    }
+    close($out);
 
     # When download was successful then check the checksum and rename the .part file
     # into the actual extension name.
