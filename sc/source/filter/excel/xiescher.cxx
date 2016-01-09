@@ -1700,8 +1700,9 @@ SdrObjectPtr XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     {
         // create embedded chart object
         OUString aEmbObjName;
+        OUString sBaseURL(GetRoot().GetMedium().GetBaseURL());
         Reference< XEmbeddedObject > xEmbObj = pDocShell->GetEmbeddedObjectContainer().
-                CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aEmbObjName );
+                CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aEmbObjName, &sBaseURL );
 
         /*  Set the size to the embedded object, this prevents that font sizes
             of text objects are changed in the chart when the object is
