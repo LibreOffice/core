@@ -100,6 +100,7 @@ StringMap WindowUIObject::get_state()
 {
     StringMap aMap;
     aMap["Visible"] = OUString::boolean(mxWindow->IsVisible());
+    aMap["ReallyVisible"] = OUString::boolean(mxWindow->IsReallyVisible());
     aMap["Enabled"] = OUString::boolean(mxWindow->IsEnabled());
     aMap["WindowType"] = OUString::number(mxWindow->GetType(), 16);
     if (mxWindow->GetParent())
