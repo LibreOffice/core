@@ -45,7 +45,7 @@ inline double toRadian(int nDegree)
 }
 
 CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
-    : mpFontData( static_cast<CoreTextFontData const *>(rFSD.mpFontData) )
+    : mpFontData( static_cast<CoreTextFontFace const *>(rFSD.mpFontData) )
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
     , mpStyleDict( nullptr )
@@ -235,19 +235,19 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     return true;
 }
 
-PhysicalFontFace* CoreTextFontData::Clone() const
+PhysicalFontFace* CoreTextFontFace::Clone() const
 {
-    return new CoreTextFontData( *this);
+    return new CoreTextFontFace( *this);
 }
 
-LogicalFontInstance* CoreTextFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
+LogicalFontInstance* CoreTextFontFace::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
 {
     return new LogicalFontInstance( rFSD);
 }
 
-int CoreTextFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
+int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
 {
-    DBG_ASSERT( pTagName[4]=='\0', "CoreTextFontData::GetFontTable with invalid tagname!\n" );
+    DBG_ASSERT( pTagName[4]=='\0', "CoreTextFontFace::GetFontTable with invalid tagname!\n" );
 
     const CTFontTableTag nTagCode = (pTagName[0]<<24) + (pTagName[1]<<16) + (pTagName[2]<<8) + (pTagName[3]<<0);
 
@@ -420,7 +420,7 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     if( bFontEnabled)
     {
         const sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>(pValue);
-        CoreTextFontData* pFontData = new CoreTextFontData( rDFA, nFontId );
+        CoreTextFontFace* pFontData = new CoreTextFontFace( rDFA, nFontId );
         SystemFontList* pFontList = static_cast<SystemFontList*>(pContext);
         pFontList->AddFont( pFontData );
     }
@@ -450,7 +450,7 @@ SystemFontList::~SystemFontList()
     }
 }
 
-void SystemFontList::AddFont( CoreTextFontData* pFontData )
+void SystemFontList::AddFont( CoreTextFontFace* pFontData )
 {
     sal_IntPtr nFontId = pFontData->GetFontId();
     maFontContainer[ nFontId ] = pFontData;
@@ -465,7 +465,7 @@ void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) co
     }
 }
 
-CoreTextFontData* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
+CoreTextFontFace* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
 {
     CTFontContainer::const_iterator it = maFontContainer.find( nFontId );
     if( it == maFontContainer.end() )

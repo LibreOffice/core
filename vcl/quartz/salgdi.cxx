@@ -53,7 +53,7 @@
 
 using namespace vcl;
 
-CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
+CoreTextFontFace::CoreTextFontFace( const CoreTextFontFace& rSrc )
   : PhysicalFontFace( rSrc )
   , mnFontId( rSrc.mnFontId )
   , mbOs2Read( rSrc.mbOs2Read )
@@ -64,7 +64,7 @@ CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
         mpCharMap = rSrc.mpCharMap;
 }
 
-CoreTextFontData::CoreTextFontData( const ImplFontAttributes& rDFA, sal_IntPtr nFontId )
+CoreTextFontFace::CoreTextFontFace( const ImplFontAttributes& rDFA, sal_IntPtr nFontId )
   : PhysicalFontFace( rDFA )
   , mnFontId( nFontId )
   , mbOs2Read( false )
@@ -74,7 +74,7 @@ CoreTextFontData::CoreTextFontData( const ImplFontAttributes& rDFA, sal_IntPtr n
 {
 }
 
-CoreTextFontData::~CoreTextFontData()
+CoreTextFontFace::~CoreTextFontFace()
 {
     if( mpCharMap )
     {
@@ -82,14 +82,14 @@ CoreTextFontData::~CoreTextFontData()
     }
 }
 
-sal_IntPtr CoreTextFontData::GetFontId() const
+sal_IntPtr CoreTextFontFace::GetFontId() const
 {
     return (sal_IntPtr)mnFontId;
 }
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 
-const FontCharMapPtr CoreTextFontData::GetFontCharMap() const
+const FontCharMapPtr CoreTextFontFace::GetFontCharMap() const
 {
     // return the cached charmap
     if( mpCharMap )
@@ -102,18 +102,18 @@ const FontCharMapPtr CoreTextFontData::GetFontCharMap() const
     // get the CMAP byte size
     // allocate a buffer for the CMAP raw data
     const int nBufSize = GetFontTable( "cmap", nullptr );
-    DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::GetFontCharMap : GetFontTable1 failed!\n");
+    DBG_ASSERT( (nBufSize > 0), "CoreTextFontFace::GetFontCharMap : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return mpCharMap;
 
     // get the CMAP raw data
     ByteVector aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    DBG_ASSERT( (nRawLength > 0), "CoreTextFontData::GetFontCharMap : GetFontTable2 failed!\n");
+    DBG_ASSERT( (nRawLength > 0), "CoreTextFontFace::GetFontCharMap : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
         return mpCharMap;
 
-    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::GetFontCharMap : ByteCount mismatch!\n");
+    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontFace::GetFontCharMap : ByteCount mismatch!\n");
 
     // parse the CMAP
     CmapResult aCmapResult;
@@ -127,7 +127,7 @@ const FontCharMapPtr CoreTextFontData::GetFontCharMap() const
     return mpCharMap;
 }
 
-bool CoreTextFontData::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     // read this only once per font
     if( mbFontCapabilitiesRead )
@@ -171,7 +171,7 @@ bool CoreTextFontData::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
     return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
-void CoreTextFontData::ReadOs2Table() const
+void CoreTextFontFace::ReadOs2Table() const
 {
     // read this only once per font
     if( mbOs2Read )
@@ -182,25 +182,25 @@ void CoreTextFontData::ReadOs2Table() const
 
     // prepare to get the OS/2 table raw data
     const int nBufSize = GetFontTable( "OS/2", nullptr );
-    DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::ReadOs2Table : GetFontTable1 failed!\n");
+    DBG_ASSERT( (nBufSize > 0), "CoreTextFontFace::ReadOs2Table : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return;
 
     // get the OS/2 raw data
     ByteVector aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    DBG_ASSERT( (nRawLength > 0), "CoreTextFontData::ReadOs2Table : GetFontTable2 failed!\n");
+    DBG_ASSERT( (nRawLength > 0), "CoreTextFontFace::ReadOs2Table : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
         return;
 
-    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::ReadOs2Table : ByteCount mismatch!\n");
+    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontFace::ReadOs2Table : ByteCount mismatch!\n");
     mbHasOs2Table = true;
 
     // parse the OS/2 raw data
     // TODO: also analyze panose info, etc.
 }
 
-void CoreTextFontData::ReadMacCmapEncoding() const
+void CoreTextFontFace::ReadMacCmapEncoding() const
 {
     // read this only once per font
     if( mbCmapEncodingRead )
@@ -217,7 +217,7 @@ void CoreTextFontData::ReadMacCmapEncoding() const
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
     if( nRawLength < 24 )
         return;
-    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::ReadMacCmapEncoding : ByteCount mismatch!\n");
+    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontFace::ReadMacCmapEncoding : ByteCount mismatch!\n");
 
     const unsigned char* pCmap = &aBuffer[0];
     if( GetUShort( pCmap ) != 0x0000 )
@@ -430,7 +430,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     }
 
     // update the text style
-    mpFontData = static_cast<const CoreTextFontData*>( pReqFont->mpFontData );
+    mpFontData = static_cast<const CoreTextFontFace*>( pReqFont->mpFontData );
     mpTextStyle = new CoreTextStyle( *pReqFont );
 
     SAL_INFO("vcl.ct",
@@ -506,7 +506,7 @@ static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
 bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
                                       ByteVector& rBuffer, bool* pJustCFF )
 {
-    const CoreTextFontData* pMacFont = static_cast<const CoreTextFontData*>(pFontData);
+    const CoreTextFontFace* pMacFont = static_cast<const CoreTextFontFace*>(pFontData);
 
     // short circuit for CFF-only fonts
     const int nCffSize = pMacFont->GetFontTable( "CFF ", nullptr);
