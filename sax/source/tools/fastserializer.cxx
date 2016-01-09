@@ -94,29 +94,8 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::write( const OUString& sOutput, bool bEscape )
     {
-        const sal_Int32 nLength = sOutput.getLength();
-        for (sal_Int32 i = 0; i < nLength; ++i)
-        {
-            const sal_Unicode cUnicode = sOutput[ i ];
-            const char cChar = cUnicode;
-            if (cUnicode & 0xff80)
-            {
-                write( OString(&cUnicode, 1, RTL_TEXTENCODING_UTF8) );
-            }
-            else if(bEscape) switch( cChar )
-            {
-                case '<':   writeBytes( "&lt;", 4 );     break;
-                case '>':   writeBytes( "&gt;", 4 );     break;
-                case '&':   writeBytes( "&amp;", 5 );    break;
-                case '\'':  writeBytes( "&apos;", 6 );   break;
-                case '"':   writeBytes( "&quot;", 6 );   break;
-                case '\n':  writeBytes( "&#10;", 5 );    break;
-                case '\r':  writeBytes( "&#13;", 5 );    break;
-                default:    writeBytes( &cChar, 1 );     break;
-            }
-            else
-                writeBytes( &cChar, 1 );
-        }
+        write( sOutput.toUtf8(), bEscape );
+
     }
 
     void FastSaxSerializer::write( const OString& sOutput, bool bEscape )
