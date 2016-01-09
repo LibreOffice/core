@@ -34,13 +34,13 @@
 #include <graphite_layout.hxx>
 #endif
 
-class ImplWinFontEntry;
+class WinFontInstance;
 struct VisualItem;
 
 class WinLayout : public SalLayout
 {
 public:
-                        WinLayout(HDC, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
+                        WinLayout(HDC, const ImplWinFontData&, WinFontInstance&, bool bUseOpenGL);
     virtual             ~WinLayout();
     virtual void        InitFont() const override;
     void                SetFontScale( float f ) { mfFontScale = f; }
@@ -65,13 +65,13 @@ public:
     bool                mbUseOpenGL;        ///< We need to render via OpenGL
 
     const ImplWinFontData& mrWinFontData;
-    ImplWinFontEntry&   mrWinFontEntry;
+    WinFontInstance&   mrWinFontEntry;
 };
 
 class UniscribeLayout : public WinLayout
 {
 public:
-                    UniscribeLayout(HDC, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
+                    UniscribeLayout(HDC, const ImplWinFontData&, WinFontInstance&, bool bUseOpenGL);
 
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;
@@ -145,13 +145,13 @@ private:
 class GraphiteLayoutWinImpl : public GraphiteLayout
 {
 public:
-    GraphiteLayoutWinImpl(const gr_face * pFace, ImplWinFontEntry & rFont)
+    GraphiteLayoutWinImpl(const gr_face * pFace, WinFontInstance & rFont)
         throw()
     : GraphiteLayout(pFace), mrFont(rFont) {};
     virtual ~GraphiteLayoutWinImpl() throw() {};
     virtual sal_GlyphId getKashidaGlyph(int & rWidth) override;
 private:
-    ImplWinFontEntry & mrFont;
+    WinFontInstance & mrFont;
 };
 
 /// This class uses the SIL Graphite engine to provide complex text layout services to the VCL
@@ -162,7 +162,7 @@ private:
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
-    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL) throw();
+    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw();
     virtual ~GraphiteWinLayout();
 
     // used by upper layers
