@@ -578,6 +578,7 @@ vcl_headless_freetype_code=\
     vcl/headless/svptext \
     vcl/headless/svpglyphcache \
     vcl/unx/generic/gdi/cairotextrender \
+    vcl/unx/generic/gdi/gcach_ftyp \
     vcl/headless/svpcairotextrender \
 
 ifeq ($(USING_X11),TRUE)
@@ -587,7 +588,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/gdi/x11windowprovider \
-    vcl/unx/generic/gdi/gcach_ftyp \
     vcl/unx/generic/window/screensaverinhibitor \
     $(if $(filter TRUE,$(ENABLE_CUPS)),\
         vcl/unx/generic/printer/cupsmgr \
