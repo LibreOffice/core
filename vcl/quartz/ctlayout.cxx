@@ -532,7 +532,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
         {
             if ( !CFEqual( iter->m_pFont,  pFont ) )
             {
-                pFallbackFont = new CoreTextFontData( rDevFontAttr, reinterpret_cast<sal_IntPtr>(pFontDesc) );
+                pFallbackFont = new CoreTextFontFace( rDevFontAttr, reinterpret_cast<sal_IntPtr>(pFontDesc) );
                 *(pFallbackFonts++) = pFallbackFont;
             }
             else

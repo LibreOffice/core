@@ -54,11 +54,11 @@ typedef sal_uInt32 sal_GlyphId;
 typedef std::vector<unsigned char> ByteVector;
 
 // CoreText-specific physically available font face
-class CoreTextFontData : public PhysicalFontFace
+class CoreTextFontFace : public PhysicalFontFace
 {
 public:
-                                    CoreTextFontData( const ImplFontAttributes&, sal_IntPtr nFontID );
-    virtual                         ~CoreTextFontData();
+                                    CoreTextFontFace( const ImplFontAttributes&, sal_IntPtr nFontID );
+    virtual                         ~CoreTextFontFace();
 
     PhysicalFontFace*               Clone() const override;
     LogicalFontInstance*            CreateFontInstance( FontSelectPattern& ) const override;
@@ -74,7 +74,7 @@ public:
     void                            ReadMacCmapEncoding() const;
 
 protected:
-                                    CoreTextFontData( const CoreTextFontData& );
+                                    CoreTextFontFace( const CoreTextFontFace& );
 
 private:
     const sal_IntPtr                mnFontId;
@@ -98,7 +98,7 @@ public:
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
-    const CoreTextFontData*  mpFontData;
+    const CoreTextFontFace*  mpFontData;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float               mfFontStretch;
     /// text rotation in radian
@@ -122,16 +122,16 @@ public:
     ~SystemFontList( void );
 
     bool        Init( void );
-    void        AddFont( CoreTextFontData* );
+    void        AddFont( CoreTextFontFace* );
 
     void    AnnounceFonts( PhysicalFontCollection& ) const;
-    CoreTextFontData* GetFontDataFromId( sal_IntPtr nFontId ) const;
+    CoreTextFontFace* GetFontDataFromId( sal_IntPtr nFontId ) const;
 
 private:
     CTFontCollectionRef mpCTFontCollection;
     CFArrayRef mpCTFontArray;
 
-    typedef std::unordered_map<sal_IntPtr,CoreTextFontData*> CTFontContainer;
+    typedef std::unordered_map<sal_IntPtr,CoreTextFontFace*> CTFontContainer;
     CTFontContainer maFontContainer;
 };
 
@@ -166,7 +166,7 @@ protected:
     RGBAColor                               maFillColor;
 
     // Device Font settings
-    const CoreTextFontData*                 mpFontData;
+    const CoreTextFontFace*                 mpFontData;
     CoreTextStyle*                          mpTextStyle;
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing
