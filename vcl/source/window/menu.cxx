@@ -3138,9 +3138,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
         if( ! pW->IsDisposed() )
             pW->ImplDecModalCount();
 
-        if ( !pWin->IsDisposed() )
-            return 0;
-        else
+        if ( pWin->IsDisposed() )
             return 0;
 
         // Restore focus (could already have been
