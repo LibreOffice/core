@@ -587,7 +587,7 @@ namespace drawinglayer
             Used inside OutputDevice::DrawGradient to mark the start and end of a MetaGradientEx action.
             It is used in various exporters/importers to have direct access to the gradient before it
             is rendered by VCL (and thus fragmented to polygon color actions and others). On that base, e.g.
-            the Metafile to SdrObject import creates it's gradient objects.
+            the Metafile to SdrObject import creates its gradient objects.
             Best (and safest) way to support it here is to use PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D,
             map it back to the corresponding tools tools::PolyPolygon and the Gradient and just call
             OutputDevice::DrawGradient which creates the necessary compatible actions.
@@ -669,7 +669,7 @@ namespace drawinglayer
             - TextHierarchyParagraphPrimitive2D: Encapsulates single paragraph
             - TextHierarchyBlockPrimitive2D: encapsulates object texts (only one ATM)
             Those are now supported in hierarchy. This means the MetaFile renderer will support them
-            by using them, reculrively using their content and adding MetaFile comments as needed.
+            by using them, recursively using their content and adding MetaFile comments as needed.
             This also means that when another text layouter will be used it will be necessary to
             create/support the same HierarchyPrimitives to support users.
             To transport the information using this hierarchy is best suited to all future needs;

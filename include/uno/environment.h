@@ -313,7 +313,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
 /** Dumps out environment information, i.e. registered interfaces.
 
     @param stream       output stream (FILE *)
-    @param pEnvDcp      descritpro of environment to be dumped
+    @param pEnvDcp      descriptor of environment to be dumped
     @param pFilter      if not null, filters output
 */
 CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(

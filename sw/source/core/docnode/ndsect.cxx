@@ -1022,7 +1022,7 @@ SwFrame *SwSectionNode::MakeFrame( SwFrame *pSib )
     return new SwSectionFrame( *m_pSection, pSib );
 }
 
-// Creates all Document Views for the precedeing Node.
+// Creates all Document Views for the preceding Node.
 // The created ContentFrames are attached to the corresponding Layout
 void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
 {

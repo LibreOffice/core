@@ -63,7 +63,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
     private XResultSet xReSet = null;
 
     /**
-     * Retcieves the object relations:
+     * Retrieves the object relations:
     * <ul>
     *  <li><code>XSingleSelectQueryAnalyzer xQueryAna</code></li>
     *  <li><code>XPropertySet xProp</code></li>

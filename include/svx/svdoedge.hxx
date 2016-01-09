@@ -169,7 +169,7 @@ protected:
     bool                        bEdgeTrackDirty : 1; // sal_True=Verbindungsverlauf muss neu berechnet werden.
     bool                        bEdgeTrackUserDefined : 1;
 
-    // Bool to allow supporession of default connects at object
+    // Bool to allow suppression of default connects at object
     // inside test (HitTest) and object center test (see ImpFindConnector())
     bool                        mbSuppressDefaultConnect : 1;
 

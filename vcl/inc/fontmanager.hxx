@@ -63,7 +63,7 @@ enum type {
 /*
  *  the difference between FastPrintFontInfo and PrintFontInfo
  *  is that the information in FastPrintFontInfo can usually
- *  be gathered without openening either the font file or
+ *  be gathered without opening either the font file or
  *  an afm metric file. they are gathered from fonts.dir alone.
  *  if only FastPrintFontInfo is gathered and PrintFontInfo
  *  on demand and for less fonts, then performance in startup

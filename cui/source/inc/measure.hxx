@@ -27,7 +27,7 @@
 
 class SdrView;
 
-/// Dialog for changing TextAtrributes
+/// Dialog for changing TextAttributes
 class SvxMeasurePage : public SvxTabPage
 {
 private:

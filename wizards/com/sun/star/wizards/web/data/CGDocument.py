@@ -30,7 +30,7 @@ from com.sun.star.document.UpdateDocMode import NO_UPDATE
 
 '''
 About the member fields Title, Description and Author:
-There is an ambiguicy in handling these fields.
+There is an ambiguity in handling these fields.
 On the one hand, the user can set those fields to a custom value,
 relevant only for the web-wizard.
 On the other-hand, the web-wizard can read those fields automatically

@@ -486,7 +486,7 @@ SfxUShortRanges& SfxUShortRanges::operator -=
             // right side
             if( u1 > u2 ) // anything left at all
             {
-                // reduce minuend interval, try again (minuend might be affected by other subtrahend itnervals )
+                // reduce minuend interval, try again (minuend might be affected by other subtrahend intervals )
                 _pRanges[ nPos1 ] = u2 + 1;
             }
 

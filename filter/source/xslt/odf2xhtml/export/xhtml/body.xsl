@@ -859,7 +859,7 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<!-- A XML node other than text or element (e.g. commment) should not stop the recursion  -->
+	<!-- A XML node other than text or element (e.g. comment) should not stop the recursion  -->
 	<xsl:template match="comment()" mode="frameFloating">
 		<xsl:param name="globalData"/>
 		<xsl:param name="previousFrameWidths" select="0"/>
@@ -2775,7 +2775,7 @@
 
 	<!-- Hidden text dependent on Office variables:
 		 The text is not shown, if condition is 'true'.
-		 Implemented solely for conditons as '<VARIABLE>==0' or '<VARIABLE>==1'
+		 Implemented solely for conditions as '<VARIABLE>==0' or '<VARIABLE>==1'
 	-->
 	<xsl:key match="text:variable-set" name="varSet" use="@text:name"/>
 	<xsl:template match="text:hidden-text">

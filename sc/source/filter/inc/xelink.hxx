@@ -101,7 +101,7 @@ private:
     void                CalcSortedIndexes();
 
 private:
-    /** Data structure with infoemation about one Calc sheet. */
+    /** Data structure with information about one Calc sheet. */
     struct XclExpTabInfoEntry
     {
         OUString       maScName;

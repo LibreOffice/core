@@ -461,7 +461,7 @@ Resource RID_SUBSETMAP
     };
     String RID_SUBSETSTR_CANADIAN_ABORIGINAL
     {
-        Text [ en-US ] = "Canadan Aboriginal Syllables";
+        Text [ en-US ] = "Canadian Aboriginal Syllables";
     };
     String RID_SUBSETSTR_MONGOLIAN
     {

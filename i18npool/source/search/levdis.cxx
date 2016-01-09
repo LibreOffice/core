@@ -23,7 +23,7 @@
     including wildcards
     '*' for any number (0 or more) of arbitrary characters
     '?' for exactly one arbitrary character
-    escapeable with  backslash, "\*" or "\?"
+    escapable with  backslash, "\*" or "\?"
 
     Return:
         WLD if WLD <= nLimit, else nLimit+1
@@ -177,7 +177,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
             nP = nRepP0;
         if ( c == '*' && bpPatIsWild[j] )
         {
-            nQ = 0;     // instertion and deletion without penalty
+            nQ = 0;     // insertion and deletion without penalty
             nR = 0;
         }
         else

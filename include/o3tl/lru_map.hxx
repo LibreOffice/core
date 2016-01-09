@@ -19,7 +19,7 @@ namespace o3tl
 
 /** LRU map
  *
- * Similar to unordered_map (it actually uses it) with additionaly functionality
+ * Similar to unordered_map (it actually uses it) with additionally functionality
  * which removes the entries that have been "least recently used" when the size
  * hits the specified capacity.
  *

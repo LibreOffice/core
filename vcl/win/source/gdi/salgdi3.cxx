@@ -374,7 +374,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
     {
         bFirst = false;
 
-        // use method suggested in #i97086# to determnine the systems default language
+        // use method suggested in #i97086# to determine the systems default language
         // TODO: move into i18npool or sal/osl/w32/nlsupport.c
         LanguageType nDefaultLang = 0;
         HKEY hKey = NULL;

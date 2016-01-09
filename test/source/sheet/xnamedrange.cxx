@@ -79,7 +79,7 @@ void XNamedRange::testSetType()
     OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
-    sal_Int32 nType = ::sheet::NamedRangeFlag::ROW_HEADER;;
+    sal_Int32 nType = ::sheet::NamedRangeFlag::ROW_HEADER;
     xNamedRange->setType(nType);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected Type ROW_HEADER after setting it", xNamedRange->getType() == nType);
 

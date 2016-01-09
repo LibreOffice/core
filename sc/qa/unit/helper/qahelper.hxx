@@ -111,7 +111,7 @@ SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode&
 // handling APIs? Do we really want to add arbitrary new file handling
 // wrappers here and there (and then having to handle the Android (and
 // eventually perhaps iOS) special cases here, too)?  Please move this to osl,
-// it sure looks gemerally useful. Or am I missing something?
+// it sure looks generally useful. Or am I missing something?
 
 SCQAHELPER_DLLPUBLIC void loadFile(const OUString& aFileName, std::string& aContent);
 

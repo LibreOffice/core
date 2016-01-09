@@ -362,7 +362,7 @@ geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation()
         // optimizations the avoid updates when the transformation is
         // unchanged (when the window size changes then due to the constant
         // aspect ratio the size of the preview may remain the same while
-        // the position changes.  The position, however, is repesented by
+        // the position changes.  The position, however, is rapresented by
         // the position of the view window.  This transformation is given
         // relative to the view window and therefore does not contain the
         // position.)

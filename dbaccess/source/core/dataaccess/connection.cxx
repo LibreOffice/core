@@ -265,7 +265,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
                          , const Reference< XComponentContext >& _rxORB)
             :OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
-                // container would do it's own refcounting, it would have to acquire m_pMutex
+                // container would do its own refcounting, it would have to acquire m_pMutex
                 // same for tables
             ,m_aTableFilter(_rDB.m_pImpl->m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)

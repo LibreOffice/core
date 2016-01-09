@@ -336,7 +336,7 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
         rSubObj.SetLayer(rReplaceObj.GetLayer());
 
         // remove old object from group-list and add new one
-        // (this also exchanges it in the drwaing page)
+        // (this also exchanges it in the drawing page)
         pObjectList->ReplaceObject(&rSubObj, rReplaceObj.GetOrdNum());
     }
     else

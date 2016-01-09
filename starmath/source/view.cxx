@@ -354,7 +354,7 @@ void SmGraphicWindow::SetCursor(const Rectangle &rRect)
 }
 
 const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
-    // looks for a VISIBLE node in the formula tree with it's token at
+    // looks for a VISIBLE node in the formula tree with its token at
     // (or around) the position 'nRow', 'nCol' in the edit window
     // (row and column numbering starts with 1 there!).
     // If there is such a node the formula-cursor is set to cover that nodes

@@ -100,7 +100,7 @@ public:
     virtual ~ObjectContact();
 
     // LazyInvalidate request. This is used from the VOCs to mark that they
-    // got invalidated by an ActionCanged() call. An active view needs to remember
+    // got invalidated by an ActionChanged() call. An active view needs to remember
     // this and take action on it. Default implementation directly calls back
     // triggerLazyInvalidate() which promptly handles the request
     virtual void setLazyInvalidate(ViewObjectContact& rVOC);

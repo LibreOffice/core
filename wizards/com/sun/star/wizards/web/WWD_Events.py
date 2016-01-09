@@ -278,7 +278,7 @@ class WWD_Events(WWD_Startup):
             # update the list to show the right selection.
 
         self.docListDA.updateUI()
-        # disables all the next steps, if the list of docuemnts
+        # disables all the next steps, if the list of documents
         # is empty.
         self.checkSteps()
 

@@ -787,7 +787,7 @@ public:
         @param orTokens  (input/output parameter) Expects a single string token
             in this token sequence (whitespace tokens are allowed). The string
             is split into substrings. A list of string tokens separated with
-            parameter separator tokens is returned in this psrameter.
+            parameter separator tokens is returned in this parameter.
 
         @param cStringSep  The separator character used to split the input
             string.

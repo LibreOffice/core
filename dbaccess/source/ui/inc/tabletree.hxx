@@ -76,7 +76,7 @@ public:
     /** fill the table list with the tables and views determined by the two given containers.
         The views sequence is used to determine which table is of type view.
         @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
-                                    Used to split the full qualified names into it's parts.
+                                    Used to split the full qualified names into its parts.
         @param      _rTables        table/view sequence
         @param      _rViews         view sequence
     */
@@ -149,7 +149,7 @@ protected:
 
     /** fill the table list with the tables and views determined by the two given containers
         @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
-                                    Used to split the full qualified names into it's parts.
+                                    Used to split the full qualified names into its parts.
         @param      _rTables        table/view sequence, the second argument is <TRUE/> if it is a table, otherwise it is a view.
     */
     void    UpdateTableList(

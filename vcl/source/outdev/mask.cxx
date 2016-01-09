@@ -114,7 +114,7 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                            ImplLogicWidthToDevicePixel(rDestSize.Width()),
                            ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
-        // we don't want to mirror via cooridates
+        // we don't want to mirror via coordinates
         const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, pImpBmp->ImplGetSize() );
 
         // check if output is necessary

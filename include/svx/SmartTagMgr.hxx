@@ -124,7 +124,7 @@ public:
     SmartTagMgr( const OUString& rApplicationName );
     virtual ~SmartTagMgr();
 
-    /** Triggeres configuration reading, library loading and listener registration
+    /** Triggers configuration reading, library loading and listener registration
         NOTE: MUST BE CALLED AFTER CONSTRUCTION!
     */
     void Init( const OUString& rConfigurationGroupName );

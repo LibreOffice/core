@@ -118,7 +118,7 @@ static  bool lcl_HasStrongLTR ( const OUString& rText, sal_Int32 nStart, sal_Int
  }
 
 // class SwLineLayout: This is the layout of a single line, which is made
-// up of it's dimension, the character count and the word spacing in the line.
+// up of its dimension, the character count and the word spacing in the line.
 // Line objects are managed in an own pool, in order to store them continuously
 // in memory so that they are paged out together and don't fragment memory.
 SwLineLayout::~SwLineLayout()

@@ -192,7 +192,7 @@ ViewObjectContact::~ViewObjectContact()
 
     // take care of remembered ObjectContact. Remove from
     // OC first. The VC removal (below) CAN trigger a StopGettingViewed()
-    // which (depending of it's implementation) may destroy other OCs. This
+    // which (depending of its implementation) may destroy other OCs. This
     // can trigger the deletion of the helper OC of a page visualising object
     // which IS the OC of this object. Eventually StopGettingViewed() needs
     // to get asynchron later

@@ -38,7 +38,7 @@ namespace drawinglayer
 
             This primitive is specialized to Grid visualisation. The graphic definition
             (Transform) contains the whole grid area, but will of course be combined
-            with the visible area (Viewport) when decomposed. Also a reolution-dependent
+            with the visible area (Viewport) when decomposed. Also a resolution-dependent
             point reduction is used to not create too much grid visualisation data. This
             makes this primitive highly view-dependent and it dynamically buffers
             the last decomposition dependent from the Viewport used.

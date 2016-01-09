@@ -60,14 +60,14 @@ Tables contain *only* those pairs.<br/>
 2.b. design is arbitrary.<br/>
 As result the following limitations:<br/>
 No column merge is allowed.<br/>
-One compolsary Heading row.<br/>
+One compulsory Heading row.<br/>
 <br/><br/>
 To let the template be flexible, we use a kind of "detection": we look where
 the items are read the design of each table, reaplying it after writing the
 table.self.xTextDocument
 <br/><br/>
 A note about threads:<br/>
-Many methods here are synchronized, in order to avoid colission made by
+Many methods here are synchronized, in order to avoid collision made by
 events fired too often.
 '''
 class AgendaDocument(TextDocument):
@@ -791,7 +791,7 @@ class Topics(object):
     in the preview document, in response to a change in the gui (by the user)
     Since the structure of the topics table is flexible,
     The Topics object, which analyzed the structure of the topics table upon
-    initialization, refreshes the approperiate cell.
+    initialization, refreshes the appropriate cell.
     '''
     def writeCell(self, row, column, data):
         # if the whole row should be written...

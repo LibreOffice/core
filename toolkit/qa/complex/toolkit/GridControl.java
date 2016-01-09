@@ -296,7 +296,7 @@ public class GridControl
                 removeColumnIndex, removalIndex );
         }
 
-        // calling addColumn with a column not created by the given model/implementatoion should not succeed
+        // calling addColumn with a column not created by the given model/implementation should not succeed
         boolean caughtExpected = false;
         try
         {

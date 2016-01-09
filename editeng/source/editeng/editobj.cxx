@@ -117,7 +117,7 @@ ContentInfo::ContentInfo( SfxItemPool& rPool ) :
 {
 }
 
-// the real Copy constructor is nonsens, since I have to work with another Pool!
+// the real Copy constructor is nonsense, since I have to work with another Pool!
 ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse ) :
     maText(rCopyFrom.maText),
     aStyle(rCopyFrom.aStyle),

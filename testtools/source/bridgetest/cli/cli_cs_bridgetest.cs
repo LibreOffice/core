@@ -966,7 +966,7 @@ static bool raiseException(XBridgeTest xLBT )
 
     private void perform_test( XBridgeTest xLBT )
     {
-        bool bRet= true;;
+        bool bRet= true;
        bRet = check( performTest( xLBT ), "standard test" ) && bRet;
        bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
        bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) && bRet;

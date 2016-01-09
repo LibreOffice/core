@@ -299,7 +299,7 @@ class Process(ProcessErrors):
 
     # copies layout files which are not .xsl files
     # to the target directory.
-    # @param ucb UCB encapsulatzion object
+    # @param ucb UCB encapsulation object
     # @param fileAccess filaAccess encapsulation object
     # @param settings web wizard settings
     # @param layout the layout object

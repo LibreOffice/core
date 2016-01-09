@@ -54,7 +54,7 @@ class AquaClipboard;
 // instance
 - (EventListener*)initWithAquaClipboard: (AquaClipboard*) pcb;
 
-// Promiss resolver function
+// Promise resolver function
 - (void)pasteboard:(NSPasteboard*)sender provideDataForType:(const NSString *)type;
 
 -(void)applicationDidBecomeActive:(NSNotification*)aNotification;

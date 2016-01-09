@@ -173,7 +173,7 @@ protected:
     virtual void    allFeatureStatesChanged( ) override;
     virtual bool    isEnabled( sal_Int16 _nFeatureId ) const override;
 
-    // XDispatchProviderInterception disambiguaiton
+    // XDispatchProviderInterception disambiguation
     virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) override;
 

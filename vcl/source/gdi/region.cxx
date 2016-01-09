@@ -36,7 +36,7 @@
 
 namespace
 {
-    /** Return <TRUE/> when the given polygon is rectiliner and oriented so that
+    /** Return <TRUE/> when the given polygon is rectilinear and oriented so that
         all sides are either horizontal or vertical.
     */
     bool ImplIsPolygonRectilinear (const tools::PolyPolygon& rPolyPoly)

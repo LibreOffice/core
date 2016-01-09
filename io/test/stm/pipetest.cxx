@@ -265,7 +265,7 @@ void OPipeTest::testSimple( const Reference < XInterface > &r )
         input->readBytes( seqRead , 5 );
         ERROR_ASSERT(   ! strcmp(   (char*) seqRead.getArray() ,
                             (char*) &( seqWrite.getArray()[seqWrite.getLength()-5] ) ),
-                        "write/read mismatich" );
+                        "write/read mismatch" );
 
     }
 

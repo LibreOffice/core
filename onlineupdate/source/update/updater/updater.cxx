@@ -1829,7 +1829,7 @@ LaunchCallbackApp(const NS_tchar *workingDir,
     WinLaunchChild(argv[0], argc, argv, nullptr);
   }
 #else
-# warning "Need implementaton of LaunchCallbackApp"
+# warning "Need implementation of LaunchCallbackApp"
 #endif
 }
 
@@ -2698,7 +2698,7 @@ int NS_main(int argc, NS_tchar **argv)
         }
       }
 
-      // Make sure the service registry entries for the instsallation path
+      // Make sure the service registry entries for the installation path
       // are available.  If not don't use the service.
       if (useService) {
         WCHAR maintenanceServiceKey[MAX_PATH + 1];

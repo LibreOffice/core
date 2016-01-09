@@ -141,7 +141,7 @@ or:
 	This is an interim measure while we are migrating, such that
 	it is possible to delete an object conventionally and ensure
 	that its dispose method gets called. In the 'end' we would
-	instead assert that a Window has been disposed in it's
+	instead assert that a Window has been disposed in its
 	destructor, and elide these calls.
 
 	As the object's vtable is altered as we go down the

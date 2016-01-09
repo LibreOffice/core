@@ -116,7 +116,7 @@ void ScDPResultTree::add(
         DimensionsType::iterator itDim = rDims.find(aUpperName);
         if (itDim == rDims.end())
         {
-            // New dimenison.  Insert it.
+            // New dimension.  Insert it.
             std::pair<DimensionsType::iterator, bool> r =
                 rDims.insert(DimensionsType::value_type(aUpperName, new DimensionNode));
 

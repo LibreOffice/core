@@ -423,7 +423,7 @@ class SaveProgressDialog : public ModalDialog
                     is used automatically.
 
             @param  pCore
-                    used to start emegrency save.
+                    used to start emergency save.
          */
         SaveProgressDialog(vcl::Window*       pParent,
                            RecoveryCore* pCore  );

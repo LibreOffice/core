@@ -310,7 +310,7 @@ static int ArgStrLen(const wchar_t *s)
   BOOL addDoubleQuotes = wcspbrk(s, L" \t") != nullptr;
 
   if (addDoubleQuotes) {
-    i += 2; // initial and final duoblequote
+    i += 2; // initial and final doublequote
   }
 
   if (hasDoubleQuote) {

@@ -1131,7 +1131,7 @@ private:
     as they are encountered, and so their end point is normally unimportant.
     But hyperlink fields need to be applied as attributes to text and it is
     far easier and safer to set the end point of an attribute when we
-    encounter the end marker of the field instead of caculating in advance
+    encounter the end marker of the field instead of calculating in advance
     where the end point will fall, to do so fully correctly duplicates the
     main logic of the filter itself.
     */

@@ -276,7 +276,7 @@ private:
  *
  *  The size can be given directly or calculated automatically from
  *  the difference between the tell() return values before and
- *  after streaming the conntents.
+ *  after streaming the contents.
  *
  *  To allow for forward and backward compatibility, newer versions
  *  of the data must always include the older versions completely,

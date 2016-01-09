@@ -618,7 +618,7 @@ void FormulaParserImpl::initializeImport( const CellAddress& rBaseAddr, FormulaT
         break;
         case FORMULATYPE_DEFINEDNAME:
             mbRelativeAsOffset = true;
-            // BIFF2-BIFF4: convert 2D referebces to absolute 3D references
+            // BIFF2-BIFF4: convert 2D references to absolute 3D references
             mb2dRefsAs3dRefs = (getFilterType() == FILTER_BIFF) && (getBiff() <= BIFF4);
         break;
     }

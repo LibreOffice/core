@@ -144,7 +144,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
     // additional members as this is not compatible to older office versions.
     // We decided to place the writing of the help text here as it seems the less worse alternative. There is no delivered
     // office version including formatted controls (and thus the OFormattedModel), and the OFormattedModel::read seems
-    // robust against this change (as it will read a wrong and unknown file version and thus set it's members to defaults).
+    // robust against this change (as it will read a wrong and unknown file version and thus set its members to defaults).
 
     if ((nVersionId & PF_HANDLE_COMMON_PROPS) != 0)
         writeCommonEditProperties(_rxOutStream);

@@ -316,7 +316,7 @@ void OViewsWindow::removeSection(sal_uInt16 _nPosition)
 
         m_pParent->getReportView()->UpdatePropertyBrowserDelayed((*aNew)->getReportSection().getSectionView());
 
-        aPos->disposeAndClear();;
+        aPos->disposeAndClear();
         m_aSections.erase(aPos);
         Resize();
     }

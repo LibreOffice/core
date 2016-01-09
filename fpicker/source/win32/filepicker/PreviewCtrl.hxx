@@ -65,7 +65,7 @@ class CAutoOleInit
 public:
 
     // used to communicate ole
-    // initialzation failures
+    // initialization failures
     class COleInitException { };
 
     CAutoOleInit( )

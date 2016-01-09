@@ -36,7 +36,7 @@ namespace xmloff
                                     >   OAttribListMerger_Base;
     /** implements the XAttributeList list by merging different source attribute lists
 
-        <p>Currently, the time behavious is O(n), though it would be possible to change it to O(log n).</p>
+        <p>Currently, the time behaviour is O(n), though it would be possible to change it to O(log n).</p>
     */
     class OAttribListMerger : public OAttribListMerger_Base
     {

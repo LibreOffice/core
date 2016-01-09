@@ -115,7 +115,7 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         if ( !xSourceInStream.is() )
             throw io::IOException( THROW_WHERE );
 
-        // TODO: headers of encripted streams should be copied also
+        // TODO: headers of encrypted streams should be copied also
         ::comphelper::OStorageHelper::CopyInputToOutput( xSourceInStream, xDestOutStream );
 
         uno::Sequence<OUString> aPropNames { "Compressed" };

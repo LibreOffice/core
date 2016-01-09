@@ -82,7 +82,7 @@ class LoadEnvException
              */
             ID_STILL_RUNNING,
 
-            /** @short  sometiems we can't specify the reason for an error, because we
+            /** @short  sometimes we can't specify the reason for an error, because we
                         was interrupted by an called code in an unexpected way ...
              */
             ID_GENERAL_ERROR

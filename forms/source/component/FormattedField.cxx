@@ -853,7 +853,7 @@ bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                 }
                 else
                 {
-                    DBG_ASSERT( aControlValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::commitControlValueToDbColumn: invalud value type !" );
+                    DBG_ASSERT( aControlValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::commitControlValueToDbColumn: invalid value type!" );
                     m_xColumnUpdate->updateString( getString( aControlValue ) );
                 }
             }

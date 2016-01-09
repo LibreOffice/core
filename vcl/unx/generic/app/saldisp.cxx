@@ -1455,7 +1455,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
         // For some X-servers special care is needed for Keypad keys.
         // For example Solaris XServer:
         // 2, 4, 6, 8 are classified as Cursorkeys (Up, Down, Left, Right)
-        // 1, 3, 5, 9 are classified as Funtionkeys (F27,F29,F33,F35)
+        // 1, 3, 5, 9 are classified as Functionkeys (F27,F29,F33,F35)
         // 0 as Keypadkey, and the decimal point key not at all (KP_Insert)
         KeySym nNewKeySym = XLookupKeysym( pEvent, nNumLockIndex_ );
         if( nNewKeySym != NoSymbol )

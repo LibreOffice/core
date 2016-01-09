@@ -76,7 +76,7 @@ published service FilterFactory
         <strong>Proposed behavior</strong><p>
         Searching of a suitable filter for a given internal type name, must be done by the new interface
         com::sun::star::container::XContainerQuery, available on this factory too.
-        The factory interface can be used to create filter components by it's internal filter name only.
+        The factory interface can be used to create filter components by its internal filter name only.
         </p>
 
         <p>
@@ -89,7 +89,7 @@ published service FilterFactory
 
         <p>
         <strong>Initialization of a filter component</strong><p>
-        Every filter, which was created by this factory can(!) be initialized with it's own configuration data
+        Every filter, which was created by this factory can(!) be initialized with its own configuration data
         and may given optional arguments of the corresponding createInstanceWithArguments() request. To do so the filter
         instance must support the optional interface com::sun::star::lang::XInitialization.
         The arguments parameter will have the following structure:

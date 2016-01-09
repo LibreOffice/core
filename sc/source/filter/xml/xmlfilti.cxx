@@ -513,7 +513,7 @@ SvXMLImportContext* ScXMLSetItemContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 ScXMLSetItemContext::~ScXMLSetItemContext()

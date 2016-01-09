@@ -618,7 +618,7 @@ extern "C" {                         /* Assume C declarations for C++ */
 
 /********************************************/
 /* SQLGetFunctions: additional values for   */
-/* fFunction to represent functions that    */
+/* Function to represent functions that    */
 /* are not in the X/Open spec.              */
 /********************************************/
 

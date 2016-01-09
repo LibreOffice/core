@@ -59,7 +59,7 @@ private:
 
 protected:
 
-    //UUUU Helper to check if the local maProperties contzains the given
+    //UUUU Helper to check if the local maProperties contains the given
     // FillStyle tag and if the FillStyle there is different from FillStyle_NONE
     bool doNewDrawingLayerFillStyleDefinitionsExist(
         const ::rtl::OUString& rFillStyleTag) const;

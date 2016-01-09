@@ -366,7 +366,7 @@ void ScCondFormatsObj::removeByID(const sal_Int32 nID)
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScConditionalFormatList* pFormatList = getCoreObject();;
+    ScConditionalFormatList* pFormatList = getCoreObject();
     pFormatList->erase(nID);
 }
 
@@ -374,7 +374,7 @@ uno::Sequence<uno::Reference<sheet::XConditionalFormat> > ScCondFormatsObj::getC
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScConditionalFormatList* pFormatList = getCoreObject();;
+    ScConditionalFormatList* pFormatList = getCoreObject();
     size_t n = pFormatList->size();
     uno::Sequence<uno::Reference<sheet::XConditionalFormat> > aCondFormats(n);
     sal_Int32 i = 0;
@@ -390,8 +390,8 @@ sal_Int32 ScCondFormatsObj::getLength()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScConditionalFormatList* pFormatList = getCoreObject();;
-    return pFormatList->size();;
+    ScConditionalFormatList* pFormatList = getCoreObject();
+    return pFormatList->size();
 }
 
 ScConditionalFormatList* ScCondFormatsObj::getCoreObject()

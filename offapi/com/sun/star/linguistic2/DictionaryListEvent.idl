@@ -31,7 +31,7 @@ module com { module sun { module star { module linguistic2 {
     <P>This structure is used by the dictionary-list to inform
     its listeners about certain events.
     Since the dictionary-list is able to collect several single
-    events before broadcasting them to it's listeners the
+    events before broadcasting them to its listeners the
     integer argument may be a combination (logical or) of several
     event types.
     If more specific information about the events is requested by a

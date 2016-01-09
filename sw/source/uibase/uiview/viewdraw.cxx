@@ -557,7 +557,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     }
 
     // To allow editing the referenced object from a SwDrawVirtObj here
-    // the original needs to be fetched evenually. This ATM activates the
+    // the original needs to be fetched eventually. This ATM activates the
     // text edit mode for the original object.
     SdrObject* pToBeActivated = pObj;
 

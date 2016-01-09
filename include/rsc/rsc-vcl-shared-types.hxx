@@ -42,7 +42,7 @@ enum class MenuItemBits : sal_Int16
     ABOUT               = 0x0008,
     HELP                = 0x0010,
     POPUPSELECT         = 0x0020,
-    // These have been said to be a prelimitary (sic) solution since 2007
+    // These have been said to be a preliminary (sic) solution since 2007
     NOSELECT            = 0x0040,
     ICON                = 0x0080,
     TEXT                = 0x0100,

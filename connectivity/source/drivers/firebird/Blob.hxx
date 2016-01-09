@@ -34,7 +34,7 @@ namespace connectivity
             isc_db_handle*      m_pDatabaseHandle;
             isc_tr_handle*      m_pTransactionHandle;
             // We store our own copy of the blob id as typically the statement
-            // manages it's own blob id, and blobs are independent of a statement
+            // manages its own blob id, and blobs are independent of a statement
             // in firebird.
             ISC_QUAD            m_blobID;
             isc_blob_handle     m_blobHandle;

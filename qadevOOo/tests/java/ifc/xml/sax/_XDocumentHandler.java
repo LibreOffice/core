@@ -191,7 +191,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          *
          * Has <b>OK</b> status if no exceptions occurred during
          * the whole transferring and if the appropriate changes
-         * occurred in the document where XML data was trnsfered to.
+         * occurred in the document where XML data was transferred to.
          * This check is performed by checker relation.
          */
     public void _endDocument() {

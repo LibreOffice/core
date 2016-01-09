@@ -1237,7 +1237,7 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMe
         }
     }
 
-    // convert to greysacles
+    // convert to greyscales
     if( rPrinterOptions.IsConvertToGreyscales() )
     {
         mpImplData->mxPrinter->SetDrawMode( mpImplData->mxPrinter->GetDrawMode() |

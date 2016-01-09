@@ -1818,7 +1818,7 @@ sal_Size SvMemoryStream::PutData( const void* pData, sal_Size nCount )
             else
             {
                 // lacking memory is larger than nResize,
-                // resize by (nCoount-nMaxCount) + resize offset
+                // resize by (nCount-nMaxCount) + resize offset
                 if( !ReAllocateMemory( nCount-nMaxCount+nNewResize ) )
                 {
                     nCount = 0;

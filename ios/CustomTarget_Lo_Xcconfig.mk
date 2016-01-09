@@ -35,6 +35,6 @@ $(LO_XCCONFIG) :
 	fi
 
 # Do *not* remove $(LO_XCCONFIG) in a clean target. It is created
-# during configury, not in this custom gbuild makefile.
+# during configure, not in this custom gbuild makefile.
 
 # vim: set noet sw=4 ts=4:

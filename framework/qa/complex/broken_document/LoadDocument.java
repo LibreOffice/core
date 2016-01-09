@@ -56,7 +56,7 @@ public class LoadDocument {
         }
 
         XComponentLoader xDesktopLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
-        System.out.println("xDektopLoader is null: " + (xDesktopLoader == null));
+        System.out.println("xDesktopLoader is null: " + (xDesktopLoader == null));
         PropertyValue[] val = new PropertyValue[0];
 
         String fileUrl = complex.broken_document.TestDocument.getUrl("dbf.dbf.emf");

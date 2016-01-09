@@ -225,7 +225,7 @@ unsigned char * JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
     if (nSize > SAL_MAX_INT32 / (bGray?1:3))
         return nullptr;
 
-    // Check if the bitmap is untypically large.
+    // Check if the bitmap is atypically large.
     if (nSize*(bGray?1:3) > MAX_BITMAP_BYTE_SIZE)
     {
         // Do not try to acquire resources for the large bitmap or to

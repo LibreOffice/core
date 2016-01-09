@@ -34,7 +34,7 @@
 
 namespace desktop
 {
-    // to be able to display the help nicely in a dialog box with propotional font,
+    // to be able to display the help nicely in a dialog box with proportional font,
     // we need to split it in chunks...
     //  ___HEAD___
     //  LEFT RIGHT

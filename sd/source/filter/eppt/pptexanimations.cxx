@@ -909,7 +909,7 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
         }
         else if ( p->Name == "master-element" )
         {
-        pAny[ DFF_ANIM_AFTEREFFECT ] = &(p->Value);;
+        pAny[ DFF_ANIM_AFTEREFFECT ] = &(p->Value);
         }
         p++;
     }

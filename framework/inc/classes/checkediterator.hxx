@@ -80,7 +80,7 @@ class CheckedIterator
 
         inline CheckedIterator& operator++()
         {
-            // Warn programmer if he forget to initailize object!
+            // Warn programmer if he forget to initialize object!
             SAL_WARN_IF( m_pContainer==nullptr, "fwk", "CheckedIterator::operator++(): Object not initialized!" );
             // Step to next element if any exist or set our end states.
             switch( m_eEndState )

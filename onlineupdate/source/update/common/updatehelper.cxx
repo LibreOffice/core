@@ -715,7 +715,7 @@ GetDWORDValue(HKEY key, LPCWSTR valueName, DWORD &retValue)
 
 /**
  * Determines if the the system's elevation type allows
- * unprmopted elevation.
+ * unprompted elevation.
  *
  * @param isUnpromptedElevation Out parameter which specifies if unprompted
  *                              elevation is allowed.

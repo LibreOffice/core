@@ -211,7 +211,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
             }
             else
             {
-                // If the Fly is deleted, all Flys in it's content have to be deleted too.
+                // If the Fly is deleted, all Flys in its content have to be deleted too.
                 const SwFormatContent &rContent = pFormat->GetContent();
                 if( rContent.GetContentIdx() )
                 {

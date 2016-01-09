@@ -452,7 +452,7 @@ public class Protocol extends JComponent
      *          specify how the log should be generated.
      *
      * @param nFilter
-     *          can be used to filter log messages by it's type.
+     *          can be used to filter log messages by its type.
      *
      * @param sFileName
      *          the name of the log file (if nMode requires a log file)

@@ -84,7 +84,7 @@ namespace svgio
         void SvgStyleNode::addCssStyleSheet(const OUString& aSelectors, const SvgStyleAttributes& rNewStyle)
         {
             // aSelectors: CssStyle selectors, any combination, no comma separations, no spaces at start/end
-            // rNewStyle: the already preapared style to register on that name
+            // rNewStyle: the already prepared style to register on that name
             if(!aSelectors.isEmpty())
             {
                 std::vector< OUString > aSelectorParts;

@@ -169,7 +169,7 @@ namespace dbp
 
     bool OGroupBoxWizard::onFinish()
     {
-        // commit the basic control setttings
+        // commit the basic control settings
         commitControlSettings(&m_aSettings);
 
         // create the radio buttons

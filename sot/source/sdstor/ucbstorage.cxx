@@ -2155,7 +2155,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         nLocalRet = pElement->m_xStream->Commit();
                         if ( pElement->m_xStream->m_bIsOLEStorage )
                         {
-                            // OLE storage should be stored encrytped, if the storage uses encryption
+                            // OLE storage should be stored encrypted, if the storage uses encryption
                             pElement->m_xStream->m_aContentType = "application/vnd.sun.star.oleobject";
                             Any aValue;
                             aValue <<= true;

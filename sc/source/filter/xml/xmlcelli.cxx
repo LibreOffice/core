@@ -876,7 +876,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         "ScXMLTableRowCellContext::SetAnnotation - shape without drawing page" );
     if( mxAnnotationData->mxShape.is() && mxAnnotationData->mxShapes.is() )
     {
-        OSL_ENSURE( mxAnnotationData->mxShapes.get() == xShapes.get(), "ScXMLTableRowCellContext::SetAnnotation - diffenet drawing pages" );
+        OSL_ENSURE( mxAnnotationData->mxShapes.get() == xShapes.get(), "ScXMLTableRowCellContext::SetAnnotation - different drawing pages" );
         SdrObject* pObject = ::GetSdrObjectFromXShape( mxAnnotationData->mxShape );
         OSL_ENSURE( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
 

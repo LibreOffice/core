@@ -528,7 +528,7 @@ continue2:
                     else
                     {
                         runelen = 1;
-                        s->lineinc = 0;;
+                        s->lineinc = 0;
                         tp->type = COMMENT;
                         tp->flag |= XTWS;
                     }

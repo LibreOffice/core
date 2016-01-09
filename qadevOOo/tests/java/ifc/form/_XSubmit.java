@@ -130,7 +130,7 @@ public class _XSubmit extends MultiMethodTest {
                 e.printStackTrace(log);
             }
         } else {
-            log.println("!!! The tested compoennt doesn't support XPropertySet ");
+            log.println("!!! The tested component doesn't support XPropertySet ");
         }
 
         oObj.submit(cntrl, new MouseEvent());

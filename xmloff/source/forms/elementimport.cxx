@@ -965,7 +965,7 @@ namespace xmloff
         if ( !m_xElement.is() )
             return;
 
-        // register our control with it's id
+        // register our control with its id
         if (!m_sControlId.isEmpty())
             m_rFormImport.registerControlId(m_xElement, m_sControlId);
         // it's allowed to have no control id. In this case we're importing a column
@@ -1520,7 +1520,7 @@ namespace xmloff
         rtl::Reference < XMLTextImportHelper > xTextImportHelper( m_rContext.getGlobalContext().GetTextImport() );
         if ( m_xCursor.is() )
         {
-            // delete the newline which has been imported errornously
+            // delete the newline which has been imported erroneously
             // TODO (fs): stole this code somewhere - why don't we fix the text import??
             m_xCursor->gotoEnd( sal_False );
             m_xCursor->goLeft( 1, sal_True );
@@ -1981,7 +1981,7 @@ namespace xmloff
         // split up the value string
         if (!_rValue.isEmpty())
         {
-            // For the moment, we build a vector instead of a Sequence. It's easier to handle because of it's
+            // For the moment, we build a vector instead of a Sequence. It's easier to handle because of its
             // push_back method
             ::std::vector< OUString > aElements;
             // estimate the number of tokens

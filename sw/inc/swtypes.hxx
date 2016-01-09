@@ -256,7 +256,7 @@ enum PrepareHint
     PREP_POS_CHGD,          // Position of Frame has changed.
                             // (Check for Fly-break). In void* of Prepare()
                             // a sal_Bool& is passed. If this is sal_True,
-                            // it indicateds that a format has been executed.
+                            // it indicates that a format has been executed.
     PREP_UL_SPACE,          // UL-Space has changed, TextFrames have to
                             // re-calculate line space.
     PREP_MUST_FIT,          // Make frm fit (split) even if the attributes do

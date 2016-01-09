@@ -1624,7 +1624,7 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
  * SwChartDataProvider::AddRowCols tries to notify charts of added columns
  * or rows and extends the value sequence respectively (if possible).
  * If those can be added to the end of existing value data-sequences those
- * sequences get mofdified accordingly and will send a modification
+ * sequences get modified accordingly and will send a modification
  * notification (calling 'setModified
  *
  * Since this function is a work-around for non existent Writer core functionality

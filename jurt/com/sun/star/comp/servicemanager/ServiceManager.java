@@ -505,7 +505,7 @@ public class ServiceManager implements XMultiServiceFactory,
     }
 
     /**
-     * Checks if the any componets are registered.
+     * Checks if the any components are registered.
      *
      * @return  true - if the list of the registred components is not empty - otherwise false.
      * @see     com.sun.star.container.XElementAccess

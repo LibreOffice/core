@@ -446,7 +446,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
             // in case the object is already in requested state
             if ( m_nObjectState == nNewState )
             {
-                // if active object is activated again, bring it's window to top
+                // if active object is activated again, bring its window to top
                 if ( m_nObjectState == embed::EmbedStates::ACTIVE )
                     m_pDocHolder->Show();
 

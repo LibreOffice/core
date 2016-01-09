@@ -40,7 +40,7 @@ void WinOpenGLSalGraphicsImpl::Init()
          ( mpContext->getOpenGLWindow().hWnd != mrParent.mhWnd ||
            mpContext->getOpenGLWindow().hDC == mrParent.mhLocalDC ) )
     {
-        // This can legitimiately happen, SalFrame keeps 2x
+        // This can legitimately happen, SalFrame keeps 2x
         // SalGraphics which share the same hWnd and hDC.
         // The shape 'Area' dialog does reparenting to trigger this.
         SAL_WARN("vcl.opengl", "Unusual: Windows handle / DC changed without DeInit");

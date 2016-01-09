@@ -82,9 +82,9 @@ public:
     ::rtl::OUString SAL_CALL getImplementationName()
             throw ( css::uno::RuntimeException, std::exception ) override;
     sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName )
-            throw ( css::uno::RuntimeException, std::exception ) override;;
+            throw ( css::uno::RuntimeException, std::exception ) override;
     css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-            throw ( css::uno::RuntimeException, std::exception ) override;;
+            throw ( css::uno::RuntimeException, std::exception ) override;
 
 private:
     void replay();

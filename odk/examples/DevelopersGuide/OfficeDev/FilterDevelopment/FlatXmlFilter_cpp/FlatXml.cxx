@@ -196,7 +196,7 @@ sal_Bool XFlatXml::exporter(
     // read source data
     // we are especially interested in the output stream
     // since that is where our xml-writer will push the data
-    // from it's data-source interface
+    // from its data-source interface
     OUString aName, sURL;
     Reference<XOutputStream> rOutputStream;
     sal_Int32 nLength = aSourceData.getLength();

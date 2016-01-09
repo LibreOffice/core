@@ -175,7 +175,7 @@ public class SOfficeFactory {
     } // finished createChartDoc
 
     /**
-     * creates a simple TextTable defaultet to 2 rows and 2 columns
+     * creates a simple TextTable defaulted to 2 rows and 2 columns
      */
     public static XTextTable createTextTable(XTextDocument xTextDoc)
     {

@@ -47,7 +47,7 @@
 #include "docoptio.hxx"
 #include "unonames.hxx"
 
-// Much of the impl. for the equivalend UNO module is
+// Much of the impl. for the equivalent UNO module is
 // sc/source/ui/unoobj/docuno.cxx, viewuno.cxx
 
 using namespace ::ooo::vba;

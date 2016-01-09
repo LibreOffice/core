@@ -141,7 +141,7 @@ namespace utl
             */
             bool                EnableNotification(const css::uno::Sequence< OUString >& rNames,
                                         bool bEnableInternalNotification = false);
-            /** disables notifications about changes on sub nodes/values, which previosly had
+            /** disables notifications about changes on sub nodes/values, which previously had
                 been enabled with EnableNotification
                 @see Notify
                 @see EnableNotification

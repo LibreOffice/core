@@ -338,7 +338,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     //   * when bWorksInPixels is false: these are in the logic units
     //
     // This is where all the confusion comes from, ultimately we want them
-    // always in the logic units (100th of milimiters), but we need to get
+    // always in the logic units (100th of millimiters), but we need to get
     // there gradually (get rid of setting MAP_PIXEL first), otherwise we'd
     // break all the drawing by one change.
     // So until that happens, we need to special case.

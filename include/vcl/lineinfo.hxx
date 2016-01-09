@@ -112,7 +112,7 @@ public:
 
     // helper to get decomposed polygon data with the LineInfo applied. The source
     // hairline polygon is given in io_rLinePolyPolygon. Both given polygons may
-    // contain results; e.g. when no fat line but DasDot is defined, the result will
+    // contain results; e.g. when no fat line but DashDot is defined, the result will
     // be in io_rLinePolyPolygon while o_rFillPolyPolygon will be empty. When fat line
     // is defined, it will be vice-versa. If none is defined, io_rLinePolyPolygon will
     // not be changed (but o_rFillPolyPolygon will be freed)

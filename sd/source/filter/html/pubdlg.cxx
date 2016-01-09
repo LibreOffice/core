@@ -1578,7 +1578,7 @@ bool SdPublishingDlg::Save()
     sal_uInt16 aCheck = nMagic;
     pStream->WriteUInt16( aCheck );
 
-    // Destroys the SdIOCompat before the Stream is being destributed
+    // Destroys the SdIOCompat before the Stream is being distributed
     {
         SdIOCompat aIO(*pStream, StreamMode::WRITE, 0);
 

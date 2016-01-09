@@ -580,7 +580,7 @@ public:
     /// Iterate through the nodes and call the appropriate OutputNode() on them.
     void WriteText();
 
-    /// Return whether cuurently exported node is in table.
+    /// Return whether currently exported node is in table.
     bool IsInTable() const;
 
     /// Set the pCurPam appropriately and call WriteText().

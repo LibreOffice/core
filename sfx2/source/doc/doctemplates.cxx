@@ -611,7 +611,7 @@ bool SfxDocTplService_Impl::needsUpdate()
         aValue >>= bNeedsUpdate;
 
     // the old template component also checks this state, but it is initialized from this component
-    // so if this componend was already updated the old component does not need such an update
+    // so if this component was already updated the old component does not need such an update
     ::svt::TemplateFolderCache aTempCache;
     if ( !bNeedsUpdate )
         bNeedsUpdate = aTempCache.needsUpdate();
@@ -798,7 +798,7 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         // if the parent doesn't exists and bCreateParent is set to true,
         // we try to create the parent and if this was successful, we
         // try to create the new folder again ( but this time, we set
-        // bCreateParent to false to avoid endless recusions )
+        // bCreateParent to false to avoid endless recursions )
         if ( ( aParentURL.getSegmentCount() >= 1 ) &&
                createFolder( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), bCreateParent, bFsysFolder, aParent ) )
         {

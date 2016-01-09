@@ -2245,7 +2245,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
         rtl_uString * strTmp = NULL;
         sal_Int32 nPos;
 
-        /* try to find the file in the directory of the executbale */
+        /* try to find the file in the directory of the executable */
         if (osl_getExecutableFile(&strTmp) != osl_Process_E_None)
             return sal_False;
 

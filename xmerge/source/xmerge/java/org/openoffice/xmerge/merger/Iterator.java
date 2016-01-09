@@ -74,11 +74,11 @@ public interface Iterator {
     boolean equivalent(Object obj1, Object obj2);
 
     /**
-     * A method to force the {@code Iterator} to transverse the tree again to
+     * A method to force the {@code Iterator} to traverse the tree again to
      * refresh the content.
      *
-     * <p>It is used mainly for {@code Iterator} objects which take a snap shot
-     * instead of dynamically transversing the tree.  The current position will
+     * <p>It is used mainly for {@code Iterator} objects which take a snapshot
+     * instead of dynamically tranversing the tree.  The current position will
      * be set to the beginning.</p>
      */
     void refresh();

@@ -65,7 +65,7 @@ namespace nsSelectionType
     const SelectionType SEL_DRW_TXT         = 0x000400; // draw-textobjects in edit mode
     const SelectionType SEL_BEZ             = 0x000800; // edit ornament objects
     const SelectionType SEL_DRW_FORM        = 0x001000; // drawing objects: DB-Forms
-    const SelectionType SEL_FOC_FRM_CTRL    = 0x002000; // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by it's clients.
+    const SelectionType SEL_FOC_FRM_CTRL    = 0x002000; // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by its clients.
     const SelectionType SEL_MEDIA           = 0x004000; // Media object
     const SelectionType SEL_EXTRUDED_CUSTOMSHAPE = 0x008000;    // extruded custom shape
     const SelectionType SEL_FONTWORK        = 0x010000; // fontwork

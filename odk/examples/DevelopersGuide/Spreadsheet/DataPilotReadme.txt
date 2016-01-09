@@ -24,7 +24,7 @@ component.
 
 Simple usage scenario:
 ======================
-1. build and deploay the component
+1. build and deploy the component
 2. open a new spreadsheet document
 3. select for example cell B:2
 4. start the DataPilot dialog

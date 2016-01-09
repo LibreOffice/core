@@ -678,7 +678,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
  * but Get{Simple|Compound}GlyphOutline returns 0 in such a case.
  *
  * NOTE: glyphlist is the stack of glyphs traversed while constructing
- * a composite glyph. This is a safequard against endless recursion
+ * a composite glyph. This is a safeguard against endless recursion
  * in corrupted fonts.
  */
 static int GetTTGlyphOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >* glyphlist)
@@ -1024,7 +1024,7 @@ static void GetNames(TrueTypeFont *t)
     }
 
     /* #i60349# sanity check psname
-     * psname parctically has to be 7bit ascii and should not contains spaces
+     * psname pratically has to be 7bit ascii and should not contains spaces
      * there is a class of broken fonts which do not fulfill that at all, so let's try
      * if the family name is 7bit ascii and take it instead if so
      */
@@ -1471,7 +1471,7 @@ static void allocTrueTypeFont( TrueTypeFont** ttf )
     }
 }
 
-/* forward declariotn for the two entry points to use*/
+/* forward declaration for the two entry points to use*/
 static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t );
 
 #if !defined(WIN32)

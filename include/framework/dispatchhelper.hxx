@@ -39,7 +39,7 @@ namespace framework{
     @short      implements an easy way for dispatches
     @descr      Dispatches are splitted into different parts:
                     - parsing of the URL
-                    - searching for a dispatcgh object
+                    - searching for a dispatch object
                     - dispatching of the URL
                 All these steps are done inside one method call here.
 */

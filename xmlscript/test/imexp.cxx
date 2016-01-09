@@ -171,7 +171,7 @@ void MyApp::Main()
             importFile( aParam1.getStr(), xContext ) );
         OSL_ASSERT( xModel.is() );
 
-        Reference< awt::XUnoControlDialog > xDlg = UnoControlDialog::create( xContext );;
+        Reference< awt::XUnoControlDialog > xDlg = UnoControlDialog::create( xContext );
         xDlg->setModel( xModel );
         xDlg->createPeer( xToolkit, 0 );
         xDlg->execute();

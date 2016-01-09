@@ -115,7 +115,7 @@ public:
             Type of the property's value.  It controls the transformation
             into the value's string representation.
         @param nResourceId
-            Id of the kocalized name of the property int the resource.
+            Id of the localized name of the property int the resource.
         @param nWhichId
             This which id is used to localize the property value.  If it is
             not known a value of -1 signals to use a default representation.
@@ -140,7 +140,7 @@ public:
     */
     void AddFillProperties();
 
-    /** Add properties that describesattributes of 3D objects.
+    /** Add properties that describes attributes of 3D objects.
     */
     void Add3DProperties();
 

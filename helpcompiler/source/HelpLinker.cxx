@@ -986,7 +986,7 @@ bool compileExtensionHelp
         {
             XML_Error nError = XML_GetErrorCode( parser );
             o_rHelpProcessingErrorInfo.m_eErrorClass = HELPPROCESSING_XMLPARSING_ERROR;
-            o_rHelpProcessingErrorInfo.m_aErrorMsg = OUString::createFromAscii( XML_ErrorString( nError ) );;
+            o_rHelpProcessingErrorInfo.m_aErrorMsg = OUString::createFromAscii( XML_ErrorString( nError ) );
             o_rHelpProcessingErrorInfo.m_aXMLParsingFile = aTreeFileURL;
             // CRASHES!!! o_rHelpProcessingErrorInfo.m_nXMLParsingLine = XML_GetCurrentLineNumber( parser );
             bSuccess = false;

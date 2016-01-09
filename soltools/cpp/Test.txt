@@ -73,7 +73,7 @@ args(t1, (args(t2, (x, y))))    // t1 (t2 (x, y))
 #define __ ARGS
 int foo __((int x));            // int foo (int x);
 
-/* Concatinations */
+/* Concatenations */
 
 #define tail _Test
 // Txt_##tail                      // Txt_##_Test

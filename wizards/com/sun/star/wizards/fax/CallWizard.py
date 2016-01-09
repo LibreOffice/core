@@ -68,7 +68,7 @@ class CallWizard(unohelper.Base, XJobExecutor, XServiceInfo):
 
 g_ImplementationHelper.addImplementation( \
     CallWizard,                               # UNO object class
-    g_implName,                               # implemtenation name
+    g_implName,                               # implementation name
     ("com.sun.star.task.Job",),)              # list of implemented services
                                               # (the only service)
 

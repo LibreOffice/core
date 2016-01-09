@@ -1494,7 +1494,7 @@
                         </xsl:attribute>
                     </xsl:if>
                     <xsl:variable name="typeid_adj">
-                        <!--for fix the bug of version 1.63: the following discription: adj="-11796480,,5400" in OOo should be: modifier =" -11796480 0 5400"-->
+                        <!--for fix the bug of version 1.63: the following description: adj="-11796480,,5400" in OOo should be: modifier =" -11796480 0 5400"-->
                         <xsl:variable name="tmp_adj">
                             <xsl:value-of select="key('shapetype',@type)/@adj"/>
                         </xsl:variable>

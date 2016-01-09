@@ -62,7 +62,7 @@ public class OfficeDocumentView
     {
         XDispatch xReturn = null;
 
-        // go get the dispatch provider of it's frame
+        // go get the dispatch provider of its frame
         XDispatchProvider xProvider = UnoRuntime.queryInterface( XDispatchProvider.class, m_controller.getFrame() );
         if ( null != xProvider )
         {

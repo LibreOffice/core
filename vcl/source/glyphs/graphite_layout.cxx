@@ -106,7 +106,7 @@ namespace
 //    This is an extended vector class with methods added to enable
 //        o Correctly filling with glyphs.
 //        o Querying clustering relationships.
-//        o manipulations that affect neighouring glyphs.
+//        o manipulations that affect neighbouring glyphs.
 
 const int GraphiteLayout::EXTRA_CONTEXT_LENGTH = 32;
 

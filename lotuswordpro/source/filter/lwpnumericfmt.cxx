@@ -365,7 +365,7 @@ XFStyle* LwpNumericFormat::Convert()
 }
 /**
 *
-*   @descrption for SODC_2754
+*   @description for SODC_2754
 *   @return fix wrong encoding of POUND symbol
 */
 OUString    LwpNumericFormat::reencode(const OUString& sCode)

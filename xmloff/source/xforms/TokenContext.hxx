@@ -59,7 +59,7 @@ public:
 
     /** call HandleChild for each child element in the token map;
      * create a warning for all others. Classes that wish to override
-     * CreateChildCotnenxt may want to call the parent method for
+     * CreateChildContext may want to call the parent method for
      * handling of defaults. */
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,

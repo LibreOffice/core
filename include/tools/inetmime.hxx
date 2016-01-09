@@ -154,7 +154,7 @@ public:
         with intervening linear white space and comments (cf. RFCs 822, 2045).
         The RFC 2231 extension are supported.  The encoding of rMediaType
         should be US-ASCII, but any Unicode values in the range U+0080..U+FFFF
-        are interpretet 'as appropriate.'
+        are interpreted 'as appropriate.'
 
         @param pType  If not null, returns the type (the first of the above
         tokens), in US-ASCII encoding and converted to lower case.

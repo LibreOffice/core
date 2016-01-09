@@ -3379,7 +3379,7 @@ void FormController::stopFiltering()
         Reference< XControl > xControl = pControls[--i];
         if (xControl.is())
         {
-            // now enable eventhandling again
+            // now enable event handling again
             addToEventAttacher(xControl);
 
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
@@ -4223,7 +4223,7 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
         return;
     }
 
-    // log off the interception from it's interception object
+    // log off the interception from its interception object
     DispatchInterceptionMultiplexer* pInterceptorImpl = *aIter;
     pInterceptorImpl->dispose();
     pInterceptorImpl->release();

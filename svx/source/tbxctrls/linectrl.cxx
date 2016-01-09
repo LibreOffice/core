@@ -43,7 +43,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
-// For End Line Controlleer
+// For End Line Controller
 #define MAX_LINES 12
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineStyleToolBoxControl, XLineStyleItem );

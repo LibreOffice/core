@@ -153,7 +153,7 @@ public class _DataAwareControlModel extends MultiPropertyTest {
     }
 
     /**
-    * Forces environment recreateation.
+    * Forces environment recreation.
     */
     @Override
     public void after() {

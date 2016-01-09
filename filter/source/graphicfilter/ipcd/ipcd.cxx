@@ -50,7 +50,7 @@ private:
     SvStream &m_rPCD;
     BitmapWriteAccess*  mpAcc;
 
-    sal_uInt8               nOrientation;   // orientation of the picture withinthe PCD file:
+    sal_uInt8               nOrientation;   // orientation of the picture within the PCD file:
                                         // 0 - spire point up
                                         // 1 - spire points to the right
                                         // 2 - spire points down

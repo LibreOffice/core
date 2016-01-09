@@ -155,7 +155,7 @@ void SAL_CALL ClipboardManager::dispose()
         rBHelper.aLC.disposeAndClear( aEvt );
 
         // removeClipboard is still allowed here,  so make a copy of the
-        // list (to ensure integrety) and clear the original.
+        // list (to ensure integrity) and clear the original.
         ClearableMutexGuard aGuard2( rBHelper.rMutex );
         ClipboardMap aCopy(m_aClipboardMap);
         m_aClipboardMap.clear();

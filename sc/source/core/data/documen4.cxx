@@ -936,7 +936,7 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
     if (nUsed > 0)
         return static_cast<sal_uInt16>((nDif*64)/nUsed);            // max.256 (SC_DOCCOMP_MAXDIFF)
 
-    OSL_ENSURE(!nDif,"Diff withoud Used");
+    OSL_ENSURE(!nDif,"Diff without Used");
     return 0;
 }
 

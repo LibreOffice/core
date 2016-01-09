@@ -46,7 +46,7 @@ namespace pcr
     typedef ::cppu::WeakComponentImplHelper    <   css::inspection::XPropertyHandler
                                                 ,   css::beans::XPropertyChangeListener
                                                 >   PropertyComposer_Base;
-    /** implements an <type>XPropertyHandler</type> which composes it's information
+    /** implements an <type>XPropertyHandler</type> which composes its information
         from a set of other property handlers
     */
     class PropertyComposer  :public ::comphelper::OBaseMutex
@@ -65,7 +65,7 @@ namespace pcr
         PropertyBag                                     m_aSupportedProperties;
 
     public:
-        /** constructs an <type>XPropertyHandler</type> which composes it's information from a set
+        /** constructs an <type>XPropertyHandler</type> which composes its information from a set
             of other property handlers
 
             @param _rSlaveHandlers

@@ -600,7 +600,7 @@ namespace osl_StreamPipe
 
     /** testing the methods:
         inline StreamPipe();
-        inline StreamPipe(oslPipe Pipe);;
+        inline StreamPipe(oslPipe Pipe);
         inline StreamPipe(const StreamPipe& Pipe);
         inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options = osl_Pipe_OPEN);
         inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec );

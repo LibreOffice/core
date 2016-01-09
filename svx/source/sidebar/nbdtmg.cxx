@@ -1581,8 +1581,8 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                         bool bIsMatch = false;
                         if (pBrsh1==pBrsh2) bIsMatch = true;
                         if (pBrsh1 && pBrsh2) {
-                            const Graphic* pGrf1 = pBrsh1->GetGraphic();;
-                            const Graphic* pGrf2 = pBrsh2->GetGraphic();;
+                            const Graphic* pGrf1 = pBrsh1->GetGraphic();
+                            const Graphic* pGrf2 = pBrsh2->GetGraphic();
                             if (pGrf1==pGrf2) bIsMatch = true;
                             if (pGrf1 && pGrf2) {
                                 if ( pGrf1->GetBitmap().IsEqual(pGrf2->GetBitmap()) &&
@@ -1774,7 +1774,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             if (isResetSize) aFmt.SetBulletRelSize(45);
         }else if ((aFmt.GetNumberingType()&(~LINK_TOKEN)) == SVX_NUM_BITMAP ) {
             if (pLevelSettings->pBrushItem) {
-                    const Graphic* pGrf = pLevelSettings->pBrushItem->GetGraphic();;
+                    const Graphic* pGrf = pLevelSettings->pBrushItem->GetGraphic();
                     Size aSize = pLevelSettings->aSize;
                     sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
                     if (!isResetSize  && aFmt.GetGraphicSize()!=Size(0,0)) aSize=aFmt.GetGraphicSize();

@@ -430,7 +430,7 @@ void SfxRequest::Done
                                    set */
 
     bool                bKeep   /*  true (default)
-                                   'rSet' is saved and GetArgs() queriable.
+                                   'rSet' is saved and GetArgs() queryable.
 
                                     false
                                    'rSet' is not copied (faster) */

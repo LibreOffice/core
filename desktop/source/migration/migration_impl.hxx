@@ -46,7 +46,7 @@ namespace desktop
 
 struct install_info
 {
-    OUString productname;  // human readeable product name
+    OUString productname;  // human readable product name
     OUString userdata;     // file: url for user installation
 };
 

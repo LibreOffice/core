@@ -603,7 +603,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             nMins       = 0;
             while ( nSizeDelta && (nItems != nMins) )
             {
-                // determinne which items we can calculate
+                // determine which items we can calculate
                 nCalcItems = 0;
                 while ( !nCalcItems )
                 {

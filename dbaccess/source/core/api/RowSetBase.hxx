@@ -373,7 +373,7 @@ namespace dbaccess
         */
         explicit ORowSetNotifier( ORowSetBase* m_pRowSet );
 
-        /** use this one to consturct an vector for change value notification
+        /** use this one to construct an vector for change value notification
         */
         ORowSetNotifier( ORowSetBase* m_pRowSet,const ORowSetValueVector::Vector& i_aRow );
 

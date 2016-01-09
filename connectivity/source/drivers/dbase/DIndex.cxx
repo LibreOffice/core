@@ -285,7 +285,7 @@ void ODbaseIndex::Collect(ONDXPage* pPage)
 
 void ODbaseIndex::Release(bool bSave)
 {
-    // Release the Index-recources
+    // Release the Index-resources
     m_bUseCollector = false;
 
     if (m_aCurLeaf.Is())

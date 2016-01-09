@@ -211,7 +211,7 @@ namespace svgio
 
             if(maCssStyleVector.empty())
             {
-                // return given original if no CssStlyes found
+                // return given original if no CssStyles found
                 return &rOriginal;
             }
             else

@@ -36,7 +36,7 @@ namespace psp {
 /*
  container for a font and its helper fonts:
  1st is the font itself
- 2nd is a fallback font, usually a font with unicode glyph repertoir (e.g. andale)
+ 2nd is a fallback font, usually a font with unicode glyph repertoire (e.g. andale)
  symbol fonts (adobe-fontspecific) may need special glyphmapping
  (symbol page vc. latin page)
 */

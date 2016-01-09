@@ -1071,7 +1071,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             xTrans->parseStrict( aURL );
 
             Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
-            Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();;
+            Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();
             if ( xDisp.is() )
                 xDisp->dispatch( aURL, aArgs );
         }

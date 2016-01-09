@@ -24,7 +24,7 @@
   <templates>
     <group oor:name="HistoryItem">
       <info>
-        <desc>Describe an history item in it's details. Use URL as node name.</desc>
+        <desc>Describe an history item in its details. Use URL as node name.</desc>
       </info>
       <prop oor:name="Filter" oor:type="xs:string">
         <info>

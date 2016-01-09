@@ -42,7 +42,7 @@ namespace utl
     //= DesktopTerminationObserver
 
     /** a class which allows non-UNO components to observe the desktop (aka application)
-        for it's shutdown
+        for its shutdown
     */
     namespace DesktopTerminationObserver
     {

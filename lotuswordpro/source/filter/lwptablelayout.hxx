@@ -80,7 +80,7 @@ class LwpColumnLayout;
 
 /**
  * @brief
- * VO_TABLELAYOUT object and functions for registering styles and coverting tables
+ * VO_TABLELAYOUT object and functions for registering styles and converting tables
  */
 class LwpTableLayout: public LwpLayout
 {

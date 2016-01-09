@@ -97,7 +97,7 @@ public class ScHeaderFieldObj extends TestCase {
     * instance of the service <code>com.sun.star.text.TextField.Time</code> and
     * the instance of the service <code>com.sun.star.text.TextField.Date</code>
     * Obtains the text (the interface <code>XText</code>) which is printed in
-    * the left part of the header or footer and inserts in it's content
+    * the left part of the header or footer and inserts in its content
     * the second created instance.
     * Object relations created :
     * <ul>

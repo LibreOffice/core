@@ -82,7 +82,7 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
             {
                 m_bIsBookmarkable = ::comphelper::getBOOL(xSet->getPropertyValue(PROPERTY_ISBOOKMARKABLE));
                 OSL_ENSURE( !m_bIsBookmarkable || Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY).is(),
-                    "OResultSet::OResultSet: aggregate is inconsistent in it's bookmarkable attribute!" );
+                    "OResultSet::OResultSet: aggregate is inconsistent in its bookmarkable attribute!" );
                 m_bIsBookmarkable = m_bIsBookmarkable && Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY).is();
             }
         }

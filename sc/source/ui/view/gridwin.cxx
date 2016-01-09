@@ -5262,7 +5262,7 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
     }
 
     if ( bUp )
-        aNew.PutInOrder();             // For ButtonUp agin in the proper order
+        aNew.PutInOrder();             // For ButtonUp again in the proper order
 
     if ( aNew != aOld )
     {

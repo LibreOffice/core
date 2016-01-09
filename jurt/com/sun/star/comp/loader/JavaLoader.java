@@ -226,7 +226,7 @@ public class JavaLoader implements XImplementationLoader,
      * Provides a components factory.
      *
      * <p>The <code>JavaLoader</code> tries to load the class first. If a
-     * loacation URL is given the RegistrationClassFinder is used to load the
+     * location URL is given the RegistrationClassFinder is used to load the
      * class. Otherwise the class is loaded through the Class.forName method.</p>
      *
      * <p>To get the factory the inspects the class for the optional static member
@@ -418,7 +418,7 @@ public class JavaLoader implements XImplementationLoader,
     /**
      * Registers the <code>JavaLoader</code> at the registry.
      *
-     * @param      regKey   root key under which the <code>JavaLoader</code> should be regidstered.
+     * @param      regKey   root key under which the <code>JavaLoader</code> should be registered.
      * @return     true if registration succseeded - otherwise false.
      */
     public static boolean writeRegistryServiceInfo(XRegistryKey regKey) {

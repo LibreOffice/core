@@ -8,7 +8,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# prepare pythoin environnement - Add the path of this class
+# prepare Python environment - Add the path of this class
 from os import path
 from sys import modules
 from sys import path as syspath
@@ -30,7 +30,7 @@ from com.sun.star.awt.TextAlign import RIGHT as right
 from com.sun.star.awt import XActionListener
 
 class MsgBox(unohelper.Base):
-    """Inspect UNO object, link to sdk and recusrsive calls"""
+    """Inspect UNO object, link to sdk and recursive calls"""
 
     def __init__(self, aContext):
         """acontext : a Valid UNO context

@@ -139,7 +139,7 @@ namespace DOM
     sal_Bool SAL_CALL CAttr::getSpecified()
         throw (RuntimeException, std::exception)
     {
-        // FIXME if this DOM implemenatation supported DTDs it would need
+        // FIXME if this DOM implementation supported DTDs it would need
         // to check that this attribute is not default or something
         return sal_True;
     }

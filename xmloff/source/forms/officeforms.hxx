@@ -40,7 +40,7 @@ namespace xmloff
         OFormsRootImport( SvXMLImport& _rImport, sal_uInt16 _nPrfx, const OUString& _rLocalName);
         virtual ~OFormsRootImport();
 
-        // SvXMLImportContext overriabled
+        // SvXMLImportContext overridable
         virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
         virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) override;

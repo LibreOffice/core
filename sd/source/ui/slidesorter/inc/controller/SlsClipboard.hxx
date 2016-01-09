@@ -168,7 +168,7 @@ private:
     */
     sal_Int32 PasteTransferable (sal_Int32 nInsertPosition);
 
-    /** Select a range of pages of the model.  Typicall usage is the
+    /** Select a range of pages of the model.  Typically usage is the
         selection of newly inserted pages.
         @param nFirstIndex
             The index of the first page to select.

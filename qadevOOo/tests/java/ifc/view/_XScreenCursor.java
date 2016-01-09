@@ -64,7 +64,7 @@ public class _XScreenCursor extends MultiMethodTest {
      * The following method tests are to be completed successfully before :
      * <ul>
      *  <li> <code> screenDown() </code> : by default view is on the
-     *  top of pag, thereby it's needed first to moved down. </li>
+     *  top of pag, thereby its needed first to moved down. </li>
      * </ul>
      */
     public void _screenUp(){

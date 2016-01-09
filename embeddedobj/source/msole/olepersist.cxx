@@ -522,7 +522,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream )
         throw ( uno::Exception )
 {
-    OSL_ENSURE( xTargetStream.is(), "Invalid argumant!\n" );
+    OSL_ENSURE( xTargetStream.is(), "Invalid argument!\n" );
     if ( !xTargetStream.is() )
         throw uno::RuntimeException();
 

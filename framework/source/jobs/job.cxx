@@ -471,7 +471,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
 /**
     @short  starts listening for office shutdown and closing of our
             given target frame (if it's a valid reference)
-    @descr  We will reghister ourself as terminate listener
+    @descr  We will register ourself as terminate listener
             at the global desktop instance. That will hold us
             alive and additional we get the information, if the
             office wish to shutdown. If then an internal job

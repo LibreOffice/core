@@ -385,7 +385,7 @@ public:
 
     /**
      * Calculate the shadow space on the specified side dependent from
-     * the orientation and connection with neightbours.
+     * the orientation and connection with neighbours.
      * @see shaditem.hxx for integer constants of sides
      *
      * @param[in]   nShadow     specify the side

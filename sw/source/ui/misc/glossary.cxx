@@ -384,7 +384,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, NameModify, Edit&, rEdit, void )
     const bool bNotFound = !DoesBlockExist(aName, bNameED ? OUString() : rEdit.GetText());
     if(bNameED)
     {
-            // did the text get in to the Listbbox in the Edit with a click?
+            // did the text get in to the Listbox in the Edit with a click?
         if(bNotFound)
         {
             m_pShortNameEdit->SetText( lcl_GetValidShortCut( aName ) );

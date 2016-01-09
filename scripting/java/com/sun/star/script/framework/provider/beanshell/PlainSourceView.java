@@ -62,7 +62,7 @@ public class PlainSourceView extends JScrollPane implements
             try {
                 ta.setCaretPosition(pos);
             } catch (IllegalArgumentException iae) {
-                // do nothing and allow JTextArea to set it's own position
+                // do nothing and allow JTextArea to set its own position
             }
         }
 

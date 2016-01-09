@@ -590,7 +590,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         if (!xCert.is())
             xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-        DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
+        DBG_ASSERT( xCert.is(), "Error getting Certificate!" );
         if ( xCert.is() )
         {
             ScopedVclPtrInstance< CertificateViewer > aViewer( this, maSignatureManager.maSignatureHelper.GetSecurityEnvironment(), xCert, false );

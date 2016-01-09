@@ -438,7 +438,7 @@ void ScDocumentPool::InitVersionMaps()
     pVersionMap3 = new sal_uInt16 [ nMap3Count ];
     for ( i=0, j=nMap3Start; i < nMap3New; i++, j++ )
         pVersionMap3[i] = j;
-    // An entry insterted ...
+    // An entry inserted...
     for ( i=nMap3New, j=nMap3Start+nMap3New+1; i < nMap3Count; i++, j++ )
         pVersionMap3[i] = j;
 

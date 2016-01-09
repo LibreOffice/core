@@ -183,8 +183,8 @@ void RtfAttributeOutput::RTLAndCJKState(bool bIsRTL, sal_uInt16 nScript)
        You would have thought that
        m_rExport.Strm() << (bIsRTL ? OOO_STRING_SVTOOLS_RTF_RTLCH : OOO_STRING_SVTOOLS_RTF_LTRCH); would be sufficient here ,
        but looks like word needs to see the other directional token to be
-       satisified that all is kosher, otherwise it seems in ver 2003 to go and
-       semi-randomlyly stick strike through about the place. Perhaps
+       satisfied that all is kosher, otherwise it seems in ver 2003 to go and
+       semi-randomly stick strike through about the place. Perhaps
        strikethrough is some ms developers "something is wrong signal" debugging
        code that we're triggering ?
        */
@@ -776,7 +776,7 @@ void RtfAttributeOutput::TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer
             OOO_STRING_SVTOOLS_RTF_CLBRDRT, OOO_STRING_SVTOOLS_RTF_CLBRDRL, OOO_STRING_SVTOOLS_RTF_CLBRDRB, OOO_STRING_SVTOOLS_RTF_CLBRDRR
         };
         //Yes left and top are swapped with eachother for cell padding! Because
-        //that's what the thunderingly annoying rtf export/import word xp does.
+        //that's what the thundering annoying rtf export/import word xp does.
         static const char* aCellPadNames[] =
         {
             OOO_STRING_SVTOOLS_RTF_CLPADL, OOO_STRING_SVTOOLS_RTF_CLPADT, OOO_STRING_SVTOOLS_RTF_CLPADB, OOO_STRING_SVTOOLS_RTF_CLPADR

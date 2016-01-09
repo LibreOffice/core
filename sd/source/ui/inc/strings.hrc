@@ -29,7 +29,7 @@
 /*
  *  Dummy-Strings, these ResourceIDs: should not be assigned to other strings
  *  as they're used for popup-menus (a popup-menu and its
- *  configurationsstring should have identical ResourceID's!).
+ *  configurations string should have identical ResourceID's!).
  *  See also: res_bmp.hrc, popup.src
  */
 

@@ -48,7 +48,7 @@ WCHAR * buildPath(
 {
     // Remove leading ".." segments in the second path together with matching
     // segments in the first path that are neither empty nor "." nor ".." nor
-    // end in ":" (which is not foolprove, as it can erroneously erase the start
+    // end in ":" (which is not foolproof, as it can erroneously erase the start
     // of a UNC path, but only if the input is bad data):
     while (backLength >= 2 && backBegin[0] == L'.' && backBegin[1] == L'.' &&
            (backLength == 2 || backBegin[2] == L'\\'))

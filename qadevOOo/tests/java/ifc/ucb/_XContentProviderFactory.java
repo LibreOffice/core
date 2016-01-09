@@ -38,7 +38,7 @@ public class _XContentProviderFactory extends MultiMethodTest {
     public static XContentProviderFactory oObj = null;
 
     /**
-     * Creates a propvider. <p>
+     * Creates a provider. <p>
      * Has <b> OK </b> status if the returned value is not
      * <code>null</code>. <p>
      */

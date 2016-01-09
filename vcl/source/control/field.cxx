@@ -1067,7 +1067,7 @@ static OUString ImplMetricGetUnitText(const OUString& rStr)
     return aStr.makeStringAndClear();
 }
 
-// #104355# support localized mesaurements
+// #104355# support localized measurements
 
 static const OUString ImplMetricToString( FieldUnit rUnit )
 {

@@ -719,7 +719,7 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
                                         sal_Int32 , sal_Int32 nEndPos )
 {
     // Condition:
-    //  at the beginning:   _ or * after Space with the folloeing !Space
+    //  at the beginning:   _ or * after Space with the following !Space
     //  at the end:         _ or * before Space (word delimiter?)
 
     sal_Unicode cInsChar = rTxt[ nEndPos ];  // underline or bold

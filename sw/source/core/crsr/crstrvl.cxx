@@ -850,7 +850,7 @@ SwField* SwCursorShell::GetCurField( const bool bIncludeInputFieldAtStart ) cons
         return nullptr;
     }
 
-    SwField* pCurField = GetFieldAtCursor( pCursor, bIncludeInputFieldAtStart );;
+    SwField* pCurField = GetFieldAtCursor( pCursor, bIncludeInputFieldAtStart );
     if ( pCurField != nullptr
          && RES_TABLEFLD == pCurField->GetTyp()->Which() )
     {

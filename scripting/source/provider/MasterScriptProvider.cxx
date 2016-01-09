@@ -137,7 +137,7 @@ throw ( Exception, RuntimeException, std::exception )
         {
             // from the arguments, we were able to deduce a model. That alone doesn't
             // suffice, we also need an XEmbeddedScripts which actually indicates support
-            // for embeddeding scripts
+            // for embedding scripts
             Reference< XEmbeddedScripts > xScripts( m_xModel, UNO_QUERY );
             if ( !xScripts.is() )
             {

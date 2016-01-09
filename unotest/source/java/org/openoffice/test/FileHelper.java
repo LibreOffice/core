@@ -26,7 +26,7 @@ public class FileHelper
     /*
      * Concat a _sRelativePathToAdd to a _sPath and append a '/' to the _sPath only if need.
      *
-     * @return a right concated path
+     * @return a right concatened path
      */
     public static String appendPath(String _sPath, String _sRelativePathToAdd)
     {

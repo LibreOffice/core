@@ -42,7 +42,7 @@ struct ArrayImpl;
     On drawing, the thicker frame border of neighbored cells is selected
     automatically. All borders are drawn "connected", that means, the correct
     start and end coordinates of all lines of the borders are calculated,
-    especaially, if they are drawn together with diagonal frame borders.
+    especially, if they are drawn together with diagonal frame borders.
 
     This array fully supports merged cell ranges. In a merged range, the frame
     borders of the top-left cell is extended to the entire range, and all other

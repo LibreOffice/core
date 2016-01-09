@@ -38,7 +38,7 @@ throw ( RuntimeException ) :
         m_RunTimeManager( runtimeMgr, UNO_SET_THROW ),
         m_ScriptURI( scriptURI )
 {
-    SAL_INFO("scripting.provider", "<!constucting a ScriptImpl>" );
+    SAL_INFO("scripting.provider", "<!constructing a ScriptImpl>" );
 }
 
 

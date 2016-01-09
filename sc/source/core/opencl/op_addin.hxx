@@ -25,7 +25,7 @@ class OpGestep: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-        const std::string &sSymName, SubArguments &vSubArguments) override;;
+        const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Gestep"; }
 };
 

@@ -1208,7 +1208,7 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 
 /**
  * This function creates a Line that reaches to the other Page Margin.
- * DummyLines or DummyPortions make sure, that osicllations stop, because
+ * DummyLines or DummyPortions make sure, that oscillations stop, because
  * there's no way to flow back.
  * They are used for Footnotes in paragraph-bound Frames and for Footnote
  * oscillations

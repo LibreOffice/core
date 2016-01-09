@@ -455,7 +455,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     public boolean approveReset( EventObject aEvent ) throws com.sun.star.uno.RuntimeException
     {
         return false;
-            // do not allow the date field to be reset - it would set it's content
+            // do not allow the date field to be reset - it would set its content
             // to the current date
             // Note that another possible solution would be to wait for the resetted
             // event and correct the value there

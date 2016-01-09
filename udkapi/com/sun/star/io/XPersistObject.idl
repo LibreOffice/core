@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module io {
      <p>
      The object needs to be created before it deserializes
      itself again (by using the read method). Therefore it must be
-     createable by name via a factory, which is in general
+     creatable by name via a factory, which is in general
      the global service manager. The create and read mechanism
      is implemented by the com::sun::star::io::ObjectInputStream.
 

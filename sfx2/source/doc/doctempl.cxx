@@ -800,7 +800,7 @@ bool SfxDocumentTemplates::CopyFrom
     }
     else
     {
-        uno::Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );;
+        uno::Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = "Hidden";

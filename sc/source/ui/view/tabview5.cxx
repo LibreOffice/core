@@ -104,7 +104,7 @@ void ScTabView::Init()
         pTabControl->SetStyle(pTabControl->GetStyle() | WB_SIZEABLE);
 
     /*  #i97900# The tab control has to remain in RTL mode if GUI is RTL, this
-        is needed to draw the 3D effect correctly. The base TabBar implementes
+        is needed to draw the 3D effect correctly. The base TabBar implements
         mirroring independent from the GUI direction. Have to set RTL mode
         explicitly because the parent frame window is already RTL disabled. */
     pTabControl->EnableRTL( AllSettings::GetLayoutRTL() );

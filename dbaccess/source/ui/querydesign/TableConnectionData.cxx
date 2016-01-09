@@ -92,7 +92,7 @@ bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSour
     if (sal_uInt16(m_vConnLineData.size()) < nIndex)
         return false;
 
-        // == still allowed, this correponds to a Append
+        // == still allowed, this corresponds to an Append
 
     if (m_vConnLineData.size() == nIndex)
         return AppendConnLine(rSourceFieldName, rDestFieldName);

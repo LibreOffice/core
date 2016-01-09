@@ -488,7 +488,7 @@ void ScTable::FillFormula(
                 }
                 else
                 {
-                    OSL_FAIL( "FillFormula: MatrixOrigin no forumla cell with MM_FORMULA" );
+                    OSL_FAIL( "FillFormula: MatrixOrigin no formula cell with MM_FORMULA" );
                 }
             }
             else

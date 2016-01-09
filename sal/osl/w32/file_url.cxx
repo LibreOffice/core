@@ -142,7 +142,7 @@ static BOOL IsValidFilePathComponent(
         // - Array should be const static
         // - Sorted array, use binary search
         // - More intelligent check for com1-9, lpt1-9
-        // Maybe make szComponent upper case, don't search case intensitive
+        // Maybe make szComponent upper case, don't search case insensitive
         // Talked to HRO: Could be removed. Shouldn't be used in OOo, and if used for something like a filename, it will lead to an error anyway.
         /*
         if ( fValid )

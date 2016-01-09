@@ -1437,7 +1437,7 @@ void SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
 {
     mVisiblePagePropSet.bIsBackgroundVisible                = true;
     mVisiblePagePropSet.bAreBackgroundObjectsVisible        = true;
-    mVisiblePagePropSet.bIsPageNumberFieldVisible           = false;;
+    mVisiblePagePropSet.bIsPageNumberFieldVisible           = false;
     mVisiblePagePropSet.bIsHeaderFieldVisible               = false;
     mVisiblePagePropSet.bIsFooterFieldVisible               = true;
     mVisiblePagePropSet.bIsDateTimeFieldVisible             = true;

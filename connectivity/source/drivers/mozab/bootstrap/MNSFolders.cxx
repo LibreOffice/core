@@ -100,7 +100,7 @@ namespace
         {
             OUString sProductPath;
 
-            // check whether we have an anevironment variable which helps us
+            // check whether we have an environment variable which help us
             const char* pProfileByEnv = getenv( ProductRootEnvironmentVariable[ productIndex ] );
             if ( pProfileByEnv )
             {

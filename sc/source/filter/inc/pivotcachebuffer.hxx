@@ -166,7 +166,7 @@ struct PCSharedItemsModel
     bool                mbHasMixed;         /// True = has [(string|bool|error) and (number|date)] or (number and date).
     bool                mbIsNumeric;        /// True = has numeric item(s), maybe other types except date.
     bool                mbIsInteger;        /// True = has numeric item(s) with only integers, maybe other types except date.
-    bool                mbHasLongText;      /// True = contains strings with >255 charascters.
+    bool                mbHasLongText;      /// True = contains strings with >255 characters.
     bool                mbHasLongIndexes;   /// True = indexes to shared items are 16-bit (BIFF only).
 
     explicit            PCSharedItemsModel();

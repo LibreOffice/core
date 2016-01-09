@@ -1325,7 +1325,7 @@ Rectangle Polygon::GetBoundRect() const
     // Removing the assert. Bezier curves have the attribute that each single
     // curve segment defined by four points can not exit the four-point polygon
     // defined by that points. This allows to say that the curve segment can also
-    // never leave the Range of it's defining points.
+    // never leave the Range of its defining points.
     // The result is that Polygon::GetBoundRect() may not create the minimal
     // BoundRect of the Polygon (to get that, use basegfx::B2DPolygon classes),
     // but will always create a valid BoundRect, at least as long as this method

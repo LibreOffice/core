@@ -27,7 +27,7 @@
  module com {  module sun {  module star {  module form {  module control {
 
 
-/** is an extended grid control, which allows the user to customize some of it's user interface's aspects.
+/** is an extended grid control, which allows the user to customize some of its user interface's aspects.
 */
 published service InteractionGridControl
 {

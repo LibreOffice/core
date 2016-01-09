@@ -28,7 +28,7 @@
 /**
  * SvNumberFormatsSupplierServiceObject - a number formats supplier which
  * - can be instantiated as an service
- * - works with it's own SvNumberFormatter instance
+ * - works with its own SvNumberFormatter instance
  * - can be initialized (css::lang::XInitialization)
  * with a specific language (i.e. css::lang::Locale)
  */

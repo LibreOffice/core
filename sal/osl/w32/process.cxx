@@ -279,7 +279,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
                 0, reinterpret_cast<LPCWSTR>(ppArgs[0]->buffer), L".exe", aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), 0);
             if ((0 < dwResult) && (dwResult < aBuffer.getBufSizeInSymbols()))
             {
-                /* Replace argv[0] with it's absolute path */
+                /* Replace argv[0] with its absolute path */
                 rtl_uString_newFromStr_WithLength(
                     &(ppArgs[0]), aBuffer, dwResult);
             }
@@ -448,7 +448,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )
     {
         oslFileError    eError;
-        rtl_uString     *ustrTemp = NULL;;
+        rtl_uString     *ustrTemp = NULL;
 
         rtl_uString_newFromStr_WithLength( &ustrTemp, aBuffer, dwLen );
         eError = osl_getFileURLFromSystemPath( ustrTemp, pustrWorkingDir );

@@ -1250,7 +1250,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     // add the accessory controller to the panel
     [pPrintPanel addAccessoryController: [pAccessoryController autorelease]];
 
-    // set the current selecte tab item
+    // set the current selected tab item
     if( pState->nLastPage >= 0 && pState->nLastPage < [pTabView numberOfTabViewItems] )
         [pTabView selectTabViewItemAtIndex: pState->nLastPage];
 

@@ -1120,7 +1120,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         {
             //?????? Currently not supported
             // Window is docked individually; size is calculated.
-            // It must therefore be initialized with the DloatingSize if
+            // It must therefore be initialized with the FloatingSize if
             // someone relies on it that a reasonable size is set
             SetSizePixel(GetFloatingSize());
             SetSizePixel(CalcDockingSize(GetAlignment()));

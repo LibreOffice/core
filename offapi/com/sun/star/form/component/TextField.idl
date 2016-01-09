@@ -46,7 +46,7 @@ published service TextField
     */
     [optional] service RichTextControl;
 
-    /** can be used to reset the control to it's default text.
+    /** can be used to reset the control to its default text.
 
         @see TextField::DefaultText
     */

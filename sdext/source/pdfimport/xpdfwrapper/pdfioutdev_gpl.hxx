@@ -93,7 +93,7 @@ namespace pdfi
             size(0.0)
         {}
 
-        // xdpf goo stuff is so totally borked...
+        // xpdf goo stuff is so totally borked...
         // ...need to hand-code assignment
         FontAttributes( const FontAttributes& rSrc ) :
             familyName(),

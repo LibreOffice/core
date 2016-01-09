@@ -36,7 +36,7 @@ import com.sun.star.awt.XTabControllerModel;
 *  <li><code> activateTabOrder()</code></li>
 *  <li><code> autoTabOrder()</code></li>
 *  <li><code> getContainer()</code></li>
-*  <li><code> getCotrols()</code></li>
+*  <li><code> getControls()</code></li>
 *  <li><code> getModel()</code></li>
 *  <li><code> setContainer()</code></li>
 *  <li><code> setModel()</code></li>

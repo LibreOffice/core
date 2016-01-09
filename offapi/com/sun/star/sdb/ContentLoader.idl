@@ -79,7 +79,7 @@ published service ContentLoader
         The parameters passed to the
         com::sun::star::frame::XFrameLoader::load()
         are forwarded to the object being created,
-        in particular to it's
+        in particular to its
         com::sun::star::lang::XInitialization
         interface.
     **/

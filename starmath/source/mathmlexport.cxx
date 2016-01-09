@@ -734,7 +734,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     sal_uInt16 nSize = pNode->GetNumSubNodes();
 
     //If the list ends in newline then the last entry has
-    //no subnodes, the newline is superfulous so we just drop
+    //no subnodes, the newline is superfluous so we just drop
     //the last node, inclusion would create a bad MathML
     //table
     if (nSize >= 1)

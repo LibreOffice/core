@@ -579,7 +579,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
     sal_uInt16 nCurrCol = mnPaintStartCol;
     sal_uInt16 nConsideredRows = 0;
     Point aCurrPaintOffset = aInitialPaintOffset;
-    // loop on pages to determine preview background retangles
+    // loop on pages to determine preview background rectangles
     while ( pPage &&
             (!mbDoesLayoutRowsFitIntoWindow || nConsideredRows < mnRows) &&
             aCurrPaintOffset.Y() < maWinSize.Height()

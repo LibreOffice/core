@@ -154,7 +154,7 @@ namespace ww
 
     /** Find the WinWord english name from a sti index
 
-        Map the word style index to it's english name
+        Map the word style index to its english name
 
         @param
         sti the Style index

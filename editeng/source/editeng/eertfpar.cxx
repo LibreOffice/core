@@ -305,7 +305,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     EditPaM aStartPaM( pSttNode, rSet.GetSttCnt() );
     EditPaM aEndPaM( pEndNode, rSet.GetEndCnt() );
 
-    // If possible adjust the Escapemant-Item:
+    // If possible adjust the Escapement-Item:
     const SfxPoolItem* pItem;
 
     // #i66167# adapt font heights to destination MapUnit if necessary

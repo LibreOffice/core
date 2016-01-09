@@ -388,7 +388,7 @@ namespace dbaui
         void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< OUString >& i_rObjectName );
 
     protected:
-        // initalizing members
+        // initializing members
 
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const override;

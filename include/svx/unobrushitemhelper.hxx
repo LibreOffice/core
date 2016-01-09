@@ -22,7 +22,7 @@
 #include "svx/svxdllapi.h"
 #include <editeng/brushitem.hxx>
 
-//UUUU Helper function definintions for UNO API fallbacks to replace SvxBrushItem. The
+//UUUU Helper function definitions for UNO API fallbacks to replace SvxBrushItem. The
 // idea is to have fallbacks to create a SvxBrushItem if needed for backwards compatibility
 // if needed from the SfxItemSet and vice versa. This is used in cases where e.g. UNO API
 // accesses to slots in the SvxBrushItem are used (see cases in SvxBrushItem::QueryValue

@@ -105,7 +105,7 @@ namespace myImplHelpers
 
     /*
      SwTextFormatColl and SwCharFormat are quite distinct types and how they are
-     gotten is also distinct, but the algorithm to match word's eqivalents into
+     gotten is also distinct, but the algorithm to match word's equivalents into
      them is the same, so we put the different stuff into two separate helper
      implementations and a core template that uses the helpers that uses the
      same algorithm to do the work. We'll make the helpers specializations of a
@@ -500,7 +500,7 @@ namespace sw
              All we want to do is ensure for now is that if a charfmt exist
              in the character properties that it rises to the top and is
              exported first.  In the future we might find more ordering
-             depandancies for export, in which case this is the place to do
+             dependencies for export, in which case this is the place to do
              it
             */
             if (nA == nB)

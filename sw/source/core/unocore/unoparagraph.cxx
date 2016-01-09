@@ -821,7 +821,7 @@ throw (uno::RuntimeException, std::exception)
                         SwPosition aPos( rTextNode );
                         SwPaM aPam( aPos );
                         // handle properties that are not part of the attribute
-                        // and thus only pretendend to be paragraph attributes
+                        // and thus only pretended to be paragraph attributes
                         beans::PropertyState eTemp;
                         const bool bDone =
                             SwUnoCursorHelper::getCursorPropertyValue(

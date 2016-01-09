@@ -180,7 +180,7 @@ class WWD_General(WebWizardDialog):
 
     def enableSteps(self, enabled):
         if not enabled and not self.isStepEnabled(3):
-            #disbale steps 3-7
+            #disable steps 3-7
             return
 
         for i in range(3,8):
@@ -294,7 +294,7 @@ class WWD_General(WebWizardDialog):
     '''
     substitutes path variables with the corresponding values.
     @param path a path, which might contain OOo path variables.
-    @return the path, after substituing path variables.
+    @return the path, after substituting path variables.
     '''
 
     def substitute(self, path):

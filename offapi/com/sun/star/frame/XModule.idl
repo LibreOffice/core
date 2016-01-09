@@ -30,7 +30,7 @@ module com { module sun { module star { module frame {
 /** can be used to overrule identification of office modules.
 
     <p>
-    Normally an office module will be identified by it's service name
+    Normally an office module will be identified by its service name
     in combination with a set of configuration data.
     But sometimes whole existing office modules will be used as black box components
     to implement a different office module on top of it. Patching a service name

@@ -263,7 +263,7 @@ void XclPCNumGroupInfo::SetXclDataType( sal_uInt16 nXclType )
 XclImpStream& operator>>( XclImpStream& rStrm, XclPCNumGroupInfo& rInfo )
 {
     rInfo.mnFlags = rStrm.ReaduInt16();
-    return rStrm;;
+    return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPCNumGroupInfo& rInfo )

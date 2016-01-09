@@ -391,7 +391,7 @@ sal_uInt16 MapDirection( sal_uInt16 nDir, const bool bVertFormat )
     return nDir;
 }
 
-// maps the absolute direction set at the font to its logical conterpart
+// maps the absolute direction set at the font to its logical counterpart
 // in the rotated environment
 sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat )
 {

@@ -1232,7 +1232,7 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
             *result = nullptr;
             return true;
         }
-        typereg_Version version = entry->getVersion();;
+        typereg_Version version = entry->getVersion();
         if (version < TYPEREG_VERSION_0 || version > maxVersion) {
             *result = nullptr;
             return true;

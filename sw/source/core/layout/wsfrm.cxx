@@ -582,7 +582,7 @@ void SwFrame::InsertBehind( SwLayoutFrame *pParent, SwFrame *pBefore )
     }
 }
 
-/** Insert a chain of SwFrames into an existing struction
+/** Insert a chain of SwFrames into an existing structure
  *
  * Currently, this method is used to insert a SectionFrame (which may have some siblings) into an
  * existing structure. If the third parameter is NULL, this method is (besides handling the

@@ -59,7 +59,7 @@ import com.sun.star.uno.UnoRuntime;
 * INSTANCEn are n Objectrelations so that every thread can isert it's own
 * object. n depends on the variable THRCNT which and comes from API.INI
 * Some Object-Container can't replace the first that comes belong. So in
-* NAMEREPLACE you can determine a containerobject, which is replaceable. <p>
+* NAMEREPLACE you can determine a container object, which is replaceable. <p>
 *
 * Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.

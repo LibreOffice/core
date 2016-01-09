@@ -23,7 +23,7 @@ name of this app is a bit too grandiose. Built by an Xcode project.
 MobileLibreOffice - Uses the code in "shared" subdirectory. Can be
 built in two configurations: 1) the "normal" configurations (Debug and
 Release) that matches experimental/LibreOffice in functionality, more
-or less. (But the coded is entirely differently structred.) But also
+or less. (But the coded is entirely differently structured.) But also
 this is currently broken, 2) the Debug_tile_tester configuration,
 where one can tweak tiling parameters and see a tile rendered. Also
 built by an Xcode project.

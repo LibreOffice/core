@@ -511,7 +511,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
         {
             // if it is an embedded object (without it's own printer)
             // we change the MapMode temporarily.
-            //!If it is a document with it's own printer the MapMode should
+            //!If it is a document with its own printer the MapMode should
             //!be set correct (once) elsewhere(!), in order to avoid numerous
             //!superfluous pushing and poping of the MapMode when using
             //!this class.
@@ -536,7 +536,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
         {
             // if it is an embedded object (without it's own printer)
             // we change the MapMode temporarily.
-            //!If it is a document with it's own printer the MapMode should
+            //!If it is a document with its own printer the MapMode should
             //!be set correct (once) elsewhere(!), in order to avoid numerous
             //!superfluous pushing and poping of the MapMode when using
             //!this class.

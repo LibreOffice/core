@@ -733,7 +733,7 @@ const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
         const_cast<FontList*>(this)->mpSizeAry = nullptr;
     }
 
-    // use standarad sizes if no name
+    // use standard sizes if no name
     if ( rInfo.GetName().isEmpty() )
         return aStdSizeAry;
 

@@ -179,7 +179,7 @@ public final class WikiEditorImpl extends WeakBase
     {
         String urlstring = url.Complete;
         m_statusListeners.put( urlstring, listener );
-        // synchroneous callback required!!!
+        // synchronous callback required!!!
         callStatusListener( urlstring );
     }
 

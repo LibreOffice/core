@@ -458,7 +458,7 @@ LinguMgrExitLstnr::~LinguMgrExitLstnr()
         xDesktop->removeEventListener( this );
         xDesktop = nullptr;    //! release reference to desktop
     }
-    OSL_ENSURE(!xDesktop.is(), "reference to desktop should be realeased");
+    OSL_ENSURE(!xDesktop.is(), "reference to desktop should be released");
 }
 
 void LinguMgrExitLstnr::disposing(const EventObject& rSource)

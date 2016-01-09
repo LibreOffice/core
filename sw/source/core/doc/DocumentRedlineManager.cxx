@@ -1294,7 +1294,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                     {
                         // it may be necessary to split the existing redline in
                         // two. In this case, pRedl will be changed to cover
-                        // only part of it's former range, and pNew will cover
+                        // only part of its former range, and pNew will cover
                         // the remainder.
                         SwRangeRedline* pNew = nullptr;
 

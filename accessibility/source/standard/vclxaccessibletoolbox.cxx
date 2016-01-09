@@ -419,7 +419,7 @@ void VCLXAccessibleToolBox::UpdateAllItems_Impl()
         for ( i = 0; i < nCount; ++i )
         {
             Any aNewValue;
-            aNewValue <<= getAccessibleChild( (sal_Int32)i );;
+            aNewValue <<= getAccessibleChild( (sal_Int32)i );
             NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewValue );
         }
     }

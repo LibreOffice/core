@@ -116,7 +116,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
         field (/interface attribute) by name.
         <br>
         If the reflected type is not an interface, struct or union or the
-        interace, struct or union does not have a field (/interface attribute)
+        interface, struct or union does not have a field (/interface attribute)
         with the demanded name, then a null-reference is returned.
 
         @param aName

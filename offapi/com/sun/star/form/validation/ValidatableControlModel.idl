@@ -67,7 +67,7 @@ service ValidatableControlModel
         <p>As soon as a validator is set via XValidatable::setValidator(), the validatable
         control model registers itself as listener. If the validity constraint of the validator
         changes, the ValidatableControlModel re-validates its current valid, and
-        broadcasts any resuling changes to all its XFormComponentValidityListener, if
+        broadcasts any resulting changes to all its XFormComponentValidityListener, if
         necessary.</p>
     */
     interface XValidityConstraintListener;

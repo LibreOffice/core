@@ -144,7 +144,7 @@ SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
     m_pColumnBtn->SetClickHdl( aLk );
     m_pPageCollBox->SetSelectHdl( LINK(this,SwBreakDlg,SelectHdl) );
 
-    get<OKButton>("ok")->SetClickHdl(LINK(this,SwBreakDlg,OkHdl));;
+    get<OKButton>("ok")->SetClickHdl(LINK(this,SwBreakDlg,OkHdl));
     m_pPageNumBox->SetClickHdl(LINK(this,SwBreakDlg,PageNumHdl));
     m_pPageNumEdit->SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
 

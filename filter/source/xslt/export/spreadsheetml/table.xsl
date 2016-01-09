@@ -222,7 +222,7 @@
 
 
 	<!-- current node is a table:table-column -->
-	<!-- dublicates column elements in case of column-repeated attribute  -->
+	<!-- duplicates column elements in case of column-repeated attribute  -->
 	<xsl:template name="repeat-adding-table-column">
 		<xsl:param name="table:table-column" />
 		<xsl:param name="numberColumnsRepeated" />
@@ -312,7 +312,7 @@
 	<!--
 		Rows as "table:table-row" might be grouped in
 		"table:table-header-rows" or "table:table-row-group"
-		This row-tree will be traversed providing each Row with it's
+		This row-tree will be traversed providing each Row with its
 		calculatedRowPosition and earlierRowNumber.
 		By this repeated empty rows might be neglected in the spreadsheetml output,
 		as the following row will notice the 'gap' and provide @ss:Index,

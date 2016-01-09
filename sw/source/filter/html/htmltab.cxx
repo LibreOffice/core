@@ -428,7 +428,7 @@ class HTMLTable
     bool bHasToFly;
     bool bFixedCols;
     bool bColSpec;                  // where there COL(GROUP)-elements?
-    bool bPrcWidth;                 // width is declarated in %
+    bool bPrcWidth;                 // width is declared in %
 
     SwHTMLParser *pParser;          // the current parser
     HTMLTable *pTopTable;           // the table on the Top-Level

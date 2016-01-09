@@ -1511,7 +1511,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
         {
             // Scripting Framework URL
-            aAny <<= maStrScript;;
+            aAny <<= maStrScript;
             pProperties->Name = maStrEventType;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1528,7 +1528,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         else
         {
             // Old Basic macro URL
-            aAny <<= maStrStarBasic;;
+            aAny <<= maStrStarBasic;
             pProperties->Name = maStrEventType;
             pProperties->Handle = -1;
             pProperties->Value = aAny;

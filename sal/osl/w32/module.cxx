@@ -154,7 +154,7 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
 {
     /* casting from a function pointer to a data pointer is invalid
        be in this case unavoidable because the API has to stay
-       compitable we need to keep this function which returns a
+       compatible. We need to keep this function which returns a
        void* by definition */
 #ifdef _MSC_VER
 #pragma warning(push)

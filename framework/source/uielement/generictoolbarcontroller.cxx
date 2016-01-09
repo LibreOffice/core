@@ -320,7 +320,7 @@ class Toolbarmenu : public ::PopupMenu
 
 Toolbarmenu::Toolbarmenu()
 {
-    SAL_INFO("fwk.uielement", "contstructing Toolbarmenu " << this);
+    SAL_INFO("fwk.uielement", "constructing Toolbarmenu " << this);
 }
 
 Toolbarmenu::~Toolbarmenu()

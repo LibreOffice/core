@@ -108,7 +108,7 @@ StgCache::~StgCache()
 
 void StgCache::SetPhysPageSize( short n )
 {
-    OSL_ENSURE( n >= 512, "Unexpecte page size is provided!" );
+    OSL_ENSURE( n >= 512, "Unexpected page size is provided!" );
     if ( n >= 512 )
     {
         m_nPageSize = n;

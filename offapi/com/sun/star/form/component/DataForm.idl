@@ -99,7 +99,7 @@ published service DataForm
         <p>You can add your component as
         com::sun::star::form::XDatabaseParameterListener
         to a form to get notified whenever the form needs parameter values to be filled in<br/>
-        In a first approach, the form tries to fill any parameters from it's master-detail relation
+        In a first approach, the form tries to fill any parameters from its master-detail relation
         (if any). All values which can't be filled are then passed to all listeners, which can
         fill them by their own choice.</p>
 

@@ -159,7 +159,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
 
 void SwFlyFrame::Chain( SwFrame* _pAnch )
 {
-    // Connect to chain neighboors.
+    // Connect to chain neighbours.
     // No problem, if a neighboor doesn't exist - the construction of the
     // neighboor will make the connection
     const SwFormatChain& rChain = GetFormat()->GetChain();

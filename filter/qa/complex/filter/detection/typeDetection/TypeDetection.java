@@ -117,7 +117,7 @@ import util.utils;
  * correspond <code>defaultFileType</code> from <code>csv.files</code>
  *
  * Syntax: fileAlias;FilterName;FilterOptions;FilterData
- * Example: Writer6_1;%SO6productname %SO6formatversion Textdokument;;
+ * Example: Writer6_1;%SO6productname %SO6formatversion Textdocument;
  *
  * The example shows the following:
  * <code>Writer6_1</code> is the same as in <code>csv.files</code>

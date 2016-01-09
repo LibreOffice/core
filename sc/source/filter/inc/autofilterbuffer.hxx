@@ -142,7 +142,7 @@ public:
     virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) override;
 
 private:
-    /** Appends the passed filter criteriom, if it contains valid settings. */
+    /** Appends the passed filter criterion, if it contains valid settings. */
     void                appendCriterion( const FilterCriterionModel& rCriterion );
 
 private:

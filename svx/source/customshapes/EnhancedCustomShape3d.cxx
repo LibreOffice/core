@@ -305,7 +305,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         // created visualisation helper model shape individually. The shadow itself
         // will then be rendered from the 3D renderer correctly for the whole 3D scene
         // (and thus behind all objects of which the visualisation may be built). So,
-        // dio NOT remove it from the ItemSet here.
+        // do NOT remove it from the ItemSet here.
         // aSet.ClearItem(SDRATTR_SHADOW);
 
         std::vector< E3dCompoundObject* > aPlaceholderObjectList;

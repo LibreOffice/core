@@ -31,7 +31,7 @@ extern "C" {
  * Thread identifier administration.
  ***/
 /**
-  Establishs an association between the current thread and the given thread identifier.
+  Establishes an association between the current thread and the given thread identifier.
   There can be only one association at a time. The association must be broken by
   uno_releaseIdFromCurrentThread().
   This method is in general called by a bridge, that wants to bind a remote threadId
@@ -143,7 +143,7 @@ uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
                    uno_threadpool_enter().
   @param doRequest The function, that shall be called to execute the request.
                    0 if pJob is a reply.
-  @param bIsOneway True, if the request is asynchrons. False, if it is synchronous.
+  @param bIsOneway True, if the request is asynchronous. False, if it is synchronous.
                    Set to sal_False, if pJob is a reply.
  */
 CPPU_DLLPUBLIC void SAL_CALL

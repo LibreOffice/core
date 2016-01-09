@@ -229,7 +229,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
             try
             {
                     ::rtl::Reference< ::jvmaccess::VirtualMachine > xVM;
-                    uno::Reference< java::XJavaVM >                 xJavaVM = java::JavaVirtualMachine::create(xContext);;
+                    uno::Reference< java::XJavaVM >                 xJavaVM = java::JavaVirtualMachine::create(xContext);
                     uno::Sequence< sal_Int8 >                       aProcessID( 17 );
 
                     rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(aProcessID.getArray()) );

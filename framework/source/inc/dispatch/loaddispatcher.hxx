@@ -73,7 +73,7 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper< css::frame::XNotifyingDis
                     will be used to create own needed services on demand.
 
             @param  xOwnerFrame
-                    used as startpoit to locate the right target frame.
+                    used as startpoint to locate the right target frame.
 
             @param  sTargetName
                     the name or the target frame for loading or a special qualifier

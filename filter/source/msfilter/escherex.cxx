@@ -4917,7 +4917,7 @@ void EscherExGlobal::WriteDggAtom( SvStream& rStrm ) const
     // write the DGG record header (do not include the 8 bytes of the header in the data size)
     rStrm.WriteUInt32( ESCHER_Dgg << 16 ).WriteUInt32( nDggSize - 8 );
 
-    // claculate and write the fixed DGG data
+    // calculate and write the fixed DGG data
     sal_uInt32 nShapeCount = 0;
     sal_uInt32 nLastShapeId = 0;
     for( DrawingInfoVector::const_iterator aIt = maDrawingInfos.begin(), aEnd = maDrawingInfos.end(); aIt != aEnd; ++aIt )

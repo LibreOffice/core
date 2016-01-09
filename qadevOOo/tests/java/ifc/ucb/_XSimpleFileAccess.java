@@ -520,7 +520,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
 
         if (oHandler == null)
             throw new StatusException
-                (Status.failed("Reelation InteractionHandler not found"));
+                (Status.failed("Relation InteractionHandler not found"));
 
         try {
             handler = UnoRuntime.queryInterface

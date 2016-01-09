@@ -175,7 +175,7 @@ public class _XEventAttacherManager extends MultiMethodTest {
     }
 
     /**
-     * Method checks that array of descriptors contains the concrete desciptor.
+     * Method checks that array of descriptors contains the concrete descriptor.
      * @param container the array of descriptors
      * @param evt the descriptor which presence in the array is checked
      * @return true if the descriptor presence in the array

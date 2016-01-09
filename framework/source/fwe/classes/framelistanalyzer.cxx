@@ -223,7 +223,7 @@ void FrameListAnalyzer::impl_analyze()
             }
 
             // d) Or is it the a task, which use another or no model at all?
-            //    Add it to the list of "other frames". But look for it's
+            //    Add it to the list of "other frames". But look for its
             //    visible state ... if it's allowed to do so.
 
             bool bHidden = false;

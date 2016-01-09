@@ -216,7 +216,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77715,"FDO77715.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
 {
-    // DOCX contaning TOC should preserve code field '\u'.
+    // DOCX containing TOC should preserve code field '\u'.
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;

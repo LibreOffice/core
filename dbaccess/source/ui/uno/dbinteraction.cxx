@@ -86,7 +86,7 @@ namespace dbaui
 
         Sequence< Reference< XInteractionContinuation > > aContinuations( i_Request->getContinuations() );
 
-        // try to extract an SQLException (or one of it's derived members
+        // try to extract an SQLException (or one of its derived members
         SQLExceptionInfo aInfo( aRequest );
         if ( aInfo.isValid() )
         {

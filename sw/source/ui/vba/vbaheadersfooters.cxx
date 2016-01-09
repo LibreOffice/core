@@ -41,7 +41,7 @@ public:
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
     {
-        // first page, evenpages and primary page
+        // first page, even pages and primary page
         return 3;
     }
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override

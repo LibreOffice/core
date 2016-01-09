@@ -562,7 +562,7 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
             pPage = pPage->GetNext();
     }
 
-    OSL_ENSURE( GetPageNum() <= maPageRects.size(), "number of pages differes from page rect array size" );
+    OSL_ENSURE( GetPageNum() <= maPageRects.size(), "number of pages differs from page rect array size" );
     size_t nPageIdx = 0;
 
     while ( pPage && !pRet )

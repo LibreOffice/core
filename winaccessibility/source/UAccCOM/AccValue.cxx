@@ -122,7 +122,7 @@ STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 
     default:
         {
-            // Unsupport type conversion.
+            // Unsupported type conversion.
             hRet = E_FAIL;
         }
         break;

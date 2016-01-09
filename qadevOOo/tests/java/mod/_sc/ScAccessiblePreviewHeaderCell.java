@@ -212,7 +212,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
             }
             if (i == 20) { // give up after 10 sec
                 throw new RuntimeException(
-                    "Couldn't get AccessibleRolte.TABLE/TABLE_CELL object");
+                    "Couldn't get AccessibleRole.TABLE/TABLE_CELL object");
             }
             log.println("No TABLE/TABLE_CELL found yet, retrying");
         }

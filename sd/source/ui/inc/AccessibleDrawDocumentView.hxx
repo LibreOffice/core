@@ -130,7 +130,7 @@ protected:
         @param nAccessibleChildIndex
             Index of the child to select or deselect.  If the parameter has
             the value ACCESSIBLE_SELECTION_CHILD_ALL then all children are
-            selected or deslected.
+            selected or deselected.
         @param bSelect
             Indicates whether to select or deselect the specified child
             reps. children.

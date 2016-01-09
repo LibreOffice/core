@@ -99,7 +99,7 @@ public:
     Color GetHighlightColor() const { return maHighlightColor;}
     void SetHighlightColor (const Color& rColor);
 
-    /** The UI can be set to be read only indepently from the model status.
+    /** The UI can be set to be read only independently from the model status.
         Used for instance in the presenter view.
     */
     bool IsUIReadOnly() const { return mbIsUIReadOnly;}

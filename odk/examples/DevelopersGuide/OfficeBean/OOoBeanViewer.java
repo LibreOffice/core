@@ -39,7 +39,7 @@ import javax.swing.filechooser.*;
 import javax.swing.*;
 import java.io.*;
 
-/** A simple Applet that contains the SimpleBean.
+/* A simple Applet that contains the SimpleBean.
  *
  * This applet is a sample implementation of the
  * OpenOffice.org bean.

@@ -299,7 +299,7 @@ namespace svgio
             drawinglayer::primitive2d::Primitive2DSequence aSequence;
 
             // #i125258# check now if we need to init some style settings locally. Do not do this
-            // in the constructor, there is not yet informatikon e.g. about existing CssStyles.
+            // in the constructor, there is not yet information e.g. about existing CssStyles.
             // Here all nodes are read and interpreted
             const_cast< SvgSvgNode* >(this)->initializeStyleAttributes();
 
@@ -594,7 +594,7 @@ namespace svgio
                                 // no clip needed, but an invisible HiddenGeometryPrimitive2D
                                 // to allow getting the full Svg range using the primitive mechanisms.
                                 // This is needed since e.g. an SdrObject using this as graphic will
-                                // create a mapping transformation to exactly map the content to it's
+                                // create a mapping transformation to exactly map the content to its
                                 // real life size
                                 const drawinglayer::primitive2d::Primitive2DReference xLine(
                                     new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(

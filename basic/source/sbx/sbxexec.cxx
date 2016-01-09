@@ -381,7 +381,7 @@ SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
     p = SkipWhitespace( p );
     if( !*p )
     {
-        return nullptr;;
+        return nullptr;
     }
     pVar = QualifiedName( this, this, &p, t );
     p = SkipWhitespace( p );

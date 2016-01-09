@@ -448,7 +448,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
         if( sParent != mxStyle->getParentStyle() )
         {
             // this may except if setting the parent style forms a
-            // circle in the style depencies; especially if the parent
+            // circle in the style dependencies; especially if the parent
             // style is the same as the current style
             try
             {

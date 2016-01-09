@@ -34,7 +34,7 @@ const sal_Int32 SCF_INV_SEGMENT = -1;
 
 /** Progress bar for complex progress representation.
 
-    The progress bar contains one or more segments, each with customable
+    The progress bar contains one or more segments, each with customizable
     size. Each segment is represented by a unique identifier. While showing the
     progress bar, several segments can be started simultaneously. The progress
     bar displays the sum of all started segments on screen.

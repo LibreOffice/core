@@ -109,7 +109,7 @@ sal_Int32 FindEndPosR1C1(const sal_Unicode* p, sal_Int32 nStartPos, sal_Int32 nE
 }
 
 /**
- * Find last character position that is considred text, from the specified
+ * Find last character position that is considered text, from the specified
  * start position.
  */
 sal_Int32 FindEndPos(const sal_Unicode* p, sal_Int32 nStartPos, sal_Int32 nEndPos,

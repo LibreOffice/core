@@ -130,7 +130,7 @@ Reference<drawing::framework::XPaneBorderPainter>
 void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
 {
     mbHasCallout = true;
-    // Anchor is given in the coorindate system of the parent window.
+    // Anchor is given in the coordinate system of the parent window.
     // Transform it into the local coordinate system.
     maCalloutAnchor = rCalloutAnchor;
     const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());

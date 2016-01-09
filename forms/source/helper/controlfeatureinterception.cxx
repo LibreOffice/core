@@ -117,7 +117,7 @@ namespace frm
             // tell the interceptor it has a new (means no) predecessor
             xInterceptor->setMasterDispatchProvider( nullptr );
 
-            // ask for it's successor
+            // ask for its successor
             Reference< XDispatchProvider > xSlave = xInterceptor->getSlaveDispatchProvider();
             // and give it the new (means no) successoert
             xInterceptor->setSlaveDispatchProvider( nullptr );

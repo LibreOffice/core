@@ -77,7 +77,7 @@ class QueuedTopWindowListener
     public void windowDeactivated (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
-        System.out.println ("QueuedTopWindowListener: Top window deactived: " + aEvent);
+        System.out.println ("QueuedTopWindowListener: Top window deactivated: " + aEvent);
     }
 
     public void disposing( final EventObject aEvent)

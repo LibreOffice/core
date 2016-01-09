@@ -133,7 +133,7 @@ bool LifeTimeManager::dispose()
     //--do the disposing of listeners after calling this method
     {
         uno::Reference< lang::XComponent > xComponent =
-            uno::Reference< lang::XComponent >(m_pComponent);;
+            uno::Reference< lang::XComponent >(m_pComponent);
         if(xComponent.is())
         {
             // notify XCLoseListeners
@@ -222,12 +222,12 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
     try
     {
         uno::Reference< util::XCloseable > xCloseable =
-            uno::Reference< util::XCloseable >(m_pCloseable);;
+            uno::Reference< util::XCloseable >(m_pCloseable);
         if(xCloseable.is())
         {
             //--call queryClosing on all registered close listeners
             ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
-                        cppu::UnoType<util::XCloseListener>::get());;
+                        cppu::UnoType<util::XCloseListener>::get());
             if( pIC )
             {
                 lang::EventObject aEvent( xCloseable );
@@ -341,7 +341,7 @@ void CloseableLifeTimeManager::impl_doClose()
         {
             //--call notifyClosing on all registered close listeners
             ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
-                        cppu::UnoType<util::XCloseListener>::get());;
+                        cppu::UnoType<util::XCloseListener>::get());
             if( pIC )
             {
                 lang::EventObject aEvent( xCloseable );

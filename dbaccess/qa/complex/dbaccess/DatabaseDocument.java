@@ -227,7 +227,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 return;
             }
 
-            assertEquals("interaction handleer called in wrong state", STATE_LOADING_DOC, m_loadDocState);
+            assertEquals("interaction handler called in wrong state", STATE_LOADING_DOC, m_loadDocState);
 
             // auto-approve
             final XInteractionContinuation continuations[] = _request.getContinuations();
@@ -419,7 +419,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         assertEquals("wrong URL after loading the document", documentURL, databaseDoc.getURL());
         impl_checkDocumentInitState(databaseDoc, true);
 
-        // and while we are here ... initilizing the same document again should not be possible
+        // and while we are here ... initializing the same document again should not be possible
         assureException( databaseDoc, XLoadable.class, "initNew", new Object[0],
             DoubleInitializationException.class );
         assureException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
@@ -595,7 +595,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         assertTrue( "The test case marker did not survive re-retrieval of the doc from the data source.",
             impl_hasMarker( databaseDoc.getArgs() ) );
 
-        // on the other hand, closing and regurlarly re-loading the doc *without* the marker should indeed
+        // on the other hand, closing and regulary re-loading the doc *without* the marker should indeed
         // lose it
         impl_closeDocument( databaseDoc );
         databaseDoc = impl_loadDocument( documentURL, impl_getDefaultLoadArgs() );

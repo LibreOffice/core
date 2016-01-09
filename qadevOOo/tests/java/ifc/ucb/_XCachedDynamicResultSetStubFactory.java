@@ -113,7 +113,7 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
     /**
     * Creates an instance of <code>CachedDynamicResultSet</code> service
     * which is not connected to any stub. Then tries to connect it to
-    * <code>DynaminResultSet</code> created and passed as relation.
+    * <code>DynamicResultSet</code> created and passed as relation.
     * Connection is checked by retrieving and comparing of row numbers
     * of connected set and its source set. <p>
     * Has <b>OK</b> status if row numbers are equal and they are

@@ -42,7 +42,7 @@ published service ViewDescriptor
     [property] string SchemaName;
 
 
-    /** is the command for creating the view. After appending a view to it's
+    /** is the command for creating the view. After appending a view to its
         container, the command may be empty. This is typically a
         SQL Select-Statement.
      */

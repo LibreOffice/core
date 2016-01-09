@@ -1035,7 +1035,7 @@ bool SwFieldMgr::InsertField(
             pField = new SwDBField(pTyp);
             pField->SetSubType(nSubType);
 
-            if( !(nSubType & nsSwExtendedSubType::SUB_OWN_FMT) ) // determinee database format
+            if( !(nSubType & nsSwExtendedSubType::SUB_OWN_FMT) ) // determine database format
             {
                 Reference< XDataSource> xSource;
                 rData.m_aDBDataSource >>= xSource;

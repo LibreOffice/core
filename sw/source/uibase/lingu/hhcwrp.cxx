@@ -436,7 +436,7 @@ void SwHHCWrapper::ReplaceUnit(
             //!! back to false we do it now manually in order for the selection
             //!! to be done properly in the following call to Left.
             // We didn't fix it in Delete and Insert since it is currently
-            // unclear if someone depends on this incorrect behvaiour
+            // unclear if someone depends on this incorrect behaviour
             // of the flag.
             m_rWrtShell.EndSelect();
 

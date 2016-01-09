@@ -47,7 +47,7 @@
 
 01/20/2005 (JSC): BugID=i40985
   change const value com.sun.star.configuration.backend.NodeAttribute:MASK to
-  0x7F00 insterad of 0xFF00. Necessary because of a bug fix in idlc and possible
+  0x7F00 instead of 0xFF00. Necessary because of a bug fix in idlc and possible
   because only 3 bits are masked.
 
 02/18/05 (JSC/TL): BugID=i42890

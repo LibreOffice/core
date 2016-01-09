@@ -553,7 +553,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
         }
         else
         {
-            // If all else fails, take 15% of the height, as emprically
+            // If all else fails, take 15% of the height, as empirically
             // determined by CL
             nGuessedLeading = (nWinHeight * 15) / 100;
         }

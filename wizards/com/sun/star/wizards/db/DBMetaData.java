@@ -363,7 +363,7 @@ public class DBMetaData
         WidthList[15][0] = DataType.TIME; // ==  92;
         WidthList[16][0] = DataType.TIMESTAMP; // ==  93;
         // NumericTypes are all types where aggregate functions can be performed on.
-        // Similarly to a major competitor date/time/timmestamp fields are not included
+        // Similarly to a major competitor date/time/timestamp fields are not included
 
 
     }

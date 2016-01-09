@@ -1695,7 +1695,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     ODatabaseMetaDataResultSet::ORow aRow(8);
     aRow[0] = new ORowSetValueDecorator(); // Unused
     aRow[1] = new ORowSetValueDecorator(); // TABLE_CAT unsupported
-    aRow[2] = new ORowSetValueDecorator(); // TABLE_SCHEM unussported.
+    aRow[2] = new ORowSetValueDecorator(); // TABLE_SCHEM unsupported.
 
     while( rs->next() )
     {

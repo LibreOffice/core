@@ -59,7 +59,7 @@ protected:
     bool                        mbInsGluePointMode : 1;
     bool                        mbNoDragXorPolys : 1;
     bool                        mbAutoVertexCon : 1;  // automatic generation of connectors at the vertices
-    bool                        mbAutoCornerCon : 1;  // automatic geneartion of connectors at the corners
+    bool                        mbAutoCornerCon : 1;  // automatic generation of connectors at the corners
     bool                        mbRubberEdgeDragging : 1;
     bool                        mbDetailedEdgeDragging : 1;
 

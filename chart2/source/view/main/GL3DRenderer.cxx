@@ -1112,7 +1112,7 @@ void OpenGL3DRenderer::Set3DSenceInfo(sal_uInt32 nColor, bool twoSidesLighting)
     else
     {
         m_iLightNum = 0;
-        m_Ambient = getColorAsVector(nColor);;
+        m_Ambient = getColorAsVector(nColor);
     }
     SetLightInfo(true, 0xFFFFFF, glm::vec4(-1.0, -1.0, 1.0, 0.0));
     SetLightInfo(true, 0xFFFFFF, glm::vec4(-1.0, 1.0, 1.0, 0.0));

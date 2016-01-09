@@ -75,7 +75,7 @@ public class _XPagePrintable extends MultiMethodTest {
     }
 
     /**
-     * Changes a property 'IsLandscape' in existsing print settings,
+     * Changes a property 'IsLandscape' in existing print settings,
      * and sets these settings back. <p>
      *
      * Has <b>OK</b> status if settings gotten again has the changed

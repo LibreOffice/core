@@ -1145,7 +1145,7 @@ static void lcl_FillSelBoxes( SwSelBoxes &rBoxes, SwTableLine &rLine )
         rBoxes.insert( rLine.GetTabBoxes()[i] );
 }
 
-/** SwTable::InsertSpannedRow(..) inserts "superfluous" rows, i.e. rows containig
+/** SwTable::InsertSpannedRow(..) inserts "superfluous" rows, i.e. rows containing
     overlapped cells only. This is a preparation for an upcoming split.
 */
 

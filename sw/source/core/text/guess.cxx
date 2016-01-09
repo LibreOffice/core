@@ -513,7 +513,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     return false;
 }
 
-// returns true if word at position nPos has a diffenrent spelling
+// returns true if word at position nPos has a different spelling
 // if hyphenated at this position (old german spelling)
 bool SwTextGuess::AlternativeSpelling( const SwTextFormatInfo &rInf,
     const sal_Int32 nPos )

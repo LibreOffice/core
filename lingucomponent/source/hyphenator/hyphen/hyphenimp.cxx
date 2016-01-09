@@ -193,7 +193,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 
                     // currently only one language per dictionary is supported in the actual implementation...
                     // Thus here we work-around this by adding the same dictionary several times.
-                    // Once for each of it's supported locales.
+                    // Once for each of its supported locales.
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         LanguageTag aLanguageTag( aDictIt->aLocaleNames[i] );

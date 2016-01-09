@@ -169,7 +169,7 @@ public class ScCellRangeObj extends TestCase {
                                        XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet", PropSet);
 
-        // XSearchable: Add a cell to make a seacrchable entry
+        // XSearchable: Add a cell to make a searchable entry
         try {
             tEnv.addObjRelation("XSearchable.MAKEENTRYINCELL", new XCell[] {
                         testRange.getCellByPosition(0,0), testRange.getCellByPosition(0,1)});

@@ -2194,7 +2194,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     }
 
     // Address in DDE function must be always parsed as CONV_OOO so that it
-    // would always work regardless of current address convension.  We do this
+    // would always work regardless of current address conversion.  We do this
     // because the address item in a DDE entry is *not* normalized when saved
     // into ODF.
     ScRange aRange;

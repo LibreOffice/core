@@ -143,7 +143,7 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                         const bool bEmpty =
                             ( pHt->Which() != RES_TXTATR_FIELD
                               && pHt->Which() != RES_TXTATR_ANNOTATION )
-                            || (static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true).isEmpty());;
+                            || (static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true).isEmpty());
                         if ( bEmpty && nStart == nAkt )
                         {
                             rArr.push_back( nAkt );

@@ -164,7 +164,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRMETHOD				:	sLocal = &quot;La méthode &apos;%0&apos; n&apos;est pas applicable dans ce contexte&quot;
 				Case &quot;ERR&quot; &amp; ERRPROPERTYINIT		:	sLocal = &quot;Propriété &apos;%0&apos; applicable mais non initialisée&quot;
 				Case &quot;ERR&quot; &amp; ERRFILENOTCREATED		:	sLocal = &quot;Erreur de création du fichier &apos;%0&apos;&quot;
-				Case &quot;ERR&quot; &amp; ERRDIALOGNOTFOUND		:	sLocal = &quot;Dialogue &apos;%0&apos; introuvable dans les librairies chargées actuellement&quot;
+				Case &quot;ERR&quot; &amp; ERRDIALOGNOTFOUND		:	sLocal = &quot;Dialogue &apos;%0&apos; introuvable dans les libraries chargées actuellement&quot;
 				Case &quot;ERR&quot; &amp; ERRDIALOGUNDEFINED		:	sLocal = &quot;Boîte de dialogue inconnue&quot;
 				Case &quot;ERR&quot; &amp; ERRDIALOGSTARTED		:	sLocal = &quot;Dialogue déjà initialisé précédemment&quot;
 				Case &quot;ERR&quot; &amp; ERRDIALOGNOTSTARTED	:	sLocal = &quot;Dialogue &apos;%0&apos; non initialisé&quot;

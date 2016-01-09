@@ -1060,7 +1060,7 @@ IMPL_LINK_TYPED( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             /*  Convert scrollbar mouse position to screen position. If RTL
                 mode of scrollbar differs from RTL mode of its parent, then the
                 direct call to Window::OutputToNormalizedScreenPixel() will
-                give unusable results, because calcualtion of screen position
+                give unusable results, because calculation of screen position
                 is based on parent orientation and expects equal orientation of
                 the child position. Need to mirror mouse position before. */
             Point aMousePos = pScroll->GetPointerPosPixel();

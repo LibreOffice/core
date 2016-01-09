@@ -86,7 +86,7 @@ void BufferNode::setReceivedAll()
  *
  *   NAME
  *  setReceivedAll -- indicates that the element in this BufferNode has
- *  been compeletely bufferred.
+ *  been completely bufferred.
  *
  *   SYNOPSIS
  *  setReceivedAll();

@@ -92,7 +92,7 @@ To run gtktiledviewer:
 
     bin/run gtktiledviewer $PWD/instdir/program path/to/test.odt
 
-To receive all incoming evetns from core use G_MESSAGES_DEBUG=all
+To receive all incoming events from core use G_MESSAGES_DEBUG=all
 
     G_MESSAGES_DEBUG=all bin/run gtktiledviewer $PWD/instdir/program ../test.odt
 

@@ -532,7 +532,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     Reference< XControl > xCntrl;
     try
     {
-       Reference< XDialogProvider >  xDlgProv;;
+       Reference< XDialogProvider >  xDlgProv;
        if( bDocDialog )
            xDlgProv = css::awt::DialogProvider::createWithModelAndScripting( xContext, xModel, xInput, aDlgLib, xScriptListener );
        else

@@ -1358,7 +1358,7 @@ namespace
         // The first element is (again) an AND condition
         else if ( SQL_ISRULE(pCondition,boolean_term) )
         {
-            OSL_ENSURE(pCondition->count() == 3,"Illegal definifiton of boolean_term");
+            OSL_ENSURE(pCondition->count() == 3,"Illegal definition of boolean_term");
             eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(0), nLevel,bHaving,bAddOrOnOneLine );
             if ( eErrorCode == eOk )
                 eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(2), nLevel,bHaving,bAddOrOnOneLine );

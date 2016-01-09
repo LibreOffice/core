@@ -157,7 +157,7 @@ void UnoInterfaceToUniqueIdentifierMapper::insertReference( const OUString& rIde
     while(nLength--)
     {
         if( (*p < '0') || (*p > '9') )
-            return; // a custom id, that will never conflict with genereated id's
+            return; // a custom id, that will never conflict with generated id's
 
         p++;
     }

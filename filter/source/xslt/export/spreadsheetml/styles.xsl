@@ -70,7 +70,7 @@
 		<xsl:if test="not(@style:family='table-row') or @style:family='table-row' and key('getCellByStyle', '.')">
 			<xsl:element name="Style">
 				<xsl:attribute name="ss:ID">
-					<!-- neglecting that a style is only unique in conjunction with it's family name -->
+					<!-- neglecting that a style is only unique in conjunction with its family name -->
 					<xsl:value-of select="@style:name" />
 				</xsl:attribute>
 				<xsl:choose>

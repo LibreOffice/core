@@ -2032,7 +2032,7 @@ void Content::transfer(
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     OUString( "Invalid source URI! "
-                                        "Unabale to determine source type!" ),
+                                        "Unable to determine source type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 xEnv );

@@ -175,7 +175,7 @@ public class FormLayer
         // insert the text field control
         XPropertySet field = createControlAndShape( _formComponentServiceName,
             _xPos + 25, _yPos, 40, _height );
-        // knit it to it's label component
+        // knit it to its label component
         field.setPropertyValue( "LabelControl", label );
 
         // names
@@ -221,7 +221,7 @@ public class FormLayer
             if ( xFieldModel.getPropertySetInfo().hasPropertyByName( "BorderColor" ) )
                 xFieldModel.setPropertyValue( "BorderColor", Integer.valueOf( 0x00C0C0C0 ) );
         }
-        // knit it to it's label component
+        // knit it to its label component
         xFieldModel.setPropertyValue( "LabelControl", xLabelModel );
 
         // some names, so later on we can find them

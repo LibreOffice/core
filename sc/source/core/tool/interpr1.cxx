@@ -6189,7 +6189,7 @@ void ScInterpreter::ScLookup()
             case svDoubleRef:
             {
                 // Use the result array vector.  Note that the result array is assumed
-                // to be a vector (i.e. 1-dimensinoal array).
+                // to be a vector (i.e. 1-dimensional array).
 
                 ScAddress aAdr;
                 aAdr.SetTab(nResTab);

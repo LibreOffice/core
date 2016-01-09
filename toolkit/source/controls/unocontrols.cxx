@@ -1327,7 +1327,7 @@ void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) thr
     // Nowadays, since the listener handling changed a lot towards 1.1 (the VCLXWindow reacts on more
     // basic events from the VCL-windows, not anymore on the Link-based events like in 1.0.x), this
     // isn't the case anymore: For instance, this method here gets called for the radio button
-    // which is being implicitily _de_selected, too. This is pretty bad for compatibility.
+    // which is being implicitly _de_selected, too. This is pretty bad for compatibility.
     // Thus, we suppress all events with a new state other than "1". This is unlogical, and weird, when looking
     // from a pure API perspective, but it's _compatible_ with older product versions, and this is
     // all which matters here.

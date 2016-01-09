@@ -2019,7 +2019,7 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
         OSL_ENSURE( xThisRoundsForm.is(), "FmXFormShell::setCurrentSelection: *everything* should belong to a form!" );
 
         if ( !xNewCurrentForm.is() )
-        {   // the first form we encounterd
+        {   // the first form we encountered
             xNewCurrentForm = xThisRoundsForm;
         }
         else if ( xNewCurrentForm != xThisRoundsForm )
@@ -2338,7 +2338,7 @@ IMPL_LINK_TYPED(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscCon
     // The alternative to this (ugly but certainly not entirely fixable) solution would be
     // to renounce the caching of the SdrObjects, which would lead to significant extra
     // work in OnFoundData (since there I'd have to get the SdrObject first thing every
-    // time). But since OnFoundData is usually called more often than ExecuteSeearch, I'll
+    // time). But since OnFoundData is usually called more often than ExecuteSearch, I'll
     // do that here.
 
     Reference< XNameAccess> xValidFormFields;
@@ -2792,7 +2792,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
 
     pFormView->ChangeDesignMode(bDesign);
 
-    // notify listensers
+    // notify listeners
     FmDesignModeChangedHint aChangedHint( bDesign );
     m_pShell->Broadcast(aChangedHint);
 

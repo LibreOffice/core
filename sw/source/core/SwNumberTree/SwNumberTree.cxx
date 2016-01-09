@@ -483,7 +483,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
             mChildren.upper_bound(pChild);
 
         OSL_ENSURE(! (aInsertDeepIt != mChildren.end() &&
-                  (*aInsertDeepIt)->IsPhantom()), " unexspected phantom");
+                  (*aInsertDeepIt)->IsPhantom()), " unexpected phantom");
 
         if (aInsertDeepIt == mChildren.begin())
         {

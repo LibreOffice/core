@@ -506,7 +506,7 @@ class CheckTable(unittest.TestCase):
         xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
                                    (PropertyValue('Text', 0, '15-10-30', 0),))
         xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
-        # Without number recognition 15-10-30 should not be interperated as a date
+        # Without number recognition 15-10-30 should not be interpretated as a date
         self.assertEquals(xTable.getCellByPosition(0,0).getString(), '15-10-30')
         self.assertEquals(xTable.getCellByPosition(0,0).getValue(), 0)
         # Activate number recognition

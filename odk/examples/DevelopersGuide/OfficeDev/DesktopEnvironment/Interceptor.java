@@ -1,4 +1,4 @@
-/*************************************************************************
+/*
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -30,7 +30,7 @@
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *************************************************************************/
+ */
 
 // Imports
 
@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 
 // Implementation
 
-/**
+/*
  * This class can be used to intercept dispatched URL's
  * on any frame used in this demo application.
  * It intercept all URL's which try to create a new empty frame.
@@ -75,7 +75,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * @member m_xMaster     use this interceptor if he doesn't handle queried dispatch request
      * @member m_xSlave      we can forward all unhandled requests to this slave interceptor
      * @member m_xFrame      intercepted frame
@@ -90,7 +90,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * ctor
      * Initialize the new interceptor. Given frame reference can be used to
      * register this interceptor on it automatically later.
@@ -112,7 +112,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * start working as frame action listener really.
      * We will be frame action listener here. In case
      * we get a frame action which indicates, that we should
@@ -141,7 +141,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * In case we got an oneway listener callback - we had to use the office
      * asynchronous then. This method is the callback from the started thread
      * (started inside the original oneway method). We found all parameters of
@@ -189,7 +189,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * callback for frame action events
      * We use it to update our interception. Because if a new component was loaded into
      * the frame or another interceptor was registered, we should refresh our connection
@@ -244,7 +244,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * Indicates using of us as an interceptor.
      * Now we have to react for the requests, we are registered.
      * That means: load new empty documents - triggered by the new menu of the office.
@@ -283,7 +283,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * Internal callback for frame action events, triggered by the used
      * OnewayExecutor thread we started in frameAction().
      * We use it to update our interception on the internal saved frame.
@@ -343,7 +343,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * Implementation of interface XDispatchProviderInterceptor
      * These functions are used to build a list of interceptor objects
      * connected in both ways.
@@ -392,7 +392,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * Implementation of interface XDispatchProvider
      * These functions are called from our master if he willn't handle the outstanding request.
      * Given parameter should be checked if they are right for us. If it's true, the returned
@@ -480,7 +480,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * This method is called if this interceptor "wins the request".
      * We intercepted creation of new frames and loading of empty documents.
      * Do it now.
@@ -521,7 +521,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * Notification of status listener isn't guaranteed (instead of listener on XNotifyingDispatch interface).
      * So this interceptor doesn't support that really...
      */
@@ -552,7 +552,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * Implements (optional!) optimization for interceptor mechanism.
      * Any interceptor which provides this special interface is called automatically
      * at registration time on this method. Returned URL's will be used to
@@ -569,7 +569,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * This class listen on the intercepted frame to free all used resources on closing.
      * We forget the reference to the frame only here. Deregistration
      * isn't necessary here - because this frame dies and wish to be forgotten.
@@ -594,7 +594,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
 
 
-    /**
+    /*
      * If this java application shutdown - we must cancel all current existing
      * listener connections. Otherwhise the office will run into some
      * DisposedExceptions if it tries to use these forgotten listener references.
@@ -626,7 +626,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
         // it's a good idea to cancel listening for frame action events
         // before(!) we deregister us as an interceptor.
-        // Because registration and deregistratio nof interceptor objects
+        // Because registration and deregistration of interceptor objects
         // will force sending of frame action events...!
         if (bIsActionListener)
             xFrame.removeFrameActionListener(this);

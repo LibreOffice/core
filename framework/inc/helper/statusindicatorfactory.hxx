@@ -54,7 +54,7 @@
 namespace framework{
 
 /**
-    @descr  This struct hold some information about all currently running progress proccesses.
+    @descr  This struct hold some information about all currently running progress processes.
             Because the can be used on a stack, we must cache her states but must paint only
             the top most one.
  */
@@ -83,7 +83,7 @@ struct IndicatorInfo
         /** @short  initialize new instance of this class
 
             @param  xIndicator
-                    the new child indiactor of our factory.
+                    the new child indicator of our factory.
 
             @param  sText
                     its initial text.
