@@ -2958,6 +2958,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf95775, "tdf95775.docx")
     // This must not fail in layout
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf92157, "tdf92157.docx")
+{
+    // A graphic with dimensions 0,0 should not fail on load
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf60351, "tdf60351.docx")
 {
     // Get the first image in the document and check its contour polygon.
