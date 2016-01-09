@@ -44,6 +44,7 @@ struct AddonsParams
     OUString aImageId;
     OUString aTarget;
     OUString aControlType;
+    sal_uInt16 nWidth;
 };
 
 struct AddonToolbarItem
@@ -54,6 +55,7 @@ struct AddonToolbarItem
     OUString aTarget;
     OUString aContext;
     OUString aControlType;
+    sal_uInt16 nWidth;
 };
 
 typedef ::std::vector< AddonToolbarItem > AddonToolbarItemContainer;
@@ -79,7 +81,8 @@ class ToolBarMerger
                                                    OUString& rImageIdentifier,
                                                    OUString& rTarget,
                                                    OUString& rContext,
-                                                   OUString& rControlType );
+                                                   OUString& rControlType,
+                                                   sal_uInt16& rWidth );
 
         static ReferenceToolbarPathInfo FindReferencePoint( ToolBox* pToolbar,
                                                             const OUString& rReferencePoint );
@@ -131,6 +134,7 @@ class ToolBarMerger
             ToolBox*        pToolbar,
             const OUString& rCommandURL,
             sal_uInt16      nId,
+            sal_uInt16      nWidth,
             const OUString& rControlType );
 
         static void CreateToolbarItem( ToolBox* pToolbox,
