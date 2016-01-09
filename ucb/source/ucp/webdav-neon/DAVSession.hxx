@@ -75,6 +75,11 @@ public:
 
     // DAV methods
 
+    virtual void OPTIONS( const OUString & inPath,
+                          DAVOptions& rOptions,
+                          const DAVRequestEnvironment & rEnv )
+        throw( std::exception ) = 0;
+
     // allprop & named
     virtual void PROPFIND( const OUString & inPath,
                            const Depth inDepth,

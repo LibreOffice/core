@@ -86,6 +86,12 @@ public:
     const DAVRequestEnvironment & getRequestEnvironment() const
     { return m_aEnv; }
 
+    virtual void
+    OPTIONS( const OUString & inPath,
+             DAVOptions& rOptions, // contains the name+values
+             const DAVRequestEnvironment & rEnv )
+        throw( std::exception ) SAL_OVERRIDE;
+
     // allprop & named
     virtual void
     PROPFIND( const OUString & inPath,
