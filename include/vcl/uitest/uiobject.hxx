@@ -18,6 +18,7 @@ enum class UIObjectType
 {
     WINDOW,
     DIALOG,
+    BUTTON,
     UNKNOWN
 };
 
@@ -50,6 +51,10 @@ public:
     virtual UIObjectType getType() const;
 
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID);
+
+    virtual void dumpState() const;
+
+    virtual void dumpHierarchy() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
