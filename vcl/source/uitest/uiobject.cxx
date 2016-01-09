@@ -111,6 +111,7 @@ StringMap WindowUIObject::get_state()
 void WindowUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
+    bool bHandled = true;
     if (rAction == "SET")
     {
         for (auto itr = rParameters.begin(); itr != rParameters.end(); ++itr)
@@ -128,6 +129,15 @@ void WindowUIObject::execute(const OUString& rAction,
         {
             mxWindow->KeyInput(*itr);
         }
+    }
+    else
+    {
+        bHandled = false;
+    }
+
+    if (!bHandled)
+    {
+        SAL_WARN("vcl.uitest", "unkown action or parameter for " << get_name() << ". Action: " << rAction);
     }
 }
 
@@ -270,6 +280,7 @@ EditUIObject::EditUIObject(VclPtr<Edit> xEdit):
 void EditUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
+    bool bHandled = true;;
     if (rAction == "SET")
     {
         if (rParameters.find("TEXT") != rParameters.end())
@@ -288,12 +299,17 @@ void EditUIObject::execute(const OUString& rAction,
             // TODO: moggi: add code
         }
         else
-            SAL_WARN("vcl.uitest", "unkown set parameters for EditUIObject");
+        {
+            bHandled = false;
+        }
     }
     else
     {
-        SAL_WARN("vcl.uitest", "unknown action for EditUIObject: " << rAction);
+        bHandled = false;
     }
+
+    if (!bHandled)
+        WindowUIObject::execute(rAction, rParameters);
 }
 
 StringMap EditUIObject::get_state()
