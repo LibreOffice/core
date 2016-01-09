@@ -71,13 +71,13 @@ private:
 #endif
 
 // win32 specific physically available font face
-class ImplWinFontData : public PhysicalFontFace
+class WinFontFace : public PhysicalFontFace
 {
 public:
-    explicit                ImplWinFontData( const ImplFontAttributes&,
+    explicit                WinFontFace( const ImplFontAttributes&,
                                 int nFontHeight, BYTE eWinCharSet,
                                 BYTE nPitchAndFamily  );
-    virtual                 ~ImplWinFontData();
+    virtual                 ~WinFontFace();
 
     virtual PhysicalFontFace* Clone() const override;
     virtual LogicalFontInstance* CreateFontInstance( FontSelectPattern& ) const override;
@@ -199,7 +199,7 @@ private:
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
 
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
-    const ImplWinFontData*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
+    const WinFontFace*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     WinFontInstance*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
     float                   mfFontScale[ MAX_FALLBACK ];        // allows metrics emulation of huge font sizes
     float                   mfCurrentFontScale;
@@ -458,7 +458,7 @@ inline bool ImplCmpKernData( const KERNINGPAIR& a, const KERNINGPAIR& b )
 }
 
 // called extremely often from just one spot => inline
-inline bool ImplWinFontData::HasChar( sal_uInt32 cChar ) const
+inline bool WinFontFace::HasChar( sal_uInt32 cChar ) const
 {
     if( mpUnicodeMap->HasChar( cChar ) )
         return true;

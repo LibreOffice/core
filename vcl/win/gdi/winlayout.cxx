@@ -508,7 +508,7 @@ void WinFontInstance::setupGLyphy(HDC hDC)
     mpGLyphyFont = demo_font_create(hNewDC, mpGLyphyAtlas);
 }
 
-WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, WinFontInstance& rWFE, bool bUseOpenGL)
+WinLayout::WinLayout(HDC hDC, const WinFontFace& rWFD, WinFontInstance& rWFE, bool bUseOpenGL)
 :   mhDC( hDC ),
     mhFont( (HFONT)GetCurrentObject(hDC,OBJ_FONT) ),
     mnBaseAdv( 0 ),
@@ -718,7 +718,7 @@ static void InitUSP()
     bUspInited = true;
 }
 
-UniscribeLayout::UniscribeLayout(HDC hDC, const ImplWinFontData& rWinFontData,
+UniscribeLayout::UniscribeLayout(HDC hDC, const WinFontFace& rWinFontData,
         WinFontInstance& rWinFontEntry, bool bUseOpenGL)
 :   WinLayout(hDC, rWinFontData, rWinFontEntry, bUseOpenGL),
     mpScriptItems( NULL ),
@@ -2754,7 +2754,7 @@ float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
     return gm.gmCellIncX;
 }
 
-GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw()
+GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const WinFontFace& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw()
   : WinLayout(hDC, rWFD, rWFE, bUseOpenGL), mpFont(NULL),
     maImpl(rWFD.GraphiteFace(), rWFE)
 {
@@ -2914,7 +2914,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int nFallba
 
     WinLayout* pWinLayout = NULL;
 
-    const ImplWinFontData& rFontFace = *mpWinFontData[ nFallbackLevel ];
+    const WinFontFace& rFontFace = *mpWinFontData[ nFallbackLevel ];
     WinFontInstance& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
@@ -2991,17 +2991,17 @@ bool WinFontInstance::InitKashidaHandling( HDC hDC )
     return true;
 }
 
-PhysicalFontFace* ImplWinFontData::Clone() const
+PhysicalFontFace* WinFontFace::Clone() const
 {
 #if ENABLE_GRAPHITE
     if ( mpGraphiteData )
         mpGraphiteData->AddReference();
 #endif
-    PhysicalFontFace* pClone = new ImplWinFontData( *this );
+    PhysicalFontFace* pClone = new WinFontFace( *this );
     return pClone;
 }
 
-LogicalFontInstance* ImplWinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* WinFontFace::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     LogicalFontInstance* pFontInstance = new WinFontInstance( rFSD );
     return pFontInstance;

@@ -40,7 +40,7 @@ struct VisualItem;
 class WinLayout : public SalLayout
 {
 public:
-                        WinLayout(HDC, const ImplWinFontData&, WinFontInstance&, bool bUseOpenGL);
+                        WinLayout(HDC, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
     virtual             ~WinLayout();
     virtual void        InitFont() const override;
     void                SetFontScale( float f ) { mfFontScale = f; }
@@ -64,14 +64,14 @@ public:
     float               mfFontScale;        // allows metrics emulation of huge font sizes
     bool                mbUseOpenGL;        ///< We need to render via OpenGL
 
-    const ImplWinFontData& mrWinFontData;
+    const WinFontFace& mrWinFontData;
     WinFontInstance&   mrWinFontEntry;
 };
 
 class UniscribeLayout : public WinLayout
 {
 public:
-                    UniscribeLayout(HDC, const ImplWinFontData&, WinFontInstance&, bool bUseOpenGL);
+                    UniscribeLayout(HDC, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
 
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;
@@ -162,7 +162,7 @@ private:
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
-    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw();
+    GraphiteWinLayout(HDC hDC, const WinFontFace& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw();
     virtual ~GraphiteWinLayout();
 
     // used by upper layers
