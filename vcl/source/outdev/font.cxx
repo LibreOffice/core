@@ -979,38 +979,6 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
     return aFont;
 }
 
-FontSelectPatternAttributes::FontSelectPatternAttributes( const vcl::Font& rFont,
-    const OUString& rSearchName, const Size& rSize, float fExactHeight )
-    : maSearchName( rSearchName )
-    , mnWidth( rSize.Width() )
-    , mnHeight( rSize.Height() )
-    , mfExactHeight( fExactHeight)
-    , mnOrientation( rFont.GetOrientation() )
-    , meLanguage( rFont.GetLanguage() )
-    , mbVertical( rFont.IsVertical() )
-    , mbNonAntialiased( false )
-    , mbEmbolden( false )
-{
-    maTargetName = GetFamilyName();
-
-    rFont.GetFontAttributes( *this );
-
-    // normalize orientation between 0 and 3600
-    if( 3600 <= (unsigned)mnOrientation )
-    {
-        if( mnOrientation >= 0 )
-            mnOrientation %= 3600;
-        else
-            mnOrientation = 3600 - (-mnOrientation % 3600);
-    }
-
-    // normalize width and height
-    if( mnHeight < 0 )
-        mnHeight = -mnHeight;
-    if( mnWidth < 0 )
-        mnWidth = -mnWidth;
-}
-
 void OutputDevice::ImplInitFontList() const
 {
     if( !mpFontCollection->Count() )
