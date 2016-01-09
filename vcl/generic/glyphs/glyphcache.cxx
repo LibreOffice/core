@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <gcach_ftyp.hxx>
+#include "unx/gcach_ftyp.hxx"
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
