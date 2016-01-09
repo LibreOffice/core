@@ -45,6 +45,14 @@ std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindo
             return std::unique_ptr<UIObject>(new DialogUIObject(pDialog));
         }
         break;
+        case WINDOW_EDIT:
+        case WINDOW_MULTILINEEDIT:
+        {
+            Edit* pEdit = dynamic_cast<Edit*>(pWindow);
+            assert(pEdit);
+            return std::unique_ptr<UIObject>(new EditUIObject(pEdit));
+        }
+        break;
         default:
         break;
     }
