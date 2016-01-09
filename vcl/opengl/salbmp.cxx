@@ -472,13 +472,25 @@ GLuint OpenGLSalBitmap::CreateTexture()
                 pSrcFormat->StartLine( pSrcData );
 
                 sal_uInt32 nX = mnBufWidth;
-                while( nX-- )
+                if (nFormat == GL_BGR)
                 {
-                    const BitmapColor& c = pSrcFormat->ReadPixel();
-
-                    *pDstData++ = c.GetRed();
-                    *pDstData++ = c.GetGreen();
-                    *pDstData++ = c.GetBlue();
+                    while( nX-- )
+                    {
+                        const BitmapColor& c = pSrcFormat->ReadPixel();
+                        *pDstData++ = c.GetBlue();
+                        *pDstData++ = c.GetGreen();
+                        *pDstData++ = c.GetRed();
+                    }
+                }
+                else // RGB
+                {
+                    while( nX-- )
+                    {
+                        const BitmapColor& c = pSrcFormat->ReadPixel();
+                        *pDstData++ = c.GetRed();
+                        *pDstData++ = c.GetGreen();
+                        *pDstData++ = c.GetBlue();
+                    }
                 }
 
                 pSrcData += mnBytesPerRow;
