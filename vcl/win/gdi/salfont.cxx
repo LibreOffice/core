@@ -1437,7 +1437,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
     }
 
     DBG_ASSERT( pFont->mpFontData, "WinSalGraphics mpFontData==NULL");
-    mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<ImplWinFontEntry*>( pFont->mpFontInstance );
+    mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<WinFontInstance*>( pFont->mpFontInstance );
     mpWinFontData[ nFallbackLevel ] = static_cast<const ImplWinFontData*>( pFont->mpFontData );
 
     HFONT hOldFont = 0;

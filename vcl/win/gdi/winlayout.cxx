@@ -86,11 +86,11 @@ struct OpenGLGlyphCacheChunk
 };
 
 // win32 specific physical font instance
-class ImplWinFontEntry : public LogicalFontInstance
+class WinFontInstance : public LogicalFontInstance
 {
 public:
-    explicit                ImplWinFontEntry( FontSelectPattern& );
-    virtual                 ~ImplWinFontEntry();
+    explicit                WinFontInstance( FontSelectPattern& );
+    virtual                 ~WinFontInstance();
     void                    setupGLyphy(HDC hDC);
 
 private:
@@ -122,7 +122,7 @@ private:
     bool                    mbGLyphySetupCalled;
 };
 
-GLuint ImplWinFontEntry::mnGLyphyProgram = 0;
+GLuint WinFontInstance::mnGLyphyProgram = 0;
 
 #ifdef SAL_LOG_INFO
 
@@ -192,7 +192,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream << "}";
 }
 
-bool ImplWinFontEntry::GlyphIsCached(int nGlyphIndex) const
+bool WinFontInstance::GlyphIsCached(int nGlyphIndex) const
 {
     if (nGlyphIndex == DROPPED_OUTGLYPH)
         return true;
@@ -205,7 +205,7 @@ bool ImplWinFontEntry::GlyphIsCached(int nGlyphIndex) const
     return false;
 }
 
-bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics)
+bool WinFontInstance::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics)
 {
     const int DEFAULT_CHUNK_SIZE = 20;
 
@@ -443,7 +443,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     return true;
 }
 
-const OpenGLGlyphCacheChunk& ImplWinFontEntry::GetCachedGlyphChunkFor(int nGlyphIndex) const
+const OpenGLGlyphCacheChunk& WinFontInstance::GetCachedGlyphChunkFor(int nGlyphIndex) const
 {
     auto i = maOpenGLGlyphCache.cbegin();
     while (i != maOpenGLGlyphCache.cend() && nGlyphIndex >= i->mnFirstGlyph + i->mnGlyphCount)
@@ -453,7 +453,7 @@ const OpenGLGlyphCacheChunk& ImplWinFontEntry::GetCachedGlyphChunkFor(int nGlyph
     return *i;
 }
 
-void ImplWinFontEntry::setupGLyphy(HDC hDC)
+void WinFontInstance::setupGLyphy(HDC hDC)
 {
     if (mbGLyphySetupCalled)
         return;
@@ -508,7 +508,7 @@ void ImplWinFontEntry::setupGLyphy(HDC hDC)
     mpGLyphyFont = demo_font_create(hNewDC, mpGLyphyAtlas);
 }
 
-WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL)
+WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, WinFontInstance& rWFE, bool bUseOpenGL)
 :   mhDC( hDC ),
     mhFont( (HFONT)GetCurrentObject(hDC,OBJ_FONT) ),
     mnBaseAdv( 0 ),
@@ -719,7 +719,7 @@ static void InitUSP()
 }
 
 UniscribeLayout::UniscribeLayout(HDC hDC, const ImplWinFontData& rWinFontData,
-        ImplWinFontEntry& rWinFontEntry, bool bUseOpenGL)
+        WinFontInstance& rWinFontEntry, bool bUseOpenGL)
 :   WinLayout(hDC, rWinFontData, rWinFontEntry, bUseOpenGL),
     mpScriptItems( NULL ),
     mpVisualItems( NULL ),
@@ -2754,7 +2754,7 @@ float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
     return gm.gmCellIncX;
 }
 
-GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL) throw()
+GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, WinFontInstance& rWFE, bool bUseOpenGL) throw()
   : WinLayout(hDC, rWFD, rWFE, bUseOpenGL), mpFont(NULL),
     maImpl(rWFD.GraphiteFace(), rWFE)
 {
@@ -2915,7 +2915,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int nFallba
     WinLayout* pWinLayout = NULL;
 
     const ImplWinFontData& rFontFace = *mpWinFontData[ nFallbackLevel ];
-    ImplWinFontEntry& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
+    WinFontInstance& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
 
@@ -2950,7 +2950,7 @@ int    WinSalGraphics::GetMinKashidaWidth()
     return nMinKashida;
 }
 
-ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
+WinFontInstance::WinFontInstance( FontSelectPattern& rFSD )
 :   LogicalFontInstance( rFSD )
 ,    mpGLyphyAtlas( nullptr )
 ,    mpGLyphyFont( nullptr )
@@ -2962,13 +2962,13 @@ ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
     mbGLyphySetupCalled = false;
 }
 
-ImplWinFontEntry::~ImplWinFontEntry()
+WinFontInstance::~WinFontInstance()
 {
     if( maScriptCache != NULL )
         ScriptFreeCache( &maScriptCache );
 }
 
-bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
+bool WinFontInstance::InitKashidaHandling( HDC hDC )
 {
     if( mnMinKashidaWidth >= 0 )    // already cached?
         return mnMinKashidaWidth;
@@ -3003,7 +3003,7 @@ PhysicalFontFace* ImplWinFontData::Clone() const
 
 LogicalFontInstance* ImplWinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
-    LogicalFontInstance* pFontInstance = new ImplWinFontEntry( rFSD );
+    LogicalFontInstance* pFontInstance = new WinFontInstance( rFSD );
     return pFontInstance;
 }
 
