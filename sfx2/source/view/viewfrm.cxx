@@ -2171,6 +2171,9 @@ void SfxViewFrame::ExecView_Impl
         }
 
         case SID_VIEWSHELL0:
+        {
+            /*svx::ParaPropertyPanel::initial();*/
+        }
         case SID_VIEWSHELL1:
         case SID_VIEWSHELL2:
         case SID_VIEWSHELL3:
