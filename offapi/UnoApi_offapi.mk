@@ -437,6 +437,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/ui/dialogs,\
 	Wizard \
 	XSLTFilterDialog \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/ui/test,\
+    UITest \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/util,\
 	JobManager \
 	NumberFormatter \
