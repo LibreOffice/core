@@ -393,6 +393,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/sft \
     vcl/source/fontsubset/ttcr \
     vcl/source/fontsubset/xlat \
+    vcl/source/uitest/factory \
     vcl/source/uitest/uiobject \
     vcl/source/uitest/uitest \
 ))

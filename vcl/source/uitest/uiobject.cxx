@@ -8,8 +8,11 @@
  */
 
 #include "uitest/uiobject_impl.hxx"
+#include "uitest/factory.hxx"
 
 #include <iostream>
+
+#define DUMP_UITEST(x) SAL_INFO("vcl.uitest", #x)
 
 UIObject::~UIObject()
 {
@@ -39,6 +42,40 @@ std::unique_ptr<UIObject> UIObject::get_child(const OUString&)
     return std::unique_ptr<UIObject>();
 }
 
+void UIObject::dumpState() const
+{
+}
+
+void UIObject::dumpHierarchy() const
+{
+}
+
+
+namespace {
+
+bool isDialogWindow(vcl::Window* pWindow)
+{
+    WindowType nType = pWindow->GetType();
+    if (nType >= 0x13a && nType <= 0x13c)
+        return true;
+
+    return false;
+}
+
+vcl::Window* get_dialog_parent(vcl::Window* pWindow)
+{
+    if (isDialogWindow(pWindow))
+        return pWindow;
+
+    vcl::Window* pParent = pWindow->GetParent();
+    if (!pParent)
+        return pWindow;
+
+    return get_dialog_parent(pParent);
+}
+
+}
+
 WindowUIObject::WindowUIObject(VclPtr<vcl::Window> xWindow):
     mxWindow(xWindow)
 {
@@ -49,6 +86,7 @@ StringMap WindowUIObject::get_state()
     StringMap aMap;
     aMap["Visible"] = OUString::boolean(mxWindow->IsVisible());
     aMap["Enabled"] = OUString::boolean(mxWindow->IsEnabled());
+    aMap["WindowType"] = OUString::number(mxWindow->GetType(), 16);
     if (mxWindow->GetParent())
         aMap["Parent"] = mxWindow->GetParent()->get_id();
 
@@ -98,12 +136,104 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID)
 
 std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
 {
-    vcl::Window* pWindow = findChild(mxWindow.get(), rID);
+    vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
+    vcl::Window* pWindow = findChild(pDialogParent, rID);
 
-    if (pWindow)
-        return std::unique_ptr<UIObject>(new WindowUIObject(pWindow));
+    return UITestWrapperFactory::createObject(pWindow);
+}
 
-    return nullptr;
+OUString WindowUIObject::get_name() const
+{
+    return OUString("WindowUIObject");
+}
+
+void WindowUIObject::dumpState() const
+{
+    DUMP_UITEST(get_name() << " " << mxWindow->get_id());
+    StringMap aState = const_cast<WindowUIObject*>(this)->get_state();
+    for (auto itr = aState.begin(), itrEnd = aState.end(); itr != itrEnd; ++itr)
+    {
+        DUMP_UITEST("Property: " << itr->first << " with value: " << itr->second);
+    }
+    size_t nCount = mxWindow->GetChildCount();
+    if (nCount)
+        DUMP_UITEST("With " << nCount << " Children:");
+
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        vcl::Window* pChild = mxWindow->GetChild(i);
+        // TODO: moggi: we need to go through a factory for the new objects
+        std::unique_ptr<UIObject> pChildWrapper =
+            UITestWrapperFactory::createObject(pChild);
+        pChildWrapper->dumpState();
+    }
+}
+
+void WindowUIObject::dumpHierarchy() const
+{
+    vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
+    std::unique_ptr<UIObject> pParentWrapper =
+        UITestWrapperFactory::createObject(pDialogParent);
+    pParentWrapper->dumpState();
+}
+
+ButtonUIObject::ButtonUIObject(VclPtr<Button> xButton):
+    WindowUIObject(xButton),
+    mxButton(xButton)
+{
+}
+
+StringMap ButtonUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    // Move that to a Contrl base class
+    aMap["Label"] = mxButton->GetDisplayText();
+
+    return aMap;
+}
+
+UIObjectType ButtonUIObject::getType() const
+{
+    return UIObjectType::BUTTON;
+}
+
+void ButtonUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "CLICK")
+        mxButton->Click();
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+OUString ButtonUIObject::get_name() const
+{
+    return OUString("ButtonUIObject");
+}
+
+DialogUIObject::DialogUIObject(VclPtr<Dialog> xDialog):
+    WindowUIObject(xDialog),
+    mxDialog(xDialog)
+{
+}
+
+StringMap DialogUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    // Move that to a Contrl base class
+    aMap["Modal"] = OUString::boolean(mxDialog->IsModalInputMode());
+
+    return aMap;
+}
+
+OUString DialogUIObject::get_name() const
+{
+    return OUString("DialogUIObject");
+}
+
+UIObjectType DialogUIObject::getType() const
+{
+    return UIObjectType::DIALOG;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
