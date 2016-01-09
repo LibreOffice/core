@@ -331,7 +331,7 @@ const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pL
 
 void FreetypeFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
 {
-    ImplFTSFontData* pFD = new ImplFTSFontData( this, maDevFontAttributes );
+    FreetypeFontFace* pFD = new FreetypeFontFace( this, maDevFontAttributes );
     pFontCollection->Add( pFD );
 }
 
@@ -424,7 +424,7 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
     return pNew;
 }
 
-ImplFTSFontData::ImplFTSFontData( FreetypeFontInfo* pFI, const ImplFontAttributes& rDFA )
+FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const ImplFontAttributes& rDFA )
 :   PhysicalFontFace( rDFA ),
     mpFreetypeFontInfo( pFI )
 {
@@ -432,7 +432,7 @@ ImplFTSFontData::ImplFTSFontData( FreetypeFontInfo* pFI, const ImplFontAttribute
     SetOrientationFlag( true );
 }
 
-LogicalFontInstance* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* FreetypeFontFace::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ServerFontInstance* pEntry = new ServerFontInstance( rFSD );
     return pEntry;

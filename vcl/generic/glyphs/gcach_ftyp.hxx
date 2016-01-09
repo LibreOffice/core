@@ -146,16 +146,16 @@ private:
     sal_IntPtr          mnMaxFontId;
 };
 
-class ImplFTSFontData : public PhysicalFontFace
+class FreetypeFontFace : public PhysicalFontFace
 {
 private:
     FreetypeFontInfo*             mpFreetypeFontInfo;
 
 public:
-                            ImplFTSFontData( FreetypeFontInfo*, const ImplFontAttributes& );
+                            FreetypeFontFace( FreetypeFontInfo*, const ImplFontAttributes& );
 
-    virtual LogicalFontInstance*  CreateFontInstance( FontSelectPattern& ) const override;
-    virtual PhysicalFontFace* Clone() const override   { return new ImplFTSFontData( *this ); }
+    virtual LogicalFontInstance* CreateFontInstance( FontSelectPattern& ) const override;
+    virtual PhysicalFontFace* Clone() const override   { return new FreetypeFontFace( *this ); }
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 };
 
