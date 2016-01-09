@@ -2260,12 +2260,12 @@ static ImplFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont
     return aDFA;
 }
 
-ImplPdfBuiltinFontData::ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& rBuiltin )
+PdfBuiltinFontFace::PdfBuiltinFontFace( const PDFWriterImpl::BuiltinFont& rBuiltin )
 :   PhysicalFontFace( GetDevFontAttributes(rBuiltin) ),
     mrBuiltin( rBuiltin )
 {}
 
-LogicalFontInstance* ImplPdfBuiltinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* PdfBuiltinFontFace::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     LogicalFontInstance* pEntry = new LogicalFontInstance( rFSD );
     return pEntry;
@@ -2916,7 +2916,7 @@ bool PDFWriterImpl::emitTilings()
     return true;
 }
 
-sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplPdfBuiltinFontData* pFD, sal_Int32 nFontObject )
+sal_Int32 PDFWriterImpl::emitBuiltinFont( const PdfBuiltinFontFace* pFD, sal_Int32 nFontObject )
 {
     if( !pFD )
         return 0;
@@ -4175,7 +4175,7 @@ bool PDFWriterImpl::emitFonts()
     for( std::map< sal_Int32, sal_Int32 >::iterator it = m_aBuiltinFontToObjectMap.begin();
         it != m_aBuiltinFontToObjectMap.end(); ++it )
     {
-        ImplPdfBuiltinFontData aData(m_aBuiltinFonts[it->first]);
+        PdfBuiltinFontFace aData(m_aBuiltinFonts[it->first]);
         it->second = emitBuiltinFont( &aData, it->second );
     }
     appendBuiltinFontsToDict( aFontDict );
