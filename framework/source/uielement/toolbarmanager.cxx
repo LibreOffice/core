@@ -718,6 +718,7 @@ void ToolBarManager::CreateControllers()
                 {
                     // retrieve additional parameters
                     OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
+                    sal_uInt16 nWidth = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->nWidth;
 
                     Reference< XStatusListener > xStatusListener(
                         ToolBarMerger::CreateController( m_xContext,
@@ -725,6 +726,7 @@ void ToolBarManager::CreateControllers()
                                                          m_pToolBar,
                                                          aCommandURL,
                                                          nId,
+                                                         nWidth,
                                                          aControlType ), UNO_QUERY );
 
                     xController = xStatusListener;
