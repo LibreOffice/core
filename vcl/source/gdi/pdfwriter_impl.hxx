@@ -71,7 +71,7 @@ namespace vcl
 
 class PDFStreamIf;
 class Matrix3;
-class ImplPdfBuiltinFontData;
+class PdfBuiltinFontFace;
 
 class PDFWriterImpl
 {
@@ -835,7 +835,7 @@ i12626
     /* writes all gradient patterns */
     bool emitGradients();
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
-    sal_Int32 emitBuiltinFont( const ImplPdfBuiltinFontData*, sal_Int32 nObject = -1 );
+    sal_Int32 emitBuiltinFont( const PdfBuiltinFontFace*, sal_Int32 nObject = -1 );
     /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
     std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( const PhysicalFontFace*, EmbedFont& );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
@@ -1256,16 +1256,16 @@ public:
     }
 };
 
-class ImplPdfBuiltinFontData : public PhysicalFontFace
+class PdfBuiltinFontFace : public PhysicalFontFace
 {
 private:
     const PDFWriterImpl::BuiltinFont& mrBuiltin;
 
 public:
-    explicit                            ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
+    explicit                            PdfBuiltinFontFace( const PDFWriterImpl::BuiltinFont& );
     const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
 
-    virtual PhysicalFontFace*           Clone() const override { return new ImplPdfBuiltinFontData(*this); }
+    virtual PhysicalFontFace*           Clone() const override { return new PdfBuiltinFontFace(*this); }
     virtual LogicalFontInstance*        CreateFontInstance( FontSelectPattern& ) const override;
     virtual sal_IntPtr                  GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
 };
