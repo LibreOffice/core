@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_22a0589f",
+        "filename": "extensions/source/propctrlr/defaultforminspection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "virtualizes is actually grammatically more accurate.",
+      "range": {
+        "startLine": 120,
+        "startChar": 15,
+        "endLine": 120,
+        "endChar": 65
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_029d5465",
+        "filename": "extensions/source/propctrlr/eformshelper.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "since none of its functionality will be available then.",
+      "range": {
+        "startLine": 76,
+        "startChar": 27,
+        "endLine": 76,
+        "endChar": 79
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6288a023",
+        "filename": "filter/qa/complex/filter/detection/typeDetection/TypeDetection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "Could this break something? Is `make check` clean?",
+      "range": {
+        "startLine": 466,
+        "startChar": 24,
+        "endLine": 466,
+        "endChar": 64
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8287840e",
+        "filename": "lotuswordpro/source/filter/lwpfrib.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "others, we",
+      "range": {
+        "startLine": 242,
+        "startChar": 53,
+        "endLine": 242,
+        "endChar": 63
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c2798c31",
+        "filename": "odk/examples/cpp/remoteclient/Makefile",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "This trailing space could go too.",
+      "range": {
+        "startLine": 122,
+        "startChar": 69,
+        "endLine": 122,
+        "endChar": 71
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2277b83b",
+        "filename": "scripting/examples/basic/SearchAndReplace.xba",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "Trailing space.",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 1
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_42947c36",
+        "filename": "testtools/qa/cli/readme.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "Trailing spaces can go too (many in this file).",
+      "range": {
+        "startLine": 3,
+        "startChar": 34,
+        "endLine": 3,
+        "endChar": 35
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a299e870",
+        "filename": "vcl/generic/print/genpspgraphics.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "fTransparency seems more accurate, no?",
+      "range": {
+        "startLine": 436,
+        "startChar": 79,
+        "endLine": 436,
+        "endChar": 91
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_829e6454",
+        "filename": "vcl/source/outdev/mask.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "coordinates",
+      "range": {
+        "startLine": 117,
+        "startChar": 39,
+        "endLine": 117,
+        "endChar": 49
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e2a3f09c",
+        "filename": "winaccessibility/source/UAccCOM/AccHyperLink.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "representation",
+      "range": {
+        "startLine": 109,
+        "startChar": 46,
+        "endLine": 109,
+        "endChar": 60
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c2a06c93",
+        "filename": "wizards/source/access2base/Utils.xba",
+        "patchSetId": 5
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "Trailing space.",
+      "range": {
+        "startLine": 600,
+        "startChar": 0,
+        "endLine": 600,
+        "endChar": 1
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_22ae9885",
+        "filename": "writerfilter/inc/dmapper/resourcemodel.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 1,
+      "message": "representation",
+      "range": {
+        "startLine": 382,
+        "startChar": 22,
+        "endLine": 382,
+        "endChar": 36
+      },
+      "revId": "349e13877f56746d78291f71d4ef37ae97fd4cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

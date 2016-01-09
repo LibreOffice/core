@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_e27c9022",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/FunctionHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 0,
+      "message": "I\u0027d leave these alone. They are part of the original license and, as ugly as they are, not worth chasing them (just to many cases to change).",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 74
+      },
+      "revId": "67925c3b5cf713cfb85a92baebd13708b8649974",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_628f0024",
+        "filename": "sw/source/core/inc/DocumentLayoutManager.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-09T15:58:59Z",
+      "side": 0,
+      "message": "This //\u003c is a standard doxygen (among other) document generator marker. It means the comment belongs to the code on the left (equivalent to writing the comment on top of it with /// marker). Think we should leave it alone.",
+      "range": {
+        "startLine": 41,
+        "startChar": 57,
+        "endLine": 41,
+        "endChar": 60
+      },
+      "revId": "67925c3b5cf713cfb85a92baebd13708b8649974",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
