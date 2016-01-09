@@ -26,7 +26,7 @@ public:
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 
-    virtual UIObjectType getType() const override;
+    virtual UIObjectType get_type() const override;
 
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
 
@@ -52,7 +52,7 @@ public:
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 
-    virtual UIObjectType getType() const override;
+    virtual UIObjectType get_type() const override;
 
 protected:
 
@@ -67,7 +67,7 @@ public:
 
     DialogUIObject(VclPtr<Dialog> xDialog);
 
-    virtual UIObjectType getType() const override;
+    virtual UIObjectType get_type() const override;
 
     virtual StringMap get_state() override;
 
@@ -89,7 +89,7 @@ public:
 
     virtual StringMap get_state() override;
 
-    virtual UIObjectType getType() const override;
+    virtual UIObjectType get_type() const override;
 
 protected:
 

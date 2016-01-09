@@ -35,7 +35,7 @@ void UIObject::execute(const OUString& /*rAction*/,
     throw std::exception();
 }
 
-UIObjectType UIObject::getType() const
+UIObjectType UIObject::get_type() const
 {
     return UIObjectType::UNKNOWN;
 }
@@ -108,7 +108,7 @@ void WindowUIObject::execute(const OUString& rAction,
     }
 }
 
-UIObjectType WindowUIObject::getType() const
+UIObjectType WindowUIObject::get_type() const
 {
     return UIObjectType::WINDOW;
 }
@@ -195,7 +195,7 @@ StringMap ButtonUIObject::get_state()
     return aMap;
 }
 
-UIObjectType ButtonUIObject::getType() const
+UIObjectType ButtonUIObject::get_type() const
 {
     return UIObjectType::BUTTON;
 }
@@ -233,7 +233,7 @@ OUString DialogUIObject::get_name() const
     return OUString("DialogUIObject");
 }
 
-UIObjectType DialogUIObject::getType() const
+UIObjectType DialogUIObject::get_type() const
 {
     return UIObjectType::DIALOG;
 }
@@ -299,7 +299,7 @@ StringMap EditUIObject::get_state()
     return aMap;
 }
 
-UIObjectType EditUIObject::getType() const
+UIObjectType EditUIObject::get_type() const
 {
     return UIObjectType::EDIT;
 }
