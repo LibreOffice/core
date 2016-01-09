@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a2356847",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-09T20:34:21Z",
+      "side": 1,
+      "message": "We don\u0027t want to clear this here. We just want to print this OSL_FAIL out thus:\n\nif (mpDialogParent \u0026\u0026 mpDialogParent-\u003eIsDisposed())\n   OSL_FAIL(...);\n\nin fact - it would prolly be better to have a plain assert here:\n\nassert (!mpDialogParent || !mpDialogParent-\u003eIsDisposed());\n\n? \u003d) We don\u0027t want to clear the pointer that is an object member and we need to keep our parentage around. Clearing a local variable, or deletion tag - is very different to zeroing a critical member \u003d)",
+      "revId": "77654b9cf774d67f0fc62d8d80f90d928af43c01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
