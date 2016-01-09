@@ -570,6 +570,16 @@ public:
     struct DrawEllipse : public RegionRenderer
     {
         RENDER_DETAILS(ellipse,KEY_E,500)
+        void doInvert(OutputDevice &rDev, const Rectangle &r,
+                      InvertFlags nFlags)
+        {
+            rDev.Invert(r, nFlags);
+            if (r.GetWidth() > 10 && r.GetHeight() > 10)
+            {
+                Rectangle aSmall(r.Center()-Point(4,4), Size(8,8));
+                rDev.Invert(aSmall,nFlags);
+            }
+        }
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) override
         {
@@ -580,10 +590,10 @@ public:
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
                 auto aRegions = partition(rCtx, 2, 2);
-                rDev.Invert(aRegions[0]);
-                rDev.Invert(aRegions[1], InvertFlags::N50);
-                rDev.Invert(aRegions[2], InvertFlags::Highlight);
-                rDev.Invert(aRegions[3], (InvertFlags)0xffff);
+                doInvert(rDev, aRegions[0], InvertFlags::NONE);
+                doInvert(rDev, aRegions[1], InvertFlags::N50);
+                doInvert(rDev, aRegions[2], InvertFlags::Highlight);
+                doInvert(rDev, aRegions[3], (InvertFlags)0xffff);
             }
         }
     };
