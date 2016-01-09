@@ -98,11 +98,13 @@ public:
 
     // create an object from a ClassId
     css::uno::Reference < css::embed::XEmbeddedObject >
-                        CreateEmbeddedObject( const css::uno::Sequence < sal_Int8 >&, OUString& );
+                        CreateEmbeddedObject( const css::uno::Sequence < sal_Int8 >&, OUString&,
+                                              OUString const* pBaseURL = nullptr );
 
     css::uno::Reference < css::embed::XEmbeddedObject >
                         CreateEmbeddedObject( const css::uno::Sequence < sal_Int8 >&,
-                        const css::uno::Sequence < css::beans::PropertyValue >&, OUString& );
+                        const css::uno::Sequence < css::beans::PropertyValue >&, OUString&,
+                        OUString const* pBaseURL = nullptr );
 
     // insert an embedded object into the container - objects persistent representation will be added to the storage
     bool            InsertEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString& );

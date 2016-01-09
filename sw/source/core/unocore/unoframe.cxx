@@ -2924,7 +2924,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
                     pCnt.reset( new comphelper::EmbeddedObjectContainer );
                     OUString aName;
-                    xIPObj = pCnt->CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
+
+                    OUString sDocumentBaseURL = pDoc->GetPersist()->getDocumentBaseURL();
+                    xIPObj = pCnt->CreateEmbeddedObject(aClassName.GetByteSequence(), aName,
+                                                        &sDocumentBaseURL);
                 }
                 if ( xIPObj.is() )
                 {
