@@ -86,7 +86,7 @@ if (SOLAR_JAVA==TRUE && SYSTEM_LUCENE!=YES)
 if (ENABLE_NSS_MODULE!=NO && SYSTEM_NSS!=YES)
     MD5 = 1f24ab1d39f4a51faf22244c94a6203f
     name = xmlsec1-1.2.14.tar.gz
-    URL1 = ftp://ftp.aleksey.com/pub/xmlsec/releases/xmlsec1-1.2.14.tar.gz
+    URL1 = http://xmlsoft.org/sources/xmlsec/releases/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_REDLAND != YES)
@@ -176,13 +176,13 @@ if ( true )
 if (SYSTEM_LIBXML != YES)
     MD5 = 8127a65e8c3b08856093099b52599c86
     name = libxml2-2.7.8.tar.gz
-    URL1 = ftp://xmlsoft.org/libxml2/libxml2-2.7.8.tar.gz
+    URL1 = http://xmlsoft.org/sources/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_LIBXSLT != YES)
     MD5 = e61d0364a30146aaa3001296f853b2b9
     name = libxslt-1.1.26.tar.gz
-    URL1 = ftp://xmlsoft.org/libxml2/libxslt-1.1.26.tar.gz
+    URL1 = http://xmlsoft.org/sources/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
@@ -307,13 +307,13 @@ if (ENABLE_CATEGORY_B==YES && SYSTEM_HUNSPELL!=YES)
 if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && ENABLE_JAVASCRIPT==YES)
     MD5 = 99d94103662a8d0b571e247a77432ac5
     name = rhino1_7R3.zip
-    URL1 = ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R3.zip
+    URL1 = https://ftp.mozilla.org/pub/js/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && ENABLE_NSS_MODULE==YES)
     MD5 = 067a04150b1d8b64f7da3019688a7547
     name = nss-3.14.4-with-nspr-4.9.5.tar.gz
-    URL1 = ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_14_4_RTM/src/nss-3.14.4-with-nspr-4.9.5.tar.gz
+    URL1 = https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_14_4_RTM/src/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_SAXON!=YES && DISABLE_SAXON!=YES && SOLAR_JAVA==TRUE)
