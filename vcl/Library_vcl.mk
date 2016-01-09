@@ -555,7 +555,6 @@ vcl_generic_code= \
     vcl/generic/print/prtsetup \
     vcl/generic/print/text_gfx \
     vcl/generic/fontmanager/fontsubst \
-    vcl/generic/glyphs/gcach_ftyp \
     vcl/generic/glyphs/gcach_layout \
     vcl/generic/glyphs/glyphcache \
     vcl/generic/glyphs/scrptrun \
@@ -588,6 +587,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/gdi/x11windowprovider \
+    vcl/unx/generic/gdi/gcach_ftyp \
     vcl/unx/generic/window/screensaverinhibitor \
     $(if $(filter TRUE,$(ENABLE_CUPS)),\
         vcl/unx/generic/printer/cupsmgr \
