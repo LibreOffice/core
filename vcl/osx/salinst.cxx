@@ -187,8 +187,10 @@ bool ImplSVMainHook( int * pnInit )
     if (comphelper::LibreOfficeKit::isActive())
         return false;
 
+    NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.plist", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
     unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.txt", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
+    [ pool drain ];
 
     gpnInit = pnInit;
 
