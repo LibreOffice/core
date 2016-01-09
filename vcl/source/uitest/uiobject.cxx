@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-#define DUMP_UITEST(x) SAL_INFO("vcl.uitest", #x)
+#define DUMP_UITEST(x) SAL_INFO("vcl.uitest", x)
 
 UIObject::~UIObject()
 {
