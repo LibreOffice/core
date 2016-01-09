@@ -576,6 +576,7 @@ bool OpenGLSalGraphicsImpl::UseInvert( SalInvert nFlags )
     if( ( nFlags & SAL_INVERT_50 ) ||
         ( nFlags & SAL_INVERT_TRACKFRAME ) )
     {
+        // FIXME: Trackframe really should be 2 pix. on/off stipple.
         if( !UseInvert50() )
             return false;
         mpProgram->SetBlendMode( GL_ONE_MINUS_DST_COLOR,
@@ -1757,7 +1758,17 @@ void OpenGLSalGraphicsImpl::invert(
     PreDraw();
 
     if( UseInvert( nFlags ) )
-        DrawRect( nX, nY, nWidth, nHeight );
+    {
+        if( nFlags & SAL_INVERT_TRACKFRAME )
+        { // FIXME: could be more efficient.
+            DrawRect( nX, nY, nWidth, 1 );
+            DrawRect( nX, nY + nHeight, nWidth, 1 );
+            DrawRect( nX, nY, 1, nHeight );
+            DrawRect( nX + nWidth, nY, 1, nHeight );
+        }
+        else
+            DrawRect( nX, nY, nWidth, nHeight );
+    }
 
     PostDraw();
 }
