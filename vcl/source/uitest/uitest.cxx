@@ -8,12 +8,30 @@
  */
 
 #include <vcl/uitest/uitest.hxx>
+#include <vcl/uitest/uiobject.hxx>
+
+#include <vcl/dialog.hxx>
+
+#include "uitest/factory.hxx"
+
+#include "svdata.hxx"
 
 #include <comphelper/dispatchcommand.hxx>
 
 void UITest::executeCommand(const OUString& rCommand)
 {
     comphelper::dispatchCommand(rCommand, css::uno::Sequence<css::beans::PropertyValue>());
+}
+
+std::unique_ptr<UIObject> UITest::getFocusTopWindow()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    ImplSVWinData& rWinData = pSVData->maWinData;
+
+    if (rWinData.mpLastExecuteDlg)
+        return UITestWrapperFactory::createObject(rWinData.mpLastExecuteDlg.get());
+
+    return UITestWrapperFactory::createObject(rWinData.mpFirstFrame.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

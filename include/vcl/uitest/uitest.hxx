@@ -11,11 +11,17 @@
 
 #include <vcl/dllapi.h>
 
+#include <memory>
+
+class UIObject;
+
 class UITEST_DLLPUBLIC UITest
 {
 public:
 
     void executeCommand(const OUString& rCommand);
+
+    std::unique_ptr<UIObject> getFocusTopWindow();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
