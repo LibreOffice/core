@@ -229,10 +229,11 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         OUString   aContext;
         OUString   aTarget;
         OUString   aControlType;
+        sal_uInt16 nWidth( 0 );
 
         const Sequence< PropertyValue >& rSeq = rAddonToolbar[n];
 
-        ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType );
+        ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType, nWidth );
 
         if ( IsCorrectContext( aModuleIdentifier, aContext ))
         {
@@ -263,6 +264,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 AddonsParams* pRuntimeItemData = new AddonsParams;
                 pRuntimeItemData->aImageId  = aImageId;
                 pRuntimeItemData->aTarget   = aTarget;
+                pRuntimeItemData->nWidth    = nWidth;
                 m_pToolBar->SetItemData( nId, pRuntimeItemData );
                 m_pToolBar->SetItemCommand( nId, aURL );
 
@@ -308,7 +310,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 {
                     ::cppu::OWeakObject* pController = nullptr;
 
-                    pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, aControlType );
+                    pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
                     xController.set( pController, UNO_QUERY );
                 }
 
