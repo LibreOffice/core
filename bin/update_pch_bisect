@@ -24,7 +24,7 @@ it contains one or more required
 include without which it wouldn't
 compile, which it identifies.
 
-Usage: ./bin/update_pch_bisect ./vcl/inc/pch/precompiled_vcl.hxx "/opt/lo/bin/make vcl.build" --find-required --verbose
+Usage: ./bin/update_pch_bisect ./vcl/inc/pch/precompiled_vcl.hxx "make vcl.build" --find-required --verbose
 """
 
 from __future__ import print_function
@@ -240,6 +240,7 @@ if __name__ == '__main__':
     print('    --find-required - Finds all required includes.')
     print('                      Must compile with all includes.\n')
     print('    --verbose - print noisy progress.')
+    print('Example: ./bin/update_pch_bisect ./vcl/inc/pch/precompiled_vcl.hxx "make vcl.build" --find-required --verbose')
     print('\nRunning unit-tests...')
 
 

@@ -20,15 +20,16 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX
 #define INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX
 
-#include <sal/config.h>
-
+#include <memory>
 #include <map>
 
+#include <sal/config.h>
+
 #include "dllapi.h"
-#include <svx/svdobj.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/uno3.hxx>
 #include <svx/fmglob.hxx>
-#include <memory>
+#include <svx/svdobj.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace report {
@@ -37,9 +38,6 @@ namespace com { namespace sun { namespace star {
     }
     namespace style {
         class XStyle;
-    }
-    namespace beans {
-        class XPropertySet;
     }
 }}}
 
@@ -100,7 +98,7 @@ REPORTDESIGN_DLLPUBLIC css::uno::Reference< css::style::XStyle> getUsedStyle(con
 template < typename T> T getStyleProperty(const css::uno::Reference< css::report::XReportDefinition>& _xReport,const OUString& _sPropertyName)
 {
     T nReturn = T();
-    css::uno::Reference< css::beans::XPropertySet> xProp(getUsedStyle(_xReport),css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::beans::XPropertySet> xProp(getUsedStyle(_xReport),css::uno::UNO_QUERY_THROW);
     xProp->getPropertyValue(_sPropertyName) >>= nReturn;
     return nReturn;
 }

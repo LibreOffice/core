@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2016-01-07 14:31:00 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -52,7 +52,6 @@
 #include <osl/file.hxx>
 #include <osl/module.h>
 #include <osl/module.hxx>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/security.hxx>
@@ -83,7 +82,6 @@
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -93,7 +91,6 @@
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/dibtools.hxx>
@@ -157,13 +154,11 @@
 #include <basic/sbxdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -234,8 +229,6 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -286,7 +279,6 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -317,6 +309,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -326,7 +319,6 @@
 #include <comphelper/types.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
@@ -361,7 +353,6 @@
 #include <sax/tools/converter.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sot/sotdllapi.h>
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -375,7 +366,6 @@
 #include <svl/lckbitem.hxx>
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
-#include <svl/ownlist.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/sharecontrolfile.hxx>
@@ -433,7 +423,6 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/confignode.hxx>
 #include <unotools/eventcfg.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/historyoptions.hxx>
@@ -501,7 +490,6 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sidebar/Accessible.hxx>
-#include <vcl/CommandInfoProvider.hxx>
 #include <sfx2/sidebar/Context.hxx>
 #include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/sidebar/Deck.hxx>
