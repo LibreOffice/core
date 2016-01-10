@@ -28,16 +28,22 @@ else
     modules="$@"
 fi
 
+if [[ "$OSTYPE" == "cygwin" ]]; then
+    MAKE=/opt/lo/bin/make
+else
+    MAKE=make
+fi
+
 function build()
 {
     local START=$(date +%s.%N)
 
-    /opt/lo/bin/make "$module.build" > /dev/null
+    $MAKE -sr "$module" > /dev/null
     status=$?
     if [ $status -ne 0 ];
     then
         # Spurious failures happen.
-        /opt/lo/bin/make "$module.build" > /dev/null
+        $MAKE "$module.build" > /dev/null
         status=$?
     fi
 
@@ -49,6 +55,12 @@ function build()
     if [ $status -eq 0 ];
     then
         size="$(du -s workdir/CxxObject/$module/ | awk '{print $1}')"
+        echo $size
+        filename="workdir/PrecompiledHeader/nodebug/$(basename $header)*"
+        pch_size="$(du -s $filename | awk '{print $1}' | paste -sd+ | bc)"
+        echo $pch_size
+        size="$(echo "$pch_size + $size" | bc)"
+        echo $size
         score=$(printf %.2f $(echo "10000 / ($build_time * e($size/1048576))" | bc -l))
     fi
 }
@@ -134,19 +146,19 @@ for module in $modules; do
     #run "$root" "$module" --cutoff=999
 
     # Build before updating pch.
-    /opt/lo/bin/make "$module.build" > /dev/null
+    $MAKE "$module.build" > /dev/null
     if [ $? -ne 0 ];
     then
         # Build with dependencies before updating pch.
         echo "Failed to build $module, building known state with dependencies..."
         ./bin/update_pch.sh "$module" > /dev/null
-        /opt/lo/bin/make "$module.clean" > /dev/null
-        /opt/lo/bin/make "$module.all" > /dev/null
+        $MAKE "$module.clean" > /dev/null
+        $MAKE "$module.all" > /dev/null
         if [ $? -ne 0 ];
         then
             # Build all!
             echo "Failed to build $module with dependencies, building all..."
-            /opt/lo/bin/make build-nocheck > /dev/null
+            $MAKE build-nocheck > /dev/null
             if [ $? -ne 0 ];
             then
                 >&2 echo "Broken build. Please revert changes and try again."

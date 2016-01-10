@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:43 using:
+ Generated on 2016-01-07 22:00:58 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <config_features.h>
 #include <config_global.h>
 #include <config_typesizes.h>
 #include <config_vcl.h>
