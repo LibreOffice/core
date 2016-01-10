@@ -492,7 +492,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
     const PhysicalFontFace* pFallbackFont = nullptr;
     CTFontRef pFont = nullptr;
     CTFontDescriptorRef pFontDesc = nullptr;
-    ImplFontAttributes rDevFontAttr;
+    FontAttributes rDevFontAttr;
 
     boost::ptr_vector<CTRunData>::const_iterator iter = m_vRunData.begin();
 

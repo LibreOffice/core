@@ -58,7 +58,7 @@ private:
 class FreetypeFontInfo
 {
 public:
-                           FreetypeFontInfo( const ImplFontAttributes&,
+                           FreetypeFontInfo( const FontAttributes&,
                                const OString& rNativeFileName,
                                int nFaceNum, sal_IntPtr nFontId);
                           ~FreetypeFontInfo();
@@ -74,7 +74,7 @@ public:
     const OString&        GetFontFileName() const   { return mpFontFile->GetFileName(); }
     sal_IntPtr            GetFontId() const         { return mnFontId; }
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
-    const ImplFontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
+    const FontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
 
     void                  AnnounceFont( PhysicalFontCollection* );
 
@@ -94,7 +94,7 @@ private:
     GraphiteFaceWrapper * mpGraphiteFace;
 #endif
     sal_IntPtr      mnFontId;
-    ImplFontAttributes maDevFontAttributes;
+    FontAttributes maDevFontAttributes;
 
     FontCharMapPtr  mpFontCharMap;
 
@@ -133,7 +133,7 @@ public:
                         ~FreetypeManager();
 
     void                AddFontFile( const OString& rNormalizedName,
-                            int nFaceNum, sal_IntPtr nFontId, const ImplFontAttributes&);
+                            int nFaceNum, sal_IntPtr nFontId, const FontAttributes&);
     void                AnnounceFonts( PhysicalFontCollection* ) const;
     void                ClearFontList();
 
@@ -152,7 +152,7 @@ private:
     FreetypeFontInfo*             mpFreetypeFontInfo;
 
 public:
-                            FreetypeFontFace( FreetypeFontInfo*, const ImplFontAttributes& );
+                            FreetypeFontFace( FreetypeFontInfo*, const FontAttributes& );
 
     virtual LogicalFontInstance* CreateFontInstance( FontSelectPattern& ) const override;
     virtual PhysicalFontFace* Clone() const override   { return new FreetypeFontFace( *this ); }

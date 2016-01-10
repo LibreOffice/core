@@ -196,7 +196,7 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 }
 #endif
 
-FreetypeFontInfo::FreetypeFontInfo( const ImplFontAttributes& rDevFontAttributes,
+FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
     const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId)
 :
     maFaceFT( nullptr ),
@@ -372,7 +372,7 @@ FreetypeManager::~FreetypeManager()
 }
 
 void FreetypeManager::AddFontFile( const OString& rNormalizedName,
-    int nFaceNum, sal_IntPtr nFontId, const ImplFontAttributes& rDevFontAttr)
+    int nFaceNum, sal_IntPtr nFontId, const FontAttributes& rDevFontAttr)
 {
     if( rNormalizedName.isEmpty() )
         return;
@@ -424,7 +424,7 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
     return pNew;
 }
 
-FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const ImplFontAttributes& rDFA )
+FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes& rDFA )
 :   PhysicalFontFace( rDFA ),
     mpFreetypeFontInfo( pFI )
 {
@@ -613,9 +613,9 @@ ServerFont::~ServerFont()
 }
 
 
-void ServerFont::FetchFontAttributes( ImplFontAttributes& rTo, long& rFactor ) const
+void ServerFont::FetchFontAttributes( FontAttributes& rTo, long& rFactor ) const
 {
-    static_cast<ImplFontAttributes&>(rTo) = mpFontInfo->GetFontAttributes();
+    static_cast<FontAttributes&>(rTo) = mpFontInfo->GetFontAttributes();
 
     rTo.SetScalableFlag( true ); // FIXME: Shouldn't this check FT_IS_SCALABLE( maFaceFT )?
     rTo.SetTrueTypeFlag( FT_IS_SFNT( maFaceFT ) != 0 );
