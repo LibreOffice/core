@@ -28,19 +28,19 @@ public:
 
 void VclFontCharMapTest::testDefaultFontCharMap()
 {
-    FontCharMapPtr pfcmap( new FontCharMap() ); // gets default map
+    FontCharMapPtr xfcmap( new FontCharMap() ); // gets default map
 
-    CPPUNIT_ASSERT( pfcmap->IsDefaultMap() );
+    CPPUNIT_ASSERT( xfcmap->IsDefaultMap() );
 
-    sal_uInt32 nStartBMPPlane = pfcmap->GetFirstChar();
-    sal_uInt32 nStartSupBMPPlane = pfcmap->GetNextChar(0xD800);
-    sal_uInt32 nEndBMPPlane = pfcmap->GetLastChar();
+    sal_uInt32 nStartBMPPlane = xfcmap->GetFirstChar();
+    sal_uInt32 nStartSupBMPPlane = xfcmap->GetNextChar(0xD800);
+    sal_uInt32 nEndBMPPlane = xfcmap->GetLastChar();
 
     CPPUNIT_ASSERT( nStartBMPPlane == 0x0020 );
     CPPUNIT_ASSERT( nStartSupBMPPlane == 0xE000 );
     CPPUNIT_ASSERT( nEndBMPPlane == 0xFFF0-1 );
 
-    pfcmap = nullptr;
+    xfcmap = nullptr;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontCharMapTest);

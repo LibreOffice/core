@@ -116,7 +116,7 @@ private:
 #endif
     mutable bool                    mbHasArabicSupport;
     mutable bool                    mbFontCapabilitiesRead;
-    mutable FontCharMapPtr          mpUnicodeMap;
+    mutable FontCharMapPtr          mxUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
     mutable vcl::FontCapabilities   maFontCapabilities;
 
@@ -460,7 +460,7 @@ inline bool ImplCmpKernData( const KERNINGPAIR& a, const KERNINGPAIR& b )
 // called extremely often from just one spot => inline
 inline bool WinFontFace::HasChar( sal_uInt32 cChar ) const
 {
-    if( mpUnicodeMap->HasChar( cChar ) )
+    if( mxUnicodeMap->HasChar( cChar ) )
         return true;
     // second chance to allow symbol aliasing
     if( mbAliasSymbolsLow && ((cChar-0xF000) <= 0xFF) )
@@ -469,7 +469,7 @@ inline bool WinFontFace::HasChar( sal_uInt32 cChar ) const
         cChar += 0xF000;
     else
         return false;
-    return mpUnicodeMap->HasChar( cChar );
+    return mxUnicodeMap->HasChar( cChar );
 }
 
 #endif // INCLUDED_VCL_INC_WIN_SALGDI_H

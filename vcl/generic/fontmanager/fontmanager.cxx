@@ -2109,11 +2109,11 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                 CmapResult aCmapResult;
                 if( ParseCMAP( pCmapData, nCmapSize, aCmapResult ) )
                 {
-                    FontCharMapPtr pCharMap( new FontCharMap(aCmapResult) );
+                    FontCharMapPtr xFontCharMap( new FontCharMap(aCmapResult) );
                     for( sal_uInt32 cOld = 0;;)
                     {
                         // get next unicode covered by font
-                        const sal_uInt32 c = pCharMap->GetNextChar( cOld );
+                        const sal_uInt32 c = xFontCharMap->GetNextChar( cOld );
                         if( c == cOld )
                             break;
                         cOld = c;
@@ -2122,12 +2122,12 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                             break;
 #endif
                         // get the matching glyph index
-                        const sal_GlyphId aGlyphId = pCharMap->GetGlyphIndex( c );
+                        const sal_GlyphId aGlyphId = xFontCharMap->GetGlyphIndex( c );
                         // update the requested map
                         rUnicodeEnc[ (sal_Unicode)c ] = aGlyphId;
                     }
 
-                    pCharMap = nullptr;
+                    xFontCharMap = nullptr;
                 }
             }
         }

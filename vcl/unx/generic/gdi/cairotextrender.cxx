@@ -352,8 +352,8 @@ const FontCharMapPtr CairoTextRender::GetFontCharMap() const
     if( !mpServerFont[0] )
         return nullptr;
 
-    const FontCharMapPtr pFCMap = mpServerFont[0]->GetFontCharMap();
-    return pFCMap;
+    const FontCharMapPtr xFCMap = mpServerFont[0]->GetFontCharMap();
+    return xFCMap;
 }
 
 bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const

@@ -243,7 +243,7 @@ FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
     return aMetric;
 }
 
-bool OutputDevice::GetFontCharMap( FontCharMapPtr& rFontCharMap ) const
+bool OutputDevice::GetFontCharMap( FontCharMapPtr& rxFontCharMap ) const
 {
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
@@ -256,16 +256,16 @@ bool OutputDevice::GetFontCharMap( FontCharMapPtr& rFontCharMap ) const
     if( !mpFontInstance )
         return false;
 
-    FontCharMapPtr pFontCharMap ( mpGraphics->GetFontCharMap() );
-    if (!pFontCharMap)
+    FontCharMapPtr xFontCharMap ( mpGraphics->GetFontCharMap() );
+    if (!xFontCharMap)
     {
-        FontCharMapPtr pDefaultMap( new FontCharMap() );
-        rFontCharMap = pDefaultMap;
+        FontCharMapPtr xDefaultMap( new FontCharMap() );
+        rxFontCharMap = xDefaultMap;
     }
     else
-        rFontCharMap = pFontCharMap;
+        rxFontCharMap = xFontCharMap;
 
-    if( rFontCharMap->IsDefaultMap() )
+    if( rxFontCharMap->IsDefaultMap() )
         return false;
     return true;
 }
@@ -1540,8 +1540,8 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();
     const_cast<OutputDevice&>(*this).SetFont( rTempFont );
-    FontCharMapPtr pFontCharMap ( new FontCharMap() );
-    bool bRet = GetFontCharMap( pFontCharMap );
+    FontCharMapPtr xFontCharMap ( new FontCharMap() );
+    bool bRet = GetFontCharMap( xFontCharMap );
     const_cast<OutputDevice&>(*this).SetFont( aOrigFont );
 
     // if fontmap is unknown assume it doesn't have the glyphs
@@ -1549,10 +1549,10 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
         return nIndex;
 
     for( sal_Int32 i = nIndex; nIndex < nEnd; ++i, ++nIndex )
-        if( ! pFontCharMap->HasChar( rStr[i] ) )
+        if( ! xFontCharMap->HasChar( rStr[i] ) )
             return nIndex;
 
-    pFontCharMap = nullptr;
+    xFontCharMap = nullptr;
 
     return -1;
 }
