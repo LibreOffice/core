@@ -10,6 +10,7 @@
 #include <sal/types.h>
 #include <math.h>
 #include <string.h>
+#include <memory>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -343,13 +344,12 @@ doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highligh
     boost::property_tree::ptree aTree;
     GtkWidget* drawingWidget = GTK_WIDGET(pDocView);
     GdkWindow* drawingWindow = gtk_widget_get_window(drawingWidget);
-    cairo_region_t* cairoVisRegion = gdk_window_get_visible_region(drawingWindow);
+    std::shared_ptr<cairo_region_t> cairoVisRegion( gdk_window_get_visible_region(drawingWindow),
+                                                    cairo_region_destroy);
     cairo_rectangle_int_t cairoVisRect;
-    int x, y;
-
-    cairo_region_get_rectangle(cairoVisRegion, 0, &cairoVisRect);
-    x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
-    y = pixelToTwip (cairoVisRect.y, priv->m_fZoom);
+    cairo_region_get_rectangle(cairoVisRegion.get(), 0, &cairoVisRect);
+    int x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
+    int y = pixelToTwip (cairoVisRect.y, priv->m_fZoom);
 
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/type", '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/value", '/'), pText);
