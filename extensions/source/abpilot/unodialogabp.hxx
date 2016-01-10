@@ -41,7 +41,7 @@ namespace abp
         OUString m_sDataSourceName;
 
     public:
-        OABSPilotUno(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+        explicit OABSPilotUno(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
     private:
         // XInterface (disambiguation)
