@@ -88,7 +88,7 @@ DEFAULTS = \
     'reportdesign.rpt'                  : ( 9, EXCLUDE, INCLUDE, INCLUDE), #   9.4
     'reportdesign.rptui'                : ( 4, EXCLUDE, INCLUDE, INCLUDE), #  13.1
     'reportdesign.rptxml'               : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   7.6
-    'sal.sal'                           : ( 5, EXCLUDE, INCLUDE, INCLUDE), #   4.2
+    'sal.sal'                           : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   4.2
     'sc.sc'                             : (12, EXCLUDE, INCLUDE, INCLUDE), #  92.6
     'sc.scfilt'                         : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #  39.9
     'sc.scui'                           : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #  15.0
@@ -407,6 +407,7 @@ def filter_ignore(line, module):
             'vcl/jobset.hxx',
             'vcl/oldprintadaptor.hxx',
             'vcl/opengl/OpenGLContext.hxx',
+            'vcl/opengl/OpenGLHelper.hxx',  # Conflicts with X header on *ix
             'vcl/print.hxx',
             'vcl/prntypes.hxx', # redefines Orientation from filter/jpeg/Exif.hxx
             'vcl/sysdata.hxx',
@@ -417,6 +418,11 @@ def filter_ignore(line, module):
             'SchXMLImport.hxx', # enums redefined in draw\sdxmlimp_impl.hxx
             'XMLEventImportHelper.hxx', # NameMap redefined in XMLEventExport.hxx
             'xmloff/XMLEventExport.hxx', # enums redefined
+            ]
+    if module == 'xmlsecurity':
+        ignore_list += [
+            'xmlsec/crypto.h',
+            'xmlsecurity/xmlsec-wrapper.h',
             ]
 
     for i in ignore_list:
@@ -737,7 +743,7 @@ def generate(includes, libname, filename, module):
         f.write('\n Generated on {} using:\n {}\n'.format(
                 datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 make_command_line()))
-        f.write('\n If after updating build fails, use the following command to locate conflicting headers:\n ./bin/update_pch_bisect {} "/opt/lo/bin/make {}.build" --find-conflicts\n*/\n'.format(
+        f.write('\n If after updating build fails, use the following command to locate conflicting headers:\n ./bin/update_pch_bisect {} "make {}.build" --find-conflicts\n*/\n'.format(
                 filename, module))
 
         # svx needs this (sendreportw32.cxx)
@@ -760,7 +766,7 @@ def generate(includes, libname, filename, module):
            (module == 'xmlsecurity' and libname == 'xsec_xmlsec'):
             ado_define = """
 // Cleanup windows header macro pollution.
-#ifdef WNT
+#if defined(WNT) && defined(WINAPI)
 #   include <postwin.h>
 #   undef RGB
 #endif

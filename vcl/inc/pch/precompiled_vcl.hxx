@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-08 23:14:46 using:
+ Generated on 2016-01-10 11:16:04 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./vcl/inc/pch/precompiled_vcl.hxx "/opt/lo/bin/make vcl.build" --find-conflicts
+ ./bin/update_pch_bisect ./vcl/inc/pch/precompiled_vcl.hxx "make vcl.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -36,6 +36,7 @@
 #include <functional>
 #include <iomanip>
 #include <limits.h>
+#include <map>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -129,14 +130,12 @@
 #include <salsys.hxx>
 #include <saltimer.hxx>
 #include <salvd.hxx>
-#include <vcl/FilterConfigItem.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
@@ -148,10 +147,8 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
-#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/fltcall.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -174,7 +171,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salbtype.hxx>
@@ -182,7 +178,6 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
@@ -221,10 +216,6 @@
 #include <brdwin.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
@@ -235,7 +226,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
