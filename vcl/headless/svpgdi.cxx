@@ -149,6 +149,109 @@ namespace
         b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
         return ~b;
     }
+
+    class SourceHelper
+    {
+    public:
+        SourceHelper(const SalBitmap& rSourceBitmap)
+        {
+            const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSourceBitmap);
+            const basebmp::BitmapDeviceSharedPtr& rSrcBmp = rSrc.getBitmap();
+
+            if (rSourceBitmap.GetBitCount() != 32)
+            {
+                //big stupid copy here
+                static bool bWarnedOnce;
+                SAL_WARN_IF(!bWarnedOnce, "vcl.gdi", "non default depth bitmap, slow convert, upscale the input");
+                bWarnedOnce = true;
+                Size aSize = rSourceBitmap.GetSize();
+                aTmpBmp.Create(aSize, 0, BitmapPalette());
+                assert(aTmpBmp.GetBitCount() == 32);
+                basegfx::B2IBox aRect(0, 0, aSize.Width(), aSize.Height());
+                const basebmp::BitmapDeviceSharedPtr& rTmpSrc = aTmpBmp.getBitmap();
+                rTmpSrc->drawBitmap(rSrcBmp, aRect, aRect, basebmp::DrawMode::Paint );
+                source = SvpSalGraphics::createCairoSurface(rTmpSrc);
+            }
+            else
+                source = SvpSalGraphics::createCairoSurface(rSrcBmp);
+        }
+        ~SourceHelper()
+        {
+            cairo_surface_destroy(source);
+        }
+        cairo_surface_t* getSurface()
+        {
+            return source;
+        }
+    private:
+        SvpSalBitmap aTmpBmp;
+        cairo_surface_t* source;
+    };
+
+    class MaskHelper
+    {
+    public:
+        MaskHelper(const SalBitmap& rAlphaBitmap)
+        {
+            const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
+            const basebmp::BitmapDeviceSharedPtr& rMaskBmp = rMask.getBitmap();
+
+            basegfx::B2IVector size = rMaskBmp->getSize();
+            sal_Int32 nStride = rMaskBmp->getScanlineStride();
+            basebmp::RawMemorySharedArray data = rMaskBmp->getBuffer();
+
+            if (rAlphaBitmap.GetBitCount() == 8)
+            {
+                // the alpha values need to be inverted for Cairo
+                // so big stupid copy and invert here
+                const int nImageSize = size.getY() * nStride;
+                const unsigned char* pSrcBits = data.get();
+                pAlphaBits = new unsigned char[nImageSize];
+                memcpy(pAlphaBits, pSrcBits, nImageSize);
+
+                // TODO: make upper layers use standard alpha
+                sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits);
+                for( int i = nImageSize/sizeof(sal_uInt32); --i >= 0; ++pLDst )
+                    *pLDst = ~*pLDst;
+                assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits+nImageSize);
+
+                mask = cairo_image_surface_create_for_data(pAlphaBits,
+                                                CAIRO_FORMAT_A8,
+                                                size.getX(), size.getY(),
+                                                nStride);
+            }
+            else
+            {
+                // the alpha values need to be inverted *and* reordered for Cairo
+                // so big stupid copy and reverse + invert here
+                const int nImageSize = size.getY() * nStride;
+                const unsigned char* pSrcBits = data.get();
+                pAlphaBits = new unsigned char[nImageSize];
+                memcpy(pAlphaBits, pSrcBits, nImageSize);
+
+                unsigned char* pDst = pAlphaBits;
+                for (int i = nImageSize; --i >= 0; ++pDst)
+                    *pDst = reverseAndInvert(*pDst);
+
+                mask = cairo_image_surface_create_for_data(pAlphaBits,
+                                                CAIRO_FORMAT_A1,
+                                                size.getX(), size.getY(),
+                                                nStride);
+            }
+        }
+        ~MaskHelper()
+        {
+            cairo_surface_destroy(mask);
+            delete[] pAlphaBits;
+        }
+        cairo_surface_t* getMask()
+        {
+            return mask;
+        }
+    private:
+        cairo_surface_t *mask;
+        unsigned char* pAlphaBits;
+    };
 }
 
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap )
@@ -159,90 +262,19 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
         return false;
     }
 
-    cairo_surface_t* source = nullptr;
-
-    const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSourceBitmap);
-    const basebmp::BitmapDeviceSharedPtr& rSrcBmp = rSrc.getBitmap();
-
-    SvpSalBitmap aTmpBmp;
-    if (rSourceBitmap.GetBitCount() != 32)
-    {
-        //big stupid copy here
-        static bool bWarnedOnce;
-        SAL_WARN_IF(!bWarnedOnce, "vcl.gdi", "non default depth bitmap, slow convert, upscale the input");
-        bWarnedOnce = true;
-        Size aSize = rSourceBitmap.GetSize();
-        aTmpBmp.Create(aSize, 0, BitmapPalette());
-        assert(aTmpBmp.GetBitCount() == 32);
-        basegfx::B2IBox aRect(0, 0, aSize.Width(), aSize.Height());
-        const basebmp::BitmapDeviceSharedPtr& rTmpSrc = aTmpBmp.getBitmap();
-        rTmpSrc->drawBitmap(rSrcBmp, aRect, aRect, basebmp::DrawMode::Paint );
-        source = createCairoSurface(rTmpSrc);
-    }
-    else
-        source = createCairoSurface(rSrcBmp);
-
+    SourceHelper aSurface(rSourceBitmap);
+    cairo_surface_t* source = aSurface.getSurface();
     if (!source)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
         return false;
     }
 
-    const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
-    const basebmp::BitmapDeviceSharedPtr& rMaskBmp = rMask.getBitmap();
-
-    cairo_surface_t *mask = nullptr;
-
-    unsigned char* pAlphaBits = nullptr;
-
-    basegfx::B2IVector size = rMaskBmp->getSize();
-    sal_Int32 nStride = rMaskBmp->getScanlineStride();
-    basebmp::RawMemorySharedArray data = rMaskBmp->getBuffer();
-
-    if (rAlphaBitmap.GetBitCount() == 8)
-    {
-        // the alpha values need to be inverted for Cairo
-        // so big stupid copy and invert here
-        const int nImageSize = size.getY() * nStride;
-        const unsigned char* pSrcBits = data.get();
-        pAlphaBits = new unsigned char[nImageSize];
-        memcpy(pAlphaBits, pSrcBits, nImageSize);
-
-        // TODO: make upper layers use standard alpha
-        sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits);
-        for( int i = nImageSize/sizeof(sal_uInt32); --i >= 0; ++pLDst )
-            *pLDst = ~*pLDst;
-        assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits+nImageSize);
-
-        mask = cairo_image_surface_create_for_data(pAlphaBits,
-                                        CAIRO_FORMAT_A8,
-                                        size.getX(), size.getY(),
-                                        nStride);
-    }
-    else
-    {
-        // the alpha values need to be inverted *and* reordered for Cairo
-        // so big stupid copy and reverse + invert here
-        const int nImageSize = size.getY() * nStride;
-        const unsigned char* pSrcBits = data.get();
-        pAlphaBits = new unsigned char[nImageSize];
-        memcpy(pAlphaBits, pSrcBits, nImageSize);
-
-        unsigned char* pDst = pAlphaBits;
-        for (int i = nImageSize; --i >= 0; ++pDst)
-            *pDst = reverseAndInvert(*pDst);
-
-        mask = cairo_image_surface_create_for_data(pAlphaBits,
-                                        CAIRO_FORMAT_A1,
-                                        size.getX(), size.getY(),
-                                        nStride);
-    }
-
+    MaskHelper aMask(rAlphaBitmap);
+    cairo_surface_t *mask = aMask.getMask();
     if (!mask)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
-        cairo_surface_destroy(source);
-        delete[] pAlphaBits;
         return false;
     }
 
@@ -267,9 +299,6 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
     cairo_mask_surface(cr, mask, -rTR.mnSrcX, -rTR.mnSrcY);
 
     cairo_surface_flush(cairo_get_target(cr));
-    cairo_surface_destroy(mask);
-    cairo_surface_destroy(source);
-    delete[] pAlphaBits;
     cairo_destroy(cr); // unref
 
     if (xDamageTracker)
