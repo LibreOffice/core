@@ -190,7 +190,7 @@ FontMetric OutputDevice::GetFontMetric() const
         return aMetric;
 
     LogicalFontInstance* pFontInstance = mpFontInstance;
-    ImplFontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
+    FontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
 
     // prepare metric
     aMetric.Font::operator=( maFont );
@@ -486,7 +486,7 @@ FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const vcl::Font& rFont 
 long OutputDevice::GetFontExtLeading() const
 {
     LogicalFontInstance*      pFontInstance = mpFontInstance;
-    ImplFontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
+    FontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
 
     return pFontAttributes->GetExternalLeading();
 }
@@ -1464,7 +1464,7 @@ long OutputDevice::GetMinKashida() const
         return 0;
 
     LogicalFontInstance* pFontInstance = mpFontInstance;
-    ImplFontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
+    FontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
     return ImplDevicePixelToLogicWidth( pFontAttributes->GetMinKashida() );
 }
 

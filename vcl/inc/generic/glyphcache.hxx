@@ -63,7 +63,7 @@ public:
     void                    AddFontFile(
                                 const OString& rNormalizedName,
                                 int nFaceNum, sal_IntPtr nFontId,
-                                const ImplFontAttributes&);
+                                const FontAttributes&);
 
     void                    AnnounceFonts( PhysicalFontCollection* ) const;
 
@@ -161,7 +161,7 @@ public:
 
     const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
 
-    void                    FetchFontAttributes( ImplFontAttributes&, long& rFactor ) const;
+    void                    FetchFontAttributes( FontAttributes&, long& rFactor ) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
     int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
     double                  GetStretch() { return mfStretch; }
