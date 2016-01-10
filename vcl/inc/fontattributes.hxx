@@ -161,6 +161,31 @@ public:
     long            GetDoubleStrikeoutOffset1()                 { return mnDStrikeoutOffset1; }
     long            GetDoubleStrikeoutOffset2()                 { return mnDStrikeoutOffset2; }
 
+    void            SetUnderlineSize( long nUnderlineSize )                         { mnUnderlineSize = nUnderlineSize; }
+    void            SetUnderlineOffset( long nUnderlineOffset )                     { mnUnderlineOffset = nUnderlineOffset; }
+    void            SetBoldUnderlineSize( long nBUnderlineSize )                    { mnBUnderlineSize = nBUnderlineSize; }
+    void            SetBoldUnderlineOffset( long nBUnderlineOffset )                { mnBUnderlineOffset = nBUnderlineOffset; }
+    void            SetDoubleUnderlineSize( long nDUnderlineSize )                  { mnDUnderlineSize = nDUnderlineSize; }
+    void            SetDoubleUnderlineOffset1( long nDUnderlineOffset1 )            { mnDUnderlineOffset1 = nDUnderlineOffset1; }
+    void            SetDoubleUnderlineOffset2( long nDUnderlineOffset2 )            { mnDUnderlineOffset2 = nDUnderlineOffset2; }
+    void            SetWavelineUnderlineSize( long nWUnderlineSize )                { mnWUnderlineSize = nWUnderlineSize; }
+    void            SetWavelineUnderlineOffset( long nWUnderlineOffset )            { mnWUnderlineOffset = nWUnderlineOffset; }
+    void            SetAboveUnderlineSize( long nAboveUnderlineSize )               { mnAboveUnderlineSize = nAboveUnderlineSize; }
+    void            SetAboveUnderlineOffset( long nAboveUnderlineOffset )           { mnAboveUnderlineOffset = nAboveUnderlineOffset; }
+    void            SetAboveBoldUnderlineSize( long nAboveBUnderlineSize )          { mnAboveBUnderlineSize = nAboveBUnderlineSize; }
+    void            SetAboveBoldUnderlineOffset( long nAboveBUnderlineOffset )      { mnAboveBUnderlineOffset = nAboveBUnderlineOffset; }
+    void            SetAboveDoubleUnderlineSize( long nAboveDUnderlineSize )        { mnAboveDUnderlineSize = nAboveDUnderlineSize; }
+    void            SetAboveDoubleUnderlineOffset1( long nAboveDUnderlineOffset1 )  { mnAboveDUnderlineOffset1 = nAboveDUnderlineOffset1; }
+    void            SetAboveDoubleUnderlineOffset2( long nAboveDUnderlineOffset2 )  { mnAboveDUnderlineOffset2 = nAboveDUnderlineOffset2; }
+    void            SetAboveWavelineUnderlineSize( long nAboveWUnderlineSize )      { mnAboveWUnderlineSize = nAboveWUnderlineSize; }
+    void            SetAboveWavelineUnderlineOffset( long nAboveWUnderlineOffset )  { mnAboveWUnderlineOffset = nAboveWUnderlineOffset; }
+    void            SetStrikeoutSize( long nStrikeoutSize )                         { mnStrikeoutSize = nStrikeoutSize; }
+    void            SetStrikeoutOffset( long nStrikeoutOffset )                     { mnStrikeoutOffset = nStrikeoutOffset; }
+    void            SetBoldStrikeoutSize( long nBStrikeoutSize )                    { mnBStrikeoutSize = nBStrikeoutSize; }
+    void            SetBoldStrikeoutOffset( long nBStrikeoutOffset )                { mnBStrikeoutOffset = nBStrikeoutOffset; }
+    void            SetDoubleStrikeoutSize( long nDStrikeoutSize )                  { mnDStrikeoutSize = nDStrikeoutSize; }
+    void            SetDoubleStrikeoutOffset1( long nDStrikeoutOffset1 )            { mnDStrikeoutOffset1 = nDStrikeoutOffset1; }
+    void            SetDoubleStrikeoutOffset2( long nDStrikeoutOffset2 )            { mnDStrikeoutOffset2 = nDStrikeoutOffset2; }
 
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();
