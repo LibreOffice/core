@@ -341,15 +341,14 @@ doSearch(LOKDocView* pDocView, const char* pText, bool bBackwards, bool highligh
         return;
 
     boost::property_tree::ptree aTree;
+    cairo_rectangle_int_t cairoVisRect;
     GtkWidget* drawingWidget = GTK_WIDGET(pDocView);
     GdkWindow* drawingWindow = gtk_widget_get_window(drawingWidget);
-    cairo_region_t* cairoVisRegion = gdk_window_get_visible_region(drawingWindow);
-    cairo_rectangle_int_t cairoVisRect;
-    int x, y;
-
-    cairo_region_get_rectangle(cairoVisRegion, 0, &cairoVisRect);
-    x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
-    y = pixelToTwip (cairoVisRect.y, priv->m_fZoom);
+    std::shared_ptr<cairo_region_t> cairoVisRegion( gdk_window_get_visible_region(drawingWindow),
+                                                    cairo_region_destroy);
+    cairo_region_get_rectangle(cairoVisRegion.get(), 0, &cairoVisRect);
+    int x = pixelToTwip (cairoVisRect.x, priv->m_fZoom);
+    int y = pixelToTwip (cairoVisRect.y, priv->m_fZoom);
 
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/type", '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/value", '/'), pText);
