@@ -2337,9 +2337,9 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
     pSymbolDisplay->SetFont(aFontMetric);
 
     // update subset listbox for new font's unicode subsets
-    FontCharMapPtr pFontCharMap;
-    pCharsetDisplay->GetFontCharMap( pFontCharMap );
-    pSubsetMap.reset(new SubsetMap( pFontCharMap ));
+    FontCharMapPtr xFontCharMap;
+    pCharsetDisplay->GetFontCharMap( xFontCharMap );
+    pSubsetMap.reset(new SubsetMap( xFontCharMap ));
 
     pFontsSubsetLB->Clear();
     bool bFirst = true;
@@ -2357,7 +2357,7 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
         pFontsSubsetLB->SetNoSelection();
     pFontsSubsetLB->Enable( !bFirst );
 
-    pFontCharMap = nullptr;
+    xFontCharMap = nullptr;
 }
 
 

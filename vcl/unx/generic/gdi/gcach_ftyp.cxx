@@ -209,7 +209,7 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
 #endif
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
-    mpFontCharMap( nullptr ),
+    mxFontCharMap( nullptr ),
     mpChar2Glyph( nullptr ),
     mpGlyph2Char( nullptr )
 {
@@ -221,8 +221,8 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
 
 FreetypeFontInfo::~FreetypeFontInfo()
 {
-    if( mpFontCharMap )
-        mpFontCharMap = nullptr;
+    if( mxFontCharMap )
+        mxFontCharMap = nullptr;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
 #if ENABLE_GRAPHITE
@@ -972,31 +972,31 @@ bool ServerFont::GetAntialiasAdvice() const
 
 const FontCharMapPtr ServerFont::GetFontCharMap() const
 {
-    const FontCharMapPtr pFCMap = mpFontInfo->GetFontCharMap();
-    return pFCMap;
+    const FontCharMapPtr xFCMap = mpFontInfo->GetFontCharMap();
+    return xFCMap;
 }
 
 const FontCharMapPtr FreetypeFontInfo::GetFontCharMap()
 {
     // check if the charmap is already cached
-    if( mpFontCharMap )
-        return mpFontCharMap;
+    if( mxFontCharMap )
+        return mxFontCharMap;
 
     // get the charmap and cache it
     CmapResult aCmapResult;
     bool bOK = GetFontCodeRanges( aCmapResult );
     if( bOK )
     {
-        FontCharMapPtr pFontCharMap( new FontCharMap ( aCmapResult ) );
-        mpFontCharMap = pFontCharMap;
+        FontCharMapPtr xFontCharMap( new FontCharMap ( aCmapResult ) );
+        mxFontCharMap = xFontCharMap;
     }
     else
     {
-        FontCharMapPtr pFontCharMap( new FontCharMap() );
-        mpFontCharMap = pFontCharMap;
+        FontCharMapPtr xFontCharMap( new FontCharMap() );
+        mxFontCharMap = xFontCharMap;
     }
-    // mpFontCharMap on either branch now has a refcount of 1
-    return mpFontCharMap;
+    // mxFontCharMap on either branch now has a refcount of 1
+    return mxFontCharMap;
 }
 
 // TODO: merge into method GetFontCharMap()

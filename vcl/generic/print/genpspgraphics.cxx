@@ -770,8 +770,8 @@ const FontCharMapPtr GenPspGraphics::GetFontCharMap() const
     if( !m_pServerFont[0] )
         return nullptr;
 
-    const FontCharMapPtr pFCMap = m_pServerFont[0]->GetFontCharMap();
-    return pFCMap;
+    const FontCharMapPtr xFCMap = m_pServerFont[0]->GetFontCharMap();
+    return xFCMap;
 }
 
 bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const

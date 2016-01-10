@@ -462,41 +462,41 @@ void XclImpFont::GuessScriptType()
     if( OutputDevice* pPrinter = GetPrinter() )
     {
         vcl::Font aFont( maData.maName, Size( 0, 10 ) );
-        FontCharMapPtr pCharMap;
+        FontCharMapPtr xFontCharMap;
 
         pPrinter->SetFont( aFont );
-        if( pPrinter->GetFontCharMap( pCharMap ) )
+        if( pPrinter->GetFontCharMap( xFontCharMap ) )
         {
             // CJK fonts
             mbHasAsian =
-                pCharMap->HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
-                pCharMap->HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
-                pCharMap->HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
-                pCharMap->HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
-                pCharMap->HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
-                pCharMap->HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
-                pCharMap->HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
-                pCharMap->HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
-                pCharMap->HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
-                pCharMap->HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
-                pCharMap->HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
-                pCharMap->HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
-                pCharMap->HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
+                xFontCharMap->HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
+                xFontCharMap->HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
+                xFontCharMap->HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
+                xFontCharMap->HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
+                xFontCharMap->HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
+                xFontCharMap->HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
+                xFontCharMap->HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
+                xFontCharMap->HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
+                xFontCharMap->HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
+                xFontCharMap->HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
+                xFontCharMap->HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
+                xFontCharMap->HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
+                xFontCharMap->HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
             // CTL fonts
             mbHasCmplx =
-                pCharMap->HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
-                pCharMap->HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
-                pCharMap->HasChar( 0x0721 ) ||   // 0700-074F: Syriac
-                pCharMap->HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
-                pCharMap->HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
-                pCharMap->HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
-                pCharMap->HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
-                pCharMap->HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
+                xFontCharMap->HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
+                xFontCharMap->HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
+                xFontCharMap->HasChar( 0x0721 ) ||   // 0700-074F: Syriac
+                xFontCharMap->HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
+                xFontCharMap->HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
+                xFontCharMap->HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
+                xFontCharMap->HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
+                xFontCharMap->HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
             // Western fonts
-            mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || pCharMap->HasChar( 'A' );
+            mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || xFontCharMap->HasChar( 'A' );
         }
 
-        pCharMap = nullptr;
+        xFontCharMap = nullptr;
     }
 }
 

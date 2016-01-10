@@ -94,9 +94,9 @@ private:
     GraphiteFaceWrapper * mpGraphiteFace;
 #endif
     sal_IntPtr      mnFontId;
-    FontAttributes maDevFontAttributes;
+    FontAttributes  maDevFontAttributes;
 
-    FontCharMapPtr  mpFontCharMap;
+    FontCharMapPtr  mxFontCharMap;
 
     // cache unicode->glyphid mapping because looking it up is expensive
     // TODO: change to std::unordered_multimap when a use case requires a m:n mapping

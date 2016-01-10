@@ -1260,7 +1260,7 @@ public:
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;
 
-    bool                        GetFontCharMap( FontCharMapPtr& rFontCharMap ) const;
+    bool                        GetFontCharMap( FontCharMapPtr& rxFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     /** Retrieve detailed font information in platform independent structure

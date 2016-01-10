@@ -60,8 +60,8 @@ CoreTextFontFace::CoreTextFontFace( const CoreTextFontFace& rSrc )
   , mbHasOs2Table( rSrc.mbHasOs2Table )
   , mbCmapEncodingRead( rSrc.mbCmapEncodingRead )
 {
-    if( rSrc.mpCharMap )
-        mpCharMap = rSrc.mpCharMap;
+    if( rSrc.mxCharMap )
+        mxCharMap = rSrc.mxCharMap;
 }
 
 CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFontId )
@@ -76,9 +76,9 @@ CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFont
 
 CoreTextFontFace::~CoreTextFontFace()
 {
-    if( mpCharMap )
+    if( mxCharMap )
     {
-        mpCharMap = nullptr;
+        mxCharMap = nullptr;
     }
 }
 
@@ -92,26 +92,26 @@ static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 const FontCharMapPtr CoreTextFontFace::GetFontCharMap() const
 {
     // return the cached charmap
-    if( mpCharMap )
-        return mpCharMap;
+    if( mxCharMap )
+        return mxCharMap;
 
     // set the default charmap
     FontCharMapPtr pCharMap( new FontCharMap() );
-    mpCharMap = pCharMap;
+    mxCharMap = pCharMap;
 
     // get the CMAP byte size
     // allocate a buffer for the CMAP raw data
     const int nBufSize = GetFontTable( "cmap", nullptr );
     DBG_ASSERT( (nBufSize > 0), "CoreTextFontFace::GetFontCharMap : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
-        return mpCharMap;
+        return mxCharMap;
 
     // get the CMAP raw data
     ByteVector aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
     DBG_ASSERT( (nRawLength > 0), "CoreTextFontFace::GetFontCharMap : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
-        return mpCharMap;
+        return mxCharMap;
 
     DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontFace::GetFontCharMap : ByteCount mismatch!\n");
 
@@ -119,12 +119,12 @@ const FontCharMapPtr CoreTextFontFace::GetFontCharMap() const
     CmapResult aCmapResult;
     if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
     {
-        FontCharMapPtr pDefFontCharMap( new FontCharMap(aCmapResult) );
+        FontCharMapPtr xDefFontCharMap( new FontCharMap(aCmapResult) );
         // create the matching charmap
-        mpCharMap = pDefFontCharMap;
+        mxCharMap = xDefFontCharMap;
     }
 
-    return mpCharMap;
+    return mxCharMap;
 }
 
 bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
@@ -459,8 +459,8 @@ const FontCharMapPtr AquaSalGraphics::GetFontCharMap() const
 {
     if( !mpFontData )
     {
-        FontCharMapPtr pFontCharMap( new FontCharMap() );
-        return pFontCharMap;
+        FontCharMapPtr xFontCharMap( new FontCharMap() );
+        return xFontCharMap;
     }
 
     return mpFontData->GetFontCharMap();
@@ -741,14 +741,14 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
             free( const_cast<TTSimpleGlyphMetrics *>(pGlyphMetrics) );
         }
 
-        FontCharMapPtr pMap = mpFontData->GetFontCharMap();
-        DBG_ASSERT( pMap && pMap->GetCharCount(), "no charmap" );
+        FontCharMapPtr xFCMap = mpFontData->GetFontCharMap();
+        DBG_ASSERT( xFCMap && xFCMap->GetCharCount(), "no charmap" );
 
         // get unicode<->glyph encoding
-        // TODO? avoid sft mapping by using the pMap itself
-        int nCharCount = pMap->GetCharCount();
-        sal_uInt32 nChar = pMap->GetFirstChar();
-        for( ; --nCharCount >= 0; nChar = pMap->GetNextChar( nChar ) )
+        // TODO? avoid sft mapping by using the xFCMap itself
+        int nCharCount = xFCMap->GetCharCount();
+        sal_uInt32 nChar = xFCMap->GetFirstChar();
+        for( ; --nCharCount >= 0; nChar = xFCMap->GetNextChar( nChar ) )
         {
             if( nChar > 0xFFFF ) // TODO: allow UTF-32 chars
                 break;
@@ -761,7 +761,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
             }
         }
 
-        pMap = nullptr;
+        xFCMap = nullptr;
     }
 
     ::CloseTTFont( pSftFont );
