@@ -99,7 +99,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
     return false;
 }
 
-FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize);
+FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
 
 void ServerFontInstance::HandleFontOptions()
 {
@@ -416,7 +416,7 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
         // inform GlyphCache about this font provided by the PsPrint subsystem
-        ImplFontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
+        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
         aDFA.IncreaseQualityBy( 4096 );
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
@@ -440,7 +440,7 @@ void cairosubcallback(void* pPattern)
     cairo_ft_font_options_substitute(pFontOptions, static_cast<FcPattern*>(pPattern));
 }
 
-FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
+FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)
 {
     psp::FastPrintFontInfo aInfo;
 
@@ -453,7 +453,7 @@ FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttribut
 }
 
 void
-CairoTextRender::GetFontAttributes( ImplFontAttributes *pFontAttributes, int nFallbackLevel )
+CairoTextRender::GetFontAttributes( FontAttributes *pFontAttributes, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;

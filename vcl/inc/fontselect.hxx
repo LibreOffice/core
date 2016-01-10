@@ -33,7 +33,7 @@ class ConvertChar;
 class OutputDevice;
 class Size;
 
-class FontSelectPatternAttributes : public ImplFontAttributes
+class FontSelectPatternAttributes : public FontAttributes
 {
 public:
                     FontSelectPatternAttributes( const vcl::Font&, const OUString& rSearchName,

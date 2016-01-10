@@ -73,7 +73,7 @@ static bool bImplSalCourierScalable = false;
 static bool bImplSalCourierNew = false;
 
 // TODO: also support temporary TTC font files
-typedef std::map< OUString, ImplFontAttributes > FontAttrMap;
+typedef std::map< OUString, FontAttributes > FontAttrMap;
 
 class ImplFontAttrCache
 {
@@ -93,8 +93,8 @@ public:
                               const OUString& rBaseURL);
             ~ImplFontAttrCache();
 
-    ImplFontAttributes  GetFontAttr( const OUString& rFontFileName ) const;
-    void                   AddFontAttr( const OUString& rFontFileName, const ImplFontAttributes& );
+    FontAttributes  GetFontAttr( const OUString& rFontFileName ) const;
+    void                   AddFontAttr( const OUString& rFontFileName, const FontAttributes& );
 };
 
 ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUString& rBaseURL ) : aBaseURL( rBaseURL )
@@ -116,7 +116,7 @@ ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUStri
 
     // read the cache entries from the file
     OUString aFontFileURL;
-    ImplFontAttributes aDFA;
+    FontAttributes aDFA;
     for(;;)
     {
         aFontFileURL = read_uInt16_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8);
@@ -161,7 +161,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
             while ( aIter != aFontAttributes.end() )
             {
                 const OUString rFontFileURL( (*aIter).first );
-                const ImplFontAttributes& rDFA( (*aIter).second );
+                const FontAttributes& rDFA( (*aIter).second );
                 write_uInt16_lenPrefixed_uInt8s_FromOUString(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
                 write_uInt16_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.GetFamilyName(), RTL_TEXTENCODING_UTF8);
 
@@ -190,9 +190,9 @@ OUString ImplFontAttrCache::OptimizeURL( const OUString& rURL ) const
     return aOptimizedFontFileURL;
 }
 
-ImplFontAttributes ImplFontAttrCache::GetFontAttr( const OUString& rFontFileName ) const
+FontAttributes ImplFontAttrCache::GetFontAttr( const OUString& rFontFileName ) const
 {
-    ImplFontAttributes aDFA;
+    FontAttributes aDFA;
     FontAttrMap::const_iterator it = aFontAttributes.find( OptimizeURL( rFontFileName ) );
     if( it != aFontAttributes.end() )
     {
@@ -201,7 +201,7 @@ ImplFontAttributes ImplFontAttrCache::GetFontAttr( const OUString& rFontFileName
     return aDFA;
 }
 
-void ImplFontAttrCache::AddFontAttr( const OUString& rFontFileName, const ImplFontAttributes& rDFA )
+void ImplFontAttrCache::AddFontAttr( const OUString& rFontFileName, const FontAttributes& rDFA )
 {
     SAL_WARN_IF(rFontFileName.isEmpty() || rDFA.GetFamilyName().isEmpty(),
         "vcl.gdi", "ImplFontNameCache::AddFontName - invalid data!");
@@ -770,10 +770,10 @@ inline BYTE ImplPitchToWin( FontPitch ePitch )
         return DEFAULT_PITCH;
 }
 
-static ImplFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont,
+static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont,
     const NEWTEXTMETRICW& rMetric, DWORD nFontType )
 {
-    ImplFontAttributes aDFA;
+    FontAttributes aDFA;
 
     const LOGFONTW rLogFont = rEnumFont.elfLogFont;
 
@@ -994,7 +994,7 @@ const void * GrFontData::getTable(unsigned int name, size_t *len) const
 }
 #endif
 
-WinFontFace::WinFontFace( const ImplFontAttributes& rDFS,
+WinFontFace::WinFontFace( const FontAttributes& rDFS,
     int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   PhysicalFontFace( rDFS ),
     mnId( 0 ),
@@ -1477,7 +1477,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
         return 0;
 }
 
-void WinSalGraphics::GetFontAttributes( ImplFontAttributes* pFontAttributes, int nFallbackLevel )
+void WinSalGraphics::GetFontAttributes( FontAttributes* pFontAttributes, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
     HFONT hOldFont = SelectFont( getHDC(), mhFonts[nFallbackLevel] );
@@ -1692,7 +1692,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
 }
 
 static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
-    ImplFontAttributes& rDFA )
+    FontAttributes& rDFA )
 {
     OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
@@ -1790,7 +1790,7 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
 {
     SAL_INFO( "vcl.gdi", "WinSalGraphics::AddTempDevFont(): " << OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    ImplFontAttributes aDFA;
+    FontAttributes aDFA;
     aDFA.SetFamilyName(rFontName);
     aDFA.SetQuality( 1000 );
     aDFA.SetBuiltInFontFlag( true );
@@ -1825,7 +1825,7 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     aDFA.SetEmbeddableFlag( false );
 
     /*
-    // TODO: improve ImplFontAttributes using the "font resource file"
+    // TODO: improve FontAttributes using the "font resource file"
     aDFS.maName = // using "FONTRES:" from file
     if( rFontName != aDFS.maName )
         aDFS.maMapName = aFontName;

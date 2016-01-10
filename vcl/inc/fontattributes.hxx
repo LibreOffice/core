@@ -31,11 +31,11 @@
 class OutputDevice;
 class FontSelectPattern;
 
-class ImplFontAttributes
+class FontAttributes
 {
 public:
-    explicit        ImplFontAttributes();
-    explicit        ImplFontAttributes( const FontSelectPattern& );
+    explicit        FontAttributes();
+    explicit        FontAttributes( const FontSelectPattern& );
 
     // device independent font functions
     const OUString& GetFamilyName() const                       { return maFamilyName; }
@@ -60,7 +60,7 @@ public:
 
     void            SetSymbolFlag(const bool bSymbolFlag )      { mbSymbolFlag = bSymbolFlag; }
 
-    bool            CompareDeviceIndependentFontAttributes(const ImplFontAttributes& rOther) const;
+    bool            CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const;
 
     // Device dependent functions
     int             GetQuality() const                          { return mnQuality; }

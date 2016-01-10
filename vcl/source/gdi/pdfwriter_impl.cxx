@@ -2240,9 +2240,9 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
     return m_pReferenceDevice;
 }
 
-static ImplFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
+static FontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
 {
-    ImplFontAttributes aDFA;
+    FontAttributes aDFA;
     aDFA.SetFamilyName( OUString::createFromAscii( rBuiltin.m_pName ) );
     aDFA.SetStyleName( OUString::createFromAscii( rBuiltin.m_pStyleName ) );
     aDFA.SetFamilyType( rBuiltin.m_eFamily );

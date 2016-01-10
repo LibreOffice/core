@@ -608,7 +608,7 @@ void Font::Merge( const vcl::Font& rFont )
     SetRelief( rFont.GetRelief() );
 }
 
-void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
+void Font::GetFontAttributes( FontAttributes& rAttrs ) const
 {
     rAttrs.SetFamilyName( mpImplFont->maFamilyName );
     rAttrs.SetStyleName( mpImplFont->maStyleName );
