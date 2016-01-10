@@ -192,7 +192,7 @@ SwEmbedObjectLink::~SwEmbedObjectLink()
                     xObject->changeState( nState );
                 }
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception&)
             {
             }
         }
@@ -357,7 +357,7 @@ bool SwOLENode::SavePersistentData()
                 // "unload" object
                 aOLEObj.xOLERef->changeState( embed::EmbedStates::LOADED );
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception&)
             {
             }
         }
@@ -549,8 +549,9 @@ bool SwOLENode::UpdateLinkURL_Impl()
                     if ( nCurState != embed::EmbedStates::LOADED )
                         xObj->changeState( nCurState );
                 }
-                catch( uno::Exception& )
-                {}
+                catch (const uno::Exception&)
+                {
+                }
             }
 
             if ( !bResult )
@@ -873,7 +874,7 @@ bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, cons
                     // setting object to loaded state will remove it from cache
                     xObj->changeState( embed::EmbedStates::LOADED );
                 }
-                catch ( uno::Exception& )
+                catch (const uno::Exception&)
                 {
                     bRet = false;
                 }
