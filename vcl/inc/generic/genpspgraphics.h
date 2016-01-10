@@ -34,7 +34,7 @@ class PhysicalFontCollection;
 namespace psp { struct JobData; class PrinterGfx; }
 
 class ServerFont;
-class ImplFontAttributes;
+class FontAttributes;
 class SalInfoPrinter;
 class GlyphCache;
 
@@ -69,7 +69,7 @@ public:
                                               Int32Vector& rWidths,
                                               Ucs2UIntMap& rUnicodeEnc );
 
-    static ImplFontAttributes Info2FontAttributes( const psp::FastPrintFontInfo& );
+    static FontAttributes Info2FontAttributes( const psp::FastPrintFontInfo& );
     static void             AnnounceFonts( PhysicalFontCollection*,
                                            const psp::FastPrintFontInfo& );
 
@@ -92,7 +92,7 @@ public:
 
     virtual void            SetTextColor( SalColor nSalColor ) override;
     virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
-    virtual void            GetFontAttributes( ImplFontAttributes*, int nFallbackLevel ) override;
+    virtual void            GetFontAttributes( FontAttributes*, int nFallbackLevel ) override;
     virtual const FontCharMapPtr GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
     virtual void            GetDevFontList( PhysicalFontCollection* ) override;

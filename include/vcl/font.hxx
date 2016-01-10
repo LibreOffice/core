@@ -33,7 +33,7 @@ class SvStream;
 #define FontAlign TextAlign
 
 class Impl_Font;
-class ImplFontAttributes;
+class FontAttributes;
 namespace vcl { class Font; }
 // need to first declare these outside the vcl namespace, or the friend declarations won't work right
 VCL_DLLPUBLIC SvStream&  ReadFont( SvStream& rIStm, vcl::Font& );
@@ -125,7 +125,7 @@ public:
     bool                IsWordLineMode() const;
 
     void                Merge( const Font& rFont );
-    void                GetFontAttributes( ImplFontAttributes& rAttrs ) const;
+    void                GetFontAttributes( FontAttributes& rAttrs ) const;
 
     Font&               operator=( const Font& );
     bool                operator==( const Font& ) const;

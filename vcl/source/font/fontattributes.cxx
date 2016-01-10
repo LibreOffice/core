@@ -63,7 +63,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::utl;
 
-bool ImplFontAttributes::CompareDeviceIndependentFontAttributes(const ImplFontAttributes& rOther) const
+bool FontAttributes::CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const
 {
     if (maFamilyName != rOther.maFamilyName)
         return false;
@@ -92,7 +92,7 @@ bool ImplFontAttributes::CompareDeviceIndependentFontAttributes(const ImplFontAt
     return true;
 }
 
-ImplFontAttributes::ImplFontAttributes()
+FontAttributes::FontAttributes()
     : mnWidth ( 0 )
     , mnOrientation( 0 )
     , mnAscent( 0 )
@@ -135,7 +135,7 @@ ImplFontAttributes::ImplFontAttributes()
     // empty
 }
 
-ImplFontAttributes::ImplFontAttributes( const FontSelectPattern& rFontSelData )
+FontAttributes::FontAttributes( const FontSelectPattern& rFontSelData )
     : mnWidth ( rFontSelData.mnWidth )
     , mnOrientation( (short)(rFontSelData.mnOrientation) )
     , mnAscent( 0 )
@@ -194,7 +194,7 @@ ImplFontAttributes::ImplFontAttributes( const FontSelectPattern& rFontSelData )
 }
 
 
-void ImplFontAttributes::ImplInitTextLineSize( const OutputDevice* pDev )
+void FontAttributes::ImplInitTextLineSize( const OutputDevice* pDev )
 {
     long nDescent = mnDescent;
     if ( nDescent <= 0 )
@@ -295,7 +295,7 @@ void ImplFontAttributes::ImplInitTextLineSize( const OutputDevice* pDev )
 
 }
 
-void ImplFontAttributes::ImplInitAboveTextLineSize()
+void FontAttributes::ImplInitAboveTextLineSize()
 {
     long nIntLeading = mnIntLeading;
     // TODO: assess usage of nLeading below (changed in extleading CWS)

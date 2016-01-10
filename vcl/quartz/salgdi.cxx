@@ -64,7 +64,7 @@ CoreTextFontFace::CoreTextFontFace( const CoreTextFontFace& rSrc )
         mpCharMap = rSrc.mpCharMap;
 }
 
-CoreTextFontFace::CoreTextFontFace( const ImplFontAttributes& rDFA, sal_IntPtr nFontId )
+CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFontId )
   : PhysicalFontFace( rDFA )
   , mnFontId( nFontId )
   , mbOs2Read( false )
@@ -306,7 +306,7 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
     // SAL_ DEBUG(std::hex << nSalColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
 }
 
-void AquaSalGraphics::GetFontAttributes( ImplFontAttributes* pFontAttributes, int /*nFallbackLevel*/ )
+void AquaSalGraphics::GetFontAttributes( FontAttributes* pFontAttributes, int /*nFallbackLevel*/ )
 {
     mpTextStyle->GetFontAttributes( *pFontAttributes );
 }

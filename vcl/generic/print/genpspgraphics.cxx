@@ -878,7 +878,7 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
         aInfo.m_aFamilyName = rFontName;
 
         // inform glyph cache of new font
-        ImplFontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
+        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
         aDFA.IncreaseQualityBy( 5800 );
 
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
@@ -913,14 +913,14 @@ void GenPspGraphics::ClearDevFontCache()
     GlyphCache::GetInstance().ClearFontCache();
 }
 
-void GenPspGraphics::GetFontAttributes( ImplFontAttributes *pFontAttributes, int )
+void GenPspGraphics::GetFontAttributes( FontAttributes *pFontAttributes, int )
 {
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     psp::PrintFontInfo aInfo;
 
     if (rMgr.getFontInfo (m_pPrinterGfx->GetFontID(), aInfo))
     {
-        ImplFontAttributes aDFA = Info2FontAttributes( aInfo );
+        FontAttributes aDFA = Info2FontAttributes( aInfo );
         *pFontAttributes = aDFA;
         pFontAttributes->SetBuiltInFontFlag( aDFA.IsBuiltInFont() );
         pFontAttributes->SetScalableFlag( true );
@@ -1083,9 +1083,9 @@ void GenPspGraphics::DoGetGlyphWidths( psp::fontID aFont,
     rMgr.getGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
-ImplFontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo& rInfo )
+FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo& rInfo )
 {
-    ImplFontAttributes aDFA;
+    FontAttributes aDFA;
     aDFA.SetFamilyName( rInfo.m_aFamilyName );
     aDFA.SetStyleName( rInfo.m_aStyleName );
     aDFA.SetFamilyType( rInfo.m_eFamilyStyle );

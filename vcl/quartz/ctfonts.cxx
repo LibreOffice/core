@@ -117,7 +117,7 @@ CoreTextStyle::~CoreTextStyle()
         CFRelease( mpStyleDict );
 }
 
-void CoreTextStyle::GetFontAttributes( ImplFontAttributes& rFontAttributes ) const
+void CoreTextStyle::GetFontAttributes( FontAttributes& rFontAttributes ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
@@ -130,7 +130,7 @@ void CoreTextStyle::GetFontAttributes( ImplFontAttributes& rFontAttributes ) con
     rFontAttributes.SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
     rFontAttributes.SetInternalLeading( lrint( fAscent - fCapHeight ) );
 
-    // since ImplFontAttributes::mnWidth is only used for stretching/squeezing fonts
+    // since FontAttributes::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
     rFontAttributes.SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
@@ -274,10 +274,10 @@ int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResu
     return (int)nByteLength;
 }
 
-ImplFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFontEnabled )
+FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFontEnabled )
 {
     // all CoreText fonts are device fonts that can rotate just fine
-    ImplFontAttributes rDFA;
+    FontAttributes rDFA;
     rDFA.SetOrientationFlag( true );
     rDFA.SetBuiltInFontFlag( true );
     rDFA.SetQuality( 0 );
@@ -415,7 +415,7 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
 
     bool bFontEnabled;
-    ImplFontAttributes rDFA = DevFontFromCTFontDescriptor( pFD, &bFontEnabled );
+    FontAttributes rDFA = DevFontFromCTFontDescriptor( pFD, &bFontEnabled );
 
     if( bFontEnabled)
     {
