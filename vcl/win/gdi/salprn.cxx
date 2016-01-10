@@ -370,7 +370,6 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     LONG            nRet;
     HWND            hWnd = 0;
     DWORD           nMode = DM_OUT_BUFFER;
-    sal_uLong           nDriverDataLen = 0;
     SalDriverData*  pOutBuffer = NULL;
     BYTE*           pInBuffer = NULL;
 
@@ -384,7 +383,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 
     // make Outputbuffer
-    nDriverDataLen              = sizeof(SalDriverData) + nSysJobSize-1;
+    const sal_Size nDriverDataLen = sizeof(SalDriverData) + nSysJobSize-1;
     pOutBuffer                  = (SalDriverData*)rtl_allocateZeroMemory( nDriverDataLen );
     pOutBuffer->mnSysSignature  = SAL_DRIVERDATA_SYSSIGN;
     // calculate driver data offset including structure padding
@@ -476,7 +475,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     // PaperBin
     if ( nFlags & JobSetFlags::PAPERBIN )
     {
-        sal_uLong nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
+        const DWORD nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
 
         if ( nCount && (nCount != GDI_ERROR) )
         {
@@ -485,7 +484,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             pSetupData->mnPaperBin = 0;
 
             // search the right bin and assign index to mnPaperBin
-            for( sal_uLong i = 0; i < nCount; i++ )
+            for( DWORD i = 0; i < nCount; ++i )
             {
                 if( CHOOSE_DEVMODE(dmDefaultSource) == pBins[ i ] )
                 {
@@ -508,9 +507,9 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
         }
         else
         {
-            sal_uLong   nPaperCount = ImplDeviceCaps( pPrinter, DC_PAPERS, NULL, pSetupData );
+            const DWORD nPaperCount = ImplDeviceCaps( pPrinter, DC_PAPERS, NULL, pSetupData );
             WORD*   pPapers = NULL;
-            sal_uLong   nPaperSizeCount = ImplDeviceCaps( pPrinter, DC_PAPERSIZE, NULL, pSetupData );
+            const DWORD nPaperSizeCount = ImplDeviceCaps( pPrinter, DC_PAPERSIZE, NULL, pSetupData );
             POINT*  pPaperSizes = NULL;
             if ( nPaperCount && (nPaperCount != GDI_ERROR) )
             {
@@ -524,7 +523,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             }
             if( nPaperSizeCount == nPaperCount && pPaperSizes && pPapers )
             {
-                for( sal_uLong i = 0; i < nPaperCount; i++ )
+                for( DWORD i = 0; i < nPaperCount; ++i )
                 {
                     if( pPapers[ i ] == CHOOSE_DEVMODE(dmPaperSize) )
                     {
@@ -743,7 +742,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     // PaperBin
     if ( nFlags & JobSetFlags::PAPERBIN )
     {
-        sal_uLong nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
+        const DWORD nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
 
         if ( nCount && (nCount != GDI_ERROR) )
         {
@@ -921,9 +920,9 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             default:
             {
                 short   nPaper = 0;
-                sal_uLong   nPaperCount = ImplDeviceCaps( pPrinter, DC_PAPERS, NULL, pSetupData );
+                const DWORD nPaperCount = ImplDeviceCaps( pPrinter, DC_PAPERS, NULL, pSetupData );
                 WORD*   pPapers = NULL;
-                sal_uLong   nPaperSizeCount = ImplDeviceCaps( pPrinter, DC_PAPERSIZE, NULL, pSetupData );
+                const DWORD nPaperSizeCount = ImplDeviceCaps( pPrinter, DC_PAPERSIZE, NULL, pSetupData );
                 POINT*  pPaperSizes = NULL;
                 DWORD   nLandscapeAngle = ImplDeviceCaps( pPrinter, DC_ORIENTATION, NULL, pSetupData );
                 if ( nPaperCount && (nPaperCount != GDI_ERROR) )
@@ -940,7 +939,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                 {
                     PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
                     // compare paper formats and select a good match
-                    for ( sal_uLong i = 0; i < nPaperCount; i++ )
+                    for ( DWORD i = 0; i < nPaperCount; ++i )
                     {
                         if ( aInfo.sloppyEqual(PaperInfo(pPaperSizes[i].x*10, pPaperSizes[i].y*10)))
                         {
@@ -955,7 +954,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                     if ( !nPaper && nLandscapeAngle != 0 )
                     {
                         PaperInfo aRotatedInfo(pSetupData->mnPaperHeight, pSetupData->mnPaperWidth);
-                        for ( sal_uLong i = 0; i < nPaperCount; i++ )
+                        for ( DWORD i = 0; i < nPaperCount; ++i )
                         {
                             if ( aRotatedInfo.sloppyEqual(PaperInfo(pPaperSizes[i].x*10, pPaperSizes[i].y*10)) )
                             {
@@ -1159,12 +1158,11 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
 
 int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 {
-    int nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
+    const DWORD nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
 
-    if( nRet != sal::static_int_cast<int>( GDI_ERROR ) )
-        return nRet * 10;
-    else
-        return 900; // guess
+    if( nRet != GDI_ERROR )
+        return static_cast<int>(nRet) * 10;
+    return 900; // guess
 }
 
 SalGraphics* WinSalInfoPrinter::AcquireGraphics()
