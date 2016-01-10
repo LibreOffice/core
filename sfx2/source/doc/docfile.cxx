@@ -418,14 +418,14 @@ Reference < XContent > SfxMedium::GetContent() const
         Reference < css::ucb::XContent > xContent;
 
         // tdf#95144 add a default css::ucb::XCommandEnvironment
-        // in order to have http and https protocol manage certificates correctly
+        // in order to have the WebDAV UCP provider manage https protocol certificates correctly
         css:: uno::Reference< task::XInteractionHandler > xIH(
                 css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
 
         css::uno::Reference< css::ucb::XProgressHandler > xProgress;
-        ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment(new comphelper::SimpleFileAccessInteraction( xIH ), xProgress);
+        ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment( new comphelper::SimpleFileAccessInteraction( xIH ), xProgress );
 
-        Reference < css::ucb::XCommandEnvironment > xEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
+        Reference < css::ucb::XCommandEnvironment > xEnv( static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY );
 
         const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_CONTENT, false);
         if ( pItem )
