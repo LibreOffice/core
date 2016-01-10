@@ -564,7 +564,7 @@ long VirtualDevice::GetFontExtLeading() const
 #endif
 
     LogicalFontInstance* pFontInstance = mpFontInstance;
-    ImplFontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
+    FontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
 
     return pFontAttributes->GetExternalLeading();
 }

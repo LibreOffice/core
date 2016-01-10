@@ -109,7 +109,7 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const vcl::Font& rFont
 #ifdef WNT
 FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
-    : ImplFontAttributes( rFontData )
+    : FontAttributes( rFontData )
     , mnWidth( rSize.Width() )
     , mnHeight( rSize.Height() )
     , mfExactHeight( fExactHeight )

@@ -46,7 +46,7 @@
 #include <unordered_map>
 
 class AquaSalFrame;
-class ImplFontAttributes;
+class FontAttributes;
 class CoreTextStyle;
 class XorEmulation;
 
@@ -57,7 +57,7 @@ typedef std::vector<unsigned char> ByteVector;
 class CoreTextFontFace : public PhysicalFontFace
 {
 public:
-                                    CoreTextFontFace( const ImplFontAttributes&, sal_IntPtr nFontID );
+                                    CoreTextFontFace( const FontAttributes&, sal_IntPtr nFontID );
     virtual                         ~CoreTextFontFace();
 
     PhysicalFontFace*               Clone() const override;
@@ -94,7 +94,7 @@ public:
 
     SalLayout* GetTextLayout( void ) const;
 
-    void       GetFontAttributes( ImplFontAttributes& ) const;
+    void       GetFontAttributes( FontAttributes& ) const;
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
@@ -338,7 +338,7 @@ public:
     // set the font
     virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontAttributes( ImplFontAttributes*, int nFallbackLevel ) override;
+    virtual void            GetFontAttributes( FontAttributes*, int nFallbackLevel ) override;
     // get the repertoire of the current font
     virtual const FontCharMapPtr GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;

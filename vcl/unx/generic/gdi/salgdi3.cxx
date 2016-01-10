@@ -136,7 +136,7 @@ void X11SalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 }
 
 void
-X11SalGraphics::GetFontAttributes( ImplFontAttributes *pFontAttributes, int nFallbackLevel )
+X11SalGraphics::GetFontAttributes( FontAttributes *pFontAttributes, int nFallbackLevel )
 {
     mxTextRenderImpl->GetFontAttributes(pFontAttributes, nFallbackLevel);
 }
