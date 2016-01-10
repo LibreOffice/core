@@ -118,7 +118,7 @@ struct SbxVarEntry;
 
 class BASIC_DLLPUBLIC SbxArray : public SbxBase
 {
-    typedef std::vector<SbxVarEntry*> VarEntriesType;
+    typedef std::vector<SbxVarEntry> VarEntriesType;
 
 // #100883 Method to set method directly to parameter array
     friend class SbMethod;
