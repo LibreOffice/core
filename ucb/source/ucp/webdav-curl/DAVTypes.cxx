@@ -10,6 +10,7 @@
 
 #include "DAVTypes.hxx"
 
+#include "CurlUri.hxx"
 #include "../inc/urihelper.hxx"
 
 #include <osl/time.h>
@@ -18,7 +19,7 @@
 using namespace http_dav_ucp;
 using namespace com::sun::star;
 
-// DAVCapabilities implementation
+// DAVOptions implementation
 
 DAVOptions::DAVOptions() :
     m_isResourceFound( false ),
@@ -62,6 +63,84 @@ bool DAVOptions::operator==( const DAVOptions& rOpts ) const
         m_nStaleTime == rOpts.m_nStaleTime &&
         m_sURL == rOpts.m_sURL &&
         m_sRedirectedURL == rOpts.m_sRedirectedURL;
+}
+
+
+// DAVOptionsCache implementation
+
+DAVOptionsCache::DAVOptionsCache()
+{
+}
+
+
+DAVOptionsCache::~DAVOptionsCache()
+{
+}
+
+
+bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOptions )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
+    normalizeURLLastChar( aEncodedUrl );
+
+    // search the URL in the static map
+    DAVOptionsMap::iterator it;
+    it = m_aTheCache.find( aEncodedUrl );
+    if ( it == m_aTheCache.end() )
+        return false;
+    else
+    {
+        // check if the capabilities are stale, before restoring
+        TimeValue t1;
+        osl_getSystemTime( &t1 );
+        if ( (*it).second.getStaleTime() < t1.Seconds )
+        {
+            // if stale, remove from cache, do not restore
+            removeDAVOptions( rURL );
+            return false;
+            // return false instead
+        }
+        rDAVOptions = (*it).second;
+        return true;
+    }
+}
+
+
+void DAVOptionsCache::removeDAVOptions( const OUString & rURL )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
+    normalizeURLLastChar( aEncodedUrl );
+
+    DAVOptionsMap::iterator it;
+    it = m_aTheCache.find( aEncodedUrl );
+    if ( it != m_aTheCache.end() )
+    {
+        m_aTheCache.erase( it );
+    }
+}
+
+
+void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    OUString aURL( rDAVOptions.getURL() );
+
+    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(aURL) ) );
+    normalizeURLLastChar( aEncodedUrl );
+    rDAVOptions.setURL( aEncodedUrl );
+
+// unchanged, it may be used to access a server
+    OUString aRedirURL( rDAVOptions.getRedirectedURL() );
+    rDAVOptions.setRedirectedURL( aRedirURL );
+
+    TimeValue t1;
+    osl_getSystemTime( &t1 );
+    rDAVOptions.setStaleTime( t1.Seconds + nLifeTime );
+
+    m_aTheCache[ aEncodedUrl ] = rDAVOptions;
 }
 
 
