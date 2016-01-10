@@ -1586,14 +1586,18 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
     if (!xPropSet.is())
         return *this;
 
+    bool bIsChart(false);
     OUString clsid;
     xPropSet->getPropertyValue("CLSID") >>= clsid;
-    assert(!clsid.isEmpty());
-    SvGlobalName aClassID;
-    bool const isValid(aClassID.MakeId(clsid));
-    assert(isValid); (void)isValid;
+    if (!clsid.isEmpty())
+    {
+        SvGlobalName aClassID;
+        bool const isValid = aClassID.MakeId(clsid);
+        assert(isValid); (void)isValid;
+        bIsChart = SotExchange::IsChart(aClassID);
+    }
 
-    if (SotExchange::IsChart(aClassID))
+    if (bIsChart)
     {
         Reference< XChartDocument > xChartDoc;
         xPropSet->getPropertyValue("Model") >>= xChartDoc;
@@ -1603,154 +1607,160 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
         ChartExport aChartExport( mnXmlNamespace, GetFS(), xModel, GetFB(), GetDocumentType() );
         static sal_Int32 nChartCount = 0;
         aChartExport.WriteChartObj( xShape, ++nChartCount );
+        return *this;
+    }
+
+    uno::Reference<embed::XEmbeddedObject> const xObj(
+        xPropSet->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
+
+    if (!xObj.is())
+    {
+        SAL_WARN("oox", "ShapeExport::WriteOLE2Shape: no object");
+        return *this;
+    }
+
+    uno::Reference<beans::XPropertySet> const xParent(
+        uno::Reference<container::XChild>(xObj, uno::UNO_QUERY)->getParent(),
+        uno::UNO_QUERY);
+
+    uno::Sequence<beans::PropertyValue> grabBag;
+    xParent->getPropertyValue("InteropGrabBag") >>= grabBag;
+
+    OUString const entryName(
+        uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName());
+    OUString progID;
+
+    for (auto const& it : grabBag)
+    {
+        if (it.Name == "EmbeddedObjects")
+        {
+            uno::Sequence<beans::PropertyValue> objects;
+            it.Value >>= objects;
+            for (auto const& object : objects)
+            {
+                if (object.Name == entryName)
+                {
+                    uno::Sequence<beans::PropertyValue> props;
+                    object.Value >>= props;
+                    for (auto const& prop : props)
+                    {
+                        if (prop.Name == "ProgID")
+                        {
+                            prop.Value >>= progID;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    OUString sMediaType;
+    OUString sRelationType;
+    OUString sSuffix;
+    const char * pProgID(nullptr);
+
+    uno::Reference<io::XInputStream> const xInStream =
+        oox::GetOLEObjectStream(
+            mpFB->getComponentContext(), xObj, progID,
+            sMediaType, sRelationType, sSuffix, pProgID);
+
+    if (!xInStream.is())
+    {
+        return *this;
+    }
+
+    OString anotherProgID;
+    if (!pProgID && !progID.isEmpty())
+    {
+        anotherProgID = OUStringToOString(progID, RTL_TEXTENCODING_UTF8);
+        pProgID = anotherProgID.getStr();
+    }
+
+    assert(!sMediaType.isEmpty());
+    assert(!sRelationType.isEmpty());
+    assert(!sSuffix.isEmpty());
+
+    OUString sFileName = "embeddings/oleObject" + OUString::number(mnEmbeddeDocumentCounter++) + "." + sSuffix;
+    uno::Reference<io::XOutputStream> const xOutStream(
+        mpFB->openFragmentStream(
+            OUString::createFromAscii(GetComponentDir()) + "/" + sFileName,
+            sMediaType));
+    assert(xOutStream.is()); // no reason why that could fail
+
+    try {
+        ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
+    } catch (uno::Exception const& e) {
+        SAL_WARN("oox", "ShapeExport::WriteOLEObject: exception: " << e.Message);
+    }
+
+    OUString const sRelId = mpFB->addRelation(
+        mpFS->getOutputStream(), sRelationType,
+        OUString::createFromAscii(GetRelationCompPrefix()) + sFileName);
+
+    mpFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
+
+    mpFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
+
+    mpFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+                           XML_id,     I32S( GetNewShapeID( xShape ) ),
+                           XML_name,   IDS(Object),
+                           FSEND );
+
+    mpFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
+                           FSEND );
+
+    if (GetDocumentType() == DOCUMENT_PPTX)
+        mpFS->singleElementNS( mnXmlNamespace, XML_nvPr,
+                               FSEND );
+    mpFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
+
+    WriteShapeTransformation( xShape, mnXmlNamespace );
+
+    mpFS->startElementNS( XML_a, XML_graphic, FSEND );
+    mpFS->startElementNS( XML_a, XML_graphicData,
+                          XML_uri, "http://schemas.openxmlformats.org/presentationml/2006/ole",
+                          FSEND );
+    if (pProgID)
+    {
+        mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
+                          XML_progId, pProgID,
+                          FSNS(XML_r, XML_id), USS( sRelId ),
+                          XML_spid, "",
+                          FSEND );
     }
     else
     {
-        uno::Reference<embed::XEmbeddedObject> const xObj(
-            xPropSet->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
-
-        uno::Reference<beans::XPropertySet> const xParent(
-            uno::Reference<container::XChild>(xObj, uno::UNO_QUERY)->getParent(),
-            uno::UNO_QUERY);
-
-        uno::Sequence<beans::PropertyValue> grabBag;
-        xParent->getPropertyValue("InteropGrabBag") >>= grabBag;
-
-        OUString const entryName(
-            uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName());
-        OUString progID;
-
-        for (auto const& it : grabBag)
-        {
-            if (it.Name == "EmbeddedObjects")
-            {
-                uno::Sequence<beans::PropertyValue> objects;
-                it.Value >>= objects;
-                for (auto const& object : objects)
-                {
-                    if (object.Name == entryName)
-                    {
-                        uno::Sequence<beans::PropertyValue> props;
-                        object.Value >>= props;
-                        for (auto const& prop : props)
-                        {
-                            if (prop.Name == "ProgID")
-                            {
-                                prop.Value >>= progID;
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-
-        OUString sMediaType;
-        OUString sRelationType;
-        OUString sSuffix;
-        const char * pProgID(nullptr);
-
-        uno::Reference<io::XInputStream> const xInStream =
-            oox::GetOLEObjectStream(
-                mpFB->getComponentContext(), xObj, progID,
-                sMediaType, sRelationType, sSuffix, pProgID);
-
-        if (!xInStream.is())
-        {
-            return *this;
-        }
-
-        OString anotherProgID;
-        if (!pProgID && !progID.isEmpty())
-        {
-            anotherProgID = OUStringToOString(progID, RTL_TEXTENCODING_UTF8);
-            pProgID = anotherProgID.getStr();
-        }
-
-        assert(!sMediaType.isEmpty());
-        assert(!sRelationType.isEmpty());
-        assert(!sSuffix.isEmpty());
-
-        OUString sFileName = "embeddings/oleObject" + OUString::number(mnEmbeddeDocumentCounter++) + "." + sSuffix;
-        uno::Reference<io::XOutputStream> const xOutStream(
-            mpFB->openFragmentStream(
-                OUString::createFromAscii(GetComponentDir()) + "/" + sFileName,
-                sMediaType));
-        assert(xOutStream.is()); // no reason why that could fail
-
-        try {
-            ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
-        } catch (uno::Exception const& e) {
-            SAL_WARN("oox", "ShapeExport::WriteOLEObject: exception: " << e.Message);
-        }
-
-        OUString const sRelId = mpFB->addRelation(
-            mpFS->getOutputStream(), sRelationType,
-            OUString::createFromAscii(GetRelationCompPrefix()) + sFileName);
-
-        mpFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
-
-        mpFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
-
-        mpFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                               XML_id,     I32S( GetNewShapeID( xShape ) ),
-                               XML_name,   IDS(Object),
-                               FSEND );
-
-        mpFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
-                               FSEND );
-
-        if (GetDocumentType() == DOCUMENT_PPTX)
-            mpFS->singleElementNS( mnXmlNamespace, XML_nvPr,
-                                   FSEND );
-        mpFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
-
-        WriteShapeTransformation( xShape, mnXmlNamespace );
-
-        mpFS->startElementNS( XML_a, XML_graphic, FSEND );
-        mpFS->startElementNS( XML_a, XML_graphicData,
-                              XML_uri, "http://schemas.openxmlformats.org/presentationml/2006/ole",
-                              FSEND );
-        if (pProgID)
-        {
-            mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
-                              XML_progId, pProgID,
-                              FSNS(XML_r, XML_id), USS( sRelId ),
-                              XML_spid, "",
-                              FSEND );
-        }
-        else
-        {
-            mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
+        mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
 //?                                              XML_name, "Document",
-                              FSNS(XML_r, XML_id), USS( sRelId ),
-                              // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
-                              XML_spid, "",
-                              FSEND );
-        }
-
-        mpFS->singleElementNS( mnXmlNamespace, XML_embed, FSEND );
-
-        // pic element
-        SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
-        // The spec doesn't allow <p:pic> here, but PowerPoint requires it.
-        bool bEcma = mpFB->getVersion() == oox::core::ECMA_DIALECT;
-        if (pSdrOLE2 && dynamic_cast<const SdrOle2Obj*>( pSdrOLE2) != nullptr && bEcma)
-        {
-            const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
-            if (pGraphic)
-                WriteGraphicObjectShapePart( xShape, pGraphic );
-        }
-
-        mpFS->endElementNS( mnXmlNamespace, XML_oleObj );
-
-        mpFS->endElementNS( XML_a, XML_graphicData );
-        mpFS->endElementNS( XML_a, XML_graphic );
-
-        mpFS->endElementNS( mnXmlNamespace, XML_graphicFrame );
+                          FSNS(XML_r, XML_id), USS( sRelId ),
+                          // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
+                          XML_spid, "",
+                          FSEND );
     }
+
+    mpFS->singleElementNS( mnXmlNamespace, XML_embed, FSEND );
+
+    // pic element
+    SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
+    // The spec doesn't allow <p:pic> here, but PowerPoint requires it.
+    bool bEcma = mpFB->getVersion() == oox::core::ECMA_DIALECT;
+    if (pSdrOLE2 && dynamic_cast<const SdrOle2Obj*>( pSdrOLE2) != nullptr && bEcma)
+    {
+        const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
+        if (pGraphic)
+            WriteGraphicObjectShapePart( xShape, pGraphic );
+    }
+
+    mpFS->endElementNS( mnXmlNamespace, XML_oleObj );
+
+    mpFS->endElementNS( XML_a, XML_graphicData );
+    mpFS->endElementNS( XML_a, XML_graphic );
+
+    mpFS->endElementNS( mnXmlNamespace, XML_graphicFrame );
+
     return *this;
 }
 
