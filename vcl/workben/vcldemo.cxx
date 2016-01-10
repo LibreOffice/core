@@ -1288,7 +1288,8 @@ public:
         drawBackground(rDev, aWholeWin);
 
         if (!bVDev /* want everything in the vdev */ &&
-            mnSelectedRenderer >= 0)
+            mnSelectedRenderer >= 0 &&
+            static_cast<sal_uInt32>(mnSelectedRenderer) < maRenderers.size())
         {
             aCtx.meStyle = RENDER_EXPANDED;
             RegionRenderer * r = maRenderers[mnSelectedRenderer];
