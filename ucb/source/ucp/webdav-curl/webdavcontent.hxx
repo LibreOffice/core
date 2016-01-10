@@ -76,7 +76,9 @@ class Content : public ::ucbhelper::ContentImplHelper,
     std::unique_ptr< DAVResourceAccess > m_xResAccess;
     std::unique_ptr< CachableContentProperties > m_xCachedProps; // locally cached props
     OUString     m_aEscapedTitle;
+    // resource type for general DAV methods
     ResourceType      m_eResourceType;
+    // resource type for general LOCK method only
     ResourceType      m_eResourceTypeForLocks;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
     rtl::Reference< DAVSessionFactory > m_rSessionFactory;
@@ -262,6 +264,17 @@ public:
                        const ContentProperties& rData,
                        const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
                        const OUString& rContentId );
+
+    /// Use OPTIONS method to retrieve the type of the Web resource
+    /// @throws css::uno::Exception
+    void getResourceOptions( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+                             DAVOptions& rDAVOptions,
+                             const std::unique_ptr< DAVResourceAccess > & rResAccess );
+
+    /// @throws css::uno::Exception
+    void getResourceOptions( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+                             DAVOptions& rDAVOptions );
+
 };
 
 }
