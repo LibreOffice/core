@@ -38,6 +38,7 @@
 #include "osl/doublecheckedlocking.h"
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <officecfg/Inet.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
@@ -92,6 +93,12 @@
 using namespace com::sun::star;
 using namespace webdav_ucp;
 
+// Static value, to manage a simple OPTIONS cache
+// Key is the URL, element is the DAVOptions resulting from an OPTIONS call.
+// Cached DAVOptions have a lifetime that depends on the errors received or not received
+// and on the value of received options.
+static DAVOptionsCache aStaticDAVOptionsCache;
+
 
 // Content Implementation.
 
@@ -114,6 +121,7 @@ Content::Content(
 {
     try
     {
+        initOptsCacheLifeTime();
         m_xResAccess.reset( new DAVResourceAccess(
                 rxContext,
                 rSessionFactory,
@@ -147,6 +155,7 @@ Content::Content(
 {
     try
     {
+        initOptsCacheLifeTime();
         m_xResAccess.reset( new DAVResourceAccess(
             rxContext, rSessionFactory, Identifier->getContentIdentifier() ) );
     }
@@ -162,6 +171,34 @@ Content::Content(
 // virtual
 Content::~Content()
 {
+}
+
+
+void Content::initOptsCacheLifeTime()
+{
+    // see description in
+    // officecfg/registry/schema/org/openoffice/Inet.xcs
+    // for use of these filed values.
+    sal_uInt32 nAtime;
+    nAtime = officecfg::Inet::Settings::OptsCacheLifeImplWeb::get( m_xContext );
+    m_nOptsCacheLifeImplWeb = std::max( sal_uInt32( 0 ),
+                                        std::min( nAtime, sal_uInt32( 3600 ) ) );
+
+    nAtime = officecfg::Inet::Settings::OptsCacheLifeDAV::get( m_xContext );
+    m_nOptsCacheLifeDAV = std::max( sal_uInt32( 0 ),
+                                    std::min( nAtime, sal_uInt32( 3600 ) ) );
+
+    nAtime = officecfg::Inet::Settings::OptsCacheLifeDAVLocked::get( m_xContext );
+    m_nOptsCacheLifeDAVLocked = std::max( sal_uInt32( 0 ),
+                                    std::min( nAtime, sal_uInt32( 3600 ) ) );
+
+    nAtime = officecfg::Inet::Settings::OptsCacheLifeNotImpl::get( m_xContext );
+    m_nOptsCacheLifeNotImpl = std::max( sal_uInt32( 0 ),
+                                              std::min( nAtime, sal_uInt32( 43200 ) ) );
+
+    nAtime = officecfg::Inet::Settings::OptsCacheLifeNotFound::get( m_xContext );
+    m_nOptsCacheLifeNotFound = std::max( sal_uInt32( 0 ),
+                                              std::min( nAtime, sal_uInt32( 30 ) ) );
 }
 
 

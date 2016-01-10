@@ -163,6 +163,38 @@
         </info>
 	<value>60</value>
       </prop>
+      <!-- WebDAV OPTIONS cache lifetime time values -->
+      <prop oor:name="OptsCacheLifeImplWeb" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource is Web only, implementing OPTIONS. Time in seconds. Min. 0 sec (no caching) max. 3600 sec (1h), default to 300 (5m).</desc>
+        </info>
+	<value>300</value>
+      </prop>
+      <prop oor:name="OptsCacheLifeDAV" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource is WebDAV. Time in seconds. Min. 0 sec (no caching) max. 3600 sec (1h), default to 60 (1m).</desc>
+        </info>
+	<value>60</value>
+      </prop>
+      <prop oor:name="OptsCacheLifeDAVLocked" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource is WebDAV and the resource is locked. Time in seconds. Min. 0 sec (no caching) max. 3600 sec (1h), default to 600 (10m).</desc>
+        </info>
+	<value>600</value>
+      </prop>
+      <prop oor:name="OptsCacheLifeNotImpl" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource does not implement OPTIONS method. Time in seconds. Min. 0 sec (no caching) max. 43200 sec (12h), default to 3600 (1h)</desc>
+        </info>
+	<value>3600</value>
+      </prop>
+      <prop oor:name="OptsCacheLifeNotFound" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the Web/DAV resource OPTIONS cache lifetime, when the web resource is not found on server. Time in seconds. Min. 0 sec (no caching) max. 30 sec, default to 15 (15 sec).</desc>
+        </info>
+	<value>15</value>
+      </prop>
+      <!-- End of WebDAV OPTIONS cache lifetime time values -->
     </group>
   </component>
 </oor:component-schema>
