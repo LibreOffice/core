@@ -29,12 +29,15 @@ namespace
         void DAVTypesCheckReset( webdav_ucp::DAVOptions aDavType );
         void DAVTypesTest();
 
+        void DAVOptsCacheTests();
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE( webdav_opts_test );
         CPPUNIT_TEST( DAVTypesTest );
+        CPPUNIT_TEST( DAVOptsCacheTests );
         CPPUNIT_TEST_SUITE_END();
     };                          // class webdav_local_test
 
@@ -245,6 +248,31 @@ namespace
 
         aDavOpt.setURL( aURL );
         CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
+    }
+
+    void webdav_opts_test::DAVOptsCacheTests()
+    {
+        // define a local cache to test
+        webdav_ucp::DAVOptionsCache aDAVOptsCache;
+        // the value to cache
+        webdav_ucp::DAVOptions aDavOpt;
+        // the returned value to test
+        webdav_ucp::DAVOptions aDavOptCached;
+        // init the values
+        OUString aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
+        OUString aURL = "http://a%20fake%20url/to%20test/another-url";
+        OUString aRedirectedURL = "http://a%20fake%20url/to%20test/another-url/redirected";
+        aDavOpt.setURL( aURL );
+        aDavOpt.setRedirectedURL( aRedirectedURL );
+        aDavOpt.setResourceFound();
+        aDavOpt.setClass1();
+        aDavOpt.setClass2();
+        aDavOpt.setClass3();
+        aDavOpt.setAllowedMethods( aAllowedMethods );
+        // add to cache
+        aDAVOptsCache.addDAVOptions( aDavOpt, 30000 );
+        CPPUNIT_ASSERT_EQUAL( true ,aDAVOptsCache.getDAVOptions( aURL, aDavOptCached ) );
+        CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptCached );
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION( webdav_opts_test );
