@@ -98,6 +98,23 @@ class Content : public ::ucbhelper::ContentImplHelper,
     bool              m_bCollection;
     bool              m_bDidGetOrHead;
     std::vector< OUString > m_aFailedPropNames;
+    // Options Cache lifetime
+    // for web site implementing OPTIONS, but not dav
+    sal_uInt32 m_nOptsCacheLifeImplWeb;
+    // for WebDAV site where OPTIONS is mandatory
+    sal_uInt32 m_nOptsCacheLifeDAV;
+    // same as above, but when the resource is locked by us
+    sal_uInt32 m_nOptsCacheLifeDAVLocked;
+// For web site not implementing OPTIONS
+    // during this time we assume the site doesn't turn to WebDAV
+    // but remains a simple Web
+    sal_uInt32 m_nOptsCacheLifeNotImpl;
+    // When resource is not found
+    // may be the resource is unavailable only briefly?
+    // so better have this small
+    sal_uInt32 m_nOptsCacheLifeNotFound;
+
+    void initOptsCacheLifeTime();
 
 private:
     virtual css::uno::Sequence< css::beans::Property >
