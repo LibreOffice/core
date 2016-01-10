@@ -3525,4 +3525,106 @@ Content::ResourceType Content::getResourceType(
     return ret;
 }
 
+
+void Content::getResourceOptions(
+                    const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+                    DAVOptions& rDAVOptions,
+                    const std::unique_ptr< DAVResourceAccess > & rResAccess )
+    throw ( css::uno::Exception, std::exception )
+{
+    try
+    {
+        rResAccess->OPTIONS( rDAVOptions, xEnv );
+        // IMPORTANT:the correctly implemented server will answer without errors, even if the resource is not present
+    }
+    catch ( DAVException const & e )
+    {
+        rResAccess->resetUri();
+
+        switch( e.getError() )
+        {
+            case DAVException::DAV_HTTP_TIMEOUT:
+            case DAVException::DAV_HTTP_CONNECT:
+            {
+                // something bad happened to the connection
+                // not same as not found, this instead happens when the server does'n exist or does'n aswer at all
+                // probably a new bit stating 'timed out' should be added to opts var?
+                // in any case abort the command
+                cancelCommandExecution( e, xEnv );
+                // unreachable
+            }
+            break;
+            case DAVException::DAV_HTTP_AUTH:
+            {
+                SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException Authentication error for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                // - the remote site is a WebDAV with special configuration: read/only for read operations
+                //   and read/write for write operations, the user is not allowed to lock/write and
+                //   she cancelled the credentials request.
+                //   this is not actually an error, it means only that for current user this is a standard web,
+                //   though possibly DAV enabled
+            }
+            break;
+            case DAVException::DAV_HTTP_ERROR:
+            {
+                switch( e.getStatus() )
+                {
+                    case SC_FORBIDDEN:
+                    {
+                        SAL_WARN( "ucb.ucp.webdav","OPTIONS - Forbidden for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                        rDAVOptions.setResourceFound(); // means it exists, but it's not DAV
+                    }
+                    break;
+                    case SC_BAD_REQUEST:
+                    {
+                        SAL_WARN( "ucb.ucp.webdav","OPTIONS - Bad request for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                        rDAVOptions.setResourceFound(); // means it exists, but it's not DAV
+                    }
+                    break;
+                    case SC_NOT_IMPLEMENTED:
+                    case SC_METHOD_NOT_ALLOWED:
+                    {
+                        // OPTIONS method must be implemented in DAV
+                        // resource is NON_DAV, or not advertising it
+                        SAL_WARN( "ucb.ucp.webdav","OPTIONS - Method not implemented or not allowed for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                        rDAVOptions.setResourceFound(); // means it exists, but it's not DAV
+                    }
+                    break;
+                    case SC_NOT_FOUND:
+                    {
+                        SAL_WARN( "ucb.ucp.webdav", "OPTIONS - Resource not found for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                    }
+                    break;
+                    default:
+                        break;
+                }
+            }
+            break;
+            default: // leave the resource type as UNKNOWN, for now
+                // it means this will be managed as a standard http site
+                SAL_WARN( "ucb.ucp.webdav","OPTIONS - DAVException for URL <" << m_xIdentifier->getContentIdentifier() << ">, DAV error: "
+                          << e.getError() << ", HTTP error: "<<e.getStatus() );
+                break;
+        }
+    }
+}
+
+
+void Content::getResourceOptions(
+                    const uno::Reference< ucb::XCommandEnvironment >& xEnv,
+                    DAVOptions& rDAVOptions )
+    throw ( uno::Exception, std::exception )
+{
+    std::unique_ptr< DAVResourceAccess > xResAccess;
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+    }
+    getResourceOptions( xEnv, rDAVOptions, xResAccess );
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+    }
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
