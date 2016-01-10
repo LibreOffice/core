@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">MathML 1.01</value>
+            <value xml:lang="en-US">MathML 2.0</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>math_MathML_XML_Math</value></prop>

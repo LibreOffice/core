@@ -23,7 +23,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>MathML XML (Math)</value></prop>
         <prop oor:name="UIName">
-            <value>MathML 1.01</value>
+            <value>MathML 2.0</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

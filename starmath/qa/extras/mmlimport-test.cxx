@@ -48,7 +48,7 @@ private:
                                            OUString(),
                                            SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE,
                                            SotClipboardFormatId::STARCALC_8,
-                                           "MathML 1.01",
+                                           "MathML 2.0",
                                            0,
                                            OUString(),
                                            OUString(),
