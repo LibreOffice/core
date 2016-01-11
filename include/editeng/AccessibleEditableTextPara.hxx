@@ -344,7 +344,7 @@ namespace accessibility
         void _correctValues( const sal_Int32 nIndex, css::uno::Sequence< css::beans::PropertyValue >& rValues );
         sal_Int32 SkipField(sal_Int32 nIndex, bool bForward);
         // get overlapped field, extend return string. Only extend forward for now
-        bool ExtendByField( css::accessibility::TextSegment& Segment );
+        void ExtendByField( css::accessibility::TextSegment& Segment );
         OUString GetFieldTypeNameAtIndex(sal_Int32 nIndex);
         // the paragraph index in the edit engine (guarded by solar mutex)
         sal_Int32   mnParagraphIndex;
