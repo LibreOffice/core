@@ -229,7 +229,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
     return true;
 }
 
-bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
+void SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                                         SfxPoolItem& rItem )
 {
     const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
@@ -249,7 +249,6 @@ bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
         if( bUndoIdInitialized )
             bUndoIdInitialized = true;
     }
-    return 0 != nWhich;
 }
 
 bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL )

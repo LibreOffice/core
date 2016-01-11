@@ -148,7 +148,7 @@ public:
 
     virtual ~SvxNumberFormat();
 
-    SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
+    void            Store(SvStream &rStream, FontToSubsFontConverter pConverter);
 
     SvxNumberFormat& operator=( const SvxNumberFormat&  );
     bool            operator==( const SvxNumberFormat&  ) const;
@@ -265,7 +265,7 @@ public:
 
     SvxNumRule&             operator=( const SvxNumRule&  );
 
-    SvStream&               Store(SvStream &rStream);
+    void                    Store(SvStream &rStream);
     const SvxNumberFormat*  Get(sal_uInt16 nLevel)const;
     const SvxNumberFormat&  GetLevel(sal_uInt16 nLevel)const;
     void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, bool bIsValid = true);
@@ -286,7 +286,7 @@ public:
 
     SvxNumRuleType          GetNumRuleType() const { return eNumberingType; }
 
-    bool                    UnLinkGraphics();
+    void                    UnLinkGraphics();
 };
 
 class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem

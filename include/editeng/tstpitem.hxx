@@ -72,8 +72,6 @@ public:
                         }
 
     // For the SortedArray:
-    bool            operator==( const SvxTabStop& rTS ) const
-                        { return nTabPos == rTS.nTabPos; }
     bool            operator <( const SvxTabStop& rTS ) const
                         { return nTabPos < rTS.nTabPos; }
 
