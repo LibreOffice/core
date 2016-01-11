@@ -23,7 +23,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sallayout.hxx>
 // Module
-#include "unx/gcach_ftyp.hxx"
+#include "unx/freetype_glyphcache.hxx"
 #include "generic/glyphcache.hxx"
 #include <graphite_features.hxx>
 #include <graphite_serverfont.hxx>

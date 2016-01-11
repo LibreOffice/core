@@ -20,7 +20,7 @@
 
 #include <vcl/fontcharmap.hxx>
 
-#include "unx/gcach_ftyp.hxx"
+#include "unx/freetype_glyphcache.hxx"
 
 #include "vcl/svapp.hxx"
 #include <fontinstance.hxx>
