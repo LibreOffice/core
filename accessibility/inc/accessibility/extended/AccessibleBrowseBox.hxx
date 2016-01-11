@@ -215,7 +215,6 @@ public:
 
     /// returns the AccessibleContext belonging to this Accessible
     inline AccessibleBrowseBox*            getContext()         { return m_pContext; }
-    inline const AccessibleBrowseBox*      getContext() const   { return m_pContext; }
 
 protected:
     virtual ~AccessibleBrowseBoxAccess();
