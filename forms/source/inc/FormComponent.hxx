@@ -1106,7 +1106,7 @@ protected:
     void        initFromField( const css::uno::Reference< css::sdbc::XRowSet>& _rxForm );
 
 private:
-    bool    connectToField( const css::uno::Reference< css::sdbc::XRowSet>& _rxForm );
+    void        connectToField( const css::uno::Reference< css::sdbc::XRowSet>& _rxForm );
     void        resetField();
 
     /** does a new validation of the control value

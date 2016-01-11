@@ -254,7 +254,7 @@ namespace frm
             @precond
                 canMoveLeft()
         */
-        bool        impl_moveLeft_throw() const;
+        void        impl_moveLeft_throw() const;
 
         /** moves our cursor one position to the right, caring for different possible
             cursor states.
@@ -264,7 +264,7 @@ namespace frm
             @precond
                 canMoveRight()
         */
-        bool        impl_moveRight_throw( ) const;
+        void        impl_moveRight_throw( ) const;
 
         /** impl-version of commitCurrentRecord, which can be called without caring for
             an output parameter, and within const-contexts

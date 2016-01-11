@@ -1924,7 +1924,7 @@ void OBoundControlModel::resetField()
     m_nFieldType = DataType::OTHER;
 }
 
-bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
+void OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::connectToField: invalid call (have an external binding)!" );
     // if there's a connection to the database
@@ -1992,7 +1992,7 @@ bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
         }
 
     }
-    return hasField();
+    hasField();
 }
 
 void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )

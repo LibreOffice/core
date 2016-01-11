@@ -180,11 +180,6 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
     }
 }
 
-bool OGroup::operator==( const OGroup& rGroup ) const
-{
-    return m_aGroupName.equals(rGroup.GetGroupName());
-}
-
 Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 {
     sal_Int32 nLen = m_aCompArray.size();

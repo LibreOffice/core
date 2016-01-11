@@ -95,14 +95,14 @@ const OUString PathExpression::_getExpressionForEvaluation() const
     return sExpr;
 }
 
-bool PathExpression::evaluate( const EvaluationContext& rContext )
+void PathExpression::evaluate( const EvaluationContext& rContext )
 {
     // for simple expression we don't need to re-bind (if we were bound before)
     // (we will evaluate empty expressions, since they are interpreted as ".")
     if( mxResult.is() && isSimpleExpression() )
-        return true;
+        return;
 
-    bool bResult = _evaluate( rContext, _getExpressionForEvaluation() );
+    _evaluate( rContext, _getExpressionForEvaluation() );
 
     // clear old result, and copy new
     maNodes.clear();
@@ -115,8 +115,6 @@ bool PathExpression::evaluate( const EvaluationContext& rContext )
         for( sal_Int32 n = 0; n < nLength; n++ )
             maNodes.push_back( xNodeList->item( n ) );
     }
-
-    return bResult;
 }
 
 

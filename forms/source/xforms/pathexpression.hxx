@@ -65,7 +65,7 @@ public:
 
 
     /// evaluate the expression relative to the content node.
-    bool evaluate( const xforms::EvaluationContext& rContext );
+    void evaluate( const xforms::EvaluationContext& rContext );
 
 
     // get the result of this expression as node/node list/...

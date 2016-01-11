@@ -1448,17 +1448,17 @@ namespace frm
     }
 
 
-    bool FormOperations::impl_moveLeft_throw( ) const
+    void FormOperations::impl_moveLeft_throw( ) const
     {
         OSL_PRECOND( impl_hasCursor_nothrow(), "FormOperations::impl_moveLeft_throw: no cursor!" );
         if ( !impl_hasCursor_nothrow() )
-            return false;
+            return;
 
         sal_Bool bRecordInserted = sal_False;
         bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
 
         if ( !bSuccess )
-            return false;
+            return;
 
         if ( bRecordInserted )
         {
@@ -1479,22 +1479,20 @@ namespace frm
             else
                 m_xCursor->previous();
         }
-
-        return true;
     }
 
 
-    bool FormOperations::impl_moveRight_throw( ) const
+    void FormOperations::impl_moveRight_throw( ) const
     {
         OSL_PRECOND( impl_hasCursor_nothrow(), "FormOperations::impl_moveRight_throw: no cursor!" );
         if ( !impl_hasCursor_nothrow() )
-            return false;
+            return;
 
         sal_Bool bRecordInserted = sal_False;
         bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
 
         if ( !bSuccess )
-            return false;
+            return;
 
         if ( bRecordInserted )
         {
@@ -1508,8 +1506,6 @@ namespace frm
             else
                 (void)m_xCursor->next();
         }
-
-        return true;
     }
 
 
