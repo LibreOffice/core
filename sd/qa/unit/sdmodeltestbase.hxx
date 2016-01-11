@@ -180,21 +180,27 @@ protected:
         pShell->DoClose();
     }
 
-    sd::DrawDocShellRef saveAndReload(sd::DrawDocShell *pShell, sal_Int32 nExportType)
+    sd::DrawDocShellRef saveAndReload(sd::DrawDocShell *pShell, sal_Int32 nExportType,
+            utl::TempFile * pTempFile = nullptr)
     {
         FileFormat* pFormat = getFormat(nExportType);
-        utl::TempFile aTempFile;
-        save(pShell, pFormat, aTempFile);
+        std::unique_ptr<utl::TempFile> pNewTempFile;
+        if (!pTempFile)
+        {
+            pNewTempFile.reset(new utl::TempFile);
+            pTempFile = pNewTempFile.get();
+        }
+        save(pShell, pFormat, *pTempFile);
         if(nExportType == ODP)
         {
-            // BootstrapFixture::validate(aTempFile.GetFileName(), test::ODF);
+            // BootstrapFixture::validate(pTempFile->GetFileName(), test::ODF);
         }
         else if(nExportType == PPTX)
         {
-            BootstrapFixture::validate(aTempFile.GetFileName(), test::OOXML);
+            BootstrapFixture::validate(pTempFile->GetFileName(), test::OOXML);
         }
-        aTempFile.EnableKillingFile();
-        return loadURL(aTempFile.GetURL(), nExportType);
+        pTempFile->EnableKillingFile();
+        return loadURL(pTempFile->GetURL(), nExportType);
     }
 
     /** Dump shapes in xDocShRef, and compare the dump against content of pShapesDumpFileNameBase<number>.xml.
