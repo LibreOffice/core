@@ -23,151 +23,10 @@
 
 #include <string.h>
 #include <limits.h>
-#include <algorithm>
-
-
-// add nOffset to each bit-value in the set
-
-BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
-{
-    // create a work-copy, return it if nothing to shift
-    BitSet aSet(*this);
-    if ( nOffset == 0 )
-        return aSet;
-
-    // compute the shiftment in long-words and bits
-    sal_uInt16 nBlockDiff = nOffset / 32;
-    sal_uInt32 nBitValDiff = nOffset % 32;
-
-    // compute the new number of bits
-    for ( sal_uInt16 nBlock = 0; nBlock < nBlockDiff; ++nBlock )
-        aSet.nCount = aSet.nCount - CountBits( *(aSet.pBitmap+nBlock) );
-    aSet.nCount = aSet.nCount -
-        CountBits( *(aSet.pBitmap+nBlockDiff) >> (32-nBitValDiff) );
-
-    // shift complete long-words
-    sal_uInt16 nTarget, nSource;
-    for ( nTarget = 0, nSource = nBlockDiff;
-          (nSource+1) < aSet.nBlocks;
-          ++nTarget, ++nSource )
-        *(aSet.pBitmap+nTarget) =
-            ( *(aSet.pBitmap+nSource) << nBitValDiff ) |
-            ( *(aSet.pBitmap+nSource+1) >> (32-nBitValDiff) );
-
-    // shift the remainder (if in total minor 32 bits, only this)
-    *(aSet.pBitmap+nTarget) = *(aSet.pBitmap+nSource) << nBitValDiff;
-
-    // determine the last used block
-    while ( *(aSet.pBitmap+nTarget) == 0 )
-        --nTarget;
-
-    // shorten the block-array
-    if ( nTarget < aSet.nBlocks )
-    {
-        sal_uInt32* pNewMap = new sal_uInt32[nTarget];
-        memcpy( pNewMap, aSet.pBitmap, 4 * nTarget );
-        delete [] aSet.pBitmap;
-        aSet.pBitmap = pNewMap;
-        aSet.nBlocks = nTarget;
-    }
-
-    return aSet;
-}
-
-
-
-// subtracts nOffset from each bit-value in the set
-
-BitSet BitSet::operator>>( sal_uInt16 ) const
-{
-    return BitSet();
-}
-
-
-
-// internal code for operator= and copy-ctor
-
-void BitSet::CopyFrom( const BitSet& rSet )
-{
-    nCount = rSet.nCount;
-    nBlocks = rSet.nBlocks;
-    if ( rSet.nBlocks )
-    {
-        pBitmap = new sal_uInt32[nBlocks];
-        memcpy( pBitmap, rSet.pBitmap, 4 * nBlocks );
-    }
-    else
-        pBitmap = nullptr;
-}
-
-
-
-// creates an empty bitset
-
-BitSet::BitSet()
-{
-    nCount = 0;
-    nBlocks = 0;
-    pBitmap = nullptr;
-}
-
-
-
-// creates a copy of bitset rOrig
-
-BitSet::BitSet( const BitSet& rOrig )
-{
-    CopyFrom(rOrig);
-}
-
-
-
-// frees the storage
-
-BitSet::~BitSet()
-{
-    delete [] pBitmap;
-}
-
-
-
-// assignment from another bitset
-
-BitSet& BitSet::operator=( const BitSet& rOrig )
-{
-    if ( this != &rOrig )
-    {
-        delete [] pBitmap;
-        CopyFrom(rOrig);
-    }
-    return *this;
-}
-
-
-
-// assignment from a single bit
-
-BitSet& BitSet::operator=( sal_uInt16 nBit )
-{
-    delete [] pBitmap;
-
-    nBlocks = nBit / 32;
-    sal_uInt32 nBitVal = 1L << (nBit % 32);
-    nCount = 1;
-
-    pBitmap = new sal_uInt32[nBlocks + 1];
-    memset( pBitmap, 0, 4 * (nBlocks + 1) );
-
-    *(pBitmap+nBlocks) = nBitVal;
-
-    return *this;
-}
-
-
 
 // creates the asymetric difference with another bitset
 
-BitSet& BitSet::operator-=(sal_uInt16 nBit)
+IndexBitSet& IndexBitSet::operator-=(sal_uInt16 nBit)
 {
     sal_uInt16 nBlock = nBit / 32;
     sal_uInt32 nBitVal = 1L << (nBit % 32);
@@ -184,47 +43,9 @@ BitSet& BitSet::operator-=(sal_uInt16 nBit)
     return *this;
 }
 
-
-
-// unites with the bits of rSet
-
-BitSet& BitSet::operator|=( const BitSet& rSet )
-{
-    sal_uInt16 nMax = std::min(nBlocks, rSet.nBlocks);
-
-    // expand the bitmap
-    if ( nBlocks < rSet.nBlocks )
-    {
-        sal_uInt32 *pNewMap = new sal_uInt32[rSet.nBlocks];
-        memset( pNewMap + nBlocks, 0, 4 * (rSet.nBlocks - nBlocks) );
-
-        if ( pBitmap )
-        {
-            memcpy( pNewMap, pBitmap, 4 * nBlocks );
-            delete [] pBitmap;
-        }
-        pBitmap = pNewMap;
-        nBlocks = rSet.nBlocks;
-    }
-
-    // add the bits blocks by block
-    for ( sal_uInt16 nBlock = 0; nBlock < nMax; ++nBlock )
-    {
-        // compute number of additional bits
-        sal_uInt32 nDiff = ~*(pBitmap+nBlock) & *(rSet.pBitmap+nBlock);
-        nCount = nCount + CountBits(nDiff);
-
-        *(pBitmap+nBlock) |= *(rSet.pBitmap+nBlock);
-    }
-
-    return *this;
-}
-
-
-
 // unites with a single bit
 
-BitSet& BitSet::operator|=( sal_uInt16 nBit )
+IndexBitSet& IndexBitSet::operator|=( sal_uInt16 nBit )
 {
     sal_uInt16 nBlock = nBit / 32;
     sal_uInt32 nBitVal = 1L << (nBit % 32);
@@ -256,7 +77,7 @@ BitSet& BitSet::operator|=( sal_uInt16 nBit )
 
 // determines if the bit is set (may be the only one)
 
-bool BitSet::Contains( sal_uInt16 nBit ) const
+bool IndexBitSet::Contains( sal_uInt16 nBit ) const
 {
     sal_uInt16 nBlock = nBit / 32;
     sal_uInt32 nBitVal = 1L << (nBit % 32);
@@ -266,34 +87,16 @@ bool BitSet::Contains( sal_uInt16 nBit ) const
     return ( nBitVal & *(pBitmap+nBlock) ) == nBitVal;
 }
 
-
-
-// determines if the bitsets are equal
-
-bool BitSet::operator==( const BitSet& rSet ) const
+IndexBitSet::IndexBitSet()
 {
-    if ( nBlocks != rSet.nBlocks )
-        return false;
-
-    sal_uInt16 nBlock = nBlocks;
-    while ( nBlock-- > 0 )
-        if ( *(pBitmap+nBlock) != *(rSet.pBitmap+nBlock) )
-            return false;
-
-    return true;
+    nCount = 0;
+    nBlocks = 0;
+    pBitmap = nullptr;
 }
 
-// counts the number of 1-bits in the parameter
-// Wegner/Kernighan/Ritchie method
-sal_uInt16 BitSet::CountBits(sal_uInt32 nBits)
+IndexBitSet::~IndexBitSet()
 {
-    sal_uInt32 nCount = 0;
-    while (nBits)
-    {
-        nBits &= nBits - 1; // clear the least significant bit set
-        ++nCount;
-    }
-    return nCount;
+    delete [] pBitmap;
 }
 
 sal_uInt16 IndexBitSet::GetFreeIndex()
