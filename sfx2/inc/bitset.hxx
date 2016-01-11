@@ -137,7 +137,7 @@ inline bool BitSet::operator!=( const BitSet& rSet ) const
     return !( *this == rSet );
 }
 
-class IndexBitSet : BitSet
+class IndexBitSet : private BitSet
 {
 public:
   sal_uInt16 GetFreeIndex();
