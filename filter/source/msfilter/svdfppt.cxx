@@ -1724,7 +1724,7 @@ bool PPTConvertOCXControls::InsertControl(
     }
     return bRetValue;
 };
-const css::uno::Reference< css::drawing::XDrawPage >& PPTConvertOCXControls::GetDrawPage()
+void PPTConvertOCXControls::GetDrawPage()
 {
     if( !xDrawPage.is() && mxModel.is() )
     {
@@ -1757,7 +1757,6 @@ const css::uno::Reference< css::drawing::XDrawPage >& PPTConvertOCXControls::Get
             aAny >>= xDrawPage;
         }
     }
-    return xDrawPage;
 }
 
 bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32 nInputSize )
@@ -3874,7 +3873,7 @@ PPTParaSheet::PPTParaSheet( const PPTParaSheet& rSheet )
     *this = rSheet;
 }
 
-bool PPTParaSheet::Read( SdrPowerPointImport&
+void PPTParaSheet::Read( SdrPowerPointImport&
 #ifdef DBG_UTIL
                     rManager
 #endif
@@ -3932,7 +3931,7 @@ bool PPTParaSheet::Read( SdrPowerPointImport&
             // number of tabulators
             rIn.ReadUInt16( nVal16 );
             if (rIn.remainingSize() / sizeof(nVal32) < nVal16)
-                return false;
+                return;
             for ( i = 0; i < nVal16; i++ )
                 rIn.ReadUInt32( nVal32 );      // reading the tabulators
         }
@@ -4003,7 +4002,6 @@ bool PPTParaSheet::Read( SdrPowerPointImport&
         }
         nPMask >>= 1;
     }
-    return true;
 }
 
 void PPTParaSheet::UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeight )

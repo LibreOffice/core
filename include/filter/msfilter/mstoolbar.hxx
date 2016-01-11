@@ -148,7 +148,7 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
 #endif
-    bool ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
+    void ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
     OUString CustomText() { return customText.getString(); }
 };
 
