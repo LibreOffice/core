@@ -545,15 +545,6 @@ vcl_really_generic_code= \
 vcl_generic_code= \
 	$(vcl_really_generic_code) \
     vcl/generic/app/gendisp \
-    vcl/generic/print/bitmap_gfx \
-    vcl/generic/print/common_gfx \
-    vcl/generic/print/glyphset \
-    vcl/generic/print/printerjob \
-    vcl/generic/print/psputil \
-    vcl/generic/print/genpspgraphics \
-    vcl/generic/print/genprnpsp \
-    vcl/generic/print/prtsetup \
-    vcl/generic/print/text_gfx \
 
 vcl_headless_code= \
     vcl/headless/svpbmp \
@@ -580,6 +571,15 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/fontmanager/helper \
     vcl/unx/generic/fontmanager/parseAFM \
     vcl/headless/svpcairotextrender \
+    vcl/unx/generic/print/bitmap_gfx \
+    vcl/unx/generic/print/common_gfx \
+    vcl/unx/generic/print/glyphset \
+    vcl/unx/generic/print/printerjob \
+    vcl/unx/generic/print/psputil \
+    vcl/unx/generic/print/genpspgraphics \
+    vcl/unx/generic/print/genprnpsp \
+    vcl/unx/generic/print/prtsetup \
+    vcl/unx/generic/print/text_gfx \
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\

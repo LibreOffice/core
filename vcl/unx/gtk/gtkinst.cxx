@@ -32,7 +32,7 @@
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
 #include <vcl/apptypes.hxx>
-#include <generic/genpspgraphics.h>
+#include <unx/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
 

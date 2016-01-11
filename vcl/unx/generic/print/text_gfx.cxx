@@ -22,7 +22,7 @@
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
-#include "generic/printergfx.hxx"
+#include "unx/printergfx.hxx"
 #include "fontmanager.hxx"
 #include "vcl/helper.hxx"
 

@@ -18,13 +18,13 @@
  */
 
 #include "generic/geninst.h"
-#include "generic/genpspgraphics.h"
+#include "unx/genpspgraphics.h"
 #include "unx/glyphcache.hxx"
 
 #include "vcl/sysdata.hxx"
 #include "fontinstance.hxx"
 
-#include "generic/printergfx.hxx"
+#include "unx/printergfx.hxx"
 #include "salbmp.hxx"
 #include "impfont.hxx"
 #include "outdev.h"

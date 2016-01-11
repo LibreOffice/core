@@ -60,7 +60,7 @@
 #include "x11cairotextrender.hxx"
 #include "openglx11cairotextrender.hxx"
 
-#include "generic/printergfx.hxx"
+#include "unx/printergfx.hxx"
 #include "xrender_peer.hxx"
 #include "cairo_cairo.hxx"
 #include "cairo_xlib_cairo.hxx"

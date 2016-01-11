@@ -34,7 +34,7 @@
 #include <unx/x11/xlimits.hxx>
 #include "xrender_peer.hxx"
 
-#include "generic/printergfx.hxx"
+#include "unx/printergfx.hxx"
 
 #include "vcl/bmpacc.hxx"
 #include <outdata.hxx>

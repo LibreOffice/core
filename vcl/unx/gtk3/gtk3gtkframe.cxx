@@ -27,7 +27,7 @@
 #include <unx/wmadaptor.hxx>
 #include <unx/sm.hxx>
 #include <unx/salbmp.h>
-#include <generic/genprn.h>
+#include <unx/genprn.h>
 #include <generic/geninst.h>
 #include <headless/svpgdi.hxx>
 #include <osl/file.hxx>
