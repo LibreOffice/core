@@ -141,8 +141,6 @@ public:
     );
     virtual ~EntryDescriptor ();
 
-    bool operator == (EntryDescriptor const& rDesc) const;
-
     ScriptDocument const&   GetDocument() const { return m_aDocument; }
 
     LibraryLocation         GetLocation() const { return m_eLocation; }

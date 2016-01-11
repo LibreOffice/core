@@ -1447,9 +1447,9 @@ namespace basctl
     }
 
 
-    bool ScriptDocument::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
+    void ScriptDocument::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
     {
-        return m_pImpl->saveDocument( _rxStatusIndicator );
+        m_pImpl->saveDocument( _rxStatusIndicator );
     }
 
 

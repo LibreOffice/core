@@ -42,9 +42,9 @@ public:
     explicit DlgEdFunc (DlgEditor& rParent);
     virtual ~DlgEdFunc();
 
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void MouseButtonDown( const MouseEvent& rMEvt );
     virtual bool MouseButtonUp( const MouseEvent& rMEvt );
-    virtual bool MouseMove( const MouseEvent& rMEvt );
+    virtual void MouseMove( const MouseEvent& rMEvt );
     bool KeyInput( const KeyEvent& rKEvt );
 };
 
@@ -58,9 +58,9 @@ public:
     explicit DlgEdFuncInsert (DlgEditor& rParent);
     virtual ~DlgEdFuncInsert ();
 
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void MouseMove( const MouseEvent& rMEvt ) override;
 };
 
 
@@ -76,9 +76,9 @@ public:
     explicit DlgEdFuncSelect (DlgEditor& rParent);
     virtual ~DlgEdFuncSelect ();
 
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual bool MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void MouseMove( const MouseEvent& rMEvt ) override;
 };
 
 

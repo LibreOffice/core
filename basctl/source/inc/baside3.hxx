@@ -93,8 +93,8 @@ public:
     bool                RenameDialog( const OUString& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();
-    bool                SaveDialog();
-    bool                ImportDialog();
+    void                SaveDialog();
+    void                ImportDialog();
 
     virtual OUString             GetTitle() override;
     virtual EntryDescriptor      CreateEntryDescriptor() override;

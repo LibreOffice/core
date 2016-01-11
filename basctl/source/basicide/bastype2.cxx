@@ -160,19 +160,6 @@ EntryDescriptor::EntryDescriptor (
 EntryDescriptor::~EntryDescriptor()
 { }
 
-bool EntryDescriptor::operator == (EntryDescriptor const& rDesc) const
-{
-    return
-        m_aDocument == rDesc.m_aDocument &&
-        m_eLocation == rDesc.m_eLocation &&
-        m_aLibName == rDesc.m_aLibName &&
-        m_aLibSubName == rDesc.m_aLibSubName &&
-        m_aName == rDesc.m_aName &&
-        m_aMethodName == rDesc.m_aMethodName &&
-        m_eType == rDesc.m_eType;
-}
-
-
 // TreeListBox
 
 

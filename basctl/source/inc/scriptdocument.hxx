@@ -457,7 +457,7 @@ namespace basctl
             @precond
                 <code>isApplication</code> returns <FALSE/>
         */
-        bool        saveDocument(
+        void        saveDocument(
                         const css::uno::Reference< css::task::XStatusIndicator >& _rxStatusIndicator
                     ) const;
 

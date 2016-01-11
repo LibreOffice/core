@@ -128,7 +128,7 @@ public:
     void SAL_CALL _elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
 
     virtual void SetLayer(SdrLayerID nLayer) override;
-    bool MakeDataAware( const css::uno::Reference< css::frame::XModel >& xModel );
+    void MakeDataAware( const css::uno::Reference< css::frame::XModel >& xModel );
 };
 
 

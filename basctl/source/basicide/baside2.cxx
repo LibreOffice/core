@@ -363,36 +363,36 @@ bool ModulWindow::BasicExecute()
     return bDone;
 }
 
-bool ModulWindow::CompileBasic()
+void ModulWindow::CompileBasic()
 {
     CheckCompileBasic();
 
-    return XModule().Is() && xModule->IsCompiled();
+    XModule().Is() && xModule->IsCompiled();
 }
 
-bool ModulWindow::BasicRun()
+void ModulWindow::BasicRun()
 {
     aStatus.nBasicFlags = 0;
-    return BasicExecute();
+    BasicExecute();
 }
 
-bool ModulWindow::BasicStepOver()
+void ModulWindow::BasicStepOver()
 {
     aStatus.nBasicFlags = SbDEBUG_STEPINTO | SbDEBUG_STEPOVER;
-    return BasicExecute();
+    BasicExecute();
 }
 
 
-bool ModulWindow::BasicStepInto()
+void ModulWindow::BasicStepInto()
 {
     aStatus.nBasicFlags = SbDEBUG_STEPINTO;
-    return BasicExecute();
+    BasicExecute();
 }
 
-bool ModulWindow::BasicStepOut()
+void ModulWindow::BasicStepOut()
 {
     aStatus.nBasicFlags = SbDEBUG_STEPOUT;
-    return BasicExecute();
+    BasicExecute();
 }
 
 
@@ -403,10 +403,8 @@ void ModulWindow::BasicStop()
     aStatus.bIsRunning = false;
 }
 
-bool ModulWindow::LoadBasic()
+void ModulWindow::LoadBasic()
 {
-    bool bDone = false;
-
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
 
@@ -438,20 +436,15 @@ bool ModulWindow::LoadBasic()
             sal_uLong nError = aMedium.GetError();
             if ( nError )
                 ErrorHandler::HandleError( nError );
-            else
-                bDone = true;
         }
         else
             ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_COULDNTREAD))->Execute();
     }
-    return bDone;
 }
 
 
-bool ModulWindow::SaveBasicSource()
+void ModulWindow::SaveBasicSource()
 {
-    bool bDone = false;
-
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD);
 
@@ -484,21 +477,17 @@ bool ModulWindow::SaveBasicSource()
             sal_uLong nError = aMedium.GetError();
             if ( nError )
                 ErrorHandler::HandleError( nError );
-            else
-                bDone = true;
         }
         else
             ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_COULDNTWRITE))->Execute();
     }
-
-    return bDone;
 }
 
-bool ModulWindow::ImportDialog()
+void ModulWindow::ImportDialog()
 {
     const ScriptDocument& rDocument = GetDocument();
     OUString aLibName = GetLibName();
-    return implImportDialog( this, aCurPath, rDocument, aLibName );
+    implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
 bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
@@ -559,7 +548,7 @@ void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
 }
 
 
-bool ModulWindow::BasicToggleBreakPoint()
+void ModulWindow::BasicToggleBreakPoint()
 {
     AssertValidEditEngine();
 
@@ -567,16 +556,12 @@ bool ModulWindow::BasicToggleBreakPoint()
     aSel.GetStart().GetPara()++;    // Basic lines start at 1!
     aSel.GetEnd().GetPara()++;
 
-    bool bNewBreakPoint = false;
-
     for ( sal_uInt32 nLine = aSel.GetStart().GetPara(); nLine <= aSel.GetEnd().GetPara(); ++nLine )
     {
-        if ( ToggleBreakPoint( nLine ) )
-            bNewBreakPoint = true;
+        ToggleBreakPoint( nLine );
     }
 
     aXEditorWindow->GetBrkWindow().Invalidate();
-    return bNewBreakPoint;
 }
 
 

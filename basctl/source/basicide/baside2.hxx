@@ -152,7 +152,7 @@ public:
     void            InitScrollBars();
 
     void            ForceSyntaxTimeout();
-    bool            SetSourceInBasic();
+    void            SetSourceInBasic();
 
     bool            CanModify() { return ImpCanModify(); }
 
@@ -246,7 +246,7 @@ public:
     virtual void    dispose() override;
 
     void            AddWatch( const OUString& rVName );
-    bool            RemoveSelectedWatch();
+    void            RemoveSelectedWatch();
     void            UpdateWatches( bool bBasicStopped = false );
 };
 
@@ -351,13 +351,13 @@ public:
     void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
     OUString        GetSbModuleName();
 
-    bool            CompileBasic();
-    bool            BasicRun();
-    bool            BasicStepOver();
-    bool            BasicStepInto();
-    bool            BasicStepOut();
+    void            CompileBasic();
+    void            BasicRun();
+    void            BasicStepOver();
+    void            BasicStepInto();
+    void            BasicStepOut();
     void            BasicStop();
-    bool            BasicToggleBreakPoint();
+    void            BasicToggleBreakPoint();
     void            BasicToggleBreakPointEnabled();
     void            ManageBreakPoints();
     void            UpdateBreakPoint( const BreakPoint& rBrk );
@@ -367,9 +367,9 @@ public:
     long            BasicBreakHdl( StarBASIC* pBasic );
     void            AssertValidEditEngine();
 
-    bool            LoadBasic();
-    bool            SaveBasicSource();
-    bool            ImportDialog();
+    void            LoadBasic();
+    void            SaveBasicSource();
+    void            ImportDialog();
 
     void            EditMacro( const OUString& rMacroName );
 

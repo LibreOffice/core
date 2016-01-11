@@ -88,9 +88,8 @@ DlgEdFunc::~DlgEdFunc()
 {
 }
 
-bool DlgEdFunc::MouseButtonDown( const MouseEvent& )
+void DlgEdFunc::MouseButtonDown( const MouseEvent& )
 {
-    return true;
 }
 
 bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
@@ -99,9 +98,8 @@ bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
     return true;
 }
 
-bool DlgEdFunc::MouseMove( const MouseEvent& )
+void DlgEdFunc::MouseMove( const MouseEvent& )
 {
-    return true;
 }
 
 bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
@@ -342,10 +340,10 @@ DlgEdFuncInsert::~DlgEdFuncInsert()
     rParent.GetView().SetEditMode();
 }
 
-bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
+void DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( !rMEvt.IsLeft() )
-        return true;
+        return;
 
     SdrView& rView  = rParent.GetView();
     vcl::Window& rWindow = rParent.GetWindow();
@@ -377,8 +375,6 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         if ( rView.IsMarkedHit(aPos, nHitLog) && rParent.GetMode() != DlgEditor::READONLY )
             rParent.ShowProperties();
     }
-
-    return true;
 }
 
 bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
@@ -413,7 +409,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
+void DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView& rView  = rParent.GetView();
     vcl::Window& rWindow = rParent.GetWindow();
@@ -429,8 +425,6 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     }
 
     rWindow.SetPointer( rView.GetPreferredPointer( aPos, &rWindow, nHitLog ) );
-
-    return true;
 }
 
 DlgEdFuncSelect::DlgEdFuncSelect (DlgEditor& rParent_) :
@@ -443,7 +437,7 @@ DlgEdFuncSelect::~DlgEdFuncSelect()
 {
 }
 
-bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
+void DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // get view from parent
     SdrView& rView  = rParent.GetView();
@@ -501,8 +495,6 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         if ( rView.IsMarkedHit(aMDPos, nHitLog) && rParent.GetMode() != DlgEditor::READONLY )
             rParent.ShowProperties();
     }
-
-    return true;
 }
 
 bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
@@ -539,7 +531,7 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     return true;
 }
 
-bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
+void DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView& rView  = rParent.GetView();
     vcl::Window& rWindow = rParent.GetWindow();
@@ -558,8 +550,6 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     }
 
     rWindow.SetPointer( rView.GetPreferredPointer( aPnt, &rWindow, nHitLog ) );
-
-    return true;
 }
 
 } // namespace basctl

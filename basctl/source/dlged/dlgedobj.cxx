@@ -1672,9 +1672,8 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
 
     return aDeviceInfo;
 }
-bool DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
+void DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
 {
-    bool bRes = false;
     // Need to flesh this out, currently we will only support data-aware controls for calc
     // and only handle a subset of functionality e.g. linked-cell and cell range data source. Of course later
     // we need to disambiguate for writer ( and others ? ) and also support the generic form (db) bindings
@@ -1707,10 +1706,7 @@ bool DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
             Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", aArgs ), UNO_QUERY );
             xListEntrySink->setListEntrySource( xSource );
         }
-        if ( xListEntrySink.is() || xBindable.is() )
-            bRes = true;
     }
-    return bRes;
 }
 } // namespace basctl
 

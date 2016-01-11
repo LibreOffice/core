@@ -675,10 +675,8 @@ void DialogWindow::UpdateBrowser()
     rLayout.UpdatePropertyBrowser();
 }
 
-bool DialogWindow::SaveDialog()
+void DialogWindow::SaveDialog()
 {
-    bool bDone = false;
-
     Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD);
 
@@ -733,7 +731,6 @@ bool DialogWindow::SaveDialog()
                 if (! nRead)
                     break;
             }
-            bDone = true;
 
             // With resource?
             Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
@@ -832,8 +829,6 @@ bool DialogWindow::SaveDialog()
         else
             ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_COULDNTWRITE))->Execute();
     }
-
-    return bDone;
 }
 
 std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
@@ -1211,11 +1206,11 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
 }
 
 
-bool DialogWindow::ImportDialog()
+void DialogWindow::ImportDialog()
 {
     const ScriptDocument& rDocument = GetDocument();
     OUString aLibName = GetLibName();
-    return implImportDialog( this, aCurPath, rDocument, aLibName );
+    implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
 DlgEdModel& DialogWindow::GetModel() const

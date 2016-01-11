@@ -929,9 +929,8 @@ void EditorWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-bool EditorWindow::SetSourceInBasic()
+void EditorWindow::SetSourceInBasic()
 {
-    bool bChanged = false;
     if ( pEditEngine && pEditEngine->IsModified()
         && !GetEditView()->IsReadOnly() )   // Added for #i60626, otherwise
             // any read only bug in the text engine could lead to a crash later
@@ -939,10 +938,8 @@ bool EditorWindow::SetSourceInBasic()
         if ( !StarBASIC::IsRunning() ) // Not at runtime!
         {
             rModulWindow.UpdateModule();
-            bChanged = true;
         }
     }
-    return bChanged;
 }
 
 // Returns the position of the last character of any of the following
@@ -1763,7 +1760,7 @@ void WatchWindow::AddWatch( const OUString& rVName )
     UpdateWatches();
 }
 
-bool WatchWindow::RemoveSelectedWatch()
+void WatchWindow::RemoveSelectedWatch()
 {
     SvTreeListEntry* pEntry = aTreeListBox->GetCurEntry();
     if ( pEntry )
@@ -1776,10 +1773,7 @@ bool WatchWindow::RemoveSelectedWatch()
             aXEdit->SetText( OUString() );
         if ( !aTreeListBox->GetEntryCount() )
             aRemoveWatchButton->Disable();
-        return true;
     }
-    else
-        return false;
 }
 
 
