@@ -69,7 +69,7 @@ public:
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
 private:
-    static int mnEmbeddeDocumentCounter;
+    int m_nEmbeddedObjects;
     struct ShapeCheck
     {
         bool operator()( const css::uno::Reference< css::drawing::XShape>& s1, const css::uno::Reference< css::drawing::XShape>& s2 ) const
