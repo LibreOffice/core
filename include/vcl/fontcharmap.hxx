@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FONTCHARMAP_METRIC_HXX
-#define INCLUDED_FONTCHARMAP_METRIC_HXX
+#ifndef INCLUDED_FONTCHARMAP_HXX
+#define INCLUDED_FONTCHARMAP_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
+
+#include "impfontcharmap.hxx"
 
 #include <boost/intrusive_ptr.hpp>
 
@@ -164,6 +166,23 @@ inline void intrusive_ptr_release(FontCharMap* pFontCharMap)
         delete pFontCharMap;
 }
 
-#endif // INCLUDED_FONTCHARMAP_METRIC_HXX
+
+// CmapResult is a normalized version of the many CMAP formats
+class VCL_PLUGIN_PUBLIC CmapResult
+{
+public:
+    explicit            CmapResult( bool bSymbolic = false,
+                            const sal_uInt32* pRangeCodes = nullptr, int nRangeCount = 0,
+                            const int* pStartGlyphs = nullptr, const sal_uInt16* pGlyphIds = nullptr );
+
+    const sal_uInt32*   mpRangeCodes;
+    const int*          mpStartGlyphs;
+    const sal_uInt16*   mpGlyphIds;
+    int                 mnRangeCount;
+    bool                mbSymbolic;
+    bool                mbRecoded;
+};
+
+#endif // INCLUDED_FONTCHARMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

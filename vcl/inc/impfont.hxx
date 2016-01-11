@@ -161,64 +161,7 @@ private:
     FcPattern* mpPattern;
 };
 
-// - ImplFontCharMap -
 
-class CmapResult;
-
-class VCL_PLUGIN_PUBLIC ImplFontCharMap
-{
-public:
-    explicit            ImplFontCharMap( const CmapResult& );
-    virtual             ~ImplFontCharMap();
-
-private:
-    friend class FontCharMap;
-    friend void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap);
-    friend void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap);
-
-                        ImplFontCharMap( const ImplFontCharMap& ) = delete;
-    void                operator=( const ImplFontCharMap& ) = delete;
-
-    static ImplFontCharMapPtr getDefaultMap( bool bSymbols=false);
-    bool                isDefaultMap() const;
-
-private:
-    const sal_uInt32*   mpRangeCodes;     // pairs of StartCode/(EndCode+1)
-    const int*          mpStartGlyphs;    // range-specific mapper to glyphs
-    const sal_uInt16*   mpGlyphIds;       // individual glyphid mappings
-    int                 mnRangeCount;
-    int                 mnCharCount;      // covered codepoints
-    mutable sal_uInt32  mnRefCount;
-};
-
-inline void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap)
-{
-    ++pImplFontCharMap->mnRefCount;
-}
-
-inline void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap)
-{
-    if (--pImplFontCharMap->mnRefCount == 0)
-        delete pImplFontCharMap;
-}
-
-// CmapResult is a normalized version of the many CMAP formats
-class VCL_PLUGIN_PUBLIC CmapResult
-{
-public:
-    explicit            CmapResult( bool bSymbolic = false,
-                            const sal_uInt32* pRangeCodes = nullptr, int nRangeCount = 0,
-                            const int* pStartGlyphs = nullptr, const sal_uInt16* pGlyphIds = nullptr );
-
-    const sal_uInt32*   mpRangeCodes;
-    const int*          mpStartGlyphs;
-    const sal_uInt16*   mpGlyphIds;
-    int                 mnRangeCount;
-    bool                mbSymbolic;
-    bool                mbRecoded;
-};
-
-bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 
 #endif // INCLUDED_VCL_INC_IMPFONT_HXX
 
