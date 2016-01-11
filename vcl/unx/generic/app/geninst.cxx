@@ -28,7 +28,7 @@
 #include <comphelper/solarmutex.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 
 // SalYieldMutex
 

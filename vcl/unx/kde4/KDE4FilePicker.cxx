@@ -57,7 +57,7 @@
 
 #undef Region
 
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 
 #include "svids.hrc"
 

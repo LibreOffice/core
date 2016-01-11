@@ -24,7 +24,7 @@
 #include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 #include "unx/glyphcache.hxx"
 #include "headless/svpgdi.hxx"
 

@@ -44,7 +44,7 @@
 #include <config_cairo_canvas.h>
 
 #include "fontsubset.hxx"
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 #include "unx/genpspgraphics.h"
 #include "unx/glyphcache.hxx"
 #include "unx/printergfx.hxx"

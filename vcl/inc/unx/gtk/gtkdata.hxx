@@ -27,7 +27,7 @@
 #include <gtk/gtk.h>
 #include <postx.h>
 
-#include <generic/gendata.hxx>
+#include <unx/gendata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
 #include <unx/gtk/gtksys.hxx>

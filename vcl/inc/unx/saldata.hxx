@@ -28,7 +28,7 @@
 #include <vcl/salgtype.hxx>
 #include <salframe.hxx>
 #include <unx/salinst.h>
-#include <generic/gendata.hxx>
+#include <unx/gendata.hxx>
 #include <osl/module.h>
 #include <vclpluginapi.h>
 

@@ -538,14 +538,6 @@ endif
 
 endif
 
-vcl_really_generic_code= \
-    vcl/generic/app/gensys \
-    vcl/generic/app/geninst \
-
-vcl_generic_code= \
-	$(vcl_really_generic_code) \
-    vcl/generic/app/gendisp \
-
 vcl_headless_code= \
     vcl/headless/svpbmp \
     vcl/headless/svpdummies \
@@ -554,6 +546,7 @@ vcl_headless_code= \
     vcl/headless/svpinst \
     vcl/headless/svpdata \
     vcl/headless/svpvd \
+    vcl/unx/generic/app/gendisp \
 
 vcl_headless_freetype_code=\
     vcl/headless/svpprn \
@@ -580,10 +573,11 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/print/genprnpsp \
     vcl/unx/generic/print/prtsetup \
     vcl/unx/generic/print/text_gfx \
+    vcl/unx/generic/app/gensys \
+    vcl/unx/generic/app/geninst \
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-	$(vcl_generic_code) \
     vcl/unx/generic/plugadapt/salplug \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
@@ -615,7 +609,6 @@ endif
 
 ifeq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-	$(vcl_generic_code) \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
@@ -646,7 +639,6 @@ $(eval $(call gb_Library_add_libs,vcl,\
 	-llo-bootstrap \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-	$(vcl_generic_code) \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
