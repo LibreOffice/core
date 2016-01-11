@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include "unx/gcach_ftyp.hxx"
+#include "unx/freetype_glyphcache.hxx"
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unx/gcach_ftyp.hxx"
+#include "unx/freetype_glyphcache.hxx"
 #include <sallayout.hxx>
 #include <salgdi.hxx>
 #include <scrptrun.h>
