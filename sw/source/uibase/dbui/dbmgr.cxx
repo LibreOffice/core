@@ -417,7 +417,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam, const OUString& rColumnName,
 // import data
 bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent )
 {
-    OSL_ENSURE(!bInMerge && !pImpl->pMergeData, "merge already activated!");
+    assert( !bInMerge && !pImpl->pMergeData && "merge already activated!" );
 
     SwDBData aData;
     aData.nCommandType = sdb::CommandType::TABLE;
@@ -938,6 +938,10 @@ static void lcl_PreparePrinterOptions(
     }
 }
 
+/**
+ * Please have a look at the README in the same directory, before you make
+ * larger changes in this function!
+ */
 bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                  const SwMergeDescriptor& rMergeDescriptor,
                                  vcl::Window* pParent)
@@ -982,6 +986,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     OUString                            sMailBodyMimeType;
     rtl_TextEncoding                    sMailEncoding = ::osl_getThreadTextEncoding();
 
+    // bNoError should be handled together with m_bCancel. while an error
+    // should always also set cancel, cancel doesn't indicate an / set error.
     bool bNoError = true;
 
     uno::Reference< beans::XPropertySet > xColumnProp;
@@ -1031,7 +1037,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             uno::Reference<document::XDocumentPropertiesSupplier>
                 xDPS(pSourceDocSh->GetModel(), uno::UNO_QUERY);
             xSourceDocProps.set(xDPS->getDocumentProperties());
-            OSL_ENSURE(xSourceDocProps.is(), "DocumentProperties is null");
+            assert( xSourceDocProps.is() && "DocumentProperties is null" );
         }
 
         if( !bMT_SHELL && pSourceDocSh->IsModified() )
@@ -1085,6 +1091,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             if( !IsMergeSilent() )
             {
+                // construct the process dialog
                 pSourceWindow = &pSourceShell->GetView().GetEditWin();
                 if( ! pParent )
                     pParent = pSourceWindow;
@@ -1155,7 +1162,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 // #i72517#
                 const SwPageDesc* pSourcePageDesc = pSourceShell->FindPageDescByName( sStartingPageDesc );
                 const SwFrameFormat& rMaster = pSourcePageDesc->GetMaster();
-                bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive()  ||
+                bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive() ||
                                                 rMaster.GetFooter().IsActive();
 
                 sModifiedStartingPageDesc = sStartingPageDesc;
@@ -1186,10 +1193,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             long nStartRow, nEndRow;
             bool bFreezedLayouts = false;
-            // collect temporary files
+            // to collect temporary email files
             ::std::vector< OUString> aFilesToRemove;
 
-            // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
+            // The SfxObjectShell will be closed explicitly later but
+            // it is more safe to use SfxObjectShellLock here
             SfxObjectShellLock xWorkDocSh;
             SwView*            pWorkView             = nullptr;
             SwDoc*             pWorkDoc              = nullptr;
@@ -1323,12 +1331,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             pEvtSrc->LaunchMailMergeEvent( aEvt );
                         }
 
+                        // working copy is merged - prepare final steps depending on merge options
+
                         if (bCreateSingleFile)
                         {
-                            pWorkDoc->RemoveInvisibleContent();
+                            assert( pTargetShell && "no target shell available!" );
 
-                            OSL_ENSURE( pTargetShell, "no target shell available!" );
-                            // copy created file into the target document
+                            // prepare working copy and target to append
+
+                            pWorkDoc->RemoveInvisibleContent();
                             rWorkShell.ConvertFieldsToText();
                             rWorkShell.SetNumberingRestart();
                             if( bSynchronizedDoc )
@@ -1336,15 +1347,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 lcl_RemoveSectionLinks( rWorkShell );
                             }
 
-                            // insert the document into the target document
-
-                            //#i72517# put the styles to the target document
-                            //if the source uses headers or footers each new copy need to copy a new page styles
-                            SwPageDesc* pTargetPageDesc(nullptr);
-                            if(bPageStylesWithHeaderFooter)
+                            // #i72517# put the styles to the target document
+                            // if the source uses headers or footers each working document
+                            // needs inidividual page styles
+                            SwPageDesc* pTargetPageDesc = nullptr;
+                            if( bPageStylesWithHeaderFooter )
                             {
-                                //create a new pagestyle
-                                //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
+                                // create a new pagestyle
+                                // copy the pagedesc from the current document to the new
+                                // document and change the name of the to-be-applied style
                                 OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
                                 pTargetPageDesc = pTargetDoc->MakePageDesc( sNewPageDescName );
                                 const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
@@ -1359,16 +1370,19 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             else
                                 pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
-                            // insert the document into the target document
                             if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                 lcl_SaveDebugDoc( xWorkDocSh, "WorkDoc", nDocNo );
+
+                            // append the working document to the target document
                             if( targetDocPageCount % 2 == 1 )
                                 ++targetDocPageCount; // Docs always start on odd pages (so offset must be even).
                             SwNodeIndex appendedDocStart = pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
                                 nStartingPageNo, pTargetPageDesc, !bWorkDocInitialized, targetDocPageCount);
                             targetDocPageCount += rWorkShell.GetPageCnt();
+
                             if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                 lcl_SaveDebugDoc( xTargetDocShell, "MergeDoc" );
+
                             if (bMT_SHELL)
                             {
                                 SwDocMergeInfo aMergeInfo;
@@ -1438,7 +1452,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                             //read in the temporary file and use it as mail body
                                             SfxMedium aMedium( sFileURL, StreamMode::READ);
                                             SvStream* pInStream = aMedium.GetInStream();
-                                            OSL_ENSURE(pInStream, "no output file created?");
+                                            assert( pInStream && "no output file created?" );
                                             if(pInStream)
                                             {
                                                 pInStream->SetStreamCharSet( sMailEncoding );
@@ -1473,7 +1487,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                     xMailDispatcher->enqueueMailMessage( xMessage );
                                     if(!xMailDispatcher->isStarted())
-                                            xMailDispatcher->start();
+                                        xMailDispatcher->start();
                                     //schedule for removal
                                     aFilesToRemove.push_back(sFileURL);
                                 }
@@ -1894,7 +1908,7 @@ OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> xColumnProp
 {
     uno::Reference< sdb::XColumn > xColumn(xColumnProps, uno::UNO_QUERY);
     OUString sRet;
-    OSL_ENSURE(xColumn.is(), "SwDBManager::::ImportDBField: illegal arguments");
+    assert( xColumn.is() && "SwDBManager::::ImportDBField: illegal arguments" );
     if(!xColumn.is())
         return sRet;
 
@@ -2239,7 +2253,8 @@ bool SwDBManager::ExistsNextRecord() const
 sal_uInt32  SwDBManager::GetSelectedRecordId()
 {
     sal_uInt32  nRet = 0;
-    OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
+    assert( pImpl->pMergeData &&
+            pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is())
         return 0;
     try
@@ -2254,7 +2269,8 @@ sal_uInt32  SwDBManager::GetSelectedRecordId()
 
 bool SwDBManager::ToRecordId(sal_Int32 nSet)
 {
-    OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
+    assert( pImpl->pMergeData &&
+            pImpl->pMergeData->xResultSet.is() && "no data source in merge" );
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is()|| nSet < 0)
         return false;
     bool bRet = false;
@@ -2842,14 +2858,14 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
+    assert( pFact && "Factory creation failed!" );
     pImpl->pMergeDialog = pFact->CreateMailMergeDlg( DLG_MAILMERGE,
                                                         &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                                                         sDataSource,
                                                         sDataTableOrQuery,
                                                         nCmdType,
                                                         xConnection);
-    OSL_ENSURE(pImpl->pMergeDialog, "Dialog creation failed!");
+    assert( pImpl->pMergeDialog && "Dialog creation failed!" );
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
         aDescriptor[svx::daSelection] <<= pImpl->pMergeDialog->GetSelection();
@@ -2870,7 +2886,6 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                         SwDocShell::Factory().GetFilterContainer() );
             try
             {
-
                 uno::Sequence< beans::PropertyValue > aValues(1);
                 beans::PropertyValue* pValues = aValues.getArray();
                 pValues[0].Name = "FilterName";
@@ -3009,13 +3024,12 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
     aDBData.nCommandType = nCmdType;
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
+    assert( pFact && "Factory creation failed!" );
     std::unique_ptr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData ));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
+    assert( pDlg && "Dialog creation failed!" );
     if( RET_OK == pDlg->Execute() )
     {
         OUString sDummy;
