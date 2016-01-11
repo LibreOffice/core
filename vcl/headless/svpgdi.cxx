@@ -316,10 +316,75 @@ bool SvpSalGraphics::drawTransformedBitmap(
     const SalBitmap& rSourceBitmap,
     const SalBitmap* pAlphaBitmap)
 {
-    // here direct support for transformed bitmaps can be implemented
-    (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
-    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
-    return false;
+    if (pAlphaBitmap && pAlphaBitmap->GetBitCount() != 8 && pAlphaBitmap->GetBitCount() != 1)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap alpha depth case: " << pAlphaBitmap->GetBitCount());
+        return false;
+    }
+
+    SourceHelper aSurface(rSourceBitmap);
+    cairo_surface_t* source = aSurface.getSurface();
+    if (!source)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
+        return false;
+    }
+
+    std::unique_ptr<MaskHelper> xMask;
+    cairo_surface_t *mask = nullptr;
+    if (pAlphaBitmap)
+    {
+        xMask.reset(new MaskHelper(*pAlphaBitmap));
+        mask = xMask->getMask();
+        if (!mask)
+        {
+            SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
+            return false;
+        }
+    }
+
+    const Size aSize = rSourceBitmap.GetSize();
+
+    cairo_t* cr = getCairoContext();
+    assert(cr && m_aDevice->isTopDown());
+
+    clipRegion(cr);
+
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+
+    // setup the image transformation
+    // using the rNull,rX,rY points as destinations for the (0,0),(0,Width),(Height,0) source points
+    const basegfx::B2DVector aXRel = rX - rNull;
+    const basegfx::B2DVector aYRel = rY - rNull;
+    cairo_matrix_t matrix;
+    cairo_matrix_init(&matrix,
+                      aXRel.getX()/aSize.Width(), aXRel.getY()/aSize.Width(),
+                      aYRel.getX()/aSize.Height(), aYRel.getY()/aSize.Height(),
+                      rNull.getX(), rNull.getY());
+
+    cairo_transform(cr, &matrix);
+
+    cairo_rectangle(cr, 0, 0, aSize.Width(), aSize.Height());
+    if (xDamageTracker)
+        extents = getFillDamage(cr);
+    cairo_clip(cr);
+
+    cairo_set_source_surface(cr, source, 0, 0);
+    if (mask)
+        cairo_mask_surface(cr, mask, 0, 0);
+    else
+        cairo_paint(cr);
+
+    cairo_surface_flush(cairo_get_target(cr));
+    cairo_destroy(cr); // unref
+
+    if (xDamageTracker)
+    {
+        xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
+                                                extents.y + extents.height));
+    }
+    return true;
 }
 
 namespace
