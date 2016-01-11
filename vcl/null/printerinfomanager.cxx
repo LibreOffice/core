@@ -19,7 +19,7 @@
 
 #include "vcl/printerinfomanager.hxx"
 
-#include "generic/gendata.hxx"
+#include "unx/gendata.hxx"
 
 using namespace psp;
 using namespace osl;

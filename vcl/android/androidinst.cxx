@@ -15,7 +15,7 @@
 
 #include <android/androidinst.hxx>
 #include <headless/svpdummies.hxx>
-#include <generic/gendata.hxx>
+#include <unx/gendata.hxx>
 #include <osl/detail/android-bootstrap.h>
 #include <rtl/strbuf.hxx>
 #include <basebmp/scanlineformats.hxx>
