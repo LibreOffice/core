@@ -15,6 +15,10 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	$(if $(filter-out ANDROID IOS,$(OS)),Library_xsec_xmlsec) \
 ))
 
+$(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
+    CppunitTest_xmlsecurity_signing \
+))
+
 $(eval $(call gb_Module_add_l10n_targets,xmlsecurity,\
 	AllLangResTarget_xsec \
 	UIConfig_xmlsec \
