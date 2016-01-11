@@ -719,7 +719,7 @@ void ErrorBarResources::disposingRangeSelection()
         m_apRangeSelectionHelper->stopRangeListening( false );
 }
 
-bool ErrorBarResources::isRangeFieldContentValid( Edit & rEdit )
+void ErrorBarResources::isRangeFieldContentValid( Edit & rEdit )
 {
     OUString aRange( rEdit.GetText());
     bool bIsValid = ( aRange.isEmpty() ) ||
@@ -736,8 +736,6 @@ bool ErrorBarResources::isRangeFieldContentValid( Edit & rEdit )
         rEdit.SetControlBackground( RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR );
         rEdit.SetControlForeground( RANGE_SELECTION_INVALID_RANGE_FOREGROUND_COLOR );
     }
-
-    return bIsValid;
 }
 
 } //namespace chart

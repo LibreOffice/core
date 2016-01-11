@@ -712,18 +712,14 @@ void DataBrowser::Resize()
     SetUpdateMode( bLastUpdateMode );
 }
 
-bool DataBrowser::SetReadOnly( bool bNewState )
+void DataBrowser::SetReadOnly( bool bNewState )
 {
-    bool bResult = m_bIsReadOnly;
-
     if( m_bIsReadOnly != bNewState )
     {
         m_bIsReadOnly = bNewState;
         Invalidate();
         DeactivateCell();
     }
-
-    return bResult;
 }
 
 void DataBrowser::SetClean()

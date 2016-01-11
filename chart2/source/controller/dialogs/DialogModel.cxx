@@ -705,7 +705,7 @@ void DialogModel::startControllerLockTimer()
     m_aTimerTriggeredControllerLock.startTimer();
 }
 
-bool DialogModel::setData(
+void DialogModel::setData(
     const Sequence< beans::PropertyValue > & rArguments )
 {
     m_aTimerTriggeredControllerLock.startTimer();
@@ -716,7 +716,7 @@ bool DialogModel::setData(
         ! m_xTemplate.is() )
     {
         OSL_FAIL( "Model objects missing" );
-        return false;
+        return;
     }
 
     try
@@ -746,10 +746,7 @@ bool DialogModel::setData(
     catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
-        return false;
     }
-
-    return true;
 }
 
 void DialogModel::setTimeBasedRange( bool bTimeBased, sal_Int32 nStart, sal_Int32 nEnd) const

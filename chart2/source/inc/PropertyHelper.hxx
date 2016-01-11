@@ -152,33 +152,6 @@ struct OOO_DLLPUBLIC_CHARTTOOLS PropertyNameLess
     }
 };
 
-struct OOO_DLLPUBLIC_CHARTTOOLS PropertyLess : public ::std::binary_function<
-        ::com::sun::star::beans::Property,
-        ::com::sun::star::beans::Property,
-        bool >
-{
-    bool operator() ( const ::com::sun::star::beans::Property & rFirst,
-                      const ::com::sun::star::beans::Property & rSecond )
-    {
-        return ( rFirst.Name.compareTo( rSecond.Name ) < 0 );
-    }
-};
-
-struct OOO_DLLPUBLIC_CHARTTOOLS PropertyValueNameEquals : public ::std::unary_function< ::com::sun::star::beans::PropertyValue, bool >
-{
-    explicit PropertyValueNameEquals( const OUString & rName ) :
-            m_aName( rName )
-    {}
-
-    bool operator() ( const ::com::sun::star::beans::PropertyValue & rPropValue )
-    {
-        return rPropValue.Name.equals( m_aName );
-    }
-
-private:
-    OUString m_aName;
-};
-
 } //  namespace chart
 
 // INCLUDED_CHART2_SOURCE_INC_PROPERTYHELPER_HXX

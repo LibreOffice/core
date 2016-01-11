@@ -68,7 +68,6 @@ public:
     OutputDevice* getReferenceDevice() const;
 
     SfxItemPool&            GetItemPool();
-    SAL_DLLPRIVATE const SfxItemPool&      GetItemPool() const;
 
     SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         createUnoModel() override;

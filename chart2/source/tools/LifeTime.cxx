@@ -373,18 +373,17 @@ void CloseableLifeTimeManager::impl_doClose()
     //mutex will be reacquired in destructor of aNegativeGuard
 }
 
-bool CloseableLifeTimeManager::g_addCloseListener( const uno::Reference< util::XCloseListener > & xListener )
+void CloseableLifeTimeManager::g_addCloseListener( const uno::Reference< util::XCloseListener > & xListener )
     throw(uno::RuntimeException)
 {
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
     //Mutex needs to be acquired exactly ones; will be released inbetween
     if( !impl_canStartApiCall() )
-        return false;
+        return;
     //mutex is acquired
 
     m_aListenerContainer.addInterface( cppu::UnoType<util::XCloseListener>::get(),xListener );
     m_bOwnership = false;
-    return true;
 }
 
 bool CloseableLifeTimeManager::impl_canStartApiCall()

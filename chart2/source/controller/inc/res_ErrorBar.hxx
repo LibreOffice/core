@@ -131,7 +131,7 @@ private:
     DECL_LINK_TYPED( RangeChanged, Edit&, void );
 
     void UpdateControlStates();
-    bool isRangeFieldContentValid( Edit & rEdit );
+    void isRangeFieldContentValid( Edit & rEdit );
 };
 
 } //namespace chart

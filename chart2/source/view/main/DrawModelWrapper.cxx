@@ -260,10 +260,6 @@ SfxItemPool& DrawModelWrapper::GetItemPool()
 {
     return this->SdrModel::GetItemPool();
 }
-const SfxItemPool& DrawModelWrapper::GetItemPool() const
-{
-    return this->SdrModel::GetItemPool();
-}
 XColorListRef DrawModelWrapper::GetColorList() const
 {
     return this->SdrModel::GetColorList();

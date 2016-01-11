@@ -332,7 +332,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
     return xTemplate;
 }
 
-bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParameter
+void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParameter
                 , const uno::Reference< XChartDocument >& xChartModel )
 {
     uno::Reference< lang::XMultiServiceFactory > xTemplateManager( xChartModel->getChartTypeManager(), uno::UNO_QUERY );
@@ -360,7 +360,6 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
             xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::makeAny(rParameter.bSortByXValues));
         }
     }
-    return false;
 }
 void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {

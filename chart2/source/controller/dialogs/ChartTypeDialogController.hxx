@@ -118,7 +118,7 @@ public:
     virtual void        adjustParameterToSubType( ChartTypeParameter& rParameter );
     virtual void        adjustParameterToMainType( ChartTypeParameter& rParameter );
     OUString            getServiceNameForParameter( const ChartTypeParameter& rParameter ) const;
-    bool                commitToModel( const ChartTypeParameter& rParameter
+    void                commitToModel( const ChartTypeParameter& rParameter
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel );
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate( const ChartTypeParameter& rParameter

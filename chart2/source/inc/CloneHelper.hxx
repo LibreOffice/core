@@ -47,25 +47,6 @@ template< class Interface >
     }
 };
 
-/// functor that clones a map element with a UNO-Reference as value
-template< typename Key, class Interface >
-    struct CreateRefWithKeyClone : public ::std::unary_function<
-        ::std::pair<  Key, Interface >,
-        ::std::pair<  Key, Interface > >
-{
-    ::std::pair< Key, Interface > operator() (
-        const ::std::pair< Key, Interface > & rOther )
-    {
-        Interface xResult;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >
-              xCloneable( rOther.second, ::com::sun::star::uno::UNO_QUERY );
-        if( xCloneable.is())
-            xResult.set( xCloneable->createClone(), ::com::sun::star::uno::UNO_QUERY );
-
-        return ::std::make_pair< Key, Interface >( rOther.first, xResult );
-    }
-};
-
 /// clones a vector of UNO-References
 template< class Interface >
     void CloneRefVector(

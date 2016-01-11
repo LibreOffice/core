@@ -134,46 +134,6 @@ struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString : public ::std::unary_function<
     }
 };
 
-/** can be used to find an element with a specific first element in e.g. a
-    vector of pairs (for searching keys in maps you will of course use map::find)
- */
-template< typename First, typename Second >
-    class FirstOfPairEquals : public ::std::unary_function< ::std::pair< First, Second >, bool >
-{
-public:
-    FirstOfPairEquals( const First & aVal )
-            : m_aValueToCompareWith( aVal )
-    {}
-    bool operator() ( const ::std::pair< First, Second > & rElem )
-    {
-        return rElem.first == m_aValueToCompareWith;
-    }
-
-private:
-    First m_aValueToCompareWith;
-};
-
-/** can be used to find a certain value in a map
-
-    ::std::find_if( aMap.begin(), aMap.end(),
-                    SecondOfPairEquals< string, int >( 42 ));
- */
-template< typename Key, typename Value >
-    class SecondOfPairEquals : public ::std::unary_function< ::std::pair< Key, Value >, bool >
-{
-public:
-    SecondOfPairEquals( const Value & aVal )
-            : m_aValueToCompareWith( aVal )
-    {}
-    bool operator() ( const ::std::pair< Key, Value > & rMapElem )
-    {
-        return rMapElem.second == m_aValueToCompareWith;
-    }
-
-private:
-    Value m_aValueToCompareWith;
-};
-
 } //  namespace CommonFunctors
 } //  namespace chart
 

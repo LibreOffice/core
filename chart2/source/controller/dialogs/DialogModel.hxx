@@ -148,7 +148,7 @@ public:
 
     bool allArgumentsForRectRangeDetected() const;
 
-    bool setData( const ::com::sun::star::uno::Sequence<
+    void setData( const ::com::sun::star::uno::Sequence<
                       ::com::sun::star::beans::PropertyValue > & rArguments );
 
     void setTimeBasedRange( bool bTimeBased, sal_Int32 nStart, sal_Int32 nEnd) const;

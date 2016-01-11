@@ -90,8 +90,7 @@ public:
     // Window
     virtual void Resize() override;
 
-    /// @return old state
-    bool SetReadOnly( bool bNewState );
+    void SetReadOnly( bool bNewState );
     bool IsReadOnly() const { return m_bIsReadOnly;}
 
     /// reset the dirty status, if changes have been saved

@@ -97,7 +97,7 @@ OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_isNeedToCancelLongLastingCalls( bool
                     throw ( ::com::sun::star::util::CloseVetoException );
 OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose(bool bDeliverOwnership, bool bMyVeto );
 OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose_doClose();
-OOO_DLLPUBLIC_CHARTTOOLS    bool    g_addCloseListener( const ::com::sun::star::uno::Reference<
+OOO_DLLPUBLIC_CHARTTOOLS    void        g_addCloseListener( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::util::XCloseListener > & xListener )
                     throw(::com::sun::star::uno::RuntimeException);
 
