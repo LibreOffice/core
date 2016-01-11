@@ -387,7 +387,6 @@ void SbxDecimal::getString( OUString& rString )
 
         SysFreeString( aBStr );
     }
-    return bRet;
 #else
     (void)rString;
 #endif
