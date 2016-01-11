@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_39040e7d",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-11T17:14:40Z",
+      "side": 1,
+      "message": "I didn\u0027t try, but \"intd\" vs TINT and \"int\" vs TINTD looks odd to me. Anyone with insights?",
+      "revId": "fa002252331b2babf11ff9327d19905052fa7cb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
