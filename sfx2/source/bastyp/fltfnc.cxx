@@ -1069,7 +1069,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         // register SfxFilter
         // first erase module name from old filter names!
         // e.g: "scalc: DIF" => "DIF"
-        sal_Int32 nStartRealName = sFilterName.indexOf( ": ", 0 );
+        sal_Int32 nStartRealName = sFilterName.indexOf( ": " );
         if( nStartRealName != -1 )
         {
             SAL_WARN( "sfx.bastyp", "Old format, not supported!");
