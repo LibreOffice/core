@@ -849,7 +849,10 @@ void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
     drawPolyPolygon(aPolyPoly, 0);
 }
 
-static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, bool bClosePath)
+static const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
+
+static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, bool bClosePath,
+                             bool bPixelSnap, bool bLineDraw)
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolygon.count();
@@ -877,6 +880,18 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
 
         basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
 
+        if( bPixelSnap)
+        {
+            // snap device coordinates to full pixels
+            aPoint.setX( basegfx::fround( aPoint.getX() ) );
+            aPoint.setY( basegfx::fround( aPoint.getY() ) );
+        }
+
+        if( bLineDraw )
+        {
+            aPoint += aHalfPointOfs;
+        }
+
         if( !nPointIdx )
         {
             // first point => just move there
@@ -899,6 +914,11 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
         {
             basegfx::B2DPoint aCP1 = rPolygon.getNextControlPoint( nPrevIdx );
             basegfx::B2DPoint aCP2 = rPolygon.getPrevControlPoint( nClosedIdx );
+            if( bLineDraw )
+            {
+                aCP1 += aHalfPointOfs;
+                aCP2 += aHalfPointOfs;
+            }
             cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(),
                                aPoint.getX(), aPoint.getY());
         }
@@ -988,7 +1008,7 @@ bool SvpSalGraphics::drawPolyLine(
         }
     }
 
-    AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed());
+    AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
 
     cairo_set_source_rgba(cr, m_aLineColor.getRed()/255.0,
                               m_aLineColor.getGreen()/255.0,
@@ -1041,7 +1061,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     ApplyPaintMode(cr, m_ePaintMode);
 
     for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
-        AddPolygonToPath(cr, *pPoly, true);
+        AddPolygonToPath(cr, *pPoly, true, !getAntiAliasB2DDraw(), m_bUseLineColor);
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
 
@@ -1237,7 +1257,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
 
-    AddPolygonToPath(cr, rPoly, true);
+    AddPolygonToPath(cr, rPoly, true, !getAntiAliasB2DDraw(), false);
 
     cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 
