@@ -555,7 +555,7 @@ public:
     DECL_DLLPRIVATE_LINK_TYPED( ImplHandlePaintHdl, Idle*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplGenerateMouseMoveHdl, void*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplTrackTimerHdl, Timer*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplAsyncFocusHdl, void*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplAsyncFocusHdl, Idle*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplHandleResizeTimerHdl, Idle*, void );
 
 

@@ -3031,7 +3031,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         // hopefully we will not receive the corresponding button up before this
         // button down arrives again
         vcl::Window *pWin = pFrame->GetWindow();
-        if( pWin && pWin->ImplGetWindowImpl()->mpFrameData->mnFocusId )
+        if( pWin && pWin->ImplGetWindowImpl()->mpFrameData->mpFocusIdle )
         {
             PostMessageW( hWnd, nMsg, wParam, lParam );
             return 1;
