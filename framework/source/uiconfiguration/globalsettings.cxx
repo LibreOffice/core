@@ -72,7 +72,7 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
         bool GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, css::uno::Any& aValue );
 
     private:
-        bool impl_initConfigAccess();
+        void impl_initConfigAccess();
 
         osl::Mutex                                                m_mutex;
         bool                                                      m_bDisposed   : 1,
@@ -212,7 +212,7 @@ bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eElement
     return false;
 }
 
-bool GlobalSettings_Access::impl_initConfigAccess()
+void GlobalSettings_Access::impl_initConfigAccess()
 {
     css::uno::Sequence< css::uno::Any > aArgs( 2 );
     css::beans::PropertyValue           aPropValue;
@@ -241,8 +241,6 @@ bool GlobalSettings_Access::impl_initConfigAccess()
                         static_cast< cppu::OWeakObject* >( this ),
                         css::uno::UNO_QUERY ));
         }
-
-        return m_xConfigAccess.is();
     }
     catch ( const css::lang::WrappedTargetException& )
     {
@@ -250,8 +248,6 @@ bool GlobalSettings_Access::impl_initConfigAccess()
     catch ( const css::uno::Exception& )
     {
     }
-
-    return false;
 }
 
 //  global class

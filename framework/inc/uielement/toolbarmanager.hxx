@@ -146,7 +146,7 @@ class ToolBarManager : public ToolbarManager_Base
         ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         css::uno::Reference< css::frame::XModel > GetModelFromFrame() const;
         bool IsPluginMode() const;
-        long HandleClick(void ( SAL_CALL css::frame::XToolbarController::*_pClick )(  ));
+        void HandleClick(void ( SAL_CALL css::frame::XToolbarController::*_pClick )(  ));
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event );
 

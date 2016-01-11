@@ -132,8 +132,8 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         Any                       getInfoFromCommand( const OUString& rCommandURL );
         void                      fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel );
         Sequence< OUString > getAllCommands();
-        bool                  fillCache();
-        bool                  addGenericInfoToCache();
+        void                  fillCache();
+        void                  addGenericInfoToCache();
         void                      impl_fill(const Reference< XNameAccess >& _xConfigAccess,bool _bPopup,
                                                 std::vector< OUString >& aImageCommandVector,
                                                 std::vector< OUString >& aImageRotateVector,
@@ -145,7 +145,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
                                     OUStringHash,
                                     std::equal_to< OUString > > CommandToInfoCache;
 
-        bool initializeConfigAccess();
+        void initializeConfigAccess();
 
         OUString                     m_aConfigCmdAccess;
         OUString                     m_aConfigPopupAccess;
@@ -370,11 +370,11 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
         }
     }
 }
-bool ConfigurationAccess_UICommand::fillCache()
+void ConfigurationAccess_UICommand::fillCache()
 {
 
     if ( m_bCacheFilled )
-        return true;
+        return;
 
     std::vector< OUString > aImageCommandVector;
     std::vector< OUString > aImageRotateVector;
@@ -388,11 +388,9 @@ bool ConfigurationAccess_UICommand::fillCache()
     m_aCommandMirrorImageList = comphelper::containerToSequence( aImageMirrorVector );
 
     m_bCacheFilled = true;
-
-    return true;
 }
 
-bool ConfigurationAccess_UICommand::addGenericInfoToCache()
+void ConfigurationAccess_UICommand::addGenericInfoToCache()
 {
     if ( m_xGenericUICommands.is() && !m_bGenericDataRetrieved )
     {
@@ -427,8 +425,6 @@ bool ConfigurationAccess_UICommand::addGenericInfoToCache()
 
         m_bGenericDataRetrieved = true;
     }
-
-    return true;
 }
 
 Any ConfigurationAccess_UICommand::getInfoFromCommand( const OUString& rCommandURL )
@@ -514,7 +510,7 @@ Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
     return Sequence< OUString >();
 }
 
-bool ConfigurationAccess_UICommand::initializeConfigAccess()
+void ConfigurationAccess_UICommand::initializeConfigAccess()
 {
     Sequence< Any > aArgs( 1 );
     PropertyValue   aPropValue;
@@ -552,8 +548,6 @@ bool ConfigurationAccess_UICommand::initializeConfigAccess()
                 xContainer->addContainerListener(m_xConfigAccessListener);
             }
         }
-
-        return true;
     }
     catch (const WrappedTargetException&)
     {
@@ -561,8 +555,6 @@ bool ConfigurationAccess_UICommand::initializeConfigAccess()
     catch (const Exception&)
     {
     }
-
-    return false;
 }
 
 // container.XContainerListener

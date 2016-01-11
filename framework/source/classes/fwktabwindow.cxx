@@ -292,7 +292,7 @@ void FwkTabWindow::RemoveEventListener( const Link<VclWindowEvent&,void>& rEvent
     m_aTabCtrl->RemoveEventListener( rEventListener );
 }
 
-FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< beans::NamedValue >& rProperties )
+void FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< beans::NamedValue >& rProperties )
 {
     OUString sTitle, sToolTip, sPageURL;
     uno::Reference< css::awt::XContainerWindowEventHandler > xEventHdl;
@@ -329,8 +329,6 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
         m_aTabCtrl->SetPageImage( nIdx, Image( xImage ) );
     if ( bDisabled )
         m_aTabCtrl->EnablePage( nIdx, false );
-
-    return pEntry->m_pPage;
 }
 
 void FwkTabWindow::ActivatePage( sal_Int32 nIndex )

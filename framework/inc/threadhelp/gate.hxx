@@ -108,17 +108,13 @@ class Gate : private boost::noncopyable
             @seealso    method open()
 
             @param      "pTimeOut", optional parameter to wait a certain time
-            @return     true, if wait was successful (gate was opened)
-                        false, if condition has an error or timeout was reached!
 
-            @onerror    We return false.
         *//*-*****************************************************************************************************/
-        bool wait(const TimeValue* pTimeOut = nullptr)
+        void wait(const TimeValue* pTimeOut = nullptr)
         {
             // We must safe access to our internal member!
             ::osl::ClearableMutexGuard aLock( m_aAccessLock );
             // If gate not closed - caller can pass it.
-            bool bSuccessful = true;
             if( m_bClosed )
             {
                 // Then we must release used access lock -
@@ -126,10 +122,8 @@ class Gate : private boost::noncopyable
                 // and if we hold the access lock nobody else can use this object without a deadlock!
                 aLock.clear();
                 // Wait for opening gate...
-                bSuccessful = ( m_aPassage.wait( pTimeOut ) == ::osl::Condition::result_ok );
+                m_aPassage.wait( pTimeOut );
             }
-
-            return bSuccessful;
         }
 
     //  private member

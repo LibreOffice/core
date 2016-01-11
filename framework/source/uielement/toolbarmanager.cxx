@@ -1242,12 +1242,13 @@ void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName
         }
     }
 }
-long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )())
+
+void ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )())
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return 1;
+        return;
 
     sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
@@ -1258,7 +1259,6 @@ long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )(
         if ( xController.is() )
             (xController.get()->*_pClick)( );
     }
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED(ToolBarManager, Click, ToolBox *, void)

@@ -242,22 +242,22 @@ class AddonsOptions_Impl : public ConfigItem
             @return     A list of configuration key names is returned.
         *//*-*****************************************************************************************************/
 
-        bool                 ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& aAddonMenuSeq );
-        bool                 ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeMenuBarSeq );
-        bool                 ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames );
+        void                 ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& aAddonMenuSeq );
+        void                 ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeMenuBarSeq );
+        void                 ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames );
         bool                 ReadToolBarItemSet( const OUString& rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
-        bool                 ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
+        void                 ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
         void                 ReadImages( ImageManager& aImageManager );
-        bool                 ReadMenuMergeInstructions( MergeMenuInstructionContainer& rContainer );
-        bool                 ReadToolbarMergeInstructions( ToolbarMergingInstructions& rToolbarMergeMap );
-        bool                 ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& rContainer );
+        void                 ReadMenuMergeInstructions( MergeMenuInstructionContainer& rContainer );
+        void                 ReadToolbarMergeInstructions( ToolbarMergingInstructions& rToolbarMergeMap );
+        void                 ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& rContainer );
 
-        bool                 ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
+        void                 ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
         bool                 ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
         bool                 ReadMergeStatusbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeStatusbar );
         bool                 ReadMenuItem( const OUString& aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu = false );
         bool                 ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
-        bool                 AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
+        void                 AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
         bool                 ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
         bool                 ReadStatusBarItem( const OUString& aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
         ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
@@ -534,7 +534,7 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool
     return aImage;
 }
 
-bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
+void AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
     OUString             aAddonMenuNodeName( "AddonUI/AddonMenu" );
@@ -566,11 +566,9 @@ bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >
             rAddonMenuSeq[nIndex++] = aMenuItem;
         }
     }
-
-    return ( rAddonMenuSeq.getLength() > 0 );
 }
 
-bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
+void AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
     OUString             aAddonHelpMenuNodeName( "AddonUI/OfficeHelp" );
@@ -602,11 +600,9 @@ bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > 
             rAddonOfficeHelpMenuSeq[nIndex++] = aMenuItem;
         }
     }
-
-    return ( rAddonOfficeHelpMenuSeq.getLength() > 0 );
 }
 
-bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
+void AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
 {
     // Read the OfficeMenuBar set and fill property sequences
     OUString             aAddonMenuBarNodeName( "AddonUI/OfficeMenuBar" );
@@ -655,11 +651,9 @@ bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue
             }
         }
     }
-
-    return ( rAddonOfficeMenuBarSeq.getLength() > 0 );
 }
 
-bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
+void AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
 {
     // Read the OfficeToolBar set and fill property sequences
     OUString             aAddonToolBarNodeName( "AddonUI/OfficeToolBar" );
@@ -675,8 +669,6 @@ bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBa
         rAddonOfficeToolBars.push_back( m_aEmptyAddonToolBar );
         ReadToolBarItemSet( aToolBarItemNode, rAddonOfficeToolBars[n] );
     }
-
-    return ( !rAddonOfficeToolBars.empty() );
 }
 
 bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
@@ -774,7 +766,7 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
     return aPopupMenuURL;
 }
 
-bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
+void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
     const OUString aMenuMergeRootName( "AddonUI/OfficeMenuBarMerging/" );
 
@@ -836,11 +828,9 @@ bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContaine
             aContainer.push_back( aMergeMenuInstruction );
         }
     }
-
-    return true;
 }
 
-bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
+void AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
 {
     OUString aMergeMenuBaseNode( aMergeAddonInstructionBase+m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS ] );
 
@@ -851,10 +841,10 @@ bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructi
     for ( sal_uInt32 i = 0; i < (sal_uInt32)aSubMenuNodeNames.getLength(); i++ )
         aSubMenuNodeNames[i] = aMergeMenuBaseNode + aSubMenuNodeNames[i];
 
-    return ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
+    ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
 }
 
-bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
+void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
     const OUString aToolbarMergeRootName( "AddonUI/OfficeToolbarMerging/" );
 
@@ -922,8 +912,6 @@ bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
             rVector.push_back( aMergeToolbarInstruction );
         }
     }
-
-    return true;
 }
 
 bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
@@ -936,7 +924,7 @@ bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstru
     return ReadToolBarItemSet( aMergeToolbarBaseNode, rMergeToolbarItems );
 }
 
-bool AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
+void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
 {
     const ::rtl::OUString aStatusbarMergeRootName( "AddonUI/OfficeStatusbarMerging/" );
 
@@ -996,8 +984,6 @@ bool AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructi
             aContainer.push_back( aMergeStatusbarInstruction );
         }
     }
-
-    return true;
 }
 
 bool AddonsOptions_Impl::ReadMergeStatusbarData(
@@ -1179,7 +1165,7 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
     return bResult;
 }
 
-bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
+void AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
 {
     Sequence< Sequence< PropertyValue > > aTargetSubMenuSeq;
     Sequence< Sequence< PropertyValue > > aSourceSubMenuSeq;
@@ -1193,8 +1179,6 @@ bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopu
             aTargetSubMenuSeq[nIndex++] = aSourceSubMenuSeq[i];
         rTargetPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aTargetSubMenuSeq;
     }
-
-    return true;
 }
 
 bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )

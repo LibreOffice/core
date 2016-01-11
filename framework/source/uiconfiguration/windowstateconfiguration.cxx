@@ -213,7 +213,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         Any                       impl_getSequenceFromStruct( const WindowStateInfo& rWinStateInfo );
         void                      impl_fillStructFromSequence( WindowStateInfo& rWinStateInfo, const Sequence< PropertyValue >& rSeq );
         Any                       impl_getWindowStateFromResourceURL( const OUString& rResourceURL );
-        bool                      impl_initializeConfigAccess();
+        void                      impl_initializeConfigAccess();
 
     private:
         typedef std::unordered_map< OUString,
@@ -1236,7 +1236,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
     }
 }
 
-bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
+void ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 {
     Sequence< Any > aArgs( 2 );
     PropertyValue   aPropValue;
@@ -1262,8 +1262,6 @@ bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
                 xContainer->addContainerListener(m_xConfigListener);
             }
         }
-
-        return true;
     }
     catch ( const WrappedTargetException& )
     {
@@ -1271,8 +1269,6 @@ bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     catch ( const Exception& )
     {
     }
-
-    return false;
 }
 
 typedef ::cppu::WeakComponentImplHelper< css::container::XNameAccess,
