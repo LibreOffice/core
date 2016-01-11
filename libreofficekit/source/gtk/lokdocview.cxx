@@ -13,7 +13,7 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include <iostream>
+#include <sstream>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
