@@ -131,7 +131,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
        value from the backend db. This entry already contains the path as it
        is used in the configmgr.ini.
      */
-    bool addToConfigmgrIni( bool isSchema, bool isURL, OUString const & url,
+    void addToConfigmgrIni( bool isSchema, bool isURL, OUString const & url,
                      Reference<XCommandEnvironment> const & xCmdEnv );
     bool removeFromConfigmgrIni( bool isSchema, OUString const & url,
                           Reference<XCommandEnvironment> const & xCmdEnv );
@@ -471,7 +471,7 @@ void BackendImpl::configmgrini_flush(
 }
 
 
-bool BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const & url_,
+void BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( isURL ? dp_misc::makeRcTerm(url_) : url_ );
@@ -483,10 +483,7 @@ bool BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const &
         // write immediately:
         m_configmgrini_modified = true;
         configmgrini_flush( xCmdEnv );
-        return true;
     }
-    else
-        return false;
 }
 
 

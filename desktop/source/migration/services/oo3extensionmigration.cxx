@@ -80,7 +80,7 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
 {
 }
 
-::osl::FileBase::RC OO3ExtensionMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
+void OO3ExtensionMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
 {
     ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
     if ( aResult == ::osl::FileBase::E_NOENT )
@@ -88,11 +88,7 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
         INetURLObject aBaseURL( rDirURL );
         aBaseURL.removeSegment();
         checkAndCreateDirectory( aBaseURL );
-        return ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-    }
-    else
-    {
-        return aResult;
+        ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
     }
 }
 

@@ -310,9 +310,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & id, Reference<XInterface> const & xObject );
     void releaseObject( OUString const & id );
 
-    bool addToUnoRc( RcItem kind, OUString const & url,
+    void addToUnoRc( RcItem kind, OUString const & url,
                      Reference<XCommandEnvironment> const & xCmdEnv );
-    bool removeFromUnoRc( RcItem kind, OUString const & url,
+    void removeFromUnoRc( RcItem kind, OUString const & url,
                           Reference<XCommandEnvironment> const & xCmdEnv );
     bool hasInUnoRc( RcItem kind, OUString const & url );
 
@@ -992,7 +992,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
 }
 
 
-bool BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
+void BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
@@ -1004,14 +1004,11 @@ bool BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
         // write immediately:
         m_unorc_modified = true;
         unorc_flush( xCmdEnv );
-        return true;
     }
-    else
-        return false;
 }
 
 
-bool BackendImpl::removeFromUnoRc(
+void BackendImpl::removeFromUnoRc(
     RcItem kind, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -1022,7 +1019,6 @@ bool BackendImpl::removeFromUnoRc(
     // write immediately:
     m_unorc_modified = true;
     unorc_flush( xCmdEnv );
-    return true;
 }
 
 

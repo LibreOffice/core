@@ -747,7 +747,7 @@ void ExtMgrDialog::setGetExtensionsURL( const OUString &rURL )
 }
 
 
-long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
+void ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      bool bLicenseMissing )
 {
 
@@ -758,20 +758,19 @@ long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
 
     if (m_pBundledCbx->IsChecked() && (xPackage->getRepositoryName() == BUNDLED_PACKAGE_MANAGER) )
     {
-       return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+        m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
     else if (m_pSharedCbx->IsChecked() && (xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER) )
     {
-        return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+        m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
     else if (m_pUserCbx->IsChecked() && (xPackage->getRepositoryName() == USER_PACKAGE_MANAGER ))
     {
-        return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+        m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
     else
     {
     //OSL_FAIL("Package will not be displayed");
-        return 0;
     }
 }
 
@@ -1221,7 +1220,7 @@ void UpdateRequiredDialog::dispose()
     ModalDialog::dispose();
 }
 
-long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
+void UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                              bool bLicenseMissing )
 {
     // We will only add entries to the list with unsatisfied dependencies
@@ -1230,9 +1229,8 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
         const SolarMutexGuard aGuard;
         m_pUpdateBtn->Enable();
-        return m_pExtensionBox->addEntry( xPackage );
+        m_pExtensionBox->addEntry( xPackage );
     }
-    return 0;
 }
 
 
@@ -1255,12 +1253,10 @@ void UpdateRequiredDialog::checkEntries()
 }
 
 
-bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
+void UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
                                           bool bEnable )
 {
     m_pManager->getCmdQueue()->enableExtension( xPackage, bEnable );
-
-    return true;
 }
 
 

@@ -77,7 +77,7 @@ public:
     virtual void    updateProgress( const long nProgress ) = 0;
 
     virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) = 0;
-    virtual long    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &xPackage,
+    virtual void    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &xPackage,
                                       bool bLicenseMissing = false ) = 0;
 
     virtual void    prepareChecking() = 0;
@@ -156,7 +156,7 @@ public:
     virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) override;
 
     void            setGetExtensionsURL( const OUString &rURL );
-    virtual long    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
+    virtual void    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
                                       bool bLicenseMissing = false ) override;
     bool enablePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage,
                         bool bEnable );
@@ -224,9 +224,9 @@ public:
 
     virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) override;
 
-    virtual long    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
+    virtual void    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
                                       bool bLicenseMissing = false ) override;
-    bool            enablePackage( const css::uno::Reference< css::deployment::XPackage > &xPackage, bool bEnable );
+    void            enablePackage( const css::uno::Reference< css::deployment::XPackage > &xPackage, bool bEnable );
 
     virtual void    prepareChecking() override;
     virtual void    checkEntries() override;

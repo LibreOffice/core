@@ -138,7 +138,7 @@ static OString decodeString( const sal_Char* pEncChars, int nLen)
     return aDecStr.makeStringAndClear();
 }
 
-bool PersistentMap::open()
+void PersistentMap::open()
 {
     // open the existing file
     sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read;
@@ -152,9 +152,9 @@ bool PersistentMap::open()
     m_bToBeCreated &= (rcOpen == osl::File::E_NOENT) && !m_bIsOpen;
 
     if( !m_bIsOpen)
-        return m_bToBeCreated;
+        return;
 
-    return readAll();
+    readAll();
 }
 
 

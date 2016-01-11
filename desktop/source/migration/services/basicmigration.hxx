@@ -60,7 +60,7 @@ namespace migration
         OUString         m_sSourceDir;
 
         TStringVectorPtr        getFiles( const OUString& rBaseURL ) const;
-        ::osl::FileBase::RC     checkAndCreateDirectory( INetURLObject& rDirURL );
+        void                    checkAndCreateDirectory( INetURLObject& rDirURL );
         void                    copyFiles();
 
     public:

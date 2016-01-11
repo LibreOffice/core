@@ -189,7 +189,7 @@ bool TheExtensionManager::isVisible()
 }
 
 
-bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bParentVisible*/ )
+void TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bParentVisible*/ )
 {
     std::vector< uno::Reference< deployment::XPackage >  > vEntries;
     uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
@@ -198,11 +198,11 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
         xAllPackages = m_xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
                                                               uno::Reference< ucb::XCommandEnvironment >() );
     } catch ( const deployment::DeploymentException & ) {
-        return false;
+        return;
     } catch ( const ucb::CommandFailedException & ) {
-        return false;
+        return;
     } catch ( const ucb::CommandAbortedException & ) {
-        return false;
+        return;
     } catch ( const lang::IllegalArgumentException & e ) {
         throw uno::RuntimeException( e.Message, e.Context );
     }
@@ -218,7 +218,6 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
     }
 
     m_pExecuteCmdQueue->checkForUpdates( vEntries );
-    return true;
 }
 
 

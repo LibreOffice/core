@@ -54,7 +54,7 @@ public:
     bool erase( OString const & key, bool flush_immediately = true );
 
 protected:
-    bool open();
+    void open();
     bool readAll();
     void add( OString const & key, OString const & value );
     void flush();

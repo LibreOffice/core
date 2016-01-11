@@ -255,7 +255,7 @@ for d in definitionSet:
     if d[0] == "void":
         continue
     # ignore UNO constructor method entrypoints
-    if "_get_implementation" in d[1]:
+    if "_get_implementation" in d[1] or "_getFactory" in d[1]:
         continue
     # the plugin can't see calls to these
     if "operator new" in d[1]:

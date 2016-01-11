@@ -79,7 +79,7 @@ namespace migration
             SCANRESULT_DONTMIGRATE_EXTENSION
         };
 
-        ::osl::FileBase::RC     checkAndCreateDirectory( INetURLObject& rDirURL );
+        void                    checkAndCreateDirectory( INetURLObject& rDirURL );
         ScanResult              scanExtensionFolder( const OUString& sExtFolder );
         void                    scanUserExtensions( const OUString& sSourceDir, TStringVector& aMigrateExtensions );
         bool                    scanDescriptionXml( const OUString& sDescriptionXmlFilePath );

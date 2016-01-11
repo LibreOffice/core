@@ -106,7 +106,7 @@ namespace migration
 
 
 
-    ::osl::FileBase::RC BasicMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
+    void BasicMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
     {
         ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
         if ( aResult == ::osl::FileBase::E_NOENT )
@@ -114,11 +114,7 @@ namespace migration
             INetURLObject aBaseURL( rDirURL );
             aBaseURL.removeSegment();
             checkAndCreateDirectory( aBaseURL );
-            return ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-        }
-        else
-        {
-            return aResult;
+            ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
         }
     }
 
