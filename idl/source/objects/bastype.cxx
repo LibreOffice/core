@@ -115,7 +115,7 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
     return false;
 }
 
-bool SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
+void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvStringHashEntry * pName,
                                     SvTokenStream & rInStm )
 {
@@ -125,7 +125,7 @@ bool SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         if( rBase.FindId( getString(), &n ) )
         {
             nValue = n;
-            return true;
+            return;
         }
         else
         {
@@ -135,10 +135,9 @@ bool SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
             rBase.WriteError( rInStm );
         }
     }
-    return false;
 }
 
-bool SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
+void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -151,7 +150,7 @@ bool SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         {
             setString(pTok->GetString());
             nValue = n;
-            return true;
+            return;
         }
         else
         {
@@ -162,7 +161,6 @@ bool SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
     }
     rInStm.Seek( nTokPos );
-    return false;
 }
 
 bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
@@ -192,9 +190,9 @@ bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     return false;
 }
 
-bool SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
+void SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
-    return SvString::ReadSvIdl( SvHash_HelpText(), rInStm );
+    SvString::ReadSvIdl( SvHash_HelpText(), rInStm );
 }
 
 bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )

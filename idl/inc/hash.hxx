@@ -79,8 +79,6 @@ public:
 
     bool            operator == ( const SvStringHashEntry & rRef )
                     { return nHashId == rRef.nHashId; }
-    bool            operator != ( const SvStringHashEntry & rRef )
-                    { return ! operator == ( rRef ); }
     SvStringHashEntry & operator = ( const SvStringHashEntry & rRef )
         { SvRefBase::operator=( rRef );
           aName   = rRef.aName;
@@ -110,8 +108,6 @@ public:
     bool    Insert( const OString& rStr, sal_uInt32 * pHash ); // insert string
     bool    Test( const OString& rStr, sal_uInt32 * pHash ) const; // test of insert string
     SvStringHashEntry * Get ( sal_uInt32 nIndex ) const; // return pointer to string
-    SvStringHashEntry & operator []( sal_uInt32 nPos ) const
-            { return pEntries[ nPos ]; }
 };
 
 #endif // INCLUDED_IDL_INC_HASH_HXX

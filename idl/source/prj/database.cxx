@@ -674,7 +674,7 @@ struct WriteDummy
     }
 };
 
-bool SvIdlDataBase::WriteDepFile(
+void SvIdlDataBase::WriteDepFile(
         SvFileStream & rStream, OUString const& rTarget)
 {
     rStream.WriteCharPtr( OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8).getStr() );
@@ -682,7 +682,6 @@ bool SvIdlDataBase::WriteDepFile(
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
     rStream.WriteCharPtr( "\n\n" );
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDummy(rStream));
-    return rStream.GetError() == SVSTREAM_OK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

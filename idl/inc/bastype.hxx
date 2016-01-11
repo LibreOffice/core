@@ -79,8 +79,8 @@ public:
     sal_uInt32  GetValue() const { return nValue; }
     void        SetValue( sal_uInt32 nVal ) { nValue = nVal; }
 
-    bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    bool        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
+    void        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    void        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
                            SvTokenStream & rInStm );
 };
 
@@ -112,7 +112,7 @@ class SvHelpText : public SvString
 {
 public:
                 SvHelpText() {}
-    bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    void        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 };
 
 
@@ -138,10 +138,6 @@ public:
                 {
                     return (r.nMajorVersion == nMajorVersion)
                              && (r.nMinorVersion == nMinorVersion);
-                }
-    bool        operator != ( const SvVersion & r )
-                {
-                    return !(*this == r);
                 }
 
     bool        ReadSvIdl( SvTokenStream & rInStm );

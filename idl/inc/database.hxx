@@ -126,7 +126,7 @@ public:
     SvMetaAttribute *       SearchKnownAttr( const SvIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
     void AddDepFile(OUString const& rFileName);
-    bool WriteDepFile(SvFileStream & rStream, OUString const& rTarget);
+    void WriteDepFile(SvFileStream & rStream, OUString const& rTarget);
 };
 
 class SvIdlWorkingBase : public SvIdlDataBase

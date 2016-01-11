@@ -176,11 +176,10 @@ SvMetaModule * SvMetaExtern::GetModule() const
     return pModule;
 }
 
-const SvGlobalName & SvMetaExtern::GetUUId() const
+void SvMetaExtern::GetUUId() const
 {
     if( aUUId == SvGlobalName() )
         GetModule()->FillNextName( &const_cast<SvMetaExtern *>(this)->aUUId );
-    return aUUId;
 }
 
 void SvMetaExtern::SetModule( SvIdlDataBase & rBase )

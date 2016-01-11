@@ -128,7 +128,7 @@ public:
 
     void            Push( SvMetaObject * pObj )
                     { aList.push_back( pObj ); }
-    SvMetaObject *  Pop() { return aList.pop_back(); }
+    void            Pop() { aList.pop_back(); }
     SvMetaObject *  Get( std::function<bool ( const SvMetaObject* )> isSvMetaObject )
                     {
                         for( SvMetaObjectMemberList::reverse_iterator it = aList.rbegin(); it != aList.rend(); ++it )
@@ -200,7 +200,7 @@ public:
 
     SvMetaModule *      GetModule() const;
 
-    const SvGlobalName &GetUUId() const;
+    void                GetUUId() const;
     void                SetModule( SvIdlDataBase & rBase );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
