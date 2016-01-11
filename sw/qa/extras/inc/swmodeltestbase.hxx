@@ -28,7 +28,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
 
 #include <test/bootstrapfixture.hxx>
@@ -42,7 +41,6 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <sfx2/objsh.hxx>
 #include <dbmgr.hxx>
 #include <unoprnms.hxx>
 
