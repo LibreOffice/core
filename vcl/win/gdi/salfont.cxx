@@ -49,6 +49,7 @@
 #include "sft.hxx"
 #include "win/saldata.hxx"
 #include "win/salgdi.h"
+#include "impfontcharmap.hxx"
 
 using namespace vcl;
 
