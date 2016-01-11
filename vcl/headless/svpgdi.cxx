@@ -838,12 +838,13 @@ void SvpSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 
 void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+
     if (m_ePaintMode != XOR)
     {
-        basegfx::B2DPolygon aPoly;
-        aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
-        for (sal_uInt32 i = 1; i < nPoints; ++i)
-            aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
         drawPolyPolygon(basegfx::B2DPolyPolygon(aPoly), 0);
         return;
     }
@@ -852,10 +853,6 @@ void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 
     if ((m_bUseLineColor || m_bUseFillColor) && nPoints && m_aDevice)
     {
-        basegfx::B2DPolygon aPoly;
-        aPoly.append( basegfx::B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-        for( sal_uLong i = 1; i < nPoints; i++ )
-            aPoly.setB2DPoint( i, basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
         ensureClip(); // FIXME: for ...
         if( m_bUseFillColor )
         {
@@ -871,27 +868,36 @@ void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
-                                      const sal_uInt32* pPointCounts,
-                                      PCONSTSALPOINT*   pPtAry )
+void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
+                                     const sal_uInt32* pPointCounts,
+                                     PCONSTSALPOINT*   pPtAry)
 {
+    basegfx::B2DPolyPolygon aPolyPoly;
+    for(sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
+    {
+        sal_uInt32 nPoints = pPointCounts[nPolygon];
+        if (nPoints)
+        {
+            PCONSTSALPOINT pPoints = pPtAry[nPolygon];
+            basegfx::B2DPolygon aPoly;
+            aPoly.append( basegfx::B2DPoint(pPoints->mnX, pPoints->mnY), nPoints);
+            for (sal_uInt32 i = 1; i < nPoints; ++i)
+                aPoly.setB2DPoint(i, basegfx::B2DPoint( pPoints[i].mnX, pPoints[i].mnY));
+
+            aPolyPoly.append(aPoly);
+        }
+    }
+
+    if (m_ePaintMode != XOR)
+    {
+        drawPolyPolygon(aPolyPoly, 0);
+        return;
+    }
+
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygon case");
+
     if ((m_bUseLineColor || m_bUseFillColor) && nPoly && m_aDevice)
     {
-        basegfx::B2DPolyPolygon aPolyPoly;
-        for( sal_uInt32 nPolygon = 0; nPolygon < nPoly; nPolygon++ )
-        {
-            sal_uInt32 nPoints = pPointCounts[nPolygon];
-            if( nPoints )
-            {
-                PCONSTSALPOINT pPoints = pPtAry[nPolygon];
-                basegfx::B2DPolygon aPoly;
-                aPoly.append( basegfx::B2DPoint( pPoints->mnX, pPoints->mnY ), nPoints );
-                for( sal_uInt32 i = 1; i < nPoints; i++ )
-                    aPoly.setB2DPoint( i, basegfx::B2DPoint( pPoints[i].mnX, pPoints[i].mnY ) );
-
-                aPolyPoly.append( aPoly );
-            }
-        }
         ensureClip(); // FIXME: for ...
         if( m_bUseFillColor )
         {
