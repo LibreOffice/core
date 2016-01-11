@@ -25,7 +25,7 @@
 #include <tools/debug.hxx>
 
 #include "generic/geninst.h"
-#include "generic/glyphcache.hxx"
+#include "unx/glyphcache.hxx"
 #include "headless/svpgdi.hxx"
 
 namespace

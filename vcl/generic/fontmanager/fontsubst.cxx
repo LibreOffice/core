@@ -19,7 +19,7 @@
 
 #include "generic/geninst.h"
 #include "generic/genpspgraphics.h"
-#include "generic/glyphcache.hxx"
+#include "unx/glyphcache.hxx"
 
 #include "vcl/sysdata.hxx"
 #include "fontinstance.hxx"

@@ -26,7 +26,7 @@
 #ifndef _MSC_VER
 #include <graphite_layout.hxx>
 
-#include "generic/glyphcache.hxx"
+#include "unx/glyphcache.hxx"
 
 class PhysicalFontFace;
 

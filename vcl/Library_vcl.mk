@@ -423,7 +423,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 # handle X11 platforms, which have additional files and possibly system graphite
 ifneq (,$(or $(USING_X11),$(ENABLE_HEADLESS)))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/generic/glyphs/graphite_serverfont \
+    vcl/unx/generic/glyphs/graphite_serverfont \
 ))
 endif
 
@@ -555,9 +555,6 @@ vcl_generic_code= \
     vcl/generic/print/prtsetup \
     vcl/generic/print/text_gfx \
     vcl/generic/fontmanager/fontsubst \
-    vcl/generic/glyphs/gcach_layout \
-    vcl/generic/glyphs/glyphcache \
-    vcl/generic/glyphs/scrptrun \
     vcl/generic/fontmanager/fontcache \
     vcl/generic/fontmanager/fontconfig \
     vcl/generic/fontmanager/fontmanager \
@@ -579,6 +576,9 @@ vcl_headless_freetype_code=\
     vcl/headless/svpglyphcache \
     vcl/unx/generic/gdi/cairotextrender \
     vcl/unx/generic/glyphs/freetype_glyphcache \
+    vcl/unx/generic/glyphs/gcach_layout \
+    vcl/unx/generic/glyphs/glyphcache \
+    vcl/unx/generic/glyphs/scrptrun \
     vcl/headless/svpcairotextrender \
 
 ifeq ($(USING_X11),TRUE)
