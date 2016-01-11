@@ -81,7 +81,7 @@ private:
     };
     bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
     void ensureClip();
-
+    bool invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
 protected:
     vcl::Region                         m_aClipRegion;
     SvpCairoTextRender                  m_aTextRenderImpl;

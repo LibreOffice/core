@@ -1308,76 +1308,82 @@ namespace
     }
 }
 
-void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+bool SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
 {
-    if (m_ePaintMode != XOR)
+    if (m_ePaintMode == XOR)
+        return false;
+
+    cairo_t* cr = getCairoContext();
+    assert(cr && m_aDevice->isTopDown());
+    clipRegion(cr);
+    ApplyPaintMode(cr, m_ePaintMode);
+
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+
+    AddPolygonToPath(cr, rPoly, true);
+
+    cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+
+    if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
     {
-        cairo_t* cr = getCairoContext();
-        assert(cr && m_aDevice->isTopDown());
-        clipRegion(cr);
-        ApplyPaintMode(cr, m_ePaintMode);
+        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+    }
+    else
+    {
+        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
+    }
 
-        cairo_rectangle_int_t extents = {0, 0, 0, 0};
-        basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
-
-        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
-
-        cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
-
-        if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
-        {
-            cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
-        }
-        else
-        {
-            SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
-        }
-
-        if (nFlags & SAL_INVERT_TRACKFRAME)
-        {
-            cairo_set_line_width(cr, 2.0);
-            const double dashLengths[2] = { 4.0, 4.0 };
-            cairo_set_dash(cr, dashLengths, 2, 0);
-
-            if (xDamageTracker)
-                extents = getStrokeDamage(cr);
-
-            cairo_stroke(cr);
-        }
-        else
-        {
-            if (xDamageTracker)
-                extents = getFillDamage(cr);
-
-            cairo_clip(cr);
-
-            if (nFlags & SAL_INVERT_50)
-            {
-                cairo_pattern_t *pattern = create_stipple();
-                cairo_mask(cr, pattern);
-                cairo_pattern_destroy(pattern);
-            }
-            else
-            {
-                cairo_paint(cr);
-            }
-        }
-
-        cairo_surface_flush(cairo_get_target(cr));
-        cairo_destroy(cr); // unref
+    if (nFlags & SAL_INVERT_TRACKFRAME)
+    {
+        cairo_set_line_width(cr, 2.0);
+        const double dashLengths[2] = { 4.0, 4.0 };
+        cairo_set_dash(cr, dashLengths, 2, 0);
 
         if (xDamageTracker)
-        {
-            xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
-                                                    extents.y + extents.height));
-        }
+            extents = getStrokeDamage(cr);
 
-        return;
+        cairo_stroke(cr);
     }
+    else
+    {
+        if (xDamageTracker)
+            extents = getFillDamage(cr);
+
+        cairo_clip(cr);
+
+        if (nFlags & SAL_INVERT_50)
+        {
+            cairo_pattern_t *pattern = create_stipple();
+            cairo_mask(cr, pattern);
+            cairo_pattern_destroy(pattern);
+        }
+        else
+        {
+            cairo_paint(cr);
+        }
+    }
+
+    cairo_surface_flush(cairo_get_target(cr));
+    cairo_destroy(cr); // unref
+
+    if (xDamageTracker)
+    {
+        xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
+                                                extents.y + extents.height));
+    }
+
+    return true;
+}
+
+void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+{
+    basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
+    if (invert(aRect, nFlags))
+        return;
 
     SAL_WARN("vcl.gdi", "SvpSalGraphics::invert unhandled XOR (?)");
 
-    basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
     basegfx::B2DPolyPolygon aPolyPoly( aRect );
     basegfx::B2IBox aDestRange( nX, nY, nX + nWidth, nY + nHeight );
 
@@ -1387,16 +1393,19 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert /*nFlags*/ )
+void SvpSalGraphics::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags)
 {
-    SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, unhandled points case");
-
-    // FIXME: handle SAL_INVERT_50 and SAL_INVERT_TRACKFRAME
     basegfx::B2DPolygon aPoly;
-    aPoly.append( basegfx::B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-    for( sal_uLong i = 1; i < nPoints; i++ )
-        aPoly.setB2DPoint( i, basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
-    aPoly.setClosed( true );
+    aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+    aPoly.setClosed(true);
+
+    if (invert(aPoly, nFlags))
+        return;
+
+    SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, unhandled points case");
+    // FIXME: handle SAL_INVERT_50 and SAL_INVERT_TRACKFRAME
     ensureClip(); // FIXME for ...
     m_aDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(aPoly), basebmp::Color( 0xffffff ), basebmp::DrawMode::XOR, m_aClipMap );
     dbgOut( m_aDevice );
