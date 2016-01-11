@@ -158,10 +158,10 @@ public:
     bool PutLong( sal_Int32 );
     bool PutSingle( float );
     bool PutDouble( double );
-    bool PutDate( double );
+    void PutDate( double );
     bool PutBool( bool );
-    bool PutErr( sal_uInt16 );
-    bool PutStringExt( const OUString& );     // with extended analysis (International, "sal_True"/"sal_False")
+    void PutErr( sal_uInt16 );
+    void PutStringExt( const OUString& );     // with extended analysis (International, "sal_True"/"sal_False")
     bool PutInt64( sal_Int64 );
     bool PutUInt64( sal_uInt64 );
     bool PutString( const OUString& );
@@ -170,12 +170,12 @@ public:
     bool PutUShort( sal_uInt16 );
     bool PutULong( sal_uInt32 );
     bool PutEmpty();
-    bool PutNull();
+    void PutNull();
 
             // Special methods
-    bool PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec );
+    void PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec );
     bool PutDecimal( SbxDecimal* pDecimal ); // This function is needed for Windows build, don't remove
-    bool fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec ) const;
+    void fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec ) const;
     bool PutCurrency( const sal_Int64& );
             // Interface for CDbl in Basic
     static SbxError ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle = false );

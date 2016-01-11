@@ -578,7 +578,7 @@ bool SbxValue::Put( const SbxValues& rVal )
 // if Float were declared with ',' as the decimal separator or BOOl
 // explicit with "TRUE" or "FALSE".
 // Implementation in ImpConvStringExt (SBXSCAN.CXX)
-bool SbxValue::PutStringExt( const OUString& r )
+void SbxValue::PutStringExt( const OUString& r )
 {
     // Copy; if it is Unicode convert it immediately
     OUString aStr( r );
@@ -621,7 +621,6 @@ bool SbxValue::PutStringExt( const OUString& r )
         ResetError();
 
     SetFlags( nFlags_ );
-    return bRet;
 }
 
 bool SbxValue::PutBool( bool b )
@@ -640,35 +639,31 @@ bool SbxValue::PutEmpty()
     return bRet;
 }
 
-bool SbxValue::PutNull()
+void SbxValue::PutNull()
 {
     bool bRet = SetType( SbxNULL );
     if( bRet )
         SetModified( true );
-    return bRet;
 }
 
 
 // Special decimal methods
-bool SbxValue::PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec )
+void SbxValue::PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec )
 {
     SbxValue::Clear();
     aData.pDecimal = new SbxDecimal( rAutomationDec );
     aData.pDecimal->addRef();
     aData.eType = SbxDECIMAL;
-    return true;
 }
 
-bool SbxValue::fillAutomationDecimal
+void SbxValue::fillAutomationDecimal
     ( css::bridge::oleautomation::Decimal& rAutomationDec ) const
 {
     SbxDecimal* pDecimal = GetDecimal();
     if( pDecimal != nullptr )
     {
         pDecimal->fillAutomationDecimal( rAutomationDec );
-        return true;
     }
-    return false;
 }
 
 
@@ -686,12 +681,15 @@ bool SbxValue::PutString( const OUString& r )
 bool SbxValue::p( t n ) \
 { SbxValues aRes(e); aRes.m = n; Put( aRes ); return !IsError(); }
 
+void SbxValue::PutDate( double n )
+{ SbxValues aRes(SbxDATE); aRes.nDouble = n; Put( aRes ); }
+void SbxValue::PutErr( sal_uInt16 n )
+{ SbxValues aRes(SbxERROR); aRes.nUShort = n; Put( aRes ); }
+
 PUT( PutByte,     SbxBYTE,       sal_uInt8,        nByte )
 PUT( PutChar,     SbxCHAR,       sal_Unicode,      nChar )
 PUT( PutCurrency, SbxCURRENCY,   const sal_Int64&, nInt64 )
-PUT( PutDate,     SbxDATE,       double,           nDouble )
 PUT( PutDouble,   SbxDOUBLE,     double,           nDouble )
-PUT( PutErr,      SbxERROR,      sal_uInt16,       nUShort )
 PUT( PutInteger,  SbxINTEGER,    sal_Int16,        nInteger )
 PUT( PutLong,     SbxLONG,       sal_Int32,        nLong )
 PUT( PutObject,   SbxOBJECT,     SbxBase*,         pObj )

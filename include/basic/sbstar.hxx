@@ -71,7 +71,7 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
 protected:
     bool                                CError( SbError, const OUString&, sal_Int32, sal_Int32, sal_Int32 );
 private:
-    BASIC_DLLPRIVATE bool               RTError( SbError, sal_Int32, sal_Int32, sal_Int32 );
+    BASIC_DLLPRIVATE void               RTError( SbError, sal_Int32, sal_Int32, sal_Int32 );
     BASIC_DLLPRIVATE bool               RTError( SbError, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
     BASIC_DLLPRIVATE sal_uInt16         BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     BASIC_DLLPRIVATE sal_uInt16         StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
