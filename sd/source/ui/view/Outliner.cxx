@@ -591,6 +591,8 @@ void Outliner::Initialize (bool bDirectionIsForward)
 
 bool Outliner::SearchAndReplaceAll()
 {
+    DetectChange();
+
     bool bRet = true;
     // Save the current position to be restored after having replaced all
     // matches.
