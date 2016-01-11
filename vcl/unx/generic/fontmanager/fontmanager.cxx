@@ -27,7 +27,7 @@
 
 #include "fontcache.hxx"
 #include "fontsubset.hxx"
-#include "impfont.hxx"
+#include "impfontcharmap.hxx"
 #include "svdata.hxx"
 #include "unx/geninst.h"
 #include "fontmanager.hxx"

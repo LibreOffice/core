@@ -17,7 +17,7 @@
  */
 #include <vcl/fontcharmap.hxx>
 #include <fontinstance.hxx>
-#include <impfont.hxx>
+#include <impfontcharmap.hxx>
 
 #include <vector>
 #include <set>

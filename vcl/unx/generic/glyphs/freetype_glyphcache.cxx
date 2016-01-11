@@ -68,6 +68,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include "fontmanager.hxx"
+#include "impfontcharmap.hxx"
 
 static FT_Library aLibFT = nullptr;
 
