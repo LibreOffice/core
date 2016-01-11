@@ -28,7 +28,7 @@
 #include <unx/sm.hxx>
 #include <unx/salbmp.h>
 #include <unx/genprn.h>
-#include <generic/geninst.h>
+#include <unx/geninst.h>
 #include <headless/svpgdi.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <generic/gensys.h>
+#include <unx/gensys.h>
 #include <unx/screensaverinhibitor.hxx>
 
 #include <prex.h>

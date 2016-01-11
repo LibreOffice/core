@@ -19,7 +19,7 @@
 
 #include <config_folders.h>
 
-#include <generic/gensys.h>
+#include <unx/gensys.h>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>

@@ -23,7 +23,7 @@
 #include <osl/thread.hxx>
 #include <vclpluginapi.h>
 #include <salinst.hxx>
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 
 #include <prex.h>
 #include <X11/Xlib.h>

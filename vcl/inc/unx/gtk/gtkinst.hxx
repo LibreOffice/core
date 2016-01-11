@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 
 #include <unx/salinst.h>
-#include <generic/gensys.h>
+#include <unx/gensys.h>
 #include <headless/svpinst.hxx>
 #include <gtk/gtk.h>
 

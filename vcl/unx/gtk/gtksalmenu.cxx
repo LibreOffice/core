@@ -11,7 +11,7 @@
 
 #ifdef ENABLE_GMENU_INTEGRATION
 
-#include <generic/gendata.hxx>
+#include <unx/gendata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/glomenu.h>

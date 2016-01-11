@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <generic/gendata.hxx>
+#include <unx/gendata.hxx>
 #include <headless/svpinst.hxx>
 
 class SvpSalData : public SalGenericData

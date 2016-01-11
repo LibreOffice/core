@@ -18,8 +18,8 @@
  */
 
 #include <salframe.hxx>
-#include <generic/gendisp.hxx>
-#include <generic/geninst.h>
+#include <unx/gendisp.hxx>
+#include <unx/geninst.h>
 
 SalGenericDisplay::SalGenericDisplay()
 {
