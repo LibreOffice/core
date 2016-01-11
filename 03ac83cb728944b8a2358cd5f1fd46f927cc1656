@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_99237a05",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-11T18:20:43Z",
+      "side": 1,
+      "message": "As this is part of an API, IMHO pTargetWindow should be checked for nullptr before calling strlen() on it or creating OUString of it.\n\nWhich raises another question: why do we need to always construct a temporary OUString even if most times it will be empty? postMouseEvent() even declares a default of a temporary empty OUString instance.",
+      "revId": "03ac83cb728944b8a2358cd5f1fd46f927cc1656",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_5d963e95",
         "filename": "include/LibreOfficeKit/LibreOfficeKit.hxx",
         "patchSetId": 1
