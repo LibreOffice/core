@@ -1379,7 +1379,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 m_bCancel = !Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
                             }
                             if( !m_bCancel && !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
+                            {
                                 m_bCancel = true;
+                                bNoError = false;
+                            }
                         }
                         else
                         {
