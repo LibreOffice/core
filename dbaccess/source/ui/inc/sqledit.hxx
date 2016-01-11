@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 namespace dbaui
 {
     class OQueryTextView;
-    class OSqlEdit : public MultiLineEditSyntaxHighlight, utl::ConfigurationListener
+    class OSqlEdit : public MultiLineEditSyntaxHighlight, public utl::ConfigurationListener
     {
     private:
         class ChangesListener;

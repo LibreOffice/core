@@ -70,7 +70,7 @@ class SfxItemSet;
 
 namespace svx { namespace sidebar { class GalleryControl; } }
 
-class GalleryBrowser1 : public Control, SfxListener
+class GalleryBrowser1 : public Control, public SfxListener
 {
     friend class GalleryBrowser;
     friend class svx::sidebar::GalleryControl;

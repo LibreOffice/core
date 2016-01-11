@@ -224,7 +224,7 @@ namespace xforms
     */
     template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS = OXSDDataType >
     class ODerivedDataType  :public SUPERCLASS
-                            ,::comphelper::OPropertyArrayUsageHelper< CONCRETE_DATA_TYPE_IMPL >
+                            ,public ::comphelper::OPropertyArrayUsageHelper< CONCRETE_DATA_TYPE_IMPL >
     {
     private:
         bool    m_bPropertiesRegistered;

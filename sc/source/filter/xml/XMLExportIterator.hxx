@@ -72,7 +72,7 @@ struct ScMyShape
 
 typedef std::list<ScMyShape>    ScMyShapeList;
 
-class ScMyShapesContainer : ScMyIteratorBase
+class ScMyShapesContainer : public ScMyIteratorBase
 {
 private:
     ScMyShapeList               aShapeList;
@@ -101,7 +101,7 @@ struct ScMyNoteShape
 
 typedef std::list<ScMyNoteShape>    ScMyNoteShapeList;
 
-class ScMyNoteShapesContainer : ScMyIteratorBase
+class ScMyNoteShapesContainer : public ScMyIteratorBase
 {
 private:
     ScMyNoteShapeList           aNoteShapeList;
@@ -129,7 +129,7 @@ struct ScMyMergedRange
 
 typedef std::list<ScMyMergedRange>  ScMyMergedRangeList;
 
-class ScMyMergedRangesContainer : ScMyIteratorBase
+class ScMyMergedRangesContainer : public ScMyIteratorBase
 {
 private:
     ScMyMergedRangeList         aRangeList;
@@ -166,7 +166,7 @@ struct ScMyAreaLink
 
 typedef ::std::list< ScMyAreaLink > ScMyAreaLinkList;
 
-class ScMyAreaLinksContainer : ScMyIteratorBase
+class ScMyAreaLinksContainer : public ScMyIteratorBase
 {
 private:
     ScMyAreaLinkList            aAreaLinkList;
@@ -193,7 +193,7 @@ struct ScMyCellRangeAddress : css::table::CellRangeAddress
 
 typedef std::list<ScMyCellRangeAddress> ScMyEmptyDatabaseRangeList;
 
-class ScMyEmptyDatabaseRangesContainer : ScMyIteratorBase
+class ScMyEmptyDatabaseRangesContainer : public ScMyIteratorBase
 {
 private:
     ScMyEmptyDatabaseRangeList  aDatabaseList;
@@ -222,7 +222,7 @@ struct ScMyDetectiveObj
 typedef ::std::list< ScMyDetectiveObj > ScMyDetectiveObjList;
 typedef ::std::vector< ScMyDetectiveObj > ScMyDetectiveObjVec;
 
-class ScMyDetectiveObjContainer : ScMyIteratorBase
+class ScMyDetectiveObjContainer : public ScMyIteratorBase
 {
 private:
     ScMyDetectiveObjList        aDetectiveObjList;
@@ -256,7 +256,7 @@ struct ScMyDetectiveOp
 typedef ::std::list< ScMyDetectiveOp > ScMyDetectiveOpList;
 typedef ::std::vector< ScMyDetectiveOp > ScMyDetectiveOpVec;
 
-class ScMyDetectiveOpContainer : ScMyIteratorBase
+class ScMyDetectiveOpContainer : public ScMyIteratorBase
 {
 private:
     ScMyDetectiveOpList         aDetectiveOpList;

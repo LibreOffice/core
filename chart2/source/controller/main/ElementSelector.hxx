@@ -67,7 +67,7 @@ class SelectorListBox : public ListBox
 typedef ::cppu::ImplHelper1 < ::com::sun::star::lang::XServiceInfo> ElementSelectorToolbarController_BASE;
 
 class ElementSelectorToolbarController : public ::svt::ToolboxController
-                                                , ElementSelectorToolbarController_BASE
+                                                , public ElementSelectorToolbarController_BASE
 {
 public:
     explicit ElementSelectorToolbarController();

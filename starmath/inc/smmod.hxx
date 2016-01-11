@@ -85,7 +85,7 @@ public:
     static const OUString GetExportSymbolSetName( const OUString &rUiName );
 };
 
-class SmModule : public SfxModule, utl::ConfigurationListener
+class SmModule : public SfxModule, public utl::ConfigurationListener
 {
     std::unique_ptr<svtools::ColorConfig> mpColorConfig;
     std::unique_ptr<SmMathConfig> mpConfig;

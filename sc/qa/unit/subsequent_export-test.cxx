@@ -74,7 +74,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class ScExportTest : public ScBootstrapFixture, XmlTestTools
+class ScExportTest : public ScBootstrapFixture, public XmlTestTools
 {
 protected:
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;

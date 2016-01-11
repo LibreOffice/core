@@ -79,7 +79,7 @@ struct ScClipData;
 #define SC_DROP_NAVIGATOR       1
 #define SC_DROP_TABLE           2
 
-class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
+class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     Timer               aIdleTimer;
     Idle                aSpellIdle;

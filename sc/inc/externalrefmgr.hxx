@@ -358,7 +358,7 @@ private:
     mutable DocDataType maDocs;
 };
 
-class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper, SfxListener
+class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper, public SfxListener
 {
 public:
 

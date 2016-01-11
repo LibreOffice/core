@@ -330,7 +330,7 @@ namespace {
     /** Read the resource file and process it into a sequence of properties
         that can be passed to the printing dialog.
     */
-    class DialogCreator : Resource
+    class DialogCreator : public Resource
     {
     public:
         DialogCreator (bool bImpress, sal_Int32 nCurPage)

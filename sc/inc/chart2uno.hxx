@@ -62,7 +62,7 @@ class ScChart2DataProvider : public
                     css::chart2::data::XRangeXMLConversion,
                     css::beans::XPropertySet,
                     css::lang::XServiceInfo>,
-                SfxListener
+                public SfxListener
 {
 public:
 
@@ -188,7 +188,7 @@ class ScChart2DataSource : public
                 ::cppu::WeakImplHelper<
                     css::chart2::data::XDataSource,
                     css::lang::XServiceInfo>,
-                SfxListener
+                public SfxListener
 {
 public:
 
@@ -235,7 +235,7 @@ class ScChart2DataSequence : public
                     css::util::XModifyBroadcaster,
                     css::beans::XPropertySet,
                     css::lang::XServiceInfo>,
-                SfxListener,
+                public SfxListener,
                 private boost::noncopyable
 {
 public:

@@ -79,7 +79,7 @@ typedef ::cppu::WeakAggComponentImplHelper7<
 
 class SvxGraphCtrlAccessibleContext:
     private comphelper::OBaseMutex, public SvxGraphCtrlAccessibleContext_Base,
-    SfxListener, accessibility::IAccessibleViewForwarder
+    public SfxListener, public accessibility::IAccessibleViewForwarder
 {
 public:
     friend class GraphCtrl;
