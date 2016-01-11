@@ -312,18 +312,24 @@ uno::Sequence< beans::Property > Content::getProperties(
     if ( !bTransient )
     {
         // Obtain all properties supported for this resource from server.
-        try
+        DAVOptions aDAVOptions;
+        getResourceOptions( xEnv, aDAVOptions, xResAccess );
+        // only Class 1 is needed for PROPFIND
+        if ( aDAVOptions.isClass1() )
         {
-            std::vector< DAVResourceInfo > props;
-            xResAccess->PROPFIND( DAVZERO, props, xEnv );
+            try
+            {
+                std::vector< DAVResourceInfo > props;
+                xResAccess->PROPFIND( DAVZERO, props, xEnv );
 
-            // Note: vector always contains exactly one resource info, because
-            //       we used a depth of DAVZERO for PROPFIND.
-            aPropSet.insert( (*props.begin()).properties.begin(),
-                             (*props.begin()).properties.end() );
-        }
-        catch ( DAVException const & )
-        {
+                // Note: vector always contains exactly one resource info, because
+                //       we used a depth of DAVZERO for PROPFIND.
+                aPropSet.insert( (*props.begin()).properties.begin(),
+                                 (*props.begin()).properties.end() );
+            }
+            catch ( DAVException const & )
+            {
+            }
         }
     }
 
