@@ -359,11 +359,9 @@ bool URLTransformer::isExternalURL(const OUString& /*rURL*/) const
     if ( GETA(propName) ) \
         mAny >>= variable;
 
-// not thread safe
-int ShapeExport::mnEmbeddeDocumentCounter = 1;
-
 ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport )
     : DrawingML( pFS, pFB, eDocumentType, pTextExport )
+    , m_nEmbeddedObjects(0)
     , mnShapeIdMax( 1 )
     , mnPictureIdMax( 1 )
     , mnXmlNamespace( nXmlNamespace )
@@ -1683,7 +1681,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
     assert(!sRelationType.isEmpty());
     assert(!sSuffix.isEmpty());
 
-    OUString sFileName = "embeddings/oleObject" + OUString::number(mnEmbeddeDocumentCounter++) + "." + sSuffix;
+    OUString sFileName = "embeddings/oleObject" + OUString::number(++m_nEmbeddedObjects) + "." + sSuffix;
     uno::Reference<io::XOutputStream> const xOutStream(
         mpFB->openFragmentStream(
             OUString::createFromAscii(GetComponentDir()) + "/" + sFileName,
