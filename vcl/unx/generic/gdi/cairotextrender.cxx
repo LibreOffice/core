@@ -28,7 +28,7 @@
 #include "generic/printergfx.hxx"
 #include "generic/genpspgraphics.h"
 #include "generic/geninst.h"
-#include "generic/glyphcache.hxx"
+#include "unx/glyphcache.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
 

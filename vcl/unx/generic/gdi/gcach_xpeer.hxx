@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_UNX_GENERIC_GDI_GCACH_XPEER_HXX
 #define INCLUDED_VCL_UNX_GENERIC_GDI_GCACH_XPEER_HXX
 
-#include "generic/glyphcache.hxx"
+#include "unx/glyphcache.hxx"
 
 class X11GlyphCache : public GlyphCache
 {
