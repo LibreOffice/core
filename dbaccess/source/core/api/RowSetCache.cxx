@@ -873,8 +873,6 @@ void ORowSetCache::moveWindow()
         return;
     }
 
-    bool bRet = true;
-
     sal_Int32 nDiff = (m_nFetchSize - 1) / 2;
     sal_Int32 nNewStartPos  = (m_nPosition - nDiff) - 1; //m_nPosition is 1-based, but m_nStartPos is 0-based
     sal_Int32 nNewEndPos    = nNewStartPos + m_nFetchSize;
@@ -963,7 +961,7 @@ void ORowSetCache::moveWindow()
         }
         else
         {// no rows can be reused so fill again
-            bRet = reFillMatrix(nNewStartPos,nNewEndPos);
+            reFillMatrix(nNewStartPos,nNewEndPos);
         }
     }
 
@@ -1076,7 +1074,7 @@ void ORowSetCache::moveWindow()
             }
         }
         else // no rows can be reused so fill again
-            bRet = reFillMatrix(nNewStartPos,nNewEndPos);
+            reFillMatrix(nNewStartPos,nNewEndPos);
     }
 
     if(!m_bRowCountFinal)
