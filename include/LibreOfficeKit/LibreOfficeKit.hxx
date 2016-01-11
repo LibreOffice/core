@@ -296,6 +296,10 @@ public:
     {
         return mpThis->pClass->getError(mpThis);
     }
+    inline void freeError(const char *pfree)
+    {
+        mpThis->pClass->freeError(pfree);
+    }
 };
 
 /// Factory method to create a lok::Office instance.
