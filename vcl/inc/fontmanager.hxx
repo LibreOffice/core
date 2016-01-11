@@ -31,6 +31,7 @@
 #include <vcl/vclenum.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include "salglyphid.hxx"
+#include "unx/fc_fontoptions.hxx"
 
 #include <vector>
 

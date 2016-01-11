@@ -29,6 +29,7 @@
 #include "unx/genpspgraphics.h"
 #include "unx/geninst.h"
 #include "unx/glyphcache.hxx"
+#include "unx/fc_fontoptions.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
 
