@@ -1218,6 +1218,37 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The internal number of the date." ;
         };
     };
+    Resource SC_OPCODE_WEEKNUM_OOO
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the calendar week corresponding to the given date.\nThis function only provides interoperability with %PRODUCTNAME 5.0 and earlier and OpenOffice.org." ;
+        };
+        ExtraData =
+        {
+            2;
+            ID_FUNCTION_GRP_DATETIME;
+            U2S( HID_FUNC_WEEKNUM_OOO );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The internal number of the date." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "mode" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, other values = Monday)." ;
+        };
+    };
      // -=*# Resource for function EASTERSUNDAY #*=-
     Resource SC_OPCODE_EASTERSUNDAY
     {

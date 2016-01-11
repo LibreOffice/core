@@ -2401,6 +2401,7 @@ void Test::testFunctionLists()
         "TODAY",
         "WEEKDAY",
         "WEEKNUM",
+        "WEEKNUM_OOO",
         "WEEKS",
         "WEEKSINYEAR",
         "WORKDAY.INTL",
