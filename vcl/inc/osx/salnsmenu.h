@@ -33,10 +33,6 @@ class AquaSalMenuItem;
 
 @interface SalNSMenu : NSMenu
 {
-    /* Caution: SalNSMenu instances occasionally are binary copied
-       in AquaSalMenu::ShowNativePopupMenu. If any members are added,
-       please take this into account !
-    */
     AquaSalMenu*        mpMenu;
 }
 -(id)initWithMenu: (AquaSalMenu*)pMenu;
@@ -46,10 +42,6 @@ class AquaSalMenuItem;
 
 @interface SalNSMenuItem : NSMenuItem
 {
-    /* Caution: SalNSMenuItem instances occasionally are binary copied
-       in AquaSalMenu::ShowNativePopupMenu. If any members are added,
-       please take this into account !
-    */
     AquaSalMenuItem*    mpMenuItem;
 }
 -(id)initWithMenuItem: (AquaSalMenuItem*)pMenuItem;

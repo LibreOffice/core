@@ -55,6 +55,21 @@
             else
                 OSL_FAIL( "unconnected menu" );
         }
+        else if( mpMenu->mpVCLMenu )
+        {
+            mpMenu->mpVCLMenu->Activate();
+
+            // Hide disabled items
+            NSArray* elements = [pMenu itemArray];
+            NSEnumerator* it = [elements objectEnumerator];
+            id element;
+            while ( ( element = [it nextObject] ) != nil )
+            {
+                NSMenuItem* item = static_cast< NSMenuItem* >( element );
+                if( ![item isSeparatorItem] )
+                    [item setHidden: ![item isEnabled]];
+            }
+        }
     }
 }
 
