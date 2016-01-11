@@ -45,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_components,vcl_lifecycle,\
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \
 	framework/util/fwk \
+	sfx2/util/sfx \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_lifecycle))
