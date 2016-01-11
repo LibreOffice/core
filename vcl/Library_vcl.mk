@@ -35,7 +35,7 @@ endif
 
 $(eval $(call gb_Library_set_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
 
-$(eval $(call gb_Library_use_custom_headers,vcl,officecfg/registry vcl/generic/fontmanager))
+$(eval $(call gb_Library_use_custom_headers,vcl,officecfg/registry vcl/unx/generic/fontmanager))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
@@ -554,12 +554,6 @@ vcl_generic_code= \
     vcl/generic/print/genprnpsp \
     vcl/generic/print/prtsetup \
     vcl/generic/print/text_gfx \
-    vcl/generic/fontmanager/fontsubst \
-    vcl/generic/fontmanager/fontcache \
-    vcl/generic/fontmanager/fontconfig \
-    vcl/generic/fontmanager/fontmanager \
-    vcl/generic/fontmanager/helper \
-    vcl/generic/fontmanager/parseAFM \
 
 vcl_headless_code= \
     vcl/headless/svpbmp \
@@ -579,6 +573,12 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/glyphs/gcach_layout \
     vcl/unx/generic/glyphs/glyphcache \
     vcl/unx/generic/glyphs/scrptrun \
+    vcl/unx/generic/fontmanager/fontsubst \
+    vcl/unx/generic/fontmanager/fontcache \
+    vcl/unx/generic/fontmanager/fontconfig \
+    vcl/unx/generic/fontmanager/fontmanager \
+    vcl/unx/generic/fontmanager/helper \
+    vcl/unx/generic/fontmanager/parseAFM \
     vcl/headless/svpcairotextrender \
 
 ifeq ($(USING_X11),TRUE)
