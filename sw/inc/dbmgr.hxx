@@ -144,32 +144,65 @@ struct SwMergeDescriptor
 {
     const DBManagerOptions                              nMergeType;
     SwWrtShell&                                         rSh;
-    const svx::ODataAccessDescriptor&                 rDescriptor;
-    OUString                                            sSaveToFilter; ///< export filter to save resulting files
+    const svx::ODataAccessDescriptor&                   rDescriptor;
+
+    /**
+     * Create a single or multiple results
+     *
+     * This currently just affects FILE and PRINTER, as EMAIL is always
+     * multiple and SHELL is always single.
+     */
+    bool                                                bCreateSingleFile;
+
+    /**
+     * @defgroup save Export filter settings
+     * @addtogroup save
+     * @{ */
+    OUString                                            sSaveToFilter;
     OUString                                            sSaveToFilterOptions;
     css::uno::Sequence< css::beans::PropertyValue >     aSaveToFilterData;
+    /** @} */
 
+    /**
+     * @defgroup file Mail merge as File settings
+     * @addtogroup file
+     * @{ */
     OUString                                            sPath;
+    /** @} */
 
+    /**
+     * @defgroup email Mail merge as eMail settings
+     * @addtogroup email
+     * @{ */
     OUString                                            sSubject;
     OUString                                            sMailBody;
     OUString                                            sAttachmentName;
     css::uno::Sequence< OUString >                      aCopiesTo;
     css::uno::Sequence< OUString >                      aBlindCopiesTo;
-
     css::uno::Reference< css::mail::XSmtpService >      xSmtpServer;
+    bool                                                bSendAsHTML;
+    bool                                                bSendAsAttachment;
+    /** @} */
 
-    bool                                            bSendAsHTML;
-    bool                                            bSendAsAttachment;
+    /**
+     * @addtogroup file email
+     * @{ */
 
-    bool                                            bPrintAsync;
-    bool                                            bCreateSingleFile;
-
+    /** DB column to fetch EMail of Filename from
+     */
     OUString                                            sDBcolumn;
 
-    SwMailMergeConfigItem*                              pMailMergeConfigItem;
+    /** @} */
 
-    css::uno::Sequence<  css::beans::PropertyValue >  aPrintOptions;
+    /**
+     * @defgroup print Mail merge to Printer
+     * @addtogroup print
+     * @{ */
+    bool                                                bPrintAsync;
+    css::uno::Sequence<  css::beans::PropertyValue >    aPrintOptions;
+    /** @} */
+
+    SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
     SwMergeDescriptor( const DBManagerOptions nType,
                        SwWrtShell& rShell,
@@ -177,11 +210,11 @@ struct SwMergeDescriptor
         nMergeType(nType),
         rSh(rShell),
         rDescriptor(rDesc),
+        bCreateSingleFile( false ),
         bSendAsHTML( true ),
         bSendAsAttachment( false ),
         bPrintAsync( false ),
-        bCreateSingleFile( false ),
-        pMailMergeConfigItem(nullptr)
+        pMailMergeConfigItem( nullptr )
     {
         if( nType == DBMGR_MERGE_SHELL )
             bCreateSingleFile = true;
@@ -197,7 +230,14 @@ class SW_DLLPUBLIC SwDBManager
 {
 friend class SwConnectionDisposedListener_Impl;
 
-    bool            m_bCancel;            ///< Mail merge canceled.
+    /** Mail merge cancel indicator
+
+       TODO: convert m_bCancel to a three state escalating enum
+       run, cancel, error. Not sure if this helps readability /
+       further code cleanup, but it would be easier to follow the
+       seamantics and we could get rid of bNoError in MergeMailFiles
+     */
+    bool            m_bCancel;
     bool            bInitDBFields : 1;
     bool            bInMerge    : 1;    ///< merge process active
     bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
@@ -223,7 +263,7 @@ friend class SwConnectionDisposedListener_Impl;
     /// Insert a single data record as text into document.
     SAL_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
-    /// merge to file _and_ merge to e-Mail
+    /// Run the mail merge for defined modes, except DBMGR_MERGE
     SAL_DLLPRIVATE bool MergeMailFiles( SwWrtShell* pSh,
                                         const SwMergeDescriptor& rMergeDescriptor,
                                         vcl::Window* pParent );
