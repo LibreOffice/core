@@ -759,16 +759,12 @@ void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 
 void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    if( m_bUseLineColor )
-    {
-        ensureClip(); // FIXME: for ...
-        m_aDevice->drawLine( basegfx::B2IPoint( nX1, nY1 ),
-                             basegfx::B2IPoint( nX2, nY2 ),
-                             m_aLineColor,
-                             m_aDrawMode,
-                             m_aClipMap );
-    }
-    dbgOut( m_aDevice );
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(nX1, nY1), 2);
+    aPoly.setB2DPoint(1, basegfx::B2DPoint(nX2, nY2));
+    aPoly.setClosed(false);
+    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Middle,
+                 css::drawing::LineCap_BUTT);
 }
 
 void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
@@ -800,19 +796,16 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     m_bUseLineColor = bOrigUseLineColor;
 }
 
-void SvpSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
-    if (m_bUseLineColor && nPoints && m_aDevice)
-    {
-        basegfx::B2DPolygon aPoly;
-        aPoly.append( basegfx::B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-        for( sal_uLong i = 1; i < nPoints; i++ )
-            aPoly.setB2DPoint( i, basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
-        aPoly.setClosed( false );
-        ensureClip(); // FIXME: for ...
-        m_aDevice->drawPolygon( aPoly, m_aLineColor, m_aDrawMode, m_aClipMap );
-    }
-    dbgOut( m_aDevice );
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+    aPoly.setClosed(false);
+
+    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Middle,
+                 css::drawing::LineCap_BUTT);
 }
 
 void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
