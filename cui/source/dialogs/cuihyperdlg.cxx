@@ -305,7 +305,7 @@ IMPL_LINK_NOARG_TYPED(SvxHpLinkDlg, ClickCloseHdl_Impl, Button*, void)
 |*
 |************************************************************************/
 
-sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
+void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 {
     sal_uInt16 nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
 
@@ -355,7 +355,6 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
             mbGrabFocus = false;
         }
     }
-    return nPageId;
 }
 
 /*************************************************************************

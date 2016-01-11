@@ -234,10 +234,8 @@ void CuiAboutConfigTabPage::Reset()
     m_pPrefBox->SetUpdateMode(true);
 }
 
-bool CuiAboutConfigTabPage::FillItemSet()
+void CuiAboutConfigTabPage::FillItemSet()
 {
-    bool bModified = false;
-
     std::vector< std::shared_ptr< Prop_Impl > >::iterator pIter;
     for( pIter = m_vectorOfModified.begin() ; pIter != m_vectorOfModified.end(); ++pIter )
     {
@@ -245,13 +243,10 @@ bool CuiAboutConfigTabPage::FillItemSet()
         Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
 
         xNameReplace->replaceByName( (*pIter)->Property, (*pIter)->Value );
-        bModified = true;
 
         Reference< util::XChangesBatch > xChangesBatch( xUpdateAccess, UNO_QUERY_THROW );
         xChangesBatch->commitChanges();
     }
-
-    return bModified;
 }
 
 void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAccess, SvTreeListEntry *pParentEntry,

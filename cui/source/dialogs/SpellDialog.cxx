@@ -905,7 +905,7 @@ IMPL_LINK_TYPED(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton, void )
 }
 
 
-int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
+void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
 
@@ -944,13 +944,12 @@ int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
     if (DictionaryError::NONE != nAddRes)
     {
         SvxDicError( this, nAddRes );
-        return 0; // don't continue
+        return; // don't continue
     }
 
     // go on
     SpellContinue_Impl();
     m_pSentenceED->UndoActionEnd();
-    return 0;
 }
 
 

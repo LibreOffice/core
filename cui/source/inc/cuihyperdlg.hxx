@@ -85,7 +85,7 @@ public:
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) override;
 
-    sal_uInt16              SetPage( SvxHyperlinkItem* pItem );
+    void                    SetPage( SvxHyperlinkItem* pItem );
     void                    SetReadOnlyMode( bool bReadOnly );
     inline bool             IsHTMLDoc() const { return mbIsHTMLDoc; }
 

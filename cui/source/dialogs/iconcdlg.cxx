@@ -494,7 +494,7 @@ void IconChoiceDialog::ActivatePageImpl ()
 
 
 
-bool IconChoiceDialog::DeActivatePageImpl ()
+void IconChoiceDialog::DeActivatePageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( mnCurrentPageId );
 
@@ -551,11 +551,6 @@ bool IconChoiceDialog::DeActivatePageImpl ()
             }
         }
     }
-
-    if ( nRet & IconChoicePage::LEAVE_PAGE )
-        return true;
-    else
-        return false;
 }
 
 

@@ -2580,7 +2580,7 @@ void SvxMenuConfigPage::DeleteSelectedTopLevel()
     GetSaveInData()->SetModified( );
 }
 
-bool SvxMenuConfigPage::DeleteSelectedContent()
+void SvxMenuConfigPage::DeleteSelectedContent()
 {
     SvTreeListEntry *pActEntry = m_pContentsListBox->FirstSelected();
 
@@ -2610,10 +2610,7 @@ bool SvxMenuConfigPage::DeleteSelectedContent()
 
         GetSaveInData()->SetModified();
         pMenu->SetModified();
-
-        return true;
     }
-    return false;
 }
 
 short SvxMenuConfigPage::QueryReset()
@@ -3220,7 +3217,7 @@ void SvxToolbarConfigPage::DeleteSelectedTopLevel()
     }
 }
 
-bool SvxToolbarConfigPage::DeleteSelectedContent()
+void SvxToolbarConfigPage::DeleteSelectedContent()
 {
     SvTreeListEntry *pActEntry = m_pContentsListBox->FirstSelected();
 
@@ -3258,11 +3255,7 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
                 DeleteSelectedTopLevel();
             }
         }
-
-        return true;
     }
-
-    return false;
 }
 
 IMPL_LINK_TYPED( SvxToolbarConfigPage, MoveHdl, Button *, pButton, void )
@@ -4403,7 +4396,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
     }
 }
 
-bool ToolbarSaveInData::LoadToolbar(
+void ToolbarSaveInData::LoadToolbar(
     const uno::Reference< container::XIndexAccess >& xToolbarSettings,
     SvxConfigEntry* pParentData )
 {
@@ -4486,8 +4479,6 @@ bool ToolbarSaveInData::LoadToolbar(
             }
         }
     }
-
-    return true;
 }
 
 IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void )
@@ -4706,7 +4697,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDi
     AddFunction();
 }
 
-SvTreeListEntry* SvxToolbarConfigPage::AddFunction(
+void SvxToolbarConfigPage::AddFunction(
     SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
 {
     SvTreeListEntry* pNewLBEntry =
@@ -4733,8 +4724,6 @@ SvTreeListEntry* SvxToolbarConfigPage::AddFunction(
     {
         static_cast<ToolbarSaveInData*>( GetSaveInData() )->ApplyToolbar( pToolbar );
     }
-
-    return pNewLBEntry;
 }
 
 SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg)

@@ -986,7 +986,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
 
 
 
-bool SvxLineTabPage::FillXLSet_Impl()
+void SvxLineTabPage::FillXLSet_Impl()
 {
     sal_Int32 nPos;
 
@@ -1103,8 +1103,6 @@ bool SvxLineTabPage::FillXLSet_Impl()
     m_rXLSet.Put( XLineTransparenceItem( nVal ) );
 
     m_pCtlPreview->SetLineAttributes(m_aXLineAttr.GetItemSet());
-
-    return true;
 }
 
 

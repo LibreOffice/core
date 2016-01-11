@@ -443,7 +443,7 @@ public:
     bool            FillItemSet( SfxItemSet* ) override;
     void            Reset( const SfxItemSet* ) override;
 
-    virtual bool    DeleteSelectedContent() = 0;
+    virtual void    DeleteSelectedContent() = 0;
     virtual void    DeleteSelectedTopLevel() = 0;
 
     SvxConfigEntry* GetTopLevelSelection()
@@ -481,7 +481,7 @@ private:
     void            Init() override;
     void            UpdateButtonStates() override;
     short           QueryReset() override;
-    bool            DeleteSelectedContent() override;
+    void            DeleteSelectedContent() override;
     void            DeleteSelectedTopLevel() override;
 
 public:
@@ -574,7 +574,7 @@ private:
     void            UpdateButtonStates() override;
     short           QueryReset() override;
     void            Init() override;
-    bool            DeleteSelectedContent() override;
+    void            DeleteSelectedContent() override;
     void            DeleteSelectedTopLevel() override;
 
 public:
@@ -582,7 +582,7 @@ public:
     virtual ~SvxToolbarConfigPage();
     virtual void dispose() override;
 
-    SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = nullptr,
+    void            AddFunction( SvTreeListEntry* pTarget = nullptr,
                                              bool bFront = false,
                                              bool bAllowDuplicates = true );
 
@@ -607,7 +607,7 @@ private:
     css::uno::Reference
         < css::container::XNameAccess > m_xPersistentWindowState;
 
-    bool        LoadToolbar(
+    void        LoadToolbar(
         const css::uno::Reference< css::container::XIndexAccess >& xToolBarSettings,
         SvxConfigEntry* pParentData );
 

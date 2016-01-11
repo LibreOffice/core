@@ -1247,7 +1247,7 @@ namespace svx
                             SuggestionList();
                             ~SuggestionList();
 
-        bool                Set( const OUString& _rElement, sal_uInt16 _nNumOfElement );
+        void                Set( const OUString& _rElement, sal_uInt16 _nNumOfElement );
         bool                Reset( sal_uInt16 _nNumOfElement );
         const OUString*     Get( sal_uInt16 _nNumOfElement ) const;
         void                Clear();
@@ -1269,7 +1269,7 @@ namespace svx
         Clear();
     }
 
-    bool SuggestionList::Set( const OUString& _rElement, sal_uInt16 _nNumOfElement )
+    void SuggestionList::Set( const OUString& _rElement, sal_uInt16 _nNumOfElement )
     {
         bool    bRet = _nNumOfElement < m_vElements.size();
         if( bRet )
@@ -1282,8 +1282,6 @@ namespace svx
                 ++m_nNumOfEntries;
             }
         }
-
-        return bRet;
     }
 
     bool SuggestionList::Reset( sal_uInt16 _nNumOfElement )

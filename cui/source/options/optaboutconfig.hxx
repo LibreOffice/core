@@ -75,7 +75,7 @@ public:
    void     FillItems(const css::uno::Reference<css::container::XNameAccess>& xNameAccess,
                       SvTreeListEntry *pParentEntry = nullptr, int lineage = 0, bool bLoadAll = false);
    static css::uno::Reference< css::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
-   bool FillItemSet();
+   void FillItemSet();
 };
 
 class CuiAboutConfigValueDialog : public ModalDialog

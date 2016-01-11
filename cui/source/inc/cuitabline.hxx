@@ -191,7 +191,7 @@ private:
     // LineCaps
     DECL_LINK_TYPED( ChangeCapStyleHdl_Impl, ListBox&, void );
 
-    bool FillXLSet_Impl();
+    void FillXLSet_Impl();
 
     void InitSymbols(MenuButton* pButton);
     void SymbolSelected(MenuButton* pButton);
@@ -366,7 +366,7 @@ private:
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
     DECL_LINK_TYPED( SelectLineEndHdl_Impl, ListBox&, void );
-    long ChangePreviewHdl_Impl( void* p );
+    void ChangePreviewHdl_Impl();
 
     void CheckChanges_Impl();
 

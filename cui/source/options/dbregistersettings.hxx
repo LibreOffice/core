@@ -55,10 +55,6 @@ namespace svx
                 // properly set when filling the struct from the XDatabaseRegistrations data
         }
 
-        bool operator!=( const DatabaseRegistration& _rhs ) const
-        {
-            return !( this->operator==( _rhs ) );
-        }
     };
 
     typedef ::std::map< OUString, DatabaseRegistration > DatabaseRegistrations;

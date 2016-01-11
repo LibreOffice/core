@@ -311,10 +311,9 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, voi
 
 
 
-long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
+void SvxLineEndDefTabPage::ChangePreviewHdl_Impl()
 {
     m_pCtlPreview->Invalidate();
-    return 0L;
 }
 
 
@@ -534,7 +533,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 
             *pnLineEndListState |= ChangeType::MODIFIED;
 
-            ChangePreviewHdl_Impl( this );
+            ChangePreviewHdl_Impl();
         }
     }
     // determine button state

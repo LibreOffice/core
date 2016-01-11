@@ -164,7 +164,7 @@ protected:
     static void             RefreshInputSet();
 
     void                    ActivatePageImpl ();
-    bool                    DeActivatePageImpl ();
+    void                    DeActivatePageImpl ();
     void                    ResetPageImpl ();
 
     short                   Ok();
@@ -191,11 +191,8 @@ public:
     const sal_uInt16*   GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
 
-    const OKButton&     GetOKButton() const { return *m_pOKBtn; }
     OKButton&           GetOKButton() { return *m_pOKBtn; }
-    const PushButton&   GetApplyButton() const { return *m_pApplyBtn; }
     PushButton&         GetApplyButton() { return *m_pApplyBtn; }
-    const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
 
     short               Execute() override;

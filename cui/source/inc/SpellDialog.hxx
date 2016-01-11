@@ -197,7 +197,7 @@ private:
 
     DECL_LINK_TYPED( InitHdl, void*, void );
 
-    int             AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu *pMenu );
+    void            AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu *pMenu );
     void            StartSpellOptDlg_Impl();
     int             InitUserDicts();
     void            UpdateBoxes_Impl();

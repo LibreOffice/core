@@ -1668,7 +1668,7 @@ void SvxSwPosSizeTabPage::UpdateExample()
     m_pExampleWN->Invalidate();
 }
 
-sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16 nAlign,
+void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16 nAlign,
         sal_uInt16 nRel, ListBox &rLB, FixedText &rFT)
 {
     OUString sSelEntry;
@@ -1810,8 +1810,6 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
     rFT.Enable(rLB.GetEntryCount() != 0);
 
     RelHdl(rLB);
-
-    return nLBRelations;
 }
 
 sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
