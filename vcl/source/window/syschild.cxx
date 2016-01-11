@@ -79,10 +79,13 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             // trigger a LoseFocus which matches the status
             // of the window with matching Activate-Status
             pWindow->ImplGetFrameData()->mbSysObjFocus = false;
-            if ( !pWindow->ImplGetFrameData()->mnFocusId )
+            if ( !pWindow->ImplGetFrameData()->mpFocusIdle )
             {
                 pWindow->ImplGetFrameData()->mbStartFocusState = true;
-                pWindow->ImplGetFrameData()->mnFocusId = Application::PostUserEvent( LINK( pWindow->ImplGetFrameWindow(), vcl::Window, ImplAsyncFocusHdl ), nullptr, true );
+                pWindow->ImplGetFrameData()->mpFocusIdle = new Idle("loseFocus");
+                pWindow->ImplGetFrameData()->mpFocusIdle->SetIdleHdl(LINK( pWindow->ImplGetFrameWindow(), vcl::Window, ImplAsyncFocusHdl ));
+                pWindow->ImplGetFrameData()->mpFocusIdle->SetPriority(SchedulerPriority::LOW);
+                pWindow->ImplGetFrameData()->mpFocusIdle->Start();
             }
             break;
 
