@@ -1372,7 +1372,7 @@ bool SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     rStat.TakeCreateRect(aOutRect);
     aOutRect.Justify();
 
-    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
+    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointCount()>=2);
 }
 
 void SdrObject::BrkCreate(SdrDragStat& /*rStat*/)

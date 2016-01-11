@@ -563,7 +563,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         OUString aStr;
         ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
         OUStringBuffer aBuf(aStr);
-        const sal_uInt32 nPointCount(rDrag.GetPointAnz());
+        const sal_uInt32 nPointCount(rDrag.GetPointCount());
 
         if(OBJ_CIRC != meCircleKind && nPointCount > 2)
         {
@@ -623,7 +623,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
     nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
     nStart=0;
     nEnd=36000;
-    if (rStat.GetPointAnz()>2) {
+    if (rStat.GetPointCount()>2) {
         Point aP(rStat.GetPoint(2)-aCenter);
         if (nWdt==0) aP.X()=0;
         if (nHgt==0) aP.Y()=0;
@@ -646,7 +646,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
         nEnd=nStart;
         aP2=aP1;
     } else aP1=aCenter;
-    if (rStat.GetPointAnz()>3) {
+    if (rStat.GetPointCount()>3) {
         Point aP(rStat.GetPoint(3)-aCenter);
         if (nWdt>=nHgt) {
             aP.Y()=BigMulDiv(aP.Y(),nWdt,nHgt);
@@ -703,7 +703,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
 
     // #i103058# push current angle settings to ItemSet to
     // allow FullDrag visualisation
-    if(rStat.GetPointAnz() >= 4)
+    if(rStat.GetPointCount() >= 4)
     {
         ImpSetCircInfoToAttr();
     }
@@ -716,17 +716,17 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     bool bRet = false;
-    if (eCmd==SDRCREATE_FORCEEND && rStat.GetPointAnz()<4) meCircleKind=OBJ_CIRC;
+    if (eCmd==SDRCREATE_FORCEEND && rStat.GetPointCount()<4) meCircleKind=OBJ_CIRC;
     if (meCircleKind==OBJ_CIRC) {
-        bRet=rStat.GetPointAnz()>=2;
+        bRet=rStat.GetPointCount()>=2;
         if (bRet) {
             maRect = pU->aR;
             ImpJustifyRect(maRect);
         }
     } else {
-        rStat.SetNoSnap(rStat.GetPointAnz()>=2);
-        rStat.SetOrtho4Possible(rStat.GetPointAnz()<2);
-        bRet=rStat.GetPointAnz()>=4;
+        rStat.SetNoSnap(rStat.GetPointCount()>=2);
+        rStat.SetOrtho4Possible(rStat.GetPointCount()<2);
+        bRet=rStat.GetPointCount()>=4;
         if (bRet) {
             maRect = pU->aR;
             ImpJustifyRect(maRect);
@@ -754,8 +754,8 @@ void SdrCircObj::BrkCreate(SdrDragStat& rStat)
 
 bool SdrCircObj::BckCreate(SdrDragStat& rStat)
 {
-    rStat.SetNoSnap(rStat.GetPointAnz()>=3);
-    rStat.SetOrtho4Possible(rStat.GetPointAnz()<3);
+    rStat.SetNoSnap(rStat.GetPointCount()>=3);
+    rStat.SetOrtho4Possible(rStat.GetPointCount()<3);
     return meCircleKind!=OBJ_CIRC;
 }
 
@@ -763,12 +763,12 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 {
     const ImpCircUser* pU = static_cast<const ImpCircUser*>(rDrag.GetUser());
 
-    if(rDrag.GetPointAnz() < 4L)
+    if(rDrag.GetPointCount() < 4L)
     {
         // force to OBJ_CIRC to get full visualisation
         basegfx::B2DPolyPolygon aRetval(ImpCalcXPolyCirc(OBJ_CIRC, pU->aR, pU->nStart, pU->nEnd));
 
-        if(3L == rDrag.GetPointAnz())
+        if(3L == rDrag.GetPointCount())
         {
             // add edge to first point on ellipse
             basegfx::B2DPolygon aNew;

@@ -127,7 +127,7 @@ Fraction SdrDragStat::GetYFact() const
 void SdrDragStat::TakeCreateRect(Rectangle& rRect) const
 {
     rRect=Rectangle(GetStart(),GetNow());
-    if (GetPointAnz()>=2) {
+    if (GetPointCount()>=2) {
         Point aBtmRgt(GetPoint(1));
         rRect.Right()=aBtmRgt.X();
         rRect.Bottom()=aBtmRgt.Y();

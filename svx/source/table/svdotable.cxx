@@ -2402,7 +2402,7 @@ bool SdrTableObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(maRect);
     ImpJustifyRect(maRect);
-    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
+    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointCount()>=2);
 }
 
 void SdrTableObj::BrkCreate(SdrDragStat& /*rStat*/)

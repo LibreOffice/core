@@ -2211,7 +2211,7 @@ bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
     AdaptTextMinSize();
 
     SetRectsDirty();
-    return ( eCmd == SDRCREATE_FORCEEND || rStat.GetPointAnz() >= 2 );
+    return ( eCmd == SDRCREATE_FORCEEND || rStat.GetPointCount() >= 2 );
 }
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const

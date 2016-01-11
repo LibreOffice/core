@@ -2054,7 +2054,7 @@ bool SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
 
 bool SdrEdgeObj::EndCreate(SdrDragStat& rDragStat, SdrCreateCmd eCmd)
 {
-    bool bOk=(eCmd==SDRCREATE_FORCEEND || rDragStat.GetPointAnz()>=2);
+    bool bOk=(eCmd==SDRCREATE_FORCEEND || rDragStat.GetPointCount()>=2);
     if (bOk) {
         ConnectToNode(true,aCon1.pObj);
         ConnectToNode(false,aCon2.pObj);

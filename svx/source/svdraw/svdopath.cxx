@@ -1411,7 +1411,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     sal_uInt16 nActPoint=rXPoly.GetPointCount()-1;
     rXPoly[nActPoint]=rStat.Now();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE) {
-        if (rStat.GetPointAnz()>=2) eCmd=SDRCREATE_FORCEEND;
+        if (rStat.GetPointCount()>=2) eCmd=SDRCREATE_FORCEEND;
         bRet = eCmd==SDRCREATE_FORCEEND;
         if (bRet) {
             mbCreating = false;
@@ -1422,7 +1422,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     }
 
     if (!pU->bMixedCreate && IsFreeHand(pU->eStartKind)) {
-        if (rStat.GetPointAnz()>=2) eCmd=SDRCREATE_FORCEEND;
+        if (rStat.GetPointCount()>=2) eCmd=SDRCREATE_FORCEEND;
         bRet=eCmd==SDRCREATE_FORCEEND;
         if (bRet) {
             mbCreating=false;

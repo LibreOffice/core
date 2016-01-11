@@ -217,7 +217,7 @@ bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     if (dynamic_cast<const SdrRectObj *>(this) != nullptr) {
         static_cast<SdrRectObj*>(this)->SetXPolyDirty();
     }
-    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
+    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointCount()>=2);
 }
 
 void SdrTextObj::BrkCreate(SdrDragStat& /*rStat*/)

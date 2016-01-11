@@ -601,7 +601,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
     if (pAktCreate!=nullptr)
     {
-        sal_uIntPtr nCount=maDragStat.GetPointAnz();
+        sal_uIntPtr nCount=maDragStat.GetPointCount();
 
         if (nCount<=1 && eCmd==SDRCREATE_FORCEEND)
         {
@@ -710,7 +710,7 @@ void SdrCreateView::BckCreateObj()
 {
     if (pAktCreate!=nullptr)
     {
-        if (maDragStat.GetPointAnz()<=2 )
+        if (maDragStat.GetPointCount()<=2 )
         {
             BrkCreateObj();
         }
@@ -791,7 +791,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                 if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
                 {
                     // #i103058# Allow SolidDragging with four points
-                    if(maDragStat.GetPointAnz() < 4)
+                    if(maDragStat.GetPointCount() < 4)
                     {
                         bUseSolidDragging = false;
                     }
