@@ -171,7 +171,7 @@ public:
     const css::uno::Reference< css::script::XPersistentLibraryContainer >&
                     GetScriptLibraryContainer()  const;
 
-    bool            LoadLib( sal_uInt16 nLib );
+    void            LoadLib( sal_uInt16 nLib );
     bool            RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage );
 
     // Modify-Flag will be reset only during save.
@@ -208,7 +208,7 @@ private:
 
     BASIC_DLLPRIVATE StarBASIC* GetStdLib() const;
     BASIC_DLLPRIVATE StarBASIC* AddLib( SotStorage& rStorage, const OUString& rLibName, bool bReference );
-    BASIC_DLLPRIVATE bool RemoveLib( sal_uInt16 nLib );
+    BASIC_DLLPRIVATE void RemoveLib( sal_uInt16 nLib );
     BASIC_DLLPRIVATE bool HasLib( const OUString& rName ) const;
 
     BASIC_DLLPRIVATE StarBASIC* CreateLibForLibContainer( const OUString& rLibName,

@@ -466,7 +466,7 @@ OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, boo
 }
 
 // returns value <> 0 in case of an error
-short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
+void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
                 short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                 short& nNoOfOptionalDigitsLeft,
                 short& nNoOfExponentDigits, short& nNoOfOptionalExponentDigits,
@@ -528,7 +528,7 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
                 if( c=='0' )
                 {
                     // ERROR: 0 after # in the exponent is NOT allowed!!
-                    return -4;
+                    return;
                 }
                 nNoOfOptionalExponentDigits++;
                 nNoOfExponentDigits++;
@@ -538,7 +538,7 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             nState++;
             if( nState>1 )
             {
-                return -1;  // ERROR: too many decimal points
+                return;  // ERROR: too many decimal points
             }
             break;
         case '%':
@@ -577,7 +577,6 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             break;
         }
     }
-    return 0;
 }
 
 // the flag bCreateSign says that at the mantissa a leading sign

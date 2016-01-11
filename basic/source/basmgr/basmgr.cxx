@@ -1185,10 +1185,10 @@ bool BasicManager::IsReference( sal_uInt16 nLib )
     return false;
 }
 
-bool BasicManager::RemoveLib( sal_uInt16 nLib )
+void BasicManager::RemoveLib( sal_uInt16 nLib )
 {
     // Only physical deletion if no reference
-    return RemoveLib( nLib, !IsReference( nLib ) );
+    RemoveLib( nLib, !IsReference( nLib ) );
 }
 
 bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
@@ -1343,7 +1343,7 @@ OUString BasicManager::GetLibName( sal_uInt16 nLib )
     return OUString();
 }
 
-bool BasicManager::LoadLib( sal_uInt16 nLib )
+void BasicManager::LoadLib( sal_uInt16 nLib )
 {
     bool bDone = false;
     DBG_ASSERT( nLib < mpImpl->aLibs.size() , "Lib?!" );
@@ -1373,7 +1373,6 @@ bool BasicManager::LoadLib( sal_uInt16 nLib )
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, OUString(), ERRCODE_BUTTON_OK );
         aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::LIBNOTFOUND, OUString::number(nLib)));
     }
-    return bDone;
 }
 
 StarBASIC* BasicManager::CreateLib( const OUString& rLibName )
