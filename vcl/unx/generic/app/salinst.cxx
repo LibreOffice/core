@@ -27,9 +27,9 @@
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 #include "generic/geninst.h"
-#include "generic/genpspgraphics.h"
+#include "unx/genpspgraphics.h"
 #include "unx/salframe.h"
-#include "generic/genprn.h"
+#include "unx/genprn.h"
 #include "unx/sm.hxx"
 
 #include "vcl/apptypes.hxx"

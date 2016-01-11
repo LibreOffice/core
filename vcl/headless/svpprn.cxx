@@ -26,7 +26,7 @@
 #include "salptype.hxx"
 #include "saldatabasic.hxx"
 
-#include "generic/genpspgraphics.h"
+#include "unx/genpspgraphics.h"
 
 #include "headless/svpprn.hxx"
 #include "headless/svpinst.hxx"

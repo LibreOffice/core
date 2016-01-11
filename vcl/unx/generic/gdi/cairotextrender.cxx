@@ -25,8 +25,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include "generic/printergfx.hxx"
-#include "generic/genpspgraphics.h"
+#include "unx/printergfx.hxx"
+#include "unx/genpspgraphics.h"
 #include "generic/geninst.h"
 #include "unx/glyphcache.hxx"
 #include "PhysicalFontFace.hxx"

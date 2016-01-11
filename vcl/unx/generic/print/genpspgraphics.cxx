@@ -45,9 +45,9 @@
 
 #include "fontsubset.hxx"
 #include "generic/geninst.h"
-#include "generic/genpspgraphics.h"
+#include "unx/genpspgraphics.h"
 #include "unx/glyphcache.hxx"
-#include "generic/printergfx.hxx"
+#include "unx/printergfx.hxx"
 #include "impfont.hxx"
 #include "langboost.hxx"
 #include "fontinstance.hxx"

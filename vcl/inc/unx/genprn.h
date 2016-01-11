@@ -21,8 +21,8 @@
 #define INCLUDED_VCL_INC_GENERIC_GENPRN_H
 
 #include "vcl/jobdata.hxx"
-#include "generic/printergfx.hxx"
-#include "generic/printerjob.hxx"
+#include "unx/printergfx.hxx"
+#include "unx/printerjob.hxx"
 #include "salprn.hxx"
 #include "vclpluginapi.h"
 

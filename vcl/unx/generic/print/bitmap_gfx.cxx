@@ -19,7 +19,7 @@
 
 #include "psputil.hxx"
 
-#include "generic/printergfx.hxx"
+#include "unx/printergfx.hxx"
 #include "vcl/strhelper.hxx"
 
 namespace psp {

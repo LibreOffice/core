@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
 
-#include "generic/genprn.h"
+#include "unx/genprn.h"
 
 #include <memory>
 
