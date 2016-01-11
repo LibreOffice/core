@@ -11,7 +11,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sd_export_tests))
 
-$(eval $(call gb_CppunitTest_use_external,sd_export_tests,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sd_export_tests,\
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_export_tests, \
     sd/qa/unit/export-tests \
