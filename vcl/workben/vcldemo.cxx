@@ -570,7 +570,7 @@ public:
     struct DrawEllipse : public RegionRenderer
     {
         RENDER_DETAILS(ellipse,KEY_E,500)
-        void doInvert(OutputDevice &rDev, const Rectangle &r,
+        static void doInvert(OutputDevice &rDev, const Rectangle &r,
                       InvertFlags nFlags)
         {
             rDev.Invert(r, nFlags);
