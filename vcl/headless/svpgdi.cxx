@@ -736,26 +736,25 @@ void SvpSalGraphics::drawPixel( long nX, long nY )
 {
     if( m_bUseLineColor )
     {
-        ensureClip();
-        m_aDevice->setPixel( basegfx::B2IPoint( nX, nY ),
-                             m_aLineColor,
-                             m_aDrawMode,
-                             m_aClipMap
-                             );
+        drawPixel(nX, nY, m_aLineColor.toInt32());
     }
-    dbgOut( m_aDevice );
 }
 
 void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
-    basebmp::Color aColor( nSalColor );
-    ensureClip();
-    m_aDevice->setPixel( basegfx::B2IPoint( nX, nY ),
-                         aColor,
-                         m_aDrawMode,
-                         m_aClipMap
-                         );
-    dbgOut( m_aDevice );
+    basebmp::Color aOrigFillColor = m_aFillColor;
+    bool bOrigUseFillColor = m_bUseFillColor;
+    bool bOrigUseLineColor = m_bUseLineColor;
+
+    basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+1, nY+1));
+    m_bUseLineColor = false;
+    m_bUseFillColor = true;
+    m_aFillColor = basebmp::Color(nSalColor);
+    drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0.0);
+
+    m_bUseFillColor = bOrigUseFillColor;
+    m_bUseLineColor = bOrigUseLineColor;
+    m_aFillColor = aOrigFillColor;
 }
 
 void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
@@ -784,7 +783,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     {
         basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
         m_bUseFillColor = true;
-        drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0);
+        drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0.0);
         m_bUseFillColor = false;
     }
 
@@ -793,7 +792,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
         // need same -1 hack as X11SalGraphicsImpl::drawRect
         basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1));
         m_bUseLineColor = true;
-        drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0);
+        drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0.0);
         m_bUseLineColor = false;
     }
 
@@ -823,7 +822,7 @@ void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
     for (sal_uInt32 i = 1; i < nPoints; ++i)
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
 
-    drawPolyPolygon(basegfx::B2DPolyPolygon(aPoly), 0);
+    drawPolyPolygon(basegfx::B2DPolyPolygon(aPoly), 0.0);
 }
 
 void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
@@ -846,7 +845,7 @@ void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
         }
     }
 
-    drawPolyPolygon(aPolyPoly, 0);
+    drawPolyPolygon(aPolyPoly, 0.0);
 }
 
 static const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
