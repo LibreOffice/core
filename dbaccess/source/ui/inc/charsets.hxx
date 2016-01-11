@@ -102,13 +102,9 @@ namespace dbaui
 
         /// prefix increment
         const ExtendedCharsetIterator&  operator++();
-        /// postfix increment
-        const ExtendedCharsetIterator   operator++(int) { ExtendedCharsetIterator hold(*this); ++*this; return hold; }
 
         /// prefix decrement
         const ExtendedCharsetIterator&  operator--();
-        /// postfix decrement
-        const ExtendedCharsetIterator   operator--(int) { ExtendedCharsetIterator hold(*this); --*this; return hold; }
 
     protected:
         ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition );

@@ -872,13 +872,13 @@ namespace dbmm
         /** adjust the document-events which refer to macros/scripts in the document, taking into
             account the new names of the moved libraries
         */
-        bool    impl_adjustDocumentEvents_nothrow(
+        void    impl_adjustDocumentEvents_nothrow(
                     const SubDocument& _rDocument
                 ) const;
 
         /** adjusts the script references bound to form component events
         */
-        bool    impl_adjustFormComponentEvents_nothrow(
+        void    impl_adjustFormComponentEvents_nothrow(
                     const SubDocument& _rDocument
                 ) const;
 
@@ -1650,14 +1650,14 @@ namespace dbmm
         return true;
     }
 
-    bool MigrationEngine_Impl::impl_adjustDocumentEvents_nothrow( const SubDocument& _rDocument ) const
+    void MigrationEngine_Impl::impl_adjustDocumentEvents_nothrow( const SubDocument& _rDocument ) const
     {
         try
         {
             Reference< XEventsSupplier > xSuppEvents( _rDocument.xDocument, UNO_QUERY );
             if ( !xSuppEvents.is() )
                 // this is allowed. E.g. new-style reports currently do not support this
-                return true;
+                return;
 
             Reference< XNameReplace > xEvents( xSuppEvents->getEvents(), UNO_SET_THROW );
             Sequence< OUString > aEventNames = xEvents->getElementNames();
@@ -1687,9 +1687,7 @@ namespace dbmm
                 lcl_getSubDocumentDescription( _rDocument ),
                 ::cppu::getCaughtException()
             ) );
-            return false;
         }
-        return true;
     }
 
     void MigrationEngine_Impl::impl_adjustDialogElementEvents_throw( const Reference< XInterface >& _rxElement ) const
@@ -1786,7 +1784,7 @@ namespace dbmm
         }
     }
 
-    bool MigrationEngine_Impl::impl_adjustFormComponentEvents_nothrow( const SubDocument& _rDocument ) const
+    void MigrationEngine_Impl::impl_adjustFormComponentEvents_nothrow( const SubDocument& _rDocument ) const
     {
         try
         {
@@ -1805,9 +1803,7 @@ namespace dbmm
                 lcl_getSubDocumentDescription( _rDocument ),
                 ::cppu::getCaughtException()
             ) );
-            return false;
         }
-        return true;
     }
 
     bool MigrationEngine_Impl::impl_unprotectPasswordLibrary_throw( const Reference< XLibraryContainerPassword >& _rxPasswordManager,

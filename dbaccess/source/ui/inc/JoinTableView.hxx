@@ -178,7 +178,6 @@ namespace dbaui
         void SelectConn(OTableConnection* pConn);
 
         OTableWindowMap& GetTabWinMap() { return m_aTableMap; }
-        const OTableWindowMap& GetTabWinMap() const { return m_aTableMap; }
 
         /** gives a read only access to the connection vector
         */
@@ -307,7 +306,7 @@ namespace dbaui
 
     private:
         void InitColors();
-        bool ScrollWhileDragging();
+        void ScrollWhileDragging();
 
         /** opens the context menu to delete a connection
             @param _aPos the position where the popup menu should appear

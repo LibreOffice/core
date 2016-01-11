@@ -50,29 +50,6 @@ namespace dbaccess
 
     typedef ::rtl::Reference< ORowSetOldRowHelper > TORowSetOldRowHelperRef;
 
-    class ORowSetValueCompare
-    {
-        const css::uno::Any& m_rAny;
-    public:
-        explicit ORowSetValueCompare(const css::uno::Any& _rAny) : m_rAny(_rAny){}
-
-        bool operator ()(const ORowSetRow& _rRH)
-        {
-            switch((_rRH->get())[0].getTypeKind())
-            {
-                case css::sdbc::DataType::TINYINT:
-                case css::sdbc::DataType::SMALLINT:
-                case css::sdbc::DataType::INTEGER:
-                    return comphelper::getINT32(m_rAny) == (sal_Int32)(_rRH->get())[0];
-                default:
-                {
-                    css::uno::Sequence<sal_Int8> aSeq;
-                    m_rAny >>= aSeq;
-                    return aSeq == (_rRH->get())[0];
-                }
-            }
-        }
-    };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETROW_HXX
 

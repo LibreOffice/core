@@ -229,9 +229,9 @@ void ODbAdminDialog::enableConfirmSettings( bool _bEnable )
     (void)_bEnable;
 }
 
-bool ODbAdminDialog::saveDatasource()
+void ODbAdminDialog::saveDatasource()
 {
-    return PrepareLeaveCurrentPage();
+    PrepareLeaveCurrentPage();
 }
 
 ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()

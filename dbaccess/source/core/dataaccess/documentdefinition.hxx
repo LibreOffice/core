@@ -142,7 +142,7 @@ public:
         getContainerStorage() const;
 
     bool save(bool _bApprove);
-    bool saveAs();
+    void saveAs();
     void closeObject();
     bool isModified();
     inline bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }

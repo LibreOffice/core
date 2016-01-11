@@ -73,7 +73,7 @@ namespace dbaui
         virtual css::uno::Reference< css::sdbc::XDriver > getDriver() override;
         virtual OUString getDatasourceType(const SfxItemSet& _rSet) const override;
         virtual void clearPassword() override;
-        virtual bool saveDatasource() override;
+        virtual void saveDatasource() override;
         virtual void setTitle(const OUString& _sTitle) override;
         virtual void enableConfirmSettings( bool _bEnable ) override;
     };

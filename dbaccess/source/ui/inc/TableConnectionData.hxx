@@ -67,7 +67,7 @@ namespace dbaui
          */
         virtual OTableConnectionData* NewInstance() const;
 
-        bool SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName );
+        void SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName );
         bool AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName );
         /** Deletes list of ConnLines
         */

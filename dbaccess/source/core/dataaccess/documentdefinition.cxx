@@ -1299,18 +1299,19 @@ bool ODocumentDefinition::save(bool _bApprove)
     return true;
 }
 
-bool ODocumentDefinition::saveAs()
+void ODocumentDefinition::saveAs()
 {
     // default handling: instantiate an interaction handler and let it handle the parameter request
     if ( !m_bOpenInDesign )
-        return false;
+        return;
 
     {
         osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
         if ( m_pImpl->m_aProps.aTitle.isEmpty() )
         {
             aGuard.clear();
-            return save(false); // (sal_False) : we don't want an approve dialog
+            save(false); // (sal_False) : we don't want an approve dialog
+            return;
         }
     }
     try
@@ -1340,9 +1341,9 @@ bool ODocumentDefinition::saveAs()
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
-                return false;
+                return;
             if  ( pDisApprove->wasSelected() )
-                return true;
+                return;
             if ( pDocuSave->wasSelected() )
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
@@ -1403,7 +1404,6 @@ bool ODocumentDefinition::saveAs()
     {
         OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
-    return true;
 }
 
 namespace

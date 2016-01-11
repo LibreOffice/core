@@ -57,36 +57,9 @@ ORowSetRow& ORowSetCacheIterator::operator *()
     return *m_aIter->second.aIterator;
 }
 
-const ORowSetRow& ORowSetCacheIterator::operator *() const
-{
-    if ( !m_pRowSet->isInsertRow() && m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
-    {
-        OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
-        OSL_VERIFY(m_pCache->moveToBookmark(m_aIter->second.aBookmark));
-        m_aIter->second.aIterator = m_pCache->m_aMatrixIter;
-    }
-    return *m_aIter->second.aIterator;
-}
-
 ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->()
 {
     return m_aIter->second.aIterator;
-}
-
-const ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->() const
-{
-    if ( !m_pRowSet->isInsertRow() && m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
-    {
-        OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
-        OSL_VERIFY(m_pCache->moveToBookmark(m_aIter->second.aBookmark));
-        m_aIter->second.aIterator = m_pCache->m_aMatrixIter;
-    }
-    return m_aIter->second.aIterator;
-}
-
-bool ORowSetCacheIterator::operator <=(const ORowSetMatrix::iterator& _rRH) const
-{
-    return m_aIter->second.aIterator <= _rRH;
 }
 
 bool ORowSetCacheIterator::operator <(const ORowSetMatrix::iterator& _rRH) const
@@ -97,11 +70,6 @@ bool ORowSetCacheIterator::operator <(const ORowSetMatrix::iterator& _rRH) const
 bool ORowSetCacheIterator::operator !=(const ORowSetMatrix::iterator& _rRH) const
 {
     return m_aIter->second.aIterator != _rRH;
-}
-
-bool ORowSetCacheIterator::operator ==(const ORowSetMatrix::iterator& _rRH) const
-{
-    return m_aIter->second.aIterator == _rRH;
 }
 
 void ORowSetCacheIterator::setBookmark(const css::uno::Any&    _rBookmark)

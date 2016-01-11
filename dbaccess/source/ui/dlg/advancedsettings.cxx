@@ -540,9 +540,9 @@ namespace dbaui
         (void)_bEnable;
     }
 
-    bool AdvancedSettingsDialog::saveDatasource()
+    void AdvancedSettingsDialog::saveDatasource()
     {
-        return PrepareLeaveCurrentPage();
+        PrepareLeaveCurrentPage();
     }
 
 } // namespace dbaui

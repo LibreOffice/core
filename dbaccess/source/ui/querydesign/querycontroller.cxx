@@ -817,7 +817,7 @@ void OQueryController::impl_showAutoSQLViewError( const css::uno::Any& _rErrorDe
     showError( aErrorContext );
 }
 
-bool OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo )
+void OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     OSL_PRECOND( getContainer(), "OQueryController::impl_setViewMode: illegal call!" );
 
@@ -843,7 +843,6 @@ bool OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInf
     }
 
     setModified( wasModified );
-    return bSuccess;
 }
 
 void OQueryController::impl_initialize()

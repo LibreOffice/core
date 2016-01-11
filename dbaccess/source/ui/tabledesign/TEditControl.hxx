@@ -130,7 +130,7 @@ namespace dbaui
             if (pDescrWin && pActRow)
                 pDescrWin->DisplayData(pActRow->GetActFieldDescr());
         }
-        bool SaveCurRow();
+        void SaveCurRow();
         void SwitchType( const TOTypeInfoSP& _pType );
 
         /// force displaying of the given row
@@ -182,7 +182,7 @@ namespace dbaui
         OUString GenerateName( const OUString& rName );
         bool SetDataPtr( long nRow );
 
-        bool SaveData(long nRow, sal_uInt16 nColumnId);
+        void SaveData(long nRow, sal_uInt16 nColumnId);
         /** AdjustFieldDescription set the needed values for the description
             @param  _pFieldDesc     the field description where to set the values
             @param  _rMultiSel      contains the positions which changed for undo/redo

@@ -834,7 +834,7 @@ bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndPos)
 // If m_nPosition is out of the current window,
 // move it and update m_nStartPos and m_nEndPos
 // Caller is responsible for updating m_aMatrixIter
-bool ORowSetCache::moveWindow()
+void ORowSetCache::moveWindow()
 {
     OSL_ENSURE(m_nStartPos >= 0,"ORowSetCache::moveWindow: m_nStartPos is less than 0!");
     OSL_ENSURE(m_nEndPos >= m_nStartPos,"ORowSetCache::moveWindow: m_nStartPos not smaller than m_nEndPos");
@@ -870,7 +870,7 @@ bool ORowSetCache::moveWindow()
                 m_bRowCountFinal = true;
             }
         }
-        return true;
+        return;
     }
 
     bool bRet = true;
@@ -958,7 +958,7 @@ bool ORowSetCache::moveWindow()
             else
             { // normally this should never happen
                 OSL_FAIL("What the hell is happen here!");
-                return false;
+                return;
             }
         }
         else
@@ -1084,8 +1084,6 @@ bool ORowSetCache::moveWindow()
     OSL_ENSURE(m_nStartPos >= 0,"ORowSetCache::moveWindow: m_nStartPos is less than 0!");
     OSL_ENSURE(m_nEndPos > m_nStartPos,"ORowSetCache::moveWindow: m_nStartPos not smaller than m_nEndPos");
     OSL_ENSURE(m_nEndPos-m_nStartPos <= m_nFetchSize,"ORowSetCache::moveWindow: m_nStartPos and m_nEndPos too far apart");
-
-    return bRet;
 }
 
 bool ORowSetCache::first(  )

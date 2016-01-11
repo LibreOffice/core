@@ -73,7 +73,6 @@ namespace dbaui
         inline bool IsEmpty() const;
 
         OTableFieldDesc& operator=( const OTableFieldDesc& _aField );
-        bool operator==( const OTableFieldDesc& rDesc );
 
         bool IsVisible() const { return m_bVisible;}
         bool IsGroupBy() const { return m_bGroupBy;}

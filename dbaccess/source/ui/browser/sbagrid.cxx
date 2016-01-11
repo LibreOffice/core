@@ -583,7 +583,7 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
     FmGridHeader::MouseButtonDown(_rMEvt);
 }
 
-bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos)
+void SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos)
 {
     sal_uInt16 nId = GetItemId(_rMousePos);
     bool bResizingCol = false;
@@ -610,10 +610,7 @@ bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMouseP
                     _rMousePos.Y() - GetSizePixel().Height()
                 )
             );
-        return true;
     }
-
-    return false;
 }
 
 void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu)

@@ -2269,12 +2269,12 @@ void ORowSet::impl_resetTables_nothrow()
     DELETEZ( m_pTables );
 }
 
-bool ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
+void ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
 {
     bool bUseEscapeProcessing = impl_buildActiveCommand_throw( );
     _out_rCommandToExecute = m_aActiveCommand;
     if ( !bUseEscapeProcessing )
-        return bUseEscapeProcessing;
+        return;
 
     if (m_bCommandFacetsDirty)
         m_xComposer = nullptr;
@@ -2319,8 +2319,6 @@ bool ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
     _out_rCommandToExecute = m_xComposer->getQueryWithSubstitution();
 
     m_bCommandFacetsDirty = false;
-
-    return bUseEscapeProcessing;
 }
 
 bool ORowSet::impl_buildActiveCommand_throw()

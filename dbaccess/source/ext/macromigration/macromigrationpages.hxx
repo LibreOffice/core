@@ -48,8 +48,7 @@ namespace dbmm
         MacroMigrationPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
 
     protected:
-        const MacroMigrationDialog& getDialog() const;
-              MacroMigrationDialog& getDialog();
+        MacroMigrationDialog& getDialog();
     };
 
     // PreparationPage

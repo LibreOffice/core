@@ -172,9 +172,9 @@ namespace dbaui
     {
         (void)_bEnable;
     }
-    bool OUserAdminDlg::saveDatasource()
+    void OUserAdminDlg::saveDatasource()
     {
-        return PrepareLeaveCurrentPage();
+        PrepareLeaveCurrentPage();
     }
 }   // namespace dbaui
 

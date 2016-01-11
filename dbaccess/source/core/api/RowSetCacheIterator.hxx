@@ -61,15 +61,11 @@ namespace dbaccess
         operator ORowSetMatrix::iterator();
 
         ORowSetRow& operator *();
-        const ORowSetRow& operator *() const;
 
         ORowSetMatrix::iterator& operator ->();
-        const ORowSetMatrix::iterator& operator ->() const;
 
-        bool operator <=(const ORowSetMatrix::iterator& _rRH) const;
         bool operator <(const ORowSetMatrix::iterator& _rRH) const;
         bool operator !=(const ORowSetMatrix::iterator& _rRH) const;
-        bool operator ==(const ORowSetMatrix::iterator& _rRH) const;
 
         void setBookmark(const css::uno::Any&  _rBookmark);
 

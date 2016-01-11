@@ -97,7 +97,7 @@ namespace dbaccess
         bool fill(ORowSetMatrix::iterator& _aIter, const ORowSetMatrix::const_iterator& _aEnd, sal_Int32& _nPos, bool _bCheck);
         bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
         bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 &_nNewEndPos);
-        bool moveWindow();
+        void moveWindow();
 
         void rotateCacheIterator(ORowSetMatrix::difference_type _nDist);
         void updateValue(sal_Int32 columnIndex

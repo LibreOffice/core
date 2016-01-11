@@ -70,7 +70,7 @@ namespace dbaui
         OUString GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }
         OUString GetDestFieldName() const { return GetFieldName(JTCS_TO); }
 
-        bool Reset();
+        void Reset();
         OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );
     };
 

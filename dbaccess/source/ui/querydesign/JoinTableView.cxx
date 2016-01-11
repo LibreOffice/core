@@ -1001,7 +1001,7 @@ void OJoinTableView::ClearAll()
     Invalidate();
 }
 
-bool OJoinTableView::ScrollWhileDragging()
+void OJoinTableView::ScrollWhileDragging()
 {
     OSL_ENSURE(m_pDragWin != nullptr, "OJoinTableView::ScrollWhileDragging must not be called when a window is being dragged !");
 
@@ -1014,7 +1014,7 @@ bool OJoinTableView::ScrollWhileDragging()
     Point aLowerRight(aDragWinPos.X() + aDragWinSize.Width(), aDragWinPos.Y() + aDragWinSize.Height());
 
     if (!m_bTrackingInitiallyMoved && (aDragWinPos == m_pDragWin->GetPosPixel()))
-        return true;
+        return;
 
     // avoid illustration errors (when scrolling with active TrackingRect)
     HideTracking();
@@ -1073,8 +1073,6 @@ bool OJoinTableView::ScrollWhileDragging()
     m_aDragRect = Rectangle(m_ptPrevDraggingPos - m_aDragOffset, m_pDragWin->GetSizePixel());
     Update();
     ShowTracking( m_aDragRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
-
-    return bScrolling;
 }
 
 IMPL_LINK_NOARG_TYPED(OJoinTableView, OnDragScrollTimer, Idle *, void)

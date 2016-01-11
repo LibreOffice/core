@@ -50,11 +50,6 @@ namespace dbmm
     {
     }
 
-    const MacroMigrationDialog& MacroMigrationPage::getDialog() const
-    {
-        return *dynamic_cast< const MacroMigrationDialog* >( GetParentDialog() );
-    }
-
     MacroMigrationDialog& MacroMigrationPage::getDialog()
     {
         return *dynamic_cast< MacroMigrationDialog* >( GetParentDialog() );

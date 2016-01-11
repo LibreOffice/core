@@ -112,7 +112,7 @@ public:
     virtual void clearPassword() override;
     virtual void setTitle(const OUString& _sTitle) override;
     virtual void enableConfirmSettings( bool _bEnable ) override;
-    virtual bool saveDatasource() override;
+    virtual void saveDatasource() override;
     virtual OUString getStateDisplayName( WizardState _nState ) const override;
 
     /** returns <TRUE/> if the database should be opened, otherwise <FALSE/>.

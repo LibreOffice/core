@@ -87,23 +87,24 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     return *this;
 }
 
-bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName )
+void OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName )
 {
     if (sal_uInt16(m_vConnLineData.size()) < nIndex)
-        return false;
+        return;
 
         // == still allowed, this corresponds to an Append
 
     if (m_vConnLineData.size() == nIndex)
-        return AppendConnLine(rSourceFieldName, rDestFieldName);
+    {
+        AppendConnLine(rSourceFieldName, rDestFieldName);
+        return;
+    }
 
     OConnectionLineDataRef pConnLineData = m_vConnLineData[nIndex];
     OSL_ENSURE(pConnLineData != nullptr, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
 
     pConnLineData->SetSourceFieldName( rSourceFieldName );
     pConnLineData->SetDestFieldName( rDestFieldName );
-
-    return true;
 }
 
 bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName )

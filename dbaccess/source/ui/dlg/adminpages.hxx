@@ -36,8 +36,8 @@ namespace dbaui
     {
     public:
         virtual ~ISaveValueWrapper() = 0;
-        virtual bool SaveValue() = 0;
-        virtual bool Disable() = 0;
+        virtual void SaveValue() = 0;
+        virtual void Disable() = 0;
     };
 
     template < class T > class OSaveValueWrapper : public ISaveValueWrapper
@@ -47,8 +47,8 @@ namespace dbaui
         explicit OSaveValueWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
 
-        virtual bool SaveValue() override { m_pSaveValue->SaveValue(); return true;} // bool return value only for stl
-        virtual bool Disable() override { m_pSaveValue->Disable(); return true;} // bool return value only for stl
+        virtual void SaveValue() override { m_pSaveValue->SaveValue(); }
+        virtual void Disable() override { m_pSaveValue->Disable(); }
     };
 
     template < class T > class ODisableWrapper : public ISaveValueWrapper
@@ -58,8 +58,8 @@ namespace dbaui
         explicit ODisableWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
 
-        virtual bool SaveValue() override { return true;} // bool return value only for stl
-        virtual bool Disable() override { m_pSaveValue->Disable(); return true;} // bool return value only for stl
+        virtual void SaveValue() override {}
+        virtual void Disable() override { m_pSaveValue->Disable(); }
     };
 
     // OGenericAdministrationPage

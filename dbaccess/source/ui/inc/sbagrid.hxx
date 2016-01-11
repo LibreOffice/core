@@ -184,7 +184,7 @@ namespace dbaui
         // Window overridables
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-        bool ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
+        void ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
 
     private:
         using FmGridHeader::StartDrag;

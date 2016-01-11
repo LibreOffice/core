@@ -72,13 +72,13 @@ namespace dbaui
         void        Deselect();
         bool        IsSelected() const { return m_bSelected; }
         bool        CheckHit( const Point& rMousePos ) const;
-        bool        InvalidateConnection();
+        void        InvalidateConnection();
         void        UpdateLineList();
 
         OTableWindow* GetSourceWin() const;
         OTableWindow* GetDestWin() const;
 
-        bool RecalcLines();
+        void RecalcLines();
         /** isTableConnection
 
             @param  _pTable the table where we should check if we belongs to it

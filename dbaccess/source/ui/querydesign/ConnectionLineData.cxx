@@ -59,11 +59,10 @@ OConnectionLineData& OConnectionLineData::operator=( const OConnectionLineData& 
     return *this;
 }
 
-bool OConnectionLineData::Reset()
+void OConnectionLineData::Reset()
 {
     m_aDestFieldName.clear();
     m_aSourceFieldName.clear();
-    return true;
 }
 
 namespace dbaui

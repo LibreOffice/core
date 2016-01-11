@@ -635,12 +635,11 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
     }
 }
 
-bool ODbTypeWizDialogSetup::saveDatasource()
+void ODbTypeWizDialogSetup::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
     if ( pPage )
         pPage->FillItemSet(m_pOutSet);
-    return true;
 }
 
 bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)

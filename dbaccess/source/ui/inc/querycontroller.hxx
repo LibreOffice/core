@@ -219,7 +219,7 @@ namespace dbaui
 
         /** switches to the graphical or SQL view mode, as determined by m_bGraphicalDesign
         */
-        bool    impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo );
+        void    impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo );
 
         /// sets m_sStatement, and notifies our respective property change listeners
         void    setStatement_fireEvent( const OUString& _rNewStatement, bool _bFireStatementChange = true );

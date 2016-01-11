@@ -156,13 +156,6 @@ namespace dbaccess
                 The command which is to be executed, according to the current settings -
                 it is built from our active command plus our current filter/order criterions.
 
-            @return
-                whether we should use escape processing before executing the actual command. This is determined
-                from our own EscapeProcessing property, and possibly overruled by the respective property
-                of a query we're based on.
-                Effectively, this value determines whether or not we actually have an composer (m_xComposer)
-                and dependent information (such as the parameters container).
-
             @precond
                 m_xActiveConnection points to a valid SDB-level connection
 
@@ -172,7 +165,7 @@ namespace dbaccess
             @throws css::uno::RuntimeException
                 if any of the components involved throws a css::uno::RuntimeException
         */
-        bool        impl_initComposer_throw( OUString& _out_rCommandToExecute );
+        void        impl_initComposer_throw( OUString& _out_rCommandToExecute );
 
         /** returns the table container of our active connection
 

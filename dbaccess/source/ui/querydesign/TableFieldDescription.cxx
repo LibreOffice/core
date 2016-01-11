@@ -98,21 +98,6 @@ OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
     return *this;
 }
 
-bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
-{
-
-    return (    m_eOrderDir != rDesc.GetOrderDir()      ||
-                m_eDataType != rDesc.GetDataType()      ||
-                m_aAliasName != rDesc.GetAlias()        ||
-                m_aFunctionName != rDesc.GetFunction()  ||
-                m_aFieldName != rDesc.GetField()        ||
-                m_aTableName != rDesc.GetTable()        ||
-                m_bGroupBy != rDesc.IsGroupBy()         ||
-                m_aCriteria != rDesc.GetCriteria()  ||
-                m_bVisible != rDesc.IsVisible() );
-
-}
-
 void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const OUString& rCrit)
 {
     if (nIdx < m_aCriteria.size())

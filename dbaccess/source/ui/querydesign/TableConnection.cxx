@@ -108,12 +108,11 @@ namespace dbaui
         return *this;
     }
 
-    bool OTableConnection::RecalcLines()
+    void OTableConnection::RecalcLines()
     {
         // call RecalcLines on each line
         for( const auto& pLine : m_vConnLine )
             pLine->RecalcLine();
-        return true;
     }
     OTableWindow* OTableConnection::GetSourceWin() const
     {
@@ -158,7 +157,7 @@ namespace dbaui
                              { return pLine->CheckHit( rMousePos ); } );
     }
 
-    bool OTableConnection::InvalidateConnection()
+    void OTableConnection::InvalidateConnection()
     {
         Rectangle rcBounding = GetBoundingRect();
         rcBounding.Bottom() += 1;
@@ -168,8 +167,6 @@ namespace dbaui
         // Invalidate records obviously one pixel line less as Draw.
         // Or everything works differently .....  in any case it works ....
         m_pParent->Invalidate( rcBounding, InvalidateFlags::NoChildren );
-
-        return true;
     }
 
     Rectangle OTableConnection::GetBoundingRect() const

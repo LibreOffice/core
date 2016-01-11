@@ -206,13 +206,9 @@ public:
 
     /// prefix increment
     const TypeIterator& operator++();
-    /// postfix increment
-    const TypeIterator  operator++(int) { TypeIterator hold(*this); ++*this; return hold; }
 
     /// prefix decrement
     const TypeIterator& operator--();
-    /// postfix decrement
-    const TypeIterator  operator--(int) { TypeIterator hold(*this); --*this; return hold; }
 
 protected:
     TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos = 0);

@@ -424,17 +424,16 @@ EditBrowseBox::RowStatus OTableEditorCtrl::GetRowStatus(long nRow) const
     }
 }
 
-bool OTableEditorCtrl::SaveCurRow()
+void OTableEditorCtrl::SaveCurRow()
 {
     if (GetFieldDescr(GetCurRow()) == nullptr)
         // there is no data in the current row
-        return true;
+        return;
     if (!SaveModified())
-        return false;
+        return;
 
     SetDataPtr(GetCurRow());
     pDescrWin->SaveData( pActRow->GetActFieldDescr() );
-    return true;
 }
 
 void OTableEditorCtrl::DisplayData(long nRow, bool bGrabFocus)
@@ -500,7 +499,7 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
     return nCount;
 }
 
-bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
+void OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
 {
     // Store the cell content
     SetDataPtr( nRow == -1 ? GetCurRow() : nRow);
@@ -524,7 +523,7 @@ bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
                     pActFieldDescr = pActRow->GetActFieldDescr();
                 }
                 else
-                    return true;
+                    return;
             }
             if(pActFieldDescr)
                 pActFieldDescr->SetName( aName );
@@ -584,7 +583,6 @@ bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
             }
             break;
     }
-    return true;
 }
 
 bool OTableEditorCtrl::SaveModified()

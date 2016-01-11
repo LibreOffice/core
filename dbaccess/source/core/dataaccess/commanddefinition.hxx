@@ -58,7 +58,6 @@ class OCommandDefinition   : public OComponentDefinition
 protected:
     virtual ~OCommandDefinition();
 
-    inline const OCommandDefinition_Impl& getCommandDefinition() const { return dynamic_cast< const OCommandDefinition_Impl& >( *m_pImpl.get() ); }
     inline       OCommandDefinition_Impl& getCommandDefinition()       { return dynamic_cast<       OCommandDefinition_Impl& >( *m_pImpl.get() ); }
 
 public:

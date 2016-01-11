@@ -100,8 +100,6 @@ const sal_uInt16 TYPE_BIT       = 31;
                 ,bCaseSensitive(false)
                 ,bUnsigned(false)
         {}
-        bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
-        bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
         inline OUString  getDBName() const { return aTypeName; }
 
     };

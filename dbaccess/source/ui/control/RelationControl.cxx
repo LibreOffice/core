@@ -678,9 +678,9 @@ namespace dbaui
         m_pRC_Tables->Invalidate();
     }
 
-    bool OTableListBoxControl::SaveModified()
+    void OTableListBoxControl::SaveModified()
     {
-        return m_pRC_Tables->SaveModified();
+        m_pRC_Tables->SaveModified();
     }
 
     TTableWindowData::value_type OTableListBoxControl::getReferencingTable()    const

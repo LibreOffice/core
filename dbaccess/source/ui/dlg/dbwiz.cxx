@@ -320,7 +320,7 @@ void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
     // anormal tab dialog.
 }
 
-bool ODbTypeWizDialog::saveDatasource()
+void ODbTypeWizDialog::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
     if ( pPage )
@@ -330,7 +330,6 @@ bool ODbTypeWizDialog::saveDatasource()
     if ( m_pImpl->getCurrentDataSource().is() )
         m_pImpl->getCurrentDataSource()->getPropertyValue(PROPERTY_URL) >>= sOldURL;
     DataSourceInfoConverter::convert( getORB(), m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());
-    return true;
 }
 
 IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPage ) const
