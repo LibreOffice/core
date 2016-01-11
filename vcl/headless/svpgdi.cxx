@@ -254,6 +254,14 @@ namespace
     };
 }
 
+static void ApplyPaintMode(cairo_t* cr, PaintMode ePaintMode)
+{
+    if (ePaintMode == INVERT)
+        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+    else
+        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+}
+
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap )
 {
     if (rAlphaBitmap.GetBitCount() != 8 && rAlphaBitmap.GetBitCount() != 1)
@@ -280,8 +288,8 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
 
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
-
     clipRegion(cr);
+    ApplyPaintMode(cr, m_ePaintMode);
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
@@ -347,8 +355,8 @@ bool SvpSalGraphics::drawTransformedBitmap(
 
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
-
     clipRegion(cr);
+    ApplyPaintMode(cr, m_ePaintMode);
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
@@ -432,8 +440,8 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 {
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
-
     clipRegion(cr);
+    ApplyPaintMode(cr, m_ePaintMode);
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
 
@@ -485,6 +493,7 @@ SvpSalGraphics::SvpSalGraphics() :
     m_bUseFillColor( false ),
     m_aFillColor( COL_WHITE ),
     m_aDrawMode( basebmp::DrawMode::Paint ),
+    m_ePaintMode( OVERPAINT ),
     m_bClipSetup( false ),
     m_aTextRenderImpl(*this)
 {
@@ -711,8 +720,9 @@ void SvpSalGraphics::SetFillColor( SalColor nSalColor )
     m_aFillColor = basebmp::Color( nSalColor );
 }
 
-void SvpSalGraphics::SetXORMode( bool bSet, bool )
+void SvpSalGraphics::SetXORMode(bool bSet, bool bInvert)
 {
+    m_ePaintMode = bInvert ? INVERT : (bSet ? XOR : OVERPAINT);
     m_aDrawMode = bSet ? basebmp::DrawMode::XOR : basebmp::DrawMode::Paint;
 }
 
@@ -828,7 +838,7 @@ void SvpSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 
 void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
-    if (m_aDrawMode != basebmp::DrawMode::XOR)
+    if (m_ePaintMode != XOR)
     {
         basegfx::B2DPolygon aPoly;
         aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
@@ -992,8 +1002,8 @@ bool SvpSalGraphics::drawPolyLine(
 
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
-
     clipRegion(cr);
+    ApplyPaintMode(cr, m_ePaintMode);
 
     // setup line attributes
     cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
@@ -1098,8 +1108,8 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
 {
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
-
     clipRegion(cr);
+    ApplyPaintMode(cr, m_ePaintMode);
 
     for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
         AddPolygonToPath(cr, *pPoly, true);
@@ -1300,12 +1310,12 @@ namespace
 
 void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
-    if (m_aDrawMode != basebmp::DrawMode::XOR)
+    if (m_ePaintMode != XOR)
     {
         cairo_t* cr = getCairoContext();
         assert(cr && m_aDevice->isTopDown());
-
         clipRegion(cr);
+        ApplyPaintMode(cr, m_ePaintMode);
 
         cairo_rectangle_int_t extents = {0, 0, 0, 0};
         basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
@@ -1473,7 +1483,7 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 
 bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
 {
-    if (m_aDrawMode == basebmp::DrawMode::XOR)
+    if (m_ePaintMode == XOR)
         return false;
     if (!isCairoCompatible(m_aOrigDevice))
         return false;

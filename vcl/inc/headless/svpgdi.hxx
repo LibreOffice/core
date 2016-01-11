@@ -50,6 +50,8 @@ class ServerFont;
 typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 
+enum PaintMode { OVERPAINT, XOR, INVERT };
+
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
     basebmp::BitmapDeviceSharedPtr       m_aDevice;
@@ -63,6 +65,7 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
     basebmp::Color                       m_aFillColor;
 
     basebmp::DrawMode                    m_aDrawMode;
+    PaintMode                            m_ePaintMode;
 
 public:
     static GlyphCache& getPlatformGlyphCache();
