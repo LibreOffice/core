@@ -258,8 +258,6 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     SvxMSDffImportRec(const SvxMSDffImportRec& rCopy);
     ~SvxMSDffImportRec();
 
-    bool operator==( const SvxMSDffImportRec& rEntry ) const
-    {   return nShapeId == rEntry.nShapeId; }
     bool operator<( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId < rEntry.nShapeId;  }
 

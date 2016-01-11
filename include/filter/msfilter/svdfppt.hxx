@@ -780,7 +780,7 @@ public:
                     explicit PPTParaSheet( sal_uInt32 nInstance );
                     PPTParaSheet( const PPTParaSheet& rParaSheet );
 
-    bool            Read(
+    void            Read(
                         SdrPowerPointImport& rMan,
                         SvStream& rIn,
                         bool bMasterStyle,
@@ -1279,7 +1279,7 @@ public:
 
 class PPTConvertOCXControls : public SvxMSConvertOCXControls
 {
-    virtual const css::uno::Reference< css::drawing::XDrawPage > & GetDrawPage() override;
+    virtual void GetDrawPage() override;
     PptPageKind     ePageKind;
     const SdrPowerPointImport* mpPPTImporter;
 public:

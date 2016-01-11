@@ -680,8 +680,8 @@ public:
 
     sal_uInt32  GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = nullptr ) const;
     void        WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = nullptr  );
-    bool        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
-    bool        bWritePictureOffset, sal_uInt32 nResize = 0);
+    void        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
+                    bool bWritePictureOffset, sal_uInt32 nResize = 0);
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
                     const OString& rGraphicId,
@@ -818,7 +818,7 @@ public:
 
     void        Commit( SvStream& rSt, sal_uInt16 nVersion = 3, sal_uInt16 nRecType = ESCHER_OPT );
 
-    bool        CreateShapeProperties(
+    void        CreateShapeProperties(
                     const css::uno::Reference< css::drawing::XShape > & rXShape
                 );
     bool        CreateOLEGraphicProperties(
@@ -833,12 +833,12 @@ public:
                 );
 
     /** Creates a complex ESCHER_Prop_fillBlip containing the BLIP directly (for Excel charts). */
-    bool        CreateEmbeddedBitmapProperties(
+    void        CreateEmbeddedBitmapProperties(
                     const OUString& rBitmapUrl,
                     css::drawing::BitmapMode eBitmapMode
                 );
     /** Creates a complex ESCHER_Prop_fillBlip containing a hatch style (for Excel charts). */
-    bool        CreateEmbeddedHatchProperties(
+    void        CreateEmbeddedHatchProperties(
                     const css::drawing::Hatch& rHatch,
                     const Color& rBackColor,
                     bool bFillBackground
@@ -906,7 +906,7 @@ public:
 
                 // Because shadow properties depends to the line and fillstyle, the CreateShadowProperties method should be called at last.
                 // It activ only when at least a FillStyle or LineStyle is set.
-    bool        CreateShadowProperties(
+    void        CreateShadowProperties(
                     const css::uno::Reference< css::beans::XPropertySet > &
                 );
 
@@ -957,10 +957,10 @@ public:
 
     bool        PtIsID( sal_uInt32 nID );
     void        PtInsert( sal_uInt32 nID, sal_uInt32 nOfs );
-    sal_uInt32  PtDelete( sal_uInt32 nID );
+    void        PtDelete( sal_uInt32 nID );
     sal_uInt32  PtGetOffsetByID( sal_uInt32 nID );
-    sal_uInt32  PtReplace( sal_uInt32 nID, sal_uInt32 nOfs );
-    sal_uInt32  PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs );
+    void        PtReplace( sal_uInt32 nID, sal_uInt32 nOfs );
+    void        PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs );
 
                 EscherPersistTable();
     virtual     ~EscherPersistTable();
@@ -1216,7 +1216,7 @@ public:
     void            ReplacePersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset );
     sal_uInt32      GetPersistOffset( sal_uInt32 nKey );
     bool            SeekToPersistOffset( sal_uInt32 nKey );
-    bool    InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
+    void            InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
                                                                                     // current StreamPosition changes
     void            SetEditAs( const OUString& rEditAs );
     rtl::OUString   GetEditAs() { return mEditAs; }
@@ -1242,8 +1242,8 @@ public:
     virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = nullptr );
     sal_uInt32  EnterGroup( const Rectangle* pBoundRect = nullptr );
     sal_uInt32  GetGroupLevel() const { return mnGroupLevel; };
-    bool SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
-    bool SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
+    void SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
+    void SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
     virtual void LeaveGroup();
 
                 // a ESCHER_Sp is being written ( a ESCHER_DgContainer has to be opened for this purpose!)
@@ -1313,10 +1313,6 @@ public:
 private:
                         EscherEx( const EscherEx& ) = delete;
     EscherEx&           operator=( const EscherEx& ) = delete;
-
-    // prevent C-style cast to former base class EscherGraphicProvider
-    operator EscherGraphicProvider&();
-    operator EscherGraphicProvider const&();
 };
 
 
