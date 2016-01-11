@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d99ce26b",
+        "filename": "solenv/gbuild/platform/unxgcc.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-11T15:16:30Z",
+      "side": 1,
+      "message": "given $(ARGS) would also pick up an env var of that name that happens to be set upon make invocation, it is maybe too generic a name?\n\nuser-provided $(ARGS) emphasises a problem already present with all the variable interpolations into printf arguments: this breaks if the interpolated variable contents contains printf specifiers like %s; better use %s in the printf format argument, plus a \u0027$(ARGS)\u0027 argument (which, of course, still breaks if ARGS contains single quote characters; more sophisticated processing is needed in such cases, but we happily ignore that everywhere)",
+      "revId": "888e4f8b085f76eba12a3eee796a28e0f56c3c73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
