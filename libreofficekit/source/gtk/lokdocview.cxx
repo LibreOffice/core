@@ -2503,12 +2503,12 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     // set properties to indicate if view can be further zoomed in/out
     bool bCanZoomIn  = priv->m_fZoom < MAX_ZOOM;
     bool bCanZoomOut = priv->m_fZoom > MIN_ZOOM;
-    if (bCanZoomIn != priv->m_bCanZoomIn)
+    if (bCanZoomIn != bool(priv->m_bCanZoomIn))
     {
         priv->m_bCanZoomIn = bCanZoomIn;
         g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_IN]);
     }
-    if (bCanZoomOut != priv->m_bCanZoomOut)
+    if (bCanZoomOut != bool(priv->m_bCanZoomOut))
     {
         priv->m_bCanZoomOut = bCanZoomOut;
         g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_OUT]);
