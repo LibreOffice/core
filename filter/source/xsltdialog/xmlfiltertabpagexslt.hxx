@@ -37,7 +37,7 @@ public:
     virtual ~XMLFilterTabPageXSLT();
     virtual void dispose() override;
 
-    bool FillInfo( filter_info_impl* pInfo );
+    void FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
 
     DECL_LINK_TYPED( ClickBrowseHdl_Impl, Button *, void );

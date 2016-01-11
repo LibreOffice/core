@@ -74,7 +74,7 @@ void XMLFilterTabPageXSLT::dispose()
     TabPage::dispose();
 }
 
-bool XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
+void XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
 {
     if( pInfo )
     {
@@ -84,8 +84,6 @@ bool XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
         pInfo->maImportTemplate = GetURL( m_pEDImportTemplate );
         pInfo->mbNeedsXSLT2 = m_pCBNeedsXSLT2->IsChecked();
     }
-
-    return true;
 }
 
 void XMLFilterTabPageXSLT::SetInfo(const filter_info_impl* pInfo)

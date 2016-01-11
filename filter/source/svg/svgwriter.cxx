@@ -858,7 +858,7 @@ void SVGTextWriter::implSetFontFamily()
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, sFontFamily );
 }
 
-bool SVGTextWriter::createParagraphEnumeration()
+void SVGTextWriter::createParagraphEnumeration()
 {
     if( mrTextShape.is() )
     {
@@ -869,7 +869,6 @@ bool SVGTextWriter::createParagraphEnumeration()
         if( xEnumeration.is() )
         {
             mrParagraphEnumeration.set( xEnumeration );
-            return true;
         }
         else
         {
@@ -880,7 +879,6 @@ bool SVGTextWriter::createParagraphEnumeration()
     {
         OSL_FAIL( "SVGTextWriter::createParagraphEnumeration: no valid XText interface found." );
     }
-    return false;
 }
 
 bool SVGTextWriter::nextParagraph()

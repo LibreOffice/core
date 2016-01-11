@@ -957,9 +957,8 @@ OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
 
 
 
-bool SVGFilter::implGenerateMetaData()
+void SVGFilter::implGenerateMetaData()
 {
-    bool bRet = false;
     sal_Int32 nCount = mSelectedPages.getLength();
     if( nCount != 0 )
     {
@@ -1184,18 +1183,13 @@ bool SVGFilter::implGenerateMetaData()
                 }
             }
         }
-        bRet = true;
     }
-
-    return bRet;
 }
 
 
 
-bool SVGFilter::implExportAnimations()
+void SVGFilter::implExportAnimations()
 {
-    bool bRet = false;
-
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation-animations" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
@@ -1251,9 +1245,6 @@ bool SVGFilter::implExportAnimations()
             }
         }
     }
-
-    bRet = true;
-    return bRet;
 }
 
 
@@ -1336,7 +1327,7 @@ void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPat
  *  We export bitmaps embedded into text shapes, such as those used by list
  *  items with image style, only once in a specific <defs> element.
  */
-bool SVGFilter::implExportTextEmbeddedBitmaps()
+void SVGFilter::implExportTextEmbeddedBitmaps()
 {
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "TextEmbeddedBitmaps" );
     SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
@@ -1382,23 +1373,21 @@ bool SVGFilter::implExportTextEmbeddedBitmaps()
                 else
                 {
                     OSL_FAIL( "implExportTextEmbeddedBitmaps: no shape bounding box." );
-                    return false;
+                    return;
                 }
             }
             else
             {
                 OSL_FAIL( "implExportTextEmbeddedBitmaps: metafile should have MetaBmpExScaleAction only." );
-                return false;
+                return;
             }
         }
         else
         {
             OSL_FAIL( "implExportTextEmbeddedBitmaps: metafile should have a single action." );
-            return false;
+            return;
         }
-
     }
-    return true;
 }
 
 
@@ -1406,7 +1395,7 @@ bool SVGFilter::implExportTextEmbeddedBitmaps()
 #define SVGFILTER_EXPORT_SVGSCRIPT( z, n, aFragment ) \
         xExtDocHandler->unknown( aFragment ## n );
 
-bool SVGFilter::implGenerateScript()
+void SVGFilter::implGenerateScript()
 {
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "type", "text/ecmascript" );
 
@@ -1419,8 +1408,6 @@ bool SVGFilter::implGenerateScript()
             BOOST_PP_REPEAT( N_SVGSCRIPT_FRAGMENTS, SVGFILTER_EXPORT_SVGSCRIPT, aSVGScript )
         }
     }
-
-    return true;
 }
 
 
@@ -1446,10 +1433,8 @@ Any SVGFilter::implSafeGetPagePropSet( const OUString & sPropertyName,
  *  This method is used when exporting a single page
  *  as implGenerateMetaData is not invoked.
  */
-bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
+void SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
 {
-    bool bRet = false;
-
     mVisiblePagePropSet.bIsBackgroundVisible                = true;
     mVisiblePagePropSet.bAreBackgroundObjectsVisible        = true;
     mVisiblePagePropSet.bIsPageNumberFieldVisible           = false;
@@ -1493,12 +1478,8 @@ bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
                     mVisiblePagePropSet.nPageNumberingType = pSdrModel->GetPageNumType();
                 }
             }
-
-            bRet = true;
         }
     }
-
-    return bRet;
 }
 
 
@@ -1558,7 +1539,7 @@ bool SVGFilter::implExportMasterPages( const std::vector< Reference< XDrawPage >
 
 
 
-bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPages,
+void SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
@@ -1590,7 +1571,6 @@ bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPage
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "SlideGroup" );
     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
-    bool bRet = false;
     for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
     {
         Reference< XShapes > xShapes;
@@ -1642,13 +1622,11 @@ bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPage
 
                     SvXMLElementExport aSlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
-                    bRet = implExportPage( sPageId, rxPages[i], xShapes, false /* is not a master page */ ) || bRet;
+                    implExportPage( sPageId, rxPages[i], xShapes, false /* is not a master page */ );
                 }
             } // append the </g> closing tag related to inserted elements
         } // append the </g> closing tag related to the svg element handling the slide visibility
     }
-
-    return bRet;
 }
 
 
@@ -2151,7 +2129,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
 
 
 
-bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
+void SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
 {
     Reference< XGraphicExportFilter >  xExporter = drawing::GraphicExportFilter::create( mxContext );
 
@@ -2173,8 +2151,6 @@ bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& r
     aMtf.Read( *aFile.GetStream( StreamMode::READ ) );
 
     (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
-
-    return true;
 }
 
 
