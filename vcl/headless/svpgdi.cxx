@@ -1126,24 +1126,32 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rPosAry,
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
-                                 const SalBitmap& rSalBitmap )
+void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
 {
-    if( !m_aDevice.get() )
-        return;
+    SourceHelper aSurface(rSourceBitmap);
+    cairo_surface_t* source = aSurface.getSurface();
+    if (!source)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
+    }
 
-    const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
-    basegfx::B2IBox aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
-                     rPosAry.mnSrcX+rPosAry.mnSrcWidth,
-                     rPosAry.mnSrcY+rPosAry.mnSrcHeight );
-    basegfx::B2IBox aDestRect( rPosAry.mnDestX, rPosAry.mnDestY,
-                      rPosAry.mnDestX+rPosAry.mnDestWidth,
-                      rPosAry.mnDestY+rPosAry.mnDestHeight );
+    cairo_t* cr = getCairoContext(false);
+    assert(cr && m_aDevice->isTopDown());
+    clipRegion(cr);
+    ApplyPaintMode(cr, m_ePaintMode);
 
-    SvpSalGraphics::ClipUndoHandle aUndo( this );
-    if( !isClippedSetup( aDestRect, aUndo ) )
-        m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, basebmp::DrawMode::Paint, m_aClipMap );
-    dbgOut( m_aDevice );
+    cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
+
+    cairo_rectangle_int_t extents = getFillDamage(cr);
+
+    cairo_clip(cr);
+
+    cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
+    cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
+    cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
+    cairo_paint(cr);
+
+    releaseCairoContext(cr, false, extents);
 }
 
 void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
