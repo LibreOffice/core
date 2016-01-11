@@ -102,7 +102,7 @@ public:
 
     virtual ~OLockListener();
 
-    bool Init();
+    void Init();
     void Dispose();
 
 // XEventListener

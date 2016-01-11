@@ -445,12 +445,12 @@ void SAL_CALL OLockListener::notifyTermination( const lang::EventObject& aEvent 
 
 // XInitialization
 
-bool OLockListener::Init()
+void OLockListener::Init()
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
     if ( m_bDisposed || m_bInitialized )
-        return false;
+        return;
 
     try
     {
@@ -481,8 +481,6 @@ bool OLockListener::Init()
     }
 
     m_bInitialized = true;
-
-    return true;
 }
 
 void createRegistryInfo_OInstanceLocker()
