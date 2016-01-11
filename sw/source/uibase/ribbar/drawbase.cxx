@@ -443,10 +443,11 @@ void SwDrawBase::Deactivate()
 
     m_pWin->SetDrawAction(false);
 
-    m_pWin->ReleaseMouse();
+    if (m_pWin->IsMouseCaptured())
+        m_pWin->ReleaseMouse();
     g_bNoInterrupt = false;
 
-    if(m_pWin->GetApplyTemplate())
+    if (m_pWin->GetApplyTemplate())
         m_pWin->SetApplyTemplate(SwApplyTemplate());
     m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
 }
