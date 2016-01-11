@@ -25,6 +25,7 @@
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 #include <xmlsecurity/sigstruct.hxx>
+#include <xmlsecuritydllapi.h>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
@@ -87,7 +88,7 @@ struct XMLSignatureVerifyResult
 
  **********************************************************/
 
-class XMLSignatureHelper
+class XMLSECURITY_DLLPUBLIC XMLSignatureHelper
 {
 private:
     ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxCtx;

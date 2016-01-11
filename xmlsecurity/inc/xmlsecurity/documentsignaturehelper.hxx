@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include "xmlsecurity/sigstruct.hxx"
+#include "xmlsecuritydllapi.h"
 
 #include <vector>
 
@@ -62,7 +63,7 @@ struct SignatureStreamHelper
 };
 
 
-class DocumentSignatureHelper
+class XMLSECURITY_DLLPUBLIC DocumentSignatureHelper
 {
 public:
 
