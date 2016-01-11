@@ -64,7 +64,7 @@
 #include <set>
 #include <unordered_set>
 
-#include "adobeenc.tab"
+#include "adobe_encoding_table.hxx"
 
 #ifdef CALLGRIND_COMPILE
 #include <valgrind/callgrind.h>
