@@ -464,7 +464,6 @@ SvpSalGraphics::SvpSalGraphics() :
     m_aLineColor( COL_BLACK ),
     m_bUseFillColor( false ),
     m_aFillColor( COL_WHITE ),
-    m_aDrawMode( basebmp::DrawMode::Paint ),
     m_ePaintMode( OVERPAINT ),
     m_bClipSetup( false ),
     m_aTextRenderImpl(*this)
@@ -695,7 +694,6 @@ void SvpSalGraphics::SetFillColor( SalColor nSalColor )
 void SvpSalGraphics::SetXORMode(bool bSet, bool bInvert)
 {
     m_ePaintMode = bInvert ? INVERT : (bSet ? XOR : OVERPAINT);
-    m_aDrawMode = bSet ? basebmp::DrawMode::XOR : basebmp::DrawMode::Paint;
 }
 
 void SvpSalGraphics::SetROPLineColor( SalROPColor nROPColor )

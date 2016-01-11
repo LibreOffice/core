@@ -65,7 +65,6 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
     bool                                 m_bUseFillColor;
     basebmp::Color                       m_aFillColor;
 
-    basebmp::DrawMode                    m_aDrawMode;
     PaintMode                            m_ePaintMode;
 
 public:
