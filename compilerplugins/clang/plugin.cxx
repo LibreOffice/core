@@ -61,8 +61,8 @@ const Stmt* Plugin::parentStmt( const Stmt* stmt )
     {
     if( parents.empty())
         buildParents( compiler );
-if(parents.count(stmt)!=1)stmt->dump();
-    assert( parents.count( stmt ) == 1 );
+    //if(parents.count(stmt)!=1)stmt->dump();
+    //assert( parents.count( stmt ) == 1 );
     return parents[ stmt ];
     }
 
@@ -70,7 +70,7 @@ Stmt* Plugin::parentStmt( Stmt* stmt )
     {
     if( parents.empty())
         buildParents( compiler );
-    assert( parents.count( stmt ) == 1 );
+    //assert( parents.count( stmt ) == 1 );
     return const_cast< Stmt* >( parents[ stmt ] );
     }
 

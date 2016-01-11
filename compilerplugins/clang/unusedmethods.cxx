@@ -59,6 +59,7 @@ struct MyFuncInfo
 
 // try to limit the voluminous output a little
 static std::set<MyFuncInfo> callSet;
+static std::set<MyFuncInfo> usedReturnSet;
 static std::set<MyFuncInfo> definitionSet;
 
 
@@ -82,6 +83,8 @@ public:
         std::string output;
         for (const MyFuncInfo & s : callSet)
             output += "call:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
+        for (const MyFuncInfo & s : usedReturnSet)
+            output += "usedReturn:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         for (const MyFuncInfo & s : definitionSet)
         {
             //treat all UNO interfaces as having been called, since they are part of our external ABI
@@ -100,7 +103,7 @@ public:
     bool VisitFunctionDecl( const FunctionDecl* decl );
     bool VisitDeclRefExpr( const DeclRefExpr* );
 private:
-    void logCallToRootMethods(const FunctionDecl* functionDecl);
+    void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
     std::string fullyQualifiedName(const FunctionDecl* functionDecl);
 };
@@ -172,7 +175,7 @@ std::string UnusedMethods::fullyQualifiedName(const FunctionDecl* functionDecl)
     return ret;
 }
 
-void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl)
+void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet)
 {
     functionDecl = functionDecl->getCanonicalDecl();
     bool bCalledSuperMethod = false;
@@ -183,7 +186,7 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl)
         for(CXXMethodDecl::method_iterator it = methodDecl->begin_overridden_methods();
             it != methodDecl->end_overridden_methods(); ++it)
         {
-            logCallToRootMethods(*it);
+            logCallToRootMethods(*it, funcSet);
             bCalledSuperMethod = true;
         }
     }
@@ -191,7 +194,7 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl)
     {
         while (functionDecl->getTemplateInstantiationPattern())
             functionDecl = functionDecl->getTemplateInstantiationPattern();
-        callSet.insert(niceName(functionDecl));
+        funcSet.insert(niceName(functionDecl));
     }
 }
 
@@ -227,7 +230,29 @@ gotfunc:
     if (traversedFunctionSet.insert(fullyQualifiedName(calleeFunctionDecl)).second)
         TraverseFunctionDecl(calleeFunctionDecl);
 
-    logCallToRootMethods(calleeFunctionDecl);
+    logCallToRootMethods(calleeFunctionDecl, callSet);
+
+    if (calleeFunctionDecl->getReturnType()->isVoidType()) {
+        return true;
+    }
+    const Stmt* parent = parentStmt(expr);
+    if (!parent) {
+        return true;
+    }
+    if (isa<Expr>(parent) || isa<ReturnStmt>(parent) || isa<DeclStmt>(parent)
+        || isa<IfStmt>(parent) || isa<SwitchStmt>(parent) || isa<ForStmt>(parent)
+        || isa<WhileStmt>(parent) || isa<DoStmt>(parent)
+        || isa<CXXForRangeStmt>(parent))
+    {
+        logCallToRootMethods(calleeFunctionDecl, usedReturnSet);
+        return true;
+    }
+    if (isa<CompoundStmt>(parent) || isa<DefaultStmt>(parent) || isa<CaseStmt>(parent)
+        || isa<LabelStmt>(parent))
+    {
+        return true;
+    }
+    parent->dump();
     return true;
 }
 
@@ -267,7 +292,8 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     if (!isa<FunctionDecl>(functionDecl)) {
         return true;
     }
-    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl());
+    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl(), callSet);
+    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl(), usedReturnSet);
     return true;
 }
 
