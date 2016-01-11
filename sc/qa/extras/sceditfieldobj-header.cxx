@@ -30,7 +30,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScEditFieldObj_Header : public CalcUnoApiTest, apitest::XTextContent, apitest::XPropertySet
+class ScEditFieldObj_Header : public CalcUnoApiTest, public apitest::XTextContent, public apitest::XPropertySet
 {
 public:
     ScEditFieldObj_Header();

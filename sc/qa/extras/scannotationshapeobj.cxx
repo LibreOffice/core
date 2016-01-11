@@ -24,7 +24,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScAnnotationShapeObj : public CalcUnoApiTest, apitest::XText
+class ScAnnotationShapeObj : public CalcUnoApiTest, public apitest::XText
 {
 public:
     ScAnnotationShapeObj();

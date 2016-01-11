@@ -27,7 +27,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScEditFieldObj_Cell : public CalcUnoApiTest, apitest::XTextField, apitest::XTextContent, apitest::XPropertySet
+class ScEditFieldObj_Cell : public CalcUnoApiTest, public apitest::XTextField, public apitest::XTextContent, public apitest::XPropertySet
 {
 public:
     ScEditFieldObj_Cell();

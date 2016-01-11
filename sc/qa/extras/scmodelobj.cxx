@@ -17,7 +17,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 1
 
-class ScModelObj : public UnoApiTest, apitest::XGoalSeek
+class ScModelObj : public UnoApiTest, public apitest::XGoalSeek
 {
 public:
     virtual void setUp() override;

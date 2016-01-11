@@ -20,7 +20,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 2
 
-class ScStyleLoaderObj : public CalcUnoApiTest, apitest::XStyleLoader
+class ScStyleLoaderObj : public CalcUnoApiTest, public apitest::XStyleLoader
 {
 public:
     ScStyleLoaderObj();

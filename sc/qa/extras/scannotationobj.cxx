@@ -26,7 +26,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 5
 
-class ScAnnontationObj : public CalcUnoApiTest, apitest::XSheetAnnotation
+class ScAnnontationObj : public CalcUnoApiTest, public apitest::XSheetAnnotation
 {
 public:
     ScAnnontationObj();

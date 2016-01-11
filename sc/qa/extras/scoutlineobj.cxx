@@ -20,7 +20,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 6
 
-class ScOutlineObj : public CalcUnoApiTest, apitest::XSheetOutline
+class ScOutlineObj : public CalcUnoApiTest, public apitest::XSheetOutline
 {
 public:
     ScOutlineObj();

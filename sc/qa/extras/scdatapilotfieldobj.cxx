@@ -24,8 +24,8 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 6
 
-class ScDataPilotFieldObj : public CalcUnoApiTest, apitest::XDataPilotFieldGrouping,
-                                apitest::DataPilotField
+class ScDataPilotFieldObj : public CalcUnoApiTest, public apitest::XDataPilotFieldGrouping,
+                                public apitest::DataPilotField
 {
 public:
     virtual void setUp() override;

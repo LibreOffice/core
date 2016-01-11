@@ -25,8 +25,8 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 14
 
-class ScCellRangeObj : public CalcUnoApiTest, apitest::XCellRangesQuery, apitest::CellProperties,
-                        apitest::XSearchable, apitest::XReplaceable, apitest::XCellRangeData
+class ScCellRangeObj : public CalcUnoApiTest, public apitest::XCellRangesQuery, public apitest::CellProperties,
+                        public apitest::XSearchable, public apitest::XReplaceable, public apitest::XCellRangeData
 {
 public:
     ScCellRangeObj();

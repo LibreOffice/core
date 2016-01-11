@@ -26,8 +26,8 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 16
 
-class ScDataPilotTableObj : public CalcUnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable,
-                                apitest::XNamed, apitest::XDataPilotTable2
+class ScDataPilotTableObj : public CalcUnoApiTest, public apitest::XDataPilotDescriptor, public apitest::XDataPilotTable,
+                                public apitest::XNamed, public apitest::XDataPilotTable2
 {
 public:
     ScDataPilotTableObj();

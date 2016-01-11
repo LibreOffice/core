@@ -22,7 +22,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 6
 
-class ScDatabaseRangeObj : public CalcUnoApiTest, apitest::XDatabaseRange
+class ScDatabaseRangeObj : public CalcUnoApiTest, public apitest::XDatabaseRange
 {
 public:
     virtual void setUp() override;

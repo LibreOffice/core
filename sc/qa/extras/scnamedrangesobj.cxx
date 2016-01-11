@@ -21,7 +21,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 3
 
-class ScNamedRangesObj : public CalcUnoApiTest, apitest::XNamedRanges
+class ScNamedRangesObj : public CalcUnoApiTest, public apitest::XNamedRanges
 {
 public:
     virtual void setUp() override;

@@ -21,7 +21,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 11
 
-class ScTableSheetsObj : public CalcUnoApiTest, public ::apitest::XSpreadsheets2, apitest::XNameContainer
+class ScTableSheetsObj : public CalcUnoApiTest, public ::apitest::XSpreadsheets2, public apitest::XNameContainer
 {
 public:
     ScTableSheetsObj();

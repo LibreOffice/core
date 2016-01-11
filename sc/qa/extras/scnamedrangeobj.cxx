@@ -24,7 +24,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 9
 
-class ScNamedRangeObj : public CalcUnoApiTest, apitest::XNamedRange, apitest::XNamed, apitest::XCellRangeReferrer
+class ScNamedRangeObj : public CalcUnoApiTest, public apitest::XNamedRange, public apitest::XNamed, public apitest::XCellRangeReferrer
 {
 public:
     ScNamedRangeObj();

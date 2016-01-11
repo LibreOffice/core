@@ -21,7 +21,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-class ScTableSheetObj : public CalcUnoApiTest, apitest::XSearchable, apitest::XReplaceable, apitest::XPrintAreas
+class ScTableSheetObj : public CalcUnoApiTest, public apitest::XSearchable, public apitest::XReplaceable, public apitest::XPrintAreas
 {
 public:
     ScTableSheetObj();
