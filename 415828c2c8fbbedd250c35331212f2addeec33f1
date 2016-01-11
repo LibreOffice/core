@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_36189d84",
+        "filename": "ucb/source/ucp/cmis/cmis_url.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-11T10:07:19Z",
+      "side": 1,
+      "message": "given that m_sUser is e.g. set via\n\n  m_sUser \u003d aUrl.GetUser( INetURLObject::DECODE_WITH_CHARSET );\n\nin the URL ctor above, it looks wrong to encode it here with rtl_UriEncodeKeepEscapes",
+      "revId": "415828c2c8fbbedd250c35331212f2addeec33f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
