@@ -40,6 +40,7 @@
 #include "ctfonts.hxx"
 #include "fontsubset.hxx"
 #include "impfont.hxx"
+#include "impfontcharmap.hxx"
 #ifdef MACOSX
 #include "osx/salframe.h"
 #endif
