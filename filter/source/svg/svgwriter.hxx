@@ -213,7 +213,7 @@ class SVGTextWriter
     void setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction );
     void addFontAttributes( bool bIsTextContainer );
 
-    bool createParagraphEnumeration();
+    void createParagraphEnumeration();
     bool nextParagraph();
     bool nextTextPortion();
 
@@ -295,11 +295,10 @@ private:
     bool                                    mbIsPlaceholderShape;
 
 
-    SVGAttributeWriter*     ImplAcquireContext()
+    void                    ImplAcquireContext()
     {
         maContextStack.push( mpContext = new SVGAttributeWriter( mrExport, mrFontExport ) );
         maTextWriter.setContext( mpContext );
-        return mpContext;
     }
     void                    ImplReleaseContext()
     {

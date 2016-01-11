@@ -36,7 +36,7 @@ public:
     virtual ~XMLFilterTabPageBasic();
     virtual void dispose() override;
 
-    bool FillInfo( filter_info_impl* pInfo );
+    void FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
 
     VclPtr<Edit>              m_pEDFilterName;

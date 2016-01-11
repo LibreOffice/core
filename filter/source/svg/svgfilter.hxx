@@ -252,20 +252,20 @@ private:
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
     static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
-    bool                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
-    bool                            implGenerateMetaData();
+    void                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
+    void                            implGenerateMetaData();
     void                            implExportTextShapeIndex();
     void                            implEmbedBulletGlyphs();
     void                            implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData );
-    bool                            implExportTextEmbeddedBitmaps();
-    bool                            implGenerateScript();
+    void                            implExportTextEmbeddedBitmaps();
+    void                            implGenerateScript();
 
     bool                            implExportDocument();
-    bool                            implExportAnimations();
+    void                            implExportAnimations();
 
     bool                            implExportMasterPages( const std::vector< Reference< XDrawPage > >& rxPages,
                                                                sal_Int32 nFirstPage, sal_Int32 nLastPage );
-    bool                            implExportDrawPages( const XDrawPageSequence& rxPages,
+    void                            implExportDrawPages( const XDrawPageSequence& rxPages,
                                                              sal_Int32 nFirstPage, sal_Int32 nLastPage );
     bool                            implExportPage( const OUString & sPageId,
                                                         const Reference< XDrawPage > & rxPage,
@@ -280,7 +280,7 @@ private:
     bool                            implCreateObjects();
     bool                            implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes );
     bool                            implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape );
-    bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
+    void                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
     static OUString                 implGetClassFromShape( const Reference< XShape >& rxShape );
     void                            implRegisterInterface( const Reference< XInterface >& rxIf );

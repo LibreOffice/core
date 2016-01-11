@@ -83,7 +83,7 @@ static OUString checkExtensions( const OUString& rExtensions )
     return aRet;
 }
 
-bool XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
+void XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
 {
     if( pInfo )
     {
@@ -118,8 +118,6 @@ bool XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
             }
         }
     }
-
-    return true;
 }
 
 void XMLFilterTabPageBasic::SetInfo(const filter_info_impl* pInfo)
