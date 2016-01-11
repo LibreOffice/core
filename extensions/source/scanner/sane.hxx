@@ -29,7 +29,7 @@
 // - BitmapTransporter -
 
 
-class BitmapTransporter : public OWeakObject, css::awt::XBitmap
+class BitmapTransporter : public OWeakObject, public css::awt::XBitmap
 {
     SvMemoryStream                      m_aStream;
     osl::Mutex                          m_aProtector;

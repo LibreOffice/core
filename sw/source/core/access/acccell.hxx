@@ -29,8 +29,8 @@ class SwAccessibleTable;
 class SwFrameFormat;
 
 class SwAccessibleCell : public SwAccessibleContext,
-                  css::accessibility::XAccessibleValue,
-                  css::accessibility::XAccessibleSelection,
+                  public css::accessibility::XAccessibleValue,
+                  public css::accessibility::XAccessibleSelection,
                   public  css::accessibility::XAccessibleExtendedAttributes
 {
     // Implementation for XAccessibleSelection interface

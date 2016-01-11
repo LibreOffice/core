@@ -113,7 +113,7 @@ public:
 
 //  class VCLXFileControl
 
-class VCLXFileControl : css::awt::XTextComponent, public css::awt::XTextLayoutConstrains, public VCLXWindow
+class VCLXFileControl : public css::awt::XTextComponent, public css::awt::XTextLayoutConstrains, public VCLXWindow
 {
 protected:
     DECL_LINK_TYPED(ModifyHdl, Edit&, void);

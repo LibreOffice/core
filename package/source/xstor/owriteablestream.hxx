@@ -230,7 +230,7 @@ public:
     sal_Int32 GetNewRelId() { return m_nRelId ++; }
 };
 
-class OWriteStream : css::lang::XTypeProvider
+class OWriteStream : public css::lang::XTypeProvider
             , public css::io::XInputStream
             , public css::io::XOutputStream
             , public css::embed::XExtendedStorageStream
