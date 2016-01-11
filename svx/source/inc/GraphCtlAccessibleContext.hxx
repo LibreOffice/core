@@ -78,7 +78,7 @@ typedef ::cppu::WeakAggComponentImplHelper7<
                 SvxGraphCtrlAccessibleContext_Base;
 
 class SvxGraphCtrlAccessibleContext:
-    comphelper::OBaseMutex, public SvxGraphCtrlAccessibleContext_Base,
+    private comphelper::OBaseMutex, public SvxGraphCtrlAccessibleContext_Base,
     SfxListener, accessibility::IAccessibleViewForwarder
 {
 public:
