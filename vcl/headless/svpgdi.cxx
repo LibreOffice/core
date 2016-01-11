@@ -826,8 +826,20 @@ void SvpSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
+    if (m_aDrawMode != basebmp::DrawMode::XOR)
+    {
+        basegfx::B2DPolygon aPoly;
+        aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+        for (sal_uInt32 i = 1; i < nPoints; ++i)
+            aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+        drawPolyPolygon(basegfx::B2DPolyPolygon(aPoly), 0);
+        return;
+    }
+
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolygon case");
+
     if ((m_bUseLineColor || m_bUseFillColor) && nPoints && m_aDevice)
     {
         basegfx::B2DPolygon aPoly;
