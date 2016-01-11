@@ -36,8 +36,8 @@ class   SalXLib;
 #include <vector>
 #include <tools/gen.hxx>
 #include <salwtype.hxx>
-#include <generic/gendata.hxx>
-#include <generic/gendisp.hxx>
+#include <unx/gendata.hxx>
+#include <unx/gendisp.hxx>
 #include <o3tl/enumarray.hxx>
 
 #include <vclpluginapi.h>

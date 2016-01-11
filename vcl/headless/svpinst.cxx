@@ -40,7 +40,7 @@
 
 #include <salframe.hxx>
 #include <svdata.hxx>
-#include <generic/gendata.hxx>
+#include <unx/gendata.hxx>
 #include <basebmp/scanlineformats.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>

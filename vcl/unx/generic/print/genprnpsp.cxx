@@ -52,7 +52,7 @@
 #include "svids.hrc"
 #include "saldatabasic.hxx"
 #include "unx/genprn.h"
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 #include "unx/genpspgraphics.h"
 
 #include "jobset.h"
