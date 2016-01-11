@@ -29,7 +29,7 @@
 // - BitmapTransporter -
 
 
-class BitmapTransporter : public OWeakObject, public css::awt::XBitmap
+class BitmapTransporter: public cppu::WeakImplHelper<css::awt::XBitmap>
 {
     SvMemoryStream                      m_aStream;
     osl::Mutex                          m_aProtector;
@@ -38,12 +38,6 @@ public:
 
                                         BitmapTransporter();
     virtual                             ~BitmapTransporter();
-
-
-    // XInterface
-    virtual Any SAL_CALL                queryInterface( const Type & rType ) throw( RuntimeException, std::exception ) override;
-    virtual void SAL_CALL               acquire() throw() override { OWeakObject::acquire(); }
-    virtual void SAL_CALL               release() throw() override { OWeakObject::release(); }
 
     virtual css::awt::Size SAL_CALL          getSize() throw(std::exception) override;
     virtual Sequence< sal_Int8 > SAL_CALL    getDIB() throw(std::exception) override;

@@ -41,17 +41,6 @@ BitmapTransporter::~BitmapTransporter()
 #endif
 }
 
-
-
-Any SAL_CALL BitmapTransporter::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
-{
-    const Any aRet( cppu::queryInterface( rType, static_cast< css::awt::XBitmap* >( this ) ) );
-
-    return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
-}
-
-
-
 css::awt::Size BitmapTransporter::getSize() throw(std::exception)
 {
     osl::MutexGuard aGuard( m_aProtector );
