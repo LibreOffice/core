@@ -44,7 +44,6 @@
 #ifdef MACOSX
 #include "osx/salframe.h"
 #endif
-#include "quartz/salgdi.h"
 #include "quartz/utils.h"
 #ifdef IOS
 #include "saldatabasic.hxx"
