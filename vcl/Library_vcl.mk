@@ -281,7 +281,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/hatch \
     vcl/source/gdi/impanmvw \
     vcl/source/gdi/impbmp \
-    vcl/source/gdi/impfont \
+    vcl/source/gdi/fontcharmap \
     vcl/source/gdi/impgraph \
     vcl/source/gdi/impvect \
     vcl/source/gdi/jobset \
