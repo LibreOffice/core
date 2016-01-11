@@ -16,6 +16,24 @@
       "revId": "415828c2c8fbbedd250c35331212f2addeec33f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1952ea13",
+        "filename": "ucb/source/ucp/cmis/cmis_url.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2016-01-11T10:49:01Z",
+      "side": 1,
+      "message": "I need to encode a user, that in Google may be something like:\nname.surname@gmail.com\ninto a RFC3896 format e.g.:\nname.surname%40gmail.com\n\nThe sEncodeBinding assignment right below uses the same family of RFC encoding to do the job.\nIn the rest of the code the entire target URL (of which sEncodedUser is a part) is encoded using rtl::Uri::encode.",
+      "parentUuid": "dab17558_36189d84",
+      "revId": "415828c2c8fbbedd250c35331212f2addeec33f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
