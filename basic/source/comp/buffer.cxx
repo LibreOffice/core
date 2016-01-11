@@ -151,17 +151,12 @@ void SbiBuffer::Chain( sal_uInt32 off )
     }
 }
 
-bool SbiBuffer::operator +=( sal_Int8 n )
+void SbiBuffer::operator +=( sal_Int8 n )
 {
     if( Check( 1 ) )
     {
         *pCur++ = (char) n;
         nOff += 1;
-        return true;
-    }
-    else
-    {
-        return false;
     }
 }
 
@@ -179,18 +174,13 @@ bool SbiBuffer::operator +=( sal_uInt8 n )
     }
 }
 
-bool SbiBuffer::operator +=( sal_Int16 n )
+void SbiBuffer::operator +=( sal_Int16 n )
 {
     if( Check( 2 ) )
     {
         *pCur++ = (char) ( n & 0xFF );
         *pCur++ = (char) ( n >> 8 );
         nOff += 2;
-        return true;
-    }
-    else
-    {
-        return false;
     }
 }
 
@@ -224,13 +214,13 @@ bool SbiBuffer::operator +=( sal_uInt32 n )
     }
 }
 
-bool SbiBuffer::operator +=( sal_Int32 n )
+void SbiBuffer::operator +=( sal_Int32 n )
 {
-    return operator +=( (sal_uInt32) n );
+    operator +=( (sal_uInt32) n );
 }
 
 
-bool SbiBuffer::operator +=( const OUString& n )
+void SbiBuffer::operator +=( const OUString& n )
 {
     sal_uInt32 len = n.getLength() + 1;
     if( Check( len ) )
@@ -239,11 +229,6 @@ bool SbiBuffer::operator +=( const OUString& n )
         memcpy( pCur, aByteStr.getStr(), len );
         pCur += len;
         nOff += len;
-        return true;
-    }
-    else
-    {
-        return false;
     }
 }
 

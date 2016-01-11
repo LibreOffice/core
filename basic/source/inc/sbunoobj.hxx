@@ -59,7 +59,7 @@ public:
     bool isEmpty() { return (mnPos == -1); }
 
     css::uno::Any getValue();
-    bool setValue( const css::uno::Any& );
+    void setValue( const css::uno::Any& );
 };
 
 class SbUnoStructRefObject: public SbxObject

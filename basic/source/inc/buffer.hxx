@@ -37,13 +37,13 @@ public:
    ~SbiBuffer();
     void Patch( sal_uInt32, sal_uInt32 );
     void Chain( sal_uInt32 );
-    bool operator += (const OUString&); // save basic-string
-    bool operator += (sal_Int8);        // save character
-    bool operator += (sal_Int16);       // save integer
+    void operator += (const OUString&); // save basic-string
+    void operator += (sal_Int8);        // save character
+    void operator += (sal_Int16);       // save integer
     bool operator += (sal_uInt8);       // save character
     bool operator += (sal_uInt16);      // save integer
     bool operator += (sal_uInt32);      // save integer
-    bool operator += (sal_Int32);       // save integer
+    void operator += (sal_Int32);       // save integer
     char*  GetBuffer();             // give out buffer (delete yourself!)
     sal_uInt32 GetSize()                { return nOff; }
 };

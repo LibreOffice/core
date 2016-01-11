@@ -349,7 +349,7 @@ bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
 
 #endif
 
-bool SbxDecimal::getString( OUString& rString )
+void SbxDecimal::getString( OUString& rString )
 {
 #ifdef WIN32
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
@@ -390,7 +390,6 @@ bool SbxDecimal::getString( OUString& rString )
     return bRet;
 #else
     (void)rString;
-    return false;
 #endif
 }
 

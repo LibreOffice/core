@@ -4754,9 +4754,9 @@ Any StructRefInfo::getValue()
     return aRet;
 }
 
-bool StructRefInfo::setValue( const Any& rValue )
+void StructRefInfo::setValue( const Any& rValue )
 {
-    return uno_type_assignData( getInst(),
+    uno_type_assignData( getInst(),
        maType.getTypeLibType(),
        const_cast<void*>(rValue.getValue()),
        rValue.getValueTypeRef(),
