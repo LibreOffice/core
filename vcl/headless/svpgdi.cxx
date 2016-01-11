@@ -802,6 +802,38 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
 void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
+    if (m_ePaintMode != XOR)
+    {
+        // because of the -1 hack we have to do fill and draw separately
+        bool bOrigUseFillColor = m_bUseFillColor;
+        bool bOrigUseLineColor = m_bUseLineColor;
+        m_bUseFillColor = false;
+        m_bUseLineColor = false;
+
+        if (bOrigUseFillColor)
+        {
+            basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
+            m_bUseFillColor = true;
+            drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0);
+            m_bUseFillColor = false;
+        }
+
+        if (bOrigUseLineColor)
+        {
+            // need same -1 hack as X11SalGraphicsImpl::drawRect
+            basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1));
+            m_bUseLineColor = true;
+            drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0);
+            m_bUseLineColor = false;
+        }
+
+        m_bUseFillColor = bOrigUseFillColor;
+        m_bUseLineColor = bOrigUseLineColor;
+        return;
+    }
+
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawRect case");
+
     if ((m_bUseLineColor || m_bUseFillColor) && m_aDevice)
     {
         ensureClip(); // FIXME: for ...
