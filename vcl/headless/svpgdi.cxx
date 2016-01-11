@@ -306,8 +306,7 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
     cairo_mask_surface(cr, mask, -rTR.mnSrcX, -rTR.mnSrcY);
 
-    cairo_surface_flush(cairo_get_target(cr));
-    cairo_destroy(cr); // unref
+    releaseCairoContext(cr);
 
     if (xDamageTracker)
     {
@@ -384,8 +383,7 @@ bool SvpSalGraphics::drawTransformedBitmap(
     else
         cairo_paint(cr);
 
-    cairo_surface_flush(cairo_get_target(cr));
-    cairo_destroy(cr); // unref
+    releaseCairoContext(cr);
 
     if (xDamageTracker)
     {
@@ -476,8 +474,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         cairo_stroke_preserve(cr);
     }
 
-    cairo_surface_flush(cairo_get_target(cr));
-    cairo_destroy(cr); // unref
+    releaseCairoContext(cr);
 
     if (xDamageTracker)
     {
@@ -1105,8 +1102,7 @@ bool SvpSalGraphics::drawPolyLine(
 
     cairo_stroke(cr);
 
-    cairo_surface_flush(cairo_get_target(cr));
-    cairo_destroy(cr); // unref
+    releaseCairoContext(cr);
 
     if (xDamageTracker)
     {
@@ -1181,8 +1177,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
         cairo_stroke_preserve(cr);
     }
 
-    cairo_surface_flush(cairo_get_target(cr));
-    cairo_destroy(cr); // unref
+    releaseCairoContext(cr);
 
     if (xDamageTracker)
     {
@@ -1402,8 +1397,7 @@ bool SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
         }
     }
 
-    cairo_surface_flush(cairo_get_target(cr));
-    cairo_destroy(cr); // unref
+    releaseCairoContext(cr);
 
     if (xDamageTracker)
     {
@@ -1491,6 +1485,12 @@ cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr
 cairo_t* SvpSalGraphics::getCairoContext() const
 {
     return SvpSalGraphics::createCairoContext(m_aOrigDevice);
+}
+
+void SvpSalGraphics::releaseCairoContext(cairo_t* cr) const
+{
+    cairo_surface_flush(cairo_get_target(cr));
+    cairo_destroy(cr); // unref
 }
 
 #if ENABLE_CAIRO_CANVAS
