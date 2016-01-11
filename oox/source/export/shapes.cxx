@@ -1618,15 +1618,24 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
         return *this;
     }
 
-    uno::Reference<beans::XPropertySet> const xParent(
-        uno::Reference<container::XChild>(xObj, uno::UNO_QUERY)->getParent(),
-        uno::UNO_QUERY);
-
     uno::Sequence<beans::PropertyValue> grabBag;
-    xParent->getPropertyValue("InteropGrabBag") >>= grabBag;
+    OUString entryName;
+    try
+    {
+        uno::Reference<beans::XPropertySet> const xParent(
+            uno::Reference<container::XChild>(xObj, uno::UNO_QUERY_THROW)->getParent(),
+            uno::UNO_QUERY_THROW);
 
-    OUString const entryName(
-        uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName());
+        xParent->getPropertyValue("InteropGrabBag") >>= grabBag;
+
+        entryName = uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY)->getEntryName();
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("oox", "ShapeExport::WriteOLE2Shape: exception: " << e.Message);
+        return *this;
+    }
+
     OUString progID;
 
     for (auto const& it : grabBag)
