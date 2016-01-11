@@ -594,7 +594,7 @@ public:
     /** Determine the name of the volume device's File System.
 
         @return
-        The name of the volume's fielsystem if this information is valid,
+        The name of the volume's filesystem if this information is valid,
         otherwise an empty string.
     */
 

@@ -2810,7 +2810,7 @@ void XMLTextImportHelper::AddCrossRefHeadingMapping(OUString const& rFrom, OUStr
     m_xImpl->m_pCrossRefHeadingBookmarkMap->insert(std::make_pair(rFrom, rTo));
 }
 
-// tdf#94804: hack to map cross reference fiels that reference duplicate marks
+// tdf#94804: hack to map cross reference fields that reference duplicate marks
 // note that we can't really check meta:generator for this since the file might
 // be round-tripped by different versions preserving duplicates => always map
 void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
