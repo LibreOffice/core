@@ -266,7 +266,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 
 // Calculating      nLimit,   nReplP0,    nInsQ0,     nDelR0,     bSplitCount
 // from user values           nOtherX,    nShorterY,  nLongerZ,   bRelaxed
-int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
+void WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
 {
     if ( nX < 0 ) nX = 0;       // only positive values
     if ( nY < 0 ) nY = 0;
@@ -286,7 +286,6 @@ int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
     nInsQ0 = ( nY ? nLimit / nY : nLimit + 1 );
     nDelR0 = ( nZ ? nLimit / nZ : nLimit + 1 );
     bSplitCount = bRelaxed;
-    return nLimit;
 }
 
 // greatest common divisor according to Euklid (chaindivision)

@@ -179,7 +179,7 @@ public:
     /** Calculate the internal weighs corresponding to the user input values.
         @returns nLimit for later comparison with WLD()
      */
-    int CalcLPQR( int nOtherX, int nShorterY, int nLongerZ,
+    void CalcLPQR( int nOtherX, int nShorterY, int nLongerZ,
                     bool bRelaxed = true );
 
     inline int GetLimit() const     { return nLimit; }
