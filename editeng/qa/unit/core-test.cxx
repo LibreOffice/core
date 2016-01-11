@@ -260,10 +260,9 @@ private:
         m_rText = m_rText.replaceAt(nPos, nLen, rTxt);
         return true;
     }
-    virtual bool SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& ) override
+    virtual void SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& ) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::SetAttr\n");
-        return true;
     }
     virtual bool SetINetAttr( sal_Int32, sal_Int32, const OUString& ) override
     {

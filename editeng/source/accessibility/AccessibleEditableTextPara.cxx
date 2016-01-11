@@ -1681,7 +1681,7 @@ namespace accessibility
         }
         return nIndex;
     }
-    bool AccessibleEditableTextPara::ExtendByField( css::accessibility::TextSegment& Segment )
+    void AccessibleEditableTextPara::ExtendByField( css::accessibility::TextSegment& Segment )
     {
         sal_Int32 nParaIndex = GetParagraphIndex();
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
@@ -1744,7 +1744,6 @@ namespace accessibility
                     Segment.SegmentText = GetTextRange(Segment.SegmentStart, Segment.SegmentEnd);
             }
         }
-        return bExtend;
     }
 
     css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)

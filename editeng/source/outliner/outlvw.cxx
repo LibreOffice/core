@@ -576,10 +576,9 @@ void OutlinerView::Indent( short nDiff )
         pOwner->UndoActionEnd( OLUNDO_DEPTH );
 }
 
-bool OutlinerView::AdjustHeight( long nDY )
+void OutlinerView::AdjustHeight( long nDY )
 {
     pEditView->MoveParagraphs( nDY );
-    return true;    // remove return value...
 }
 
 Rectangle OutlinerView::GetVisArea() const
@@ -1275,9 +1274,9 @@ OUString OutlinerView::GetSelected() const
     return pEditView->GetSelected();
 }
 
-EESpellState OutlinerView::StartSpeller( bool bMultiDoc )
+void OutlinerView::StartSpeller( bool bMultiDoc )
 {
-    return pEditView->StartSpeller( bMultiDoc );
+    pEditView->StartSpeller( bMultiDoc );
 }
 
 EESpellState OutlinerView::StartThesaurus()
