@@ -28,6 +28,10 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_signing, \
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,xmlsecurity_signing,\
+    boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_set_include,xmlsecurity_signing,\
 	-I$(SRCDIR)/xmlsecurity/inc \
 	$$(INCLUDE) \
