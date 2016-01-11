@@ -254,14 +254,6 @@ namespace
     };
 }
 
-static void ApplyPaintMode(cairo_t* cr, PaintMode ePaintMode)
-{
-    if (ePaintMode == INVERT)
-        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
-    else
-        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-}
-
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap )
 {
     if (rAlphaBitmap.GetBitCount() != 8 && rAlphaBitmap.GetBitCount() != 1)
@@ -289,7 +281,6 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
     cairo_t* cr = getCairoContext(false);
     assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
-    ApplyPaintMode(cr, m_ePaintMode);
 
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
@@ -346,7 +337,6 @@ bool SvpSalGraphics::drawTransformedBitmap(
     cairo_t* cr = getCairoContext(false);
     assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
-    ApplyPaintMode(cr, m_ePaintMode);
 
     // setup the image transformation
     // using the rNull,rX,rY points as destinations for the (0,0),(0,Width),(Height,0) source points
@@ -421,7 +411,6 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     cairo_t* cr = getCairoContext(false);
     assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
-    ApplyPaintMode(cr, m_ePaintMode);
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
 
@@ -953,7 +942,6 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_t* cr = getCairoContext(false);
     assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
-    ApplyPaintMode(cr, m_ePaintMode);
 
     // setup line attributes
     cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
@@ -1048,7 +1036,6 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     cairo_t* cr = getCairoContext(true);
     assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
-    ApplyPaintMode(cr, m_ePaintMode);
 
     for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
         AddPolygonToPath(cr, *pPoly, true, !getAntiAliasB2DDraw(), m_bUseLineColor);
@@ -1136,7 +1123,6 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
     cairo_t* cr = getCairoContext(false);
     assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
-    ApplyPaintMode(cr, m_ePaintMode);
 
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
@@ -1251,7 +1237,6 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
     cairo_t* cr = getCairoContext(false);
     assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
-    ApplyPaintMode(cr, m_ePaintMode);
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
 
@@ -1392,6 +1377,10 @@ cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
     else
         cr = SvpSalGraphics::createCairoContext(m_aOrigDevice);
     cairo_set_line_width(cr, 1);
+    if (m_ePaintMode == INVERT)
+        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+    else
+        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     return cr;
 }
 
