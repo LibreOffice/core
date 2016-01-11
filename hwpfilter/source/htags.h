@@ -46,7 +46,7 @@ struct HyperText
     char  macro[325];
     uchar type;
     char reserve[3];
-    bool Read(HWPFile& hwpf);
+    void Read(HWPFile& hwpf);
 };
 /**
  * @short Win32 OLE object
@@ -63,7 +63,7 @@ struct OlePicture
     explicit OlePicture(int tsize);
     ~OlePicture(void);
 
-    bool Read(HWPFile& hwpf);
+    void Read(HWPFile& hwpf);
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 

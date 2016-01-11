@@ -43,18 +43,17 @@ HWPFont::~HWPFont()
 }
 
 
-int HWPFont::AddFont(int lang, const char *font)
+void HWPFont::AddFont(int lang, const char *font)
 {
     int nfonts;
 
     if (!(lang >= 0 && lang < NLanguage))
-        return 0;
+        return;
     nfonts = nFonts[lang];
     if (MAXFONTS <= nfonts)
-        return 0;
+        return;
     strncpy(fontnames[lang] + FONTNAMELEN * nfonts, font, FONTNAMELEN - 1);
     nFonts[lang]++;
-    return nfonts;
 }
 
 

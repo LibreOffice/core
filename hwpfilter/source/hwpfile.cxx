@@ -176,15 +176,17 @@ int HWPFile::Read1b(void *ptr, size_t nmemb)
     return hiodev ? hiodev->read1b(ptr, nmemb) : 0;
 }
 
-int HWPFile::Read2b(void *ptr, size_t nmemb)
+void HWPFile::Read2b(void *ptr, size_t nmemb)
 {
-    return hiodev ? hiodev->read2b(ptr, nmemb) : 0;
+    if (hiodev)
+        hiodev->read2b(ptr, nmemb);
 }
 
 
-int HWPFile::Read4b(void *ptr, size_t nmemb)
+void HWPFile::Read4b(void *ptr, size_t nmemb)
 {
-    return hiodev ? hiodev->read4b(ptr, nmemb) : 0;
+    if (hiodev)
+        hiodev->read4b(ptr, nmemb);
 }
 
 
@@ -200,9 +202,10 @@ size_t HWPFile::SkipBlock(size_t size)
 }
 
 
-bool HWPFile::SetCompressed(bool flag)
+void HWPFile::SetCompressed(bool flag)
 {
-    return hiodev && hiodev->setCompressed(flag);
+    if (hiodev)
+        hiodev->setCompressed(flag);
 }
 
 
@@ -218,27 +221,27 @@ HIODev *HWPFile::SetIODevice(HIODev * new_hiodev)
 
 // end of HIODev wrapper
 
-bool HWPFile::InfoRead()
+void HWPFile::InfoRead()
 {
-    return _hwpInfo.Read(*this);
+    _hwpInfo.Read(*this);
 }
 
 
-bool HWPFile::FontRead()
+void HWPFile::FontRead()
 {
-    return _hwpFont.Read(*this);
+    _hwpFont.Read(*this);
 }
 
 
-bool HWPFile::StyleRead()
+void HWPFile::StyleRead()
 {
-    return _hwpStyle.Read(*this);
+    _hwpStyle.Read(*this);
 }
 
 
-bool HWPFile::ParaListRead()
+void HWPFile::ParaListRead()
 {
-    return ReadParaList(plist);
+    ReadParaList(plist);
 }
 
 bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)

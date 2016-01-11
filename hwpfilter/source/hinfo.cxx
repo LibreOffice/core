@@ -197,24 +197,24 @@ bool HWPSummary::Read(HWPFile & hwpf)
 }
 
 
-bool ParaShape::Read(HWPFile & hwpf)
+void ParaShape::Read(HWPFile & hwpf)
 {
     pagebreak = 0;
     unsigned short tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     left_margin = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     right_margin = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     indent = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     lspacing = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     pspacing_next = tmp16;
 
     hwpf.Read1b(&condense, 1);
@@ -224,37 +224,36 @@ bool ParaShape::Read(HWPFile & hwpf)
         hwpf.Read1b(&tabs[ii].type, 1);
         hwpf.Read1b(&tabs[ii].dot_continue, 1);
         if (!hwpf.Read2b(tmp16))
-            return false;
+            return;
         tabs[ii].position = tmp16;
     }
     hwpf.Read1b(&coldef.ncols, 1);
     hwpf.Read1b(&coldef.separator, 1);
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     coldef.spacing = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     coldef.columnlen = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     coldef.columnlen0 = tmp16;
     hwpf.Read1b(&shade, 1);
     hwpf.Read1b(&outline, 1);
     hwpf.Read1b(&outline_continue, 1);
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     pspacing_prev = tmp16;
 
     hwpf.Read1b(reserved, 2);
-    return (!hwpf.State());
 }
 
 
-bool CharShape::Read(HWPFile & hwpf)
+void CharShape::Read(HWPFile & hwpf)
 {
     unsigned short tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     size = tmp16;
     hwpf.Read1b(font, NLanguage);
     hwpf.Read1b(ratio, NLanguage);
@@ -263,8 +262,6 @@ bool CharShape::Read(HWPFile & hwpf)
     hwpf.Read1b(&shade, 1);
     hwpf.Read1b(&attr, 1);
     hwpf.Read1b(reserved, 4);
-
-    return (!hwpf.State());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

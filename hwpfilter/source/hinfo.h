@@ -231,7 +231,7 @@ struct CharShape
     unsigned char attr;
     unsigned char reserved[4];
 
-    bool Read(HWPFile &);
+    void Read(HWPFile &);
 };
 
 /* ?? ?????? ???? ?????? */
@@ -284,7 +284,7 @@ struct ParaShape
     CharShape *cshape;
      unsigned char pagebreak;
 
-    bool  Read(HWPFile &);
+    void  Read(HWPFile &);
 //  virtual ~ParaShape();
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HINFO_H

@@ -25,7 +25,7 @@
 #include "hwpfile.h"
 #include "htags.h"
 
-bool HyperText::Read(HWPFile & hwpf)
+void HyperText::Read(HWPFile & hwpf)
 {
     hwpf.Read1b(filename, 256);
     hwpf.Read2b(bookmark, 16);
@@ -41,7 +41,6 @@ bool HyperText::Read(HWPFile & hwpf)
                 break;
         }
     }
-    return true;
 }
 
 
@@ -101,21 +100,21 @@ OlePicture::~OlePicture()
 
 #define FILESTG_SIGNATURE_NORMAL 0xF8995568
 
-bool OlePicture::Read(HWPFile & hwpf)
+void OlePicture::Read(HWPFile & hwpf)
 {
     if (size <= 0)
-        return false;
+        return;
 
 // We process only FILESTG_SIGNATURE_NORMAL.
     hwpf.Read4b(&signature, 1);
     if (signature != FILESTG_SIGNATURE_NORMAL)
-        return false;
+        return;
 #ifdef WIN32
     char *data = new char[size];
     if (hwpf.ReadBlock(data,size) == 0)
     {
           delete [] data;
-          return false;
+          return;
     }
     FILE *fp;
     char tname[200];
@@ -124,7 +123,7 @@ bool OlePicture::Read(HWPFile & hwpf)
     if (0 == (fp = fopen(tname, "wb")))
     {
          delete [] data;
-         return false;
+         return;
     }
     fwrite(data, size, 1, fp);
     delete [] data;
@@ -135,15 +134,13 @@ bool OlePicture::Read(HWPFile & hwpf)
                     NULL, 0, &pis) != S_OK ) {
          pis = 0;
          unlink(tname);
-         return false;
+         return;
     }
     unlink(tname);
 #else
     if (pis == nullptr || hwpf.ReadBlock(pis, size) == 0)
-        return false;
+        return;
 #endif
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

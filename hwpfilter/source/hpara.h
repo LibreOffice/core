@@ -68,7 +68,7 @@ struct LineInfo
     hunit         height_sp;
     unsigned short    softbreak;                  // column, page, section
 
-    bool  Read(HWPFile &hwpf, HWPPara *para);
+    void  Read(HWPFile &hwpf, HWPPara *para);
 };
 /**
  * It represents the paragraph.
