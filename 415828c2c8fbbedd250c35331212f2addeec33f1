@@ -34,6 +34,24 @@
       "revId": "415828c2c8fbbedd250c35331212f2addeec33f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_d948625e",
+        "filename": "ucb/source/ucp/cmis/cmis_url.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-11T11:08:08Z",
+      "side": 1,
+      "message": "but if that address happens to be \u003c%1234@gmail.com\u003e, it needs to be encoded as \"%251234%40gmail.com\", not \"%1234%40gmail.com\"",
+      "parentUuid": "dab17558_1952ea13",
+      "revId": "415828c2c8fbbedd250c35331212f2addeec33f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
