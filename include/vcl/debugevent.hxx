@@ -17,7 +17,7 @@
 #include <sal/types.h>
 #include <vcl/window.hxx>
 
-class VCL_DLLPUBLIC DebugEventInjector : Timer {
+class VCL_DLLPUBLIC DebugEventInjector : private Timer {
   sal_uInt32 mnEventsLeft;
   DebugEventInjector( sal_uInt32 nMaxEvents );
 

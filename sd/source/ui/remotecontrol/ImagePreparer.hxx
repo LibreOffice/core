@@ -18,7 +18,7 @@
 namespace sd
 {
 
-class ImagePreparer : Timer
+class ImagePreparer : private Timer
 {
     sal_uInt32 mnSendingSlide;
 public:

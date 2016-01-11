@@ -27,7 +27,7 @@ namespace sd
 {
 
 // Timer is protected by the solar mutex => so are we.
-class Receiver : Timer
+class Receiver : private Timer
 {
     std::deque< std::vector< OString > > maExecQueue;
 public:

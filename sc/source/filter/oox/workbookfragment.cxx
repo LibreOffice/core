@@ -253,7 +253,7 @@ public:
     }
 };
 
-class ProgressBarTimer : Timer
+class ProgressBarTimer : private Timer
 {
     // FIXME: really we should unify all sheet loading
     // progress reporting into something pleasant.
