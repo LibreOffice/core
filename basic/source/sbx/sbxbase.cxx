@@ -329,7 +329,7 @@ const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const
         return m_Params[n - 1].get();
 }
 
-bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+void SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     m_Params.clear();
     sal_uInt16 nParam;
@@ -352,10 +352,9 @@ bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         SbxParamInfo& p(*m_Params.back());
         p.nUserData = nUserData;
     }
-    return true;
 }
 
-bool SbxInfo::StoreData( SvStream& rStrm ) const
+void SbxInfo::StoreData( SvStream& rStrm ) const
 {
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aComment,
         RTL_TEXTENCODING_ASCII_US );
@@ -370,7 +369,6 @@ bool SbxInfo::StoreData( SvStream& rStrm ) const
              .WriteUInt16( static_cast<sal_uInt16>(i->nFlags) )
              .WriteUInt32( i->nUserData );
     }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

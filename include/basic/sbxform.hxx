@@ -133,7 +133,7 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
     BASIC_DLLPRIVATE OUString GetNegFormatString( const OUString& sFormatStrg, bool & bFound );
     BASIC_DLLPRIVATE OUString Get0FormatString( const OUString& sFormatStrg, bool & bFound );
     BASIC_DLLPRIVATE OUString GetNullFormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE short  AnalyseFormatString( const OUString& sFormatStrg,
+    BASIC_DLLPRIVATE void     AnalyseFormatString( const OUString& sFormatStrg,
                                                  short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                                                  short& nNoOfOptionalDigitsLeft,
                                                  short& nNoOfExponentDigits,

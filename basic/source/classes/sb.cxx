@@ -1696,9 +1696,9 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     return bRet;
 }
 
-bool StarBASIC::RTError( SbError code, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
+void StarBASIC::RTError( SbError code, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
-    return RTError( code, OUString(), l, c1, c2 );
+    RTError( code, OUString(), l, c1, c2 );
 }
 
 bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )

@@ -599,7 +599,7 @@ SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
     return pProp;
 }
 
-SbProcedureProperty* SbModule::GetProcedureProperty( const OUString& rName, SbxDataType t )
+void SbModule::GetProcedureProperty( const OUString& rName, SbxDataType t )
 {
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
     SbProcedureProperty* pProp = p ? dynamic_cast<SbProcedureProperty*>( p ) : nullptr;
@@ -615,10 +615,9 @@ SbProcedureProperty* SbModule::GetProcedureProperty( const OUString& rName, SbxD
         pProps->Put( pProp, pProps->Count() );
         StartListening( pProp->GetBroadcaster(), true );
     }
-    return pProp;
 }
 
-SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
+void SbModule::GetIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
 {
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
     SbIfaceMapperMethod* pMapperMethod = p ? dynamic_cast<SbIfaceMapperMethod*>( p ) : nullptr;
@@ -634,7 +633,6 @@ SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod( const OUString& rName, SbMe
         pMethods->Put( pMapperMethod, pMethods->Count() );
     }
     pMapperMethod->bInvalid = false;
-    return pMapperMethod;
 }
 
 SbIfaceMapperMethod::~SbIfaceMapperMethod()
@@ -1791,7 +1789,7 @@ bool SbModule::HasExeCode()
 }
 
 // Store only image, no source
-bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
+void SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 {
     bool bRet = Compile();
     if( bRet )
@@ -1818,18 +1816,16 @@ bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
             pImage->aOUSource = aOUSource;
         }
     }
-    return bRet;
 }
 
 // Called for >= OO 1.0 passwd protected libraries only
 
-bool SbModule::LoadBinaryData( SvStream& rStrm )
+void SbModule::LoadBinaryData( SvStream& rStrm )
 {
     OUString aKeepSource = aOUSource;
-    bool bRet = LoadData( rStrm, 2 );
+    LoadData( rStrm, 2 );
     LoadCompleted();
     aOUSource = aKeepSource;
-    return bRet;
 }
 
 bool SbModule::LoadCompleted()
