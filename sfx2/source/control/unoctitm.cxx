@@ -650,12 +650,12 @@ void UsageInfo::save()
 
     if( file.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) == osl::File::E_None )
     {
-        OString jan = "Usage information:\n";
+        OString aUsageInfoMsg = "Usage information:\n";
 
         for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
-            jan += "\n" + it->first.toUtf8() + ";" + OString::number(it->second);
+            aUsageInfoMsg += "\n" + it->first.toUtf8() + ";" + OString::number(it->second);
 
-        jan += "\nUsage information end\n";
+        aUsageInfoMsg += "\nUsage information end\n";
         sal_uInt64 written = 0;
         file.write(jan.pData->buffer, jan.getLength(), written);
         file.close();
