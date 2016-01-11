@@ -548,7 +548,7 @@ private:
 
     void                CheckPageOverflow();
 
-    EditPaM             Clear();
+    void                Clear();
     EditPaM             RemoveText();
     bool                CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY );
     void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 nStartPosY );

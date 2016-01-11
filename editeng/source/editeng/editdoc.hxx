@@ -201,7 +201,6 @@ public:
     const EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const;
     EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
     const EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const;
-    const EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const;
     EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
     const EditCharAttrib* FindFeature( sal_Int32 nPos ) const;
 
@@ -262,7 +261,6 @@ public:
     void            SetStyleSheet( SfxStyleSheet* pS, bool bRecalcFont = true );
     void            SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle );
     SfxStyleSheet*  GetStyleSheet() { return aContentAttribs.GetStyleSheet(); }
-    const SfxStyleSheet* GetStyleSheet() const { return aContentAttribs.GetStyleSheet(); }
 
     void            CreateDefFont();
 

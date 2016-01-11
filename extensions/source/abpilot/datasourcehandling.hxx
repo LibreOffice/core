@@ -58,7 +58,7 @@ namespace abp
         void    getDataSourceNames( StringBag& _rNames ) const;
 
         /// disambiguates the given name by appending successive numbers
-        OUString& disambiguate(OUString& _rDataSourceName);
+        void disambiguate(OUString& _rDataSourceName);
 
         /// creates a new MORK data source
         ODataSource createNewMORK( const OUString& _rName );

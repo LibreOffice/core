@@ -222,7 +222,7 @@ namespace abp
     }
 
 
-    OUString& ODataSourceContext::disambiguate(OUString& _rDataSourceName)
+    void ODataSourceContext::disambiguate(OUString& _rDataSourceName)
     {
         OUString sCheck( _rDataSourceName );
         StringBag::const_iterator aPos = m_pImpl->aDataSourceNames.find( sCheck );
@@ -237,7 +237,6 @@ namespace abp
         }
 
         _rDataSourceName = sCheck;
-        return _rDataSourceName;
     }
 
 

@@ -1205,7 +1205,7 @@ namespace pcr
 
 
     #define STD_HEIGHT  100
-    bool DropDownEditControl::ShowDropDown( bool bShow )
+    void DropDownEditControl::ShowDropDown( bool bShow )
     {
         if (bShow)
         {
@@ -1241,8 +1241,6 @@ namespace pcr
             m_bDropdown = false;
             m_pImplEdit->GrabFocus();
         }
-        return m_bDropdown;
-
     }
 
 

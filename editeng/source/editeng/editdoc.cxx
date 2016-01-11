@@ -2940,19 +2940,6 @@ bool CharAttribList::HasBoundingAttrib( sal_Int32 nBound ) const
     return false;
 }
 
-const EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const
-{
-    if ( !bHasEmptyAttribs )
-        return nullptr;
-
-    for (const std::unique_ptr<EditCharAttrib>& rAttr : aAttribs)
-    {
-        if (rAttr->GetStart() == nPos && rAttr->GetEnd() == nPos && rAttr->Which() == nWhich)
-            return rAttr.get();
-    }
-    return nullptr;
-}
-
 EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     if ( !bHasEmptyAttribs )

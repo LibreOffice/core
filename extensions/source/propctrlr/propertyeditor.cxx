@@ -391,21 +391,19 @@ namespace pcr
     }
 
 
-    sal_uInt16 OPropertyEditor::InsertEntry( const OLineDescriptor& rData, sal_uInt16 _nPageId, sal_uInt16 nPos )
+    void OPropertyEditor::InsertEntry( const OLineDescriptor& rData, sal_uInt16 _nPageId, sal_uInt16 nPos )
     {
         // let the current page handle this
         OBrowserPage* pPage = getPage( _nPageId );
         DBG_ASSERT( pPage, "OPropertyEditor::InsertEntry: don't have such a page!" );
         if ( !pPage )
-            return EDITOR_LIST_ENTRY_NOTFOUND;
+            return;
 
-        sal_uInt16 nEntry = pPage->getListBox().InsertEntry( rData, nPos );
+        pPage->getListBox().InsertEntry( rData, nPos );
 
         OSL_ENSURE( m_aPropertyPageIds.find( rData.sName ) == m_aPropertyPageIds.end(),
             "OPropertyEditor::InsertEntry: property already present in the map!" );
         m_aPropertyPageIds.insert( MapStringToPageId::value_type( rData.sName, _nPageId ) );
-
-        return nEntry;
     }
 
 

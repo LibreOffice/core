@@ -391,7 +391,7 @@ namespace pcr
         DECL_LINK_TYPED( ReturnHdl, FloatingWindow*, void );
         DECL_LINK_TYPED( DropDownHdl, Button*, void );
 
-        bool ShowDropDown( bool bShow );
+        void ShowDropDown( bool bShow );
     };
 
 

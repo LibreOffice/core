@@ -102,7 +102,7 @@ namespace pcr
 
         void                        ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
 
-        sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 _nPageId, sal_uInt16 nPos = EDITOR_LIST_APPEND );
+        void                        InsertEntry( const OLineDescriptor&, sal_uInt16 _nPageId, sal_uInt16 nPos = EDITOR_LIST_APPEND );
         void                        RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor& );
 

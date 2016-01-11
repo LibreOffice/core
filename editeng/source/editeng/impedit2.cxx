@@ -611,7 +611,7 @@ EditPaM ImpEditEngine::InsertText(const EditSelection& aSel, const OUString& rSt
     return aPaM;
 }
 
-EditPaM ImpEditEngine::Clear()
+void ImpEditEngine::Clear()
 {
     InitDoc( false );
 
@@ -628,8 +628,6 @@ EditPaM ImpEditEngine::Clear()
         EditView* pView = aEditViews[--nView];
         pView->pImpEditView->SetEditSelection( aSel );
     }
-
-    return aPaM;
 }
 
 EditPaM ImpEditEngine::RemoveText()

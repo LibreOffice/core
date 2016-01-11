@@ -52,7 +52,7 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
 
     // from SvxSpellWrapper copied and modified
     bool        ConvNext_impl();        // former SpellNext
-    bool        FindConvText_impl();    // former FindSpellError
+    void        FindConvText_impl();    // former FindSpellError
     bool        ConvMore_impl();        // former SpellMore
 
     // from EditSpellWrapper copied and modified

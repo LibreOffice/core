@@ -498,19 +498,18 @@ namespace pcr
     }
 
 
-    bool XSDValidationPropertyHandler::implDoCloneCurrentDataType( const OUString& _rNewName )
+    void XSDValidationPropertyHandler::implDoCloneCurrentDataType( const OUString& _rNewName )
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implDoCloneCurrentDataType: this will crash!" );
 
         ::rtl::Reference< XSDDataType > pType = m_pHelper->getValidatingDataType();
         if ( !pType.is() )
-            return false;
+            return;
 
         if ( !m_pHelper->cloneDataType( pType, _rNewName ) )
-            return false;
+            return;
 
         m_pHelper->setValidatingDataTypeByName( _rNewName );
-        return true;
     }
 
 

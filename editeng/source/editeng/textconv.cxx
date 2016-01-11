@@ -116,7 +116,7 @@ bool TextConvWrapper::ConvNext_impl()
 }
 
 
-bool TextConvWrapper::FindConvText_impl()
+void TextConvWrapper::FindConvText_impl()
 {
     // modified version of SvxSpellWrapper::FindSpellError
 
@@ -138,7 +138,6 @@ bool TextConvWrapper::FindConvText_impl()
         }
     }
     m_pWin->LeaveWait();
-    return bFound;
 }
 
 

@@ -77,7 +77,7 @@ namespace pcr
         bool    implDoRemoveCurrentDataType();
 
         bool    implPrepareCloneDataCurrentType( OUString& _rNewName );
-        bool    implDoCloneCurrentDataType( const OUString& _rNewName );
+        void    implDoCloneCurrentDataType( const OUString& _rNewName );
 
         /** retrieves the names of the data types which our introspectee can be validated against
         */

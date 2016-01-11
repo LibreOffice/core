@@ -86,9 +86,6 @@ namespace pcr
         inline StlSyntaxSequence( const ELEMENT* pElements, sal_Int32 len ) : UnoBase( pElements, len ) { }
         explicit inline StlSyntaxSequence( sal_Int32 len ) : UnoBase( len ) { }
 
-        operator const UnoBase&() const { return *this; }
-        operator       UnoBase&()       { return *this; }
-
         typedef const ELEMENT* const_iterator;
         typedef       ELEMENT* iterator;
 
