@@ -90,7 +90,7 @@ protected:
     // das einzige Formular
     css::uno::Reference< css::container::XIndexContainer >  xFormComps;
 
-    virtual const css::uno::Reference< css::drawing::XDrawPage > & GetDrawPage();
+    virtual void GetDrawPage();
 };
 
 #endif

@@ -470,7 +470,7 @@ TBCGeneralInfo::Print( FILE* fp )
 }
 #endif
 
-bool
+void
 TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std::vector< beans::PropertyValue >& sControlData )
 {
     if ( ( bFlags & 0x5 ) )
@@ -511,7 +511,6 @@ aToolbarItem(3).Name = "Visible"
 aToolbarItem(3).Value = true
 */
     }
-    return true;
 }
 
 TBCMenuSpecific::TBCMenuSpecific() : tbid( 0 )

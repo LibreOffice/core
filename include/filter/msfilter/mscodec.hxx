@@ -252,7 +252,7 @@ public:
     bool                InitCipher( sal_uInt32 nCounter );
 
     /** Creates an MD5 digest of salt digest. */
-    bool                CreateSaltDigest(
+    void               CreateSaltDigest(
                             const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] );
 
     /** Encodes a block of memory.
