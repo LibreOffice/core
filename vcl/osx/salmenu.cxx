@@ -317,37 +317,6 @@ AquaSalMenu::~AquaSalMenu()
     }
 }
 
-sal_Int32 removeUnusedItemsRunner(NSMenu * pMenu)
-{
-    NSArray * elements = [pMenu itemArray];
-    NSEnumerator * it = [elements objectEnumerator];
-    id elem;
-    NSMenuItem * lastDisplayedMenuItem = nil;
-    sal_Int32 drawnItems = 0;
-    bool firstEnabledItemIsNoSeparator = false;
-    while((elem=[it nextObject]) != nil) {
-        NSMenuItem * item = static_cast<NSMenuItem *>(elem);
-        if( (![item isEnabled] && ![item isSeparatorItem]) || ([item isSeparatorItem] && (lastDisplayedMenuItem != nil && [lastDisplayedMenuItem isSeparatorItem])) ) {
-            [[item menu]removeItem:item];
-        } else {
-            if( ! firstEnabledItemIsNoSeparator && [item isSeparatorItem] ) {
-                [[item menu]removeItem:item];
-            } else {
-                firstEnabledItemIsNoSeparator = true;
-                lastDisplayedMenuItem = item;
-                drawnItems++;
-                if( [item hasSubmenu] ) {
-                    removeUnusedItemsRunner( [item submenu] );
-                }
-            }
-        }
-    }
-    if( lastDisplayedMenuItem != nil && [lastDisplayedMenuItem isSeparatorItem]) {
-        [[lastDisplayedMenuItem menu]removeItem:lastDisplayedMenuItem];
-    }
-    return drawnItems;
-}
-
 bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags)
 {
     // do not use native popup menu when AQUA_NATIVE_MENUS is set to false
@@ -364,13 +333,6 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     NSView* pParentNSView = [pParentNSWindow contentView];
     NSView* pPopupNSView = static_cast<AquaSalFrame *>(pWin->ImplGetWindow()->ImplGetFrame())->mpNSView;
     NSRect popupFrame = [pPopupNSView frame];
-
-    // since we manipulate the menu below (removing entries)
-    // let's rather make a copy here and work with that
-    NSMenu* pCopyMenu = [mpMenu copy];
-
-    // filter disabled elements
-    removeUnusedItemsRunner( pCopyMenu );
 
     // create frame rect
     NSRect displayPopupFrame = NSMakeRect( rRect.Left()+(offset-1), rRect.Top()+(offset+1), popupFrame.size.width, 0 );
@@ -390,15 +352,13 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
 
     // open popup menu
     NSPopUpButtonCell * pPopUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
-    [pPopUpButtonCell setMenu: pCopyMenu];
+    [pPopUpButtonCell setMenu: mpMenu];
     [pPopUpButtonCell selectItem:nil];
     [AquaA11yWrapper setPopupMenuOpen: YES];
     [pPopUpButtonCell performClickWithFrame:displayPopupFrame inView:pParentNSView];
     [pPopUpButtonCell release];
     [AquaA11yWrapper setPopupMenuOpen: NO];
 
-    // clean up the copy
-    [pCopyMenu release];
     return true;
 }
 
