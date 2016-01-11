@@ -123,7 +123,7 @@ public:
 
 };
 
-class ContentInfo : boost::noncopyable
+class ContentInfo : private boost::noncopyable
 {
     friend class EditTextObjectImpl;
 public:
@@ -173,7 +173,7 @@ public:
 #endif
 };
 
-class EditTextObjectImpl : boost::noncopyable
+class EditTextObjectImpl : private boost::noncopyable
 {
 public:
     typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;

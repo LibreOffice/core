@@ -29,7 +29,7 @@ namespace sc {
 class DataStream;
 struct DocumentLinkManagerImpl;
 
-class DocumentLinkManager : boost::noncopyable
+class DocumentLinkManager : private boost::noncopyable
 {
     std::unique_ptr<DocumentLinkManagerImpl> mpImpl;
 

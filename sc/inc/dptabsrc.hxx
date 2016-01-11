@@ -299,7 +299,7 @@ public:
     ScDPDimension*  getByIndex(long nIndex) const;
 };
 
-class ScDPDimension : boost::noncopyable, public cppu::WeakImplHelper<
+class ScDPDimension : private boost::noncopyable, public cppu::WeakImplHelper<
                             css::sheet::XHierarchiesSupplier,
                             css::container::XNamed,
                             css::util::XCloneable,
@@ -706,7 +706,7 @@ public:
     SCROW                   GetSrcItemsCount();
 };
 
-class ScDPMember : boost::noncopyable, public cppu::WeakImplHelper<
+class ScDPMember : private boost::noncopyable, public cppu::WeakImplHelper<
                             css::container::XNamed,
                             css::beans::XPropertySet,
                             css::lang::XServiceInfo >

@@ -81,7 +81,7 @@ private:
 };
 
 /// (Partially) abstract base class for an operand
-class DynamicKernelArgument : boost::noncopyable
+class DynamicKernelArgument : private boost::noncopyable
 {
 public:
     DynamicKernelArgument( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft );

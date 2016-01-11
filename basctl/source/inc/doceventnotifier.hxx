@@ -34,7 +34,7 @@ namespace basctl
     class ScriptDocument;
 
 
-    class SAL_NO_VTABLE DocumentEventListener : ::boost::noncopyable
+    class SAL_NO_VTABLE DocumentEventListener : private ::boost::noncopyable
     {
     public:
         virtual void onDocumentCreated( const ScriptDocument& _rDocument ) = 0;

@@ -54,7 +54,7 @@ struct AreaListener
     Used in a Unique Associative Container.
  */
 
-class ScBroadcastArea : boost::noncopyable
+class ScBroadcastArea : private boost::noncopyable
 {
 private:
     ScBroadcastArea*    pUpdateChainNext;

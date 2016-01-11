@@ -29,7 +29,7 @@ namespace sc {
 struct ColumnBlockPosition;
 class ColumnBlockPositionSet;
 
-class ClipContextBase : boost::noncopyable
+class ClipContextBase : private boost::noncopyable
 {
     std::unique_ptr<ColumnBlockPositionSet> mpSet;
 

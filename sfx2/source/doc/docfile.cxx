@@ -166,7 +166,7 @@ bool IsLockingUsed()
 
 } // anonymous namespace
 
-class SfxMedium_Impl : boost::noncopyable
+class SfxMedium_Impl : private boost::noncopyable
 {
 public:
     StreamMode m_nStorOpenMode;

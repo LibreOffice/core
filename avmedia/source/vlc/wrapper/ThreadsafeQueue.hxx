@@ -31,7 +31,7 @@ namespace vlc
 namespace wrapper
 {
 template<class T>
-class ThreadsafeQueue : boost::noncopyable
+class ThreadsafeQueue : private boost::noncopyable
 {
 public:
     ThreadsafeQueue();

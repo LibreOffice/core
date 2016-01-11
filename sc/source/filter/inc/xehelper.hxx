@@ -209,7 +209,7 @@ class ScPatternAttr;
 /** This class provides methods to create an XclExpString.
     @descr  The string can be created from an edit engine text object or
     directly from a Calc edit cell. */
-class XclExpStringHelper : boost::noncopyable
+class XclExpStringHelper : private boost::noncopyable
 {
 public:
     /** Creates a new unformatted string from the passed string.
@@ -393,7 +393,7 @@ private:
 /** This class contains static methods to encode a file URL.
     @descr  Excel stores URLs in a format that contains special control characters,
     i.e. for directory separators or volume names. */
-class XclExpUrlHelper : boost::noncopyable
+class XclExpUrlHelper : private boost::noncopyable
 {
 public:
     /** Encodes and returns the URL passed in rAbsUrl to an Excel like URL.

@@ -56,7 +56,7 @@ public:
     mutable css::uno::Sequence<double> Doubles;
 };
 
-class VDataSeries final : boost::noncopyable
+class VDataSeries final : private boost::noncopyable
 {
 public:
     VDataSeries( const css::uno::Reference<css::chart2::XDataSeries>& xDataSeries );

@@ -108,7 +108,7 @@ public:
 
 //  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
 
-class ScHeaderFooterTextData : boost::noncopyable
+class ScHeaderFooterTextData : private boost::noncopyable
 {
 private:
     EditTextObject* mpTextObj;

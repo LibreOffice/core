@@ -236,7 +236,7 @@ class ScChart2DataSequence : public
                     css::beans::XPropertySet,
                     css::lang::XServiceInfo>,
                 SfxListener,
-                boost::noncopyable
+                private boost::noncopyable
 {
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,

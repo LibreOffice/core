@@ -38,7 +38,7 @@ class ResourceFactoryManager;
 /** Manage the set of active resources.  Activate and deactivate resources.
 */
 class ConfigurationControllerResourceManager
-    : ::boost::noncopyable
+    : private ::boost::noncopyable
 {
 public:
     /** For every active resource both the resource itself as well as its

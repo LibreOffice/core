@@ -51,7 +51,7 @@ namespace accessibility
                                           > AccessibleTableShape_Base;
 /** @descr
 */
-class AccessibleTableShape : boost::noncopyable, public AccessibleTableShape_Base, public css::accessibility::XAccessibleTableSelection
+class AccessibleTableShape : private boost::noncopyable, public AccessibleTableShape_Base, public css::accessibility::XAccessibleTableSelection
 {
 public:
     AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo );
@@ -159,7 +159,7 @@ typedef ::cppu::WeakImplHelper<
             css::accessibility::XAccessibleTableSelection >
             AccessibleTableHeaderShape_BASE;
 
-class AccessibleTableHeaderShape : boost::noncopyable,
+class AccessibleTableHeaderShape : private boost::noncopyable,
     public MutexOwner,
     public AccessibleTableHeaderShape_BASE
 {

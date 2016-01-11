@@ -820,7 +820,7 @@ typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 class ScMyStylesImportHelper;
 class ScXMLEditAttributeMap;
 
-class ScXMLImport: public SvXMLImport, boost::noncopyable
+class ScXMLImport: public SvXMLImport, private boost::noncopyable
 {
     typedef std::unordered_map< OUString, sal_Int16, OUStringHash >   CellTypeMap;
     typedef ::std::map<SCTAB, std::unique_ptr<ScMyNamedExpressions>> SheetNamedExpMap;

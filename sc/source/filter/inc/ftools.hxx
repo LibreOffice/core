@@ -121,7 +121,7 @@ class ScStyleSheetPool;
 class SvStream;
 
 /** Contains static methods used anywhere in the filters. */
-class ScfTools : boost::noncopyable
+class ScfTools : private boost::noncopyable
 {
 public:
 

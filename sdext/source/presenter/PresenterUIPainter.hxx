@@ -31,7 +31,7 @@ namespace sdext { namespace presenter {
 /** Functions for painting UI elements.
 */
 class PresenterUIPainter
-    : ::boost::noncopyable
+    : private ::boost::noncopyable
 {
 public:
     PresenterUIPainter();

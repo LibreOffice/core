@@ -110,7 +110,7 @@ bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rNam
     return rName1.compareToIgnoreAsciiCase(rName2 ) < 0;
 }
 
-class WorkbookGlobals : boost::noncopyable
+class WorkbookGlobals : private boost::noncopyable
 {
 public:
     explicit            WorkbookGlobals( ExcelFilter& rFilter );

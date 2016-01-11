@@ -47,7 +47,7 @@ struct SC_DLLPUBLIC ColRowSpan
  * Structure that stores segments of boolean flags per column, and perform
  * custom action on those segments.
  */
-class ColumnSpanSet : boost::noncopyable
+class ColumnSpanSet : private boost::noncopyable
 {
 public:
     typedef mdds::flat_segment_tree<SCROW, bool> ColumnSpansType;

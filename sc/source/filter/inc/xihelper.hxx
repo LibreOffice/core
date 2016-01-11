@@ -105,7 +105,7 @@ class EditTextObject;
 /** This class provides methods to convert an XclImpString.
     @The string can be converted to an edit engine text object or directly
     to a Calc edit cell. */
-class XclImpStringHelper : boost::noncopyable
+class XclImpStringHelper : private boost::noncopyable
 {
 public:
     /** Returns a new edit engine text object.
@@ -247,7 +247,7 @@ private:
 /** This class contains static methods to decode an URL stored in an Excel file.
     @descr  Excel URLs can contain a sheet name, for instance: path\[test.xls]Sheet1
     This sheet name will be extracted automatically. */
-class XclImpUrlHelper : boost::noncopyable
+class XclImpUrlHelper : private boost::noncopyable
 {
 public:
     /** Decodes an encoded external document URL with optional sheet name.
@@ -292,7 +292,7 @@ class ScTokenArray;
 
 /** This class stores one cached value of a cached value list (used for instance in
     CRN, EXTERNNAME, tArray). */
-class XclImpCachedValue : boost::noncopyable
+class XclImpCachedValue : private boost::noncopyable
 {
 public:
     /** Creates a cached value and reads contents from stream and stores it with its array address. */

@@ -24,7 +24,7 @@ namespace sc {
 struct ColumnBlockPosition;
 class ColumnBlockPositionSet;
 
-class StartListeningContext : boost::noncopyable
+class StartListeningContext : private boost::noncopyable
 {
     ScDocument& mrDoc;
     std::shared_ptr<ColumnBlockPositionSet> mpSet;
@@ -36,7 +36,7 @@ public:
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
 
-class EndListeningContext : boost::noncopyable
+class EndListeningContext : private boost::noncopyable
 {
     ScDocument& mrDoc;
     ColumnSpanSet maSet;
@@ -60,7 +60,7 @@ public:
     void purgeEmptyBroadcasters();
 };
 
-class PurgeListenerAction : public ColumnSpanSet::Action, boost::noncopyable
+class PurgeListenerAction : public ColumnSpanSet::Action, private boost::noncopyable
 {
     ScDocument& mrDoc;
     std::unique_ptr<ColumnBlockPosition> mpBlockPos;

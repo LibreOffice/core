@@ -41,7 +41,7 @@ struct ScDPNumGroupInfo;
  * This class represents the cached data part of the datapilot cache table
  * implementation.
  */
-class SC_DLLPUBLIC ScDPCache : boost::noncopyable
+class SC_DLLPUBLIC ScDPCache : private boost::noncopyable
 {
     typedef std::unordered_set<OUString, OUStringHash> StringSetType;
 

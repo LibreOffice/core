@@ -130,7 +130,7 @@ namespace
 
     See also: BeginSwBlock and EndSwBlock.
     */
-    class WriterSpecificAutoFormatBlock : ::boost::noncopyable
+    class WriterSpecificAutoFormatBlock : private ::boost::noncopyable
     {
     public:
         explicit WriterSpecificAutoFormatBlock(SvStream &rStream) : _rStream(rStream)

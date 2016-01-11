@@ -67,7 +67,7 @@ enum UpdateState {
     UPDATESTATES_COUNT
 };
 
-class UpdateHandler : ::boost::noncopyable,
+class UpdateHandler : private ::boost::noncopyable,
                       public cppu::WeakImplHelper< css::awt::XActionListener,
                                                     css::awt::XTopWindowListener,
                                                     css::task::XInteractionHandler,

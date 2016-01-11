@@ -389,7 +389,7 @@ public:
 //  ImpEditEngine
 
 
-class ImpEditEngine : public SfxListener, boost::noncopyable
+class ImpEditEngine : public SfxListener, private boost::noncopyable
 {
     friend class EditEngine;
     friend class EditDbg;

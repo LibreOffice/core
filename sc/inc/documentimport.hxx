@@ -38,7 +38,7 @@ enum class SvtScriptType;
  * position calculation, or anything else that requires expensive
  * computation which are unnecessary and undesirable during import.
  */
-class SC_DLLPUBLIC ScDocumentImport : boost::noncopyable
+class SC_DLLPUBLIC ScDocumentImport : private boost::noncopyable
 {
     std::unique_ptr<ScDocumentImportImpl> mpImpl;
 

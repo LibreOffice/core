@@ -14,7 +14,7 @@
 
 #include "column.hxx"
 
-class ScColumnTextWidthIterator : boost::noncopyable
+class ScColumnTextWidthIterator : private boost::noncopyable
 {
     sc::CellTextAttrStoreType& mrCellTextAttrs;
     const size_t mnEnd;

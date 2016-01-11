@@ -135,7 +135,7 @@ private:
 //==== PresenterSlideSorter::MouseOverManager =================================
 
 class PresenterSlideSorter::MouseOverManager
-    : ::boost::noncopyable
+    : private ::boost::noncopyable
 {
 public:
     MouseOverManager (

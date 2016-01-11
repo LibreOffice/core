@@ -114,7 +114,7 @@ class ScDBData;
 class ScDocumentImport;
 class ScHint;
 
-class ScTable : boost::noncopyable
+class ScTable : private boost::noncopyable
 {
 private:
     typedef ::std::vector< ScRange > ScRangeVec;

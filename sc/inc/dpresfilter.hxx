@@ -46,7 +46,7 @@ struct ScDPResultFilter
  * <p>If the pivot table layout only consists of either column or row
  * dimensions, the root node only has one child node.</p>
  */
-class ScDPResultTree : boost::noncopyable
+class ScDPResultTree : private boost::noncopyable
 {
 public:
     typedef std::vector<double> ValuesType;

@@ -80,7 +80,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
-class ScTabView : boost::noncopyable
+class ScTabView : private boost::noncopyable
 {
 private:
     enum BlockMode { None = 0, Normal = 1, Own = 2 };

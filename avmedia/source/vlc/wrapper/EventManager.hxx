@@ -24,7 +24,7 @@ namespace vlc
 namespace wrapper
 {
     class EventHandler;
-    class EventManager : boost::noncopyable
+    class EventManager : private boost::noncopyable
     {
 
     public:

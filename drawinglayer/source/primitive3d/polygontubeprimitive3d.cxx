@@ -36,7 +36,7 @@ namespace drawinglayer
     {
         namespace // anonymous namespace
         {
-            class TubeBuffer : boost::noncopyable
+            class TubeBuffer : private boost::noncopyable
             {
             private:
                 // data for buffered tube primitives
@@ -118,7 +118,7 @@ namespace drawinglayer
                 return rTheBuffer.getLineTubeSegments(nSegments, rMaterial);
             }
 
-            class CapBuffer : boost::noncopyable
+            class CapBuffer : private boost::noncopyable
             {
             private:
                 // data for buffered cap primitives
@@ -193,7 +193,7 @@ namespace drawinglayer
                 return rTheBuffer.getLineCapSegments(nSegments, rMaterial);
             }
 
-            class CapRoundBuffer : boost::noncopyable
+            class CapRoundBuffer : private boost::noncopyable
             {
             private:
                 // data for buffered capround primitives

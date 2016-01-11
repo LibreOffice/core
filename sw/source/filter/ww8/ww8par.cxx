@@ -439,7 +439,7 @@ OUString BasicProjImportHelper::getProjectName()
     return sProjName;
 }
 
-class Sttb : TBBase, private boost::noncopyable
+class Sttb : public TBBase, private boost::noncopyable
 {
 struct SBBItem
 {

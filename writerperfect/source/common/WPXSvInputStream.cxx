@@ -42,7 +42,7 @@ namespace packages = com::sun::star::packages;
 namespace
 {
 
-class PositionHolder : boost::noncopyable
+class PositionHolder : private boost::noncopyable
 {
 public:
     explicit PositionHolder(const Reference<XSeekable> &rxSeekable);

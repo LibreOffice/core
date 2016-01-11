@@ -33,7 +33,7 @@ namespace datastreams {
     class ReaderThread;
 }
 
-class DataStream : boost::noncopyable
+class DataStream : private boost::noncopyable
 {
 public:
     struct Cell

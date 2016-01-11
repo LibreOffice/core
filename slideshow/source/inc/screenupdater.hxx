@@ -42,7 +42,7 @@ namespace slideshow
             objects report any pending update, commitUpdates() does
             nothing.
          */
-        class ScreenUpdater : boost::noncopyable
+        class ScreenUpdater : private boost::noncopyable
         {
         public:
             explicit ScreenUpdater( UnoViewContainer const& rViewContainer );

@@ -35,7 +35,7 @@ typedef ::cppu::WeakComponentImplHelper<
 
 class ODFSerializer : private cppu::BaseMutex,
                 public ODFSerializerBase,
-                boost::noncopyable
+                private boost::noncopyable
 {
 public:
     explicit ODFSerializer(const uno::Reference<io::XOutputStream>& xOut) :

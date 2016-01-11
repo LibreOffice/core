@@ -219,7 +219,7 @@ struct ScSortInfo
 };
 IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 
-class ScSortInfoArray : boost::noncopyable
+class ScSortInfoArray : private boost::noncopyable
 {
 public:
 

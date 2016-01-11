@@ -315,7 +315,7 @@ struct ScMyCell
                                 ~ScMyCell();
 };
 
-class ScMyNotEmptyCellsIterator : boost::noncopyable
+class ScMyNotEmptyCellsIterator : private boost::noncopyable
 {
     css::uno::Reference<css::sheet::XSpreadsheet> xTable;
     css::uno::Reference<css::table::XCellRange> xCellRange;

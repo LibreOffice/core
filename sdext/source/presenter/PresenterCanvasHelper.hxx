@@ -35,7 +35,7 @@ namespace sdext { namespace presenter {
 /** Collection of functions to ease the life of a canvas user.
 */
 class PresenterCanvasHelper
-    : ::boost::noncopyable
+    : private ::boost::noncopyable
 {
 public:
     PresenterCanvasHelper();

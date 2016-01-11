@@ -52,7 +52,7 @@ struct ESelection;
 
 //  ScInputHandler
 
-class ScInputHandler : boost::noncopyable
+class ScInputHandler : private boost::noncopyable
 {
 private:
     VclPtr<ScInputWindow>          pInputWin;

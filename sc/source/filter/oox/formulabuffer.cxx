@@ -47,7 +47,7 @@ namespace {
  * Cache the token array for the last cell position in each column. We use
  * one cache per sheet.
  */
-class CachedTokenArray : boost::noncopyable
+class CachedTokenArray : private boost::noncopyable
 {
 public:
 

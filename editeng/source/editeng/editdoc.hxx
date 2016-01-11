@@ -233,7 +233,7 @@ public:
 
 // class ContentNode
 
-class ContentNode : boost::noncopyable
+class ContentNode : private boost::noncopyable
 {
 private:
     OUString maString;

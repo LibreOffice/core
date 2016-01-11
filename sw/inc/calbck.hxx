@@ -72,7 +72,7 @@ namespace sw
         const SfxPoolItem* m_pNew;
     };
     /// refactoring out the some of the more sane SwClient functionality
-    class SW_DLLPUBLIC WriterListener : ::boost::noncopyable
+    class SW_DLLPUBLIC WriterListener : private ::boost::noncopyable
     {
         friend class ::SwModify;
         friend class ::sw::ClientIteratorBase;

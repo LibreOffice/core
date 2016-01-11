@@ -48,7 +48,7 @@ class AccessibleShapeTreeInfo;
 
 typedef ::cppu::ImplInheritanceHelper< AccessibleContextBase, css::accessibility::XAccessibleExtendedComponent > AccessibleCellBase;
 
-class AccessibleCell : boost::noncopyable, public AccessibleCellBase, public AccessibleComponentBase, public IAccessibleViewForwarderListener
+class AccessibleCell : private boost::noncopyable, public AccessibleCellBase, public AccessibleComponentBase, public IAccessibleViewForwarderListener
 {
 public:
     AccessibleCell( const css::uno::Reference< css::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo);
