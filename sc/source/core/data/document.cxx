@@ -3808,7 +3808,7 @@ void ScDocument::CompileAll()
 
 namespace {
 
-class CompileXMLHandler : std::unary_function<ScTable*, void>
+class CompileXMLHandler : public std::unary_function<ScTable*, void>
 {
     sc::CompileFormulaContext* mpCxt;
     ScProgress* mpProgress;

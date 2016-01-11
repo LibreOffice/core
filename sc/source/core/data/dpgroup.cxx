@@ -641,7 +641,7 @@ void ScDPGroupTableData::CreateCacheTable()
 
 namespace {
 
-class FindCaseInsensitive : std::unary_function<ScDPItemData, bool>
+class FindCaseInsensitive : public std::unary_function<ScDPItemData, bool>
 {
     ScDPItemData maValue;
 public:

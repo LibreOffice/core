@@ -135,7 +135,7 @@ struct ElemLessEqualZero : public unary_function<double, double>
 };
 
 template<typename _Comp>
-class CompareMatrixElemFunc : std::unary_function<MatrixImplType::element_block_node_type, void>
+class CompareMatrixElemFunc : public std::unary_function<MatrixImplType::element_block_node_type, void>
 {
     static _Comp maComp;
 
@@ -1155,7 +1155,7 @@ public:
     }
 };
 
-class CountElements : std::unary_function<MatrixImplType::element_block_node_type, void>
+class CountElements : public std::unary_function<MatrixImplType::element_block_node_type, void>
 {
     size_t mnCount;
     bool mbCountString;
@@ -1186,7 +1186,7 @@ public:
 const size_t ResultNotSet = std::numeric_limits<size_t>::max();
 
 template<typename _Type>
-class WalkAndMatchElements : std::unary_function<MatrixImplType::element_block_node_type, void>
+class WalkAndMatchElements : public std::unary_function<MatrixImplType::element_block_node_type, void>
 {
     _Type maMatchValue;
     MatrixImplType::size_pair_type maSize;
@@ -1336,7 +1336,7 @@ struct MinOp
 };
 
 template<typename _Op>
-class CalcMaxMinValue : std::unary_function<MatrixImplType::element_block_type, void>
+class CalcMaxMinValue : public std::unary_function<MatrixImplType::element_block_type, void>
 {
     double mfVal;
     bool mbTextAsZero;
@@ -1425,7 +1425,7 @@ inline double evaluate( double fVal, ScQueryOp eOp )
     return CreateDoubleError( errUnknownState);
 }
 
-class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type, void>
+class CompareMatrixFunc : public std::unary_function<MatrixImplType::element_block_type, void>
 {
     sc::Compare& mrComp;
     size_t mnMatPos;
@@ -1519,7 +1519,7 @@ public:
 /**
  * Left-hand side is a matrix while the right-hand side is a numeric value.
  */
-class CompareMatrixToNumericFunc : std::unary_function<MatrixImplType::element_block_type, void>
+class CompareMatrixToNumericFunc : public std::unary_function<MatrixImplType::element_block_type, void>
 {
     sc::Compare& mrComp;
     double mfRightValue;
@@ -1608,7 +1608,7 @@ public:
     }
 };
 
-class ToDoubleArray : std::unary_function<MatrixImplType::element_block_type, void>
+class ToDoubleArray : public std::unary_function<MatrixImplType::element_block_type, void>
 {
     std::vector<double> maArray;
     std::vector<double>::iterator miPos;
@@ -1682,7 +1682,7 @@ struct ArrayMul : public std::binary_function<double, double, double>
 };
 
 template<typename _Op>
-class MergeDoubleArrayFunc : std::unary_function<MatrixImplType::element_block_type, void>
+class MergeDoubleArrayFunc : public std::unary_function<MatrixImplType::element_block_type, void>
 {
     std::vector<double>& mrArray;
     std::vector<double>::iterator miPos;

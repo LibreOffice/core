@@ -207,7 +207,7 @@ struct EqualByOrderIndex : std::binary_function<Bucket, Bucket, bool>
     }
 };
 
-class PushBackValue : std::unary_function<Bucket, void>
+class PushBackValue : public std::unary_function<Bucket, void>
 {
     ScDPCache::ScDPItemDataVec& mrItems;
 public:
@@ -218,7 +218,7 @@ public:
     }
 };
 
-class PushBackOrderIndex : std::unary_function<Bucket, void>
+class PushBackOrderIndex : public std::unary_function<Bucket, void>
 {
     ScDPCache::IndexArrayType& mrData;
 public:
@@ -229,7 +229,7 @@ public:
     }
 };
 
-class TagValueSortOrder : std::unary_function<Bucket, void>
+class TagValueSortOrder : public std::unary_function<Bucket, void>
 {
     SCROW mnCurIndex;
 public:

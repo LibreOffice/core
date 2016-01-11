@@ -465,7 +465,7 @@ void TextPortionList::Remove(sal_Int32 nPos)
 
 namespace {
 
-class FindTextPortionByAddress : std::unary_function<std::unique_ptr<TextPortion>, bool>
+class FindTextPortionByAddress : public std::unary_function<std::unique_ptr<TextPortion>, bool>
 {
     const TextPortion* mp;
 public:
@@ -1984,7 +1984,7 @@ EditDoc::~EditDoc()
 
 namespace {
 
-class RemoveEachItemFromPool : std::unary_function<std::unique_ptr<ContentNode>, void>
+class RemoveEachItemFromPool : public std::unary_function<std::unique_ptr<ContentNode>, void>
 {
     EditDoc& mrDoc;
 public:
@@ -2890,7 +2890,7 @@ bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
 
 namespace {
 
-class FindByAddress : std::unary_function<std::unique_ptr<EditCharAttrib>, bool>
+class FindByAddress : public std::unary_function<std::unique_ptr<EditCharAttrib>, bool>
 {
     const EditCharAttrib* mpAttr;
 public:
@@ -2955,7 +2955,7 @@ EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nP
 
 namespace {
 
-class FindByStartPos : std::unary_function<std::unique_ptr<EditCharAttrib>, bool>
+class FindByStartPos : public std::unary_function<std::unique_ptr<EditCharAttrib>, bool>
 {
     sal_Int32 mnPos;
 public:
@@ -2985,7 +2985,7 @@ const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
 
 namespace {
 
-class RemoveEmptyAttrItem : std::unary_function<std::unique_ptr<EditCharAttrib>, void>
+class RemoveEmptyAttrItem : public std::unary_function<std::unique_ptr<EditCharAttrib>, void>
 {
     SfxItemPool& mrItemPool;
 public:

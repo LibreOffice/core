@@ -584,7 +584,7 @@ public:
     }
 };
 
-class FindIntersectingTable : std::unary_function<std::unique_ptr<ScDPObject>, bool>
+class FindIntersectingTable : public std::unary_function<std::unique_ptr<ScDPObject>, bool>
 {
     ScRange maRange;
 public:
@@ -596,7 +596,7 @@ public:
     }
 };
 
-class FindIntersetingTableByColumns : std::unary_function<std::unique_ptr<ScDPObject>, bool>
+class FindIntersetingTableByColumns : public std::unary_function<std::unique_ptr<ScDPObject>, bool>
 {
     SCCOL mnCol1;
     SCCOL mnCol2;
@@ -630,7 +630,7 @@ public:
     }
 };
 
-class FindIntersectingTableByRows : std::unary_function<std::unique_ptr<ScDPObject>, bool>
+class FindIntersectingTableByRows : public std::unary_function<std::unique_ptr<ScDPObject>, bool>
 {
     SCCOL mnCol;
     SCROW mnRow1;
@@ -664,7 +664,7 @@ public:
     }
 };
 
-class AccumulateOutputRanges : std::unary_function<std::unique_ptr<ScDPObject>, void>
+class AccumulateOutputRanges : public std::unary_function<std::unique_ptr<ScDPObject>, void>
 {
     ScRangeList maRanges;
     SCTAB mnTab;
@@ -1326,7 +1326,7 @@ void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHead
 
 namespace {
 
-class FindByName : std::unary_function<const ScDPSaveDimension*, bool>
+class FindByName : public std::unary_function<const ScDPSaveDimension*, bool>
 {
     OUString maName; // must be all uppercase.
 public:
@@ -1349,7 +1349,7 @@ public:
     }
 };
 
-class LessByDimOrder : std::binary_function<sheet::DataPilotFieldFilter, sheet::DataPilotFieldFilter, bool>
+class LessByDimOrder : public std::binary_function<sheet::DataPilotFieldFilter, sheet::DataPilotFieldFilter, bool>
 {
     const ScDPSaveData::DimOrderType& mrDimOrder;
 

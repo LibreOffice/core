@@ -1357,7 +1357,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
 
 #define SHRINK_RANGE_THRESHOLD 10000
 
-class ShrinkRefTokenToDataRange : std::unary_function<ScTokenRef, void>
+class ShrinkRefTokenToDataRange : public std::unary_function<ScTokenRef, void>
 {
     ScDocument* mpDoc;
 public:

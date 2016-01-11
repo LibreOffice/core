@@ -651,7 +651,7 @@ void ScTable::DestroySortCollator()
 namespace {
 
 template<typename _Hint, typename _ReorderMap, typename _Index>
-class ReorderNotifier : std::unary_function<SvtListener*, void>
+class ReorderNotifier : public std::unary_function<SvtListener*, void>
 {
     _Hint maHint;
 public:
@@ -664,7 +664,7 @@ public:
     }
 };
 
-class StartListeningNotifier : std::unary_function<SvtListener*, void>
+class StartListeningNotifier : public std::unary_function<SvtListener*, void>
 {
     sc::RefStartListeningHint maHint;
 public:
@@ -676,7 +676,7 @@ public:
     }
 };
 
-class StopListeningNotifier : std::unary_function<SvtListener*, void>
+class StopListeningNotifier : public std::unary_function<SvtListener*, void>
 {
     sc::RefStopListeningHint maHint;
 public:
@@ -688,7 +688,7 @@ public:
     }
 };
 
-class FormulaGroupPosCollector : std::unary_function<SvtListener*, void>
+class FormulaGroupPosCollector : public std::unary_function<SvtListener*, void>
 {
     sc::RefQueryFormulaGroup& mrQuery;
 
