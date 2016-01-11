@@ -40,8 +40,7 @@ SvxMSConvertOCXControls::~SvxMSConvertOCXControls()
 {
 }
 
-const uno::Reference< drawing::XDrawPage >&
-    SvxMSConvertOCXControls::GetDrawPage()
+void SvxMSConvertOCXControls::GetDrawPage()
 {
     if( !xDrawPage.is() && mxModel.is() )
     {
@@ -51,8 +50,6 @@ const uno::Reference< drawing::XDrawPage >&
         xDrawPage = xTxtDoc->getDrawPage();
         OSL_ENSURE( xDrawPage.is(), "no XDrawPage" );
     }
-
-    return xDrawPage;
 }
 
 
