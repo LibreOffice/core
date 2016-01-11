@@ -674,7 +674,7 @@ sal_Int32 OStatement_Base::getResultSetConcurrency() const
 sal_Int32 OStatement_Base::getResultSetType() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    SQLULEN nValue (getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE, SQL_CURSOR_FORWARD_ONLY));
+    SQLULEN nValue (getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE));
     switch(nValue)
     {
         case SQL_CURSOR_FORWARD_ONLY:
@@ -863,13 +863,13 @@ void OStatement_Base::setCursorName(const OUString &_par0)
 bool OStatement_Base::isUsingBookmarks() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    return SQL_UB_OFF != getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
+    return SQL_UB_OFF != getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS);
 }
 
 bool OStatement_Base::getEscapeProcessing() const
 {
     OSL_ENSURE( m_aStatementHandle, "StatementHandle is null!" );
-    return SQL_NOSCAN_OFF == getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_NOSCAN_OFF);
+    return SQL_NOSCAN_OFF == getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS);
 }
 
 void OStatement_Base::setUsingBookmarks(bool _bUseBookmark)

@@ -1170,7 +1170,7 @@ Sequence<sal_Int8> OResultSet::impl_getBookmark(  ) throw( SQLException,  Runtim
     {
         if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
         {
-            m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
+            m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS);
         }
         if(m_nUseBookmarks == SQL_UB_OFF)
             throw SQLException();
@@ -1368,7 +1368,7 @@ bool  OResultSet::isBookmarkable() const
 
     if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
     {
-        m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
+        m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS);
     }
 
     return (m_nUseBookmarks != SQL_UB_OFF) && (nAttr & SQL_CA1_BOOKMARK) == SQL_CA1_BOOKMARK;
@@ -1724,7 +1724,7 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
         } // switch(_eCursorPosition)
         if ( m_nUseBookmarks == ODBC_SQL_NOT_DEFINED )
         {
-            m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
+            m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS);
         }
         if ( m_nUseBookmarks == SQL_UB_OFF )
         {
