@@ -1056,7 +1056,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     }
 }
 
-bool EditView::SelectCurrentWord( sal_Int16 nWordType )
+void EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
     EditSelection aCurSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
@@ -1064,7 +1064,6 @@ bool EditView::SelectCurrentWord( sal_Int16 nWordType )
     pImpEditView->SetEditSelection( aCurSel );
     pImpEditView->DrawSelection();
     ShowCursor( true, false );
-    return aCurSel.HasRange();
 }
 
 void EditView::InsertField( const SvxFieldItem& rFld )

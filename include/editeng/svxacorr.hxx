@@ -87,7 +87,7 @@ public:
     virtual bool Replace( sal_Int32 nPos, const OUString& rTxt ) = 0;
     virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt ) = 0;
 
-    virtual bool SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
+    virtual void SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                             SfxPoolItem& ) = 0;
 
     virtual bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) = 0;
@@ -279,7 +279,7 @@ public:
     // FIXME: this has the horrible flaw that the rTxt must be a reference
     // to the actual SwTxtNode/EditNode string because it inserts the character
     // in rDoc and expects that to side-effect rTxt
-    sal_uLong DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+    void DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                            sal_Int32 nPos, sal_Unicode cInsChar, bool bInsert, vcl::Window* pFrameWin = nullptr );
 
     // Return for the autotext expansion the previous word,
@@ -339,11 +339,11 @@ public:
     //  - pure Text
     bool PutText( const OUString& rShort, const OUString& rLong, LanguageType eLang = LANGUAGE_SYSTEM );
     //  - Text with attribution (only in the SWG - SWG format!)
-    bool PutText( const OUString& rShort, SfxObjectShell& rShell,
+    void PutText( const OUString& rShort, SfxObjectShell& rShell,
                  LanguageType eLang = LANGUAGE_SYSTEM )
-        { return _GetLanguageList( eLang ).PutText(rShort, rShell ); }
+        { _GetLanguageList( eLang ).PutText(rShort, rShell ); }
 
-    bool MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
+    void MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
                                   std::vector<SvxAutocorrWord>& aDeleteEntries,
                                   LanguageType eLang = LANGUAGE_SYSTEM );
 

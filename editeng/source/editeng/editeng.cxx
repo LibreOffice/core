@@ -340,16 +340,15 @@ EditView* EditEngine::RemoveView( EditView* pView )
     return pRemoved;
 }
 
-EditView* EditEngine::RemoveView(size_t nIndex)
+void EditEngine::RemoveView(size_t nIndex)
 {
     ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
     if (nIndex >= rViews.size())
-        return nullptr;
+        return;
 
     EditView* pView = rViews[nIndex];
     if ( pView )
-        return RemoveView( pView );
-    return nullptr;
+        RemoveView( pView );
 }
 
 EditView* EditEngine::GetView(size_t nIndex) const
@@ -707,9 +706,9 @@ EditPaM EditEngine::ConnectContents(sal_Int32 nLeftNode, bool bBackward)
     return pImpEditEngine->ConnectContents(nLeftNode, bBackward);
 }
 
-EditPaM EditEngine::InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem)
+void EditEngine::InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem)
 {
-    return pImpEditEngine->ImpInsertFeature(rEditSelection, rItem);
+    pImpEditEngine->ImpInsertFeature(rEditSelection, rItem);
 }
 
 EditSelection EditEngine::MoveParagraphs(const Range& rParagraphs, sal_Int32 nNewPos, EditView* pCurView)
@@ -747,14 +746,14 @@ void EditEngine::FormatAndUpdate(EditView* pCurView)
     pImpEditEngine->FormatAndUpdate(pCurView);
 }
 
-bool EditEngine::Undo(EditView* pView)
+void EditEngine::Undo(EditView* pView)
 {
-    return pImpEditEngine->Undo(pView);
+    pImpEditEngine->Undo(pView);
 }
 
-bool EditEngine::Redo(EditView* pView)
+void EditEngine::Redo(EditView* pView)
 {
-    return pImpEditEngine->Redo(pView);
+    pImpEditEngine->Redo(pView);
 }
 
 uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)
@@ -1467,12 +1466,11 @@ sal_uLong EditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFo
     return rInput.GetError();
 }
 
-sal_uLong EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
+void EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     EditPaM aStartPaM( pImpEditEngine->GetEditDoc().GetStartPaM() );
     EditPaM aEndPaM( pImpEditEngine->GetEditDoc().GetEndPaM() );
     pImpEditEngine->Write( rOutput, eFormat, EditSelection( aStartPaM, aEndPaM ) );
-    return rOutput.GetError();
 }
 
 EditTextObject* EditEngine::CreateTextObject()

@@ -243,7 +243,7 @@ SvxNumberFormat::~SvxNumberFormat()
     delete pBulletFont;
 }
 
-SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
+void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
 {
     if(pConverter && pBulletFont)
     {
@@ -308,8 +308,6 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     rStream.WriteInt32( mnListtabPos );
     rStream.WriteInt32( mnFirstLineIndent );
     rStream.WriteInt32( mnIndentAt );
-
-    return rStream;
 }
 
 SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
@@ -658,7 +656,7 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     rStream.ReadUInt16( nTmp16 ); nFeatureFlags = static_cast<SvxNumRuleFlags>(nTmp16);
 }
 
-SvStream& SvxNumRule::Store( SvStream &rStream )
+void SvxNumRule::Store( SvStream &rStream )
 {
     rStream.WriteUInt16( NUMITEM_VERSION_03 );
     rStream.WriteUInt16( nLevelCount );
@@ -691,9 +689,8 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     rStream.WriteUInt16( static_cast<sal_uInt16>(nFeatureFlags) );
     if(pConverter)
         DestroyFontToSubsFontConverter(pConverter);
-
-    return rStream;
 }
+
 SvxNumRule::~SvxNumRule()
 {
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
@@ -860,9 +857,8 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum ) const
 }
 
 // changes linked to embedded bitmaps
-bool SvxNumRule::UnLinkGraphics()
+void SvxNumRule::UnLinkGraphics()
 {
-    bool bRet = false;
     for(sal_uInt16 i = 0; i < GetLevelCount(); i++)
     {
         SvxNumberFormat aFmt(GetLevel(i));
@@ -879,14 +875,12 @@ bool SvxNumRule::UnLinkGraphics()
                 aTempItem.SetGraphic(*pGraphic);
                 sal_Int16    eOrient = aFmt.GetVertOrient();
                 aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );
-                bRet = true;
             }
         }
         else if((SVX_NUM_BITMAP|LINK_TOKEN) == aFmt.GetNumberingType())
             aFmt.SetNumberingType(SVX_NUM_BITMAP);
         SetLevel(i, aFmt);
     }
-    return bRet;
 }
 
 SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule) :

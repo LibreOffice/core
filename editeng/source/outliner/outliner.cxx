@@ -1309,7 +1309,7 @@ size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )
     return ActualIndex;
 }
 
-OutlinerView* Outliner::RemoveView( OutlinerView* pView )
+void Outliner::RemoveView( OutlinerView* pView )
 {
 
     for ( ViewList::iterator it = aViewList.begin(); it != aViewList.end(); ++it )
@@ -1322,7 +1322,6 @@ OutlinerView* Outliner::RemoveView( OutlinerView* pView )
             break;
         }
     }
-    return nullptr;    // return superfluous
 }
 
 OutlinerView* Outliner::RemoveView( size_t nIndex )

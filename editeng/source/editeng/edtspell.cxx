@@ -106,10 +106,9 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     }
 }
 
-bool EditSpellWrapper::SpellContinue()
+void EditSpellWrapper::SpellContinue()
 {
     SetLast( pEditView->GetImpEditEngine()->ImpSpell( pEditView ) );
-    return GetLast().is();
 }
 
 void EditSpellWrapper::SpellEnd()
@@ -612,7 +611,7 @@ bool EdtAutoCorrDoc::ReplaceRange(sal_Int32 nPos, sal_Int32 nSourceLength, const
     return true;
 }
 
-bool EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
+void EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
             sal_uInt16 nSlotId, SfxPoolItem& rItem)
 {
     SfxItemPool* pPool = &mpEditEngine->GetEditDoc().GetItemPool();
@@ -635,7 +634,6 @@ bool EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
         mpEditEngine->SetAttribs( aSel, aSet, ATTRSPECIAL_EDGE );
         bAllowUndoAction = false;
     }
-    return true;
 }
 
 bool EdtAutoCorrDoc::SetINetAttr(sal_Int32 nStt, sal_Int32 nEnd,

@@ -228,7 +228,7 @@ public:
 
     void            InsertView(EditView* pEditView, size_t nIndex = EE_APPEND);
     EditView*       RemoveView( EditView* pEditView );
-    EditView*       RemoveView(size_t nIndex = EE_APPEND);
+    void            RemoveView(size_t nIndex = EE_APPEND);
     EditView*       GetView(size_t nIndex = 0) const;
     size_t          GetViewCount() const;
     bool            HasView( EditView* pView ) const;
@@ -369,7 +369,7 @@ public:
 
 //  sal_uInt32: Error code of the stream.
     sal_uLong       Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
-    sal_uLong       Write( SvStream& rOutput, EETextFormat );
+    void            Write( SvStream& rOutput, EETextFormat );
 
     void            SetStatusEventHdl( const Link<EditStatus&,void>& rLink );
     Link<EditStatus&,void> GetStatusEventHdl() const;
@@ -587,7 +587,7 @@ public:
     EditPaM SplitContent(sal_Int32 nNode, sal_Int32 nSepPos);
     EditPaM ConnectContents(sal_Int32 nLeftNode, bool bBackward);
 
-    EditPaM InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem);
+    void InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem);
 
     EditSelection MoveParagraphs(const Range& rParagraphs, sal_Int32 nNewPos, EditView* pCurView);
 
@@ -600,8 +600,8 @@ public:
     void SetUndoMode(bool b);
     void FormatAndUpdate(EditView* pCurView = nullptr);
 
-    bool Undo(EditView* pView);
-    bool Redo(EditView* pView);
+    void Undo(EditView* pView);
+    void Redo(EditView* pView);
 
     sal_Int32 GetOverflowingParaNum() const;
     sal_Int32 GetOverflowingLineNum() const;

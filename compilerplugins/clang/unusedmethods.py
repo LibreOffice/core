@@ -137,6 +137,31 @@ for k, definitions in sourceLocationToDefinitionMap.iteritems():
     if len(definitions) > 1:
         for d in definitions:
             definitionSet.remove(d)
+
+def isOtherConstness( d, callSet ):
+    clazz = d[0] + " " + d[1]
+    # if this method is const, and there is a non-const variant of it, and the non-const variant is in use, then leave it alone
+    if d[0].startswith("const ") and d[1].endswith(" const"):
+        if ((d[0][6:],d[1][:-6]) in callSet):
+           return True
+    elif clazz.endswith(" const"):
+        clazz2 = clazz[:len(clazz)-6] # strip off " const"
+        if ((d[0],clazz2) in callSet):
+           return True
+    if clazz.endswith(" const") and ("::iterator" in clazz):
+        clazz2 = clazz[:len(clazz)-6] # strip off " const"
+        clazz2 = clazz2.replace("::const_iterator", "::iterator")
+        if ((d[0],clazz2) in callSet):
+           return True
+    # if this method is non-const, and there is a const variant of it, and the const variant is in use, then leave it alone
+    if (not clazz.endswith(" const")) and ((d[0],"const " + clazz + " const") in callSet):
+           return True
+    if (not clazz.endswith(" const")) and ("::iterator" in clazz):
+        clazz2 = clazz.replace("::iterator", "::const_iterator") + " const"
+        if ((d[0],clazz2) in callSet):
+           return True
+    return False
+
     
 tmp1set = set()
 for d in definitionSet:
@@ -153,26 +178,8 @@ for d in definitionSet:
         or ("::IsA(" in d[1])
         or ("::Type()" in d[1])):
         continue
-    # if this method is const, and there is a non-const variant of it, and the non-const variant is in use, then leave it alone
-    if d[0].startswith("const ") and d[1].endswith(" const"):
-        if ((d[0][6:],d[1][:-6]) in callSet):
-           continue
-    elif clazz.endswith(" const"):
-        clazz2 = clazz[:len(clazz)-6] # strip off " const"
-        if ((d[0],clazz2) in callSet):
-           continue
-    if clazz.endswith(" const") and ("::iterator" in clazz):
-        clazz2 = clazz[:len(clazz)-6] # strip off " const"
-        clazz2 = clazz2.replace("::const_iterator", "::iterator")
-        if ((d[0],clazz2) in callSet):
-           continue
-    # if this method is non-const, and there is a const variant of it, and the const variant is in use, then leave it alone
-    if (not clazz.endswith(" const")) and ((d[0],"const " + clazz + " const") in callSet):
-       continue
-    if (not clazz.endswith(" const")) and ("::iterator" in clazz):
-        clazz2 = clazz.replace("::iterator", "::const_iterator") + " const"
-        if ((d[0],clazz2) in callSet):
-           continue
+    if isOtherConstness(d, callSet):
+        continue
     # just ignore iterators, they normally occur in pairs, and we typically want to leave one constness version alone
     # alone if the other one is in use.
     if d[1] == "begin() const" or d[1] == "begin()" or d[1] == "end()" or d[1] == "end() const":

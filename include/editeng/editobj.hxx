@@ -98,7 +98,7 @@ public:
 
     EditTextObject* Clone() const;
 
-    bool Store( SvStream& rOStream ) const;
+    void Store( SvStream& rOStream ) const;
 
     static EditTextObject* Create( SvStream& rIStream );
 

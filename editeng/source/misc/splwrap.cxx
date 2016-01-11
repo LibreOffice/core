@@ -260,9 +260,8 @@ void SvxSpellWrapper::SpellEnd()
     ShowLanguageErrors();
 }
 
-bool SvxSpellWrapper::SpellContinue()
+void SvxSpellWrapper::SpellContinue()
 {
-    return false;
 }
 
 void SvxSpellWrapper::ReplaceAll( const OUString &, sal_Int16 )

@@ -372,10 +372,10 @@ SvtScriptType EditTextObject::GetScriptType() const
 }
 
 
-bool EditTextObject::Store( SvStream& rOStream ) const
+void EditTextObject::Store( SvStream& rOStream ) const
 {
     if ( rOStream.GetError() )
-        return false;
+        return;
 
     sal_Size nStartPos = rOStream.Tell();
 
@@ -392,8 +392,6 @@ bool EditTextObject::Store( SvStream& rOStream ) const
     rOStream.Seek( nStartPos + sizeof( nWhich ) );
     rOStream.WriteUInt32( nStructSz );
     rOStream.Seek( nEndPos );
-
-    return rOStream.GetError() == 0;
 }
 
 EditTextObject* EditTextObject::Create( SvStream& rIStream )

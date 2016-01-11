@@ -260,7 +260,7 @@ public:
     void        Indent( short nDiff );
     void        AdjustDepth( short nDX );   // Later replace with Indent!
 
-    bool        AdjustHeight( long nDY );
+    void        AdjustHeight( long nDY );
 
     sal_uLong   Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
@@ -298,7 +298,7 @@ public:
     Pointer     GetPointer( const Point& rPosPixel );
     void        Command( const CommandEvent& rCEvt );
 
-    EESpellState    StartSpeller( bool bMultipleDoc = false );
+    void            StartSpeller( bool bMultipleDoc = false );
     EESpellState    StartThesaurus();
     sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
@@ -709,7 +709,7 @@ public:
     void            SetAddExtLeading( bool b );
 
     size_t          InsertView( OutlinerView* pView, size_t nIndex = size_t(-1) );
-    OutlinerView*   RemoveView( OutlinerView* pView );
+    void            RemoveView( OutlinerView* pView );
     OutlinerView*   RemoveView( size_t nIndex );
     OutlinerView*   GetView( size_t nIndex ) const;
     size_t          GetViewCount() const;

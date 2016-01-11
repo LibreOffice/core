@@ -1205,8 +1205,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
     return sRet;
 }
 
-sal_uLong
-SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nInsPos, sal_Unicode cChar,
                                     bool bInsert, vcl::Window* pFrameWin )
 {
@@ -1417,8 +1416,6 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         }
 
     } while( false );
-
-    return nRet;
 }
 
 SvxAutoCorrectLanguageLists& SvxAutoCorrect::_GetLanguageList(
@@ -1607,7 +1604,7 @@ bool SvxAutoCorrect::PutText( const OUString& rShort, const OUString& rLong,
     return false;
 }
 
-bool SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
+void SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
                                               std::vector<SvxAutocorrWord>& aDeleteEntries,
                                               LanguageType eLang )
 {
@@ -1615,14 +1612,12 @@ bool SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntr
     auto const iter = m_pLangTable->find(aLanguageTag);
     if (iter != m_pLangTable->end())
     {
-        return iter->second->MakeCombinedChanges( aNewEntries, aDeleteEntries );
+        iter->second->MakeCombinedChanges( aNewEntries, aDeleteEntries );
     }
     else if(CreateLanguageFile( aLanguageTag ))
     {
-        return m_pLangTable->find( aLanguageTag )->second->MakeCombinedChanges( aNewEntries, aDeleteEntries );
+        m_pLangTable->find( aLanguageTag )->second->MakeCombinedChanges( aNewEntries, aDeleteEntries );
     }
-    return false;
-
 }
 
 //  - return the replacement text (only for SWG-Format, all other
