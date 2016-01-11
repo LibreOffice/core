@@ -140,9 +140,7 @@ public:
 
     void testFdo90607();
     void testTdf91378();
-#if !defined WNT
     void testBnc822341();
-#endif
     void testTdf80224();
     void testTdf92527();
 
@@ -181,9 +179,7 @@ public:
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testTdf91378);
 
-#if !defined WNT
     CPPUNIT_TEST(testBnc822341);
-#endif
     CPPUNIT_TEST(testTdf80224);
 
     CPPUNIT_TEST(testExportTransitionsPPTX);
@@ -1085,8 +1081,6 @@ void SdExportTest::testTdf91378()
     xDocShRef->DoClose();
 }
 
-#if !defined WNT
-
 void SdExportTest::testBnc822341()
 {
     // Check import / export of embedded text document
@@ -1156,8 +1150,6 @@ void SdExportTest::testBnc822341()
 
     xDocShRef->DoClose();
 }
-
-#endif
 
 void SdExportTest::testBulletMarginAndIndentation()
 {
