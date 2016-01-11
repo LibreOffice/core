@@ -281,7 +281,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/hatch \
     vcl/source/gdi/impanmvw \
     vcl/source/gdi/impbmp \
-    vcl/source/gdi/fontcharmap \
     vcl/source/gdi/impgraph \
     vcl/source/gdi/impvect \
     vcl/source/gdi/jobset \
@@ -397,6 +396,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/font/fontselect \
     vcl/source/font/fontinstance \
     vcl/source/font/fontcache \
+    vcl/source/font/fontcharmap \
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/gsub \
