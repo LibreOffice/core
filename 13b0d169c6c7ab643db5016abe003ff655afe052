@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d67e71ad",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-01-11T09:32:19Z",
+      "side": 1,
+      "message": "I would prefer to nullify the tile buffer here. All accesses to it should be already covered by a priv-\u003em_pDocument check.",
+      "revId": "13b0d169c6c7ab643db5016abe003ff655afe052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
