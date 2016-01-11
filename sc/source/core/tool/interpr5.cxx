@@ -1673,7 +1673,7 @@ void ScInterpreter::ScPow()
 
 namespace {
 
-class SumValues : std::unary_function<double, void>
+class SumValues : public std::unary_function<double, void>
 {
     double mfSum;
     bool   mbError;

@@ -658,7 +658,7 @@ void ScDPDimensionSaveData::WriteToData( ScDPGroupTableData& rData ) const
 
 namespace {
 
-class AddGroupDimToCache : std::unary_function<ScDPSaveGroupDimension, void>
+class AddGroupDimToCache : public std::unary_function<ScDPSaveGroupDimension, void>
 {
     ScDPCache& mrCache;
 public:

@@ -141,7 +141,7 @@ public:
     }
 };
 
-class InsertFieldPath : std::unary_function<OString, void>
+class InsertFieldPath : public std::unary_function<OString, void>
 {
     orcus::orcus_xml& mrFilter;
 public:
@@ -217,7 +217,7 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
 
 namespace {
 
-class SetNamespaceAlias : std::unary_function<size_t, void>
+class SetNamespaceAlias : public std::unary_function<size_t, void>
 {
     orcus::orcus_xml& mrFilter;
     orcus::xmlns_repository& mrNsRepo;

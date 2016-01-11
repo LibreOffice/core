@@ -166,7 +166,7 @@ SvLBoxItem& SvTreeListEntry::GetItem( size_t nPos )
 
 namespace {
 
-class FindByType : std::unary_function<SvLBoxItem, void>
+class FindByType : public std::unary_function<SvLBoxItem, void>
 {
     sal_uInt16 mnId;
 public:
@@ -177,7 +177,7 @@ public:
     }
 };
 
-class FindByPointer : std::unary_function<SvLBoxItem, void>
+class FindByPointer : public std::unary_function<SvLBoxItem, void>
 {
     const SvLBoxItem* mpItem;
 public:

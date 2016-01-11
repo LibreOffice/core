@@ -588,7 +588,7 @@ std::vector<double> GetDashing( sal_uInt16 nDashing )
 
 namespace {
 
-class ApplyScale : std::unary_function<double, void>
+class ApplyScale : public std::unary_function<double, void>
 {
     double mfScale;
 public:

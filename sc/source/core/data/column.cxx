@@ -1969,7 +1969,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
 namespace {
 
-class SharedTopFormulaCellPicker : std::unary_function<sc::CellStoreType::value_type, void>
+class SharedTopFormulaCellPicker : public std::unary_function<sc::CellStoreType::value_type, void>
 {
 public:
     virtual ~SharedTopFormulaCellPicker() {}
@@ -2043,7 +2043,7 @@ public:
     }
 };
 
-class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
+class UpdateRefOnNonCopy : public std::unary_function<sc::FormulaGroupEntry, void>
 {
     SCCOL mnCol;
     SCROW mnTab;

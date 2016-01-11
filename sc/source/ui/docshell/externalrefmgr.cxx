@@ -216,7 +216,7 @@ bool hasRefsToSrcDoc(ScRangeData& rData, sal_uInt16 nFileId)
     return false;
 }
 
-class EraseRangeByIterator : unary_function<ScRangeName::iterator, void>
+class EraseRangeByIterator : public unary_function<ScRangeName::iterator, void>
 {
     ScRangeName& mrRanges;
 public:

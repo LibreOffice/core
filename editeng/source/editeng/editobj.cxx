@@ -869,7 +869,7 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 
 namespace {
 
-class FindByParagraph : std::unary_function<editeng::Section, bool>
+class FindByParagraph : public std::unary_function<editeng::Section, bool>
 {
     sal_Int32 mnPara;
 public:
@@ -880,7 +880,7 @@ public:
     }
 };
 
-class FindBySectionStart : std::unary_function<editeng::Section, bool>
+class FindBySectionStart : public std::unary_function<editeng::Section, bool>
 {
     sal_Int32 mnPara;
     sal_Int32 mnStart;

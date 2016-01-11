@@ -395,7 +395,7 @@ void ScDocument::SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArra
 
 namespace {
 
-class StartNeededListenersHandler : std::unary_function<ScTable*, void>
+class StartNeededListenersHandler : public std::unary_function<ScTable*, void>
 {
     std::shared_ptr<sc::StartListeningContext> mpCxt;
 public:
