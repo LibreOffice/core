@@ -22,7 +22,7 @@ GlyphCache& SvpCairoTextRender::getPlatformGlyphCache()
 
 cairo_t* SvpCairoTextRender::getCairoContext()
 {
-    return mrParent.getCairoContext();
+    return mrParent.getCairoContext(false);
 }
 
 void SvpCairoTextRender::getSurfaceOffset(double& nDX, double& nDY)

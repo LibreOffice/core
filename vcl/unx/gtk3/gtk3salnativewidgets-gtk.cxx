@@ -1073,7 +1073,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         return false;
     }
 
-    cairo_t *cr = getCairoContext();
+    cairo_t *cr = getCairoContext(false);
     clipRegion(cr);
     cairo_translate(cr, rControlRegion.Left(), rControlRegion.Top());
 

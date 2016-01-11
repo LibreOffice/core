@@ -49,6 +49,7 @@ class GlyphCache;
 class ServerFont;
 typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
+typedef struct _cairo_rectangle_int cairo_rectangle_int_t;
 
 enum PaintMode { OVERPAINT, XOR, INVERT };
 
@@ -81,7 +82,7 @@ private:
     };
     bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
     void ensureClip();
-    bool invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
+    void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
 protected:
     vcl::Region                         m_aClipRegion;
     SvpCairoTextRender                  m_aTextRenderImpl;
@@ -218,10 +219,12 @@ public:
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const override;
 #endif // ENABLE_CAIRO_CANVAS
 
-    cairo_t*                getCairoContext() const;
-    void                    releaseCairoContext(cairo_t* cr) const;
+    cairo_t*                getCairoContext(bool bXorModeAllowed) const;
+    void                    releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const cairo_rectangle_int_t& extents) const;
     static cairo_surface_t* createCairoSurface(const basebmp::BitmapDeviceSharedPtr& rBuffer);
     static cairo_t*         createCairoContext(const basebmp::BitmapDeviceSharedPtr& rBuffer);
+    static cairo_surface_t* createTmpCompatibleCairoSurface(const basebmp::BitmapDeviceSharedPtr& rBuffer);
+    static cairo_t*         createTmpCompatibleCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer);
     void                    clipRegion(cairo_t* cr);
 };
 
