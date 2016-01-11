@@ -51,9 +51,9 @@
 #include "vcl/settings.hxx"
 #include "svids.hrc"
 #include "saldatabasic.hxx"
-#include "generic/genprn.h"
+#include "unx/genprn.h"
 #include "generic/geninst.h"
-#include "generic/genpspgraphics.h"
+#include "unx/genpspgraphics.h"
 
 #include "jobset.h"
 #include "print.h"

@@ -26,7 +26,7 @@
 #include <vclpluginapi.h>
 #include <salinst.hxx>
 #include <saldatabasic.hxx>
-#include <generic/genprn.h>
+#include "unx/genprn.h"
 
 class VCL_DLLPUBLIC SalYieldMutexReleaser
 {

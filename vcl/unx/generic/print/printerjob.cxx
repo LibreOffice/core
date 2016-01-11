@@ -26,8 +26,8 @@
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
-#include "generic/printerjob.hxx"
-#include "generic/printergfx.hxx"
+#include "unx/printerjob.hxx"
+#include "unx/printergfx.hxx"
 #include "vcl/ppdparser.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/printerinfomanager.hxx"

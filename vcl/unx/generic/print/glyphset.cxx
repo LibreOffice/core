@@ -22,7 +22,7 @@
 
 #include "sft.hxx"
 
-#include "generic/printergfx.hxx"
+#include "unx/printergfx.hxx"
 #include "fontsubset.hxx"
 #include "fontmanager.hxx"
 

@@ -21,9 +21,9 @@
 #define INCLUDED_VCL_INC_HEADLESS_SVPPRN_HXX
 
 #include "vcl/jobdata.hxx"
-#include "generic/printergfx.hxx"
-#include "generic/printerjob.hxx"
-#include "generic/genprn.h"
+#include "unx/printergfx.hxx"
+#include "unx/printerjob.hxx"
+#include "unx/genprn.h"
 
 #include "vclpluginapi.h"
 
