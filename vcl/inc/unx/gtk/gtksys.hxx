@@ -9,7 +9,7 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKSYS_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKSYS_HXX
 
-#include "generic/gensys.h"
+#include "unx/gensys.h"
 #include <gtk/gtk.h>
 #include <unx/saltype.h>
 #include <deque>

@@ -26,7 +26,7 @@
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 #include "unx/genpspgraphics.h"
 #include "unx/salframe.h"
 #include "unx/genprn.h"

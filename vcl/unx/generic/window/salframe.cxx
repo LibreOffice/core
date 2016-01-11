@@ -57,7 +57,7 @@
 #include "unx/i18n_status.hxx"
 #include <unx/x11/xlimits.hxx>
 
-#include "generic/gensys.h"
+#include "unx/gensys.h"
 #include "sallayout.hxx"
 
 #include <sal/macros.h>

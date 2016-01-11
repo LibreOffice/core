@@ -29,7 +29,7 @@
 #include "fontsubset.hxx"
 #include "impfont.hxx"
 #include "svdata.hxx"
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 #include "fontmanager.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/ppdparser.hxx"

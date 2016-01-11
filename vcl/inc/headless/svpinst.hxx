@@ -25,7 +25,7 @@
 #include <salinst.hxx>
 #include <salwtype.hxx>
 #include <saltimer.hxx>
-#include <generic/geninst.h>
+#include <unx/geninst.h>
 #include <unx/genprn.h>
 #include <basebmp/scanlineformats.hxx>
 

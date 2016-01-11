@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "generic/geninst.h"
+#include "unx/geninst.h"
 #include "unx/genpspgraphics.h"
 #include "unx/glyphcache.hxx"
 

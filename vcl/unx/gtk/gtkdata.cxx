@@ -35,7 +35,7 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtksalmenu.hxx>
 #include <unx/salobj.h>
-#include <generic/geninst.h>
+#include <unx/geninst.h>
 #include <osl/thread.h>
 #include <osl/process.h>
 

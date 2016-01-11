@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
 
 #include <vcl/sysdata.hxx>
-#include <generic/gensys.h>
+#include <unx/gensys.h>
 #include <salobj.hxx>
 #include <salimestatus.hxx>
 #include <salsys.hxx>
