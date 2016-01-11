@@ -1902,6 +1902,7 @@ ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     nTipVisible ( 0 ),
     bFormulaMode( false )
 {
+    set_id("pos_window");
     Size aSize( GetTextWidth( "GW99999:GW99999" ),
                 GetTextHeight() );
     aSize.Width() += 25;    // FIXME: ??
