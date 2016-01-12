@@ -649,9 +649,6 @@ void RtfAttributeOutput::TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer
      * called for each cell.
      */
 
-    const SwTableBox* pTblBox = pTableTextNodeInfoInner->getTableBox();
-    SwFrmFmt* pFmt = pTblBox->GetFrmFmt();
-    const SvxBoxItem& rDefault = pFmt->GetBox();
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
     SwWriteTableRow* pRow = aRows[ pTableTextNodeInfoInner->getRow() ];
     const SwWriteTableCell* pCell = &pRow->GetCells()[ pTableTextNodeInfoInner->getCell() ];
@@ -682,8 +679,7 @@ void RtfAttributeOutput::TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer
         {
             if (const SvxBorderLine* pLn = rBox.GetLine(aBorders[i]))
                 m_aRowDefs.append(OutTBLBorderLine(m_rExport, pLn, aBorderNames[i]));
-            if (rDefault.GetDistance(aBorders[i]) !=
-                    rBox.GetDistance(aBorders[i]))
+            if (rBox.GetDistance(aBorders[i]))
             {
                 m_aRowDefs.append(aCellPadUnits[i]);
                 m_aRowDefs.append((sal_Int32)3);
