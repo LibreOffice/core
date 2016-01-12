@@ -24,6 +24,8 @@
 #include <global.hxx>
 #include <undoblk.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <memory>
 #include <utility>
 
@@ -99,11 +101,11 @@ std::unique_ptr<ScSimpleUndo::DataSpansType> DocFuncUtil::getNonEmptyCellSpans(
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
 
         std::pair<ScSimpleUndo::DataSpansType::iterator,bool> r =
-            pDataSpans->insert(nTab, new sc::ColumnSpanSet(false));
+            pDataSpans->insert(std::make_pair(nTab, o3tl::make_unique<sc::ColumnSpanSet>(false)));
 
         if (r.second)
         {
-            sc::ColumnSpanSet* pSet = r.first->second;
+            sc::ColumnSpanSet *const pSet = r.first->second.get();
             pSet->scan(rDoc, nTab, nCol1, nRow1, nCol2, nRow2, true);
         }
     }
