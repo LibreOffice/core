@@ -624,7 +624,15 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
                 if(pCustomShape)
                 {
-                    pCustomShape->setUnoShape(nullptr);
+                    // tdf#96522 do not reset UNO API implementation since e.g. the
+                    // animation evtl. added to the object uses weak references and
+                    // will be lost when resetting it. In that sense it is *not* a
+                    // on-demand recreatable ressource.
+                    // Luckily, the object causing problems in tdf#93994 is not the
+                    // UNO API object, but the XCustomShapeEngine involved. This
+                    // object is on-demand replacable and can be reset here. This
+                    // will free the involved EditEngine and VirtualDevice.
+                    pCustomShape->mxCustomShapeEngine.set(nullptr);
                 }
             }
 
