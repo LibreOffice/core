@@ -1807,6 +1807,11 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                 if( xShapes.is() )
                 {
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Group" );
+                    const OUString& rShapeId = implGetValidIDFromInterface( Reference<XInterface>(rxShape, UNO_QUERY) );
+                    if( !rShapeId.isEmpty() )
+                    {
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
+                    }
                     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
                     bRet = implExportShapes( xShapes, bMaster );
