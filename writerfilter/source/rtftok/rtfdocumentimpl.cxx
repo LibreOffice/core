@@ -2273,10 +2273,16 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             bRestored = true;
         }
 
-        // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic WW8TabDesc::CalcDefaults(): add a fake cell.
+        // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic WW8TabDesc::CalcDefaults(): resize the last cell
         const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
         if ((m_nCellxMax - m_nTopLevelCurrentCellX) >= MINLAY)
-            dispatchValue(RTF_CELLX, m_nCellxMax);
+        {
+            auto pXValueLast = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblGridBase_gridCol, false);
+            auto pXValue = std::make_shared<RTFValue>(pXValueLast->getInt() + m_nCellxMax - m_nTopLevelCurrentCellX);
+            m_aStates.top().aTableRowSprms.eraseLast(NS_ooxml::LN_CT_TblGridBase_gridCol);
+            m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue, RTFOverwrite::NO_APPEND);
+            m_nTopLevelCurrentCellX = m_nCellxMax;
+        }
 
         if (m_nTopLevelCells)
         {
