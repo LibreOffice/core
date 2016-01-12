@@ -44,6 +44,20 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     mpObj->execute(rAction, aMap);
 }
 
+css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    StringMap aMap = mpObj->get_state();
+    css::uno::Sequence<css::beans::PropertyValue> aProps(aMap.size());
+    sal_Int32 i = 0;
+    for (auto itr = aMap.begin(), itrEnd = aMap.end(); itr != itrEnd; ++itr, ++i)
+    {
+        aProps[i].Name = itr->first;
+        aProps[i].Value = css::uno::makeAny(itr->second);
+    }
+
+    return aProps;
 }
 
 OUString SAL_CALL UIObjectUnoObj::getImplementationName()
