@@ -32,7 +32,7 @@
 class SvStream;
 #define FontAlign TextAlign
 
-class Impl_Font;
+class ImplFont;
 class FontAttributes;
 namespace vcl { class Font; }
 // need to first declare these outside the vcl namespace, or the friend declarations won't work right
@@ -44,7 +44,7 @@ namespace vcl {
 class VCL_DLLPUBLIC Font
 {
 private:
-    Impl_Font*          mpImplFont;
+    ImplFont*           mpImplFont;
     void                MakeUnique();
 
 public:
