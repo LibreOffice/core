@@ -22,7 +22,6 @@
 
 #include <vcl/dllapi.h>
 
-class Scheduler;
 struct ImplSchedulerData;
 
 enum class SchedulerPriority {
