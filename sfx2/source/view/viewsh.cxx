@@ -55,6 +55,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 #include <sfx2/app.hxx>
 #include "view.hrc"
@@ -216,65 +217,6 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
     uno::Reference< datatransfer::clipboard::XClipboardListener > xThis( static_cast< datatransfer::clipboard::XClipboardListener* >( this ));
     AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_CHANGEDCONTENTS, xThis, this );
     Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo );
-}
-
-
-
-static OUString RetrieveLabelFromCommand(
-    const OUString& rCommandURL,
-    const css::uno::Reference< css::frame::XFrame >& rFrame )
-{
-    static css::uno::WeakReference< frame::XModuleManager2 > s_xModuleManager;
-    static css::uno::WeakReference< container::XNameAccess > s_xNameAccess;
-
-    OUString aLabel;
-    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( s_xModuleManager );
-    css::uno::Reference< css::container::XNameAccess > xNameAccess( s_xNameAccess );
-    css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-
-    try
-    {
-        if ( !xModuleManager.is() )
-        {
-            xModuleManager = css::frame::ModuleManager::create(xContext);
-            s_xModuleManager = xModuleManager;
-        }
-
-        OUString aModuleIdentifier = xModuleManager->identify( rFrame );
-
-        if ( !xNameAccess.is() )
-        {
-            xNameAccess.set( css::frame::theUICommandDescription::get(xContext),
-                             css::uno::UNO_QUERY_THROW );
-            s_xNameAccess = xNameAccess;
-        }
-
-        css::uno::Any a = xNameAccess->getByName( aModuleIdentifier );
-        css::uno::Reference< css::container::XNameAccess > xUICommands;
-        a >>= xUICommands;
-
-        OUString aStr;
-        css::uno::Sequence< css::beans::PropertyValue > aPropSeq;
-
-        a = xUICommands->getByName( rCommandURL );
-        if ( a >>= aPropSeq )
-        {
-            for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-            {
-                if ( aPropSeq[i].Name == "Label" )
-                {
-                    aPropSeq[i].Value >>= aStr;
-                    break;
-                }
-            }
-            aLabel = aStr;
-        }
-    }
-    catch (const css::uno::Exception&)
-    {
-    }
-
-    return aLabel;
 }
 
 class SfxInPlaceClientList
@@ -853,7 +795,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                             uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
 
                             OUStringBuffer aBuffer( 60 );
-                            aBuffer.append( RetrieveLabelFromCommand(
+                            aBuffer.append( vcl::CommandInfoProvider::Instance().GetLabelForCommand(
                                 ".uno:PrintDefault",
                                 xFrame ));
                             aBuffer.append( " (" );
