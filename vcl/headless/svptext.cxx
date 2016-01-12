@@ -22,15 +22,16 @@
 #include <basegfx/range/b2ibox.hxx>
 #include "headless/svpgdi.hxx"
 #include <config_cairo_canvas.h>
+#include "impfontmetricdata.hxx"
 
 sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {
     return m_aTextRenderImpl.SetFont(pIFSD, nFallbackLevel);
 }
 
-void SvpSalGraphics::GetFontAttributes( FontAttributes* pFontAttributes, int nFallbackLevel )
+void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pFontMetric, int nFallbackLevel )
 {
-    m_aTextRenderImpl.GetFontAttributes(pFontAttributes, nFallbackLevel);
+    m_aTextRenderImpl.GetFontMetric(pFontMetric, nFallbackLevel);
 }
 
 const FontCharMapPtr SvpSalGraphics::GetFontCharMap() const

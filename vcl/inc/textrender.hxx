@@ -31,6 +31,7 @@
 #include <config_cairo_canvas.h>
 
 class ImplLayoutArgs;
+class ImplFontMetricData;
 class ServerFontLayout;
 class PhysicalFontCollection;
 class PhysicalFontFace;
@@ -42,7 +43,7 @@ public:
 
     virtual void                    SetTextColor( SalColor nSalColor ) = 0;
     virtual sal_uInt16              SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
-    virtual void                    GetFontAttributes( FontAttributes*, int nFallbackLevel ) = 0;
+    virtual void                    GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) = 0;
     virtual const FontCharMapPtr    GetFontCharMap() const = 0;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
     virtual void                    GetDevFontList( PhysicalFontCollection* ) = 0;

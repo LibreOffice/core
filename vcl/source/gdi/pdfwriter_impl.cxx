@@ -9168,18 +9168,18 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         Point aOffset = Point(0,0);
 
         if ( nEmphMark & EMPHASISMARK_POS_BELOW )
-            aOffset.Y() += m_pReferenceDevice->mpFontInstance->maFontAttributes.GetDescent() + nEmphYOff;
+            aOffset.Y() += m_pReferenceDevice->mpFontInstance->maFontMetric.GetDescent() + nEmphYOff;
         else
-            aOffset.Y() -= m_pReferenceDevice->mpFontInstance->maFontAttributes.GetAscent() + nEmphYOff;
+            aOffset.Y() -= m_pReferenceDevice->mpFontInstance->maFontMetric.GetAscent() + nEmphYOff;
 
         long nEmphWidth2     = nEmphWidth / 2;
         long nEmphHeight2    = nEmphHeight / 2;
         aOffset += Point( nEmphWidth2, nEmphHeight2 );
 
         if ( eAlign == ALIGN_BOTTOM )
-            aOffset.Y() -= m_pReferenceDevice->mpFontInstance->maFontAttributes.GetDescent();
+            aOffset.Y() -= m_pReferenceDevice->mpFontInstance->maFontMetric.GetDescent();
         else if ( eAlign == ALIGN_TOP )
-            aOffset.Y() += m_pReferenceDevice->mpFontInstance->maFontAttributes.GetAscent();
+            aOffset.Y() += m_pReferenceDevice->mpFontInstance->maFontMetric.GetAscent();
 
         for( int nStart = 0;;)
         {
@@ -9497,17 +9497,17 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnd
 
     if ( bIsAbove )
     {
-        if ( !pFontInstance->maFontAttributes.GetAboveWavelineUnderlineSize() )
+        if ( !pFontInstance->maFontMetric.GetAboveWavelineUnderlineSize() )
             m_pReferenceDevice->ImplInitAboveTextLineSize();
-        nLineHeight = HCONV( pFontInstance->maFontAttributes.GetAboveWavelineUnderlineSize() );
-        nLinePos = HCONV( pFontInstance->maFontAttributes.GetAboveWavelineUnderlineOffset() );
+        nLineHeight = HCONV( pFontInstance->maFontMetric.GetAboveWavelineUnderlineSize() );
+        nLinePos = HCONV( pFontInstance->maFontMetric.GetAboveWavelineUnderlineOffset() );
     }
     else
     {
-        if ( !pFontInstance->maFontAttributes.GetWavelineUnderlineSize() )
+        if ( !pFontInstance->maFontMetric.GetWavelineUnderlineSize() )
             m_pReferenceDevice->ImplInitTextLineSize();
-        nLineHeight = HCONV( pFontInstance->maFontAttributes.GetWavelineUnderlineSize() );
-        nLinePos = HCONV( pFontInstance->maFontAttributes.GetWavelineUnderlineOffset() );
+        nLineHeight = HCONV( pFontInstance->maFontMetric.GetWavelineUnderlineSize() );
+        nLinePos = HCONV( pFontInstance->maFontMetric.GetWavelineUnderlineOffset() );
     }
     if ( (eTextLine == UNDERLINE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
@@ -9576,17 +9576,17 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
         case UNDERLINE_DASHDOTDOT:
             if ( bIsAbove )
             {
-                if ( !pFontInstance->maFontAttributes.GetAboveUnderlineSize() )
+                if ( !pFontInstance->maFontMetric.GetAboveUnderlineSize() )
                     m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontInstance->maFontAttributes.GetAboveUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->maFontAttributes.GetAboveUnderlineOffset() );
+                nLineHeight = HCONV( pFontInstance->maFontMetric.GetAboveUnderlineSize() );
+                nLinePos    = HCONV( pFontInstance->maFontMetric.GetAboveUnderlineOffset() );
             }
             else
             {
-                if ( !pFontInstance->maFontAttributes.GetUnderlineSize() )
+                if ( !pFontInstance->maFontMetric.GetUnderlineSize() )
                     m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontInstance->maFontAttributes.GetUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->maFontAttributes.GetUnderlineOffset() );
+                nLineHeight = HCONV( pFontInstance->maFontMetric.GetUnderlineSize() );
+                nLinePos    = HCONV( pFontInstance->maFontMetric.GetUnderlineOffset() );
             }
             break;
         case UNDERLINE_BOLD:
@@ -9597,36 +9597,36 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
         case UNDERLINE_BOLDDASHDOTDOT:
             if ( bIsAbove )
             {
-                if ( !pFontInstance->maFontAttributes.GetAboveBoldUnderlineSize() )
+                if ( !pFontInstance->maFontMetric.GetAboveBoldUnderlineSize() )
                     m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontInstance->maFontAttributes.GetAboveBoldUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->maFontAttributes.GetAboveBoldUnderlineOffset() );
+                nLineHeight = HCONV( pFontInstance->maFontMetric.GetAboveBoldUnderlineSize() );
+                nLinePos    = HCONV( pFontInstance->maFontMetric.GetAboveBoldUnderlineOffset() );
             }
             else
             {
-                if ( !pFontInstance->maFontAttributes.GetBoldUnderlineSize() )
+                if ( !pFontInstance->maFontMetric.GetBoldUnderlineSize() )
                     m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontInstance->maFontAttributes.GetBoldUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->maFontAttributes.GetBoldUnderlineOffset() );
+                nLineHeight = HCONV( pFontInstance->maFontMetric.GetBoldUnderlineSize() );
+                nLinePos    = HCONV( pFontInstance->maFontMetric.GetBoldUnderlineOffset() );
                 nLinePos += nLineHeight/2;
             }
             break;
         case UNDERLINE_DOUBLE:
             if ( bIsAbove )
             {
-                if ( !pFontInstance->maFontAttributes.GetAboveDoubleUnderlineSize() )
+                if ( !pFontInstance->maFontMetric.GetAboveDoubleUnderlineSize() )
                     m_pReferenceDevice->ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontInstance->maFontAttributes.GetAboveDoubleUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->maFontAttributes.GetAboveDoubleUnderlineOffset1() );
-                nLinePos2   = HCONV( pFontInstance->maFontAttributes.GetAboveDoubleUnderlineOffset2() );
+                nLineHeight = HCONV( pFontInstance->maFontMetric.GetAboveDoubleUnderlineSize() );
+                nLinePos    = HCONV( pFontInstance->maFontMetric.GetAboveDoubleUnderlineOffset1() );
+                nLinePos2   = HCONV( pFontInstance->maFontMetric.GetAboveDoubleUnderlineOffset2() );
             }
             else
             {
-                if ( !pFontInstance->maFontAttributes.GetDoubleUnderlineSize() )
+                if ( !pFontInstance->maFontMetric.GetDoubleUnderlineSize() )
                     m_pReferenceDevice->ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontInstance->maFontAttributes.GetDoubleUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->maFontAttributes.GetDoubleUnderlineOffset1() );
-                nLinePos2   = HCONV( pFontInstance->maFontAttributes.GetDoubleUnderlineOffset2() );
+                nLineHeight = HCONV( pFontInstance->maFontMetric.GetDoubleUnderlineSize() );
+                nLinePos    = HCONV( pFontInstance->maFontMetric.GetDoubleUnderlineOffset1() );
+                nLinePos2   = HCONV( pFontInstance->maFontMetric.GetDoubleUnderlineOffset2() );
             }
             break;
         default:
@@ -9739,23 +9739,23 @@ void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontSt
     switch ( eStrikeout )
     {
         case STRIKEOUT_SINGLE:
-            if ( !pFontInstance->maFontAttributes.GetStrikeoutSize() )
+            if ( !pFontInstance->maFontMetric.GetStrikeoutSize() )
                 m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontInstance->maFontAttributes.GetStrikeoutSize() );
-            nLinePos    = HCONV( pFontInstance->maFontAttributes.GetStrikeoutOffset() );
+            nLineHeight = HCONV( pFontInstance->maFontMetric.GetStrikeoutSize() );
+            nLinePos    = HCONV( pFontInstance->maFontMetric.GetStrikeoutOffset() );
             break;
         case STRIKEOUT_BOLD:
-            if ( !pFontInstance->maFontAttributes.GetBoldStrikeoutSize() )
+            if ( !pFontInstance->maFontMetric.GetBoldStrikeoutSize() )
                 m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontInstance->maFontAttributes.GetBoldStrikeoutSize() );
-            nLinePos    = HCONV( pFontInstance->maFontAttributes.GetBoldStrikeoutOffset() );
+            nLineHeight = HCONV( pFontInstance->maFontMetric.GetBoldStrikeoutSize() );
+            nLinePos    = HCONV( pFontInstance->maFontMetric.GetBoldStrikeoutOffset() );
             break;
         case STRIKEOUT_DOUBLE:
-            if ( !pFontInstance->maFontAttributes.GetDoubleStrikeoutSize() )
+            if ( !pFontInstance->maFontMetric.GetDoubleStrikeoutSize() )
                 m_pReferenceDevice->ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontInstance->maFontAttributes.GetDoubleStrikeoutSize() );
-            nLinePos    = HCONV( pFontInstance->maFontAttributes.GetDoubleStrikeoutOffset1() );
-            nLinePos2   = HCONV( pFontInstance->maFontAttributes.GetDoubleStrikeoutOffset2() );
+            nLineHeight = HCONV( pFontInstance->maFontMetric.GetDoubleStrikeoutSize() );
+            nLinePos    = HCONV( pFontInstance->maFontMetric.GetDoubleStrikeoutOffset1() );
+            nLinePos2   = HCONV( pFontInstance->maFontMetric.GetDoubleStrikeoutOffset2() );
             break;
         default:
             break;
@@ -9876,9 +9876,9 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     Point aPos( rPos );
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
     if( eAlign == ALIGN_TOP )
-        aPos.Y() += HCONV( pFontInstance->maFontAttributes.GetAscent() );
+        aPos.Y() += HCONV( pFontInstance->maFontMetric.GetAscent() );
     else if( eAlign == ALIGN_BOTTOM )
-        aPos.Y() -= HCONV( pFontInstance->maFontAttributes.GetDescent() );
+        aPos.Y() -= HCONV( pFontInstance->maFontMetric.GetDescent() );
 
     OStringBuffer aLine( 512 );
     // save GS

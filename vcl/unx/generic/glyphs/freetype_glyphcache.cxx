@@ -614,9 +614,9 @@ ServerFont::~ServerFont()
 }
 
 
-void ServerFont::FetchFontAttributes( FontAttributes& rTo, long& rFactor ) const
+void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
-    static_cast<FontAttributes&>(rTo) = mpFontInfo->GetFontAttributes();
+    static_cast< FontAttributes& >(rTo) = mpFontInfo->GetFontAttributes();
 
     rTo.SetScalableFlag( true ); // FIXME: Shouldn't this check FT_IS_SCALABLE( maFaceFT )?
     rTo.SetTrueTypeFlag( FT_IS_SFNT( maFaceFT ) != 0 );

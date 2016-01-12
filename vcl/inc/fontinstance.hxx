@@ -25,6 +25,7 @@
 
 #include "fontselect.hxx"
 #include "fontattributes.hxx"
+#include "impfontmetricdata.hxx"
 
 #include <unordered_map>
 
@@ -41,16 +42,16 @@ public:
 
 public: // TODO: make data members private
     ImplFontCache * mpFontCache;
-    FontSelectPattern  maFontSelData;          // FontSelectionData
-    FontAttributes  maFontAttributes;       // Font attributes
-    const ConvertChar* mpConversion;           // used e.g. for StarBats->StarSymbol
+    FontSelectPattern  maFontSelData;       // FontSelectionData
+    ImplFontMetricData maFontMetric;        // Font attributes
+    const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     long            mnLineHeight;
     sal_uLong       mnRefCount;
     sal_uInt16      mnSetFontFlags;         // Flags returned by SalGraphics::SetFont()
     short           mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
     short           mnOrientation;          // text angle in 3600 system
-    bool            mbInit;                 // true if maFontAttributes member is valid
+    bool            mbInit;                 // true if maFontMetric member is valid
 
     void            AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
     bool            GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;
