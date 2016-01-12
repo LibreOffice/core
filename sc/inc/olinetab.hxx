@@ -23,7 +23,6 @@
 #include "scdllapi.h"
 #include "address.hxx"
 
-#include <memory>
 #include <map>
 
 #define SC_OL_MAXDEPTH      7
@@ -64,8 +63,8 @@ public:
 
 class ScOutlineCollection
 {
-    typedef std::map<SCCOLROW, std::unique_ptr<ScOutlineEntry>> MapType;
-    MapType maEntries;
+    typedef std::map<SCCOLROW, ScOutlineEntry> MapType;
+    MapType m_Entries;
 
 public:
     typedef MapType::iterator iterator;
@@ -75,7 +74,7 @@ public:
 
     size_t size() const;
     void clear();
-    void insert(std::unique_ptr<ScOutlineEntry> pEntry);
+    void insert(ScOutlineEntry const& rEntry);
     iterator begin();
     iterator end();
     const_iterator begin() const;
