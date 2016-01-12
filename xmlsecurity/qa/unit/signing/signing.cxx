@@ -32,8 +32,6 @@
 #include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 
-#if !defined(MACOSX)
-
 using namespace com::sun::star;
 
 namespace
@@ -188,8 +186,6 @@ void SigningTest::testDescription()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SigningTest);
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
