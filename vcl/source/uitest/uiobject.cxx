@@ -12,6 +12,8 @@
 
 #include <vcl/event.hxx>
 
+#include <rtl/ustrbuf.hxx>
+
 #include <iostream>
 #include <vector>
 
@@ -89,6 +91,26 @@ std::vector<KeyEvent> generate_key_events_from_text(const OUString& rStr)
     return aEvents;
 }
 
+OUString to_string(const Point& rPos)
+{
+    OUStringBuffer aBuffer;
+    aBuffer.append(OUString::number(rPos.X()));
+    aBuffer.append("x");
+    aBuffer.append(OUString::number(rPos.Y()));
+
+    return aBuffer.makeStringAndClear();
+}
+
+OUString to_string(const Size& rSize)
+{
+    OUStringBuffer aBuffer;
+    aBuffer.append(rSize.Width());
+    aBuffer.append("x");
+    aBuffer.append(rSize.Height());
+
+    return aBuffer.makeStringAndClear();
+}
+
 }
 
 WindowUIObject::WindowUIObject(VclPtr<vcl::Window> xWindow):
@@ -103,8 +125,33 @@ StringMap WindowUIObject::get_state()
     aMap["ReallyVisible"] = OUString::boolean(mxWindow->IsReallyVisible());
     aMap["Enabled"] = OUString::boolean(mxWindow->IsEnabled());
     aMap["WindowType"] = OUString::number(mxWindow->GetType(), 16);
-    if (mxWindow->GetParent())
+
+    Point aPos = mxWindow->GetPosPixel();
+    aMap["RelPosition"] = to_string(aPos);
+    aMap["Size"] = to_string(mxWindow->GetSizePixel());
+    aMap["ID"] = mxWindow->get_id();
+    vcl::Window* pParent = mxWindow->GetParent();
+    if (pParent)
         aMap["Parent"] = mxWindow->GetParent()->get_id();
+
+    bool bIgnoreAllExceptTop = isDialogWindow(mxWindow.get());
+    while(pParent)
+    {
+        Point aParentPos = pParent->GetPosPixel();
+        if (!bIgnoreAllExceptTop)
+            aPos += aParentPos;
+
+        if (isDialogWindow(pParent))
+        {
+            bIgnoreAllExceptTop = true;
+        }
+
+        pParent = pParent->GetParent();
+
+        if (!pParent && bIgnoreAllExceptTop)
+            aPos += aParentPos;
+    }
+    aMap["AbsPosition"] = to_string(aPos);
 
     return aMap;
 }
