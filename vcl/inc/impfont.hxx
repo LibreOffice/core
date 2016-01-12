@@ -104,25 +104,32 @@ private:
     sal_uInt16          mnMiscFlags;   // Misc Flags
     sal_uInt32          mnRefCount;    // Reference Counter
 
-    enum { DEVICE_FLAG=1, SCALABLE_FLAG=2, LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16, FULLSTOP_CENTERED_FLAG=32 };
+    bool                mbScalableFont;
+
+    // TODO: As these are progressively moved from bit fields into boolean variables, comment them out.
+    // Eventually this enum will not be needed and we can remove it.
+    enum { DEVICE_FLAG=1, /* SCALABLE_FLAG=2, */ LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16, FULLSTOP_CENTERED_FLAG=32 };
 
 public:
+
+    bool                operator==( const ImplFontMetric& ) const;
+
                         ImplFontMetric();
     void                AddReference();
     void                DeReference();
 
-    long                GetAscent() const       { return mnAscent; }
-    long                GetDescent() const      { return mnDescent; }
-    long                GetIntLeading() const   { return mnIntLeading; }
-    long                GetExtLeading() const   { return mnExtLeading; }
-    long                GetLineHeight() const   { return mnLineHeight; }
-    long                GetSlant() const        { return mnSlant; }
-    bool                IsFullstopCentered() const { return  ((mnMiscFlags & FULLSTOP_CENTERED_FLAG ) != 0); }
+    long                GetAscent() const                           { return mnAscent; }
+    long                GetDescent() const                          { return mnDescent; }
+    long                GetIntLeading() const                       { return mnIntLeading; }
+    long                GetExtLeading() const                       { return mnExtLeading; }
+    long                GetLineHeight() const                       { return mnLineHeight; }
+    long                GetSlant() const                            { return mnSlant; }
 
-    long                GetBulletOffset() const { return mnBulletOffset; }
-    bool                IsScalable() const      { return ((mnMiscFlags & SCALABLE_FLAG) != 0); }
+    bool                IsScalable() const                          { return mbScalableFont; }
+    bool                IsFullstopCentered() const                  { return  ((mnMiscFlags & FULLSTOP_CENTERED_FLAG ) != 0); }
+    long                GetBulletOffset() const                     { return mnBulletOffset; }
 
-    bool                operator==( const ImplFontMetric& ) const;
+    void                SetScalableFlag(bool bScalable)             { mbScalableFont = bScalable; }
 };
 
 
