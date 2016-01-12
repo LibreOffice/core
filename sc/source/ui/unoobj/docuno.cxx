@@ -495,22 +495,10 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 void ScModelObj::setPart( int nPart )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-    SfxUInt16Item aItem( SID_CURRENTTAB, nPart + 1 );
-    SfxDispatcher& rDisp = pViewData->GetDispatcher();
+    ScTabView* pTabView = dynamic_cast< ScTabView* >( pViewData->GetView() );
 
-    rDisp.Execute( SID_CURRENTTAB, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, nullptr );
-
-    SfxBindings& rBind = pViewData->GetBindings();
-    rBind.Invalidate( FID_FILL_TAB );
-    rBind.Invalidate( FID_TAB_DESELECTALL );
-    rBind.Invalidate( FID_INS_TABLE );
-    rBind.Invalidate( FID_TAB_APPEND );
-    rBind.Invalidate( FID_TAB_MOVE );
-    rBind.Invalidate( FID_TAB_RENAME );
-    rBind.Invalidate( FID_DELETE_TABLE );
-    rBind.Invalidate( FID_TABLE_SHOW );
-    rBind.Invalidate( FID_TABLE_HIDE );
-    rBind.Invalidate( FID_TAB_SET_TAB_BG_COLOR );
+    if (pTabView)
+        pTabView->SelectTabPage(nPart + 1);
 }
 
 int ScModelObj::getParts()
