@@ -44,7 +44,6 @@ private:
 
     DECL_LINK_TYPED(ShowPageList, const CommandEvent&, void);
 
-    void SwitchToPageId(sal_uInt16 nId);
 protected:
     virtual void    Select() override;
     virtual void    Command( const CommandEvent& rCEvt ) override;
@@ -73,6 +72,7 @@ public:
     void            UpdateStatus();
 
     void            SetSheetLayoutRTL( bool bSheetRTL );
+    void            SwitchToPageId( sal_uInt16 nId );
 };
 
 #endif

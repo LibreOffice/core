@@ -386,6 +386,7 @@ public:
 
     SC_DLLPUBLIC void SetTabNo( SCTAB nTab, bool bNew = false, bool bExtendSelection = false, bool bSameTabButMoved = false );
     void            SelectNextTab( short nDir, bool bExtendSelection = false );
+    void            SelectTabPage( const sal_uInt16 nTab );
 
     void            ActivateView( bool bActivate, bool bFirst );
     void            ActivatePart( ScSplitPos eWhich );
