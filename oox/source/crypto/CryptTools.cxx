@@ -284,7 +284,7 @@ sal_uInt32 Digest::getLength()
     return 0;
 }
 
-bool Digest::update(std::vector<sal_uInt8>& input)
+void Digest::update(std::vector<sal_uInt8>& input)
 {
     #if USE_TLS_OPENSSL
     EVP_DigestUpdate(mpContext, &input[0], input.size());
@@ -292,10 +292,9 @@ bool Digest::update(std::vector<sal_uInt8>& input)
     #if USE_TLS_NSS
     HASH_Update(mpContext, &input[0], input.size());
     #endif
-    return true;
 }
 
-bool Digest::finalize(std::vector<sal_uInt8>& digest)
+void Digest::finalize(std::vector<sal_uInt8>& digest)
 {
     digest.clear();
 
@@ -311,7 +310,6 @@ bool Digest::finalize(std::vector<sal_uInt8>& digest)
     digest.resize(digestLength, 0);
     HASH_End(mpContext, &digest[0], &digestWrittenLength, digestLength);
     #endif
-    return true;
 }
 
 bool Digest::sha1(vector<sal_uInt8>& output, vector<sal_uInt8>& input)

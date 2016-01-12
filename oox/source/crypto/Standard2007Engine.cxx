@@ -198,7 +198,7 @@ bool Standard2007Engine::decrypt(
     return true;
 }
 
-bool Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOutputStream& rStream)
+void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOutputStream& rStream)
 {
     mInfo.header.flags        = ENCRYPTINFO_AES | ENCRYPTINFO_CRYPTOAPI;
     mInfo.header.algId        = ENCRYPT_ALGO_AES128;
@@ -213,10 +213,10 @@ bool Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
     mKey.resize(keyLength, 0);
 
     if (!calculateEncryptionKey(password))
-        return false;
+        return;
 
     if (!generateVerifier())
-        return false;
+        return;
 
     rStream.WriteUInt32(VERSION_INFO_2007_FORMAT);
 
@@ -234,11 +234,9 @@ bool Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
 
     sal_uInt32 encryptionVerifierSize = static_cast<sal_uInt32>(sizeof(EncryptionVerifierAES));
     rStream.writeMemory(&mInfo.verifier, encryptionVerifierSize);
-
-    return true;
 }
 
-bool Standard2007Engine::encrypt(
+void Standard2007Engine::encrypt(
                             BinaryXInputStream& aInputStream,
                             BinaryXOutputStream& aOutputStream)
 {
@@ -257,7 +255,6 @@ bool Standard2007Engine::encrypt(
         outputLength = aEncryptor.update(outputBuffer, inputBuffer, inputLength);
         aOutputStream.writeMemory( &outputBuffer[0], outputLength );
     }
-    return true;
 }
 
 } // namespace core

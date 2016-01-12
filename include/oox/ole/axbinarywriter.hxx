@@ -97,7 +97,7 @@ public:
     void                skipProperty() { startNextProperty( true ); }
 
     /** Final processing, write contents of all complex properties, writes record size */
-    bool                finalizeExport();
+    void                finalizeExport();
 
 private:
     bool                ensureValid( bool bCondition = true );

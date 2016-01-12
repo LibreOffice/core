@@ -517,7 +517,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
     return aResult;
 }
 
-ChartExport& ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nChartCount )
+void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nChartCount )
 {
     FSHelperPtr pFS = GetFS();
 
@@ -614,8 +614,6 @@ ChartExport& ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_
 
     SetFS( pChart );
     ExportContent();
-
-    return *this;
 }
 
 void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XChartDocument > & xChartDoc )

@@ -134,8 +134,8 @@ private:
     bool                setFillBitmapNameFromUrl( sal_Int32 nPropId, const css::uno::Any& rValue );
 
     // not implemented, to prevent implicit conversion from enum to int
-    css::uno::Any& operator[]( ShapePropertyId ePropId );
-    const css::uno::Any& operator[]( ShapePropertyId ePropId ) const;
+    css::uno::Any& operator[]( ShapePropertyId ePropId ) = delete;
+    const css::uno::Any& operator[]( ShapePropertyId ePropId ) const = delete;
 
 private:
     ModelObjectHelper&  mrModelObjHelper;

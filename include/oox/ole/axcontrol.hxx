@@ -883,7 +883,7 @@ public:
     explicit            AxMultiPageModel();
 
     virtual ApiControlType getControlType() const override;
-    bool        importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages );
+    void                importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages );
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
     std::vector<sal_uInt32> mnIDs;
     sal_uInt32          mnActiveTab;
@@ -956,7 +956,7 @@ public:
                             const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const ControlConverter& rConv ) const;
 
-    bool                convertFromProperties(
+    void                convertFromProperties(
                             const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const ControlConverter& rConv );
 

@@ -31,7 +31,7 @@ public:
     virtual ~CryptoEngine()
     {}
 
-    virtual bool writeEncryptionInfo(
+    virtual void writeEncryptionInfo(
                     const OUString& rPassword,
                     BinaryXOutputStream& rStream) = 0;
 
@@ -41,7 +41,7 @@ public:
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) = 0;
 
-    virtual bool encrypt(
+    virtual void encrypt(
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) = 0;
 };

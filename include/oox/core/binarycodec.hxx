@@ -131,11 +131,8 @@ public:
         @param nBytes
             Size of the passed data blocks. pnDestData and pnSrcData must be of
             this size.
-
-        @return
-            True = decoding was successful (no error occurred).
     */
-    bool                decode(
+    void                decode(
                             sal_uInt8* pnDestData,
                             const sal_uInt8* pnSrcData,
                             sal_Int32 nBytes );
@@ -284,11 +281,8 @@ public:
 
         @param nBytes
             Number of bytes to be skipped (cipher "seeks" forward).
-
-        @return
-            True = skip was successful (no error occurred).
      */
-    bool                skip( sal_Int32 nBytes );
+    void                skip( sal_Int32 nBytes );
 
 private:
     rtlCipher           mhCipher;

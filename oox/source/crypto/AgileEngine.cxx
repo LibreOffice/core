@@ -50,7 +50,7 @@ Crypto::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
     return Crypto::UNKNOWN;
 }
 
-bool AgileEngine::calculateBlock(
+void AgileEngine::calculateBlock(
     const sal_uInt8* rBlock,
     sal_uInt32 aBlockSize,
     vector<sal_uInt8>& rHashFinal,
@@ -75,11 +75,9 @@ bool AgileEngine::calculateBlock(
 
     Decrypt aDecryptor(key, salt, cryptoType(mInfo));
     aDecryptor.update(rOutput, rInput);
-
-    return true;
 }
 
-bool AgileEngine::calculateHashFinal(const OUString& rPassword, vector<sal_uInt8>& aHashFinal)
+void AgileEngine::calculateHashFinal(const OUString& rPassword, vector<sal_uInt8>& aHashFinal)
 {
     sal_Int32 saltSize = mInfo.saltSize;
     vector<sal_uInt8> salt = mInfo.saltValue;
@@ -109,8 +107,6 @@ bool AgileEngine::calculateHashFinal(const OUString& rPassword, vector<sal_uInt8
     }
 
     std::copy(hash.begin(), hash.end(), aHashFinal.begin());
-
-    return true;
 }
 
 bool AgileEngine::generateEncryptionKey(const OUString& rPassword)
@@ -192,18 +188,18 @@ bool AgileEngine::decrypt(
     return true;
 }
 
-bool AgileEngine::writeEncryptionInfo(
+void AgileEngine::writeEncryptionInfo(
                         const OUString& /*aPassword*/,
                         BinaryXOutputStream& /*rStream*/)
 {
-    return false; // Agile encrypting is not supported for now
+    // Agile encrypting is not supported for now
 }
 
-bool AgileEngine::encrypt(
+void AgileEngine::encrypt(
                     BinaryXInputStream& /*aInputStream*/,
                     BinaryXOutputStream& /*aOutputStream*/)
 {
-    return false; // Agile encrypting is not supported for now
+    // Agile encrypting is not supported for now
 }
 
 } // namespace core

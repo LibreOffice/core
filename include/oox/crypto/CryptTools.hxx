@@ -144,8 +144,8 @@ public:
     Digest(DigestType eType);
     virtual ~Digest();
 
-    bool update(std::vector<sal_uInt8>& input);
-    bool finalize(std::vector<sal_uInt8>& digest);
+    void update(std::vector<sal_uInt8>& input);
+    void finalize(std::vector<sal_uInt8>& digest);
 
     sal_uInt32 getLength();
 

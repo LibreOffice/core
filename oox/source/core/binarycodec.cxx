@@ -210,7 +210,7 @@ void BinaryCodec_XOR::startBlock()
     mnOffset = 0;
 }
 
-bool BinaryCodec_XOR::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int32 nBytes )
+void BinaryCodec_XOR::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int32 nBytes )
 {
     const sal_uInt8* pnCurrKey = mpnKey + mnOffset;
     const sal_uInt8* pnKeyLast = mpnKey + 0x0F;
@@ -245,7 +245,7 @@ bool BinaryCodec_XOR::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
     }
 
     // update offset and leave
-    return skip( nBytes );
+    skip( nBytes );
 }
 
 bool BinaryCodec_XOR::skip( sal_Int32 nBytes )
@@ -391,7 +391,7 @@ bool BinaryCodec_RCF::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
     return eResult == rtl_Cipher_E_None;
 }
 
-bool BinaryCodec_RCF::skip( sal_Int32 nBytes )
+void BinaryCodec_RCF::skip( sal_Int32 nBytes )
 {
     // decode dummy data in memory to update internal state of RC4 cipher
     sal_uInt8 pnDummy[ 1024 ];
@@ -403,7 +403,6 @@ bool BinaryCodec_RCF::skip( sal_Int32 nBytes )
         bResult = decode( pnDummy, pnDummy, nBlockLen );
         nBytesLeft -= nBlockLen;
     }
-    return bResult;
 }
 
 } // namespace core

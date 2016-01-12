@@ -210,7 +210,7 @@ public:
     sal_Int32           GetChartID( );
     css::uno::Reference< css::frame::XModel > getModel(){ return mxChartModel; }
 
-    ChartExport& WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nChartCount );
+    void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nChartCount );
 
     void ExportContent();
     void InitRangeSegmentationProperties(

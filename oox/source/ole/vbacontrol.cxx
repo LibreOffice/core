@@ -523,7 +523,7 @@ bool VbaFormControl::importSiteModel( BinaryInputStream& rInStrm )
     return mxSiteModel->importBinaryModel( rInStrm );
 }
 
-bool VbaFormControl::importEmbeddedSiteModels( BinaryInputStream& rInStrm )
+void VbaFormControl::importEmbeddedSiteModels( BinaryInputStream& rInStrm )
 {
     sal_uInt64 nAnchorPos = rInStrm.tell();
     sal_uInt32 nSiteCount, nSiteDataSize;
@@ -568,7 +568,6 @@ bool VbaFormControl::importEmbeddedSiteModels( BinaryInputStream& rInStrm )
     }
 
     rInStrm.seek( nSiteEndPos );
-    return bValid;
 }
 
 void VbaFormControl::finalizeEmbeddedControls()

@@ -149,7 +149,7 @@ private:
     bool                importSiteModel( BinaryInputStream& rInStrm );
 
     /** Imports the site models of all embedded controls from the 'f' stream. */
-    bool                importEmbeddedSiteModels( BinaryInputStream& rInStrm );
+    void                importEmbeddedSiteModels( BinaryInputStream& rInStrm );
     /*  Final processing of all embedded controls after import. */
     void                finalizeEmbeddedControls();
 

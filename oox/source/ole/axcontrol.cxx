@@ -2456,7 +2456,7 @@ ApiControlType AxMultiPageModel::getControlType() const
     return API_CONTROL_MULTIPAGE;
 }
 
-bool AxMultiPageModel::importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages )
+void AxMultiPageModel::importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages )
 {
     // PageProperties
     for ( sal_Int32 nPage = 0; nPage < nPages; ++nPage )
@@ -2478,7 +2478,6 @@ bool AxMultiPageModel::importPageAndMultiPageProperties( BinaryInputStream& rInS
     {
         mnIDs.push_back( rInStrm.readInt32() );
     }
-    return true;
 }
 
 void AxMultiPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
@@ -2666,16 +2665,14 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
     return false;
 }
 
-bool EmbeddedControl::convertFromProperties( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv )
+void EmbeddedControl::convertFromProperties( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv )
 {
     if( mxModel.get() && rxCtrlModel.is() && !maName.isEmpty() )
     {
         PropertySet aPropSet( rxCtrlModel );
         aPropSet.getProperty( maName, PROP_Name );
         mxModel->convertFromProperties( aPropSet, rConv );
-        return true;
     }
-    return false;
 }
 
 EmbeddedForm::EmbeddedForm( const Reference< XModel >& rxDocModel,

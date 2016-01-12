@@ -459,7 +459,7 @@ void PresentationFragmentHandler::finalizeImport()
     return this;
 }
 
-bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlideFragmentHandler,
+void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlideFragmentHandler,
         const SlidePersistPtr& rSlidePersistPtr )
 {
     Reference< drawing::XDrawPage > xSlide( rSlidePersistPtr->getPage() );
@@ -511,7 +511,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
         }
     }
     rSlidePersistPtr->setPath( rxSlideFragmentHandler->getFragmentPath() );
-    return getFilter().importFragment( rxSlideFragmentHandler );
+    getFilter().importFragment( rxSlideFragmentHandler );
 }
 
 } }

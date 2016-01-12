@@ -94,7 +94,7 @@ public:
 
     virtual bool generateEncryptionKey(const OUString& rPassword) override;
 
-    virtual bool writeEncryptionInfo(
+    virtual void writeEncryptionInfo(
                     const OUString& rPassword,
                     BinaryXOutputStream& rStream) override;
 
@@ -102,7 +102,7 @@ public:
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) override;
 
-    virtual bool encrypt(
+    virtual void encrypt(
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) override;
 

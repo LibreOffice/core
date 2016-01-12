@@ -42,9 +42,9 @@ class AgileEngine : public CryptoEngine
 {
     AgileEncryptionInfo mInfo;
 
-    bool calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal);
+    void calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal);
 
-    bool calculateBlock(
+    void calculateBlock(
             const sal_uInt8* rBlock,
             sal_uInt32 aBlockSize,
             std::vector<sal_uInt8>& rHashFinal,
@@ -59,7 +59,7 @@ public:
 
     AgileEncryptionInfo& getInfo() { return mInfo;}
 
-    virtual bool writeEncryptionInfo(
+    virtual void writeEncryptionInfo(
                     const OUString& rPassword,
                     BinaryXOutputStream& rStream) override;
 
@@ -69,7 +69,7 @@ public:
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) override;
 
-    virtual bool encrypt(
+    virtual void encrypt(
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream) override;
 };

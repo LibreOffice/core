@@ -154,7 +154,7 @@ void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue, bool bCompr
     startNextProperty();
 }
 
-bool AxBinaryPropertyWriter::finalizeExport()
+void AxBinaryPropertyWriter::finalizeExport()
 {
     // write large properties
     maOutStrm.align( 4 );
@@ -185,7 +185,6 @@ bool AxBinaryPropertyWriter::finalizeExport()
         maOutStrm.WriteUInt32( mnPropFlags );
 
     maOutStrm.seek( nPos );
-    return true;
 }
 
 bool AxBinaryPropertyWriter::ensureValid( bool bCondition )

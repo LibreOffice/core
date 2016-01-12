@@ -1205,7 +1205,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const Point* pNdTopLeft, const bool bOOxmlExport )
+void VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const Point* pNdTopLeft, const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;
@@ -1213,7 +1213,7 @@ sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_
     m_eHRel = eHRel;
     m_eVRel = eVRel;
     m_pNdTopLeft = pNdTopLeft;
-    return EscherEx::AddSdrObject(rObj, bOOxmlExport);
+    EscherEx::AddSdrObject(rObj, bOOxmlExport);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
