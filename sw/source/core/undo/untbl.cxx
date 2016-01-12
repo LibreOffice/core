@@ -1093,7 +1093,7 @@ void _SaveTable::NewFrameFormat( const SwTableLine* pTableLn, const SwTableBox* 
     }
 
     // first re-assign Frames
-    SwIterator<SwTabFrame,SwFormat> aIter( *pOldFormat );
+    SwIterator<SwLayoutFrame,SwFormat> aIter( *pOldFormat );
     for( SwFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
         if( pTableLn ? static_cast<SwRowFrame*>(pLast)->GetTabLine() == pTableLn
