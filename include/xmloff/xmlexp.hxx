@@ -154,8 +154,6 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     XMLImageMapExport* mpImageMapExport;
     XMLErrors*  mpXMLErrors;
 
-    bool                        mbExtended;     // Does document contain extens.
-
     const enum ::xmloff::token::XMLTokenEnum meClass;
     SAL_DLLPRIVATE void _InitCtor();
 
@@ -221,8 +219,6 @@ protected:
 
     OUString GetSourceShellID() const;
     OUString GetDestinationShellID() const;
-
-    void SetExtended( bool bSet=true ) { mbExtended = bSet; }
 
     // save linked sections? (may be false in global documents)
     bool mbSaveLinkedSections;

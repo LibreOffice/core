@@ -131,7 +131,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     SwDoc *pDoc = getDoc();
 
-    bool bExtended = false;
     if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
                             SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT))
     {
@@ -174,7 +173,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                                                 pUnknown->GetNamespace( nIdx ) );
                             nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
                         }
-                        bExtended = true;
                     }
                 }
             }
@@ -188,8 +186,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         GetMM100UnitConverter().SetXMLMeasureUnit( eUnit );
         pTwipUnitConv->SetXMLMeasureUnit( eUnit );
     }
-
-    SetExtended( bExtended );
 
     if( getExportFlags() & SvXMLExportFlags::META)
     {
