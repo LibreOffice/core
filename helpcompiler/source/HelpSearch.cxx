@@ -20,7 +20,7 @@ HelpSearch::HelpSearch(OUString const &indexDir)
     d_indexDir = OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
 }
 
-bool HelpSearch::query(OUString const &queryStr, bool captionOnly,
+void HelpSearch::query(OUString const &queryStr, bool captionOnly,
         std::vector<OUString> &rDocuments, std::vector<float> &rScores) {
 
     lucene::index::IndexReader *reader = lucene::index::IndexReader::open(d_indexDir.getStr());
@@ -51,8 +51,6 @@ bool HelpSearch::query(OUString const &queryStr, bool captionOnly,
 
     reader->close();
     _CLDELETE(reader);
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

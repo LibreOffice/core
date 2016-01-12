@@ -33,7 +33,7 @@ class L10N_DLLPUBLIC HelpSearch{
 	 * @param rDocuments Vector to write the paths of the found documents.
 	 * @param rScores Vector to write the scores to.
 	 */
-        bool query(OUString const &queryStr, bool captionOnly,
+        void query(OUString const &queryStr, bool captionOnly,
             std::vector<OUString> &rDocuments, std::vector<float> &rScores);
 };
 

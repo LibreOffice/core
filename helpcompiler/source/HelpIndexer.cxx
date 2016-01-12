@@ -110,7 +110,7 @@ bool HelpIndexer::scanForFiles(OUString const & path) {
     return true;
 }
 
-bool HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
+void HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
     // Add the help path as an indexed, untokenized field.
 
     OUString path = "#HLP#" + d_module + "/" + fileName;
@@ -128,8 +128,6 @@ bool HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
     // Add the content as a field.
     OUString contentPath = d_contentDir + "/" + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
-
-    return true;
 }
 
 lucene::util::Reader *HelpIndexer::helpFileReader(OUString const & path) {

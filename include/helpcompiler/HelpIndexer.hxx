@@ -76,7 +76,7 @@ class L10N_DLLPUBLIC HelpIndexer {
 	/**
 	 * Fill the Document with information on the given help file.
 	 */
-        bool helpDocument(OUString const & fileName, lucene::document::Document *doc);
+        void helpDocument(OUString const & fileName, lucene::document::Document *doc);
 
 	/**
 	 * Create a reader for the given file, and create an "empty" reader in case the file doesn't exist.
