@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <classes/resource.hrc>
+#include <classes/fwkresid.hxx>
+
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
@@ -43,7 +46,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -413,12 +415,8 @@ void SaveToolbarController::updateImage()
     }
     else if ( m_xModifiable.is() && m_xModifiable->isModified() )
     {
-        const OUString aImageURL( "private:graphicrepository/res/savemodified_" + ( bLargeIcons ? OUString( "large.png" ) : OUString( "small.png" ) ) );
-        const css::uno::Reference< css::graphic::XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create( m_xContext ) );
-        const css::uno::Reference< css::graphic::XGraphic > xGraphic(
-            xGraphicProvider->queryGraphic( comphelper::InitPropertySequence( { { "URL", css::uno::makeAny( aImageURL ) } } ) ), css::uno::UNO_QUERY );
-        if ( xGraphic.is() )
-            aImage = Image( xGraphic );
+        Image aResImage( bLargeIcons ? FwkResId( IMG_SAVEMODIFIED_LARGE ) : FwkResId( IMG_SAVEMODIFIED_SMALL ) );
+        aImage = aResImage;
     }
 
     if ( !aImage )
