@@ -1515,6 +1515,11 @@ void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
     PaintExtras();
 }
 
+void ScTabView::SelectTabPage( const sal_uInt16 nTab )
+{
+    pTabControl->SwitchToPageId( nTab );
+}
+
 //  SetTabNo    - angezeigte Tabelle
 
 void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSameTabButMoved )

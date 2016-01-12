@@ -496,7 +496,10 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 void ScModelObj::setPart( int nPart )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-    pViewData->SetTabNo( nPart );
+    ScTabView* pTabView = dynamic_cast< ScTabView* >( pViewData->GetView() );
+
+    if (pTabView)
+        pTabView->SelectTabPage(nPart + 1);
 }
 
 int ScModelObj::getParts()
