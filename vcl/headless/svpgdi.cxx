@@ -66,16 +66,20 @@ rDevice
 
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
 
-#define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
+#   define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
 
-struct cairo_rectangle_int_t
-{
-    double x;
-    double y;
-    double width;
-    double height;
-};
+    struct cairo_rectangle_int_t
+    {
+        double x;
+        double y;
+        double width;
+        double height;
+    };
 
+#endif
+
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 12, 0)
+#   define cairo_surface_create_similar_image cairo_surface_create_similar
 #endif
 
 namespace
@@ -367,6 +371,16 @@ bool SvpSalGraphics::drawTransformedBitmap(
 
 namespace
 {
+    cairo_format_t getCairoFormat(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+    {
+        cairo_format_t nFormat;
+        if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
+            nFormat = CAIRO_FORMAT_ARGB32;
+        else
+            nFormat = CAIRO_FORMAT_A1;
+        return nFormat;
+    }
+
     bool isCairoCompatible(const basebmp::BitmapDeviceSharedPtr &rBuffer)
     {
         if (!rBuffer)
@@ -378,11 +392,7 @@ namespace
 
         basegfx::B2IVector size = rBuffer->getSize();
         sal_Int32 nStride = rBuffer->getScanlineStride();
-        cairo_format_t nFormat;
-        if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
-            nFormat = CAIRO_FORMAT_ARGB32;
-        else
-            nFormat = CAIRO_FORMAT_A1;
+        cairo_format_t nFormat = getCairoFormat(rBuffer);
         return (cairo_format_stride_for_width(nFormat, size.getX()) == nStride);
     }
 }
@@ -1080,14 +1090,8 @@ void SvpSalGraphics::copyArea( long nDestX,
                                       long nSrcHeight,
                                       sal_uInt16 /*nFlags*/ )
 {
-    basegfx::B2IBox aSrcRect( nSrcX, nSrcY, nSrcX+nSrcWidth, nSrcY+nSrcHeight );
-    basegfx::B2IBox aDestRect( nDestX, nDestY, nDestX+nSrcWidth, nDestY+nSrcHeight );
-    // fprintf( stderr, "copyArea %ld pixels - clip region %d\n",
-    //         (long)(nSrcWidth * nSrcHeight), m_aClipMap.get() != NULL );
-    SvpSalGraphics::ClipUndoHandle aUndo( this );
-    if( !isClippedSetup( aDestRect, aUndo ) )
-        m_aDevice->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode::Paint, m_aClipMap );
-    dbgOut( m_aDevice );
+    SalTwoRect aTR(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
+    copyBits(aTR, this);
 }
 
 void SvpSalGraphics::copySource( const SalTwoRect& rTR,
@@ -1114,6 +1118,8 @@ void SvpSalGraphics::copySource( const SalTwoRect& rTR,
 void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
                                SalGraphics*      pSrcGraphics )
 {
+    SalTwoRect aTR(rTR);
+
     SvpSalGraphics* pSrc = pSrcGraphics ?
         static_cast<SvpSalGraphics*>(pSrcGraphics) : this;
 
@@ -1124,7 +1130,28 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
         return;
     }
 
-    copySource(rTR, source);
+    if (pSrc == this)
+    {
+        //self copy is a problem, so dup source in that case
+        cairo_surface_t *pCopy = cairo_surface_create_similar_image(source,
+                                            getCairoFormat(m_aOrigDevice),
+                                            aTR.mnSrcWidth,
+                                            aTR.mnSrcHeight);
+
+        cairo_t* cr = cairo_create(pCopy);
+        cairo_set_source_surface(cr, source, -aTR.mnSrcX, -aTR.mnSrcY);
+        cairo_rectangle(cr, 0, 0, aTR.mnSrcWidth, aTR.mnSrcHeight);
+        cairo_fill(cr);
+        cairo_destroy(cr);
+
+        cairo_surface_destroy(source);
+        source = pCopy;
+
+        aTR.mnSrcX = 0;
+        aTR.mnSrcY = 0;
+    }
+
+    copySource(aTR, source);
 
     cairo_surface_destroy(source);
 }
@@ -1321,11 +1348,7 @@ cairo_surface_t* SvpSalGraphics::createCairoSurface(const basebmp::BitmapDeviceS
     sal_Int32 nStride = rBuffer->getScanlineStride();
 
     basebmp::RawMemorySharedArray data = rBuffer->getBuffer();
-    cairo_format_t nFormat;
-    if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
-        nFormat = CAIRO_FORMAT_ARGB32;
-    else
-        nFormat = CAIRO_FORMAT_A1;
+    cairo_format_t nFormat = getCairoFormat(rBuffer);
     cairo_surface_t *target =
         cairo_image_surface_create_for_data(data.get(),
                                         nFormat,
@@ -1420,8 +1443,8 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         unsigned char *true_surface_data = cairo_image_surface_get_data(true_surface);
         unsigned char *xor_surface_data = cairo_image_surface_get_data(surface);
 
-        cairo_format_t nFormat(CAIRO_FORMAT_ARGB32);
-        assert(m_aOrigDevice->getScanlineFormat() == SVP_CAIRO_FORMAT && "need to implement CAIRO_FORMAT_A1 after all here");
+        cairo_format_t nFormat = getCairoFormat(m_aOrigDevice);
+        assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
         sal_Int32 nStride = cairo_format_stride_for_width(nFormat, size.getX());
         for (sal_Int32 y = nExtentsTop; y < nExtentsBottom; ++y)
         {
