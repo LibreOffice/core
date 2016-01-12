@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_ccd89e20",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-01-12T14:55:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_2cddea14",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_8bce8e58",
         "filename": "sc/inc/helpids.h",
         "patchSetId": 6
@@ -470,6 +488,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_cc1d3ebf",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-01-12T14:55:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_ecc48241",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_0b30de55",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 6
@@ -517,6 +553,24 @@
       "side": 1,
       "message": "Those 3 should go into te saFuncTableOOoLO table then.",
       "parentUuid": "dab17558_1e4dbe72",
+      "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2c796afd",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-01-12T14:55:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_ccc1be30",
       "revId": "5bbe6dd7cf4228921421d3f3cd96c7b6466ee9f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
