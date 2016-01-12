@@ -109,6 +109,8 @@ bool SdPPTFilter::Import()
 
                     if ( !bRet )
                         mrMedium.SetError( SVSTREAM_WRONGVERSION, OSL_LOG_PREFIX );
+                    pLibrary->release(); //TODO: let it get unloaded?
+                    delete pLibrary;
                 }
 #else
                 bRet = ImportPPT( &mrDocument, *pDocStream, *pStorage, mrMedium );
