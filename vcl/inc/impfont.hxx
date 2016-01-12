@@ -34,15 +34,15 @@
 class ImplFontCharMap;
 typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
 
-// - Impl_Font -
+// - ImplFont -
 
-class Impl_Font
+class ImplFont
 {
 public:
-                        Impl_Font();
-                        Impl_Font( const Impl_Font& );
+                        ImplFont();
+                        ImplFont( const ImplFont& );
 
-    bool                operator==( const Impl_Font& ) const;
+    bool                operator==( const ImplFont& ) const;
 
     FontPitch           GetPitch()      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }
     FontFamily          GetFamily()     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
@@ -83,8 +83,8 @@ private:
                         mbVertical:1,
                         mbTransparent:1;    // compatibility, now on output device
 
-    friend SvStream&    ReadImpl_Font( SvStream& rIStm, Impl_Font& );
-    friend SvStream&    WriteImpl_Font( SvStream& rOStm, const Impl_Font& );
+    friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
+    friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );
 };
 
 // - ImplFontMetric -
