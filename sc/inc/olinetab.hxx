@@ -23,7 +23,8 @@
 #include "scdllapi.h"
 #include "address.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
+#include <map>
 
 #define SC_OL_MAXDEPTH      7
 
@@ -63,7 +64,7 @@ public:
 
 class ScOutlineCollection
 {
-    typedef boost::ptr_map<SCCOLROW, ScOutlineEntry> MapType;
+    typedef std::map<SCCOLROW, std::unique_ptr<ScOutlineEntry>> MapType;
     MapType maEntries;
 
 public:
@@ -74,7 +75,7 @@ public:
 
     size_t size() const;
     void clear();
-    void insert(ScOutlineEntry* pEntry);
+    void insert(std::unique_ptr<ScOutlineEntry> pEntry);
     iterator begin();
     iterator end();
     const_iterator begin() const;

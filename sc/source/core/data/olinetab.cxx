@@ -25,6 +25,8 @@
 #include "address.hxx"
 #include "table.hxx"
 
+#include <o3tl/make_unique.hxx>
+
 #include <osl/diagnose.h>
 
 ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden ) :
@@ -97,10 +99,10 @@ void ScOutlineCollection::clear()
     maEntries.clear();
 }
 
-void ScOutlineCollection::insert(ScOutlineEntry* pEntry)
+void ScOutlineCollection::insert(std::unique_ptr<ScOutlineEntry> pEntry)
 {
     SCCOLROW nStart = pEntry->GetStart();
-    maEntries.insert(nStart, pEntry);
+    maEntries.insert(std::make_pair(nStart, std::move(pEntry)));
 }
 
 ScOutlineCollection::iterator ScOutlineCollection::begin()
@@ -150,8 +152,8 @@ ScOutlineArray::ScOutlineArray( const ScOutlineArray& rArray ) :
         ScOutlineCollection::const_iterator it = rColl.begin(), itEnd = rColl.end();
         for (; it != itEnd; ++it)
         {
-            const ScOutlineEntry* pEntry = it->second;
-            aCollections[nLevel].insert(new ScOutlineEntry(*pEntry));
+            const ScOutlineEntry *const pEntry = it->second.get();
+            aCollections[nLevel].insert(o3tl::make_unique<ScOutlineEntry>(ScOutlineEntry(*pEntry)));
         }
     }
 }
@@ -171,7 +173,7 @@ void ScOutlineArray::FindEntry(
         ScOutlineCollection::iterator it = pCollect->begin(), itEnd = pCollect->end();
         for (; it != itEnd; ++it)
         {
-            ScOutlineEntry* pEntry = it->second;
+            ScOutlineEntry *const pEntry = it->second.get();
             if (pEntry->GetStart() <= nSearchPos && pEntry->GetEnd() >= nSearchPos)
             {
                 rFindLevel = nLevel + 1; // Next Level (for insertion)
@@ -242,7 +244,7 @@ bool ScOutlineArray::Insert(
             ScOutlineCollection::iterator it = rColl.begin(), itEnd = rColl.end();
             while (it != itEnd)
             {
-                ScOutlineEntry* pEntry = it->second;
+                ScOutlineEntry *const pEntry = it->second.get();
                 SCCOLROW nEntryStart = pEntry->GetStart();
                 if (nEntryStart >= nStartCol && nEntryStart <= nEndCol)
                 {
@@ -251,7 +253,7 @@ bool ScOutlineArray::Insert(
                         rSizeChanged = false; // No more room
                         return false;
                     }
-                    aCollections[nMoveLevel+1].insert(new ScOutlineEntry(*pEntry));
+                    aCollections[nMoveLevel+1].insert(o3tl::make_unique<ScOutlineEntry>(*pEntry));
                     size_t nPos = std::distance(rColl.begin(), it);
                     rColl.erase(it);
                     it = rColl.begin();
@@ -280,9 +282,9 @@ bool ScOutlineArray::Insert(
         rSizeChanged = true;
     }
 
-    ScOutlineEntry* pNewEntry = new ScOutlineEntry( nStartCol, nEndCol+1-nStartCol, bHidden );
+    std::unique_ptr<ScOutlineEntry> pNewEntry(new ScOutlineEntry(nStartCol, nEndCol+1-nStartCol, bHidden));
     pNewEntry->SetVisible( bVisible );
-    aCollections[nLevel].insert(pNewEntry);
+    aCollections[nLevel].insert(std::move(pNewEntry));
 
     return true;
 }
@@ -299,7 +301,7 @@ bool ScOutlineArray::FindTouchedLevel(
         ScOutlineCollection::const_iterator it = pCollect->begin(), itEnd = pCollect->end();
         for (; it != itEnd; ++it)
         {
-            const ScOutlineEntry* pEntry = it->second;
+            const ScOutlineEntry *const pEntry = it->second.get();
             SCCOLROW nStart = pEntry->GetStart();
             SCCOLROW nEnd   = pEntry->GetEnd();
 
@@ -325,7 +327,7 @@ void ScOutlineArray::RemoveSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nLev
     ScOutlineCollection::iterator it = rColl.begin(), itEnd = rColl.end();
     while (it != itEnd)
     {
-        ScOutlineEntry* pEntry = it->second;
+        ScOutlineEntry *const pEntry = it->second.get();
         SCCOLROW nStart = pEntry->GetStart();
         SCCOLROW nEnd   = pEntry->GetEnd();
         if (nStart >= nStartPos && nEnd <= nEndPos)
@@ -349,7 +351,7 @@ void ScOutlineArray::RemoveSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nLev
 
     while (it != itEnd)
     {
-        ScOutlineEntry* pEntry = it->second;
+        ScOutlineEntry *const pEntry = it->second.get();
         SCCOLROW nStart = pEntry->GetStart();
         SCCOLROW nEnd   = pEntry->GetEnd();
 
@@ -383,12 +385,12 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
         ScOutlineCollection::iterator it = rColl.begin(), itEnd = rColl.end();
         while (it != itEnd)
         {
-            ScOutlineEntry* pEntry = it->second;
+            ScOutlineEntry *const pEntry = it->second.get();
             SCCOLROW nStart = pEntry->GetStart();
             SCCOLROW nEnd   = pEntry->GetEnd();
             if (nStart >= nStartPos && nEnd <= nEndPos)
             {
-                aCollections[nLevel-1].insert(new ScOutlineEntry(*pEntry));
+                aCollections[nLevel-1].insert(o3tl::make_unique<ScOutlineEntry>(*pEntry));
 
                 // Re-calc iterator positions after the tree gets invalidated
                 size_t nPos = std::distance(rColl.begin(), it);
@@ -406,12 +408,12 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
 
         while (it != itEnd)
         {
-            ScOutlineEntry* pEntry = it->second;
+            ScOutlineEntry *const pEntry = it->second.get();
             SCCOLROW nStart = pEntry->GetStart();
             SCCOLROW nEnd   = pEntry->GetEnd();
             if (nStart >= nStartPos && nEnd <= nEndPos)
             {
-                aCollections[nLevel-1].insert(new ScOutlineEntry(*pEntry));
+                aCollections[nLevel-1].insert(o3tl::make_unique<ScOutlineEntry>(*pEntry));
 
                 // Re-calc iterator positions after the tree gets invalidated
                 size_t nPos = std::distance(rColl.begin(), it);
@@ -461,7 +463,7 @@ bool ScOutlineArray::Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, bool& rSi
     bool bAny = false;
     while (it != itEnd)
     {
-        ScOutlineEntry* pEntry = it->second;
+        ScOutlineEntry *const pEntry = it->second.get();
         SCCOLROW nStart = pEntry->GetStart();
         SCCOLROW nEnd   = pEntry->GetEnd();
         if (nBlockStart <= nEnd && nBlockEnd >= nStart)
@@ -495,7 +497,7 @@ ScOutlineEntry* ScOutlineArray::GetEntry(size_t nLevel, size_t nIndex)
 
     ScOutlineCollection::iterator it = rColl.begin();
     std::advance(it, nIndex);
-    return it->second;
+    return it->second.get();
 }
 
 const ScOutlineEntry* ScOutlineArray::GetEntry(size_t nLevel, size_t nIndex) const
@@ -509,7 +511,7 @@ const ScOutlineEntry* ScOutlineArray::GetEntry(size_t nLevel, size_t nIndex) con
 
     ScOutlineCollection::const_iterator it = rColl.begin();
     std::advance(it, nIndex);
-    return it->second;
+    return it->second.get();
 }
 
 size_t ScOutlineArray::GetCount(size_t nLevel) const
@@ -529,7 +531,7 @@ const ScOutlineEntry* ScOutlineArray::GetEntryByPos(size_t nLevel, SCCOLROW nPos
     ScOutlineCollection::const_iterator it = rColl.begin(), itEnd = rColl.end();
     for (; it != itEnd; ++it)
     {
-        const ScOutlineEntry* pEntry = it->second;
+        const ScOutlineEntry *const pEntry = it->second.get();
         if (pEntry->GetStart() <= nPos && nPos <= pEntry->GetEnd())
             return pEntry;
     }
@@ -547,7 +549,7 @@ bool ScOutlineArray::GetEntryIndex(size_t nLevel, SCCOLROW nPos, size_t& rnIndex
     ScOutlineCollection::const_iterator it = rColl.begin(), itEnd = rColl.end();
     for (; it != itEnd; ++it)
     {
-        const ScOutlineEntry* p = it->second;
+        const ScOutlineEntry *const p = it->second.get();
         if (p->GetStart() <= nPos && nPos <= p->GetEnd())
         {
             rnIndex = std::distance(rColl.begin(), it);
@@ -568,7 +570,7 @@ bool ScOutlineArray::GetEntryIndexInRange(
     ScOutlineCollection::const_iterator it = rColl.begin(), itEnd = rColl.end();
     for (; it != itEnd; ++it)
     {
-        const ScOutlineEntry* p = it->second;
+        const ScOutlineEntry *const p = it->second.get();
         if (nBlockStart <= p->GetStart() && p->GetEnd() <= nBlockEnd)
         {
             rnIndex = std::distance(rColl.begin(), it);
@@ -594,7 +596,7 @@ void ScOutlineArray::SetVisibleBelow(
         ScOutlineCollection::iterator it = rColl.begin(), itEnd = rColl.end();
         for (; it != itEnd; ++it)
         {
-            ScOutlineEntry* p = it->second;
+            ScOutlineEntry *const  p = it->second.get();
             if (p->GetStart() >= nStart && p->GetEnd() <= nEnd)
             {
                 p->SetVisible(bValue);
@@ -634,7 +636,7 @@ void ScOutlineArray::ExtendBlock(size_t nLevel, SCCOLROW& rBlkStart, SCCOLROW& r
     ScOutlineCollection::const_iterator it = rColl.begin(), itEnd = rColl.end();
     for (; it != itEnd; ++it)
     {
-        const ScOutlineEntry* pEntry = it->second;
+        const ScOutlineEntry *const pEntry = it->second.get();
         SCCOLROW nStart = pEntry->GetStart();
         SCCOLROW nEnd   = pEntry->GetEnd();
 
@@ -824,7 +826,7 @@ ScSubOutlineIterator::ScSubOutlineIterator(
     const ScOutlineCollection& rColl = pArray->aCollections[nLevel];
     ScOutlineCollection::const_iterator it = rColl.begin();
     std::advance(it, nEntry);
-    const ScOutlineEntry* pEntry = it->second;
+    const ScOutlineEntry* pEntry = it->second.get();
     nStart = pEntry->GetStart();
     nEnd   = pEntry->GetEnd();
     nSubLevel = nLevel + 1;
@@ -846,7 +848,7 @@ ScOutlineEntry* ScSubOutlineIterator::GetNext()
         {
             ScOutlineCollection::iterator it = rColl.begin();
             std::advance(it, nSubEntry);
-            pEntry = it->second;
+            pEntry = it->second.get();
 
             if (pEntry->GetStart() >= nStart && pEntry->GetEnd() <= nEnd)
                 bFound = true;
