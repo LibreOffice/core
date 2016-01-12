@@ -47,7 +47,7 @@ public:
         : Idle( "gl idle swap" )
         , m_pImpl( pImpl )
     {
-        SetPriority( SchedulerPriority::HIGHEST );
+        SetPriority( SchedulerPriority::LOW );
     }
     virtual ~OpenGLFlushIdle()
     {
