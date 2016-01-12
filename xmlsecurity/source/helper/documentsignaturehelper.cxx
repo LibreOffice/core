@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace
@@ -300,27 +301,34 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 
     SignatureStreamHelper aHelper;
 
-    try
-    {
-        OUString aSIGStoreName(  "META-INF"  );
-        aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
-        if ( aHelper.xSignatureStorage.is() )
-        {
-            OUString aSIGStreamName;
-            if ( eDocSigMode == SignatureModeDocumentContent )
-                aSIGStreamName = DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName();
-            else if ( eDocSigMode == SignatureModeMacros )
-                aSIGStreamName = DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName();
-            else
-                aSIGStreamName = DocumentSignatureHelper::GetPackageSignatureDefaultStreamName();
+    uno::Reference<container::XNameAccess> xNameAccess(rxStore, uno::UNO_QUERY);
+    if (!xNameAccess.is())
+        return aHelper;
 
-            aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
-        }
-    }
-    catch(css::io::IOException& )
+    if (xNameAccess->hasByName("META-INF"))
     {
-        // Doesn't have to exist...
-        DBG_ASSERT( nOpenMode == css::embed::ElementModes::READ, "Error creating signature stream..." );
+        try
+        {
+            OUString aSIGStoreName(  "META-INF"  );
+            aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
+            if ( aHelper.xSignatureStorage.is() )
+            {
+                OUString aSIGStreamName;
+                if ( eDocSigMode == SignatureModeDocumentContent )
+                    aSIGStreamName = DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName();
+                else if ( eDocSigMode == SignatureModeMacros )
+                    aSIGStreamName = DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName();
+                else
+                    aSIGStreamName = DocumentSignatureHelper::GetPackageSignatureDefaultStreamName();
+
+                aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
+            }
+        }
+        catch(css::io::IOException& )
+        {
+            // Doesn't have to exist...
+            DBG_ASSERT( nOpenMode == css::embed::ElementModes::READ, "Error creating signature stream..." );
+        }
     }
 
     return aHelper;
