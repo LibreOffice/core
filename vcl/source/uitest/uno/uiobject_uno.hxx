@@ -43,6 +43,9 @@ public:
     void SAL_CALL executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& xPropValues)
         throw (css::uno::RuntimeException, std::exception) override;
 
+    css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getState()
+        throw (css::uno::RuntimeException, std::exception) override;
+
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
 

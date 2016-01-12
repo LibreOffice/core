@@ -19,6 +19,8 @@ interface XUIObject
     XUIObject getChild([in] string id);
 
     void executeAction([in] string action, [in] com::sun::star::beans::PropertyValues propValues);
+
+    com::sun::star::beans::PropertyValues getState();
 };
 
 }; }; }; }; };
