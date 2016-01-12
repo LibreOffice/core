@@ -3876,7 +3876,9 @@ aAnimationNodeTypeInMap = {
     'animatemotion'     : ANIMATION_NODE_ANIMATEMOTION,
     'animatecolor'      : ANIMATION_NODE_ANIMATECOLOR,
     'animatetransform'  : ANIMATION_NODE_ANIMATETRANSFORM,
-    'transitionfilter'  : ANIMATION_NODE_TRANSITIONFILTER
+    'transitionfilter'  : ANIMATION_NODE_TRANSITIONFILTER,
+    'audio'             : ANIMATION_NODE_AUDIO,
+    'command'           : ANIMATION_NODE_COMMAND
 };
 
 
@@ -5246,7 +5248,7 @@ BaseNode.prototype.parseElement = function()
     {
         this.eFillMode = ( this.aEnd ||
                            ( this.nReapeatCount != 1) ||
-                           this.aDuration )
+                           ( this.aDuration && !this.aDuration.isIndefinite() ) )
                               ? FILL_MODE_REMOVE
                               : FILL_MODE_FREEZE;
     }
@@ -7158,6 +7160,12 @@ function createAnimationNode( aElement, aParentNode, aNodeContext )
         case ANIMATION_NODE_TRANSITIONFILTER:
             aCreatedNode = new AnimationTransitionFilterNode( aElement, aParentNode, aNodeContext );
             break;
+         case ANIMATION_NODE_AUDIO:
+            log( 'createAnimationNode: AUDIO not implemented' );
+            return null;
+         case ANIMATION_NODE_COMMAND:
+            log( 'createAnimationNode: COMMAND not implemented' );
+            return null;
         default:
             log( 'createAnimationNode: invalid Animation Node Type: ' + eAnimationNodeType );
             return null;
