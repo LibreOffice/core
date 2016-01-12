@@ -21,7 +21,8 @@
 #define INCLUDED_SC_INC_UNITCONV_HXX
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
+
+#include <map>
 
 class ScUnitConverterData
 {
@@ -44,7 +45,7 @@ public:
 
 class ScUnitConverter : public boost::noncopyable
 {
-    typedef boost::ptr_map<OUString, ScUnitConverterData> MapType;
+    typedef std::map<OUString, ScUnitConverterData> MapType;
     MapType maData;
 
 public:
