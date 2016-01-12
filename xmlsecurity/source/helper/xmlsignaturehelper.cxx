@@ -41,6 +41,7 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -390,7 +391,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(mxCtx);
 
     // Create the signature reader.
-    uno::Reference<xml::sax::XDocumentHandler> xHandler = mpXSecController->createSignatureReader();
+    uno::Reference<xml::sax::XDocumentHandler> xHandler = mpXSecController->createSignatureReader(embed::StorageFormats::OFOPXML);
 
     // Create the signature listener.
     ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(

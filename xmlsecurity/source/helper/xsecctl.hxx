@@ -463,7 +463,7 @@ public:
      */
     void collectToVerify( const OUString& referenceId );
     void addSignature( sal_Int32 nSignatureId );
-    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > createSignatureReader();
+    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > createSignatureReader(sal_Int32 nType = 0);
     void releaseSignatureReader();
 
 public:
