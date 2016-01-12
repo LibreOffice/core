@@ -386,6 +386,30 @@ void RtfExport::WriteMainText()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
+    if (boost::optional<SvxBrushItem> oBrush = getBackground())
+    {
+        Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_VIEWBKSP).WriteChar('1');
+        Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BACKGROUND);
+        Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP);
+        Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
+
+        std::vector< std::pair<OString, OString> > aProperties;
+        aProperties.push_back(std::make_pair<OString, OString>("shapeType", "1"));
+        aProperties.push_back(std::make_pair<OString, OString>("fillColor", OString::number(msfilter::util::BGRToRGB(oBrush->GetColor().GetColor()))));
+        for (size_t i = 0; i < aProperties.size(); ++i)
+        {
+            Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
+            Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");
+            Strm().WriteCharPtr(aProperties[i].first.getStr());
+            Strm().WriteCharPtr("}{" OOO_STRING_SVTOOLS_RTF_SV " ");
+            Strm().WriteCharPtr(aProperties[i].second.getStr());
+            Strm().WriteCharPtr("}}");
+        }
+        Strm().WriteChar('}'); // shpinst
+        Strm().WriteChar('}'); // shp
+        Strm().WriteChar('}'); // background
+    }
+
     SwTableNode* pTableNode = m_pCurPam->GetNode().FindTableNode();
     if (m_pWriter && m_pWriter->bWriteOnlyFirstTable
             && pTableNode != nullptr)
