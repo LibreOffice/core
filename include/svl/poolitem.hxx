@@ -247,7 +247,7 @@ inline bool IsInvalidItem(const SfxPoolItem *pItem)
     return pItem == reinterpret_cast<SfxPoolItem *>(-1);
 }
 
-class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxVoidItem final: public SfxPoolItem
 {
     SfxVoidItem & operator=( const SfxVoidItem& ) = delete;
 public:

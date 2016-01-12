@@ -177,7 +177,7 @@ public:
     virtual MetaAction* createBeginComment() const override;
 };
 
-class EDITENG_DLLPUBLIC SvxPageField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxPageField final: public SvxFieldData
 {
 public:
     SV_DECL_PERSIST1( SvxPageField, SvxFieldData, css::text::textfield::Type::PAGE )
@@ -189,7 +189,7 @@ public:
     virtual MetaAction* createBeginComment() const override;
 };
 
-class EDITENG_DLLPUBLIC SvxPageTitleField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxPageTitleField final: public SvxFieldData
 {
 public:
     SV_DECL_PERSIST1( SvxPageTitleField, SvxFieldData, css::text::textfield::Type::PAGE_NAME )
@@ -201,7 +201,7 @@ public:
     virtual MetaAction* createBeginComment() const override;
 };
 
-class EDITENG_DLLPUBLIC SvxPagesField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxPagesField final: public SvxFieldData
 {
 public:
     SV_DECL_PERSIST1( SvxPagesField, SvxFieldData, css::text::textfield::Type::PAGES )
@@ -211,7 +211,7 @@ public:
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
-class EDITENG_DLLPUBLIC SvxTimeField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxTimeField final: public SvxFieldData
 {
 public:
     SV_DECL_PERSIST1( SvxTimeField, SvxFieldData, css::text::textfield::Type::TIME )
@@ -223,7 +223,7 @@ public:
     virtual MetaAction* createBeginComment() const override;
 };
 
-class EDITENG_DLLPUBLIC SvxFileField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxFileField final: public SvxFieldData
 {
 public:
     SV_DECL_PERSIST1( SvxFileField, SvxFieldData, css::text::textfield::Type::DOCINFO_TITLE )
@@ -233,7 +233,7 @@ public:
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
-class EDITENG_DLLPUBLIC SvxTableField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxTableField final: public SvxFieldData
 {
     int mnTab;
 public:
@@ -378,7 +378,7 @@ public:
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
     value is stored at the page */
-class EDITENG_DLLPUBLIC SvxHeaderField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxHeaderField final: public SvxFieldData
 {
 public:
     SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, css::text::textfield::Type::PRESENTATION_HEADER )
@@ -390,7 +390,7 @@ public:
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
     value is stored at the page */
-class EDITENG_DLLPUBLIC SvxFooterField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxFooterField final: public SvxFieldData
 {
 public:
     SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, css::text::textfield::Type::PRESENTATION_FOOTER )
@@ -401,7 +401,7 @@ public:
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
     value is stored at the page */
-class EDITENG_DLLPUBLIC SvxDateTimeField : public SvxFieldData
+class EDITENG_DLLPUBLIC SvxDateTimeField final: public SvxFieldData
 {
 public:
     SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, css::text::textfield::Type::PRESENTATION_DATE_TIME )

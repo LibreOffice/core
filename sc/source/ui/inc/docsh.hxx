@@ -80,7 +80,7 @@ typedef std::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 #define SC_PF_TESTMERGE     2
 #define SC_PF_WHOLEROWS     4
 
-class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
+class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
 {
     ScDocument          aDocument;
 
