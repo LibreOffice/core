@@ -28,11 +28,22 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
     return new UIObjectUnoObj(std::move(pObj));
 }
 
-void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction)
+void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rPropValues)
     throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    mpObj->execute(rAction, StringMap());
+    StringMap aMap;
+    for (sal_Int32 i = 0, n = rPropValues.getLength(); i < n; ++i)
+    {
+        OUString aVal;
+        if (!(rPropValues[i].Value >>= aVal))
+            continue;
+
+        aMap[rPropValues[i].Name] = aVal;
+    }
+    mpObj->execute(rAction, aMap);
+}
+
 }
 
 OUString SAL_CALL UIObjectUnoObj::getImplementationName()

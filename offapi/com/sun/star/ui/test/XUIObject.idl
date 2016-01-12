@@ -10,13 +10,15 @@
 #ifndef __com_sun_star_ui_test_XUIObject_idl__
 #define __com_sun_star_ui_test_XUIObject_idl__
 
+#include <com/sun/star/beans/PropertyValues.idl>
+
 module com { module sun { module star { module ui { module test {
 
 interface XUIObject
 {
     XUIObject getChild([in] string id);
 
-    void executeAction([in] string action);
+    void executeAction([in] string action, [in] com::sun::star::beans::PropertyValues propValues);
 };
 
 }; }; }; }; };
