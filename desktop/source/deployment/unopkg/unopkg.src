@@ -64,7 +64,7 @@ String RID_STR_UNOPKG_ACCEPT_LIC_N
 
 String RID_STR_CONCURRENTINSTANCE
 {
-    Text [ en-US ] = "unopkg cannot be started. The lock file indicates it as already running. "
+    Text [ en-US ] = "unopkg cannot be started. The lock file indicates it is already running. "
         "If this does not apply, delete the lock file at:";
 };
 
