@@ -82,6 +82,7 @@ private:
     bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
     void ensureClip();
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
+    void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
 protected:
     vcl::Region                         m_aClipRegion;
     SvpCairoTextRender                  m_aTextRenderImpl;

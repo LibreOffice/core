@@ -1090,36 +1090,9 @@ void SvpSalGraphics::copyArea( long nDestX,
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::copyBits( const SalTwoRect& rPosAry,
-                               SalGraphics*      pSrcGraphics )
+void SvpSalGraphics::copySource( const SalTwoRect& rTR,
+                                 cairo_surface_t* source )
 {
-    if( !m_aDevice.get() )
-        return;
-
-    SvpSalGraphics* pSrc = pSrcGraphics ?
-        static_cast<SvpSalGraphics*>(pSrcGraphics) : this;
-    basegfx::B2IBox aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
-                     rPosAry.mnSrcX+rPosAry.mnSrcWidth,
-                     rPosAry.mnSrcY+rPosAry.mnSrcHeight );
-    basegfx::B2IBox aDestRect( rPosAry.mnDestX, rPosAry.mnDestY,
-                      rPosAry.mnDestX+rPosAry.mnDestWidth,
-                      rPosAry.mnDestY+rPosAry.mnDestHeight );
-
-    SvpSalGraphics::ClipUndoHandle aUndo( this );
-    if( !isClippedSetup( aDestRect, aUndo ) )
-        m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode::Paint, m_aClipMap );
-    dbgOut( m_aDevice );
-}
-
-void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
-{
-    SourceHelper aSurface(rSourceBitmap);
-    cairo_surface_t* source = aSurface.getSurface();
-    if (!source)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
-    }
-
     cairo_t* cr = getCairoContext(false);
     assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
@@ -1136,6 +1109,36 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
     cairo_paint(cr);
 
     releaseCairoContext(cr, false, extents);
+}
+
+void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
+                               SalGraphics*      pSrcGraphics )
+{
+    SvpSalGraphics* pSrc = pSrcGraphics ?
+        static_cast<SvpSalGraphics*>(pSrcGraphics) : this;
+
+    cairo_surface_t* source = SvpSalGraphics::createCairoSurface(pSrc->m_aOrigDevice);
+    if (!source)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawBitmap case");
+        return;
+    }
+
+    copySource(rTR, source);
+
+    cairo_surface_destroy(source);
+}
+
+void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
+{
+    SourceHelper aSurface(rSourceBitmap);
+    cairo_surface_t* source = aSurface.getSurface();
+    if (!source)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawBitmap case");
+    }
+
+    copySource(rTR, source);
 }
 
 void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
