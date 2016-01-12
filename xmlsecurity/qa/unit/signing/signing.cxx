@@ -32,7 +32,7 @@
 #include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX)
 
 using namespace com::sun::star;
 

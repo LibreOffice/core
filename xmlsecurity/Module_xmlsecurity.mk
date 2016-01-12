@@ -15,12 +15,9 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	$(if $(filter-out ANDROID IOS,$(OS)),Library_xsec_xmlsec) \
 ))
 
-# FIXME find out what's the proper fix to get this linked on Windows
-ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_signing \
 ))
-endif
 
 $(eval $(call gb_Module_add_l10n_targets,xmlsecurity,\
 	AllLangResTarget_xsec \

@@ -17,6 +17,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,xmlsecurity_signing, \
 
 $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_signing, \
 	comphelper \
+	cppuhelper \
 	cppu \
 	sal \
 	sax \
