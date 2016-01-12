@@ -19,6 +19,8 @@
 
 #include "formel.hxx"
 
+#include <o3tl/make_unique.hxx>
+
 _ScRangeListTabs::_ScRangeListTabs()
 {
 }
@@ -55,12 +57,12 @@ void _ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab, const bool b )
     if (nTab < 0 || MAXTAB < nTab)
         return;
 
-    TabRangeType::iterator itr = maTabRanges.find(nTab);
-    if (itr == maTabRanges.end())
+    TabRangeType::iterator itr = m_TabRanges.find(nTab);
+    if (itr == m_TabRanges.end())
     {
         // No entry for this table yet.  Insert a new one.
         std::pair<TabRangeType::iterator, bool> r =
-            maTabRanges.insert(nTab, new RangeListType);
+            m_TabRanges.insert(std::make_pair(nTab, o3tl::make_unique<RangeListType>()));
 
         if (!r.second)
             // Insertion failed.
@@ -125,12 +127,12 @@ void _ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab, bool b )
     if (nTab < 0 || MAXTAB < nTab)
         return;
 
-    TabRangeType::iterator itr = maTabRanges.find(nTab);
-    if (itr == maTabRanges.end())
+    TabRangeType::iterator itr = m_TabRanges.find(nTab);
+    if (itr == m_TabRanges.end())
     {
         // No entry for this table yet.  Insert a new one.
         std::pair<TabRangeType::iterator, bool> r =
-            maTabRanges.insert(nTab, new RangeListType);
+            m_TabRanges.insert(std::make_pair(nTab, o3tl::make_unique<RangeListType>()));
 
         if (!r.second)
             // Insertion failed.
@@ -145,8 +147,8 @@ const ScRange* _ScRangeListTabs::First( SCTAB n )
 {
     OSL_ENSURE( ValidTab(n), "-_ScRangeListTabs::First(): Good bye!" );
 
-    TabRangeType::iterator itr = maTabRanges.find(n);
-    if (itr == maTabRanges.end())
+    TabRangeType::iterator itr = m_TabRanges.find(n);
+    if (itr == m_TabRanges.end())
         // No range list exists for this table.
         return nullptr;
 

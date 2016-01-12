@@ -26,8 +26,9 @@
 #include "root.hxx"
 #include "tokstack.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
 #include <vector>
+#include <map>
 
 namespace svl {
 
@@ -60,8 +61,8 @@ enum FORMULA_TYPE
 class _ScRangeListTabs
 {
     typedef ::std::vector<ScRange> RangeListType;
-    typedef ::boost::ptr_map<SCTAB, RangeListType> TabRangeType;
-    TabRangeType maTabRanges;
+    typedef ::std::map<SCTAB, std::unique_ptr<RangeListType>> TabRangeType;
+    TabRangeType m_TabRanges;
     RangeListType::const_iterator maItrCur;
     RangeListType::const_iterator maItrCurEnd;
 
@@ -75,7 +76,7 @@ public:
     const ScRange* First ( SCTAB nTab = 0 );
     const ScRange* Next ();
 
-    bool HasRanges () const { return !maTabRanges.empty(); }
+    bool HasRanges () const { return !m_TabRanges.empty(); }
 };
 
 class ConverterBase
