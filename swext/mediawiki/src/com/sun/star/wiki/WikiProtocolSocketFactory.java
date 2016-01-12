@@ -171,8 +171,6 @@ class WikiProtocolSocketFactory extends SSLSocketFactory
 // to stderr - useful for debugging encrypted TLS connections
 class LoggingProtocolSocketFactory extends SSLSocketFactory
 {
-    private SSLContext m_aSSLContext;
-
     private static class LogSocket extends SSLSocket
     {
         private final SSLSocket m_Socket;

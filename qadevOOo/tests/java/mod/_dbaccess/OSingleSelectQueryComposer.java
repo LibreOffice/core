@@ -23,7 +23,6 @@ import java.io.PrintWriter;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.DBTools;
 import util.utils;
 
 import com.sun.star.beans.XPropertySet;
@@ -32,7 +31,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
-import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbcx.XColumnsSupplier;

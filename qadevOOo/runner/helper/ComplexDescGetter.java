@@ -147,7 +147,7 @@ public class ComplexDescGetter extends DescGetter
      * @param testMethodNames list of all methods to test
      * @return filled description entry
      */
-    public DescEntry createTestDesc(String testObjectName, String className, String[] testMethodNames, LogWriter log)
+    private DescEntry createTestDesc(String testObjectName, String className, String[] testMethodNames, LogWriter log)
     {
 
         DescEntry dEntry = new DescEntry();

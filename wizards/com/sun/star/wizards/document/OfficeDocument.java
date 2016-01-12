@@ -17,7 +17,6 @@
  */
 package com.sun.star.wizards.document;
 
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;

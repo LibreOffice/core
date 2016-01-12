@@ -49,7 +49,6 @@ public class _XDataPilotTable {
     private XCell xCellForChange = null;
     private XCell xCellForCheck = null;
     private CellAddress OutputRange = null;
-    private int changeValue = 0;
 
     /**
      * The test parameters
@@ -72,7 +71,6 @@ public class _XDataPilotTable {
         xCellForChange = (XCell)param.get("CELLFORCHANGE");
         xCellForCheck = (XCell)param.get("CELLFORCHECK");
         OutputRange = (CellAddress)param.get("OUTPUTRANGE");
-        changeValue = ((Integer)param.get("CHANGEVALUE")).intValue();
 
         if (xCellForChange == null || OutputRange == null ||
                 xCellForCheck == null) {

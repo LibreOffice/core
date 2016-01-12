@@ -120,10 +120,8 @@ public class ProcessHandler
     private boolean isStarted = false;
     private long mTimeOut = 0;
     private Pump stdout = null;
-    private Pump stderr = null;
     private PrintStream stdIn = null;
     private Process m_aProcess = null;
-    private TestParameters param = null;
     private boolean debug = false;
     private boolean bUseOutput = true;
 
@@ -212,7 +210,6 @@ public class ProcessHandler
     {
         this(null, log, workDir, null, 0);
         this.cmdLineArray = commands;
-        this.param = param;
         if (shortWait != 0)
         {
             this.mTimeOut = shortWait;
@@ -223,62 +220,6 @@ public class ProcessHandler
         }
         debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
 
-    }
-
-    /**
-     * This method do an asynchronous execution of the commands. To avoid a interruption on long running processes
-     * caused by <CODE>OfficeWatcher</CODE>, the OfficeWatcher get frequently a ping.
-     * @see helper.OfficeWatcher
-     */
-    public void runCommand()
-    {
-
-        boolean changedText = true;
-        String memText = "";
-
-        this.executeAsynchronously();
-
-        OfficeWatcher ow = null;
-        if (param != null)
-        {
-            ow = (OfficeWatcher) param.get(PropertyName.OFFICE_WATCHER);
-        }
-        if (ow != null)
-        {
-            ow.ping();
-        }
-
-        int hangcheck = 10;
-        while (!this.isFinished() && changedText)
-        {
-            waitFor(2000, false); // wait but don't kill
-
-            if (ow != null)
-            {
-                ow.ping();
-            }
-            // check for changes in the output stream. If there are no changes, the process maybe hangs
-            if (!this.isFinished())
-            {
-                hangcheck--;
-                if (hangcheck < 0)
-                {
-                    String sOutputText = getOutputText();
-                    if (sOutputText.length() == memText.length())
-                    {
-                        changedText = false;
-                    }
-                    hangcheck = 10;
-                    memText = this.getOutputText();
-                }
-            }
-        }
-
-        if (!this.isFinished())
-        {
-            dbg("runCommand Process is not finished but there are no changes in output stream.");
-            this.kill();
-        }
     }
 
     /**
@@ -417,7 +358,7 @@ public class ProcessHandler
         }
         dbg("execute: pump io-streams");
         stdout = new Pump(m_aProcess.getInputStream(), log, "out > ", bUseOutput);
-        stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ", bUseOutput);
+        new Pump(m_aProcess.getErrorStream(), log, "err > ", bUseOutput);
         stdIn = new PrintStream(m_aProcess.getOutputStream());
 
         dbg("execute: flush io-streams");
@@ -547,24 +488,6 @@ public class ProcessHandler
             return stdout.getStringBuffer();
         }
     }
-
-    /**
-     * Returns the text output by external command to stderr.
-     * @return the text output by external command to stderr
-     */
-    public String getErrorText()
-    {
-        if (stderr == null)
-        {
-            return "";
-        }
-        else
-        {
-            return stderr.getStringBuffer();
-        }
-    }
-
-
 
     /**
      * Returns information about was the command started or

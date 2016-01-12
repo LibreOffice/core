@@ -45,7 +45,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     private FieldFormatter curFieldFormatter;
     private PrimaryKeyHandler curPrimaryKeyHandler;
     HashMap<String, FieldDescription> fielditems;
-    int wizardmode;
+    private int wizardmode;
     private String tablename;
     private String serrToManyFields;
     private String serrTableNameexists;
@@ -127,7 +127,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     }
 
 
-    public boolean iscompleted(int _ndialogpage)
+    private boolean iscompleted(int _ndialogpage)
     {
         switch (_ndialogpage)
         {

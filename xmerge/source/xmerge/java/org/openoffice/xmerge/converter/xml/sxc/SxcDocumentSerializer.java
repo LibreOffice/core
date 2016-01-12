@@ -24,7 +24,6 @@ import java.util.Iterator;
 
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
-import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.DocumentSerializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.StyleCatalog;

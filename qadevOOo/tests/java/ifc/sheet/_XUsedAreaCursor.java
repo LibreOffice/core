@@ -21,7 +21,6 @@ package ifc.sheet;
 import lib.MultiMethodTest;
 
 import com.sun.star.sheet.XCellRangeAddressable;
-import com.sun.star.sheet.XSheetCellCursor;
 import com.sun.star.sheet.XUsedAreaCursor;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.uno.UnoRuntime;
