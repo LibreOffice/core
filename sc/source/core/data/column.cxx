@@ -1909,14 +1909,20 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     // Split the formula grouping at the top and bottom boundaries.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
-    aPos = maCells.position(aPos.first, nEndRow+1);
-    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
+    if (ValidRow(nEndRow+1))
+    {
+        aPos = maCells.position(aPos.first, nEndRow+1);
+        sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
+    }
 
     // Do the same with the destination column.
     aPos = rCol.maCells.position(nStartRow);
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
-    aPos = rCol.maCells.position(aPos.first, nEndRow+1);
-    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
+    if (ValidRow(nEndRow+1))
+    {
+        aPos = rCol.maCells.position(aPos.first, nEndRow+1);
+        sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
+    }
 
     // Move the broadcasters to the destination column.
     maBroadcasters.transfer(nStartRow, nEndRow, rCol.maBroadcasters, nStartRow);
@@ -1930,8 +1936,11 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);
     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
-    aPos = rCol.maCells.position(aPos.first, nEndRow+1);
-    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+    if (ValidRow(nEndRow+1))
+    {
+        aPos = rCol.maCells.position(aPos.first, nEndRow+1);
+        sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+    }
 
     CellStorageModified();
     rCol.CellStorageModified();
