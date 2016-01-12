@@ -52,8 +52,11 @@ public:
     long                GetExtLeading() const;
     long                GetLineHeight() const;
     long                GetSlant() const;
+    bool                IsScalable() const;
     bool                IsFullstopCentered() const;
     long                GetBulletOffset() const;
+
+    void                SetScalableFlag(bool);
 
     FontMetric&         operator=( const FontMetric& rMetric );
     bool                operator==( const FontMetric& rMetric ) const;
