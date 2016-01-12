@@ -926,6 +926,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                             aFont.SetName( pFontInstance->maFontSelData.mpFontData->GetFamilyName() );
                         else
                             aFont.SetName( pFontInstance->maFontSelData.maTargetName );
+                        pOutDev->mpFontCache->Release(pFontInstance);
                     }
                 }
             }
