@@ -20,12 +20,17 @@
 #ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_INC_DUMMYOBJECT_HXX
 #define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_DUMMYOBJECT_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace embed {
@@ -49,7 +54,8 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper
                         , css::embed::XEmbedPersist >
 {
     ::osl::Mutex    m_aMutex;
-    ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
+    std::unique_ptr<cppu::OMultiTypeInterfaceContainerHelper>
+        m_pInterfaceContainer;
     bool m_bDisposed;
 
     OUString m_aEntryName;
@@ -75,8 +81,7 @@ protected:
 public:
 
     ODummyEmbeddedObject()
-    : m_pInterfaceContainer( nullptr )
-    , m_bDisposed( false )
+    : m_bDisposed( false )
     , m_nObjectState( -1 )
     , m_nCachedAspect( 0 )
     , m_bHasCachedSize( false )

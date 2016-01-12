@@ -30,8 +30,6 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <cppuhelper/interfacecontainer.h>
-
 #include <dummyobject.hxx>
 
 
@@ -594,7 +592,7 @@ void SAL_CALL ODummyEmbeddedObject::addStateChangeListener( const uno::Reference
         return;
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex ));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                         xListener );
@@ -676,7 +674,7 @@ void SAL_CALL ODummyEmbeddedObject::addCloseListener( const uno::Reference< util
         return;
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex ));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
@@ -700,7 +698,7 @@ void SAL_CALL ODummyEmbeddedObject::addEventListener( const uno::Reference< docu
         return;
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex ));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
 }
