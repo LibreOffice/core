@@ -65,7 +65,6 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
     : mpContext(nullptr)
     , mrParent(rParent)
     , mpProvider(pProvider)
-    , mpFramebuffer(nullptr)
     , mpProgram(nullptr)
     , mpFlush(new OpenGLFlushIdle(this))
     , mbUseScissor(false)
@@ -470,13 +469,13 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 
         // TODO: lfrb: User GL_ARB_copy_image?
         OpenGLTexture aNewTex = OpenGLTexture( GetWidth(), GetHeight() );
-        mpFramebuffer = mpContext->AcquireFramebuffer( aNewTex );
+        mpContext->AcquireFramebuffer( aNewTex );
         DrawTexture( maOffscreenTex, aPosAry );
         maOffscreenTex = aNewTex;
     }
     else
     {
-        mpFramebuffer = mpContext->AcquireFramebuffer( maOffscreenTex );
+        mpContext->AcquireFramebuffer( maOffscreenTex );
         CHECK_GL_ERROR();
 
         if( bClearTexture )

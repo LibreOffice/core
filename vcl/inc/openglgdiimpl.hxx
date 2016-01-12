@@ -69,7 +69,6 @@ protected:
     SalGraphics& mrParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mpProvider;
-    OpenGLFramebuffer* mpFramebuffer;
     OpenGLProgram* mpProgram;
 
     /// This idle handler is used to swap buffers after rendering.
