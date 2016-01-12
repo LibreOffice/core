@@ -283,15 +283,22 @@ void DigitalSignaturesDialog::SetStorage( const com::sun::star::uno::Reference <
     Reference < css::packages::manifest::XManifestReader > xReader =
         css::packages::manifest::ManifestReader::create(mxCtx);
 
-    //Get the manifest.xml
-    Reference < css::embed::XStorage > xSubStore(rxStore->openStorageElement(
-                "META-INF", css::embed::ElementModes::READ), UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xNameAccess(rxStore, uno::UNO_QUERY);
+    if (!xNameAccess.is())
+        return;
 
-    Reference< css::io::XInputStream > xStream(
-        xSubStore->openStreamElement("manifest.xml", css::embed::ElementModes::READ),
-        UNO_QUERY_THROW);
+    if (xNameAccess->hasByName("META-INF"))
+    {
+        //Get the manifest.xml
+        Reference < css::embed::XStorage > xSubStore(rxStore->openStorageElement(
+                    "META-INF", css::embed::ElementModes::READ), UNO_QUERY_THROW);
 
-    m_manifest = xReader->readManifestSequence(xStream);
+        Reference< css::io::XInputStream > xStream(
+            xSubStore->openStreamElement("manifest.xml", css::embed::ElementModes::READ),
+            UNO_QUERY_THROW);
+
+        m_manifest = xReader->readManifestSequence(xStream);
+    }
 }
 
 void DigitalSignaturesDialog::SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream )
