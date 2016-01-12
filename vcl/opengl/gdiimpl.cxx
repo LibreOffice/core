@@ -47,7 +47,8 @@ public:
         : Idle( "gl idle swap" )
         , m_pImpl( pImpl )
     {
-        SetPriority( SchedulerPriority::HIGHEST );
+        // We don't want to be swapping before we've painted.
+        SetPriority( SchedulerPriority::POST_PAINT );
     }
     ~OpenGLFlushIdle()
     {
@@ -55,6 +56,7 @@ public:
     virtual void Invoke() override
     {
         m_pImpl->doFlush();
+        SetPriority( SchedulerPriority::HIGHEST );
         Stop();
     }
 };
