@@ -730,6 +730,16 @@ void Dialog::StateChanged( StateChangedType nType )
         ImplInitSettings();
         Invalidate();
     }
+
+    if (!mbModalMode && nType == StateChangedType::Visible)
+    {
+        css::uno::Reference< css::uno::XComponentContext > xContext(
+                            comphelper::getProcessComponentContext() );
+        css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+        css::document::DocumentEvent aObject;
+        aObject.EventName = "ModelessDialogVisible";
+        xEventBroadcaster->documentEventOccured(aObject);
+    }
 }
 
 void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
