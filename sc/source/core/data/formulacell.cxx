@@ -48,6 +48,7 @@
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
 #include <svl/intitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/strbuf.hxx>
 #include "formulagroup.hxx"
 #include "listenercontext.hxx"
@@ -62,7 +63,7 @@
 #include <grouparealistener.hxx>
 
 #include <memory>
-#include <boost/ptr_container/ptr_map.hpp>
+#include <map>
 
 using namespace formula;
 
@@ -553,13 +554,13 @@ struct AreaListenerKey
     }
 };
 
-typedef boost::ptr_map<AreaListenerKey, sc::FormulaGroupAreaListener> AreaListenersType;
+typedef std::map<AreaListenerKey, std::unique_ptr<sc::FormulaGroupAreaListener>> AreaListenersType;
 
 }
 
 struct ScFormulaCellGroup::Impl
 {
-    AreaListenersType maAreaListeners;
+    AreaListenersType m_AreaListeners;
 };
 
 ScFormulaCellGroup::ScFormulaCellGroup() :
@@ -624,31 +625,31 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
 {
     AreaListenerKey aKey(rRange, bStartFixed, bEndFixed);
 
-    AreaListenersType::iterator it = mpImpl->maAreaListeners.lower_bound(aKey);
-    if (it == mpImpl->maAreaListeners.end() || mpImpl->maAreaListeners.key_comp()(aKey, it->first))
+    AreaListenersType::iterator it = mpImpl->m_AreaListeners.lower_bound(aKey);
+    if (it == mpImpl->m_AreaListeners.end() || mpImpl->m_AreaListeners.key_comp()(aKey, it->first))
     {
         // Insert a new one.
-        it = mpImpl->maAreaListeners.insert(
-            it, aKey, new sc::FormulaGroupAreaListener(
-                rRange, *(*ppTopCell)->GetDocument(), (*ppTopCell)->aPos, mnLength, bStartFixed, bEndFixed));
+        it = mpImpl->m_AreaListeners.insert(
+            it, std::make_pair(aKey, o3tl::make_unique<sc::FormulaGroupAreaListener>(
+                rRange, *(*ppTopCell)->GetDocument(), (*ppTopCell)->aPos, mnLength, bStartFixed, bEndFixed)));
     }
 
-    return it->second;
+    return it->second.get();
 }
 
 void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
 {
-    AreaListenersType::iterator it = mpImpl->maAreaListeners.begin(), itEnd = mpImpl->maAreaListeners.end();
+    AreaListenersType::iterator it = mpImpl->m_AreaListeners.begin(), itEnd = mpImpl->m_AreaListeners.end();
     for (; it != itEnd; ++it)
     {
-        sc::FormulaGroupAreaListener* pListener = it->second;
+        sc::FormulaGroupAreaListener *const pListener = it->second.get();
         ScRange aListenRange = pListener->getListeningRange();
         // This "always listen" special range is never grouped.
         bool bGroupListening = (aListenRange != BCA_LISTEN_ALWAYS);
         rDoc.EndListeningArea(aListenRange, bGroupListening, pListener);
     }
 
-    mpImpl->maAreaListeners.clear();
+    mpImpl->m_AreaListeners.clear();
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
