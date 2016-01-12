@@ -1422,24 +1422,23 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     }
 
     // office:version = ...
-    if( !mbExtended )
+    const sal_Char* pVersion = nullptr;
+    switch (getDefaultVersion())
     {
-        const sal_Char* pVersion = 0;
-        switch( getDefaultVersion() )
-        {
-        case SvtSaveOptions::ODFVER_LATEST: pVersion = sXML_1_2; break;
-        case SvtSaveOptions::ODFVER_012_EXT_COMPAT: pVersion = sXML_1_2; break;
-        case SvtSaveOptions::ODFVER_012: pVersion = sXML_1_2; break;
-        case SvtSaveOptions::ODFVER_011: pVersion = sXML_1_1; break;
-        case SvtSaveOptions::ODFVER_010: break;
+    case SvtSaveOptions::ODFVER_LATEST: pVersion = sXML_1_2; break;
+    case SvtSaveOptions::ODFVER_012_EXT_COMPAT: pVersion = sXML_1_2; break;
+    case SvtSaveOptions::ODFVER_012: pVersion = sXML_1_2; break;
+    case SvtSaveOptions::ODFVER_011: pVersion = sXML_1_1; break;
+    case SvtSaveOptions::ODFVER_010: break;
 
-        default:
-            SAL_WARN("xmloff.core", "xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
-        }
+    default:
+        SAL_WARN("xmloff.core", "xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
+    }
 
-        if( pVersion )
-            AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
-                              OUString::createFromAscii(pVersion) );
+    if (pVersion)
+    {
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
+                          OUString::createFromAscii(pVersion) );
     }
 
     {
