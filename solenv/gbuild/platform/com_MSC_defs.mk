@@ -197,26 +197,6 @@ gb_CXXFLAGS := \
 	-Zc:wchar_t- \
 
 
-ifneq ($(ENABLE_LTO),)
-
-# Sigh, but there are cases of C4702 when using link-time code
-# generation and optimization where I couldn't get
-# __pragma(warning(disable:4702)) to help. Especially, the
-# ImplInheritanceHelper2() {} in <cppuhelper/implbase2.hxx>
-# was reported as containing "unreachable code" when linking
-# the dbaccess dbu library. Let's try globally disabling C4702.
-
-# Might be fixed in VS2013 though?
-# VCVER=110 for VS2012
-
-ifneq ($(filter 110,$(VCVER)),)
-gb_CXXFLAGS += \
-	-wd4702 \
-
-endif
-
-endif
-
 ifeq ($(CPUNAME),X86_64)
 
 gb_CXXFLAGS += \
