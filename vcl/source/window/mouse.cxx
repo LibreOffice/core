@@ -256,7 +256,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
     vcl::Window *pFrame = pSVData->maWinData.mpFirstFrame;
     while( pFrame  )
     {
-        if( pFrame != mpWindowImpl->mpFrameWindow.get() && pFrame->mpWindowImpl->mpFrameData->mpFocusIdle )
+        if( pFrame != mpWindowImpl->mpFrameWindow.get() && pFrame->mpWindowImpl->mpFrameData->mnFocusId )
         {
             bAsyncFocusWaiting = true;
             break;

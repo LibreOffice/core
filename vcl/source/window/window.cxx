@@ -498,12 +498,9 @@ void Window::dispose()
 
     if ( mpWindowImpl->mpFrameData )
     {
-        if ( mpWindowImpl->mpFrameData->mpFocusIdle )
-        {
-            mpWindowImpl->mpFrameData->mpFocusIdle->Stop();
-            delete mpWindowImpl->mpFrameData->mpFocusIdle;
-            mpWindowImpl->mpFrameData->mpFocusIdle = nullptr;
-        }
+        if ( mpWindowImpl->mpFrameData->mnFocusId )
+            Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnFocusId );
+        mpWindowImpl->mpFrameData->mnFocusId = nullptr;
         if ( mpWindowImpl->mpFrameData->mnMouseMoveId )
             Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnMouseMoveId );
         mpWindowImpl->mpFrameData->mnMouseMoveId = nullptr;
@@ -573,7 +570,7 @@ void Window::dispose()
         }
         mpWindowImpl->mpFrame->SetCallback( nullptr, nullptr );
         pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
-        assert (mpWindowImpl->mpFrameData->mpFocusIdle == nullptr);
+        assert (mpWindowImpl->mpFrameData->mnFocusId == nullptr);
         assert (mpWindowImpl->mpFrameData->mnMouseMoveId == nullptr);
         delete mpWindowImpl->mpFrameData;
     }
@@ -1039,7 +1036,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->mpFontCollection   = pSVData->maGDIData.mpScreenFontList;
         mpWindowImpl->mpFrameData->mpFontCache        = pSVData->maGDIData.mpScreenFontCache;
         mpWindowImpl->mpFrameData->mnAllSaveBackSize  = 0;
-        mpWindowImpl->mpFrameData->mpFocusIdle        = nullptr;
+        mpWindowImpl->mpFrameData->mnFocusId          = nullptr;
         mpWindowImpl->mpFrameData->mnMouseMoveId      = nullptr;
         mpWindowImpl->mpFrameData->mnLastMouseX       = -1;
         mpWindowImpl->mpFrameData->mnLastMouseY       = -1;
