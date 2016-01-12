@@ -912,6 +912,13 @@ DECLARE_RTFEXPORT_TEST(testTdf90421, "tdf90421.fodt")
     }
 }
 
+DECLARE_RTFEXPORT_TEST(testPageBackground, "page-background.rtf")
+{
+    // The problem was that \background was ignored.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
