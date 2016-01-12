@@ -1316,7 +1316,8 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
     uno::Sequence< security::DocumentSignatureInformation > aResult;
     uno::Reference< security::XDocumentDigitalSignatures > xLocSigner = xSigner;
 
-    if ( GetMedium() && !GetMedium()->GetName().isEmpty() && IsOwnStorageFormat_Impl( *GetMedium())  && GetMedium()->GetStorage().is() )
+    bool bSupportsSigning = GetMedium() && GetMedium()->GetFilter() && GetMedium()->GetFilter()->GetSupportsSigning();
+    if (GetMedium() && !GetMedium()->GetName().isEmpty() && (IsOwnStorageFormat_Impl(*GetMedium()) || bSupportsSigning) && GetMedium()->GetStorage().is())
     {
         try
         {
