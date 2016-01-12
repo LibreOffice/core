@@ -27,14 +27,16 @@ struct ImplSVData;
 struct ImplSchedulerData;
 
 enum class SchedulerPriority {
-    HIGHEST   = 0,
-    HIGH      = 1,
-    RESIZE    = 2,
-    REPAINT   = 3,
-    MEDIUM    = 3,
-    LOW       = 4,
-    LOWER     = 5,
-    LOWEST    = 6
+    HIGHEST      = 0,
+    HIGH         = 1,
+    RESIZE       = 2,
+    REPAINT      = 3,
+    MEDIUM       = 3,
+    POST_PAINT   = 4,
+    DEFAULT_IDLE = 5,
+    LOW          = 6,
+    LOWER        = 7,
+    LOWEST       = 8
 };
 
 class VCL_DLLPUBLIC Scheduler
