@@ -1520,6 +1520,22 @@ void WW8Export::AppendBookmark( const OUString& rName, bool bSkip )
     m_pBkmks->Append( nSttCP, rName );
 }
 
+boost::optional<SvxBrushItem> MSWordExportBase::getBackground()
+{
+    boost::optional<SvxBrushItem> oRet;
+    const SwFrameFormat &rFormat = m_pDoc->GetPageDesc(0).GetMaster();
+    SvxBrushItem aBrush(RES_BACKGROUND);
+    SfxItemState eState = rFormat.GetBackgroundState(aBrush);
+
+    if (SfxItemState::SET == eState)
+    {
+        // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
+        if (aBrush.GetColor().GetColor() != COL_AUTO)
+            oRet.reset(aBrush);
+    }
+    return oRet;
+}
+
 // #i120928 collect all the graphics of bullets applied to paragraphs
 int MSWordExportBase::CollectGrfsOfBullets()
 {

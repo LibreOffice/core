@@ -241,9 +241,6 @@ private:
     /// Write word/embeddings/Worksheet[n].xlsx
     void WriteEmbeddings();
 
-    /// Get background color of the document, if there is one.
-    boost::optional<SvxBrushItem> getBackground();
-
     /// return true if Page Layout is set as Mirrored
     bool isMirroredMargin();
 
