@@ -18,8 +18,6 @@
 package complex.persistent_window_states;
 
 
-import helper.WindowListener;
-
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.WindowEvent;

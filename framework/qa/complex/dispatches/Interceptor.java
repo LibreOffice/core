@@ -158,7 +158,7 @@ public class Interceptor implements XDispatch,
      * solar mutex. If this hangs - you can see a beautiful deadlock
      * when you attach your debugger to the main process.
      */
-    public void checkNoSolarMutexHeld()
+    private void checkNoSolarMutexHeld()
     {
         try
         {

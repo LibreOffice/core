@@ -20,7 +20,6 @@ package ifc.text;
 
 import lib.MultiMethodTest;
 
-import com.sun.star.table.XCell;
 import com.sun.star.text.XTextTableCursor;
 
 

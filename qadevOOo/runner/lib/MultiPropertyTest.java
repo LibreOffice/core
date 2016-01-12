@@ -37,10 +37,6 @@ import util.ValueChanger;
 import util.ValueComparer;
 import util.utils;
 
-import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
-
 /**
  * MultiPropertyTest extends the functionality of MultiMethodTest to support
  * services testing. Since, in most cases, service tests has one method testing

@@ -18,8 +18,6 @@
 
 package ifc.connection;
 
-import java.io.PrintWriter;
-
 import lib.MultiMethodTest;
 import lib.StatusException;
 

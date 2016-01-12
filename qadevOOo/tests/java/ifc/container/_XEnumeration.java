@@ -22,7 +22,6 @@ import lib.MultiMethodTest;
 
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
-import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.lang.WrappedTargetException;
 
 /**

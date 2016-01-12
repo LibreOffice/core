@@ -22,7 +22,6 @@ package ifc.document;
 import lib.MultiMethodTest;
 
 import com.sun.star.document.XMimeTypeInfo;
-import com.sun.star.lang.XComponent;
 
 /**
  * Testing <code>com.sun.star.document.XMimeTypeInfo</code>

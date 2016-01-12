@@ -19,8 +19,6 @@
 package ifc.text;
 
 import lib.MultiMethodTest;
-import util.XInstCreator;
-
 import com.sun.star.text.XFootnote;
 
 

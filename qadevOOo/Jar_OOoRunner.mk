@@ -58,7 +58,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/graphical/FileHelper \
     qadevOOo/runner/helper/APIDescGetter \
     qadevOOo/runner/helper/AppProvider \
-    qadevOOo/runner/helper/BuildEnvTools \
     qadevOOo/runner/helper/CfgParser \
     qadevOOo/runner/helper/ClParser \
     qadevOOo/runner/helper/ComplexDescGetter \
@@ -70,7 +69,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/helper/OfficeProvider \
     qadevOOo/runner/helper/OfficeWatcher \
     qadevOOo/runner/helper/OSHelper \
-    qadevOOo/runner/helper/ParameterNotFoundException \
     qadevOOo/runner/helper/ProcessHandler \
     qadevOOo/runner/helper/PropertyHandlerFactroy \
     qadevOOo/runner/helper/PropertyHandlerImpl \
@@ -78,7 +76,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/helper/StringHelper \
     qadevOOo/runner/helper/UnoProvider \
     qadevOOo/runner/helper/URLHelper \
-    qadevOOo/runner/helper/WindowListener \
     qadevOOo/runner/lib/DynamicClassLoader \
     qadevOOo/runner/lib/ExceptionStatus \
     qadevOOo/runner/lib/MultiMethodTest \

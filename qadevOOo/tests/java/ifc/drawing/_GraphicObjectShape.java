@@ -22,7 +22,6 @@ import lib.MultiPropertyTest;
 
 import com.sun.star.awt.XBitmap;
 import com.sun.star.container.XIndexContainer;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 
 /**

@@ -20,11 +20,7 @@ package com.sun.star.script.framework.browse;
 
 import com.sun.star.beans.XIntrospectionAccess;
 
-import com.sun.star.container.NoSuchElementException;
-
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.WrappedTargetException;
-
 import com.sun.star.lib.uno.helper.PropertySet;
 
 import com.sun.star.script.XInvocation;
