@@ -1756,7 +1756,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 // line has to be formatted, so that the first line of the Follow can flow up.
                 // Which had flowed to the next page to be together with the footnote (this is
                 // especially true for areas with columns)
-                OSL_ENSURE( GetFollow(), "PREP_FTN_GONE darf nur vom Follow gerufen werden" );
+                OSL_ENSURE( GetFollow(), "PREP_FTN_GONE may only be called by Follow" );
                 sal_Int32 nPos = GetFollow()->GetOfst();
                 if( IsFollow() && GetOfst() == nPos )       // If we don't have a mass of text, we call our
                     FindMaster()->Prepare( PREP_FTN_GONE ); // Master's Prepare
