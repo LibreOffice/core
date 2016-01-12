@@ -122,6 +122,7 @@
 #include <algorithm>
 #include <cassert>
 #include <set>
+#include <utility>
 #include <rtl/strbuf.hxx>
 #include <tools/time.hxx>
 #include <memory>
@@ -1219,12 +1220,12 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     if (nRowCount > 0)
                     {
-                        sal_uInt32* pTableArry = new sal_uInt32[ nRowCount + 2 ];
+                        std::unique_ptr<sal_uInt32[]> pTableArry(new sal_uInt32[ nRowCount + 2 ]);
                         pTableArry[ 0 ] = nTableProperties;
                         pTableArry[ 1 ] = nRowCount;
                         for ( i = 0; i < nRowCount; i++ )
                             rSt.ReadUInt32( pTableArry[ i + 2 ] );
-                        rData.pTableRowProperties = pTableArry;
+                        rData.pTableRowProperties = std::move(pTableArry);
                     }
                 }
             }
@@ -2862,12 +2863,12 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 Rectangle aEmpty;
                                                 aShapeHd.SeekToBegOfRecord( rStCtrl );
                                                 sal_Int32 nShapeId;
-                                                aProcessData.pTableRowProperties = nullptr;
+                                                aProcessData.pTableRowProperties.reset();
                                                 SdrObject* pObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aEmpty, aEmpty, 0, &nShapeId );
                                                 if ( pObj )
                                                 {
                                                     if ( aProcessData.pTableRowProperties )
-                                                        pObj = CreateTable( pObj, aProcessData.pTableRowProperties, aProcessData.rPersistEntry.pSolverContainer );
+                                                        pObj = CreateTable( pObj, aProcessData.pTableRowProperties.get(), aProcessData.rPersistEntry.pSolverContainer );
 
                                                     pRet->NbcInsertObject( pObj );
 

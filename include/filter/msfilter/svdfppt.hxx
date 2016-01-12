@@ -508,13 +508,11 @@ struct ProcessData
     PptSlidePersistEntry&       rPersistEntry;
     SdPageCapsule               pPage;
     ::std::vector< SdrObject* > aBackgroundColoredObjects;
-    sal_uInt32*                 pTableRowProperties;
+    std::unique_ptr<sal_uInt32[]> pTableRowProperties;
 
     ProcessData( PptSlidePersistEntry& rP, SdPageCapsule pP ) :
         rPersistEntry               ( rP ),
-        pPage                       ( pP ),
-        pTableRowProperties         ( nullptr ) {};
-    ~ProcessData() { delete[] pTableRowProperties; };
+        pPage                       ( pP ) {};
 };
 
 
