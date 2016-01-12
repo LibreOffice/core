@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Noel Grandin <noelgrandin@gmail.com>
+Code-Review-1: Arnaud Versini <arnaud.versini@libreoffice.org>
+Verified+1: Arnaud Versini <arnaud.versini@libreoffice.org>
+Submitted-by: Noel Grandin <noelgrandin@gmail.com>
+Submitted-at: Tue, 12 Jan 2016 06:06:49 +0000
+Reviewed-on: https://gerrit.libreoffice.org/21308
+Project: core
+Branch: refs/heads/master
