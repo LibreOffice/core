@@ -732,7 +732,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     rReq.GetArg(SID_SAVETO, false, TYPE(SfxBoolItem)));
                 if (saveTo == nullptr || !saveTo->GetValue())
                 {
-                    GetFrame()->RemoveInfoBar("readonly");
+                    SfxViewFrame *pFrame = GetFrame();
+                    if (pFrame)
+                        pFrame->RemoveInfoBar("readonly");
                     SetReadOnlyUI(false);
                 }
             }
