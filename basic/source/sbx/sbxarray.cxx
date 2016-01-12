@@ -507,7 +507,7 @@ bool SbxArray::StoreData( SvStream& rStrm ) const
             nElem++;
     }
     rStrm.WriteUInt16( nElem );
-    for( sal_uInt32 n = 0; n < mpVarEntries->size(); n++ )
+    for( size_t n = 0; n < mpVarEntries->size(); n++ )
     {
         SbxVarEntry& rEntry = (*mpVarEntries)[n];
         if (rEntry.mpVar && !(rEntry.mpVar->GetFlags() & SbxFlagBits::DontStore))
