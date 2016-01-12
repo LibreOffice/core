@@ -1126,7 +1126,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
     cairo_surface_t* source = SvpSalGraphics::createCairoSurface(pSrc->m_aOrigDevice);
     if (!source)
     {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawBitmap case");
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::copyBits case");
         return;
     }
 
@@ -1168,23 +1168,11 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
     copySource(rTR, source);
 }
 
-void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
-                                 const SalBitmap& rSalBitmap,
+void SvpSalGraphics::drawBitmap( const SalTwoRect& rTR,
+                                 const SalBitmap& rSourceBitmap,
                                  const SalBitmap& rTransparentBitmap )
 {
-    const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
-    const SvpSalBitmap& rSrcTrans = static_cast<const SvpSalBitmap&>(rTransparentBitmap);
-    basegfx::B2IBox aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
-                     rPosAry.mnSrcX+rPosAry.mnSrcWidth,
-                     rPosAry.mnSrcY+rPosAry.mnSrcHeight );
-    basegfx::B2IBox aDestRect( rPosAry.mnDestX, rPosAry.mnDestY,
-                      rPosAry.mnDestX+rPosAry.mnDestWidth,
-                      rPosAry.mnDestY+rPosAry.mnDestHeight );
-    SvpSalGraphics::ClipUndoHandle aUndo( this );
-    if (!isClippedSetup(aDestRect, aUndo) && m_aDevice)
-        m_aDevice->drawMaskedBitmap( rSrc.getBitmap(), rSrcTrans.getBitmap(),
-                                     aSrcRect, aDestRect, basebmp::DrawMode::Paint, m_aClipMap );
-    dbgOut( m_aDevice );
+    drawAlphaBitmap(rTR, rSourceBitmap, rTransparentBitmap);
 }
 
 void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
