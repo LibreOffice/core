@@ -81,13 +81,6 @@ public:
             (void) store_acquireHandle (m_hImpl);
     }
 
-    /** Conversion into Stream Handle.
-     */
-    inline operator storeStreamHandle() const
-    {
-        return m_hImpl;
-    }
-
     /** Open the stream.
         @see store_openStream()
      */
@@ -191,13 +184,6 @@ public:
     {
         if (m_hImpl)
             (void) store_acquireHandle (m_hImpl);
-    }
-
-    /** Conversion into Directory Handle.
-     */
-    inline operator storeDirectoryHandle() const
-    {
-        return m_hImpl;
     }
 
     /** Open the directory.

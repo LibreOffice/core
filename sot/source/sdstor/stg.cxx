@@ -263,15 +263,14 @@ bool StorageStream::Commit()
     }
 }
 
-bool StorageStream::CopyTo( BaseStorageStream* pDest )
+void StorageStream::CopyTo( BaseStorageStream* pDest )
 {
     if( !Validate() || !pDest || !pDest->Validate( true ) || Equals( *pDest ) )
-        return false;
+        return;
     pEntry->Copy( *pDest );
     pDest->Commit();
     pIo->MoveError( *this );
     SetError( pDest->GetError() );
-    return Good() && pDest->Good();
 }
 
 bool StorageStream::Validate( bool bValidate ) const
@@ -650,20 +649,18 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
 
 // Delete a stream or substorage by setting the temp bit.
 
-bool Storage::Remove( const OUString& rName )
+void Storage::Remove( const OUString& rName )
 {
     if( !Validate( true ) )
-        return false;
+        return;
     StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
     if( p )
     {
         p->Invalidate( true );
-        return true;
     }
     else
     {
         SetError( SVSTREAM_FILE_NOT_FOUND );
-        return false;
     }
 }
 

@@ -195,7 +195,7 @@ sal_uInt64 SotStorageStream::remainingSize()
     return SvStream::remainingSize();
 }
 
-bool SotStorageStream::CopyTo( SotStorageStream * pDestStm )
+void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
 {
     Flush(); // alle Daten schreiben
     pDestStm->ClearBuffer();
@@ -226,7 +226,6 @@ bool SotStorageStream::CopyTo( SotStorageStream * pDestStm )
         pOwnStm->CopyTo( pDestStm->pOwnStm );
         SetError( pOwnStm->GetError() );
     }
-    return GetError() == SVSTREAM_OK;
 }
 
 bool SotStorageStream::Commit()

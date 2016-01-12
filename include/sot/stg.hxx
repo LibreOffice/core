@@ -74,7 +74,7 @@ public:
     virtual void        Flush() = 0;
     virtual bool        SetSize( sal_uLong nNewSize ) = 0;
     virtual sal_uLong   GetSize() const = 0;
-    virtual bool        CopyTo( BaseStorageStream * pDestStm ) = 0;
+    virtual void        CopyTo( BaseStorageStream * pDestStm ) = 0;
     virtual bool        Commit() = 0;
     virtual bool        Equals( const BaseStorageStream& rStream ) const = 0;
 };
@@ -114,7 +114,7 @@ public:
     virtual bool                IsStream( const OUString& rEleName ) const = 0;
     virtual bool                IsStorage( const OUString& rEleName ) const = 0;
     virtual bool                IsContained( const OUString& rEleName ) const = 0;
-    virtual bool                Remove( const OUString & rEleName ) = 0;
+    virtual void                Remove( const OUString & rEleName ) = 0;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) = 0;
     virtual bool                ValidateFAT() = 0;
     virtual bool                Equals( const BaseStorage& rStream ) const = 0;
@@ -147,7 +147,7 @@ public:
     virtual void        Flush() override;
     virtual bool        SetSize( sal_uLong nNewSize ) override;
     virtual sal_uLong   GetSize() const override;
-    virtual bool        CopyTo( BaseStorageStream * pDestStm ) override;
+    virtual void        CopyTo( BaseStorageStream * pDestStm ) override;
     virtual bool        Commit() override;
     virtual bool        Validate( bool=false ) const override;
     virtual bool        ValidateMode( StreamMode ) const override;
@@ -202,7 +202,7 @@ public:
     virtual bool                IsStream( const OUString& rEleName ) const override;
     virtual bool                IsStorage( const OUString& rEleName ) const override;
     virtual bool                IsContained( const OUString& rEleName ) const override;
-    virtual bool                Remove( const OUString & rEleName ) override;
+    virtual void                Remove( const OUString & rEleName ) override;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) override;
     virtual bool                ValidateFAT() override;
     virtual bool                Validate( bool=false ) const override;
@@ -231,7 +231,7 @@ public:
     virtual void                Flush() override;
     virtual bool                SetSize( sal_uLong nNewSize ) override;
     virtual sal_uLong           GetSize() const override;
-    virtual bool                CopyTo( BaseStorageStream * pDestStm ) override;
+    virtual void                CopyTo( BaseStorageStream * pDestStm ) override;
     virtual bool                Commit() override;
     virtual bool                Validate( bool=false ) const override;
     virtual bool                ValidateMode( StreamMode ) const override;
@@ -305,7 +305,7 @@ public:
     virtual bool                IsStream( const OUString& rEleName ) const override;
     virtual bool                IsStorage( const OUString& rEleName ) const override;
     virtual bool                IsContained( const OUString& rEleName ) const override;
-    virtual bool                Remove( const OUString & rEleName ) override;
+    virtual void                Remove( const OUString & rEleName ) override;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) override;
     virtual bool                ValidateFAT() override;
     virtual bool                Validate( bool=false ) const override;

@@ -53,7 +53,7 @@ public:
 
     virtual void        SetSize( sal_uInt64 nNewSize ) override;
     sal_uInt32          GetSize() const;
-    bool                CopyTo( SotStorageStream * pDestStm );
+    void                CopyTo( SotStorageStream * pDestStm );
     bool                Commit();
     bool                SetProperty( const OUString& rName, const css::uno::Any& rValue );
     virtual sal_uInt64 remainingSize() override;

@@ -1366,10 +1366,10 @@ bool UCBStorageStream::Commit()
     return true;
 }
 
-bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
+void UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
 {
     if( !pImp->Init() )
-        return false;
+        return;
 
     UCBStorageStream* pStg =  dynamic_cast<UCBStorageStream*>( pDestStm );
     if ( pStg )
@@ -1379,7 +1379,7 @@ bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     Seek( STREAM_SEEK_TO_END );
     sal_Int32 n = Tell();
     if( n < 0 )
-        return false;
+        return;
 
     if( pDestStm->SetSize( n ) && n )
     {
@@ -1398,8 +1398,6 @@ bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
             n -= nn;
         }
     }
-
-    return true;
 }
 
 bool UCBStorageStream::SetProperty( const OUString& rName, const css::uno::Any& rValue )
@@ -2924,10 +2922,10 @@ bool UCBStorage::IsContained( const OUString & rEleName ) const
     return ( pElement != nullptr );
 }
 
-bool UCBStorage::Remove( const OUString& rEleName )
+void UCBStorage::Remove( const OUString& rEleName )
 {
     if( rEleName.isEmpty() )
-        return false;
+        return;
 
     UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
     if ( pElement )
@@ -2936,8 +2934,6 @@ bool UCBStorage::Remove( const OUString& rEleName )
     }
     else
         SetError( SVSTREAM_FILE_NOT_FOUND );
-
-    return ( pElement != nullptr );
 }
 
 bool UCBStorage::ValidateFAT()
