@@ -159,10 +159,9 @@ void InitSystemTimer(ImplSVData* pSVData)
 
 }
 
-void Scheduler::CallbackTaskScheduling(bool ignore)
+void Scheduler::CallbackTaskScheduling(bool)
 {
     // this function is for the saltimer callback
-    (void)ignore;
     Scheduler::ProcessTaskScheduling( false );
 }
 
