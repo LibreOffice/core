@@ -901,7 +901,7 @@ FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken*
     }
 }
 
-sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
+void FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
 {
     if (nOffset < nLen)
     {
@@ -948,13 +948,10 @@ sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount
             else
                 nIndex -= nStop - nOffset;
         }
-
-        return nCount;
     }
     else
     {
         SAL_WARN("formula.core","FormulaTokenArray::RemoveToken - nOffset " << nOffset << " >= nLen " << nLen);
-        return 0;
     }
 }
 
@@ -994,9 +991,9 @@ FormulaToken* FormulaTokenArray::AddDouble( double fVal )
     return Add( new FormulaDoubleToken( fVal ) );
 }
 
-FormulaToken* FormulaTokenArray::AddExternal( const sal_Unicode* pStr )
+void FormulaTokenArray::AddExternal( const sal_Unicode* pStr )
 {
-    return AddExternal( OUString( pStr ) );
+    AddExternal( OUString( pStr ) );
 }
 
 FormulaToken* FormulaTokenArray::AddExternal( const OUString& rStr,

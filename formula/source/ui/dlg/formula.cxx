@@ -1742,9 +1742,9 @@ void FormulaModalDialog::SetMeText(const OUString& _sText)
     m_pImpl->SetMeText(_sText);
 }
 
-bool FormulaModalDialog::CheckMatrix(OUString& aFormula)
+void FormulaModalDialog::CheckMatrix(OUString& aFormula)
 {
-    return m_pImpl->CheckMatrix(aFormula);
+    m_pImpl->CheckMatrix(aFormula);
 }
 
 void FormulaModalDialog::Update()

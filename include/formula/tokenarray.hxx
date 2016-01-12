@@ -159,10 +159,8 @@ protected:
                 Start offset into pCode.
         @param  nCount
                 Count of tokens to remove.
-
-        @return The actual number of tokens removed from pCode array.
      */
-    sal_uInt16              RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount );
+    void                    RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount );
 
     inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
                                 { nMode |= (nBits & ~RECALCMODE_EMASK); }
@@ -304,7 +302,7 @@ public:
 
     FormulaToken* AddString( const svl::SharedString& rStr );
     FormulaToken* AddDouble( double fVal );
-    FormulaToken* AddExternal( const sal_Unicode* pStr );
+    void          AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
         Others don't use! */
     FormulaToken* AddExternal( const OUString& rStr, OpCode eOp = ocExternal );

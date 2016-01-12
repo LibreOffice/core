@@ -72,7 +72,7 @@ protected:
 
     void            SetMeText(const OUString& _sText);
     void            Update();
-    bool            CheckMatrix(OUString& aFormula /*IN/OUT*/);
+    void            CheckMatrix(OUString& aFormula /*IN/OUT*/);
     void            Update(const OUString& _sExp);
 
     void            StoreFormEditData(FormEditData* pData);
