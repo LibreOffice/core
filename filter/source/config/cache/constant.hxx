@@ -120,6 +120,7 @@
 #define  FLAGNAME_TEMPLATE          "TEMPLATE"
 #define  FLAGNAME_TEMPLATEPATH      "TEMPLATEPATH"
 #define  FLAGNAME_COMBINED          "COMBINED"
+#define FLAGNAME_SUPPORTSSIGNING "SUPPORTSSIGNING"
 
 /** @short  some uno service names.
  */

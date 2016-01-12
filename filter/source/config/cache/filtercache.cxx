@@ -1935,6 +1935,7 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxF
     if (nFlags & SfxFilterFlags::TEMPLATE         ) lFlagNames.push_back(FLAGNAME_TEMPLATE         );
     if (nFlags & SfxFilterFlags::TEMPLATEPATH     ) lFlagNames.push_back(FLAGNAME_TEMPLATEPATH     );
     if (nFlags & SfxFilterFlags::COMBINED         ) lFlagNames.push_back(FLAGNAME_COMBINED         );
+    if (nFlags & SfxFilterFlags::SUPPORTSSIGNING) lFlagNames.push_back(FLAGNAME_SUPPORTSSIGNING);
 
     return comphelper::containerToSequence(lFlagNames);
 }
@@ -2023,6 +2024,11 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
         if (pNames[i] == FLAGNAME_STARTPRESENTATION)
         {
             nField |= SfxFilterFlags::STARTPRESENTATION;
+            continue;
+        }
+        if (pNames[i] == FLAGNAME_SUPPORTSSIGNING)
+        {
+            nField |= SfxFilterFlags::SUPPORTSSIGNING;
             continue;
         }
         if (pNames[i] == FLAGNAME_READONLY)
