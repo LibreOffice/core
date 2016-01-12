@@ -136,7 +136,6 @@ namespace
         : public rtl::Static<osl::Mutex, theApplicationMutex> {};
 }
 
-#include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <sfx2/imagemgr.hxx>
 #include "fwkhelper.hxx"
@@ -161,7 +160,6 @@ SfxApplication* SfxApplication::GetOrCreate()
         // a fault will be moved outside the SFX
         g_pSfxApplication->Initialize_Impl();
 
-        ::framework::SetImageProducer( GetImage );
         ::framework::SetRefreshToolbars( RefreshToolbars );
         ::framework::SetToolBoxControllerCreator( SfxToolBoxControllerFactory );
         ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );

@@ -21,7 +21,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <framework/imageproducer.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/gen.hxx>

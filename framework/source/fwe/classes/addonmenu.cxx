@@ -20,7 +20,6 @@
 #include <framework/addonmenu.hxx>
 #include <framework/addonsoptions.hxx>
 #include <general.h>
-#include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <services.h>
 

@@ -23,7 +23,6 @@
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
 #include <framework/bmkmenu.hxx>
-#include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>

@@ -19,7 +19,6 @@
 
 #include <uielement/toolbarmerger.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
-#include <framework/imageproducer.hxx>
 
 #include <svtools/miscopt.hxx>
 #include <comphelper/processfactory.hxx>

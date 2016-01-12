@@ -22,7 +22,6 @@
 #include "services.h"
 #include "general.h"
 #include "properties.h"
-#include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hrc>

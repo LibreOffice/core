@@ -24,7 +24,6 @@
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <uiconfiguration/windowstateproperties.hxx>
 

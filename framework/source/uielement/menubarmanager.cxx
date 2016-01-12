@@ -21,7 +21,6 @@
 #include <framework/menuconfiguration.hxx>
 #include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
-#include <framework/imageproducer.hxx>
 #include <framework/addonsoptions.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/menumanager.hxx>
