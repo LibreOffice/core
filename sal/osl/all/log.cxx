@@ -107,8 +107,15 @@ char const * getEnvironmentVariable() {
 
 #endif
 
+namespace {
+    inline bool isDebug(sal_detail_LogLevel level) {
+        return level == SAL_DETAIL_LOG_LEVEL_DEBUG ||
+               level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE;
+    }
+}
+
 bool report(sal_detail_LogLevel level, char const * area) {
-    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
+    if (isDebug(level))
         return true;
     assert(area != nullptr);
     char const * env = getEnvironmentVariable();
@@ -187,13 +194,13 @@ void log(
     if (!sal_use_syslog) {
         s << toString(level) << ':';
     }
-    if (level != SAL_DETAIL_LOG_LEVEL_DEBUG) {
+    if (!isDebug(level)) {
         s << area << ':';
     }
     s << OSL_DETAIL_GETPID << ':';
 #endif
     s << osl::Thread::getCurrentIdentifier() << ':';
-    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
+    if (isDebug(level)) {
         s << ' ';
     } else {
         const size_t nStrLen(std::strlen(SRCDIR "/"));
@@ -203,7 +210,7 @@ void log(
     }
 
     s << message;
-    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE) {
+    if (isDebug(level)) {
         s << " at:\n";
         s << OUString(osl_backtraceAsString(), SAL_NO_ACQUIRE);
     }
@@ -219,6 +226,7 @@ void log(
         android_log_level = ANDROID_LOG_WARN;
         break;
     case SAL_DETAIL_LOG_LEVEL_DEBUG:
+    case SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE:
         android_log_level = ANDROID_LOG_DEBUG;
         break;
     default:
@@ -243,6 +251,7 @@ void log(
             prio = LOG_WARNING;
             break;
         case SAL_DETAIL_LOG_LEVEL_DEBUG:
+        case SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE:
             prio = LOG_DEBUG;
             break;
         }
