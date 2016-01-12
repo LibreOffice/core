@@ -34,7 +34,8 @@ ImplFontMetric::ImplFontMetric()
     mnSlant( 0 ),
     mnBulletOffset( 0 ),
     mnMiscFlags( 0 ),
-    mnRefCount( 1 )
+    mnRefCount( 1 ),
+    mbScalableFont( false )
 {}
 
 inline void ImplFontMetric::AddReference()
@@ -152,6 +153,16 @@ bool FontMetric::IsFullstopCentered() const
 long FontMetric::GetBulletOffset() const
 {
     return mpImplMetric->GetBulletOffset();
+}
+
+bool FontMetric::IsScalable() const
+{
+    return mpImplMetric->IsScalable();
+}
+
+void FontMetric::SetScalableFlag(bool bScalable)
+{
+    mpImplMetric->SetScalableFlag( bScalable );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
