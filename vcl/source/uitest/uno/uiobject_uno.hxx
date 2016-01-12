@@ -16,6 +16,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/test/XUIObject.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <memory>
 
@@ -39,7 +40,7 @@ public:
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getChild(const OUString& rID)
         throw (css::uno::RuntimeException, std::exception) override;
 
-    void SAL_CALL executeAction(const OUString& rAction)
+    void SAL_CALL executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& xPropValues)
         throw (css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
