@@ -21,9 +21,11 @@
 #define INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
 
 #include <functional>
+#include <memory>
+#include <map>
 #include <set>
 #include <unordered_set>
-#include <boost/ptr_container/ptr_map.hpp>
+
 #include <boost/noncopyable.hpp>
 
 #include <svl/broadcast.hxx>
@@ -248,7 +250,7 @@ public:
 class  ScBroadcastAreaSlotMachine
 {
 private:
-    typedef boost::ptr_map<ScBroadcastArea*, sc::ColumnSpanSet> BulkGroupAreasType;
+    typedef std::map<ScBroadcastArea*, std::unique_ptr<sc::ColumnSpanSet>> BulkGroupAreasType;
 
     /**
         Slot offset arrangement of columns and rows, once per sheet.
@@ -289,7 +291,7 @@ private:
 
 private:
     ScBroadcastAreasBulk  aBulkBroadcastAreas;
-    BulkGroupAreasType maBulkGroupAreas;
+    BulkGroupAreasType m_BulkGroupAreas;
     TableSlotsMap         aTableSlotsMap;
     AreasToBeErased       maAreasToBeErased;
     SvtBroadcaster       *pBCAlways;             // for the RC_ALWAYS special range

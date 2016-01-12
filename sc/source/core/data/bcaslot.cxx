@@ -34,6 +34,8 @@
 #include <grouparealistener.hxx>
 #endif
 
+#include <o3tl/make_unique.hxx>
+
 // Number of slots per dimension
 // must be integer divisors of MAXCOLCOUNT respectively MAXROWCOUNT
 #define BCA_SLOTS_COL ((MAXCOLCOUNT_DEFINE) / 16)
@@ -1128,27 +1130,27 @@ bool ScBroadcastAreaSlotMachine::InsertBulkArea( const ScBroadcastArea* pArea )
 
 void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, const ScRange& rRange )
 {
-    BulkGroupAreasType::iterator it = maBulkGroupAreas.lower_bound(pArea);
-    if (it == maBulkGroupAreas.end() || maBulkGroupAreas.key_comp()(pArea, it->first))
+    BulkGroupAreasType::iterator it = m_BulkGroupAreas.lower_bound(pArea);
+    if (it == m_BulkGroupAreas.end() || m_BulkGroupAreas.key_comp()(pArea, it->first))
     {
         // Insert a new one.
-        it = maBulkGroupAreas.insert(it, pArea, new sc::ColumnSpanSet(false));
+        it = m_BulkGroupAreas.insert(it, std::make_pair(pArea, o3tl::make_unique<sc::ColumnSpanSet>(false)));
     }
 
-    sc::ColumnSpanSet* pSet = it->second;
+    sc::ColumnSpanSet *const pSet = it->second.get();
     assert(pSet);
     pSet->set(rRange, true);
 }
 
 void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
 {
-    if (maBulkGroupAreas.empty())
+    if (m_BulkGroupAreas.empty())
         return;
 
     sc::BulkDataHint aHint(*pDoc, nullptr);
 
     bool bBroadcasted = false;
-    BulkGroupAreasType::iterator it = maBulkGroupAreas.begin(), itEnd = maBulkGroupAreas.end();
+    BulkGroupAreasType::iterator it = m_BulkGroupAreas.begin(), itEnd = m_BulkGroupAreas.end();
     for (; it != itEnd; ++it)
     {
         ScBroadcastArea* pArea = it->first;
@@ -1162,7 +1164,7 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
         }
         else
         {
-            const sc::ColumnSpanSet* pSpans = it->second;
+            const sc::ColumnSpanSet *const pSpans = it->second.get();
             assert(pSpans);
             aHint.setSpans(pSpans);
             rBC.Broadcast(aHint);
@@ -1170,7 +1172,7 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
         }
     }
 
-    maBulkGroupAreas.clear();
+    m_BulkGroupAreas.clear();
     if (bBroadcasted)
         pDoc->TrackFormulas();
 }
