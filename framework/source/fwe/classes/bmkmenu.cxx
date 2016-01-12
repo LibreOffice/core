@@ -21,7 +21,6 @@
 
 #include <framework/bmkmenu.hxx>
 #include <general.h>
-#include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
 
 #include <com/sun/star/uno/Reference.h>

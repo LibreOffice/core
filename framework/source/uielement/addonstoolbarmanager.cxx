@@ -22,7 +22,6 @@
 
 #include <uielement/generictoolbarcontroller.hxx>
 #include "services.h"
-#include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hrc>

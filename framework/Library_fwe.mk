@@ -67,7 +67,6 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/dispatch/interaction \
     framework/source/fwe/helper/actiontriggerhelper \
     framework/source/fwe/helper/configimporter \
-    framework/source/fwe/helper/imageproducer \
     framework/source/fwe/helper/propertysetcontainer \
     framework/source/fwe/helper/titlehelper \
     framework/source/fwe/helper/documentundoguard \
