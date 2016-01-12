@@ -1285,7 +1285,7 @@ void SwDocShell::SetChangeRecording( bool bActivate )
     m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
 }
 
-bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
+void SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
     const SfxAllItemSet aSet( GetPool() );
     const SfxItemSet*   pArgs = &aSet;
@@ -1295,9 +1295,7 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
     Sequence< sal_Int8 > aPasswd = rIDRA.GetRedlinePassword();
     if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
         && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswd.getLength() > 0))
-        return false;
-
-    bool bRes = false;
+        return;
 
     if (!rNewPassword.isEmpty())
     {
@@ -1307,15 +1305,11 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
         Sequence< sal_Int8 > aNewPasswd;
         SvPasswordHelper::GetHashPassword( aNewPasswd, rNewPassword );
         rIDRA.SetRedlinePassword( aNewPasswd );
-        bRes = true;
     }
     else
     {
         rIDRA.SetRedlinePassword( Sequence< sal_Int8 >() );
-        bRes = true;
     }
-
-    return bRes;
 }
 
 bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash )

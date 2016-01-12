@@ -411,17 +411,16 @@ void ShellCall_Impl( void* pObj, void* pArg )
     static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg) );
 }
 
-const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
+void SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
 {
     if( !bAsync )
-        return ExecuteSlot( rReq );
+        ExecuteSlot( rReq );
     else
     {
         if( !pImp->pExecuter )
             pImp->pExecuter = new svtools::AsynchronLink(
                 Link<void*,void>( this, ShellCall_Impl ) );
         pImp->pExecuter->Call( new SfxRequest( rReq ) );
-        return nullptr;
     }
 }
 

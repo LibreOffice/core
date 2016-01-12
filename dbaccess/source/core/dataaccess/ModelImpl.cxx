@@ -1295,10 +1295,9 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
     return nCurrentMode;
 }
 
-bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
+void ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
     m_aMediaDescriptor.put( "MacroExecutionMode", nMacroMode );
-    return true;
 }
 
 OUString ODatabaseModelImpl::getDocumentLocation() const

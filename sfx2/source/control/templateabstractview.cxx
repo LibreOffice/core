@@ -119,13 +119,6 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
     return true;
 }
 
-bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
-{
-    assert(pItem);
-
-    return pItem->maTitle.matchIgnoreAsciiCase(maKeyword);
-}
-
 TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mnCurRegionId(0),

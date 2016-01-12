@@ -467,7 +467,7 @@ public:
 public:
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getCurrentMacroExecMode() const override;
-    virtual bool setCurrentMacroExecMode( sal_uInt16 ) override;
+    virtual void setCurrentMacroExecMode( sal_uInt16 ) override;
     virtual OUString getDocumentLocation() const override;
     virtual bool documentStorageHasMacros() const override;
     virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;

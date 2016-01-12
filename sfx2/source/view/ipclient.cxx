@@ -770,7 +770,7 @@ void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fractio
 }
 
 
-bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
+void SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
 {
     if( rArea != m_pImp->m_aObjArea || m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
     {
@@ -781,10 +781,7 @@ bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fractio
         m_pImp->SizeHasChanged();
 
         Invalidate();
-        return true;
     }
-
-    return false;
 }
 
 

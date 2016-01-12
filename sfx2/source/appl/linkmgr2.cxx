@@ -186,33 +186,33 @@ bool LinkManager::InsertLink( SvBaseLink * pLink,
 }
 
 
-bool LinkManager::InsertDDELink( SvBaseLink * pLink,
+void LinkManager::InsertDDELink( SvBaseLink * pLink,
                                     const OUString& rServer,
                                     const OUString& rTopic,
                                     const OUString& rItem )
 {
     if( !( OBJECT_CLIENT_SO & pLink->GetObjType() ) )
-        return false;
+        return;
 
     OUString sCmd;
     ::sfx2::MakeLnkName( sCmd, &rServer, rTopic, rItem );
 
     pLink->SetObjType( OBJECT_CLIENT_DDE );
     pLink->SetName( sCmd );
-    return Insert( pLink );
+    Insert( pLink );
 }
 
 
-bool LinkManager::InsertDDELink( SvBaseLink * pLink )
+void LinkManager::InsertDDELink( SvBaseLink * pLink )
 {
     DBG_ASSERT( OBJECT_CLIENT_SO & pLink->GetObjType(), "no OBJECT_CLIENT_SO" );
     if( !( OBJECT_CLIENT_SO & pLink->GetObjType() ) )
-        return false;
+        return;
 
     if( pLink->GetObjType() == OBJECT_CLIENT_SO )
         pLink->SetObjType( OBJECT_CLIENT_DDE );
 
-    return Insert( pLink );
+    Insert( pLink );
 }
 
 

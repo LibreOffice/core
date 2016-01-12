@@ -422,14 +422,12 @@ SotClipboardFormatId SvBaseLink::GetContentType() const
 }
 
 
-bool SvBaseLink::SetContentType( SotClipboardFormatId nType )
+void SvBaseLink::SetContentType( SotClipboardFormatId nType )
 {
     if( OBJECT_CLIENT_SO & nObjType )
     {
         pImplData->ClientType.nCntntType = nType;
-        return true;
     }
-    return false;
 }
 
 LinkManager* SvBaseLink::GetLinkManager()

@@ -79,7 +79,7 @@ friend class SfxFrameStatusListener;
     css::uno::Reference< css::lang::XComponent >           m_xStatusListener;
 
 private:
-    SfxFrameStatusListener* GetOrCreateStatusListener();
+    void                    GetOrCreateStatusListener();
 
     SfxPopupWindow(SfxPopupWindow &) = delete;
     void operator =(SfxPopupWindow &) = delete;

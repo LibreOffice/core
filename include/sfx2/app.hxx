@@ -175,10 +175,10 @@ public:
     css::script::XLibraryContainer * GetDialogContainer();
     css::script::XLibraryContainer * GetBasicContainer();
     static StarBASIC*           GetBasic();
-    sal_uInt16                  SaveBasicAndDialogContainer() const;
+    void                        SaveBasicAndDialogContainer() const;
 
     // misc.
-    bool                        GetOptions(SfxItemSet &);
+    void                        GetOptions(SfxItemSet &);
     void                        SetOptions(const SfxItemSet &);
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
@@ -189,7 +189,7 @@ public:
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
-    SAL_DLLPRIVATE bool         Initialize_Impl();
+    SAL_DLLPRIVATE void         Initialize_Impl();
 
     SAL_DLLPRIVATE SfxAppData_Impl* Get_Impl() const { return pAppData_Impl; }
 

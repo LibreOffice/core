@@ -251,11 +251,10 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
 
 
 
-sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, vcl::Window* pWindow )
+void SfxPopupMenuManager::Execute( const Point& rPos, vcl::Window* pWindow )
 {
-    sal_uInt16 nVal = static_cast<PopupMenu*>( GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
+    static_cast<PopupMenu*>( GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
     delete pStaticThesSubMenu;  pStaticThesSubMenu = nullptr;
-    return nVal;
 }
 
 

@@ -419,7 +419,7 @@ public:
     virtual bool    IsChangeRecording() const override;
     virtual bool    HasChangeRecordProtection() const override;
     virtual void    SetChangeRecording( bool bActivate ) override;
-    virtual bool    SetProtectionPassword( const OUString &rPassword ) override;
+    virtual void    SetProtectionPassword( const OUString &rPassword ) override;
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void SnapVisArea( Rectangle& rRect ) const;

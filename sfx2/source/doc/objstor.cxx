@@ -487,10 +487,9 @@ bool SfxObjectShell::Load( SfxMedium& rMedium )
     return GeneralInit_Impl( rMedium.GetStorage(), true );
 }
 
-bool SfxObjectShell::DoInitUnitTest()
+void SfxObjectShell::DoInitUnitTest()
 {
     pMedium = new SfxMedium;
-    return true; // always a success!
 }
 
 bool SfxObjectShell::DoInitNew( SfxMedium* pMed )

@@ -71,7 +71,7 @@ public:
     Rectangle           GetObjArea() const;
     Rectangle           GetScaledObjArea() const;
     void                SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight );
-    bool                SetObjAreaAndScale( const Rectangle&, const Fraction&, const Fraction& );
+    void                SetObjAreaAndScale( const Rectangle&, const Fraction&, const Fraction& );
     const Fraction&     GetScaleWidth() const;
     const Fraction&     GetScaleHeight() const;
     void                Invalidate();

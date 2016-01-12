@@ -53,7 +53,7 @@ public:
     VclPtr<SfxPrinter>      Clone() const;
 
     static VclPtr<SfxPrinter> Create( SvStream &rStream, SfxItemSet *pOptions );
-    SvStream&               Store( SvStream &rStream ) const;
+    void                    Store( SvStream &rStream ) const;
 
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    SetOptions( const SfxItemSet &rNewOptions );

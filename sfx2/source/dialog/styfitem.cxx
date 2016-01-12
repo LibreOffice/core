@@ -117,39 +117,31 @@ SfxStyleFamilies::~SfxStyleFamilies()
 
 
 
-bool SfxStyleFamilies::updateImages( const ResId& _rId )
+void SfxStyleFamilies::updateImages( const ResId& _rId )
 {
-    bool bSuccess = false;
+    ::svt::OLocalResourceAccess aLocalRes( _rId );
 
-    {
-        ::svt::OLocalResourceAccess aLocalRes( _rId );
+    // check if the image list is present
+    ResId aImageListId( (sal_uInt16) 1, *_rId.GetResMgr() );
+    aImageListId.SetRT( RSC_IMAGELIST );
 
-        // check if the image list is present
-        ResId aImageListId( (sal_uInt16) 1, *_rId.GetResMgr() );
-        aImageListId.SetRT( RSC_IMAGELIST );
+    if ( aLocalRes.IsAvailableRes( aImageListId ) )
+    {   // there is such a list
+        ImageList aImages( aImageListId );
 
-        if ( aLocalRes.IsAvailableRes( aImageListId ) )
-        {   // there is such a list
-            ImageList aImages( aImageListId );
+        // number of styles items/images
+        sal_uInt16 nCount = aImages.GetImageCount( );
+        DBG_ASSERT( aEntryList.size() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
+        if ( nCount > aEntryList.size() )
+            nCount = aEntryList.size();
 
-            // number of styles items/images
-            sal_uInt16 nCount = aImages.GetImageCount( );
-            DBG_ASSERT( aEntryList.size() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
-            if ( nCount > aEntryList.size() )
-                nCount = aEntryList.size();
-
-            // set the images on the items
-            for ( size_t i = 0; i < nCount; ++i )
-            {
-                SfxStyleFamilyItem* pItem = aEntryList[ i ];
-                pItem->SetImage( aImages.GetImage( aImages.GetImageId( i ) ) );
-            }
-
-            bSuccess = true;
+        // set the images on the items
+        for ( size_t i = 0; i < nCount; ++i )
+        {
+            SfxStyleFamilyItem* pItem = aEntryList[ i ];
+            pItem->SetImage( aImages.GetImage( aImages.GetImageId( i ) ) );
         }
     }
-
-    return bSuccess;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

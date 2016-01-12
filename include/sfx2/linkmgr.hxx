@@ -91,13 +91,13 @@ public:
     bool        Insert( SvBaseLink* pLink );
 
     // the links connect to a SvLinkSource and adds to the list
-    bool        InsertDDELink( SvBaseLink*,
+    void        InsertDDELink( SvBaseLink*,
                         const OUString& rServer,
                         const OUString& rTopic,
                         const OUString& rItem );
 
     // if everything is already set at the link!
-    bool        InsertDDELink( SvBaseLink* );
+    void        InsertDDELink( SvBaseLink* );
 
     // Connect the links to a pseudo-object and add to the list
     bool InsertFileLink( sfx2::SvBaseLink&,

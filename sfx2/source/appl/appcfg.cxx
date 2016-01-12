@@ -149,7 +149,7 @@ IMPL_LINK_TYPED(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)
 
 
 
-bool SfxApplication::GetOptions( SfxItemSet& rSet )
+void SfxApplication::GetOptions( SfxItemSet& rSet )
 {
     bool bRet = false;
     SfxItemPool &rPool = GetPool();
@@ -490,8 +490,6 @@ bool SfxApplication::GetOptions( SfxItemSet& rSet )
         }
         pRanges++;
     }
-
-    return bRet;
 }
 
 // TODO/CLEANUP: Why two SetOptions Methods?

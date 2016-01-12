@@ -3137,9 +3137,8 @@ void ScDocShell::SetChangeRecording( bool bActivate )
     }
 }
 
-bool ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
+void ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
-    bool bRes = false;
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
     if (pChangeTrack)
     {
@@ -3158,7 +3157,6 @@ bool ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
         {
             pChangeTrack->SetProtection( css::uno::Sequence< sal_Int8 >() );
         }
-        bRes = true;
 
         if ( bProtected != pChangeTrack->IsProtected() )
         {
@@ -3166,8 +3164,6 @@ bool ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
             SetDocumentModified();
         }
     }
-
-    return bRes;
 }
 
 bool ScDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash )

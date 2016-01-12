@@ -301,7 +301,7 @@ void FocusManager::RemoveWindow (vcl::Window& rWindow)
     }
 }
 
-bool FocusManager::MoveFocusInsidePanel (
+void FocusManager::MoveFocusInsidePanel (
     const FocusLocation& rFocusLocation,
     const sal_Int32 nDirection)
 {
@@ -314,21 +314,20 @@ bool FocusManager::MoveFocusInsidePanel (
                 maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GrabFocus();
             else
                 FocusPanelContent(rFocusLocation.mnIndex);
-            return true;
+            break;
 
         case PC_PanelToolBox:
             if (nDirection < 0 && bHasToolBoxItem)
                 maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GrabFocus();
             else
                 FocusPanelContent(rFocusLocation.mnIndex);
-            return true;
+            break;
 
-        default:
-            return false;
+        default: break;
     }
 }
 
-bool FocusManager::MoveFocusInsideDeckTitle (
+void FocusManager::MoveFocusInsideDeckTitle (
     const FocusLocation& rFocusLocation,
     const sal_Int32 nDirection)
 {
@@ -345,17 +344,16 @@ bool FocusManager::MoveFocusInsideDeckTitle (
                 FocusPanelContent(0);
             else if (bHasToolBoxItem)
                 mpDeckTitleBar->GetToolBox().GrabFocus();
-            return true;
+            break;
 
         case PC_DeckToolBox:
             if (nDirection>0 && ! IsPanelTitleVisible(0))
                 FocusPanelContent(0);
             else
                 mpDeckTitleBar->GrabFocus();
-            return true;
+            break;
 
-        default:
-            return false;
+        default: break;
     }
 }
 

@@ -152,7 +152,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getCurrentMacroExecMode() const override;
-    virtual bool setCurrentMacroExecMode( sal_uInt16 nMacroMode ) override;
+    virtual void setCurrentMacroExecMode( sal_uInt16 nMacroMode ) override;
     virtual OUString getDocumentLocation() const override;
     virtual bool documentStorageHasMacros() const override;
     virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;

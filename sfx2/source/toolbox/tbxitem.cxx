@@ -983,7 +983,7 @@ void SfxPopupWindow::dispose()
 
 
 
-SfxFrameStatusListener* SfxPopupWindow::GetOrCreateStatusListener()
+void SfxPopupWindow::GetOrCreateStatusListener()
 {
     if ( !m_xStatusListener.is() )
     {
@@ -993,8 +993,6 @@ SfxFrameStatusListener* SfxPopupWindow::GetOrCreateStatusListener()
                                     this );
         m_xStatusListener.set( static_cast< cppu::OWeakObject* >( m_pStatusListener ), UNO_QUERY );
     }
-
-    return m_pStatusListener;
 }
 
 

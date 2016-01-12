@@ -136,7 +136,7 @@ public:
     void                 SetUpdateMode( SfxLinkUpdateMode );
     SfxLinkUpdateMode    GetUpdateMode() const;
     SotClipboardFormatId GetContentType() const;
-    bool                 SetContentType( SotClipboardFormatId nType );
+    void                 SetContentType( SotClipboardFormatId nType );
 
     LinkManager*          GetLinkManager();
     const LinkManager*    GetLinkManager() const;

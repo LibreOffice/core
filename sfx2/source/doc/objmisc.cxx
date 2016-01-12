@@ -1866,17 +1866,14 @@ sal_Int16 SfxObjectShell_Impl::getCurrentMacroExecMode() const
     return nImposedExecMode;
 }
 
-bool SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
+void SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
     const SfxMedium* pMedium( rDocShell.GetMedium() );
     OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
     if ( pMedium )
     {
         pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, nMacroMode ) );
-        return true;
     }
-
-    return false;
 }
 
 OUString SfxObjectShell_Impl::getDocumentLocation() const

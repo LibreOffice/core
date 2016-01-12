@@ -1169,7 +1169,7 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
     }
 }
 
-bool SfxViewFrame::SetBorderPixelImpl
+void SfxViewFrame::SetBorderPixelImpl
 (
     const SfxViewShell* pVSh,
     const SvBorder&     rBorder
@@ -1207,15 +1207,9 @@ bool SfxViewFrame::SetBorderPixelImpl
         aEditArea.Bottom() -= rBorder.Bottom();
         pVSh->GetWindow()->SetPosSizePixel( aEditArea.TopLeft(), aEditArea.GetSize() );
     }
-
-    return true;
 }
 
-const SvBorder& SfxViewFrame::GetBorderPixelImpl
-(
-    const SfxViewShell* /*pSh*/
-)   const
-
+const SvBorder& SfxViewFrame::GetBorderPixelImpl() const
 {
     return pImp->aBorder;
 }

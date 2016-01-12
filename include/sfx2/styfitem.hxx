@@ -80,11 +80,8 @@ public:
         requested bitmap mode, incremented by 1.</p>
 
         <p>Usually, you will use the same resource which originally constructed the object.</p>
-
-        @return
-            <TRUE/> if an image list for the requested mode could be found in the given resource.
     */
-    bool    updateImages( const ResId& _rId );
+    void    updateImages( const ResId& _rId );
 };
 
 #endif

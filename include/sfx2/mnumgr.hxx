@@ -86,10 +86,10 @@ public:
     // Changing code which relies on Popup would need much more effort.
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, vcl::Window* pWindow );
 
-    sal_uInt16              Execute( const Point& rPos, vcl::Window *pWindow );
+    void                Execute( const Point& rPos, vcl::Window *pWindow );
 
     void                RemoveDisabledEntries();
-    Menu*                   GetSVMenu();
+    Menu*               GetSVMenu();
 };
 
 #endif // INCLUDED_SFX2_MNUMGR_HXX

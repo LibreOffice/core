@@ -83,7 +83,7 @@ namespace sfx2
 
             see getCurrentMacroExecMode
         */
-        virtual bool
+        virtual void
                     setCurrentMacroExecMode( sal_uInt16 ) = 0;
 
         /** returns the origin of the document

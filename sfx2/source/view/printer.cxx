@@ -85,7 +85,7 @@ VclPtr<SfxPrinter> SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
 
 
-SvStream& SfxPrinter::Store( SvStream& rStream ) const
+void SfxPrinter::Store( SvStream& rStream ) const
 
 /*  [Description]
 
@@ -93,7 +93,7 @@ SvStream& SfxPrinter::Store( SvStream& rStream ) const
 */
 
 {
-    return WriteJobSetup( rStream, GetJobSetup() );
+    WriteJobSetup( rStream, GetJobSetup() );
 }
 
 

@@ -61,7 +61,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 
     SAL_DLLPRIVATE void SetIsRemote_Impl();
     SAL_DLLPRIVATE void CloseInStream_Impl();
-    SAL_DLLPRIVATE bool CloseOutStream_Impl();
+    SAL_DLLPRIVATE void CloseOutStream_Impl();
     SAL_DLLPRIVATE void CloseStreams_Impl();
 
     SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
@@ -204,10 +204,10 @@ public:
     SAL_DLLPRIVATE void SetStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xNewStorage );
 
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
-    SAL_DLLPRIVATE sal_uInt16 AddVersion_Impl( css::util::RevisionTag& rVersion );
+    SAL_DLLPRIVATE void AddVersion_Impl( css::util::RevisionTag& rVersion );
     SAL_DLLPRIVATE bool TransferVersionList_Impl( SfxMedium& rMedium );
-    SAL_DLLPRIVATE bool SaveVersionList_Impl( bool bUseXML );
-    SAL_DLLPRIVATE bool RemoveVersion_Impl( const OUString& rVersion );
+    SAL_DLLPRIVATE void SaveVersionList_Impl( bool bUseXML );
+    SAL_DLLPRIVATE void RemoveVersion_Impl( const OUString& rVersion );
 
     SAL_DLLPRIVATE void SetExpired_Impl( const DateTime& rDateTime );
     SAL_DLLPRIVATE SvKeyValueIterator* GetHeaderAttributes_Impl();
@@ -243,7 +243,7 @@ public:
 
     SAL_DLLPRIVATE bool StorageCommit_Impl();
 
-    SAL_DLLPRIVATE bool TransactedTransferForFS_Impl( const INetURLObject& aSource,
+    SAL_DLLPRIVATE void TransactedTransferForFS_Impl( const INetURLObject& aSource,
                              const INetURLObject& aDest,
                              const css::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
 

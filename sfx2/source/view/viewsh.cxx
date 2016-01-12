@@ -1193,7 +1193,7 @@ const SvBorder& SfxViewShell::GetBorderPixel() const
 {
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
-    return GetViewFrame()->GetBorderPixelImpl( this );
+    return GetViewFrame()->GetBorderPixelImpl();
 }
 
 

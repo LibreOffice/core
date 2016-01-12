@@ -200,7 +200,7 @@ OUString GetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
 
 
 
-bool SfxApplication::Initialize_Impl()
+void SfxApplication::Initialize_Impl()
 {
 #ifdef TLX_VALIDATE
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );
@@ -270,7 +270,7 @@ bool SfxApplication::Initialize_Impl()
     SetPool( pAppData_Impl->pPool );
 
     if ( pAppData_Impl->bDowning )
-        return false;
+        return;
 
     // App-Dispatcher aufbauen
     pAppData_Impl->pAppDispat->Push(*this);
@@ -282,8 +282,6 @@ bool SfxApplication::Initialize_Impl()
         // Set special characters callback on vcl edit control
         Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
     }
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

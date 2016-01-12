@@ -318,7 +318,7 @@ public:
      *
      * @return true if the initialization is successful, false otherwise.
      */
-    bool                        DoInitUnitTest();
+    void                        DoInitUnitTest();
     bool                        DoInitNew( SfxMedium* pMedium=nullptr );
     bool                        DoLoad( SfxMedium* pMedium );
     bool                        DoLoadExternal( SfxMedium* pMed );
@@ -624,7 +624,7 @@ public:
     virtual bool    IsChangeRecording() const;
     virtual bool    HasChangeRecordProtection() const;
     virtual void    SetChangeRecording( bool bActivate );
-    virtual bool    SetProtectionPassword( const OUString &rPassword );
+    virtual void    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash );
 
     SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( bool bFullContent ) const;

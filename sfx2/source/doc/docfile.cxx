@@ -596,7 +596,7 @@ bool SfxMedium::CloseOutStream()
     return true;
 }
 
-bool SfxMedium::CloseOutStream_Impl()
+void SfxMedium::CloseOutStream_Impl()
 {
     if ( pImp->m_pOutStream )
     {
@@ -622,8 +622,6 @@ bool SfxMedium::CloseOutStream_Impl()
         if ( pImp->m_pSet )
             pImp->m_pSet->ClearItem( SID_STREAM );
     }
-
-    return true;
 }
 
 
@@ -1637,7 +1635,7 @@ bool SfxMedium::StorageCommit_Impl()
 }
 
 
-bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
+void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                                                  const INetURLObject& aDest,
                                                  const Reference< css::ucb::XCommandEnvironment >& xComEnv )
 {
@@ -1758,8 +1756,6 @@ bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
         else
             pImp->m_eError = ERRCODE_IO_CANTREAD;
     }
-
-    return bResult;
 }
 
 
@@ -3263,7 +3259,7 @@ uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Refere
     return uno::Sequence < util::RevisionTag >();
 }
 
-sal_uInt16 SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
+void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
 {
     if ( GetStorage().is() )
     {
@@ -3290,16 +3286,13 @@ sal_uInt16 SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
         pImp->aVersions.realloc( nLength+1 );
         rRevision.Identifier = aRevName;
         pImp->aVersions[nLength] = rRevision;
-        return nKey;
     }
-
-    return 0;
 }
 
-bool SfxMedium::RemoveVersion_Impl( const OUString& rName )
+void SfxMedium::RemoveVersion_Impl( const OUString& rName )
 {
     if ( !pImp->aVersions.getLength() )
-        return false;
+        return;
 
     sal_Int32 nLength = pImp->aVersions.getLength();
     for ( sal_Int32 n=0; n<nLength; n++ )
@@ -3309,11 +3302,9 @@ bool SfxMedium::RemoveVersion_Impl( const OUString& rName )
             for ( sal_Int32 m=n; m<nLength-1; m++ )
                 pImp->aVersions[m] = pImp->aVersions[m+1];
             pImp->aVersions.realloc(nLength-1);
-            return true;
+            return;
         }
     }
-
-    return false;
 }
 
 bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
@@ -3327,26 +3318,23 @@ bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
     return false;
 }
 
-bool SfxMedium::SaveVersionList_Impl( bool /*bUseXML*/ )
+void SfxMedium::SaveVersionList_Impl( bool /*bUseXML*/ )
 {
     if ( GetStorage().is() )
     {
         if ( !pImp->aVersions.getLength() )
-            return true;
+            return;
 
         uno::Reference < document::XDocumentRevisionListPersistence > xWriter =
                  document::DocumentRevisionListPersistence::create( comphelper::getProcessComponentContext() );
         try
         {
             xWriter->store( GetStorage(), pImp->aVersions );
-            return true;
         }
         catch ( const uno::Exception& )
         {
         }
     }
-
-    return false;
 }
 
 bool SfxMedium::IsReadOnly() const

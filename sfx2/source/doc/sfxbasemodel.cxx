@@ -1015,7 +1015,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(RuntimeE
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell );
         if ( pFrame )
         {
-            SvBorder aBorder = pFrame->GetBorderPixelImpl( pFrame->GetViewShell() );
+            SvBorder aBorder = pFrame->GetBorderPixelImpl();
 
             Sequence< sal_Int32 > aBorderSeq(4);
             aBorderSeq[0] = aBorder.Left();
