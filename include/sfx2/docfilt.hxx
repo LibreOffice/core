@@ -76,6 +76,8 @@ public:
 
     bool IsAllowedAsTemplate() const { return bool(nFormatType & SfxFilterFlags::TEMPLATE); }
     bool IsOwnFormat() const { return bool(nFormatType & SfxFilterFlags::OWN); }
+    /// If the filter supports digital signatures.
+    bool GetSupportsSigning() const { return bool(nFormatType & SfxFilterFlags::SUPPORTSSIGNING); }
     bool IsOwnTemplateFormat() const { return bool(nFormatType & SfxFilterFlags::TEMPLATEPATH); }
     bool IsAlienFormat() const { return bool(nFormatType & SfxFilterFlags::ALIEN); }
     bool CanImport() const { return bool(nFormatType & SfxFilterFlags::IMPORT); }
