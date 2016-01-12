@@ -1817,7 +1817,7 @@ void Printer::InitFont() const
 
 void Printer::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const
 {
-    pFontEntry->mnOrientation = pFontEntry->maFontAttributes.GetOrientation();
+    pFontEntry->mnOrientation = pFontEntry->maFontMetric.GetOrientation();
 }
 
 void Printer::DrawImage( const Point&, const Image&, DrawImageFlags )

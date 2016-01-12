@@ -35,6 +35,7 @@
 #include <fontinstance.hxx>
 #include <sallayout.hxx>
 #include "fontattributes.hxx"
+#include "impfontmetricdata.hxx"
 
 #include <unordered_map>
 
@@ -127,18 +128,18 @@ class GlyphData
 public:
                             GlyphData() : mnLruValue(0) {}
 
-    const GlyphMetric&      GetMetric() const           { return maFontAttributes; }
+    const GlyphMetric&      GetMetric() const           { return maGlyphMetric; }
 
-    void                    SetSize( const Size& s)     { maFontAttributes.SetSize( s ); }
-    void                    SetOffset( int nX, int nY ) { maFontAttributes.SetOffset( nX, nY ); }
-    void                    SetDelta( int nX, int nY )  { maFontAttributes.SetDelta( nX, nY ); }
-    void                    SetCharWidth( long nW )     { maFontAttributes.SetCharWidth( nW ); }
+    void                    SetSize( const Size& s)     { maGlyphMetric.SetSize( s ); }
+    void                    SetOffset( int nX, int nY ) { maGlyphMetric.SetOffset( nX, nY ); }
+    void                    SetDelta( int nX, int nY )  { maGlyphMetric.SetDelta( nX, nY ); }
+    void                    SetCharWidth( long nW )     { maGlyphMetric.SetCharWidth( nW ); }
 
     void                    SetLruValue( int n ) const  { mnLruValue = n; }
     long                    GetLruValue() const         { return mnLruValue;}
 
 private:
-    GlyphMetric             maFontAttributes;
+    GlyphMetric             maGlyphMetric;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnLruValue;
@@ -161,7 +162,7 @@ public:
 
     const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
 
-    void                    FetchFontAttributes( FontAttributes&, long& rFactor ) const;
+    void                    FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
     int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
     double                  GetStretch() { return mfStretch; }

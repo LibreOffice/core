@@ -41,6 +41,8 @@
 #include "fontsubset.hxx"
 #include "impfont.hxx"
 #include "impfontcharmap.hxx"
+#include "impfontmetricdata.hxx"
+
 #ifdef MACOSX
 #include "osx/salframe.h"
 #endif
@@ -306,9 +308,9 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
     // SAL_ DEBUG(std::hex << nSalColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
 }
 
-void AquaSalGraphics::GetFontAttributes( FontAttributes* pFontAttributes, int /*nFallbackLevel*/ )
+void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pFontMetric, int /*nFallbackLevel*/ )
 {
-    mpTextStyle->GetFontAttributes( *pFontAttributes );
+    mpTextStyle->GetFontMetric( *pFontMetric );
 }
 
 static bool AddTempDevFont(const OUString& rFontFileURL)

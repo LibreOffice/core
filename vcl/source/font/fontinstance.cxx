@@ -82,7 +82,7 @@ namespace std
 LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData )
     : mpFontCache(nullptr)
     , maFontSelData( rFontSelData )
-    , maFontAttributes( rFontSelData )
+    , maFontMetric( rFontSelData )
     , mpConversion( nullptr )
     , mnLineHeight( 0 )
     , mnRefCount( 1 )

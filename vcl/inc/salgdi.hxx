@@ -29,6 +29,8 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/metric.hxx>
 
+#include "impfontmetricdata.hxx"
+
 #include "salgdiimpl.hxx"
 #include "salglyphid.hxx"
 #include "sallayout.hxx"
@@ -145,7 +147,7 @@ public:
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
 
     // get the current font's metrics
-    virtual void                GetFontAttributes( FontAttributes*, int nFallbackLevel = 0 ) = 0;
+    virtual void                GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
     // get the repertoire of the current font
     virtual const FontCharMapPtr GetFontCharMap() const = 0;

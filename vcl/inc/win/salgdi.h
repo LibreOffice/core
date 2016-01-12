@@ -46,6 +46,7 @@ class OpenGLTexture;
 class PhysicalFontCollection;
 class SalGraphicsImpl;
 class WinOpenGLSalGraphicsImpl;
+class ImplFontMetricData;
 
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
@@ -361,7 +362,7 @@ public:
     // set the font
     virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontAttributes( FontAttributes*, int nFallbackLevel ) override;
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) override;
     // get the repertoire of the current font
     virtual const FontCharMapPtr GetFontCharMap() const override;
     // get the layout capabilities of the current font

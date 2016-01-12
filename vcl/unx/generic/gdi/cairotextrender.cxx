@@ -32,6 +32,7 @@
 #include "unx/fc_fontoptions.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
+#include "impfontmetricdata.hxx"
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
@@ -454,7 +455,7 @@ FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, 
 }
 
 void
-CairoTextRender::GetFontAttributes( FontAttributes *pFontAttributes, int nFallbackLevel )
+CairoTextRender::GetFontMetric( ImplFontMetricData *pFontMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
@@ -462,7 +463,7 @@ CairoTextRender::GetFontAttributes( FontAttributes *pFontAttributes, int nFallba
     if( mpServerFont[nFallbackLevel] != nullptr )
     {
         long rDummyFactor;
-        mpServerFont[nFallbackLevel]->FetchFontAttributes( *pFontAttributes, rDummyFactor );
+        mpServerFont[nFallbackLevel]->FetchFontMetric( *pFontMetric, rDummyFactor );
     }
 }
 

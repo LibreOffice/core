@@ -30,6 +30,7 @@
 #include <salvd.hxx>
 #include <outdev.h>
 #include "PhysicalFontCollection.hxx"
+#include "impfontmetricdata.hxx"
 #include <svdata.hxx>
 
 #include <vcl/ITiledRenderable.hxx>
@@ -564,9 +565,9 @@ long VirtualDevice::GetFontExtLeading() const
 #endif
 
     LogicalFontInstance* pFontInstance = mpFontInstance;
-    FontAttributes* pFontAttributes = &(pFontInstance->maFontAttributes);
+    ImplFontMetricData* pFontMetric = &(pFontInstance->maFontMetric);
 
-    return pFontAttributes->GetExternalLeading();
+    return pFontMetric->GetExternalLeading();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
