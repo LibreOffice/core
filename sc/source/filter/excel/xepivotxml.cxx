@@ -20,6 +20,8 @@
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
+#include <o3tl/make_unique.hxx>
+
 #include <vector>
 
 using namespace oox;
@@ -343,16 +345,16 @@ void XclExpXmlPivotTableManager::Initialize()
         sal_Int32 nCacheId = itCache->second;
         SCTAB nTab = rDPObj.GetOutRange().aStart.Tab();
 
-        TablesType::iterator it = maTables.find(nTab);
-        if (it == maTables.end())
+        TablesType::iterator it = m_Tables.find(nTab);
+        if (it == m_Tables.end())
         {
             // Insert a new instance for this sheet index.
             std::pair<TablesType::iterator, bool> r =
-                maTables.insert(nTab, new XclExpXmlPivotTables(GetRoot(), maCaches));
+                m_Tables.insert(std::make_pair(nTab, o3tl::make_unique<XclExpXmlPivotTables>(GetRoot(), maCaches)));
             it = r.first;
         }
 
-        XclExpXmlPivotTables* p = it->second;
+        XclExpXmlPivotTables *const p = it->second.get();
         p->AppendTable(&rDPObj, nCacheId, i+1);
     }
 
@@ -366,8 +368,8 @@ XclExpXmlPivotCaches& XclExpXmlPivotTableManager::GetCaches()
 
 XclExpXmlPivotTables* XclExpXmlPivotTableManager::GetTablesBySheet( SCTAB nTab )
 {
-    TablesType::iterator it = maTables.find(nTab);
-    return it == maTables.end() ? nullptr : it->second;
+    TablesType::iterator const it = m_Tables.find(nTab);
+    return it == m_Tables.end() ? nullptr : it->second.get();
 }
 
 XclExpXmlPivotTables::Entry::Entry( const ScDPObject* pTable, sal_Int32 nCacheId, sal_Int32 nPivotId ) :
