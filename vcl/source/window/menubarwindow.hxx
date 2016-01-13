@@ -78,7 +78,7 @@ private:
     PopupMenu*      pActivePopup;
     sal_uInt16      nHighlightedItem;
     sal_uInt16      nRolloveredItem;
-    sal_uLong       nSaveFocusId;
+    VclPtr<vcl::Window> xSaveFocusId;
     bool            mbAutoPopup;
     bool            bIgnoreFirstMove;
     bool            bStayActive;
@@ -127,8 +127,8 @@ public:
     virtual void    Resize() override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 
-    void    SetFocusId(sal_uLong nId) { nSaveFocusId = nId; }
-    sal_uLong GetFocusId() const { return nSaveFocusId; }
+    void    SetFocusId(const VclPtr<vcl::Window>& xId) { xSaveFocusId = xId; }
+    VclPtr<vcl::Window> GetFocusId() const { return xSaveFocusId; }
 
     void    SetMenu(MenuBar* pMenu);
     void    SetHeight(long nHeight);

@@ -1142,8 +1142,8 @@ public:
 
     bool                                IsCompoundControl() const;
 
-    static sal_uIntPtr                  SaveFocus();
-    static bool                         EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore = true );
+    static VclPtr<vcl::Window>          SaveFocus();
+    static bool                         EndSaveFocus( const VclPtr<vcl::Window>& xFocusWin, bool bRestore = true );
 
     void                                CaptureMouse();
     void                                ReleaseMouse();

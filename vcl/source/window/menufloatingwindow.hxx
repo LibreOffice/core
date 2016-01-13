@@ -41,7 +41,7 @@ private:
     Timer aHighlightChangedTimer;
     Timer aSubmenuCloseTimer;
     Timer aScrollTimer;
-    sal_uLong nSaveFocusId;
+    VclPtr<vcl::Window> xSaveFocusId;
     sal_uInt16 nHighlightedItem; // highlighted/selected Item
     sal_uInt16 nMBDownPos;
     sal_uInt16 nScrollerHeight;
@@ -100,15 +100,15 @@ public:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    void SetFocusId( sal_uLong nId ) { nSaveFocusId = nId; }
-    sal_uLong GetFocusId() const      { return nSaveFocusId; }
+    void SetFocusId( const VclPtr<vcl::Window>& xId ) { xSaveFocusId = xId; }
+    VclPtr<vcl::Window> GetFocusId() const      { return xSaveFocusId; }
 
     void EnableScrollMenu( bool b );
     bool IsScrollMenu() const        { return bScrollMenu; }
     sal_uInt16 GetScrollerHeight() const   { return nScrollerHeight; }
 
     void Execute();
-    void StopExecute( sal_uLong nFocusId = 0 );
+    void StopExecute( VclPtr<vcl::Window> xFocusId = nullptr );
     void EndExecute();
     void EndExecute( sal_uInt16 nSelectId );
 

@@ -756,7 +756,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
     StartPopupMode( aRect, nFlags );
 }
 
-void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, sal_uLong nFocusId )
+void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, VclPtr<vcl::Window> xFocusId )
 {
     if ( !mbInPopupMode )
         return;
@@ -782,8 +782,8 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, sal_uLong n
         Show( false, ShowFlags::NoFocusChange );
 
         // maybe pass focus on to a suitable FloatingWindow
-        if ( nFocusId )
-            Window::EndSaveFocus( nFocusId );
+        if ( xFocusId != nullptr )
+            Window::EndSaveFocus( xFocusId );
         else if ( pSVData->maWinData.mpFocusWin && pSVData->maWinData.mpFirstFloat &&
                   ImplIsWindowOrChild( pSVData->maWinData.mpFocusWin ) )
             pSVData->maWinData.mpFirstFloat->GrabFocus();
@@ -792,8 +792,8 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, sal_uLong n
     else
     {
         mbPopupModeTearOff = true;
-        if ( nFocusId )
-            Window::EndSaveFocus( nFocusId, false );
+        if ( xFocusId != nullptr )
+            Window::EndSaveFocus( xFocusId, false );
     }
     EnableSaveBackground( mbOldSaveBackMode );
 

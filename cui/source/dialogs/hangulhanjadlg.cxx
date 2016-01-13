@@ -825,9 +825,9 @@ namespace svx
 
             // give the focus to the new def button temporarily - VCL is somewhat peculiar
             // in recognizing a new default button
-            sal_uInt32 nSaveFocusId = Window::SaveFocus();
+            VclPtr<vcl::Window> xSaveFocusId = Window::SaveFocus();
             pNewDefButton->GrabFocus();
-            Window::EndSaveFocus( nSaveFocusId );
+            Window::EndSaveFocus( xSaveFocusId );
         }
     }
 

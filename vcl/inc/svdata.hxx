@@ -404,11 +404,6 @@ private:
 
 };
 
-struct ImplFocusDelData : public ImplDelData
-{
-    VclPtr<vcl::Window> mpFocusWin;
-};
-
 struct ImplSVEvent
 {
     void*               mpData;
