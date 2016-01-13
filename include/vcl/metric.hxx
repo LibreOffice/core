@@ -48,11 +48,14 @@ public:
 
     long                GetAscent() const;
     long                GetDescent() const;
-    long                GetIntLeading() const;
-    long                GetExtLeading() const;
+    long                GetInternalLeading() const;
+    long                GetExternalLeading() const;
     long                GetLineHeight() const;
     long                GetSlant() const;
     long                GetBulletOffset() const;
+
+    void                SetExternalLeading(long);
+    void                SetInternalLeading(long);
 
     bool                IsScalable() const;
     bool                IsFullstopCentered() const;
@@ -79,8 +82,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
            << ",size=(" << rMetric.GetSize().Width() << "," << rMetric.GetSize().Height() << ")"
            << ",ascent=" << rMetric.GetAscent()
            << ",descent=" << rMetric.GetDescent()
-           << ",intLeading=" << rMetric.GetIntLeading()
-           << ",extLeading=" << rMetric.GetExtLeading()
+           << ",intLeading=" << rMetric.GetInternalLeading()
+           << ",extLeading=" << rMetric.GetExternalLeading()
            << ",lineHeight=" << rMetric.GetLineHeight()
            << ",slant=" << rMetric.GetSlant()
            << "}";

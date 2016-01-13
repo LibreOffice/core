@@ -117,11 +117,14 @@ public:
 
     long                GetAscent() const                           { return mnAscent; }
     long                GetDescent() const                          { return mnDescent; }
-    long                GetIntLeading() const                       { return mnIntLeading; }
-    long                GetExtLeading() const                       { return mnExtLeading; }
+    long                GetInternalLeading() const                  { return mnIntLeading; }
+    long                GetExternalLeading() const                  { return mnExtLeading; }
     long                GetLineHeight() const                       { return mnLineHeight; }
     long                GetSlant() const                            { return mnSlant; }
     long                GetBulletOffset() const                     { return mnBulletOffset; }
+
+    void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
+    void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
 
     bool                IsScalable() const                          { return mbScalableFont; }
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }

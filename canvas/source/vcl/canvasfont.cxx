@@ -126,8 +126,8 @@ namespace vclcanvas
         return rendering::FontMetrics(
             aMetric.GetAscent(),
             aMetric.GetDescent(),
-            aMetric.GetIntLeading(),
-            aMetric.GetExtLeading(),
+            aMetric.GetInternalLeading(),
+            aMetric.GetExternalLeading(),
             0,
             aMetric.GetDescent() / 2.0,
             aMetric.GetAscent() / 2.0);

@@ -2827,7 +2827,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     nAscent = (sal_uInt16)aMetric.GetAscent();
     if ( IsAddExtLeading() )
         nAscent = sal::static_int_cast< sal_uInt16 >(
-            nAscent + aMetric.GetExtLeading() );
+            nAscent + aMetric.GetExternalLeading() );
     nDescent = (sal_uInt16)aMetric.GetDescent();
 
     if ( IsFixedCellHeight() )
@@ -2837,7 +2837,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     }
     else
     {
-        sal_uInt16 nIntLeading = ( aMetric.GetIntLeading() > 0 ) ? (sal_uInt16)aMetric.GetIntLeading() : 0;
+        sal_uInt16 nIntLeading = ( aMetric.GetInternalLeading() > 0 ) ? (sal_uInt16)aMetric.GetInternalLeading() : 0;
         // Fonts without leading cause problems
         if ( ( nIntLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
         {
