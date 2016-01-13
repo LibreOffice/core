@@ -41,7 +41,6 @@ public:
 
 public:
     OpenGLFramebuffer* mpPrevFramebuffer;
-    OpenGLFramebuffer* mpNextFramebuffer;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_FRAMEBUFFER_H

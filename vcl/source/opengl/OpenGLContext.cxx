@@ -1649,7 +1649,6 @@ OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rText
         if( mpLastFramebuffer )
         {
             pFramebuffer->mpPrevFramebuffer = mpLastFramebuffer;
-            mpLastFramebuffer->mpNextFramebuffer = pFramebuffer;
             mpLastFramebuffer = pFramebuffer;
         }
         else

@@ -18,8 +18,7 @@ OpenGLFramebuffer::OpenGLFramebuffer() :
     mnWidth( 0 ),
     mnHeight( 0 ),
     mnAttachedTexture( 0 ),
-    mpPrevFramebuffer( nullptr ),
-    mpNextFramebuffer( nullptr )
+    mpPrevFramebuffer( nullptr )
 {
     glGenFramebuffers( 1, &mnId );
     CHECK_GL_ERROR();
