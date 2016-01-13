@@ -183,7 +183,7 @@ namespace drawinglayer
         double TextLayouterDevice::getOverlineOffset() const
         {
             const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            double fRet = (rMetric.GetIntLeading() / 2.0) - rMetric.GetAscent();
+            double fRet = (rMetric.GetInternalLeading() / 2.0) - rMetric.GetAscent();
             return fRet;
         }
 
@@ -197,14 +197,14 @@ namespace drawinglayer
         double TextLayouterDevice::getStrikeoutOffset() const
         {
             const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            double fRet = (rMetric.GetAscent() - rMetric.GetIntLeading()) / 3.0;
+            double fRet = (rMetric.GetAscent() - rMetric.GetInternalLeading()) / 3.0;
             return fRet;
         }
 
         double TextLayouterDevice::getOverlineHeight() const
         {
             const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            double fRet = rMetric.GetIntLeading() / 2.5;
+            double fRet = rMetric.GetInternalLeading() / 2.5;
             return fRet;
         }
 

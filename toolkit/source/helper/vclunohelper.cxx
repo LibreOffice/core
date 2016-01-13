@@ -434,7 +434,7 @@ css::awt::SimpleFontMetric VCLUnoHelper::CreateFontMetric( const FontMetric& rFo
     css::awt::SimpleFontMetric aFM;
     aFM.Ascent = (sal_Int16)rFontMetric.GetAscent();
     aFM.Descent = (sal_Int16)rFontMetric.GetDescent();
-    aFM.Leading = (sal_Int16)rFontMetric.GetIntLeading();
+    aFM.Leading = (sal_Int16)rFontMetric.GetInternalLeading();
     aFM.Slant = (sal_Int16)rFontMetric.GetSlant();
     aFM.FirstChar = 0x0020;
     aFM.LastChar = 0xFFFD;

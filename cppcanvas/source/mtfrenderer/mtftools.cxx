@@ -66,7 +66,7 @@ namespace cppcanvas
             {
                 case ALIGN_TOP:
                     return ::Size( 0,
-                                   aMetric.GetIntLeading() + aMetric.GetAscent() );
+                                   aMetric.GetInternalLeading() + aMetric.GetAscent() );
 
                 default:
                     ENSURE_OR_THROW( false,
@@ -243,10 +243,10 @@ namespace cppcanvas
 
             TextLineInfo aTextInfo(
                 (aMetric.GetDescent() + 2) / 4.0,
-                ((aMetric.GetIntLeading() + 1.5) / 3.0),
-                (aMetric.GetIntLeading() / 2.0) - aMetric.GetAscent(),
+                ((aMetric.GetInternalLeading() + 1.5) / 3.0),
+                (aMetric.GetInternalLeading() / 2.0) - aMetric.GetAscent(),
                 aMetric.GetDescent() / 2.0,
-                (aMetric.GetIntLeading() - aMetric.GetAscent()) / 3.0,
+                (aMetric.GetInternalLeading() - aMetric.GetAscent()) / 3.0,
                 rState.textOverlineStyle,
                 rState.textUnderlineStyle,
                 rState.textStrikeoutStyle );

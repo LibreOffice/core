@@ -48,7 +48,7 @@ public:
 
     long                GetAscent() const;
     long                GetDescent() const;
-    long                GetIntLeading() const;
+    long                GetInternalLeading() const;
     long                GetExtLeading() const;
     long                GetLineHeight() const;
     long                GetSlant() const;
@@ -79,7 +79,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
            << ",size=(" << rMetric.GetSize().Width() << "," << rMetric.GetSize().Height() << ")"
            << ",ascent=" << rMetric.GetAscent()
            << ",descent=" << rMetric.GetDescent()
-           << ",intLeading=" << rMetric.GetIntLeading()
+           << ",intLeading=" << rMetric.GetInternalLeading()
            << ",extLeading=" << rMetric.GetExtLeading()
            << ",lineHeight=" << rMetric.GetLineHeight()
            << ",slant=" << rMetric.GetSlant()
