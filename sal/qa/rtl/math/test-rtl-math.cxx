@@ -89,7 +89,7 @@ public:
     }
 
     void test_doubleToString() {
-        double fVal = 999999999999999;
+        double fVal = 999999999999999.0;
         sal_Int32 aGroups[3] = { 3, 2, 0 };
         rtl::OUString aRes( rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
@@ -97,31 +97,31 @@ public:
                     '.', aGroups, ',', true));
         CPPUNIT_ASSERT_EQUAL( OUString("99,99,99,99,99,99,999"), aRes);
 
-        fVal = 4503599627370495;
+        fVal = 4503599627370495.0;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.');
         CPPUNIT_ASSERT_EQUAL( OUString("4503599627370495"), aRes);
 
-        fVal = 4503599627370496;
+        fVal = 4503599627370496.0;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     2, '.');
         CPPUNIT_ASSERT_EQUAL( OUString("4503599627370496.00"), aRes);
 
-        fVal = 9007199254740991;    // (2^53)-1
+        fVal = 9007199254740991.0;  // (2^53)-1
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.', true);
         CPPUNIT_ASSERT_EQUAL( OUString("9007199254740991"), aRes);
 
-        fVal = 9007199254740992;    // (2^53), algorithm switch
+        fVal = 9007199254740992.0;  // (2^53), algorithm switch
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.', true);
         CPPUNIT_ASSERT_EQUAL( OUString("9.00719925474099E+015"), aRes);
 
-        fVal = 9007199254740993;    // (2^53)+1 would be but is 9007199254740992
+        fVal = 9007199254740993.0;  // (2^53)+1 would be but is 9007199254740992
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.', true);
