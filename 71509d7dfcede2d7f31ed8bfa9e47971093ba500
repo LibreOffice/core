@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_afca6c4d",
+        "filename": "sw/inc/hints.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-13T12:50:56Z",
+      "side": 1,
+      "message": "i was wondering if we actually put SwMsgPoolItems into item sets, and this is a clear indication that we don\u0027t do that:\n\nbool SwMsgPoolItem::operator\u003d\u003d( const SfxPoolItem\u0026 ) const\n{\n    OSL_FAIL( \"SwMsgPoolItem knows no \u003d\u003d\" );\n    return false;\n}\n\nSfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const\n{\n    OSL_FAIL( \"SwMsgPoolItem knows no Clone\" );\n    return nullptr;\n}\n\nthe SwMsgPoolItem are some sort of hack to transport down-castable objects to SwClient::Modify(), they\u0027re not \"real\" items.\n\nso perhaps it would even make sense to ignore them in the clang plugin and omit the operator\u003d\u003d",
+      "revId": "71509d7dfcede2d7f31ed8bfa9e47971093ba500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_0fbbb8c5",
         "filename": "sw/inc/hints.hxx",
         "patchSetId": 5
