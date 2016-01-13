@@ -1345,9 +1345,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             Point aP1(aXP1[1]); aP1-=aXP1[0];
             Point aP2(aXP1[nPointCount-2]); aP2-=aXP1[nPointCount-1];
             long nAng1=0; if (aP1.X()<0) nAng1=18000; if (aP1.Y()>0) nAng1=27000;
-            if (aP1.Y()<0) nAng1=9000; if (aP1.X()!=0 && aP1.Y()!=0) nAng1=1; // slant?!
+            if (aP1.Y()<0) nAng1=9000;
+            if (aP1.X()!=0 && aP1.Y()!=0) nAng1=1; // slant?!
             long nAng2=0; if (aP2.X()<0) nAng2=18000; if (aP2.Y()>0) nAng2=27000;
-            if (aP2.Y()<0) nAng2=9000; if (aP2.X()!=0 && aP2.Y()!=0) nAng2=1; // slant?!
+            if (aP2.Y()<0) nAng2=9000;
+            if (aP2.X()!=0 && aP2.Y()!=0) nAng2=1; // slant?!
             if (nAng1!=nAngle1) nIntersections++;
             if (nAng2!=nAngle2) nIntersections++;
         }
