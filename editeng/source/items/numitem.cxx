@@ -168,6 +168,7 @@ SvxNumberFormat::SvxNumberFormat( sal_Int16 eType,
       eVertOrient(text::VertOrientation::NONE),
       pBulletFont(nullptr)
 {
+    AdjustChange = false;
 }
 
 SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
@@ -241,6 +242,24 @@ SvxNumberFormat::~SvxNumberFormat()
 {
     delete pGraphicBrush;
     delete pBulletFont;
+}
+
+void SvxNumberFormat::SetNumberingType(sal_Int16 nSet)
+{
+    if(!AdjustChange)
+    {
+        if(nSet == SVX_NUM_ROMAN_UPPER || nSet == SVX_NUM_ROMAN_LOWER)
+            eNumAdjust = SVX_ADJUST_RIGHT;
+        else if (eNumAdjust == SVX_ADJUST_RIGHT && (GetNumberingType() == SVX_NUM_ROMAN_UPPER || GetNumberingType() == SVX_NUM_ROMAN_LOWER))
+            eNumAdjust = SVX_ADJUST_LEFT;
+    }
+
+    SvxNumberType::SetNumberingType(nSet);
+}
+void SvxNumberFormat::SetNumAdjust(SvxAdjust eSet)
+{
+    eNumAdjust = eSet;
+    AdjustChange = true;
 }
 
 void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
