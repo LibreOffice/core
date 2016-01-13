@@ -123,6 +123,8 @@ public:
     long                GetSlant() const                            { return mnSlant; }
     long                GetBulletOffset() const                     { return mnBulletOffset; }
 
+    void                SetAscent( long nAscent )                   { mnAscent = nAscent; }
+    void                SetDescent( long nDescent )                 { mnDescent = nDescent; }
     void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
     void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
 
