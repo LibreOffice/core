@@ -14,15 +14,19 @@
 
 #include <vcl/metric.hxx>
 
+#include "impfont.hxx"
+
 class VclFontMetricTest : public test::BootstrapFixture
 {
 public:
     VclFontMetricTest() : BootstrapFixture(true, false) {}
 
     void testScalableFlag();
+    void testEqualityOperator();
 
     CPPUNIT_TEST_SUITE(VclFontMetricTest);
     CPPUNIT_TEST(testScalableFlag);
+    CPPUNIT_TEST(testEqualityOperator);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -31,12 +35,24 @@ void VclFontMetricTest::testScalableFlag()
     // default constructor should set scalable flag to false
     FontMetric aFontMetric;
 
-    CPPUNIT_ASSERT( !aFontMetric.IsScalable() );
+    CPPUNIT_ASSERT_MESSAGE( "Scalable flag should be false after default constructor called", !aFontMetric.IsScalable() );
 
     aFontMetric.SetScalableFlag(true);
 
-    CPPUNIT_ASSERT( aFontMetric.IsScalable() );
+    CPPUNIT_ASSERT_MESSAGE( "Scalable flag should be true", aFontMetric.IsScalable() );
 }
+
+void VclFontMetricTest::testEqualityOperator()
+{
+    // default constructor should set scalable flag to false
+    FontMetric aLhs, aRhs;
+
+    aLhs.SetScalableFlag(true);
+    aRhs.SetScalableFlag(true);
+
+    CPPUNIT_ASSERT_MESSAGE( "Scalable flag set same", aLhs == aRhs );
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontMetricTest);
 

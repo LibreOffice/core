@@ -53,6 +53,8 @@ inline void ImplFontMetric::DeReference()
 
 bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 {
+    if( mbScalableFont != r.mbScalableFont )
+        return false;
     if( mnMiscFlags  != r.mnMiscFlags )
         return false;
     if( mnAscent     != r.mnAscent )
