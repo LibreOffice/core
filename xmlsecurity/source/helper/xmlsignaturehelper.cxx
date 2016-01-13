@@ -35,12 +35,17 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/sequence.hxx>
 
 #define TAG_DOCUMENTSIGNATURES  "document-signatures"
 #define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
@@ -301,11 +306,6 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     return !mbError;
 }
 
-bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& /*xStorage*/)
-{
-    return true;
-}
-
 SignatureInformation XMLSignatureHelper::GetSignatureInformation( sal_Int32 nSecurityId ) const
 {
     return mpXSecController->getSignatureInformation( nSecurityId );
@@ -342,6 +342,38 @@ IMPL_LINK_NOARG_TYPED( XMLSignatureHelper, StartVerifySignatureElement, LinkPara
         sal_Int32 nSignatureId = mpXSecController->getNewSecurityId();
         mpXSecController->addSignature( nSignatureId );
     }
+}
+
+namespace
+{
+bool lcl_isSignatureType(const beans::StringPair& rPair)
+{
+    return rPair.First == "Type" && rPair.Second == "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature";
+}
+}
+
+bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embed::XStorage>& xStorage)
+{
+    sal_Int32 nOpenMode = embed::ElementModes::READ;
+    uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement("_rels", nOpenMode);
+    uno::Reference<io::XInputStream> xRelStream(xSubStorage->openStreamElement("origin.sigs.rels", nOpenMode), uno::UNO_QUERY);
+    uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo;
+    aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, "origin.sigs.rels", mxCtx);
+
+    for (const uno::Sequence<beans::StringPair>& rRelation : aRelationsInfo)
+    {
+        auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rRelation);
+        if (std::find_if(aRelation.begin(), aRelation.end(), lcl_isSignatureType) != aRelation.end())
+        {
+            std::vector<beans::StringPair>::iterator it = std::find_if(aRelation.begin(), aRelation.end(), [](const beans::StringPair& rPair) { return rPair.First == "Target"; });
+            if (it != aRelation.end())
+            {
+                // TODO now handle it->Second
+            }
+        }
+    }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
