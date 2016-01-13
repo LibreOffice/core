@@ -29,6 +29,7 @@
 
 #include <../dialogs/resourcemanager.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -272,7 +273,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             xInputStream.set( aStreamHelper.xSignatureStream, UNO_QUERY );
     }
 
-    if ( !xInputStream.is() )
+    if (!xInputStream.is() && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
         return Sequence< ::com::sun::star::security::DocumentSignatureInformation >(0);
 
 
@@ -289,7 +290,10 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
     aSignatureHelper.StartMission();
 
-    aSignatureHelper.ReadAndVerifySignature( xInputStream );
+    if (xInputStream.is())
+        aSignatureHelper.ReadAndVerifySignature(xInputStream);
+    else if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
+        aSignatureHelper.ReadAndVerifySignatureStorage(aStreamHelper.xSignatureStorage);
 
     aSignatureHelper.EndMission();
 
