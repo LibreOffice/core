@@ -210,7 +210,7 @@ void log(
     }
 
     s << message;
-    if (isDebug(level)) {
+    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE) {
         s << " at:\n";
         s << OUString(osl_backtraceAsString(), SAL_NO_ACQUIRE);
     }
