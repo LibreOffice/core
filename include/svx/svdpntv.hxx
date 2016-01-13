@@ -420,7 +420,11 @@ public:
     void setHideFormControl(bool bNew) { if(bNew != (bool)mbHideFormControl) mbHideFormControl = bNew; }
 
     void SetGridCoarse(const Size& rSiz) { maGridBig=rSiz; }
-    void SetGridFine(const Size& rSiz) { maGridFin=rSiz; if (maGridFin.Height()==0) maGridFin.Height()=maGridFin.Width(); if (mbGridVisible) InvalidateAllWin(); }
+    void SetGridFine(const Size& rSiz) {
+        maGridFin=rSiz;
+        if (maGridFin.Height()==0) maGridFin.Height()=maGridFin.Width();
+        if (mbGridVisible) InvalidateAllWin();
+    }
     const Size& GetGridCoarse() const { return maGridBig; }
     const Size& GetGridFine() const { return maGridFin; }
 
