@@ -2523,7 +2523,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case KS_NextCell:
                 // always 'flush' in tables
-                rSh.GoNextCell();
+                rSh.GoNextCell(!rSh.HasReadonlySel());
                 nSlotId = FN_GOTO_NEXT_CELL;
                 break;
             case KS_PrevCell:
