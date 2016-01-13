@@ -8767,7 +8767,6 @@ AnimatedElement.prototype.initElement = function()
     this.nCenterY = this.nBaseCenterY;
     this.nScaleFactorX = 1.0;
     this.nScaleFactorY = 1.0;
-    this.setCTM();
 
     // add a transform attribute of type matrix
     this.aActiveElement.setAttribute( 'transform', makeMatrixString( 1, 0, 0, 1, 0, 0 ) );
@@ -9056,117 +9055,82 @@ AnimatedElement.prototype.getHeight = function()
     return this.nScaleFactorY * this.getBaseBBox().height;
 };
 
-AnimatedElement.prototype.setCTM = function()
-{
-
-    this.aICTM.e = this.getBaseCenterX();
-    this.aICTM.f = this.getBaseCenterY();
-
-    this.aCTM.e = -this.aICTM.e;
-    this.aCTM.f = -this.aICTM.f;
-};
-
 AnimatedElement.prototype.updateTransformAttribute = function()
 {
+    //this.aActiveElement.setAttribute( 'transform', matrixToString( this.aTMatrix ) );
     this.aTransformAttrList = this.aActiveElement.transform.baseVal;
     this.aTransformAttr = this.aTransformAttrList.getItem( 0 );
     this.aTransformAttr.setMatrix( this.aTMatrix );
 };
 
-AnimatedElement.prototype.setX = function( nXNewPos )
+AnimatedElement.prototype.setX = function( nNewCenterX )
 {
+    if( nNewCenterX === this.nCenterX ) return;
+
     this.aTransformAttrList = this.aActiveElement.transform.baseVal;
     this.aTransformAttr = this.aTransformAttrList.getItem( 0 );
-    this.aTransformAttr.matrix.e += ( nXNewPos - this.getX() );
-    this.nCenterX = nXNewPos;
+    this.aTMatrix = this.aTransformAttr.matrix.translate( nNewCenterX - this.nCenterX, 0 );
+    this.aTransformAttr.setMatrix( this.aTMatrix );
+    this.nCenterX = nNewCenterX;
 };
 
-AnimatedElement.prototype.setY = function( nYNewPos )
+AnimatedElement.prototype.setY = function( nNewCenterY )
 {
+    if( nNewCenterY === this.nCenterY ) return;
+
     this.aTransformAttrList = this.aActiveElement.transform.baseVal;
     this.aTransformAttr = this.aTransformAttrList.getItem( 0 );
-    this.aTransformAttr.matrix.f += ( nYNewPos - this.getY() );
-    this.nCenterY = nYNewPos;
+    this.aTMatrix = this.aTransformAttr.matrix.translate( 0, nNewCenterY - this.nCenterY );
+    this.aTransformAttr.setMatrix( this.aTMatrix );
+    this.nCenterY = nNewCenterY;
 };
 
 AnimatedElement.prototype.setWidth = function( nNewWidth )
 {
-    var nBaseWidth = this.getBaseBBox().width;
-    if( nBaseWidth <= 0 )
-        return;
+    ANIMDBG.print( 'AnimatedElement.setWidth: nNewWidth = ' + nNewWidth );
+    if( nNewWidth < 0 )
+    {
+        log('AnimatedElement(' + this.getId() + ').setWidth: negative height!');
+        nNewWidth = 0;
+    }
 
-    this.nScaleFactorX = nNewWidth / nBaseWidth;
-    this.implScale();
+    var nBaseWidth = this.getBaseBBox().width;
+    var nScaleFactorX = nNewWidth / nBaseWidth;
+
+    if( nScaleFactorX < 1e-5 ) nScaleFactorX = 1e-5;
+    if( nScaleFactorX == this.nScaleFactorX ) return;
+
+    this.aTMatrix = document.documentElement.createSVGMatrix()
+        .translate( this.nCenterX, this.nCenterY )
+        .scaleNonUniform( nScaleFactorX, this.nScaleFactorY )
+        .translate( -this.nBaseCenterX, -this.nBaseCenterY );
+    this.updateTransformAttribute();
+
+    this.nScaleFactorX = nScaleFactorX;
 };
 
 AnimatedElement.prototype.setHeight = function( nNewHeight )
 {
-    var nBaseHeight = this.getBaseBBox().height;
-    if( nBaseHeight <= 0 )
-        return;
-
-    this.nScaleFactorY = nNewHeight / nBaseHeight;
-    this.implScale();
-};
-
-AnimatedElement.prototype.implScale = function( )
-{
-    this.aTMatrix = document.documentElement.createSVGMatrix();
-    this.aTMatrix.a = this.nScaleFactorX;
-    this.aTMatrix.d = this.nScaleFactorY;
-    this.aTMatrix = this.aICTM.multiply( this.aTMatrix.multiply( this.aCTM ) );
-
-    var nDeltaX = this.getX() - this.getBaseCenterX();
-    var nDeltaY = this.getY() - this.getBaseCenterY();
-    this.aTMatrix = this.aTMatrix.translate( nDeltaX, nDeltaY );
-    this.updateTransformAttribute();
-};
-
-AnimatedElement.prototype.setWidth2 = function( nNewWidth )
-{
-    if( nNewWidth < 0 )
-        log( 'AnimatedElement(' + this.getId() + ').setWidth: negative width!' );
-    if( nNewWidth < 0.001 )
-        nNewWidth = 0.001;
-
-    this.setCTM();
-
-    var nCurWidth = this.getWidth();
-    if( nCurWidth <= 0 )
-        nCurWidth = 0.001;
-
-    var nScaleFactor = nNewWidth / nCurWidth;
-    if( nScaleFactor < 1e-5 )
-        nScaleFactor = 1e-5;
-    this.aTMatrix = document.documentElement.createSVGMatrix();
-    this.aTMatrix.a = nScaleFactor;
-    this.aTMatrix = this.aICTM.multiply( this.aTMatrix.multiply( this.aCTM ) );
-    this.updateTransformAttribute();
-};
-
-AnimatedElement.prototype.setHeight2 = function( nNewHeight )
-{
-    ANIMDBG.print( 'AnimatedElement.setHeight: nNewHeight = ' + nNewHeight );
+    ANIMDBG.print( 'AnimatedElement.setWidth: nNewHeight = ' + nNewHeight );
     if( nNewHeight < 0 )
-        log( 'AnimatedElement(' + this.getId() + ').setWidth: negative height!' );
-    if( nNewHeight < 0.001 )
-        nNewHeight = 0.001;
+    {
+        log('AnimatedElement(' + this.getId() + ').setWidth: negative height!');
+        nNewHeight = 0;
+    }
 
-    this.setCTM();
+    var nBaseHeight = this.getBaseBBox().height;
+    var nScaleFactorY = nNewHeight / nBaseHeight;
 
-    var nCurHeight = this.getHeight();
-    ANIMDBG.print( 'AnimatedElement.setHeight: nCurHeight = ' + nCurHeight );
-    if( nCurHeight <= 0 )
-        nCurHeight = 0.001;
+    if( nScaleFactorY < 1e-5 ) nScaleFactorY = 1e-5;
+    if( nScaleFactorY == this.nScaleFactorY ) return;
 
-    var nScaleFactor = nNewHeight / nCurHeight;
-    ANIMDBG.print( 'AnimatedElement.setHeight: nScaleFactor = ' + nScaleFactor );
-    if( nScaleFactor < 1e-5 )
-        nScaleFactor = 1e-5;
-    this.aTMatrix = document.documentElement.createSVGMatrix();
-    this.aTMatrix.d = nScaleFactor;
-    this.aTMatrix = this.aICTM.multiply( this.aTMatrix.multiply( this.aCTM ) );
+    this.aTMatrix = document.documentElement.createSVGMatrix()
+        .translate( this.nCenterX, this.nCenterY )
+        .scaleNonUniform( this.nScaleFactorX, nScaleFactorY )
+        .translate( -this.nBaseCenterX, -this.nBaseCenterY );
     this.updateTransformAttribute();
+
+    this.nScaleFactorY = nScaleFactorY;
 };
 
 AnimatedElement.prototype.getOpacity = function()
