@@ -1259,21 +1259,20 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
 
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
+    basegfx::B2IVector aSize(nWidth, nHeight);
+    basebmp::BitmapDeviceSharedPtr aCopy = createBitmapDevice(aSize, true, SVP_CAIRO_FORMAT);
+
+    cairo_t* cr = SvpSalGraphics::createCairoContext(aCopy);
+
+    cairo_surface_t *source = createCairoSurface(m_aOrigDevice);
+    SalTwoRect aTR(nX, nY, nWidth, nHeight, 0, 0, nWidth, nHeight);
+    renderSource(cr, aTR, source);
+    cairo_surface_destroy(source);
+
+    cairo_destroy(cr);
+
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
-
-    if (m_aOrigDevice)
-    {
-        basebmp::BitmapDeviceSharedPtr aCopy;
-        aCopy = cloneBitmapDevice(basegfx::B2IVector(nWidth, nHeight),
-                                   m_aOrigDevice);
-        basegfx::B2IVector size = aCopy->getSize();
-        basegfx::B2IBox aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
-        basegfx::B2IBox aDestRect( 0, 0, nWidth, nHeight );
-
-        aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode::Paint );
-
-        pBitmap->setBitmap( aCopy );
-    }
+    pBitmap->setBitmap(aCopy);
 
     return pBitmap;
 }
