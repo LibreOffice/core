@@ -106,11 +106,12 @@ private:
 
     bool                mbScalableFont;
     bool                mbFullstopCentered;
+    bool                mbDevice;
 
     // TODO: As these are progressively moved from bit fields into boolean variables, comment them out.
     // Eventually this enum will not be needed and we can remove it.
     enum {
-        DEVICE_FLAG=1,
+        /* DEVICE_FLAG=1, */
         /* SCALABLE_FLAG=2, */
         LATIN_FLAG=4,
         CJK_FLAG=8,
@@ -136,9 +137,12 @@ public:
 
     bool                IsScalable() const                          { return mbScalableFont; }
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
+    bool                IsBuiltInFont() const                       { return mbDevice; }
 
-    void                SetScalableFlag(bool bScalable)             { mbScalableFont = bScalable; }
-    void                SetFullstopCenteredFlag(bool bCentered)     { mbFullstopCentered = bCentered; }
+    void                SetScalableFlag( bool bScalable )           { mbScalableFont = bScalable; }
+    void                SetFullstopCenteredFlag( bool bCentered )   { mbFullstopCentered = bCentered; }
+    void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
+
 };
 
 
