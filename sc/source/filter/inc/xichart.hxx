@@ -34,7 +34,6 @@
 #include "xlstyle.hxx"
 #include "xiescher.hxx"
 #include "xistring.hxx"
-#include <boost/ptr_container/ptr_map.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace awt
@@ -776,7 +775,7 @@ public:
     /** Returns true, if the series is child of another series (e.g. trend line). */
     inline bool         HasParentSeries() const { return mnParentIdx != EXC_CHSERIES_INVALID; }
     /** Returns true, if the series contains child series (e.g. trend lines). */
-    inline bool         HasChildSeries() const { return !maTrendLines.empty() || !maErrorBars.empty(); }
+    inline bool         HasChildSeries() const { return !maTrendLines.empty() || !m_ErrorBars.empty(); }
     /** Returns series title or an empty string, if the series does not contain a title. */
     OUString            GetTitle() const { return mxTitleLink ? mxTitleLink->GetString() : OUString(); }
 
@@ -820,7 +819,7 @@ private:
     typedef ::std::map<sal_uInt16, XclImpChDataFormatRef> XclImpChDataFormatMap;
     typedef ::std::map<sal_uInt16, XclImpChTextRef>       XclImpChTextMap;
     typedef ::std::list< XclImpChSerTrendLineRef >        XclImpChSerTrendLineList;
-    typedef ::boost::ptr_map<sal_uInt8, XclImpChSerErrorBar> XclImpChSerErrorBarMap;
+    typedef ::std::map<sal_uInt8, std::unique_ptr<XclImpChSerErrorBar>> XclImpChSerErrorBarMap;
 
     XclChSeries         maData;             /// Contents of the CHSERIES record.
     XclImpChSourceLinkRef mxValueLink;      /// Link data for series values.
@@ -831,7 +830,7 @@ private:
     XclImpChDataFormatMap maPointFmts;      /// CHDATAFORMAT groups for data point formats.
     XclImpChTextMap     maLabels;           /// Data point labels (CHTEXT groups).
     XclImpChSerTrendLineList maTrendLines;  /// Trend line settings (CHSERTRENDLINE records).
-    XclImpChSerErrorBarMap maErrorBars;     /// Error bar settings (CHSERERRORBAR records).
+    XclImpChSerErrorBarMap m_ErrorBars;     /// Error bar settings (CHSERERRORBAR records).
     sal_uInt16          mnGroupIdx;         /// Chart type group (CHTYPEGROUP group) this series is assigned to.
     sal_uInt16          mnSeriesIdx;        /// 0-based series index.
     sal_uInt16          mnParentIdx;        /// 0-based index of parent series (trend lines and error bars).

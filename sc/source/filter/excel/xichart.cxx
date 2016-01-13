@@ -75,7 +75,7 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <o3tl/numeric.hxx>
-#include <o3tl/ptr_container.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
@@ -1882,7 +1882,10 @@ void XclImpChSeries::AddChildSeries( const XclImpChSeries& rSeries )
         these are properties of the parent series. This function adds the
         settings of the passed series to this series. */
     maTrendLines.insert( maTrendLines.end(), rSeries.maTrendLines.begin(), rSeries.maTrendLines.end() );
-    maErrorBars.insert( rSeries.maErrorBars.begin(), rSeries.maErrorBars.end() );
+    for (auto const& it : rSeries.m_ErrorBars)
+    {
+        m_ErrorBars.insert(std::make_pair(it.first, o3tl::make_unique<XclImpChSerErrorBar>(*it.second)));
+    }
 }
 
 void XclImpChSeries::FinalizeDataFormats()
@@ -1916,9 +1919,9 @@ void XclImpChSeries::FinalizeDataFormats()
                 (*aLIt)->SetTrendlineName(mxTitleLink->GetString());
             }
         }
-        for( XclImpChSerErrorBarMap::iterator aMIt = maErrorBars.begin(), aMEnd = maErrorBars.end(); aMIt != aMEnd; ++aMIt )
+        for (auto const& it : m_ErrorBars)
         {
-            aMIt->second->SetSeriesData( mxValueLink, mxSeriesFmt );
+            it.second->SetSeriesData( mxValueLink, mxSeriesFmt );
         }
     }
     else if( XclImpChTypeGroup* pTypeGroup = GetChartData().GetTypeGroup( mnGroupIdx ).get() )
@@ -2134,7 +2137,7 @@ void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
     unique_ptr<XclImpChSerErrorBar> pErrorBar(new XclImpChSerErrorBar(GetChRoot()));
     pErrorBar->ReadChSerErrorBar(rStrm);
     sal_uInt8 nBarType = pErrorBar->GetBarType();
-    o3tl::ptr_container::insert(maErrorBars, nBarType, std::move(pErrorBar));
+    m_ErrorBars.insert(std::make_pair(nBarType, std::move(pErrorBar)));
 }
 
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
@@ -2169,13 +2172,13 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) c
 
 Reference< XPropertySet > XclImpChSeries::CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const
 {
-    XclImpChSerErrorBarMap::const_iterator itrPosBar = maErrorBars.find(nPosBarId);
-    XclImpChSerErrorBarMap::const_iterator itrNegBar = maErrorBars.find(nNegBarId);
-    XclImpChSerErrorBarMap::const_iterator itrEnd = maErrorBars.end();
+    XclImpChSerErrorBarMap::const_iterator itrPosBar = m_ErrorBars.find(nPosBarId);
+    XclImpChSerErrorBarMap::const_iterator itrNegBar = m_ErrorBars.find(nNegBarId);
+    XclImpChSerErrorBarMap::const_iterator itrEnd = m_ErrorBars.end();
     if (itrPosBar == itrEnd || itrNegBar == itrEnd)
         return Reference<XPropertySet>();
 
-    return XclImpChSerErrorBar::CreateErrorBar(itrPosBar->second, itrNegBar->second);
+    return XclImpChSerErrorBar::CreateErrorBar(itrPosBar->second.get(), itrNegBar->second.get());
 }
 
 // Chart type groups ==========================================================
