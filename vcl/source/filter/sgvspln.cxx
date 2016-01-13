@@ -717,8 +717,10 @@ bool Spline2Poly(tools::Polygon& rSpln, bool Periodic, tools::Polygon& rPoly)
                 dt1=t-tv[i]; dt2=dt1*dt1; dt3=dt2*dt1;
                 long x=long(ax[i]+bx[i]*dt1+cx[i]*dt2+dx[i]*dt3);
                 long y=long(ay[i]+by[i]*dt1+cy[i]*dt2+dy[i]*dt3);
-                if (x<MinKoord) x=MinKoord; if (x>MaxKoord) x=MaxKoord;
-                if (y<MinKoord) y=MinKoord; if (y>MaxKoord) y=MaxKoord;
+                if (x<MinKoord) x=MinKoord;
+                if (x>MaxKoord) x=MaxKoord;
+                if (y<MinKoord) y=MinKoord;
+                if (y>MaxKoord) y=MaxKoord;
                 if (rPoly.GetSize()<PolyMax) {
                     rPoly.SetSize(rPoly.GetSize()+1);
                     rPoly.SetPoint(Point(short(x),short(y)),rPoly.GetSize()-1);
