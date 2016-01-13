@@ -114,7 +114,7 @@ public:
     const SdrPageWindow* FindPatchedPageWindow( const OutputDevice& rOutDev ) const;
 
 private:
-    SVX_DLLPRIVATE SdrPageWindow& CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
+    SVX_DLLPRIVATE void CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
 
     void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
 

@@ -248,14 +248,6 @@ OUString AccessibleShape::GetStyle()
     return ShapeTypeHandler::CreateAccessibleBaseName( mxShape );
 }
 
-bool AccessibleShape::operator== (const AccessibleShape& rShape)
-{
-    return this==&rShape;
-}
-
-
-
-
 bool AccessibleShape::SetState (sal_Int16 aState)
 {
     bool bStateHasChanged = false;

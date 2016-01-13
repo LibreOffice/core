@@ -457,13 +457,13 @@ bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     return xObj.is();
 }
 
-bool SvxOle2Shape::createLink( const OUString& aLinkURL )
+void SvxOle2Shape::createLink( const OUString& aLinkURL )
 {
     DBG_TESTSOLARMUTEX();
 
     SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
     if ( !pOle2Obj || !pOle2Obj->IsEmpty() )
-        return false;
+        return;
 
     OUString aPersistName;
 
@@ -516,8 +516,6 @@ bool SvxOle2Shape::createLink( const OUString& aLinkURL )
         if ( pOle2Obj->IsEmpty() )
             pOle2Obj->SetObjRef( xObj );
     }
-
-    return xObj.is();
 }
 
 void SvxOle2Shape::resetModifiedState()

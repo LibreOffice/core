@@ -517,9 +517,9 @@ public:
 
     bool HasUndoActions() const;
     bool HasRedoActions() const;
-    bool Undo();
-    bool Redo();
-    bool Repeat(SfxRepeatTarget&);
+    void Undo();
+    void Redo();
+    void Repeat(SfxRepeatTarget&);
 
     // The application can set a handler here which collects the UndoActions einsammelt.
     // The handler has the following signature:

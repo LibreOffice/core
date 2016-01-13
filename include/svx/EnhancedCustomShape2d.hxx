@@ -132,7 +132,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SAL_DLLPRIVATE Color    GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const;
         SAL_DLLPRIVATE void     AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
                                                   sal_uInt32& nColorIndex, sal_uInt32 nColorCount);
-        SAL_DLLPRIVATE bool     GetParameter( double& rParameterReturnValue,  const css::drawing::EnhancedCustomShapeParameter&,
+        SAL_DLLPRIVATE void     GetParameter( double& rParameterReturnValue,  const css::drawing::EnhancedCustomShapeParameter&,
                                                   const bool bReplaceGeoWidth, const bool bReplaceGeoHeight ) const;
         SAL_DLLPRIVATE Point    GetPoint( const css::drawing::EnhancedCustomShapeParameterPair&,
                                                     const bool bScale = true, const bool bReplaceGeoSize = false ) const;
@@ -141,7 +141,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
                                                    bool bLineGeometryNeededOnly, bool bSortFilledObjectsToBack,
                                                    sal_Int32 nIndex );
         SAL_DLLPRIVATE SdrObject* CreatePathObj( bool bLineGeometryNeededOnly );
-        SAL_DLLPRIVATE const sal_Int32* ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rItem );
+        SAL_DLLPRIVATE void     ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rItem );
 
         SAL_DLLPRIVATE void     SetPathSize( sal_Int32 nIndex = 0 );
 

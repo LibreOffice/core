@@ -380,9 +380,8 @@ bool SdrModel::HasRedoActions() const
     return pRedoStack && !pRedoStack->empty();
 }
 
-bool SdrModel::Undo()
+void SdrModel::Undo()
 {
-    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
         OSL_FAIL("svx::SdrModel::Undo(), method not supported with application undo manager!");
@@ -403,12 +402,10 @@ bool SdrModel::Undo()
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
-    return bRet;
 }
 
-bool SdrModel::Redo()
+void SdrModel::Redo()
 {
-    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
         OSL_FAIL("svx::SdrModel::Redo(), method not supported with application undo manager!");
@@ -429,12 +426,10 @@ bool SdrModel::Redo()
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
-    return bRet;
 }
 
-bool SdrModel::Repeat(SfxRepeatTarget& rView)
+void SdrModel::Repeat(SfxRepeatTarget& rView)
 {
-    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
         OSL_FAIL("svx::SdrModel::Redo(), method not supported with application undo manager!");
@@ -447,11 +442,9 @@ bool SdrModel::Repeat(SfxRepeatTarget& rView)
             if(pDo->CanRepeat(rView))
             {
                 pDo->Repeat(rView);
-                bRet = true;
             }
         }
     }
-    return bRet;
 }
 
 void SdrModel::ImpPostUndoAction(SdrUndoAction* pUndo)

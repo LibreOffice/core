@@ -70,7 +70,6 @@ class SVX_DLLPUBLIC SdrLayer
 
 public:
     bool operator==(const SdrLayer& rCmpLayer) const;
-    bool operator!=(const SdrLayer& rCmpLayer) const { return !operator==(rCmpLayer); }
 
     void SetName(const OUString& rNewName);
     const OUString& GetName() const { return maName; }
@@ -114,7 +113,6 @@ public:
     ~SdrLayerAdmin();
     const SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);
     bool               operator==(const SdrLayerAdmin& rCmpLayerAdmin) const;
-    bool               operator!=(const SdrLayerAdmin& rCmpLayerAdmin) const       { return !operator==(rCmpLayerAdmin); }
     void               SetParent(SdrLayerAdmin* pNewParent)                        { pParent=pNewParent; }
     void               SetModel(SdrModel* pNewModel);
     void               InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos)
@@ -135,7 +133,7 @@ public:
     SdrLayer*          NewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
 
     // New layer, name is retrieved from the resource
-    SdrLayer*          NewStandardLayer(sal_uInt16 nPos=0xFFFF);
+    void               NewStandardLayer(sal_uInt16 nPos=0xFFFF);
 
     // Iterate over all layers
     sal_uInt16         GetLayerCount() const                                         { return sal_uInt16(aLayer.size()); }

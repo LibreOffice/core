@@ -312,7 +312,7 @@ protected:
     virtual SdrObjGeoData* NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
-    bool NbcSetEckenradius(long nRad);
+    void NbcSetEckenradius(long nRad);
 
     // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
     // SdrTextMinFrameWidthItem and SdrTextMinFrameHeightItem based on all settings, necessities

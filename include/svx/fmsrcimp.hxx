@@ -89,7 +89,7 @@ class SAL_WARN_UNUSED FmRecordCountListener : public ::cppu::WeakImplHelper1< cs
 
 // attribute access
 public:
-    Link<sal_Int32,void> SetPropChangeHandler(const Link<sal_Int32,void>& lnk);
+    void SetPropChangeHandler(const Link<sal_Int32,void>& lnk);
 
 // methods
 public:
@@ -338,7 +338,7 @@ public:
     /** only valid, if not an (asynchronous) search is running, the next search will then be executed
         on top of the new iterator with the new parameter
     */
-    bool SwitchToContext(const css::uno::Reference< css::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
+    void SwitchToContext(const css::uno::Reference< css::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
         sal_Int32 nFieldIndex);
 
 protected:

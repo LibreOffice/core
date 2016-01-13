@@ -79,7 +79,6 @@ public:
     SdrGluePoint(): nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(SdrAlign::NONE),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
     SdrGluePoint(const Point& rNewPos, bool bNewPercent=true, SdrAlign nNewAlign = SdrAlign::HORZ_CENTER): aPos(rNewPos),nEscDir(SdrEscapeDirection::SMART),nId(0),nAlign(nNewAlign),bNoPercent(!bNewPercent),bReallyAbsolute(false),bUserDefined(true) {}
     bool operator==(const SdrGluePoint& rCmpGP) const   { return aPos==rCmpGP.aPos && nEscDir==rCmpGP.nEscDir && nId==rCmpGP.nId && nAlign==rCmpGP.nAlign && bNoPercent==rCmpGP.bNoPercent && bReallyAbsolute==rCmpGP.bReallyAbsolute && bUserDefined==rCmpGP.bUserDefined; }
-    bool operator!=(const SdrGluePoint& rCmpGP) const   { return !operator==(rCmpGP); }
     const Point& GetPos() const                             { return aPos; }
     void         SetPos(const Point& rNewPos)               { aPos=rNewPos; }
     SdrEscapeDirection GetEscDir() const                          { return nEscDir; }

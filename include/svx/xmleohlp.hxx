@@ -84,7 +84,7 @@ private:
     SVX_DLLPRIVATE css::uno::Reference < css::embed::XStorage > ImplGetContainerStorage(
                                     const OUString& rStorageName );
 
-    SVX_DLLPRIVATE bool                 ImplReadObject(
+    SVX_DLLPRIVATE void                 ImplReadObject(
                                     const OUString& rContainerStorageName,
                                     OUString& rObjName,
                                     const SvGlobalName *pClassId,

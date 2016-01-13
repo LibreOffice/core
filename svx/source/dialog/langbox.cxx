@@ -358,19 +358,19 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
 }
 
 
-sal_Int32 SvxLanguageBoxBase::InsertDefaultLanguage( sal_Int16 nType, sal_Int32 nPos )
+void SvxLanguageBoxBase::InsertDefaultLanguage( sal_Int16 nType, sal_Int32 nPos )
 {
-    return ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
+    ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
 }
 
 
-sal_Int32 SvxLanguageBoxBase::InsertSystemLanguage( sal_Int32 nPos )
+void SvxLanguageBoxBase::InsertSystemLanguage( sal_Int32 nPos )
 {
-    return ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, css::i18n::ScriptType::WEAK );
+    ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, css::i18n::ScriptType::WEAK );
 }
 
 
-sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
+void SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
         bool bCheckEntry, sal_Int32 nPos )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
@@ -381,7 +381,7 @@ sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
     {
         sal_Int32 nAt = ImplTypeToPos( nLang );
         if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-            return nAt;
+            return;
     }
 
     OUString aStrEntry = SvtLanguageTable::GetLanguageString( nLang );
@@ -390,8 +390,6 @@ sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
 
     sal_Int32 nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
     ImplSetEntryData( nAt, reinterpret_cast<void*>(nLang) );
-
-    return nAt;
 }
 
 

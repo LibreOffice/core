@@ -116,14 +116,11 @@ public:
     bool is() const { return m_xMoveOperations.is(); }
     bool Is() const { return m_xMoveOperations.is(); }
 
-    CursorWrapper* operator ->() { return this; }
     operator const css::uno::Reference< css::uno::XInterface>& () const{ return m_xGeneric; }
 
     // 'Conversions'
     const CursorWrapper& operator=(const css::uno::Reference< css::sdbc::XRowSet>& xCursor);
     operator const css::uno::Reference< css::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
-    operator const css::uno::Reference< css::sdbcx::XRowLocate>& () const         { return m_xBookmarkOperations; }
-    operator const css::uno::Reference< css::sdbcx::XColumnsSupplier>& () const   { return m_xColumnsSupplier; }
 
     const css::uno::Reference< css::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }
 

@@ -134,7 +134,7 @@ public:
     SAL_DLLPRIVATE OUString     GetThemeName( sal_uIntPtr nThemeId ) const;
 
     bool                        CreateTheme( const OUString& rThemeName );
-    SAL_DLLPRIVATE bool         RenameTheme( const OUString& rOldName, const OUString& rNewName );
+    SAL_DLLPRIVATE void         RenameTheme( const OUString& rOldName, const OUString& rNewName );
     bool                        RemoveTheme( const OUString& rThemeName );
 
     GalleryTheme*               AcquireTheme( const OUString& rThemeName, SfxListener& rListener );

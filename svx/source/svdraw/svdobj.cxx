@@ -932,7 +932,7 @@ void SdrObject::SetChanged()
 }
 
 // tooling for painting a single object to an OutputDevice.
-bool SdrObject::SingleObjectPainter(OutputDevice& rOut) const
+void SdrObject::SingleObjectPainter(OutputDevice& rOut) const
 {
     sdr::contact::SdrObjectVector aObjectVector;
     aObjectVector.push_back(const_cast< SdrObject* >(this));
@@ -941,8 +941,6 @@ bool SdrObject::SingleObjectPainter(OutputDevice& rOut) const
     sdr::contact::DisplayInfo aDisplayInfo;
 
     aPainter.ProcessDisplay(aDisplayInfo);
-
-    return true;
 }
 
 bool SdrObject::LineGeometryUsageIsNecessary() const

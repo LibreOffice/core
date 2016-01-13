@@ -104,18 +104,17 @@ SdrEditView::~SdrEditView()
 
 
 
-SdrLayer* SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
+void SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 {
     SdrLayerAdmin& rLA=mpModel->GetLayerAdmin();
     sal_uInt16 nMax=rLA.GetLayerCount();
     if (nPos>nMax) nPos=nMax;
-    SdrLayer* pNewLayer=rLA.NewLayer(rName,nPos);
+    rLA.NewLayer(rName,nPos);
 
     if( GetModel()->IsUndoEnabled() )
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewLayer(nPos,rLA,*mpModel));
 
     mpModel->SetChanged();
-    return pNewLayer;
 }
 
 #include <svx/svdogrp.hxx>

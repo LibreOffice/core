@@ -2110,10 +2110,10 @@ static const sal_uInt16* GetFormatRangeImpl( bool bTextOnly )
     return &gRanges[ bTextOnly ? 10 : 0];
 }
 
-bool SdrObjEditView::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  )
+void SdrObjEditView::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  )
 {
     if( mxSelectionController.is() && mxSelectionController->TakeFormatPaintBrush(rFormatSet) )
-        return true;
+        return;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     if( rMarkList.GetMarkCount() > 0 )
@@ -2130,10 +2130,7 @@ bool SdrObjEditView::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rForma
             const bool bOnlyHardAttr = false;
             rFormatSet->Put( GetAttrFromMarked(bOnlyHardAttr) );
         }
-        return true;
     }
-
-    return false;
 }
 
 static SfxItemSet CreatePaintSet( const sal_uInt16 *pRanges, SfxItemPool& rPool, const SfxItemSet& rSourceSet, const SfxItemSet& rTargetSet, bool bNoCharacterFormats, bool bNoParagraphFormats )

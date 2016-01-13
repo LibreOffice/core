@@ -194,9 +194,9 @@ public:
     void AddUndoActions( std::vector< SdrUndoAction* >& );
 
     // Layermanagement with Undo.
-    SdrLayer* InsertNewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
+    void InsertNewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
     // Delete a layer including all objects contained
-    void      DeleteLayer(const OUString& rName);
+    void DeleteLayer(const OUString& rName);
 
     // Marked objects which are outside a page
     // are assigned to an other page; at the moment without undo!!!

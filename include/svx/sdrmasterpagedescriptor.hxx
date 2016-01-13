@@ -74,10 +74,6 @@ namespace sdr
         const SetOfByte& GetVisibleLayers() const { return maVisibleLayers; }
         void SetVisibleLayers(const SetOfByte& rNew);
 
-        // operators
-        bool operator==(const MasterPageDescriptor& rCandidate) const;
-        bool operator!=(const MasterPageDescriptor& rCandidate) const;
-
         const SdrPageProperties* getCorrectSdrPageProperties() const;
     };
 } // end of namespace sdr

@@ -160,7 +160,7 @@ ShapeTypeHandler::~ShapeTypeHandler()
 
 
 
-bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
+void ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
     ShapeTypeDescriptor aDescriptorList[])
 {
     SolarMutexGuard aGuard;
@@ -186,8 +186,6 @@ bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
         // Update inverse mapping from service name to the descriptor's position.
         maServiceNameToSlotId[aDescriptorList[i].msServiceName] = nFirstId+i;
     }
-
-    return true;
 }
 
 

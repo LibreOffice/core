@@ -524,10 +524,9 @@ bool Gallery::CreateTheme( const OUString& rThemeName )
     return bRet;
 }
 
-bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
+void Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
 {
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rOldName );
-    bool                    bRet = false;
 
     // check if the new theme name is already present
     if( pThemeEntry && !HasTheme( rNewName ) && !pThemeEntry->IsReadOnly() )
@@ -544,11 +543,8 @@ bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
 
             Broadcast( GalleryHint( GalleryHintType::THEME_RENAMED, aOldName, pThm->GetName() ) );
             ReleaseTheme( pThm, aListener );
-            bRet = true;
         }
     }
-
-    return bRet;
 }
 
 bool Gallery::RemoveTheme( const OUString& rThemeName )

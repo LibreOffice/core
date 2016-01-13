@@ -534,7 +534,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
     return bRetValue;
 }
 
-const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rGeometryItem )
+void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rGeometryItem )
 {
     const sal_Int32* pDefData = nullptr;
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
@@ -621,8 +621,6 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "Handles" );
     if ( pAny )
         *pAny >>= seqHandles;
-
-    return pDefData;
 }
 
 EnhancedCustomShape2d::~EnhancedCustomShape2d()
@@ -954,11 +952,10 @@ Point EnhancedCustomShape2d::GetPoint( const css::drawing::EnhancedCustomShapePa
     return aRetValue;
 }
 
-bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCustomShapeParameter& rParameter,
+void EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCustomShapeParameter& rParameter,
                                               const bool bReplaceGeoWidth, const bool bReplaceGeoHeight ) const
 {
     rRetValue = 0.0;
-    bool bRetValue = false;
     switch ( rParameter.Type )
     {
         case EnhancedCustomShapeParameterType::ADJUSTMENT :
@@ -967,7 +964,6 @@ bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCusto
             if ( rParameter.Value >>= nAdjustmentIndex )
             {
                 rRetValue = GetAdjustValueAsDouble( nAdjustmentIndex );
-                bRetValue = true;
             }
         }
         break;
@@ -977,7 +973,6 @@ bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCusto
             if ( rParameter.Value >>= nEquationIndex )
             {
                 rRetValue = GetEquationValueAsDouble( nEquationIndex );
-                bRetValue = true;
             }
         }
         break;
@@ -989,7 +984,6 @@ bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCusto
                 if ( rParameter.Value >>= fValue )
                 {
                     rRetValue = fValue;
-                    bRetValue = true;
                 }
             }
             else
@@ -998,7 +992,6 @@ bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCusto
                 if ( rParameter.Value >>= nValue )
                 {
                     rRetValue = nValue;
-                    bRetValue = true;
                     if ( bReplaceGeoWidth && ( nValue == nCoordWidth ) )
                         rRetValue *= fXRatio;
                     else if ( bReplaceGeoHeight && ( nValue == nCoordHeight ) )
@@ -1010,29 +1003,24 @@ bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCusto
         case EnhancedCustomShapeParameterType::LEFT :
         {
             rRetValue  = 0.0;
-            bRetValue = true;
         }
         break;
         case EnhancedCustomShapeParameterType::TOP :
         {
             rRetValue  = 0.0;
-            bRetValue = true;
         }
         break;
         case EnhancedCustomShapeParameterType::RIGHT :
         {
             rRetValue = nCoordWidth;
-            bRetValue = true;
         }
         break;
         case EnhancedCustomShapeParameterType::BOTTOM :
         {
             rRetValue = nCoordHeight;
-            bRetValue = true;
         }
         break;
     }
-    return bRetValue;
 }
 
 // nLumDat 28-31 = number of luminance entries in nLumDat

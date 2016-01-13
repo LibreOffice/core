@@ -87,20 +87,6 @@ namespace sdr
         }
     }
 
-    // operators
-    bool MasterPageDescriptor::operator==(const MasterPageDescriptor& rCandidate) const
-    {
-        return (&maOwnerPage == &rCandidate.maOwnerPage
-            && &maUsedPage == &rCandidate.maUsedPage
-            && maVisibleLayers == rCandidate.maVisibleLayers);
-    }
-
-    bool MasterPageDescriptor::operator!=(const MasterPageDescriptor& rCandidate) const
-    {
-        return (&maOwnerPage != &rCandidate.maOwnerPage
-            || &maUsedPage != &rCandidate.maUsedPage
-            || maVisibleLayers != rCandidate.maVisibleLayers);
-    }
 
     const SdrPageProperties* MasterPageDescriptor::getCorrectSdrPageProperties() const
     {

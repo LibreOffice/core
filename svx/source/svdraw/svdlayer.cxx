@@ -239,7 +239,7 @@ SdrLayer* SdrLayerAdmin::NewLayer(const OUString& rName, sal_uInt16 nPos)
     return pLay;
 }
 
-SdrLayer* SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
+void SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
 {
     SdrLayerID nID=GetUniqueLayerID();
     SdrLayer* pLay=new SdrLayer(nID,OUString());
@@ -250,7 +250,6 @@ SdrLayer* SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
     else
         aLayer.insert(aLayer.begin() + nPos, pLay);
     Broadcast();
-    return pLay;
 }
 
 sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const

@@ -101,30 +101,6 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
     return *this;
 }
 
-bool XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
-{
-    if( eType != rXOBitmap.eType      ||
-        aGraphicObject != rXOBitmap.aGraphicObject ||
-        aArraySize != rXOBitmap.aArraySize     ||
-        aPixelColor != rXOBitmap.aPixelColor ||
-        aBckgrColor != rXOBitmap.aBckgrColor ||
-        bGraphicDirty != rXOBitmap.bGraphicDirty )
-    {
-        return false;
-    }
-
-    if( pPixelArray && rXOBitmap.pPixelArray )
-    {
-        sal_uInt16 nCount = (sal_uInt16) ( aArraySize.Width() * aArraySize.Height() );
-        for( sal_uInt16 i = 0; i < nCount; i++ )
-        {
-            if( *( pPixelArray + i ) != *( rXOBitmap.pPixelArray + i ) )
-                return false;
-        }
-    }
-    return true;
-}
-
 Bitmap XOBitmap::GetBitmap() const
 {
     return GetGraphicObject().GetGraphic().GetBitmap();

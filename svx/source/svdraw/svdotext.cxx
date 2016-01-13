@@ -551,10 +551,9 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
     }
 }
 
-bool SdrTextObj::NbcSetEckenradius(long nRad)
+void SdrTextObj::NbcSetEckenradius(long nRad)
 {
     SetObjectItem(makeSdrEckenradiusItem(nRad));
-    return true;
 }
 
 // #115391# This implementation is based on the object size (aRect) and the
