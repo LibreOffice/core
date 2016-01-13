@@ -57,9 +57,7 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 {
     if(    mbScalableFont     != r.mbScalableFont
         || mbFullstopCentered != r.mbFullstopCentered
-        || mbDevice           != r.mbDevice)
-        return false;
-    if( mnMiscFlags  != r.mnMiscFlags )
+        || mbDevice           != r.mbDevice) // mbDevice == built-in font flag
         return false;
     if( mnAscent     != r.mnAscent )
         return false;
