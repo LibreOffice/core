@@ -11853,6 +11853,7 @@ if test "$enable_liblangtag" = "yes" -o \
         SYSTEM_LIBLANGTAG=
         AC_MSG_RESULT([no])
         BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
+        LIBLANGTAG_CFLAGS="-I${WORKDIR}/UnpackedTarball/langtag"
         if test "$COM" = "MSC"; then
             LIBLANGTAG_LIBS="${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs/liblangtag.lib"
         else
