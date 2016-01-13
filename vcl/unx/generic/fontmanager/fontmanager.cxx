@@ -1294,11 +1294,11 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         pFont->m_aGlobalMetricY.width = pFont->m_aGlobalMetricX.width = aInfo.xMax - aInfo.xMin;
         pFont->m_aGlobalMetricY.height = pFont->m_aGlobalMetricX.height = aInfo.yMax - aInfo.yMin;
 
-        if( aInfo.winAscent && aInfo.winDescent )
+        if( aInfo.ascender && aInfo.descender )
         {
-            pFont->m_nAscend    = aInfo.winAscent;
-            pFont->m_nDescend   = aInfo.winDescent;
-            pFont->m_nLeading   = pFont->m_nAscend + pFont->m_nDescend - 1000;
+            pFont->m_nLeading   = aInfo.linegap;
+            pFont->m_nAscend    = aInfo.ascender;
+            pFont->m_nDescend   = -aInfo.descender;
         }
         else if( aInfo.typoAscender && aInfo.typoDescender )
         {
@@ -1306,11 +1306,11 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
             pFont->m_nAscend    = aInfo.typoAscender;
             pFont->m_nDescend   = -aInfo.typoDescender;
         }
-        else
+        else if( aInfo.winAscent && aInfo.winDescent )
         {
-            pFont->m_nLeading   = aInfo.linegap;
-            pFont->m_nAscend    = aInfo.ascender;
-            pFont->m_nDescend   = -aInfo.descender;
+            pFont->m_nAscend    = aInfo.winAscent;
+            pFont->m_nDescend   = aInfo.winDescent;
+            pFont->m_nLeading   = pFont->m_nAscend + pFont->m_nDescend - 1000;
         }
 
         // last try: font bounding box
@@ -2015,6 +2015,13 @@ bool PrintFontManager::createFontSubset(
             pOutFile, pGlyphSetName,
             aRequestedGlyphIds, pEnc, nGlyphs, pWidths );
         fclose( pOutFile );
+        // For OTC, values from hhea or OS2 are better
+        psp::PrintFontInfo aFontInfo;
+        if( getFontInfo( nFont, aFontInfo ) )
+        {
+            rInfo.m_nAscent     = aFontInfo.m_nAscend;
+            rInfo.m_nDescent    = -aFontInfo.m_nDescend;
+        }
         // cleanup before early return
         CloseTTFont( pTTFont );
         return bOK;
