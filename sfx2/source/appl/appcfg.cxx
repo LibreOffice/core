@@ -483,10 +483,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     SAL_INFO( "sfx", "W1:Wrong ID while getting Options!" );
                     break;
             }
-#ifdef DBG_UTIL
-            if ( !bRet )
-                OSL_FAIL( "Putting options failed!" );
-#endif
+            SAL_WARN_IF(!bRet, "sfx.appl", "Putting options failed!");
         }
         pRanges++;
     }
