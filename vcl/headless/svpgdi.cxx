@@ -1137,13 +1137,9 @@ void SvpSalGraphics::copyArea( long nDestX,
     copyBits(aTR, this);
 }
 
-void SvpSalGraphics::copySource( const SalTwoRect& rTR,
-                                 cairo_surface_t* source )
+static cairo_rectangle_int_t renderSource(cairo_t* cr, const SalTwoRect& rTR,
+                                          cairo_surface_t* source)
 {
-    cairo_t* cr = getCairoContext(false);
-    assert(cr && m_aDevice->isTopDown());
-    clipRegion(cr);
-
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
     cairo_rectangle_int_t extents = getFillDamage(cr);
@@ -1154,6 +1150,18 @@ void SvpSalGraphics::copySource( const SalTwoRect& rTR,
     cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
     cairo_paint(cr);
+
+    return extents;
+}
+
+void SvpSalGraphics::copySource( const SalTwoRect& rTR,
+                                 cairo_surface_t* source )
+{
+    cairo_t* cr = getCairoContext(false);
+    assert(cr && m_aDevice->isTopDown());
+    clipRegion(cr);
+
+    cairo_rectangle_int_t extents = renderSource(cr, rTR, source);
 
     releaseCairoContext(cr, false, extents);
 }
