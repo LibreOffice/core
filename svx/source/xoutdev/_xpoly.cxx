@@ -480,13 +480,6 @@ bool XPolygon::operator==( const XPolygon& rXPoly ) const
     return *rXPoly.pImpXPolygon == *pImpXPolygon;
 }
 
-bool XPolygon::operator!=( const XPolygon& rXPoly ) const
-{
-    pImpXPolygon->CheckPointDelete();
-    if (rXPoly.pImpXPolygon==pImpXPolygon) return false;
-    return *rXPoly.pImpXPolygon != *pImpXPolygon;
-}
-
 /// get the flags for the point at the given position
 XPolyFlags XPolygon::GetFlags( sal_uInt16 nPos ) const
 {
@@ -1050,18 +1043,6 @@ XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 
     pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
     return *this;
-}
-
-bool XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
-{
-    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return true;
-    return *pImpXPolyPolygon == *rXPolyPoly.pImpXPolyPolygon;
-}
-
-bool XPolyPolygon::operator!=( const XPolyPolygon& rXPolyPoly ) const
-{
-    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return false;
-    return *pImpXPolyPolygon != *rXPolyPoly.pImpXPolyPolygon;
 }
 
 /**

@@ -135,7 +135,7 @@ private:
     SVX_DLLPRIVATE void MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow );
 
     SVX_DLLPRIVATE void EditCell( const CellPos& rPos, vcl::Window* pWindow, const css::awt::MouseEvent* pMouseEvent = nullptr, sal_uInt16 nAction = 0 );
-    SVX_DLLPRIVATE bool StopTextEdit();
+    SVX_DLLPRIVATE void StopTextEdit();
 
     SVX_DLLPRIVATE sal_uInt16 getKeyboardAction( const KeyEvent& rKEvt, vcl::Window* pWindow );
     SVX_DLLPRIVATE bool executeAction( sal_uInt16 nAction, bool bSelect, vcl::Window* pWindow );

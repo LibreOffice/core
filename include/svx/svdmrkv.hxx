@@ -252,7 +252,7 @@ public:
     OUString GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }
     OUString GetDescriptionOfMarkedPoints() const { return GetMarkedObjectList().GetPointMarkDescription(); }
     OUString GetDescriptionOfMarkedGluePoints() const { return GetMarkedObjectList().GetGluePointMarkDescription(); }
-    bool GetBoundRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeBoundRect(pPageView, rRect); }
+    void GetBoundRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { GetMarkedObjectList().TakeBoundRect(pPageView, rRect); }
     bool GetSnapRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeSnapRect(pPageView, rRect); }
 
     // Get a list of all those links which are connected to marked nodes,
@@ -303,7 +303,7 @@ public:
 
     // Mark all objects within a rectangular area
     // Just objects are marked which are inclosed completely
-    bool MarkObj(const Rectangle& rRect, bool bUnmark=false);
+    void MarkObj(const Rectangle& rRect, bool bUnmark=false);
     void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark=false, bool bImpNoSetMarkHdl=false);
     void MarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
     void UnmarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
@@ -333,7 +333,7 @@ public:
     bool MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
 
     // Mark all points within this rectangular alle Punkte (View coordinates)
-    bool MarkPoints(const Rectangle& rRect, bool bUnmark=false) { return MarkPoints(&rRect,bUnmark); }
+    void MarkPoints(const Rectangle& rRect, bool bUnmark=false) { MarkPoints(&rRect,bUnmark); }
     bool UnmarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
     bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return rHdl.IsSelected(); }
     bool MarkAllPoints() { return MarkPoints(nullptr,false); }
@@ -384,7 +384,7 @@ public:
     // Pick: Supported options for nOptions are SEARCH_NEXT, SEARCH_BACKWARD
     bool PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
     bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV, bool bUnmark=false);
-    bool UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV) { return MarkGluePoint(pObj,nId,pPV,true); }
+    void UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV) { MarkGluePoint(pObj,nId,pPV,true); }
     bool IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const;
 
     // Get the Hdl (handle) of a marked GluePoint. Non-marked
@@ -408,7 +408,7 @@ public:
     // bool BegMarkGluePoints(const Point& rPnt, OutputDevice* pOut);
     bool BegMarkGluePoints(const Point& rPnt, bool bUnmark = false);
     void MovMarkGluePoints(const Point& rPnt);
-    bool EndMarkGluePoints();
+    void EndMarkGluePoints();
     void BrkMarkGluePoints();
     bool IsMarkGluePoints() const { return (nullptr != mpMarkGluePointsOverlay); }
 
@@ -437,7 +437,7 @@ public:
     // objects may not be processed in the meantime (until the next
     // LeaveGroup()). With markings which overlaps pages, every page is processed
     // separately. The method returns sal_True, if at least one group was entered.
-    bool EnterMarkedGroup();
+    void EnterMarkedGroup();
 
     // Is set by DragView automatically when finishing a Crook-Drag.
     void SetLastCrookCenter(const Point& rPt) { maLastCrookCenter=rPt; }

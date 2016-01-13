@@ -247,7 +247,7 @@ public:
     // Has only effect, if the document has draw-objects with macrofunctionality (SdrObject::HasMacro()==sal_True).
     bool IsMacroMode() const { return bMacroMode; }
     bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin);
-    bool BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin) { return BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
+    void BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin) { BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
     void MovMacroObj(const Point& rPnt);
     void BrkMacroObj();
     bool EndMacroObj();
@@ -265,7 +265,7 @@ public:
     static bool SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier );
 
     /** returns a format paint brush set from the current selection */
-    bool TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  );
+    void TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  );
 
     /** applies a format paint brush set from the current selection.
         if bNoCharacterFormats is true, no character attributes are changed.

@@ -583,18 +583,18 @@ bool SvdProgressInfo::ReportActions( sal_uIntPtr nAnzActions )
     return maLink.Call(nullptr);
 }
 
-bool SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
+void SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
 {
     nSumCurAction += nAnzInserts;
     nCurInsert += nAnzInserts;
 
-    return maLink.Call(nullptr);
+    maLink.Call(nullptr);
 }
 
-bool SvdProgressInfo::ReportRescales( sal_uIntPtr nAnzRescales )
+void SvdProgressInfo::ReportRescales( sal_uIntPtr nAnzRescales )
 {
     nSumCurAction += nAnzRescales;
-    return maLink.Call(nullptr);
+    maLink.Call(nullptr);
 }
 
 void SvdProgressInfo::SetActionCount( sal_uIntPtr _nActionCount )
@@ -607,7 +607,7 @@ void SvdProgressInfo::SetInsertCount( sal_uIntPtr _nInsertCount )
     nInsertCount = _nInsertCount;
 }
 
-bool SvdProgressInfo::SetNextObject()
+void SvdProgressInfo::SetNextObject()
 {
     nActionCount = 0;
     nCurAction   = 0;
@@ -616,7 +616,7 @@ bool SvdProgressInfo::SetNextObject()
     nCurInsert   = 0;
 
     nCurObj++;
-    return ReportActions(0);
+    ReportActions(0);
 }
 
 // #i101872# isolate GetTextEditBackgroundColor to tooling; it will anyways only be used as long

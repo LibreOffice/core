@@ -88,7 +88,6 @@ public:
           Point&    operator[]( sal_uInt16 nPos );
     XPolygon&       operator=( const XPolygon& rXPoly );
     bool            operator==( const XPolygon& rXPoly ) const;
-    bool            operator!=( const XPolygon& rXPoly ) const;
 
     XPolyFlags  GetFlags( sal_uInt16 nPos ) const;
     void        SetFlags( sal_uInt16 nPos, XPolyFlags eFlags );
@@ -150,8 +149,6 @@ public:
     XPolygon&       operator[]( sal_uInt16 nPos );
 
     XPolyPolygon&   operator=( const XPolyPolygon& rXPolyPoly );
-    bool            operator==( const XPolyPolygon& rXPolyPoly ) const;
-    bool            operator!=( const XPolyPolygon& rXPolyPoly ) const;
 
     // transformations
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);

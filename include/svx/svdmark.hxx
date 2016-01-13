@@ -65,10 +65,6 @@ public:
 
     SdrMark& operator=(const SdrMark& rMark);
     bool operator==(const SdrMark& rMark) const;
-    bool operator!=(const SdrMark& rMark) const
-    {
-        return !(operator==(rMark));
-    }
 
     void SetMarkedSdrObj(SdrObject* pNewObj);
     SdrObject* GetMarkedSdrObj() const { return mpSelectedSdrObject;}
@@ -170,7 +166,6 @@ protected:
     bool                                                mbSorted;
 
 private:
-    SVX_DLLPRIVATE bool operator==(const SdrMarkList& rCmpMarkList) const;
     SVX_DLLPRIVATE void ImpForceSort();
 
 private:

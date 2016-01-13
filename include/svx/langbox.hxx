@@ -69,9 +69,9 @@ public:
                             bool bCheckSpellAvail = false );
 
     sal_Int32       InsertLanguage( const LanguageType eLangType, sal_Int32  nPos = LISTBOX_APPEND );
-    sal_Int32       InsertDefaultLanguage( sal_Int16 nType, sal_Int32  nPos = LISTBOX_APPEND );
-    sal_Int32       InsertSystemLanguage( sal_Int32  nPos = LISTBOX_APPEND );
-    sal_Int32       InsertLanguage( const LanguageType eLangType,
+    void            InsertDefaultLanguage( sal_Int16 nType, sal_Int32  nPos = LISTBOX_APPEND );
+    void            InsertSystemLanguage( sal_Int32  nPos = LISTBOX_APPEND );
+    void            InsertLanguage( const LanguageType eLangType,
                                     bool bCheckEntry, sal_Int32  nPos = LISTBOX_APPEND );
     void            RemoveLanguage( const LanguageType eLangType );
     void            SelectLanguage( const LanguageType eLangType, bool bSelect = true );

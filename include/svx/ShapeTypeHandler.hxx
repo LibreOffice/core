@@ -131,11 +131,8 @@ public:
              Number of new shape types.
          @param aDescriptorList
              Array of new shape type descriptors.
-         @return
-             The returned flag indicates whether the specified shape
-             descriptors have been successfully added.
      */
-    bool AddShapeTypeList (int nDescriptorCount,
+    void AddShapeTypeList (int nDescriptorCount,
         ShapeTypeDescriptor aDescriptorList[]);
 
     /// get the accessible base name for an object

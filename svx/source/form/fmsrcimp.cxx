@@ -106,15 +106,12 @@ FmRecordCountListener::FmRecordCountListener(const Reference< css::sdbc::XResult
 }
 
 
-Link<sal_Int32,void> FmRecordCountListener::SetPropChangeHandler(const Link<sal_Int32,void>& lnk)
+void FmRecordCountListener::SetPropChangeHandler(const Link<sal_Int32,void>& lnk)
 {
-    Link<sal_Int32,void> lnkReturn = m_lnkWhoWantsToKnow;
     m_lnkWhoWantsToKnow = lnk;
 
     if (m_xListening.is())
         NotifyCurrentCount();
-
-    return lnkReturn;
 }
 
 
@@ -1131,12 +1128,12 @@ void FmSearchEngine::CancelSearch()
 }
 
 
-bool FmSearchEngine::SwitchToContext(const Reference< css::sdbc::XResultSet > & xCursor, const OUString& sVisibleFields, const InterfaceArray& arrFields,
+void FmSearchEngine::SwitchToContext(const Reference< css::sdbc::XResultSet > & xCursor, const OUString& sVisibleFields, const InterfaceArray& arrFields,
     sal_Int32 nFieldIndex)
 {
     DBG_ASSERT(!m_bSearchingCurrently, "FmSearchEngine::SwitchToContext : please do not call while I'm searching !");
     if (m_bSearchingCurrently)
-        return false;
+        return;
 
     m_xSearchCursor = xCursor;
     m_xOriginalIterator = xCursor;
@@ -1147,8 +1144,6 @@ bool FmSearchEngine::SwitchToContext(const Reference< css::sdbc::XResultSet > & 
 
     Init(sVisibleFields);
     RebuildUsedFields(nFieldIndex, true);
-
-    return true;
 }
 
 

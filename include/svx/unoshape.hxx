@@ -580,7 +580,7 @@ public:
 
     bool createObject( const SvGlobalName &aClassName );
 
-    bool createLink( const OUString& aLinkURL );
+    void createLink( const OUString& aLinkURL );
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

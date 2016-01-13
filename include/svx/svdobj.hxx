@@ -522,7 +522,7 @@ public:
 
     // Tooling for painting a single object to a OutputDevice. This will be needed as long
     // as not all painting is changed to use DrawContact objects.
-    bool SingleObjectPainter(OutputDevice& rOut) const;
+    void SingleObjectPainter(OutputDevice& rOut) const;
     bool LineGeometryUsageIsNecessary() const;
 
     // Returns a copy of the object. Every inherited class must reimplement this (in class Foo

@@ -172,12 +172,10 @@ SdrPageView::~SdrPageView()
     ClearPageWindows();
 }
 
-SdrPageWindow& SdrPageView::CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow)
+void SdrPageView::CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow)
 {
     SdrPageWindow& rWindow = *(new SdrPageWindow(*this, rPaintWindow));
     AppendPageWindow(rWindow);
-
-    return rWindow;
 }
 
 void SdrPageView::AddPaintWindowToPageView(SdrPaintWindow& rPaintWindow)

@@ -336,18 +336,18 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
     return (sal_uInt16)0xFFFF;
 }
 
-bool BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
+void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
     if ( mLevel == (sal_uInt16)0xFFFF || mLevel == 0)
-        return false;
+        return;
 
     if ( GetNBOIndexForNumRule(aNum,mLevel) != (sal_uInt16)0xFFFF )
-        return false;
+        return;
 
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
 
     if ( nActLv == (sal_uInt16)0xFFFF )
-        return false;
+        return;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_Unicode cChar = aFmt.GetBulletChar();
@@ -372,7 +372,7 @@ bool BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     }*/
     //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
     if ( nIndex >= DEFAULT_BULLET_TYPES )
-        return false;
+        return;
 
     pActualBullets[nIndex]->cBulletChar = cChar;
     if ( pFont )
@@ -384,11 +384,9 @@ bool BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     OUString sNUM = OUString::number( nIndex + 1 );
     aStrFromRES = aStrFromRES.replaceFirst(aReplace,sNUM);
     pActualBullets[nIndex]->sDescription = aStrFromRES;
-
-    return true;
 }
 
-bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool /*isDefault*/, bool isResetSize)
+void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool /*isDefault*/, bool isResetSize)
 {
     //if ( mLevel == (sal_uInt16)0xFFFF )
     //  return sal_False;
@@ -414,7 +412,7 @@ bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     }*/
     //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
     if ( nIndex >= DEFAULT_BULLET_TYPES )
-        return false;
+        return;
     cChar = pActualBullets[nIndex]->cBulletChar;
     //vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
     vcl::Font rActBulletFont = pActualBullets[nIndex]->aFont;
@@ -437,8 +435,6 @@ bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
         }
         nMask <<= 1;
     }
-
-    return true;
 }
 
 OUString BulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefault*/)
@@ -615,20 +611,20 @@ sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uI
     return (sal_uInt16)0xFFFF;
 }
 
-bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
+void GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
     if ( mLevel == (sal_uInt16)0xFFFF || mLevel > aNum.GetLevelCount() || mLevel == 0)
-        return false;
+        return;
 
     if ( GetNBOIndexForNumRule(aNum,mLevel) != (sal_uInt16)0xFFFF )
-        return false;
+        return;
 
     if ( nIndex >= aGrfDataLst.size() )
-        return false;
+        return;
 
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
     if ( nActLv == (sal_uInt16)0xFFFF )
-        return false;
+        return;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     const SvxBrushItem* pBrsh = aFmt.GetBrush();
@@ -636,7 +632,7 @@ bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex
     if ( pBrsh )
         pGrf = pBrsh->GetGraphic();
     else
-        return false;
+        return;
 
     if ( pGrf )
     {
@@ -652,21 +648,16 @@ bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex
         OUString sNUM = OUString::number( nIndex + 1 );
         aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
         pEntry->sDescription = aStrFromRES;
-    }else
-    {
-        return false;
     }
-
-    return true;
 }
 
-bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool /*isDefault*/, bool /*isResetSize*/)
+void GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool /*isDefault*/, bool /*isResetSize*/)
 {
     //if ( mLevel == (sal_uInt16)0xFFFF )
     //  return sal_False;
 
     if ( nIndex >= aGrfDataLst.size() )
-        return false;
+        return;
 
     OUString sGrfName;
     GrfBulDataRelation* pEntry = aGrfDataLst[nIndex];
@@ -701,8 +692,6 @@ bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, s
         }
         nMask <<= 1 ;
     }
-
-    return true;
 }
 
 OUString GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefault*/)
@@ -989,10 +978,10 @@ sal_uInt16 MixBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 
     return (sal_uInt16)0xFFFF;
 }
 
-bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel)
+void MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel)
 {
     if ( mLevel == (sal_uInt16)0xFFFF || mLevel == 0 || nIndex>=DEFAULT_BULLET_TYPES)
-        return false;
+        return;
 
     //if ( GetNBOIndexForNumRule(aNum,mLevel) != (sal_uInt16)0xFFFF )
     //  return sal_False;
@@ -1000,7 +989,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
 
     if ( nActLv == (sal_uInt16)0xFFFF )
-        return false;
+        return;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_Int16 eNumType = aFmt.GetNumberingType();
@@ -1024,7 +1013,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
         if ( pBrsh )
             pGrf = pBrsh->GetGraphic();
         else
-            return false;
+            return;
 
         OUString sEmpty;
         if ( pGrf )
@@ -1050,7 +1039,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
             pEntry->bIsCustomized = true;
         }else
         {
-            return false;
+            return;
         }
     }else
     {
@@ -1079,7 +1068,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
             if ( pBrsh )
                 pGrf = pBrsh->GetGraphic();
             else
-                return false;
+                return;
 
             OUString aGrfName;
             if ( pGrf )
@@ -1127,14 +1116,13 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
         }
     }
     ImplStore("standard.sya");
-    return true;
 }
 
-bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault, bool isResetSize)
+void MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault, bool isResetSize)
 {
     //if ( mLevel == (sal_uInt16)0xFFFF || nIndex>=DEFAULT_BULLET_TYPES )
     if ( nIndex>=DEFAULT_BULLET_TYPES )
-        return false;
+        return;
     MixBulletsSettings_Impl* pCurrentBullets = pActualBullets[nIndex];
     if (isDefault) pCurrentBullets=pDefaultActualBullets[nIndex];
 
@@ -1221,8 +1209,6 @@ bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
             nMask <<= 1 ;
         }
     }
-
-    return true;
 }
 
 OUString MixBulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool isDefault)
@@ -1353,27 +1339,19 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     return (sal_uInt16)0xFFFF;
 }
 
-bool NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
+void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
-    //if ( mLevel == (sal_uInt16)0xFFFF || mLevel == 0)
-    //  return sal_False;
-
-    //if ( GetNBOIndexForNumRule(aNum,mLevel) != (sal_uInt16)0xFFFF )
-    //  return sal_False;
-
     sal_uInt16 nActLv = IsSingleLevel(mLevel);
 
     if ( nActLv == (sal_uInt16)0xFFFF )
-        return false;
+        return;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
-    //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix())[0];
-    //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix())[0];
     sal_Int16 eNumType = aFmt.GetNumberingType();
 
     sal_uInt16 nCount = pNumberSettingsArr->size();
     if ( nIndex >= nCount )
-        return false;
+        return;
 
     NumberSettings_Impl* _pSet = (*pNumberSettingsArr)[nIndex].get();
 
@@ -1396,17 +1374,12 @@ bool NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
         _pSet->sDescription = GetDescription(nIndex,true);
     }
     ImplStore("standard.syb");
-    return true;
 }
 
-bool NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault, bool isResetSize)
+void NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault, bool isResetSize)
 {
-    //if ( mLevel == (sal_uInt16)0xFFFF )
-    //  return sal_False;
-
-    //DBG_ASSERT(pNumSettingsArr->Count() > nIndex, "wrong index");
     if(pNumberSettingsArr->size() <= nIndex)
-        return false;
+        return;
     NumberSettingsArr_Impl*     pCurrentNumberSettingsArr=pNumberSettingsArr;
     if (isDefault) pCurrentNumberSettingsArr=pDefaultNumberSettingsArr;
     NumberSettings_Impl* _pSet = (*pCurrentNumberSettingsArr)[nIndex].get();
@@ -1430,8 +1403,6 @@ bool NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
         }
         nMask <<= 1 ;
     }
-
-    return true;
 }
 
 OUString NumberingTypeMgr::GetDescription(sal_uInt16 nIndex, bool isDefault)
@@ -1618,14 +1589,11 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
     return (sal_uInt16)0xFFFF;
 }
 
-bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
+void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
-    //if ( mLevel == 0 || mLevel == (sal_uInt16)0xFFFF )
-    //  return sal_False;
-
     sal_uInt16 nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
     if ( nIndex >= nLength )
-        return false;
+        return;
 
     OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[nIndex];
     sal_uInt16 nCount = pItemArr->pNumSettingsArr->size();
@@ -1686,17 +1654,13 @@ bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
         pItemArr->sDescription = GetDescription(nIndex,true);
     }
     ImplStore("standard.syc");
-    return true;
 }
 
-bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 /*mLevel*/, bool isDefault, bool isResetSize)
+void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 /*mLevel*/, bool isDefault, bool isResetSize)
 {
-    //if ( mLevel == (sal_uInt16)0xFFFF )
-    //  return sal_False;
-
     DBG_ASSERT(DEFAULT_NUM_VALUSET_COUNT > nIndex, "wrong index");
     if(DEFAULT_NUM_VALUSET_COUNT <= nIndex)
-        return false;
+        return;
 
     const FontList* pList = nullptr;
 
@@ -1803,8 +1767,6 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
         aFmt.SetSuffix(pLevelSettings->sSuffix);
         aNum.SetLevel(i, aFmt);
     }
-
-    return true;
 }
 
 OUString OutlineTypeMgr::GetDescription(sal_uInt16 nIndex, bool isDefault)

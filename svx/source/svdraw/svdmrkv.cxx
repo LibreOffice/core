@@ -470,10 +470,8 @@ void SdrMarkView::MovMarkGluePoints(const Point& rPnt)
     }
 }
 
-bool SdrMarkView::EndMarkGluePoints()
+void SdrMarkView::EndMarkGluePoints()
 {
-    bool bRetval(false);
-
     if(IsMarkGluePoints())
     {
         if(maDragStat.IsMinMoved())
@@ -481,15 +479,11 @@ bool SdrMarkView::EndMarkGluePoints()
             Rectangle aRect(maDragStat.GetStart(),maDragStat.GetNow());
             aRect.Justify();
             MarkGluePoints(&aRect, mpMarkGluePointsOverlay->IsUnmarking());
-
-            bRetval = true;
         }
 
         // cleanup
         BrkMarkGluePoints();
     }
-
-    return bRetval;
 }
 
 void SdrMarkView::BrkMarkGluePoints()
@@ -1537,7 +1531,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     return pFndObj!=nullptr;
 }
 
-bool SdrMarkView::MarkObj(const Rectangle& rRect, bool bUnmark)
+void SdrMarkView::MarkObj(const Rectangle& rRect, bool bUnmark)
 {
     bool bFnd=false;
     Rectangle aR(rRect);
@@ -1576,7 +1570,6 @@ bool SdrMarkView::MarkObj(const Rectangle& rRect, bool bUnmark)
         MarkListHasChanged();
         AdjustMarkHdl();
     }
-    return bFnd;
 }
 
 void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool bImpNoSetMarkHdl)
@@ -2053,9 +2046,8 @@ void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, 
 
 
 
-bool SdrMarkView::EnterMarkedGroup()
+void SdrMarkView::EnterMarkedGroup()
 {
-    bool bRet=false;
     // We enter only the first group found (in only one PageView), because
     // PageView::EnterGroup calls an AdjustMarkHdl.
     // TODO: I'll have to prevent that via a flag.
@@ -2072,14 +2064,12 @@ bool SdrMarkView::EnterMarkedGroup()
                 SdrObject* pObj=pM->GetMarkedSdrObj();
                 if (pObj->IsGroupObject()) {
                     if (pPV->EnterGroup(pObj)) {
-                        bRet=true;
                         bEnter=true;
                     }
                 }
             }
         }
     }
-    return bRet;
 }
 
 

@@ -445,8 +445,6 @@ protected:
 private:
     SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&): aList()  {}
     SVX_DLLPRIVATE void operator=(const SdrHdlList&)                 {}
-    SVX_DLLPRIVATE bool operator==(const SdrHdlList&) const      { return false; }
-    SVX_DLLPRIVATE bool operator!=(const SdrHdlList&) const      { return false; }
 
 public:
     explicit SdrHdlList(SdrMarkView* pV);

@@ -1951,18 +1951,13 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
 
 
 
-bool SvxTableController::StopTextEdit()
+void SvxTableController::StopTextEdit()
 {
     if(mpView->IsTextEdit())
     {
         mpView->SdrEndTextEdit();
         mpView->SetCurrentObj(OBJ_TABLE);
         mpView->SetEditMode(SDREDITMODE_EDIT);
-        return true;
-    }
-    else
-    {
-        return false;
     }
 }
 

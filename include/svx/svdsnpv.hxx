@@ -182,9 +182,9 @@ public:
     bool IsMoveSnapOnlyTopLeft() const { return bMoveSnapOnlyTopLeft; }
 
     // #114409#-1 Migrate PageOrigin
-    bool BegSetPageOrg(const Point& rPnt);
+    void BegSetPageOrg(const Point& rPnt);
     void MovSetPageOrg(const Point& rPnt);
-    bool EndSetPageOrg();
+    void EndSetPageOrg();
     void BrkSetPageOrg();
     bool IsSetPageOrg() const { return (nullptr != mpPageOriginOverlay); }
 
@@ -195,7 +195,7 @@ public:
     // Move of an available auxiliary line. Use nHelpLineNum and pPV from PickHelpLine.
     bool BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV);
     // interactive insertion of a new auxiliary line
-    bool BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind);
+    void BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind);
     Pointer GetDraggedHelpLinePointer() const;
 
     // change the type of auxiliary line while dragging

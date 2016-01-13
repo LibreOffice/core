@@ -367,7 +367,7 @@ uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerSt
     return mxContainerStorage;
 }
 
-bool SvXMLEmbeddedObjectHelper::ImplReadObject(
+void SvXMLEmbeddedObjectHelper::ImplReadObject(
         const OUString& rContainerStorageName,
         OUString& rObjName,
         const SvGlobalName *pClassId,
@@ -379,7 +379,7 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     uno::Reference < embed::XStorage > xCntnrStor( ImplGetContainerStorage( rContainerStorageName ) );
 
     if( !xCntnrStor.is() && !pTemp )
-        return false;
+        return;
 
     OUString aSrcObjName( rObjName );
     comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
@@ -420,7 +420,7 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
             }
             catch ( uno::Exception& )
             {
-                return false;
+                return;
             }
         }
         else
@@ -431,7 +431,7 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
             }
             catch ( uno::Exception& )
             {
-                return false;
+                return;
             }
         }
     }
@@ -447,8 +447,6 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     //             area.
     OUString const baseURL(mpDocPersist->getDocumentBaseURL());
     rContainer.GetEmbeddedObject(aName, &baseURL);
-
-    return true;
 }
 
 OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
