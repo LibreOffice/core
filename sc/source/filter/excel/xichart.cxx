@@ -2799,17 +2799,17 @@ Reference< XLabeledDataSequence > XclImpChTypeGroup::CreateCategSequence() const
 
 void XclImpChTypeGroup::ReadChDropBar( XclImpStream& rStrm )
 {
-    if (maDropBars.find(EXC_CHDROPBAR_UP) == maDropBars.end())
+    if (m_DropBars.find(EXC_CHDROPBAR_UP) == m_DropBars.end())
     {
         unique_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
         p->ReadRecordGroup(rStrm);
-        o3tl::ptr_container::insert(maDropBars, EXC_CHDROPBAR_UP, std::move(p));
+        m_DropBars.insert(std::make_pair(EXC_CHDROPBAR_UP, std::move(p)));
     }
-    else if(maDropBars.find(EXC_CHDROPBAR_DOWN) == maDropBars.end())
+    else if (m_DropBars.find(EXC_CHDROPBAR_DOWN) == m_DropBars.end())
     {
         unique_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
         p->ReadRecordGroup(rStrm);
-        o3tl::ptr_container::insert(maDropBars, EXC_CHDROPBAR_DOWN, std::move(p));
+        m_DropBars.insert(std::make_pair(EXC_CHDROPBAR_DOWN, std::move(p)));
     }
 }
 
@@ -2927,17 +2927,17 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > xChartType, s
             xHiLoLine->second->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
         }
         // white dropbar format
-        XclImpChDropBarMap::const_iterator itr = maDropBars.find(EXC_CHDROPBAR_UP);
+        XclImpChDropBarMap::const_iterator itr = m_DropBars.find(EXC_CHDROPBAR_UP);
         Reference<XPropertySet> xWhitePropSet;
-        if (itr != maDropBars.end() && aTypeProp.GetProperty(xWhitePropSet, EXC_CHPROP_WHITEDAY))
+        if (itr != m_DropBars.end() && aTypeProp.GetProperty(xWhitePropSet, EXC_CHPROP_WHITEDAY))
         {
             ScfPropertySet aBarProp( xWhitePropSet );
             itr->second->Convert(GetChRoot(), aBarProp);
         }
         // black dropbar format
-        itr = maDropBars.find(EXC_CHDROPBAR_DOWN);
+        itr = m_DropBars.find(EXC_CHDROPBAR_DOWN);
         Reference<XPropertySet> xBlackPropSet;
-        if (itr != maDropBars.end() && aTypeProp.GetProperty(xBlackPropSet, EXC_CHPROP_BLACKDAY))
+        if (itr != m_DropBars.end() && aTypeProp.GetProperty(xBlackPropSet, EXC_CHPROP_BLACKDAY))
         {
             ScfPropertySet aBarProp( xBlackPropSet );
             itr->second->Convert(GetChRoot(), aBarProp);

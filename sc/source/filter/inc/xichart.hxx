@@ -1022,7 +1022,7 @@ private:
     /** Returns true, if the chart type group contains a hi-lo line format. */
     inline bool         HasHiLoLine() const { return maChartLines.find( EXC_CHCHARTLINE_HILO ) != maChartLines.end(); }
     /** Returns true, if the chart type group contains drop bar formats. */
-    inline bool         HasDropBars() const { return !maDropBars.empty(); }
+    inline bool         HasDropBars() const { return !m_DropBars.empty(); }
 
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
     void                InsertDataSeries( css::uno::Reference< css::chart2::XChartType > xChartType,
@@ -1037,7 +1037,7 @@ private:
 
 private:
     typedef ::std::vector< XclImpChSeriesRef >               XclImpChSeriesVec;
-    typedef boost::ptr_map<sal_uInt16, XclImpChDropBar>      XclImpChDropBarMap;
+    typedef ::std::map<sal_uInt16, std::unique_ptr<XclImpChDropBar>> XclImpChDropBarMap;
     typedef boost::ptr_map<sal_uInt16, XclImpChLineFormat>   XclImpChLineFormatMap;
     typedef ::std::set< sal_uInt16 >                         UInt16Set;
 
@@ -1048,7 +1048,7 @@ private:
     XclImpChSeriesRef   mxFirstSeries;      /// First series in this chart type group (CHSERIES groups).
     XclImpChChart3dRef  mxChart3d;          /// 3D settings (CHCHART3D record).
     XclImpChLegendRef   mxLegend;           /// Chart legend (CHLEGEND group).
-    XclImpChDropBarMap  maDropBars;         /// Dropbars (CHDROPBAR group).
+    XclImpChDropBarMap  m_DropBars;         /// Dropbars (CHDROPBAR group).
     XclImpChLineFormatMap maChartLines;     /// Global line formats (CHCHARTLINE group).
     XclImpChDataFormatRef mxGroupFmt;       /// Default format for all series (CHDATAFORMAT group).
     UInt16Set           maUnusedFormats;    /// Contains unused format indexes for automatic colors.
