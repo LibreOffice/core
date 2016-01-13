@@ -1899,7 +1899,6 @@ void SvNumberformat::GetOutputString(const OUString& sString,
     }
     *ppColor = NumFor[nIx].GetColor();
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    bool bRes = false;
     if (rInfo.eScannedType == css::util::NumberFormat::TEXT)
     {
         const sal_uInt16 nAnz = NumFor[nIx].GetCount();
@@ -1910,7 +1909,7 @@ void SvNumberformat::GetOutputString(const OUString& sString,
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
-                    bRes = lcl_appendStarFillChar( sOutBuff, rInfo.sStrArray[i]);
+                    lcl_appendStarFillChar( sOutBuff, rInfo.sStrArray[i]);
                 }
                 break;
             case NF_SYMBOLTYPE_BLANK:
