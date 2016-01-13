@@ -1673,9 +1673,40 @@ void SwXStyle::SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertySimp
     else if(SFX_STYLE_FAMILY_FRAME == m_rEntry.m_eFamily)
         o_rStyleBase.getNewBase()->GetFrameFormat()->SetAutoUpdateFormat(bAuto);
 }
+template<>
+void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    static_assert(COND_COMMAND_COUNT == 28, "invalid size of command count?");
+    using expectedarg_t = uno::Sequence<beans::NamedValue>;
+    if(!rValue.has<expectedarg_t>() || !m_pBasePool)
+        throw lang::IllegalArgumentException();
+    SwCondCollItem aCondItem;
+    for(auto& rNamedValue : rValue.get<expectedarg_t>())
+    {
+        if(!rNamedValue.Value.has<OUString>())
+            throw lang::IllegalArgumentException();
+
+        const OUString sValue(rNamedValue.Value.get<OUString>());
+        // get UI style name from programmatic style name
+        OUString aStyleName;
+        SwStyleNameMapper::FillUIName(sValue, aStyleName, lcl_GetSwEnumFromSfxEnum(m_rEntry.m_eFamily), true);
+
+        // check for correct context and style name
+        const auto nIdx(GetCommandContextIndex(rNamedValue.Name));
+        if(nIdx == -1)
+            throw lang::IllegalArgumentException();
+        m_pBasePool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
+        for(auto pBase = m_pBasePool->First(); pBase->GetName() != aStyleName; pBase = m_pBasePool->Next())
+        {
+            if(!pBase)
+                throw lang::IllegalArgumentException();
+        }
+        aCondItem.SetStyle(&aStyleName, nIdx);
+    }
+    o_rStyleBase.GetItemSet().Put(aCondItem);
+}
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    SfxStyleSheetBasePool* pBasePool = m_pBasePool;
     SfxStyleFamily eFamily = m_rEntry.m_eFamily;
     SwDoc* pDoc(m_pDoc);
     //UUUU adapted switch logic to a more readable state; removed goto's and made
@@ -1740,62 +1771,9 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             break;
         }
         case FN_UNO_PARA_STYLE_CONDITIONS:
-        {
-            uno::Sequence< beans::NamedValue > aSeq;
-            if (!(aValue >>= aSeq))
-                throw lang::IllegalArgumentException();
-
-            OSL_ENSURE(COND_COMMAND_COUNT == 28,
-                    "invalid size of command count?");
-            const beans::NamedValue *pSeq = aSeq.getConstArray();
-            const sal_Int32 nLen = aSeq.getLength();
-
-            bool bFailed = false;
-            SwCondCollItem aCondItem;
-            for(sal_Int32 i = 0; i < nLen; ++i)
-            {
-                OUString aTmp;
-                if ((pSeq[i].Value >>= aTmp))
-                {
-                    // get UI style name from programmatic style name
-                    OUString aStyleName;
-                    SwStyleNameMapper::FillUIName(aTmp, aStyleName,
-                            lcl_GetSwEnumFromSfxEnum(eFamily), true);
-
-                    // check for correct context and style name
-
-                    sal_Int16 nIdx = GetCommandContextIndex( pSeq[i].Name );
-
-                    bool bStyleFound = false;
-                    if (pBasePool)
-                    {
-                        pBasePool->SetSearchMask( SFX_STYLE_FAMILY_PARA);
-                        const SfxStyleSheetBase* pBase = pBasePool->First();
-                        while (pBase && !bStyleFound)
-                        {
-                            if(pBase->GetName() == aStyleName)
-                                bStyleFound = true;
-                            pBase = pBasePool->Next();
-                        }
-                    }
-
-                    if (nIdx == -1 || !bStyleFound)
-                    {
-                        bFailed = true;
-                        break;
-                    }
-
-                    aCondItem.SetStyle(&aStyleName, nIdx);
-                }
-                else
-                    bFailed = true;
-            }
-            if (bFailed)
-                throw lang::IllegalArgumentException();
-            rBase.GetItemSet().Put( aCondItem );
+            SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
         case FN_UNO_CATEGORY:
         {
             if(!rBase.getNewBase()->IsUserDefined())
