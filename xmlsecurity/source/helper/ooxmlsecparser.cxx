@@ -42,12 +42,25 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         if (!aId.isEmpty())
             m_pXSecController->setId(aId);
     }
+    else if (rName == "Reference")
+    {
+        OUString aURI = xAttribs->getValueByName("URI");
+        if (aURI.startsWith("#"))
+            m_pXSecController->addReference(aURI.copy(1));
+        // TODO else
+    }
 }
 
 void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     if (rName == "SignedInfo")
         m_pXSecController->setReferenceCount();
+    else if (rName == "Reference")
+    {
+        // TODO import digest value
+        OUString aDigestValue;
+        m_pXSecController->setDigestValue(aDigestValue);
+    }
 }
 
 void SAL_CALL OOXMLSecParser::characters(const OUString& /*rChars*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
