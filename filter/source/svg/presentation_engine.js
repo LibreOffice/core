@@ -5984,6 +5984,7 @@ function AnimationBaseNode3( aAnimElem, aParentNode, aNodeContext )
     this.aByValue = null;
     this.aKeyTimes = null;
     this.aValues = null;
+    this.aFormula= null;
 }
 extend( AnimationBaseNode3, AnimationBaseNode2 );
 
@@ -6034,6 +6035,9 @@ AnimationBaseNode3.prototype.parseElement = function()
         this.aValues = [];
     }
 
+    // formula attribute
+    this.aFormula = aAnimElem.getAttributeNS( NSS['anim'], 'formula' );
+
     return bRet;
 };
 
@@ -6067,6 +6071,11 @@ AnimationBaseNode3.prototype.getValues = function()
     return this.aValues;
 };
 
+AnimationBaseNode3.prototype.getFormula = function()
+{
+    return this.aFormula;
+};
+
 AnimationBaseNode3.prototype.info = function( bVerbose )
 {
     var sInfo = AnimationBaseNode3.superclass.info.call( this, bVerbose );
@@ -6095,6 +6104,10 @@ AnimationBaseNode3.prototype.info = function( bVerbose )
         // values
         if( this.getKeyTimes().length )
             sInfo += ';  values: ' + this.getValues().join( ',' );
+
+        // formula
+        if( this.getFormula() )
+            sInfo += ';  formula: ' + this.getFormula();
     }
 
     return sInfo;
@@ -10969,6 +10982,7 @@ function ActivityParamSet()
     this.nDecelerationFraction = 0.0;
     this.nSlideWidth = undefined;
     this.nSlideHeight = undefined;
+    this.aFormula = null;
     this.aDiscreteTimes = [];
 }
 
@@ -11634,6 +11648,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
         this.bDynamicStartValue = false;
         this.nIteration = 0;
         this.bCumulative = bAccumulate;
+        this.aFormula = aActivityParamSet.aFormula;
 
         //this.initAnimatedElement();
 
@@ -11643,7 +11658,10 @@ function FromToByActivityTemplate( BaseType ) // template parameter
     FromToByActivity.prototype.initAnimatedElement = function()
     {
         if( this.aAnimation && this.aFrom )
-            this.aAnimation.perform( this.aFrom );
+        {
+            var aValue = this.aFormula ? this.aFormula( this.aFrom ) : this.aFrom;
+            this.aAnimation.perform(aValue);
+        }
     };
 
     FromToByActivity.prototype.startAnimation = function()
@@ -11782,6 +11800,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
             aValue = this.add( this.scale( nRepeatCount, this.aEndValue ), aValue );
         }
 
+        aValue = this.aFormula ? this.aFormula( aValue ) : aValue;
         this.aAnimation.perform( aValue );
 
         if( this.bDynamicStartValue )
@@ -11795,10 +11814,9 @@ function FromToByActivityTemplate( BaseType ) // template parameter
     {
         if( this.aAnimation )
         {
-            if( this.isAutoReverse() )
-                this.aAnimation.perform( this.aStartValue );
-            else
-                this.aAnimation.perform( this.aEndValue );
+            var aValue = this.isAutoReverse() ? this.aStartValue : this.aEndValue;
+            aValue = this.aFormula ? this.aFormula( aValue ) : aValue;
+            this.aAnimation.perform( aValue );
         }
     };
 
@@ -11840,6 +11858,7 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
         this.scale = aOperatorSet.scale;
         this.bCumulative = bAccumulate;
         this.aLastValue = this.aValueList[ this.aValueList.length - 1 ];
+        this.aFormula = aActivityParamSet.aFormula;
 
         //this.initAnimatedElement();
     }
@@ -11859,7 +11878,11 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
     ValueListActivity.prototype.initAnimatedElement = function()
     {
         if( this.aAnimation )
-            this.aAnimation.perform( this.aValueList[0] );
+        {
+            var aValue = this.aValueList[0];
+            aValue = this.aFormula ? this.aFormula( aValue ) : aValue;
+            this.aAnimation.perform(aValue);
+        }
     };
 
     ValueListActivity.prototype.startAnimation = function()
@@ -11904,6 +11927,8 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
             aValue = this.add( aValue, this.scale( nRepeatCount, this.aLastValue ) );
             //aValue = aValue + nRepeatCount * this.aLastValue;
         }
+
+        aValue = this.aFormula ? this.aFormula( aValue ) : aValue;
         this.aAnimation.perform( aValue );
     };
 
@@ -11911,7 +11936,8 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
     {
         if( this.aAnimation )
         {
-            this.aAnimation.perform( this.aLastValue );
+            var aValue = this.aFormula ? this.aFormula( this.aLastValue ) : this.aLastValue;
+            this.aAnimation.perform( aValue );
         }
     };
 
@@ -11959,7 +11985,27 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
                                   eValueType === STRING_PROPERTY ||
                                   eValueType === ENUM_PROPERTY );
 
+    if( aAnimationNode.getFormula() )
+    {
+        var sFormula =  aAnimationNode.getFormula();
+        var reMath = /abs|sqrt|asin|acos|atan|sin|cos|tan|exp|log|min|max/g;
+        sFormula = sFormula.replace(reMath, 'Math.$&');
+        sFormula = sFormula.replace(/pi(?!\w)/g, 'Math.PI');
+        sFormula = sFormula.replace(/e(?!\w)/g, 'Math.E');
+        sFormula = sFormula.replace(/\$/g, '__PARAM0__');
 
+        var aAnimatedElement = aAnimationNode.getAnimatedElement();
+        var aBBox = aAnimatedElement.getBaseBBox();
+        var width = aBBox.width / aActivityParamSet.nSlideWidth;
+        var height = aBBox.height / aActivityParamSet.nSlideHeight;
+        var x = ( aBBox.x + aBBox.width / 2 ) / aActivityParamSet.nSlideWidth;
+        var y = ( aBBox.y + aBBox.height / 2 ) / aActivityParamSet.nSlideHeight;
+
+        aActivityParamSet.aFormula = function( __PARAM0__ ) {
+
+            return eval(sFormula);
+        };
+    }
 
     aActivityParamSet.aDiscreteTimes = aAnimationNode.getKeyTimes();
 
@@ -12148,9 +12194,15 @@ function evalValuesAttribute( aValueList, aValueSet, aBBox, nSlideWidth, nSlideH
     var x = ( aBBox.x + aBBox.width / 2 ) / nSlideWidth;
     var y = ( aBBox.y + aBBox.height / 2 ) / nSlideHeight;
 
+    var reMath = /abs|sqrt|asin|acos|atan|sin|cos|tan|exp|log|min|max/g;
+
     for( var i = 0; i < aValueSet.length; ++i )
     {
-        var aValue =  eval( aValueSet[i] );
+        var sValue = aValueSet[i];
+        sValue = sValue.replace(reMath, 'Math.$&');
+        sValue = sValue.replace(/pi(?!\w)/g, 'Math.PI');
+        sValue = sValue.replace(/e(?!\w)/g, 'Math.E');
+        var aValue =  eval( sValue );
         aValueList.push( aValue );
     }
 }
