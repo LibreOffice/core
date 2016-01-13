@@ -221,7 +221,7 @@ inline void doubleToString(StringT ** pResult,
             if (nDecPlaces == rtl_math_DecimalPlaces_Max || bEraseTrailingDecZeros)
                 nDecPlaces = 0;
             else
-                nDecPlaces = ::std::min( nDecPlaces, 15);
+                nDecPlaces = ::std::min<sal_Int32>(nDecPlaces, 15);
 
             // Max 1 sign, 16 integer digits, 15 group separators, 1 decimal
             // separator, 15 decimals digits.
