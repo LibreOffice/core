@@ -88,6 +88,46 @@ public:
         CPPUNIT_ASSERT_EQUAL(0.0, res);
     }
 
+    void test_doubleToString() {
+        double fVal = 999999999999999;
+        sal_Int32 aGroups[3] = { 3, 2, 0 };
+        rtl::OUString aRes( rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    rtl_math_DecimalPlaces_Max,
+                    '.', aGroups, ',', true));
+        CPPUNIT_ASSERT_EQUAL( OUString("99,99,99,99,99,99,999"), aRes);
+
+        fVal = 4503599627370495;
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    rtl_math_DecimalPlaces_Max, '.', false);
+        CPPUNIT_ASSERT_EQUAL( OUString("4503599627370495"), aRes);
+
+        fVal = 4503599627370496;
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    2, '.', false);
+        CPPUNIT_ASSERT_EQUAL( OUString("4503599627370496.00"), aRes);
+
+        fVal = 9007199254740991;    // (2^53)-1
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    rtl_math_DecimalPlaces_Max, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("9007199254740991"), aRes);
+
+        fVal = 9007199254740992;    // (2^53), algorithm switch
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    rtl_math_DecimalPlaces_Max, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("9.00719925474099E+015"), aRes);
+
+        fVal = 9007199254740993;    // (2^53)+1 would be but is 9007199254740992
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    rtl_math_DecimalPlaces_Max, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("9.00719925474099E+015"), aRes);
+    }
+
     void test_erf() {
         double x, res;
         x =  0.0;
@@ -176,6 +216,7 @@ public:
     CPPUNIT_TEST(test_stringToDouble_good);
     CPPUNIT_TEST(test_stringToDouble_bad);
     CPPUNIT_TEST(test_stringToDouble_exponent_without_digit);
+    CPPUNIT_TEST(test_doubleToString);
     CPPUNIT_TEST(test_erf);
     CPPUNIT_TEST(test_erfc);
     CPPUNIT_TEST(test_expm1);
