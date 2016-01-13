@@ -69,9 +69,11 @@ namespace comphelper
 
 
     //= OContainerListenerAdapter
+    class SAL_DLLPUBLIC_TEMPLATE OContainerListenerAdapter_BASE
+        : public cppu::WeakImplHelper<css::container::XContainerListener> {};
 
     class COMPHELPER_DLLPUBLIC OContainerListenerAdapter
-            :public cppu::WeakImplHelper< css::container::XContainerListener >
+        : public OContainerListenerAdapter_BASE
     {
         friend class OContainerListener;
 
