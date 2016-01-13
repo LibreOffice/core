@@ -1899,7 +1899,6 @@ void SvNumberformat::GetOutputString(const OUString& sString,
     }
     *ppColor = NumFor[nIx].GetColor();
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    bool bRes = false;
     if (rInfo.eScannedType == css::util::NumberFormat::TEXT)
     {
         const sal_uInt16 nAnz = NumFor[nIx].GetCount();
