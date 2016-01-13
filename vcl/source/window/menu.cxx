@@ -2309,11 +2309,6 @@ bool Menu::HasValidEntries( bool bCheckPopups )
     return bValidEntries;
 }
 
-sal_uLong Menu::DeactivateMenuBar(sal_uLong nFocusId)
-{
-    return nFocusId;
-}
-
 void Menu::MenuBarKeyInput(const KeyEvent&)
 {
 }
@@ -2516,17 +2511,15 @@ void MenuBar::ClosePopup(Menu *pMenu)
     pMenuWin->PopupClosed(pMenu);
 }
 
-sal_uLong MenuBar::DeactivateMenuBar(sal_uLong nFocusId)
+void MenuBar::DeactivateMenuBar(VclPtr<vcl::Window>& xFocusId)
 {
     MenuBarWindow* pMenuWin = getMenuBarWindow();
-    nFocusId = pMenuWin ? pMenuWin->GetFocusId() : 0;
-    if (nFocusId)
+    xFocusId = pMenuWin ? pMenuWin->GetFocusId() : nullptr;
+    if (xFocusId != nullptr)
     {
-        pMenuWin->SetFocusId(0);
+        pMenuWin->SetFocusId(nullptr);
         ImplGetSVData()->maWinData.mbNoDeactivate = false;
     }
-
-    return nFocusId;
 }
 
 void MenuBar::MenuBarKeyInput(const KeyEvent& rEvent)
@@ -2945,12 +2938,12 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
     nSelectedId = 0;
     bCanceled = false;
 
-    sal_uLong nFocusId = 0;
+    VclPtr<vcl::Window> xFocusId;
     bool bRealExecute = false;
     if ( !pStartedFrom )
     {
         pSVData->maWinData.mbNoDeactivate = true;
-        nFocusId = Window::SaveFocus();
+        xFocusId = Window::SaveFocus();
         bRealExecute = true;
     }
     else
@@ -3074,7 +3067,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
         aSz.Height() = ImplCalcHeight( nEntries );
     }
 
-    pWin->SetFocusId( nFocusId );
+    pWin->SetFocusId( xFocusId );
     pWin->SetOutputSizePixel( aSz );
     // #102158# menus must never grab the focus, otherwise
     // they will be closed immediately
@@ -3143,13 +3136,13 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
 
         // Restore focus (could already have been
         // restored in Select)
-        nFocusId = pWin->GetFocusId();
-        if ( nFocusId )
+        xFocusId = pWin->GetFocusId();
+        if ( xFocusId != nullptr )
         {
-            pWin->SetFocusId( 0 );
+            pWin->SetFocusId( nullptr );
             pSVData->maWinData.mbNoDeactivate = false;
         }
-        pWin->ImplEndPopupMode( FloatWinPopupEndFlags::NONE, nFocusId );
+        pWin->ImplEndPopupMode( FloatWinPopupEndFlags::NONE, xFocusId );
 
         if ( nSelectedId )  // then clean up .. ( otherwise done by TH )
         {
