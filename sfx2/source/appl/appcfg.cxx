@@ -151,6 +151,7 @@ IMPL_LINK_TYPED(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)
 
 void SfxApplication::GetOptions( SfxItemSet& rSet )
 {
+    bool bRet = false;
     SfxItemPool &rPool = GetPool();
 
     const sal_uInt16 *pRanges = rSet.GetRanges();
