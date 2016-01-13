@@ -432,7 +432,9 @@ sal_Int32 SAL_CALL OCollection::findColumn( const OUString& columnName ) throw(S
     if ( !m_pElements->exists(columnName) )
     {
         ::dbtools::throwInvalidColumnException( columnName, static_cast< XIndexAccess*>(this) );
+#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
         assert(false);
+#endif
     }
 
     return m_pElements->findColumn(columnName) + 1; // because columns start at one

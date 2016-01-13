@@ -181,8 +181,10 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
     }
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
+#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     assert(false);
     return 0; // Never reached
+#endif
 }
 
 void ODatabaseMetaDataResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
