@@ -128,6 +128,7 @@ public:
     void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
     void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
     void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; }
+    void                SetSlant( long nSlant )                     { mnSlant = nSlant; }
 
     bool                IsScalable() const                          { return mbScalableFont; }
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }

@@ -27,6 +27,7 @@ public:
     void testFullstopCenteredFlag();
     void testBuiltInFontFlag();
     void testSpacings();
+    void testSlant();
     void testEqualityOperator();
 
     CPPUNIT_TEST_SUITE(VclFontMetricTest);
@@ -34,6 +35,7 @@ public:
     CPPUNIT_TEST(testFullstopCenteredFlag);
     CPPUNIT_TEST(testBuiltInFontFlag);
     CPPUNIT_TEST(testSpacings);
+    CPPUNIT_TEST(testSlant);
     CPPUNIT_TEST(testEqualityOperator);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -103,6 +105,18 @@ void VclFontMetricTest::testSpacings()
 }
 
 
+void VclFontMetricTest::testSlant()
+{
+    // default constructor should set scalable flag to false
+    FontMetric aFontMetric;
+
+    CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetSlant(), 0L );
+
+    aFontMetric.SetSlant( 45 );
+    CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetSlant(), 45L );
+}
+
+
 void VclFontMetricTest::testEqualityOperator()
 {
     // default constructor should set scalable flag to false
@@ -142,6 +156,11 @@ void VclFontMetricTest::testEqualityOperator()
     aRhs.SetDescent( 100 );
     CPPUNIT_ASSERT_MESSAGE( "Descent set same, aLHS == aRhs failed", aLhs == aRhs );
     CPPUNIT_ASSERT_MESSAGE( "Descent set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
+
+    aLhs.SetSlant( 100 );
+    aRhs.SetSlant( 100 );
+    CPPUNIT_ASSERT_MESSAGE( "Slant set same, aLHS == aRhs failed", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "Slant set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
 }
 
 

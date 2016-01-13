@@ -222,7 +222,7 @@ FontMetric OutputDevice::GetFontMetric() const
     // OutputDevice has its own external leading function due to #i60945#
     aMetric.SetExternalLeading( ImplDevicePixelToLogicHeight( GetFontExtLeading() ) );
     aMetric.SetLineHeight( ImplDevicePixelToLogicHeight( pFontAttributes->GetAscent() + pFontAttributes->GetDescent() + mnEmphasisAscent + mnEmphasisDescent ) );
-    aMetric.mpImplMetric->mnSlant        = ImplDevicePixelToLogicHeight( pFontAttributes->GetSlant() );
+    aMetric.SetSlant( ImplDevicePixelToLogicHeight( pFontAttributes->GetSlant() ) );
 
     SAL_INFO("vcl.gdi.fontmetric", "OutputDevice::GetFontMetric:" << aMetric);
 

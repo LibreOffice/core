@@ -173,6 +173,11 @@ long FontMetric::GetSlant() const
     return mpImplMetric->GetSlant();
 }
 
+void FontMetric::SetSlant( long nSlant )
+{
+    mpImplMetric->SetSlant( nSlant );
+}
+
 long FontMetric::GetBulletOffset() const
 {
     return mpImplMetric->GetBulletOffset();
