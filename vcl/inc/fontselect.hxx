@@ -26,12 +26,10 @@
 
 #include <unordered_map>
 
+namespace vcl { class Font; }
+
 class PhysicalFontFace;
 class LogicalFontInstance;
-class ImplFontCache;
-namespace vcl { class Font; }
-class ConvertChar;
-class OutputDevice;
 class Size;
 
 class FontSelectPatternAttributes : public FontAttributes
@@ -65,6 +63,8 @@ public:
     bool            mbEmbolden;                 // Force emboldening
     ItalicMatrix    maItalicMatrix;             // Force matrix for slant
 };
+
+
 
 class FontSelectPattern : public FontSelectPatternAttributes
 {
