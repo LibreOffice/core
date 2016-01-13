@@ -3854,7 +3854,7 @@ void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
     {
         unique_ptr<XclImpChText> pText(new XclImpChText(GetChRoot()));
         pText->ReadRecordGroup(rStrm);
-        o3tl::ptr_container::insert(maDefTexts, nTextId, std::move(pText));
+        m_DefTexts.insert(std::make_pair(nTextId, std::move(pText)));
     }
 }
 
@@ -3904,8 +3904,8 @@ const XclImpChText* XclImpChChart::GetDefaultText( XclChTextType eTextType ) con
         case EXC_CHTEXTTYPE_DATALABEL:  nDefTextId = bBiff8 ? EXC_CHDEFTEXT_AXESSET : EXC_CHDEFTEXT_GLOBAL; break;
     }
 
-    XclImpChTextMap::const_iterator itr = maDefTexts.find(nDefTextId);
-    return itr == maDefTexts.end() ? nullptr : itr->second;
+    XclImpChTextMap::const_iterator const itr = m_DefTexts.find(nDefTextId);
+    return itr == m_DefTexts.end() ? nullptr : itr->second.get();
 }
 
 bool XclImpChChart::IsManualPlotArea() const

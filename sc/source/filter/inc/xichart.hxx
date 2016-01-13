@@ -1334,14 +1334,14 @@ private:
 private:
     typedef ::std::vector< XclImpChSeriesRef >                   XclImpChSeriesVec;
     typedef ::std::map<XclChDataPointPos, XclImpChDataFormatRef> XclImpChDataFormatMap;
-    typedef ::boost::ptr_map<sal_uInt16, XclImpChText>           XclImpChTextMap;
+    typedef ::std::map<sal_uInt16, std::unique_ptr<XclImpChText>> XclImpChTextMap;
 
     XclChRectangle      maRect;             /// Position of the chart on the sheet (CHCHART record).
     XclImpChSeriesVec   maSeries;           /// List of series data (CHSERIES groups).
     XclImpChDataFormatMap maDataFmts;       /// All series and point formats (CHDATAFORMAT groups).
     XclImpChFrameRef    mxFrame;            /// Chart frame format (CHFRAME group).
     XclChProperties     maProps;            /// Chart properties (CHPROPERTIES record).
-    XclImpChTextMap     maDefTexts;         /// Default text objects (CHDEFAULTTEXT groups).
+    XclImpChTextMap     m_DefTexts;         /// Default text objects (CHDEFAULTTEXT groups).
     XclImpChAxesSetRef  mxPrimAxesSet;      /// Primary axes set (CHAXESSET group).
     XclImpChAxesSetRef  mxSecnAxesSet;      /// Secondary axes set (CHAXESSET group).
     XclImpChTextRef     mxTitle;            /// Chart title (CHTEXT group).
