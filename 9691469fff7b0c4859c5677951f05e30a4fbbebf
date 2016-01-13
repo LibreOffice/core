@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_ea3102ee",
+        "filename": "include/vcl/floatwin.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001172
+      },
+      "writtenOn": "2016-01-13T20:19:50Z",
+      "side": 1,
+      "message": "There is a default value and hence no const reference.",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_0a3566d9",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2312,
+      "author": {
+        "id": 1001172
+      },
+      "writtenOn": "2016-01-13T20:19:50Z",
+      "side": 1,
+      "message": "I thought that since this was part of the original code, there must be some intention to modify this in the future and hence left it as is, without constifying it or deleting it. Also it is overridden below after inheritance.",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
