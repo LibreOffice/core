@@ -123,9 +123,19 @@ long FontMetric::GetAscent() const
     return mpImplMetric->GetAscent();
 }
 
+void FontMetric::SetAscent( long nAscent )
+{
+    mpImplMetric->SetAscent( nAscent );
+}
+
 long FontMetric::GetDescent() const
 {
     return mpImplMetric->GetDescent();
+}
+
+void FontMetric::SetDescent( long nDescent )
+{
+    mpImplMetric->SetDescent( nDescent );
 }
 
 long FontMetric::GetInternalLeading() const

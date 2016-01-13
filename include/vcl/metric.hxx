@@ -54,6 +54,8 @@ public:
     long                GetSlant() const;
     long                GetBulletOffset() const;
 
+    void                SetAscent(long);
+    void                SetDescent(long);
     void                SetExternalLeading(long);
     void                SetInternalLeading(long);
 
