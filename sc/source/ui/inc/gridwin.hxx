@@ -28,7 +28,6 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <boost/ptr_container/ptr_map.hpp>
 #include <vector>
 
 namespace editeng {

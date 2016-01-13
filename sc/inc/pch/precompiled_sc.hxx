@@ -66,7 +66,6 @@
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>

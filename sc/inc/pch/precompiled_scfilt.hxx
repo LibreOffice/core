@@ -52,7 +52,6 @@
 #include <boost/checked_delete.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional/optional.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
