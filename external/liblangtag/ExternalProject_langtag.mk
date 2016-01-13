@@ -22,7 +22,10 @@ $(eval $(call gb_ExternalProject_register_targets,langtag,\
 # Results in "cl : Command line error D8003 : missing source filename"
 $(call gb_ExternalProject_get_state_target,langtag,build):
 	$(call gb_ExternalProject_run,build,\
-		MAKE=$(MAKE) ./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
+		MAKE=$(MAKE) ./configure --disable-modules --disable-test --disable-introspection --with-pic \
+		$(if $(or $(DISABLE_DYNLOADING),$(filter MSC,$(COM))), \
+			--disable-shared --enable-static, \
+			--enable-shared --disable-static) \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) "ac_cv_va_copy=no") \
@@ -38,5 +41,9 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		   $(if $(verbose),V=1) \
 		   $(gb_Helper_set_ld_path) \
 		   $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(EXTERNAL_WORKDIR)/liblangtag/.libs/liblangtag.1.dylib \
+		) \
 	)
 # vim: set noet sw=4 ts=4:
