@@ -40,7 +40,7 @@
 
 #include "vcl/vclenum.hxx"
 #include <vcl/settings.hxx>
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 #include <vcl/decoview.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>

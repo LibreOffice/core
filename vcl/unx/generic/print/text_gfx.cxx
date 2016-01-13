@@ -23,7 +23,7 @@
 #include "glyphset.hxx"
 
 #include "unx/printergfx.hxx"
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 #include "vcl/helper.hxx"
 
 #include "osl/thread.h"

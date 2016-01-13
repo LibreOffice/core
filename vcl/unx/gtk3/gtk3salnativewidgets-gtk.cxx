@@ -16,7 +16,7 @@
 #include <unx/gtk/gtkgdi.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 #include "cairo_gtk3_cairo.hxx"
 
 #include <boost/optional.hpp>

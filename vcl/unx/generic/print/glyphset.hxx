@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_GENERIC_PRINT_GLYPHSET_HXX
 #define INCLUDED_VCL_GENERIC_PRINT_GLYPHSET_HXX
 
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 
 #include "osl/file.hxx"
 

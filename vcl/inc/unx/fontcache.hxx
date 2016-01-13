@@ -24,7 +24,7 @@
 #include <vcl/dllapi.h>
 #include <unordered_map>
 
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 
 namespace psp
 {

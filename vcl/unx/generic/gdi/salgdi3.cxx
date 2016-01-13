@@ -42,7 +42,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 #include "impfont.hxx"
 #include "gcach_xpeer.hxx"
 #include "unx/genpspgraphics.h"

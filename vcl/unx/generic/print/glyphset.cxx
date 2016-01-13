@@ -24,7 +24,7 @@
 
 #include "unx/printergfx.hxx"
 #include "fontsubset.hxx"
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 
 #include <tools/gen.hxx>
 

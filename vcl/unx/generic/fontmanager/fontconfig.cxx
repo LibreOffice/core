@@ -19,7 +19,7 @@
 
 #include "unx/fontcache.hxx"
 #include "impfont.hxx"
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>

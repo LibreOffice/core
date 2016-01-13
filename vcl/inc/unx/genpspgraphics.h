@@ -23,7 +23,7 @@
 #include <vcl/vclenum.hxx>
 #include <config_cairo_canvas.h>
 
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 #include "salgdi.hxx"
 #include "sallayout.hxx"
 #include "vclpluginapi.h"

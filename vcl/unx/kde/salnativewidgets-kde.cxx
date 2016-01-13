@@ -29,7 +29,7 @@
 #include "unx/pixmap.hxx"
 
 #include <vcl/settings.hxx>
-#include "fontmanager.hxx"
+#include "unx/fontmanager.hxx"
 #include <vcl/vclenum.hxx>
 #include <rtl/ustrbuf.hxx>
 
