@@ -536,12 +536,6 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
 
 void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rGeometryItem )
 {
-    const sal_Int32* pDefData = nullptr;
-    const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
-    if ( pDefCustomShape )
-        pDefData = pDefCustomShape->pDefData;
-
-
     // AdjustmentValues
     const Any* pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "AdjustmentValues" );
     if ( pAny )

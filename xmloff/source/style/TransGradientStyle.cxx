@@ -80,8 +80,6 @@ void XMLTransGradientStyleImport::importXML(
     uno::Any& rValue,
     OUString& rStrName )
 {
-    bool bHasName       = false;
-    bool bHasStyle      = false;
     OUString aDisplayName;
 
     awt::Gradient aGradient;
@@ -124,7 +122,6 @@ void XMLTransGradientStyleImport::importXML(
         case XML_TOK_GRADIENT_NAME:
             {
                 rStrName = rStrValue;
-                bHasName = true;
             }
             break;
         case XML_TOK_GRADIENT_DISPLAY_NAME:
@@ -138,7 +135,6 @@ void XMLTransGradientStyleImport::importXML(
                 if( SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_GradientStyle_Enum ) )
                 {
                     aGradient.Style = (awt::GradientStyle) eValue;
-                    bHasStyle = true;
                 }
             }
             break;
