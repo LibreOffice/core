@@ -33,7 +33,6 @@ ImplFontMetric::ImplFontMetric()
     mnLineHeight( 0 ),
     mnSlant( 0 ),
     mnBulletOffset( 0 ),
-    mnMiscFlags( 0 ),
     mnRefCount( 1 ),
     mbScalableFont( false ),
     mbFullstopCentered( false ),
@@ -57,9 +56,7 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 {
     if(    mbScalableFont     != r.mbScalableFont
         || mbFullstopCentered != r.mbFullstopCentered
-        || mbBuiltInFontFlag  != r.mbBuiltInFontFlag)
-        return false;
-    if( mnMiscFlags  != r.mnMiscFlags )
+        || mbDevice           != r.mbDevice) // mbDevice == built-in font flag
         return false;
     if( mnAscent     != r.mnAscent )
         return false;
