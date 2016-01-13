@@ -747,16 +747,6 @@ void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     m_aFillColor = aOrigFillColor;
 }
 
-void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
-{
-    basegfx::B2DPolygon aPoly;
-    aPoly.append(basegfx::B2DPoint(nX1, nY1), 2);
-    aPoly.setB2DPoint(1, basegfx::B2DPoint(nX2, nY2));
-    aPoly.setClosed(false);
-    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Middle,
-                 css::drawing::LineCap_BUTT);
-}
-
 void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     // because of the -1 hack we have to do fill and draw separately
@@ -910,6 +900,28 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
     {
         cairo_close_path(cr);
     }
+}
+
+void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+{
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(nX1, nY1), 2);
+    aPoly.setB2DPoint(1, basegfx::B2DPoint(nX2, nY2));
+    aPoly.setClosed(false);
+
+    cairo_t* cr = getCairoContext(false);
+    assert(cr && m_aDevice->isTopDown());
+    clipRegion(cr);
+
+    AddPolygonToPath(cr, aPoly, aPoly.isClosed(), !getAntiAliasB2DDraw(), true);
+
+    applyColor(cr, m_aLineColor);
+
+    cairo_rectangle_int_t extents = getStrokeDamage(cr);
+
+    cairo_stroke(cr);
+
+    releaseCairoContext(cr, false, extents);
 }
 
 bool SvpSalGraphics::drawPolyLine(
