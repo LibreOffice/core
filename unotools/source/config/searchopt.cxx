@@ -50,7 +50,7 @@ protected:
     bool            IsModified() const { return bModified; }
     using ConfigItem::SetModified;
     void            SetModified( bool bVal );
-    bool            Load();
+    void            Load();
     bool            Save();
 
     static Sequence< OUString >    GetPropertyNames();
@@ -161,7 +161,7 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
     return aNames;
 }
 
-bool SvtSearchOptions_Impl::Load()
+void SvtSearchOptions_Impl::Load()
 {
     bool bSucc = false;
 
@@ -210,8 +210,6 @@ bool SvtSearchOptions_Impl::Load()
         }
     }
     DBG_ASSERT( bSucc, "LoadConfig failed" );
-
-    return bSucc;
 }
 
 bool SvtSearchOptions_Impl::Save()

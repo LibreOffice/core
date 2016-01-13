@@ -148,7 +148,7 @@ class SvtLinguConfigItem : public utl::ConfigItem
 
     static bool GetHdlByName( sal_Int32 &rnHdl, const OUString &rPropertyName, bool bFullPropName = false );
     static const uno::Sequence< OUString > GetPropertyNames();
-    bool                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
+    void                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
     bool                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
 
     SvtLinguConfigItem(const SvtLinguConfigItem&) = delete;
@@ -548,7 +548,7 @@ const SvtLinguOptions& SvtLinguConfigItem::GetOptions() const
     return aOpt;
 }
 
-bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
+void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
 
@@ -661,8 +661,6 @@ bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
         bRes = true;
     }
     DBG_ASSERT( bRes, "LoadOptions failed" );
-
-    return bRes;
 }
 
 bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyNames )

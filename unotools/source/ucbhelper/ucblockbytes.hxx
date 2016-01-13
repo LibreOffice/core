@@ -128,7 +128,7 @@ public:
 
     bool                    setInputStream_Impl( const css::uno::Reference < css::io::XInputStream > &rxInputStream,
                                                  bool bSetXSeekable = true );
-    bool                    setStream_Impl( const css::uno::Reference < css::io::XStream > &rxStream );
+    void                    setStream_Impl( const css::uno::Reference < css::io::XStream > &rxStream );
     void                    terminate_Impl();
 
     css::uno::Reference < css::io::XInputStream > getInputStream_Impl() const

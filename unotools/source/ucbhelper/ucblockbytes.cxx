@@ -1093,7 +1093,7 @@ Reference < XInputStream > UcbLockBytes::getInputStream()
     return m_xInputStream;
 }
 
-bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
+void UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
 {
     osl::MutexGuard aGuard( m_aMutex );
     if ( aStream.is() )
@@ -1107,8 +1107,6 @@ bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
         m_xOutputStream.clear();
         setInputStream_Impl( Reference < XInputStream >() );
     }
-
-    return m_xInputStream.is();
 }
 
 bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputStream, bool bSetXSeekable )
