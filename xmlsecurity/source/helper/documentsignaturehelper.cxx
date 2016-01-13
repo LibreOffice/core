@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -328,6 +329,18 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
         {
             // Doesn't have to exist...
             DBG_ASSERT( nOpenMode == css::embed::ElementModes::READ, "Error creating signature stream..." );
+        }
+    }
+    else if(xNameAccess->hasByName("_xmlsignatures"))
+    {
+        try
+        {
+            aHelper.xSignatureStorage = rxStore->openStorageElement("_xmlsignatures", nSubStorageOpenMode);
+            aHelper.nStorageFormat = embed::StorageFormats::OFOPXML;
+        }
+        catch (const io::IOException& rException)
+        {
+            SAL_WARN("xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream: " << rException.Message);
         }
     }
 

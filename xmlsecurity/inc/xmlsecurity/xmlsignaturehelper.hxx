@@ -177,6 +177,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XWriter> CreateDocumentHandlerWithHeader( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream );
     static void CloseDocumentHandler( const ::com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler>& xDocumentHandler );
     static void ExportSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler, const SignatureInformation& signatureInfo );
+
+    /// Read and verify an OOXML signature.
+    bool ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& xStorage);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSIGNATUREHELPER_HXX

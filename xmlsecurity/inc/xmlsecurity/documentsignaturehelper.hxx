@@ -60,6 +60,13 @@ struct SignatureStreamHelper
 {
     css::uno::Reference < css::embed::XStorage >    xSignatureStorage;
     css::uno::Reference < css::io::XStream >        xSignatureStream;
+    /// If this is embed::StorageFormats::OFOPXML, then it's expected that xSignatureStream is an empty reference.
+    sal_Int32 nStorageFormat;
+
+    SignatureStreamHelper()
+        : nStorageFormat(0)
+    {
+    }
 };
 
 

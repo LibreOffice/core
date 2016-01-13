@@ -301,6 +301,11 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     return !mbError;
 }
 
+bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& /*xStorage*/)
+{
+    return true;
+}
+
 SignatureInformation XMLSignatureHelper::GetSignatureInformation( sal_Int32 nSecurityId ) const
 {
     return mpXSecController->getSignatureInformation( nSecurityId );
