@@ -1043,7 +1043,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 ))
 
 define gb_LinkTarget__use_liblangtag
-$(call gb_LinkTarget_use_unpacked,$(1),langtag)
 $(call gb_LinkTarget_set_include,$(1),\
 	$(LIBLANGTAG_CFLAGS) \
 	$$(INCLUDE) \
