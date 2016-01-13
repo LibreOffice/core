@@ -177,7 +177,7 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
             Update();
         }
     }
-    else
+    else if ( mnPercent != nNewPercent )
     {
         mnPreviousPercent = mnPercent;
         mnPercent = nNewPercent;
