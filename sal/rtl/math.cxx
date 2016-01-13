@@ -207,6 +207,88 @@ inline void doubleToString(StringT ** pResult,
         return;
     }
 
+    // Use integer representation for integer values that fit into the
+    // mantissa (1.((2^53)-1)) with a precision of 1 for highest accuracy.
+    const sal_Int64 kMaxInt = (static_cast<sal_Int64>(1) << 53) - 1;
+    if ((eFormat == rtl_math_StringFormat_Automatic ||
+         eFormat == rtl_math_StringFormat_F) && fValue <= static_cast<double>(kMaxInt))
+    {
+        sal_Int64 nInt = static_cast<sal_Int64>(fValue);
+        // Check the integer range again because double comparison may yield
+        // true within the precision range.
+        if (nInt <= kMaxInt && static_cast<double>(nInt) == fValue)
+        {
+            if (nDecPlaces == rtl_math_DecimalPlaces_Max)
+                nDecPlaces = 0;
+            else
+                nDecPlaces = ::std::max<sal_Int32>( ::std::min<sal_Int32>( nDecPlaces, 15), -15);
+            if (bEraseTrailingDecZeros && nDecPlaces > 0)
+                nDecPlaces = 0;
+
+            // Round before decimal position.
+            if (nDecPlaces < 0)
+            {
+                sal_Int64 nRounding = static_cast<sal_Int64>( getN10Exp( -nDecPlaces - 1));
+                sal_Int64 nTemp = nInt / nRounding;
+                int nDigit = nTemp % 10;
+                nTemp /= 10;
+                if (nDigit >= 5)
+                    ++nTemp;
+                nTemp *= 10;
+                nTemp *= nRounding;
+                nInt = nTemp;
+                nDecPlaces = 0;
+            }
+
+            // Max 1 sign, 16 integer digits, 15 group separators, 1 decimal
+            // separator, 15 decimals digits.
+            typename T::Char aBuf[64];
+            typename T::Char * pBuf = aBuf;
+            typename T::Char * p = pBuf;
+
+            // Backward fill.
+            size_t nGrouping = 0;
+            sal_Int32 nGroupDigits = 0;
+            do
+            {
+                typename T::Char nDigit = nInt % 10;
+                nInt /= 10;
+                *p++ = nDigit + '0';
+                if (pGroups && pGroups[nGrouping] == ++nGroupDigits && nInt > 0 && cGroupSeparator)
+                {
+                    *p++ = cGroupSeparator;
+                    if (pGroups[nGrouping+1])
+                        ++nGrouping;
+                    nGroupDigits = 0;
+                }
+            }
+            while (nInt > 0);
+            if (bSign)
+                *p++ = '-';
+
+            // Reverse buffer content.
+            sal_Int32 n = (p - pBuf) / 2;
+            for (sal_Int32 i=0; i < n; ++i)
+            {
+                ::std::swap( pBuf[i], p[-i-1]);
+            }
+            // Append decimals.
+            if (nDecPlaces > 0)
+            {
+                *p++ = cDecSeparator;
+                while (nDecPlaces--)
+                    *p++ = '0';
+            }
+
+            if (pResultCapacity == nullptr)
+                T::createString(pResult, pBuf, p - pBuf);
+            else
+                T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf, p - pBuf);
+
+            return;
+        }
+    }
+
     // find the exponent
     int nExp = 0;
     if ( fValue > 0.0 )
