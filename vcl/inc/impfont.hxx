@@ -108,7 +108,14 @@ private:
 
     // TODO: As these are progressively moved from bit fields into boolean variables, comment them out.
     // Eventually this enum will not be needed and we can remove it.
-    enum { DEVICE_FLAG=1, /* SCALABLE_FLAG=2, */ LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16, FULLSTOP_CENTERED_FLAG=32 };
+    enum {
+        DEVICE_FLAG=1,
+        /* SCALABLE_FLAG=2, */
+        LATIN_FLAG=4,
+        CJK_FLAG=8,
+        CTL_FLAG=16,
+        FULLSTOP_CENTERED_FLAG=32
+    };
 
 public:
 
