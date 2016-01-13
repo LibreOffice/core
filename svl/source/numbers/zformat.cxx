@@ -1878,7 +1878,7 @@ static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, const 
     return false;
 }
 
-bool SvNumberformat::GetOutputString(const OUString& sString,
+void SvNumberformat::GetOutputString(const OUString& sString,
                                      OUString& OutString,
                                      Color** ppColor)
 {
@@ -1895,7 +1895,7 @@ bool SvNumberformat::GetOutputString(const OUString& sString,
     else
     {
         *ppColor = nullptr; // no change of color
-        return false;
+        return;
     }
     *ppColor = NumFor[nIx].GetColor();
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
@@ -1927,7 +1927,6 @@ bool SvNumberformat::GetOutputString(const OUString& sString,
         }
     }
     OutString = sOutBuff.makeStringAndClear();
-    return bRes;
 }
 
 sal_uLong SvNumberformat::ImpGGT(sal_uLong x, sal_uLong y)

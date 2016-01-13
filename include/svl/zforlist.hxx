@@ -876,10 +876,9 @@ private:
     // Adjust a sequence of format codes to contain only one (THE) default
     // instead of multiple defaults for short/medium/long types.
     // If there is no medium but a short and a long default the long is taken.
-    // Return the default index in the sequence.
     // Non-PRODUCT version may check locale data for matching defaults in one
     // FormatElement group.
-    SVL_DLLPRIVATE sal_Int32 ImpAdjustFormatCodeDefault( css::i18n::NumberFormatCode * pFormatArr,
+    SVL_DLLPRIVATE void ImpAdjustFormatCodeDefault( css::i18n::NumberFormatCode * pFormatArr,
                                                          sal_Int32 nCount, bool bCheckCorrectness = true );
 
     // Obtain the format entry for a given key index.

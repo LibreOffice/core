@@ -208,7 +208,7 @@ public:
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString ) const;
 
     bool GetOutputString( double fNumber, OUString& OutString, Color** ppColor );
-    bool GetOutputString( const OUString& sString, OUString& OutString, Color** ppColor );
+    void GetOutputString( const OUString& sString, OUString& OutString, Color** ppColor );
 
     // True if type text
     bool IsTextFormat() const { return (eType & css::util::NumberFormat::TEXT) != 0; }

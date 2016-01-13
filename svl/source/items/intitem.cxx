@@ -165,14 +165,13 @@ SfxMetricItem::SfxMetricItem(const SfxMetricItem & rItem):
 }
 
 // virtual
-bool SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
+void SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
 {
     BigInt aTheValue(GetValue());
     aTheValue *= nMult;
     aTheValue += nDiv / 2;
     aTheValue /= nDiv;
     SetValue(aTheValue);
-    return true;
 }
 
 // virtual

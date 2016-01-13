@@ -259,7 +259,7 @@ public:
     /** Add a style sheet.
      * Not an actual public function. Do not call it from non-subclasses.
      */
-    SfxStyleSheetBase&          Add( const SfxStyleSheetBase& );
+    void                        Add( const SfxStyleSheetBase& );
 };
 
 class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,

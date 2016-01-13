@@ -207,8 +207,6 @@ public:
                                         return pPtr;
                                     }
 
-            CalendarWrapper*    operator->()    { return get(); }
-            CalendarWrapper&    operator*()     { return *get(); }
 };
 
 /** Load a transliteration only if it's needed.
@@ -286,7 +284,6 @@ public:
                                     }
 
     const   ::utl::TransliterationWrapper*  operator->() const  { return get(); }
-    const   ::utl::TransliterationWrapper&  operator*() const   { return *get(); }
 };
 
 /** Load a native number service wrapper only if it's needed.
@@ -340,8 +337,6 @@ public:
                                         return pPtr;
                                     }
 
-            NativeNumberWrapper*    operator->()    { return get(); }
-            NativeNumberWrapper&    operator*()     { return *get(); }
 };
 
 #endif // INCLUDED_SVL_ONDEMAND_HXX

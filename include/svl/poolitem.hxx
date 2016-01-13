@@ -177,7 +177,7 @@ public:
                                     const IntlWrapper * pIntlWrapper = nullptr ) const;
 
     virtual sal_uInt16       GetVersion( sal_uInt16 nFileFormatVersion ) const;
-    virtual bool             ScaleMetrics( long lMult, long lDiv );
+    virtual void             ScaleMetrics( long lMult, long lDiv );
     virtual bool             HasMetrics() const;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;

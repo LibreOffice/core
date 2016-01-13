@@ -56,7 +56,7 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
-    virtual bool             ScaleMetrics( long nMult, long nDiv ) override;
+    virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
     const Size& GetSize() const { return aSize; }

@@ -737,12 +737,11 @@ bool XLineDashItem::HasMetrics() const
     return true;
 }
 
-bool XLineDashItem::ScaleMetrics(long nMul, long nDiv)
+void XLineDashItem::ScaleMetrics(long nMul, long nDiv)
 {
     aDash.SetDotLen( ScaleMetricValue( aDash.GetDotLen(), nMul, nDiv ) );
     aDash.SetDashLen( ScaleMetricValue( aDash.GetDashLen(), nMul, nDiv ) );
     aDash.SetDistance( ScaleMetricValue( aDash.GetDistance(), nMul, nDiv ) );
-    return true;
 }
 
 bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2975,10 +2974,9 @@ bool XFillHatchItem::HasMetrics() const
     return true;
 }
 
-bool XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
+void XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
 {
     aHatch.SetDistance( ScaleMetricValue( aHatch.GetDistance(), nMul, nDiv ) );
-    return true;
 }
 
 bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const

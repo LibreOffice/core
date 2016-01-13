@@ -30,7 +30,7 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual bool HasMetrics() const override;
-    virtual bool ScaleMetrics(long nMul, long nDiv) override;
+    virtual void ScaleMetrics(long nMul, long nDiv) override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = nullptr) const override;
 };

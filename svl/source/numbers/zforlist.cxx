@@ -2093,14 +2093,14 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
 }
 
 
-sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
+void SvNumberFormatter::ImpAdjustFormatCodeDefault(
         css::i18n::NumberFormatCode * pFormatArr,
         sal_Int32 nCnt, bool bCheckCorrectness )
 {
     using namespace ::com::sun::star;
 
     if ( !nCnt )
-        return -1;
+        return;
     if (bCheckCorrectness && LocaleDataWrapper::areChecksEnabled())
     {
         // check the locale data for correctness
@@ -2195,7 +2195,6 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
     if ( nDef == -1 )
         nDef = 0;
     pFormatArr[nDef].Default = true;
-    return nDef;
 }
 
 SvNumberformat* SvNumberFormatter::GetFormatEntry( sal_uInt32 nKey )

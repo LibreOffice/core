@@ -30,7 +30,7 @@ public:
                              SfxMetricItem( const SfxMetricItem& );
                              virtual ~SfxMetricItem() {}
 
-    virtual bool             ScaleMetrics( long lMult, long lDiv ) override;
+    virtual void             ScaleMetrics( long lMult, long lDiv ) override;
     virtual bool             HasMetrics() const override;
 
 };

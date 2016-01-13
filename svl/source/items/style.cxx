@@ -676,7 +676,7 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleF
  * Helper function: If a template with this name exists it is created
  * anew. All templates that have this template as a parent are reconnected.
  */
-SfxStyleSheetBase& SfxStyleSheetBasePool::Add( const SfxStyleSheetBase& rSheet )
+void SfxStyleSheetBasePool::Add( const SfxStyleSheetBase& rSheet )
 {
     SfxStyleSheetIterator aIter(this, rSheet.GetFamily(), nMask);
     SfxStyleSheetBase* pOld = aIter.Find( rSheet.GetName() );
@@ -686,7 +686,6 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Add( const SfxStyleSheetBase& rSheet )
     rtl::Reference< SfxStyleSheetBase > xNew( Create( rSheet ) );
     pImp->mxIndexedStyleSheets->AddStyleSheet(xNew);
     Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::CHANGED, *xNew.get() ) );
-    return *xNew.get();
 }
 
 SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator=( const SfxStyleSheetBasePool& r )

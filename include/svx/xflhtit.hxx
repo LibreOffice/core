@@ -53,7 +53,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = nullptr ) const override;
     virtual bool            HasMetrics() const override;
-    virtual bool            ScaleMetrics(long nMul, long nDiv) override;
+    virtual void            ScaleMetrics(long nMul, long nDiv) override;
 
     const XHatch&           GetHatchValue() const { return aHatch;} // GetValue -> GetHatchValue
     void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue

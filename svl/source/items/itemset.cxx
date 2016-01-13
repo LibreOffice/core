@@ -1286,7 +1286,7 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
  *  @see SfxItemPool::StoreItem() const
  *  @see SfxItemSet::Load(SvStream&,bool,const SfxItemPool*)
  */
-SvStream &SfxItemSet::Store
+void SfxItemSet::Store
 (
     SvStream&   rStream,        // Target stream for normal Items
     bool        bDirect         /* true: Save Items directly
@@ -1329,8 +1329,6 @@ SvStream &SfxItemSet::Store
             rStream.Seek( nPos );
         }
     }
-
-    return rStream;
 }
 
 /**
@@ -1341,7 +1339,7 @@ SvStream &SfxItemSet::Store
  *
  * @see SfxItemSet::Store(Stream&,bool) const
  */
-SvStream &SfxItemSet::Load
+void SfxItemSet::Load
 (
     SvStream&           rStream,    //  Stream we're loading from
 
@@ -1407,8 +1405,6 @@ SvStream &SfxItemSet::Load
             }
         }
     }
-
-    return rStream;
 }
 
 bool SfxItemSet::operator==(const SfxItemSet &rCmp) const

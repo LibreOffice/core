@@ -87,7 +87,7 @@ public:
     SvxMacroTableDtor& operator=( const SvxMacroTableDtor &rCpy );
     bool operator==( const SvxMacroTableDtor& rOther ) const;
 
-    SvStream&   Read( SvStream &, sal_uInt16 nVersion = SVX_MACROTBL_AKTVERSION );
+    void        Read( SvStream &, sal_uInt16 nVersion = SVX_MACROTBL_AKTVERSION );
     SvStream&   Write( SvStream & ) const;
 
     static sal_uInt16 GetVersion() { return SVX_MACROTBL_AKTVERSION; }
@@ -108,7 +108,7 @@ public:
     // This stores a copy of the rMacro parameter
     SvxMacro& Insert(sal_uInt16 nEvent, const SvxMacro& rMacro);
     // If the entry exists, remove it from the map and release it's storage
-    bool Erase(sal_uInt16 nEvent);
+    void Erase(sal_uInt16 nEvent);
 };
 
 

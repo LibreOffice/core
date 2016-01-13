@@ -87,8 +87,6 @@ public:
     inline          SfxMiniRecordWriter( SvStream *pStream, sal_uInt8 nTag );
     inline          ~SfxMiniRecordWriter();
 
-    inline SvStream& operator*() const;
-
     sal_uInt32      Close( bool bSeekToEndOfRec = true );
 
 private:
@@ -256,8 +254,6 @@ protected:
 public:
     SfxMiniRecordReader( SvStream *pStream, sal_uInt8 nTag );
     inline              ~SfxMiniRecordReader();
-
-    inline SvStream&    operator*() const;
 
     inline void         Skip();
 
@@ -577,16 +573,6 @@ inline SfxMiniRecordWriter::~SfxMiniRecordWriter()
         Close();
 }
 
-/** Get the record's stream
- * @return The stream containing the record
- * @note The record must not be already closed!
- */
-inline SvStream& SfxMiniRecordWriter::operator*() const
-{
-    DBG_ASSERT( !_bHeaderOk, "getting Stream of closed record" );
-    return *_pStream;
-}
-
 /** The dtor moves the stream automatically to the position directly behind the record */
 inline SfxMiniRecordReader::~SfxMiniRecordReader()
 {
@@ -599,17 +585,6 @@ inline void SfxMiniRecordReader::Skip()
 {
     _pStream->Seek(_nEofRec);
     _bSkipped = true;
-}
-
-/** get the owning stream
- *
- * This method returns the stream in which the record is contained.
- * The current position of the stream must be inside the record.
- */
-inline SvStream& SfxMiniRecordReader::operator*() const
-{
-    DBG_ASSERT( _pStream->Tell() < _nEofRec, "read behind record" );
-    return *_pStream;
 }
 
 /// @see SfxMiniRecordWriter::Close()

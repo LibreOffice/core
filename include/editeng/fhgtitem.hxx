@@ -61,7 +61,7 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override;
     virtual sal_uInt16           GetVersion( sal_uInt16 nItemVersion) const override;
-    virtual bool                 ScaleMetrics( long nMult, long nDiv ) override;
+    virtual void                 ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool                 HasMetrics() const override;
 
     inline SvxFontHeightItem& operator=(const SvxFontHeightItem& rSize)

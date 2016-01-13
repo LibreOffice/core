@@ -55,7 +55,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = nullptr ) const override;
     virtual bool            HasMetrics() const override;
-    virtual bool            ScaleMetrics(long nMul, long nDiv) override;
+    virtual void            ScaleMetrics(long nMul, long nDiv) override;
 
     const XDash&            GetDashValue() const { return aDash;}
     void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue

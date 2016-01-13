@@ -237,9 +237,8 @@ SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
     return new SfxVoidItem(*this);
 }
 
-bool SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
+void SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
 {
-    return false;
 }
 
 

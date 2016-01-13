@@ -368,11 +368,10 @@ SvStream& SvxSizeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 
 
 
-bool SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
+void SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
 {
     aSize.Width() = Scale( aSize.Width(), nMult, nDiv );
     aSize.Height() = Scale( aSize.Height(), nMult, nDiv );
-    return true;
 }
 
 
@@ -795,13 +794,12 @@ sal_uInt16 SvxLRSpaceItem::GetVersion( sal_uInt16 nFileVersion ) const
 
 
 
-bool SvxLRSpaceItem::ScaleMetrics( long nMult, long nDiv )
+void SvxLRSpaceItem::ScaleMetrics( long nMult, long nDiv )
 {
     nFirstLineOfst = (short)Scale( nFirstLineOfst, nMult, nDiv );
     nTxtLeft = Scale( nTxtLeft, nMult, nDiv );
     nLeftMargin = Scale( nLeftMargin, nMult, nDiv );
     nRightMargin = Scale( nRightMargin, nMult, nDiv );
-    return true;
 }
 
 
@@ -1072,11 +1070,10 @@ sal_uInt16 SvxULSpaceItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 
 
 
-bool SvxULSpaceItem::ScaleMetrics( long nMult, long nDiv )
+void SvxULSpaceItem::ScaleMetrics( long nMult, long nDiv )
 {
     nUpper = (sal_uInt16)Scale( nUpper, nMult, nDiv );
     nLower = (sal_uInt16)Scale( nLower, nMult, nDiv );
-    return true;
 }
 
 
@@ -1532,10 +1529,9 @@ SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) 
 
 
 
-bool SvxShadowItem::ScaleMetrics( long nMult, long nDiv )
+void SvxShadowItem::ScaleMetrics( long nMult, long nDiv )
 {
     nWidth = (sal_uInt16)Scale( nWidth, nMult, nDiv );
-    return true;
 }
 
 
@@ -2280,7 +2276,7 @@ sal_uInt16 SvxBoxItem::GetVersion( sal_uInt16 nFFVer ) const
 
 
 
-bool SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
+void SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
 {
     if ( pTop )     pTop->ScaleMetrics( nMult, nDiv );
     if ( pBottom )  pBottom->ScaleMetrics( nMult, nDiv );
@@ -2290,7 +2286,6 @@ bool SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
     nBottomDist = (sal_uInt16)Scale( nBottomDist, nMult, nDiv );
     nLeftDist = (sal_uInt16)Scale( nLeftDist, nMult, nDiv );
     nRightDist = (sal_uInt16)Scale( nRightDist, nMult, nDiv );
-    return true;
 }
 
 
@@ -2653,12 +2648,11 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 
 
 
-bool SvxBoxInfoItem::ScaleMetrics( long nMult, long nDiv )
+void SvxBoxInfoItem::ScaleMetrics( long nMult, long nDiv )
 {
     if ( pHori ) pHori->ScaleMetrics( nMult, nDiv );
     if ( pVert ) pVert->ScaleMetrics( nMult, nDiv );
     nDefDist = (sal_uInt16)Scale( nDefDist, nMult, nDiv );
-    return true;
 }
 
 
@@ -3263,10 +3257,9 @@ SvStream& SvxLineItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 
 
 
-bool SvxLineItem::ScaleMetrics( long nMult, long nDiv )
+void SvxLineItem::ScaleMetrics( long nMult, long nDiv )
 {
     if ( pLine ) pLine->ScaleMetrics( nMult, nDiv );
-    return true;
 }
 
 

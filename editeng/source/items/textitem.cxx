@@ -1071,10 +1071,9 @@ sal_uInt16 SvxFontHeightItem::GetVersion(sal_uInt16 nFileVersion) const
 
 
 
-bool SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
+void SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
 {
     nHeight = (sal_uInt32)Scale( nHeight, nMult, nDiv );
-    return true;
 }
 
 
@@ -1156,10 +1155,9 @@ SvStream& SvxFontWidthItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/
 
 
 
-bool SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
+void SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
 {
     nWidth = (sal_uInt16)Scale( nWidth, nMult, nDiv );
-    return true;
 }
 
 
@@ -2105,10 +2103,9 @@ SvStream& SvxKerningItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 
 
 
-bool SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
+void SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
 {
     SetValue( (sal_Int16)Scale( GetValue(), nMult, nDiv ) );
-    return true;
 }
 
 

@@ -63,12 +63,8 @@ static void eatSpace(const OUString & rCmd, sal_Int32 * pIndex)
 /**
  * Text is parsed and the single commands are added to the list.
  *
- * @returns bool  true
- *                The text was correctly parsed
-                  false
-                  The text was not parsed correctly
 */
-bool SvCommandList::AppendCommands
+void SvCommandList::AppendCommands
 (
  const OUString & rCmd,    /* This text is translated to commands */
  sal_Int32 * pEaten        /* Count of chars that have been read */
@@ -95,27 +91,22 @@ bool SvCommandList::AppendCommands
     }
 
     *pEaten = index;
-
-    return true;
 }
 
 /**
  * An object of the type SvCommand is created and the list is
  * attached.
- *
- * @returns SvCommand & The created object
 */
-SvCommand & SvCommandList::Append
+void SvCommandList::Append
 (
  const OUString & rCommand,    /* The command */
  const OUString & rArg         /* The command's argument */
 )
 {
     aCommandList.push_back( SvCommand( rCommand, rArg ) );
-    return aCommandList.back();
 }
 
-bool SvCommandList::FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
+void SvCommandList::FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
 {
     const sal_Int32 nCount = aCommandSequence.getLength();
     OUString aCommand, aArg;
@@ -124,12 +115,10 @@ bool SvCommandList::FillFromSequence( const css::uno::Sequence < css::beans::Pro
     {
         aCommand = aCommandSequence[nIndex].Name;
         if( !( aCommandSequence[nIndex].Value >>= aApiArg ) )
-            return false;
+            return;
         aArg = aApiArg;
         Append( aCommand, aArg );
     }
-
-    return true;
 }
 
 void SvCommandList::FillSequence( css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
