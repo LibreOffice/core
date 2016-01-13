@@ -166,6 +166,7 @@ class XSecController : public cppu::WeakImplHelper
  ******************************************************************************/
 {
     friend class XSecParser;
+    friend class OOXMLSecParser;
 
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxCtx;
