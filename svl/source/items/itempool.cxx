@@ -402,12 +402,12 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
     if ( pImp->mpSecondary )
     {
 #ifdef DBG_UTIL
-        // Delete() did not yet run?
-        if ( !pImp->maPoolItems.empty() && !pImp->mpSecondary->pImp->maPoolItems.empty() )
+        if (pImp->ppStaticDefaults != nullptr && !pImp->maPoolItems.empty()
+            && !pImp->mpSecondary->pImp->maPoolItems.empty())
+            // Delete() did not yet run?
         {
                 // Does the Master have SetItems?
             bool bHasSetItems = false;
-            assert(pImp->ppStaticDefaults);
             for ( sal_uInt16 i = 0; !bHasSetItems && i < pImp->mnEnd - pImp->mnStart; ++i )
                 bHasSetItems = dynamic_cast<const SfxSetItem *>(pImp->ppStaticDefaults[i]) != nullptr;
 
@@ -517,35 +517,36 @@ void SfxItemPool::Delete()
     sal_uInt16 nArrCnt;
 
     // Collect the SetItems first
-    assert(pImp->ppStaticDefaults);
-    for ( nArrCnt = GetSize_Impl();
-          nArrCnt;
-          --nArrCnt, ++itrItemArr, ++ppDefaultItem, ++ppStaticDefaultItem )
-    {
-        // *ppStaticDefaultItem could've already been deleted in a class derived
-        // from SfxItemPool
-        // This causes chaos in Itempool!
-        if ( *ppStaticDefaultItem && dynamic_cast< const SfxSetItem* >(*ppStaticDefaultItem) !=  nullptr )
+    if (pImp->ppStaticDefaults != nullptr) {
+        for ( nArrCnt = GetSize_Impl();
+              nArrCnt;
+              --nArrCnt, ++itrItemArr, ++ppDefaultItem, ++ppStaticDefaultItem )
         {
-            if ( *itrItemArr )
+            // *ppStaticDefaultItem could've already been deleted in a class derived
+            // from SfxItemPool
+            // This causes chaos in Itempool!
+            if ( *ppStaticDefaultItem && dynamic_cast< const SfxSetItem* >(*ppStaticDefaultItem) !=  nullptr )
             {
-                SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
-                for ( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
-                    if (*ppHtArr)
-                    {
+                if ( *itrItemArr )
+                {
+                    SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
+                    for ( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
+                        if (*ppHtArr)
+                        {
 #ifdef DBG_UTIL
-                        ReleaseRef( **ppHtArr, (*ppHtArr)->GetRefCount() );
+                            ReleaseRef( **ppHtArr, (*ppHtArr)->GetRefCount() );
 #endif
-                        delete *ppHtArr;
-                    }
-                DELETEZ( *itrItemArr );
-            }
-            if ( *ppDefaultItem )
-            {
+                            delete *ppHtArr;
+                        }
+                    DELETEZ( *itrItemArr );
+                }
+                if ( *ppDefaultItem )
+                {
 #ifdef DBG_UTIL
-                SetRefCount( **ppDefaultItem, 0 );
+                    SetRefCount( **ppDefaultItem, 0 );
 #endif
-                DELETEZ( *ppDefaultItem );
+                    DELETEZ( *ppDefaultItem );
+                }
             }
         }
     }
