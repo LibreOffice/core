@@ -2488,7 +2488,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
 }
 
 
-bool Content::renameData(
+void Content::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
@@ -2498,7 +2498,7 @@ bool Content::renameData(
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
         OSL_FAIL( "renameData not supported by root and documents!" );
-        return false;
+        return;
     }
 
     Uri aOldUri( xOldId->getContentIdentifier() );
@@ -2507,7 +2507,7 @@ bool Content::renameData(
             aOldUri.getParentUri(), READ_WRITE_NOCREATE );
 
     if ( !xStorage.is() )
-        return false;
+        return;
 
     try
     {
@@ -2519,40 +2519,40 @@ bool Content::renameData(
     {
         // this storage is in invalid state for eny reason
         OSL_FAIL( "Caught InvalidStorageException!" );
-        return false;
+        return;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
         OSL_FAIL( "Caught IllegalArgumentException!" );
-        return false;
+        return;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with old name in this storage
         OSL_FAIL( "Caught NoSuchElementException!" );
-        return false;
+        return;
     }
     catch ( container::ElementExistException const & )
     {
         // an element with new name already exists in this storage
         OSL_FAIL( "Caught ElementExistException!" );
-        return false;
+        return;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
         OSL_FAIL( "Caught IOException!" );
-        return false;
+        return;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
         OSL_FAIL( "Caught StorageWrappedTargetException!" );
-        return false;
+        return;
     }
 
-    return commitStorage( xStorage );
+    commitStorage( xStorage );
 }
 
 

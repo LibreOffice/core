@@ -694,13 +694,13 @@ bool HierarchyContent::storeData()
 }
 
 
-bool HierarchyContent::renameData(
+void HierarchyContent::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     HierarchyEntry aEntry(
             m_xContext, m_pProvider, xOldId->getContentIdentifier() );
-    return aEntry.move( xNewId->getContentIdentifier(),
+    aEntry.move( xNewId->getContentIdentifier(),
                         m_aProps.getHierarchyEntryData() );
 }
 

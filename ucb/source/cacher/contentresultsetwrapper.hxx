@@ -142,10 +142,10 @@ private:
 
     //methods:
 private:
-    PropertyChangeListenerContainer_Impl* SAL_CALL
+    void SAL_CALL
     impl_getPropertyChangeListenerContainer();
 
-    PropertyChangeListenerContainer_Impl* SAL_CALL
+    void SAL_CALL
     impl_getVetoableChangeListenerContainer();
 
 protected:

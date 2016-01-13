@@ -268,8 +268,6 @@ public:
 
     RegexpMapConstIter operator ++(int);
 
-    RegexpMapEntry< Val > const & operator *() const;
-
     RegexpMapEntry< Val > const * operator ->() const;
 
     bool equals(RegexpMapConstIter const & rOther) const;
@@ -328,12 +326,6 @@ RegexpMapConstIter< Val > RegexpMapConstIter< Val >::operator ++(int)
 }
 
 template< typename Val >
-RegexpMapEntry< Val > const & RegexpMapConstIter< Val >::operator *() const
-{
-    return m_pImpl->get();
-}
-
-template< typename Val >
 RegexpMapEntry< Val > const * RegexpMapConstIter< Val >::operator ->() const
 {
     return &m_pImpl->get();
@@ -358,10 +350,6 @@ public:
     RegexpMapIter & operator ++();
 
     RegexpMapIter operator ++(int);
-
-    RegexpMapEntry< Val > & operator *();
-
-    RegexpMapEntry< Val > const & operator *() const;
 
     RegexpMapEntry< Val > * operator ->();
 
@@ -389,18 +377,6 @@ RegexpMapIter< Val > RegexpMapIter< Val >::operator ++(int)
     RegexpMapIter aTemp(*this);
     this->m_pImpl->next();
     return aTemp;
-}
-
-template< typename Val >
-RegexpMapEntry< Val > & RegexpMapIter< Val >::operator *()
-{
-    return this->m_pImpl->get();
-}
-
-template< typename Val >
-RegexpMapEntry< Val > const & RegexpMapIter< Val >::operator *() const
-{
-    return this->m_pImpl->get();
 }
 
 template< typename Val >
@@ -432,7 +408,7 @@ public:
 
     RegexpMap & operator =(RegexpMap const & rOther);
 
-    bool add(OUString const & rKey, Val const & rValue, bool bOverwrite,
+    void add(OUString const & rKey, Val const & rValue, bool bOverwrite,
              OUString * pReverse = nullptr);
 
     iterator find(OUString const & rKey, OUString * pReverse = nullptr);
@@ -481,7 +457,7 @@ RegexpMap< Val > & RegexpMap< Val >::operator =(RegexpMap const & rOther)
 }
 
 template< typename Val >
-bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
+void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
                            bool bOverwrite, rtl::OUString * pReverse)
 {
     Regexp aRegexp(Regexp::parse(rKey));
@@ -491,7 +467,7 @@ bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
         if (m_pImpl->m_pDefault)
         {
             if (!bOverwrite)
-                return false;
+                return;
             delete m_pImpl->m_pDefault;
         }
         m_pImpl->m_pDefault = new Entry< Val >(aRegexp, rValue);
@@ -511,7 +487,7 @@ bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
                     break;
                 }
                 else
-                    return false;
+                    return;
             }
         }
 
@@ -520,8 +496,6 @@ bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
 
     if (pReverse)
         *pReverse = aRegexp.getRegexp(true);
-
-    return true;
 }
 
 template< typename Val >

@@ -178,22 +178,20 @@ void SAL_CALL ContentResultSetWrapper::impl_EnsureNotDisposed()
         throw DisposedException();
 }
 
-ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL ContentResultSetWrapper::impl_getPropertyChangeListenerContainer()
+void SAL_CALL ContentResultSetWrapper::impl_getPropertyChangeListenerContainer()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pPropertyChangeListeners )
         m_pPropertyChangeListeners =
             new PropertyChangeListenerContainer_Impl( m_aContainerMutex );
-    return m_pPropertyChangeListeners;
 }
 
-ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL ContentResultSetWrapper::impl_getVetoableChangeListenerContainer()
+void SAL_CALL ContentResultSetWrapper::impl_getVetoableChangeListenerContainer()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pVetoableChangeListeners )
         m_pVetoableChangeListeners =
             new PropertyChangeListenerContainer_Impl( m_aContainerMutex );
-    return m_pVetoableChangeListeners;
 }
 
 void SAL_CALL ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const PropertyChangeEvent& rEvt )

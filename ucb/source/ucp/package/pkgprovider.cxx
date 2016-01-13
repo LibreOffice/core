@@ -262,7 +262,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
 }
 
 
-bool ContentProvider::removePackage( const OUString & rName )
+void ContentProvider::removePackage( const OUString & rName )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -272,10 +272,9 @@ bool ContentProvider::removePackage( const OUString & rName )
         if ( it != m_pPackages->end() )
         {
             m_pPackages->erase( it );
-            return true;
+            return;
         }
     }
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

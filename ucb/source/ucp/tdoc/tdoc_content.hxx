@@ -126,7 +126,7 @@ private:
         throw ( css::ucb::CommandFailedException,
                 css::task::DocumentPasswordRequest,
                 css::uno::RuntimeException );
-    bool renameData( const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
+    void renameData( const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
                      const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId );
     bool removeData();
 

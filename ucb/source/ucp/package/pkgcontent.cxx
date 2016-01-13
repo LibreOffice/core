@@ -2439,7 +2439,7 @@ bool Content::loadData(
 }
 
 
-bool Content::renameData(
+void Content::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
@@ -2450,7 +2450,7 @@ bool Content::renameData(
                                                                         aURI );
 
     if ( !xNA->hasByHierarchicalName( aURI.getPath() ) )
-        return false;
+        return;
 
     try
     {
@@ -2461,22 +2461,18 @@ bool Content::renameData(
         if ( !xNamed.is() )
         {
             OSL_FAIL( "Content::renameData - Got no XNamed interface!" );
-            return false;
+            return;
         }
 
         PackageUri aNewURI( xNewId->getContentIdentifier() );
 
         // No success indicator!? No return value / exceptions specified.
         xNamed->setName( aNewURI.getName() );
-
-        return true;
     }
     catch ( container::NoSuchElementException const & )
     {
         // getByHierarchicalName
     }
-
-    return false;
 }
 
 

@@ -815,7 +815,7 @@ Reference< XContentProvider > UniversalContentBroker::queryContentProvider(
                  : Reference< XContentProvider >();
 }
 
-bool UniversalContentBroker::configureUcb()
+void UniversalContentBroker::configureUcb()
     throw (uno::RuntimeException)
 {
     OUString aKey1;
@@ -824,19 +824,17 @@ bool UniversalContentBroker::configureUcb()
         || !(m_aArguments[0] >>= aKey1) || !(m_aArguments[1] >>= aKey2))
     {
         OSL_FAIL("UniversalContentBroker::configureUcb(): Bad arguments");
-        return false;
+        return;
     }
 
     ContentProviderDataList aData;
     if (!getContentProviderData(aKey1, aKey2, aData))
     {
         OSL_TRACE("UniversalContentBroker::configureUcb(): No configuration");
-        return false;
+        return;
     }
 
     prepareAndRegister(aData);
-
-    return true;
 }
 
 void UniversalContentBroker::prepareAndRegister(

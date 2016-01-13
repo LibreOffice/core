@@ -190,7 +190,7 @@ private:
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv ) throw( css::uno::Exception );
 
 
-    bool configureUcb()
+    void configureUcb()
         throw ( css::uno::RuntimeException);
 
     bool getContentProviderData(

@@ -155,7 +155,7 @@ private:
 
     bool
     hasData( const PackageUri& rURI );
-    bool
+    void
     renameData( const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
                 const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId );
     bool

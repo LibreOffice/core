@@ -89,16 +89,12 @@ public:
                css::uno::RuntimeException, std::exception ) override;
 
 
-    // Additional interfaces
-
-
-
     // Non-interface methods.
 
 
     css::uno::Reference< css::container::XHierarchicalNameAccess >
     createPackage( const PackageUri & rParam );
-    bool
+    void
     removePackage( const OUString & rName );
 };
 
