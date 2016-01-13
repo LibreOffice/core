@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_6f26c469",
+        "filename": "sfx2/source/view/viewsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-01-13T07:35:14Z",
+      "side": 1,
+      "message": "This is used as a tooltip, so please use GetLabelForCommand, not GetMenuLabelForCommand.\n\nElse this patch looks good, thanks a lot!",
+      "revId": "92e2cbb2a7356b5e7e8d6715ea8734d6b9475b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
