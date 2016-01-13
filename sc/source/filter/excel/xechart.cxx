@@ -53,6 +53,8 @@
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 
+#include <o3tl/make_unique.hxx>
+
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -2471,7 +2473,7 @@ void XclExpChTypeGroup::ConvertSeries(
                 if (bConnectBars && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR))
                 {
                     sal_uInt16 nKey = EXC_CHCHARTLINE_CONNECT;
-                    maChartLines.insert(nKey, new XclExpChLineFormat(GetChRoot()));
+                    m_ChartLines.insert(std::make_pair(nKey, o3tl::make_unique<XclExpChLineFormat>(GetChRoot())));
                 }
             }
             else
@@ -2523,8 +2525,10 @@ void XclExpChTypeGroup::WriteSubRecords( XclExpStream& rStrm )
     lclSaveRecord( rStrm, mxLegend );
     lclSaveRecord( rStrm, mxUpBar );
     lclSaveRecord( rStrm, mxDownBar );
-    for( XclExpChLineFormatMap::iterator aLIt = maChartLines.begin(), aLEnd = maChartLines.end(); aLIt != aLEnd; ++aLIt )
-        lclSaveRecord( rStrm, aLIt->second, EXC_ID_CHCHARTLINE, aLIt->first );
+    for (auto const& it : m_ChartLines)
+    {
+        lclSaveRecord( rStrm, it.second.get(), EXC_ID_CHCHARTLINE, it.first );
+    }
 }
 
 sal_uInt16 XclExpChTypeGroup::GetFreeFormatIdx() const
@@ -2564,7 +2568,7 @@ void XclExpChTypeGroup::CreateAllStockSeries(
         XclExpChLineFormatRef xLineFmt( new XclExpChLineFormat( GetChRoot() ) );
         xLineFmt->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
         sal_uInt16 nKey = EXC_CHCHARTLINE_HILO;
-        maChartLines.insert(nKey, new XclExpChLineFormat(GetChRoot()));
+        m_ChartLines.insert(std::make_pair(nKey, o3tl::make_unique<XclExpChLineFormat>(GetChRoot())));
     }
     // dropbars
     if( bHasOpen && bHasClose )
