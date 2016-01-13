@@ -20,7 +20,8 @@
 #ifndef INCLUDED_VCL_INC_FONTSELECT_HXX
 #define INCLUDED_VCL_INC_FONTSELECT_HXX
 
-#include <vcl/dllapi.h>
+#include <i18nlangtag/lang.h>
+
 #include "fontattributes.hxx"
 
 #include <unordered_map>

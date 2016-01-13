@@ -20,16 +20,8 @@
 #ifndef INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 #define INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 
-#include <sal/types.h>
-#include <i18nlangtag/lang.h>
 #include <unotools/fontdefs.hxx>
-#include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
-
-#include "fontselect.hxx"
-
-class OutputDevice;
-class FontSelectPattern;
 
 class FontAttributes
 {
