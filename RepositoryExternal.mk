@@ -1034,6 +1034,8 @@ $(call gb_LinkTarget_add_libs,$(1),$(LIBLANGTAG_LIBS))
 
 endef
 
+gb_ExternalProject__use_liblangtag :=
+
 else # !SYSTEM_LIBLANGTAG
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
@@ -1051,11 +1053,17 @@ $(call gb_LinkTarget_use_external_project,$(1),langtag)
 
 endef
 
+define gb_ExternalProject__use_liblangtag
+$(call gb_ExternalProject_use_external_project,$(1),langtag)
+
+endef
+
 endif # SYSTEM_LIBLANGTAG
 
 else
 
 gb_LinkTarget__use_liblangtag :=
+gb_ExternalProject__use_liblangtag :=
 
 endif # ENABLE_LIBLANGTAG
 
