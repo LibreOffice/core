@@ -37,9 +37,6 @@ namespace textconversiondlgs
 
 
 
-/**
-*/
-
 struct DictionaryEntry
 {
     DictionaryEntry( const OUString& rTerm, const OUString& rMapping
@@ -47,8 +44,6 @@ struct DictionaryEntry
                     , bool bNewEntry = false );
 
     virtual ~DictionaryEntry();
-
-    bool operator==( const DictionaryEntry& rE ) const;
 
     OUString m_aTerm;
     OUString m_aMapping;

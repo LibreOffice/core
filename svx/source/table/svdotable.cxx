@@ -211,7 +211,7 @@ public:
     CellRef getCell( const CellPos& rPos ) const;
     void LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHeight );
 
-    bool ApplyCellStyles();
+    void ApplyCellStyles();
     void UpdateCells( Rectangle& rArea );
 
     SdrTableObjImpl();
@@ -366,12 +366,10 @@ void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
 
 
 
-bool SdrTableObjImpl::ApplyCellStyles()
+void SdrTableObjImpl::ApplyCellStyles()
 {
     if( !mxTable.is() || !mxTableStyle.is() )
-        return false;
-
-    bool bChanges = false;
+        return;
 
     const sal_Int32 nColCount = getColumnCount();
     const sal_Int32 nRowCount = getRowCount();
@@ -451,15 +449,12 @@ bool SdrTableObjImpl::ApplyCellStyles()
                     CellRef xCell( getCell( aPos ) );
                     if( xCell.is() && ( xCell->GetStyleSheet() != pStyle ) )
                     {
-                        bChanges = true;
                         xCell->SetStyleSheet( pStyle, true );
                     }
                 }
             }
         }
     }
-
-    return bChanges;
 }
 
 

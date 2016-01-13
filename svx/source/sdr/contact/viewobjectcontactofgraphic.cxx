@@ -73,9 +73,8 @@ namespace sdr
     {
         // Test graphics state and eventually trigger a SwapIn event or an Asynchronous
         // load event. Return value gives info if SwapIn was triggered or not
-        bool ViewObjectContactOfGraphic::impPrepareGraphicWithAsynchroniousLoading()
+        void ViewObjectContactOfGraphic::impPrepareGraphicWithAsynchroniousLoading()
         {
-            bool bRetval(false);
             SdrGrafObj& rGrafObj = getSdrGrafObj();
 
             if(rGrafObj.IsSwappedOut())
@@ -133,8 +132,6 @@ namespace sdr
                             rGrafObj.ForceSwapIn();
                             rGrafObj.mbInsidePaint = false;
                         }
-
-                        bRetval = true;
                     }
                 }
             }
@@ -160,15 +157,12 @@ namespace sdr
                     GetViewContact().ActionChanged();
                 }
             }
-
-            return bRetval;
         }
 
         // Test graphics state and eventually trigger a SwapIn event. Return value
         // gives info if SwapIn was triggered or not
-        bool ViewObjectContactOfGraphic::impPrepareGraphicWithSynchroniousLoading()
+        void ViewObjectContactOfGraphic::impPrepareGraphicWithSynchroniousLoading()
         {
-            bool bRetval(false);
             SdrGrafObj& rGrafObj = getSdrGrafObj();
 
             if(rGrafObj.IsSwappedOut())
@@ -196,12 +190,8 @@ namespace sdr
                         rGrafObj.ForceSwapIn();
                         rGrafObj.mbInsidePaint = false;
                     }
-
-                    bRetval = true;
                 }
             }
-
-            return bRetval;
         }
 
         // This is the call from the asynch graphic loading. This may only be called from

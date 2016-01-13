@@ -135,12 +135,6 @@ bool AccessibleCell::ResetState (sal_Int16 aState)
 
 
 
-bool AccessibleCell::operator== (const AccessibleCell& rAccessibleCell)
-{
-    return this == &rAccessibleCell;
-}
-
-
 // XInterface
 
 

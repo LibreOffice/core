@@ -129,11 +129,10 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, bool /*bScaleToGrap
     }
 }
 
-bool IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
+void IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
 {
     const SdrObject*    pSdrObj = GetSelectedSdrObject();
     IMapObject*         pIMapObj;
-    bool                bRet = false;
 
     if ( pSdrObj && ( ( pIMapObj = GetIMapObj( pSdrObj ) ) != nullptr ) )
     {
@@ -142,11 +141,7 @@ bool IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
         pIMapObj->SetTarget( rNewInfo.aMarkTarget );
         pModel->SetChanged();
         UpdateInfo( false );
-
-        bRet = true;
     }
-
-    return bRet;
 }
 
 const ImageMap& IMapWindow::GetImageMap()

@@ -118,8 +118,6 @@ namespace svx
         // access to the instance which implements the functionality. Not to be used when not assigned
         inline const FormControllerHelper* operator->() const { return m_pImpl; }
         inline       FormControllerHelper* operator->()       { return m_pImpl; }
-        inline const FormControllerHelper& operator*() const  { return *m_pImpl; }
-        inline       FormControllerHelper& operator*()        { return *m_pImpl; }
     };
 
 

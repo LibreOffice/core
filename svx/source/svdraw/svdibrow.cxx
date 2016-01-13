@@ -530,14 +530,13 @@ bool _SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
     return bRet;
 }
 
-bool _SdrItemBrowserControl::EndChangeEntry()
+void _SdrItemBrowserControl::EndChangeEntry()
 {
     if (!pEditControl)
-        return false;
+        return;
 
     aEntryChangedHdl.Call(*this);
     BreakChangeEntry();
-    return true;
 }
 
 void _SdrItemBrowserControl::BreakChangeEntry()

@@ -123,7 +123,7 @@ public:
                         virtual ~IMapWindow();
     virtual void        dispose() override;
 
-    bool                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
+    void                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
 
     void                SetImageMap( const ImageMap& rImageMap );
     const ImageMap&     GetImageMap();

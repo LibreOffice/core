@@ -150,8 +150,8 @@ namespace svx
     protected:
         enum AttributeSet { eCharAttribs, eParaAttribs };
         void    executeAttributeDialog( AttributeSet _eSet, SfxRequest& _rReq );
-        bool    executeSelectAll( );
-        bool    executeClipboardSlot( SfxSlotId _nSlot );
+        void    executeSelectAll( );
+        void    executeClipboardSlot( SfxSlotId _nSlot );
 
     private:
         inline  bool    isControllerListening() const { return !m_aControlObservers.empty(); }

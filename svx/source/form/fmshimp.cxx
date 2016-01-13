@@ -1067,14 +1067,14 @@ bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 }
 
 
-bool FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
+void FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
 {
     OSL_PRECOND( canConvertCurrentSelectionToControl( _nSlotId ), "FmXFormShell::executeControlConversionSlot: illegal call!" );
     InterfaceBag::const_iterator aSelectedElement = m_aCurrentSelection.begin();
     if ( aSelectedElement == m_aCurrentSelection.end() )
-        return false;
+        return;
 
-    return executeControlConversionSlot( Reference< XFormComponent >( *aSelectedElement, UNO_QUERY ), _nSlotId );
+    executeControlConversionSlot( Reference< XFormComponent >( *aSelectedElement, UNO_QUERY ), _nSlotId );
 }
 
 

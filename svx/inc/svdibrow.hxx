@@ -75,7 +75,7 @@ public:
     void Clear();
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=nullptr);
     sal_uInt16 GetCurrentWhich() const;
-    bool EndChangeEntry();
+    void EndChangeEntry();
     void BreakChangeEntry();
 
     /** GetCellText returns the text at the given position

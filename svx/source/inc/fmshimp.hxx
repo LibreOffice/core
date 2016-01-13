@@ -431,7 +431,7 @@ public:
     /** executes a control conversion slot for the current selection
         @precond canConvertCurrentSelectionToControl( <arg>_nSlotId</arg> ) must return <TRUE/>
     */
-    SAL_DLLPRIVATE        bool executeControlConversionSlot( sal_uInt16 _nSlotId );
+    SAL_DLLPRIVATE        void executeControlConversionSlot( sal_uInt16 _nSlotId );
     /// checks whether the given slot id denotes a control conversion slot
     SAL_DLLPRIVATE static bool isControlConversionSlot( sal_uInt16 _nSlotId );
 

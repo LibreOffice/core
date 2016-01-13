@@ -48,9 +48,6 @@ namespace svxform
         // (which is checked via the supported interfaces) _all_ members will be set to
         // void !, even if the object has some of the needed interfaces.
 
-        DataColumn* operator ->() { return this; }
-        operator css::uno::Reference< css::uno::XInterface> () const{ return m_xColumn.get(); }
-
         // 'conversions'
         inline const css::uno::Reference< css::sdb::XColumn>& getColumn() const
         {

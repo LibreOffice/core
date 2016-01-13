@@ -131,9 +131,9 @@ namespace svxform
     }
 
 
-    sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const Reference< XPropertySet >& _rxControlModel )
+    void FormControlFactory::initializeControlModel( const DocumentType _eDocType, const Reference< XPropertySet >& _rxControlModel )
     {
-        return initializeControlModel(
+        initializeControlModel(
             _eDocType, _rxControlModel, Rectangle()
         );
     }

@@ -750,7 +750,7 @@ namespace svx
     }
 
 
-    bool FmTextControlShell::executeSelectAll( )
+    void FmTextControlShell::executeSelectAll( )
     {
         try
         {
@@ -758,18 +758,16 @@ namespace svx
             {
                 sal_Int32 nTextLen = m_xActiveTextComponent->getText().getLength();
                 m_xActiveTextComponent->setSelection( css::awt::Selection( 0, nTextLen ) );
-                return true;
             }
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return false;   // not handled
     }
 
 
-    bool FmTextControlShell::executeClipboardSlot( SfxSlotId _nSlot )
+    void FmTextControlShell::executeClipboardSlot( SfxSlotId _nSlot )
     {
         try
         {
@@ -800,14 +798,12 @@ namespace svx
                 default:
                     OSL_FAIL( "FmTextControlShell::executeClipboardSlot: invalid slot!" );
                 }
-                return true;
             }
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return false;   // not handled
     }
 
 

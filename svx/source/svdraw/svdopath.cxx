@@ -267,15 +267,15 @@ public:
     void ResetFormFlags() { bBezier=false; bCurve=false; bCircle=false; bLine=false; bRect=false; }
     bool IsFormFlag() const { return bBezier || bCurve || bCircle || bLine || bRect; }
     XPolygon GetFormPoly() const;
-    bool CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown);
+    void CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown);
     XPolygon GetBezierPoly() const;
     static XPolygon GetCurvePoly() { return XPolygon(); }
-    bool CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
+    void CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
     XPolygon GetCirclePoly() const;
-    bool CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
+    void CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
     static Point    CalcLine(const Point& rCsr, long nDirX, long nDirY, SdrView* pView);
     XPolygon GetLinePoly() const;
-    bool CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
+    void CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
     XPolygon GetRectPoly() const;
 };
 
@@ -289,7 +289,7 @@ XPolygon ImpPathCreateUser::GetFormPoly() const
     return XPolygon();
 }
 
-bool ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown)
+void ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown)
 {
     bool bRet = true;
     aBezStart=rP1;
@@ -301,7 +301,6 @@ bool ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Poi
     if (!bMouseDown || (0L == aBezEnd.X() && 0L == aBezEnd.Y())) aBezEnd=rP2;
 
     bBezier=bRet;
-    return bRet;
 }
 
 XPolygon ImpPathCreateUser::GetBezierPoly() const
@@ -314,7 +313,7 @@ XPolygon ImpPathCreateUser::GetBezierPoly() const
     return aXP;
 }
 
-bool ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
+void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
 {
     long nTangAngle=GetAngle(rDir);
     aCircStart=rP1;
@@ -359,7 +358,6 @@ bool ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     nCircRadius=nRad;
     if (nRad==0 || std::abs(nCircRelAngle)<5) bRet=false;
     bCircle=bRet;
-    return bRet;
 }
 
 XPolygon ImpPathCreateUser::GetCirclePoly() const
@@ -411,12 +409,12 @@ Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, Sdr
     return Point(x,y);
 }
 
-bool ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
+void ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
 {
     aLineStart=rP1;
     aLineEnd=rP2;
     bLine90=false;
-    if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bLine=false; return false; }
+    if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bLine=false; return; }
     Point aTmpPt(rP2-rP1);
     long nDirX=rDir.X();
     long nDirY=rDir.Y();
@@ -430,7 +428,6 @@ bool ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point
         aLineEnd+=aP2;
     }
     bLine=true;
-    return true;
 }
 
 XPolygon ImpPathCreateUser::GetLinePoly() const
@@ -441,12 +438,12 @@ XPolygon ImpPathCreateUser::GetLinePoly() const
     return aXP;
 }
 
-bool ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
+void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
 {
     aRectP1=rP1;
     aRectP2=rP1;
     aRectP3=rP2;
-    if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bRect=false; return false; }
+    if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bRect=false; return; }
     Point aTmpPt(rP2-rP1);
     long nDirX=rDir.X();
     long nDirY=rDir.Y();
@@ -491,7 +488,6 @@ bool ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
         }
     }
     bRect=true;
-    return true;
 }
 
 XPolygon ImpPathCreateUser::GetRectPoly() const

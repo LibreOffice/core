@@ -52,7 +52,7 @@ class SdrTableRtfExporter
 {
 public:
     SdrTableRtfExporter( SvStream& rStrmP, SdrTableObj& rObj );
-    sal_uLong Write();
+    void Write();
     void WriteRow( const Reference< XPropertySet >& xRowSet, sal_Int32 nRow, const std::vector< sal_Int32 >& aColumnStart );
     void WriteCell( sal_Int32 nCol, sal_Int32 nRow );
 
@@ -83,7 +83,7 @@ long HundMMToTwips( long nIn )
     return nRet;
 }
 
-sal_uLong SdrTableRtfExporter::Write()
+void SdrTableRtfExporter::Write()
 {
     mrStrm.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
     mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
@@ -126,7 +126,6 @@ sal_uLong SdrTableRtfExporter::Write()
     }
 
     mrStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
-    return mrStrm.GetError();
 }
 
 void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sal_Int32 nRow, const std::vector< sal_Int32 >& aColumnStart )

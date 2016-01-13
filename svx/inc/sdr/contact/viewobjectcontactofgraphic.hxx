@@ -44,8 +44,8 @@ namespace sdr
 
             // async graphics loading helpers. Only to be used internally or from the
             // event helper class (in .cxx file)
-            bool impPrepareGraphicWithAsynchroniousLoading();
-            bool impPrepareGraphicWithSynchroniousLoading();
+            void impPrepareGraphicWithAsynchroniousLoading();
+            void impPrepareGraphicWithSynchroniousLoading();
             void doAsynchGraphicLoading();
             void forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent);
 

@@ -569,7 +569,7 @@ namespace sdr { namespace contact {
 
             Failure of this method will be reported via an assertion in a non-product version.
         */
-        bool    ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL );
+        void    ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL );
 
         /** returns our XControl, if it already has been created
 
@@ -964,27 +964,28 @@ namespace sdr { namespace contact {
     }
 
 
-    bool ViewObjectContactOfUnoControl_Impl::ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL )
+    void ViewObjectContactOfUnoControl_Impl::ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL )
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
         if ( impl_isDisposed_nofail() )
-            return false;
+            return;
 
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
         if ( pPageViewContact )
         {
             SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
             const OutputDevice& rDevice( m_pAntiImpl->getPageViewOutputDevice().get() );
-            return impl_ensureControl_nothrow(
+            impl_ensureControl_nothrow(
                 aPVAccess,
                 rDevice,
                 _pInitialViewTransformationOrNULL ? *_pInitialViewTransformationOrNULL : rDevice.GetViewTransformation()
             );
+            return;
         }
 
         DummyPageViewAccess aNoPageView;
         const OutputDevice& rDevice( impl_getOutputDevice_throw() );
-        return impl_ensureControl_nothrow(
+        impl_ensureControl_nothrow(
             aNoPageView,
             rDevice,
             _pInitialViewTransformationOrNULL ? *_pInitialViewTransformationOrNULL : rDevice.GetViewTransformation()

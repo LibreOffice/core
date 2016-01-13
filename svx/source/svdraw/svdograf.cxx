@@ -120,7 +120,7 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
     void                DataChanged( const Graphic& rGraphic );
 
-    bool                Connect() { return nullptr != GetRealObject(); }
+    void                Connect() { GetRealObject(); }
     void                UpdateAsynchron();
     void                RemoveGraphicUpdater();
 

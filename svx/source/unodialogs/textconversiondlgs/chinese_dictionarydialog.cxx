@@ -359,13 +359,6 @@ DictionaryEntry::~DictionaryEntry()
 {
 }
 
-bool DictionaryEntry::operator==( const DictionaryEntry& rE ) const
-{
-    return m_aTerm == rE.m_aTerm
-            && m_aMapping == rE.m_aMapping
-            && m_nConversionPropertyType == rE.m_nConversionPropertyType;
-}
-
 void DictionaryList::setColSizes()
 {
     HeaderBar &rBar = GetTheHeaderBar();

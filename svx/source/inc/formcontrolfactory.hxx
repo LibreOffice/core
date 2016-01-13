@@ -70,7 +70,7 @@ namespace svxform
                 );
 
         sal_Int16 initializeControlModel( const DocumentType _eDocType, const SdrUnoObj& _rObject );
-        sal_Int16 initializeControlModel( const DocumentType _eDocType, const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel );
+        void      initializeControlModel( const DocumentType _eDocType, const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel );
 
         void initializeTextFieldLineEnds(
                     const css::uno::Reference< css::beans::XPropertySet >& _rxModel

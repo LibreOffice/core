@@ -56,8 +56,6 @@ public:
 
     void Init();
 
-    bool operator== (const AccessibleCell& rAccessibleCell);
-
     virtual bool SetState (sal_Int16 aState) override;
     virtual bool ResetState (sal_Int16 aState) override;
 

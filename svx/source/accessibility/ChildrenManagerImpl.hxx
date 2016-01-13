@@ -519,15 +519,6 @@ public:
                );
     }
 
-    /** The ordering defined by this operator is only used in order to be able
-        to put child descriptors in some STL containers.  The ordering itself is
-        not so important, its 'features' are not used.
-    */
-    inline bool operator < (const ChildDescriptor& aDescriptor) const
-    {
-        return (mxShape.get() < aDescriptor.mxShape.get());
-    }
-
 };
 
 
