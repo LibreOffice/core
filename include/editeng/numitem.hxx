@@ -65,7 +65,7 @@ public:
     OUString        GetNumStr( sal_uLong nNo ) const;
     OUString        GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const;
 
-    void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
+    virtual void    SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
     sal_Int16       GetNumberingType() const {return nNumType;}
 
     void            SetShowSymbol(bool bSet) {bShowSymbol = bSet;}
@@ -99,6 +99,7 @@ private:
     OUString       sSuffix;
 
     SvxAdjust           eNumAdjust;
+    bool                AdjustChange;
 
     sal_uInt8           nInclUpperLevels;   // Take over numbers from the previous level.
     sal_uInt16          nStart;             // Start of counting
@@ -154,7 +155,8 @@ public:
     bool            operator==( const SvxNumberFormat&  ) const;
     bool            operator!=( const SvxNumberFormat& rFmt) const {return !(*this == rFmt);}
 
-    void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
+    void            SetNumberingType(sal_Int16 nSet);
+    void            SetNumAdjust(SvxAdjust eSet);
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
     void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
     const OUString&   GetPrefix() const { return sPrefix;}
