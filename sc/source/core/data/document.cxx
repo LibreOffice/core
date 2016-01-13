@@ -105,6 +105,8 @@
 #include <memory>
 #include <boost/checked_delete.hpp>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 #include "mtvelements.hxx"
 
 using ::editeng::SvxBorderLine;
@@ -566,6 +568,9 @@ bool ScDocument::InsertTab(
         aCxt.mnTabDeletedStart = nPos;
         aCxt.mnTabDeletedEnd = nPos;
         SetAllFormulasDirty(aCxt);
+
+        if (GetDrawLayer()->isTiledRendering())
+            GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
     }
 
     return bValid;
