@@ -963,8 +963,10 @@ void TextType::Draw(OutputDevice& rOut)
                     PointType Pos;
                     xp1=long(Pos1.x)+xPos+long(xLine[i]);
                     yp1=long(Pos1.y)+yPos;
-                    if (xp1>32000) xp1=32000; if (xp1<-12000) xp1=-12000;
-                    if (yp1>32000) yp1=32000; if (yp1<-12000) yp1=-12000;
+                    if (xp1>32000) xp1=32000;
+                    if (xp1<-12000) xp1=-12000;
+                    if (yp1>32000) yp1=32000;
+                    if (yp1<-12000) yp1=-12000;
                     Pos.x=short(xp1);
                     Pos.y=short(yp1);
 
