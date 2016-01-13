@@ -1277,10 +1277,30 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     return pBitmap;
 }
 
+static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
+{
+    return (a > 0) ? (c * 255 + a / 2) / a : 0;
+}
+
+static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
+{
+    return (c * a + 127) / 255;
+}
+
 SalColor SvpSalGraphics::getPixel( long nX, long nY )
 {
-    basebmp::Color aColor( m_aOrigDevice->getPixel( basegfx::B2IPoint( nX, nY ) ) );
-    return aColor.toInt32();
+    cairo_surface_t* surface = createCairoSurface(m_aOrigDevice);
+    unsigned char *surface_data = cairo_image_surface_get_data(surface);
+    cairo_format_t nFormat = getCairoFormat(m_aOrigDevice);
+    assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
+    basegfx::B2IVector size = m_aOrigDevice->getSize();
+    sal_Int32 nStride = cairo_format_stride_for_width(nFormat, size.getX());
+    unsigned char *row = surface_data + (nStride*nY);
+    unsigned char *data = row + (nX * 4);
+    sal_uInt8 b = unpremultiply(data[0], data[3]);
+    sal_uInt8 g = unpremultiply(data[1], data[3]);
+    sal_uInt8 r = unpremultiply(data[2], data[3]);
+    return MAKE_SALCOLOR(r, g, b);
 }
 
 namespace
@@ -1446,16 +1466,6 @@ cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
     else
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     return cr;
-}
-
-static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
-{
-    return (a > 0) ? (c * 255 + a / 2) / a : 0;
-}
-
-static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
-{
-    return (c * a + 127) / 255;
 }
 
 void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const cairo_rectangle_int_t& extents) const
