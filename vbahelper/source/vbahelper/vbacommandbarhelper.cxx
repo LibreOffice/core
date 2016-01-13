@@ -160,16 +160,13 @@ void VbaCommandBarHelper::ApplyChange( const OUString& sResourceUrl, const css::
     }
 }
 
-bool VbaCommandBarHelper::persistChanges() throw (css::uno::RuntimeException)
+void VbaCommandBarHelper::persistChanges() throw (css::uno::RuntimeException)
 {
     uno::Reference< css::ui::XUIConfigurationPersistence > xConfigPersistence( m_xDocCfgMgr, uno::UNO_QUERY_THROW );
-    bool result = false;
     if( xConfigPersistence->isModified() )
     {
         xConfigPersistence->store();
-        result = true;
     }
-    return result;
 }
 
 uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager() throw (uno::RuntimeException)
