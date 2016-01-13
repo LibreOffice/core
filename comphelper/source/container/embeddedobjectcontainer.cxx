@@ -696,7 +696,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     // objects without persistence are not really stored by the method
     if (xObj.is() && StoreEmbeddedObject(xObj, rName, true, rSrcShellID, rDestShellID))
     {
-        assert(!rDestShellID.isEmpty() && !rDestShellID.startsWith("0x")); // assume that every shell has a base URL
+        SAL_INFO_IF(rDestShellID.isEmpty(), "comphelper.container",
+            "SfxObjectShell with no base URL?"); // every shell has a base URL, except the clipboard SwDocShell
         xResult = Get_Impl(rName, xObj, &rDestShellID);
         if ( !xResult.is() )
         {
