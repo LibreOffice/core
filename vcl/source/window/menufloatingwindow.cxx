@@ -32,7 +32,6 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
     mpWindowImpl->mbMenuFloatingWindow= true;
     pMenu               = pMen;
     pActivePopup        = nullptr;
-    nSaveFocusId        = 0;
     bInExecute          = false;
     bScrollMenu         = false;
     nHighlightedItem    = ITEMPOS_INVALID;
@@ -397,21 +396,21 @@ void MenuFloatingWindow::Execute()
     pSVData->maAppData.mpActivePopupMenu = nullptr;
 }
 
-void MenuFloatingWindow::StopExecute( sal_uLong nFocusId )
+void MenuFloatingWindow::StopExecute( VclPtr<vcl::Window> xFocusId )
 {
     // restore focus
     // (could have been restored in Select)
-    if ( nSaveFocusId )
+    if ( xSaveFocusId != nullptr )
     {
-        Window::EndSaveFocus( nFocusId, false );
-        nFocusId = nSaveFocusId;
-        if ( nFocusId )
+        Window::EndSaveFocus( xFocusId, false );
+        xFocusId = xSaveFocusId;
+        if ( xFocusId != nullptr )
         {
-            nSaveFocusId = 0;
+            xSaveFocusId = nullptr;
             ImplGetSVData()->maWinData.mbNoDeactivate = false;
         }
     }
-    ImplEndPopupMode( FloatWinPopupEndFlags::NONE, nFocusId );
+    ImplEndPopupMode( FloatWinPopupEndFlags::NONE, xFocusId );
 
     aHighlightChangedTimer.Stop();
     bInExecute = false;
@@ -456,9 +455,9 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 void MenuFloatingWindow::EndExecute()
 {
     Menu* pStart = pMenu ? pMenu->ImplGetStartMenu() : nullptr;
-    sal_uLong nFocusId = 0;
+    VclPtr<vcl::Window> xFocusId = nullptr;
     if (pStart)
-        nFocusId = pStart->DeactivateMenuBar(nFocusId);
+        xFocusId = pStart->DeactivateMenuBar(xFocusId);
 
     // if started elsewhere, cleanup there as well
     MenuFloatingWindow* pCleanUpFrom = this;
@@ -475,7 +474,7 @@ void MenuFloatingWindow::EndExecute()
     Menu* pM = pMenu;
     sal_uInt16 nItem = nHighlightedItem;
 
-    pCleanUpFrom->StopExecute( nFocusId );
+    pCleanUpFrom->StopExecute( xFocusId );
 
     if ( nItem != ITEMPOS_INVALID && pM )
     {

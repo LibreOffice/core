@@ -126,11 +126,9 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     SetType(WINDOW_MENUBARWINDOW);
     pMenu = nullptr;
     pActivePopup = nullptr;
-    nSaveFocusId = 0;
     nHighlightedItem = ITEMPOS_INVALID;
     nRolloveredItem = ITEMPOS_INVALID;
     mbAutoPopup = true;
-    nSaveFocusId = 0;
     bIgnoreFirstMove = true;
     bStayActive = false;
     SetMBWHideAccel(true);
@@ -462,15 +460,15 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
             // #105406# avoid saving the focus when we already have the focus
             bool bNoSaveFocus = (this == ImplGetSVData()->maWinData.mpFocusWin.get() );
 
-            if( nSaveFocusId )
+            if( xSaveFocusId != nullptr )
             {
                 if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
                 {
                     // we didn't clean up last time
-                    Window::EndSaveFocus( nSaveFocusId, false );    // clean up
-                    nSaveFocusId = 0;
+                    Window::EndSaveFocus( xSaveFocusId, false );    // clean up
+                    xSaveFocusId = nullptr;
                     if( !bNoSaveFocus )
-                        nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+                        xSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
                 }
                 else {
                     ; // do nothing: we 're activated again from taskpanelist, focus was already saved
@@ -479,7 +477,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
             else
             {
                 if( !bNoSaveFocus )
-                    nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+                    xSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
             }
         }
         else
@@ -497,11 +495,11 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         ImplGetSVData()->maWinData.mbNoDeactivate = false;
         if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
         {
-            sal_uLong nTempFocusId = nSaveFocusId;
-            nSaveFocusId = 0;
-            Window::EndSaveFocus( nTempFocusId, bAllowRestoreFocus );
+            VclPtr<vcl::Window> xTempFocusId = xSaveFocusId;
+            xSaveFocusId = nullptr;
+            Window::EndSaveFocus( xTempFocusId, bAllowRestoreFocus );
             // #105406# restore focus to document if we could not save focus before
-            if( bDefaultToDocument && !nTempFocusId && bAllowRestoreFocus )
+            if( bDefaultToDocument && xTempFocusId == nullptr && bAllowRestoreFocus )
                 GrabFocusToDocument();
         }
     }
@@ -739,7 +737,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         else
         {
             ChangeHighlightItem( ITEMPOS_INVALID, false );
-            nSaveFocusId = 0;
+            xSaveFocusId = nullptr;
         }
         bDone = true;
     }

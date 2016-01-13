@@ -404,37 +404,32 @@ void Window::EndAutoScroll()
     }
 }
 
-sal_uIntPtr Window::SaveFocus()
+VclPtr<vcl::Window> Window::SaveFocus()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpFocusWin )
     {
-        ImplFocusDelData* pDelData = new ImplFocusDelData;
-        pSVData->maWinData.mpFocusWin->ImplAddDel( pDelData );
-        pDelData->mpFocusWin = pSVData->maWinData.mpFocusWin;
-        return reinterpret_cast<sal_uIntPtr>(pDelData);
+        VclPtr<vcl::Window> xFocusWin = pSVData->maWinData.mpFocusWin;
+        return xFocusWin;
     }
     else
-        return 0;
+        return nullptr;
 }
 
-bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
+bool Window::EndSaveFocus( const VclPtr<vcl::Window>& xFocusWin, bool bRestore )
 {
-    if ( !nSaveId )
+    if ( xFocusWin == nullptr )
         return false;
     else
     {
         bool                bOK = true;
-        ImplFocusDelData*   pDelData = reinterpret_cast<ImplFocusDelData*>(nSaveId);
-        if ( !pDelData->IsDead() )
+        if ( !xFocusWin->IsDisposed() )
         {
-            pDelData->mpFocusWin->ImplRemoveDel( pDelData );
             if ( bRestore )
-                pDelData->mpFocusWin->GrabFocus();
+                xFocusWin->GrabFocus();
         }
         else
             bOK = !bRestore;
-        delete pDelData;
         return bOK;
     }
 }

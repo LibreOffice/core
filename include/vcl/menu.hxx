@@ -208,7 +208,7 @@ protected:
     virtual void ClosePopup(Menu* pMenu) = 0;
 
     /// Deactivate the MenuBarWindow.
-    virtual sal_uLong DeactivateMenuBar(sal_uLong nFocusId);
+    virtual VclPtr<vcl::Window> DeactivateMenuBar( VclPtr<vcl::Window> xFocusId);
 
     /// Forward the KeyInput call to the MenuBar.
     virtual void MenuBarKeyInput(const KeyEvent& rEvent);
@@ -451,7 +451,7 @@ public:
     virtual void ClosePopup(Menu* pMenu) override;
 
     /// Deactivate the MenuBarWindow.
-    virtual sal_uLong DeactivateMenuBar(sal_uLong nFocusId) override;
+    virtual VclPtr<vcl::Window> DeactivateMenuBar(VclPtr<vcl::Window> xFocusId) override;
 
     /// Forward the KeyInput call to the MenuBar.
     virtual void MenuBarKeyInput(const KeyEvent& rEvent) override;
