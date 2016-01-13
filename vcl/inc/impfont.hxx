@@ -105,6 +105,7 @@ private:
     sal_uInt32          mnRefCount;    // Reference Counter
 
     bool                mbScalableFont;
+    bool                mbFullstopCentered;
 
     // TODO: As these are progressively moved from bit fields into boolean variables, comment them out.
     // Eventually this enum will not be needed and we can remove it.
@@ -113,8 +114,8 @@ private:
         /* SCALABLE_FLAG=2, */
         LATIN_FLAG=4,
         CJK_FLAG=8,
-        CTL_FLAG=16,
-        FULLSTOP_CENTERED_FLAG=32
+        CTL_FLAG=16
+        /* FULLSTOP_CENTERED_FLAG=32 */
     };
 
 public:
@@ -131,12 +132,13 @@ public:
     long                GetExtLeading() const                       { return mnExtLeading; }
     long                GetLineHeight() const                       { return mnLineHeight; }
     long                GetSlant() const                            { return mnSlant; }
-
-    bool                IsScalable() const                          { return mbScalableFont; }
-    bool                IsFullstopCentered() const                  { return  ((mnMiscFlags & FULLSTOP_CENTERED_FLAG ) != 0); }
     long                GetBulletOffset() const                     { return mnBulletOffset; }
 
+    bool                IsScalable() const                          { return mbScalableFont; }
+    bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
+
     void                SetScalableFlag(bool bScalable)             { mbScalableFont = bScalable; }
+    void                SetFullstopCenteredFlag(bool bCentered)     { mbFullstopCentered = bCentered; }
 };
 
 
