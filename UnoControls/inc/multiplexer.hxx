@@ -121,8 +121,6 @@ public:
 
     virtual void SAL_CALL release() throw() override;
 
-    operator css::uno::Reference< css::uno::XInterface >() const { return (static_cast<OWeakObject*>(const_cast<OMRCListenerMultiplexerHelper *>(this)));}
-
     OMRCListenerMultiplexerHelper& operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
     //  container methods
