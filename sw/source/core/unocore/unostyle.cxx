@@ -1662,7 +1662,17 @@ void SwXStyle::SetPropertyValue<RES_TEXT_VERT_ADJUST>(const SfxItemPropertySimpl
     if(pPageDesc)
         pPageDesc->SetVerticalAdjustment(rValue.get<drawing::TextVerticalAdjust>());
 }
-
+template<>
+void SwXStyle::SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(!rValue.has<bool>())
+        throw lang::IllegalArgumentException();
+    const bool bAuto(rValue.get<bool>());
+    if(SFX_STYLE_FAMILY_PARA == m_rEntry.m_eFamily)
+        o_rStyleBase.getNewBase()->GetCollection()->SetAutoUpdateFormat(bAuto);
+    else if(SFX_STYLE_FAMILY_FRAME == m_rEntry.m_eFamily)
+        o_rStyleBase.getNewBase()->GetFrameFormat()->SetAutoUpdateFormat(bAuto);
+}
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SfxStyleSheetBasePool* pBasePool = m_pBasePool;
@@ -1725,12 +1735,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             break;
         case FN_UNO_IS_AUTO_UPDATE:
         {
-            bool bAuto = *static_cast<sal_Bool const *>(aValue.getValue());
-            if(SFX_STYLE_FAMILY_PARA == eFamily)
-                rBase.getNewBase()->GetCollection()->SetAutoUpdateFormat(bAuto);
-            else if(SFX_STYLE_FAMILY_FRAME == eFamily)
-                rBase.getNewBase()->GetFrameFormat()->SetAutoUpdateFormat(bAuto);
-
+            SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
         }
