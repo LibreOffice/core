@@ -146,14 +146,6 @@ bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, cons
 
 namespace
 {
-    unsigned char reverseAndInvert(unsigned char b)
-    {
-        b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-        b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-        b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-        return ~b;
-    }
-
     class SourceHelper
     {
     public:
@@ -226,16 +218,17 @@ namespace
             }
             else
             {
-                // the alpha values need to be inverted *and* reordered for Cairo
-                // so big stupid copy and reverse + invert here
+                // the alpha values need to be inverted for Cairo
+                // so big stupid copy and invert here
                 const int nImageSize = size.getY() * nStride;
                 const unsigned char* pSrcBits = data.get();
                 pAlphaBits = new unsigned char[nImageSize];
                 memcpy(pAlphaBits, pSrcBits, nImageSize);
 
+                // TODO: make upper layers use standard alpha
                 unsigned char* pDst = pAlphaBits;
                 for (int i = nImageSize; --i >= 0; ++pDst)
-                    *pDst = reverseAndInvert(*pDst);
+                    *pDst = ~*pDst;
 
                 mask = cairo_image_surface_create_for_data(pAlphaBits,
                                                 CAIRO_FORMAT_A1,
@@ -747,7 +740,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     m_bUseLineColor = false;
     m_bUseFillColor = true;
     m_aFillColor = basebmp::Color(nSalColor);
-    drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0.0);
+    drawPolyPolygon(basegfx::B2DPolyPolygon(aRect));
 
     m_bUseFillColor = bOrigUseFillColor;
     m_bUseLineColor = bOrigUseLineColor;
@@ -776,7 +769,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     {
         basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
         m_bUseFillColor = true;
-        drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0.0);
+        drawPolyPolygon(basegfx::B2DPolyPolygon(aRect));
         m_bUseFillColor = false;
     }
 
@@ -785,7 +778,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
         // need same -1 hack as X11SalGraphicsImpl::drawRect
         basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1));
         m_bUseLineColor = true;
-        drawPolyPolygon(basegfx::B2DPolyPolygon(aRect), 0.0);
+        drawPolyPolygon(basegfx::B2DPolyPolygon(aRect));
         m_bUseLineColor = false;
     }
 
@@ -812,7 +805,7 @@ void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
     for (sal_uInt32 i = 1; i < nPoints; ++i)
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
 
-    drawPolyPolygon(basegfx::B2DPolyPolygon(aPoly), 0.0);
+    drawPolyPolygon(basegfx::B2DPolyPolygon(aPoly));
 }
 
 void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
@@ -835,7 +828,7 @@ void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
         }
     }
 
-    drawPolyPolygon(aPolyPoly, 0.0);
+    drawPolyPolygon(aPolyPoly);
 }
 
 static const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
@@ -1041,14 +1034,20 @@ bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
     return false;
 }
 
-bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
+void SvpSalGraphics::setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPoly)
 {
-    cairo_t* cr = getCairoContext(true);
-    assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
 
     for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
         AddPolygonToPath(cr, *pPoly, true, !getAntiAliasB2DDraw(), m_bUseLineColor);
+}
+
+bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
+{
+    cairo_t* cr = getCairoContext(true);
+    assert(cr && m_aDevice->isTopDown());
+
+    setupPolyPolygon(cr, rPolyPoly);
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
 
@@ -1080,6 +1079,50 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     releaseCairoContext(cr, true, extents);
 
     return true;
+}
+
+void SvpSalGraphics::applyColor(cairo_t *cr, const basebmp::Color &rColor)
+{
+    if (CAIRO_FORMAT_ARGB32 == getCairoFormat(m_aOrigDevice))
+    {
+        cairo_set_source_rgba(cr, rColor.getRed()/255.0,
+                                  rColor.getGreen()/255.0,
+                                  rColor.getBlue()/255.0,
+                                  1.0);
+    }
+    else
+    {
+        double fSet = rColor.toInt32() == COL_BLACK ? 0.0 : 1.0;
+        cairo_set_source_rgba(cr, 1, 1, 1, fSet);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    }
+}
+
+void SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly)
+{
+    cairo_t* cr = getCairoContext(true);
+    assert(cr && m_aDevice->isTopDown());
+
+    setupPolyPolygon(cr, rPolyPoly);
+
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+
+    if (m_bUseFillColor)
+    {
+        applyColor(cr, m_aFillColor);
+        if (!m_bUseLineColor)
+            extents = getFillDamage(cr);
+        cairo_fill_preserve(cr);
+    }
+
+    if (m_bUseLineColor)
+    {
+        applyColor(cr, m_aLineColor);
+        extents = getStrokeDamage(cr);
+        cairo_stroke_preserve(cr);
+    }
+
+    releaseCairoContext(cr, true, extents);
 }
 
 void SvpSalGraphics::copyArea( long nDestX,
