@@ -29,6 +29,7 @@
 
 #include "fontinstance.hxx"
 #include "PhysicalFontFace.hxx"
+#include "impfontcache.hxx"
 
 class Size;
 namespace vcl { class Font; }
@@ -122,40 +123,6 @@ class ImplGlyphFallbackFontSubstitution
 {
 public:
     virtual bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const = 0;
-};
-
-// TODO: closely couple with PhysicalFontCollection
-
-class ImplFontCache
-{
-private:
-    LogicalFontInstance* mpFirstEntry;
-    int                  mnRef0Count;    // number of unreferenced LogicalFontInstances
-
-    // cache of recently used font instances
-    struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
-    struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
-    typedef std::unordered_map<FontSelectPattern,LogicalFontInstance*,IFSD_Hash,IFSD_Equal > FontInstanceList;
-    FontInstanceList    maFontInstanceList;
-
-    int                 CountUnreferencedEntries() const;
-
-public:
-                        ImplFontCache();
-                        ~ImplFontCache();
-
-    LogicalFontInstance* GetFontInstance( PhysicalFontCollection*,
-                             const vcl::Font&, const Size& rPixelSize, float fExactHeight);
-    LogicalFontInstance* GetFontInstance( PhysicalFontCollection*, FontSelectPattern& );
-    LogicalFontInstance* GetGlyphFallbackFont( PhysicalFontCollection*, FontSelectPattern&,
-                            int nFallbackLevel, OUString& rMissingCodes );
-
-    /// Increase the refcount of the given LogicalFontInstance.
-    void                Acquire(LogicalFontInstance*);
-    /// Decrease the refcount and potentially cleanup the entries with zero refcount from the cache.
-    void                Release(LogicalFontInstance*);
-
-    void                Invalidate();
 };
 
 namespace vcl { struct ControlLayoutData; }

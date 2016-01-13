@@ -26,6 +26,7 @@
 #include "fontselect.hxx"
 #include "fontattributes.hxx"
 #include "impfontmetricdata.hxx"
+#include "impfontcache.hxx"
 
 #include <unordered_map>
 

@@ -38,6 +38,8 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/rendersettings.hxx>
 #include "vcleventlisteners.hxx"
+#include "impfontcache.hxx"
+
 #include <vector>
 #include <set>
 

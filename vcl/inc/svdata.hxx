@@ -38,6 +38,8 @@
 #include "vcl/vclevent.hxx"
 #include "vcleventlisteners.hxx"
 
+#include "impfontcache.hxx"
+
 #include "unotools/options.hxx"
 
 #include "xconnection.hxx"
