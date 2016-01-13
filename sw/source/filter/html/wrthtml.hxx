@@ -192,10 +192,6 @@ struct HTMLControl
     ~HTMLControl();
 
     // operatoren fuer das Sort-Array
-    bool operator==( const HTMLControl& rCtrl ) const
-    {
-        return nNdIdx == rCtrl.nNdIdx;
-    }
     bool operator<( const HTMLControl& rCtrl ) const
     {
         return nNdIdx < rCtrl.nNdIdx;

@@ -65,12 +65,4 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
     return *this;
 }
 
-bool InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
-{
-    return (eObjType == rOpt.eObjType &&
-            aOleId == rOpt.aOleId); // So that identical Ole-IDs can't be added multiple
-                                    // times, don't compare against anything else.
-
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1446,7 +1446,7 @@ sal_Int32 SwFramePage::FillPosLB(const FrameMap* _pMap,
     return GetMapPos(_pMap, _rLB);
 }
 
-sal_uLong SwFramePage::FillRelLB( const FrameMap* _pMap,
+void SwFramePage::FillRelLB( const FrameMap* _pMap,
                             const sal_uInt16 _nLBSelPos,
                             const sal_Int16 _nAlign,
                             const sal_Int16 _nRel,
@@ -1622,8 +1622,6 @@ sal_uLong SwFramePage::FillRelLB( const FrameMap* _pMap,
     _rFT.Enable( bEnable );
 
     RelHdl(_rLB);
-
-    return nLBRelations;
 }
 
 sal_Int16 SwFramePage::GetRelation(FrameMap * /*pMap*/, ListBox &rRelationLB)

@@ -104,8 +104,8 @@ public:
     using SwEditShell::Insert;
 
     long CallSetCursor(const Point* pPt, bool bProp) { return (this->*m_fnSetCursor)(pPt, bProp); }
-    long Drag         (const Point* pPt, bool bProp) { return (this->*m_fnDrag)(pPt, bProp); }
-    long EndDrag      (const Point* pPt, bool bProp) { return (this->*m_fnEndDrag)(pPt, bProp); }
+    void Drag         (const Point* pPt, bool bProp) { (this->*m_fnDrag)(pPt, bProp); }
+    void EndDrag      (const Point* pPt, bool bProp) { (this->*m_fnEndDrag)(pPt, bProp); }
     long KillSelection(const Point* pPt, bool bProp) { return (this->*m_fnKillSel)(pPt, bProp); }
 
     // reset all selections
@@ -138,7 +138,7 @@ public:
 
     void    EnterAddMode();
     void    LeaveAddMode();
-    bool    ToggleAddMode();
+    void    ToggleAddMode();
     bool    IsAddMode() const { return m_bAddMode; }
 
     void    EnterBlockMode();
@@ -193,7 +193,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual = false );
     bool Up         ( bool bSelect, sal_uInt16 nCount = 1, bool bBasicCall = false );
     bool Down       ( bool bSelect, sal_uInt16 nCount = 1, bool bBasicCall = false );
-    bool NxtWrd     ( bool bSelect = false ) { return SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
+    void NxtWrd     ( bool bSelect = false ) { SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
     bool PrvWrd     ( bool bSelect = false ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
 
     bool LeftMargin ( bool bSelect, bool bBasicCall );
@@ -203,37 +203,37 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool EndDoc     ( bool bSelect = false );
 
     bool SttNxtPg   ( bool bSelect = false );
-    bool SttPrvPg   ( bool bSelect = false );
-    bool EndNxtPg   ( bool bSelect = false );
+    void SttPrvPg   ( bool bSelect = false );
+    void EndNxtPg   ( bool bSelect = false );
     bool EndPrvPg   ( bool bSelect = false );
     bool SttPg      ( bool bSelect = false );
     bool EndPg      ( bool bSelect = false );
     bool SttPara    ( bool bSelect = false );
-    bool EndPara    ( bool bSelect = false );
+    void EndPara    ( bool bSelect = false );
     bool FwdPara    ( bool bSelect = false )
                 { return SimpleMove( &SwWrtShell::_FwdPara, bSelect ); }
-    bool BwdPara    ( bool bSelect = false )
-                { return SimpleMove( &SwWrtShell::_BwdPara, bSelect ); }
-    bool FwdSentence( bool bSelect = false )
-                { return SimpleMove( &SwWrtShell::_FwdSentence, bSelect ); }
-    bool BwdSentence( bool bSelect = false )
-                { return SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
+    void BwdPara    ( bool bSelect = false )
+                { SimpleMove( &SwWrtShell::_BwdPara, bSelect ); }
+    void FwdSentence( bool bSelect = false )
+                { SimpleMove( &SwWrtShell::_FwdSentence, bSelect ); }
+    void BwdSentence( bool bSelect = false )
+                { SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
 
     // #i20126# Enhanced table selection
     bool SelectTableRowCol( const Point& rPt, const Point* pEnd = nullptr, bool bRowDrag = false );
-    bool SelectTableRow();
-    bool SelectTableCol();
-    bool SelectTableCell();
+    void SelectTableRow();
+    void SelectTableCol();
+    void SelectTableCell();
 
     bool SelectTextAttr( sal_uInt16 nWhich, const SwTextAttr* pAttr = nullptr );
 
     // per column jumps
-    bool StartOfColumn      ( bool bSelect = false );
-    bool EndOfColumn        ( bool bSelect = false );
-    bool StartOfNextColumn  ( bool bSelect = false );
-    bool EndOfNextColumn    ( bool bSelect = false );
-    bool StartOfPrevColumn  ( bool bSelect = false );
-    bool EndOfPrevColumn    ( bool bSelect = false );
+    void StartOfColumn      ( bool bSelect = false );
+    void EndOfColumn        ( bool bSelect = false );
+    void StartOfNextColumn  ( bool bSelect = false );
+    void EndOfNextColumn    ( bool bSelect = false );
+    void StartOfPrevColumn  ( bool bSelect = false );
+    void EndOfPrevColumn    ( bool bSelect = false );
 
     // set the cursor to page "nPage" at the beginning
     // additionally to a identically named implementation in crsrsh.hxx
@@ -259,19 +259,19 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void ChgDBData(const SwDBData& SwDBData);
 
     // delete
-    long    DelToEndOfLine();
-    long    DelToStartOfLine();
-    long    DelLine();
+    void    DelToEndOfLine();
+    void    DelToStartOfLine();
+    void    DelLine();
     long    DelLeft();
 
     // also deletes the frame or sets the cursor in the frame when bDelFrame == false
     long    DelRight();
-    long    DelToEndOfPara();
-    long    DelToStartOfPara();
+    void    DelToEndOfPara();
+    void    DelToStartOfPara();
     long    DelToEndOfSentence();
-    long    DelToStartOfSentence();
-    long    DelNxtWord();
-    long    DelPrvWord();
+    void    DelToStartOfSentence();
+    void    DelNxtWord();
+    void    DelPrvWord();
 
     // checks whether a word selection exists.
     // According to the rules for intelligent Cut / Paste
@@ -395,9 +395,9 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     virtual void DrawSelChanged( ) override;
 
     // jump to bookmark and set the "selections-flags" correctly again
-    bool GotoMark( const ::sw::mark::IMark* const pMark );
+    void GotoMark( const ::sw::mark::IMark* const pMark );
     bool GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect, bool bStart );
-    bool GotoMark( const OUString& rName );
+    void GotoMark( const OUString& rName );
     bool GoNextBookmark(); // true when there still was one
     bool GoPrevBookmark();
 
@@ -407,7 +407,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-    bool SelectNextPrevHyperlink( bool bNext = true );
+    void SelectNextPrevHyperlink( bool bNext = true );
 
     // determine corresponding SwView
     const SwView&       GetView() const { return m_rView; }
@@ -461,7 +461,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void GotoOutline( sal_uInt16 nIdx );
     bool GotoOutline( const OUString& rName );
     bool GotoRegion( const OUString& rName );
-    bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
+    void GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
         sal_uInt16 nSeqNo = 0 );
     bool GotoNextTOXBase( const OUString* pName = nullptr);
     bool GotoTable( const OUString& rName );
@@ -580,8 +580,8 @@ private:
     // after SSize/Move of a frame update; Point is destination.
     SAL_DLLPRIVATE long  UpdateLayoutFrame(const Point *, bool bProp=false );
 
-    SAL_DLLPRIVATE long  SttLeaveSelect(const Point *, bool bProp=false );
-    SAL_DLLPRIVATE long  AddLeaveSelect(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE void  SttLeaveSelect(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE void  AddLeaveSelect(const Point *, bool bProp=false );
     SAL_DLLPRIVATE long  Ignore(const Point *, bool bProp=false );
 
     SAL_DLLPRIVATE void  LeaveExtSel() { m_bSelWrd = m_bSelLn = false;}

@@ -630,10 +630,10 @@ void RtfSdrExport::EndShape(sal_Int32 nShapeElement)
     }
 }
 
-sal_uInt32 RtfSdrExport::AddSdrObject(const SdrObject& rObj)
+void RtfSdrExport::AddSdrObject(const SdrObject& rObj)
 {
     m_pSdrObject = &rObj;
-    return EscherEx::AddSdrObject(rObj);
+    EscherEx::AddSdrObject(rObj);
 }
 
 bool RtfSdrExport::isTextBox(const SwFrameFormat& rFrameFormat)

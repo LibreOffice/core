@@ -2707,14 +2707,12 @@ sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::Get(WW8_FC& rStart, WW8_FC& rEnd, sal_Int32&
     return pSprms;
 }
 
-bool WW8PLCFx_Fc_FKP::WW8Fkp::SetIdx(sal_uInt8 nI)
+void WW8PLCFx_Fc_FKP::WW8Fkp::SetIdx(sal_uInt8 nI)
 {
     if (nI < mnIMax)
     {
         mnIdx = nI;
-        return true;
     }
-    return false;
 }
 
 sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(sal_Int32& rLen) const
@@ -2735,11 +2733,11 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( sal_uInt16 nId )
     return aIter.FindSprm(nId);
 }
 
-bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
+void WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
     std::vector<const sal_uInt8 *> &rResult)
 {
     if (mnIdx >= mnIMax)
-       return false;
+       return;
 
     sal_Int32 nLen;
     sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
@@ -2752,7 +2750,6 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
             rResult.push_back(aIter.GetAktParams());
         aIter.advance();
     };
-    return !rResult.empty();
 }
 
 void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
@@ -4180,12 +4177,10 @@ OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
     return aRet;
 }
 
-bool WW8PLCFx_Book::MapName(OUString& rName)
+void WW8PLCFx_Book::MapName(OUString& rName)
 {
     if( !pBook[0] || !pBook[1] )
-        return false;
-
-    bool bFound = false;
+        return;
 
     size_t i = 0;
     while (i < aBookNames.size())
@@ -4193,12 +4188,10 @@ bool WW8PLCFx_Book::MapName(OUString& rName)
         if (rName.equalsIgnoreAsciiCase(aBookNames[i]))
         {
             rName = aBookNames[i];
-            bFound = true;
             break;
         }
         ++i;
     }
-    return bFound;
 }
 
 const OUString* WW8PLCFx_Book::GetName() const
@@ -4970,7 +4963,7 @@ void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
         pRes->nSprmId = 0;
 }
 
-bool WW8PLCFMan::TransferOpenSprms(std::stack<sal_uInt16> &rStack)
+void WW8PLCFMan::TransferOpenSprms(std::stack<sal_uInt16> &rStack)
 {
     for (sal_uInt16 i = 0; i < nPLCF; ++i)
     {
@@ -4983,7 +4976,6 @@ bool WW8PLCFMan::TransferOpenSprms(std::stack<sal_uInt16> &rStack)
             p->pIdStack->pop();
         }
     }
-    return rStack.empty();
 }
 
 void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
@@ -5239,10 +5231,10 @@ const sal_uInt8* WW8PLCFMan::HasCharSprm( sal_uInt16 nId ) const
     return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx)->HasSprm( nId );
 }
 
-bool WW8PLCFMan::HasCharSprm(sal_uInt16 nId,
+void WW8PLCFMan::HasCharSprm(sal_uInt16 nId,
     std::vector<const sal_uInt8 *> &rResult) const
 {
-    return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx)->HasSprm(nId, rResult);
+    static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx)->HasSprm(nId, rResult);
 }
 
 void WW8PLCFx::Save( WW8PLCFxSave1& rSave ) const
@@ -5931,7 +5923,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
 }
 
 
-bool WW8Fib::WriteHeader(SvStream& rStrm)
+void WW8Fib::WriteHeader(SvStream& rStrm)
 {
     bool bVer8 = 8 == nVersion;
 
@@ -6014,10 +6006,9 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
 
     rStrm.Write( pDataPtr, nUnencryptedHdr );
     delete[] pDataPtr;
-    return 0 == rStrm.GetError();
 }
 
-bool WW8Fib::Write(SvStream& rStrm)
+void WW8Fib::Write(SvStream& rStrm)
 {
     bool bVer8 = 8 == nVersion;
 
@@ -6259,7 +6250,6 @@ bool WW8Fib::Write(SvStream& rStrm)
 
     rStrm.Write( pDataPtr, fcMin - nUnencryptedHdr );
     delete[] pDataPtr;
-    return 0 == rStrm.GetError();
 }
 
 rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale)
@@ -7145,7 +7135,7 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
     return true;
 }
 
-bool WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen)
+void WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen)
 {
     WW8_CP nEnd;
     void* pData;
@@ -7155,11 +7145,9 @@ bool WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen)
     if (nEnd < rStart)
     {
         SAL_WARN("sw.ww8", "End " << nEnd << " before Start " << rStart);
-        return false;
+        return;
     }
     rLen = nEnd - rStart;
-
-    return true;
 }
 
 void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
@@ -7593,7 +7581,7 @@ sal_uInt32 WW8Dop::GetCompatibilityOptions2() const
     return a32Bit;
 }
 
-bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
+void WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 {
     const int nMaxDopLen = 610;
     sal_uInt32 nLen = 8 == rFib.nVersion ? nMaxDopLen : 84;
@@ -7793,7 +7781,6 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         Set_UInt16(pData, a16Bit);
     }
     rStrm.Write( aData, nLen );
-    return 0 == rStrm.GetError();
 }
 
 void WW8DopTypography::ReadFromMem(sal_uInt8 *&pData)

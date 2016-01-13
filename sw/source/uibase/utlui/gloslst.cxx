@@ -391,7 +391,7 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 // Give back all (not exceeding FIND_MAX_GLOS) found modules
 // with matching beginning.
 
-bool SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames)
+void SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames)
 {
     if(!bFilled)
         Update();
@@ -416,7 +416,6 @@ bool SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *
             }
         }
     }
-    return nFound > 0;
 }
 
 void    SwGlossaryList::ClearGroups()

@@ -44,7 +44,7 @@ class SwSrcView: public SfxViewShell
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 protected:
-    sal_uInt16              StartSearchAndReplace(const SvxSearchItem& rItem,
+    void                StartSearchAndReplace(const SvxSearchItem& rItem,
                                                   bool bFromStart,
                                                   bool bApi,
                                                   bool bRecursive = false);

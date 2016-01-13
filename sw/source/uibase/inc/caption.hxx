@@ -85,10 +85,7 @@ public:
     inline bool&            CopyAttributes()                { return bCopyAttributes; }
     inline bool             CopyAttributes() const          { return bCopyAttributes; }
 
-    bool                    operator==( const InsCaptionOpt& rOpt ) const;
     InsCaptionOpt&          operator= ( const InsCaptionOpt& rOpt );
-    inline bool             operator< ( const InsCaptionOpt & rObj ) const
-                                                { return aOleId < rObj.aOleId; }
 };
 
 #endif

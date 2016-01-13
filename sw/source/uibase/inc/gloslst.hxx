@@ -56,7 +56,7 @@ public:
         SwGlossaryList();
         virtual ~SwGlossaryList();
 
-    bool            HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames);
+    void            HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames);
     bool            GetShortName(const OUString& rLongName,
                                        OUString& rShortName, OUString& rGroupName );
 

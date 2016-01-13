@@ -78,7 +78,7 @@ public:
             const css::uno::Sequence< OUString > &rSuggestions,
             const OUString & rParaText );
 
-    sal_uInt16  Execute( const Rectangle& rPopupPos, vcl::Window* pWin );
+    void Execute( const Rectangle& rPopupPos, vcl::Window* pWin );
     void Execute( sal_uInt16 nId );
 
 };

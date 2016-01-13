@@ -1021,10 +1021,10 @@ int SwTransferable::Copy( bool bIsCut )
     return nRet;
 }
 
-int SwTransferable::CalculateAndCopy()
+void SwTransferable::CalculateAndCopy()
 {
     if(!m_pWrtShell)
-        return 0;
+        return;
     SwWait aWait( *m_pWrtShell->GetView().GetDocShell(), true );
 
     OUString aStr( m_pWrtShell->Calculate() );
@@ -1036,8 +1036,6 @@ int SwTransferable::CalculateAndCopy()
     AddFormat( SotClipboardFormatId::STRING );
 
     CopyToClipboard( &m_pWrtShell->GetView().GetEditWin() );
-
-    return 1;
 }
 
 int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr )

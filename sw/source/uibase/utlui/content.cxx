@@ -1896,7 +1896,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
 
 // Switch the display to Root
 
-bool SwContentTree::ToggleToRoot()
+void SwContentTree::ToggleToRoot()
 {
     if(!m_bIsRoot)
     {
@@ -1928,7 +1928,6 @@ bool SwContentTree::ToggleToRoot()
     }
     m_pConfig->SetRootType( m_nRootType );
     GetParentWindow()->m_aContentToolBox->CheckItem(FN_SHOW_ROOT, m_bIsRoot);
-    return m_bIsRoot;
 }
 
 // Check if the displayed content is valid.

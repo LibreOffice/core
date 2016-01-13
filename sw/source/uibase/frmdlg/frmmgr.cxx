@@ -159,7 +159,7 @@ void SwFlyFrameAttrMgr::UpdateFlyFrame()
 }
 
 // insert frame
-bool SwFlyFrameAttrMgr::InsertFlyFrame()
+void SwFlyFrameAttrMgr::InsertFlyFrame()
 {
     m_pOwnSh->StartAllAction();
 
@@ -173,7 +173,6 @@ bool SwFlyFrameAttrMgr::InsertFlyFrame()
         FrameNotify(m_pOwnSh, FLY_DRAG_START);
     }
     m_pOwnSh->EndAllAction();
-    return bRet;
 }
 
 // Insert frames of type eAnchorType. Position and size are being set explicitly.

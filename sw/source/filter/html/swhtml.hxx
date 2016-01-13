@@ -567,7 +567,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     bool GetMarginsFromContext( sal_uInt16 &nLeft, sal_uInt16 &nRight, short& nIndent,
                                 bool bIgnoreCurrent=false ) const;
-    bool GetMarginsFromContextWithNumBul( sal_uInt16 &nLeft, sal_uInt16 &nRight,
+    void GetMarginsFromContextWithNumBul( sal_uInt16 &nLeft, sal_uInt16 &nRight,
                                           short& nIndent ) const;
     void GetULSpaceFromContext( sal_uInt16 &rUpper, sal_uInt16 &rLower ) const;
 

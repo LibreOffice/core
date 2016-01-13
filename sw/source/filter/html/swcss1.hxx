@@ -65,7 +65,7 @@ class SwCSS1Parser : public SvxCSS1Parser
     void SetLinkCharFormats();
 
 protected:
-    virtual bool StyleParsed( const CSS1Selector *pSelector,
+    virtual void StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo ) override;
 

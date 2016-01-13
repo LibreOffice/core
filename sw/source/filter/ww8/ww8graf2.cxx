@@ -228,14 +228,12 @@ sal_uLong wwZOrderer::GetDrawingObjectPos(short nWwHeight)
     return std::distance(maDrawHeight.begin(), aIter);
 }
 
-bool wwZOrderer::InsertObject(SdrObject* pObject, sal_uLong nPos)
+void wwZOrderer::InsertObject(SdrObject* pObject, sal_uLong nPos)
 {
     if (!pObject->IsInserted())
     {
         mpDrawPg->InsertObject(pObject, nPos);
-        return true;
     }
-    return false;
 }
 
 extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );

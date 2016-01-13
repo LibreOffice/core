@@ -1271,7 +1271,7 @@ SwDocShell* SwPagePreview::GetDocShell()
     return dynamic_cast<SwDocShell*>( GetViewFrame()->GetObjectShell() );
 }
 
-int SwPagePreview::_CreateScrollbar( bool bHori )
+void SwPagePreview::_CreateScrollbar( bool bHori )
 {
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? pHScrollbar : pVScrollbar;
@@ -1288,7 +1288,6 @@ int SwPagePreview::_CreateScrollbar( bool bHori )
 
     InvalidateBorder();
     ppScrollbar->ExtendedShow();
-    return 1;
 }
 
 bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )

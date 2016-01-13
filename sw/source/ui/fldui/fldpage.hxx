@@ -69,7 +69,7 @@ protected:
     inline bool         IsFieldEdit() const   { return m_bFieldEdit; }
 
     // insert field
-    bool                InsertField(  sal_uInt16 nTypeId,
+    void                InsertField(  sal_uInt16 nTypeId,
                                     sal_uInt16 nSubType,
                                     const OUString& rPar1,
                                     const OUString& rPar2,

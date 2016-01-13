@@ -522,7 +522,7 @@ public:
         void Reset(WW8_FC nPos);
         long GetFilePos() const { return nFilePos; }
         sal_uInt8 GetIdx() const { return mnIdx; }
-        bool SetIdx(sal_uInt8 nI);
+        void SetIdx(sal_uInt8 nI);
         bool SeekPos(WW8_FC nFc);
         WW8_FC Where() const
         {
@@ -546,7 +546,7 @@ public:
             calls GetLenAndIStdAndSprms()...
         */
         const sal_uInt8* HasSprm( sal_uInt16 nId );
-        bool HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult);
+        void HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult);
 
         const wwSprmParser &GetSprmParser() const { return maSprmParser; }
     };
@@ -751,7 +751,7 @@ public:
     bool GetIsEnd() const { return nIsEnd != 0; }
     long GetHandle() const;
     void SetStatus( sal_uInt16 nIndex, eBookStatus eStat );
-    bool MapName(OUString& rName);
+    void MapName(OUString& rName);
     OUString GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex);
     eBookStatus GetStatus() const;
     OUString GetUniqueBookmarkName(const OUString &rSuggestedName);
@@ -965,7 +965,7 @@ public:
 
     /* asks, if *current textrun* has an Sprm of this type */
     const sal_uInt8* HasCharSprm( sal_uInt16 nId ) const;
-    bool HasCharSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult) const;
+    void HasCharSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult) const;
 
     WW8PLCFx_Cp_FKP* GetChpPLCF() const
         { return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx); }
@@ -974,7 +974,7 @@ public:
     WW8PLCFx_SEPX* GetSepPLCF() const
         { return static_cast<WW8PLCFx_SEPX*>(pSep->pPLCFx); }
     WW8PLCFxDesc* GetPap() const { return pPap; }
-    bool TransferOpenSprms(std::stack<sal_uInt16> &rStack);
+    void TransferOpenSprms(std::stack<sal_uInt16> &rStack);
     void SeekPos( long nNewCp );
     void SaveAllPLCFx( WW8PLCFxSaveAll& rSave ) const;
     void RestoreAllPLCFx( const WW8PLCFxSaveAll& rSave );
@@ -1506,8 +1506,8 @@ public:
 
     /* unfortunately incorrect, you still need one for the export */
     WW8Fib( sal_uInt8 nVersion = 6, bool bDot = false );
-    bool WriteHeader(SvStream& rStrm);
-    bool Write(SvStream& rStrm);
+    void WriteHeader(SvStream& rStrm);
+    void Write(SvStream& rStrm);
     static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale);
     ww::WordVersion GetFIBVersion() const;
     bool GetBaseCp(ManTypes nType, WW8_CP * cp) const;
@@ -1808,7 +1808,7 @@ public:
 
     /* Constructs default DOP suitable for exporting */
     WW8Dop();
-    bool Write(SvStream& rStrm, WW8Fib& rFib) const;
+    void Write(SvStream& rStrm, WW8Fib& rFib) const;
 
     sal_uInt32 GetCompatibilityOptions() const;
     void SetCompatibilityOptions(sal_uInt32 a32Bit);
@@ -1827,7 +1827,7 @@ private:
 public:
     WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop );
     bool GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart, WW8_CP& rLen);
-    bool GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen);
+    void GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen);
     void UpdateIndex( sal_uInt8 grpfIhdt );
 };
 

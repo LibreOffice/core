@@ -566,7 +566,7 @@ void SwSrcView::SetSearchItem( const SvxSearchItem& rItem )
     pSearchItem = static_cast<SvxSearchItem*>(rItem.Clone());
 }
 
-sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
+void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
                                                   bool bFromStart,
                                                   bool bApi,
                                                   bool bRecursive)
@@ -658,7 +658,6 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
             }
         }
     }
-    return nFound;
 }
 
 sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags, bool )

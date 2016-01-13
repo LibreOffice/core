@@ -142,7 +142,7 @@ public:
     WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc);
     ~WW8_WrFkp();
     bool Append( WW8_FC nEndFc, sal_uInt16 nVarLen = 0, const sal_uInt8* pSprms = nullptr );
-    bool Combine();
+    void Combine();
     void Write( SvStream& rStrm, SwWW8WrGrf& rGrf );
 
     bool IsEqualPos(WW8_FC nEndFc) const
@@ -864,10 +864,10 @@ void WW8_WrPlc1::Write( SvStream& rStrm )
 
 // Class WW8_WrPlcField for fields
 
-bool WW8_WrPlcField::Write( WW8Export& rWrt )
+void WW8_WrPlcField::Write( WW8Export& rWrt )
 {
     if( WW8_WrPlc1::Count() <= 1 )
-        return false;
+        return;
 
     WW8_FC *pfc;
     sal_Int32 *plc;
@@ -919,18 +919,16 @@ bool WW8_WrPlcField::Write( WW8Export& rWrt )
         *pfc = nFcStart;
         *plc = rWrt.pTableStrm->Tell() - nFcStart;
     }
-    return true;
 }
 
-bool WW8_WrMagicTable::Write( WW8Export& rWrt )
+void WW8_WrMagicTable::Write( WW8Export& rWrt )
 {
     if( WW8_WrPlc1::Count() <= 1 )
-        return false;
+        return;
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
     WW8_WrPlc1::Write( *rWrt.pTableStrm );
     rWrt.pFib->fcPlcfTch = nFcStart;
     rWrt.pFib->lcbPlcfTch = rWrt.pTableStrm->Tell() - nFcStart;
-    return true;
 }
 
 void WW8_WrMagicTable::Append( WW8_CP nCp, sal_uLong nData)
@@ -1244,10 +1242,10 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
     return true;
 }
 
-bool WW8_WrFkp::Combine()
+void WW8_WrFkp::Combine()
 {
     if( bCombined )
-        return false;
+        return;
     if( nIMax )
         memcpy( pFkp + ( nIMax + 1 ) * 4, pOfs, nIMax * nItemSize );
     delete[] pOfs;
@@ -1262,8 +1260,6 @@ bool WW8_WrFkp::Combine()
     for( i = 0, p = (sal_uInt32*)pFkp; i <= nIMax; i++, p++ )
         *p = OSL_SWAPDWORD( *p );
 #endif // ifdef OSL_BIGENDIAN
-
-    return true;
 }
 
 void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )

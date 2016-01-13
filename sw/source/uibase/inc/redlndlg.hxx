@@ -51,8 +51,6 @@ struct SwRedlineDataParent
     SvTreeListEntry*            pTLBParent; // corresponding TreeListBox entry
     OUString                    sComment;   // redline comment
 
-    inline bool operator==( const SwRedlineDataParent& rObj ) const
-                        { return (pData && pData->GetSeqNo() == rObj.pData->GetSeqNo()); }
     inline bool operator< ( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
 };

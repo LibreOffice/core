@@ -75,8 +75,6 @@ struct SwInsDBColumn
         bIsDBFormat(true)
     {}
 
-    bool operator==( const SwInsDBColumn& rCmp ) const
-        { return sColumn == rCmp.sColumn; }
     bool operator<( const SwInsDBColumn& rCmp ) const;
 };
 

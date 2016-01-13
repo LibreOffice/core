@@ -738,11 +738,11 @@ class SwMSConvertControls: public oox::ole::MSConvertOCXControls
 {
 public:
     SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP );
-    bool InsertFormula( WW8FormulaControl &rFormula);
+    void InsertFormula( WW8FormulaControl &rFormula);
     virtual bool InsertControl(const css::uno::Reference< css::form::XFormComponent >& rFComp,
         const css::awt::Size& rSize,
         css::uno::Reference<  css::drawing::XShape > *pShape, bool bFloatingCtrl) override;
-    bool ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
+    void ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
         css::uno::Reference< css::drawing::XShape > *pShapeRef=nullptr,
         bool bFloatingCtrl=false );
@@ -1583,7 +1583,7 @@ private:
         sal_uInt16 nSequence);
     sal_Int32 GetRangeAsDrawingString(OUString& rString, long StartCp, long nEndCp, ManTypes eType);
     OutlinerParaObject* ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType);
-    SwFrameFormat* InsertTxbxText(SdrTextObj* pTextObj, Size* pObjSiz,
+    void InsertTxbxText(SdrTextObj* pTextObj, Size* pObjSiz,
         sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp, SwFrameFormat* pFlyFormat,
         bool bMakeSdrGrafObj, bool& rbEraseTextObj,
         bool* pbTestTxbxContainsText = nullptr, long* pnStartCp = nullptr,
@@ -1682,7 +1682,7 @@ private:
     // #i84783#
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTableCell ) const;
-    bool ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const css::uno::Reference< css::container::XNameContainer >& xPrjNameMap );
+    void ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const css::uno::Reference< css::container::XNameContainer >& xPrjNameMap );
     SwWW8ImplReader(const SwWW8ImplReader &) = delete;
     SwWW8ImplReader& operator=(const SwWW8ImplReader&) = delete;
 public:     // really private, but can only be done public

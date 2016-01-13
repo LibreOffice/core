@@ -274,7 +274,6 @@ public:
     void                PrevTOXMark(bool bSame=false);
 
     // get current TOXmarks
-    sal_uInt16              GetTOXMarks();
     sal_uInt16              GetTOXMarkCount();
     SwTOXMark*          GetTOXMark(sal_uInt16 nId);
     SwTOXMark*          GetCurTOXMark();

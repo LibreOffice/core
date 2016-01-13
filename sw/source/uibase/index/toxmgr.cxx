@@ -32,14 +32,8 @@
 SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
     pSh(pShell)
 {
-    GetTOXMarks();
+    pSh->GetCurTOXMarks(aCurMarks);
     SetCurTOXMark(0);
-}
-
-// handle current TOXMarks
-sal_uInt16 SwTOXMgr::GetTOXMarks()
-{
-    return pSh->GetCurTOXMarks(aCurMarks);
 }
 
 SwTOXMark* SwTOXMgr::GetTOXMark(sal_uInt16 nId)

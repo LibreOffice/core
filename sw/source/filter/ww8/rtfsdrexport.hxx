@@ -66,7 +66,7 @@ public:
     /// Export the sdr object as Sdr.
     ///
     /// Call this when you need to export the object as Sdr in RTF.
-    sal_uInt32 AddSdrObject(const SdrObject& rObj);
+    void AddSdrObject(const SdrObject& rObj);
 
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?
     bool isTextBox(const SwFrameFormat& rFrameFormat);

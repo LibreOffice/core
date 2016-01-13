@@ -115,11 +115,10 @@ void SwFieldPage::EditNewField( bool bOnlyActivate )
 }
 
 // insert field
-bool SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
+void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
                             const OUString& rPar2, sal_uLong nFormatId,
                             sal_Unicode cSeparator, bool bIsAutomaticLanguage)
 {
-    bool bRet = false;
     SwView* pView = GetActiveView();
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
 
@@ -128,7 +127,7 @@ bool SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
         SwInsertField_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, nullptr, cSeparator, bIsAutomaticLanguage );
         //#i26566# provide parent for SwWrtShell::StartInputFieldDlg
         aData.m_pParent = &GetTabDialog()->GetOKButton();
-        bRet = m_aMgr.InsertField( aData );
+        m_aMgr.InsertField( aData );
 
         uno::Reference< frame::XDispatchRecorder > xRecorder =
                 pView->GetViewFrame()->GetBindings().GetRecorder();
@@ -277,8 +276,6 @@ bool SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
         pSh->SetUndoNoResetModified();
         pSh->EndAllAction();
     }
-
-    return bRet;
 }
 
 void SwFieldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,

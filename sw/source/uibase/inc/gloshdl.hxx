@@ -46,9 +46,9 @@ public:
 
     size_t      GetGroupCnt() const;
     OUString    GetGroupName( size_t, OUString* pTitle = nullptr );
-    bool        NewGroup(OUString & rGroupName, const OUString& rTitle);
+    void        NewGroup(OUString & rGroupName, const OUString& rTitle);
     bool        DelGroup(const OUString &);
-    bool        RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);
+    void        RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);
     void        SetCurGroup(const OUString &aGrp, bool bApi = false, bool bAlwaysCreateNew = false);
 
     sal_uInt16  GetGlossaryCnt();

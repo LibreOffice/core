@@ -700,7 +700,7 @@ void SwFieldVarPage::UpdateSubType()
     m_pSelectionLB->SetUpdateMode(true);
 }
 
-sal_Int32 SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
+void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 {
     OUString sOldSel;
     const sal_Int32 nFormatSel = m_pFormatLB->GetSelectEntryPos();
@@ -826,8 +826,6 @@ sal_Int32 SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             }
         }
     }
-
-    return nSize;
 }
 
 // Modify

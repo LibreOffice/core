@@ -985,7 +985,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
 
 // InsertTxbxText() fuegt fuer TextBoxen und CaptionBoxen den Text
 // und die Attribute ein
-SwFrameFormat* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
+void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     Size* pObjSiz, sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp,
     SwFrameFormat* pOldFlyFormat, bool bMakeSdrGrafObj, bool& rbEraseTextObj,
     bool* pbTestTxbxContainsText, long* pnStartCp, long* pnEndCp,
@@ -1191,7 +1191,6 @@ SwFrameFormat* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     m_pStrm->Seek( nOld );
     if (pbContainsGraphics)
         *pbContainsGraphics = bContainsGraphics;
-    return pFlyFormat;
 }
 
 bool SwWW8ImplReader::TxbxChainContainsRealText(sal_uInt16 nTxBxS, long& rStartCp,

@@ -2139,26 +2139,23 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     return bRet;
 }
 
-bool SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)
+void SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)
 {
-    bool bRet = false;
-
     const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
         GetServiceFactory();
 
     if(!rServiceFactory.is())
-        return false;
+        return;
 
     awt::Size aSz;
     uno::Reference< form::XFormComponent> xFComp;
 
-    if ((bRet = rFormula.Import(rServiceFactory, xFComp, aSz)))
+    if (rFormula.Import(rServiceFactory, xFComp, aSz))
     {
         uno::Reference <drawing::XShape> xShapeRef;
-        if ((bRet = InsertControl(xFComp, aSz, &xShapeRef, false)))
+        if (InsertControl(xFComp, aSz, &xShapeRef, false))
             GetShapes()->add(xShapeRef);
     }
-    return bRet;
 }
 
 void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,

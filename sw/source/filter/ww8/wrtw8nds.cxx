@@ -1932,7 +1932,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
     return bHasBookmark;
 }
 
-bool MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly )
+void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly )
 {
     bool bHasAnnotationMark = false;
 
@@ -1960,8 +1960,6 @@ bool MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
             bHasAnnotationMark = true;
         }
     }
-
-    return bHasAnnotationMark;
 }
 
 void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )

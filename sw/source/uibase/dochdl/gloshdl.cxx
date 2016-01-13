@@ -178,14 +178,14 @@ OUString SwGlossaryHdl::GetGroupName( size_t nId, OUString* pTitle )
     return sRet;
 }
 
-bool SwGlossaryHdl::NewGroup(OUString &rGrpName, const OUString& rTitle)
+void SwGlossaryHdl::NewGroup(OUString &rGrpName, const OUString& rTitle)
 {
     if (rGrpName.indexOf(GLOS_DELIM)<0)
         FindGroupName(rGrpName);
-    return rStatGlossaries.NewGroupDoc(rGrpName, rTitle);
+    rStatGlossaries.NewGroupDoc(rGrpName, rTitle);
 }
 
-bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle)
+void SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle)
 {
     bool bRet = false;
     OUString sOldGroup(rOld);
@@ -211,7 +211,6 @@ bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
         bRet = rStatGlossaries.RenameGroupDoc(sOldGroup, sNewGroup, rNewTitle);
         rNew = sNewGroup;
     }
-    return bRet;
 }
 
 bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,

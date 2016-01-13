@@ -663,12 +663,12 @@ bool RTLDrawingsHack(long &rLeft, long /*nWidth*/,
     return bRet;
 }
 
-bool WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
+void WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
     const ww8::Frame &rFrameFormat)
 {
     //Require nasty bidi swap
     if (FRMDIR_HORI_RIGHT_TOP != m_pDoc->GetTextDirection(rFrameFormat.GetPosition()))
-        return false;
+        return;
 
     SwTwips nWidth = rRight - rLeft;
     SwTwips nPageLeft, nPageRight;
@@ -696,7 +696,6 @@ bool WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
     }
     if (bRet)
         rRight = rLeft + nWidth;
-    return bRet;
 }
 
 void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
@@ -1613,7 +1612,7 @@ sal_uInt32 AddMirrorFlags(sal_uInt32 nFlags, const SwMirrorGrf &rMirror)
     return nFlags;
 }
 //For i120928,this function is added to export graphic of bullet
-sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
+void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
 {
     OpenContainer( ESCHER_SpContainer );
     AddShape(ESCHER_ShpInst_PictureFrame, 0xa00,0x401);
@@ -1660,8 +1659,6 @@ sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     AddAtom(4, ESCHER_ClientAnchor);
     GetStream().WriteUInt32( 0x80000000 );
     CloseContainer();
-
-    return 0;
 }
 
 sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uInt32 nShapeId)
@@ -3175,7 +3172,7 @@ bool  SwMSConvertControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
     return bRes;
 }
 
-bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFormObj)
+void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFormObj)
 {
     uno::Reference< awt::XControlModel > xControlModel =
         rFormObj.GetUnoControlModel();
@@ -3201,11 +3198,11 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     tools::SvRef<SotStorage> xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear());
 
     if (!xOleStg.Is())
-        return false;
+        return;
 
     OUString sUName;
     if (!WriteOCXStream( mxModel, xOleStg,xControlModel,aSize,sUName))
-        return false;
+        return;
 
     sal_uInt8 aSpecOLE[] =
     {
@@ -3227,7 +3224,6 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
         aSpecOLE);
     rWW8Wrt.WriteChar( 0x1 );
     rWW8Wrt.OutputField(nullptr, ww::eCONTROL, OUString(), WRITEFIELD_END | WRITEFIELD_CLOSE);
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

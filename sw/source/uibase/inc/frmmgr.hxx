@@ -103,7 +103,7 @@ public:
     void                UpdateFlyFrame();
 
     // create new frame
-    bool                InsertFlyFrame();
+    void                InsertFlyFrame();
     void                InsertFlyFrame(RndStdIds      eAnchorType,
                                    const Point    &rPos,
                                    const Size     &rSize,

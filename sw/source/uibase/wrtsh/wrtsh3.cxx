@@ -127,16 +127,17 @@ void SwWrtShell::DrawSelChanged( )
     g_bNoInterrupt = bOldVal;
 }
 
-bool SwWrtShell::GotoMark( const OUString& rName )
+void SwWrtShell::GotoMark( const OUString& rName )
 {
     IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark( rName );
-    if(ppMark == getIDocumentMarkAccess()->getAllMarksEnd()) return false;
-    return MoveBookMark( BOOKMARK_INDEX, ppMark->get() );
+    if (ppMark == getIDocumentMarkAccess()->getAllMarksEnd())
+        return;
+    MoveBookMark( BOOKMARK_INDEX, ppMark->get() );
 }
 
-bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
+void SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
 {
-    return MoveBookMark( BOOKMARK_INDEX, pMark );
+    MoveBookMark( BOOKMARK_INDEX, pMark );
 }
 
 bool SwWrtShell::GoNextBookmark()

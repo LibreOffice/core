@@ -304,7 +304,7 @@ sal_uInt8 maWW8_FFN[6];
 public:
      wwFont( const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet);
-    bool Write( SvStream *pTableStram ) const;
+    void Write( SvStream *pTableStram ) const;
     void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;
     void WriteRtf( const RtfAttributeOutput* rAttrOutput ) const;
     OUString GetFamilyName() const { return OUString( msFamilyNm ); }
@@ -608,9 +608,9 @@ public:
         return m_aFontHelper.GetId(rFont);
     }
     /// @overload
-    sal_uInt16 GetId( const wwFont& rFont)
+    void GetId( const wwFont& rFont)
     {
-        return m_aFontHelper.GetId(rFont);
+        m_aFontHelper.GetId(rFont);
     }
 
     const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
@@ -853,8 +853,7 @@ protected:
 
     /// Find the nearest annotation mark from the current position.
     ///
-    /// Returns false when there is no annotation mark.
-    bool NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
+    void NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
 
     void GetSortedAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
 
@@ -1103,7 +1102,7 @@ public:
     SwTwips CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const;
 
     /// Nasty swap for bidi if necessary
-    bool MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
+    void MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
         const ww8::Frame &rFrameFormat);
 
     void InsUInt16( sal_uInt16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
@@ -1313,7 +1312,7 @@ public:
     WW8_WrPlcField( sal_uInt16 nStructSz, sal_uInt8 nTTyp )
         : WW8_WrPlc1( nStructSz ), nTextTyp( nTTyp ), nResults(0)
     {}
-    bool Write( WW8Export& rWrt );
+    void Write( WW8Export& rWrt );
     void ResultAdded() { ++nResults; }
     sal_uInt16 ResultCount() const { return nResults; }
 };
@@ -1326,7 +1325,7 @@ private:
 public:
     WW8_WrMagicTable() : WW8_WrPlc1( 4 ) {Append(0,0);}
     void Append( WW8_CP nCp, sal_uLong nData );
-    bool Write( WW8Export& rWrt );
+    void Write( WW8Export& rWrt );
 };
 
 class GraphicDetails

@@ -46,7 +46,7 @@ class SwVbaBorder : public SwVbaBorder_Base
 private:
     uno::Reference< beans::XPropertySet > m_xProps;
     sal_Int32 m_LineType;
-    bool setBorderLine( table::BorderLine& rBorderLine )
+    void setBorderLine( table::BorderLine& rBorderLine )
     {
         table::TableBorder aTableBorder;
         m_xProps->getPropertyValue( "TableBorder" ) >>= aTableBorder;
@@ -84,10 +84,9 @@ private:
                 // nice to investigate what we can do here
                 break;
             default:
-                    return false;
+                return;
         }
         m_xProps->setPropertyValue( "TableBorder", uno::makeAny(aTableBorder) );
-        return true;
     }
 
     bool getBorderLine( table::BorderLine& rBorderLine )

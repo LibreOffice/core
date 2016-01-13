@@ -576,23 +576,21 @@ void SwWrtShell::LeaveExtMode()
 // End of a selection; if the selection is empty,
 // ClearMark().
 
-long SwWrtShell::SttLeaveSelect(const Point *, bool )
+void SwWrtShell::SttLeaveSelect(const Point *, bool )
 {
     if(SwCursorShell::HasSelection() && !IsSelTableCells() && m_bClearMark) {
-        return 0;
+        return;
     }
     ClearMark();
-    return 1;
 }
 
 // Leaving of the selection mode in additional mode
 
-long SwWrtShell::AddLeaveSelect(const Point *, bool )
+void SwWrtShell::AddLeaveSelect(const Point *, bool )
 {
     if(IsTableMode()) LeaveAddMode();
     else if(SwCursorShell::HasSelection())
         CreateCursor();
-    return 1;
 }
 
 // Additional Mode
@@ -731,11 +729,10 @@ long SwWrtShell::UpdateLayoutFrame(const Point *pPt, bool )
 
 // Handler for toggling the modes. Returns back the old mode.
 
-bool SwWrtShell::ToggleAddMode()
+void SwWrtShell::ToggleAddMode()
 {
     m_bAddMode ? LeaveAddMode(): EnterAddMode();
     Invalidate();
-    return !m_bAddMode;
 }
 
 bool SwWrtShell::ToggleBlockMode()
@@ -816,37 +813,31 @@ bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, bool bR
 
 // Description: Selection of a table line or column
 
-bool SwWrtShell::SelectTableRow()
+void SwWrtShell::SelectTableRow()
 {
     if ( SelTableRow() )
     {
         m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
         m_fnKillSel = &SwWrtShell::ResetSelect;
-        return true;
     }
-    return false;
 }
 
-bool SwWrtShell::SelectTableCol()
+void SwWrtShell::SelectTableCol()
 {
     if ( SelTableCol() )
     {
         m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
         m_fnKillSel = &SwWrtShell::ResetSelect;
-        return true;
     }
-    return false;
 }
 
-bool SwWrtShell::SelectTableCell()
+void SwWrtShell::SelectTableCell()
 {
     if ( SelTableBox() )
     {
         m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
         m_fnKillSel = &SwWrtShell::ResetSelect;
-        return true;
     }
-    return false;
 }
 
 // Description: Check if a word selection is present.
@@ -921,7 +912,7 @@ int SwWrtShell::IntelligentCut(int nSelection, bool bCut)
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-bool SwWrtShell::SelectNextPrevHyperlink( bool bNext )
+void SwWrtShell::SelectNextPrevHyperlink( bool bNext )
 {
     StartAction();
     bool bRet = SwCursorShell::SelectNxtPrvHyperlink( bNext );
@@ -964,8 +955,6 @@ bool SwWrtShell::SelectNextPrevHyperlink( bool bNext )
 
     if( bCreateXSelection )
         SwTransferable::CreateSelection( *this );
-
-    return bRet;
 }
 
 // For the preservation of the selection the cursor will be moved left

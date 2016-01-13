@@ -309,16 +309,16 @@ bool SwWrtShell::SttNxtPg( bool bSelect )
     return MovePage( fnPageNext, fnPageStart );
 }
 
-bool SwWrtShell::SttPrvPg( bool bSelect )
+void SwWrtShell::SttPrvPg( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    return MovePage( fnPagePrev, fnPageStart );
+    MovePage( fnPagePrev, fnPageStart );
 }
 
-bool SwWrtShell::EndNxtPg( bool bSelect )
+void SwWrtShell::EndNxtPg( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    return MovePage( fnPageNext, fnPageEnd );
+    MovePage( fnPageNext, fnPageEnd );
 }
 
 bool SwWrtShell::EndPrvPg( bool bSelect )
@@ -345,50 +345,50 @@ bool SwWrtShell::SttPara( bool bSelect )
     return MovePara( fnParaCurr, fnParaStart );
 }
 
-bool SwWrtShell::EndPara( bool bSelect )
+void SwWrtShell::EndPara( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    return MovePara(fnParaCurr,fnParaEnd);
+    MovePara(fnParaCurr,fnParaEnd);
 }
 
 // Column-by-jumping.
 // SSelection with or without
 // returns success or failure
 
-bool SwWrtShell::StartOfColumn( bool bSelect )
+void SwWrtShell::StartOfColumn( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect);
-    return MoveColumn(fnColumnCurr, fnColumnStart);
+    MoveColumn(fnColumnCurr, fnColumnStart);
 }
 
-bool SwWrtShell::EndOfColumn( bool bSelect )
+void SwWrtShell::EndOfColumn( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect);
-    return MoveColumn(fnColumnCurr, fnColumnEnd);
+    MoveColumn(fnColumnCurr, fnColumnEnd);
 }
 
-bool SwWrtShell::StartOfNextColumn( bool bSelect )
+void SwWrtShell::StartOfNextColumn( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect);
-    return MoveColumn( fnColumnNext, fnColumnStart);
+    MoveColumn( fnColumnNext, fnColumnStart);
 }
 
-bool SwWrtShell::EndOfNextColumn( bool bSelect )
+void SwWrtShell::EndOfNextColumn( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect);
-    return MoveColumn(fnColumnNext, fnColumnEnd);
+    MoveColumn(fnColumnNext, fnColumnEnd);
 }
 
-bool SwWrtShell::StartOfPrevColumn( bool bSelect )
+void SwWrtShell::StartOfPrevColumn( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect);
-    return MoveColumn(fnColumnPrev, fnColumnStart);
+    MoveColumn(fnColumnPrev, fnColumnStart);
 }
 
-bool SwWrtShell::EndOfPrevColumn( bool bSelect )
+void SwWrtShell::EndOfPrevColumn( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect);
-    return MoveColumn(fnColumnPrev, fnColumnEnd);
+    MoveColumn(fnColumnPrev, fnColumnEnd);
 }
 
 bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)
@@ -629,14 +629,13 @@ bool SwWrtShell::GotoRegion( const OUString& rName )
     return bRet;
  }
 
-bool SwWrtShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
+void SwWrtShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                                     sal_uInt16 nSeqNo )
 {
     SwPosition aPos = *GetCursor()->GetPoint();
     bool bRet = SwCursorShell::GotoRefMark(rRefMark, nSubType, nSeqNo);
     if (bRet)
         m_aNavigationMgr.addEntry(aPos);
-    return bRet;
 }
 
 bool SwWrtShell::GotoNextTOXBase( const OUString* pName )

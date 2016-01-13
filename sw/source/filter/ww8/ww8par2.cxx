@@ -154,7 +154,7 @@ class WW8TabDesc: private boost::noncopyable
     void SetTabVertAlign( SwTableBox* pBox, short nWwIdx );
     void SetTabDirection( SwTableBox* pBox, short nWwIdx );
     void CalcDefaults();
-    bool SetPamInCell(short nWwCol, bool bPam);
+    void SetPamInCell(short nWwCol, bool bPam);
     void InsertCells( short nIns );
     void AdjustNewBand();
 
@@ -162,7 +162,7 @@ class WW8TabDesc: private boost::noncopyable
 
     // single box - maybe used in a merge group
     // (the merge groups are processed later at once)
-    SwTableBox* UpdateTableMergeGroup(WW8_TCell& rCell,
+    void UpdateTableMergeGroup(WW8_TCell& rCell,
         WW8SelBoxInfo* pActGroup, SwTableBox* pActBox, sal_uInt16 nCol  );
     void StartMiserableHackForUnsupportedDirection(short nWwCol);
     void EndMiserableHackForUnsupportedDirection(short nWwCol);
@@ -2821,11 +2821,11 @@ void WW8TabDesc::EndMiserableHackForUnsupportedDirection(short nWwCol)
         pIo->m_pCtrlStck->SetAttr(*pIo->m_pPaM->GetPoint(), RES_CHRATR_ROTATE);
 }
 
-bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
+void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 {
     OSL_ENSURE( pActBand, "pActBand ist 0" );
     if (!pActBand)
-        return false;
+        return;
 
     sal_uInt16 nCol = pActBand->transCell(nWwCol);
 
@@ -2834,7 +2834,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         OSL_ENSURE(false, "Actual row bigger than expected." );
         if (bPam)
             MoveOutsideTable();
-        return false;
+        return;
     }
 
     pTabLine = (*pTabLines)[nAktRow];
@@ -2861,7 +2861,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
             ParkPaM();
         }
-        return false;
+        return;
     }
     pTabBox = (*pTabBoxes)[nCol];
     if( !pTabBox->GetSttNd() )
@@ -2869,7 +2869,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         OSL_ENSURE(pTabBox->GetSttNd(), "Probleme beim Aufbau der Tabelle");
         if (bPam)
             MoveOutsideTable();
-        return false;
+        return;
     }
     if (bPam)
     {
@@ -2927,7 +2927,6 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
         StartMiserableHackForUnsupportedDirection(nWwCol);
     }
-    return true;
 }
 
 void WW8TabDesc::InsertCells( short nIns )
@@ -3253,7 +3252,7 @@ void WW8TabDesc::TableCellEnd()
 }
 
 // if necessary register the box for the merge group for this column
-SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
+void WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
                                                 WW8SelBoxInfo* pActGroup,
                                                 SwTableBox*    pActBox,
                                                 sal_uInt16         nCol )
@@ -3291,7 +3290,6 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
             pResult = (*pTheMergeGroup)[ 0 ];
         }
     }
-    return pResult;
 }
 
 sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDICATED within WW6 UI status line -1

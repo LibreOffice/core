@@ -159,7 +159,7 @@ public:
     int  Cut();
     int  Copy( bool bIsCut = false );
     int  PrepareForCopy( bool bIsCut = false );
-    int  CalculateAndCopy();                // special for Calculator
+    void  CalculateAndCopy();                // special for Calculator
     int  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );
 
     // remove the DDE-Link format promise

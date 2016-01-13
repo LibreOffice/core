@@ -138,7 +138,7 @@ public:
     inline sal_Int32 GetSLength() const;
     sal_Unicode GetOp() const { return cOp; }
 
-    bool GetURL( OUString& rURL ) const;
+    void GetURL( OUString& rURL ) const;
     bool GetColor( Color &rRGB ) const;
 
     void SetNext( CSS1Expression *pNxt ) { pNext = pNxt; }
@@ -208,9 +208,9 @@ class CSS1Parser
 
     bool IsEOF() const { return bEOF; }
 
-    sal_uInt32 IncLineNr() { return ++nlLineNr; }
+    void IncLineNr() { ++nlLineNr; }
     sal_uInt32 IncLinePos() { return ++nlLinePos; }
-    inline sal_uInt32 SetLinePos( sal_uInt32 nlPos ); // inline declaration below
+    inline void SetLinePos( sal_uInt32 nlPos ); // inline declaration below
 
     // parse parts of the grammar
     void ParseRule();
@@ -262,11 +262,9 @@ public:
     virtual ~CSS1Parser();
 };
 
-inline sal_uInt32 CSS1Parser::SetLinePos( sal_uInt32 nlPos )
+inline void CSS1Parser::SetLinePos( sal_uInt32 nlPos )
 {
-    sal_uInt32 nlOld = nlLinePos;
     nlLinePos = nlPos;
-    return nlOld;
 }
 
 #endif

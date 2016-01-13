@@ -1224,7 +1224,7 @@ CSS1Expression::~CSS1Expression()
     delete pNext;
 }
 
-bool CSS1Expression::GetURL( OUString& rURL  ) const
+void CSS1Expression::GetURL( OUString& rURL  ) const
 {
     OSL_ENSURE( CSS1_URL==eType, "CSS1-Ausruck ist keine Farbe URL" );
 
@@ -1233,8 +1233,6 @@ bool CSS1Expression::GetURL( OUString& rURL  ) const
                 '(' == aValue[3] &&
                 ')' == aValue[aValue.getLength()-1],
                 "keine gueltiges URL(...)" );
-
-    bool bRet = false;
 
     if( aValue.getLength() > 5 )
     {
@@ -1249,11 +1247,7 @@ bool CSS1Expression::GetURL( OUString& rURL  ) const
         rURL = comphelper::string::strip(rURL, aSpace);
         rURL = comphelper::string::strip(rURL, aSingleQuote);
         rURL = comphelper::string::strip(rURL, aSpace);
-
-        bRet = true;
     }
-
-    return bRet;
 }
 
 bool CSS1Expression::GetColor( Color &rColor ) const

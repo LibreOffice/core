@@ -5589,9 +5589,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
 /*  i#18686 select the object/cursor at the mouse
     position of the context menu request */
-bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
+void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 {
-    bool bRet = false;
     const Point aDocPos( PixelToLogic( rMousePos ) );
     const bool bIsInsideSelectedObj( rSh.IsInsideSelectedObj( aDocPos ) );
     //create a synthetic mouse event out of the coordinates
@@ -5643,7 +5642,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 aSelection.Adjust();
                 if(!aCompare.IsLess(aSelection)  && !aCompare.IsGreater(aSelection))
                 {
-                    return false;
+                    return;
                 }
             }
 
@@ -5653,14 +5652,14 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         {
             pSdrView->MouseButtonUp( aMEvt, this );
             rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
-            return true;
+            return;
         }
     }
     rSh.ResetCursorStack();
 
     if ( EnterDrawMode( aMEvt, aDocPos ) )
     {
-        return true;
+        return;
     }
     if ( m_rView.GetDrawFuncPtr() && m_bInsFrame )
     {
@@ -5689,7 +5688,6 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
             if( bSelObj )
             {
-                bRet = true;
                 // in case the frame was deselected in the macro
                 // just the cursor has to be displayed again.
                 if( FrameTypeFlags::NONE == rSh.GetSelFrameType() )
@@ -5707,7 +5705,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                     rSh.EnterSelFrameMode( &aDocPos );
                     g_bFrameDrag = true;
                     UpdatePointer( aDocPos );
-                    return bRet;
+                    return;
                 }
             }
 
@@ -5729,7 +5727,6 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             rSh.UnSelectFrame();
             rSh.LeaveSelFrameMode();
             m_rView.AttrChangedNotify(&rSh);
-            bRet = true;
         }
 
         bool bSelObj = rSh.SelectObj( aDocPos, nFlag );
@@ -5744,7 +5741,6 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             rSh.LeaveSelFrameMode();
             m_rView.LeaveDrawCreate();
             m_rView.AttrChangedNotify( &rSh );
-            bRet = true;
         }
         else
         {
@@ -5762,13 +5758,12 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 m_rView.AttrChangedNotify( &rSh );
             }
             UpdatePointer( aDocPos );
-            bRet = true;
         }
     }
     else if ( rSh.IsSelFrameMode() && bIsInsideSelectedObj )
     {
         // Object at the mouse cursor is already selected - do nothing
-        return false;
+        return;
     }
 
     if ( rSh.IsGCAttr() )
@@ -5787,7 +5782,6 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             // the query against the content form doesn't work!!!
             SwMvContext aMvContext( &rSh );
             rSh.CallSetCursor(&aDocPos, false);
-            bRet = true;
         }
     }
     if( !bOverURLGrf )
@@ -5800,10 +5794,8 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             if( !rSh.IsFrameSelected() )
                 rSh.GotoNextFly();
             rSh.EnterSelFrameMode();
-            bRet = true;
         }
     }
-    return bRet;
 }
 
 static SfxShell* lcl_GetTextShellFromDispatcher( SwView& rView )

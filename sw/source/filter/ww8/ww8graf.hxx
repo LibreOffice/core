@@ -69,7 +69,7 @@ private:
     sal_uLong GetEscherObjectPos( sal_uLong nSpId,
                               const bool _bInHeaderFooter );
     sal_uLong GetDrawingObjectPos(short nWwHeight);
-    bool InsertObject(SdrObject *pObject, sal_uLong nPos);
+    void InsertObject(SdrObject *pObject, sal_uLong nPos);
 public:
     wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
         const SvxMSDffShapeOrders *pShapeOrders);

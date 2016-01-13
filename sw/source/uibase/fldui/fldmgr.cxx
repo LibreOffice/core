@@ -420,9 +420,8 @@ sal_uInt16 SwFieldMgr::GetPos(sal_uInt16 nTypeId)
 }
 
 // localise subtypes of a field
-bool SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
+void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
 {
-    bool bRet = false;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
     if(pSh)
@@ -519,9 +518,7 @@ bool SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
                 }
             }
         }
-        bRet = true;
     }
-    return bRet;
 }
 
 // determine format

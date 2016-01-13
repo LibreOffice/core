@@ -158,7 +158,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     SotExchangeDest GetDropDestination( const Point& rPixPnt,
                                         SdrObject ** ppObj = nullptr );
     //select the object/cursor at the mouse position of the context menu request
-    bool            SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos );
+    void            SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos );
 
     /*
      * handler for scrolling on when the mousepointer

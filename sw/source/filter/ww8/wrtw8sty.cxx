@@ -761,7 +761,7 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
         maWW8_FFN[5] = static_cast< sal_uInt8 >(msFamilyNm.getLength() + 1);
 }
 
-bool wwFont::Write(SvStream *pTableStrm) const
+void wwFont::Write(SvStream *pTableStrm) const
 {
     pTableStrm->Write(maWW8_FFN, sizeof(maWW8_FFN));    // fixed part
     // ab Ver8 sind folgende beiden Felder eingeschoben,
@@ -772,7 +772,6 @@ bool wwFont::Write(SvStream *pTableStrm) const
     SwWW8Writer::WriteString16(*pTableStrm, msFamilyNm, true);
     if (mbAlt)
         SwWW8Writer::WriteString16(*pTableStrm, msAltNm, true);
-    return true;
 }
 
 void wwFont::WriteDocx( DocxAttributeOutput* rAttrOutput ) const

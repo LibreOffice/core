@@ -220,7 +220,7 @@ protected:
     // Selektor nicht mehr gespeichert!
     // Der ItemSet darf entsprechend modifiziert werden!
     // Die Implementierung dieser Methode gibt false zurueck.
-    virtual bool StyleParsed( const CSS1Selector *pSelector,
+    virtual void StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
 
@@ -253,7 +253,7 @@ public:
 
     // Parsen einer Style-Option. Hier wird einfach nur der Item-Set
     // gefuellt.
-    bool ParseStyleOption( const OUString& rIn, SfxItemSet& rItemSet,
+    void ParseStyleOption( const OUString& rIn, SfxItemSet& rItemSet,
                            SvxCSS1PropertyInfo& rPropInfo );
 
     // Umwandeln eines Strings in den Wert eines Enums

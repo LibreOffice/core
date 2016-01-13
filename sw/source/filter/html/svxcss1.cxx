@@ -650,12 +650,11 @@ SvxCSS1MapEntry::SvxCSS1MapEntry( const SfxItemSet& rItemSet,
     aPropInfo( rProp )
 {}
 
-bool SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
+void SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
                                  SfxItemSet& /*rItemSet*/,
                                  SvxCSS1PropertyInfo& /*rPropInfo*/ )
 {
     // wie man sieht passiert hier gar nichts
-    return true;
 }
 
 bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
@@ -844,20 +843,18 @@ bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
     return bSuccess;
 }
 
-bool SvxCSS1Parser::ParseStyleOption( const OUString& rIn,
+void SvxCSS1Parser::ParseStyleOption( const OUString& rIn,
                                       SfxItemSet& rItemSet,
                                       SvxCSS1PropertyInfo& rPropInfo )
 {
     pItemSet = &rItemSet;
     pPropInfo = &rPropInfo;
 
-    bool bSuccess = CSS1Parser::ParseStyleOption( rIn );
+    CSS1Parser::ParseStyleOption( rIn );
     rItemSet.ClearItem( aItemIds.nDirection );
 
     pItemSet = nullptr;
     pPropInfo = nullptr;
-
-    return bSuccess;
 }
 
 bool SvxCSS1Parser::GetEnum( const CSS1PropertyEnum *pPropTable,

@@ -160,7 +160,7 @@ class SwFramePage: public SfxTabPage
                                ListBox& _rLB );
     // OD 14.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in their string entries.
-    sal_uLong       FillRelLB( const FrameMap* _pMap,
+    void            FillRelLB( const FrameMap* _pMap,
                                const sal_uInt16 _nLBSelPos,
                                const sal_Int16 _nAlign,
                                const sal_Int16 _nRel,

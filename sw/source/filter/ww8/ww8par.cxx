@@ -4814,17 +4814,17 @@ class WW8Customizations
     WW8Fib mWw8Fib;
 public:
     WW8Customizations( SvStream*, WW8Fib& );
-    bool  Import( SwDocShell* pShell );
+    void  Import( SwDocShell* pShell );
 };
 
 WW8Customizations::WW8Customizations( SvStream* pTableStream, WW8Fib& rFib ) : mpTableStream(pTableStream), mWw8Fib( rFib )
 {
 }
 
-bool WW8Customizations::Import( SwDocShell* pShell )
+void WW8Customizations::Import( SwDocShell* pShell )
 {
     if ( mWw8Fib.lcbCmds == 0 || !IsEightPlus(mWw8Fib.GetFIBVersion()) )
-        return false;
+        return;
     try
     {
         Tcg aTCG;
@@ -4835,24 +4835,23 @@ bool WW8Customizations::Import( SwDocShell* pShell )
         if ( !bReadResult )
         {
             SAL_WARN("sw.ww8", "** Read of Customization data failed!!!! ");
-            return false;
+            return;
         }
 #if OSL_DEBUG_LEVEL > 1
         aTCG.Print( stderr );
 #endif
-        return aTCG.ImportCustomToolBar( *pShell );
+        aTCG.ImportCustomToolBar( *pShell );
     }
     catch(...)
     {
         SAL_WARN("sw.ww8", "** Read of Customization data failed!!!! epically");
-        return false;
     }
 }
 
-bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
+void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
 {
     if (utl::ConfigManager::IsAvoidConfig())
-        return true;
+        return;
 
     SvtPathOptions aPathOpt;
     OUString aAddinPath = aPathOpt.GetAddinPath();
@@ -4865,7 +4864,6 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         sGlobalTemplates = xSFA->getFolderContents( aAddinPath, sal_False );
 
     sal_Int32 nEntries = sGlobalTemplates.getLength();
-    bool bRes = true;
     for ( sal_Int32 i=0; i<nEntries; ++i )
     {
         INetURLObject aObj;
@@ -4898,7 +4896,6 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
             aGblCustomisations.Import( m_pDocShell );
         }
     }
-    return bRes;
 }
 
 sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)

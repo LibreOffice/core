@@ -156,7 +156,7 @@ public:
     OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
 
-    bool            ToggleToRoot();
+    void            ToggleToRoot();
     void            SetRootType(ContentTypeId nType);
     void            Display( bool bActiveView );
     void            Clear();
