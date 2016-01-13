@@ -20,13 +20,8 @@
 #ifndef INCLUDED_VCL_INC_FONTENTRY_HXX
 #define INCLUDED_VCL_INC_FONTENTRY_HXX
 
-#include <sal/types.h>
-#include <vcl/dllapi.h>
-
 #include "fontselect.hxx"
-#include "fontattributes.hxx"
 #include "impfontmetricdata.hxx"
-#include "impfontcache.hxx"
 
 #include <unordered_map>
 
