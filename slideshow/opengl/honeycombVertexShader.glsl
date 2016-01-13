@@ -73,7 +73,7 @@ void main( void )
         // Entering texture
         transformMatrix = translationMatrix(vec3(0, 0, 28 * (sqrt(time) - 1)))
             * slideScaleMatrix
-            * rotationMatrix(vec3(0.0, 0.0, 1.0), pow(time - 1, 2) * M_PI)
+            * rotationMatrix(vec3(0.0, 0.0, 1.0), pow(0.8 * (time - 1.0), 2.0) * M_PI)
             * invertSlideScaleMatrix;
     }
     modelViewProjectionMatrix = u_projectionMatrix * modelViewMatrix * transformMatrix;
