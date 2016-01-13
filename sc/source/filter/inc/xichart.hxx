@@ -1020,7 +1020,7 @@ private:
     void                ReadChDataFormat( XclImpStream& rStrm );
 
     /** Returns true, if the chart type group contains a hi-lo line format. */
-    inline bool         HasHiLoLine() const { return maChartLines.find( EXC_CHCHARTLINE_HILO ) != maChartLines.end(); }
+    inline bool         HasHiLoLine() const { return m_ChartLines.find(EXC_CHCHARTLINE_HILO) != m_ChartLines.end(); }
     /** Returns true, if the chart type group contains drop bar formats. */
     inline bool         HasDropBars() const { return !m_DropBars.empty(); }
 
@@ -1038,7 +1038,7 @@ private:
 private:
     typedef ::std::vector< XclImpChSeriesRef >               XclImpChSeriesVec;
     typedef ::std::map<sal_uInt16, std::unique_ptr<XclImpChDropBar>> XclImpChDropBarMap;
-    typedef boost::ptr_map<sal_uInt16, XclImpChLineFormat>   XclImpChLineFormatMap;
+    typedef ::std::map<sal_uInt16, XclImpChLineFormat> XclImpChLineFormatMap;
     typedef ::std::set< sal_uInt16 >                         UInt16Set;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
@@ -1049,7 +1049,7 @@ private:
     XclImpChChart3dRef  mxChart3d;          /// 3D settings (CHCHART3D record).
     XclImpChLegendRef   mxLegend;           /// Chart legend (CHLEGEND group).
     XclImpChDropBarMap  m_DropBars;         /// Dropbars (CHDROPBAR group).
-    XclImpChLineFormatMap maChartLines;     /// Global line formats (CHCHARTLINE group).
+    XclImpChLineFormatMap m_ChartLines;     /// Global line formats (CHCHARTLINE group).
     XclImpChDataFormatRef mxGroupFmt;       /// Default format for all series (CHDATAFORMAT group).
     UInt16Set           maUnusedFormats;    /// Contains unused format indexes for automatic colors.
 };
