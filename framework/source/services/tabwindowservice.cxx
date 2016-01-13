@@ -145,7 +145,7 @@ private:
     virtual css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
                                                                sal_Int32        nHandle  ) override;
 
-    DECL_DLLPRIVATE_LINK_TYPED( EventListener, VclWindowEvent&, void );
+    DECL_LINK_TYPED( EventListener, VclWindowEvent&, void );
 
     void impl_checkTabIndex (::sal_Int32 nID) throw (css::lang::IndexOutOfBoundsException);
     TTabPageInfoHash::iterator impl_getTabPageInfo(::sal_Int32 nID) throw (css::lang::IndexOutOfBoundsException);
