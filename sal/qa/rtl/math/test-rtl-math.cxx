@@ -100,13 +100,13 @@ public:
         fVal = 4503599627370495;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
-                    rtl_math_DecimalPlaces_Max, '.', false);
+                    rtl_math_DecimalPlaces_Max, '.');
         CPPUNIT_ASSERT_EQUAL( OUString("4503599627370495"), aRes);
 
         fVal = 4503599627370496;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
-                    2, '.', false);
+                    2, '.');
         CPPUNIT_ASSERT_EQUAL( OUString("4503599627370496.00"), aRes);
 
         fVal = 9007199254740991;    // (2^53)-1
