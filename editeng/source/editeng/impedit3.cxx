@@ -2837,7 +2837,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     }
     else
     {
-        sal_uInt16 nIntLeading = ( aMetric.GetIntLeading() > 0 ) ? (sal_uInt16)aMetric.GetIntLeading() : 0;
+        sal_uInt16 nIntLeading = ( aMetric.GetInternalLeading() > 0 ) ? (sal_uInt16)aMetric.GetInternalLeading() : 0;
         // Fonts without leading cause problems
         if ( ( nIntLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
         {

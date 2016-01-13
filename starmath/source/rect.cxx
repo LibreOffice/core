@@ -150,7 +150,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     // workaround for printer fonts with very small (possible 0 or even
     // negative(!)) leading
-    if (aFM.GetIntLeading() < 5  &&  rDev.GetOutDevType() == OUTDEV_PRINTER)
+    if (aFM.GetInternalLeading() < 5  &&  rDev.GetOutDevType() == OUTDEV_PRINTER)
     {
         OutputDevice    *pWindow = Application::GetDefaultDevice();
 
@@ -159,7 +159,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
         pWindow->SetMapMode(rDev.GetMapMode());
         pWindow->SetFont(rDev.GetFontMetric());
 
-        long  nDelta = pWindow->GetFontMetric().GetIntLeading();
+        long  nDelta = pWindow->GetFontMetric().GetInternalLeading();
         if (nDelta == 0)
         {   // this value approx. fits a Leading of 80 at a
             // Fontheight of 422 (12pt)

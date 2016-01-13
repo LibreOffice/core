@@ -129,9 +129,9 @@ long FontMetric::GetDescent() const
     return mpImplMetric->GetDescent();
 }
 
-long FontMetric::GetIntLeading() const
+long FontMetric::GetInternalLeading() const
 {
-    return mpImplMetric->GetIntLeading();
+    return mpImplMetric->GetInternalLeading();
 }
 
 long FontMetric::GetExtLeading() const
