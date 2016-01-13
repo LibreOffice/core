@@ -31,10 +31,10 @@
 #include "queryparam.hxx"
 #include "typedstrdata.hxx"
 
+#include <memory>
 #include <deque>
 #include <vector>
 #include <map>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/noncopyable.hpp>
 
 class ScFilterOptionsMgr;
@@ -50,7 +50,7 @@ class ScFilterDlg : public ScAnyRefDlg
         size_t mnHeaderPos;
         EntryList();
     };
-    typedef boost::ptr_map<SCCOL,EntryList> EntryListsMap;
+    typedef std::map<SCCOL, std::unique_ptr<EntryList>> EntryListsMap;
 public:
                     ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  const SfxItemSet&  rArgSet );
@@ -130,7 +130,7 @@ private:
     std::deque<bool>   maRefreshExceptQuery;
     bool                bRefInputMode;
 
-    EntryListsMap maEntryLists;
+    EntryListsMap m_EntryLists;
 
     // Hack: RefInput control
     Timer*  pTimer;

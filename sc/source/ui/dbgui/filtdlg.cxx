@@ -39,6 +39,8 @@
 #include <vcl/layout.hxx>
 #include <svl/sharedstringpool.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <limits>
 
 #define ERRORBOX(rid)   ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(rid))->Execute()
@@ -517,7 +519,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             EntryList* pList = nullptr;
-            if (!maEntryLists.count(nColumn))
+            if (!m_EntryLists.count(nColumn))
             {
                 size_t nOffset = GetSliderPos();
                 SCTAB nTab       = nSrcTab;
@@ -529,12 +531,12 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
                 // first without the first line
                 std::pair<EntryListsMap::iterator, bool> r =
-                    maEntryLists.insert(nColumn, new EntryList);
+                    m_EntryLists.insert(std::make_pair(nColumn, o3tl::make_unique<EntryList>()));
                 if (!r.second)
                     // insertion failed.
                     return;
 
-                pList = r.first->second;
+                pList = r.first->second.get();
                 pDoc->GetFilterEntriesArea(
                     nColumn, nFirstRow+1, nLastRow,
                     nTab, bCaseSens, pList->maList, maHasDates[nOffset+nList-1] );
@@ -571,7 +573,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                 }
             }
             else
-                pList = &maEntryLists[nColumn];
+                pList = m_EntryLists[nColumn].get();
 
             OSL_ASSERT(pList);
 
@@ -603,20 +605,20 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
         return;
 
     SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
-    if (!maEntryLists.count(nColumn))
+    if (!m_EntryLists.count(nColumn))
     {
         OSL_FAIL("Spalte noch nicht initialisiert");
         return;
     }
 
-    size_t nPos = maEntryLists[nColumn].mnHeaderPos;
+    size_t const nPos = m_EntryLists[nColumn]->mnHeaderPos;
     if (nPos == INVALID_HEADER_POS)
         return;
 
     ComboBox* pValList = maValueEdArr[nList-1];
     size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
-    const ScTypedStrData& rHdrEntry = maEntryLists[nColumn].maList[nPos];
+    const ScTypedStrData& rHdrEntry = m_EntryLists[nColumn]->maList[nPos];
 
     const OUString& aHdrStr = rHdrEntry.GetString();
     bool bWasThere = aHdrStr.equals(pValList->GetEntry(nListPos));
@@ -1043,7 +1045,7 @@ IMPL_LINK_TYPED( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
 
     if ( pBox == pBtnCase )            // Complete value list
     {
-        maEntryLists.clear();
+        m_EntryLists.clear();
         UpdateValueList( 1 );       // current text is recorded
         UpdateValueList( 2 );
         UpdateValueList( 3 );
