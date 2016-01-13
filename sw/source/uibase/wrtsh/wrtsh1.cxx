@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -419,7 +420,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
                 //#50270# We don't need to handle error, this is handled by the
                 //DoVerb in the SfxViewShell
-                pClient->DoVerb( SVVERB_SHOW );
+                pClient->DoVerb(embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
                 // TODO/LATER: set document name - should be done in Client
             }

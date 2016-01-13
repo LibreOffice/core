@@ -23,6 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
+#include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -427,7 +428,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 aVisualSize.Width = aTmp.Width();
                 aVisualSize.Height = aTmp.Height();
                 xObj->setVisualAreaSize( nAspect, aVisualSize );
-                mpViewShell->ActivateObject(pOleObj, SVVERB_SHOW);
+                mpViewShell->ActivateObject(pOleObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
@@ -647,7 +648,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 xObj->setVisualAreaSize( nAspect, aSz );
                             }
 
-                            mpViewShell->ActivateObject(pObj, SVVERB_SHOW);
+                            mpViewShell->ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
                         }
 
                         Size aVisSizePixel = mpWindow->GetOutputSizePixel();
