@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_0fbbb8c5",
+        "filename": "sw/inc/hints.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-13T12:38:18Z",
+      "side": 1,
+      "message": "it looks like this causes instantiation of a VclPtr on Mac, and i\u0027m not sure why?",
+      "revId": "71509d7dfcede2d7f31ed8bfa9e47971093ba500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
