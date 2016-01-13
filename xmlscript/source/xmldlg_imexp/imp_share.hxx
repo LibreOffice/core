@@ -290,19 +290,19 @@ public:
     virtual void SAL_CALL endElement()
         throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
-    bool importTextColorStyle(
+    void importTextColorStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
-    bool importTextLineColorStyle(
+    void importTextLineColorStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
-    bool importFillColorStyle(
+    void importFillColorStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
-    bool importBackgroundColorStyle(
+    void importBackgroundColorStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
-    bool importFontStyle(
+    void importFontStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
-    bool importBorderStyle(
+    void importBorderStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
-    bool importVisualEffectStyle(
+    void importVisualEffectStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
 
     StyleElement(

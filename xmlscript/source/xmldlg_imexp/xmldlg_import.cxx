@@ -125,7 +125,7 @@ OUString ControlElement::getControlModelName(
     return aModel;
 }
 
-bool StyleElement::importTextColorStyle(
+void StyleElement::importTextColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
     if ((_inited & 0x2) != 0)
@@ -133,9 +133,8 @@ bool StyleElement::importTextColorStyle(
         if ((_hasValue & 0x2) != 0)
         {
             xProps->setPropertyValue("TextColor", makeAny( _textColor ) );
-            return true;
         }
-        return false;
+        return;
     }
     _inited |= 0x2;
 
@@ -143,12 +142,11 @@ bool StyleElement::importTextColorStyle(
     {
         _hasValue |= 0x2;
         xProps->setPropertyValue( "TextColor", makeAny( _textColor ) );
-        return true;
+        return;
     }
-    return false;
 }
 
-bool StyleElement::importTextLineColorStyle(
+void StyleElement::importTextLineColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
     if ((_inited & 0x20) != 0)
@@ -156,9 +154,8 @@ bool StyleElement::importTextLineColorStyle(
         if ((_hasValue & 0x20) != 0)
         {
             xProps->setPropertyValue( "TextLineColor", makeAny( _textLineColor ) );
-            return true;
         }
-        return false;
+        return;
     }
     _inited |= 0x20;
 
@@ -166,12 +163,10 @@ bool StyleElement::importTextLineColorStyle(
     {
         _hasValue |= 0x20;
         xProps->setPropertyValue( "TextLineColor", makeAny( _textLineColor ) );
-        return true;
     }
-    return false;
 }
 
-bool StyleElement::importFillColorStyle(
+void StyleElement::importFillColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
     if ((_inited & 0x10) != 0)
@@ -179,9 +174,8 @@ bool StyleElement::importFillColorStyle(
         if ((_hasValue & 0x10) != 0)
         {
             xProps->setPropertyValue( "FillColor", makeAny( _fillColor ) );
-            return true;
         }
-        return false;
+        return;
     }
     _inited |= 0x10;
 
@@ -189,12 +183,10 @@ bool StyleElement::importFillColorStyle(
     {
         _hasValue |= 0x10;
         xProps->setPropertyValue( "FillColor", makeAny( _fillColor ) );
-        return true;
     }
-    return false;
 }
 
-bool StyleElement::importBackgroundColorStyle(
+void StyleElement::importBackgroundColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
     if ((_inited & 0x1) != 0)
@@ -202,9 +194,8 @@ bool StyleElement::importBackgroundColorStyle(
         if ((_hasValue & 0x1) != 0)
         {
             xProps->setPropertyValue( "BackgroundColor", makeAny( _backgroundColor ) );
-            return true;
         }
-        return false;
+        return;
     }
     _inited |= 0x1;
 
@@ -212,12 +203,10 @@ bool StyleElement::importBackgroundColorStyle(
     {
         _hasValue |= 0x1;
         xProps->setPropertyValue( "BackgroundColor", makeAny( _backgroundColor ) );
-        return true;
     }
-    return false;
 }
 
-bool StyleElement::importBorderStyle(
+void StyleElement::importBorderStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
     if ((_inited & 0x4) != 0)
@@ -227,9 +216,8 @@ bool StyleElement::importBorderStyle(
             xProps->setPropertyValue( "Border", makeAny( _border == BORDER_SIMPLE_COLOR ? BORDER_SIMPLE : _border ) );
             if (_border == BORDER_SIMPLE_COLOR)
                 xProps->setPropertyValue( "BorderColor", makeAny(_borderColor) );
-            return true;
         }
-        return false;
+        return;
     }
     _inited |= 0x4;
 
@@ -250,10 +238,9 @@ bool StyleElement::importBorderStyle(
         _hasValue |= 0x4;
         importBorderStyle(xProps); // write values
     }
-    return false;
 }
 
-bool StyleElement::importVisualEffectStyle(
+void StyleElement::importVisualEffectStyle(
     Reference<beans::XPropertySet> const & xProps )
 {
     if ((_inited & 0x40) != 0)
@@ -261,9 +248,8 @@ bool StyleElement::importVisualEffectStyle(
         if ((_hasValue & 0x40) != 0)
         {
             xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
-            return true;
         }
-        return false;
+        return;
     }
     _inited |= 0x40;
 
@@ -288,7 +274,6 @@ bool StyleElement::importVisualEffectStyle(
         _hasValue |= 0x40;
         xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
     }
-    return false;
 }
 
 void StyleElement::setFontProperties(
@@ -299,7 +284,7 @@ void StyleElement::setFontProperties(
     xProps->setPropertyValue("FontRelief", makeAny( _fontRelief ) );
 }
 
-bool StyleElement::importFontStyle(
+void StyleElement::importFontStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
     if ((_inited & 0x8) != 0)
@@ -307,9 +292,8 @@ bool StyleElement::importFontStyle(
         if ((_hasValue & 0x8) != 0)
         {
             setFontProperties( xProps );
-            return true;
         }
-        return false;
+        return;
     }
     _inited |= 0x8;
 
@@ -681,8 +665,6 @@ bool StyleElement::importFontStyle(
         _hasValue |= 0x8;
         setFontProperties( xProps );
     }
-
-    return bFontImport;
 }
 
 bool ImportContext::importStringProperty(
