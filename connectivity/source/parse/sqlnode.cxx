@@ -2450,7 +2450,8 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
                         if  (   rParam.aMetaData.getCatalogSeparator().isEmpty()
                                 || rString[rString.getLength() - 1] != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
-                            rString.append(" "); break;
+                            rString.append(" ");
+                        break;
                 }
             }
             if (rParam.bQuote)
@@ -2506,7 +2507,8 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
                         if  (   rParam.aMetaData.getCatalogSeparator().isEmpty()
                             ||  rString[rString.getLength() - 1] != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
-                            rString.append(" "); break;
+                            rString.append(" ");
+                        break;
                 }
             }
             rString.append(m_aNodeValue);
