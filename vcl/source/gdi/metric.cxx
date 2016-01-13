@@ -133,9 +133,9 @@ long FontMetric::GetInternalLeading() const
     return mpImplMetric->GetInternalLeading();
 }
 
-long FontMetric::GetExtLeading() const
+long FontMetric::GetExternalLeading() const
 {
-    return mpImplMetric->GetExtLeading();
+    return mpImplMetric->GetExternalLeading();
 }
 
 long FontMetric::GetLineHeight() const

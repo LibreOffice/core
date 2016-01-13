@@ -2827,7 +2827,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     nAscent = (sal_uInt16)aMetric.GetAscent();
     if ( IsAddExtLeading() )
         nAscent = sal::static_int_cast< sal_uInt16 >(
-            nAscent + aMetric.GetExtLeading() );
+            nAscent + aMetric.GetExternalLeading() );
     nDescent = (sal_uInt16)aMetric.GetDescent();
 
     if ( IsFixedCellHeight() )

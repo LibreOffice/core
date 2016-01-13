@@ -49,7 +49,7 @@ public:
     long                GetAscent() const;
     long                GetDescent() const;
     long                GetInternalLeading() const;
-    long                GetExtLeading() const;
+    long                GetExternalLeading() const;
     long                GetLineHeight() const;
     long                GetSlant() const;
     long                GetBulletOffset() const;
@@ -80,7 +80,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
            << ",ascent=" << rMetric.GetAscent()
            << ",descent=" << rMetric.GetDescent()
            << ",intLeading=" << rMetric.GetInternalLeading()
-           << ",extLeading=" << rMetric.GetExtLeading()
+           << ",extLeading=" << rMetric.GetExternalLeading()
            << ",lineHeight=" << rMetric.GetLineHeight()
            << ",slant=" << rMetric.GetSlant()
            << "}";
