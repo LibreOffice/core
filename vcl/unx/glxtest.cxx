@@ -26,7 +26,7 @@
 #include "stdint.h"
 #include <string.h>
 
-#include <vcl/opengl/glxtest.hxx>
+#include "opengl/x11/glxtest.hxx"
 
 #ifdef __SUNPRO_CC
 #include <stdio.h>

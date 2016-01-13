@@ -29,7 +29,7 @@
 #include "salinst.hxx"
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS
-#include <vcl/opengl/glxtest.hxx>
+#include "opengl/x11/glxtest.hxx"
 #endif
 
 SAL_IMPLEMENT_MAIN() {
