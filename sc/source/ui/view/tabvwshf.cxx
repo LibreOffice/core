@@ -193,8 +193,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         else
                             --nTabNr;
 
-                        if ( nTabNr <= nTabCount )
-                            bOk = InsertTable( aName, nTabNr );
+                        if (nTabNr > nTabCount)
+                            nTabNr = nTabCount;
+
+                        bOk = InsertTable(aName, nTabNr);
                     }
 
                     if (bOk)
