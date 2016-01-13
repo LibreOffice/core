@@ -204,7 +204,7 @@ private:
     void            Init_Impl();
     void            SpellContinue_Impl(bool UseSavedSentence = false, bool bIgnoreCurrentError = false );
     void            LockFocusChanges( bool bLock ) {bFocusLocked = bLock;}
-    void            Impl_Restore();
+    void            Impl_Restore(bool bUseSavedSentence);
 
     void            SetSelectedLang_Impl( LanguageType nLang );
     LanguageType    GetSelectedLang_Impl() const;

@@ -506,7 +506,7 @@ IMPL_LINK_TYPED( SpellDialog, ExtClickHdl, Button *, pBtn, void )
 IMPL_LINK_TYPED( SpellDialog, CheckGrammarHdl, Button*, pBox, void )
 {
     rParent.SetGrammarChecking( static_cast<CheckBox*>(pBox)->IsChecked() );
-    Impl_Restore();
+    Impl_Restore(true);
 }
 
 void SpellDialog::StartSpellOptDlg_Impl()
@@ -725,7 +725,7 @@ IMPL_LINK_TYPED( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, voi
     }
 }
 
-void SpellDialog::Impl_Restore()
+void SpellDialog::Impl_Restore(bool bUseSavedSentence)
 {
     //clear the "ChangeAllList"
     SvxGetChangeAllList()->clear();
@@ -733,7 +733,7 @@ void SpellDialog::Impl_Restore()
     m_pSentenceED->SetText(OUString());
     m_pSentenceED->ResetModified();
     //Resolves: fdo#39348 refill the dialog with the currently spelled sentence
-    SpellContinue_Impl(true);
+    SpellContinue_Impl(bUseSavedSentence);
     m_pIgnorePB->SetText(m_sIgnoreOnceST);
 }
 
@@ -741,7 +741,7 @@ IMPL_LINK_NOARG_TYPED(SpellDialog, IgnoreHdl, Button*, void)
 {
     if (m_sResumeST.equals(m_pIgnorePB->GetText()))
     {
-        Impl_Restore();
+        Impl_Restore(false);
     }
     else
     {
