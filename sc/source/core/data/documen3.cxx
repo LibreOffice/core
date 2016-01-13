@@ -1305,7 +1305,7 @@ bool ScDocument::SearchAndReplace(
                                     rSearchItem, nCol, nRow );
 
                                 // notify LibreOfficeKit about changed page
-                                if ( GetDrawLayer() && GetDrawLayer()->isTiledRendering() )
+                                if ( comphelper::LibreOfficeKit::isActive() )
                                 {
                                     OString aPayload = OString::number(nTab);
                                     if (comphelper::LibreOfficeKit::isViewCallback())
@@ -1341,7 +1341,7 @@ bool ScDocument::SearchAndReplace(
                                     rSearchItem, nCol, nRow );
 
                                 // notify LibreOfficeKit about changed page
-                                if ( GetDrawLayer() && GetDrawLayer()->isTiledRendering() )
+                                if ( comphelper::LibreOfficeKit::isActive() )
                                 {
                                     OString aPayload = OString::number(nTab);
                                     if (comphelper::LibreOfficeKit::isViewCallback())

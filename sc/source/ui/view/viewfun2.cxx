@@ -1846,7 +1846,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
         SetCursor( nCol, nRow, true );
 
-        if (rDoc.GetDrawLayer()->isTiledRendering())
+        if (comphelper::LibreOfficeKit::isActive())
         {
             Point aCurPos = GetViewData().GetScrPos(nCol, nRow, GetViewData().GetActivePart());
 

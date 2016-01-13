@@ -384,7 +384,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     // all the rendering should go through PaintTile() in that case.
     // TODO revisit if we can actually turn this into an assert(), and clean
     // up the callers
-    if (rDoc.GetDrawLayer()->isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
         return;
 
     ScModule* pScMod = SC_MOD();
@@ -524,7 +524,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     const ScViewOptions& rOpts = pViewData->GetOptions();
-    bool bIsTiledRendering = rDoc.GetDrawLayer()->isTiledRendering();
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
     SCTAB nTab = aOutputData.nTab;
     SCCOL nX1 = aOutputData.nX1;
@@ -1684,7 +1684,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     if (nY1 < nPosY)
         nY1 = nPosY;
 
-    if (!pDoc->GetDrawLayer()->isTiledRendering())
+    if (!comphelper::LibreOfficeKit::isActive())
     {
         // limit the selection to only what is visible on the screen
         SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);

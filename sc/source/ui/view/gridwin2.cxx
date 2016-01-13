@@ -20,6 +20,7 @@
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <comphelper/lok.hxx>
 
 #include "gridwin.hxx"
 #include "tabvwsh.hxx"
@@ -594,7 +595,7 @@ bool ScGridWindow::UpdateVisibleRange()
     SCCOL nXRight = MAXCOL;
     SCROW nYBottom = MAXROW;
 
-    if (rDoc.GetDrawLayer()->isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // entire table in the tiled rendering case
         SCTAB nTab = pViewData->GetTabNo();

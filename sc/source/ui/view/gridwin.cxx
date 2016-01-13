@@ -135,6 +135,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -1784,7 +1785,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     bool bEditMode = pViewData->HasEditView(eWhich);        // also in Mode==SC_INPUT_TYPE
     bool bDouble = (rMEvt.GetClicks() == 2);
     ScDocument* pDoc = pViewData->GetDocument();
-    bool bIsTiledRendering = pDoc->GetDrawLayer()->isTiledRendering();
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
     // DeactivateIP does only happen when MarkListHasChanged
 
@@ -2344,7 +2345,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     // double click (only left button)
     // in the tiled rendering case, single click works this way too
 
-    bool bIsTiledRendering = pViewData->GetDocument()->GetDrawLayer()->isTiledRendering();
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
     if ((bDouble || bIsTiledRendering) && !bRefMode && (nMouseStatus == SC_GM_DBLDOWN || bIsTiledRendering) && !pScMod->IsRefDialogOpen())
     {
@@ -5986,7 +5987,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
  */
 static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pDrawLayer, const std::vector<Rectangle>& rRectangles, std::vector<Rectangle>* pLogicRects = nullptr)
 {
-    if (!pDrawLayer->isTiledRendering())
+    if (!comphelper::LibreOfficeKit::isActive())
         return;
 
     double nPPTX = pViewData->GetPPTX();
@@ -6066,9 +6067,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
 
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-
-    if (!pDrawLayer->isTiledRendering() && !maVisibleRange.isInside(nX, nY))
+    if (!comphelper::LibreOfficeKit::isActive() && !maVisibleRange.isInside(nX, nY))
     {
         if (maVisibleRange.mnCol2 < nX || maVisibleRange.mnRow2 < nY)
             return;     // no further check needed, nothing visible
@@ -6091,7 +6090,7 @@ void ScGridWindow::UpdateCursorOverlay()
     bool bOverlapped = rMergeFlag.IsOverlapped();
 
     //  left or above of the screen?
-    bool bVis = pDrawLayer->isTiledRendering() || ( nX>=pViewData->GetPosX(eHWhich) && nY>=pViewData->GetPosY(eVWhich) );
+    bool bVis = comphelper::LibreOfficeKit::isActive() || ( nX>=pViewData->GetPosX(eHWhich) && nY>=pViewData->GetPosY(eVWhich) );
     if (!bVis)
     {
         SCCOL nEndX = nX;
@@ -6121,7 +6120,7 @@ void ScGridWindow::UpdateCursorOverlay()
         }
 
         // in the tiled rendering case, don't limit to the screen size
-        if (bMaybeVisible || pDrawLayer->isTiledRendering())
+        if (bMaybeVisible || comphelper::LibreOfficeKit::isActive())
         {
             long nSizeXPix;
             long nSizeYPix;
@@ -6166,7 +6165,8 @@ void ScGridWindow::UpdateCursorOverlay()
 
     if ( !aPixelRects.empty() )
     {
-        if (pDrawLayer->isTiledRendering()) {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
             mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
             updateLibreOfficeKitCellCursor();
         }
