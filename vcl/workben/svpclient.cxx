@@ -44,6 +44,7 @@
 #include <math.h>
 
 #include <errno.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -214,8 +215,22 @@ OString MyWin::processCommand( const OString& rCommand )
         else
         {
             ssize_t nBytes = 0;
-            write( nSocket, rCommand.getStr(), rCommand.getLength() );
-            write( nSocket, "\n", 1 );
+            ssize_t fd = 0;
+            fd = write( nSocket, rCommand.getStr(), rCommand.getLength() );
+
+            if (fd == 0)
+                SAL_WARN("vcl", "Connection closed on other end");
+            else if (fd < 0)
+                SAL_WARN("vcl", "Error writing to socket: " << strerror( errno ));
+
+            fd = write( nSocket, "\n", 1 );
+
+            if (fd == 0)
+                SAL_WARN("vcl", "Connection closed on other end");
+            else if (fd < 0)
+                SAL_WARN("vcl", "Error writing to socket: " << strerror( errno ));
+
+
             char buf[256];
             do
             {
