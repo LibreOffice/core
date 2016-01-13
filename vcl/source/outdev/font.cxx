@@ -215,7 +215,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetBuiltInFontFlag( pFontAttributes->IsBuiltInFont() );
     aMetric.SetScalableFlag( pFontAttributes->IsScalable() );
     aMetric.SetFullstopCenteredFlag( pFontAttributes->IsFullstopCentered() );
-    aMetric.mpImplMetric->mnBulletOffset = pFontAttributes->GetBulletOffset();
+    aMetric.SetBulletOffset( pFontAttributes->GetBulletOffset() );
     aMetric.SetAscent( ImplDevicePixelToLogicHeight( pFontAttributes->GetAscent() + mnEmphasisAscent ) );
     aMetric.SetDescent( ImplDevicePixelToLogicHeight( pFontAttributes->GetDescent() + mnEmphasisDescent ) );
     aMetric.SetInternalLeading( ImplDevicePixelToLogicHeight( pFontAttributes->GetInternalLeading() + mnEmphasisAscent ) );

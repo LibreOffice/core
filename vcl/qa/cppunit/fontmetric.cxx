@@ -28,6 +28,7 @@ public:
     void testBuiltInFontFlag();
     void testSpacings();
     void testSlant();
+    void testBulletOffset();
     void testEqualityOperator();
 
     CPPUNIT_TEST_SUITE(VclFontMetricTest);
@@ -36,6 +37,7 @@ public:
     CPPUNIT_TEST(testBuiltInFontFlag);
     CPPUNIT_TEST(testSpacings);
     CPPUNIT_TEST(testSlant);
+    CPPUNIT_TEST(testBulletOffset);
     CPPUNIT_TEST(testEqualityOperator);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -104,7 +106,6 @@ void VclFontMetricTest::testSpacings()
     CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetLineHeight(), 100L );
 }
 
-
 void VclFontMetricTest::testSlant()
 {
     // default constructor should set scalable flag to false
@@ -116,6 +117,16 @@ void VclFontMetricTest::testSlant()
     CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetSlant(), 45L );
 }
 
+void VclFontMetricTest::testBulletOffset()
+{
+    // default constructor should set scalable flag to false
+    FontMetric aFontMetric;
+
+    CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetBulletOffset(), 0L );
+
+    aFontMetric.SetBulletOffset( 45 );
+    CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetBulletOffset(), 45L );
+}
 
 void VclFontMetricTest::testEqualityOperator()
 {

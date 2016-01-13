@@ -183,6 +183,11 @@ long FontMetric::GetBulletOffset() const
     return mpImplMetric->GetBulletOffset();
 }
 
+void FontMetric::SetBulletOffset( long nOffset )
+{
+    mpImplMetric->SetBulletOffset( nOffset );
+}
+
 bool FontMetric::IsScalable() const
 {
     return mpImplMetric->IsScalable();

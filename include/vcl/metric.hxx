@@ -60,6 +60,7 @@ public:
     void                SetInternalLeading(long);
     void                SetLineHeight(long);
     void                SetSlant(long);
+    void                SetBulletOffset(long);
 
     bool                IsScalable() const;
     bool                IsFullstopCentered() const;

@@ -129,6 +129,7 @@ public:
     void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
     void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; }
     void                SetSlant( long nSlant )                     { mnSlant = nSlant; }
+    void                SetBulletOffset( long nOffset )             { mnBulletOffset = nOffset; }
 
     bool                IsScalable() const                          { return mbScalableFont; }
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
