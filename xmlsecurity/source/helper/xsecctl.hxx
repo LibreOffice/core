@@ -310,7 +310,7 @@ private:
     /*
      * the XSecParser which is used to parse the signature stream
      */
-    XSecParser *m_pXSecParser;
+    css::uno::Reference<css::xml::sax::XDocumentHandler> m_xSecParser;
 
     /*
      * the caller assigned signature id for the next signature in the

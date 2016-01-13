@@ -31,6 +31,7 @@
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
 
+using namespace com::sun::star;
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
@@ -371,7 +372,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
 
 void XSecController::addSignature( sal_Int32 nSignatureId )
 {
-    DBG_ASSERT( m_pXSecParser != nullptr, "No XSecParser initialized" );
+    DBG_ASSERT( m_xSecParser.is(), "No XSecParser initialized" );
 
     m_nReservedSignatureId = nSignatureId;
     m_bVerifyCurrentSignature = true;
@@ -379,18 +380,18 @@ void XSecController::addSignature( sal_Int32 nSignatureId )
 
 cssu::Reference< cssxs::XDocumentHandler > XSecController::createSignatureReader()
 {
-    m_pXSecParser = new XSecParser( this, nullptr );
-    cssu::Reference< cssl::XInitialization > xInitialization = m_pXSecParser;
+    m_xSecParser = new XSecParser( this, nullptr );
+    cssu::Reference< cssl::XInitialization > xInitialization(m_xSecParser, uno::UNO_QUERY);
 
     setSAXChainConnector(xInitialization, nullptr, nullptr);
 
-    return m_pXSecParser;
+    return m_xSecParser;
 }
 
 void XSecController::releaseSignatureReader()
 {
     clearSAXChainConnector( );
-    m_pXSecParser = nullptr;
+    m_xSecParser.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
