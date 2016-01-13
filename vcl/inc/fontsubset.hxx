@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <cstdio>
 
 #include "salglyphid.hxx"
 
