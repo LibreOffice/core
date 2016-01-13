@@ -497,7 +497,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
 {
     // If leading >= 5, this seems to be enough leading.
     // Nothing has to be done.
-    if ( rMet.GetIntLeading() >= 5 )
+    if ( rMet.GetInternalLeading() >= 5 )
     {
         nGuessedLeading = 0;
         return;
@@ -520,11 +520,11 @@ void SwFntObj::GuessLeading( const SwViewShell&
         {
             // If the Leading on the Window is also 0, then it has to stay
             // that way (see also StarMath).
-            long nTmpLeading = (long)aWinMet.GetIntLeading();
+            long nTmpLeading = (long)aWinMet.GetInternalLeading();
             if( nTmpLeading <= 0 )
             {
                 pWin->SetFont( rMet );
-                nTmpLeading = (long)pWin->GetFontMetric().GetIntLeading();
+                nTmpLeading = (long)pWin->GetFontMetric().GetInternalLeading();
                 if( nTmpLeading < 0 )
                     nGuessedLeading = 0;
                 else

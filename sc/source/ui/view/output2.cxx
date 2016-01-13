@@ -246,7 +246,7 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, SvtScriptType nScript )
         pFmtDevice->SetFont( aFont );
 
     aMetric = pFmtDevice->GetFontMetric();
-    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetIntLeading() == 0 )
+    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetInternalLeading() == 0 )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
         MapMode aOld = pDefaultDev->GetMapMode();
@@ -392,7 +392,7 @@ void ScDrawStringsVars::SetPattern(
 
     // if there is the leading 0 on a printer device, we have problems
     // -> take metric from the screen (as for EditEngine!)
-    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetIntLeading() == 0 )
+    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetInternalLeading() == 0 )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
         MapMode aOld = pDefaultDev->GetMapMode();
