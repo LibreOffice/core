@@ -177,21 +177,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     bool bOk = false;
                     const SfxPoolItem*  pTabItem;
                     const SfxPoolItem*  pNameItem;
+                    OUString            aName;
 
                     if ( pReqArgs->HasItem( FN_PARAM_1, &pTabItem ) &&
                          pReqArgs->HasItem( nSlot, &pNameItem ) )
                     {
-                        OUString aName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
-                        pDoc->CreateValidTabName(aName);
-
                         // sheet number from basic: 1-based
-                        // 0 is special, means adding at the end
-                        nTabNr = static_cast<const SfxUInt16Item*>(pTabItem)->GetValue();
-                        if (nTabNr == 0)
-                            nTabNr = nTabCount;
-                        else
-                            --nTabNr;
 
+                        aName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
+                        nTabNr = static_cast<const SfxUInt16Item*>(pTabItem)->GetValue() - 1;
                         if ( nTabNr <= nTabCount )
                             bOk = InsertTable( aName, nTabNr );
                     }
