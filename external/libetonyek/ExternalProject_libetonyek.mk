@@ -18,6 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,libetonyek,\
 $(eval $(call gb_ExternalProject_use_externals,libetonyek,\
 	boost_headers \
 	glm_headers \
+	liblangtag \
 	libxml2 \
 	mdds_headers \
 	revenge \
@@ -48,6 +49,8 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 			CPPFLAGS="$(CPPFLAGS) $(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
 			CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11)" \
+			LANGTAG_CFLAGS="$(LIBLANGTAG_CFLAGS)" \
+			LANGTAG_LIBS="$(LIBLANGTAG_LIBS)" \
 			XML_CFLAGS="$(LIBXML_CFLAGS)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
