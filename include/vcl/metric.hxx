@@ -36,9 +36,6 @@ typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
 
 class VCL_DLLPUBLIC FontMetric : public vcl::Font
 {
-
-    friend class ::OutputDevice;
-
 public:
                         FontMetric();
                         FontMetric( const FontMetric& );
