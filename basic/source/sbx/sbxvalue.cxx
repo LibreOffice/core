@@ -1196,7 +1196,8 @@ Lbl_OpIsDouble:
                             aL.nDouble *= aR.nDouble; break;
                         case SbxDIV:
                             if( !aR.nDouble ) SetError( ERRCODE_SBX_ZERODIV );
-                            else aL.nDouble /= aR.nDouble; break;
+                            else aL.nDouble /= aR.nDouble;
+                            break;
                         case SbxPLUS:
                             aL.nDouble += aR.nDouble; break;
                         case SbxMINUS:
