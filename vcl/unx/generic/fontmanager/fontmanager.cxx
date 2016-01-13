@@ -25,7 +25,7 @@
 
 #include "unotools/atom.hxx"
 
-#include "fontcache.hxx"
+#include "unx/fontcache.hxx"
 #include "fontsubset.hxx"
 #include "impfontcharmap.hxx"
 #include "svdata.hxx"

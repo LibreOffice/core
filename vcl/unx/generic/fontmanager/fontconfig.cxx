@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fontcache.hxx"
+#include "unx/fontcache.hxx"
 #include "impfont.hxx"
 #include "fontmanager.hxx"
 #include <vcl/svapp.hxx>

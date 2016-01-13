@@ -20,7 +20,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "fontcache.hxx"
+#include "unx/fontcache.hxx"
 
 #include "osl/thread.h"
 
