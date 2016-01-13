@@ -43,7 +43,7 @@ void main()
                 // If the center is “outside” of the canvas, clear it first.
                 startTime = 0.15;
             else
-                startTime = 0.15 + fuzz * 0.3;
+                startTime = 0.15 + fuzz * 0.4;
             float endTime = startTime + 0.05;
             actualTime = 1.0 - clamp((time - startTime) / (endTime - startTime), 0, 1);
         } else {
@@ -52,9 +52,11 @@ void main()
                 // If the center is “outside” of the canvas, clear it first.
                 startTime = 0.85;
             else
-                startTime = 0.5 + fuzz * 0.3;
+                startTime = 0.3 + fuzz * 0.4;
             float endTime = startTime + 0.05;
             actualTime = clamp((time - startTime) / (endTime - startTime), 0, 1);
+            if (time < 0.8)
+                actualTime *= time / 0.8;
         }
         gl_FragColor.a = actualTime;
     }

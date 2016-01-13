@@ -111,9 +111,9 @@ void main( void )
     // Scale the transition time to minimize the time a tile will stay black.
     float transitionTime = clamp((time - startTime) / (endTime - startTime), 0.0, 1.0);
     if (transitionTime < 0.5)
-        transitionTime = transitionTime * 0.3 / 0.5;
+        transitionTime = transitionTime / 2.0;
     else
-        transitionTime = (transitionTime * 0.3 / 0.5) + 0.4;
+        transitionTime = (transitionTime / 2.0) + 0.5;
     angle = transitionTime * M_PI * 2.0;
 
     mat4 modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
