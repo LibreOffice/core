@@ -15,10 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,langtag,\
 	$(GNUTAR) -x -j -f $(gb_UnpackedTarget_TARFILE_LOCATION)/$(LANGTAGREG_TARBALL) \
 ))
 
-# Currently no patches applied, if there were it would be:
-#$(eval $(call gb_UnpackedTarball_add_patches,langtag,\
-#	external/liblangtag/your-modification.patch \
-#))
+$(eval $(call gb_UnpackedTarball_add_patches,langtag,\
+	external/liblangtag/liblangtag-bundled-soname.patch.0 \
+	external/liblangtag/liblangtag-windows.patch.1 \
+))
 
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
