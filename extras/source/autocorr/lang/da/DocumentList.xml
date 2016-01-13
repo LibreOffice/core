@@ -901,6 +901,7 @@
   <block-list:block block-list:abbreviated-name=":Eta:" block-list:name="Η"/>
   <block-list:block block-list:abbreviated-name=":euro2:" block-list:name="💶"/>
   <block-list:block block-list:abbreviated-name=":euro:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":EW2:" block-list:name="⇔"/>
   <block-list:block block-list:abbreviated-name=":EW:" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name=":fabrik:" block-list:name="🏭"/>
   <block-list:block block-list:abbreviated-name=":fællesmængde:" block-list:name="∩"/>
@@ -1072,6 +1073,7 @@
   <block-list:block block-list:abbreviated-name=":ikke:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":ikke delmængde:" block-list:name="⊄"/>
   <block-list:block block-list:abbreviated-name=":ikke divisor i:" block-list:name="∤"/>
+  <block-list:block block-list:abbreviated-name=":ikke-drikkevand:" block-list:name="🚱"/>
   <block-list:block block-list:abbreviated-name=":ikke godt:" block-list:name="🙅"/>
   <block-list:block block-list:abbreviated-name=":ikke overmængde:" block-list:name="⊅"/>
   <block-list:block block-list:abbreviated-name=":ikke parallel:" block-list:name="∦"/>
@@ -1314,13 +1316,13 @@
   <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
   <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
   <block-list:block block-list:abbreviated-name=":N:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":NE2:" block-list:name="⇗"/>
   <block-list:block block-list:abbreviated-name=":NE:" block-list:name="↗"/>
   <block-list:block block-list:abbreviated-name=":ned2:" block-list:name="👇"/>
   <block-list:block block-list:abbreviated-name=":ned:" block-list:name="☟"/>
   <block-list:block block-list:abbreviated-name=":nej:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":Neptun:" block-list:name="♆"/>
   <block-list:block block-list:abbreviated-name=":neutral:" block-list:name="😐"/>
-  <block-list:block block-list:abbreviated-name=":NØ2:" block-list:name="⇗"/>
   <block-list:block block-list:abbreviated-name=":node2:" block-list:name="♪"/>
   <block-list:block block-list:abbreviated-name=":node:" block-list:name="♩"/>
   <block-list:block block-list:abbreviated-name=":noder2:" block-list:name="♬"/>
@@ -1332,7 +1334,7 @@
   <block-list:block block-list:abbreviated-name=":NS2:" block-list:name="⇕"/>
   <block-list:block block-list:abbreviated-name=":NS:" block-list:name="↕"/>
   <block-list:block block-list:abbreviated-name=":nuttethed:" block-list:name="💠"/>
-  <block-list:block block-list:abbreviated-name=":NV2:" block-list:name="⇖"/>
+  <block-list:block block-list:abbreviated-name=":NW2:" block-list:name="⇖"/>
   <block-list:block block-list:abbreviated-name=":NW:" block-list:name="↖"/>
   <block-list:block block-list:abbreviated-name=":ny:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":Ny:" block-list:name="Ν"/>
@@ -1360,7 +1362,6 @@
   <block-list:block block-list:abbreviated-name=":ortodoks kors:" block-list:name="☦"/>
   <block-list:block block-list:abbreviated-name=":ottendedel pause:" block-list:name="𝄾"/>
   <block-list:block block-list:abbreviated-name=":ottendedelsnode:" block-list:name="𝅘𝅥𝅮"/>
-  <block-list:block block-list:abbreviated-name=":ØV2:" block-list:name="⇔"/>
   <block-list:block block-list:abbreviated-name=":overmængde:" block-list:name="⊃"/>
   <block-list:block block-list:abbreviated-name=":pære:" block-list:name="🍐"/>
   <block-list:block block-list:abbreviated-name=":pakke:" block-list:name="📦"/>
@@ -1493,6 +1494,7 @@
   <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
   <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
   <block-list:block block-list:abbreviated-name=":S:" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=":SE2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":SE:" block-list:name="↘"/>
   <block-list:block block-list:abbreviated-name=":sejlbåd:" block-list:name="⛵"/>
   <block-list:block block-list:abbreviated-name=":sejr:" block-list:name="✌"/>
@@ -1563,7 +1565,6 @@
   <block-list:block block-list:abbreviated-name=":snemand2:" block-list:name="⛄"/>
   <block-list:block block-list:abbreviated-name=":snemand:" block-list:name="☃"/>
   <block-list:block block-list:abbreviated-name=":snowboarder:" block-list:name="🏂"/>
-  <block-list:block block-list:abbreviated-name=":SØ2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":sød kartoffel:" block-list:name="🍠"/>
   <block-list:block block-list:abbreviated-name=":softice:" block-list:name="🍦"/>
   <block-list:block block-list:abbreviated-name=":Sol2:" block-list:name="☼"/>
@@ -1620,7 +1621,6 @@
   <block-list:block block-list:abbreviated-name=":surfer:" block-list:name="🏄"/>
   <block-list:block block-list:abbreviated-name=":sushi:" block-list:name="🍣"/>
   <block-list:block block-list:abbreviated-name=":sutteflaske:" block-list:name="🍼"/>
-  <block-list:block block-list:abbreviated-name=":SV2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":sværd:" block-list:name="⚔"/>
   <block-list:block block-list:abbreviated-name=":svævebane:" block-list:name="🚠"/>
   <block-list:block block-list:abbreviated-name=":sved:" block-list:name="😓"/>
@@ -1629,6 +1629,7 @@
   <block-list:block block-list:abbreviated-name=":svimmel:" block-list:name="💫"/>
   <block-list:block block-list:abbreviated-name=":svimmelt ansigt:" block-list:name="😵"/>
   <block-list:block block-list:abbreviated-name=":svømmer:" block-list:name="🏊"/>
+  <block-list:block block-list:abbreviated-name=":SW2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":SW:" block-list:name="↙"/>
   <block-list:block block-list:abbreviated-name=":tåge:" block-list:name="🌁"/>
   <block-list:block block-list:abbreviated-name=":taleboble:" block-list:name="💬"/>
@@ -1717,7 +1718,6 @@
   <block-list:block block-list:abbreviated-name=":uden mund:" block-list:name="😶"/>
   <block-list:block block-list:abbreviated-name=":udklipsholder:" block-list:name="📋"/>
   <block-list:block block-list:abbreviated-name=":udmattet:" block-list:name="😩"/>
-  <block-list:block block-list:abbreviated-name=":udrikkeligt vand:" block-list:name="🚱"/>
   <block-list:block block-list:abbreviated-name=":udtryksløs:" block-list:name="😑"/>
   <block-list:block block-list:abbreviated-name=":uendelig:" block-list:name="∞"/>
   <block-list:block block-list:abbreviated-name=":ufornøjet:" block-list:name="😒"/>
