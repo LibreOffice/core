@@ -221,7 +221,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetInternalLeading( ImplDevicePixelToLogicHeight( pFontAttributes->GetInternalLeading() + mnEmphasisAscent ) );
     // OutputDevice has its own external leading function due to #i60945#
     aMetric.SetExternalLeading( ImplDevicePixelToLogicHeight( GetFontExtLeading() ) );
-    aMetric.mpImplMetric->mnLineHeight   = ImplDevicePixelToLogicHeight( pFontAttributes->GetAscent() + pFontAttributes->GetDescent() + mnEmphasisAscent + mnEmphasisDescent );
+    aMetric.SetLineHeight( ImplDevicePixelToLogicHeight( pFontAttributes->GetAscent() + pFontAttributes->GetDescent() + mnEmphasisAscent + mnEmphasisDescent ) );
     aMetric.mpImplMetric->mnSlant        = ImplDevicePixelToLogicHeight( pFontAttributes->GetSlant() );
 
     SAL_INFO("vcl.gdi.fontmetric", "OutputDevice::GetFontMetric:" << aMetric);
@@ -1076,9 +1076,9 @@ bool OutputDevice::ImplNewFont() const
     if( pOldFontInstance )
         mpFontCache->Release( pOldFontInstance );
 
-    LogicalFontInstance* pFontEntry = mpFontInstance;
+    LogicalFontInstance* pFontInstance = mpFontInstance;
 
-    if (!pFontEntry)
+    if (!pFontInstance)
     {
         SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no LogicalFontInstance, no Font");
         return false;
@@ -1086,28 +1086,28 @@ bool OutputDevice::ImplNewFont() const
 
     // mark when lower layers need to get involved
     mbNewFont = false;
-    if( pFontEntry != pOldFontInstance )
+    if( pFontInstance != pOldFontInstance )
         mbInitFont = true;
 
     // select font when it has not been initialized yet
-    if ( !pFontEntry->mbInit )
+    if ( !pFontInstance->mbInit )
     {
         InitFont();
 
         // get metric data from device layers
         if ( pGraphics )
         {
-            pFontEntry->mbInit = true;
+            pFontInstance->mbInit = true;
 
-            pFontEntry->maFontMetric.SetOrientation( sal::static_int_cast<short>(pFontEntry->maFontSelData.mnOrientation) );
-            pGraphics->GetFontMetric( &(pFontEntry->maFontMetric) );
+            pFontInstance->maFontMetric.SetOrientation( sal::static_int_cast<short>(pFontInstance->maFontSelData.mnOrientation) );
+            pGraphics->GetFontMetric( &(pFontInstance->maFontMetric) );
 
-            pFontEntry->maFontMetric.ImplInitTextLineSize( this );
-            pFontEntry->maFontMetric.ImplInitAboveTextLineSize();
+            pFontInstance->maFontMetric.ImplInitTextLineSize( this );
+            pFontInstance->maFontMetric.ImplInitAboveTextLineSize();
 
-            pFontEntry->mnLineHeight = pFontEntry->maFontMetric.GetAscent() + pFontEntry->maFontMetric.GetDescent();
+            pFontInstance->mnLineHeight = pFontInstance->maFontMetric.GetAscent() + pFontInstance->maFontMetric.GetDescent();
 
-            SetFontOrientation( pFontEntry );
+            SetFontOrientation( pFontInstance );
         }
     }
 
@@ -1115,7 +1115,7 @@ bool OutputDevice::ImplNewFont() const
     if ( maFont.GetKerning() & FontKerning::FontSpecific )
     {
         // TODO: test if physical font supports kerning and disable if not
-        if( pFontEntry->maFontMetric.IsKernable() )
+        if( pFontInstance->maFontMetric.IsKernable() )
             mbKerning = true;
     }
     else
@@ -1132,7 +1132,7 @@ bool OutputDevice::ImplNewFont() const
     if ( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
     {
         FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
-        long                nEmphasisHeight = (pFontEntry->mnLineHeight*250)/1000;
+        long                nEmphasisHeight = (pFontInstance->mnLineHeight*250)/1000;
         if ( nEmphasisHeight < 1 )
             nEmphasisHeight = 1;
         if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
@@ -1151,21 +1151,21 @@ bool OutputDevice::ImplNewFont() const
     else if ( eAlign == ALIGN_TOP )
     {
         mnTextOffX = 0;
-        mnTextOffY = +pFontEntry->maFontMetric.GetAscent() + mnEmphasisAscent;
-        if ( pFontEntry->mnOrientation )
+        mnTextOffY = +pFontInstance->maFontMetric.GetAscent() + mnEmphasisAscent;
+        if ( pFontInstance->mnOrientation )
         {
             Point aOriginPt(0, 0);
-            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
+            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontInstance->mnOrientation );
         }
     }
     else // eAlign == ALIGN_BOTTOM
     {
         mnTextOffX = 0;
-        mnTextOffY = -pFontEntry->maFontMetric.GetDescent() + mnEmphasisDescent;
-        if ( pFontEntry->mnOrientation )
+        mnTextOffY = -pFontInstance->maFontMetric.GetDescent() + mnEmphasisDescent;
+        if ( pFontInstance->mnOrientation )
         {
             Point aOriginPt(0, 0);
-            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
+            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontInstance->mnOrientation );
         }
     }
 
@@ -1179,7 +1179,7 @@ bool OutputDevice::ImplNewFont() const
     // #95414# fix for OLE objects which use scale factors very creatively
     if( mbMap && !aSize.Width() )
     {
-        int nOrigWidth = pFontEntry->maFontMetric.GetWidth();
+        int nOrigWidth = pFontInstance->maFontMetric.GetWidth();
         float fStretch = (float)maMapRes.mnMapScNumX * maMapRes.mnMapScDenomY;
         fStretch /= (float)maMapRes.mnMapScNumY * maMapRes.mnMapScDenomX;
         int nNewWidth = (int)(nOrigWidth * fStretch + 0.5);
@@ -1198,16 +1198,16 @@ bool OutputDevice::ImplNewFont() const
     return true;
 }
 
-void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const
+void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontInstance ) const
 {
-    if( pFontEntry->maFontSelData.mnOrientation && !pFontEntry->maFontMetric.GetOrientation() )
+    if( pFontInstance->maFontSelData.mnOrientation && !pFontInstance->maFontMetric.GetOrientation() )
     {
-        pFontEntry->mnOwnOrientation = sal::static_int_cast<short>(pFontEntry->maFontSelData.mnOrientation);
-        pFontEntry->mnOrientation = pFontEntry->mnOwnOrientation;
+        pFontInstance->mnOwnOrientation = sal::static_int_cast<short>(pFontInstance->maFontSelData.mnOrientation);
+        pFontInstance->mnOrientation = pFontInstance->mnOwnOrientation;
     }
     else
     {
-        pFontEntry->mnOrientation = pFontEntry->maFontMetric.GetOrientation();
+        pFontInstance->mnOrientation = pFontInstance->maFontMetric.GetOrientation();
     }
 }
 

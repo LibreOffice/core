@@ -33,8 +33,8 @@ public:
     CPPUNIT_TEST(testScalableFlag);
     CPPUNIT_TEST(testFullstopCenteredFlag);
     CPPUNIT_TEST(testBuiltInFontFlag);
-    CPPUNIT_TEST(testEqualityOperator);
     CPPUNIT_TEST(testSpacings);
+    CPPUNIT_TEST(testEqualityOperator);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -83,6 +83,8 @@ void VclFontMetricTest::testSpacings()
     CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetDescent(), 0L );
     CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetExternalLeading(), 0L );
     CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetInternalLeading(), 0L );
+    CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetLineHeight(), 0L );
+
 
     aFontMetric.SetAscent( 100 );
     CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetAscent(), 100L );
@@ -95,6 +97,9 @@ void VclFontMetricTest::testSpacings()
 
     aFontMetric.SetInternalLeading( 100L );
     CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetInternalLeading(), 100L );
+
+    aFontMetric.SetLineHeight( 100L );
+    CPPUNIT_ASSERT_EQUAL( (long) aFontMetric.GetLineHeight(), 100L );
 }
 
 

@@ -58,6 +58,7 @@ public:
     void                SetDescent(long);
     void                SetExternalLeading(long);
     void                SetInternalLeading(long);
+    void                SetLineHeight(long);
 
     bool                IsScalable() const;
     bool                IsFullstopCentered() const;

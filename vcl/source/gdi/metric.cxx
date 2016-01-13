@@ -163,6 +163,11 @@ long FontMetric::GetLineHeight() const
     return mpImplMetric->GetLineHeight();
 }
 
+void FontMetric::SetLineHeight( long nHeight )
+{
+    mpImplMetric->SetLineHeight( nHeight );
+}
+
 long FontMetric::GetSlant() const
 {
     return mpImplMetric->GetSlant();

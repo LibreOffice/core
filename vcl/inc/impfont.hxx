@@ -127,6 +127,7 @@ public:
     void                SetDescent( long nDescent )                 { mnDescent = nDescent; }
     void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
     void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
+    void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; }
 
     bool                IsScalable() const                          { return mbScalableFont; }
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
