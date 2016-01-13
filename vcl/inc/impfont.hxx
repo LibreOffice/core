@@ -21,20 +21,11 @@
 #define INCLUDED_VCL_INC_IMPFONT_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/color.hxx>
-#include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
-#include <vcl/fntstyle.hxx>
 #include <fontinstance.hxx>
 
 #include <boost/intrusive_ptr.hpp>
-
-class ImplFontCharMap;
-typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
-
-// - ImplFont -
 
 class ImplFont
 {
