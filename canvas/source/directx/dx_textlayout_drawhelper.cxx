@@ -278,7 +278,7 @@ namespace dxcanvas
         // relative to baseline
         const ::FontMetric& aMetric( xVirtualDevice->GetFontMetric() );
 
-        const sal_Int32 nAboveBaseline( -aMetric.GetIntLeading() - aMetric.GetAscent() );
+        const sal_Int32 nAboveBaseline( -aMetric.GetInternalLeading() - aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
 
         if( rLogicalAdvancements.getLength() )

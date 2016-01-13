@@ -128,14 +128,24 @@ long FontMetric::GetDescent() const
     return mpImplMetric->GetDescent();
 }
 
-long FontMetric::GetIntLeading() const
+long FontMetric::GetInternalLeading() const
 {
-    return mpImplMetric->GetIntLeading();
+    return mpImplMetric->GetInternalLeading();
 }
 
-long FontMetric::GetExtLeading() const
+void FontMetric::SetInternalLeading( long nLeading )
 {
-    return mpImplMetric->GetExtLeading();
+    mpImplMetric->SetInternalLeading( nLeading );
+}
+
+long FontMetric::GetExternalLeading() const
+{
+    return mpImplMetric->GetExternalLeading();
+}
+
+void FontMetric::SetExternalLeading( long nLeading )
+{
+    mpImplMetric->SetExternalLeading( nLeading );
 }
 
 long FontMetric::GetLineHeight() const
@@ -182,4 +192,5 @@ void FontMetric::SetBuiltInFontFlag( bool bIsBuiltInFont )
 {
     mpImplMetric->SetBuiltInFontFlag( bIsBuiltInFont );
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

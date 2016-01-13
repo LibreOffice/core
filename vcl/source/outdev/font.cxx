@@ -218,8 +218,9 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.mpImplMetric->mnBulletOffset = pFontAttributes->GetBulletOffset();
     aMetric.mpImplMetric->mnAscent       = ImplDevicePixelToLogicHeight( pFontAttributes->GetAscent() + mnEmphasisAscent );
     aMetric.mpImplMetric->mnDescent      = ImplDevicePixelToLogicHeight( pFontAttributes->GetDescent() + mnEmphasisDescent );
-    aMetric.mpImplMetric->mnIntLeading   = ImplDevicePixelToLogicHeight( pFontAttributes->GetInternalLeading() + mnEmphasisAscent );
-    aMetric.mpImplMetric->mnExtLeading   = ImplDevicePixelToLogicHeight( GetFontExtLeading() );
+    aMetric.SetInternalLeading( ImplDevicePixelToLogicHeight( pFontAttributes->GetInternalLeading() + mnEmphasisAscent ) );
+    // OutputDevice has its own external leading function due to #i60945#
+    aMetric.SetExternalLeading( ImplDevicePixelToLogicHeight( GetFontExtLeading() ) );
     aMetric.mpImplMetric->mnLineHeight   = ImplDevicePixelToLogicHeight( pFontAttributes->GetAscent() + pFontAttributes->GetDescent() + mnEmphasisAscent + mnEmphasisDescent );
     aMetric.mpImplMetric->mnSlant        = ImplDevicePixelToLogicHeight( pFontAttributes->GetSlant() );
 

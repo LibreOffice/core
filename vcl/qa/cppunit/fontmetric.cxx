@@ -78,17 +78,32 @@ void VclFontMetricTest::testEqualityOperator()
     aLhs.SetScalableFlag(true);
     aRhs.SetScalableFlag(true);
 
-    CPPUNIT_ASSERT_MESSAGE( "Scalable flag set same", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "Scalable flag set same, aLhs == aRhs failed", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "Scalable flag set same, aLhs != aRhs succeeded", !(aLhs != aRhs) );
 
     aLhs.SetFullstopCenteredFlag(true);
     aRhs.SetFullstopCenteredFlag(true);
 
-    CPPUNIT_ASSERT_MESSAGE( "Scalable font flag set same", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "Fullstop centered flag set same, aLhs == aRhs failed", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "Fullstop centered flag set same, aLhs != aRhs succeeded", !(aLhs != aRhs) );
 
     aLhs.SetBuiltInFontFlag(true);
     aRhs.SetBuiltInFontFlag(true);
 
-    CPPUNIT_ASSERT_MESSAGE( "Scalable font flag set same", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "Builtin font flag set same, aLHS == aRhs failed", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "Builtin font flag set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
+
+    aLhs.SetExternalLeading(10);
+    aRhs.SetExternalLeading(10);
+
+    CPPUNIT_ASSERT_MESSAGE( "External leading set same, aLHS == aRhs failed", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "External leading set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
+
+    aLhs.SetInternalLeading(10);
+    aRhs.SetInternalLeading(10);
+
+    CPPUNIT_ASSERT_MESSAGE( "Internal leading set same, aLHS == aRhs failed", aLhs == aRhs );
+    CPPUNIT_ASSERT_MESSAGE( "Internal leading set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
 }
 
 
