@@ -105,6 +105,7 @@
 #include <memory>
 #include <boost/checked_delete.hpp>
 
+#include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "mtvelements.hxx"
@@ -569,7 +570,7 @@ bool ScDocument::InsertTab(
         aCxt.mnTabDeletedEnd = nPos;
         SetAllFormulasDirty(aCxt);
 
-        if (GetDrawLayer()->isTiledRendering())
+        if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
             GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
     }
 
