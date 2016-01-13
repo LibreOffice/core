@@ -187,7 +187,6 @@ void SwGlossaryHdl::NewGroup(OUString &rGrpName, const OUString& rTitle)
 
 void SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle)
 {
-    bool bRet = false;
     OUString sOldGroup(rOld);
     if (rOld.indexOf(GLOS_DELIM)<0)
         FindGroupName(sOldGroup);
@@ -198,7 +197,6 @@ void SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
         {
             pGroup->SetName(rNewTitle);
             delete pGroup;
-            bRet = true;
         }
     }
     else
@@ -208,7 +206,7 @@ void SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
         {
             sNewGroup += OUStringLiteral1<GLOS_DELIM>() + "0";
         }
-        bRet = rStatGlossaries.RenameGroupDoc(sOldGroup, sNewGroup, rNewTitle);
+        rStatGlossaries.RenameGroupDoc(sOldGroup, sNewGroup, rNewTitle);
         rNew = sNewGroup;
     }
 }
