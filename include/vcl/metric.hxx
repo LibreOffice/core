@@ -56,9 +56,11 @@ public:
 
     bool                IsScalable() const;
     bool                IsFullstopCentered() const;
+    bool                IsBuiltInFont() const;
 
     void                SetScalableFlag(bool);
     void                SetFullstopCenteredFlag(bool);
+    void                SetBuiltInFontFlag(bool);
 
     FontMetric&         operator=( const FontMetric& rMetric );
     bool                operator==( const FontMetric& rMetric ) const;
