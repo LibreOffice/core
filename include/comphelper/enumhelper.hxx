@@ -93,12 +93,16 @@ private:
     COMPHELPER_DLLPRIVATE void impl_stopDisposeListening();
 };
 
+// this is the way that works for ENABLE_LTO with MSVC 2013
+class SAL_DLLPUBLIC_TEMPLATE OAnyEnumeration_BASE
+    : public ::cppu::WeakImplHelper<css::container::XEnumeration> {};
+
 /** provides an com.sun.star.container::XEnumeration
     for an outside set vector of Any's.
 
 */
 class COMPHELPER_DLLPUBLIC OAnyEnumeration : private OEnumerationLock
-                                           , public  ::cppu::WeakImplHelper< css::container::XEnumeration >
+                                           , public OAnyEnumeration_BASE
 {
     sal_Int32                         m_nPos;
     css::uno::Sequence< css::uno::Any > m_lItems;

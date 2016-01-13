@@ -20,6 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONREADER_HXX
 #define INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONREADER_HXX
 
+#include <xml/saxnamespacefilter.hxx> // HACK: needed for MSVC 2013 ENABLE_LTO build: WeakImplHelper<XDocumentHandler>
+
 #include <accelerators/acceleratorcache.hxx>
 #include <accelerators/keymapping.hxx>
 #include <macros/xinterface.hxx>
