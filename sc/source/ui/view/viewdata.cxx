@@ -61,6 +61,7 @@
 #include <boost/checked_delete.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
@@ -937,7 +938,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     {
         pEditView[eWhich] = new EditView( pNewEngine, pWin );
 
-        if (pDoc->GetDrawLayer() && pDoc->GetDrawLayer()->isTiledRendering())
+        if (pDoc->GetDrawLayer() && comphelper::LibreOfficeKit::isActive())
         {
             pEditView[eWhich]->registerLibreOfficeKitCallback(pDoc->GetDrawLayer()->getLibreOfficeKitCallback(),
                                                               pDoc->GetDrawLayer()->getLibreOfficeKitData());
@@ -1518,8 +1519,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     }
 
     sal_uInt16 nTSize;
-    ScDrawLayer* pModel = GetDocument()->GetDrawLayer();
-    bool bIsTiledRendering = pModel && pModel->isTiledRendering();
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
     SCCOL   nPosX = GetPosX(eWhichX);
     SCCOL   nX;
@@ -1864,8 +1864,7 @@ void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
 void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 {
     // in the tiled rendering case, nPosX [the leftmost visible column] must be 0
-    ScDrawLayer* pModel = GetDocument()->GetDrawLayer();
-    bool bIsTiledRendering = pModel && pModel->isTiledRendering();
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     if (nNewPosX != 0 && !bIsTiledRendering)
     {
         SCCOL nOldPosX = pThisTab->nPosX[eWhich];
@@ -1904,8 +1903,7 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 {
     // in the tiled rendering case, nPosY [the topmost visible row] must be 0
-    ScDrawLayer* pModel = GetDocument()->GetDrawLayer();
-    bool bIsTiledRendering = pModel && pModel->isTiledRendering();
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     if (nNewPosY != 0 && !bIsTiledRendering)
     {
         SCROW nOldPosY = pThisTab->nPosY[eWhich];

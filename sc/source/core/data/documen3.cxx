@@ -74,6 +74,7 @@
 
 #include "globalnames.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -1301,7 +1302,7 @@ bool ScDocument::SearchAndReplace(
                                     rSearchItem, nCol, nRow );
 
                                 // notify LibreOfficeKit about changed page
-                                if ( GetDrawLayer() && GetDrawLayer()->isTiledRendering() )
+                                if ( comphelper::LibreOfficeKit::isActive() )
                                 {
                                     OString aPayload = OString::number(nTab);
                                     GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
@@ -1331,7 +1332,7 @@ bool ScDocument::SearchAndReplace(
                                     rSearchItem, nCol, nRow );
 
                                 // notify LibreOfficeKit about changed page
-                                if ( GetDrawLayer() && GetDrawLayer()->isTiledRendering() )
+                                if ( comphelper::LibreOfficeKit::isActive() )
                                 {
                                     OString aPayload = OString::number(nTab);
                                     GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());

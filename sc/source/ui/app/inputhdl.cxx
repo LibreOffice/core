@@ -53,6 +53,7 @@
 #include <comphelper/string.hxx>
 #include <formula/formulahelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include "inputwin.hxx"
 #include "tabvwsh.hxx"
@@ -639,9 +640,8 @@ void ScInputHandler::ImplCreateEditEngine()
     // paint
     if (pActiveViewSh)
     {
-        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
         if (EditView* pEditView = pEngine->GetActiveView())
-            pEditView->setTiledRendering(rDoc.GetDrawLayer()->isTiledRendering());
+            pEditView->setTiledRendering(comphelper::LibreOfficeKit::isActive());
     }
 }
 
@@ -1719,8 +1719,7 @@ void ScInputHandler::UpdateActiveView()
     if (pActiveViewSh && pTableView)
     {
         ScDocShell* pDocShell = pActiveViewSh->GetViewData().GetDocShell();
-        ScDocument& rDoc = pDocShell->GetDocument();
-        if (rDoc.GetDrawLayer()->isTiledRendering())
+        if (comphelper::LibreOfficeKit::isActive())
         {
             ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
             pTableView->registerLibreOfficeKitCallback(pDrawLayer->getLibreOfficeKitCallback(), pDrawLayer->getLibreOfficeKitData());
@@ -2133,7 +2132,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
         ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
         ScDocument& rDoc = pDocSh->GetDocument();
-        if ( rDoc.GetDrawLayer()->isTiledRendering() )
+        if ( comphelper::LibreOfficeKit::isActive() )
             rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
     }
 
@@ -3470,7 +3469,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                         if ( pInputWin )
                             pInputWin->SetTextString(aString);
-                        else if ( rDoc.GetDrawLayer()->isTiledRendering() )
+                        else if ( comphelper::LibreOfficeKit::isActive() )
                             rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
                     }
 

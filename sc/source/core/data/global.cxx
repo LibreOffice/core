@@ -59,6 +59,7 @@
 #include <unotools/transliterationwrapper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include "global.hxx"
 #include "scresid.hxx"
@@ -871,7 +872,7 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
 
 void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, const SdrModel* pDrawLayer)
 {
-    if (pDrawLayer && pDrawLayer->isTiledRendering())
+    if (pDrawLayer && comphelper::LibreOfficeKit::isActive())
     {
         pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
         return;
