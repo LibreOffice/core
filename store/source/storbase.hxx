@@ -261,19 +261,7 @@ struct OStorePageDescriptor
                 (m_nSize == rhs.m_nSize)    );
     }
 
-    bool operator<= (const OStorePageDescriptor & rhs) const
-    {
-        return ((m_nAddr               == rhs.m_nAddr              ) &&
-                (store::ntohs(m_nSize) <= store::ntohs(rhs.m_nSize))    );
-    }
 
-    bool operator< (const OStorePageDescriptor & rhs) const
-    {
-        if (m_nAddr == rhs.m_nAddr)
-            return (store::ntohs(m_nSize) < store::ntohs(rhs.m_nSize));
-        else
-            return (store::ntohl(m_nAddr) < store::ntohl(rhs.m_nAddr));
-    }
 };
 
 /*========================================================================
@@ -366,11 +354,6 @@ struct OStorePageLink
     bool operator== (const OStorePageLink & rhs) const
     {
         return (m_nAddr == rhs.m_nAddr);
-    }
-
-    bool operator< (const OStorePageLink& rhs) const
-    {
-        return (store::ntohl(m_nAddr) < store::ntohl(rhs.m_nAddr));
     }
 
     /** Operation.
@@ -598,17 +581,6 @@ public:
     {
         OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator->(): Null pointer");
         return m_pagedata;
-    }
-
-    PageData & operator*()
-    {
-        OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator*(): Null pointer");
-        return *m_pagedata;
-    }
-    PageData const & operator*() const
-    {
-        OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator*(): Null pointer");
-        return *m_pagedata;
     }
 };
 

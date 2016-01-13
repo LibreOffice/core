@@ -68,7 +68,7 @@ private:
     sal_uInt32 m_nPages;
     bool m_bEOF;
 
-    bool remove(Page * pPage);
+    void remove(Page * pPage);
 
 public:
     inline SvDataPipe_Impl(sal_uInt32 nThePageSize = 1000,
@@ -84,7 +84,7 @@ public:
 
     void clearReadBuffer() { m_pReadBuffer = nullptr; }
 
-    sal_uInt32 write(sal_Int8 const * pBuffer, sal_uInt32 nSize);
+    void write(sal_Int8 const * pBuffer, sal_uInt32 nSize);
 
     void setEOF() { m_bEOF = true; }
 
@@ -533,7 +533,7 @@ SvOutputStream::~SvOutputStream()
 //  SvDataPipe_Impl
 
 
-bool SvDataPipe_Impl::remove(Page * pPage)
+void SvDataPipe_Impl::remove(Page * pPage)
 {
     if (
         pPage != m_pFirstPage ||
@@ -544,20 +544,18 @@ bool SvDataPipe_Impl::remove(Page * pPage)
         )
        )
     {
-        return false;
+        return;
     }
 
     m_pFirstPage = m_pFirstPage->m_pNext;
 
     if (m_nPages <= m_nMinPages)
-        return true;
+        return;
 
     pPage->m_pPrev->m_pNext = pPage->m_pNext;
     pPage->m_pNext->m_pPrev = pPage->m_pPrev;
     rtl_freeMemory(pPage);
     --m_nPages;
-
-    return true;
 }
 
 SvDataPipe_Impl::~SvDataPipe_Impl()
@@ -611,10 +609,10 @@ sal_uInt32 SvDataPipe_Impl::read()
     return nSize - nRemain;
 }
 
-sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
+void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
 {
     if (nSize == 0)
-        return 0;
+        return;
 
     if (m_pWritePage == nullptr)
     {
@@ -705,8 +703,6 @@ sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
             m_pWritePage->m_pRead = m_pWritePage->m_aBuffer;
             m_pWritePage->m_pEnd = m_pWritePage->m_aBuffer;
         }
-
-    return nSize - nRemain;
 }
 
 SvDataPipe_Impl::SeekResult SvDataPipe_Impl::setReadPosition(sal_uInt32
