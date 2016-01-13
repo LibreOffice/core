@@ -11,8 +11,15 @@ $(eval $(call gb_Module_Module,liblangtag))
 
 $(eval $(call gb_Module_add_targets,liblangtag,\
 	UnpackedTarball_langtag \
-	ExternalProject_langtag \
 	ExternalPackage_liblangtag_data \
+	ExternalProject_langtag \
 ))
+
+
+ifneq ($(COM),MSC)
+$(eval $(call gb_Module_add_targets,liblangtag,\
+	ExternalPackage_liblangtag \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

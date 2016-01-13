@@ -1,0 +1,10 @@
+--- liblangtag/Makefile.in.orig	2015-08-07 11:57:42.256742305 +0200
++++ liblangtag/Makefile.in	2015-08-07 11:58:11.818741799 +0200
+@@ -638,6 +638,7 @@
+ liblangtag_la_LDFLAGS = \
+ 	$(LDFLAGS)						\
+ 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
++	-release lo \
+ 	$(NULL)
+ 
+ all: $(BUILT_SOURCES)
