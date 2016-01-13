@@ -127,7 +127,7 @@ namespace vclcanvas
             aMetric.GetAscent(),
             aMetric.GetDescent(),
             aMetric.GetInternalLeading(),
-            aMetric.GetExtLeading(),
+            aMetric.GetExternalLeading(),
             0,
             aMetric.GetDescent() / 2.0,
             aMetric.GetAscent() / 2.0);

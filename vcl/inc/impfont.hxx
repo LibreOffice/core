@@ -118,7 +118,7 @@ public:
     long                GetAscent() const                           { return mnAscent; }
     long                GetDescent() const                          { return mnDescent; }
     long                GetInternalLeading() const                       { return mnIntLeading; }
-    long                GetExtLeading() const                       { return mnExtLeading; }
+    long                GetExternalLeading() const                       { return mnExtLeading; }
     long                GetLineHeight() const                       { return mnLineHeight; }
     long                GetSlant() const                            { return mnSlant; }
     long                GetBulletOffset() const                     { return mnBulletOffset; }

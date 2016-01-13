@@ -360,7 +360,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
             ((OutputDevice&)rOut).SetFont( aOldFnt );
             bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
             GuessLeading( *pSh, aMet );
-            nExtLeading = static_cast<sal_uInt16>(aMet.GetExtLeading());
+            nExtLeading = static_cast<sal_uInt16>(aMet.GetExternalLeading());
             /* HACK: There is something wrong with Writer's bullet rendering, causing lines
                with bullets to be higher than they should be. I think this is because
                Writer uses font's external leading incorrect, as the vertical distance
@@ -444,7 +444,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
             GuessLeading( rSh, aMet );
 
         if ( USHRT_MAX == nExtLeading )
-            nExtLeading = static_cast<sal_uInt16>(aMet.GetExtLeading());
+            nExtLeading = static_cast<sal_uInt16>(aMet.GetExternalLeading());
 
         // reset the original reference device font
         pPrt->SetFont( aOldPrtFnt );
@@ -1857,7 +1857,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                     pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
 
             OSL_ENSURE( !rInf.GetShell() ||
-                    ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading() ),
+                    ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExternalLeading() ),
                 "Leading values should be already calculated" );
             aTextSize.Height() = pOutDev->GetTextHeight() +
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() );
@@ -2014,7 +2014,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         aTextSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
 
     OSL_ENSURE( !rInf.GetShell() ||
-            ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading() ),
+            ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExternalLeading() ),
               "Leading values should be already calculated" );
     aTextSize.Height() += GetFontLeading( rInf.GetShell(), rInf.GetOut() );
     return aTextSize;
