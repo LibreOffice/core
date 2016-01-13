@@ -44,8 +44,10 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
     }
 }
 
-void SAL_CALL OOXMLSecParser::endElement(const OUString& /*rName*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
+    if (rName == "SignedInfo")
+        m_pXSecController->setReferenceCount();
 }
 
 void SAL_CALL OOXMLSecParser::characters(const OUString& /*rChars*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
