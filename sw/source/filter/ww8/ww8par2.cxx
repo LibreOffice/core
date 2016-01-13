@@ -3257,9 +3257,6 @@ void WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
                                                 SwTableBox*    pActBox,
                                                 sal_uInt16         nCol )
 {
-    // set default for return
-    SwTableBox* pResult = nullptr;
-
     // check if the box has to be merged
     // If cell is the first one to be merged, a new merge group has to be provided.
     // E.g., it could be that a cell is the first one to be merged, but no
@@ -3286,8 +3283,6 @@ void WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
         {
             // add current box to merge group
             pTheMergeGroup->push_back(pActBox);
-            // return target box
-            pResult = (*pTheMergeGroup)[ 0 ];
         }
     }
 }
