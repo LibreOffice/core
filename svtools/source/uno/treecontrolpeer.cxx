@@ -271,7 +271,7 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
 
 
-bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
+void TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
 {
     bool bChanged = false;
     if( pEntry && pEntry->mxNode.is() && mpTreeImpl )
@@ -333,8 +333,6 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
         if( bChanged )
             mpTreeImpl->GetModel()->InvalidateEntry( pEntry );
     }
-
-    return bChanged;
 }
 
 

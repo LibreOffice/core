@@ -97,14 +97,8 @@ namespace svt { namespace table
         sal_Int32  GetCurrentColumn() const override;
 
         /** activates the cell at the given position
-
-            @return
-                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
-                failure conditions include some other instance vetoing the move,
-                or impossibility to execute the move at all (for instance because
-                of invalid coordinates).
         */
-        bool    GoTo( ColPos _nColumnPos, RowPos _nRow);
+        void    GoTo( ColPos _nColumnPos, RowPos _nRow);
 
         SVT_DLLPRIVATE virtual void Resize() override;
         void    Select();

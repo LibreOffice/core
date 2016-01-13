@@ -1832,9 +1832,9 @@ namespace svt { namespace table
     }
 
 
-    bool TableControl_Impl::activateCell( ColPos const i_col, RowPos const i_row )
+    void TableControl_Impl::activateCell( ColPos const i_col, RowPos const i_row )
     {
-        return goTo( i_col, i_row );
+        goTo( i_col, i_row );
     }
 
 

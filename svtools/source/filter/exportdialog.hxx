@@ -155,7 +155,7 @@ private:
                         void updateControls();
 
                         void GetGraphicSource();
-                        bool GetGraphicStream();
+                        void GetGraphicStream();
                         static Bitmap GetGraphicBitmap( SvStream& rStream );
                         css::uno::Sequence< css::beans::PropertyValue >
                             GetFilterData( bool bUpdateConfig );

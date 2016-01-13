@@ -210,7 +210,7 @@ namespace svt { namespace table
         virtual RowPos  getCurrentRow() const = 0;
 
         /// activates the given cell
-        virtual bool    activateCell( ColPos const i_col, RowPos const i_row ) = 0;
+        virtual void    activateCell( ColPos const i_col, RowPos const i_row ) = 0;
 
         /// retrieves the size of the table window, in pixels
         virtual ::Size  getTableSizePixel() const = 0;

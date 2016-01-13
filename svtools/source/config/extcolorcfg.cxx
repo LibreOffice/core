@@ -118,8 +118,8 @@ public:
     void                            SetColorConfigValue(const OUString& _sName,
                                                             const ExtendedColorConfigValue& rValue );
 
-    bool                            AddScheme(const OUString& rNode);
-    bool                            RemoveScheme(const OUString& rNode);
+    void                            AddScheme(const OUString& rNode);
+    void                            RemoveScheme(const OUString& rNode);
     void                            SetModified(){ConfigItem::SetModified();}
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
@@ -490,21 +490,19 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const OUString& _sName, const
     }
 }
 
-bool ExtendedColorConfig_Impl::AddScheme(const OUString& rScheme)
+void ExtendedColorConfig_Impl::AddScheme(const OUString& rScheme)
 {
     if(ConfigItem::AddNode("ExtendedColorScheme/ColorSchemes", rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
-        return true;
     }
-    return false;
 }
 
-bool ExtendedColorConfig_Impl::RemoveScheme(const OUString& rScheme)
+void ExtendedColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
     uno::Sequence< OUString > aElements { rScheme };
-    return ClearNodeElements("ExtendedColorScheme/ColorSchemes", aElements);
+    ClearNodeElements("ExtendedColorScheme/ColorSchemes", aElements);
 }
 
 void ExtendedColorConfig_Impl::SettingsChanged()

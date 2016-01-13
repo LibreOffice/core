@@ -387,15 +387,13 @@ void ExportDialog::GetGraphicSource()
     }
 }
 
-bool ExportDialog::GetGraphicStream()
+void ExportDialog::GetGraphicStream()
 {
-    bool bRet = false;
-
     if ( !IsTempExportAvailable() )
     {
         delete mpTempStream, mpTempStream = new SvMemoryStream();
         maBitmap = Bitmap();
-        return bRet;
+        return;
     }
 
     bool bRecreateOutputStream = mpTempStream->Tell() == 0;
@@ -440,7 +438,6 @@ bool ExportDialog::GetGraphicStream()
             {
                 xGraphicExporter->setSourceDocument( xSourceDoc );
                 xGraphicExporter->filter( aDescriptor );
-                bRet = true;
 
                 if ( mnFormat == FORMAT_JPG )
                 {
@@ -450,8 +447,6 @@ bool ExportDialog::GetGraphicStream()
                 }
             }
         }
-        else
-            bRet = true;
     }
     catch( uno::Exception& )
     {
@@ -459,7 +454,6 @@ bool ExportDialog::GetGraphicStream()
         // ups
 
     }
-    return bRet;
 }
 
 Bitmap ExportDialog::GetGraphicBitmap( SvStream& rInputStream )

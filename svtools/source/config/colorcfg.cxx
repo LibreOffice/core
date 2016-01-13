@@ -92,8 +92,8 @@ public:
 
     uno::Sequence< OUString> GetSchemeNames();
 
-    bool                            AddScheme(const OUString& rNode);
-    bool                            RemoveScheme(const OUString& rNode);
+    void                            AddScheme(const OUString& rNode);
+    void                            RemoveScheme(const OUString& rNode);
     void                            SetModified(){ConfigItem::SetModified();}
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
@@ -319,21 +319,19 @@ uno::Sequence< OUString> ColorConfig_Impl::GetSchemeNames()
     return GetNodeNames("ColorSchemes");
 }
 
-bool ColorConfig_Impl::AddScheme(const OUString& rScheme)
+void ColorConfig_Impl::AddScheme(const OUString& rScheme)
 {
     if(ConfigItem::AddNode("ColorSchemes", rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
-        return true;
     }
-    return false;
 }
 
-bool ColorConfig_Impl::RemoveScheme(const OUString& rScheme)
+void ColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
     uno::Sequence< OUString > aElements { rScheme };
-    return ClearNodeElements("ColorSchemes", aElements);
+    ClearNodeElements("ColorSchemes", aElements);
 }
 
 void ColorConfig_Impl::SettingsChanged()

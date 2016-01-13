@@ -188,9 +188,9 @@ namespace svt { namespace table
     }
 
 
-    bool TableControl::GoTo( ColPos _nColumn, RowPos _nRow )
+    void TableControl::GoTo( ColPos _nColumn, RowPos _nRow )
     {
-        return m_pImpl->goTo( _nColumn, _nRow );
+        m_pImpl->goTo( _nColumn, _nRow );
     }
 
 
