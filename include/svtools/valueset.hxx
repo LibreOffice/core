@@ -278,7 +278,7 @@ private:
     ValueSet & operator= (const ValueSet &) = delete;
 
 protected:
-    bool StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );
+    void StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 

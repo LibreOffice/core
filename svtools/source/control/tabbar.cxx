@@ -2510,9 +2510,8 @@ void TabBar::HideDropPos()
     }
 }
 
-bool TabBar::SwitchPage(const Point& rPos)
+void TabBar::SwitchPage(const Point& rPos)
 {
-    bool bSwitch = false;
     sal_uInt16 nSwitchId = GetPageId(rPos);
     if (!nSwitchId)
         EndSwitchPage();
@@ -2537,15 +2536,12 @@ bool TabBar::SwitchPage(const Point& rPos)
                         Update();
                         ImplActivatePage();
                         ImplSelect();
-                        bSwitch = true;
                     }
                     mbInSwitching = false;
                 }
             }
         }
     }
-
-    return bSwitch;
 }
 
 void TabBar::EndSwitchPage()

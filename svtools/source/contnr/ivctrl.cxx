@@ -286,9 +286,9 @@ bool SvtIconChoiceCtrl::IsEntryEditing() const
     return _pImp->IsEntryEditing();
 }
 
-bool SvtIconChoiceCtrl::SetChoiceWithCursor ( bool bDo )
+void SvtIconChoiceCtrl::SetChoiceWithCursor ( bool bDo )
 {
-    return _pImp->SetChoiceWithCursor (bDo);
+    _pImp->SetChoiceWithCursor (bDo);
 }
 
 void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )

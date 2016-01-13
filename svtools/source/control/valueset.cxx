@@ -2167,10 +2167,10 @@ void ValueSet::SetFormat(bool bFormat)
     mbFormat = bFormat;
 }
 
-bool ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
+void ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
 {
     if ( rEvent.GetCommand() != CommandEventId::StartDrag )
-        return false;
+        return;
 
     // if necessary abort an existing action
     EndSelection();
@@ -2186,7 +2186,7 @@ bool ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
 
     // don't activate dragging if no item was clicked on
     if ( !nSelId )
-        return false;
+        return;
 
     // Check out if the page was selected. If not set as current page and
     // call select.
@@ -2201,8 +2201,6 @@ bool ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
 
     // assign region
     rRegion = aRegion;
-
-    return true;
 }
 
 Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCols,

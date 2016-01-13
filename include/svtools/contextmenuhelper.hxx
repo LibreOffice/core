@@ -85,7 +85,7 @@ class SVT_DLLPUBLIC ContextMenuHelper
 
         // creates an association between current module/controller bound to the
         // provided frame and their ui configuration managers.
-        bool            associateUIConfigurationManagers();
+        void            associateUIConfigurationManagers();
 
         // resets associations to create associations again on-demand.
         // Useful for implementations which recycle frames. Normal

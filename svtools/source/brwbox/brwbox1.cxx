@@ -1968,7 +1968,7 @@ bool BrowseBox::IsColumnSelected( sal_uInt16 nColumnId ) const
 
 
 
-bool BrowseBox::MakeFieldVisible
+void BrowseBox::MakeFieldVisible
 (
     long    nRow,       // line number of the field (starting with 0)
     sal_uInt16  nColId,     // column ID of the field
@@ -1981,14 +1981,6 @@ bool BrowseBox::MakeFieldVisible
     accordingly. If 'bComplete' is set, the field should become visible in its
     entirety.
 
-    [Returned Value]
-
-    bool            true
-                    The given field is already visible or was already visible.
-
-                    false
-                    The given field could not be made visible or in the case of
-                    'bComplete' could not be made visible in its entirety.
 */
 
 {
@@ -1996,12 +1988,12 @@ bool BrowseBox::MakeFieldVisible
 
     if ( !bBootstrapped ||
          ( aTestSize.Width() == 0 && aTestSize.Height() == 0 ) )
-        return false;
+        return;
 
     // is it visible already?
     bool bVisible = IsFieldVisible( nRow, nColId, bComplete );
     if ( bVisible )
-        return true;
+        return;
 
     // calculate column position, field rectangle and painting area
     sal_uInt16 nColPos = GetColumnPos( nColId );
@@ -2041,9 +2033,6 @@ bool BrowseBox::MakeFieldVisible
     if ( nRow > nBottomRow )
         // scroll further to the top
         ScrollRows( nRow - nBottomRow );
-
-    // it might still not actually fit, e.g. if the window is too small
-    return IsFieldVisible( nRow, nColId, bComplete );
 }
 
 

@@ -1412,7 +1412,7 @@ void SvTreeListBox::InitTreeView()
     nContextBmpWidthMax = 0;
 
     SetFont( GetFont() );
-    AdjustEntryHeightAndRecalc( GetFont() );
+    AdjustEntryHeightAndRecalc();
 
     SetSpaceBetweenEntries( 0 );
     SetLineColor();
@@ -2183,7 +2183,7 @@ void SvTreeListBox::ModelHasCleared()
 
     if( !(nTreeFlags & SvTreeFlags::FIXEDHEIGHT ))
         nEntryHeight = 0;
-    AdjustEntryHeight( GetFont() );
+    AdjustEntryHeight();
     AdjustEntryHeight( GetDefaultExpandedEntryBmp() );
     AdjustEntryHeight( GetDefaultCollapsedEntryBmp() );
 
@@ -2249,13 +2249,9 @@ short SvTreeListBox::GetHeightOffset(const Image& rBmp, Size& aSizeLogic )
     return nOffset;
 }
 
-short SvTreeListBox::GetHeightOffset(const vcl::Font& /* rFont */, Size& aSizeLogic )
+void SvTreeListBox::GetHeightOffset(Size& aSizeLogic )
 {
-    short nOffset = 0;
     aSizeLogic = Size(GetTextWidth(OUString('X')), GetTextHeight());
-    if( GetEntryHeight() > aSizeLogic.Height() )
-        nOffset = ( GetEntryHeight() - (short)aSizeLogic.Height()) / 2;
-    return nOffset;
 }
 
 void SvTreeListBox::SetEntryHeight( SvTreeListEntry* pEntry )
@@ -2307,10 +2303,10 @@ void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
     }
 }
 
-void SvTreeListBox::AdjustEntryHeight( const vcl::Font& rFont )
+void SvTreeListBox::AdjustEntryHeight()
 {
     Size aSize;
-    GetHeightOffset( rFont, aSize );
+    GetHeightOffset( aSize );
     if( aSize.Height()  >  nEntryHeight )
     {
         nEntryHeight = (short)aSize.Height() + nEntryHeightOffs;
@@ -2504,12 +2500,12 @@ void SvTreeListBox::SetFont( const vcl::Font& rFont )
     if (aTempFont == aOrigFont)
         return;
 
-    AdjustEntryHeightAndRecalc( GetFont() );
+    AdjustEntryHeightAndRecalc();
 }
 
-void SvTreeListBox::AdjustEntryHeightAndRecalc( const vcl::Font& rFont )
+void SvTreeListBox::AdjustEntryHeightAndRecalc()
 {
-    AdjustEntryHeight( rFont );
+    AdjustEntryHeight();
     // always invalidate, else things go wrong in SetEntryHeight
     RecalcViewData();
 }
@@ -2567,7 +2563,7 @@ void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
         nEntryHeight = nEntryHeight - nEntryHeightOffs;
         nEntryHeightOffs = (short)nOffsLogic;
         nEntryHeight = nEntryHeight + nOffsLogic;
-        AdjustEntryHeightAndRecalc( GetFont() );
+        AdjustEntryHeightAndRecalc();
         pImp->SetEntryHeight( nEntryHeight );
     }
 }
@@ -2818,7 +2814,7 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
     }
 }
 
-long SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext,
+void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext,
                                 SvLBoxTabFlags nTabFlags, bool bHasClipRegion)
 {
 
@@ -3138,8 +3134,6 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
     if (bHasClipRegion && bResetClipRegion)
         rRenderContext.SetClipRegion();
-
-    return 0; // nRowLen;
 }
 
 void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeListEntry& /*rEntry*/)
@@ -3560,7 +3554,7 @@ SvLBoxTab* SvTreeListBox::GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rPo
     return nullptr;
 }
 
-SvLBoxTab* SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
+void SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
 {
     sal_uInt16 nPos = (sal_uInt16)aTabs.size();
     while( nPos )
@@ -3570,11 +3564,10 @@ SvLBoxTab* SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTab
         if( (pTab->nFlags & nFlagMask) )
         {
             rTabPos = nPos;
-            return pTab;
+            return;
         }
     }
     rTabPos = 0xffff;
-    return nullptr;
 }
 
 void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
@@ -3746,7 +3739,7 @@ void SvTreeListBox::ApplySettings(vcl::RenderContext& rRenderContext)
     aFont = rStyleSettings.GetFieldFont();
     aFont.SetColor(rStyleSettings.GetWindowTextColor());
     SetPointFont(rRenderContext, aFont);
-    AdjustEntryHeightAndRecalc(aFont);
+    AdjustEntryHeightAndRecalc();
 
     rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
     rRenderContext.SetTextFillColor();
@@ -3766,7 +3759,7 @@ void SvTreeListBox::InitSettings(bool bFont, bool bForeground, bool bBackground)
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor(rStyleSettings.GetWindowTextColor());
         SetPointFont(*this, aFont);
-        AdjustEntryHeightAndRecalc(aFont);
+        AdjustEntryHeightAndRecalc();
     }
 
     if (bForeground || bFont)

@@ -248,7 +248,7 @@ public:
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const;
 
-    bool                SetChoiceWithCursor ( bool bDo = true );
+    void                SetChoiceWithCursor ( bool bDo = true );
 
     void                SetFont( const vcl::Font& rFont );
     void                SetPointFont( const vcl::Font& rFont );

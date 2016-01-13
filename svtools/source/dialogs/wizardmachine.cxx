@@ -506,12 +506,12 @@ namespace svt
     }
 
 
-    bool OWizardMachine::skip(sal_Int32 _nSteps)
+    void OWizardMachine::skip(sal_Int32 _nSteps)
     {
         DBG_ASSERT(_nSteps > 0, "OWizardMachine::skip: invalid number of steps!");
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( eTravelForward ) )
-            return false;
+            return;
 
         WizardState nCurrentState = getCurrentState();
         WizardState nNextState = determineNextState(nCurrentState);
@@ -519,7 +519,7 @@ namespace svt
         while (_nSteps-- > 0)
         {
             if (WZS_INVALID_STATE == nNextState)
-                return false;
+                return;
 
             // remember the skipped state in the history
             m_pImpl->aStateHistory.push(nCurrentState);
@@ -538,11 +538,10 @@ namespace svt
                 // if somebody does a skip and then does not allow to leave ...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
                 // somebody behaves really strange ...)
-            return false;
+            return;
         }
 
         // all fine
-        return true;
     }
 
 

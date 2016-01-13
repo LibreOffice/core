@@ -279,13 +279,10 @@ namespace svt
             A very essential precondition for using this method is that your <method>determineNextState</method>
             method is able to determine the next state without actually having the page of the current state.
 
-            @return
-                <TRUE/> if and only if traveling was successful
-
             @see skipUntil
             @see skipBackwardUntil
         */
-        bool                    skip( sal_Int32 _nSteps = 1 );
+        void                    skip( sal_Int32 _nSteps = 1 );
 
         /** skips one or more states, until a given state is reached
 

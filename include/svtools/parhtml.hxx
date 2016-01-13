@@ -230,7 +230,7 @@ public:
     virtual bool ParseMetaOptions( const css::uno::Reference< css::document::XDocumentProperties>&,
             SvKeyValueIterator* );
 
-    bool ParseScriptOptions( OUString& rLangString, const OUString&, HTMLScriptLanguage& rLang,
+    void ParseScriptOptions( OUString& rLangString, const OUString&, HTMLScriptLanguage& rLang,
                              OUString& rSrc, OUString& rLibrary, OUString& rModule );
 
     // remove a comment around the content of <SCRIPT> or <STYLE>
