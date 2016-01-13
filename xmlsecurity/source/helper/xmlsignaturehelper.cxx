@@ -368,12 +368,55 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
             std::vector<beans::StringPair>::iterator it = std::find_if(aRelation.begin(), aRelation.end(), [](const beans::StringPair& rPair) { return rPair.First == "Target"; });
             if (it != aRelation.end())
             {
-                // TODO now handle it->Second
+                uno::Reference<io::XInputStream> xInputStream(xStorage->openStreamElement(it->Second, nOpenMode), uno::UNO_QUERY);
+                if (!ReadAndVerifySignatureStorageStream(xInputStream))
+                    return false;
             }
         }
     }
 
     return true;
+}
+
+bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream)
+{
+    mbError = false;
+
+    // Create the input source.
+    xml::sax::InputSource aParserInput;
+    aParserInput.aInputStream = xInputStream;
+
+    // Create the sax parser.
+    uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(mxCtx);
+
+    // Create the signature reader.
+    uno::Reference<xml::sax::XDocumentHandler> xHandler = mpXSecController->createSignatureReader();
+
+    // Create the signature listener.
+    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(
+        LINK(this, XMLSignatureHelper, SignatureCreationResultListener),
+        LINK(this, XMLSignatureHelper, SignatureVerifyResultListener),
+        LINK(this, XMLSignatureHelper, StartVerifySignatureElement));
+    uno::Reference<xml::sax::XDocumentHandler> xSignatureListener(pSignatureListener);
+
+    // Parser -> signature listener -> signature reader.
+    pSignatureListener->setNextHandler(xHandler);
+    xParser->setDocumentHandler(xSignatureListener);
+
+    // Parse the stream.
+    try
+    {
+        xParser->parseStream(aParserInput);
+    }
+    catch(const uno::Exception& rException)
+    {
+        SAL_WARN("xmlsecurity.helper", "XMLSignatureHelper::ReadAndVerifySignatureStorageStream: " << rException.Message);
+    }
+
+    pSignatureListener->setNextHandler(nullptr);
+    mpXSecController->releaseSignatureReader();
+
+    return !mbError;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
