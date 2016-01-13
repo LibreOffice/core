@@ -29,9 +29,19 @@ void SAL_CALL OOXMLSecParser::endDocument() throw (xml::sax::SAXException, uno::
 {
 }
 
-void SAL_CALL OOXMLSecParser::startElement(const OUString& /*rName*/, const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/)
+void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Reference<xml::sax::XAttributeList>& xAttribs)
 throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
+    OUString aId = xAttribs->getValueByName("Id");
+    if (!aId.isEmpty())
+        m_pXSecController->collectToVerify(aId);
+
+    if (rName == "Signature")
+    {
+        //m_pXSecController->addSignature();
+        if (!aId.isEmpty())
+            m_pXSecController->setId(aId);
+    }
 }
 
 void SAL_CALL OOXMLSecParser::endElement(const OUString& /*rName*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
