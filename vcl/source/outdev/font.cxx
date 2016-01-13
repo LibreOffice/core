@@ -212,7 +212,6 @@ FontMetric OutputDevice::GetFontMetric() const
          aMetric.SetKerning( maFont.GetKerning() & ~FontKerning::FontSpecific );
 
     // set remaining metric fields
-    aMetric.mpImplMetric->mnMiscFlags   = 0;
     aMetric.SetBuiltInFontFlag( pFontAttributes->IsBuiltInFont() );
     aMetric.SetScalableFlag( pFontAttributes->IsScalable() );
     aMetric.SetFullstopCenteredFlag( pFontAttributes->IsFullstopCentered() );
