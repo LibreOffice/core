@@ -1,7 +1,4 @@
-UI rewrite, toolbars, menus, UNO stuff, including accelerators and interaction, etc.
+Toolbars, menus, UNO stuff, including accelerators and interaction, etc.
 
 See also:
-[http://wiki.openoffice.org/wiki/Framework]
-
-Notable files:
-[git:framework/source/services/backingwindow.hxx] Layout of the Startcenter buttons and the corresponding event handler.
+http://wiki.openoffice.org/wiki/Framework

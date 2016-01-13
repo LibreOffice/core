@@ -23,3 +23,6 @@ dispatch.
 
 There are also some UNO services here that could really be implemented
 anywhere, e.g. the DocumentProperties or DocumentMetadataAccess.
+
+Notable files:
+sfx2/source/dialog/backingwindow.cxx Startcenter buttons and the corresponding event handler.
