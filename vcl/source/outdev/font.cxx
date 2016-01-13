@@ -83,8 +83,7 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontMetric.SetItalic( rData.GetSlantType() );
         aFontMetric.SetWidthType( rData.GetWidthType() );
         aFontMetric.SetScalableFlag( rData.IsScalable() );
-        if( rData.IsBuiltInFont() )
-            aFontMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
+        aFontMetric.SetBuiltInFontFlag( rData.IsBuiltInFont() );
     }
 
     return aFontMetric;
@@ -214,8 +213,7 @@ FontMetric OutputDevice::GetFontMetric() const
 
     // set remaining metric fields
     aMetric.mpImplMetric->mnMiscFlags   = 0;
-    if( pFontAttributes->IsBuiltInFont() )
-            aMetric.mpImplMetric->mnMiscFlags |= ImplFontMetric::DEVICE_FLAG;
+    aMetric.SetBuiltInFontFlag( pFontAttributes->IsBuiltInFont() );
     aMetric.SetScalableFlag( pFontAttributes->IsScalable() );
     aMetric.SetFullstopCenteredFlag( pFontAttributes->IsFullstopCentered() );
     aMetric.mpImplMetric->mnBulletOffset = pFontAttributes->GetBulletOffset();

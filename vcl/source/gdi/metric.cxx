@@ -36,7 +36,8 @@ ImplFontMetric::ImplFontMetric()
     mnMiscFlags( 0 ),
     mnRefCount( 1 ),
     mbScalableFont( false ),
-    mbFullstopCentered( false )
+    mbFullstopCentered( false ),
+    mbDevice( false )
 {}
 
 inline void ImplFontMetric::AddReference()
@@ -174,4 +175,13 @@ void FontMetric::SetFullstopCenteredFlag(bool bScalable)
     mpImplMetric->SetFullstopCenteredFlag( bScalable );
 }
 
+bool FontMetric::IsBuiltInFont() const
+{
+    return mpImplMetric->IsBuiltInFont();
+}
+
+void FontMetric::SetBuiltInFontFlag( bool bIsBuiltInFont )
+{
+    mpImplMetric->SetBuiltInFontFlag( bIsBuiltInFont );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
