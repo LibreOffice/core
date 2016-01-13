@@ -1040,6 +1040,8 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	liblangtag_data \
 ))
 
+ifeq ($(COM),MSC)
+
 define gb_LinkTarget__use_liblangtag
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,langtag) \
@@ -1049,6 +1051,24 @@ $(call gb_LinkTarget_add_libs,$(1),$(LIBLANGTAG_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),langtag)
 
 endef
+
+else
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	liblangtag \
+))
+
+define gb_LinkTarget__use_liblangtag
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,langtag) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBLANGTAG_LIBS))
+$(call gb_LinkTarget_use_package,$(1),langtag)
+
+endef
+
+endif # MSC
 
 endif # SYSTEM_LIBLANGTAG
 
