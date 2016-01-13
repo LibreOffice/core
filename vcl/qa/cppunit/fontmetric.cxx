@@ -22,10 +22,12 @@ public:
     VclFontMetricTest() : BootstrapFixture(true, false) {}
 
     void testScalableFlag();
+    void testFullstopCenteredFlag();
     void testEqualityOperator();
 
     CPPUNIT_TEST_SUITE(VclFontMetricTest);
     CPPUNIT_TEST(testScalableFlag);
+    CPPUNIT_TEST(testFullstopCenteredFlag);
     CPPUNIT_TEST(testEqualityOperator);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -42,6 +44,20 @@ void VclFontMetricTest::testScalableFlag()
     CPPUNIT_ASSERT_MESSAGE( "Scalable flag should be true", aFontMetric.IsScalable() );
 }
 
+
+void VclFontMetricTest::testFullstopCenteredFlag()
+{
+    // default constructor should set scalable flag to false
+    FontMetric aFontMetric;
+
+    CPPUNIT_ASSERT_MESSAGE( "Fullstop centered flag should be false after default constructor called", !aFontMetric.IsFullstopCentered() );
+
+    aFontMetric.SetFullstopCenteredFlag(true);
+
+    CPPUNIT_ASSERT_MESSAGE( "Fullstop centered flag should be true", aFontMetric.IsFullstopCentered() );
+}
+
+
 void VclFontMetricTest::testEqualityOperator()
 {
     // default constructor should set scalable flag to false
@@ -51,6 +67,11 @@ void VclFontMetricTest::testEqualityOperator()
     aRhs.SetScalableFlag(true);
 
     CPPUNIT_ASSERT_MESSAGE( "Scalable flag set same", aLhs == aRhs );
+
+    aLhs.SetFullstopCenteredFlag(true);
+    aRhs.SetFullstopCenteredFlag(true);
+
+    CPPUNIT_ASSERT_MESSAGE( "Fullstop centered flag set same", aLhs == aRhs );
 }
 
 
