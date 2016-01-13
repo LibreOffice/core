@@ -125,7 +125,7 @@ namespace svt { namespace table
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex ) override;
         SVT_DLLPRIVATE virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const override;
-        SVT_DLLPRIVATE virtual bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) override;
+        SVT_DLLPRIVATE virtual void GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) override;
         SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const override;
         SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, AccessibleTableControlObjType eObjType ) const override;
 

@@ -123,10 +123,10 @@ public:
 
     inline sal_uLong    GetLineNr() const       { return nlLineNr; }
     inline sal_uLong    GetLinePos() const      { return nlLinePos; }
-    inline sal_uLong    IncLineNr()             { return ++nlLineNr; }
+    inline void         IncLineNr()             { ++nlLineNr; }
     inline sal_uLong    IncLinePos()            { return ++nlLinePos; }
-    inline sal_uLong    SetLineNr( sal_uLong nlNum );           // inline bottom
-    inline sal_uLong    SetLinePos( sal_uLong nlPos );          // inline bottom
+    inline void         SetLineNr( sal_uLong nlNum );           // inline bottom
+    inline void         SetLinePos( sal_uLong nlPos );          // inline bottom
 
     sal_Unicode GetNextChar();
     void RereadLookahead();
@@ -167,11 +167,11 @@ public:
 };
 
 
-inline sal_uLong SvParser::SetLineNr( sal_uLong nlNum )
-{   sal_uLong nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
+inline void SvParser::SetLineNr( sal_uLong nlNum )
+{   nlLineNr = nlNum; }
 
-inline sal_uLong SvParser::SetLinePos( sal_uLong nlPos )
-{   sal_uLong nlOld = nlLinePos; nlLinePos = nlPos; return nlOld; }
+inline void SvParser::SetLinePos( sal_uLong nlPos )
+{   nlLinePos = nlPos; }
 
 inline sal_uInt16 SvParser::GetCharSize() const
 {

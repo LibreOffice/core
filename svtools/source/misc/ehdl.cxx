@@ -263,7 +263,7 @@ struct ErrorResource_Impl : private Resource
 };
 
 
-bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
+void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 
 /*  [Description]
 
@@ -273,7 +273,6 @@ bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
     */
 
 {
-    bool bRet = false;
     std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() ));
     if( pResMgr )
     {
@@ -282,10 +281,8 @@ bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
         if(aEr)
         {
             rStr = static_cast<ResString>(aEr).GetString();
-            bRet = true;
         }
     }
-    return bRet;
 }
 
 

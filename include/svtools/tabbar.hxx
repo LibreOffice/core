@@ -474,7 +474,7 @@ public:
     bool            StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );
     sal_uInt16      ShowDropPos( const Point& rPos );
     void            HideDropPos();
-    bool            SwitchPage( const Point& rPos );
+    void            SwitchPage( const Point& rPos );
     void            EndSwitchPage();
 
     void            SetPageText( sal_uInt16 nPageId, const OUString& rText );

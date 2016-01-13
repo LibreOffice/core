@@ -500,7 +500,7 @@ public:
     // movement of visible area
     long            ScrollColumns( long nColumns );
     long            ScrollRows( long nRows );
-    bool            MakeFieldVisible( long nRow, sal_uInt16 nColId, bool bComplete = false );
+    void            MakeFieldVisible( long nRow, sal_uInt16 nColId, bool bComplete = false );
 
     // access and movement of cursor
     long            GetCurRow() const { return nCurRow; }

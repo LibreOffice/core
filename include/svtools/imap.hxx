@@ -130,7 +130,6 @@ class IMapCompat
                     IMapCompat() {}
                     IMapCompat( const IMapCompat& ) {}
     IMapCompat&     operator=( const IMapCompat& ) { return *this; }
-    bool            operator==( const IMapCompat& ) { return false; }
 
 public:
 

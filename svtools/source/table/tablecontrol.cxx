@@ -194,9 +194,9 @@ namespace svt { namespace table
     }
 
 
-    bool TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
+    void TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
     {
-        return m_pImpl->goTo( _nColPos, _nRowPos );
+        m_pImpl->goTo( _nColPos, _nRowPos );
     }
 
 

@@ -64,7 +64,7 @@ public:
     virtual sal_Int32               GetCurrentColumn() const = 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex )= 0;
     virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const= 0;
-    virtual bool    GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow )= 0;
+    virtual void    GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow )= 0;
     virtual bool    HasColHeader() = 0;
     virtual bool    HasRowHeader() = 0;
 

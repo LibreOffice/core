@@ -549,14 +549,14 @@ protected:
     using SvListView::SelectAll;
 
     SVT_DLLPRIVATE short        GetHeightOffset( const Image& rBmp, Size& rLogicSize);
-    SVT_DLLPRIVATE short        GetHeightOffset( const vcl::Font& rFont, Size& rLogicSize);
+    SVT_DLLPRIVATE void         GetHeightOffset( Size& rLogicSize);
 
     SVT_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry* pEntry );
     SVT_DLLPRIVATE void         AdjustEntryHeight( const Image& rBmp );
-    SVT_DLLPRIVATE void         AdjustEntryHeight( const vcl::Font& rFont );
+    SVT_DLLPRIVATE void         AdjustEntryHeight();
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
-    SVT_DLLPRIVATE long         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext,
+    SVT_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext,
                                              SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL,
                                              bool bHasClipRegion=false );
 
@@ -581,7 +581,7 @@ protected:
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
     SvLBoxTab*      GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos );
-    SvLBoxTab*      GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos );
+    void            GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos );
     SvLBoxTab*      GetTab( SvTreeListEntry*, SvLBoxItem* ) const;
     void            ClearTabList();
 
@@ -612,7 +612,7 @@ protected:
     bool            AreChildrenTransient() const;
     void            SetChildrenNotTransient();
 
-    void            AdjustEntryHeightAndRecalc( const vcl::Font& rFont );
+    void            AdjustEntryHeightAndRecalc();
 public:
 
     void            SetExtendedWinBits( ExtendedWinBits _nBits );

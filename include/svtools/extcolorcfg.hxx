@@ -56,9 +56,6 @@ public:
     inline sal_Int32       getDefaultColor() const { return m_nDefaultColor; }
 
     inline void            setColor(sal_Int32 _nColor) { m_nColor = _nColor; }
-
-    bool operator !=(const ExtendedColorConfigValue& rCmp) const
-        { return m_nColor != rCmp.m_nColor;}
 };
 
 class SVT_DLLPUBLIC ExtendedColorConfig : public SfxBroadcaster, public SfxListener

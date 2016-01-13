@@ -268,7 +268,7 @@ public:
     virtual void Clone(SvLBoxItem* pSource) override;
 
 
-    bool SetModeImages(const Image& rBitmap1, const Image& rBitmap2);
+    void SetModeImages(const Image& rBitmap1, const Image& rBitmap2);
 
     inline void SetBitmap1(const Image& rImage);
     inline void SetBitmap2(const Image& rImage);

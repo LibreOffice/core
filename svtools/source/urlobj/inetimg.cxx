@@ -25,9 +25,8 @@
 
 static const sal_Unicode TOKEN_SEPARATOR = '\001';
 
-bool INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
+void INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
 {
-    bool bRet = false;
     switch( nFormat )
     {
     case SotClipboardFormatId::INET_IMAGE:
@@ -47,7 +46,6 @@ bool INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
             rOStm.Write(sOut.getStr(), sOut.getLength());
             static const sal_Char aEndChar[2] = { 0 };
             rOStm.Write( aEndChar, sizeof( aEndChar ));
-            bRet = 0 == rOStm.GetError();
         }
         break;
 
@@ -55,7 +53,6 @@ bool INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
         break;
     default: break;
     }
-    return bRet;
 }
 
 bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )

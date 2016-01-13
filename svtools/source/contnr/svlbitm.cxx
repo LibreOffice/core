@@ -470,12 +470,10 @@ sal_uInt16 SvLBoxContextBmp::GetType() const
     return SV_ITEM_ID_LBOXCONTEXTBMP;
 }
 
-bool SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
+void SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
 {
-    bool bSuccess = true;
     m_pImpl->m_aImage1 = _rBitmap1;
     m_pImpl->m_aImage2 = _rBitmap2;
-    return bSuccess;
 }
 
 Image& SvLBoxContextBmp::implGetImageStore( bool _bFirst )

@@ -56,7 +56,7 @@ public:
     const OUString& GetTargetFrame() const { return aTargetFrame; }
 
     // Im-/Export
-    bool Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const;
+    void Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const;
     bool Read( SvStream& rIStm, SotClipboardFormatId nFormat );
 };
 

@@ -466,7 +466,6 @@ namespace svt
             bool Is() const {return pEvent != nullptr;}
             bool IsDown() const {return bDown;}
             const BrowserMouseEvent* operator->() const {return pEvent;}
-            const BrowserMouseEvent& operator*() const {return *pEvent;}
 
             SVT_DLLPUBLIC void Clear();
             void Set(const BrowserMouseEvent* pEvt, bool bIsDown);

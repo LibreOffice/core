@@ -377,7 +377,7 @@ ContextMenuHelper::dispatchCommand(
 // retrieves and stores references to our user-interface
 // configuration managers, like image manager, ui command
 // description manager.
-bool
+void
 ContextMenuHelper::associateUIConfigurationManagers()
 {
     uno::Reference< frame::XFrame > xFrame( m_xWeakFrame );
@@ -445,13 +445,9 @@ ContextMenuHelper::associateUIConfigurationManagers()
         }
         catch ( uno::Exception& )
         {
-            m_bUICfgMgrAssociated = true;
-            return false;
         }
         m_bUICfgMgrAssociated = true;
     }
-
-    return true;
 }
 
 Image

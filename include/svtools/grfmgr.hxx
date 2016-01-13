@@ -459,10 +459,8 @@ public:
         tile bitmap is smaller. Otherwise, the tile is drawn as
         is. This is useful if e.g. you want only a few, very large
         bitmap drawings appear on the outdev.
-
-        @return sal_True, if drawing completed successfully
      */
-    bool                    DrawTiled(
+    void                    DrawTiled(
                                 OutputDevice* pOut,
                                 const Rectangle& rArea,
                                 const Size& rSize,

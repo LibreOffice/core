@@ -35,7 +35,7 @@ static HTMLOptionEnum const aScriptLangOptEnums[] =
     { nullptr,                    0                   }
 };
 
-bool HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBaseURL,
+void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBaseURL,
                                      HTMLScriptLanguage& rLang,
                                      OUString& rSrc,
                                      OUString& rLibrary,
@@ -77,8 +77,6 @@ bool HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
             break;
         }
     }
-
-    return true;
 }
 
 void HTMLParser::RemoveSGMLComment( OUString &rString, bool bFull )
