@@ -55,7 +55,7 @@ public:
 
     virtual void Characters( const OUString& rChars ) override;
 
-    bool SetComponent(
+    void SetComponent(
         css::uno::Reference< css::lang::XComponent >& rComp );
 
 };

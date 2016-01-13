@@ -410,7 +410,7 @@ protected:
 
 
     /// explode a field master name into field type and field name
-    bool ExplodeFieldMasterName(
+    void ExplodeFieldMasterName(
         const OUString& sMasterName, /// name as returned by SO API
         OUString& sFieldType,        /// out: field type
         OUString& sVarName);         /// out: variable name

@@ -2884,30 +2884,21 @@ void XMLTextFieldExport::ExportDataBaseElement(
 
 
 // explode a field master name into field type and field name
-bool XMLTextFieldExport::ExplodeFieldMasterName(
+void XMLTextFieldExport::ExplodeFieldMasterName(
     const OUString& sMasterName, OUString& sFieldType, OUString& sVarName)
 {
     sal_Int32 nLength = sFieldMasterPrefix.getLength();
     sal_Int32 nSeparator = sMasterName.indexOf('.', nLength);
-    bool bReturn = true;
-
-#ifdef DBG_UTIL
-    // check for service name
-    bReturn &= (0 == sFieldMasterPrefix.compareTo(sMasterName, nLength));
-#endif
 
     // '.' found?
     if (nSeparator <= nLength) {
         SAL_WARN("xmloff.text", "no field var name!");
-        bReturn = false;
     }
     else
     {
         sFieldType = sMasterName.copy(nLength, nSeparator-nLength);
         sVarName = sMasterName.copy(nSeparator+1);
     }
-
-    return bReturn;
 }
 
 

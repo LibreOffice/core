@@ -143,14 +143,6 @@ enum SdXMLPresentationPlaceholderAttrTokenMap
     XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT
 };
 
-struct SdXMLltXDrawPageId
-{
-  bool operator()(sal_Int32 nId1, sal_Int32 nId2 ) const
-  {
-    return nId1 < nId2;
-  }
-};
-
 class SvXMLUnitConverter;
 class SvXMLTokenMap;
 class SdXMLMasterStylesContext;

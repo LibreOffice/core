@@ -41,7 +41,7 @@ public:
     XMLTransGradientStyleImport( SvXMLImport& rImport );
     ~XMLTransGradientStyleImport();
 
-    bool importXML(
+    void importXML(
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         css::uno::Any& rValue,
         OUString& rStrName );
@@ -55,7 +55,7 @@ public:
     XMLTransGradientStyleExport( SvXMLExport& rExport );
     ~XMLTransGradientStyleExport();
 
-    bool exportXML( const OUString& rStrName, const css::uno::Any& rValue );
+    void exportXML( const OUString& rStrName, const css::uno::Any& rValue );
 };
 
 #endif // INCLUDED_XMLOFF_INC_TRANSGRADIENTSTYLE_HXX

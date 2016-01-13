@@ -135,11 +135,11 @@ void XMLEmbeddedObjectImportContext_Impl::Characters( const OUString& rChars )
 }
 
 
-bool XMLEmbeddedObjectImportContext::SetComponent(
+void XMLEmbeddedObjectImportContext::SetComponent(
         Reference< XComponent >& rComp )
 {
     if( !rComp.is() || sFilterService.isEmpty() )
-        return false;
+        return;
 
     Sequence<Any> aArgs( 0 );
 
@@ -150,7 +150,7 @@ bool XMLEmbeddedObjectImportContext::SetComponent(
         UNO_QUERY);
 
     if( !xHandler.is() )
-        return false;
+        return;
 
     try
     {
@@ -165,8 +165,6 @@ bool XMLEmbeddedObjectImportContext::SetComponent(
     xImporter->setTargetDocument( rComp );
 
     xComp = rComp;  // keep ref to component only if there is a handler
-
-    return true;
 }
 
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(

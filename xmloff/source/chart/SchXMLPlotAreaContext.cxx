@@ -689,11 +689,8 @@ bool SchXMLPositonAttributesHelper::isAutomatic() const
     return m_bAutoSize || m_bAutoPosition;
 }
 
-bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
+void SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
-    //returns true if the attribute was proccessed
-    bool bReturn = true;
-
     if( XML_NAMESPACE_SVG == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_X ) )
@@ -720,13 +717,7 @@ bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix
                     m_aSize.Height, rValue );
             m_bHasSizeHeight = true;
         }
-        else
-            bReturn = false;
     }
-    else
-        bReturn = false;
-
-    return bReturn;
 }
 
 void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
