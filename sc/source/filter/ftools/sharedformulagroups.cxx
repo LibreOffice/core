@@ -13,13 +13,13 @@ namespace sc {
 
 void SharedFormulaGroups::set( size_t nSharedId, ScTokenArray* pArray )
 {
-    maStore.insert(nSharedId, pArray);
+    m_Store.insert(std::make_pair(nSharedId, std::unique_ptr<ScTokenArray>(pArray)));
 }
 
 const ScTokenArray* SharedFormulaGroups::get( size_t nSharedId ) const
 {
-    StoreType::const_iterator it = maStore.find(nSharedId);
-    return it == maStore.end() ? nullptr : it->second;
+    StoreType::const_iterator const it = m_Store.find(nSharedId);
+    return it == m_Store.end() ? nullptr : it->second.get();
 }
 
 }

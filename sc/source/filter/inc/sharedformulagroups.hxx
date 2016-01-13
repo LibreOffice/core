@@ -12,16 +12,18 @@
 
 #include "tokenarray.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
+#include <map>
 
 namespace sc {
 
 class SharedFormulaGroups
 {
-    typedef boost::ptr_map<size_t, ScTokenArray> StoreType;
-    StoreType maStore;
-public:
+private:
+    typedef std::map<size_t, std::unique_ptr<ScTokenArray>> StoreType;
+    StoreType m_Store;
 
+public:
     void set( size_t nSharedId, ScTokenArray* pArray );
     const ScTokenArray* get( size_t nSharedId ) const;
 };
