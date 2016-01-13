@@ -211,10 +211,10 @@
     </node>
     <node oor:name="ja" oor:op="replace">
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>HG 明朝L Sun;HG MinchoL Sun;HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG Mincho Light J;ＭＳ Ｐ明朝;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;UmePlus P Gothic;TLP明朝;LX明朝;HGPMinchoL;IPA P明朝;東風明朝;Kochi Mincho;さざなみ明朝;Mincho;Serif</value>
+        <value>HG 明朝L Sun;HG MinchoL Sun;HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG Mincho Light J;ＭＳ 明朝;ＭＳ Ｐ明朝;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;UmePlus Gothic;UmePlus P Gothic;TLP明朝;LX明朝;HGPMinchoL;IPA 明朝;IPA P明朝;東風明朝;Kochi Mincho;さざなみ明朝;Mincho;Serif</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>HG 明朝L Sun;HG 明朝L;HG Mincho Light J;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;TLPゴシック;LXゴシック;HGPGothicB;IPA Pゴシック;東風ゴシック;さざなみゴシック;Gothic;ＭＳ 明朝;HG Mincho J;HG Mincho L;HG Mincho;Mincho;ＭＳ Ｐ明朝;HG Mincho Light J;ＭＳ ゴシック;HG Gothic J;HG Gothic B;HG Gothic;Gothic;ＭＳ Ｐゴシック;UmePlus P Gothic</value>
+        <value>HG 明朝L Sun;HG 明朝L;HG Mincho Light J;ＭＳ ゴシック;ＭＳ Ｐゴシック;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;TLPゴシック;LXゴシック;HGPGothicB;IPA ゴシック;IPA Pゴシック;東風ゴシック;さざなみゴシック;Gothic;ＭＳ 明朝;HG Mincho J;HG Mincho L;HG Mincho;Mincho;ＭＳ Ｐ明朝;HG Mincho Light J;HG Gothic J;HG Gothic B;HG Gothic;Gothic;UmePlus Gothic;UmePlus P Gothic</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
         <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;HG-PGothicB;HG-GothicB;HG Mincho Light J;ＭＳ Ｐゴシック;TLPゴシック;LXゴシック;HGPGothicB;IPA Pゴシック;東風ゴシック;さざなみゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;HG Gothic;HG Gothic B;UmePlus P Gothic;Gothic</value>
