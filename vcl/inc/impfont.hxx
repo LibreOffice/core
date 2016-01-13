@@ -87,59 +87,6 @@ private:
     friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );
 };
 
-// - ImplFontMetric -
-
-class ImplFontMetric
-{
-private:
-    long                mnAscent;      // Ascent
-    long                mnDescent;     // Descent
-    long                mnIntLeading;  // Internal Leading
-    long                mnExtLeading;  // External Leading
-    long                mnLineHeight;  // Ascent+Descent+EmphasisMark
-    long                mnSlant;       // Slant
-    long                mnBulletOffset;// Offset for non-printing character
-    sal_uInt32          mnRefCount;    // Reference Counter
-
-    bool                mbScalableFont;
-    bool                mbFullstopCentered;
-    bool                mbDevice;
-
-public:
-
-    bool                operator==( const ImplFontMetric& ) const;
-
-                        ImplFontMetric();
-    void                AddReference();
-    void                DeReference();
-
-    long                GetAscent() const                           { return mnAscent; }
-    long                GetDescent() const                          { return mnDescent; }
-    long                GetInternalLeading() const                  { return mnIntLeading; }
-    long                GetExternalLeading() const                  { return mnExtLeading; }
-    long                GetLineHeight() const                       { return mnLineHeight; }
-    long                GetSlant() const                            { return mnSlant; }
-    long                GetBulletOffset() const                     { return mnBulletOffset; }
-
-    void                SetAscent( long nAscent )                   { mnAscent = nAscent; }
-    void                SetDescent( long nDescent )                 { mnDescent = nDescent; }
-    void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
-    void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
-    void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; }
-    void                SetSlant( long nSlant )                     { mnSlant = nSlant; }
-    void                SetBulletOffset( long nOffset )             { mnBulletOffset = nOffset; }
-
-    bool                IsScalable() const                          { return mbScalableFont; }
-    bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
-    bool                IsBuiltInFont() const                       { return mbDevice; }
-
-    void                SetScalableFlag( bool bScalable )           { mbScalableFont = bScalable; }
-    void                SetFullstopCenteredFlag( bool bCentered )   { mbFullstopCentered = bCentered; }
-    void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
-
-};
-
-
 #endif // INCLUDED_VCL_INC_IMPFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,60 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <impfont.hxx>
 #include <vcl/metric.hxx>
+#include "impfontmetric.hxx"
 
 #include <vector>
 #include <set>
 
 #include <cstdio>
-
-ImplFontMetric::ImplFontMetric()
-:   mnAscent( 0 ),
-    mnDescent( 0 ),
-    mnIntLeading( 0 ),
-    mnExtLeading( 0 ),
-    mnLineHeight( 0 ),
-    mnSlant( 0 ),
-    mnBulletOffset( 0 ),
-    mnRefCount( 1 ),
-    mbScalableFont( false ),
-    mbFullstopCentered( false ),
-    mbDevice( false )
-{}
-
-inline void ImplFontMetric::AddReference()
-{
-    // TODO: disable refcounting on the default maps?
-    ++mnRefCount;
-}
-
-inline void ImplFontMetric::DeReference()
-{
-    // TODO: disable refcounting on the default maps?
-    if( --mnRefCount <= 0 )
-        delete this;
-}
-
-bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
-{
-    if(    mbScalableFont     != r.mbScalableFont
-        || mbFullstopCentered != r.mbFullstopCentered
-        || mbDevice           != r.mbDevice) // mbDevice == built-in font flag
-        return false;
-    if( mnAscent     != r.mnAscent )
-        return false;
-    if( mnDescent    != r.mnDescent )
-        return false;
-    if( mnIntLeading != r.mnIntLeading )
-        return false;
-    if( mnExtLeading != r.mnExtLeading )
-        return false;
-    if( mnSlant      != r.mnSlant )
-        return false;
-
-    return true;
-}
 
 FontMetric::FontMetric()
 :   mpImplMetric( new ImplFontMetric )
@@ -217,5 +170,55 @@ void FontMetric::SetBuiltInFontFlag( bool bIsBuiltInFont )
 {
     mpImplMetric->SetBuiltInFontFlag( bIsBuiltInFont );
 }
+
+
+
+ImplFontMetric::ImplFontMetric()
+:   mnAscent( 0 ),
+    mnDescent( 0 ),
+    mnIntLeading( 0 ),
+    mnExtLeading( 0 ),
+    mnLineHeight( 0 ),
+    mnSlant( 0 ),
+    mnBulletOffset( 0 ),
+    mnRefCount( 1 ),
+    mbScalableFont( false ),
+    mbFullstopCentered( false ),
+    mbDevice( false )
+{}
+
+inline void ImplFontMetric::AddReference()
+{
+    // TODO: disable refcounting on the default maps?
+    ++mnRefCount;
+}
+
+inline void ImplFontMetric::DeReference()
+{
+    // TODO: disable refcounting on the default maps?
+    if( --mnRefCount <= 0 )
+        delete this;
+}
+
+bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
+{
+    if(    mbScalableFont     != r.mbScalableFont
+        || mbFullstopCentered != r.mbFullstopCentered
+        || mbDevice           != r.mbDevice) // mbDevice == built-in font flag
+        return false;
+    if( mnAscent     != r.mnAscent )
+        return false;
+    if( mnDescent    != r.mnDescent )
+        return false;
+    if( mnIntLeading != r.mnIntLeading )
+        return false;
+    if( mnExtLeading != r.mnExtLeading )
+        return false;
+    if( mnSlant      != r.mnSlant )
+        return false;
+
+    return true;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
