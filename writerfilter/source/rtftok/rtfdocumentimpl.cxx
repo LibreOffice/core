@@ -741,7 +741,7 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
     }
 }
 
-RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& i_xShape)
+void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& i_xShape)
 {
     SvMemoryStream aStream;
     SvStream* pStream = nullptr;
@@ -761,7 +761,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
                 b = b << 4;
                 sal_Int8 parsed = RTFTokenizer::asHex(ch);
                 if (parsed == -1)
-                    return RTFError::HEX_INVALID;
+                    return;
                 b += parsed;
                 count--;
                 if (!count)
@@ -778,7 +778,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
 
     if (!pStream->Tell())
         // No destination text? Then we'll get it later.
-        return RTFError::OK;
+        return;
 
     // Store, and get its URL.
     pStream->Seek(0);
@@ -866,7 +866,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
 
         auto pShapeValue = std::make_shared<RTFValue>(xShape);
         m_aObjectAttributes.set(NS_ooxml::LN_shape, pShapeValue);
-        return RTFError::OK;
+        return;
     }
 
     if (xPropertySet.is())
@@ -877,7 +877,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
         // Send the shape directly, no section is started, to additional properties will be ignored anyway.
         Mapper().startShape(xShape);
         Mapper().endShape();
-        return RTFError::OK;
+        return;
     }
 
     // Send it to the dmapper.
@@ -1013,8 +1013,6 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
         auto pValue = std::make_shared<RTFValue>(aAttributes, aSprms);
         m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue));
     }
-
-    return RTFError::OK;
 }
 
 RTFError RTFDocumentImpl::resolveChars(char ch)
