@@ -14,6 +14,7 @@ $(eval $(call gb_Library_use_unpacked,etonyek,libetonyek))
 $(eval $(call gb_Library_use_externals,etonyek,\
     boost_headers \
     glm_headers \
+    liblangtag \
 	libxml2 \
 	mdds_headers \
 	revenge \
@@ -45,6 +46,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/IWAParser \
 	UnpackedTarball/libetonyek/src/lib/IWAReader \
 	UnpackedTarball/libetonyek/src/lib/IWASnappyStream \
+	UnpackedTarball/libetonyek/src/lib/IWAText \
 	UnpackedTarball/libetonyek/src/lib/IWORKChainedTokenizer \
 	UnpackedTarball/libetonyek/src/lib/IWORKChart \
 	UnpackedTarball/libetonyek/src/lib/IWORKCollector \
@@ -52,6 +54,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/IWORKDiscardContext \
 	UnpackedTarball/libetonyek/src/lib/IWORKDocumentInterface \
 	UnpackedTarball/libetonyek/src/lib/IWORKFormula \
+	UnpackedTarball/libetonyek/src/lib/IWORKLanguageManager \
 	UnpackedTarball/libetonyek/src/lib/IWORKMemoryStream \
 	UnpackedTarball/libetonyek/src/lib/IWORKOutputElements \
 	UnpackedTarball/libetonyek/src/lib/IWORKOutputManager \
@@ -59,14 +62,18 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/IWORKPath \
 	UnpackedTarball/libetonyek/src/lib/IWORKPresentationRedirector \
 	UnpackedTarball/libetonyek/src/lib/IWORKProperties \
+	UnpackedTarball/libetonyek/src/lib/IWORKPropertyHandler \
 	UnpackedTarball/libetonyek/src/lib/IWORKPropertyMap \
+	UnpackedTarball/libetonyek/src/lib/IWORKRecorder \
 	UnpackedTarball/libetonyek/src/lib/IWORKShape \
 	UnpackedTarball/libetonyek/src/lib/IWORKSpreadsheetRedirector \
 	UnpackedTarball/libetonyek/src/lib/IWORKStyle \
 	UnpackedTarball/libetonyek/src/lib/IWORKStyleStack \
 	UnpackedTarball/libetonyek/src/lib/IWORKStylesheet \
 	UnpackedTarball/libetonyek/src/lib/IWORKTable \
+	UnpackedTarball/libetonyek/src/lib/IWORKTableRecorder \
 	UnpackedTarball/libetonyek/src/lib/IWORKText \
+	UnpackedTarball/libetonyek/src/lib/IWORKTextRecorder \
 	UnpackedTarball/libetonyek/src/lib/IWORKTextRedirector \
 	UnpackedTarball/libetonyek/src/lib/IWORKToken \
 	UnpackedTarball/libetonyek/src/lib/IWORKTokenizer \
@@ -79,6 +86,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/IWORKZlibStream \
 	UnpackedTarball/libetonyek/src/lib/KEY1Parser \
 	UnpackedTarball/libetonyek/src/lib/KEY1Token \
+	UnpackedTarball/libetonyek/src/lib/KEY2Collector \
 	UnpackedTarball/libetonyek/src/lib/KEY2Dictionary \
 	UnpackedTarball/libetonyek/src/lib/KEY2Parser \
 	UnpackedTarball/libetonyek/src/lib/KEY2ParserState \
@@ -90,15 +98,18 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/NUM1Parser \
 	UnpackedTarball/libetonyek/src/lib/NUM1ParserState \
 	UnpackedTarball/libetonyek/src/lib/NUM1Token \
+	UnpackedTarball/libetonyek/src/lib/NUM3Parser \
 	UnpackedTarball/libetonyek/src/lib/NUMCollector \
 	UnpackedTarball/libetonyek/src/lib/PAG1Dictionary \
 	UnpackedTarball/libetonyek/src/lib/PAG1Parser \
 	UnpackedTarball/libetonyek/src/lib/PAG1ParserState \
 	UnpackedTarball/libetonyek/src/lib/PAG1Token \
+	UnpackedTarball/libetonyek/src/lib/PAG5Parser \
 	UnpackedTarball/libetonyek/src/lib/PAGCollector \
 	UnpackedTarball/libetonyek/src/lib/PAGProperties \
 	UnpackedTarball/libetonyek/src/lib/PAGTypes \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBezierElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBinaryElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBrContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKChartInfoElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKColorElement \
@@ -114,6 +125,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKLayoutElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKLineElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKLinkElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelGeometriesProperty \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelGeometryElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelIndentsProperty \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelTypeinfoElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelTypesProperty \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListTextIndentsProperty \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListstyleElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKMediaElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKMetadataElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKNumberConverter \
