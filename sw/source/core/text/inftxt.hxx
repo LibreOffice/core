@@ -254,8 +254,10 @@ public:
 
     inline const  SwViewOption &GetOpt() const { return *m_pOpt; }
     inline const OUString &GetText() const { return *m_pText; }
-    inline sal_Unicode GetChar( const sal_Int32 nPos ) const
-    { if (m_pText && nPos < m_pText->getLength()) return (*m_pText)[ nPos ]; return 0; }
+    inline sal_Unicode GetChar( const sal_Int32 nPos ) const {
+        if (m_pText && nPos < m_pText->getLength()) return (*m_pText)[ nPos ];
+        return 0;
+    }
 
     sal_uInt16      GetTextHeight() const;
 
