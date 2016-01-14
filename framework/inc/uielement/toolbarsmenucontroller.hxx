@@ -85,20 +85,17 @@ namespace framework
         private:
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
             css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
-            OUString getUINameFromCommand( const OUString& rCommandURL );
             css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
             void addCommand( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
             bool isContextSensitiveToolbarNonVisible() { return m_bResetActive;}
 
             css::uno::Reference< css::uno::XComponentContext >        m_xContext;
             css::uno::Reference< css::container::XNameAccess >        m_xPersistentWindowState;
-            css::uno::Reference< css::container::XNameAccess >        m_xUICommandDescription;
             css::uno::Reference< css::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
             css::uno::Reference< css::ui::XUIConfigurationManager >   m_xDocCfgMgr;
             OUString                                                  m_aModuleIdentifier;
             OUString                                                  m_aPropUIName;
             OUString                                                  m_aPropResourceURL;
-            bool                                                      m_bModuleIdentified;
             bool                                                      m_bResetActive;
             std::vector< OUString >                                   m_aCommandVector;
             IntlWrapper                                               m_aIntlWrapper;
