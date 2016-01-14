@@ -13,7 +13,8 @@
 using namespace com::sun::star;
 
 OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
-    : m_pXSecController(pXSecController)
+    : m_pXSecController(pXSecController),
+      m_bInDigestValue(false)
 {
 }
 
@@ -49,6 +50,11 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             m_pXSecController->addReference(aURI.copy(1));
         // TODO else
     }
+    else if (rName == "DigestValue")
+    {
+        m_aDigestValue.clear();
+        m_bInDigestValue = true;
+    }
 }
 
 void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
@@ -56,15 +62,15 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
     if (rName == "SignedInfo")
         m_pXSecController->setReferenceCount();
     else if (rName == "Reference")
-    {
-        // TODO import digest value
-        OUString aDigestValue;
-        m_pXSecController->setDigestValue(aDigestValue);
-    }
+        m_pXSecController->setDigestValue(m_aDigestValue);
+    else if (rName == "DigestValue")
+        m_bInDigestValue = false;
 }
 
-void SAL_CALL OOXMLSecParser::characters(const OUString& /*rChars*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
+    if (m_bInDigestValue)
+        m_aDigestValue += rChars;
 }
 
 void SAL_CALL OOXMLSecParser::ignorableWhitespace(const OUString& /*rWhitespace*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
