@@ -117,7 +117,7 @@ CoreTextStyle::~CoreTextStyle()
         CFRelease( mpStyleDict );
 }
 
-void CoreTextStyle::GetFontMetric( ImplFontMetricData& rFontMetric ) const
+void CoreTextStyle::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
@@ -125,20 +125,20 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rFontMetric ) const
 
     const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
     const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
-    rFontMetric.SetAscent( lrint( fAscent ) );
-    rFontMetric.SetDescent( lrint( CTFontGetDescent( aCTFontRef )) );
-    rFontMetric.SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
-    rFontMetric.SetInternalLeading( lrint( fAscent - fCapHeight ) );
+    rxFontMetric->SetAscent( lrint( fAscent ) );
+    rxFontMetric->SetDescent( lrint( CTFontGetDescent( aCTFontRef )) );
+    rxFontMetric->SetExternalLeading( lrint( CTFontGetLeading( aCTFontRef )) );
+    rxFontMetric->SetInternalLeading( lrint( fAscent - fCapHeight ) );
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
-    rFontMetric.SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
+    rxFontMetric->SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
 
     // all CoreText fonts are scalable
-    rFontMetric.SetScalableFlag( true );
-    rFontMetric.SetTrueTypeFlag( true ); // Not sure, but this field is used only for Windows so far
-    rFontMetric.SetKernableFlag( true );
+    rxFontMetric->SetScalableFlag( true );
+    rxFontMetric->SetTrueTypeFlag( true ); // Not sure, but this field is used only for Windows so far
+    rxFontMetric->SetKernableFlag( true );
 }
 
 bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const

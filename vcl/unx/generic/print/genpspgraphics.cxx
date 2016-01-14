@@ -914,7 +914,7 @@ void GenPspGraphics::ClearDevFontCache()
     GlyphCache::GetInstance().ClearFontCache();
 }
 
-void GenPspGraphics::GetFontMetric( ImplFontMetricData *pFontMetric, int )
+void GenPspGraphics::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int )
 {
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     psp::PrintFontInfo aInfo;
@@ -922,24 +922,24 @@ void GenPspGraphics::GetFontMetric( ImplFontMetricData *pFontMetric, int )
     if (rMgr.getFontInfo (m_pPrinterGfx->GetFontID(), aInfo))
     {
         FontAttributes aDFA = Info2FontAttributes( aInfo );
-        static_cast< FontAttributes& >(*pFontMetric) = aDFA;
-        pFontMetric->SetBuiltInFontFlag( aDFA.IsBuiltInFont() );
-        pFontMetric->SetScalableFlag( true );
-        pFontMetric->SetTrueTypeFlag( false ); // FIXME, needed?
+        static_cast< FontAttributes& >(*rxFontMetric) = aDFA;
+        rxFontMetric->SetBuiltInFontFlag( aDFA.IsBuiltInFont() );
+        rxFontMetric->SetScalableFlag( true );
+        rxFontMetric->SetTrueTypeFlag( false ); // FIXME, needed?
 
-        pFontMetric->SetOrientation( m_pPrinterGfx->GetFontAngle() );
-        pFontMetric->SetSlant( 0 );
+        rxFontMetric->SetOrientation( m_pPrinterGfx->GetFontAngle() );
+        rxFontMetric->SetSlant( 0 );
 
         sal_Int32 nTextHeight   = m_pPrinterGfx->GetFontHeight();
         sal_Int32 nTextWidth    = m_pPrinterGfx->GetFontWidth();
         if( ! nTextWidth )
             nTextWidth = nTextHeight;
 
-        pFontMetric->SetWidth( nTextWidth );
-        pFontMetric->SetAscent( ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000 );
-        pFontMetric->SetDescent( ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000 );
-        pFontMetric->SetInternalLeading( ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000 );
-        pFontMetric->SetExternalLeading( 0 );
+        rxFontMetric->SetWidth( nTextWidth );
+        rxFontMetric->SetAscent( ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000 );
+        rxFontMetric->SetDescent( ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000 );
+        rxFontMetric->SetInternalLeading( ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000 );
+        rxFontMetric->SetExternalLeading( 0 );
     }
 }
 

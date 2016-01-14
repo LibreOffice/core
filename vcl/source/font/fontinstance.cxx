@@ -82,7 +82,7 @@ namespace std
 LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData )
     : mpFontCache(nullptr)
     , maFontSelData( rFontSelData )
-    , maFontMetric( rFontSelData )
+    , mxFontMetric( new ImplFontMetricData( rFontSelData ))
     , mpConversion( nullptr )
     , mnLineHeight( 0 )
     , mnRefCount( 1 )
@@ -99,6 +99,7 @@ LogicalFontInstance::~LogicalFontInstance()
 {
     delete mpUnicodeFallbackList;
     mpFontCache = nullptr;
+    mxFontMetric = nullptr;
 }
 
 void LogicalFontInstance::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
