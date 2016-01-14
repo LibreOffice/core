@@ -123,10 +123,6 @@ protected:
     void implCheckReadOnly( const sal_Char* pExceptionMsg )
         throw (css::lang::NoSupportException);
 
-    // Return the context's MultiComponentFactory
-    css::uno::Reference< css::lang::XMultiComponentFactory >
-        getMultiComponentFactory();
-
     // Returns the LocalItem for a given locale, if it exists, otherwise NULL
     // This method compares the locales exactly, no closest match search is performed
     LocaleItem* getItemForLocale( const css::lang::Locale& locale, bool bException )

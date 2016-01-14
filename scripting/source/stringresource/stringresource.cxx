@@ -734,25 +734,6 @@ void StringResourceImpl::implLoadAllLocales()
 }
 
 
-Reference< XMultiComponentFactory > StringResourceImpl::getMultiComponentFactory()
-{
-    ::osl::MutexGuard aGuard( getMutex() );
-
-    if( !m_xMCF.is() )
-    {
-        Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
-        if( !xSMgr.is() )
-        {
-            throw RuntimeException(
-                "StringResourceImpl::getMultiComponentFactory: Couldn't instantiate MultiComponentFactory" );
-        }
-        m_xMCF = xSMgr;
-    }
-    return m_xMCF;
-}
-
-
-
 // StringResourcePersistenceImpl
 
 
