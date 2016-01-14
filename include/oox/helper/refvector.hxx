@@ -134,7 +134,10 @@ private:
         FunctorType         maFunctor;
         sal_Int32           mnIndex;
         explicit            ForEachFunctorWithIndex( const FunctorType& rFunctor ) : maFunctor( rFunctor ), mnIndex( 0 ) {}
-        void                operator()( const value_type& rxValue ) { if( rxValue.get() ) maFunctor( mnIndex, *rxValue ); ++mnIndex; }
+        void                operator()( const value_type& rxValue ) {
+            if( rxValue.get() ) maFunctor( mnIndex, *rxValue );
+            ++mnIndex;
+        }
     };
 
     template< typename FunctorType >
