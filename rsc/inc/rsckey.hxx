@@ -43,7 +43,7 @@ public:
     Atom    Put( Atom nName, sal_uInt32 nTyp, sal_IntPtr nValue );
     Atom    Put( const char * pName, sal_uInt32 nTyp, sal_IntPtr nValue );
     Atom    Put( const char * pName, sal_uInt32 nTyp );
-    Atom    Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
+    void    Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
 
             // if true, it was found
     bool    Get( Atom nName, KEY_STRUCT * pEle );

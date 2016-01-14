@@ -39,7 +39,7 @@ public:
                     virtual ~RscConst();
     virtual RSCCLASS_TYPE   GetClassType() const override;
                     // sets the allowed values
-    ERRTYPE         SetConstant( Atom nVarName, sal_Int32 lValue );
+    void            SetConstant( Atom nVarName, sal_Int32 lValue );
     bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;
     bool            GetValueConst( sal_Int32 nValue, Atom  * pConstId ) const;
     sal_uInt32      GetConstPos( Atom nConstId );

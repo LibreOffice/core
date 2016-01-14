@@ -151,7 +151,7 @@ class RscTypCont
     inline void SETCONST( RscConst *p1, const char * p2, ToolBoxItemType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, ButtonType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, WindowAlign p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
-    RscEnum *   InitLangType();
+    void        InitLangType();
     RscEnum *   InitFieldUnitsType();
     RscEnum *   InitColor();
     RscEnum *   InitMapUnit();
@@ -263,11 +263,9 @@ public:
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
     rtl_TextEncoding  GetSourceCharSet() const { return nSourceCharSet; }
-    rtl_TextEncoding  SetSourceCharSet( rtl_TextEncoding aCharSet )
+    void              SetSourceCharSet( rtl_TextEncoding aCharSet )
                           {
-                              rtl_TextEncoding aOld = nSourceCharSet;
                               nSourceCharSet = aCharSet;
-                              return aOld;
                           }
     OString           GetSearchPath() const { return aSearchPath; }
     void              SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
@@ -285,7 +283,7 @@ public:
     ERRTYPE           WriteRc( WriteRcContext& rContext );
     void              WriteSrc( FILE * fOutput, sal_uLong nFileIndex,
                                 bool bName = true );
-    sal_uInt32        PutTranslatorKey( sal_uInt64 nKey );
+    void              PutTranslatorKey( sal_uInt64 nKey );
     void              IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
 };
 

@@ -352,12 +352,11 @@ private:
     DECL_LINK_TYPED( CallBackWriteRc, const NameNode&, void );
     DECL_LINK_TYPED( CallBackWriteSrc, const NameNode&, void );
 
-    ERRTYPE WriteRc( RscTop * pCl, ObjNode * pRoot )
+    void WriteRc( RscTop * pCl, ObjNode * pRoot )
     {
         pClass = pCl;
         if( pRoot )
             pRoot->EnumNodes( LINK( this, RscEnumerateObj, CallBackWriteRc ) );
-        return aError;
     }
     ERRTYPE WriteSrc( RscTop * pCl, ObjNode * pRoot ){
         pClass = pCl;
@@ -639,10 +638,10 @@ bool MakeConsistent( RscTop * pRscTop )
     return bRet;
 }
 
-sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )
+void RscTypCont::PutTranslatorKey( sal_uInt64 nKey )
 {
     aIdTranslator[ nKey ] = nFilePos;
-    return nPMId++;
+    nPMId++;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

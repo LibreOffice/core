@@ -143,7 +143,7 @@ protected:
 public:
     RscDefine * Search( const char * );
     sal_uLong   GetFileKey() const { return lFileKey; }
-    bool        Evaluate();
+    void        Evaluate();
     sal_Int32   GetNumber() const  { return lId;      }
     OString     GetMacro();
 };
@@ -215,7 +215,7 @@ public:
 
                     RscFile();
                     ~RscFile();
-    bool            InsertDependFile( sal_uLong lDepFile, size_t lPos );
+    void            InsertDependFile( sal_uLong lDepFile, size_t lPos );
     bool            Depend( sal_uLong lDepend, sal_uLong lFree );
     void            SetIncFlag(){ bIncFile = true; };
     bool            IsIncFile(){  return bIncFile; };

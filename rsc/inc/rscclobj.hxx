@@ -70,9 +70,9 @@ public:
     ObjNode*    pObjBiTree; // Zeiger auf Objektbaum
                 RefNode( Atom nTyp );
     sal_uInt32  GetId() const override;
-    bool        Insert( RefNode* pTN ) //< insert a new node in the b-tree
+    void        Insert( RefNode* pTN ) //< insert a new node in the b-tree
                     {
-                        return IdNode::Insert( static_cast<IdNode *>(pTN) );
+                        IdNode::Insert( static_cast<IdNode *>(pTN) );
                     }
     bool        PutObjNode( ObjNode * pPutObject );
 

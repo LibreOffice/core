@@ -160,14 +160,10 @@ void RscDefine::DefineToNumber()
     SetName(OString::number(lId));
 }
 
-bool RscDefine::Evaluate()
+void RscDefine::Evaluate()
 {
-    bool    bRet = true;
-
     if( pExp )
-        bRet = !pExp->Evaluate( &lId );
-
-    return bRet;
+        pExp->Evaluate( &lId );
 }
 
 RscDefine * RscDefine::Search( const char * pStr )
@@ -408,13 +404,13 @@ bool RscFile::Depend( sal_uLong lDepend, sal_uLong lFree )
     return true;
 }
 
-bool RscFile::InsertDependFile( sal_uLong lIncFile, size_t lPos )
+void RscFile::InsertDependFile( sal_uLong lIncFile, size_t lPos )
 {
     for ( size_t i = 0, n = aDepLst.size(); i < n; ++i )
     {
         RscDepend* pDep = aDepLst[ i ];
         if( pDep->GetFileKey() == lIncFile )
-            return true;
+            return;
     }
 
     // current pointer points to last element
@@ -429,7 +425,6 @@ bool RscFile::InsertDependFile( sal_uLong lIncFile, size_t lPos )
         ::std::advance( it, lPos );
         aDepLst.insert( it, new RscDepend( lIncFile ) );
     }
-    return true;
 }
 
 RscDefTree::~RscDefTree()

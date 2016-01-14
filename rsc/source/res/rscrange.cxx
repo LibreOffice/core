@@ -36,7 +36,7 @@ RSCCLASS_TYPE RscRange::GetClassType() const
     return RSCCLASS_NUMBER;
 }
 
-ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
+void RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 {
     if( nMinimum > nMaximum )
     {
@@ -48,8 +48,6 @@ ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
         nMax = nMaximum;
         nMin = nMinimum;
     }
-
-    return ERR_OK;
 }
 
 bool RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
@@ -150,7 +148,7 @@ RSCCLASS_TYPE RscLongRange::GetClassType() const
     return RSCCLASS_NUMBER;
 }
 
-ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
+void RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 {
     if( nMinimum > nMaximum )
     {
@@ -162,8 +160,6 @@ ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
         nMax = nMaximum;
         nMin = nMinimum;
     }
-
-    return ERR_OK;
 }
 
 bool RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )

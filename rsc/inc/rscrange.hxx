@@ -40,7 +40,7 @@ public:
     virtual RSCCLASS_TYPE   GetClassType() const override;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
                     // sets the allowed range
-    ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
+    void            SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // returns the class size in bytes
     sal_uInt32      Size() override { return nSize; }
                     // an assignment to a variable
@@ -78,7 +78,7 @@ public:
     virtual RSCCLASS_TYPE   GetClassType() const override;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
                     // sets the allowed range
-    ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
+    void            SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // returns the class size in bytes
     sal_uInt32      Size() override { return nSize; }
                     // an assignment to a variable
@@ -120,11 +120,10 @@ public:
                     RscIdRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
                     // sets the allowed range
-    ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
+    void            SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
                         {
                             nMin = nMinimum;
                             nMax = nMaximum;
-                            return ERR_OK;
                         }
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
     void            Destroy( const RSCINST & rInst ) override;
