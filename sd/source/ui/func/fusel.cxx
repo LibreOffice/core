@@ -78,7 +78,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-
 FuSelection::FuSelection (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -155,7 +154,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-    if (mpDoc->isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // When tiled rendering, we always work in logic units, use the non-pixel constants.
         nDrgLog = DRGLOG;
@@ -276,7 +275,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 mpWindow->ReleaseMouse();
 
                 // If tiled rendering, let client handles URL execution and early returns.
-                if (mpDoc->isTiledRendering())
+                if (comphelper::LibreOfficeKit::isActive())
                 {
                     if (comphelper::LibreOfficeKit::isViewCallback())
                     {

@@ -67,6 +67,7 @@
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/lok.hxx>
 
 #include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
@@ -506,7 +507,7 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
 void ViewShell::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(GetDoc()->isTiledRendering());
+    assert(comphelper::LibreOfficeKit::isActive());
 
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
     mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
@@ -519,7 +520,7 @@ void ViewShell::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
 void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(GetDoc()->isTiledRendering());
+    assert(comphelper::LibreOfficeKit::isActive());
 
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
     mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
@@ -532,7 +533,7 @@ void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
 void ViewShell::LogicMouseMove(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(GetDoc()->isTiledRendering());
+    assert(comphelper::LibreOfficeKit::isActive());
 
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
     mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
