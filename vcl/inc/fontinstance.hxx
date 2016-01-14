@@ -39,7 +39,7 @@ public:
 public: // TODO: make data members private
     ImplFontCache * mpFontCache;
     FontSelectPattern  maFontSelData;       // FontSelectionData
-    ImplFontMetricData maFontMetric;        // Font attributes
+    ImplFontMetricDataPtr mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     long            mnLineHeight;
