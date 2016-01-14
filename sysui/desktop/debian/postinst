@@ -176,6 +176,7 @@ application/x-wordperfect; %PREFIX -view %s
 application/wordperfect; %PREFIX -view %s
 application/vnd.lotus-wordpro; %PREFIX -view %s
 application/wpwin; %PREFIX -view %s
+application/x-mswrite; %PREFIX -view %s
 application/vnd.openofficeorg.extension; %PREFIX %s
 END
 
