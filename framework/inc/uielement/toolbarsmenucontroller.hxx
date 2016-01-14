@@ -85,7 +85,6 @@ namespace framework
         private:
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
             css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
-            OUString getUINameFromCommand( const OUString& rCommandURL );
             css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
             void addCommand( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
             bool isContextSensitiveToolbarNonVisible() { return m_bResetActive;}

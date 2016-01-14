@@ -51,6 +51,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <svtools/miscopt.hxx>
@@ -155,7 +156,7 @@ void ToolbarsMenuController::addCommand(
 
     OUString aLabel;
     if ( rLabel.isEmpty() )
-        aLabel = getUINameFromCommand( rCommandURL );
+        aLabel = vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand( rCommandURL, m_xFrame );
     else
         aLabel = rLabel;
 
@@ -207,52 +208,6 @@ Reference< XDispatch > ToolbarsMenuController::getDispatchFromCommandURL( const 
         return xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
     else
         return Reference< XDispatch >();
-}
-
-// private function
-OUString ToolbarsMenuController::getUINameFromCommand( const OUString& rCommandURL )
-{
-    OUString aLabel;
-
-    if ( !m_bModuleIdentified  )
-    {
-        try
-        {
-            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-            m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
-            Reference< XNameAccess > xNameAccess = frame::theUICommandDescription::get( m_xContext );
-            xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandDescription;
-        }
-        catch ( const Exception& )
-        {
-        }
-    }
-
-    if ( m_xUICommandDescription.is() )
-    {
-        try
-        {
-            Sequence< PropertyValue > aPropSeq;
-            OUString             aStr;
-            if ( m_xUICommandDescription->getByName( rCommandURL ) >>= aPropSeq )
-            {
-                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-                {
-                    if ( aPropSeq[i].Name == "Label" )
-                    {
-                        aPropSeq[i].Value >>= aStr;
-                        break;
-                    }
-                }
-            }
-            aLabel = aStr;
-        }
-        catch ( const Exception& )
-        {
-        }
-    }
-
-    return aLabel;
 }
 
 static void fillHashMap( const Sequence< Sequence< css::beans::PropertyValue > >& rSeqToolBars,
