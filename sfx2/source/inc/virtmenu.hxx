@@ -89,7 +89,6 @@ public:
     void            SetItemText( sal_uInt16 nItemId, const OUString& rText );
 
     Menu*           GetSVMenu() const { return pSVMenu;}
-    SfxMenuControl& operator[]( sal_uInt16 nPos ) const;
 
     void            SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
     void            InitPopup(sal_uInt16 nPos, bool bOLE = true);
@@ -98,12 +97,6 @@ public:
     DECL_LINK_TYPED( Select, Menu*, bool );
 };
 
-
-
-inline SfxMenuControl& SfxVirtualMenu::operator[]( sal_uInt16 nPos ) const
-{
-    return *(pItems+nPos);
-}
 
 
 #endif

@@ -79,8 +79,6 @@ struct StringList_Impl : private Resource
         : Resource( rErrIdP ), aResId(nId, *rErrIdP.GetResMgr()) {}
     ~StringList_Impl() { FreeResource(); }
 
-    operator bool()      { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
-
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX

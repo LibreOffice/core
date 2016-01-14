@@ -229,7 +229,7 @@ class SfxDocTplService_Impl
                                                                   const OUString& aFsysGroupName,
                                                                   const OUString& aOldGroupName,
                                                                   const OUString& aNewGroupName );
-    bool                    RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
+    void                    RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aGroupName );
     bool                    WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                 const uno::Sequence< beans::StringPair >& aUINames );
@@ -1322,7 +1322,7 @@ bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& a
 }
 
 
-bool SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
+void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aGroupName )
 {
     uno::Sequence< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
@@ -1343,7 +1343,7 @@ bool SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aU
 
     aNewUINames.realloc( nNewLen );
 
-    return !bChanged || WriteUINamesForTemplateDir_Impl( aUserPath, aNewUINames );
+    !bChanged || WriteUINamesForTemplateDir_Impl( aUserPath, aNewUINames );
 }
 
 
