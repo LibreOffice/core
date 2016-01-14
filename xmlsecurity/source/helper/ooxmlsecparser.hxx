@@ -31,6 +31,8 @@ class OOXMLSecParser: public cppu::WeakImplHelper
 
     bool m_bInDigestValue;
     OUString m_aDigestValue;
+    bool m_bInSignatureValue;
+    OUString m_aSignatureValue;
 
 public:
     OOXMLSecParser(XSecController* pXSecController);
