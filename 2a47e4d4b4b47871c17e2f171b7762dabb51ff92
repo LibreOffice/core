@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_252b3d84",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2016-01-14T19:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_53c46f91",
+      "range": {
+        "startLine": 191,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 7
+      },
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_73bb730f",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2015-12-03T22:45:47Z",
       "side": 1,
       "message": "Please place block scope braces on the next line, not following the conditional statement, so\n\n if (...)\n {\n     ...\n }\n\nMakes it easier for the eye when in the editor jumping between braces on larger blocks.\n\nAnd please one space between keyword and the opening parenthesis.",
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8520299d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2016-01-14T19:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_73bb730f",
       "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_652545aa",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2016-01-14T19:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_33c1eb81",
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_f3ce43b3",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 2
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_a53e0db6",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2016-01-14T19:32:17Z",
+      "side": 1,
+      "message": "I fixed this bug.\nHere the nArgs equals to the number of parameter descriptions. Does ScFuncDesc have some methods or member variables which express the number of parameter descriptions? \nAt first I thought ScFuncDesc::GetSuppressedArgCount() was just the thing, but it seemed to be not.",
+      "parentUuid": "dab17558_f3ce43b3",
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_d3cfbfb1",
         "filename": "sc/source/ui/inc/inputhdl.hxx",
         "patchSetId": 2
@@ -87,6 +165,24 @@
       "writtenOn": "2015-12-03T22:45:47Z",
       "side": 1,
       "message": "This should take a const reference instead of a temporary per-value copy, so\n\n ShowDescTip( const OUString\u0026 rFuncName );\n\nNitpick: please stick with our naming conventions, rFuncName in this case.",
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_054c396f",
+        "filename": "sc/source/ui/inc/inputhdl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2016-01-14T19:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_d3cfbfb1",
       "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
