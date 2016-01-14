@@ -2120,41 +2120,32 @@ bool SvNumberformat::GetOutputString(double fNumber,
         case css::util::NumberFormat::NUMBER: // Standard number format
             if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
             {
-                bool bSign = ::rtl::math::isSignBitSet(fNumber);
-                if (bSign)
+                if (::rtl::math::isSignBitSet(fNumber))
                 {
                     if (!(fNumber < 0.0))
-                    {
-                        bSign = false;
-                    }
-                    fNumber = -fNumber;
+                        fNumber = -fNumber;     // do not display -0.0
                 }
-                if (fNumber < EXP_LOWER_BOUND)
+                if (fNumber < EXP_LOWER_BOUND && fNumber > -EXP_LOWER_BOUND)
                 {
-                    sBuff.append( ::rtl::math::doubleToUString( fNumber,
+                    OutString = ::rtl::math::doubleToUString( fNumber,
                                 rtl_math_StringFormat_E2,
                                 15,
-                                GetFormatter().GetNumDecimalSep()[0], true));
+                                GetFormatter().GetNumDecimalSep()[0], true);
                 }
-                else if (fNumber < 1.0)
+                else if (fNumber < 1.0 && fNumber > -1.0)
                 {
-                    sBuff.append( ::rtl::math::doubleToUString( fNumber,
+                    OutString = ::rtl::math::doubleToUString( fNumber,
                                 rtl_math_StringFormat_Automatic,
                                 15,
-                                GetFormatter().GetNumDecimalSep()[0], true));
+                                GetFormatter().GetNumDecimalSep()[0], true);
                 }
                 else
                 {
-                    sBuff.append( ::rtl::math::doubleToUString( fNumber,
+                    OutString = ::rtl::math::doubleToUString( fNumber,
                                 rtl_math_StringFormat_Automatic,
                                 rtl_math_DecimalPlaces_Max,
-                                GetFormatter().GetNumDecimalSep()[0], true));
+                                GetFormatter().GetNumDecimalSep()[0], true);
                 }
-                if (bSign)
-                {
-                    sBuff.insert(0, '-');
-                }
-                OutString = sBuff.makeStringAndClear();
                 return false;
             }
             ImpGetOutputStandard(fNumber, sBuff);
