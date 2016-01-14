@@ -878,15 +878,15 @@ namespace
         if (aCommand.isEmpty())
             return;
 
-        OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommand, rFrame));
+        OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aCommand, rFrame));
         if (!aLabel.isEmpty())
             pButton->SetText(aLabel);
 
-        OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommand, rFrame));
+        OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(aCommand, rFrame));
         if (!aTooltip.isEmpty())
             pButton->SetQuickHelpText(aTooltip);
 
-        Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommand, /*bLarge=*/ false, rFrame));
+        Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommand, /*bLarge=*/ false, rFrame));
         pButton->SetModeImage(aImage);
 
         pButton->SetCommandHandler(aCommand);

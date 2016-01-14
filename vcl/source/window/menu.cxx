@@ -528,9 +528,9 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame,
                       MenuItemBits nBits, const OString &rIdent, sal_uInt16 nPos)
 {
-    OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
-    OUString aTooltip(CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
-    Image aImage(CommandInfoProvider::Instance().GetImageForCommand(rCommand, /*bLarge=*/ false, rFrame));
+    OUString aLabel(CommandInfoProvider::GetPopupLabelForCommand(rCommand, rFrame));
+    OUString aTooltip(CommandInfoProvider::GetTooltipForCommand(rCommand, rFrame));
+    Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, /*bLarge=*/ false, rFrame));
 
     sal_uInt16 nItemId = GetItemCount() + 1;
 
