@@ -218,10 +218,27 @@ inline void doubleToString(StringT ** pResult,
         // true within the precision range.
         if (nInt <= kMaxInt && static_cast<double>(nInt) == fValue)
         {
-            if (nDecPlaces == rtl_math_DecimalPlaces_Max || bEraseTrailingDecZeros)
+            if (nDecPlaces == rtl_math_DecimalPlaces_Max)
                 nDecPlaces = 0;
             else
-                nDecPlaces = ::std::min<sal_Int32>(nDecPlaces, 15);
+                nDecPlaces = ::std::max<sal_Int32>( ::std::min<sal_Int32>( nDecPlaces, 15), -15);
+            if (bEraseTrailingDecZeros && nDecPlaces > 0)
+                nDecPlaces = 0;
+
+            // Round before decimal position.
+            if (nDecPlaces < 0)
+            {
+                sal_Int64 nRounding = static_cast<sal_Int64>( pow( 10.0, static_cast<double>( -nDecPlaces - 1)));
+                sal_Int64 nTemp = nInt / nRounding;
+                int nDigit = nTemp % 10;
+                nTemp /= 10;
+                if (nDigit >= 5)
+                    ++nTemp;
+                nTemp *= 10;
+                nTemp *= nRounding;
+                nInt = nTemp;
+                nDecPlaces = 0;
+            }
 
             // Max 1 sign, 16 integer digits, 15 group separators, 1 decimal
             // separator, 15 decimals digits.
@@ -258,7 +275,7 @@ inline void doubleToString(StringT ** pResult,
                 pBuf[i] = c;
             }
             // Append decimals.
-            if (nDecPlaces)
+            if (nDecPlaces > 0)
             {
                 *p++ = cDecSeparator;
                 while (nDecPlaces--)
