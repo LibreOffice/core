@@ -271,7 +271,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/dibtools \
     vcl/source/gdi/embeddedfontshelper \
     vcl/source/gdi/extoutdevdata \
-    vcl/source/gdi/font \
     vcl/source/gdi/gdimtf \
     vcl/source/gdi/gdimetafiletools \
     vcl/source/gdi/gfxlink \
@@ -397,6 +396,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/font/fontcache \
     vcl/source/font/fontcharmap \
     vcl/source/font/fontmetric \
+    vcl/source/font/font \
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/gsub \
