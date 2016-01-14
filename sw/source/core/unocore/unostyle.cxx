@@ -1705,6 +1705,31 @@ void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPrope
     }
     o_rStyleBase.GetItemSet().Put(aCondItem);
 }
+template<>
+void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    using paragraphstyle_t = std::remove_const<decltype(style::ParagraphStyleCategory::TEXT)>::type;
+    using paragraphcorestyle_t = sal_uInt16;
+    if(!o_rStyleBase.getNewBase()->IsUserDefined() || !rValue.has<paragraphstyle_t>())
+        throw lang::IllegalArgumentException();
+    static std::unique_ptr<std::map<paragraphstyle_t, paragraphcorestyle_t>> pUnoToCore;
+    if(!pUnoToCore)
+    {
+        pUnoToCore.reset(new std::map<paragraphstyle_t, paragraphcorestyle_t> {
+            { style::ParagraphStyleCategory::TEXT,    SWSTYLEBIT_TEXT    },
+            { style::ParagraphStyleCategory::CHAPTER, SWSTYLEBIT_CHAPTER },
+            { style::ParagraphStyleCategory::LIST,    SWSTYLEBIT_LIST    },
+            { style::ParagraphStyleCategory::INDEX,   SWSTYLEBIT_IDX     },
+            { style::ParagraphStyleCategory::EXTRA,   SWSTYLEBIT_EXTRA   },
+            { style::ParagraphStyleCategory::HTML,    SWSTYLEBIT_HTML    }
+        });
+    }
+    const auto pUnoToCoreIt(pUnoToCore->find(rValue.get<paragraphstyle_t>()));
+    if(pUnoToCoreIt == pUnoToCore->end())
+        throw lang::IllegalArgumentException();
+    o_rStyleBase.getNewBase()->SetMask( pUnoToCoreIt->second|SFXSTYLEBIT_USERDEF );
+}
+
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SfxStyleFamily eFamily = m_rEntry.m_eFamily;
@@ -1776,36 +1801,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             break;
         case FN_UNO_CATEGORY:
         {
-            if(!rBase.getNewBase()->IsUserDefined())
-                throw lang::IllegalArgumentException();
-            short nSet = 0;
-            aValue >>= nSet;
-
-            sal_uInt16 nId;
-            switch( nSet )
-            {
-                case style::ParagraphStyleCategory::TEXT:
-                    nId = SWSTYLEBIT_TEXT;
-                    break;
-                case style::ParagraphStyleCategory::CHAPTER:
-                    nId = SWSTYLEBIT_CHAPTER;
-                    break;
-                case style::ParagraphStyleCategory::LIST:
-                    nId = SWSTYLEBIT_LIST;
-                    break;
-                case style::ParagraphStyleCategory::INDEX:
-                    nId = SWSTYLEBIT_IDX;
-                    break;
-                case style::ParagraphStyleCategory::EXTRA:
-                    nId = SWSTYLEBIT_EXTRA;
-                    break;
-                case style::ParagraphStyleCategory::HTML:
-                    nId = SWSTYLEBIT_HTML;
-                    break;
-                default: throw lang::IllegalArgumentException();
-            }
-
-            rBase.getNewBase()->SetMask( nId|SFXSTYLEBIT_USERDEF );
+            SetPropertyValue<FN_UNO_CATEGORY>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
         }
