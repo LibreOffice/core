@@ -31,25 +31,8 @@ class ImplFontMetric
     friend void intrusive_ptr_add_ref(ImplFontMetric* pImplFontMetric);
     friend void intrusive_ptr_release(ImplFontMetric* pImplFontMetric);
 
-private:
-    long                mnAscent;      // Ascent
-    long                mnDescent;     // Descent
-    long                mnIntLeading;  // Internal Leading
-    long                mnExtLeading;  // External Leading
-    long                mnLineHeight;  // Ascent+Descent+EmphasisMark
-    long                mnSlant;       // Slant
-    long                mnBulletOffset;// Offset for non-printing character
-    sal_uInt32          mnRefCount;    // Reference Counter
-
-    bool                mbScalableFont;
-    bool                mbFullstopCentered;
-    bool                mbDevice;
-
 public:
-
-    bool                operator==( const ImplFontMetric& ) const;
-
-                        ImplFontMetric();
+    explicit            ImplFontMetric();
 
     long                GetAscent() const                           { return mnAscent; }
     long                GetDescent() const                          { return mnDescent; }
@@ -74,6 +57,22 @@ public:
     void                SetScalableFlag( bool bScalable )           { mbScalableFont = bScalable; }
     void                SetFullstopCenteredFlag( bool bCentered )   { mbFullstopCentered = bCentered; }
     void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
+
+    bool                operator==( const ImplFontMetric& ) const;
+
+private:
+    long                mnAscent;                      // Ascent
+    long                mnDescent;                     // Descent
+    long                mnIntLeading;                  // Internal Leading
+    long                mnExtLeading;                  // External Leading
+    long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
+    long                mnSlant;                       // Slant
+    long                mnBulletOffset;                // Offset for non-printing character
+    sal_uInt32          mnRefCount;                    // Reference Counter
+
+    bool                mbScalableFont;
+    bool                mbFullstopCentered;
+    bool                mbDevice;
 
 };
 
