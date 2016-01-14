@@ -270,9 +270,7 @@ inline void doubleToString(StringT ** pResult,
             sal_Int32 n = (p - pBuf) / 2;
             for (sal_Int32 i=0; i < n; ++i)
             {
-                typename T::Char c = p[-i-1];
-                p[-i-1] = pBuf[i];
-                pBuf[i] = c;
+                ::std::swap( pBuf[i], p[-i-1]);
             }
             // Append decimals.
             if (nDecPlaces > 0)
