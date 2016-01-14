@@ -1742,7 +1742,7 @@ void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemProperty
     o_rStyleBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION, aString ) );
 }
 template<>
-void SwXStyle::SetPropertyValue<RES_TXTATR_CJK_RUBY>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<RES_TXTATR_CJK_RUBY>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if(MID_RUBY_CHARSTYLE != rEntry.nMemberId)
         return;
@@ -1766,6 +1766,7 @@ void SwXStyle::SetPropertyValue<RES_TXTATR_CJK_RUBY>(const SfxItemPropertySimple
         pRuby->SetCharFormatId(nId);
     }
     rStyleSet.Put(*pRuby);
+    lcl_SetDefaultWay(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
 void SwXStyle::SetPropertyValue<RES_PARATR_DROP>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -1811,104 +1812,73 @@ void SwXStyle::SetPropertyValue<RES_PARATR_NUMRULE>(const SfxItemPropertySimpleE
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    SfxStyleFamily eFamily = m_rEntry.m_eFamily;
-    SwDoc* pDoc(m_pDoc);
-    //UUUU adapted switch logic to a more readable state; removed goto's and made
-    // execution of standard setting of proerty in ItemSet dependent of this variable
-    bool bDone(false);
-    uno::Any aValue(rValue);
-    const auto nMemberId(lcl_TranslateMetric(rEntry, pDoc, aValue));
-
     switch(rEntry.nWID)
     {
         case FN_UNO_HIDDEN:
             SetPropertyValue<FN_UNO_HIDDEN>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case FN_UNO_STYLE_INTEROP_GRAB_BAG:
             SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case XATTR_FILLGRADIENT:
         case XATTR_FILLHATCH:
         case XATTR_FILLBITMAP:
         case XATTR_FILLFLOATTRANSPARENCE:
             SetPropertyValue<XATTR_FILLGRADIENT>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case RES_BACKGROUND:
             SetPropertyValue<RES_BACKGROUND>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case OWN_ATTR_FILLBMP_MODE:
             SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case RES_PAPER_BIN:
             SetPropertyValue<RES_PAPER_BIN>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
             SetPropertyValue<FN_UNO_NUM_RULES>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case RES_PARATR_OUTLINELEVEL:
             SetPropertyValue<RES_PARATR_OUTLINELEVEL>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case FN_UNO_FOLLOW_STYLE:
             SetPropertyValue<FN_UNO_FOLLOW_STYLE>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case RES_PAGEDESC:
             SetPropertyValue<RES_PAGEDESC>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case RES_TEXT_VERT_ADJUST:
             SetPropertyValue<RES_TEXT_VERT_ADJUST>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case FN_UNO_IS_AUTO_UPDATE:
-        {
             SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
-        }
         case FN_UNO_PARA_STYLE_CONDITIONS:
             SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case FN_UNO_CATEGORY:
-        {
             SetPropertyValue<FN_UNO_CATEGORY>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
-        }
         case SID_SWREGISTER_COLLECTION:
-        {
             SetPropertyValue<SID_SWREGISTER_COLLECTION>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
-        }
         case RES_TXTATR_CJK_RUBY:
             SetPropertyValue<RES_TXTATR_CJK_RUBY>(rEntry, rPropSet, rValue, rBase);
             break;
         case RES_PARATR_DROP:
             SetPropertyValue<RES_PARATR_DROP>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         case RES_PARATR_NUMRULE:
             SetPropertyValue<RES_PARATR_NUMRULE>(rEntry, rPropSet, rValue, rBase);
-            bDone = true;
             break;
         default:
-        {
-            // nothing to do
+            //UUUU adapted switch logic to a more readable state; removed goto's and made
+            // execution of standard setting of proerty in ItemSet dependent of this variable
+            uno::Any aValue(rValue);
+            lcl_TranslateMetric(rEntry, m_pDoc, aValue);
+            lcl_SetDefaultWay(rEntry, rPropSet, aValue, rBase);
             break;
-        }
     }
-    if(!bDone)
-        lcl_SetDefaultWay(rEntry, rPropSet, aValue, rBase);
 }
 
 void SAL_CALL SwXStyle::SetPropertyValues_Impl(
