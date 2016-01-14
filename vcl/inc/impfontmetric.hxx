@@ -20,8 +20,17 @@
 #ifndef INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
 #define INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
 
+#include <boost/intrusive_ptr.hpp>
+
+class ImplFontCharMap;
+typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
+
 class ImplFontMetric
 {
+    friend class FontMetric;
+    friend void intrusive_ptr_add_ref(ImplFontMetric* pImplFontMetric);
+    friend void intrusive_ptr_release(ImplFontMetric* pImplFontMetric);
+
 private:
     long                mnAscent;      // Ascent
     long                mnDescent;     // Descent
@@ -41,8 +50,6 @@ public:
     bool                operator==( const ImplFontMetric& ) const;
 
                         ImplFontMetric();
-    void                AddReference();
-    void                DeReference();
 
     long                GetAscent() const                           { return mnAscent; }
     long                GetDescent() const                          { return mnDescent; }
@@ -69,6 +76,17 @@ public:
     void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
 
 };
+
+inline void intrusive_ptr_add_ref(ImplFontMetric* pImplFontMetric)
+{
+    ++pImplFontMetric->mnRefCount;
+}
+
+inline void intrusive_ptr_release(ImplFontMetric* pImplFontMetric)
+{
+    if (--pImplFontMetric->mnRefCount == 0)
+        delete pImplFontMetric;
+}
 
 #endif // INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
 

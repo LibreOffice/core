@@ -26,19 +26,17 @@
 #include <cstdio>
 
 FontMetric::FontMetric()
-:   mpImplMetric( new ImplFontMetric )
+:   mpImplMetric( new ImplFontMetric() )
 {}
 
 FontMetric::FontMetric( const FontMetric& rFontMetric )
-:  Font( rFontMetric )
-{
-    mpImplMetric = rFontMetric.mpImplMetric;
-    mpImplMetric->AddReference();
-}
+    : Font( rFontMetric )
+    , mpImplMetric( rFontMetric.mpImplMetric )
+{}
 
 FontMetric::~FontMetric()
 {
-    mpImplMetric->DeReference();
+    mpImplMetric = nullptr;
 }
 
 FontMetric& FontMetric::operator=( const FontMetric& rFontMetric )
@@ -47,9 +45,7 @@ FontMetric& FontMetric::operator=( const FontMetric& rFontMetric )
 
     if( mpImplMetric != rFontMetric.mpImplMetric )
     {
-        mpImplMetric->DeReference();
         mpImplMetric = rFontMetric.mpImplMetric;
-        mpImplMetric->AddReference();
     }
 
     return *this;
@@ -181,24 +177,11 @@ ImplFontMetric::ImplFontMetric()
     mnLineHeight( 0 ),
     mnSlant( 0 ),
     mnBulletOffset( 0 ),
-    mnRefCount( 1 ),
+    mnRefCount( 0 ),
     mbScalableFont( false ),
     mbFullstopCentered( false ),
     mbDevice( false )
 {}
-
-inline void ImplFontMetric::AddReference()
-{
-    // TODO: disable refcounting on the default maps?
-    ++mnRefCount;
-}
-
-inline void ImplFontMetric::DeReference()
-{
-    // TODO: disable refcounting on the default maps?
-    if( --mnRefCount <= 0 )
-        delete this;
-}
 
 bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 {
