@@ -228,7 +228,7 @@ inline void doubleToString(StringT ** pResult,
             // Round before decimal position.
             if (nDecPlaces < 0)
             {
-                sal_Int64 nRounding = static_cast<sal_Int64>( pow( 10.0, static_cast<double>( -nDecPlaces - 1)));
+                sal_Int64 nRounding = static_cast<sal_Int64>( getN10Exp( -nDecPlaces - 1));
                 sal_Int64 nTemp = nInt / nRounding;
                 int nDigit = nTemp % 10;
                 nTemp /= 10;
