@@ -191,7 +191,7 @@ class LngSvcMgrListenerHelper :
 
     void    LaunchEvent( sal_Int16 nLngSvcEvtFlags );
 
-    long Timeout();
+    void Timeout();
 
 public:
     LngSvcMgrListenerHelper( LngSvcMgr &rLngSvcMgr,
@@ -260,7 +260,7 @@ void SAL_CALL LngSvcMgrListenerHelper::disposing( const lang::EventObject& rSour
     }
 }
 
-long LngSvcMgrListenerHelper::Timeout()
+void LngSvcMgrListenerHelper::Timeout()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -284,7 +284,6 @@ long LngSvcMgrListenerHelper::Timeout()
                 xRef->processLinguServiceEvent( aEvtObj );
         }
     }
-    return 0;
 }
 
 

@@ -61,7 +61,7 @@ public:
     XRMResParser();
     virtual ~XRMResParser();
 
-    int Execute( int nToken, char * pToken );
+    void Execute( int nToken, char * pToken );
 
     void SetError( bool bErr = true ) { bError = bErr; }
     bool GetError() { return bError; }

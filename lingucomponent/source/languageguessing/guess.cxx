@@ -109,15 +109,4 @@ Guess::~Guess()
 {
 }
 
-bool Guess::operator==(const string& lang)
-{
-    string toString;
-    toString += GetLanguage();
-    toString += "-";
-    toString += GetCountry();
-    toString += "-";
-    toString += GetEncoding();
-    return start(toString, lang);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

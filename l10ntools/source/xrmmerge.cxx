@@ -157,7 +157,7 @@ XRMResParser::~XRMResParser()
 {
 }
 
-int XRMResParser::Execute( int nToken, char * pToken )
+void XRMResParser::Execute( int nToken, char * pToken )
 {
     OString rToken( pToken );
 
@@ -261,7 +261,6 @@ int XRMResParser::Execute( int nToken, char * pToken )
     {
         Output( rToken );
     }
-    return 0;
 }
 
 OString XRMResParser::GetAttribute( const OString &rToken, const OString &rAttribute )

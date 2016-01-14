@@ -144,8 +144,8 @@ private:
 
     ParserQueue* pParseQueue;
 
-    bool WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
-    bool WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
+    void WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
+    void WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
 
     OString FullId();                    ///< creates cur. GID
 
@@ -175,7 +175,7 @@ public:
     ~Export();
 
     void Init();
-    int Execute( int nToken, const char * pToken ); ///< called from lexer
+    void Execute( int nToken, const char * pToken ); ///< called from lexer
 
     void SetError() { bError = true; }
     bool GetError() { return bError; }
@@ -298,7 +298,6 @@ public:
     ~MergeData();
     MergeEntrys* GetMergeEntries() { return pMergeEntrys;}
 
-    bool operator==( ResData *pData );
 };
 
 

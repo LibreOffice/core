@@ -127,7 +127,7 @@ public:
     CfgParser();
     virtual ~CfgParser();
 
-    int Execute( int nToken, char * pToken );
+    void Execute( int nToken, char * pToken );
 };
 
 /// Export strings from *.xcu files

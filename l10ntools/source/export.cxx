@@ -279,7 +279,7 @@ Export::~Export()
     }
 }
 
-int Export::Execute( int nToken, const char * pToken )
+void Export::Execute( int nToken, const char * pToken )
 {
 
     OString sToken( pToken );
@@ -300,7 +300,7 @@ int Export::Execute( int nToken, const char * pToken )
         // this tokens are not mandatory for parsing, so ignore them ...
         if ( bMergeMode )
             WriteToMerged( sOrig , false ); // ... or write them directly to dest.
-        return 0;
+        return;
     }
 
     ResData *pResData = nullptr;
@@ -320,7 +320,7 @@ int Export::Execute( int nToken, const char * pToken )
         // no res. exists at cur. level so return
         if ( bMergeMode )
             WriteToMerged( sOrig , false );
-        return 0;
+        return;
     }
 
     if ( bDefine ) {
@@ -338,7 +338,7 @@ int Export::Execute( int nToken, const char * pToken )
                     bNextMustBeDefineEOL = false;
                     if ( bMergeMode )
                         WriteToMerged( sOrig , false );
-                    return 1;
+                    return;
                 }
             }
         }
@@ -375,7 +375,7 @@ int Export::Execute( int nToken, const char * pToken )
         case NORMDEFINE:
             if ( bMergeMode )
                 WriteToMerged( sOrig , false );
-            return 0;
+            return;
         case RSCDEFINE:
             bDefine = true; // res. defined in macro
 
@@ -671,8 +671,6 @@ int Export::Execute( int nToken, const char * pToken )
     if ( bExecuteDown ) {
         Parse( LEVELDOWN, "" );
     }
-
-    return 1;
 }
 
 void Export::CutComment( OString &rText )
@@ -691,11 +689,11 @@ void Export::CutComment( OString &rText )
     }
 }
 
-bool Export::WriteData( ResData *pResData, bool bCreateNew )
+void Export::WriteData( ResData *pResData, bool bCreateNew )
 {
     if ( bMergeMode ) {
         MergeRest( pResData );
-        return true;
+        return;
     }
 
        // mandatory to export: en-US
@@ -755,7 +753,6 @@ bool Export::WriteData( ResData *pResData, bool bCreateNew )
         if ( bCreateNew )
             pResData->m_aList.clear();
     }
-    return true;
 }
 
 OString Export::GetPairedListID(const OString& rText)
@@ -780,7 +777,7 @@ OString Export::StripList(const OString & rText)
     return s1.copy( 0 , s1.lastIndexOf('\"'));
 }
 
-bool Export::WriteExportList(ResData *pResData, ExportList& rExportList,
+void Export::WriteExportList(ResData *pResData, ExportList& rExportList,
     const sal_uInt16 nTyp)
 {
     OString sGID(pResData->sGId);
@@ -822,8 +819,6 @@ bool Export::WriteExportList(ResData *pResData, ExportList& rExportList,
             "Transex3", *aOutput.mPo, global::inputPathname,
             sType, sGID, sLID, OString(), sText);
     }
-
-    return true;
 }
 
 OString Export::FullId()

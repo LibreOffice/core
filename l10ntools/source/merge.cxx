@@ -206,13 +206,6 @@ MergeData::~MergeData()
 }
 
 
-bool MergeData::operator==( ResData *pData )
-{
-    return pData->sId == sLID && pData->sGId == sGID
-        && pData->sResTyp.equalsIgnoreAsciiCase(sTyp);
-}
-
-
 // class MergeDataFile
 
 
