@@ -79,6 +79,7 @@
 
 class EditView;
 class EditEngine;
+class OutlinerSearchable;
 
 class SvxSearchItem;
 class SvxLRSpaceItem;
@@ -224,6 +225,7 @@ private:
     bool                mbTiledRendering;
     LibreOfficeKitCallback mpLibreOfficeKitCallback;
     void* mpLibreOfficeKitData;
+    OutlinerSearchable* mpLibreOfficeKitSearchable;
     EditEngine*         pEditEngine;
     VclPtr<vcl::Window> pOutWin;
     Pointer*            pPointer;
@@ -370,7 +372,7 @@ public:
 
     void            setTiledRendering(bool bTiledRendering);
     /// @see vcl::ITiledRenderable::registerCallback().
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable* pSearchable);
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
 
