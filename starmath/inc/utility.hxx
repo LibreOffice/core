@@ -135,7 +135,6 @@ public:
     vcl::Font       Get(sal_uInt16 nPos = 0) const;
 
     SmFontPickList& operator = (const SmFontPickList& rList);
-    vcl::Font       operator [] (sal_uInt16 nPos) const;
 
     void            ReadFrom(const SmFontDialog& rDialog);
     void            WriteTo(SmFontDialog& rDialog) const;

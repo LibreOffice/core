@@ -20,16 +20,15 @@ SmRtfExport::SmRtfExport(const SmNode* pIn)
 {
 }
 
-bool SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)
+void SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)
 {
     if (!m_pTree)
-        return false;
+        return;
     m_pBuffer = &rBuffer;
     m_nEncoding = nEncoding;
     m_pBuffer->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE LO_STRING_SVTOOLS_RTF_MOMATH " ");
     HandleNode(m_pTree, 0);
     m_pBuffer->append("}"); // moMath
-    return true;
 }
 
 // NOTE: This is still work in progress and unfinished, but it already covers a good

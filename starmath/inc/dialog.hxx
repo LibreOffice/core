@@ -481,14 +481,14 @@ public:
     // Dialog
     virtual short   Execute() override;
 
-    bool SelectOldSymbolSet(const OUString &rSymbolSetName)
+    void SelectOldSymbolSet(const OUString &rSymbolSetName)
     {
-        return SelectSymbolSet(*pOldSymbolSets, rSymbolSetName, false);
+        SelectSymbolSet(*pOldSymbolSets, rSymbolSetName, false);
     }
 
-    bool SelectOldSymbol(const OUString &rSymbolName)
+    void SelectOldSymbol(const OUString &rSymbolName)
     {
-        return SelectSymbol(*pOldSymbols, rSymbolName, false);
+        SelectSymbol(*pOldSymbols, rSymbolName, false);
     }
 
     bool SelectSymbolSet(const OUString &rSymbolSetName)

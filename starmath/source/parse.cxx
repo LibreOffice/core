@@ -2414,7 +2414,7 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
 }
 
 
-size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
+void SmParser::AddError(SmParseError Type, SmNode *pNode)
 {
     std::unique_ptr<SmErrorDesc> pErrDesc(new SmErrorDesc);
 
@@ -2445,8 +2445,6 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
     pErrDesc->m_aText += SM_RESSTR(nRID);
 
     m_aErrDescList.push_back(std::move(pErrDesc));
-
-    return m_aErrDescList.size()-1;
 }
 
 

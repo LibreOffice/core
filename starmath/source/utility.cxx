@@ -66,11 +66,6 @@ SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
     return *this;
 }
 
-vcl::Font SmFontPickList::operator [] (sal_uInt16 nPos) const
-{
-    return aFontVec[nPos];
-}
-
 vcl::Font SmFontPickList::Get(sal_uInt16 nPos) const
 {
     return nPos < aFontVec.size() ? aFontVec[nPos] : vcl::Font();

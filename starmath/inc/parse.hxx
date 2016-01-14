@@ -116,7 +116,7 @@ public:
     bool        IsExportSymbolNames() const        { return m_bExportSymNames; }
     void        SetExportSymbolNames(bool bVal)    { m_bExportSymNames = bVal; }
 
-    size_t      AddError(SmParseError Type, SmNode *pNode);
+    void        AddError(SmParseError Type, SmNode *pNode);
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError(size_t i);

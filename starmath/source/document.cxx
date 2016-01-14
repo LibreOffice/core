@@ -807,7 +807,7 @@ bool SmDocShell::Save()
 /*
  * replace bad characters that can not be saved. (#i74144)
  * */
-bool SmDocShell::ReplaceBadChars()
+void SmDocShell::ReplaceBadChars()
 {
     bool bReplace = false;
 
@@ -827,8 +827,6 @@ bool SmDocShell::ReplaceBadChars()
         if (bReplace)
             aText = aBuf.makeStringAndClear();
     }
-
-    return bReplace;
 }
 
 

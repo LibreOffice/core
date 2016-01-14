@@ -178,7 +178,7 @@ public:
     const OUString GetComment() const;
 
     // to replace chars that can not be saved with the document...
-    bool    ReplaceBadChars();
+    void        ReplaceBadChars();
 
     void        UpdateText();
     void        SetText(const OUString& rBuffer);
