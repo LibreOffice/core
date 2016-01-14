@@ -95,7 +95,7 @@ public:
 
     SalLayout* GetTextLayout( void ) const;
 
-    void       GetFontMetric( ImplFontMetricData& ) const;
+    void       GetFontMetric( ImplFontMetricDataPtr& ) const;
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
@@ -339,7 +339,7 @@ public:
     // set the font
     virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) override;
+    virtual void            GetFontMetric( ImplFontMetricDataPtr&, int nFallbackLevel ) override;
     // get the repertoire of the current font
     virtual const FontCharMapPtr GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
