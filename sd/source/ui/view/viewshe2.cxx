@@ -71,6 +71,7 @@
 #include <svtools/soerr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/charthelper.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -390,7 +391,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
         mpContentWindow->UpdateMapOrigin();
 
         // When tiled rendering, UpdateMapOrigin() doesn't touch the map mode.
-        if (!GetDoc()->isTiledRendering())
+        if (!comphelper::LibreOfficeKit::isActive())
             // #i74769# see above
             mpContentWindow->Invalidate(InvalidateFlags::Children);
     }

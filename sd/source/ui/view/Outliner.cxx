@@ -74,6 +74,7 @@
 #include <editeng/editerr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -632,7 +633,7 @@ bool Outliner::SearchAndReplaceAll()
         do
         {
             bFoundMatch = ! SearchAndReplaceOnce(&aSelections);
-            if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && pViewShell->GetDoc()->isTiledRendering() && bFoundMatch && aSelections.size() == 1)
+            if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::LibreOfficeKit::isActive() && bFoundMatch && aSelections.size() == 1)
             {
                 // Without this, RememberStartPosition() will think it already has a remembered position.
                 mnStartPageIndex = (sal_uInt16)-1;
@@ -645,7 +646,7 @@ bool Outliner::SearchAndReplaceAll()
         }
         while (bFoundMatch);
 
-        if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && pViewShell->GetDoc()->isTiledRendering() && !aSelections.empty())
+        if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::LibreOfficeKit::isActive() && !aSelections.empty())
         {
             boost::property_tree::ptree aTree;
             aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
@@ -669,7 +670,7 @@ bool Outliner::SearchAndReplaceAll()
 
     RestoreStartPosition ();
 
-    if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && pViewShell->GetDoc()->isTiledRendering() && !bRet)
+    if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::LibreOfficeKit::isActive() && !bRet)
     {
         // Find-all, tiled rendering and we have at least one match.
         OString aPayload = OString::number(mnStartPageIndex);
@@ -782,7 +783,7 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( false );
 
-    if (pViewShell && pViewShell->GetDoc()->isTiledRendering() && mbStringFound)
+    if (pViewShell && comphelper::LibreOfficeKit::isActive() && mbStringFound)
     {
         std::vector<Rectangle> aLogicRects;
         pOutlinerView->GetSelectionRectangles(aLogicRects);

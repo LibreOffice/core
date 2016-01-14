@@ -254,6 +254,7 @@ void SdTiledRenderingTest::testPostKeyEvent()
 
 void SdTiledRenderingTest::testPostMouseEvent()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -277,6 +278,7 @@ void SdTiledRenderingTest::testPostMouseEvent()
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().nStartPos);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSetTextSelection()
@@ -424,6 +426,7 @@ void SdTiledRenderingTest::testSearch()
 
 void SdTiledRenderingTest::testSearchAll()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
 
@@ -438,10 +441,12 @@ void SdTiledRenderingTest::testSearchAll()
     lcl_search("second", /*bFindAll=*/true);
     // This was 0: no SET_PART was emitted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSearchAllSelections()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
 
@@ -450,6 +455,7 @@ void SdTiledRenderingTest::testSearchAllSelections()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
     // This was 1: only the first match was highlighted.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSelection.size());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 #endif

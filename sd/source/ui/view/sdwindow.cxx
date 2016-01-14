@@ -41,6 +41,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 namespace sd {
 
@@ -330,7 +331,7 @@ long Window::SetZoomFactor(long nZoom)
         nZoom = mnMinZoom;
 
     // Set the zoom factor at the window's map mode.
-    if (!mpViewShell || !mpViewShell->GetDoc()->isTiledRendering())
+    if (!comphelper::LibreOfficeKit::isActive())
     {
         MapMode aMap(GetMapMode());
         aMap.SetScaleX(Fraction(nZoom, 100));
@@ -569,7 +570,7 @@ void Window::UpdateMapOrigin(bool bInvalidate)
     maPrevSize = aWinSize;
 
     // When tiled rendering, the above UpdateMapMode() call doesn't touch the map mode.
-    if (bChanged && bInvalidate && (!mpViewShell || !mpViewShell->GetDoc()->isTiledRendering()))
+    if (bChanged && bInvalidate && !comphelper::LibreOfficeKit::isActive())
         Invalidate();
 }
 
@@ -609,7 +610,7 @@ void Window::UpdateMapMode()
     Point aNewOrigin (-maWinPos.X(), -maWinPos.Y());
     maWinPos += maViewOrigin;
 
-    if (!mpViewShell || !mpViewShell->GetDoc()->isTiledRendering())
+    if (!comphelper::LibreOfficeKit::isActive())
     {
         MapMode aMap(GetMapMode());
         aMap.SetOrigin(aNewOrigin);
