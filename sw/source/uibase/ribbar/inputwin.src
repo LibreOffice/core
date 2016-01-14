@@ -40,7 +40,7 @@ ToolBox RID_TBX_FORMULA
             Identifier = FN_FORMULA_CALC ;
             HelpId = HID_TBX_FORMULA_CALC ;
             DropDown = TRUE ;
-            Text [ en-US ] = "Formula" ;
+            Text [ en-US ] = "Functions" ;
         };
         ToolBoxItem
         {
