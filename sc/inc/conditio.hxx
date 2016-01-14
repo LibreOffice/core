@@ -362,8 +362,6 @@ public:
 
     virtual void SetParent( ScConditionalFormat* ) override {}
 
-    bool operator==( const ScFormatEntry& ) const;
-
     virtual void startRendering() override;
     virtual void endRendering() override;
 
@@ -433,8 +431,6 @@ public:
     bool            MarkUsedExternalReferences() const;
 
     //  sorted (via std::set) by Index
-    //  operator== only for sorting
-    bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
     bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
 
     void startRendering();
@@ -483,8 +479,6 @@ public:
     void    DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void    SourceChanged( const ScAddress& rAddr );
-
-    bool    operator==( const ScConditionalFormatList& r ) const;       // for Ref-Undo
 
     typedef ConditionalFormatContainer::iterator iterator;
     typedef ConditionalFormatContainer::const_iterator const_iterator;

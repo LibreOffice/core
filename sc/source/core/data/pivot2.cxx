@@ -191,23 +191,6 @@ ScPivotParam& ScPivotParam::operator=( const ScPivotParam& rPivotParam )
     return *this;
 }
 
-bool ScPivotParam::operator==( const ScPivotParam& rPivotParam ) const
-{
-    bool bEqual = (nCol == rPivotParam.nCol &&
-                  nRow == rPivotParam.nRow &&
-                  nTab == rPivotParam.nTab &&
-                  bIgnoreEmptyRows  == rPivotParam.bIgnoreEmptyRows &&
-                  bDetectCategories == rPivotParam.bDetectCategories &&
-                  bMakeTotalCol == rPivotParam.bMakeTotalCol &&
-                  bMakeTotalRow == rPivotParam.bMakeTotalRow &&
-                  maLabelArray.size() == rPivotParam.maLabelArray.size() &&
-                  maPageFields == rPivotParam.maPageFields &&
-                  maColFields == rPivotParam.maColFields &&
-                  maRowFields == rPivotParam.maRowFields &&
-                  maDataFields == rPivotParam.maDataFields);
-    return bEqual;
-}
-
 // ScPivotFuncData
 
 ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
@@ -216,18 +199,6 @@ ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnFuncMask(nFuncMask),
     mnDupCount(0)
 {}
-
-bool ScPivotFuncData::operator== (const ScPivotFuncData& rFuncData) const
-{
-    if (mnCol != rFuncData.mnCol ||
-        mnOriginalDim != rFuncData.mnOriginalDim ||
-        mnFuncMask != rFuncData.mnFuncMask ||
-        mnDupCount != rFuncData.mnDupCount)
-    {
-        return false;
-    }
-    return equals(maFieldRef, rFuncData.maFieldRef);
-}
 
 #if DEBUG_PIVOT_TABLE
 void ScPivotFuncData::Dump() const

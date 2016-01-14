@@ -801,7 +801,7 @@ public:
     bool        HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
     bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = nullptr, SCCOL* pLastCol = nullptr) const;
     bool        SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden);
-    bool        SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden);
+    void        SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden);
     void        CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
     void        CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
     void        CopyRowHeight(ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, SCROW nSrcOffset);
@@ -1071,7 +1071,7 @@ private:
     bool        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
                                     const ScMarkData& rMark) const;
     bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const;
-    bool        TestTabRefAbs(SCTAB nTable) const;
+    void        TestTabRefAbs(SCTAB nTable) const;
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
 

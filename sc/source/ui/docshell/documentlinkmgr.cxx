@@ -173,15 +173,14 @@ bool DocumentLinkManager::updateDdeLinks( vcl::Window* pWin )
     return bAny;
 }
 
-bool DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
+void DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
 {
     if (!mpImpl->mpLinkManager)
-        return false;
+        return;
 
     sfx2::LinkManager* pMgr = mpImpl->mpLinkManager.get();
     const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
 
-    bool bFound = false;
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
         ::sfx2::SvBaseLink* pBase = rLinks[i].get();
@@ -194,11 +193,9 @@ bool DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& 
              OUString(pDdeLink->GetItem()) == rItem )
         {
             pDdeLink->TryUpdate();
-            bFound = true; // Could be multiple (Mode), so continue searching
+            // Could be multiple (Mode), so continue searching
         }
     }
-
-    return bFound;
 }
 
 size_t DocumentLinkManager::getDdeLinkCount() const

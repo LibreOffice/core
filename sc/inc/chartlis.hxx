@@ -193,7 +193,6 @@ public:
     void            UpdateChartsContainingTab( SCTAB nTab );
 
     bool operator==( const ScChartListenerCollection& r ) const;
-    bool operator!=( const ScChartListenerCollection& r ) const;
 
     /**
      * Start listening on hide/show change within specified cell range.  A

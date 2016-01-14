@@ -1670,11 +1670,11 @@ sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
 }
 
 // Parse only full row references
-sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
+void ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
                                const ScAddress::Details& rDetails )
 {
     if (rStr.isEmpty())
-        return 0;
+        return;
 
     const sal_Unicode* p = rStr.getStr();
     sal_uInt16 nRes = 0, ignored = 0;
@@ -1724,8 +1724,6 @@ sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
         }
         break;
     }
-
-    return (p != nullptr && *p == '\0') ? nRes : 0;
 }
 
 template<typename T > static inline void lcl_ScColToAlpha( T& rBuf, SCCOL nCol )

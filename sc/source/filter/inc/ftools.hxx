@@ -288,13 +288,13 @@ public:
 
     // various export filters
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) override;
-    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest,
+    virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest,
                                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) override;
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest,
                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) override;
-    virtual FltError ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
+    virtual void ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
                   const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions ) override;
-    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) override;
+    virtual void ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) override;
 
     virtual ScOrcusFilters* GetOrcusFilters() override;
 };

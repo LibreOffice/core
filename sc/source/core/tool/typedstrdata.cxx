@@ -72,13 +72,6 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
         left.maStrValue, right.maStrValue) == 0;
 }
 
-bool ScTypedStrData::operator== (const ScTypedStrData& r) const
-{
-    // Case insensitive comparison by default.
-    EqualCaseInsensitive aHdl;
-    return aHdl(*this, r);
-}
-
 bool ScTypedStrData::operator< (const ScTypedStrData& r) const
 {
     // Case insensitive comparison by default.

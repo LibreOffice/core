@@ -156,7 +156,7 @@ public:
 
     const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
     const ScDPItemDataVec& GetDimMemberValues( SCCOL nDim ) const;
-    bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
+    void InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(DBConnector& rDB);
 
     /**

@@ -41,11 +41,11 @@
 #include "stlpool.hxx"
 #include "ftools.hxx"
 
-FltError ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
+void ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/ )
 {
     ScRTFExport aEx( rStrm, pDoc, rRange );
-    return aEx.Write();
+    aEx.Write();
 }
 
 ScRTFExport::ScRTFExport( SvStream& rStrmP, ScDocument* pDocP, const ScRange& rRangeP )

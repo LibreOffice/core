@@ -104,8 +104,6 @@ public:
     bool empty() const;
     ScChartArray* operator[](size_t nIndex);
     const ScChartArray* operator[](size_t nIndex) const;
-
-    bool operator==(const ScChartCollection& rCmp) const;
 };
 
 #endif

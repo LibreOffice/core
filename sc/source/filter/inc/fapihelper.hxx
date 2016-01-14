@@ -231,9 +231,9 @@ public:
     /** Reads an Any from the value sequence. */
     bool                ReadValue( css::uno::Any& rAny );
     /** Reads a color value from the value sequence. */
-    bool                ReadValue( Color& rColor );
+    void                ReadValue( Color& rColor );
     /** Reads a C++ boolean value from the value sequence. */
-    bool                ReadValue( bool& rbValue );
+    void                ReadValue( bool& rbValue );
 
     // write properties -------------------------------------------------------
 

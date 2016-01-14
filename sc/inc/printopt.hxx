@@ -47,7 +47,6 @@ public:
 
     const ScPrintOptions&   operator=  ( const ScPrintOptions& rCpy );
     bool                    operator== ( const ScPrintOptions& rOpt ) const;
-    bool                    operator!= ( const ScPrintOptions& rOpt ) const;
 };
 
 // item for the dialog / options page

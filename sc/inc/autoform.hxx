@@ -327,7 +327,7 @@ public:
     ScAutoFormat();
     ScAutoFormat(const ScAutoFormat& r);
     ~ScAutoFormat();
-    bool Load();
+    void Load();
     bool Save();
 
     void SetSaveLater( bool bSet );

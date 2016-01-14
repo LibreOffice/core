@@ -1002,7 +1002,7 @@ ScAutoFormat::iterator ScAutoFormat::end()
     return m_Data.end();
 }
 
-bool ScAutoFormat::Load()
+void ScAutoFormat::Load()
 {
     INetURLObject aURL;
     SvtPathOptions aPathOpt;
@@ -1060,7 +1060,6 @@ bool ScAutoFormat::Load()
         }
     }
     mbSaveLater = false;
-    return bRet;
 }
 
 bool ScAutoFormat::Save()

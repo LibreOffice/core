@@ -730,11 +730,6 @@ bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r )
     return true;
 }
 
-bool ScChartListenerCollection::operator!=( const ScChartListenerCollection& r ) const
-{
-    return !operator==(r);
-}
-
 void ScChartListenerCollection::StartListeningHiddenRange( const ScRange& rRange, ScChartHiddenRangeListener* pListener )
 {
     maHiddenListeners.insert(std::make_pair<>(pListener, rRange));

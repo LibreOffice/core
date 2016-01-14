@@ -855,7 +855,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
 #endif
 }
 
-bool ScAttrArray::SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize)
+void ScAttrArray::SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize)
 {
     ScDocumentPool* pDocPool = pDocument->GetPool();
     for (SCSIZE i=0; i<nCount; i++)
@@ -865,7 +865,6 @@ bool ScAttrArray::SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize)
 
     pData = pNewData;
     nCount = nLimit = nSize;
-    return true;
 }
 
 static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
@@ -1407,9 +1406,8 @@ bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
     return bFound;
 }
 
-bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
+void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
 {
-    bool bFound = false;
     const ScPatternAttr* pPattern;
     const ScMergeAttr* pItem;
     SCSIZE nIndex;
@@ -1462,8 +1460,6 @@ bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
         else
             nThisStart = MAXROW+1;   // End
     }
-
-    return bFound;
 }
 
 /**

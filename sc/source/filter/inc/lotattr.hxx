@@ -76,10 +76,6 @@ private:
         ENTRY (ScPatternAttr* p);
 
         ~ENTRY ();
-
-        inline bool operator == (const ENTRY &r) const { return nHash0 == r.nHash0; }
-
-        inline bool operator == (const sal_uInt32 &r) const { return nHash0 == r; }
     };
 
     inline static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )

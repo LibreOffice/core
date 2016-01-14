@@ -273,7 +273,7 @@ public:
 
     void            UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void            UpdateInsertTabAbs(SCTAB nTable);
-    bool            UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
+    void            UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void            UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );

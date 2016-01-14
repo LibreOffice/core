@@ -1214,17 +1214,15 @@ ScRangePairList::~ScRangePairList()
     maPairs.clear();
 }
 
-ScRangePair* ScRangePairList::Remove(size_t nPos)
+void ScRangePairList::Remove(size_t nPos)
 {
     if (maPairs.size() <= nPos)
         // Out-of-bound condition.  Bail out.
-        return nullptr;
+        return;
 
     vector<ScRangePair*>::iterator itr = maPairs.begin();
     advance(itr, nPos);
-    ScRangePair* p = *itr;
     maPairs.erase(itr);
-    return p;
 }
 
 ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
@@ -1244,20 +1242,6 @@ ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
     return p;
 }
 
-bool ScRangePairList::operator==( const ScRangePairList& r ) const
-{
-    if ( this == &r )
-        return true;                // identical reference
-    if ( maPairs.size() != r.size() )
-        return false;
-    for ( size_t nIdx = 0, nCnt = maPairs.size(); nIdx < nCnt; ++nIdx )
-    {
-        if ( *maPairs[ nIdx ] != *r[ nIdx ] )
-            return false;           // auch andere Reihenfolge ist ungleich
-    }
-    return true;
-}
-
 ScRangePair* ScRangePairList::operator [](size_t idx)
 {
     return maPairs[idx];
@@ -1273,11 +1257,10 @@ size_t ScRangePairList::size() const
     return maPairs.size();
 }
 
-bool ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
+void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     ScDocument* pDoc, const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    bool bChanged = false;
     if ( !maPairs.empty() )
     {
         SCCOL nCol1;
@@ -1306,14 +1289,12 @@ bool ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
                         theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 )
                         != UR_NOTHING )
                 {
-                    bChanged = true;
                     rRange.aStart.Set( theCol1, theRow1, theTab1 );
                     rRange.aEnd.Set( theCol2, theRow2, theTab2 );
                 }
             }
         }
     }
-    return bChanged;
 }
 
 // Delete entries that have the labels (first range) on nTab

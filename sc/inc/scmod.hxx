@@ -251,8 +251,8 @@ public:
     void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
 
-    SC_DLLPUBLIC bool   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
-    SC_DLLPUBLIC bool   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
+    SC_DLLPUBLIC void   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
+    SC_DLLPUBLIC void   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
     SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
 };
 

@@ -151,7 +151,6 @@ struct ScPivotParam
     ~ScPivotParam();
 
     ScPivotParam&   operator=  ( const ScPivotParam& r );
-    bool            operator== ( const ScPivotParam& r ) const;
     void SetLabelData(const ScDPLabelDataVector& r);
 };
 
@@ -165,8 +164,6 @@ struct ScPivotFuncData
     css::sheet::DataPilotFieldReference maFieldRef;
 
     explicit ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
-
-    bool operator== (const ScPivotFuncData& r) const;
 
 #if DEBUG_PIVOT_TABLE
     void Dump() const;

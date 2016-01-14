@@ -143,8 +143,6 @@ public:
     bool            EqualEntries( const ScValidationData& r ) const;    // for undo
 
     //  sort (using std::set) by index
-    //  operator== only for sorting
-    bool operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
     bool operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
 
 private:
@@ -204,8 +202,6 @@ public:
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
-
-    bool operator==( const ScValidationDataList& r ) const;      // for ref-undo
 
     void clear();
 

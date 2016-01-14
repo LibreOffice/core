@@ -51,9 +51,9 @@ public:
     css::uno::Sequence< css::uno::Any>
             GetProperties(const css::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
-    bool    PutProperties( const css::uno::Sequence< OUString >& rNames,
+    void    PutProperties( const css::uno::Sequence< OUString >& rNames,
                             const css::uno::Sequence< css::uno::Any>& rValues)
-                            { return ConfigItem::PutProperties( rNames, rValues ); }
+                            { ConfigItem::PutProperties( rNames, rValues ); }
 
     using ConfigItem::EnableNotification;
     using ConfigItem::GetNodeNames;

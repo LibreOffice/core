@@ -68,7 +68,7 @@ public:
                             sal_Int16 nPredefId );
 
     /** Final processing after import of all style settings. Returns the API format index. */
-    sal_Int32           finalizeImport(
+    void                finalizeImport(
                             const css::uno::Reference< css::util::XNumberFormats >& rxNumFmts,
                             const css::lang::Locale& rFromLocale );
     sal_uLong fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;

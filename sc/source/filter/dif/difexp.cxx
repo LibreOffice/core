@@ -32,7 +32,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
-FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
+void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const rtl_TextEncoding eNach, sal_uInt32 nDifOption )
 {
     SCCOL       nEndCol;
@@ -43,7 +43,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* p
 
     aStart.PutInOrder( aEnd );
 
-    return ScExportDif( rStream, pDoc, ScRange( aStart, aEnd ), eNach, nDifOption );
+    ScExportDif( rStream, pDoc, ScRange( aStart, aEnd ), eNach, nDifOption );
 }
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,

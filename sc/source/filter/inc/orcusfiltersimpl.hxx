@@ -39,9 +39,9 @@ public:
     ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& rPath);
     virtual ~ScOrcusXMLContextImpl();
 
-    virtual bool loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) override;
+    virtual void loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) override;
 
-    virtual bool importXML(const ScOrcusImportXMLParam& rParam) override;
+    virtual void importXML(const ScOrcusImportXMLParam& rParam) override;
 };
 
 #endif

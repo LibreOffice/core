@@ -51,7 +51,6 @@ struct ScPageTableParam
     ScPageTableParam();
     ~ScPageTableParam();
 
-    bool                operator==  ( const ScPageTableParam& r ) const;
     void                Reset       ();
 };
 
@@ -67,7 +66,6 @@ struct ScPageAreaParam
     ScPageAreaParam();
     ~ScPageAreaParam();
 
-    bool                operator==  ( const ScPageAreaParam& r ) const;
     void                Reset       ();
 };
 

@@ -2008,10 +2008,10 @@ FormulaToken* ScTokenArray::MergeArray( )
     return AddMatrix( pArray );
 }
 
-FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
+void ScTokenArray::MergeRangeReference( const ScAddress & rPos )
 {
     if (!pCode || !nLen)
-        return nullptr;
+        return;
     sal_uInt16 nIdx = nLen;
     FormulaToken *p1, *p2, *p3;      // ref, ocRange, ref
     // The actual types are checked in extendRangeReference().
@@ -2030,7 +2030,6 @@ FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
             pCode[ nLen-1 ] = p.get();
         }
     }
-    return pCode[ nLen-1 ];
 }
 
 FormulaToken* ScTokenArray::AddOpCode( OpCode e )
@@ -2075,9 +2074,9 @@ FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const OUString&
     return Add( new ScExternalNameToken(nFileId, rName) );
 }
 
-FormulaToken* ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
+void ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
 {
-    return Add( new ScExternalSingleRefToken(nFileId, rTabName, rRef) );
+    Add( new ScExternalSingleRefToken(nFileId, rTabName, rRef) );
 }
 
 FormulaToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )

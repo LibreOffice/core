@@ -126,13 +126,13 @@ public:
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
             bool            GetProtection() const { return bProtection; }
-            bool            SetProtection( bool bProtect);
+            void            SetProtection( bool bProtect);
             bool            GetHideFormula() const { return bHideFormula; }
-            bool            SetHideFormula( bool bHFormula);
+            void            SetHideFormula( bool bHFormula);
             bool            GetHideCell() const { return bHideCell; }
-            bool            SetHideCell( bool bHCell);
+            void            SetHideCell( bool bHCell);
             bool            GetHidePrint() const { return bHidePrint; }
-            bool            SetHidePrint( bool bHPrint);
+            void            SetHidePrint( bool bHPrint);
     inline  ScProtectionAttr& operator=(const ScProtectionAttr& rProtection)
             {
                 bProtection = rProtection.bProtection;

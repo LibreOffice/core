@@ -55,11 +55,6 @@ bool FormulaGroupContext::ColKey::operator== ( const ColKey& r ) const
     return mnTab == r.mnTab && mnCol == r.mnCol;
 }
 
-bool FormulaGroupContext::ColKey::operator!= ( const ColKey& r ) const
-{
-    return !operator==(r);
-}
-
 FormulaGroupContext::ColArray::ColArray( NumArrayType* pNumArray, StrArrayType* pStrArray ) :
     mpNumArray(pNumArray), mpStrArray(pStrArray), mnSize(0)
 {

@@ -490,12 +490,11 @@ BiffInputStreamPos::BiffInputStreamPos( BiffInputStream& rStrm ) :
 {
 }
 
-bool BiffInputStreamPos::restorePosition()
+void BiffInputStreamPos::restorePosition()
 {
     bool bValidRec = mrStrm.startRecordByHandle( mnRecHandle );
     if( bValidRec )
         mrStrm.seek( mnRecPos );
-    return bValidRec && !mrStrm.isEof();
 }
 
 BiffInputStreamPosGuard::BiffInputStreamPosGuard( BiffInputStream& rStrm ) :

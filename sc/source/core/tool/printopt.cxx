@@ -66,11 +66,6 @@ bool ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
         && bForceBreaks == rOpt.bForceBreaks;
 }
 
-bool ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
-{
-    return !(operator==(rOpt));
-}
-
 ScTpPrintItem::ScTpPrintItem( sal_uInt16 nWhichP, const ScPrintOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
     theOptions  ( rOpt )

@@ -513,11 +513,10 @@ public:
     /**
      * Mark all tables as referenced that are used by any LinkListener, used
      * only during store-to-file.
-     * @returns <TRUE/> if ALL tables of ALL external documents are marked.
      */
-    bool markUsedByLinkListeners();
+    void markUsedByLinkListeners();
 
-    bool markUsedExternalRefCells();
+    void markUsedExternalRefCells();
 
     /**
      * Set a table as referenced, used only during store-to-file.

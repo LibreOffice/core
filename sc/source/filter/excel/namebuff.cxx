@@ -167,19 +167,17 @@ bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
     return maEntries[ nExcIndex -1 ].bLink;
 }
 
-bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, OUString& rAppl, OUString& rDoc ) const
+void ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, OUString& rAppl, OUString& rDoc ) const
 {
     OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index has to be >0!" );
 
     if (!nExcIndex || nExcIndex > maEntries.size() )
-        return false;
+        return;
 
     const Cont &rRet = maEntries[ nExcIndex -1 ];
 
     rAppl = rRet.aFile;
     rDoc = rRet.aTab;
-
-    return true;
 }
 
 void ExtSheetBuffer::Reset()

@@ -124,13 +124,12 @@ public:
                                         return SetState( nVal );
                                     return true;
                                 }
-            bool            SetStateCountDownOnPercent( sal_uLong nVal )
+            void            SetStateCountDownOnPercent( sal_uLong nVal )
                                 {   /// only if percentage increased
                                     if ( nGlobalRange &&
                                             ((nGlobalRange - nVal) * 100 /
                                             nGlobalRange) > nGlobalPercent )
-                                        return SetStateCountDown( nVal );
-                                    return true;
+                                        SetStateCountDown( nVal );
                                 }
             sal_uLong           GetState()
                                 {

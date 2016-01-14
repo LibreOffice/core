@@ -720,13 +720,12 @@ bool ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
     return true;
 }
 
-bool ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const
+void ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const
 {
     rBlockPos.miBroadcasterPos = maBroadcasters.begin();
     rBlockPos.miCellNotePos = maCellNotes.begin();
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
     rBlockPos.miCellPos = maCells.begin();
-    return true;
 }
 
 namespace {
@@ -1892,7 +1891,7 @@ ScFormulaCell* ScColumn::SetFormulaCell(
     return pCell;
 }
 
-ScFormulaCell* ScColumn::SetFormulaCell(
+void ScColumn::SetFormulaCell(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell,
     sc::StartListeningType eListenType )
 {
@@ -1907,7 +1906,6 @@ ScFormulaCell* ScColumn::SetFormulaCell(
     CellStorageModified();
 
     AttachNewFormulaCell(rBlockPos.miCellPos, nRow, *pCell, true, eListenType);
-    return pCell;
 }
 
 bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells )

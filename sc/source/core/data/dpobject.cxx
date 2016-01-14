@@ -2194,12 +2194,12 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
     rFields.swap(aFields);
 }
 
-bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
+void ScDPObject::FillOldParam(ScPivotParam& rParam) const
 {
     const_cast<ScDPObject*>(this)->CreateObjects();       // xSource is needed for field numbers
 
     if (!xSource.is())
-        return false;
+        return;
 
     rParam.nCol = aOutRange.aStart.Col();
     rParam.nRow = aOutRange.aStart.Row();
@@ -2237,7 +2237,6 @@ bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
             // no error
         }
     }
-    return true;
 }
 
 static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XPropertySet >& xDimProp )
@@ -2353,34 +2352,34 @@ bool ScDPObject::FillLabelDataForDimension(
     return true;
 }
 
-bool ScDPObject::FillLabelData(sal_Int32 nDim, ScDPLabelData& rLabels)
+void ScDPObject::FillLabelData(sal_Int32 nDim, ScDPLabelData& rLabels)
 {
     CreateObjects();
     if (!xSource.is())
-        return false;
+        return;
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     sal_Int32 nDimCount = xDims->getCount();
     if (nDimCount <= 0 || nDim >= nDimCount)
-        return false;
+        return;
 
-    return FillLabelDataForDimension(xDims, nDim, rLabels);
+    FillLabelDataForDimension(xDims, nDim, rLabels);
 }
 
-bool ScDPObject::FillLabelData(ScPivotParam& rParam)
+void ScDPObject::FillLabelData(ScPivotParam& rParam)
 {
     rParam.maLabelArray.clear();
 
     CreateObjects();
     if (!xSource.is())
-        return false;
+        return;
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     sal_Int32 nDimCount = xDims->getCount();
     if (nDimCount <= 0)
-        return false;
+        return;
 
     for (sal_Int32 nDim = 0; nDim < nDimCount; ++nDim)
     {
@@ -2388,8 +2387,6 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
         FillLabelDataForDimension(xDims, nDim, *pNewLabel);
         rParam.maLabelArray.push_back(std::unique_ptr<ScDPLabelData>(pNewLabel));
     }
-
-    return true;
 }
 
 bool ScDPObject::GetHierarchiesNA( sal_Int32 nDim, uno::Reference< container::XNameAccess >& xHiers )
@@ -2409,16 +2406,13 @@ bool ScDPObject::GetHierarchiesNA( sal_Int32 nDim, uno::Reference< container::XN
     return bRet;
 }
 
-bool ScDPObject::GetHierarchies( sal_Int32 nDim, uno::Sequence< OUString >& rHiers )
+void ScDPObject::GetHierarchies( sal_Int32 nDim, uno::Sequence< OUString >& rHiers )
 {
-    bool bRet = false;
     uno::Reference< container::XNameAccess > xHiersNA;
     if( GetHierarchiesNA( nDim, xHiersNA ) )
     {
         rHiers = xHiersNA->getElementNames();
-        bRet = true;
     }
-    return bRet;
 }
 
 sal_Int32 ScDPObject::GetUsedHierarchy( sal_Int32 nDim )

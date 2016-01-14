@@ -290,7 +290,7 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
 
 }
 
-bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
+void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 {
     Clear();
 
@@ -305,7 +305,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     // Sanity check
     if (!ValidRow(nStartRow) || !ValidRow(nEndRow) || nEndRow <= nStartRow)
-        return false;
+        return;
 
     sal_uInt16 nStartCol = rRange.aStart.Col();
     sal_uInt16 nEndCol = rRange.aEnd.Col();
@@ -329,7 +329,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         // possible that the new end row becomes lower than the start row
         // after the shrinkage.
         Clear();
-        return false;
+        return;
     }
 
     maFields.reserve(mnColumnCount);
@@ -379,7 +379,6 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     }
 
     PostInit();
-    return true;
 }
 
 bool ScDPCache::InitFromDataBase(DBConnector& rDB)

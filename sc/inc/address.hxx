@@ -426,14 +426,6 @@ struct ScAddressHashFunctor
     }
 };
 
-struct ScAddressEqualFunctor
-{
-    bool operator()( const ScAddress & rAdr1, const ScAddress & rAdr2 ) const
-    {
-        return rAdr1 == rAdr2;
-    }
-};
-
 inline bool ValidAddress( const ScAddress& rAddress )
 {
     return ValidCol(rAddress.Col()) && ValidRow(rAddress.Row()) && ValidTab(rAddress.Tab());
@@ -506,7 +498,7 @@ public:
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC sal_uInt16 ParseCols( const OUString&, ScDocument* = nullptr,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC sal_uInt16 ParseRows( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC void ParseRows( const OUString&, ScDocument* = nullptr,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name
@@ -681,22 +673,6 @@ inline size_t ScRange::hashStartColumn() const
         (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
          static_cast<size_t>(aEnd.Row());
 }
-
-struct ScRangeHashAreaFunctor
-{
-    size_t operator()( const ScRange & rRange ) const
-    {
-        return rRange.hashArea();
-    }
-};
-
-struct ScRangeEqualFunctor
-{
-    bool operator()( const ScRange & rRange1, const ScRange & rRange2 ) const
-    {
-        return rRange1 == rRange2;
-    }
-};
 
 inline bool ValidRange( const ScRange& rRange )
 {

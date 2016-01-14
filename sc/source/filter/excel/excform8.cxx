@@ -1299,11 +1299,11 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
     return eRet;
 }
 
-ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
+void ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
                                        const OUString& rUrl, const vector<OUString>& rTabNames )
 {
     if( !GetDocShell() )
-        return ConvErrNi;
+        return;
 
     OUString aFileUrl = ScGlobal::GetAbsDocName(rUrl, GetDocShell());
 
@@ -1316,7 +1316,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     if (eStatus != ConvOK)
     {
         rStrm.Ignore(nFormulaLen);
-        return eStatus;
+        return;
     }
 
     if (nFormulaLen == 0)
@@ -1324,7 +1324,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
         aPool.Store(OUString("-/-"));
         aPool >> aStack;
         rpArray = aPool[aStack.Get()];
-        return ConvOK;
+        return;
     }
 
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
@@ -1451,7 +1451,6 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     }
 
     rStrm.Seek(nEndPos);
-    return eRet;
 }
 
 void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData &rSRD, const bool bName )
@@ -1509,7 +1508,7 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
 }
 
 // stream seeks to first byte after <nLen>
-bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
+void ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
 {
     sal_uInt8                   nOp;
     sal_uInt16                  nRow1, nRow2, nCol1, nCol2;
@@ -1687,8 +1686,6 @@ bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
         aIn.Ignore( nSeek );
     }
     aIn.Seek( nEndPos );
-
-    return !r.empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

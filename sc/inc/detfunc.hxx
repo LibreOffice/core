@@ -116,7 +116,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
     sal_uInt16      FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uInt16 nLevel, sal_uInt16 nDeleteLevel );
 
-    bool        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
+    void        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
 
     void        Modified();
 

@@ -2434,16 +2434,14 @@ bool ScHTMLTable::PushEntry( const ImportInfo& rInfo, bool bLastInCell )
     return bPushed;
 }
 
-bool ScHTMLTable::PushTableEntry( ScHTMLTableId nTableId )
+void ScHTMLTable::PushTableEntry( ScHTMLTableId nTableId )
 {
     OSL_ENSURE( nTableId != SC_HTML_GLOBAL_TABLE, "ScHTMLTable::PushTableEntry - cannot push global table" );
-    bool bPushed = false;
     if( nTableId != SC_HTML_GLOBAL_TABLE )
     {
         ScHTMLEntryPtr xEntry( new ScHTMLEntry( maTableItemSet, nTableId ) );
-        bPushed = PushEntry( xEntry );
+        PushEntry( xEntry );
     }
-    return bPushed;
 }
 
 ScHTMLTable* ScHTMLTable::GetExistingTable( ScHTMLTableId nTableId ) const

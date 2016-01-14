@@ -42,11 +42,6 @@ public:
         sal_Int32 mnValue;
     };
 
-    struct Hash
-    {
-        size_t operator() (const ScDPItemData& rVal) const;
-    };
-
 private:
 
     union {
@@ -83,7 +78,6 @@ public:
 
     // exact equality
     bool operator==(const ScDPItemData& r) const;
-    bool operator!=(const ScDPItemData& r) const;
     bool operator< (const ScDPItemData& r) const;
 
     ScDPItemData& operator= (const ScDPItemData& r);

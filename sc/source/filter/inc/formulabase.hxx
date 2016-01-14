@@ -308,7 +308,6 @@ public:
     explicit            ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 nSpacesOpCode, bool bSkipSpaces );
     inline bool         is() const { return mpToken != mpTokenEnd; }
     inline const ApiToken* operator->() const { return mpToken; }
-    inline const ApiToken& operator*() const { return *mpToken; }
 
     ApiTokenIterator&   operator++();
 

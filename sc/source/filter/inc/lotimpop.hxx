@@ -51,7 +51,7 @@ private:
     void                Labelcell();                  // 0x0016   22
     void                Numbercell();                 // 0x0017   23
     void                Smallnumcell();               // 0x0018   24
-    ScFormulaCell*      Formulacell( sal_uInt16 nRecLen );      // 0x0019   25
+    void                Formulacell( sal_uInt16 nRecLen );      // 0x0019   25
                                                             // 0x001b   27 special
     void                NamedSheet();                 //          14000
     void                RowPresentation( sal_uInt16 nRecLen );  //           2007

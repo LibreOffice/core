@@ -989,17 +989,17 @@ public:
 
     bool IsMerged( const ScAddress& rPos ) const;
 
-    bool            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
+    void            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
                                 bool bRefresh = false );
     SC_DLLPUBLIC bool            ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
                                 bool bRefresh = false );
     bool            ExtendMerge( ScRange& rRange, bool bRefresh = false );
-    bool            ExtendTotalMerge( ScRange& rRange ) const;
-    SC_DLLPUBLIC bool           ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
+    void            ExtendTotalMerge( ScRange& rRange ) const;
+    SC_DLLPUBLIC void           ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC bool           ExtendOverlapped( ScRange& rRange ) const;
+    SC_DLLPUBLIC void           ExtendOverlapped( ScRange& rRange ) const;
 
     bool            RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
@@ -1653,7 +1653,7 @@ public:
 
     // returns whether to export a Default style for this col or not
     // nDefault is setted to one position in the current row where the Default style is
-    bool            GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault);
+    void            GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault);
 
     bool            UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bShow );
     bool            UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bShow );
@@ -1746,17 +1746,17 @@ public:
      * data range to use to populate the filter entries is inferred from the
      * database range that contains the specified cell position.
      */
-    bool GetFilterEntries(
+    void GetFilterEntries(
         SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
 
-    SC_DLLPUBLIC bool GetFilterEntriesArea(
+    SC_DLLPUBLIC void GetFilterEntriesArea(
         SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
         std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
 
-    bool GetDataEntries(
+    void GetDataEntries(
         SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
         std::vector<ScTypedStrData>& rStrings, bool bLimit = false );
-    bool GetFormulaEntries( ScTypedCaseStrSet& rStrings );
+    void GetFormulaEntries( ScTypedCaseStrSet& rStrings );
 
     bool HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
@@ -1773,7 +1773,7 @@ public:
     bool            GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
                                         bool bInSel, const ScMarkData& rMark) const;
 
-    bool            ReplaceStyle(const SvxSearchItem& rSearchItem,
+    void            ReplaceStyle(const SvxSearchItem& rSearchItem,
                                  SCCOL nCol, SCROW nRow, SCTAB nTab,
                                  ScMarkData& rMark, bool bIsUndo);
 
@@ -2215,7 +2215,7 @@ private:
 
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol ) const;
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
-    bool   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
+    void   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
 
     void SharePooledResources( ScDocument* pSrcDoc );
 

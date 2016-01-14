@@ -1354,18 +1354,16 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     return eRet;
 }
 
-ConvErr ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpStream& /*rStrm*/, sal_Size /*nFormulaLen*/,
+void ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpStream& /*rStrm*/, sal_Size /*nFormulaLen*/,
                                       const OUString& /*rUrl*/, const vector<OUString>& /*rTabNames*/ )
 {
-    // not implemented ...
-    return ConvErrNi;
 }
 
-bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )
+void ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )
 {
     OSL_ENSURE_BIFF( GetBiff() == EXC_BIFF5 );
     if( GetBiff() != EXC_BIFF5 )
-        return false;
+        return;
 
     sal_uInt8 nOp;
     sal_uInt16 nRow1, nRow2;
@@ -1574,8 +1572,6 @@ bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
         rStrm.Ignore( nSeek );
     }
     rStrm.Seek( nEndPos );
-
-    return !rRangeList.empty();
 }
 
 void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )

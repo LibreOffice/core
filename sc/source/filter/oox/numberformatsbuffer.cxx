@@ -1903,13 +1903,12 @@ void NumberFormat::setPredefinedId( const Locale& rLocale, sal_Int16 nPredefId )
     maModel.mnPredefId = nPredefId;
 }
 
-sal_Int32 NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNumFmts, const Locale& rFromLocale )
+void NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNumFmts, const Locale& rFromLocale )
 {
     if( rxNumFmts.is() && !maModel.maFmtCode.isEmpty() )
         maApiData.mnIndex = lclCreateFormat( rxNumFmts, maModel.maFmtCode, maModel.maLocale, rFromLocale );
     else
         maApiData.mnIndex = lclCreatePredefinedFormat( rxNumFmts, maModel.mnPredefId, maModel.maLocale );
-    return maApiData.mnIndex;
 }
 
 sal_uLong NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const

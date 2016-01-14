@@ -115,16 +115,15 @@ public:
                             maPairs.push_back( pR );
                         }
     void                Join( const ScRangePair&, bool bIsInList = false );
-    bool                UpdateReference( UpdateRefMode, ScDocument*,
+    void                UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void                DeleteOnTab( SCTAB nTab );
     ScRangePair*        Find( const ScAddress& ) const;
     ScRangePair*        Find( const ScRange& ) const;
     ScRangePair**       CreateNameSortedArray( size_t& nCount, ScDocument* ) const;
-    bool                operator==( const ScRangePairList& ) const;
 
-    ScRangePair*        Remove(size_t nPos);
+    void                Remove(size_t nPos);
     ScRangePair*        Remove(ScRangePair* pAdr);
 
     size_t              size() const;

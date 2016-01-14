@@ -1519,17 +1519,17 @@ void ScDetectiveFunc::UpdateAllArrowColors()
     }
 }
 
-bool ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
+void ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
 {
     //  find the rectangle for an arrow (always the object directly before the arrow)
     //  rRange must be initialized to the source cell of the arrow (start of area)
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    if (!pModel) return false;
+    if (!pModel) return;
 
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
     OSL_ENSURE(pPage,"Page ?");
-    if (!pPage) return false;
+    if (!pPage) return;
 
     // test if the object is a direct page member
     if( pObject && pObject->GetPage() && (pObject->GetPage() == pObject->GetObjList()) )
@@ -1547,12 +1547,11 @@ bool ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
                 if ( pPrevData && pPrevData->maStart.IsValid() && pPrevData->maEnd.IsValid() && (pPrevData->maStart == rRange.aStart) )
                 {
                     rRange.aEnd = pPrevData->maEnd;
-                    return true;
+                    return;
                 }
             }
         }
     }
-    return false;
 }
 
 ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,

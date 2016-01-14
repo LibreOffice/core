@@ -1665,7 +1665,7 @@ sal_uInt16 ScExternalRefManager::getExternalFileCount() const
     return static_cast< sal_uInt16 >( maSrcFiles.size() );
 }
 
-bool ScExternalRefManager::markUsedByLinkListeners()
+void ScExternalRefManager::markUsedByLinkListeners()
 {
     bool bAllMarked = false;
     for (LinkListenerMap::const_iterator itr = maLinkListeners.begin();
@@ -1677,10 +1677,9 @@ bool ScExternalRefManager::markUsedByLinkListeners()
          * As is, listening to one table will mark all tables of the document
          * being referenced. */
     }
-    return bAllMarked;
 }
 
-bool ScExternalRefManager::markUsedExternalRefCells()
+void ScExternalRefManager::markUsedExternalRefCells()
 {
     RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end();
     for (; itr != itrEnd; ++itr)
@@ -1692,10 +1691,9 @@ bool ScExternalRefManager::markUsedExternalRefCells()
             bool bUsed = pCell->MarkUsedExternalReferences();
             if (bUsed)
                 // Return true when at least one cell references external docs.
-                return true;
+                return;
         }
     }
-    return false;
 }
 
 bool ScExternalRefManager::setCacheTableReferenced( sal_uInt16 nFileId, const OUString& rTabName, size_t nSheets )

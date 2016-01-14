@@ -973,19 +973,6 @@ void ScValidationDataList::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
         (*it)->UpdateMoveTab(rCxt);
 }
 
-bool ScValidationDataList::operator==( const ScValidationDataList& r ) const
-{
-    // for Ref-Undo - internal variables can not be compared
-
-    size_t nCount = maData.size();
-    bool bEqual = ( nCount == r.maData.size() );
-    for( const_iterator it1 = begin(), it2 = r.begin(); it1 != end() && bEqual; ++it1, ++it2 ) // Entries are sorted
-        if ( !(*it1)->EqualEntries(**it2) )         // different entries ?
-            bEqual = false;
-
-    return bEqual;
-}
-
 ScValidationDataList::iterator ScValidationDataList::begin()
 {
     return maData.begin();

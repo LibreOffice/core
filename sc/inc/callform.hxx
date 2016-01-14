@@ -76,13 +76,13 @@ public:
     sal_uInt16      GetParamCount() const { return nParamCount; }
     ParamType       GetParamType(sal_uInt16 nIndex) const { return eParamType[nIndex]; }
     ParamType       GetAsyncType() const { return eAsyncType; }
-    bool            Call(void** ppParam) const;
-    bool            Unadvice(double nHandle);
+    void            Call(void** ppParam) const;
+    void            Unadvice(double nHandle);
 
                 /** name and description of parameter nParam.
                     nParam==0 => Desc := function description,
                     Name := n/a */
-    bool getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const;
+    void getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const;
 };
 
 class LegacyFuncCollection

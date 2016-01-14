@@ -44,11 +44,6 @@ void ScPageTableParam::Reset()
     nFirstPageNo = 1;
 }
 
-bool ScPageTableParam::operator==( const ScPageTableParam& r ) const
-{
-    return ( memcmp( this, &r, sizeof(ScPageTableParam) ) == 0 );
-}
-
 // struct ScPageAreaParam:
 
 ScPageAreaParam::ScPageAreaParam()
@@ -69,24 +64,5 @@ void ScPageAreaParam::Reset()
     memset( &aRepeatCol, 0, sizeof(ScRange) );
 }
 
-bool ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
-{
-    bool bEqual =
-            bPrintArea  == r.bPrintArea
-        &&  bRepeatRow  == r.bRepeatRow
-        &&  bRepeatCol  == r.bRepeatCol;
-
-    if ( bEqual )
-        if ( bPrintArea )
-            bEqual = bEqual && ( aPrintArea == r.aPrintArea );
-    if ( bEqual )
-        if ( bRepeatRow )
-            bEqual = bEqual && ( aRepeatRow == r.aRepeatRow );
-    if ( bEqual )
-        if ( bRepeatCol )
-            bEqual = bEqual && ( aRepeatCol == r.aRepeatCol );
-
-    return bEqual;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

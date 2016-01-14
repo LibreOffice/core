@@ -29,33 +29,6 @@
 const sal_Int32 ScDPItemData::DateFirst = -1;
 const sal_Int32 ScDPItemData::DateLast  = 10000;
 
-size_t ScDPItemData::Hash::operator() (const ScDPItemData& rVal) const
-{
-    switch (rVal.GetType())
-    {
-        case GroupValue:
-        case Value:
-        case RangeStart:
-            return (size_t)(rVal.mfValue);
-        case String:
-        case Error:
-        {
-            if (!rVal.mpString)
-                return 0;
-
-            if (rVal.mbStringInterned)
-                return reinterpret_cast<size_t>(rVal.mpString);
-
-            OUStringHash aStrHasher;
-            return aStrHasher(*rVal.mpString);
-        }
-        default:
-            ;
-    }
-
-    return 0;
-}
-
 sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 {
     if (rA.meType != rB.meType)
@@ -250,11 +223,6 @@ bool ScDPItemData::operator== (const ScDPItemData& r) const
 
     // need exact equality until we have a safe case insensitive string hash
     return GetString() == r.GetString();
-}
-
-bool ScDPItemData::operator!= (const ScDPItemData& r) const
-{
-    return !operator== (r);
 }
 
 bool ScDPItemData::operator< (const ScDPItemData& r) const

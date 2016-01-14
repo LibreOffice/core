@@ -369,7 +369,7 @@ LotusToSc::LotusToSc(LotusContext &rContext, SvStream &rStream, svl::SharedStrin
 typedef FUNC_TYPE ( FuncType1 ) ( sal_uInt8 );
 typedef DefTokenId ( FuncType2 ) ( sal_uInt8 );
 
-ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
+void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
     const FORMULA_TYPE /*eFT*/ )
 {
     sal_uInt8               nOc;
@@ -425,7 +425,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
         if( nBytesLeft < 0 )
         {
             rpErg = aPool[ aStack.Get() ];
-            return ConvErrCount;
+            return;
         }
 
         eType = ( pIndexToType )( nOc );
@@ -654,8 +654,6 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
         aIn.SeekRel( nBytesLeft );  // eventuellen Rest/Ueberlauf korrigieren
 
     rRest = 0;
-
-    return ConvOK;
 }
 
 FUNC_TYPE LotusToSc::IndexToType( sal_uInt8 nIndex )

@@ -353,28 +353,24 @@ SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, sal_uInt16 /* n */ ) c
     return new ScProtectionAttr(bProtect,bHFormula,bHCell,bHPrint);
 }
 
-bool ScProtectionAttr::SetProtection( bool bProtect)
+void ScProtectionAttr::SetProtection( bool bProtect)
 {
     bProtection =  bProtect;
-    return true;
 }
 
-bool ScProtectionAttr::SetHideFormula( bool bHFormula)
+void ScProtectionAttr::SetHideFormula( bool bHFormula)
 {
     bHideFormula = bHFormula;
-    return true;
 }
 
-bool ScProtectionAttr::SetHideCell( bool bHCell)
+void ScProtectionAttr::SetHideCell( bool bHCell)
 {
     bHideCell = bHCell;
-    return true;
 }
 
-bool ScProtectionAttr::SetHidePrint( bool bHPrint)
+void ScProtectionAttr::SetHidePrint( bool bHPrint)
 {
     bHidePrint = bHPrint;
-    return true;
 }
 
 /**

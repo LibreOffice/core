@@ -323,20 +323,18 @@ bool ScfPropSetHelper::ReadValue( Any& rAny )
     return pAny != nullptr;
 }
 
-bool ScfPropSetHelper::ReadValue( Color& rColor )
+void ScfPropSetHelper::ReadValue( Color& rColor )
 {
     sal_Int32 nApiColor(0);
-    bool bRet = ReadValue( nApiColor );
+    ReadValue( nApiColor );
     rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
-    return bRet;
 }
 
-bool ScfPropSetHelper::ReadValue( bool& rbValue )
+void ScfPropSetHelper::ReadValue( bool& rbValue )
 {
     Any aAny;
-    bool bRet = ReadValue( aAny );
+    ReadValue( aAny );
     rbValue = ScUnoHelpFunctions::GetBoolFromAny( aAny );
-    return bRet;
 }
 
 // write properties -----------------------------------------------------------

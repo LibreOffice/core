@@ -57,7 +57,6 @@ public:
         bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
-    bool operator== (const ScTypedStrData& r) const;
     bool operator< (const ScTypedStrData& r) const;
 
 private:

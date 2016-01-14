@@ -55,11 +55,6 @@ bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
         && rOpt.aInitTabPrefix == aInitTabPrefix;
 }
 
-bool ScDefaultsOptions::operator!=( const ScDefaultsOptions& rOpt ) const
-{
-    return !(operator==(rOpt));
-}
-
 ScTpDefaultsItem::ScTpDefaultsItem( sal_uInt16 nWhichP, const ScDefaultsOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
     theOptions  ( rOpt )

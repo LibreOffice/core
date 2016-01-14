@@ -263,7 +263,7 @@ void ImportLotus::Smallnumcell()
     pD->SetValue(aAddr, SnumToDouble(nVal));
 }
 
-ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
+void ImportLotus::Formulacell( sal_uInt16 n )
 {
     OSL_ENSURE( pIn, "-ImportLotus::Formulacell(): Null-Stream!" );
 
@@ -285,8 +285,6 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
     pD->EnsureTable(aAddr.Tab());
     pD->SetFormulaCell(aAddr, pCell);
-
-    return nullptr;
 }
 
 void ImportLotus::Read( OUString &r )

@@ -1467,7 +1467,7 @@ bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 /**
  * Entries for AutoFilter listbox
  */
-bool ScDocument::GetFilterEntries(
+void ScDocument::GetFilterEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
@@ -1514,17 +1514,14 @@ bool ScDocument::GetFilterEntries(
             }
 
             sortAndRemoveDuplicates(rStrings, aParam.bCaseSens);
-            return true;
         }
     }
-
-    return false;
 }
 
 /**
  * Entries for Filter dialog
  */
-bool ScDocument::GetFilterEntriesArea(
+void ScDocument::GetFilterEntriesArea(
     SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
     std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
@@ -1532,16 +1529,13 @@ bool ScDocument::GetFilterEntriesArea(
     {
         maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
         sortAndRemoveDuplicates(rStrings, bCaseSens);
-        return true;
     }
-
-    return false;
 }
 
 /**
  * Entries for selection list listbox (no numbers/formulas)
  */
-bool ScDocument::GetDataEntries(
+void ScDocument::GetDataEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
     std::vector<ScTypedStrData>& rStrings, bool bLimit )
 {
@@ -1559,29 +1553,27 @@ bool ScDocument::GetDataEntries(
                 if (pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING)
                     sortAndRemoveDuplicates(rStrings, bCaseSens);
 
-                return true;
+                return;
             }
         }
     }
 
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()))
-        return false;
+        return;
 
     if (!maTabs[nTab])
-        return false;
+        return;
 
     std::set<ScTypedStrData> aStrings;
-    bool bRet = maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit);
+    maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit);
     rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
     sortAndRemoveDuplicates(rStrings, bCaseSens);
-
-    return bRet;
 }
 
 /**
  * Entries for Formula auto input
  */
-bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
+void ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 {
 
     // Range name
@@ -1626,8 +1618,6 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
             }
         }
     }
-
-    return true;
 }
 
 void ScDocument::GetEmbedded( ScRange& rRange ) const
@@ -2037,12 +2027,10 @@ SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW n
         return 0;
 }
 
-bool ScDocument::ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve )
+void ScDocument::ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve )
 {
     if( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->ReservePatternCount( nCol, nReserve );
-    else
-        return false;
+        maTabs[nTab]->ReservePatternCount( nCol, nReserve );
 }
 
 void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )

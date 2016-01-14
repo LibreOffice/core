@@ -47,7 +47,6 @@ public:
                         LotusRange( const LotusRange& );
     inline LotusRange   &operator =( const LotusRange& );
     inline bool         operator ==( const LotusRange& ) const;
-    inline bool         operator !=( const LotusRange& ) const;
     inline bool         IsSingle() const;
 };
 
@@ -77,13 +76,6 @@ inline bool LotusRange::operator ==( const LotusRange& rRef ) const
     return ( nHash == rRef.nHash && nColStart == rRef.nColStart &&
         nRowStart == rRef.nRowStart && nColEnd == rRef.nColEnd &&
         nRowEnd == rRef.nRowEnd );
-}
-
-inline bool LotusRange::operator !=( const LotusRange& rRef ) const
-{
-    return ( nHash != rRef.nHash || nColStart != rRef.nColStart ||
-        nRowStart != rRef.nRowStart || nColEnd != rRef.nColEnd ||
-        nRowEnd != rRef.nRowEnd );
 }
 
 inline bool LotusRange::IsSingle() const

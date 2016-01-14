@@ -402,10 +402,10 @@ ScCTB* ScCTBWrapper::GetCustomizationData( const OUString& sTBName )
     return pCTB;
 }
 
-bool ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
+void ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
     if(rCTB.empty())
-        return true;
+        return;
 
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::theModuleUIConfigurationManagerSupplier::get(xContext) );
@@ -424,10 +424,9 @@ bool ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
         if ( !(*it).IsMenuToolbar() )
         {
             if ( !(*it).ImportCustomToolBar( *this, helper ) )
-                return false;
+                return;
         }
     }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

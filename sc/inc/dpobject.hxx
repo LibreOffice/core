@@ -193,12 +193,12 @@ public:
 
     void                ToggleDetails(const css::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
-    bool                FillOldParam(ScPivotParam& rParam) const;
-    bool                FillLabelData(sal_Int32 nDim, ScDPLabelData& Labels);
-    bool                FillLabelData(ScPivotParam& rParam);
+    void                FillOldParam(ScPivotParam& rParam) const;
+    void                FillLabelData(sal_Int32 nDim, ScDPLabelData& Labels);
+    void                FillLabelData(ScPivotParam& rParam);
 
     bool                GetHierarchiesNA( sal_Int32 nDim, css::uno::Reference< css::container::XNameAccess >& xHiers );
-    bool                GetHierarchies( sal_Int32 nDim, css::uno::Sequence< OUString >& rHiers );
+    void                GetHierarchies( sal_Int32 nDim, css::uno::Sequence< OUString >& rHiers );
 
     sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
 

@@ -114,7 +114,7 @@ class LotusConverterBase : public ConverterBase
 {
 protected:
     SvStream&           aIn;
-    sal_Int32               nBytesLeft;
+    sal_Int32           nBytesLeft;
 
     inline void         Ignore( const long nSeekRel );
     inline void         Read( sal_uInt8& nByte );
@@ -129,7 +129,7 @@ protected:
 public:
     void                Reset( const ScAddress& rEingPos );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
+    virtual void        Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 
 protected:

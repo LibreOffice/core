@@ -266,7 +266,7 @@ public:
 
     void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
     bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
-    bool InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const;
+    void InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const;
 
     void DeleteBeforeCopyFromClip(
         sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol, sc::ColumnSpanSet& rBroadcastSpans );
@@ -331,7 +331,7 @@ public:
     ScFormulaCell* SetFormulaCell(
         SCROW nRow, ScFormulaCell* pCell,
         sc::StartListeningType eListenType = sc::SingleCellListening );
-    ScFormulaCell* SetFormulaCell(
+    void SetFormulaCell(
         sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell,
         sc::StartListeningType eListenType = sc::SingleCellListening );
 

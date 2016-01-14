@@ -4506,9 +4506,8 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCa
     return MAXROW+1;
 }
 
-bool ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault)
+void ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault)
 {
-    bool bRet(false);
     nDefault = 0;
     ScDocAttrIterator aDocAttrItr(this, nTab, nCol, 0, nCol, nLastRow);
     SCCOL nColumn;
@@ -4551,11 +4550,7 @@ bool ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& n
             ++aItr;
         }
         nDefault = aDefaultItr->nFirst;
-        bRet = true;
     }
-    else
-        bRet = true;
-    return bRet;
 }
 
 void ScDocument::StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SCTAB nTab )
@@ -5316,10 +5311,9 @@ bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
     return true;
 }
 
-bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
+void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
 {
-    bool bFound = false;
     if ( ValidColRow(rStartCol,rStartRow) && ValidColRow(nEndCol,nEndRow) && ValidTab(nTab) )
     {
         if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
@@ -5366,17 +5360,14 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
     {
         OSL_FAIL("ExtendOverlapped: invalid range");
     }
-
-    return bFound;
 }
 
-bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
+void ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                               SCCOL& rEndCol, SCROW& rEndRow,
                               const ScMarkData& rMark, bool bRefresh )
 {
     // use all selected sheets from rMark
 
-    bool bFound = false;
     SCCOL nOldEndCol = rEndCol;
     SCROW nOldEndRow = rEndRow;
 
@@ -5387,15 +5378,12 @@ bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
         {
             SCCOL nThisEndCol = nOldEndCol;
             SCROW nThisEndRow = nOldEndRow;
-            if ( ExtendMerge( nStartCol, nStartRow, nThisEndCol, nThisEndRow, *itr, bRefresh ) )
-                bFound = true;
+            ExtendMerge( nStartCol, nStartRow, nThisEndCol, nThisEndRow, *itr, bRefresh );
             if ( nThisEndCol > rEndCol )
                 rEndCol = nThisEndCol;
             if ( nThisEndRow > rEndRow )
                 rEndRow = nThisEndRow;
         }
-
-    return bFound;
 }
 
 bool ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
@@ -5448,10 +5436,9 @@ bool ScDocument::ExtendMerge( ScRange& rRange, bool bRefresh )
     return bFound;
 }
 
-bool ScDocument::ExtendTotalMerge( ScRange& rRange ) const
+void ScDocument::ExtendTotalMerge( ScRange& rRange ) const
 {
     // Extend range to merged cells without including any new non-overlapped cells
-    bool bRet = false;
     ScRange aExt = rRange;
     // ExtendMerge() is non-const, but called withouth refresh.
     if (const_cast<ScDocument*>(this)->ExtendMerge( aExt ))
@@ -5471,15 +5458,12 @@ bool ScDocument::ExtendTotalMerge( ScRange& rRange ) const
                 aExt.aEnd.SetCol(rRange.aEnd.Col());
         }
 
-        bRet = ( aExt.aEnd != rRange.aEnd );
         rRange = aExt;
     }
-    return bRet;
 }
 
-bool ScDocument::ExtendOverlapped( ScRange& rRange ) const
+void ScDocument::ExtendOverlapped( ScRange& rRange ) const
 {
-    bool bFound = false;
     SCTAB nStartTab = rRange.aStart.Tab();
     SCTAB nEndTab   = rRange.aEnd.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -5495,19 +5479,15 @@ bool ScDocument::ExtendOverlapped( ScRange& rRange ) const
         if (nExtendCol < nStartCol)
         {
             nStartCol = nExtendCol;
-            bFound = true;
         }
         if (nExtendRow < nStartRow)
         {
             nStartRow = nExtendRow;
-            bFound = true;
         }
     }
 
     rRange.aStart.SetCol(nStartCol);
     rRange.aStart.SetRow(nStartRow);
-
-    return bFound;
 }
 
 bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,

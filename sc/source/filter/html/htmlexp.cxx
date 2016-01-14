@@ -131,14 +131,13 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
 
-FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
+void ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/, bool bAll,
         const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions )
 {
     ScHTMLExport aEx( rStrm, rBaseURL, pDoc, rRange, bAll, rStreamPath, rFilterOptions );
-    FltError nErr = aEx.Write();
+    aEx.Write();
     rNonConvertibleChars = aEx.GetNonConvertibleChars();
-    return nErr;
 }
 
 static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
@@ -1287,7 +1286,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
     return bFields;
 }
 
-bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
+void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         const OUString& rTargetNm, bool bFileToFile )
 {
     bool bRet = false;
@@ -1307,7 +1306,7 @@ bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
             if( it != pFileNameMap->end() )
             {
                 rFileNm = it->second;
-                return true;
+                return;
             }
         }
         else
@@ -1352,8 +1351,6 @@ bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
             rFileNm = aDest;
         }
     }
-
-    return bRet;
 }
 
 void ScHTMLExport::MakeCIdURL( OUString& rURL )

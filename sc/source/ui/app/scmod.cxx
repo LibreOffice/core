@@ -2182,39 +2182,35 @@ IMPL_LINK_TYPED( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
     }
 }
 
-bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
+void ScModule::RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
 {
     std::list<VclPtr<vcl::Window> > & rlRefWindow = m_mapRefWindow[nSlotId];
 
     if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
     {
         rlRefWindow.push_back( pWnd );
-        return true;
     }
 
-    return false;
 }
 
-bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
+void  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
 {
     auto iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
-        return false;
+        return;
 
     std::list<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
 
     auto i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
 
     if( i == rlRefWindow.end() )
-        return false;
+        return;
 
     rlRefWindow.erase( i );
 
     if( rlRefWindow.empty() )
         m_mapRefWindow.erase( nSlotId );
-
-    return true;
 }
 
 vcl::Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor )

@@ -904,18 +904,17 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     rFormat.applyToItemSet(rSet);
 }
 
-bool ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, size_t xfId)
+void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, size_t xfId)
 {
     SAL_INFO("sc.orcus.style", "applyXfToitemSet: " << xfId);
     if (maCellXfs.size() <= xfId)
     {
         SAL_WARN("sc.orcus.style", "invalid xf id");
-        return false;
+        return;
     }
 
     const xf& rXf = maCellXfs[xfId];
     applyXfToItemSet(rSet, rXf);
-    return true;
 }
 
 void ScOrcusStyles::set_font_count(size_t /*n*/)

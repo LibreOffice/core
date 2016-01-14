@@ -3391,7 +3391,7 @@ void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     // no StartListeningTo because the new sheets have not been inserted yet.
 }
 
-bool ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+void ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
     // Adjust tokens only when it's not grouped or grouped top cell.
     bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
@@ -3400,7 +3400,7 @@ bool ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     {
         if (bPosChanged)
             aPos.IncTab(-1*rCxt.mnSheets);
-        return false;
+        return;
     }
 
     EndListeningTo( pDocument );
@@ -3410,14 +3410,12 @@ bool ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
         aPos.IncTab(-1*rCxt.mnSheets);
 
     if (!bAdjustCode)
-        return false;
+        return;
 
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnDeletedTab(rCxt, aOldPos);
     if (aRes.mbNameModified)
         // Re-compile after sheet(s) have been deleted.
         bCompile = true;
-
-    return aRes.mbReferenceModified;
 }
 
 void ScFormulaCell::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo )

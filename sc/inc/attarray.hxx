@@ -125,7 +125,7 @@ public:
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
                             ScEditDataArray* pDataArray = nullptr );
-    bool    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
+    void    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                 const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
 
@@ -154,11 +154,11 @@ public:
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
 
     bool    HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
-    bool IsMerged( SCROW nRow ) const;
+    bool    IsMerged( SCROW nRow ) const;
     bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 bool bRefresh );
-    bool    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
+    void    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
 
     void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
     bool    IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;

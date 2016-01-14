@@ -73,7 +73,6 @@ struct FormulaGroupContext : boost::noncopyable
         ColKey( SCTAB nTab, SCCOL nCol );
 
         bool operator== ( const ColKey& r ) const;
-        bool operator!= ( const ColKey& r ) const;
     };
 
     struct ColArray

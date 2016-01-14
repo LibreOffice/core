@@ -66,7 +66,6 @@ public:
 
     // Comparators for PtrArrSort
     bool operator< ( const ScAddInAsync& r ) const { return nHandle <  r.nHandle; }
-    bool operator==( const ScAddInAsync& r ) const { return nHandle == r.nHandle; }
 };
 
 struct CompareScAddInAsync

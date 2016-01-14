@@ -349,7 +349,7 @@ private:
 public:
     ScOrcusStyles(ScDocument& rDoc);
 
-    bool applyXfToItemSet(SfxItemSet& rSet, size_t xfId);
+    void applyXfToItemSet(SfxItemSet& rSet, size_t xfId);
 
     // font
 

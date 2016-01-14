@@ -228,7 +228,7 @@ public:
 
     bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
     bool            IsLink( const sal_uInt16 nExcSheetIndex ) const;
-    bool            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;
+    void            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;
 
     void            Reset();
 };

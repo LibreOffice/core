@@ -170,7 +170,7 @@ ScOrcusXMLContextImpl::ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& r
 
 ScOrcusXMLContextImpl::~ScOrcusXMLContextImpl() {}
 
-bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam)
+void ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam)
 {
     rParam.maUserDataStore.clear();
 
@@ -178,7 +178,7 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
     loadContentFromURL(maPath, aStrm);
 
     if (aStrm.empty())
-        return false;
+        return;
 
     orcus::xmlns_context cxt = maNsRepo.create_context();
     orcus::xml_structure_tree aXmlTree(cxt);
@@ -200,10 +200,7 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
     catch (const std::exception&)
     {
         // Parsing of this XML file failed.
-        return false;
     }
-
-    return true;
 }
 
 namespace {
@@ -229,7 +226,7 @@ public:
 
 }
 
-bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
+void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
 {
     ScOrcusFactory aFactory(mrDoc);
     OString aSysPath = ScOrcusFiltersImpl::toSystemPath(maPath);
@@ -280,9 +277,7 @@ bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
     }
     catch (const std::exception&)
     {
-        return false;
     }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

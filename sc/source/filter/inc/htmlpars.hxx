@@ -478,9 +478,8 @@ private:
         @param bLastInCell  true = If cell is still empty, put this entry always.
         @return  true = Entry as been pushed into the current cell; false = Entry dropped. */
     bool                PushEntry( const ImportInfo& rInfo, bool bLastInCell = false );
-    /** Pushes a new entry into current cell which references a nested table.
-        @return  true = Entry as been pushed into the current cell; false = Entry dropped. */
-    bool                PushTableEntry( ScHTMLTableId nTableId );
+    /** Pushes a new entry into current cell which references a nested table.*/
+    void                PushTableEntry( ScHTMLTableId nTableId );
 
     /** Tries to find a table from the table container.
         @descr  Assumes that the table is located in the current container or

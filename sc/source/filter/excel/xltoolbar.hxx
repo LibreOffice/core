@@ -101,7 +101,7 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
 #endif
-    bool ImportCustomToolBar( SfxObjectShell& rDocSh );
+    void ImportCustomToolBar( SfxObjectShell& rDocSh );
     ScCTB* GetCustomizationData( const OUString& name );
 };
 

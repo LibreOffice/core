@@ -164,8 +164,6 @@ inline bool ScRangeData::HasType( RangeType nType ) const
 
 extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* );
 
-bool operator< (const ScRangeData& left, const ScRangeData& right);
-
 class ScRangeName
 {
 private:

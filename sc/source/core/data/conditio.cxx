@@ -1781,19 +1781,6 @@ ScFormatEntry* ScCondDateFormatEntry::Clone( ScDocument* pDoc ) const
     return new ScCondDateFormatEntry( pDoc, *this );
 }
 
-bool ScCondDateFormatEntry::operator==( const ScFormatEntry& r ) const
-{
-    if(r.GetType() != condformat::DATE)
-        return false;
-
-    const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(r);
-
-    if(rEntry.meType != meType)
-        return false;
-
-    return rEntry.maStyleName == maStyleName;
-}
-
 void ScCondDateFormatEntry::startRendering()
 {
     mpCache.reset();
@@ -2169,19 +2156,6 @@ ScConditionalFormatList::ScConditionalFormatList(ScDocument* pDoc, const ScCondi
 void ScConditionalFormatList::InsertNew( ScConditionalFormat* pNew )
 {
     m_ConditionalFormats.insert(std::unique_ptr<ScConditionalFormat>(pNew));
-}
-
-bool ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) const
-{
-    // For Ref Undo - internal variables are not compared
-    sal_uInt16 nCount = size();
-    bool bEqual = ( nCount == r.size() );
-    const_iterator locIterator = begin();
-    for(const_iterator itr = r.begin(); itr != r.end() && bEqual; ++itr, ++locIterator)
-        if (!(*locIterator)->EqualEntries(**itr)) // Entries differ?
-            bEqual = false;
-
-    return bEqual;
 }
 
 ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )

@@ -256,7 +256,6 @@ public:
 
     ScArea& operator=   ( const ScArea& r );
     bool    operator==  ( const ScArea& r ) const;
-    bool    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
 
 public:
     SCTAB nTab;

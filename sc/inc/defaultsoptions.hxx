@@ -36,7 +36,6 @@ public:
 
     ScDefaultsOptions&  operator=  ( const ScDefaultsOptions& rCpy );
     bool                operator== ( const ScDefaultsOptions& rOpt ) const;
-    bool                operator!= ( const ScDefaultsOptions& rOpt ) const;
 
 };
 

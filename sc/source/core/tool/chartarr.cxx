@@ -464,9 +464,4 @@ const ScChartArray* ScChartCollection::operator[](size_t nIndex) const
     return m_Data[nIndex].get();
 }
 
-bool ScChartCollection::operator==(const ScChartCollection& rCmp) const
-{
-    return ::comphelper::ContainerUniquePtrEquals(m_Data, rCmp.m_Data);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

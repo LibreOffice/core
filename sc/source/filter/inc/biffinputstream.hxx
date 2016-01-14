@@ -327,7 +327,7 @@ class BiffInputStreamPos
 public:
     explicit            BiffInputStreamPos( BiffInputStream& rStrm );
 
-    bool                restorePosition();
+    void                restorePosition();
 
 private:
     BiffInputStream&    mrStrm;

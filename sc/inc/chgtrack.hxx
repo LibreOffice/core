@@ -256,14 +256,12 @@ protected:
 
     ScBigRange& GetBigRange() { return aBigRange; }
 
-    ScChangeActionLinkEntry* AddLink(
-        ScChangeAction* p, ScChangeActionLinkEntry* pL )
+    void AddLink( ScChangeAction* p, ScChangeActionLinkEntry* pL )
     {
         ScChangeActionLinkEntry* pLnk =
             new ScChangeActionLinkEntry(
             &pLinkAny, p );
         pLnk->SetLink( pL );
-        return pLnk;
     }
 
     void RemoveAllAnyLinks();

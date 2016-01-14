@@ -39,14 +39,6 @@ void SpellCheckContext::CellPos::reset()
     mnRow = 0;
 }
 
-bool SpellCheckContext::CellPos::operator< (const CellPos& r) const
-{
-    if (mnCol != r.mnCol)
-        return mnCol < r.mnCol;
-
-    return mnRow < r.mnRow;
-}
-
 bool SpellCheckContext::CellPos::operator== (const CellPos& r) const
 {
     return mnCol == r.mnCol && mnRow == r.mnRow;

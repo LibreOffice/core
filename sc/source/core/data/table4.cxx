@@ -2206,12 +2206,11 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
     return false;
 }
 
-bool ScTable::TestTabRefAbs(SCTAB nTable) const
+void ScTable::TestTabRefAbs(SCTAB nTable) const
 {
     for (SCCOL i=0; i <= MAXCOL; i++)
         if (aCol[i].TestTabRefAbs(nTable))
-            return true;
-    return false;
+            return;
 }
 
 void ScTable::CompileDBFormula( sc::CompileFormulaContext& rCxt )

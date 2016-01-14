@@ -530,15 +530,13 @@ bool ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
         return false;
 }
 
-bool ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
+void ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
                               SCCOL nCol, SCROW nRow, SCTAB nTab,
                               ScMarkData& rMark,
                               bool bIsUndoP)
 {
     if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndoP);
-    else
-        return false;
+        maTabs[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndoP);
 }
 
 void ScDocument::CompileDBFormula()

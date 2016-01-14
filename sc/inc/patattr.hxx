@@ -163,8 +163,6 @@ public:
                                         return *this;
                                     }
 
-            operator FontToSubsFontConverter() const
-                                    { return h; }
 };
 
 #endif

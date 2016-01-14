@@ -600,7 +600,7 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
     return bChanged;
 }
 
-bool ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
+void ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
 {
     bool bChanged = false;
     if (bHidden)
@@ -613,8 +613,6 @@ bool ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
         if (IsStreamValid())
             SetStreamValid(false);
     }
-
-    return bChanged;
 }
 
 void ScTable::CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)

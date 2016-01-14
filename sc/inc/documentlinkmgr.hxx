@@ -57,7 +57,7 @@ public:
 
     bool updateDdeLinks( vcl::Window* pWin );
 
-    bool updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
+    void updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
 
     size_t getDdeLinkCount() const;
 
