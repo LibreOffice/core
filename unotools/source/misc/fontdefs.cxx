@@ -178,7 +178,7 @@ static sal_Unicode const aHiraginoKakuGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 
 static sal_Unicode const aHiraginoMaruGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o',0};
 static sal_Unicode const aHiraginoMaruGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
 
-static ImplLocalizedFontName aImplLocalizedNamesList[] =
+static const ImplLocalizedFontName aImplLocalizedNamesList[] =
 {
 {   "batang",               aBatang },
 {   "batangche",            aBatangChe },
