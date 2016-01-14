@@ -29,6 +29,8 @@
 #include <filter/msfilter/escherex.hxx>
 #include "oox/drawingml/drawingmltypes.hxx"
 #include <oox/token/tokens.hxx>
+#include <oox/export/utils.hxx>
+
 #ifndef OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY
 // Our rotation is counter-clockwise and is in 100ths of a degree.
 // drawingML rotation is clockwise and is in 60000ths of a degree.
@@ -86,9 +88,8 @@ protected:
     virtual ~DMLTextExport() {}
 };
 
-class OOX_DLLPUBLIC DrawingML {
-public:
-    enum DocumentType { DOCUMENT_DOCX, DOCUMENT_PPTX, DOCUMENT_XLSX };
+class OOX_DLLPUBLIC DrawingML
+{
 
 private:
     static int mnImageCounter;

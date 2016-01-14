@@ -445,7 +445,7 @@ void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr pWorksheet = rStrm.GetCurrentStream();
 
-    DrawingML aDML( pWorksheet, &rStrm, DrawingML::DOCUMENT_XLSX );
+    DrawingML aDML(pWorksheet, &rStrm, drawingml::DOCUMENT_XLSX);
     OUString rId = aDML.WriteImage( maGraphic );
     pWorksheet->singleElement( XML_picture,
             FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( rId ).getStr(),
@@ -1137,7 +1137,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
     {
         XclObjAny::WriteFromTo( rStrm, mxShape, GetTab() );
         Reference< XModel > xModel( mxChartDoc, UNO_QUERY );
-        ChartExport aChartExport( XML_xdr, pDrawing, xModel, &rStrm, DrawingML::DOCUMENT_XLSX );
+        ChartExport aChartExport(XML_xdr, pDrawing, xModel, &rStrm, drawingml::DOCUMENT_XLSX);
         static sal_Int32 nChartCount = 0;
         nChartCount++;
         aChartExport.WriteChartObj( mxShape, nChartCount );

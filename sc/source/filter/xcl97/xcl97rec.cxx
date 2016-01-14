@@ -1164,7 +1164,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
-    ShapeExport aDML( XML_xdr, pDrawing, nullptr, &rStrm, DrawingML::DOCUMENT_XLSX );
+    ShapeExport aDML(XML_xdr, pDrawing, nullptr, &rStrm, drawingml::DOCUMENT_XLSX);
     std::shared_ptr<oox::drawingml::URLTransformer> pURLTransformer(new ScURLTransformer(*mpDoc));
     aDML.SetURLTranslator(pURLTransformer);
 
