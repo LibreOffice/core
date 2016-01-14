@@ -1092,9 +1092,9 @@ OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
     if ( !m_bHasMenuBar )
     {
         // This is a context menu, prefer "PopupLabel" over "Label".
-        return vcl::CommandInfoProvider::Instance().GetPopupLabelForCommand(rCmdURL, m_xFrame);
+        return vcl::CommandInfoProvider::GetPopupLabelForCommand(rCmdURL, m_xFrame);
     }
-    return vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(rCmdURL, m_xFrame);
+    return vcl::CommandInfoProvider::GetMenuLabelForCommand(rCmdURL, m_xFrame);
 }
 
 bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
@@ -1297,7 +1297,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         if ( bItemShowMenuImages && !pPopup->GetItemImage( ITEMID_ADDONLIST ))
                         {
                             Reference< XFrame > xTemp( rFrame );
-                            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aItemCommand, false, xTemp );
+                            Image aImage = vcl::CommandInfoProvider::GetImageForCommand( aItemCommand, false, xTemp );
                             if ( !!aImage )
                                    pPopup->SetItemImage( ITEMID_ADDONLIST, aImage );
                         }
@@ -1326,12 +1326,12 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
                     {
                         // Retrieve image id from menu attributes
-                        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aImageId, false, m_xFrame );
+                        aImage = vcl::CommandInfoProvider::GetImageForCommand( aImageId, false, m_xFrame );
                     }
 
                     if ( !aImage )
                     {
-                        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aItemCommand, false, m_xFrame );
+                        aImage = vcl::CommandInfoProvider::GetImageForCommand( aItemCommand, false, m_xFrame );
                         if ( !aImage )
                             aImage = AddonsOptions().GetImageFromURL( aItemCommand, false );
                     }

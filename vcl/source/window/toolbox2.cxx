@@ -597,9 +597,9 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText, ToolBoxItem
 void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame, ToolBoxItemBits nBits,
                          const Size& rRequestedSize, sal_uInt16 nPos)
 {
-    OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(rCommand, rFrame));
-    OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
-    Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(
+    OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(rCommand, rFrame));
+    OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, rFrame));
+    Image aImage(vcl::CommandInfoProvider::GetImageForCommand(
         rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), rFrame));
 
     sal_uInt16 nItemId = GetItemCount() + 1;
@@ -1235,9 +1235,9 @@ void ToolBox::UpdateImageOrientation()
 {
     for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
     {
-        if (vcl::CommandInfoProvider::Instance().IsMirrored(it->maCommandStr))
+        if (vcl::CommandInfoProvider::IsMirrored(it->maCommandStr))
             SetItemImageMirrorMode(it->mnId, mbImagesMirrored);
-        if (vcl::CommandInfoProvider::Instance().IsRotated(it->maCommandStr))
+        if (vcl::CommandInfoProvider::IsRotated(it->maCommandStr))
             SetItemImageAngle(it->mnId, mnImagesRotationAngle);
     }
 }

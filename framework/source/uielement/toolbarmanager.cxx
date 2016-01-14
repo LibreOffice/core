@@ -292,7 +292,7 @@ void ToolBarManager::RefreshImages()
         else
         {
             OUString aCommandURL = m_pToolBar->GetItemCommand( it.first );
-            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, bBigImages, m_xFrame);
+            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, bBigImages, m_xFrame);
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
@@ -729,7 +729,7 @@ void ToolBarManager::CreateControllers()
                             new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
 
                         // Accessibility support: Set toggle button role for specific commands
-                        sal_Int32 nProps = vcl::CommandInfoProvider::Instance().GetPropertiesForCommand(aCommandURL, m_xFrame);
+                        sal_Int32 nProps = vcl::CommandInfoProvider::GetPropertiesForCommand(aCommandURL, m_xFrame);
                         if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
                             m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
                     }
@@ -1446,7 +1446,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
                 pVisibleItemsPopupMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
                 pVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pVisibleItemsPopupMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
-                Image aImage( vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, false, m_xFrame) );
+                Image aImage( vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, false, m_xFrame) );
                 commandToImage[aCommandURL] = aImage;
                 pVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
             }

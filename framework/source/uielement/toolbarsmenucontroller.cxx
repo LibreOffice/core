@@ -176,7 +176,7 @@ void ToolbarsMenuController::addCommand(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( rCommandURL, false, m_xFrame );
+        aImage = vcl::CommandInfoProvider::GetImageForCommand( rCommandURL, false, m_xFrame );
 
     VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( rPopupMenu ));
     if ( pPopupMenu )
