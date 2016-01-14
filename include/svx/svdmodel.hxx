@@ -358,7 +358,7 @@ public:
     /// Set if we are doing tiled searching.
     void                 setTiledSearching(bool bTiledSearching);
     /// Are we doing tiled searching?
-    bool                 isTiledSearching() const;
+    bool                 isTiledSearching() const override;
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
     // default font heigth in logical units
