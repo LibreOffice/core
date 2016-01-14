@@ -191,14 +191,12 @@ void LwpObjectStream::SeekRel(sal_uInt16 pos)
 /**
  * @descr  Seek to pos in object buffer/buffer
  */
-bool LwpObjectStream::Seek( sal_uInt16 pos)
+void LwpObjectStream::Seek( sal_uInt16 pos)
 {
     if (pos < m_nBufSize)
     {
         m_nReadPos = pos;
-        return true;
     }
-    return false;
 }
 
 /**

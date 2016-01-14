@@ -311,9 +311,8 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         AddBreakAfter(m_pXFContainer);
 }
 
-bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
+void LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
 {
-    bool bSuccess = false;
     //get story
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj().get());
     //if pagelayout is modified, register the pagelayout
@@ -326,7 +325,6 @@ bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
             RegisterNewSectionStyle(pLayout);
         }
 
-        bSuccess = true;
         //register master page style
         XFParaStyle* pOverStyle = new XFParaStyle();
         *pOverStyle = *pBaseStyle;
@@ -337,7 +335,6 @@ bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
         XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
         m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
     }
-    return bSuccess;
 }
 /**
  * @short   register paragraph style

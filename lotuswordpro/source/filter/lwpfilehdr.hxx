@@ -74,7 +74,7 @@ private: //data member
     sal_uInt32 m_nRootIndexOffset;
 public:
     static sal_uInt16 m_nFileRevision;
-    sal_uInt32 Read(LwpSvStream *pStrm);
+    void Read(LwpSvStream *pStrm);
     sal_uInt32 GetRootIndexOffset();
     LwpObjectID& GetDocID();
 };

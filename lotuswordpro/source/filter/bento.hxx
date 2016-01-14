@@ -202,7 +202,7 @@ class LtcBenContainer
 {
 public:
     BenError Open();
-    BenError RegisterPropertyName(const char * sPropertyName,
+    void RegisterPropertyName(const char * sPropertyName,
       pCBenPropertyName * ppPropertyName);
     // Pass NULL to begin iteration.  Done when returns NULL.
     // Objects are returned in order of increasing ID
@@ -226,7 +226,7 @@ public: // Internal methods
 
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
-    BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
+    void CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
 
     BenError GetSize(sal_uLong * pLength);
 private: // Data
@@ -258,7 +258,7 @@ class CBenValue : public CBenIDListElmt
 {
 public:
     unsigned long GetValueSize();
-    BenError ReadValueData(void * pBuffer,
+    void ReadValueData(void * pBuffer,
       unsigned long Offset, unsigned long MaxSize, unsigned long * pAmtRead);
 
     pCBenProperty BEN_EXPORT GetProperty() { return cpProperty; }

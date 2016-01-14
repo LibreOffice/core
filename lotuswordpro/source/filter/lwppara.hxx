@@ -275,7 +275,7 @@ private:
     void OverrideParaBullet(LwpParaProperty* pProps);
     void OverrideParaNumbering(LwpParaProperty* pProps);
 
-    bool RegisterMasterPage(XFParaStyle* pBaseStyle);
+    void RegisterMasterPage(XFParaStyle* pBaseStyle);
     void RegisterNewSectionStyle(LwpPageLayout* pLayout);
 
     void ParseDropcapContent();

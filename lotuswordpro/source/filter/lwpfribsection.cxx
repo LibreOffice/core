@@ -242,7 +242,7 @@ LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
  * @descr:  Register master page style for para style and register section style if necessary
  *
  */
-bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
+void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 {
     //if there is no other frib after current frib, register master page in starting para of next page
     LwpStory* pStory = nullptr;
@@ -253,7 +253,7 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     {
         pStory->SetCurrentLayout(m_pLayout);
         RegisterFillerPageStyle();
-        return false;
+        return;
     }
 
     m_bNewSection = false;
@@ -301,7 +301,7 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     //register tab style;
     pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
     if (!pStory)
-        return false;
+        return;
 
     pStory->SetTabLayout(m_pLayout);
     m_pPara->RegisterTabStyle(pOverStyle);
@@ -334,7 +334,6 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
         //}
         m_SectionStyleName = pXFStyleManager->AddStyle(pSectStyle).m_pStyle->GetStyleName();
     }
-    return false;
 }
 
 /**

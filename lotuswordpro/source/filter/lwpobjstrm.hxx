@@ -88,7 +88,7 @@ public:
     sal_uInt16 QuickRead(void* buf, sal_uInt16 len);
     sal_uInt16 GetPos() { return m_nReadPos; }
     void SeekRel(sal_uInt16 pos);
-    bool Seek( sal_uInt16 pos);
+    void Seek( sal_uInt16 pos);
     void SkipExtra();
     sal_uInt16 CheckExtra();
 

@@ -108,7 +108,7 @@ LtcBenContainer::Open() // delete two inputs
     return BenErr_OK;
 }
 
-BenError
+void
 LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
   pCBenPropertyName * ppPropertyName)
 {
@@ -119,21 +119,19 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
     if (pNamedObject != nullptr)
     {
         if (! pNamedObject->IsPropertyName())
-            return BenErr_NameConflict;
+            return;
         else *ppPropertyName = static_cast<pCBenPropertyName>(pNamedObject);
     }
     else
     {
         pCUtListElmt pPrevObject;
         if (FindID(&cObjects, cNextAvailObjectID, &pPrevObject) != nullptr)
-            return BenErr_DuplicateObjectID;
+            return;
 
         *ppPropertyName = new CBenPropertyName(this, cNextAvailObjectID,
           static_cast<pCBenObject>(pPrevObject), sPropertyName, pPrevNamedObjectListElmt);
         ++cNextAvailObjectID;
     }
-
-    return BenErr_OK;
 }
 
 pCBenObject
@@ -286,14 +284,13 @@ sal_uInt32 GetSvStreamSize(SvStream * pStream)
 /**
 *   Find hazily according to object ID
 *   @param  pObjectname - format as "GrXX,XXXXXXXX" wherein XX is high part of object ID, and XXXXXXXX is low part
-*   @return the value stream pointers  with the property names
 */
-BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObjectName)
+void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObjectName)
 {
     if (!pObjectName)
     {
         pStream = nullptr;
-        return BenErr_NamedObjectError;
+        return;
     }
     // construct the string of property name
     char sSName[64]="";
@@ -326,7 +323,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     if (nLen <= 0)
     {
         pStream = nullptr;
-        return BenErr_NamedObjectError;
+        return;
     }
 
     char * pBuf = new char[nLen];
@@ -348,7 +345,6 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     assert(pMemStream != nullptr);
 
     pStream = pMemStream;
-    return BenErr_OK;
 }
 
 }// end namespace OpenStormBento

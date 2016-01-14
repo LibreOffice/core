@@ -93,19 +93,17 @@ LwpFormulaInfo::~LwpFormulaInfo()
     }
 }
 
-bool LwpFormulaInfo::ReadConst()
+void LwpFormulaInfo::ReadConst()
 {
     double Constant = m_pObjStrm->QuickReadDouble();
 
     m_aStack.push_back( new LwpFormulaConst(Constant) );
-
-    return true;
 }
 
 /**
 *   Need more effort for unicode.
 */
-bool LwpFormulaInfo::ReadText()
+void LwpFormulaInfo::ReadText()
 {
     m_pObjStrm->QuickReadInt16(); //Disk Size
     sal_uInt16 nStrLen = m_pObjStrm->QuickReadInt16();
@@ -119,7 +117,6 @@ bool LwpFormulaInfo::ReadText()
     aText += "\"";
 
     m_aStack.push_back(new LwpFormulaText(aText));
-    return true;
 }
 
 bool LwpFormulaInfo::ReadCellID()
@@ -162,10 +159,9 @@ bool LwpFormulaInfo::ReadCellRange()
 /**
 *   Read expression from wordpro file
 */
-bool LwpFormulaInfo::ReadExpression()
+void LwpFormulaInfo::ReadExpression()
 {
     sal_uInt16 TokenType, DiskLength;
-    bool readSucceeded = true;
 
     /* Read the compiled expression length */
     m_pObjStrm->SeekRel(2);
@@ -189,12 +185,11 @@ bool LwpFormulaInfo::ReadExpression()
             }
 
             case TK_CELLID:
-                if (!ReadCellID())
-                    readSucceeded = false;
+                ReadCellID();
                 break;
 
             case TK_CELLRANGE:
-                readSucceeded = ReadCellRange();
+                ReadCellRange();
                 break;
 
             case TK_SUM:
@@ -205,8 +200,7 @@ bool LwpFormulaInfo::ReadExpression()
             case TK_AVERAGE:
                 {
                     LwpFormulaFunc* pFunc = new LwpFormulaFunc(TokenType);
-                    if (!ReadArguments(*pFunc))
-                        readSucceeded = false;
+                    ReadArguments(*pFunc);
                     m_aStack.push_back(pFunc);
                 }
                 break;
@@ -233,10 +227,6 @@ bool LwpFormulaInfo::ReadExpression()
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     m_aStack.push_back(pOp);
                 }
-                else
-                {
-                    readSucceeded = false;
-                }
                 break;
             case TK_UNARY_MINUS:
                 if (!m_aStack.empty())
@@ -245,20 +235,14 @@ bool LwpFormulaInfo::ReadExpression()
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     m_aStack.push_back(pOp);
                 }
-                else
-                {
-                    readSucceeded = false;
-                }
                 break;
             default:
                 // We don't know what to do with this token, so eat it.
                 m_pObjStrm->SeekRel(DiskLength);
-                readSucceeded = false;
                 break;
         }
         MarkUnsupported(TokenType);
     }
-    return readSucceeded;
 }
 
 void LwpFormulaInfo::MarkUnsupported(sal_uInt16 TokenType)

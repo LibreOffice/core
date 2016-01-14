@@ -68,7 +68,7 @@ CBenValue::GetValueSize()
     return Size;
 }
 
-BenError
+void
 CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
   unsigned long Amt, unsigned long * pAmtRead)
 {
@@ -89,7 +89,7 @@ CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
     while ((pCurrSeg = GetNextValueSegment(pCurrSeg)) != nullptr)
     {
         if (Amt == 0)               /// whole buffer is full now, so return
-            return BenErr_OK;
+            return;
 
         if (SegOffset <= Offset && Offset < SegOffset + pCurrSeg->GetSize()) /// begin at current segment
         {
@@ -110,17 +110,17 @@ CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
             {
                 if ((Err = pContainer->SeekToPosition(pCurrSeg->GetPosition() +
                         OffsetIntoSeg)) != BenErr_OK)
-                    return Err;
+                    return;
 
                 if ((Err = pContainer->Read(pBuffer, AmtThisSeg,
                                             &AmtReadThisSeg)) != BenErr_OK)
-                    return Err;
+                    return;
             }
 
             *pAmtRead += AmtReadThisSeg;
 
             if (AmtThisSeg != AmtReadThisSeg)
-                return BenErr_UnexpectedEndOfFile;
+                return;
 
             pBuffer += AmtReadThisSeg;
             Offset += AmtReadThisSeg;
@@ -129,7 +129,6 @@ CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
 
         SegOffset += pCurrSeg->GetSize();
     }
-    return BenErr_OK;
 }
 
 }//end namespace OpenStormBento

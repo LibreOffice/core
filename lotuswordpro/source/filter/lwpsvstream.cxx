@@ -92,9 +92,9 @@ LwpSvStream& LwpSvStream::ReadUInt32( sal_uInt32& rUInt32 )
 /**
  * @descr       SeekRel in stream
 */
-sal_Int64 LwpSvStream::SeekRel(sal_Int64 pos)
+void LwpSvStream::SeekRel(sal_Int64 pos)
 {
-    return m_pStream->SeekRel(pos);
+    m_pStream->SeekRel(pos);
 }
 /**
  * @descr       Get the current position in stream

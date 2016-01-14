@@ -515,14 +515,13 @@ VO_PARASTYLE/VO_CHARACTERSTYLE call this method to add its created style to XFSt
 Prerequisite: pStyle has been created and all properties has been set to it.
 Return the XFStyle* added by XFStyleManager
 */
-IXFStyle* LwpStyleManager::AddStyle(LwpObjectID styleObjID, IXFStyle* pStyle)
+void LwpStyleManager::AddStyle(LwpObjectID styleObjID, IXFStyle* pStyle)
 {
     assert(pStyle);
     //pStyle may change if same style is found in XFStyleManager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pStyle = pXFStyleManager->AddStyle(pStyle).m_pStyle;
     m_StyleList.insert(LwpStyleMap::value_type(styleObjID, pStyle));
-    return pStyle;
 }
 
 /*
