@@ -463,7 +463,7 @@ CairoTextRender::GetFontMetric( ImplFontMetricData *pFontMetric, int nFallbackLe
     if( mpServerFont[nFallbackLevel] != nullptr )
     {
         long rDummyFactor;
-        mpServerFont[nFallbackLevel]->FetchFontMetric( *pFontMetric, rDummyFactor );
+        mpServerFont[nFallbackLevel]->GetFontMetric( *pFontMetric, rDummyFactor );
     }
 }
 

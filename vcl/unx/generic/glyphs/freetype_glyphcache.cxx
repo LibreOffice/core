@@ -614,7 +614,7 @@ ServerFont::~ServerFont()
 }
 
 
-void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
+void ServerFont::GetFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
     static_cast< FontAttributes& >(rTo) = mpFontInfo->GetFontAttributes();
 
