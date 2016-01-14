@@ -900,13 +900,16 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
     return bRet;
 }
 
-bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr pSerializer, oox::core::OoxmlVersion version )
+bool SmDocShell::writeFormulaOoxml(
+        ::sax_fastparser::FSHelperPtr const pSerializer,
+        oox::core::OoxmlVersion const version,
+        oox::drawingml::DocumentType const documentType)
 {
     if( !pTree )
         Parse();
     if( pTree && !IsFormulaArranged() )
         ArrangeFormula();
-    SmOoxmlExport aEquation( pTree, version );
+    SmOoxmlExport aEquation(pTree, version, documentType);
     return aEquation.ConvertFromStarMath( pSerializer );
 }
 

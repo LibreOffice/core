@@ -14,6 +14,7 @@
 
 #include <sax/fshelper.hxx>
 #include <oox/core/filterbase.hxx>
+#include <oox/export/utils.hxx>
 
 /**
  Class implementing writing of formulas to OOXML.
@@ -21,7 +22,8 @@
 class SmOoxmlExport : public SmWordExportBase
 {
 public:
-    SmOoxmlExport( const SmNode* pIn, oox::core::OoxmlVersion version );
+    SmOoxmlExport(const SmNode* pIn, oox::core::OoxmlVersion version,
+            oox::drawingml::DocumentType documentType);
     bool ConvertFromStarMath( ::sax_fastparser::FSHelperPtr m_pSerializer );
 private:
     virtual void HandleVerticalStack( const SmNode* pNode, int nLevel ) override;
@@ -37,6 +39,8 @@ private:
     virtual void HandleBlank() override;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
     oox::core::OoxmlVersion version;
+    /// needed to determine markup for nested run properties
+    oox::drawingml::DocumentType const m_DocumentType;
 };
 
 
