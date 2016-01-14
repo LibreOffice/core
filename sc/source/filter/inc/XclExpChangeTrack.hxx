@@ -319,7 +319,7 @@ private:
     sal_uInt16*                 pBuffer;
     sal_uInt16                  nTabCount;
 
-    inline void                 Clear() { if( pBuffer ) delete[] pBuffer; pBuffer = nullptr; }
+    inline void                 Clear() { delete[] pBuffer; pBuffer = nullptr; }
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 

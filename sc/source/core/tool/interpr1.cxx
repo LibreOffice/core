@@ -2054,10 +2054,18 @@ void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, OUString&
 
     switch( pFormatter->GetType( nFormat ) )
     {
-        case css::util::NumberFormat::NUMBER:       if(bThousand) rFmtStr = ","; else rFmtStr = "F"; break;
-        case css::util::NumberFormat::CURRENCY:     rFmtStr = "C";                                   break;
-        case css::util::NumberFormat::SCIENTIFIC:   rFmtStr = "S";                                   break;
-        case css::util::NumberFormat::PERCENT:      rFmtStr = "P";                                   break;
+        case css::util::NumberFormat::NUMBER:
+            if(bThousand) rFmtStr = ","; else rFmtStr = "F";
+            break;
+        case css::util::NumberFormat::CURRENCY:
+            rFmtStr = "C";
+            break;
+        case css::util::NumberFormat::SCIENTIFIC:
+            rFmtStr = "S";
+            break;
+        case css::util::NumberFormat::PERCENT:
+            rFmtStr = "P";
+            break;
         default:
         {
             bAppendPrec = false;
@@ -6829,10 +6837,18 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
                         else
                             nErg += aValue.mfValue;
                         break;
-                    case ifSUMSQ:   nErg += aValue.mfValue * aValue.mfValue; break;
-                    case ifPRODUCT: nErg *= aValue.mfValue; break;
-                    case ifMAX:     if( aValue.mfValue > nErg ) nErg = aValue.mfValue; break;
-                    case ifMIN:     if( aValue.mfValue < nErg ) nErg = aValue.mfValue; break;
+                    case ifSUMSQ:
+                        nErg += aValue.mfValue * aValue.mfValue;
+                        break;
+                    case ifPRODUCT:
+                        nErg *= aValue.mfValue;
+                        break;
+                    case ifMAX:
+                        if( aValue.mfValue > nErg ) nErg = aValue.mfValue;
+                        break;
+                    case ifMIN:
+                        if( aValue.mfValue < nErg ) nErg = aValue.mfValue;
+                        break;
                     default: ; // nothing
                 }
             }

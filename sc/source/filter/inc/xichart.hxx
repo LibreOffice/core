@@ -394,7 +394,10 @@ public:
     /** Returns true, if the source link contains explicit string data. */
     inline bool         HasString() const { return mxString && !mxString->IsEmpty(); }
     /** Returns explicit string data or an empty string. */
-    OUString            GetString() const { if (mxString) return mxString->GetText(); return OUString(); }
+    OUString            GetString() const {
+        if (mxString) return mxString->GetText();
+        return OUString();
+    }
     /** Returns the number of data points of this source link. */
     sal_uInt16          GetCellCount() const;
 
