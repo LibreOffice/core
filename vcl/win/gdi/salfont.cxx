@@ -1479,7 +1479,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
         return 0;
 }
 
-void WinSalGraphics::GetFontMetric( ImplFontMetricData* pFontMetric, int nFallbackLevel )
+void WinSalGraphics::GetFontMetric( ImplFontMetricDataPtr& pFontMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
     HFONT hOldFont = SelectFont( getHDC(), mhFonts[nFallbackLevel] );

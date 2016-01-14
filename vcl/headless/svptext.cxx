@@ -29,9 +29,9 @@ sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel
     return m_aTextRenderImpl.SetFont(pIFSD, nFallbackLevel);
 }
 
-void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pFontMetric, int nFallbackLevel )
+void SvpSalGraphics::GetFontMetric( ImplFontMetricDataPtr& xFontMetric, int nFallbackLevel )
 {
-    m_aTextRenderImpl.GetFontMetric(pFontMetric, nFallbackLevel);
+    m_aTextRenderImpl.GetFontMetric(xFontMetric, nFallbackLevel);
 }
 
 const FontCharMapPtr SvpSalGraphics::GetFontCharMap() const
