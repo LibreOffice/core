@@ -163,13 +163,12 @@ bool BaseContainerNode::notifyDeactivatedChild(
     return bFinished;
 }
 
-bool BaseContainerNode::repeat()
+void BaseContainerNode::repeat()
 {
     forEachChildNode( boost::mem_fn(&AnimationNode::end), ~ENDED );
     bool bState = init_children();
     if( bState )
         activate_st();
-    return bState;
 }
 
 #if defined(DBG_UTIL)

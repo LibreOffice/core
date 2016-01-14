@@ -157,7 +157,7 @@ public:
     virtual void addViewLayer( ViewLayerSharedPtr const& pNewLayer,
                                bool                      bRedrawLayer ) override;
     virtual bool removeViewLayer( ViewLayerSharedPtr const& pNewLayer ) override;
-    virtual bool clearAllViewLayers() override;
+    virtual void clearAllViewLayers() override;
     virtual bool update() const override;
     virtual bool render() const override;
     virtual bool isContentChanged() const override;
@@ -210,9 +210,8 @@ bool ShapeOfGroup::removeViewLayer( ViewLayerSharedPtr const& /*pNewLayer*/ )
     return true;
 }
 
-bool ShapeOfGroup::clearAllViewLayers()
+void ShapeOfGroup::clearAllViewLayers()
 {
-    return true;
 }
 
 bool ShapeOfGroup::update() const

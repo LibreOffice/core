@@ -84,10 +84,8 @@ namespace slideshow
                 This method enters animation mode on the associate
                 target view. The shape can be animated in parallel on
                 different views.
-
-                @return whether the mode change finished successfully.
              */
-            bool startMedia();
+            void startMedia();
 
             /** Notify the ViewShape that it is no longer animated
 
@@ -141,7 +139,7 @@ namespace slideshow
             bool implInitialize( const ::basegfx::B2DRectangle& rBounds );
             void implSetMediaProperties( const css::uno::Reference< css::beans::XPropertySet >& rxProps );
             void implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType );
-            bool implInitializePlayerWindow( const ::basegfx::B2DRectangle& rBounds,
+            void implInitializePlayerWindow( const ::basegfx::B2DRectangle& rBounds,
                                              const css::uno::Sequence< css::uno::Any >& rVCLDeviceParams,
                                              const OUString& rMimeType );
             ViewLayerSharedPtr                    mpViewLayer;

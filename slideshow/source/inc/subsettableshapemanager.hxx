@@ -95,20 +95,12 @@ namespace slideshow
             virtual void removeIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) = 0;
 
             /** Notify that shape-intrinsic animations are now enabled.
-
-                @return true, if this event was processed by
-                anybody. If false is returned, no handler processed
-                this event (and probably, nothing will happen at all)
             */
-            virtual bool notifyIntrinsicAnimationsEnabled() = 0;
+            virtual void notifyIntrinsicAnimationsEnabled() = 0;
 
             /** Notify that shape-intrinsic animations are now disabled.
-
-                @return true, if this event was processed by
-                anybody. If false is returned, no handler processed
-                this event (and probably, nothing will happen at all)
             */
-            virtual bool notifyIntrinsicAnimationsDisabled() = 0;
+            virtual void notifyIntrinsicAnimationsDisabled() = 0;
         };
 
         typedef ::boost::shared_ptr< SubsettableShapeManager > SubsettableShapeManagerSharedPtr;

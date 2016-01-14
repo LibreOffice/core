@@ -98,10 +98,8 @@ namespace slideshow
 
                 @param rBounds
                 The current applet shape bounds
-
-                @return whether the mode change finished successfully.
              */
-            bool startApplet( const ::basegfx::B2DRectangle& rBounds );
+            void startApplet( const ::basegfx::B2DRectangle& rBounds );
 
             /** Notify the ViewShape that it is no longer animated
 

@@ -99,7 +99,7 @@ namespace slideshow
                 This method will be faster than repeated
                 removeViewLayer() calls.
              */
-            virtual bool clearAllViewLayers() = 0;
+            virtual void clearAllViewLayers() = 0;
 
             // render methods
 
@@ -246,10 +246,6 @@ namespace slideshow
                     return compare(rLHS.get(),rRHS.get());
                 }
 
-                bool operator()(const Shape* pLHS, const Shape* pRHS) const
-                {
-                    return compare(pLHS, pRHS);
-                }
             };
         };
 

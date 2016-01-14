@@ -93,7 +93,7 @@ namespace slideshow
             return mpSubsetShape ? mpSubsetShape : mpOriginalShape;
         }
 
-        bool ShapeSubset::enableSubsetShape()
+        void ShapeSubset::enableSubsetShape()
         {
             if( !mpSubsetShape &&
                 !maTreeNode.isEmpty() )
@@ -102,8 +102,6 @@ namespace slideshow
                     mpOriginalShape,
                     maTreeNode );
             }
-
-            return static_cast< bool >(mpSubsetShape);
         }
 
         void ShapeSubset::disableSubsetShape()

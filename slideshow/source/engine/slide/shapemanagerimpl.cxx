@@ -323,14 +323,14 @@ bool ShapeManagerImpl::listenerRemoved(
     return true;
 }
 
-bool ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   xShape,
+void ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   xShape,
                                       sal_Int16                                nCursor )
 {
     ShapeSharedPtr pShape( lookupShape(xShape) );
 
     // is this one of our shapes? other shapes are ignored.
     if( !pShape )
-        return false;
+        return;
 
     if( mrGlobalCursorMap.find(xShape) == mrGlobalCursorMap.end() )
     {
@@ -354,8 +354,6 @@ bool ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   x
             aIter->second = nCursor;
         }
     }
-
-    return true;
 }
 
 OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitPos ) const
@@ -392,15 +390,15 @@ void ShapeManagerImpl::removeIntrinsicAnimationHandler( const IntrinsicAnimation
     maIntrinsicAnimationEventHandlers.remove( rHandler );
 }
 
-bool ShapeManagerImpl::notifyIntrinsicAnimationsEnabled()
+void ShapeManagerImpl::notifyIntrinsicAnimationsEnabled()
 {
-    return maIntrinsicAnimationEventHandlers.applyAll(
+    maIntrinsicAnimationEventHandlers.applyAll(
         boost::mem_fn(&IntrinsicAnimationEventHandler::enableAnimations));
 }
 
-bool ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
+void ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
 {
-    return maIntrinsicAnimationEventHandlers.applyAll(
+    maIntrinsicAnimationEventHandlers.applyAll(
         boost::mem_fn(&IntrinsicAnimationEventHandler::disableAnimations));
 }
 

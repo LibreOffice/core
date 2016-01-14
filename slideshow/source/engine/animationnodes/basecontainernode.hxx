@@ -66,7 +66,7 @@ protected:
     /// @return true: if all children have been deactivated
     bool notifyDeactivatedChild( AnimationNodeSharedPtr const& pChildNode );
 
-    bool repeat();
+    void repeat();
 
     template <typename FuncT>
     inline void forEachChildNode( FuncT const& func,

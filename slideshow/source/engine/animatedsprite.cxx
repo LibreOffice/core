@@ -89,7 +89,7 @@ namespace slideshow
             return pContentCanvas;
         }
 
-        bool AnimatedSprite::resize( const ::basegfx::B2DSize& rSpriteSizePixel )
+        void AnimatedSprite::resize( const ::basegfx::B2DSize& rSpriteSizePixel )
         {
             // Enlarge or reduce the sprite size, if necessary.  This
             // method employs a strategy similar to container, when
@@ -148,8 +148,6 @@ namespace slideshow
                         mpSprite->setClip( *maClip );
                 }
             }
-
-            return static_cast< bool >(mpSprite);
         }
 
         void AnimatedSprite::setPixelOffset( const ::basegfx::B2DSize& rPixelOffset )

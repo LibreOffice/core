@@ -108,8 +108,8 @@ public:
     // Slide interface
 
 
-    virtual bool prefetch() override;
-    virtual bool show( bool ) override;
+    virtual void prefetch() override;
+    virtual void show( bool ) override;
     virtual void hide() override;
 
     virtual basegfx::B2ISize getSlideSize() const override;
@@ -410,32 +410,26 @@ SlideImpl::~SlideImpl()
     }
 }
 
-bool SlideImpl::prefetch()
+void SlideImpl::prefetch()
 {
     if( !mxRootNode.is() )
-        return false;
+        return;
 
-    return applyInitialShapeAttributes(mxRootNode);
+    applyInitialShapeAttributes(mxRootNode);
 }
 
-bool SlideImpl::show( bool bSlideBackgoundPainted )
+void SlideImpl::show( bool bSlideBackgoundPainted )
 {
-
-
     if( mbActive )
-        return true; // already active
+        return; // already active
 
     if( !mpShapeManager || !mpLayerManager )
-        return false; // disposed
-
-
+        return; // disposed
 
     // set initial shape attributes (e.g. hide shapes that have
     // 'appear' effect set)
     if( !applyInitialShapeAttributes(mxRootNode) )
-        return false;
-
-
+        return;
 
     // activate and take over view - clears view, if necessary
     mbActive = true;
@@ -486,17 +480,12 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     if( mbIntrinsicAnimationsAllowed )
         startIntrinsicAnimations();
 
-
-
     // enable paint overlay, if maUserPaintColor is valid
     activatePaintOverlay();
 
 
-
     // from now on, animations might be showing
     meAnimationState = SHOWING_STATE;
-
-    return true;
 }
 
 void SlideImpl::hide()

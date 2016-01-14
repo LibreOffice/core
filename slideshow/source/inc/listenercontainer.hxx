@@ -252,25 +252,20 @@ public:
 
         @param rListener
         Listener to add
-
-        @return false, if the listener is already added, true
-        otherwise
      */
-    bool add( listener_type const& rListener )
+    void add( listener_type const& rListener )
     {
         Guard aGuard(*this);
 
         // ensure uniqueness
         if( isAdded(rListener) )
-            return false; // already added
+            return; // already added
 
         maListeners.push_back( rListener );
 
         ListenerOperations<ListenerT>::pruneListeners(
             maListeners,
             MaxDeceasedListenerUllage);
-
-        return true;
     }
 
     /** Add new listener into sorted container

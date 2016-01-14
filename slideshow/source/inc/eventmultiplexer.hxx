@@ -445,14 +445,14 @@ public:
         displayed on. On every added view, the EventMultiplexer
         registers mouse and motion event listeners.
     */
-    bool notifyViewAdded( const UnoViewSharedPtr& rView );
+    void notifyViewAdded( const UnoViewSharedPtr& rView );
 
     /** View removed
 
         This method removes a view. Registered mouse and
         motion event listeners are revoked.
     */
-    bool notifyViewRemoved( const UnoViewSharedPtr& rView );
+    void notifyViewRemoved( const UnoViewSharedPtr& rView );
 
     /** View changed
 
@@ -472,7 +472,7 @@ public:
         @param xView
         View that has changed
     */
-    bool notifyViewChanged( const css::uno::Reference<css::presentation::XSlideShowView>& xView );
+    void notifyViewChanged( const css::uno::Reference<css::presentation::XSlideShowView>& xView );
 
     /** All Views changed
 
@@ -480,7 +480,7 @@ public:
         <em>every</em> known view has changed. View changes include
         size and transformation.
     */
-    bool notifyViewsChanged();
+    void notifyViewsChanged();
 
     /** View clobbered
 
@@ -490,28 +490,22 @@ public:
         @param xView
         View that has been clobbered
     */
-    bool notifyViewClobbered( const css::uno::Reference<css::presentation::XSlideShowView>& xView );
+    void notifyViewClobbered( const css::uno::Reference<css::presentation::XSlideShowView>& xView );
 
     /** New shape event listener added
 
         This method announces that the given listener was added for
         the specified shape.
-
-        @return true, if at least one handler successfully processed
-        the notification.
      */
-    bool notifyShapeListenerAdded( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
+    void notifyShapeListenerAdded( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
                                    const css::uno::Reference<css::drawing::XShape>&                   xShape );
 
     /** A shape event listener was removed
 
         This method announces that the given listener was removed for
         the specified shape.
-
-        @return true, if at least one handler successfully processed
-        the notification.
      */
-    bool notifyShapeListenerRemoved( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
+    void notifyShapeListenerRemoved( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
                                      const css::uno::Reference<css::drawing::XShape>&                   xShape );
 
     /** Notify a new user paint color
@@ -519,23 +513,15 @@ public:
         Sending this notification also implies that user paint is
         enabled. User paint denotes the feature to draw colored lines
         on top of the slide content.
-
-        @return true, if this event was processed by
-        anybody. If false is returned, no handler processed
-        this event (and probably, nothing will happen at all)
     */
-    bool notifyUserPaintColor( RGBColor const& rUserColor );
+    void notifyUserPaintColor( RGBColor const& rUserColor );
 
     /** Notify a new user paint width
 
          Sending this notification also implies that user paint is
          enabled. .
-
-         @return true, if this event was processed by
-         anybody. If false is returned, no handler processed
-         this event (and probably, nothing will happen at all)
-         */
-    bool notifyUserPaintStrokeWidth( double rUserStrokeWidth );
+    */
+    void notifyUserPaintStrokeWidth( double rUserStrokeWidth );
 
 
     /** Notify a new user paint erase all ink mode
@@ -543,26 +529,18 @@ public:
      Sending this notification also implies that user paint is
      enabled. User paint denotes the feature to draw colored lines
      on top of the slide content.
-
-     @return true, if this event was processed by
-     anybody. If false is returned, no handler processed
-     this event (and probably, nothing will happen at all)
      */
-    bool notifyEraseAllInk( bool const& rEraseAllInk );
-    bool notifySwitchPenMode();
-    bool notifySwitchEraserMode();
-    bool notifyEraseInkWidth( sal_Int32 rEraseInkSize );
+    void notifyEraseAllInk( bool const& rEraseAllInk );
+    void notifySwitchPenMode();
+    void notifySwitchEraserMode();
+    void notifyEraseInkWidth( sal_Int32 rEraseInkSize );
 
     /** Notify that user paint is disabled
 
         User paint denotes the feature to draw colored lines on top of
         the slide content.
-
-        @return true, if this event was processed by
-        anybody. If false is returned, no handler processed
-        this event (and probably, nothing will happen at all)
     */
-    bool notifyUserPaintDisabled();
+    void notifyUserPaintDisabled();
 
     /** Notify that the user requested the next effect.
 
@@ -580,12 +558,8 @@ public:
         This method is to be used from the Presentation object
         to signal that a new slide is starting now. This will
         invoke all registered slide start handlers.
-
-        @return true, if this event was processed by
-        anybody. If false is returned, no handler processed
-        this event (and probably, nothing will happen at all)
     */
-    bool notifySlideStartEvent();
+    void notifySlideStartEvent();
 
     /** Notify that a slide has ended
 
@@ -662,12 +636,8 @@ public:
         to signal that a slide is entering (bPauseShow=true)
         or exiting (bPauseShow=false) pause mode. This will
         invoke all registered slide end handlers.
-
-        @return true, if this event was processed by
-        anybody. If false is returned, no handler processed
-        this event (and probably, nothing will happen at all)
     */
-    bool notifyPauseMode( bool bPauseShow );
+    void notifyPauseMode( bool bPauseShow );
 
     /** Notify that all audio has to be stopped.
 
@@ -682,12 +652,8 @@ public:
     bool notifyCommandStopAudio( const boost::shared_ptr<AnimationNode>& rNode );
 
     /** Notifies that a hyperlink has been clicked.
-
-        @return true, if this event was processed by
-        anybody. If false is returned, no handler processed
-        this event (and probably, nothing will happen at all)
     */
-    bool notifyHyperlinkClicked( OUString const& hyperLink );
+    void notifyHyperlinkClicked( OUString const& hyperLink );
 
 private:
     std::unique_ptr<EventMultiplexerImpl> mpImpl;

@@ -109,7 +109,7 @@ namespace slideshow
             /// override in derived class to stop external viewer
             virtual bool implEndIntrinsicAnimation() = 0;
             /// override in derived class to pause external viewer
-            virtual bool implPauseIntrinsicAnimation() = 0;
+            virtual void implPauseIntrinsicAnimation() = 0;
             /// override in derived class to return status of animation
             virtual bool implIsIntrinsicAnimationPlaying() const = 0;
             /// override in derived class to set media time

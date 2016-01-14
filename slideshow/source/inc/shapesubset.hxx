@@ -104,10 +104,8 @@ namespace slideshow
                 successful completion of this method, the original
                 shape will cease to show the subset range, and
                 getSubsetShape() will return a valid shape.
-
-                @return true, if subsetting was successfully enabled.
              */
-            bool            enableSubsetShape();
+            void            enableSubsetShape();
 
             /** Disable the subset shape.
 

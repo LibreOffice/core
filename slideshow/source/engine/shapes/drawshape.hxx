@@ -125,7 +125,7 @@ namespace slideshow
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer ) override;
             virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) override;
-            virtual bool clearAllViewLayers() override;
+            virtual void clearAllViewLayers() override;
 
             // attribute methods
 
@@ -195,7 +195,7 @@ namespace slideshow
                 Used by IntrinsicAnimationActivity, to show the next
                 animation frame.
              */
-            bool setIntrinsicAnimationFrame( ::std::size_t nCurrFrame );
+            void setIntrinsicAnimationFrame( ::std::size_t nCurrFrame );
 
             /** forces the drawshape to load and return a specially
                 crafted metafile, usable to display drawing layer text

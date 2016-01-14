@@ -106,7 +106,7 @@ public:
     // AnimationNode:
     virtual bool init() override;
     virtual bool resolve() override;
-    virtual bool activate() override;
+    virtual void activate() override;
     virtual void deactivate() override;
     virtual void end() override;
     virtual css::uno::Reference<css::animations::XAnimationNode> getXAnimationNode() const override;

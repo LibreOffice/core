@@ -82,7 +82,7 @@ namespace slideshow
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer ) override;
             virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) override;
-            virtual bool clearAllViewLayers() override;
+            virtual void clearAllViewLayers() override;
 
 
             // ExternalShapeBase methods
@@ -93,7 +93,7 @@ namespace slideshow
             virtual void implViewsChanged() override;
             virtual bool implStartIntrinsicAnimation() override;
             virtual bool implEndIntrinsicAnimation() override;
-            virtual bool implPauseIntrinsicAnimation() override;
+            virtual void implPauseIntrinsicAnimation() override;
             virtual bool implIsIntrinsicAnimationPlaying() const override;
             virtual void implSetIntrinsicAnimationTime(double) override;
 
@@ -207,10 +207,9 @@ namespace slideshow
 
 
 
-        bool AppletShape::clearAllViewLayers()
+        void AppletShape::clearAllViewLayers()
         {
             maViewAppletShapes.clear();
-            return true;
         }
 
 
@@ -260,11 +259,10 @@ namespace slideshow
 
 
 
-        bool AppletShape::implPauseIntrinsicAnimation()
+        void AppletShape::implPauseIntrinsicAnimation()
         {
             // TODO(F1): any way of temporarily disabling/deactivating
             // applets?
-            return true;
         }
 
 

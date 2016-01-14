@@ -981,66 +981,66 @@ void EventMultiplexer::removeHyperlinkHandler( const HyperlinkHandlerSharedPtr& 
             0.0) );
 }
 
-bool EventMultiplexer::notifyShapeListenerAdded(
+void EventMultiplexer::notifyShapeListenerAdded(
     const uno::Reference<presentation::XShapeEventListener>& xListener,
     const uno::Reference<drawing::XShape>&                   xShape )
 {
-    return mpImpl->maShapeListenerHandlers.applyAll(
+    mpImpl->maShapeListenerHandlers.applyAll(
         [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
         { return pHandler->listenerAdded( xListener, xShape ); } );
 }
 
-bool EventMultiplexer::notifyShapeListenerRemoved(
+void EventMultiplexer::notifyShapeListenerRemoved(
     const uno::Reference<presentation::XShapeEventListener>& xListener,
     const uno::Reference<drawing::XShape>&                   xShape )
 {
-    return mpImpl->maShapeListenerHandlers.applyAll(
+    mpImpl->maShapeListenerHandlers.applyAll(
         [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
         { return pHandler->listenerRemoved( xListener, xShape ); } );
 }
 
-bool EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
+void EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
 {
-    return mpImpl->maUserPaintEventHandlers.applyAll(
+    mpImpl->maUserPaintEventHandlers.applyAll(
         [&rUserColor]( const UserPaintEventHandlerSharedPtr& pHandler )
         { return pHandler->colorChanged( rUserColor ); } );
 }
 
-bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
+void EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
 {
-    return mpImpl->maUserPaintEventHandlers.applyAll(
+    mpImpl->maUserPaintEventHandlers.applyAll(
         [&rUserStrokeWidth]( const UserPaintEventHandlerSharedPtr& pHandler )
         { return pHandler->widthChanged( rUserStrokeWidth ); } );
 }
 
-bool EventMultiplexer::notifyUserPaintDisabled()
+void EventMultiplexer::notifyUserPaintDisabled()
 {
-    return mpImpl->maUserPaintEventHandlers.applyAll(
+    mpImpl->maUserPaintEventHandlers.applyAll(
         boost::mem_fn(&UserPaintEventHandler::disable));
 }
 
-bool EventMultiplexer::notifySwitchPenMode(){
-    return mpImpl->maUserPaintEventHandlers.applyAll(
+void EventMultiplexer::notifySwitchPenMode(){
+    mpImpl->maUserPaintEventHandlers.applyAll(
         boost::mem_fn(&UserPaintEventHandler::switchPenMode));
 }
 
-bool EventMultiplexer::notifySwitchEraserMode(){
-    return mpImpl->maUserPaintEventHandlers.applyAll(
+void EventMultiplexer::notifySwitchEraserMode(){
+    mpImpl->maUserPaintEventHandlers.applyAll(
         boost::mem_fn(&UserPaintEventHandler::switchEraserMode));
 }
 
 //adding erasing all ink features with UserPaintOverlay
-bool EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
+void EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
 {
-    return mpImpl->maUserPaintEventHandlers.applyAll(
+    mpImpl->maUserPaintEventHandlers.applyAll(
         [&rEraseAllInk]( const UserPaintEventHandlerSharedPtr& pHandler )
         { return pHandler->eraseAllInkChanged( rEraseAllInk ); } );
 }
 
 //adding erasing features with UserPaintOverlay
-bool EventMultiplexer::notifyEraseInkWidth( sal_Int32 rEraseInkSize )
+void EventMultiplexer::notifyEraseInkWidth( sal_Int32 rEraseInkSize )
 {
-    return mpImpl->maUserPaintEventHandlers.applyAll(
+    mpImpl->maUserPaintEventHandlers.applyAll(
         [&rEraseInkSize]( const UserPaintEventHandlerSharedPtr& pHandler )
         { return pHandler->eraseInkWidthChanged( rEraseInkSize ); } );
 }
@@ -1050,9 +1050,9 @@ bool EventMultiplexer::notifyNextEffect()
     return mpImpl->notifyNextEffect();
 }
 
-bool EventMultiplexer::notifySlideStartEvent()
+void EventMultiplexer::notifySlideStartEvent()
 {
-    return mpImpl->maSlideStartHandlers.applyAll(
+    mpImpl->maSlideStartHandlers.applyAll(
         boost::mem_fn(&EventHandler::handleEvent) );
 }
 
@@ -1098,14 +1098,14 @@ bool EventMultiplexer::notifyCommandStopAudio(
         rNode );
 }
 
-bool EventMultiplexer::notifyPauseMode( bool bPauseShow )
+void EventMultiplexer::notifyPauseMode( bool bPauseShow )
 {
-    return mpImpl->maPauseHandlers.applyAll(
+    mpImpl->maPauseHandlers.applyAll(
         [&bPauseShow]( const PauseEventHandlerSharedPtr& pHandler )
         { return pHandler->handlePause( bPauseShow ); } );
 }
 
-bool EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
+void EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
 {
     ENSURE_OR_THROW( rView, "EventMultiplexer::notifyViewAdded(): Invalid view");
 
@@ -1121,12 +1121,12 @@ bool EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
         rUnoView->addMouseMotionListener(
             mpImpl->mxListener.get() );
 
-    return mpImpl->maViewHandlers.applyAll(
+    mpImpl->maViewHandlers.applyAll(
         [&rView]( const ViewEventHandlerWeakPtr& pHandler )
         { return pHandler.lock()->viewAdded( rView ); } );
 }
 
-bool EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
+void EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
 {
     ENSURE_OR_THROW( rView,
                       "EventMultiplexer::removeView(): Invalid view" );
@@ -1143,7 +1143,7 @@ bool EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
         rUnoView->removeMouseMotionListener(
             mpImpl->mxListener.get() );
 
-    return mpImpl->maViewHandlers.applyAll(
+    mpImpl->maViewHandlers.applyAll(
         [&rView]( const ViewEventHandlerWeakPtr& pHandler )
         { return pHandler.lock()->viewRemoved( rView ); } );
 }
@@ -1155,39 +1155,39 @@ bool EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
         { return pHandler.lock()->viewChanged( rView ); } );
 }
 
-bool EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSlideShowView>& xView )
+void EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSlideShowView>& xView )
 {
     UnoViewSharedPtr pView( mpImpl->findUnoView(xView) );
 
     if( !pView )
-        return false; // view not registered here
+        return; // view not registered here
 
-    return notifyViewChanged( pView );
+    notifyViewChanged( pView );
 }
 
-bool EventMultiplexer::notifyViewsChanged()
+void EventMultiplexer::notifyViewsChanged()
 {
-    return mpImpl->maViewHandlers.applyAll(
+    mpImpl->maViewHandlers.applyAll(
         boost::mem_fn( &ViewEventHandler::viewsChanged ));
 }
 
-bool EventMultiplexer::notifyViewClobbered(
+void EventMultiplexer::notifyViewClobbered(
     const uno::Reference<presentation::XSlideShowView>& xView )
 {
     UnoViewSharedPtr pView( mpImpl->findUnoView(xView) );
 
     if( !pView )
-        return false; // view not registered here
+        return; // view not registered here
 
-    return mpImpl->maViewRepaintHandlers.applyAll(
+    mpImpl->maViewRepaintHandlers.applyAll(
         [&pView]( const ViewRepaintHandlerSharedPtr& pHandler )
         { return pHandler->viewClobbered( pView ); } );
 }
 
-bool EventMultiplexer::notifyHyperlinkClicked(
+void EventMultiplexer::notifyHyperlinkClicked(
     OUString const& hyperLink )
 {
-    return mpImpl->maHyperlinkHandlers.apply(
+    mpImpl->maHyperlinkHandlers.apply(
         [&hyperLink]( const PrioritizedHandlerEntry< HyperlinkHandler >& pHandler )
         { return pHandler.getHandler()->handleHyperlink( hyperLink ); } );
 }

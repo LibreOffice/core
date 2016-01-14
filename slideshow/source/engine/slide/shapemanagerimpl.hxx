@@ -136,8 +136,8 @@ private:
         const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;
     virtual void removeIntrinsicAnimationHandler(
         const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;
-    virtual bool notifyIntrinsicAnimationsEnabled() override;
-    virtual bool notifyIntrinsicAnimationsDisabled() override;
+    virtual void notifyIntrinsicAnimationsEnabled() override;
+    virtual void notifyIntrinsicAnimationsDisabled() override;
 
 
     // ShapeListenerEventHandler
@@ -149,7 +149,7 @@ private:
     virtual bool listenerRemoved( const css::uno::Reference< css::presentation::XShapeEventListener>& xListener,
                                   const css::uno::Reference< css::drawing::XShape>&                   xShape ) override;
 
-    bool cursorChanged( const css::uno::Reference< css::drawing::XShape>&   xShape,
+    void cursorChanged( const css::uno::Reference< css::drawing::XShape>&   xShape,
                               sal_Int16                                     nCursor );
 
 

@@ -120,15 +120,13 @@ namespace slideshow
 
 
 
-        bool ViewMediaShape::startMedia()
+        void ViewMediaShape::startMedia()
         {
             if( !mxPlayer.is() )
                 implInitialize( maBounds );
 
             if (mxPlayer.is())
                 mxPlayer->start();
-
-            return true;
         }
 
 
@@ -431,7 +429,7 @@ namespace slideshow
 
 
 
-        bool ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
+        void ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams,
                                                                  const OUString& rMimeType )
         {
@@ -534,8 +532,6 @@ namespace slideshow
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
             }
-
-            return mxPlayerWindow.is();
         }
     }
 }

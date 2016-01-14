@@ -86,12 +86,8 @@ public:
 
         This method starts the animation on this node, without
         begin timeout. The node will change its state to ACTIVE.
-
-        @return true, if start was successful. This method
-        might return false, if e.g. a restart is not permitted
-        on this node.
     */
-    virtual bool activate() = 0;
+    virtual void activate() = 0;
 
     /** Immediately stop this node
 

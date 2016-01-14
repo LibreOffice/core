@@ -490,14 +490,14 @@ bool BaseNode::resolve_st()
 }
 
 
-bool BaseNode::activate()
+void BaseNode::activate()
 {
     if (! checkValidNode())
-        return false;
+        return;
 
     OSL_ASSERT( meCurrState != ACTIVE );
     if (inStateOrTransition( ACTIVE ))
-        return true;
+        return;
 
     StateTransition st(this);
     if (st.enter( ACTIVE )) {
@@ -507,11 +507,7 @@ bool BaseNode::activate()
         st.commit(); // changing state
 
         maContext.mrEventMultiplexer.notifyAnimationStart( mpSelf );
-
-        return true;
     }
-
-    return false;
 }
 
 void BaseNode::activate_st()

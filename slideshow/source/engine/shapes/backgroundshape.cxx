@@ -80,7 +80,7 @@ namespace slideshow
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer ) override;
             virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) override;
-            virtual bool clearAllViewLayers() override;
+            virtual void clearAllViewLayers() override;
 
 
             // attribute methods
@@ -209,10 +209,9 @@ namespace slideshow
             return true;
         }
 
-        bool BackgroundShape::clearAllViewLayers()
+        void BackgroundShape::clearAllViewLayers()
         {
             maViewShapes.clear();
-            return true;
         }
 
         ::basegfx::B2DRectangle BackgroundShape::getBounds() const

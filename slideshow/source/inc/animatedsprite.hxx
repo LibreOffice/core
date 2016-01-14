@@ -73,11 +73,8 @@ namespace slideshow
 
                 @param rSpriteSizePixel
                 The new size in pixel
-
-                @return true, if the resize was successful. If false
-                is returned, the sprite might be invalid.
              */
-            bool resize( const ::basegfx::B2DSize& rSpriteSizePixel );
+            void resize( const ::basegfx::B2DSize& rSpriteSizePixel );
 
             /** Set an offset for the content output in pixel
 

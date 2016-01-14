@@ -68,7 +68,7 @@ namespace slideshow
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer ) override;
             virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) override;
-            virtual bool clearAllViewLayers() override;
+            virtual void clearAllViewLayers() override;
 
 
             // ExternalShapeBase methods
@@ -79,7 +79,7 @@ namespace slideshow
             virtual void implViewsChanged() override;
             virtual bool implStartIntrinsicAnimation() override;
             virtual bool implEndIntrinsicAnimation() override;
-            virtual bool implPauseIntrinsicAnimation() override;
+            virtual void implPauseIntrinsicAnimation() override;
             virtual bool implIsIntrinsicAnimationPlaying() const override;
             virtual void implSetIntrinsicAnimationTime(double) override;
 
@@ -171,10 +171,9 @@ namespace slideshow
 
 
 
-        bool MediaShape::clearAllViewLayers()
+        void MediaShape::clearAllViewLayers()
         {
             maViewMediaShapes.clear();
-            return true;
         }
 
 
@@ -223,14 +222,12 @@ namespace slideshow
 
 
 
-        bool MediaShape::implPauseIntrinsicAnimation()
+        void MediaShape::implPauseIntrinsicAnimation()
         {
             for( const auto& pViewMediaShape : maViewMediaShapes )
                 pViewMediaShape->pauseMedia();
 
             mbIsPlaying = false;
-
-            return true;
         }
 
 
