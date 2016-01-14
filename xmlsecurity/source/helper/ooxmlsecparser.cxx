@@ -13,9 +13,10 @@
 using namespace com::sun::star;
 
 OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
-    : m_pXSecController(pXSecController),
-      m_bInDigestValue(false),
-      m_bInSignatureValue(false)
+    : m_pXSecController(pXSecController)
+    ,m_bInDigestValue(false)
+    ,m_bInSignatureValue(false)
+    ,m_bInX509Certificate(false)
 {
 }
 
@@ -65,6 +66,11 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         m_aSignatureValue.clear();
         m_bInSignatureValue = true;
     }
+    else if (rName == "X509Certificate")
+    {
+        m_aX509Certificate.clear();
+        m_bInX509Certificate = true;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->startElement(rName, xAttribs);
@@ -83,6 +89,11 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
         m_pXSecController->setSignatureValue(m_aSignatureValue);
         m_bInSignatureValue = false;
     }
+    else if (rName == "X509Certificate")
+    {
+        m_pXSecController->setX509Certificate(m_aX509Certificate);
+        m_bInX509Certificate = false;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->endElement(rName);
@@ -94,6 +105,8 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax
         m_aDigestValue += rChars;
     else if (m_bInSignatureValue)
         m_aSignatureValue += rChars;
+    else if (m_bInX509Certificate)
+        m_aX509Certificate += rChars;
 
     if (m_xNextHandler.is())
         m_xNextHandler->characters(rChars);
