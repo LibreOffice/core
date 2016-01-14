@@ -53,9 +53,9 @@ public:
     /// adds a control to the specified page
     bool InsertControl(int nDestPage, vcl::Window* pUsedControl);
 
-    bool NextPage();
+    void NextPage();
 
-    bool PreviousPage();
+    void PreviousPage();
 
     bool GotoPage(const int nPageToGo);
 

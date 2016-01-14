@@ -686,17 +686,13 @@ void SlideSorterController::UpdateAllPages()
     mrSlideSorter.GetContentWindow()->Invalidate();
 }
 
-Rectangle SlideSorterController::Resize (const Rectangle& rAvailableSpace)
+void SlideSorterController::Resize (const Rectangle& rAvailableSpace)
 {
-    Rectangle aContentArea (rAvailableSpace);
-
     if (maTotalWindowArea != rAvailableSpace)
     {
         maTotalWindowArea = rAvailableSpace;
-        aContentArea = Rearrange(true);
+        Rearrange(true);
     }
-
-    return aContentArea;
 }
 
 Rectangle  SlideSorterController::Rearrange (bool bForce)
@@ -799,7 +795,7 @@ void SlideSorterController::PrepareEditModeChange()
     }
 }
 
-bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
+void SlideSorterController::ChangeEditMode (EditMode eEditMode)
 {
     bool bResult (false);
     if (mrModel.GetEditMode() != eEditMode)
@@ -811,7 +807,6 @@ bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
         if (bResult)
             HandleModelChange();
     }
-    return bResult;
 }
 
 void SlideSorterController::FinishEditModeChange()

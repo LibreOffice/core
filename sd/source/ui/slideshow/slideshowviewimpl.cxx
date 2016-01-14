@@ -73,7 +73,7 @@ void SlideShowViewListeners::removeListener( const Reference< util::XModifyListe
         maListeners.erase( aIter );
 }
 
-bool SlideShowViewListeners::notify( const lang::EventObject& _rEvent ) throw( css::uno::Exception )
+void SlideShowViewListeners::notify( const lang::EventObject& _rEvent ) throw( css::uno::Exception )
 {
     ::osl::MutexGuard aGuard( mrMutex );
 
@@ -91,7 +91,6 @@ bool SlideShowViewListeners::notify( const lang::EventObject& _rEvent ) throw( c
             aIter = maListeners.erase( aIter );
         }
     }
-    return true;
 }
 
 void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )

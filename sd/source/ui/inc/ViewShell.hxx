@@ -531,8 +531,8 @@ protected:
     DECL_LINK_TYPED( VScrollHdl, ScrollBar *, void );
 
     // virtual scroll handler, here, derivative classes can add themselves here
-    virtual long VirtHScrollHdl(ScrollBar* pHScroll);
-    virtual long VirtVScrollHdl(ScrollBar* pVScroll);
+    virtual void VirtHScrollHdl(ScrollBar* pHScroll);
+    virtual void VirtVScrollHdl(ScrollBar* pVScroll);
 
     // virtual functions ruler handling
     virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst);

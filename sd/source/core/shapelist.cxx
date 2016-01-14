@@ -50,7 +50,7 @@ void ShapeList::addShape( SdrObject& rObject )
 }
 
 /** removes the given shape from this list */
-SdrObject* ShapeList::removeShape( SdrObject& rObject )
+void ShapeList::removeShape( SdrObject& rObject )
 {
     ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
     if( aIter != maShapeList.end() )
@@ -62,15 +62,11 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
 
         if( bIterErased )
             maIter = aIter;
-
-        if( aIter != maShapeList.end() )
-            return (*aIter);
     }
     else
     {
         OSL_FAIL("sd::ShapeList::removeShape(), given shape not part of list!");
     }
-    return nullptr;
 }
 
 /** removes all shapes from this list

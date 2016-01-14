@@ -394,7 +394,7 @@ public:
     bool InitSOIface();
     bool GetPageByIndex( sal_uInt32 nIndex, PageType );
     sal_uInt32 GetMasterIndex( PageType ePageType );
-    bool SetCurrentStyleSheet( sal_uInt32 nPageNum );
+    void SetCurrentStyleSheet( sal_uInt32 nPageNum );
 
     bool GetPresObj() { return mbPresObj; }
 

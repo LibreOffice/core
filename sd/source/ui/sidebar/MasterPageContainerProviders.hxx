@@ -54,8 +54,6 @@ public:
     */
     virtual int GetCostIndex() = 0;
 
-    virtual bool operator== (const PageObjectProvider& rProvider) = 0;
-
 protected:
     ~PageObjectProvider() {}
 };
@@ -117,7 +115,6 @@ public:
     virtual ~TemplatePageObjectProvider() {};
     virtual SdPage* operator () (SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
-    virtual bool operator== (const PageObjectProvider& rProvider) override;
 private:
     OUString msURL;
     SfxObjectShellLock mxDocumentShell;
@@ -148,7 +145,6 @@ public:
     virtual ~DefaultPageObjectProvider() {}
     virtual SdPage* operator () (SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
-    virtual bool operator== (const PageObjectProvider& rProvider) override;
 };
 
 /** This implementation of the PageObjectProvider simply returns an already
@@ -161,7 +157,6 @@ public:
     virtual ~ExistingPageProvider() {}
     virtual SdPage* operator() (SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
-    virtual bool operator== (const PageObjectProvider& rProvider) override;
 private:
     SdPage* mpPage;
 };

@@ -1117,10 +1117,8 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
 /**
  * Text entry is started, if necessary delete the default text.
  */
-bool FuText::DeleteDefaultText()
+void FuText::DeleteDefaultText()
 {
-    bool bDeleted = false;
-
     if ( mxTextObj.is() && mxTextObj->IsEmptyPresObj() )
     {
         SdPage* pPage = static_cast<SdPage*>( mxTextObj->GetPage() );
@@ -1151,12 +1149,9 @@ bool FuText::DeleteDefaultText()
                     pOutliner->SetStyleSheet(0, pSheet);
 
                 mxTextObj->SetEmptyPresObj(true);
-                bDeleted = true;
             }
         }
     }
-
-    return bDeleted;
 }
 
 bool FuText::Command(const CommandEvent& rCEvt)

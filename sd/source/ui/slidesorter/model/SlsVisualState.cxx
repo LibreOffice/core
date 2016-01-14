@@ -63,15 +63,12 @@ void VisualState::UpdateVisualState (const PageDescriptor& rDescriptor)
         SetVisualState(VS_None);
 }
 
-bool VisualState::SetLocationOffset (const Point& rOffset)
+void VisualState::SetLocationOffset (const Point& rOffset)
 {
     if (maLocationOffset != rOffset)
     {
         maLocationOffset = rOffset;
-        return true;
     }
-    else
-        return false;
 }
 
 } } } // end of namespace ::sd::slidesorter::model

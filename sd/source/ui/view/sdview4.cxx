@@ -273,7 +273,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     return pNewGrafObj;
 }
 
-SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
+void View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize,
                                    bool const bLink )
 {
@@ -287,14 +287,14 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
         uno::Reference<frame::XModel> const xModel(
                 GetDoc().GetObjectShell()->GetModel());
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
-        if (!bRet) { return nullptr; }
+        if (!bRet) { return; }
     }
 
-    return InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
+    InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
 }
 
 #if HAVE_FEATURE_GLTF
-SdrMediaObj* View::Insert3DModelURL(
+void View::Insert3DModelURL(
     const OUString& rModelURL, sal_Int8& rAction,
     const Point& rPos, const Size& rSize,
     bool const bLink )
@@ -309,14 +309,13 @@ SdrMediaObj* View::Insert3DModelURL(
         uno::Reference<frame::XModel> const xModel(
                 GetDoc().GetObjectShell()->GetModel());
         bool const bRet = ::avmedia::Embed3DModel(xModel, rModelURL, sRealURL);
-        if (!bRet) { return nullptr; }
+        if (!bRet) { return; }
     }
 
     SdrMediaObj* pRetObject = InsertMediaObj( sRealURL, "model/vnd.gltf+json", rAction, rPos, rSize );
     avmedia::MediaItem aItem = pRetObject->getMediaProperties();
     aItem.setLoop(true);
     pRetObject->setMediaProperties(aItem);
-    return pRetObject;
 }
 #endif
 

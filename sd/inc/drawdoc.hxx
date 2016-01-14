@@ -262,7 +262,7 @@ public:
     SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile);
     SAL_DLLPRIVATE SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
 
-    SAL_DLLPRIVATE bool InsertBookmark(const std::vector<OUString> &rBookmarkList,
+    SAL_DLLPRIVATE void InsertBookmark(const std::vector<OUString> &rBookmarkList,
                             std::vector<OUString> &rExchangeList, bool bLink,
                             bool bReplace, sal_uInt16 nPgPos, bool bNoDialogs,
                             ::sd::DrawDocShell* pBookmarkDocSh, bool bCopy,

@@ -49,7 +49,7 @@ bool Assistent::InsertControl(int nDestPage, vcl::Window* pUsedControl)
     return false;
 }
 
-bool Assistent::NextPage()
+void Assistent::NextPage()
 {
     if(mnCurrentPage<mnPages)
     {
@@ -58,13 +58,11 @@ bool Assistent::NextPage()
           nPage++;
 
         if(nPage <= mnPages)
-            return GotoPage(nPage);
+            GotoPage(nPage);
     }
-
-    return false;
 }
 
-bool Assistent::PreviousPage()
+void Assistent::PreviousPage()
 {
     if(mnCurrentPage>1)
     {
@@ -73,9 +71,8 @@ bool Assistent::PreviousPage()
             nPage--;
 
         if(nPage >= 0)
-            return GotoPage(nPage);
+            GotoPage(nPage);
     }
-    return false;
 }
 
 bool Assistent::GotoPage(const int nPageToGo)

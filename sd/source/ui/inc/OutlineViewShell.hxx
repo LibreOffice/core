@@ -73,8 +73,8 @@ public:
 
     virtual bool PrepareClose( bool bUI = true ) override;
 
-    virtual long VirtHScrollHdl(ScrollBar* pHScroll) override;
-    virtual long VirtVScrollHdl(ScrollBar* pVHScroll) override;
+    virtual void VirtHScrollHdl(ScrollBar* pHScroll) override;
+    virtual void VirtVScrollHdl(ScrollBar* pVHScroll) override;
 
     virtual void Activate( bool IsMDIActivate ) override;
     virtual void Deactivate( bool IsMDIActivate ) override;
@@ -145,8 +145,8 @@ public:
     */
     void SetCurrentPage (SdPage* pPage);
 
-    bool UpdateTitleObject( SdPage* pPage, Paragraph* pPara );
-    bool UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
+    void UpdateTitleObject( SdPage* pPage, Paragraph* pPara );
+    void UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
 
 private:
     void ShowSlideShow(SfxRequest& rReq);

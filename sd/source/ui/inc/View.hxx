@@ -85,7 +85,7 @@ public:
 
     void                    CompleteRedraw( OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
-    virtual bool            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
+    virtual void            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
     virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
     virtual void            MarkListHasChanged() override;
     virtual void            ModelHasChanged() override;
@@ -146,11 +146,11 @@ public:
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
                                            sal_Int8& rAction, const Point& rPos,
                                            SdrObject* pSelectedObj, ImageMap* pImageMap );
-    SdrMediaObj*            InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
+    void                    InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize,
                                             bool const bLink );
 
-    SdrMediaObj*            Insert3DModelURL( const OUString& rModelURL, sal_Int8& rAction,
+    void                    Insert3DModelURL( const OUString& rModelURL, sal_Int8& rAction,
                                               const Point& rPos, const Size& rSize,
                                               bool const bLink );
 

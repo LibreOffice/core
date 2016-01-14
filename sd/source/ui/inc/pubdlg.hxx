@@ -169,7 +169,7 @@ private:
     std::vector<SdPublishingDesign>   m_aDesignList;
     bool    m_bDesignListDirty;
     SdPublishingDesign* m_pDesign;
-    bool    Load();
+    void    Load();
     bool    Save();
 
     void    GetDesign( SdPublishingDesign* pDesign );

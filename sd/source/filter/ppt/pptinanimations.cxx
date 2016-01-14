@@ -2265,7 +2265,7 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
     }
 }
 
-bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames )
+void AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames )
 {
     OUStringBuffer aNames;
 
@@ -2298,7 +2298,6 @@ bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUStri
     }
 
     rAttributeNames = aNames.makeStringAndClear();
-    return true;
 }
 
 void AnimationImporter::importAnimationValues( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
@@ -2735,7 +2734,7 @@ void AnimationImporter::importAnimationActions( const Atom* pAtom, const Referen
     }
 }
 
-sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rTarget, sal_Int16& rSubType )
+void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rTarget, sal_Int16& rSubType )
 {
     rSubType = ShapeAnimationSubType::AS_WHOLE;
     sal_Int32 nRefMode = -1;
@@ -2852,8 +2851,6 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
         }
     }
-
-    return nRefMode;
 }
 
 void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertySet& rSet )

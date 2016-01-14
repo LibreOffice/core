@@ -72,8 +72,8 @@ private:
     void importAnimateKeyPoints( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     void importPropertySetContainer( const Atom* pAtom,PropertySet& rSet );
     bool importAttributeValue( const Atom* pAtom, css::uno::Any& rAny );
-    bool importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames );
-    sal_Int32 importTargetElementContainer( const Atom* pAtom, css::uno::Any& rTarget, sal_Int16& nSubType );
+    void importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames );
+    void importTargetElementContainer( const Atom* pAtom, css::uno::Any& rTarget, sal_Int16& nSubType );
 
     static void fillNode( css::uno::Reference< css::animations::XAnimationNode >& xTiming, const AnimationNode& rNode, const PropertySet& rSet );
     static css::uno::Reference< css::animations::XAnimationNode > createNode( const Atom* pAtom, const AnimationNode& rNode );

@@ -82,10 +82,8 @@ public:
 
     /** Place and size the scroll bars and the browser window so that the
         given rectangle is filled.
-        @return
-            The space occupied by the browser window is returned.
     */
-    Rectangle Resize (const Rectangle& rAvailableSpace);
+    void Resize (const Rectangle& rAvailableSpace);
 
     /** Determine which of the UI elements--the scroll bars, the scroll bar
         filler, the actual slide sorter view--are visible and place them in
@@ -192,11 +190,8 @@ public:
         has been changed.  For proper saving and restoring of the selection
         this method should be called between calls to
         PrepareEditModeChange() and FinishEditModeChange().
-        @return
-            A return value of <TRUE/> indicates that the edit mode has
-            changed.
     */
-    bool ChangeEditMode (EditMode eEditMode);
+    void ChangeEditMode (EditMode eEditMode);
 
     /** Finish the change of the edit mode.  Here we may select a page or
         restore a previously saved selection.

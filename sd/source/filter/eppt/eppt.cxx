@@ -922,7 +922,7 @@ bool PPTWriter::ImplCreateDocument()
     return true;
 };
 
-bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
+void PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
 {
     sal_uInt32 nCurrentOfs, nParaOfs, nParaCount = 0;
 
@@ -1000,7 +1000,6 @@ bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     rStrm.WriteUInt32( nCurrentOfs - ( nParaOfs + 4 ) );
     rStrm.WriteUInt32( nParaCount );
     rStrm.Seek( nCurrentOfs );
-    return true;
 }
 
 bool PPTWriter::ImplCreateMainNotes()

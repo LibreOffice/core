@@ -155,7 +155,7 @@ public:
 
     /** sets or clears the pause state of the running slideshow.
         !!!! This should only be called by the SdShowWindow !!!!*/
-    bool pause( bool bPause );
+    void pause( bool bPause );
     bool swipe(const CommandSwipeData &rSwipeData);
     bool longpress(const CommandLongPressData& rLongPressData);
 

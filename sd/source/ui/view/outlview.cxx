@@ -1040,14 +1040,13 @@ bool OutlineView::SetAttributes(const SfxItemSet& rSet, bool )
 /**
  * Get attributes of the selected text
  */
-bool OutlineView::GetAttributes( SfxItemSet& rTargetSet, bool ) const
+void OutlineView::GetAttributes( SfxItemSet& rTargetSet, bool ) const
 {
     OutlinerView* pOlView = GetViewByWindow(
                                 mrOutlineViewShell.GetActiveWindow());
     assert(pOlView && "keine OutlinerView gefunden");
 
     rTargetSet.Put( pOlView->GetAttribs(), false );
-    return true;
 }
 
 /** creates outliner model from draw model */

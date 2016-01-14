@@ -1739,10 +1739,9 @@ sal_Bool SAL_CALL SlideshowImpl::isEndless() throw( RuntimeException, std::excep
     return maPresSettings.mbEndless;
 }
 
-double SlideshowImpl::update()
+void SlideshowImpl::update()
 {
     startUpdateTimer();
-    return -1;
 }
 
 void SlideshowImpl::startUpdateTimer()
@@ -1770,14 +1769,14 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, updateHdl, Timer *, void)
     updateSlideShow();
 }
 
-sal_Int32 SlideshowImpl::updateSlideShow()
+void SlideshowImpl::updateSlideShow()
 {
     // prevent me from deletion when recursing (App::EnableYieldMode does)
     const rtl::Reference<SlideshowImpl> this_(this);
 
     Reference< XSlideShow > xShow( mxShow );
     if ( ! xShow.is())
-        return 0;
+        return;
 
     try
     {
@@ -1819,7 +1818,6 @@ sal_Int32 SlideshowImpl::updateSlideShow()
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
     }
-    return 0;
 }
 
 bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)

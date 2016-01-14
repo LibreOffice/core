@@ -277,7 +277,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const OUString& rBookmarkFile)
 }
 
 // Inserts a bookmark (page or object)
-bool SdDrawDocument::InsertBookmark(
+void SdDrawDocument::InsertBookmark(
     const std::vector<OUString> &rBookmarkList,     // List of names of the bookmarks to be inserted
     std::vector<OUString> &rExchangeList,           // List of the names to be used
     bool bLink,                                     // Insert bookmarks as links?
@@ -339,8 +339,6 @@ bool SdDrawDocument::InsertBookmark(
         bOK = InsertBookmarkAsObject(rBookmarkList, rExchangeList, bLink,
                                      pBookmarkDocSh, pObjPos, bCalcObjCount);
     }
-
-    return bOK;
 }
 
 namespace

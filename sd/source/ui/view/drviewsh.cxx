@@ -41,17 +41,15 @@
 
 namespace sd {
 
-bool DrawViewShell::GotoBookmark(const OUString& rBookmark)
+void DrawViewShell::GotoBookmark(const OUString& rBookmark)
 {
-    bool bRet = false;
     ::sd::DrawDocShell* pDocSh = GetDocSh();
     if( pDocSh )
     {
         if( !pDocSh->GetViewShell() ) //#i26016# this case occurs if the jump-target-document was opened already with file open dialog before triggering the jump via hyperlink
             pDocSh->Connect(this);
-        bRet = (pDocSh->GotoBookmark(rBookmark));
+        pDocSh->GotoBookmark(rBookmark);
     }
-    return bRet;
 }
 
 /**

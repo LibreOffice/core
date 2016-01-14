@@ -140,10 +140,9 @@ void RequestQueue::PageInDestruction(const SdrPage& rPage)
     RemoveRequest(&rPage);
 }
 
-bool RequestQueue::RemoveRequest (
+void RequestQueue::RemoveRequest (
     CacheKey aKey)
 {
-    bool bRequestWasRemoved (false);
     ::osl::MutexGuard aGuard (maMutex);
 
     while(true)
@@ -162,14 +161,11 @@ bool RequestQueue::RemoveRequest (
             SdrPage *pPage = const_cast<SdrPage*>(aRequestIterator->maKey);
             pPage->RemovePageUser(*this);
             mpRequestQueue->erase(aRequestIterator);
-
-            bRequestWasRemoved = true;
         }
         else
             break;
     }
 
-    return bRequestWasRemoved;
 }
 
 void RequestQueue::ChangeClass (

@@ -919,17 +919,6 @@ SdOptionsZoom::SdOptionsZoom( sal_uInt16 nConfigId, bool bUseConfig ) :
     EnableModify( true );
 }
 
-bool SdOptionsZoom::operator==( const SdOptionsZoom& rOpt ) const
-{
-    sal_Int32 nX1, nX2, nY1, nY2;
-
-    GetScale( nX1, nY1 );
-    rOpt.GetScale( nX2, nY2 );
-
-    return( ( nX1 == nX2 ) &&
-            ( nY1 == nY2 ) );
-}
-
 void SdOptionsZoom::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
 {
     static const char* aPropNames[] =
@@ -1002,20 +991,6 @@ void SdOptionsGrid::SetDefaults()
     SetSynchronize( true );
     SetGridVisible( false );
     SetEqualGrid( true );
-}
-
-bool SdOptionsGrid::operator==( const SdOptionsGrid& rOpt ) const
-{
-    return( GetFieldDrawX() == rOpt.GetFieldDrawX() &&
-            GetFieldDivisionX() == rOpt.GetFieldDivisionX() &&
-            GetFieldDrawY() == rOpt.GetFieldDrawY() &&
-            GetFieldDivisionY() == rOpt.GetFieldDivisionY() &&
-            GetFieldSnapX() == rOpt.GetFieldSnapX() &&
-            GetFieldSnapY() == rOpt.GetFieldSnapY() &&
-            IsUseGridSnap() == rOpt.IsUseGridSnap() &&
-            IsSynchronize() == rOpt.IsSynchronize() &&
-            IsGridVisible() == rOpt.IsGridVisible() &&
-            IsEqualGrid() == rOpt.IsEqualGrid() );
 }
 
 void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const

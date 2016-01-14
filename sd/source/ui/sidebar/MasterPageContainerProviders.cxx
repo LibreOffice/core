@@ -168,16 +168,6 @@ int TemplatePageObjectProvider::GetCostIndex()
     return 20;
 }
 
-bool TemplatePageObjectProvider::operator== (const PageObjectProvider& rProvider)
-{
-    const TemplatePageObjectProvider* pTemplatePageObjectProvider
-        = dynamic_cast<const TemplatePageObjectProvider*>(&rProvider);
-    if (pTemplatePageObjectProvider != nullptr)
-        return (msURL == pTemplatePageObjectProvider->msURL);
-    else
-        return false;
-}
-
 //===== DefaultPageObjectProvider ==============================================
 
 DefaultPageObjectProvider::DefaultPageObjectProvider()
@@ -208,11 +198,6 @@ int DefaultPageObjectProvider::GetCostIndex()
     return 15;
 }
 
-bool DefaultPageObjectProvider::operator== (const PageObjectProvider& rProvider)
-{
-    return (dynamic_cast<const DefaultPageObjectProvider*>(&rProvider) != nullptr);
-}
-
 //===== ExistingPageProvider ==================================================
 
 ExistingPageProvider::ExistingPageProvider (SdPage* pPage)
@@ -230,16 +215,6 @@ SdPage* ExistingPageProvider::operator() (SdDrawDocument* pDocument)
 int ExistingPageProvider::GetCostIndex()
 {
     return 0;
-}
-
-bool ExistingPageProvider::operator== (const PageObjectProvider& rProvider)
-{
-    const ExistingPageProvider* pExistingPageProvider
-        = dynamic_cast<const ExistingPageProvider*>(&rProvider);
-    if (pExistingPageProvider != nullptr)
-        return (mpPage == pExistingPageProvider->mpPage);
-    else
-        return false;
 }
 
 } } // end of namespace sd::sidebar

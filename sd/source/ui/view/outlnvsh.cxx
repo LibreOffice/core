@@ -1070,7 +1070,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 /**
  * gets invoked when ScrollBar is used
  */
-long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
+void OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
     long   nThumb = pHScroll->GetThumbPos();
     long   nRange = pHScroll->GetRange().Len();
@@ -1089,11 +1089,9 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(-nDelta, 0);
     pOutlinerView->ShowCursor(false);
-
-    return 0;
 }
 
-long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
+void OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 {
     long nThumb = pVScroll->GetThumbPos();
     long nRange = pVScroll->GetRange().Len();
@@ -1112,8 +1110,6 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(0, -nDelta);
     pOutlinerView->ShowCursor(false);
-
-    return 0;
 }
 
 /**
@@ -1577,13 +1573,13 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, bool )
     }
 }
 
-bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
+void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 {
     DBG_ASSERT( pPage, "sd::OutlineViewShell::UpdateTitleObject(), pPage == 0?" );
     DBG_ASSERT( pPara, "sd::OutlineViewShell::UpdateTitleObject(), pPara == 0?" );
 
     if( !pPage || !pPara )
-        return false;
+        return;
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
     SdrTextObj*         pTO  = OutlineView::GetTitleTextObject( pPage );
@@ -1653,17 +1649,15 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
             pPage->RemoveObject(pTO->GetOrdNum());
         }
     }
-
-    return bNewObject;
 }
 
-bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
+void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 {
     DBG_ASSERT( pPage, "sd::OutlineViewShell::UpdateOutlineObject(), pPage == 0?" );
     DBG_ASSERT( pPara, "sd::OutlineViewShell::UpdateOutlineObject(), pPara == 0?" );
 
     if( !pPage || !pPara )
-        return false;
+        return;
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
     OutlinerParaObject* pOPO = nullptr;
@@ -1758,8 +1752,6 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
             pPage->RemoveObject(pTO->GetOrdNum());
         }
     }
-
-    return bNewObject;
 }
 
 /**

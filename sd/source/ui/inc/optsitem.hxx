@@ -419,8 +419,6 @@ public:
             SdOptionsZoom( sal_uInt16 nConfigId, bool bUseConfig );
             virtual ~SdOptionsZoom() {}
 
-    bool    operator==( const SdOptionsZoom& rOpt ) const;
-
     void    GetScale( sal_Int32& rX, sal_Int32& rY ) const { Init(); rX = nX; rY = nY; }
     void    SetScale( sal_Int32 nInX, sal_Int32 nInY ) { if( nX != nInX || nY != nInY ) { OptionsChanged(); nX = nInX; nY = nInY; } }
 };
@@ -439,7 +437,6 @@ public:
             virtual ~SdOptionsGrid();
 
     void    SetDefaults();
-    bool    operator==( const SdOptionsGrid& rOpt ) const;
 
     sal_uInt32  GetFieldDrawX() const { Init(); return SvxOptionsGrid::GetFieldDrawX(); }
     sal_uInt32  GetFieldDivisionX() const { Init(); return SvxOptionsGrid::GetFieldDivisionX(); }

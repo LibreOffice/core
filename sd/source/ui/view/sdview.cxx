@@ -518,9 +518,9 @@ bool View::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
     return bOk;
 }
 
-bool View::GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr ) const
+void View::GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr ) const
 {
-    return FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr );
+    FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr );
 }
 
 /**

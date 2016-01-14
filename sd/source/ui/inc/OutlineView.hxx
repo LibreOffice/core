@@ -111,7 +111,7 @@ public:
 
     bool          PrepareClose(bool bUI = true);
 
-    virtual bool    GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const override;
+    virtual void    GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const override;
     virtual bool    SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false) override;
 
     void               FillOutliner();

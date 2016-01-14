@@ -35,9 +35,8 @@ namespace sd
         /** adds the given shape to this list */
         void addShape( SdrObject& rObject );
 
-        /** removes the shape from this list and returns
-            a pointer to the next shape in list or 0*/
-        SdrObject* removeShape( SdrObject& rObject );
+        /** removes the shape from this list*/
+        void removeShape( SdrObject& rObject );
 
         /** removes all shapes from this list */
         void clear();

@@ -63,12 +63,8 @@ public:
         @param aKey
             It is OK when the specified request is not a member of the
             queue.
-        @return
-            Returns <TRUE/> when the request has been successfully been
-            removed from the queue.  Otherwise, e.g. because the request was
-            not a member of the queue, <FALSE/> is returned.
     */
-    bool RemoveRequest (CacheKey aKey);
+    void RemoveRequest (CacheKey aKey);
 
     /** Change the priority class of the specified request.
     */

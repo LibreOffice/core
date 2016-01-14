@@ -142,7 +142,7 @@ IMPL_LINK_TYPED(ViewShell, HScrollHdl, ScrollBar *, pHScroll, void )
 /**
  * virtual scroll handler for horizontal Scrollbars
  */
-long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
+void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
     long nDelta = pHScroll->GetDelta();
 
@@ -183,8 +183,6 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
             UpdateHRuler();
 
     }
-
-    return 0;
 }
 
 /**
@@ -198,7 +196,7 @@ IMPL_LINK_TYPED(ViewShell, VScrollHdl, ScrollBar *, pVScroll, void )
 /**
  * handling for vertical Scrollbars
  */
-long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
+void ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 {
     if(IsPageFlipMode())
     {
@@ -244,8 +242,6 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
             UpdateVRuler();
 
     }
-
-    return 0;
 }
 
 SvxRuler* ViewShell::CreateHRuler(::sd::Window* , bool )

@@ -92,7 +92,7 @@ private:
     sal_Int32 mnTop;
     sal_Int32 mnTotalHeight;
 
-    EditEngine * GetEditEngine();
+    void GetEditEngine();
     EditEngine* CreateEditEngine();
     void CheckTop();
 };
@@ -264,11 +264,10 @@ PresenterTextView::Implementation::~Implementation()
     mpOutputDevice.disposeAndClear();
 }
 
-EditEngine * PresenterTextView::Implementation::GetEditEngine()
+void PresenterTextView::Implementation::GetEditEngine()
 {
     if (mpEditEngine == nullptr)
         mpEditEngine = CreateEditEngine ();
-    return mpEditEngine;
 }
 
 EditEngine* PresenterTextView::Implementation::CreateEditEngine()

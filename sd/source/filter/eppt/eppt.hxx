@@ -219,7 +219,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
                                 css::uno::Reference< css::beans::XPropertySet >& rXPagePropSet );
         void                ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPropertySet >& rXPagePropSet );
         virtual bool        ImplCreateDocument() override;
-        bool                ImplCreateHyperBlob( SvMemoryStream& rStream );
+        void                ImplCreateHyperBlob( SvMemoryStream& rStream );
         sal_uInt32          ImplInsertBookmarkURL( const OUString& rBookmark, const sal_uInt32 nType,
                                 const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 );
         virtual bool        ImplCreateMainNotes() override;

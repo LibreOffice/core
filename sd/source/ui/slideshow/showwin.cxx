@@ -305,7 +305,7 @@ void ShowWindow::Move()
     ::sd::Window::Move();
 }
 
-bool ShowWindow::SetEndMode()
+void ShowWindow::SetEndMode()
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
@@ -322,8 +322,6 @@ bool ShowWindow::SetEndMode()
 
         Invalidate();
     }
-
-    return( SHOWWINDOWMODE_END == meShowWindowMode );
 }
 
 bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )

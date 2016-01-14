@@ -1512,7 +1512,7 @@ IMPL_LINK_NOARG_TYPED(SdPublishingDlg, LastPageHdl, Button*, void)
 }
 
 // Load Designs
-bool SdPublishingDlg::Load()
+void SdPublishingDlg::Load()
 {
     m_bDesignListDirty = false;
 
@@ -1529,7 +1529,7 @@ bool SdPublishingDlg::Load()
         delete pIStm;
 
         if( !bOk )
-            return false;
+            return;
     }
 
     SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ | StreamMode::NOCREATE );
@@ -1537,13 +1537,13 @@ bool SdPublishingDlg::Load()
     SvStream* pStream = aMedium.GetInStream();
 
     if( !pStream )
-        return false;
+        return;
 
     sal_uInt16 aCheck;
     pStream->ReadUInt16( aCheck );
 
     if(aCheck != nMagic)
-        return false;
+        return;
 
     SdIOCompat aIO(*pStream, StreamMode::READ);
 
@@ -1559,8 +1559,6 @@ bool SdPublishingDlg::Load()
 
         m_aDesignList.push_back(aDesign);
     }
-
-    return( pStream->GetError() == SVSTREAM_OK );
 }
 
 // Save Designs

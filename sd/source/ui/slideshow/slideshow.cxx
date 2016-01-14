@@ -1021,7 +1021,7 @@ bool SlideShow::isAlwaysOnTop()
     return mxController.is() && mxController->maPresSettings.mbAlwaysOnTop;
 }
 
-bool SlideShow::pause( bool bPause )
+void SlideShow::pause( bool bPause )
 {
     if( mxController.is() )
     {
@@ -1030,7 +1030,6 @@ bool SlideShow::pause( bool bPause )
         else
             mxController->resume();
     }
-    return true;
 }
 
 void SlideShow::receiveRequest(SfxRequest& rReq)

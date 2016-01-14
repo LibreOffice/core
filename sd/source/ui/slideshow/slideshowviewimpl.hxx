@@ -105,7 +105,7 @@ public:
 
     void    addListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener );
     void    removeListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener );
-    bool    notify( const css::lang::EventObject& _rEvent ) throw( css::uno::Exception );
+    void    notify( const css::lang::EventObject& _rEvent ) throw( css::uno::Exception );
     void    disposing( const css::lang::EventObject& _rEventSource );
 
 protected:

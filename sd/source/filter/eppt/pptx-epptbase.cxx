@@ -505,15 +505,11 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
     return nRetValue;
 }
 
-bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
+void PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
 {
-    bool bRet = false;
     if ( nPageNum >= maStyleSheetList.size() )
         nPageNum = 0;
-    else
-        bRet = true;
     mpStyleSheet = maStyleSheetList[ nPageNum ];
-    return bRet;
 }
 
 bool PPTWriterBase::GetStyleSheets()

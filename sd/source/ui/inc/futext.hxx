@@ -55,7 +55,7 @@ public:
     virtual void Deactivate() override;         ///< deactivates the function
 
     void    SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag);
-    bool    DeleteDefaultText();
+    void    DeleteDefaultText();
     SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
