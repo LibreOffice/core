@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_ca5ebe44",
+        "filename": "vcl/unx/generic/glyphs/freetype_glyphcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-01-14T16:10:43Z",
+      "side": 1,
+      "message": "This is where I\u0027m uncertain...",
+      "range": {
+        "startLine": 619,
+        "startChar": 4,
+        "endLine": 620,
+        "endChar": 19
+      },
+      "revId": "94f1d66e420a2c73dc324501a20eda7099e489c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
