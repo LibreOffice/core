@@ -1741,7 +1741,32 @@ void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemProperty
     SwStyleNameMapper::FillUIName(sName, aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
     o_rStyleBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION, aString ) );
 }
-
+template<>
+void SwXStyle::SetPropertyValue<RES_TXTATR_CJK_RUBY>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(MID_RUBY_CHARSTYLE != rEntry.nMemberId)
+        return;
+    if(!rValue.has<OUString>())
+        throw lang::IllegalArgumentException();
+    const auto sValue(rValue.get<OUString>());
+    SfxItemSet& rStyleSet(o_rStyleBase.GetItemSet());
+    std::unique_ptr<SwFormatRuby> pRuby;
+    const SfxPoolItem* pItem;
+    if(SfxItemState::SET == rStyleSet.GetItemState(RES_TXTATR_CJK_RUBY, true, &pItem))
+        pRuby.reset(new SwFormatRuby(*static_cast<const SwFormatRuby*>(pItem)));
+    else
+        pRuby.reset(new SwFormatRuby(OUString()));
+    OUString sStyle;
+    SwStyleNameMapper::FillUIName(sValue, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
+    pRuby->SetCharFormatName(sValue);
+    pRuby->SetCharFormatId(0);
+    if(!sValue.isEmpty())
+    {
+        const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sValue, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT));
+        pRuby->SetCharFormatId(nId);
+    }
+    rStyleSet.Put(*pRuby);
+}
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1825,35 +1850,8 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             break;
         }
         case RES_TXTATR_CJK_RUBY:
-        {
-            if(MID_RUBY_CHARSTYLE == nMemberId )
-            {
-                OUString sTmp;
-                if(aValue >>= sTmp)
-                {
-                    SfxItemSet& rStyleSet = rBase.GetItemSet();
-                    std::unique_ptr<SwFormatRuby> pRuby;
-                    const SfxPoolItem* pItem;
-                    if(SfxItemState::SET == rStyleSet.GetItemState( RES_TXTATR_CJK_RUBY, true, &pItem ) )
-                        pRuby.reset(new SwFormatRuby(*static_cast<const SwFormatRuby*>(pItem)));
-                    else
-                        pRuby.reset(new SwFormatRuby(OUString()));
-                    OUString sStyle;
-                    SwStyleNameMapper::FillUIName(sTmp, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                    pRuby->SetCharFormatName( sTmp );
-                    pRuby->SetCharFormatId( 0 );
-                    if(!sTmp.isEmpty())
-                    {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-                        pRuby->SetCharFormatId(nId);
-                    }
-                    rStyleSet.Put(*pRuby);
-                }
-                else
-                    throw lang::IllegalArgumentException();
-            }
+            SetPropertyValue<RES_TXTATR_CJK_RUBY>(rEntry, rPropSet, rValue, rBase);
             break;
-        }
         case RES_PARATR_DROP:
         {
             if( MID_DROPCAP_CHAR_STYLE_NAME == nMemberId)
