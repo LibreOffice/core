@@ -308,9 +308,9 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
     // SAL_ DEBUG(std::hex << nSalColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
 }
 
-void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pFontMetric, int /*nFallbackLevel*/ )
+void AquaSalGraphics::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int /*nFallbackLevel*/ )
 {
-    mpTextStyle->GetFontMetric( *pFontMetric );
+    mpTextStyle->GetFontMetric( rxFontMetric );
 }
 
 static bool AddTempDevFont(const OUString& rFontFileURL)
