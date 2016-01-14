@@ -2125,7 +2125,11 @@ bool SvNumberformat::GetOutputString(double fNumber,
                     if (!(fNumber < 0.0))
                         fNumber = -fNumber;     // do not display -0.0
                 }
-                if (fNumber < EXP_LOWER_BOUND && fNumber > -EXP_LOWER_BOUND)
+                if (fNumber == 0.0)
+                {
+                    OutString = "0";
+                }
+                else if (fNumber < EXP_LOWER_BOUND && fNumber > -EXP_LOWER_BOUND)
                 {
                     OutString = ::rtl::math::doubleToUString( fNumber,
                                 rtl_math_StringFormat_E2,
