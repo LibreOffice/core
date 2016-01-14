@@ -28,6 +28,9 @@ class OOXMLSecParser: public cppu::WeakImplHelper
 {
     XSecController* m_pXSecController;
 
+    bool m_bInDigestValue;
+    OUString m_aDigestValue;
+
 public:
     OOXMLSecParser(XSecController* pXSecController);
     virtual ~OOXMLSecParser();
