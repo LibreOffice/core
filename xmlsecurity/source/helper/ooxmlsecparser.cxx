@@ -14,7 +14,8 @@ using namespace com::sun::star;
 
 OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     : m_pXSecController(pXSecController),
-      m_bInDigestValue(false)
+      m_bInDigestValue(false),
+      m_bInSignatureValue(false)
 {
 }
 
@@ -59,6 +60,11 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         m_aDigestValue.clear();
         m_bInDigestValue = true;
     }
+    else if (rName == "SignatureValue")
+    {
+        m_aSignatureValue.clear();
+        m_bInSignatureValue = true;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->startElement(rName, xAttribs);
@@ -72,6 +78,11 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
         m_pXSecController->setDigestValue(m_aDigestValue);
     else if (rName == "DigestValue")
         m_bInDigestValue = false;
+    else if (rName == "SignatureValue")
+    {
+        m_pXSecController->setSignatureValue(m_aSignatureValue);
+        m_bInSignatureValue = false;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->endElement(rName);
@@ -81,6 +92,8 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax
 {
     if (m_bInDigestValue)
         m_aDigestValue += rChars;
+    else if (m_bInSignatureValue)
+        m_aSignatureValue += rChars;
 
     if (m_xNextHandler.is())
         m_xNextHandler->characters(rChars);
