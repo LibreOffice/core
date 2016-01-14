@@ -1767,6 +1767,29 @@ void SwXStyle::SetPropertyValue<RES_TXTATR_CJK_RUBY>(const SfxItemPropertySimple
     }
     rStyleSet.Put(*pRuby);
 }
+template<>
+void SwXStyle::SetPropertyValue<RES_PARATR_DROP>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    if(MID_DROPCAP_CHAR_STYLE_NAME != rEntry.nMemberId)
+        return;
+    if(!rValue.has<OUString>())
+        throw lang::IllegalArgumentException();
+    SfxItemSet& rStyleSet(o_rStyleBase.GetItemSet());
+    std::unique_ptr<SwFormatDrop> pDrop;
+    const SfxPoolItem* pItem;
+    if(SfxItemState::SET == rStyleSet.GetItemState(RES_PARATR_DROP, true, &pItem))
+        pDrop.reset(new SwFormatDrop(*static_cast<const SwFormatDrop*>(pItem)));
+    else
+        pDrop.reset(new SwFormatDrop);
+    const auto sValue(rValue.get<OUString>());
+    OUString sStyle;
+    SwStyleNameMapper::FillUIName(sValue, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
+    auto pStyle(static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR)));
+    if(!pStyle)
+        throw lang::IllegalArgumentException();
+    pDrop->SetCharFormat(pStyle->GetCharFormat());
+    rStyleSet.Put(*pDrop);
+}
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1853,38 +1876,9 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             SetPropertyValue<RES_TXTATR_CJK_RUBY>(rEntry, rPropSet, rValue, rBase);
             break;
         case RES_PARATR_DROP:
-        {
-            if( MID_DROPCAP_CHAR_STYLE_NAME == nMemberId)
-            {
-                if(aValue.getValueType() == ::cppu::UnoType<OUString>::get())
-                {
-                    SfxItemSet& rStyleSet = rBase.GetItemSet();
-
-                    std::unique_ptr<SwFormatDrop> pDrop;
-                    const SfxPoolItem* pItem;
-                    if(SfxItemState::SET == rStyleSet.GetItemState( RES_PARATR_DROP, true, &pItem ) )
-                        pDrop.reset(new SwFormatDrop(*static_cast<const SwFormatDrop*>(pItem)));
-                    else
-                        pDrop.reset( new SwFormatDrop );
-                    OUString uStyle;
-                    aValue >>= uStyle;
-                    OUString sStyle;
-                    SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                    SwDocStyleSheet* pStyle =
-                        static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR));
-                    if(pStyle)
-                        pDrop->SetCharFormat(pStyle->GetCharFormat());
-                    else
-                        throw lang::IllegalArgumentException();
-                    rStyleSet.Put(*pDrop);
-                }
-                else
-                    throw lang::IllegalArgumentException();
-
-                bDone = true;
-            }
+            SetPropertyValue<RES_PARATR_DROP>(rEntry, rPropSet, rValue, rBase);
+            bDone = true;
             break;
-        }
         case RES_PARATR_NUMRULE:
         {
             lcl_SetDefaultWay(rEntry, rPropSet, aValue, rBase);
