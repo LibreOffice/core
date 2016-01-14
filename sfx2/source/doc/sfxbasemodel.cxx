@@ -1699,7 +1699,16 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
     {
         m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeToURL"  ) );
         SfxSaveGuard aSaveGuard(this, m_pData, false);
-        impl_store( rURL, rArgs, true );
+        try {
+            impl_store(rURL, rArgs, true);
+        }
+        catch (const uno::Exception &e)
+        {
+            // convert to the exception we announce in the throw
+            // (eg. neon likes to throw InteractiveAugmentedIOException which
+            // is not an io::IOException)
+            throw io::IOException(e.Message, e.Context);
+        }
     }
 }
 
