@@ -1142,6 +1142,29 @@
                 <string>public.content</string>
             </array>
             <key>UTTypeDescription</key>
+            <string>Microsoft Write</string>
+            <key>UTTypeIdentifier</key>
+            <string>org.libreoffice.wri-document</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>wri</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/x-mswrite</string>
+                </array>
+            </dict>
+        </dict>
+
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeDescription</key>
             <string>Data Interchange Format</string>
             <key>UTTypeIdentifier</key>
             <string>org.libreoffice.dif-document</string>
@@ -1782,6 +1805,7 @@
                 <string>org.libreoffice.wpd-document</string>
                 <string>org.libreoffice.hwp-document</string>
                 <string>org.libreoffice.wks-document</string>
+                <string>org.libreoffice.wri-document</string>
                 <string>org.libreoffice.dif-document</string>
                 <string>org.libreoffice.slk-document</string>
                 <string>org.libreoffice.csv-document</string>
