@@ -443,7 +443,7 @@ public:
     bool                        Init();
     bool                        Clear();
     sal_Int16                   Commit();       // if modified and committed: transfer an XInputStream to the content
-    bool                        Revert();       // discard all changes
+    void                        Revert();       // discard all changes
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
     sal_uLong                   GetSize();
 
@@ -451,7 +451,7 @@ public:
                                                                            // no seeking is produced
     sal_uLong                   ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
 
-    sal_uLong                   CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
+    void                        CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
                                                                         // but the writing is done at the end of temporary
                                                                         // pointer position is not changed
     using SvStream::SetError;
@@ -507,7 +507,7 @@ public:
     bool                        Revert();
     bool                        Insert( ::ucbhelper::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect );
-    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, bool, const OString* pKey=nullptr );
+    void                        OpenStream( UCBStorageElement_Impl*, StreamMode, bool, const OString* pKey=nullptr );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const OUString& );
     void                        GetProps( sal_Int32&, Sequence < Sequence < PropertyValue > >& rSequence, const OUString& );
     sal_Int32                   GetObjectCount();
@@ -862,21 +862,16 @@ sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
     return aResult;
 }
 
-sal_uLong UCBStorageStream_Impl::CopySourceToTemporary()
+void UCBStorageStream_Impl::CopySourceToTemporary()
 {
     // current position of the temporary stream is not changed
-    sal_uLong aResult = 0;
-
     if( m_bSourceRead )
     {
         sal_uLong aPos = m_pStream->Tell();
         m_pStream->Seek( STREAM_SEEK_TO_END );
-        aResult = ReadSourceWriteTemporary();
+        ReadSourceWriteTemporary();
         m_pStream->Seek( aPos );
     }
-
-    return aResult;
-
 }
 
 // UCBStorageStream_Impl must have a SvStream interface, because it then can be used as underlying stream
@@ -1151,13 +1146,13 @@ sal_Int16 UCBStorageStream_Impl::Commit()
     return COMMIT_RESULT_NOTHING_TO_DO;
 }
 
-bool UCBStorageStream_Impl::Revert()
+void UCBStorageStream_Impl::Revert()
 {
     // if an OLEStorage is created on this stream, no "revert" is necessary because OLEStorages do nothing on "Revert" !
     if ( m_bCommited )
     {
         OSL_FAIL("Revert while commit is in progress!" );
-        return false;                   //  ???
+        return;                   //  ???
     }
 
     Free();
@@ -1200,7 +1195,6 @@ bool UCBStorageStream_Impl::Revert()
     m_bModified = false;
     m_aName = m_aOriginalName;
     m_aContentType = m_aOriginalContentType;
-    return ( GetError() == ERRCODE_NONE );
 }
 
 bool UCBStorageStream_Impl::Clear()
@@ -2708,13 +2702,12 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
     return nullptr;
 }
 
-UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect, const OString* pKey )
+void UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect, const OString* pKey )
 {
     OUString aName( m_aURL );
     aName += "/";
     aName += pElement->m_aOriginalName;
     pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, nullptr, bDirect, pKey, m_bRepairPackage, m_xProgressHandler );
-    return pElement->m_xStream;
 }
 
 BaseStorage* UCBStorage::OpenUCBStorage( const OUString& rEleName, StreamMode nMode, bool bDirect )

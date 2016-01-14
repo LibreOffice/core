@@ -258,7 +258,7 @@ void StgHeader::SetMasters( sal_Int32 n )
 
 ///////////////////////////// class StgEntry
 
-bool StgEntry::Init()
+void StgEntry::Init()
 {
     memset( m_nName, 0, sizeof( m_nName ) );
     m_nNameLen = 0;
@@ -279,7 +279,6 @@ bool StgEntry::Init()
     SetLeaf( STG_RIGHT, STG_FREE );
     SetLeaf( STG_CHILD, STG_FREE );
     SetLeaf( STG_DATA,  STG_EOF );
-    return true;
 }
 
 static OUString ToUpperUnicode( const OUString & rStr )
