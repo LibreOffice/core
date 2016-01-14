@@ -614,19 +614,19 @@ ServerFont::~ServerFont()
 }
 
 
-void ServerFont::GetFontMetric( ImplFontMetricDataPtr& rTo, long& rFactor ) const
+void ServerFont::GetFontMetric( ImplFontMetricDataPtr& rxTo, long& rFactor ) const
 {
-    rTo->FontAttributes::operator =(mpFontInfo->GetFontAttributes());
+    rxTo->FontAttributes::operator =(mpFontInfo->GetFontAttributes());
 
-    rTo->SetScalableFlag( true ); // FIXME: Shouldn't this check FT_IS_SCALABLE( maFaceFT )?
-    rTo->SetTrueTypeFlag( FT_IS_SFNT( maFaceFT ) != 0 );
-    rTo->SetBuiltInFontFlag( true );
-    rTo->SetKernableFlag( FT_HAS_KERNING( maFaceFT ) != 0 );
-    rTo->SetOrientation( GetFontSelData().mnOrientation );
+    rxTo->SetScalableFlag( true ); // FIXME: Shouldn't this check FT_IS_SCALABLE( maFaceFT )?
+    rxTo->SetTrueTypeFlag( FT_IS_SFNT( maFaceFT ) != 0 );
+    rxTo->SetBuiltInFontFlag( true );
+    rxTo->SetKernableFlag( FT_HAS_KERNING( maFaceFT ) != 0 );
+    rxTo->SetOrientation( GetFontSelData().mnOrientation );
 
     //Always consider [star]symbol as symbol fonts
-    if ( IsStarSymbol( rTo->GetFamilyName() ) )
-        rTo->SetSymbolFlag( true );
+    if ( IsStarSymbol( rxTo->GetFamilyName() ) )
+        rxTo->SetSymbolFlag( true );
 
     FT_Activate_Size( maSizeFT );
 
@@ -635,11 +635,11 @@ void ServerFont::GetFontMetric( ImplFontMetricDataPtr& rTo, long& rFactor ) cons
     const TT_OS2* pOS2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 ));
     const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
 
-    rTo->SetAscent( 0 );
-    rTo->SetDescent( 0 );
-    rTo->SetExternalLeading( 0 );
-    rTo->SetSlant( 0 );
-    rTo->SetWidth( mnWidth );
+    rxTo->SetAscent( 0 );
+    rxTo->SetDescent( 0 );
+    rxTo->SetExternalLeading( 0 );
+    rxTo->SetSlant( 0 );
+    rxTo->SetWidth( mnWidth );
 
     // Calculating ascender and descender:
     // FreeType >= 2.4.6 does the right thing, so we just use what it gives us,
@@ -650,63 +650,63 @@ void ServerFont::GetFontMetric( ImplFontMetricDataPtr& rTo, long& rFactor ) cons
     if (nFTVERSION >= 2406)
     {
         const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-        rTo->SetAscent( (rMetrics.ascender + 32) >> 6 );
-        rTo->SetDescent( (-rMetrics.descender + 32) >> 6 );
-        rTo->SetExternalLeading( ((rMetrics.height + 32) >> 6) - (rTo->GetAscent() + rTo->GetDescent()) );
+        rxTo->SetAscent( (rMetrics.ascender + 32) >> 6 );
+        rxTo->SetDescent( (-rMetrics.descender + 32) >> 6 );
+        rxTo->SetExternalLeading( ((rMetrics.height + 32) >> 6) - (rxTo->GetAscent() + rxTo->GetDescent()) );
     }
     else
     {
         const TT_HoriHeader* pHHea = static_cast<const TT_HoriHeader*>(FT_Get_Sfnt_Table(maFaceFT, ft_sfnt_hhea));
         if (pHHea)
         {
-            rTo->SetAscent( pHHea->Ascender * fScale + 0.5 );
-            rTo->SetDescent( -pHHea->Descender * fScale + 0.5 );
-            rTo->SetExternalLeading( pHHea->Line_Gap * fScale + 0.5 );
+            rxTo->SetAscent( pHHea->Ascender * fScale + 0.5 );
+            rxTo->SetDescent( -pHHea->Descender * fScale + 0.5 );
+            rxTo->SetExternalLeading( pHHea->Line_Gap * fScale + 0.5 );
         }
 
-        if (!(rTo->GetAscent() || rTo->GetDescent()))
+        if (!(rxTo->GetAscent() || rxTo->GetDescent()))
         {
             if (pOS2 && (pOS2->version != 0xFFFF))
             {
                 if (pOS2->sTypoAscender || pOS2->sTypoDescender)
                 {
-                    rTo->SetAscent( pOS2->sTypoAscender * fScale + 0.5 );
-                    rTo->SetDescent( -pOS2->sTypoDescender * fScale + 0.5 );
-                    rTo->SetExternalLeading( pOS2->sTypoLineGap * fScale + 0.5 );
+                    rxTo->SetAscent( pOS2->sTypoAscender * fScale + 0.5 );
+                    rxTo->SetDescent( -pOS2->sTypoDescender * fScale + 0.5 );
+                    rxTo->SetExternalLeading( pOS2->sTypoLineGap * fScale + 0.5 );
                 }
                 else
                 {
-                    rTo->SetAscent( pOS2->usWinAscent * fScale + 0.5 );
-                    rTo->SetDescent( pOS2->usWinDescent * fScale + 0.5 );
-                    rTo->SetExternalLeading( 0 );
+                    rxTo->SetAscent( pOS2->usWinAscent * fScale + 0.5 );
+                    rxTo->SetDescent( pOS2->usWinDescent * fScale + 0.5 );
+                    rxTo->SetExternalLeading( 0 );
                 }
             }
         }
 
-        if (!(rTo->GetAscent() || rTo->GetDescent()))
+        if (!(rxTo->GetAscent() || rxTo->GetDescent()))
         {
             const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-            rTo->SetAscent( (rMetrics.ascender + 32) >> 6 );
-            rTo->SetDescent( (-rMetrics.descender + 32) >> 6 );
-            rTo->SetExternalLeading( ((rMetrics.height + 32) >> 6) - (rTo->GetAscent() + rTo->GetDescent() ) );
+            rxTo->SetAscent( (rMetrics.ascender + 32) >> 6 );
+            rxTo->SetDescent( (-rMetrics.descender + 32) >> 6 );
+            rxTo->SetExternalLeading( ((rMetrics.height + 32) >> 6) - (rxTo->GetAscent() + rxTo->GetDescent() ) );
         }
     }
 
-    rTo->SetInternalLeading( rTo->GetAscent() + rTo->GetDescent() - (maFaceFT->units_per_EM * fScale + 0.5) );
+    rxTo->SetInternalLeading( rxTo->GetAscent() + rxTo->GetDescent() - (maFaceFT->units_per_EM * fScale + 0.5) );
 
     if( pOS2 && (pOS2->version != 0xFFFF) )
     {
         // map the panose info from the OS2 table to their VCL counterparts
         switch( pOS2->panose[0] )
         {
-            case 1: rTo->SetFamilyType( FAMILY_ROMAN ); break;
-            case 2: rTo->SetFamilyType( FAMILY_SWISS ); break;
-            case 3: rTo->SetFamilyType( FAMILY_MODERN ); break;
-            case 4: rTo->SetFamilyType( FAMILY_SCRIPT ); break;
-            case 5: rTo->SetFamilyType( FAMILY_DECORATIVE ); break;
+            case 1: rxTo->SetFamilyType( FAMILY_ROMAN ); break;
+            case 2: rxTo->SetFamilyType( FAMILY_SWISS ); break;
+            case 3: rxTo->SetFamilyType( FAMILY_MODERN ); break;
+            case 4: rxTo->SetFamilyType( FAMILY_SCRIPT ); break;
+            case 5: rxTo->SetFamilyType( FAMILY_DECORATIVE ); break;
             // TODO: is it reasonable to override the attribute with DONTKNOW?
             case 0: // fall through
-            default: rTo->SetFamilyType( FAMILY_DONTKNOW ); break;
+            default: rxTo->SetFamilyType( FAMILY_DONTKNOW ); break;
         }
 
         switch( pOS2->panose[3] )
@@ -717,12 +717,12 @@ void ServerFont::GetFontMetric( ImplFontMetricDataPtr& rTo, long& rFactor ) cons
             case 5: // fall through
             case 6: // fall through
             case 7: // fall through
-            case 8: rTo->SetPitch( PITCH_VARIABLE ); break;
-            case 9: rTo->SetPitch( PITCH_FIXED ); break;
+            case 8: rxTo->SetPitch( PITCH_VARIABLE ); break;
+            case 9: rxTo->SetPitch( PITCH_FIXED ); break;
             // TODO: is it reasonable to override the attribute with DONTKNOW?
             case 0: // fall through
             case 1: // fall through
-            default: rTo->SetPitch( PITCH_DONTKNOW ); break;
+            default: rxTo->SetPitch( PITCH_DONTKNOW ); break;
         }
     }
 
@@ -733,7 +733,7 @@ void ServerFont::GetFontMetric( ImplFontMetricDataPtr& rTo, long& rFactor ) cons
     {
         GlyphData aGlyphData;
         InitGlyphData( nKashidaGlyphId, aGlyphData );
-        rTo->SetMinKashida( aGlyphData.GetMetric().GetCharWidth() );
+        rxTo->SetMinKashida( aGlyphData.GetMetric().GetCharWidth() );
     }
 
 }

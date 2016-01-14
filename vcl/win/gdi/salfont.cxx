@@ -1479,14 +1479,14 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
         return 0;
 }
 
-void WinSalGraphics::GetFontMetric( ImplFontMetricDataPtr& pFontMetric, int nFallbackLevel )
+void WinSalGraphics::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
     HFONT hOldFont = SelectFont( getHDC(), mhFonts[nFallbackLevel] );
 
     wchar_t aFaceName[LF_FACESIZE+60];
     if( ::GetTextFaceW( getHDC(), sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
-        pFontMetric->SetFamilyName(OUString(reinterpret_cast<const sal_Unicode*>(aFaceName)));
+        rxFontMetric->SetFamilyName(OUString(reinterpret_cast<const sal_Unicode*>(aFaceName)));
 
     // get the font metric
     TEXTMETRICA aWinMetric;
@@ -1497,63 +1497,63 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataPtr& pFontMetric, int nFal
         return;
 
     // device independent font attributes
-    pFontMetric->SetFamilyType(ImplFamilyToSal( aWinMetric.tmPitchAndFamily ));
-    pFontMetric->SetSymbolFlag(aWinMetric.tmCharSet == SYMBOL_CHARSET);
-    pFontMetric->SetWeight(ImplWeightToSal( aWinMetric.tmWeight ));
-    pFontMetric->SetPitch(ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily ));
-    pFontMetric->SetItalic(aWinMetric.tmItalic ? ITALIC_NORMAL : ITALIC_NONE);
-    pFontMetric->SetSlant( 0 );
+    rxFontMetric->SetFamilyType(ImplFamilyToSal( aWinMetric.tmPitchAndFamily ));
+    rxFontMetric->SetSymbolFlag(aWinMetric.tmCharSet == SYMBOL_CHARSET);
+    rxFontMetric->SetWeight(ImplWeightToSal( aWinMetric.tmWeight ));
+    rxFontMetric->SetPitch(ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily ));
+    rxFontMetric->SetItalic(aWinMetric.tmItalic ? ITALIC_NORMAL : ITALIC_NONE);
+    rxFontMetric->SetSlant( 0 );
 
     // device dependent font attributes
-    pFontMetric->SetBuiltInFontFlag( (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0 );
-    pFontMetric->SetScalableFlag( (aWinMetric.tmPitchAndFamily & (TMPF_VECTOR|TMPF_TRUETYPE)) != 0 );
-    pFontMetric->SetTrueTypeFlag( (aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 );
-    if( pFontMetric->IsScalable() )
+    rxFontMetric->SetBuiltInFontFlag( (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0 );
+    rxFontMetric->SetScalableFlag( (aWinMetric.tmPitchAndFamily & (TMPF_VECTOR|TMPF_TRUETYPE)) != 0 );
+    rxFontMetric->SetTrueTypeFlag( (aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 );
+    if( rxFontMetric->IsScalable() )
     {
         // check if there are kern pairs
         // TODO: does this work with GPOS kerning?
         DWORD nKernPairs = ::GetKerningPairsA( getHDC(), 0, NULL );
-        pFontMetric->SetKernableFlag( (nKernPairs > 0) );
+        rxFontMetric->SetKernableFlag( (nKernPairs > 0) );
     }
     else
     {
         // bitmap fonts cannot be rotated directly
-        pFontMetric->SetOrientation( 0 );
+        rxFontMetric->SetOrientation( 0 );
         // bitmap fonts have no kerning
-        pFontMetric->SetKernableFlag( false );
+        rxFontMetric->SetKernableFlag( false );
     }
 
     // transformation dependent font metrics
-    pFontMetric->SetWidth( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAveCharWidth ) );
-    pFontMetric->SetInternalLeading( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmInternalLeading ) );
-    pFontMetric->SetExternalLeading( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmExternalLeading ) );
-    pFontMetric->SetAscent( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAscent ) );
-    pFontMetric->SetDescent( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmDescent ) );
+    rxFontMetric->SetWidth( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAveCharWidth ) );
+    rxFontMetric->SetInternalLeading( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmInternalLeading ) );
+    rxFontMetric->SetExternalLeading( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmExternalLeading ) );
+    rxFontMetric->SetAscent( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAscent ) );
+    rxFontMetric->SetDescent( static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmDescent ) );
 
     // #107888# improved metric compatibility for Asian fonts...
     // TODO: assess workaround below for CWS >= extleading
     // TODO: evaluate use of aWinMetric.sTypo* members for CJK
     if( mpWinFontData[nFallbackLevel] && mpWinFontData[nFallbackLevel]->SupportsCJK() )
     {
-        pFontMetric->SetInternalLeading( pFontMetric->GetInternalLeading() + pFontMetric->GetExternalLeading() );
+        rxFontMetric->SetInternalLeading( rxFontMetric->GetInternalLeading() + rxFontMetric->GetExternalLeading() );
 
         // #109280# The line height for Asian fonts is too small.
         // Therefore we add half of the external leading to the
         // ascent, the other half is added to the descent.
-        const long nHalfTmpExtLeading = pFontMetric->GetExternalLeading() / 2;
-        const long nOtherHalfTmpExtLeading = pFontMetric->GetExternalLeading() - nHalfTmpExtLeading;
+        const long nHalfTmpExtLeading = rxFontMetric->GetExternalLeading() / 2;
+        const long nOtherHalfTmpExtLeading = rxFontMetric->GetExternalLeading() - nHalfTmpExtLeading;
 
         // #110641# external leading for Asian fonts.
         // The factor 0.3 has been confirmed with experiments.
-        long nCJKExtLeading = static_cast<long>(0.30 * (pFontMetric->GetAscent() + pFontMetric->GetDescent()));
-        nCJKExtLeading -= pFontMetric->GetExternalLeading();
-        pFontMetric->SetExternalLeading( (nCJKExtLeading > 0) ? nCJKExtLeading : 0 );
+        long nCJKExtLeading = static_cast<long>(0.30 * (rxFontMetric->GetAscent() + rxFontMetric->GetDescent()));
+        nCJKExtLeading -= rxFontMetric->GetExternalLeading();
+        rxFontMetric->SetExternalLeading( (nCJKExtLeading > 0) ? nCJKExtLeading : 0 );
 
-        pFontMetric->SetAscent( pFontMetric->GetAscent() + nHalfTmpExtLeading );
-        pFontMetric->SetDescent(  pFontMetric->GetDescent() + nOtherHalfTmpExtLeading );
+        rxFontMetric->SetAscent( rxFontMetric->GetAscent() + nHalfTmpExtLeading );
+        rxFontMetric->SetDescent(  rxFontMetric->GetDescent() + nOtherHalfTmpExtLeading );
     }
 
-    pFontMetric->SetMinKashida( GetMinKashidaWidth() );
+    rxFontMetric->SetMinKashida( GetMinKashidaWidth() );
 }
 
 const FontCharMapPtr WinSalGraphics::GetFontCharMap() const
