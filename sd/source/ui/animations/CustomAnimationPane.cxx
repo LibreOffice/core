@@ -803,13 +803,27 @@ void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
 {
     switch( nSelectedPopupEntry )
     {
-    case CM_WITH_CLICK:     onChangeStart( EffectNodeType::ON_CLICK ); break;
-    case CM_WITH_PREVIOUS:  onChangeStart( EffectNodeType::WITH_PREVIOUS  ); break;
-    case CM_AFTER_PREVIOUS: onChangeStart( EffectNodeType::AFTER_PREVIOUS ); break;
-    case CM_OPTIONS:        showOptions(); break;
-    case CM_DURATION:       showOptions("timing"); break;
-    case CM_REMOVE:         onRemove(); break;
-    case CM_CREATE:         if( maViewSelection.hasValue() ) onChange( true ); break;
+    case CM_WITH_CLICK:
+        onChangeStart( EffectNodeType::ON_CLICK );
+        break;
+    case CM_WITH_PREVIOUS:
+        onChangeStart( EffectNodeType::WITH_PREVIOUS  );
+        break;
+    case CM_AFTER_PREVIOUS:
+        onChangeStart( EffectNodeType::AFTER_PREVIOUS );
+        break;
+    case CM_OPTIONS:
+        showOptions();
+        break;
+    case CM_DURATION:
+        showOptions("timing");
+        break;
+    case CM_REMOVE:
+        onRemove();
+        break;
+    case CM_CREATE:
+        if( maViewSelection.hasValue() ) onChange( true );
+        break;
     }
 
     updateControls();
