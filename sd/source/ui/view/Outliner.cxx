@@ -631,6 +631,7 @@ bool Outliner::SearchAndReplaceAll()
     }
     else if (pViewShell->ISA(DrawViewShell))
     {
+        pViewShell->GetDoc()->setTiledSearching(true);
         // Go to beginning/end of document.
         maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
         // Switch to the first object which contains the search string.
@@ -680,6 +681,7 @@ bool Outliner::SearchAndReplaceAll()
             OString aPayload = aStream.str().c_str();
             pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
         }
+        pViewShell->GetDoc()->setTiledSearching(false);
     }
 
     RestoreStartPosition ();
