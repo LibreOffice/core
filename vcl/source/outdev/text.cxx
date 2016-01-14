@@ -54,7 +54,6 @@
 #include "graphite_features.hxx"
 #endif
 
-
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
@@ -299,9 +298,6 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         if( ImplDrawRotateText( rSalLayout ) )
             return true;
 
-
-
-
     long nOldX = rSalLayout.DrawBase().X();
     if( HasMirroredGraphics() )
     {
@@ -343,7 +339,6 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         ImplDrawTextLines( rSalLayout,
             maFont.GetStrikeout(), maFont.GetUnderline(), maFont.GetOverline(),
             maFont.IsWordLineMode(), ImplIsUnderlineAbove( maFont ) );
-
 
     // emphasis marks
     if( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
@@ -852,7 +847,6 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     {
         nLen = rStr.getLength() - nIndex;
     }
-
 
     if (mpOutDevData->mpRecordLayout)
     {
