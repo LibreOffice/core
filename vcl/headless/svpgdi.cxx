@@ -19,6 +19,7 @@
 
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
+#include "headless/svpframe.hxx"
 #ifndef IOS
 #include "headless/svpcairotextrender.hxx"
 #endif
@@ -276,7 +277,6 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
     }
 
     cairo_t* cr = getCairoContext(false);
-    assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
 
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
@@ -332,7 +332,6 @@ bool SvpSalGraphics::drawTransformedBitmap(
     const Size aSize = rSourceBitmap.GetSize();
 
     cairo_t* cr = getCairoContext(false);
-    assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
 
     // setup the image transformation
@@ -362,34 +361,6 @@ bool SvpSalGraphics::drawTransformedBitmap(
     return true;
 }
 
-namespace
-{
-    cairo_format_t getCairoFormat(const basebmp::BitmapDeviceSharedPtr &rBuffer)
-    {
-        cairo_format_t nFormat;
-        if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
-            nFormat = CAIRO_FORMAT_ARGB32;
-        else
-            nFormat = CAIRO_FORMAT_A1;
-        return nFormat;
-    }
-
-    bool isCairoCompatible(const basebmp::BitmapDeviceSharedPtr &rBuffer)
-    {
-        if (!rBuffer)
-            return false;
-
-        if (rBuffer->getScanlineFormat() != SVP_CAIRO_FORMAT &&
-            rBuffer->getScanlineFormat() != basebmp::Format::OneBitMsbPal)
-            return false;
-
-        basegfx::B2IVector size = rBuffer->getSize();
-        sal_Int32 nStride = rBuffer->getScanlineStride();
-        cairo_format_t nFormat = getCairoFormat(rBuffer);
-        return (cairo_format_stride_for_width(nFormat, size.getX()) == nStride);
-    }
-}
-
 #endif
 
 void SvpSalGraphics::clipRegion(cairo_t* cr)
@@ -412,7 +383,6 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
 {
     cairo_t* cr = getCairoContext(false);
-    assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
@@ -452,12 +422,12 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 }
 
 SvpSalGraphics::SvpSalGraphics() :
+    m_pSurface( nullptr ),
     m_bUseLineColor( true ),
     m_aLineColor( COL_BLACK ),
     m_bUseFillColor( false ),
     m_aFillColor( COL_WHITE ),
     m_ePaintMode( OVERPAINT ),
-    m_bClipSetup( false ),
     m_aTextRenderImpl(*this)
 {
 }
@@ -466,9 +436,9 @@ SvpSalGraphics::~SvpSalGraphics()
 {
 }
 
-void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
+void SvpSalGraphics::setSurface(cairo_surface_t* pSurface)
 {
-    m_aOrigDevice = rDevice;
+    m_pSurface = pSurface;
     ResetClipRegion();
 }
 
@@ -481,183 +451,24 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 
 sal_uInt16 SvpSalGraphics::GetBitCount() const
 {
-    return SvpSalBitmap::getBitCountFromScanlineFormat( m_aDevice->getScanlineFormat() );
+    if (CAIRO_FORMAT_A1 == cairo_image_surface_get_format(m_pSurface))
+        return 1;
+    return 32;
 }
 
 long SvpSalGraphics::GetGraphicsWidth() const
 {
-    if( m_aDevice.get() )
-    {
-        basegfx::B2IVector aSize = m_aOrigDevice->getSize();
-        return aSize.getX();
-    }
-    return 0;
+    return m_pSurface ? cairo_image_surface_get_width(m_pSurface) : 0;
 }
 
 void SvpSalGraphics::ResetClipRegion()
 {
-    m_aDevice = m_aOrigDevice;
-    m_aClipMap.reset();
-    m_bClipSetup = true;
     m_aClipRegion.SetNull();
 }
 
-// verify clip for the whole area is setup
-void SvpSalGraphics::ensureClip()
-{
-    if (m_bClipSetup)
-        return;
-
-    m_aDevice = m_aOrigDevice;
-    basegfx::B2IVector aSize = m_aDevice->getSize();
-    m_aClipMap = basebmp::createClipDevice( aSize );
-
-    RectangleVector aRectangles;
-    m_aClipRegion.GetRegionRectangles(aRectangles);
-
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
-    {
-        const long nW(aRectIter->GetWidth());
-        if(nW)
-        {
-            const long nH(aRectIter->GetHeight());
-
-            if(nH)
-            {
-                basegfx::B2DPolyPolygon aFull;
-
-                aFull.append(
-                    basegfx::tools::createPolygonFromRect(
-                        basegfx::B2DRectangle(
-                            aRectIter->Left(),
-                            aRectIter->Top(),
-                            aRectIter->Left() + nW,
-                            aRectIter->Top() + nH)));
-                m_aClipMap->fillPolyPolygon(aFull, basebmp::Color(0), basebmp::DrawMode::Paint);
-            }
-        }
-    }
-    m_bClipSetup = true;
-}
-
-SvpSalGraphics::ClipUndoHandle::~ClipUndoHandle()
-{
-    if( m_aDevice.get() )
-        m_rGfx.m_aDevice = m_aDevice;
-}
-
-// setup a clip rectangle -only- iff we have to; if aRange
-// is entirely contained inside an existing clip frame, we
-// will avoid setting up the clip bitmap. Similarly if the
-// range doesn't appear at all we return true to avoid
-// rendering
-bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphics::ClipUndoHandle &rUndo )
-{
-    if( m_bClipSetup )
-        return false;
-
-    if( m_aClipRegion.IsEmpty() ) // no clipping
-        return false;
-
-    // fprintf( stderr, "ensureClipFor: %d, %d %dx%d\n",
-    //         aRange.getMinX(), aRange.getMinY(),
-    //         (int)aRange.getWidth(), (int)aRange.getHeight() );
-
-    // first see if aRange is purely internal to one of the clip regions
-    Rectangle aRect( Point( aRange.getMinX(), aRange.getMinY() ),
-                     Size( aRange.getWidth(), aRange.getHeight() ) );
-
-    // then see if we are overlapping with just one
-    int nHit = 0;
-    Rectangle aHitRect;
-    RectangleVector aRectangles;
-    m_aClipRegion.GetRegionRectangles(aRectangles);
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
-    {
-        if( aRectIter->IsOver( aRect ) )
-        {
-            aHitRect = *aRectIter;
-            nHit++;
-        }
-    }
-
-    if( nHit == 0 ) // rendering outside any clipping region
-    {
-        SAL_INFO("vcl.headless", "SvpSalGraphics::isClippedSetup: degenerate case detected ...");
-        return true;
-    }
-    else if( nHit == 1 ) // common path: rendering against just one clipping region
-    {
-        if( aHitRect.IsInside( aRect ) )
-        {
-            //The region to be painted (aRect) is equal to or inside the
-            //current clipping region
-            SAL_INFO("vcl.headless", "SvpSalGraphics::isClippedSetup: is inside ! avoid deeper clip ...");
-            return false;
-        }
-        SAL_INFO("vcl.headless", "SvpSalGraphics::isClippedSetup: operation only overlaps with a single clip zone");
-        rUndo.m_aDevice = m_aDevice;
-        m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
-                                                 basegfx::B2IBox (aHitRect.Left(),
-                                                                  aHitRect.Top(),
-                                                                  aHitRect.Right() + 1,
-                                                                  aHitRect.Bottom() + 1) );
-        return false;
-    }
-    SAL_INFO("vcl.headless", "SvpSalGraphics::isClippedSetup: URK: complex & slow clipping case\n");
-    // horribly slow & complicated case ...
-
-    ensureClip();
-    return false;
-}
-
-// Clipping by creating unconditional mask bitmaps is horribly
-// slow so defer it, as much as possible. It is common to get
-// 3 rectangles pushed, and have to create a vast off-screen
-// mask only to destroy it shortly afterwards. That is
-// particularly galling if we render only to a small,
-// well defined rectangular area inside one of these clip
-// rectangles.
-
-// ensureClipFor() or ensureClip() need to be called before
-// real rendering. FIXME: we should prolly push this down to
-// bitmapdevice instead.
 bool SvpSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
     m_aClipRegion = i_rClip;
-    m_aClipMap.reset();
-    if( i_rClip.IsEmpty() )
-    {
-        m_aDevice = m_aOrigDevice;
-        m_bClipSetup = true;
-        return true;
-    }
-
-    RectangleVector aRectangles;
-    i_rClip.GetRegionRectangles(aRectangles);
-
-    if (1 == aRectangles.size())
-    {
-        //simplest case, subset the device to clip bounds
-        m_aClipMap.reset();
-
-        const Rectangle& aBoundRect = aRectangles[0];
-        m_aDevice = basebmp::subsetBitmapDevice(
-            m_aOrigDevice,
-            basegfx::B2IBox(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right() + 1,aBoundRect.Bottom() + 1) );
-
-        m_bClipSetup = true;
-    }
-    else
-    {
-        //more complex, either setup and tear down temporary
-        //subsets of the original device around render calls
-        //or generate m_aClipMap and pass that to basebmp
-        //calls
-        m_aDevice = m_aOrigDevice;
-        m_bClipSetup = false;
-    }
-
     return true;
 }
 
@@ -910,7 +721,6 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     aPoly.setClosed(false);
 
     cairo_t* cr = getCairoContext(false);
-    assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
 
     AddPolygonToPath(cr, aPoly, aPoly.isClosed(), !getAntiAliasB2DDraw(), true);
@@ -955,7 +765,6 @@ bool SvpSalGraphics::drawPolyLine(
     }
 
     cairo_t* cr = getCairoContext(false);
-    assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
 
     // setup line attributes
@@ -1057,7 +866,6 @@ void SvpSalGraphics::setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon
 bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
 {
     cairo_t* cr = getCairoContext(true);
-    assert(cr && m_aDevice->isTopDown());
 
     setupPolyPolygon(cr, rPolyPoly);
 
@@ -1095,7 +903,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
 
 void SvpSalGraphics::applyColor(cairo_t *cr, const basebmp::Color &rColor)
 {
-    if (CAIRO_FORMAT_ARGB32 == getCairoFormat(m_aOrigDevice))
+    if (CAIRO_FORMAT_ARGB32 == cairo_image_surface_get_format(m_pSurface))
     {
         cairo_set_source_rgba(cr, rColor.getRed()/255.0,
                                   rColor.getGreen()/255.0,
@@ -1113,7 +921,6 @@ void SvpSalGraphics::applyColor(cairo_t *cr, const basebmp::Color &rColor)
 void SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly)
 {
     cairo_t* cr = getCairoContext(true);
-    assert(cr && m_aDevice->isTopDown());
 
     setupPolyPolygon(cr, rPolyPoly);
 
@@ -1170,7 +977,6 @@ void SvpSalGraphics::copySource( const SalTwoRect& rTR,
                                  cairo_surface_t* source )
 {
     cairo_t* cr = getCairoContext(false);
-    assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
 
     cairo_rectangle_int_t extents = renderSource(cr, rTR, source);
@@ -1186,18 +992,14 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
     SvpSalGraphics* pSrc = pSrcGraphics ?
         static_cast<SvpSalGraphics*>(pSrcGraphics) : this;
 
-    cairo_surface_t* source = SvpSalGraphics::createCairoSurface(pSrc->m_aOrigDevice);
-    if (!source)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::copyBits case");
-        return;
-    }
+    cairo_surface_t* source = pSrc->m_pSurface;
 
+    cairo_surface_t *pCopy = nullptr;
     if (pSrc == this)
     {
         //self copy is a problem, so dup source in that case
-        cairo_surface_t *pCopy = cairo_surface_create_similar_image(source,
-                                            getCairoFormat(m_aOrigDevice),
+        pCopy = cairo_surface_create_similar_image(source,
+                                            cairo_image_surface_get_format(m_pSurface),
                                             aTR.mnSrcWidth,
                                             aTR.mnSrcHeight);
 
@@ -1207,7 +1009,6 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
         cairo_fill(cr);
         cairo_destroy(cr);
 
-        cairo_surface_destroy(source);
         source = pCopy;
 
         aTR.mnSrcX = 0;
@@ -1216,7 +1017,8 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
 
     copySource(aTR, source);
 
-    cairo_surface_destroy(source);
+    if (pCopy)
+        cairo_surface_destroy(pCopy);
 }
 
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
@@ -1227,7 +1029,6 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawBitmap case");
     }
-
     copySource(rTR, source);
 }
 
@@ -1238,10 +1039,11 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect& rTR,
     drawAlphaBitmap(rTR, rSourceBitmap, rTransparentBitmap);
 }
 
-void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
-                               const SalBitmap& rSalBitmap,
-                               SalColor nMaskColor )
+void SvpSalGraphics::drawMask( const SalTwoRect& /*rPosAry*/,
+                               const SalBitmap& /*rSalBitmap*/,
+                               SalColor /*nMaskColor*/ )
 {
+#if 0
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
     basegfx::B2IBox aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
                      rPosAry.mnSrcX+rPosAry.mnSrcWidth,
@@ -1267,6 +1069,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
     if( !isClippedSetup( aClipRect, aUndo ) )
         m_aDevice->drawMaskedColor( aColor, aCopy, aSrcRect, aDestPoint, m_aClipMap );
     dbgOut( m_aDevice );
+#endif
 }
 
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
@@ -1274,14 +1077,14 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     basegfx::B2IVector aSize(nWidth, nHeight);
     basebmp::BitmapDeviceSharedPtr aCopy = createBitmapDevice(aSize, true, SVP_CAIRO_FORMAT);
 
-    cairo_t* cr = SvpSalGraphics::createCairoContext(aCopy);
+    cairo_surface_t* target = SvpSalGraphics::createCairoSurface(aCopy);
+    cairo_t* cr = cairo_create(target);
 
-    cairo_surface_t *source = createCairoSurface(m_aOrigDevice);
     SalTwoRect aTR(nX, nY, nWidth, nHeight, 0, 0, nWidth, nHeight);
-    renderSource(cr, aTR, source);
-    cairo_surface_destroy(source);
+    renderSource(cr, aTR, m_pSurface);
 
     cairo_destroy(cr);
+    cairo_surface_destroy(target);
 
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
     pBitmap->setBitmap(aCopy);
@@ -1301,12 +1104,12 @@ static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
 
 SalColor SvpSalGraphics::getPixel( long nX, long nY )
 {
-    cairo_surface_t* surface = createCairoSurface(m_aOrigDevice);
-    unsigned char *surface_data = cairo_image_surface_get_data(surface);
-    cairo_format_t nFormat = getCairoFormat(m_aOrigDevice);
+    cairo_surface_flush(m_pSurface);
+    cairo_format_t nFormat = cairo_image_surface_get_format(m_pSurface);
     assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
-    basegfx::B2IVector size = m_aOrigDevice->getSize();
-    sal_Int32 nStride = cairo_format_stride_for_width(nFormat, size.getX());
+    sal_Int32 nStride = cairo_format_stride_for_width(nFormat,
+                                                      cairo_image_surface_get_width(m_pSurface));
+    unsigned char *surface_data = cairo_image_surface_get_data(m_pSurface);
     unsigned char *row = surface_data + (nStride*nY);
     unsigned char *data = row + (nX * 4);
     sal_uInt8 b = unpremultiply(data[0], data[3]);
@@ -1335,7 +1138,6 @@ namespace
 void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
 {
     cairo_t* cr = getCairoContext(false);
-    assert(cr && m_aDevice->isTopDown());
     clipRegion(cr);
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
@@ -1409,6 +1211,34 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
     return false;
 }
 
+namespace
+{
+    cairo_format_t getCairoFormat(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+    {
+        cairo_format_t nFormat;
+        if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
+            nFormat = CAIRO_FORMAT_ARGB32;
+        else
+            nFormat = CAIRO_FORMAT_A1;
+        return nFormat;
+    }
+
+    bool isCairoCompatible(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+    {
+        if (!rBuffer)
+            return false;
+
+        if (rBuffer->getScanlineFormat() != SVP_CAIRO_FORMAT &&
+            rBuffer->getScanlineFormat() != basebmp::Format::OneBitMsbPal)
+            return false;
+
+        basegfx::B2IVector size = rBuffer->getSize();
+        sal_Int32 nStride = rBuffer->getScanlineStride();
+        cairo_format_t nFormat = getCairoFormat(rBuffer);
+        return (cairo_format_stride_for_width(nFormat, size.getX()) == nStride);
+    }
+}
+
 cairo_surface_t* SvpSalGraphics::createCairoSurface(const basebmp::BitmapDeviceSharedPtr &rBuffer)
 {
     if (!isCairoCompatible(rBuffer))
@@ -1427,51 +1257,22 @@ cairo_surface_t* SvpSalGraphics::createCairoSurface(const basebmp::BitmapDeviceS
     return target;
 }
 
-cairo_surface_t* SvpSalGraphics::createTmpCompatibleCairoSurface(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+static cairo_t* createTmpCompatibleCairoContext(cairo_surface_t* pSurface)
 {
-    if (!isCairoCompatible(rBuffer))
-        return nullptr;
-
-    basegfx::B2IVector size = rBuffer->getSize();
-
-    cairo_format_t nFormat;
-    if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
-        nFormat = CAIRO_FORMAT_ARGB32;
-    else
-        nFormat = CAIRO_FORMAT_A1;
-    cairo_surface_t *target =
-        cairo_image_surface_create(nFormat,
-                                   size.getX(), size.getY());
-    return target;
-}
-
-cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
-{
-    cairo_surface_t *target = createCairoSurface(rBuffer);
-    if (!target)
-        return nullptr;
-    cairo_t* cr = cairo_create(target);
-    cairo_surface_destroy(target);
-    return cr;
-}
-
-cairo_t* SvpSalGraphics::createTmpCompatibleCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
-{
-    cairo_surface_t *target = createTmpCompatibleCairoSurface(rBuffer);
-    if (!target)
-        return nullptr;
-    cairo_t* cr = cairo_create(target);
-    cairo_surface_destroy(target);
-    return cr;
+    cairo_surface_t *target = cairo_image_surface_create(
+                                cairo_image_surface_get_format(pSurface),
+                                cairo_image_surface_get_width(pSurface),
+                                cairo_image_surface_get_height(pSurface));
+    return cairo_create(target);
 }
 
 cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
 {
     cairo_t* cr;
     if (m_ePaintMode == XOR && bXorModeAllowed)
-        cr = SvpSalGraphics::createTmpCompatibleCairoContext(m_aOrigDevice);
+        cr = createTmpCompatibleCairoContext(m_pSurface);
     else
-        cr = SvpSalGraphics::createCairoContext(m_aOrigDevice);
+        cr = cairo_create(m_pSurface);
     cairo_set_line_width(cr, 1);
     if (m_ePaintMode == INVERT)
         cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
@@ -1480,15 +1281,22 @@ cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
     return cr;
 }
 
+cairo_user_data_key_t* SvpSalGraphics::getDamageKey()
+{
+    static cairo_user_data_key_t aDamageKey;
+    return &aDamageKey;
+}
+
 void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const cairo_rectangle_int_t& extents) const
 {
     sal_Int32 nExtentsLeft(extents.x), nExtentsTop(extents.y);
     sal_Int32 nExtentsRight(extents.x + extents.width), nExtentsBottom(extents.y + extents.height);
-    basegfx::B2IVector size = m_aOrigDevice->getSize();
+    sal_Int32 nWidth = cairo_image_surface_get_width(m_pSurface);
+    sal_Int32 nHeight = cairo_image_surface_get_height(m_pSurface);
     nExtentsLeft = std::max(nExtentsLeft, 0);
     nExtentsTop = std::max(nExtentsTop, 0);
-    nExtentsRight = std::min(nExtentsRight, size.getX());
-    nExtentsBottom = std::min(nExtentsBottom, size.getY());
+    nExtentsRight = std::min(nExtentsRight, nWidth);
+    nExtentsBottom = std::min(nExtentsBottom, nHeight);
 
     cairo_surface_t* surface = cairo_get_target(cr);
     cairo_surface_flush(surface);
@@ -1498,14 +1306,14 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
     //emulate it (slowly) here.
     if (m_ePaintMode == XOR && bXorModeAllowed)
     {
-        cairo_surface_t* true_surface = createCairoSurface(m_aOrigDevice);
+        cairo_surface_t* true_surface = m_pSurface;
         cairo_surface_flush(true_surface);
         unsigned char *true_surface_data = cairo_image_surface_get_data(true_surface);
         unsigned char *xor_surface_data = cairo_image_surface_get_data(surface);
 
-        cairo_format_t nFormat = getCairoFormat(m_aOrigDevice);
+        cairo_format_t nFormat = cairo_image_surface_get_format(m_pSurface);
         assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
-        sal_Int32 nStride = cairo_format_stride_for_width(nFormat, size.getX());
+        sal_Int32 nStride = cairo_format_stride_for_width(nFormat, nWidth);
         for (sal_Int32 y = nExtentsTop; y < nExtentsBottom; ++y)
         {
             unsigned char *true_row = true_surface_data + (nStride*y);
@@ -1528,17 +1336,16 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
             }
         }
         cairo_surface_mark_dirty(true_surface);
-
-        cairo_surface_destroy(true_surface);
+        cairo_surface_destroy(surface);
     }
 
     cairo_destroy(cr); // unref
 
-    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
-    if (xDamageTracker)
+    DamageHandler* pDamage = static_cast<DamageHandler*>(cairo_surface_get_user_data(m_pSurface, getDamageKey()));
+
+    if (pDamage)
     {
-        xDamageTracker->damaged(basegfx::B2IBox(nExtentsLeft, nExtentsTop, nExtentsRight,
-                                                nExtentsBottom));
+        pDamage->damaged(pDamage->handle, nExtentsLeft, nExtentsTop, nExtentsRight, nExtentsBottom);
     }
 }
 
@@ -1579,8 +1386,6 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 
 bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
 {
-    if (!isCairoCompatible(m_aOrigDevice))
-        return false;
     switch (eType)
     {
         case OutDevSupport_TransparentRect:

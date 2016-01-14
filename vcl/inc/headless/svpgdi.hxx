@@ -50,15 +50,23 @@ class ServerFont;
 typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo_rectangle_int cairo_rectangle_int_t;
+typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
 enum PaintMode { OVERPAINT, XOR, INVERT };
 
+typedef void (*damageHandler)(void* handle,
+                              sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
+                              sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom);
+
+struct VCL_DLLPUBLIC DamageHandler
+{
+    void *handle;
+    damageHandler damaged;
+};
+
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
-    basebmp::BitmapDeviceSharedPtr       m_aDevice;
-    basebmp::BitmapDeviceSharedPtr       m_aOrigDevice;
-
-    basebmp::BitmapDeviceSharedPtr       m_aClipMap;
+    cairo_surface_t*                     m_pSurface;
 
     bool                                 m_bUseLineColor;
     basebmp::Color                       m_aLineColor;
@@ -69,18 +77,10 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 
 public:
     static GlyphCache& getPlatformGlyphCache();
-    void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);
+    void setSurface(cairo_surface_t* pSurface);
+    static cairo_user_data_key_t* getDamageKey();
 
 private:
-    bool                                 m_bClipSetup;
-    struct ClipUndoHandle {
-        SvpSalGraphics                &m_rGfx;
-        basebmp::BitmapDeviceSharedPtr m_aDevice;
-        ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
-        ~ClipUndoHandle();
-    };
-    bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
-    void ensureClip();
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
     void setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPoly);
@@ -224,10 +224,7 @@ public:
 
     cairo_t*                getCairoContext(bool bXorModeAllowed) const;
     void                    releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const cairo_rectangle_int_t& extents) const;
-    static cairo_surface_t* createCairoSurface(const basebmp::BitmapDeviceSharedPtr& rBuffer);
-    static cairo_t*         createCairoContext(const basebmp::BitmapDeviceSharedPtr& rBuffer);
-    static cairo_surface_t* createTmpCompatibleCairoSurface(const basebmp::BitmapDeviceSharedPtr& rBuffer);
-    static cairo_t*         createTmpCompatibleCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer);
+    static cairo_surface_t* createCairoSurface(const basebmp::BitmapDeviceSharedPtr &rBuffer);
     void                    clipRegion(cairo_t* cr);
 };
 

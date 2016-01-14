@@ -28,6 +28,8 @@
 #include <basebmp/scanlineformats.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
+#include <cairo.h>
+
 using namespace basebmp;
 using namespace basegfx;
 
@@ -37,48 +39,15 @@ SvpSalFrame* SvpSalFrame::s_pFocusFrame = nullptr;
 #define SvpSalGraphics AquaSalGraphics
 #endif
 
-#ifndef IOS
-namespace {
-    /// Decouple SalFrame lifetime from damagetracker lifetime
-    struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
-    {
-        virtual ~DamageTracker() {}
-        virtual void damaged( const basegfx::B2IBox& ) const override {}
-    };
-}
-#endif
-
-#ifdef ANDROID
-void SvpSalFrame::enableDamageTracker( bool bOn )
-{
-    if( m_bDamageTracking == bOn )
-        return;
-    if( m_aFrame.get() )
-    {
-        if( m_bDamageTracking )
-            m_aFrame->setDamageTracker( basebmp::IBitmapDeviceDamageTrackerSharedPtr() );
-        else
-            m_aFrame->setDamageTracker(
-                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
-    }
-    m_bDamageTracking = bOn;
-}
-#endif
-
-
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
                           SalFrameStyleFlags nSalFrameStyle,
-                          basebmp::Format nScanlineFormat,
                           SystemParentData* ) :
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
     m_nStyle( nSalFrameStyle ),
     m_bVisible( false ),
-#ifndef IOS
-    m_bDamageTracking( false ),
-    m_nScanlineFormat( nScanlineFormat ),
-#endif
+    m_pSurface( nullptr ),
     m_nMinWidth( 0 ),
     m_nMinHeight( 0 ),
     m_nMaxWidth( 0 ),
@@ -145,6 +114,8 @@ SvpSalFrame::~SvpSalFrame()
             }
         }
     }
+    if (m_pSurface)
+        cairo_surface_destroy(m_pSurface);
 }
 
 void SvpSalFrame::GetFocus()
@@ -176,7 +147,7 @@ SalGraphics* SvpSalFrame::AcquireGraphics()
 {
     SvpSalGraphics* pGraphics = new SvpSalGraphics();
 #ifndef IOS
-    pGraphics->setDevice( m_aFrame );
+    pGraphics->setSurface( m_pSurface );
 #endif
     m_aGraphics.push_back( pGraphics );
     return pGraphics;
@@ -284,21 +255,25 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     }
 #ifndef IOS
     B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
-    if( ! m_aFrame.get() || m_aFrame->getSize() != aFrameSize )
+    if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != aFrameSize.getX() ||
+                       cairo_image_surface_get_height(m_pSurface) != aFrameSize.getY() )
     {
         if( aFrameSize.getX() == 0 )
             aFrameSize.setX( 1 );
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
-        m_aFrame = createBitmapDevice( aFrameSize, true, m_nScanlineFormat );
-        if (m_bDamageTracking)
-            m_aFrame->setDamageTracker(
-                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
+
+        if (m_pSurface)
+            cairo_surface_destroy(m_pSurface);
+        m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                            aFrameSize.getX(),
+                            aFrameSize.getY());
+
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
         {
-             (*it)->setDevice( m_aFrame );
+             (*it)->setSurface(m_pSurface);
         }
     }
     if( m_bVisible )

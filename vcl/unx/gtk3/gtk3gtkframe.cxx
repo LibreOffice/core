@@ -335,24 +335,6 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
     return aAlternate;
 }
 
-namespace {
-/// Decouple SalFrame lifetime from damagetracker lifetime
-struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
-{
-    explicit DamageTracker(GtkSalFrame& rFrame) : m_rFrame(rFrame)
-    {}
-
-    virtual ~DamageTracker() {}
-
-    virtual void damaged(const basegfx::B2IBox& rDamageRect) const override
-    {
-        m_rFrame.damaged(rDamageRect);
-    }
-
-    GtkSalFrame& m_rFrame;
-};
-}
-
 static bool dumpframes = false;
 
 void GtkSalFrame::doKeyCallback( guint state,
@@ -857,6 +839,9 @@ GtkSalFrame::~GtkSalFrame()
 
     delete m_pGraphics;
     m_pGraphics = nullptr;
+
+    if (m_pSurface)
+        cairo_surface_destroy(m_pSurface);
 }
 
 void GtkSalFrame::moveWindow( long nX, long nY )
@@ -956,8 +941,22 @@ GtkWidget *GtkSalFrame::getMouseEventWidget() const
     return GTK_WIDGET(m_pEventBox);
 }
 
+static void damaged(void *handle,
+                    sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
+                    sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(handle);
+    pThis->damaged(nExtentsLeft, nExtentsTop,
+                   nExtentsRight, nExtentsBottom);
+}
+
 void GtkSalFrame::InitCommon()
 {
+    m_pSurface = nullptr;
+
+    m_aDamageHandler.handle = this;
+    m_aDamageHandler.damaged = ::damaged;
+
     m_pEventBox = GTK_EVENT_BOX(gtk_event_box_new());
     gtk_widget_add_events( GTK_WIDGET(m_pEventBox),
                            GDK_ALL_EVENTS_MASK );
@@ -1271,12 +1270,12 @@ SalGraphics* GtkSalFrame::AcquireGraphics()
     if( !m_pGraphics )
     {
         m_pGraphics = new GtkSalGraphics( this, m_pWindow );
-        if( !m_aFrame.get() )
+        if (!m_pSurface)
         {
             AllocateFrame();
             TriggerPaintEvent();
         }
-        m_pGraphics->setDevice( m_aFrame );
+        m_pGraphics->setSurface(m_pSurface);
     }
     m_bGraphics = true;
     return m_pGraphics;
@@ -1525,25 +1524,24 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
 void GtkSalFrame::AllocateFrame()
 {
     basegfx::B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
-    if( ! m_aFrame.get() || m_aFrame->getSize() != aFrameSize )
+    if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != aFrameSize.getX() ||
+                       cairo_image_surface_get_height(m_pSurface) != aFrameSize.getY() )
     {
         if( aFrameSize.getX() == 0 )
             aFrameSize.setX( 1 );
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
-        m_aFrame = basebmp::createBitmapDevice(aFrameSize, true, SVP_CAIRO_FORMAT);
-        assert(cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, aFrameSize.getX()) ==
-               m_aFrame->getScanlineStride());
-        m_aFrame->setDamageTracker(
-            basebmp::IBitmapDeviceDamageTrackerSharedPtr(new DamageTracker(*this)) );
-        SAL_INFO("vcl.gtk3", "allocated m_aFrame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
 
-#if OSL_DEBUG_LEVEL > 0 // set background to orange
-        m_aFrame->clear( basebmp::Color( 255, 127, 0 ) );
-#endif
+        if (m_pSurface)
+            cairo_surface_destroy(m_pSurface);
+        m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                            aFrameSize.getX(),
+                            aFrameSize.getY());
+        cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);
+        SAL_INFO("vcl.gtk3", "allocated Frame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
 
-        if( m_pGraphics )
-            m_pGraphics->setDevice( m_aFrame );
+        if (m_pGraphics)
+            m_pGraphics->setSurface(m_pSurface);
     }
 }
 
@@ -2654,26 +2652,14 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
 
 cairo_t* GtkSalFrame::getCairoContext() const
 {
-    cairo_t* cr = SvpSalGraphics::createCairoContext(m_aFrame);
+    cairo_t* cr = cairo_create(m_pSurface);
     assert(cr);
     return cr;
 }
 
-void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
+void GtkSalFrame::damaged(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
+                          sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom) const
 {
-#if OSL_DEBUG_LEVEL > 1
-    long long area = rDamageRect.getWidth() * rDamageRect.getHeight();
-    if( area > 32 * 1024 )
-    {
-        fprintf( stderr, "bitmap damaged  %d %d (%dx%d) area %lld widget\n",
-                  (int) rDamageRect.getMinX(),
-                  (int) rDamageRect.getMinY(),
-                  (int) rDamageRect.getWidth(),
-                 (int) rDamageRect.getHeight(),
-                 area );
-    }
-#endif
-
     if (dumpframes)
     {
         static int frame;
@@ -2684,31 +2670,18 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
     }
 
     gtk_widget_queue_draw_area(GTK_WIDGET(m_pFixedContainer),
-                               rDamageRect.getMinX(),
-                               rDamageRect.getMinY(),
-                               rDamageRect.getWidth(),
-                               rDamageRect.getHeight());
+                               nExtentsLeft, nExtentsTop,
+                               nExtentsRight - nExtentsLeft,
+                               nExtentsBottom - nExtentsTop);
 }
 
-// blit our backing basebmp buffer to the target cairo context cr
-gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
+// blit our backing cairo surface to the target cairo context
+gboolean GtkSalFrame::signalDraw(GtkWidget*, cairo_t *cr, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    cairo_save(cr);
-
-    cairo_t* source = pThis->getCairoContext();
-    cairo_surface_t *pSurface = cairo_get_target(source);
-
-    cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
-    cairo_set_source_surface(cr, pSurface, 0, 0);
+    cairo_set_source_surface(cr, pThis->m_pSurface, 0, 0);
     cairo_paint(cr);
-
-    cairo_destroy(source);
-
-    cairo_restore(cr);
-
-    cairo_surface_flush(cairo_get_target(cr));
 
     return false;
 }

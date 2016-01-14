@@ -25,15 +25,20 @@
 #include <list>
 
 class SvpSalGraphics;
+typedef struct _cairo_surface cairo_surface_t;
 
 class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
     DeviceFormat                        m_eFormat;
-    basebmp::BitmapDeviceSharedPtr      m_aDevice;
+    cairo_surface_t*                    m_pSurface;
     std::list< SvpSalGraphics* >        m_aGraphics;
 
 public:
-    SvpSalVirtualDevice(DeviceFormat eFormat) : m_eFormat(eFormat) {}
+    SvpSalVirtualDevice(DeviceFormat eFormat)
+        : m_eFormat(eFormat)
+        , m_pSurface(nullptr)
+    {
+    }
     virtual ~SvpSalVirtualDevice();
 
     // SalVirtualDevice
@@ -46,8 +51,8 @@ public:
                                           ) override;
 
     // SalGeometryProvider
-    virtual long GetWidth() const override { return m_aDevice.get() ? m_aDevice->getSize().getX() : 0; }
-    virtual long GetHeight() const override { return m_aDevice.get() ? m_aDevice->getSize().getY() : 0; }
+    virtual long GetWidth() const override;
+    virtual long GetHeight() const override;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX

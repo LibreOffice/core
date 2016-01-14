@@ -46,6 +46,8 @@
 #include <list>
 #include <vector>
 
+#include "headless/svpgdi.hxx"
+
 class GtkSalGraphics;
 class GtkSalDisplay;
 
@@ -60,7 +62,8 @@ typedef ::Window GdkNativeWindow;
     typedef void GDBusConnection;
 #endif
 
-class GtkSalFrame : public SalFrame, public X11WindowProvider
+class GtkSalFrame : public SalFrame
+                  , public X11WindowProvider
 {
     struct IMHandler
     {
@@ -320,7 +323,8 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
 
 public:
 #if GTK_CHECK_VERSION(3,0,0)
-    basebmp::BitmapDeviceSharedPtr  m_aFrame;
+    cairo_surface_t*                m_pSurface;
+    DamageHandler                   m_aDamageHandler;
 #endif
     GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
     GtkSalFrame( SystemParentData* pSysData );
@@ -356,7 +360,8 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     // only for gtk3 ...
     cairo_t* getCairoContext() const;
-    void damaged (const basegfx::B2IBox& rDamageRect);
+    void damaged(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
+                 sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom) const;
 #endif
     virtual ~GtkSalFrame();
 

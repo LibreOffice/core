@@ -200,12 +200,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 
 SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
-    return new SvpSalFrame( this, nullptr, nStyle, SVP_CAIRO_FORMAT, pParent );
+    return new SvpSalFrame( this, nullptr, nStyle, pParent );
 }
 
 SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
-    return new SvpSalFrame( this, pParent, nStyle, SVP_CAIRO_FORMAT );
+    return new SvpSalFrame( this, pParent, nStyle );
 }
 
 void SvpSalInstance::DestroyFrame( SalFrame* pFrame )
