@@ -347,7 +347,7 @@ public:
 
                     // TRUE: Cell is merged
     bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const;
-    bool            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
+    void            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCsCOL& rPosX, SCsROW& rPosY,
                                         bool bTestMerge = true, bool bRepair = false,
                                         bool bNextIfLarge = true );

@@ -2064,7 +2064,7 @@ bool ScViewFunc::InsertTable( const OUString& rName, SCTAB nTab, bool bRecord )
 
 //  Insert tables
 
-bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
+void ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
                                             SCTAB nCount, bool bRecord )
 {
     ScDocShell* pDocSh    = GetViewData().GetDocShell();
@@ -2103,11 +2103,6 @@ bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
         SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
-        return true;
-    }
-    else
-    {
-        return false;
     }
 }
 
@@ -2142,7 +2137,7 @@ bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
     }
 }
 
-bool ScViewFunc::DeleteTable( SCTAB nTab, bool bRecord )
+void ScViewFunc::DeleteTable( SCTAB nTab, bool bRecord )
 {
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
     ScDocument& rDoc    = pDocSh->GetDocument();
@@ -2155,12 +2150,11 @@ bool ScViewFunc::DeleteTable( SCTAB nTab, bool bRecord )
             --nNewTab;
         SetTabNo( nNewTab, true );
     }
-    return bSuccess;
 }
 
 //only use this method for undo for now, all sheets must be connected
 //this method doesn't support undo for now, merge it when it with the other method later
-bool ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
+void ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc    = pDocSh->GetDocument();
@@ -2196,9 +2190,7 @@ bool ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
-        return true;
     }
-    return false;
 }
 
 bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )

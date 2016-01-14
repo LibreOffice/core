@@ -861,13 +861,13 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
     return true;
 }
 
-bool ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction )
+void ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction )
 {
     // Check for invalid range.
     SCROW nLastRow = rPos.Row() + aVals.size() - 1;
     if (nLastRow > MAXROW)
         // out of bound.
-        return false;
+        return;
 
     ScRange aRange(rPos);
     aRange.aEnd.SetRow(nLastRow);
@@ -892,8 +892,6 @@ bool ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>&
     // #103934#; notify editline and cell in edit mode
     if (!bInteraction)
         NotifyInputHandler(rPos);
-
-    return true;
 }
 
 bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
@@ -1062,7 +1060,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 
         typedef ::std::list<ScMyRememberItem*> ScMyRememberItemList;
 
-bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
+void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {
     //  PutData ruft PutCell oder SetNormalString
 
@@ -1151,8 +1149,6 @@ bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
             ApplyAttributes( aMark, aPattern, true, bApi );
         }
     }
-
-    return bRet;
 }
 
 static ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const OUString& rText, const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
@@ -1231,7 +1227,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     return true;
 }
 
-bool ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool bApi )
+void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -1241,7 +1237,7 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
     {
         if (!bApi)
             rDocShell.ErrorMessage(aTester.GetMessageId());
-        return false;
+        return;
     }
 
     OUString aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! ist das noetig ???
@@ -1256,14 +1252,10 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
-
-    return true;
 }
 
-bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi )
+void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi )
 {
-    bool bDone = false;
-
     ScDocShellModificator aModificator( rDocShell );
     ScDocument& rDoc = rDocShell.GetDocument();
     ScEditableTester aTester( &rDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
@@ -1310,14 +1302,11 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
             rDoc.SetStreamValid(rPos.Tab(), false);
 
         aModificator.SetDocumentModified();
-        bDone = true;
     }
     else if (!bApi)
     {
         rDocShell.ErrorMessage(aTester.GetMessageId());
     }
-
-    return bDone;
 }
 
 bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
@@ -3142,18 +3131,18 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
     return bSuccess;
 }
 
-bool ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
+void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
     if ( rDoc.IsVisible( nTab ) == bVisible )
-        return true;                                // nichts zu tun - ok
+        return;                                // nichts zu tun - ok
 
     if ( !rDoc.IsDocEditable() )
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_PROTECTIONERR);
-        return false;
+        return;
     }
 
     ScDocShellModificator aModificator( rDocShell );
@@ -3172,7 +3161,7 @@ bool ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
         {
             if (!bApi)
                 rDocShell.ErrorMessage(STR_PROTECTIONERR);  //! eigene Meldung?
-            return false;
+            return;
         }
     }
 
@@ -3191,8 +3180,6 @@ bool ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
     SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     rDocShell.PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
     aModificator.SetDocumentModified();
-
-    return true;
 }
 
 bool ScDocFunc::SetLayoutRTL( SCTAB nTab, bool bRTL, bool /* bApi */ )
@@ -3826,7 +3813,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
     return true;
 }
 
-bool ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi )
+void ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3837,7 +3824,7 @@ bool ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
     {
         if (!bApi)
             rDocShell.ErrorMessage(aTester.GetMessageId());
-        return false;
+        return;
     }
 
     //  #i12940# ClearItems is called (from setPropertyToDefault) directly with uno object's cached
@@ -3869,8 +3856,6 @@ bool ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
     aModificator.SetDocumentModified();
 
     //! Bindings-Invalidate etc.?
-
-    return true;
 }
 
 bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bApi )
@@ -5165,7 +5150,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
     return bDone;
 }
 
-bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, bool bApi )
+void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     SCCOL nStartCol = rOldRange.aStart.Col();
@@ -5204,11 +5189,9 @@ bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         if (bUndo)
             rDocShell.GetUndoManager()->LeaveListAction();
     }
-
-    return bRet;
 }
 
-bool ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
+void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                                 const OUString& rOptions, const OUString& rSource,
                                 const ScRange& rDestRange, sal_uLong nRefresh,
                                 bool bFitBlock, bool bApi )
@@ -5292,8 +5275,6 @@ bool ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
         pBindings->Invalidate( SID_LINKS );
 
     SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
-
-    return true;
 }
 
 void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges )

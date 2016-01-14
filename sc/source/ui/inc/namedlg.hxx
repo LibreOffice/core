@@ -90,7 +90,7 @@ private:
 
     ScRangeName* GetRangeName(const OUString& rScope);
 
-    bool AddPushed();
+    void AddPushed();
     void RemovePushed();
     void CancelPushed();
     void ScopeChanged();

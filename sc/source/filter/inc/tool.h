@@ -68,16 +68,6 @@ public:
                         pAttr = NULL;
                     }
 
-    bool            operator ==( const FormIdent& rComp ) const
-                    {
-                        return ( nStamp == rComp.nStamp );
-                    }
-
-    bool            operator ==( const StampTyp& rStamp ) const
-                    {
-                        return ( nStamp == rStamp );
-                    }
-
     StampTyp        GetStamp( void ) const
                     {
                         return nStamp;

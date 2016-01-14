@@ -119,12 +119,11 @@ TableColumns& TableColumnsBuffer::createTableColumns()
     return *xTableColumns;
 }
 
-bool TableColumnsBuffer::finalizeImport( ScDBData* pDBData )
+void TableColumnsBuffer::finalizeImport( ScDBData* pDBData )
 {
     TableColumns* pTableColumns = getActiveTableColumns();
     if ( pTableColumns )
-        return pTableColumns->finalizeImport( pDBData );
-    return false;
+        pTableColumns->finalizeImport( pDBData );
 }
 
 TableColumns* TableColumnsBuffer::getActiveTableColumns()

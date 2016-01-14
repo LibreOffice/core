@@ -50,7 +50,6 @@ public:
     ScDataObject*           At(sal_uInt16 nIndex) const;
     sal_uInt16              GetCount() const { return nCount; }
 
-    ScDataObject*  operator[]( const sal_uInt16 nIndex) const { return At(nIndex); }
     ScCollection&  operator= ( const ScCollection& rCol );
 };
 

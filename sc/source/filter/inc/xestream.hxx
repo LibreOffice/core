@@ -138,7 +138,7 @@ public:
     // *** SvStream access ***
 
     /** Sets position of system stream (only allowed outside of records). */
-    sal_uInt64          SetSvStreamPos(sal_uInt64 nPos);
+    void                SetSvStreamPos(sal_uInt64 nPos);
     /** Returns the absolute position of the system stream. */
     inline sal_uInt64   GetSvStreamPos() const { return mrStrm.Tell(); }
 

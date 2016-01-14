@@ -138,7 +138,7 @@ public:
     //  Check if any cells (including column/row headers) are in the visible area
     bool    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
 
-    bool    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
+    void    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
 
     // returns the rectangle where the EditEngine draws the text of a Header Cell
     // if bColHeader is true it returns the rectangle of the header of the column in rCellPos

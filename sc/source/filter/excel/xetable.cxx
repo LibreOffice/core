@@ -1598,10 +1598,9 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     ::insert_value( mnFlags, rOutlineBfr.GetLevel(), 8, 3 );
 }
 
-sal_uInt16 XclExpColinfo::ConvertXFIndexes()
+void XclExpColinfo::ConvertXFIndexes()
 {
     maXFId.ConvertXFIndex( GetRoot() );
-    return maXFId.mnXFIndex;
 }
 
 bool XclExpColinfo::IsDefault( const XclExpDefcolwidth& rDefColWidth ) const

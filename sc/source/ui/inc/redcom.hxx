@@ -51,7 +51,7 @@ public:
                     ScDocShell *pShell, ScChangeAction *pAction, bool bPrevNext = false);
     ~ScRedComDialog();
 
-    short Execute();
+    void Execute();
 };
 
 #endif

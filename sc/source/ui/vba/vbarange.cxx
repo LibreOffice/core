@@ -575,7 +575,7 @@ public:
         return true;
     }
 
-    bool setNumberFormat( sal_Int16 nType )
+    void setNumberFormat( sal_Int16 nType )
     {
         uno::Reference< beans::XPropertySet > xNumberProps = getNumberProps();
         lang::Locale aLocale;
@@ -585,9 +585,7 @@ public:
         {
             sal_Int32 nNewIndex = xTypes->getStandardFormat( nType, aLocale );
                mxRangeProps->setPropertyValue( "NumberFormat", uno::makeAny( nNewIndex ) );
-            return true;
         }
-        return false;
     }
 
 };

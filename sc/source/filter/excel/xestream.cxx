@@ -370,10 +370,10 @@ void XclExpStream::DisableEncryption()
     EnableEncryption(false);
 }
 
-sal_uInt64 XclExpStream::SetSvStreamPos(sal_uInt64 const nPos)
+void XclExpStream::SetSvStreamPos(sal_uInt64 const nPos)
 {
     OSL_ENSURE( !mbInRec, "XclExpStream::SetSvStreamPos - not allowed inside of a record" );
-    return mbInRec ? 0 : mrStrm.Seek( nPos );
+    mbInRec ? 0 : mrStrm.Seek( nPos );
 }
 
 // private --------------------------------------------------------------------

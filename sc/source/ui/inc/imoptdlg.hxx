@@ -73,18 +73,6 @@ public:
                             return *this;
                         }
 
-    bool             operator==( const ScImportOptions& rCmp )
-                        {
-                            return
-                                   nFieldSepCode    == rCmp.nFieldSepCode
-                                && nTextSepCode     == rCmp.nTextSepCode
-                                && eCharSet         == rCmp.eCharSet
-                                && aStrFont         == rCmp.aStrFont
-                                && bFixedWidth      == rCmp.bFixedWidth
-                                && bSaveAsShown     == rCmp.bSaveAsShown
-                                && bQuoteAllText    == rCmp.bQuoteAllText
-                                && bSaveFormulas    == rCmp.bSaveFormulas;
-                        }
     OUString  BuildString() const;
 
     void    SetTextEncoding( rtl_TextEncoding nEnc );

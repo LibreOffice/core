@@ -1740,7 +1740,7 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
     }
 }
 
-bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
+void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCsCOL& rPosX, SCsROW& rPosY,
                                         bool bTestMerge, bool bRepair, bool bNextIfLarge )
 {
@@ -1844,8 +1844,6 @@ bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
             }
         }
     }
-
-    return false;
 }
 
 void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,

@@ -406,7 +406,7 @@ void ScDocShell::UpdateLinks()
     }
 }
 
-bool ScDocShell::ReloadTabLinks()
+void ScDocShell::ReloadTabLinks()
 {
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
 
@@ -437,8 +437,6 @@ bool ScDocShell::ReloadTabLinks()
 
         SetDocumentModified();
     }
-
-    return true;        //! Fehler erkennen
 }
 
 void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading )

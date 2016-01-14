@@ -46,14 +46,7 @@ struct TokenId
                         TokenId( const TokenId& r ) : nId( r.nId ) {}
     inline  TokenId&    operator =( const TokenId& r ) { nId = r.nId; return *this; }
     inline  TokenId&    operator =( sal_uInt16 n ) { nId = n; return *this; }
-    inline              operator sal_uInt16&() { return nId; }
     inline              operator const sal_uInt16&() const { return nId; }
-    inline  bool        operator <( sal_uInt16 n ) const { return nId < n; }
-    inline  bool        operator >( sal_uInt16 n ) const { return nId > n; }
-    inline  bool        operator <=( sal_uInt16 n ) const { return nId <= n; }
-    inline  bool        operator >=( sal_uInt16 n ) const { return nId >= n; }
-    inline  bool        operator ==( sal_uInt16 n ) const { return nId == n; }
-    inline  bool        operator !=( sal_uInt16 n ) const { return nId != n; }
 };
 
 struct ScComplexRefData;

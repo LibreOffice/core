@@ -654,7 +654,7 @@ SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
 
 //realize multi-selection of objects
 
-bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
+void ScDrawView::SelectCurrentViewObject( const OUString& rName )
 {
     sal_uInt16 nObjectTab = 0;
     SdrObject* pFound = nullptr;
@@ -701,10 +701,9 @@ bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
                 SetLayerLocked( pLayer->GetName(), false );
         }
         SdrPageView* pPV = GetSdrPageView();
-              bUnMark = IsObjMarked(pFound);
-           MarkObj( pFound, pPV, bUnMark);
+        bUnMark = IsObjMarked(pFound);
+        MarkObj( pFound, pPV, bUnMark);
     }
-    return bUnMark;
 }
 
 bool ScDrawView::SelectObject( const OUString& rName )
@@ -779,7 +778,7 @@ bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
     return  bisMarked;
 }
 
-bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions)
+void ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions)
 {
     // Do not change marks when the ole object is active
     // (for Drop from ole object would otherwise be deactivated in the middle of ExecuteDrag!)
@@ -791,7 +790,7 @@ bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, SdrInsertFl
             nOptions |= SdrInsertFlags::DONTMARK;
     }
 
-    return InsertObjectAtView( pObj, rPV, nOptions );
+    InsertObjectAtView( pObj, rPV, nOptions );
 }
 
 SdrObject* ScDrawView::GetMarkedNoteCaption( ScDrawObjData** ppCaptData )

@@ -612,7 +612,7 @@ void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula
     }
 }
 
-bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
+void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 {
     SfxApplication* pSfxApp = SfxGetpApp();
 
@@ -647,9 +647,8 @@ bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     if ( pScViewShell )
         pScViewShell->UpdateInputHandler(true);
-
-    return true;
 }
+
 void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
 {
     //  lock / unlock only the dispatchers of Calc documents

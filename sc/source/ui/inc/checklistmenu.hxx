@@ -193,7 +193,7 @@ private:
 class ScCheckListBox : public SvTreeListBox
 {
     SvLBoxButtonData*   mpCheckButton;
-    SvTreeListEntry* CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const;
+    void            CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const;
     void            CheckAllChildren( SvTreeListEntry* pEntry, bool bCheck = true );
 
     public:

@@ -89,7 +89,7 @@ public:
     void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr );
 
     inline void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
-    bool                DoClose( sal_uInt16 nId );
+    void                DoClose( sal_uInt16 nId );
     static void         SetDispatcherLock( bool bLock );
     static void         EnableSpreadsheets( bool bFlag = true, bool bChildren = true );
     static void         ViewShellChanged();
@@ -109,7 +109,6 @@ class SC_DLLPUBLIC ScRefHandler :
 
 public:
     operator vcl::Window *(){ return m_rWindow.get(); }
-    vcl::Window* operator ->() { return static_cast<vcl::Window *>(*this); }
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
 

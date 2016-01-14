@@ -49,25 +49,19 @@ public:
     typedef void            (ScRefHandlerCaller::*PCOMMONHDLTYPE)();
     typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::RefEdit* pEdit, formula::RefButton* pButton );
 
-    PFUNCSETREFHDLTYPE  SetSetRefHdl(  PFUNCSETREFHDLTYPE pNewHdl )
+    void SetSetRefHdl(  PFUNCSETREFHDLTYPE pNewHdl )
     {
-        PFUNCSETREFHDLTYPE pOldHdl = m_pSetReferenceHdl;
         m_pSetReferenceHdl = pNewHdl;
-        return pOldHdl;
     }
 
-    PCOMMONHDLTYPE  SetSetActHdl(  PCOMMONHDLTYPE pNewHdl )
+    void SetSetActHdl(  PCOMMONHDLTYPE pNewHdl )
     {
-        PCOMMONHDLTYPE pOldHdl = m_pSetActiveHdl;
         m_pSetActiveHdl = pNewHdl;
-        return pOldHdl;
     }
 
-    ScRefHandlerCaller  *SetHandler( ScRefHandlerCaller *pNewHandler )
+    void SetHandler( ScRefHandlerCaller *pNewHandler )
     {
-        ScRefHandlerCaller  *pOldHandler = m_pHandler;
         m_pHandler = pNewHandler;
-        return pOldHandler;
     }
     void    SetRefInputStartPreHdl( PINPUTSTARTDLTYPE pNewHdl   ){  m_pRefInputStartPreHdl = pNewHdl;   }
     void    SetRefInputDonePostHdl( void            (ScRefHandlerCaller::*pNewHdl)()    ){  m_pRefInputDonePostHdl = pNewHdl;   }

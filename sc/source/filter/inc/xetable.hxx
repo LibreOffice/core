@@ -714,8 +714,8 @@ public:
                             SCCOL nScCol, SCROW nLastScRow,
                             XclExpColOutlineBuffer& rOutlineBfr );
 
-    /** Converts the XF identifier into the Excel XF index, returns the latter. */
-    sal_uInt16          ConvertXFIndexes();
+    /** Converts the XF identifier into the Excel XF index. */
+    void                ConvertXFIndexes();
 
     /** Tries to merge this record with the passed record.
         @descr  Possible, if passed record directly follows this record and has equal contents.

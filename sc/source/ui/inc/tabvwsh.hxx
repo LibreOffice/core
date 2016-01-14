@@ -328,7 +328,7 @@ public:
     virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) override;
 
     void            ConnectObject( SdrOle2Obj* pObj );
-    bool            ActivateObject( SdrOle2Obj* pObj, long nVerb );
+    void            ActivateObject( SdrOle2Obj* pObj, long nVerb );
 
     void            DeactivateOle();
 

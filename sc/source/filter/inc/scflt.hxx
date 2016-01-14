@@ -730,8 +730,6 @@ class Sc10PageData : public ScDataObject
 public:
     Sc10PageFormat      aPageFormat;
                         Sc10PageData( const Sc10PageFormat& rFormat ) : aPageFormat(rFormat) {}
-    bool                operator==( const Sc10PageData& rData ) const
-                            { return aPageFormat == rData.aPageFormat; }
     virtual ScDataObject*   Clone() const override;
 };
 

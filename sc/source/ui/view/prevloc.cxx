@@ -308,7 +308,7 @@ Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, cons
     return Rectangle( Point( aOffsetPixel.Width(), aOffsetPixel.Height() ), aSizePixel );
 }
 
-bool ScPreviewLocationData::GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const
+void ScPreviewLocationData::GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const
 {
     ScPreviewLocationEntry* pEntry = lcl_GetEntryByAddress( m_Entries, rCellPos, SC_PLOC_CELLRANGE );
     if ( pEntry )
@@ -318,9 +318,7 @@ bool ScPreviewLocationData::GetCellPosition( const ScAddress& rCellPos, Rectangl
                                aOffsetRect.Top() + pEntry->aPixelRect.Top(),
                                aOffsetRect.Right() + pEntry->aPixelRect.Left(),
                                aOffsetRect.Bottom() + pEntry->aPixelRect.Top() );
-        return true;
     }
-    return false;
 }
 
 bool ScPreviewLocationData::HasCellsInRange( const Rectangle& rVisiblePixel ) const

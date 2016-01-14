@@ -139,30 +139,6 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
     return *this;
 }
 
-bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
-{
-    if ( bFixedLen       == rCmp.bFixedLen &&
-         aFieldSeps      == rCmp.aFieldSeps &&
-         bMergeFieldSeps == rCmp.bMergeFieldSeps &&
-         bQuotedFieldAsText == rCmp.bQuotedFieldAsText &&
-         cTextSep        == rCmp.cTextSep &&
-         eCharSet        == rCmp.eCharSet &&
-         bCharSetSystem  == rCmp.bCharSetSystem &&
-         nStartRow       == rCmp.nStartRow &&
-         nInfoCount      == rCmp.nInfoCount )
-    {
-        OSL_ENSURE( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
-                     "NULL pointer in ScAsciiOptions::operator==() column info" );
-        for (sal_uInt16 i=0; i<nInfoCount; i++)
-            if ( pColStart[i] != rCmp.pColStart[i] ||
-                 pColFormat[i] != rCmp.pColFormat[i] )
-                return false;
-
-        return true;
-    }
-    return false;
-}
-
 static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeFieldSeps )
 {
     OUString aFieldSeps;

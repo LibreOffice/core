@@ -86,10 +86,8 @@ void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rO
     }
 }
 
-bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
+void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
 {
-    bool bReturn = false;
-
     if ( AreObjectsMarked() )
     {
         BrkAction();
@@ -134,8 +132,6 @@ bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         SC_MOD()->SetDragObject( nullptr, pTransferObj );     // for internal D&D
         pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
-
-    return bReturn;
 }
 
 namespace {

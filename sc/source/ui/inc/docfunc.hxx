@@ -96,7 +96,7 @@ public:
 
     bool            SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi );
     bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
-    bool SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction );
+    void SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction );
     bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
 
@@ -107,15 +107,15 @@ public:
      * must not delete it after passing it to this call.
      */
     bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
-    bool PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi );
+    void PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi );
     bool SetCellText(
         const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
         const formula::FormulaGrammar::Grammar eGrammar );
 
     bool            ShowNote( const ScAddress& rPos, bool bShow = true );
 
-    bool            SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
-    bool            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );
+    void            SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
+    void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );
 
     bool            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                              bool bRecord, bool bApi );
@@ -138,7 +138,7 @@ public:
     bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
     bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoTabColorList, bool bRecord, bool bApi );
 
-    bool            SetTableVisible( SCTAB nTab, bool bVisible, bool bApi );
+    void            SetTableVisible( SCTAB nTab, bool bVisible, bool bApi );
 
     bool            SetLayoutRTL( SCTAB nTab, bool bRTL, bool bApi );
 
@@ -156,7 +156,7 @@ public:
     bool            Protect( SCTAB nTab, const OUString& rPassword, bool bApi );
     bool            Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi );
 
-    bool            ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi );
+    void            ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi );
     bool            ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bApi );
     bool            AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
                                         sal_uInt16 nFormatNo, bool bRecord, bool bApi );
@@ -185,7 +185,7 @@ public:
     bool            FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
                                       FillDir eDir, sal_uLong nCount, bool bRecord, bool bApi );
 
-    bool            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, bool bApi );
+    void            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, bool bApi );
 
     bool            MergeCells( const ScCellMergeOption& rOption, bool bContents,
                                         bool bRecord, bool bApi );
@@ -205,7 +205,7 @@ public:
     bool            CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi, SCTAB nTab = -1 ); // -1 for global range names
     bool            InsertNameList( const ScAddress& rStartPos, bool bApi );
 
-    bool            InsertAreaLink( const OUString& rFile, const OUString& rFilter,
+    void            InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                                             const OUString& rOptions, const OUString& rSource,
                                             const ScRange& rDestRange, sal_uLong nRefresh,
                                             bool bFitBlock, bool bApi );

@@ -76,14 +76,14 @@ public:
     SC_DLLPUBLIC bool           Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                             const ScRange* pAdvSource, bool bRecord, bool bApi );
 
-    bool            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
+    void            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                     const ScSortParam* pForceNewSort,
                                     bool bRecord, bool bApi );
 
     bool AddDBRange( const OUString& rName, const ScRange& rRange, bool bApi );
     bool DeleteDBRange( const OUString& rName );
     bool RenameDBRange( const OUString& rOld, const OUString& rNew );
-    bool ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
+    void ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
 
     void ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList );
 
@@ -100,7 +100,7 @@ public:
      * Reload the referenced pivot cache, and refresh all pivot tables that
      * reference the cache.
      */
-    sal_uLong RefreshPivotTables(ScDPObject* pDPObj, bool bApi);
+    void RefreshPivotTables(ScDPObject* pDPObj, bool bApi);
 
     /**
      * Refresh the group dimensions of all pivot tables referencing the same

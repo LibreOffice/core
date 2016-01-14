@@ -306,7 +306,7 @@ public:
 
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer) override;
     void            UpdateLinks() override;
-    bool            ReloadTabLinks();
+    void            ReloadTabLinks();
 
     void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
     void            SetCalcConfig( const ScCalcConfig& rConfig );

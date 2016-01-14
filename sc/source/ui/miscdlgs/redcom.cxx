@@ -121,7 +121,7 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
     }
 }
 
-short ScRedComDialog::Execute()
+void ScRedComDialog::Execute()
 {
     short nRet=pDlg->Execute();
 
@@ -130,8 +130,6 @@ short ScRedComDialog::Execute()
         if ( pDocShell!=nullptr && pDlg->GetNote() != aComment )
             pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
     }
-
-    return nRet;
 }
 
 void ScRedComDialog::SelectCell()

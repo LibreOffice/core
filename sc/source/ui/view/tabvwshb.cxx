@@ -98,7 +98,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     }
 }
 
-bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
+void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
     // Do not leave the hint message box on top of the object
     RemoveHintWindow();
@@ -209,8 +209,6 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     //! SetDocumentName should already happen in Sfx ???
     //TODO/LATER: how "SetDocumentName"?
     //xIPObj->SetDocumentName( GetViewData().GetDocShell()->GetTitle() );
-
-    return ( !(nErr & ERRCODE_ERROR_MASK) );
 }
 
 ErrCode ScTabViewShell::DoVerb(long nVerb)

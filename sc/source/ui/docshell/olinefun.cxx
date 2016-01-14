@@ -73,9 +73,8 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     rDocShell.PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
 }
 
-bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
+void ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
 {
-    bool bSuccess = false;
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
     SCCOL nEndCol = rRange.aEnd.Col();
@@ -125,7 +124,6 @@ bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
         rDocShell.SetDocumentModified();
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-        bSuccess = true;
     }
     else
     {
@@ -133,11 +131,9 @@ bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
             rDocShell.ErrorMessage(STR_MSSG_MAKEOUTLINE_0); // "Gruppierung nicht moeglich"
         delete pUndoTab;
     }
-
-    return bSuccess;
 }
 
-bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
+void ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
 {
     bool bDone = false;
 
@@ -201,8 +197,6 @@ bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
 
     if (!bDone && !bApi)
         rDocShell.ErrorMessage(STR_MSSG_REMOVEOUTLINE_0);   // "Aufheben nicht moeglich"
-
-    return bDone;
 }
 
 bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
@@ -258,7 +252,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
     return bSuccess;
 }
 
-bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
+void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -318,8 +312,6 @@ bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
     rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-
-    return true;
 }
 
 bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel,

@@ -122,7 +122,7 @@ public:
 
     void UpdateSourceRange();
 
-    bool ApplyChanges();
+    void ApplyChanges();
     void ApplySaveData(ScDPSaveData& rSaveData);
     void ApplyLabelData(ScDPSaveData& rSaveData);
 

@@ -1609,12 +1609,12 @@ struct ScOUStringCollate
     }
 };
 
-bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId )
+void ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(rPos.Col(), rPos.Row(), rPos.Tab());
     if (!pDPObj)
-        return false;
+        return;
 
     // We need to run this to get all members later.
     if ( pUserListId )
@@ -1624,18 +1624,18 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
     long nDimIndex = pDPObj->GetHeaderDim(rPos, nOrientation);
     if (nDimIndex < 0)
         // Invalid dimension index.  Bail out.
-        return false;
+        return;
 
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     if (!pSaveData)
-        return false;
+        return;
 
     ScDPSaveData aNewSaveData(*pSaveData);
     bool bDataLayout;
     OUString aDimName = pDPObj->GetDimName(nDimIndex, bDataLayout);
     ScDPSaveDimension* pSaveDim = aNewSaveData.GetDimensionByName(aDimName);
     if (!pSaveDim)
-        return false;
+        return;
 
     // manual evaluation of sort order is only needed if a user list id is given
     if ( pUserListId )
@@ -1667,12 +1667,12 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
         {
             ScUserList* pUserList = ScGlobal::GetUserList();
             if (!pUserList)
-                return false;
+                return;
 
             {
                 size_t n = pUserList->size();
                 if (!n || *pUserListId >= static_cast<sal_uInt16>(n))
-                    return false;
+                    return;
             }
 
             const ScUserListData& rData = (*pUserList)[*pUserListId];
@@ -1746,7 +1746,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
     pNewObj->SetSaveData(aNewSaveData);
     ScDBDocFunc aFunc(*GetViewData().GetDocShell());
 
-    return aFunc.DataPilotUpdate(pDPObj, pNewObj.get(), true, false);
+    aFunc.DataPilotUpdate(pDPObj, pNewObj.get(), true, false);
 }
 
 bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )

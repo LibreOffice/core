@@ -105,10 +105,9 @@ ScMyValidationsContainer::~ScMyValidationsContainer()
 {
 }
 
-bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
+void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     sal_Int32& nValidationIndex)
 {
-    bool bAdded(false);
     uno::Reference<beans::XPropertySet> xPropertySet(aTempAny, uno::UNO_QUERY);
     if (xPropertySet.is())
     {
@@ -167,11 +166,9 @@ bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
                 aValidation.sName += sCount;
                 aValidationVec.push_back(aValidation);
                 nValidationIndex = nCount;
-                bAdded = true;
             }
         }
     }
-    return bAdded;
 }
 
 OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation)

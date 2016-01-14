@@ -80,7 +80,7 @@ private:
 public:
                            ScMyValidationsContainer();
                            ~ScMyValidationsContainer();
-    bool                   AddValidation(const css::uno::Any& aAny,
+    void                   AddValidation(const css::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
     static OUString        GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
     static OUString        GetBaseCellAddress(ScDocument* pDoc, const css::table::CellAddress& aCell);

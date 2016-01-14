@@ -142,7 +142,7 @@ XclAddressConverterBase::~XclAddressConverterBase()
 {
 }
 
-bool XclAddressConverterBase::CheckScTab( SCTAB nScTab, bool bWarn )
+void XclAddressConverterBase::CheckScTab( SCTAB nScTab, bool bWarn )
 {
     bool bValid = (0 <= nScTab) && (nScTab <= maMaxPos.Tab());
     if( !bValid && bWarn )
@@ -150,7 +150,6 @@ bool XclAddressConverterBase::CheckScTab( SCTAB nScTab, bool bWarn )
         mbTabTrunc |= (nScTab > maMaxPos.Tab());  // do not warn for deleted refs
         mrTracer.TraceInvalidTab( nScTab, maMaxPos.Tab() );
     }
-    return bValid;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

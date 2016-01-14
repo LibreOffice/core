@@ -247,13 +247,13 @@ public:
     void            TabOp( const ScTabOpParam& rParam,  bool bRecord = true );
 
     bool            InsertTable( const OUString& rName, SCTAB nTabNr, bool bRecord = true );
-    bool            InsertTables(std::vector<OUString>& aNames, SCTAB nTab, SCTAB nCount, bool bRecord = true);
+    void            InsertTables(std::vector<OUString>& aNames, SCTAB nTab, SCTAB nCount, bool bRecord = true);
 
     bool            AppendTable( const OUString& rName, bool bRecord = true );
 
-    bool            DeleteTable( SCTAB nTabNr, bool bRecord = true );
+    void            DeleteTable( SCTAB nTabNr, bool bRecord = true );
     bool            DeleteTables(const std::vector<SCTAB>& TheTabs, bool bRecord = true );
-    bool                DeleteTables(SCTAB nTab, SCTAB nSheets);
+    void            DeleteTables(SCTAB nTab, SCTAB nSheets);
 
     bool            RenameTable( const OUString& rName, SCTAB nTabNr );
     void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName = nullptr );

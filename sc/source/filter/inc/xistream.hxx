@@ -344,9 +344,8 @@ public:
         @return  Count of bytes really written. */
     sal_Size            CopyToStream( SvStream& rOutStrm, sal_Size nBytes );
 
-    /** Copies the entire record to rOutStrm. The current record position keeps unchanged.
-        @return  Count of bytes really written. */
-    sal_Size            CopyRecordToStream( SvStream& rOutStrm );
+    /** Copies the entire record to rOutStrm. The current record position keeps unchanged. */
+    void            CopyRecordToStream( SvStream& rOutStrm );
 
     /** Seeks absolute in record content to the specified position.
         @descr  The value 0 means start of record, independent from physical stream position. */

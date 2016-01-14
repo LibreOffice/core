@@ -34,10 +34,10 @@ public:
                 ScOutlineDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                 ~ScOutlineDocFunc() {}
 
-    bool        MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi );
-    bool        RemoveOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi );
+    void        MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi );
+    void        RemoveOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi );
     bool        RemoveAllOutlines( SCTAB nTab, bool bRecord );
-    bool        AutoOutline( const ScRange& rRange, bool bRecord );
+    void        AutoOutline( const ScRange& rRange, bool bRecord );
 
     bool        SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel,
                                     bool bRecord, bool bPaint );

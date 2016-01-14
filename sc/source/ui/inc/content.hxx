@@ -127,7 +127,7 @@ public:
     OUString GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
 
     void     ObjectFresh( ScContentId nType, SvTreeListEntry* pEntry = nullptr);
-    bool     SetNavigatorDlgFlag(bool isInNavigatoeDlg){ return bisInNavigatoeDlg=isInNavigatoeDlg;};
+    void     SetNavigatorDlgFlag(bool isInNavigateDlg){ bisInNavigatoeDlg=isInNavigateDlg;};
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 

@@ -484,7 +484,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
     FillValuesToListBoxes();
 }
 
-bool ScPivotLayoutDialog::ApplyChanges()
+void ScPivotLayoutDialog::ApplyChanges()
 {
     ScDPSaveData aSaveData;
     ApplySaveData(aSaveData);
@@ -494,7 +494,7 @@ bool ScPivotLayoutDialog::ApplyChanges()
     bool bToNewSheet = false;
 
     if (!GetDestination(aDestinationRange, bToNewSheet))
-        return false;
+        return;
 
     SetDispatcherLock(false);
     SwitchToDocument();
@@ -512,12 +512,11 @@ bool ScPivotLayoutDialog::ApplyChanges()
         const SfxBoolItem* pItem = reinterpret_cast<const SfxBoolItem*>(pResult);
         if (pItem)
         {
-            return pItem->GetValue();
+            return;
         }
     }
 
     SetDispatcherLock(true);
-    return true;
 }
 
 void ScPivotLayoutDialog::ApplySaveData(ScDPSaveData& rSaveData)

@@ -3246,10 +3246,8 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
     return bUsed;
 }
 
-bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
+void ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
 {
-    bool bUsed = false;
-
     if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
         // For CommandEventId::CursorPos, do as little as possible, because
@@ -3263,7 +3261,6 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
                     pTableView->Command( rCEvt );
                 else if (pTopView)                      // call only once
                     pTopView->Command( rCEvt );
-                bUsed = true;
             }
         }
     }
@@ -3278,7 +3275,6 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
                     pTableView->Command( rCEvt );
                 else if (pTopView)                      // call only once
                     pTopView->Command( rCEvt );
-                bUsed = true;
             }
         }
     }
@@ -3304,9 +3300,7 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
             UpdateActiveView();
             bool bNewView = DataChanging( 0, true );
 
-            if (bProtected)                             // cell protected
-                bUsed = true;                           // event is used
-            else                                        // changes allowed
+            if (!bProtected)                            // changes allowed
             {
                 if (bNewView)                           // create new edit view
                 {
@@ -3338,8 +3332,6 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
                     if (pTopView)
                         pTopView->Command( rCEvt );
 
-                    bUsed = true;
-
                     if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
                     {
                         //  AutoInput after ext text input
@@ -3364,8 +3356,6 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
         if (pTopView && eMode != SC_INPUT_NONE)
             SyncViews();
     }
-
-    return bUsed;
 }
 
 void ScInputHandler::NotifyChange( const ScInputHdlState* pState,

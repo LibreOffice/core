@@ -51,8 +51,6 @@ public:
 
     ScAsciiOptions& operator=( const ScAsciiOptions& rCpy );
 
-    bool            operator==( const ScAsciiOptions& rCmp ) const;
-
     void            ReadFromString( const OUString& rString );
     OUString        WriteToString() const;
 

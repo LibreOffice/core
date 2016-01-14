@@ -1563,7 +1563,7 @@ void ScCheckListBox::ShowCheckEntry( const OUString& sName, SvTreeListEntry* pPa
         RemoveParentKeepChildren( pEntry );
 }
 
-SvTreeListEntry* ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const
+void ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const
 {
     if ( pParent && GetCheckButtonState( pParent ) == SV_BUTTON_CHECKED  )
         nCount++;
@@ -1574,7 +1574,6 @@ SvTreeListEntry* ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, 
         CountCheckedEntries( pEntry, nCount );
         pEntry = NextSibling( pEntry );
     }
-    return nullptr;
 }
 
 sal_uInt16 ScCheckListBox::GetCheckedEntryCount() const

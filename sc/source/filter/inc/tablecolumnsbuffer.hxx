@@ -79,9 +79,8 @@ public:
     /** Creates a new table columns object and stores it internally. */
     TableColumns&       createTableColumns();
 
-    /** Applies the table columns to the passed database range.
-        @return  True = this buffer contains valid table column settings. */
-    bool                finalizeImport( ScDBData* pDBData );
+    /** Applies the table columns to the passed database range. */
+    void                finalizeImport( ScDBData* pDBData );
 
 private:
     /** Returns the table columns object used. */

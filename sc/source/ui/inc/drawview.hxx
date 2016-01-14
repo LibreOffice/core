@@ -89,7 +89,7 @@ public:
     void            InvalidateAttribs();
     void            InvalidateDrawTextAttrs();
 
-    bool            BeginDrag( vcl::Window* pWindow, const Point& rStartPos );
+    void            BeginDrag( vcl::Window* pWindow, const Point& rStartPos );
     void            DoCut();
     void            DoCopy();
 
@@ -114,7 +114,7 @@ public:
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
-    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
+    void            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */
@@ -141,7 +141,7 @@ public:
 
     SdrObject*  GetObjectByName(const OUString& rName);
     bool        GetObjectIsMarked(  SdrObject * pObject );
-    bool        SelectCurrentViewObject( const OUString& rName );
+    void        SelectCurrentViewObject( const OUString& rName );
 
     // #i123922# helper which checks if a Graphic may be applied to an existing
     // SdrObject; if it's a SdrGrafObj the fill will be replaced. If it's a

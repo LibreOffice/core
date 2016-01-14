@@ -185,7 +185,7 @@ public:
     void            SetReference( const ScRange& rRef, ScDocument* pDoc );
     void            AddRefEntry();
 
-    bool            InputCommand( const CommandEvent& rCEvt, bool bForce );
+    void            InputCommand( const CommandEvent& rCEvt, bool bForce );
 
     void            InsertFunction( const OUString& rFuncName, bool bAddPar = true );
     void            ClearText();
@@ -281,8 +281,6 @@ public:
 
     ScInputHdlState&    operator= ( const ScInputHdlState& r );
     bool                operator==( const ScInputHdlState& r ) const;
-    bool                operator!=( const ScInputHdlState& r ) const
-                            { return !operator==( r ); }
 
     const ScAddress&        GetPos() const          { return aCursorPos; }
     const ScAddress&        GetStartPos() const     { return aStartPos; }

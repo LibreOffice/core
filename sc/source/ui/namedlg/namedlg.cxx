@@ -338,12 +338,11 @@ void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
     }
 }
 
-bool ScNameDlg::AddPushed()
+void ScNameDlg::AddPushed()
 {
     mbCloseWithoutUndo = true;
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     pViewSh->SwitchBetweenRefDialogs(this);
-    return false;
 }
 
 void ScNameDlg::SetEntry(const OUString& rName, const OUString& rScope)

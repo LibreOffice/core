@@ -194,9 +194,8 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
     return bDone;
 }
 
-bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
+void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
 {
-    bool bDone = false;
     ScDocument& rDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = rDoc.GetDBCollection();
     bool bUndo = rDoc.IsUndoEnabled();
@@ -236,10 +235,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         }
 
         aModificator.SetDocumentModified();
-        bDone = true;
     }
-
-    return bDone;
 }
 
 void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList )
@@ -948,7 +944,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     return true;
 }
 
-bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
+void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                 const ScSortParam* pForceNewSort, bool bRecord, bool bApi )
 {
     //! auch fuer ScDBFunc::DoSubTotals benutzen!
@@ -957,7 +953,6 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     //  - SelectionChanged (?)
 
     bool bDo = !rParam.bRemoveOnly;                         // sal_False = nur loeschen
-    bool bRet = false;
 
     ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
@@ -967,7 +962,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     if (!pDBData)
     {
         OSL_FAIL( "SubTotals: keine DBData" );
-        return false;
+        return;
     }
 
     ScEditableTester aTester( &rDoc, nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW );
@@ -975,7 +970,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     {
         if (!bApi)
             rDocShell.ErrorMessage(aTester.GetMessageId());
-        return false;
+        return;
     }
 
     if (rDoc.HasAttrib( rParam.nCol1, rParam.nRow1+1, nTab,
@@ -983,7 +978,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0); // nicht in zusammengefasste einfuegen
-        return false;
+        return;
     }
 
     bool bOk = true;
@@ -1105,10 +1100,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL,MAXROW,nTab),
                             PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
         aModificator.SetDocumentModified();
-
-        bRet = bSuccess;
     }
-    return bRet;
 }
 
 namespace {
@@ -1536,16 +1528,16 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     return true;
 }
 
-sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
+void ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
 {
     ScDPCollection* pDPs = rDocShell.GetDocument().GetDPCollection();
     if (!pDPs)
-        return 0;
+        return;
 
     std::set<ScDPObject*> aRefs;
     sal_uLong nErrId = pDPs->ReloadCache(pDPObj, aRefs);
     if (nErrId)
-        return nErrId;
+        return;
 
     std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
     for (; it != itEnd; ++it)
@@ -1555,8 +1547,6 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
         // This action is intentionally not undoable since it modifies cache.
         UpdatePivotTable(*pObj, false, bApi);
     }
-
-    return 0;
 }
 
 void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
