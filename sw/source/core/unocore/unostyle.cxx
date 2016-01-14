@@ -1790,6 +1790,24 @@ void SwXStyle::SetPropertyValue<RES_PARATR_DROP>(const SfxItemPropertySimpleEntr
     pDrop->SetCharFormat(pStyle->GetCharFormat());
     rStyleSet.Put(*pDrop);
 }
+template<>
+void SwXStyle::SetPropertyValue<RES_PARATR_NUMRULE>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    uno::Any aValue(rValue);
+    lcl_TranslateMetric(rEntry, m_pDoc, aValue);
+    lcl_SetDefaultWay(rEntry, rPropSet, aValue, o_rStyleBase);
+    // --> OD 2006-10-18 #i70223#
+    if(SFX_STYLE_FAMILY_PARA == m_rEntry.m_eFamily &&
+            o_rStyleBase.getNewBase().is() && o_rStyleBase.getNewBase()->GetCollection() &&
+            //rBase.getNewBase()->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */) //#outline level,removed by zhaojianwei
+            o_rStyleBase.getNewBase()->GetCollection()->IsAssignedToListLevelOfOutlineStyle())       ////<-end,add by zhaojianwei
+    {
+        OUString sNewNumberingRuleName;
+        aValue >>= sNewNumberingRuleName;
+        if(sNewNumberingRuleName.isEmpty() || sNewNumberingRuleName != m_pDoc->GetOutlineNumRule()->GetName())
+            o_rStyleBase.getNewBase()->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
+    }
+}
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1880,25 +1898,9 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             bDone = true;
             break;
         case RES_PARATR_NUMRULE:
-        {
-            lcl_SetDefaultWay(rEntry, rPropSet, aValue, rBase);
-            // --> OD 2006-10-18 #i70223#
-            if ( SFX_STYLE_FAMILY_PARA == eFamily &&
-                    rBase.getNewBase().is() && rBase.getNewBase()->GetCollection() &&
-                    //rBase.getNewBase()->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */) //#outline level,removed by zhaojianwei
-                    rBase.getNewBase()->GetCollection()->IsAssignedToListLevelOfOutlineStyle() )       ////<-end,add by zhaojianwei
-            {
-                OUString sNewNumberingRuleName;
-                aValue >>= sNewNumberingRuleName;
-                if ( sNewNumberingRuleName.isEmpty() ||
-                     sNewNumberingRuleName != pDoc->GetOutlineNumRule()->GetName() )
-                {
-                    rBase.getNewBase()->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
-                }
-            }
+            SetPropertyValue<RES_PARATR_NUMRULE>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
-        }
         default:
         {
             // nothing to do
