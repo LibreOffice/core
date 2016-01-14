@@ -110,8 +110,10 @@ public:
      * if bCheckFollow is set.
      */
     bool ToMaximize( bool bCheckFollow ) const;
-    inline bool _ToMaximize() const
-        { if( !m_pSection ) return false; return ToMaximize( false ); }
+    inline bool _ToMaximize() const {
+        if( !m_pSection ) return false;
+        return ToMaximize( false );
+    }
     bool MoveAllowed( const SwFrame* ) const;
     bool CalcMinDiff( SwTwips& rMinDiff ) const;
 
@@ -136,8 +138,10 @@ public:
 
     void InvalidateFootnotePos();
     void CollectEndnotes( SwLayouter* pLayouter );
-    const SwSectionFormat* GetEndSectFormat() const
-        { if( IsEndnAtEnd() ) return _GetEndSectFormat(); return nullptr; }
+    const SwSectionFormat* GetEndSectFormat() const {
+        if( IsEndnAtEnd() ) return _GetEndSectFormat();
+        return nullptr;
+    }
 
     static void MoveContentAndDelete( SwSectionFrame* pDel, bool bSave );
 

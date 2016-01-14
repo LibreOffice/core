@@ -221,10 +221,16 @@ class SwAutoFormat
     bool DoTable();
 
     void _SetRedlineText( sal_uInt16 nId );
-    bool SetRedlineText( sal_uInt16 nId )
-        { if( m_aFlags.bWithRedlining )   _SetRedlineText( nId );  return true; }
-    bool ClearRedlineText()
-        { if( m_aFlags.bWithRedlining )   m_pDoc->GetDocumentRedlineManager().SetAutoFormatRedlineComment(nullptr);  return true; }
+    bool SetRedlineText( sal_uInt16 nId ) {
+        if( m_aFlags.bWithRedlining )
+            _SetRedlineText( nId );
+        return true;
+    }
+    bool ClearRedlineText() {
+        if( m_aFlags.bWithRedlining )
+            m_pDoc->GetDocumentRedlineManager().SetAutoFormatRedlineComment(nullptr);
+        return true;
+    }
 
 public:
     SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,

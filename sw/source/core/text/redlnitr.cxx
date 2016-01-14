@@ -104,9 +104,11 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
             int nTmp = SW_SCRIPTS;
             switch ( pScriptInfo->GetScriptType( nCnt++ ) ) {
                 case i18n::ScriptType::ASIAN :
-                    if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;
+                    if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK;
+                    break;
                 case i18n::ScriptType::COMPLEX :
-                    if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL; break;
+                    if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL;
+                    break;
                 default:
                     if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;
             }
