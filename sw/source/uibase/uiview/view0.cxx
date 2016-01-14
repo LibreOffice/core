@@ -330,7 +330,8 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                     nWhich = 0;
                 }
                 else
-                    aBool.SetValue( IsHScrollbarVisible() ); break;
+                    aBool.SetValue( IsHScrollbarVisible() );
+                break;
             case FN_VSCROLLBAR:
                 aBool.SetValue( IsVScrollbarVisible() ); break;
             case SID_AUTOSPELL_CHECK:
