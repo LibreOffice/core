@@ -180,7 +180,7 @@ protected:
         throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
     sal_Int32       findEND()
         throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
-    sal_Int32       recover()
+    void            recover()
         throw(css::io::IOException, css::packages::zip::ZipException, css::uno::RuntimeException);
 
 };

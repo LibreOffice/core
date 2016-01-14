@@ -136,9 +136,8 @@ public:
         Returns true, if a manual position and size could be calculated. */
     bool                convertFromModel( PropertySet& rPropSet );
 
-    /** Tries to set the position from the contained OOXML layout model.
-        Returns true, if a manual position could be calculated. */
-    bool                convertFromModel(
+    /** Tries to set the position from the contained OOXML layout model. */
+    void                convertFromModel(
                             const css::uno::Reference< css::drawing::XShape >& rxShape,
                             double fRotationAngle );
     bool getAutoLayout(){return mrModel.mbAutoLayout;}

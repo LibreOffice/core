@@ -1409,7 +1409,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
     return pNewElement;
 }
 
-SotElement_Impl* OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference< io::XInputStream >& xInStream )
+void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference< io::XInputStream >& xInStream )
 {
     // insert of raw stream means insert and commit
     SAL_WARN_IF( !m_xPackage.is(), "package.xstor", "Not possible to refer to package as to factory!" );
@@ -1447,8 +1447,6 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( const OUString& aName, const un
     m_aChildrenList.push_back( pNewElement );
     m_bIsModified = true;
     m_bBroadcastModified = true;
-
-    return pNewElement;
 }
 
 OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )

@@ -860,7 +860,7 @@ sal_Int32 ZipFile::readCEN()
     return nCenPos;
 }
 
-sal_Int32 ZipFile::recover()
+void ZipFile::recover()
     throw(IOException, ZipException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -872,7 +872,7 @@ sal_Int32 ZipFile::recover()
     {
         nLength = aGrabber.getLength();
         if (nLength == 0 || nLength < ENDHDR)
-            return -1;
+            return;
 
         aGrabber.seek( 0 );
 
@@ -1021,8 +1021,6 @@ sal_Int32 ZipFile::recover()
             nGenPos += nPos;
             aGrabber.seek( nGenPos );
         }
-
-        return 0;
     }
     catch ( IllegalArgumentException& )
     {

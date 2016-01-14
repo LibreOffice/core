@@ -385,7 +385,7 @@ bool LayoutConverter::convertFromModel( PropertySet& rPropSet )
     return false;
 }
 
-bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, double fRotationAngle )
+void LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, double fRotationAngle )
 {
     if( !mrModel.mbAutoLayout )
     {
@@ -407,10 +407,8 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
                 aShapePos.Y += static_cast< sal_Int32 >( fSin * aShapeSize.Width + 0.5 );
             // set the resulting position at the shape
             rxShape->setPosition( aShapePos );
-            return true;
         }
     }
-    return false;
 }
 
 } // namespace chart

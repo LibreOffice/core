@@ -62,7 +62,7 @@ sal_Int32 SAL_CALL ByteGrabber::readBytes( uno::Sequence< sal_Int8 >& aData,
 }
 
 // XSeekable chained...
-sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
+void SAL_CALL ByteGrabber::seek( sal_Int64 location )
     throw(lang::IllegalArgumentException, io::IOException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -74,7 +74,6 @@ sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
         if (location > nLen )
             location = nLen;
         xSeek->seek( location );
-        return location;
     }
     else
         throw io::IOException(THROW_WHERE );

@@ -1024,9 +1024,8 @@ void ORptExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,
     }
 }
 
-bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle)
+void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle)
 {
-    bool bGroupExported = false;
     if ( _xReportDefinition.is() )
     {
         Reference< XGroups > xGroups = _xReportDefinition->getGroups();
@@ -1035,7 +1034,6 @@ bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
             sal_Int32 nCount = xGroups->getCount();
             if ( _nPos >= 0 && _nPos < nCount )
             {
-                bGroupExported = true;
                 Reference<XGroup> xGroup(xGroups->getByIndex(_nPos),uno::UNO_QUERY);
                 OSL_ENSURE(xGroup.is(),"No Group prepare for GPF");
                 if ( _bExportAutoStyle )
@@ -1116,7 +1114,6 @@ bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
             }
         }
     }
-    return bGroupExported;
 }
 
 void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormattedField>& _xParentFormattedField)
