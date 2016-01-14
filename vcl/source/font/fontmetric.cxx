@@ -66,6 +66,7 @@ using namespace ::utl;
 
 ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     : FontAttributes( rFontSelData )
+    , mnRefCount ( 0 )
     , mnWidth ( rFontSelData.mnWidth )
     , mnOrientation( (short)(rFontSelData.mnOrientation) )
     , mnAscent( 0 )
