@@ -97,6 +97,20 @@ public:
                     '.', aGroups, ',', true));
         CPPUNIT_ASSERT_EQUAL( OUString("99,99,99,99,99,99,999"), aRes);
 
+        fVal = 949.0;
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    -2,     // round before decimals
+                    '.', aGroups, ',', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("900"), aRes);
+
+        fVal = 950.0;
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    -2,     // round before decimals
+                    '.', aGroups, ',', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("1,000"), aRes);
+
         fVal = 4503599627370495.0;
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
