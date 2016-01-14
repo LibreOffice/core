@@ -249,14 +249,13 @@ OptimizerDialog::~OptimizerDialog()
 
 
 
-bool OptimizerDialog::execute()
+void OptimizerDialog::execute()
 {
     Reference< XItemEventBroadcaster > maRoadmapBroadcaster( mxRoadmapControl, UNO_QUERY_THROW );
     maRoadmapBroadcaster->addItemListener( mxItemListener );
     UnoDialog::execute();
     UpdateConfiguration();          // taking actual control settings for the configuration
     maRoadmapBroadcaster->removeItemListener( mxItemListener );
-    return mbStatus;
 }
 
 

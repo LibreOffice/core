@@ -326,19 +326,15 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
     return bModified;
 }
 
-bool PresenterPaneBorderPainter::ProvideTheme()
+void PresenterPaneBorderPainter::ProvideTheme()
 {
     if (mpTheme.get() == nullptr)
     {
         // Create a theme without bitmaps (no canvas => no bitmaps).
-        return ProvideTheme(nullptr);
+        ProvideTheme(nullptr);
     }
-    else
-    {
         // When there already is a theme then without a canvas we can not
         // add anything new.
-        return false;
-    }
 }
 
 void PresenterPaneBorderPainter::SetTheme (const std::shared_ptr<PresenterTheme>& rpTheme)

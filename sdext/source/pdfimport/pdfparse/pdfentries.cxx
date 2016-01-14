@@ -74,11 +74,11 @@ struct EmitImplData
         m_nDecryptGeneration( 0 )
     {}
     ~EmitImplData() {}
-    bool decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen, sal_uInt8* pOutBuffer,
+    void decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen, sal_uInt8* pOutBuffer,
                   unsigned int nObject, unsigned int nGeneration ) const
     {
         const PDFFile* pFile = dynamic_cast<const PDFFile*>(m_pObjectContainer);
-        return pFile && pFile->decrypt( pInBuffer, nLen, pOutBuffer, nObject, nGeneration );
+        pFile && pFile->decrypt( pInBuffer, nLen, pOutBuffer, nObject, nGeneration );
     }
 
     void setDecryptObject( unsigned int nObject, unsigned int nGeneration )
@@ -769,9 +769,8 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
     }
 }
 
-bool PDFObject::writeStream( EmitContext& rWriteContext, const PDFFile* pParsedFile ) const
+void PDFObject::writeStream( EmitContext& rWriteContext, const PDFFile* pParsedFile ) const
 {
-    bool bSuccess = false;
     if( m_pStream )
     {
         char* pStream = nullptr;
@@ -788,7 +787,6 @@ bool PDFObject::writeStream( EmitContext& rWriteContext, const PDFFile* pParsedF
             rWriteContext.write( pStream, nBytes );
         rtl_freeMemory( pStream );
     }
-    return bSuccess;
 }
 
 bool PDFObject::emit( EmitContext& rWriteContext ) const

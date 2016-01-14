@@ -338,7 +338,7 @@ InformationDialog::~InformationDialog()
 
 
 
-bool InformationDialog::execute()
+void InformationDialog::execute()
 {
     UnoDialog::execute();
 
@@ -352,7 +352,6 @@ bool InformationDialog::execute()
             mrbOpenNewDocument = bOpenNewDocument;
         }
     }
-    return mbStatus;
 }
 
 

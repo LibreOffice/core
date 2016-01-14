@@ -65,7 +65,7 @@ public:
         css::uno::Reference< css::frame::XDispatch > rxStatusDispatcher );
     ~OptimizerDialog();
 
-    bool                execute();
+    void                execute();
 
     sal_Int16               mnCurrentStep;
     sal_Int16               mnTabIndex;

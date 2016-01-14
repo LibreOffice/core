@@ -67,7 +67,7 @@ public:
             const css::uno::Reference< css::frame::XModel >& rxModel );
         ~ImpOptimizer();
 
-        bool     Optimize( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
+        void     Optimize( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
         void     DispatchStatus();
 };
 

@@ -52,7 +52,7 @@ public:
                 bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
 
-    bool                execute();
+    void                execute();
 
 private:
 

@@ -135,7 +135,7 @@ private:
     */
     bool ProvideTheme (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
-    bool ProvideTheme();
+    void ProvideTheme();
 
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);

@@ -592,10 +592,8 @@ static void DispatchURL( Reference< XComponentContext > xContext, const OUString
 
 
 
-bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
+void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 {
-    bool bRet = true;
-
     if ( mxModel.is() )
     {
         sal_Int64 nEstimatedFileSize = 0;
@@ -692,7 +690,7 @@ bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         if ( xStorable.is() && !xStorable->isReadonly() )
         {
             mxModel->lockControllers();
-            bRet = Optimize();
+            Optimize();
             mxModel->unlockControllers();
 
             // clearing undo stack:
@@ -741,9 +739,6 @@ bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             DispatchStatus();
         }
     }
-    else
-        bRet = false;
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
