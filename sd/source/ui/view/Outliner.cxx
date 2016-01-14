@@ -74,6 +74,7 @@
 #include <editeng/editerr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/string.hxx>
+#include <comphelper/scopeguard.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -616,7 +617,10 @@ bool Outliner::SearchAndReplaceAll()
     }
     else if( nullptr != dynamic_cast< const DrawViewShell *>( pViewShell.get() ))
     {
+        // Disable selection change notifications during search all.
         pViewShell->GetDoc()->setTiledSearching(true);
+        comphelper::ScopeGuard aGuard([pViewShell]() { pViewShell->GetDoc()->setTiledSearching(false); });
+
         // Go to beginning/end of document.
         maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
         // Switch to the first object which contains the search string.
@@ -666,7 +670,6 @@ bool Outliner::SearchAndReplaceAll()
             OString aPayload = aStream.str().c_str();
             pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
         }
-        pViewShell->GetDoc()->setTiledSearching(false);
     }
 
     RestoreStartPosition ();
