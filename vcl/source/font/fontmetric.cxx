@@ -17,52 +17,202 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "i18nlangtag/mslangid.hxx"
-
-#include <unotools/configmgr.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/print.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/sysdata.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/metric.hxx>
 
-#include "sallayout.hxx"
-#include "svdata.hxx"
-
-#include "impfont.hxx"
-#include "outdata.hxx"
-#include "fontinstance.hxx"
-#include "fontattributes.hxx"
+#include "impfontmetric.hxx"
 #include "impfontmetricdata.hxx"
-
-#include "outdev.h"
-#include "window.h"
-
-#include "PhysicalFontCollection.hxx"
 #include "PhysicalFontFace.hxx"
-#include "PhysicalFontFamily.hxx"
 
-#include "svids.hrc"
-
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include "graphite_features.hxx"
-#endif
-
-#include "../gdi/pdfwriter_impl.hxx"
+#include <vector>
+#include <set>
+#include <cstdio>
 
 #include <boost/functional/hash.hpp>
-#include <cmath>
-#include <cstring>
-#include <memory>
-#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::utl;
+
+FontMetric::FontMetric()
+:   mpImplMetric( new ImplFontMetric() )
+{}
+
+FontMetric::FontMetric( const FontMetric& rFontMetric )
+    : Font( rFontMetric )
+    , mpImplMetric( rFontMetric.mpImplMetric )
+{}
+
+FontMetric::~FontMetric()
+{
+    mpImplMetric = nullptr;
+}
+
+FontMetric& FontMetric::operator=( const FontMetric& rFontMetric )
+{
+    Font::operator=( rFontMetric );
+
+    if( mpImplMetric != rFontMetric.mpImplMetric )
+    {
+        mpImplMetric = rFontMetric.mpImplMetric;
+    }
+
+    return *this;
+}
+
+bool FontMetric::operator==( const FontMetric& rFontMetric ) const
+{
+    if( !Font::operator==( rFontMetric ) )
+        return false;
+    if( mpImplMetric == rFontMetric.mpImplMetric )
+        return true;
+    if( *mpImplMetric == *rFontMetric.mpImplMetric  )
+        return true;
+    return false;
+}
+
+FontType FontMetric::GetType() const
+{
+    return (mpImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
+}
+
+long FontMetric::GetAscent() const
+{
+    return mpImplMetric->GetAscent();
+}
+
+void FontMetric::SetAscent( long nAscent )
+{
+    mpImplMetric->SetAscent( nAscent );
+}
+
+long FontMetric::GetDescent() const
+{
+    return mpImplMetric->GetDescent();
+}
+
+void FontMetric::SetDescent( long nDescent )
+{
+    mpImplMetric->SetDescent( nDescent );
+}
+
+long FontMetric::GetInternalLeading() const
+{
+    return mpImplMetric->GetInternalLeading();
+}
+
+void FontMetric::SetInternalLeading( long nLeading )
+{
+    mpImplMetric->SetInternalLeading( nLeading );
+}
+
+long FontMetric::GetExternalLeading() const
+{
+    return mpImplMetric->GetExternalLeading();
+}
+
+void FontMetric::SetExternalLeading( long nLeading )
+{
+    mpImplMetric->SetExternalLeading( nLeading );
+}
+
+long FontMetric::GetLineHeight() const
+{
+    return mpImplMetric->GetLineHeight();
+}
+
+void FontMetric::SetLineHeight( long nHeight )
+{
+    mpImplMetric->SetLineHeight( nHeight );
+}
+
+long FontMetric::GetSlant() const
+{
+    return mpImplMetric->GetSlant();
+}
+
+void FontMetric::SetSlant( long nSlant )
+{
+    mpImplMetric->SetSlant( nSlant );
+}
+
+long FontMetric::GetBulletOffset() const
+{
+    return mpImplMetric->GetBulletOffset();
+}
+
+void FontMetric::SetBulletOffset( long nOffset )
+{
+    mpImplMetric->SetBulletOffset( nOffset );
+}
+
+bool FontMetric::IsScalable() const
+{
+    return mpImplMetric->IsScalable();
+}
+
+void FontMetric::SetScalableFlag(bool bScalable)
+{
+    mpImplMetric->SetScalableFlag( bScalable );
+}
+
+bool FontMetric::IsFullstopCentered() const
+{
+    return mpImplMetric->IsFullstopCentered();
+}
+
+void FontMetric::SetFullstopCenteredFlag(bool bScalable)
+{
+    mpImplMetric->SetFullstopCenteredFlag( bScalable );
+}
+
+bool FontMetric::IsBuiltInFont() const
+{
+    return mpImplMetric->IsBuiltInFont();
+}
+
+void FontMetric::SetBuiltInFontFlag( bool bIsBuiltInFont )
+{
+    mpImplMetric->SetBuiltInFontFlag( bIsBuiltInFont );
+}
+
+
+
+ImplFontMetric::ImplFontMetric()
+:   mnAscent( 0 ),
+    mnDescent( 0 ),
+    mnIntLeading( 0 ),
+    mnExtLeading( 0 ),
+    mnLineHeight( 0 ),
+    mnSlant( 0 ),
+    mnBulletOffset( 0 ),
+    mnRefCount( 0 ),
+    mbScalableFont( false ),
+    mbFullstopCentered( false ),
+    mbDevice( false )
+{}
+
+bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
+{
+    if(    mbScalableFont     != r.mbScalableFont
+        || mbFullstopCentered != r.mbFullstopCentered
+        || mbDevice           != r.mbDevice) // mbDevice == built-in font flag
+        return false;
+    if( mnAscent     != r.mnAscent )
+        return false;
+    if( mnDescent    != r.mnDescent )
+        return false;
+    if( mnIntLeading != r.mnIntLeading )
+        return false;
+    if( mnExtLeading != r.mnExtLeading )
+        return false;
+    if( mnSlant      != r.mnSlant )
+        return false;
+
+    return true;
+}
 
 ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     : FontAttributes( rFontSelData )
