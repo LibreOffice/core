@@ -91,7 +91,9 @@ public:
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) throw( css::lang::NoSupportException, css::uno::RuntimeException, std::exception ) override;
 
     // oox::FormulaExportBase
-    virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version ) override;
+    virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,
+            oox::core::OoxmlVersion version,
+            oox::drawingml::DocumentType documentType) override;
     virtual void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding) override;
     // oox::FormulaImportBase
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) override;

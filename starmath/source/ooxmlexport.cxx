@@ -16,9 +16,11 @@
 using namespace oox;
 using namespace oox::core;
 
-SmOoxmlExport::SmOoxmlExport( const SmNode* pIn, OoxmlVersion v )
+SmOoxmlExport::SmOoxmlExport(const SmNode *const pIn, OoxmlVersion const v,
+        drawingml::DocumentType const documentType)
 : SmWordExportBase( pIn )
 , version( v )
+, m_DocumentType(documentType)
 {
 }
 
@@ -63,7 +65,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
         m_pSerializer->singleElementNS( XML_m, XML_nor, FSEND );
         m_pSerializer->endElementNS( XML_m, XML_rPr );
     }
-    if( version == ECMA_DIALECT )
+    if (drawingml::DOCUMENT_DOCX == m_DocumentType && ECMA_DIALECT == version)
     { // HACK: MSOffice2007 does not import characters properly unless this font is explicitly given
         m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, FSNS( XML_w, XML_ascii ), "Cambria Math",

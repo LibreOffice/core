@@ -12,6 +12,7 @@
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <oox/core/filterbase.hxx>
+#include <oox/export/utils.hxx>
 #include <oox/dllapi.h>
 
 namespace oox
@@ -24,7 +25,9 @@ namespace oox
 class OOX_DLLPUBLIC FormulaExportBase
 {
 public:
-    virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version ) = 0;
+    virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,
+            oox::core::OoxmlVersion version,
+            oox::drawingml::DocumentType documentType) = 0;
     virtual void writeFormulaRtf( OStringBuffer& rBuffer, rtl_TextEncoding nEncoding ) = 0;
 
 protected:
