@@ -1729,6 +1729,19 @@ void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntr
         throw lang::IllegalArgumentException();
     o_rStyleBase.getNewBase()->SetMask( pUnoToCoreIt->second|SFXSTYLEBIT_USERDEF );
 }
+template<>
+void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    OUString sName;
+    rValue >>= sName;
+    SwRegisterItem aReg(!sName.isEmpty());
+    aReg.SetWhich(SID_SWREGISTER_MODE);
+    o_rStyleBase.GetItemSet().Put(aReg);
+    OUString aString;
+    SwStyleNameMapper::FillUIName(sName, aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
+    o_rStyleBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION, aString ) );
+}
+
 
 void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& rBase) throw(beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -1807,15 +1820,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
         }
         case SID_SWREGISTER_COLLECTION:
         {
-            OUString sName;
-            aValue >>= sName;
-            SwRegisterItem aReg( !sName.isEmpty() );
-            aReg.SetWhich(SID_SWREGISTER_MODE);
-            rBase.GetItemSet().Put(aReg);
-            OUString aString;
-            SwStyleNameMapper::FillUIName(sName, aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
-
-            rBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION, aString ) );
+            SetPropertyValue<SID_SWREGISTER_COLLECTION>(rEntry, rPropSet, rValue, rBase);
             bDone = true;
             break;
         }
