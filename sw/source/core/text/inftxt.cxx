@@ -1258,9 +1258,15 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                 bDraw = true;
             }
             break;
-        case POR_TAB:       if ( GetOpt().IsTab() )     bDraw = true; break;
-        case POR_SOFTHYPH:  if ( GetOpt().IsSoftHyph() )bDraw = true; break;
-        case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = true; break;
+        case POR_TAB:
+            if ( GetOpt().IsTab() )     bDraw = true;
+            break;
+        case POR_SOFTHYPH:
+            if ( GetOpt().IsSoftHyph() )bDraw = true;
+            break;
+        case POR_BLANK:
+            if ( GetOpt().IsHardBlank())bDraw = true;
+            break;
         default:
             {
                 OSL_ENSURE( false, "SwTextPaintInfo::DrawViewOpt: don't know how to draw this" );
