@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/outliner.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <tools/weakbase.hxx>
@@ -149,7 +150,7 @@ public:
 
 struct SdrModelImpl;
 
-class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >
+class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >, public OutlinerSearchable
 {
 protected:
     DateTime       aReadDate;  // date of the incoming stream

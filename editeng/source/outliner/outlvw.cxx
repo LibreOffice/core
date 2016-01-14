@@ -1430,9 +1430,9 @@ void OutlinerView::setTiledRendering(bool bTiledRendering)
     pEditView->setTiledRendering(bTiledRendering);
 }
 
-void OutlinerView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData)
+void OutlinerView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable* pSearchable)
 {
-    pEditView->registerLibreOfficeKitCallback(pCallback, pLibreOfficeKitData);
+    pEditView->registerLibreOfficeKitCallback(pCallback, pLibreOfficeKitData, pSearchable);
 }
 
 Color OutlinerView::GetBackgroundColor()
@@ -1460,7 +1460,9 @@ Selection OutlinerView::GetSurroundingTextSelection() const
     return pEditView->GetSurroundingTextSelection();
 }
 
-
+OutlinerSearchable::~OutlinerSearchable()
+{
+}
 
 // ===== some code for thesaurus sub menu within context menu
 

@@ -1727,7 +1727,7 @@ void ScInputHandler::UpdateActiveView()
         if (rDoc.GetDrawLayer()->isTiledRendering())
         {
             ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
-            pTableView->registerLibreOfficeKitCallback(pDrawLayer->getLibreOfficeKitCallback(), pDrawLayer->getLibreOfficeKitData());
+            pTableView->registerLibreOfficeKitCallback(pDrawLayer->getLibreOfficeKitCallback(), pDrawLayer->getLibreOfficeKitData(), pDrawLayer);
             pTableView->setTiledRendering(true);
         }
     }

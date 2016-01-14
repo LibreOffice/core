@@ -72,6 +72,7 @@ class SvxLRSpaceItem;
 class EditEngine;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
+class OutlinerSearchable;
 
 namespace svl
 {
@@ -274,7 +275,7 @@ public:
     /// Set if we are doing tiled rendering.
     void        setTiledRendering(bool bTiledRendering);
     /// @see vcl::ITiledRenderable::registerCallback().
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable* pSearchable);
 
     SfxItemSet  GetAttribs();
 
@@ -374,6 +375,14 @@ public:
     Selection   GetSurroundingTextSelection() const;
 };
 
+/// Interface class to know if we do tiled searching.
+class EDITENG_DLLPUBLIC OutlinerSearchable
+{
+public:
+    virtual ~OutlinerSearchable();
+
+    virtual bool isTiledSearching() const = 0;
+};
 
 // some thesaurus functionality to avoid code duplication in different projects...
 bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( OUString &rStatusVal, LanguageType &rLang, const EditView &rEditView );

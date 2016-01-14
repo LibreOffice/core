@@ -35,6 +35,7 @@
 #include <ViewShell.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 
@@ -60,6 +61,7 @@ public:
     void testSearch();
     void testSearchAll();
     void testSearchAllSelections();
+    void testSearchAllNotifications();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -74,6 +76,7 @@ public:
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchAll);
     //CPPUNIT_TEST(testSearchAllSelections);
+    CPPUNIT_TEST(testSearchAllNotifications);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -92,13 +95,17 @@ private:
     sal_Int32 m_nPart;
     std::vector<OString> m_aSearchResultSelection;
     std::vector<int> m_aSearchResultPart;
+    int m_nSelectionBeforeSearchResult;
+    int m_nSelectionAfterSearchResult;
 #endif
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
 #if !defined(WNT) && !defined(MACOSX)
     : m_bFound(true),
-    m_nPart(0)
+    m_nPart(0),
+    m_nSelectionBeforeSearchResult(0),
+    m_nSelectionAfterSearchResult(0)
 #endif
 {
 }
@@ -183,6 +190,10 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             lcl_convertRectangle(rString, aRectangle);
             m_aSelection.push_back(aRectangle);
         }
+        if (m_aSearchResultSelection.empty())
+            ++m_nSelectionBeforeSearchResult;
+        else
+            ++m_nSelectionAfterSearchResult;
     }
     break;
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
@@ -454,6 +465,20 @@ void SdTiledRenderingTest::testSearchAllSelections()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
     // This was 1: only the first match was highlighted.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSelection.size());
+}
+
+void SdTiledRenderingTest::testSearchAllNotifications()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+
+    lcl_search("third", /*bFindAll=*/true);
+    // Make sure that we get no notifications about selection changes during search.
+    CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
+    // But we do get the selection of the first hit.
+    CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 #endif

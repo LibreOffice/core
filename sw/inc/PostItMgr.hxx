@@ -63,6 +63,7 @@ class SwSidebarItem;
 class SwFrm;
 namespace vcl { class Window; }
 struct ImplSVEvent;
+class OutlinerSearchable;
 
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
@@ -294,7 +295,7 @@ class SwPostItMgr: public SfxListener
             void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
             void PaintTile(OutputDevice& rRenderContext, const Rectangle& rRect);
             /// Informs already created annotations about a newly registered LOK callback.
-            void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData);
+            void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData, OutlinerSearchable* pSearchable);
 };
 
 #endif

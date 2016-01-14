@@ -26,6 +26,7 @@
 #include <impedit.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
 #include <tools/poly.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XDictionaryEntry.hpp>
@@ -81,6 +82,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     mbTiledRendering    = false;
     mpLibreOfficeKitCallback = 0;
     mpLibreOfficeKitData = 0;
+    mpLibreOfficeKitSearchable = 0;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
@@ -128,14 +130,27 @@ bool ImpEditView::isTiledRendering() const
     return mbTiledRendering;
 }
 
-void ImpEditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
+void ImpEditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData, OutlinerSearchable* pSearchable)
 {
     mpLibreOfficeKitCallback = pCallback;
     mpLibreOfficeKitData = pData;
+    mpLibreOfficeKitSearchable = pSearchable;
 }
 
 void ImpEditView::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
+    if (mpLibreOfficeKitSearchable && mpLibreOfficeKitSearchable->isTiledSearching())
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_SELECTION_START:
+        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+            return;
+        }
+    }
+
     if (mpLibreOfficeKitCallback)
         mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
 }

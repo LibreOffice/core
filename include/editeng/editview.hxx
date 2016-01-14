@@ -36,6 +36,7 @@
 class EditEngine;
 class ImpEditEngine;
 class ImpEditView;
+class OutlinerSearchable;
 class SvxSearchItem;
 class SvxFieldItem;
 namespace vcl { class Window; }
@@ -178,7 +179,7 @@ public:
     void            setTiledRendering(bool bTiledRendering);
     bool            isTiledRendering();
     /// @see vcl::ITiledRenderable::registerCallback().
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable *pSearchable);
 
     void            SetControlWord( EVControlBits nWord );
     EVControlBits   GetControlWord() const;
