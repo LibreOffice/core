@@ -90,6 +90,7 @@
 #include <vcl/svapp.hxx>
 #include <memory>
 #include <libxml/xmlwriter.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -128,6 +129,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbTiledRendering = false;
     mpLibreOfficeKitCallback = nullptr;
     mpLibreOfficeKitData = nullptr;
+    mbTiledSearching = false;
     nProgressAkt=0;
     nProgressMax=0;
     nProgressOfs=0;
@@ -828,8 +830,30 @@ void SdrModel::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, 
 
 void SdrModel::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
+    if (mbTiledSearching)
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_SELECTION_START:
+        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+            return;
+        }
+    }
+
     if (mpLibreOfficeKitCallback)
         mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
+}
+
+void SdrModel::setTiledSearching(bool bTiledSearching)
+{
+    mbTiledSearching = bTiledSearching;
+}
+
+bool SdrModel::isTiledSearching() const
+{
+    return mbTiledSearching;
 }
 
 LibreOfficeKitCallback SdrModel::getLibreOfficeKitCallback() const
