@@ -614,8 +614,9 @@ uno::Any SAL_CALL Content::execute(
     {
 
         // unlock
-        if ( resourceTypeForLocks( Environment ) == DAV )
-            unlock( Environment );
+        // do not check for a DAV resource
+        // the lock store will be checked before sending
+        unlock( Environment );
     }
     else if ( aCommand.Name == "createNewContent" && isFolder( Environment ) )
     {
