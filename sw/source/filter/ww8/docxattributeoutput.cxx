@@ -4544,7 +4544,8 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
     oox::FormulaExportBase* formulaexport = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xInterface.get()));
     assert( formulaexport != nullptr );
     if (formulaexport)
-        formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
+        formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
+                oox::drawingml::DOCUMENT_DOCX);
 }
 
 void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)

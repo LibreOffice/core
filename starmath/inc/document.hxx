@@ -31,6 +31,7 @@
 #include <sax/fshelper.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/mathml/import.hxx>
+#include <oox/export/utils.hxx>
 
 #include <memory>
 #include <set>
@@ -146,7 +147,9 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
      */
     void                InvalidateCursor();
 
-    bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr pSerializer, oox::core::OoxmlVersion version );
+    bool writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,
+            oox::core::OoxmlVersion version,
+            oox::drawingml::DocumentType documentType);
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
