@@ -280,14 +280,14 @@ DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored
 
     for (sal_Int32 i = 0; i < xDraws->getCount(); i++)
     {
-        text::TextContentAnchorType nAnchorType;
-        sal_uInt16 nAnchorPageNo;
         xPropertySet.set(xDraws->getByIndex(i), uno::UNO_QUERY);
 
-        xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_TYPE ) >>= nAnchorType;
+        text::TextContentAnchorType nAnchorType;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_TYPE ) >>= nAnchorType);
         CPPUNIT_ASSERT_EQUAL( text::TextContentAnchorType_AT_PAGE, nAnchorType );
 
-        xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_PAGE_NO ) >>= nAnchorPageNo;
+        sal_uInt16 nAnchorPageNo = {};
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_PAGE_NO ) >>= nAnchorPageNo);
         // are all shapes are on different page numbers?
         CPPUNIT_ASSERT(pages.insert(nAnchorPageNo).second);
     }
