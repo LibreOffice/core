@@ -361,7 +361,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
         m_pFilter->openFragmentStreamWithSerializer( aFileName,
             "application/vnd.openxmlformats-officedocument.drawingml.chart+xml" );
 
-    oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
+    oox::drawingml::ChartExport aChartExport(XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DOCUMENT_DOCX);
     aChartExport.ExportContent();
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
@@ -422,7 +422,7 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
         nNamespace = XML_wpg;
     else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
         nNamespace = XML_pic;
-    oox::drawingml::ShapeExport aExport(nNamespace, m_pAttrOutput->GetSerializer(), nullptr, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX, m_pAttrOutput);
+    oox::drawingml::ShapeExport aExport(nNamespace, m_pAttrOutput->GetSerializer(), nullptr, m_pFilter, oox::drawingml::DOCUMENT_DOCX, m_pAttrOutput);
     aExport.WriteShape(xShape);
 }
 
@@ -1450,7 +1450,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     SetFS(m_pDocumentFS);
 
     // the DrawingML access
-    m_pDrawingML = new oox::drawingml::DrawingML( m_pDocumentFS, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
+    m_pDrawingML = new oox::drawingml::DrawingML(m_pDocumentFS, m_pFilter, oox::drawingml::DOCUMENT_DOCX);
 
     // the attribute output for the document
     m_pAttrOutput = new DocxAttributeOutput( *this, m_pDocumentFS, m_pDrawingML );

@@ -44,6 +44,10 @@ OString write1000thOfAPercent(T number)
     return OString::number( number * 1000 );
 }
 
+namespace oox { namespace drawingml {
+    enum DocumentType { DOCUMENT_DOCX, DOCUMENT_PPTX, DOCUMENT_XLSX };
+} }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

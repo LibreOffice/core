@@ -1144,7 +1144,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( Reference< XShape > );
 typedef std::unordered_map< const char*, ShapeConverter, rtl::CStringHash, rtl::CStringEqual> NameToConvertMapType;
 
-static const NameToConvertMapType& lcl_GetConverters(DrawingML::DocumentType eDocumentType)
+static const NameToConvertMapType& lcl_GetConverters(DocumentType eDocumentType)
 {
     static bool shape_map_inited = false;
     static NameToConvertMapType shape_converters;
@@ -1177,7 +1177,7 @@ static const NameToConvertMapType& lcl_GetConverters(DrawingML::DocumentType eDo
     shape_converters[ "com.sun.star.presentation.OutlinerShape" ]       = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.SlideNumberShape" ]    = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.TitleTextShape" ]      = &ShapeExport::WriteTextShape;
-    if (eDocumentType == DrawingML::DOCUMENT_DOCX)
+    if (eDocumentType == DOCUMENT_DOCX)
         shape_converters[ "com.sun.star.drawing.GroupShape" ] = &ShapeExport::WriteGroupShape;
     shape_map_inited = true;
 
