@@ -193,7 +193,11 @@ public:
     Rectangle& MarkBound() { return aMarkBound; }
     Rectangle& MarkSnap() { return aMarkSnap; }
 
-    void SetLayerVisible(const OUString& rName, bool bShow = true) { SetLayer(rName, aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
+    void SetLayerVisible(const OUString& rName, bool bShow = true) {
+        SetLayer(rName, aLayerVisi, bShow);
+        if(!bShow) AdjHdl();
+        InvalidateAllWin();
+    }
     bool IsLayerVisible(const OUString& rName) const { return IsLayer(rName, aLayerVisi); }
 
     void SetLayerLocked(const OUString& rName, bool bLock = true) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
