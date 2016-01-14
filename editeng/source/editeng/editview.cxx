@@ -592,9 +592,9 @@ bool EditView::isTiledRendering()
     return pImpEditView->isTiledRendering();
 }
 
-void EditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData)
+void EditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable *pSearchable)
 {
-    pImpEditView->registerLibreOfficeKitCallback(pCallback, pLibreOfficeKitData);
+    pImpEditView->registerLibreOfficeKitCallback(pCallback, pLibreOfficeKitData, pSearchable);
 }
 
 void EditView::SetControlWord( EVControlBits nWord )

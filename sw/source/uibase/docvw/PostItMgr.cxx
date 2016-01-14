@@ -881,7 +881,7 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const Rectangle& /*rRe
     }
 }
 
-void SwPostItMgr::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
+void SwPostItMgr::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData, OutlinerSearchable* pSearchable)
 {
     for (SwSidebarItem* pItem : mvPostItFields)
     {
@@ -889,8 +889,8 @@ void SwPostItMgr::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallbac
         if (!pPostIt)
             continue;
 
-        pPostIt->GetOutlinerView()->setTiledRendering(mpWrtShell->isTiledRendering());
-        pPostIt->GetOutlinerView()->registerLibreOfficeKitCallback(pCallback, pData);
+        pPostIt->GetOutlinerView()->setTiledRendering(comphelper::LibreOfficeKit::isActive());
+        pPostIt->GetOutlinerView()->registerLibreOfficeKitCallback(pCallback, pData, pSearchable);
     }
 }
 

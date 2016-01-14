@@ -618,8 +618,8 @@ void SwSidebarWin::InitControls()
         LibreOfficeKitCallback pCallback = nullptr;
         void* pData = nullptr;
         pDrawModel->getLibreOfficeKitCallback(pCallback, pData);
-        mpOutlinerView->setTiledRendering(mrView.GetWrtShellPtr()->isTiledRendering());
-        mpOutlinerView->registerLibreOfficeKitCallback(pCallback, pData);
+        mpOutlinerView->setTiledRendering(comphelper::LibreOfficeKit::isActive());
+        mpOutlinerView->registerLibreOfficeKitCallback(pCallback, pData, pDrawModel);
     }
 
     //create Scrollbars
