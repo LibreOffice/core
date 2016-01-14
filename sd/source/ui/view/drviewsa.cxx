@@ -20,6 +20,7 @@
 #include "DrawViewShell.hxx"
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/svdlayer.hxx>
@@ -208,6 +209,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     svtools::ColorConfig aColorConfig;
     mnAppBackgroundColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+    if (comphelper::LibreOfficeKit::isActive())
+        mnAppBackgroundColor = COL_TRANSPARENT;
 
     mpFrameView->Connect();
 

@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 #include "DrawViewShell.hxx"
+#include <comphelper/lok.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
@@ -345,6 +346,8 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
             Color aFillColor;
 
             aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+            if (comphelper::LibreOfficeKit::isActive())
+                aFillColor = COL_TRANSPARENT;
 
             mpDrawView->SetApplicationBackgroundColor(aFillColor);
         }
