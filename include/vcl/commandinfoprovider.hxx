@@ -55,15 +55,15 @@ public:
         @return
             The command labe.
     */
-    OUString GetLabelForCommand (
+    static OUString GetLabelForCommand (
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    OUString GetMenuLabelForCommand (
+    static OUString GetMenuLabelForCommand (
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    OUString GetPopupLabelForCommand (
+    static OUString GetPopupLabelForCommand (
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
@@ -78,26 +78,26 @@ public:
             The returned label contains the keyboard accelerator, if
             one is defined and bIncludeShortcut is true.
     */
-    OUString GetTooltipForCommand (
+   static OUString GetTooltipForCommand (
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         bool bIncludeShortcut = true);
 
     /** Returns the shortcut for a command in human-readable form */
-    OUString GetCommandShortcut (const OUString& rCommandName,
+          OUString GetCommandShortcut (const OUString& rCommandName,
                                  const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    Image GetImageForCommand(
+  static Image GetImageForCommand(
         const OUString& rsCommandName,
         bool bLarge,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    sal_Int32 GetPropertiesForCommand(
+   static  sal_Int32 GetPropertiesForCommand(
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    bool IsRotated(const OUString& rsCommandName);
-    bool IsMirrored(const OUString& rsCommandName);
+   static  bool IsRotated(const OUString& rsCommandName);
+   static  bool IsMirrored(const OUString& rsCommandName);
 
     /** Do not call.  Should be part of a local and hidden interface.
     */

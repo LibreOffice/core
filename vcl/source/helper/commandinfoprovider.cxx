@@ -124,36 +124,39 @@ CommandInfoProvider::~CommandInfoProvider()
     dispose();
 }
 
-OUString CommandInfoProvider::GetLabelForCommand (
+OUString vcl::CommandInfoProvider::GetLabelForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
+    CommandInfoProvider i;
+    i.SetFrame(rxFrame);
 
-    return GetCommandProperty("Name", rsCommandName);
+    return i.GetCommandProperty("Name", rsCommandName);
 }
 
 OUString CommandInfoProvider::GetMenuLabelForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
+     CommandInfoProvider i;
+    i.SetFrame(rxFrame);
 
     // Here we want to use "Label", not "Name". "Name" is a stripped-down version of "Label" without accelerators
     // and ellipsis. In the menu, we want to have those accelerators and ellipsis.
-    return GetCommandProperty("Label", rsCommandName);
+    return i.GetCommandProperty("Label", rsCommandName);
 }
 
 OUString CommandInfoProvider::GetPopupLabelForCommand (
     const OUString& rsCommandName,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
+     CommandInfoProvider i;
+    i.SetFrame(rxFrame);
 
-    OUString sPopupLabel(GetCommandProperty("PopupLabel", rsCommandName));
+    OUString sPopupLabel(i.GetCommandProperty("PopupLabel", rsCommandName));
     if (!sPopupLabel.isEmpty())
         return sPopupLabel;
-    return GetCommandProperty("Label", rsCommandName);
+    return i.GetCommandProperty("Label", rsCommandName);
 }
 
 OUString CommandInfoProvider::GetTooltipForCommand (
@@ -161,14 +164,15 @@ OUString CommandInfoProvider::GetTooltipForCommand (
     const Reference<frame::XFrame>& rxFrame,
     bool bIncludeShortcut)
 {
-    SetFrame(rxFrame);
+    CommandInfoProvider i;
+    i.SetFrame(rxFrame);
 
-    OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName));
+    OUString sLabel (i.GetCommandProperty("TooltipLabel", rsCommandName));
     if (sLabel.isEmpty())
-        sLabel = GetCommandProperty("Name", rsCommandName);
+        sLabel = i.GetCommandProperty("Name", rsCommandName);
 
     if (bIncludeShortcut) {
-        const OUString sShortCut(GetCommandShortcut(rsCommandName, rxFrame));
+        const OUString sShortCut(i.GetCommandShortcut(rsCommandName, rxFrame));
         if (!sShortCut.isEmpty())
             return sLabel + " (" + sShortCut + ")";
     }
@@ -178,6 +182,7 @@ OUString CommandInfoProvider::GetTooltipForCommand (
 OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
                                                   const Reference<frame::XFrame>& rxFrame)
 {
+
     SetFrame(rxFrame);
 
     OUString sShortcut;
@@ -200,7 +205,8 @@ OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
 Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName, bool bLarge,
                                               const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
+CommandInfoProvider i;
+    i.SetFrame(rxFrame);
 
     if (rsCommandName.isEmpty())
         return Image();
@@ -236,8 +242,9 @@ Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName, boo
     }
 
     try {
-        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(mxContext));
-        Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier()));
+
+        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(i.mxContext));
+        Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(i.GetModuleIdentifier()));
 
         Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
         Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), UNO_QUERY);
@@ -261,10 +268,11 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
+    CommandInfoProvider i;
+    i.SetFrame(rxFrame);
 
     sal_Int32 nValue = 0;
-    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
+    const Sequence<beans::PropertyValue> aProperties (i.GetCommandProperties(rsCommandName));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
     {
         if (aProperties[nIndex].Name == "Properties")
@@ -278,12 +286,14 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
 
 bool CommandInfoProvider::IsRotated(const OUString& rsCommandName)
 {
-    return ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName);
+     CommandInfoProvider i;
+    return i.ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName);
 }
 
 bool CommandInfoProvider::IsMirrored(const OUString& rsCommandName)
 {
-    return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName);
+     CommandInfoProvider i;
+    return i.ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName);
 }
 
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
