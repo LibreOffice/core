@@ -144,7 +144,7 @@ void BmkMenu::Initialize()
 
                 if ( !aImageId.isEmpty() )
                 {
-                    Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aImageId, false, m_xFrame );
+                    Image aImage = vcl::CommandInfoProvider::GetImageForCommand( aImageId, false, m_xFrame );
                     if ( !!aImage )
                     {
                         bImageSet = true;
@@ -154,7 +154,7 @@ void BmkMenu::Initialize()
 
                 if ( !bImageSet )
                 {
-                    Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aURL, false, m_xFrame );
+                    Image aImage = vcl::CommandInfoProvider::GetImageForCommand( aURL, false, m_xFrame );
                     if ( !aImage )
                         InsertItem( nId, aTitle );
                     else
