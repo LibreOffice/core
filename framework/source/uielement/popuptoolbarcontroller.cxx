@@ -415,7 +415,7 @@ void SaveToolbarController::updateImage()
 
     if ( xStorable.is() && xStorable->isReadonly() )
     {
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( ".uno:SaveAs", bLargeIcons, m_xFrame );
+        aImage = vcl::CommandInfoProvider::GetImageForCommand( ".uno:SaveAs", bLargeIcons, m_xFrame );
     }
     else if ( m_xModifiable.is() && m_xModifiable->isModified() )
     {
@@ -424,7 +424,7 @@ void SaveToolbarController::updateImage()
     }
 
     if ( !aImage )
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( m_aCommandURL, bLargeIcons, m_xFrame );
+        aImage = vcl::CommandInfoProvider::GetImageForCommand( m_aCommandURL, bLargeIcons, m_xFrame );
 
     if ( !!aImage )
         pToolBox->SetItemImage( nId, aImage );
@@ -447,7 +447,7 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
 
         bool bReadOnly = xStorable->isReadonly();
         pToolBox->SetQuickHelpText( nId,
-            vcl::CommandInfoProvider::Instance().GetTooltipForCommand( bReadOnly ? OUString( ".uno:SaveAs" ) : m_aCommandURL, m_xFrame ) );
+            vcl::CommandInfoProvider::GetTooltipForCommand( bReadOnly ? OUString( ".uno:SaveAs" ) : m_aCommandURL, m_xFrame ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~( bReadOnly ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) |  ( bReadOnly ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN ) );
         updateImage();

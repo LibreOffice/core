@@ -204,7 +204,7 @@ ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
 
 void ControllerItem::SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nIndex)
 {
-    rToolBox.SetQuickHelpText(nIndex, vcl::CommandInfoProvider::Instance().GetTooltipForCommand(".uno:" + msCommandName, mxFrame));
+    rToolBox.SetQuickHelpText(nIndex, vcl::CommandInfoProvider::GetTooltipForCommand(".uno:" + msCommandName, mxFrame));
     rToolBox.SetHelpText(nIndex, GetHelpText());
     rToolBox.SetItemImage(nIndex, GetIcon());
 }

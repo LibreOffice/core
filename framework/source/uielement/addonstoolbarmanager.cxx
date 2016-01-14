@@ -121,14 +121,14 @@ static Image RetrieveImage( Reference< css::frame::XFrame >& rFrame,
         if ( !!aImage )
             return aImage;
         else
-            aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, bBigImage, rFrame );
+            aImage = vcl::CommandInfoProvider::GetImageForCommand(aImageId, bBigImage, rFrame );
         if ( !!aImage )
             return aImage;
     }
 
     aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
     if ( !aImage )
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aImageId, bBigImage, rFrame );
+        aImage = vcl::CommandInfoProvider::GetImageForCommand(aImageId, bBigImage, rFrame );
 
     return aImage;
 }
