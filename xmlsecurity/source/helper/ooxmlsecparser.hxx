@@ -27,6 +27,7 @@ class OOXMLSecParser: public cppu::WeakImplHelper
     >
 {
     XSecController* m_pXSecController;
+    css::uno::Reference<css::xml::sax::XDocumentHandler> m_xNextHandler;
 
     bool m_bInDigestValue;
     OUString m_aDigestValue;
