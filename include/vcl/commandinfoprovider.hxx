@@ -55,17 +55,12 @@ public:
         @return
             The command labe.
     */
-    OUString GetLabelForCommand (
-        const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static OUString GetLabelForCommand (
+        const OUString& rsCommandName);
 
-    OUString GetMenuLabelForCommand (
-        const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static OUString GetMenuLabelForCommand (const OUString& rsCommandName);
 
-    OUString GetPopupLabelForCommand (
-        const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static OUString GetPopupLabelForCommand (const OUString& rsCommandName);
 
     /** Return a tooltip for the given command. Falls back to label if command has no tooltip.
         @param rsCommandName
@@ -78,26 +73,21 @@ public:
             The returned label contains the keyboard accelerator, if
             one is defined and bIncludeShortcut is true.
     */
-    OUString GetTooltipForCommand (
-        const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+   static OUString GetTooltipForCommand (const OUString& rsCommandName,
         bool bIncludeShortcut = true);
 
     /** Returns the shortcut for a command in human-readable form */
-    OUString GetCommandShortcut (const OUString& rCommandName,
-                                 const css::uno::Reference<css::frame::XFrame>& rxFrame);
+  static  OUString GetCommandShortcut (const OUString& rCommandName);
 
-    Image GetImageForCommand(
+  static Image GetImageForCommand(
         const OUString& rsCommandName,
         bool bLarge,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    sal_Int32 GetPropertiesForCommand(
-        const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+   static  sal_Int32 GetPropertiesForCommand(const OUString& rsCommandName);
 
-    bool IsRotated(const OUString& rsCommandName);
-    bool IsMirrored(const OUString& rsCommandName);
+   static  bool IsRotated(const OUString& rsCommandName);
+   static  bool IsMirrored(const OUString& rsCommandName);
 
     /** Do not call.  Should be part of a local and hidden interface.
     */
@@ -106,26 +96,26 @@ public:
     void dispose();
 
   private:
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
-    css::uno::Reference<css::frame::XFrame> mxCachedDataFrame;
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedGlobalAcceleratorConfiguration;
-    OUString msCachedModuleIdentifier;
-    css::uno::Reference<css::lang::XComponent> mxFrameListener;
+   static css::uno::Reference<css::uno::XComponentContext> mxContext;
+   static  css::uno::Reference<css::frame::XFrame> mxCachedDataFrame;
+   static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
+   static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;
+   static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedGlobalAcceleratorConfiguration;
+   static OUString msCachedModuleIdentifier;
+   static css::uno::Reference<css::lang::XComponent> mxFrameListener;
 
     CommandInfoProvider();
     ~CommandInfoProvider();
 
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration();
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration();
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration();
-    OUString GetModuleIdentifier();
-    css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
+   static css::uno::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration();
+   static  css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration();
+   static css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration();
+   static OUString GetModuleIdentifier();
+   static css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
         const OUString& rsCommandName);
-    OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName);
-    bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName);
-    static OUString RetrieveShortcutsFromConfiguration(
+   static OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName);
+   static bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName);
+   static OUString RetrieveShortcutsFromConfiguration(
         const css::uno::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
         const OUString& rsCommandName);
     static vcl::KeyCode AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey);

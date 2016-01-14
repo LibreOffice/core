@@ -1,0 +1,364 @@
+diff --git a/framework/source/uielement/menubarmanager.cxx b/framework/source/uielement/menubarmanager.cxx
+index bc25a53..c5eb6e2 100644
+--- a/framework/source/uielement/menubarmanager.cxx
++++ b/framework/source/uielement/menubarmanager.cxx
+@@ -1092,7 +1092,7 @@ OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
+     if ( !m_bHasMenuBar )
+     {
+         // This is a context menu, prefer "PopupLabel" over "Label".
+-        return vcl::CommandInfoProvider::GetPopupLabelForCommand(rCmdURL, m_xFrame);
++        return vcl::CommandInfoProvider::Instance().GetPopupLabelForCommand(rCmdURL, m_xFrame);
+     }
+     return vcl::CommandInfoProvider::GetMenuLabelForCommand(rCmdURL, m_xFrame);
+ }
+diff --git a/framework/source/uielement/thesaurusmenucontroller.cxx b/framework/source/uielement/thesaurusmenucontroller.cxx
+index 7199c7d..41601e3 100644
+--- a/framework/source/uielement/thesaurusmenucontroller.cxx
++++ b/framework/source/uielement/thesaurusmenucontroller.cxx
+@@ -105,7 +105,7 @@ void ThesaurusMenuController::fillPopupMenu()
+ 
+         pVCLMenu->InsertSeparator();
+         OUString aThesaurusDialogCmd( ".uno:ThesaurusDialog" );
+-        pVCLMenu->InsertItem( nId, vcl::CommandInfoProvider::GetPopupLabelForCommand( aThesaurusDialogCmd, m_xFrame ) );
++        pVCLMenu->InsertItem( nId, vcl::CommandInfoProvider::Instance().GetPopupLabelForCommand( aThesaurusDialogCmd, m_xFrame ) );
+         pVCLMenu->SetItemCommand( nId, aThesaurusDialogCmd );
+     }
+ }
+diff --git a/include/vcl/commandinfoprovider.hxx b/include/vcl/commandinfoprovider.hxx
+index 04247d6..7fb7ad8 100644
+--- a/include/vcl/commandinfoprovider.hxx
++++ b/include/vcl/commandinfoprovider.hxx
+@@ -55,7 +55,7 @@ public:
+         @return
+             The command labe.
+     */
+-    static OUString GetLabelForCommand (
++   static  OUString GetLabelForCommand (
+         const OUString& rsCommandName,
+         const css::uno::Reference<css::frame::XFrame>& rxFrame);
+ 
+@@ -63,7 +63,7 @@ public:
+         const OUString& rsCommandName,
+         const css::uno::Reference<css::frame::XFrame>& rxFrame);
+ 
+-    static OUString GetPopupLabelForCommand (
++     static OUString GetPopupLabelForCommand (
+         const OUString& rsCommandName,
+         const css::uno::Reference<css::frame::XFrame>& rxFrame);
+ 
+@@ -78,13 +78,13 @@ public:
+             The returned label contains the keyboard accelerator, if
+             one is defined and bIncludeShortcut is true.
+     */
+-   static OUString GetTooltipForCommand (
++ static OUString GetTooltipForCommand (
+         const OUString& rsCommandName,
+         const css::uno::Reference<css::frame::XFrame>& rxFrame,
+         bool bIncludeShortcut = true);
+ 
+     /** Returns the shortcut for a command in human-readable form */
+-          OUString GetCommandShortcut (const OUString& rCommandName,
++  static    OUString GetCommandShortcut (const OUString& rCommandName,
+                                  const css::uno::Reference<css::frame::XFrame>& rxFrame);
+ 
+   static Image GetImageForCommand(
+@@ -92,12 +92,12 @@ public:
+         bool bLarge,
+         const css::uno::Reference<css::frame::XFrame>& rxFrame);
+ 
+-   static  sal_Int32 GetPropertiesForCommand(
++  static sal_Int32 GetPropertiesForCommand(
+         const OUString& rsCommandName,
+         const css::uno::Reference<css::frame::XFrame>& rxFrame);
+ 
+-   static  bool IsRotated(const OUString& rsCommandName);
+-   static  bool IsMirrored(const OUString& rsCommandName);
++  static bool IsRotated(const OUString& rsCommandName);
++  static bool IsMirrored(const OUString& rsCommandName);
+ 
+     /** Do not call.  Should be part of a local and hidden interface.
+     */
+@@ -106,25 +106,25 @@ public:
+     void dispose();
+ 
+   private:
+-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+-    css::uno::Reference<css::frame::XFrame> mxCachedDataFrame;
+-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
+-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;
+-    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedGlobalAcceleratorConfiguration;
+-    OUString msCachedModuleIdentifier;
+-    css::uno::Reference<css::lang::XComponent> mxFrameListener;
++   static css::uno::Reference<css::uno::XComponentContext> mxContext;
++  static  css::uno::Reference<css::frame::XFrame> mxCachedDataFrame;
++   static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
++    static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;
++   static css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedGlobalAcceleratorConfiguration;
++    static OUString msCachedModuleIdentifier;
++   static css::uno::Reference<css::lang::XComponent> mxFrameListener;
+ 
+     CommandInfoProvider();
+     ~CommandInfoProvider();
+ 
+-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration();
+-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration();
+-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration();
+-    OUString GetModuleIdentifier();
+-    css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
++    static css::uno::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration();
++   static  css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration();
++    static css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration();
++   static OUString GetModuleIdentifier();
++   static css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
+         const OUString& rsCommandName);
+-    OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName);
+-    bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName);
++   static OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName);
++   static bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName);
+     static OUString RetrieveShortcutsFromConfiguration(
+         const css::uno::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
+         const OUString& rsCommandName);
+diff --git a/svx/source/mnuctrls/smarttagmenu.cxx b/svx/source/mnuctrls/smarttagmenu.cxx
+index 66d6d25..16b0f02 100644
+--- a/svx/source/mnuctrls/smarttagmenu.cxx
++++ b/svx/source/mnuctrls/smarttagmenu.cxx
+@@ -188,7 +188,7 @@ void SmartTagMenuController::FillMenu()
+     {
+         const OUString aCommand = ".uno:AutoCorrectDlg?OpenSmartTag:bool=true";
+         pVCLMenu->InsertSeparator();
+-        pVCLMenu->InsertItem( nMenuId, vcl::CommandInfoProvider::GetPopupLabelForCommand( aCommand, m_xFrame ) );
++        pVCLMenu->InsertItem( nMenuId, vcl::CommandInfoProvider::Instance().GetPopupLabelForCommand( aCommand, m_xFrame ) );
+         pVCLMenu->SetItemCommand( nMenuId, aCommand );
+     }
+ }
+diff --git a/vcl/source/helper/commandinfoprovider.cxx b/vcl/source/helper/commandinfoprovider.cxx
+index 5fb3364..6551166 100644
+--- a/vcl/source/helper/commandinfoprovider.cxx
++++ b/vcl/source/helper/commandinfoprovider.cxx
+@@ -46,6 +46,7 @@ namespace
+         : public ::cppu::BaseMutex,
+           public FrameListenerInterfaceBase
+     {
++
+     public:
+         FrameListener (vcl::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
+             : FrameListenerInterfaceBase(m_aMutex),
+@@ -93,30 +94,41 @@ CommandInfoProvider& CommandInfoProvider::Instance()
+     return aProvider;
+ }
+ 
++ css::uno::Reference<css::lang::XComponent> vcl::CommandInfoProvider::mxFrameListener;
++  css::uno::Reference<css::ui::XAcceleratorConfiguration> vcl::CommandInfoProvider::mxCachedGlobalAcceleratorConfiguration;
++  css::uno::Reference<css::uno::XComponentContext>  vcl::CommandInfoProvider::mxContext;
++   css::uno::Reference<css::frame::XFrame>  vcl::CommandInfoProvider::mxCachedDataFrame;
++  css::uno::Reference<css::ui::XAcceleratorConfiguration>  vcl::CommandInfoProvider::mxCachedDocumentAcceleratorConfiguration;
++  css::uno::Reference<css::ui::XAcceleratorConfiguration>  vcl::CommandInfoProvider::mxCachedModuleAcceleratorConfiguration;
++  OUString  vcl::CommandInfoProvider::msCachedModuleIdentifier;
++
+ CommandInfoProvider::CommandInfoProvider()
+-    : mxContext(comphelper::getProcessComponentContext()),
+-      mxCachedDataFrame(),
+-      mxCachedDocumentAcceleratorConfiguration(),
+-      mxCachedModuleAcceleratorConfiguration(),
+-      mxCachedGlobalAcceleratorConfiguration(),
+-      msCachedModuleIdentifier(),
+-      mxFrameListener()
++   //: mxContext(comphelper::getProcessComponentContext()),
++    //mxCachedDataFrame(),
++    //mxCachedDocumentAcceleratorConfiguration(),
++    //mxCachedModuleAcceleratorConfiguration(),
++    //mxCachedGlobalAcceleratorConfiguration(),
++    //msCachedModuleIdentifier(),
++    //mxFrameListener()
++
+ {
++
++
+     ImplGetSVData()->mpCommandInfoProvider = this;
+ }
+ 
+ void CommandInfoProvider::dispose()
+ {
+-    if (mxFrameListener.is())
++    if ( vcl::CommandInfoProvider::mxFrameListener.is())
+     {
+-        mxFrameListener->dispose();
+-        mxFrameListener.clear();
++         vcl::CommandInfoProvider:: mxFrameListener->dispose();
++         vcl::CommandInfoProvider::mxFrameListener.clear();
+     }
+-    mxCachedGlobalAcceleratorConfiguration.clear();
+-    mxCachedModuleAcceleratorConfiguration.clear();
+-    mxCachedDocumentAcceleratorConfiguration.clear();
+-    mxCachedDataFrame.clear();
+-    mxContext.clear();
++    vcl::CommandInfoProvider::mxCachedGlobalAcceleratorConfiguration.clear();
++     vcl::CommandInfoProvider:: mxCachedModuleAcceleratorConfiguration.clear();
++      vcl::CommandInfoProvider::mxCachedDocumentAcceleratorConfiguration.clear();
++      vcl::CommandInfoProvider::mxCachedDataFrame.clear();
++      vcl::CommandInfoProvider::mxContext.clear();
+ }
+ 
+ CommandInfoProvider::~CommandInfoProvider()
+@@ -128,35 +140,34 @@ OUString vcl::CommandInfoProvider::GetLabelForCommand (
+     const OUString& rsCommandName,
+     const Reference<frame::XFrame>& rxFrame)
+ {
+-    CommandInfoProvider i;
+-    i.SetFrame(rxFrame);
+ 
+-    return i.GetCommandProperty("Name", rsCommandName);
++
++    return CommandInfoProvider::GetCommandProperty("Name", rsCommandName);
+ }
+ 
+ OUString CommandInfoProvider::GetMenuLabelForCommand (
+     const OUString& rsCommandName,
+     const Reference<frame::XFrame>& rxFrame)
+ {
+-     CommandInfoProvider i;
+-    i.SetFrame(rxFrame);
++
++    //SetFrame(rxFrame);
+ 
+     // Here we want to use "Label", not "Name". "Name" is a stripped-down version of "Label" without accelerators
+     // and ellipsis. In the menu, we want to have those accelerators and ellipsis.
+-    return i.GetCommandProperty("Label", rsCommandName);
++    return GetCommandProperty("Label", rsCommandName);
+ }
+ 
+ OUString CommandInfoProvider::GetPopupLabelForCommand (
+     const OUString& rsCommandName,
+     const css::uno::Reference<css::frame::XFrame>& rxFrame)
+ {
+-     CommandInfoProvider i;
+-    i.SetFrame(rxFrame);
+ 
+-    OUString sPopupLabel(i.GetCommandProperty("PopupLabel", rsCommandName));
++    //SetFrame(rxFrame);
++
++    OUString sPopupLabel(CommandInfoProvider::GetCommandProperty("PopupLabel", rsCommandName));
+     if (!sPopupLabel.isEmpty())
+         return sPopupLabel;
+-    return i.GetCommandProperty("Label", rsCommandName);
++    return CommandInfoProvider::GetCommandProperty("Label", rsCommandName);
+ }
+ 
+ OUString CommandInfoProvider::GetTooltipForCommand (
+@@ -164,15 +175,15 @@ OUString CommandInfoProvider::GetTooltipForCommand (
+     const Reference<frame::XFrame>& rxFrame,
+     bool bIncludeShortcut)
+ {
+-    CommandInfoProvider i;
+-    i.SetFrame(rxFrame);
+ 
+-    OUString sLabel (i.GetCommandProperty("TooltipLabel", rsCommandName));
++    //SetFrame(rxFrame);
++
++    OUString sLabel (CommandInfoProvider::GetCommandProperty("TooltipLabel", rsCommandName));
+     if (sLabel.isEmpty())
+-        sLabel = i.GetCommandProperty("Name", rsCommandName);
++        sLabel =CommandInfoProvider::GetCommandProperty("Name", rsCommandName);
+ 
+     if (bIncludeShortcut) {
+-        const OUString sShortCut(i.GetCommandShortcut(rsCommandName, rxFrame));
++        const OUString sShortCut(CommandInfoProvider::GetCommandShortcut(rsCommandName, rxFrame));
+         if (!sShortCut.isEmpty())
+             return sLabel + " (" + sShortCut + ")";
+     }
+@@ -183,7 +194,7 @@ OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
+                                                   const Reference<frame::XFrame>& rxFrame)
+ {
+ 
+-    SetFrame(rxFrame);
++   // SetFrame(rxFrame);
+ 
+     OUString sShortcut;
+ 
+@@ -205,8 +216,8 @@ OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
+ Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName, bool bLarge,
+                                               const Reference<frame::XFrame>& rxFrame)
+ {
+-CommandInfoProvider i;
+-    i.SetFrame(rxFrame);
++
++    //SetFrame(rxFrame);
+ 
+     if (rsCommandName.isEmpty())
+         return Image();
+@@ -243,8 +254,8 @@ CommandInfoProvider i;
+ 
+     try {
+ 
+-        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(i.mxContext));
+-        Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(i.GetModuleIdentifier()));
++        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(mxContext));
++        Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier()));
+ 
+         Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
+         Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), UNO_QUERY);
+@@ -268,11 +279,11 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
+     const OUString& rsCommandName,
+     const Reference<frame::XFrame>& rxFrame)
+ {
+-    CommandInfoProvider i;
+-    i.SetFrame(rxFrame);
++
++    //SetFrame(rxFrame);
+ 
+     sal_Int32 nValue = 0;
+-    const Sequence<beans::PropertyValue> aProperties (i.GetCommandProperties(rsCommandName));
++    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
+     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
+     {
+         if (aProperties[nIndex].Name == "Properties")
+@@ -286,14 +297,14 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
+ 
+ bool CommandInfoProvider::IsRotated(const OUString& rsCommandName)
+ {
+-     CommandInfoProvider i;
+-    return i.ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName);
++
++    return CommandInfoProvider::ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName);
+ }
+ 
+ bool CommandInfoProvider::IsMirrored(const OUString& rsCommandName)
+ {
+-     CommandInfoProvider i;
+-    return i.ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName);
++
++    return CommandInfoProvider::ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName);
+ }
+ 
+ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
+@@ -424,7 +435,7 @@ bool CommandInfoProvider::ResourceHasKey(const OUString& rsResourceName, const O
+     Sequence< OUString > aSequence;
+     try
+     {
+-        const OUString sModuleIdentifier (GetModuleIdentifier());
++        const OUString sModuleIdentifier (CommandInfoProvider::GetModuleIdentifier());
+         if (!sModuleIdentifier.isEmpty())
+         {
+             Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+@@ -451,7 +462,7 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties(const O
+ 
+     try
+     {
+-        const OUString sModuleIdentifier (GetModuleIdentifier());
++        const OUString sModuleIdentifier ( CommandInfoProvider::GetModuleIdentifier());
+         if (sModuleIdentifier.getLength() > 0)
+         {
+             Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+diff --git a/vcl/source/window/menu.cxx b/vcl/source/window/menu.cxx
+index c626d96..1b12799 100644
+--- a/vcl/source/window/menu.cxx
++++ b/vcl/source/window/menu.cxx
+@@ -528,7 +528,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
+ void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame,
+                       MenuItemBits nBits, const OString &rIdent, sal_uInt16 nPos)
+ {
+-    OUString aLabel(CommandInfoProvider::GetPopupLabelForCommand(rCommand, rFrame));
++    OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
+     OUString aTooltip(CommandInfoProvider::GetTooltipForCommand(rCommand, rFrame));
+     Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, /*bLarge=*/ false, rFrame));
+ 
