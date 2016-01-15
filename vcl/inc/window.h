@@ -91,7 +91,7 @@ namespace dnd {
     class XDropTarget;
 }}}}}
 
-bool ImplWindowFrameProc( vcl::Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
+bool ImplWindowFrameProc( vcl::Window* pInst, sal_uInt16 nEvent, const void* pEvent );
 
 #define WINDOW_HITTEST_INSIDE           ((sal_uInt16)0x0001)
 #define WINDOW_HITTEST_TRANSPARENT      ((sal_uInt16)0x0002)

@@ -227,8 +227,7 @@ struct SalQueryCharPositionEvent
 
 // - SalFrame-Types -
 
-typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, SalFrame* pFrame,
-                              sal_uInt16 nEvent, const void* pEvent );
+typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, sal_uInt16 nEvent, const void* pEvent );
 
 // - SalObject-Events -
 
