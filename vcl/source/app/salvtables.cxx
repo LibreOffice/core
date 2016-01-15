@@ -43,12 +43,6 @@ SalFrame::~SalFrame()
 {
 }
 
-void SalFrame::SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc )
-{
-    m_pWindow = pWindow;
-    m_pProc = pProc;
-}
-
 // default to full-frame flushes
 // on ports where partial-flushes are much cheaper this method should be overridden
 void SalFrame::Flush( const Rectangle& )

@@ -568,7 +568,6 @@ void Window::dispose()
             assert (mpWindowImpl->mpFrameData->mpNextFrame.get() != pSysWin);
             pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
         }
-        mpWindowImpl->mpFrame->SetCallback( nullptr, nullptr );
         pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
         assert (mpWindowImpl->mpFrameData->mnFocusId == nullptr);
         assert (mpWindowImpl->mpFrameData->mnMouseMoveId == nullptr);
@@ -1015,8 +1014,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
                 "Could not create system window!",
                 Reference< XInterface >() );
         }
-
-        pFrame->SetCallback( this, ImplWindowFrameProc );
 
         // set window frame data
         mpWindowImpl->mpFrameData     = new ImplFrameData;
