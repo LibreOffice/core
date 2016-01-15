@@ -7024,6 +7024,7 @@ AnimationTransitionFilterNode.prototype.createActivity = function()
 AnimationTransitionFilterNode.prototype.parseElement = function()
 {
     var bRet = AnimationTransitionFilterNode.superclass.parseElement.call( this );
+    var bIsValidTransition = true;
 
     var aAnimElem = this.aElement;
 
@@ -7036,7 +7037,7 @@ AnimationTransitionFilterNode.prototype.parseElement = function()
     }
     else
     {
-        this.eCurrentState = INVALID_NODE;
+        bIsValidTransition = false;
         log( 'AnimationTransitionFilterNode.parseElement: transition type not valid: ' + sTypeAttr );
     }
 
@@ -7051,8 +7052,18 @@ AnimationTransitionFilterNode.prototype.parseElement = function()
     }
     else
     {
-        this.eCurrentState = INVALID_NODE;
+        bIsValidTransition = false;
         log( 'AnimationTransitionFilterNode.parseElement: transition subtype not valid: ' + sSubTypeAttr );
+    }
+
+    // if we do not support the requested transition type we fall back to crossfade transition;
+    // note: if we do not provide an alternative transition and we set the state of the animation node to 'invalid'
+    // the animation engine stops itself;
+    if( !bIsValidTransition )
+    {
+        this.eTransitionType = FADE_TRANSITION;
+        this.eTransitionSubType = CROSSFADE_TRANS_SUBTYPE;
+        log( 'AnimationTransitionFilterNode.parseElement: in place of the invalid transition a crossfade transition is used' );
     }
 
     // direction attribute
