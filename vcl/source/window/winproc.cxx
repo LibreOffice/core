@@ -1972,14 +1972,7 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
     {
         if ( pSVEvent->mbCall && !pSVEvent->maDelData.IsDead() )
         {
-            if ( pSVEvent->mpWindow )
-            {
-                pSVEvent->maLink.Call( pSVEvent->mpData );
-            }
-            else
-            {
-                pSVEvent->maLink.Call( pSVEvent->mpData );
-            }
+            pSVEvent->maLink.Call( pSVEvent->mpData );
         }
 
         delete pSVEvent;
