@@ -5163,10 +5163,23 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     # /path/to/compiler/foo-gcc" you need to set the AR etc env vars
     # explicitly. Or put /path/to/compiler in PATH yourself.
 
-    AC_CHECK_TOOL(AR,ar)
-    AC_CHECK_TOOL(NM,nm)
+    # Use wrappers for LTO
+    if test "$ENABLE_LTO" == "TRUE"; then
+        if test "$COM_IS_CLANG" == "TRUE"; then
+            AC_CHECK_TOOL(AR,llvm-ar)
+            AC_CHECK_TOOL(NM,llvm-nm)
+            AC_CHECK_TOOL(RANLIB,llvm-ranlib)
+        else
+            AC_CHECK_TOOL(AR,gcc-ar)
+            AC_CHECK_TOOL(NM,gcc-nm)
+            AC_CHECK_TOOL(RANLIB,gcc-ranlib)
+        fi
+    else
+        AC_CHECK_TOOL(AR,ar)
+        AC_CHECK_TOOL(NM,nm)
+        AC_CHECK_TOOL(RANLIB,ranlib)
+    fi
     AC_CHECK_TOOL(OBJDUMP,objdump)
-    AC_CHECK_TOOL(RANLIB,ranlib)
     AC_CHECK_TOOL(READELF,readelf)
     AC_CHECK_TOOL(STRIP,strip)
     if test "$_os" = "WINNT"; then
