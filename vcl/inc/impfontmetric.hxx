@@ -27,10 +27,6 @@ typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
 
 class ImplFontMetric
 {
-    friend class FontMetric;
-    friend void intrusive_ptr_add_ref(ImplFontMetric* pImplFontMetric);
-    friend void intrusive_ptr_release(ImplFontMetric* pImplFontMetric);
-
 public:
     explicit            ImplFontMetric();
 
@@ -61,6 +57,10 @@ public:
     bool                operator==( const ImplFontMetric& ) const;
 
 private:
+    friend class FontMetric;
+    friend void intrusive_ptr_add_ref(ImplFontMetric* pImplFontMetric);
+    friend void intrusive_ptr_release(ImplFontMetric* pImplFontMetric);
+
     long                mnAscent;                      // Ascent
     long                mnDescent;                     // Descent
     long                mnIntLeading;                  // Internal Leading

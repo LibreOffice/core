@@ -26,6 +26,8 @@
 class FontAttributes
 {
 public:
+    explicit        FontAttributes();
+
     // device independent font functions
     const OUString& GetFamilyName() const                       { return maFamilyName; }
     FontFamily      GetFamilyType() const                       { return meFamily; }
@@ -91,10 +93,10 @@ private:
     OUString        maFamilyName;               // Font Family Name
     OUString        maStyleName;                // Font Style Name
     FontWeight      meWeight;                   // Weight Type
-    FontItalic      meItalic;                   // Slant Type
     FontFamily      meFamily;                   // Family Type
     FontPitch       mePitch;                    // Pitch Type
     FontWidth       meWidthType;                // Width Type
+    FontItalic      meItalic;                   // Slant Type
     bool            mbSymbolFlag;               // Is font a symbol?
 
     // device dependent variables

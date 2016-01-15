@@ -58,10 +58,19 @@
 #include <memory>
 #include <algorithm>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::rtl;
-using namespace ::utl;
+FontAttributes::FontAttributes()
+:   meWeight( WEIGHT_DONTKNOW ),
+    mePitch( PITCH_DONTKNOW ),
+    meWidthType ( WIDTH_DONTKNOW ),
+    meItalic ( ITALIC_NONE ),
+    mbSymbolFlag( false ),
+    mnQuality( 0 ),
+    mbOrientation( false ),
+    mbDevice( false ),
+    mbSubsettable( false ),
+    mbEmbeddable ( false )
+{}
+
 
 bool FontAttributes::CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const
 {
