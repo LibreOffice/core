@@ -617,7 +617,7 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     gtk_style_context_restore(context);
 }
 
-void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
+Rectangle GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      cairo_t *cr,
                                      const Rectangle& rControlRectangle,
                                      ControlType nType,
@@ -658,6 +658,8 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
 
     PaintOneSpinButton(context, cr, nType, upBtnPart, areaRect, upBtnState );
     PaintOneSpinButton(context, cr, nType, downBtnPart, areaRect, downBtnState );
+
+    return areaRect;
 }
 
 #define ARROW_SIZE 11 * 0.85
@@ -1077,6 +1079,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     clipRegion(cr);
     cairo_translate(cr, rControlRegion.Left(), rControlRegion.Top());
 
+    Rectangle aDamageRect(rControlRegion);
+
     long nX = 0;
     long nY = 0;
     long nWidth = rControlRegion.GetWidth();
@@ -1159,7 +1163,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         PaintScrollbar(context, cr, rControlRegion, nType, nPart, rValue);
         break;
     case RENDER_SPINBUTTON:
-        PaintSpinButton(context, cr, rControlRegion, nType, nPart, rValue);
+        aDamageRect.Union(PaintSpinButton(context, cr, rControlRegion, nType, nPart, rValue));
         break;
     case RENDER_COMBOBOX:
         PaintCombobox(flags, cr, rControlRegion, nType, nPart, rValue);
@@ -1215,7 +1219,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
     gtk_style_context_restore(context);
     cairo_destroy(cr); // unref
-    mpFrame->damaged(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.Right(), rControlRegion.Bottom());
+
+    if (!aDamageRect.IsEmpty())
+        mpFrame->damaged(aDamageRect.Left(), aDamageRect.Top(), aDamageRect.Right(), aDamageRect.Bottom());
 
     return true;
 }

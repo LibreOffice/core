@@ -104,7 +104,7 @@ private:
                              ControlPart nPart,
                              Rectangle aAreaRect,
                              ControlState nState );
-           void PaintSpinButton(GtkStyleContext *context,
+           Rectangle PaintSpinButton(GtkStyleContext *context,
                          cairo_t *cr,
                          const Rectangle& rControlRectangle,
                          ControlType nType,
