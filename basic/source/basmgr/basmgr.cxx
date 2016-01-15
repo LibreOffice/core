@@ -1343,8 +1343,9 @@ OUString BasicManager::GetLibName( sal_uInt16 nLib )
     return OUString();
 }
 
-void BasicManager::LoadLib( sal_uInt16 nLib )
+bool BasicManager::LoadLib( sal_uInt16 nLib )
 {
+    bool bDone = false;
     DBG_ASSERT( nLib < mpImpl->aLibs.size() , "Lib?!" );
     if ( nLib < mpImpl->aLibs.size() )
     {
@@ -1354,11 +1355,11 @@ void BasicManager::LoadLib( sal_uInt16 nLib )
         {
             OUString aLibName = rLibInfo.GetLibName();
             xLibContainer->loadLibrary( aLibName );
-            xLibContainer->isLibraryLoaded( aLibName );
+            bDone = xLibContainer->isLibraryLoaded( aLibName );
         }
         else
         {
-            ImpLoadLibrary( &rLibInfo, nullptr );
+            bDone = ImpLoadLibrary( &rLibInfo, nullptr );
             StarBASIC* pLib = GetLib( nLib );
             if ( pLib )
             {
@@ -1372,6 +1373,7 @@ void BasicManager::LoadLib( sal_uInt16 nLib )
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, OUString(), ERRCODE_BUTTON_OK );
         aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::LIBNOTFOUND, OUString::number(nLib)));
     }
+    return bDone;
 }
 
 StarBASIC* BasicManager::CreateLib( const OUString& rLibName )
@@ -1584,8 +1586,11 @@ namespace
                 StarBASIC* pLib = i_manager->GetLib( nLib );
                 if( !pLib )
                 {
-                    i_manager->LoadLib( nLib );
-                    pLib = i_manager->GetLib( nLib );
+                    bool const bLoaded = i_manager->LoadLib( nLib );
+                    if (bLoaded)
+                    {
+                        pLib = i_manager->GetLib( nLib );
+                    }
                 }
 
                 if( pLib )

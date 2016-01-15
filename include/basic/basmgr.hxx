@@ -171,7 +171,7 @@ public:
     const css::uno::Reference< css::script::XPersistentLibraryContainer >&
                     GetScriptLibraryContainer()  const;
 
-    void            LoadLib( sal_uInt16 nLib );
+    bool            LoadLib( sal_uInt16 nLib );
     bool            RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage );
 
     // Modify-Flag will be reset only during save.
