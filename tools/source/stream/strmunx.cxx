@@ -451,9 +451,9 @@ bool SvFileStream::LockFile()
   return LockRange( 0UL, 0UL );
 }
 
-bool SvFileStream::UnlockFile()
+void SvFileStream::UnlockFile()
 {
-    return UnlockRange( 0UL, 0UL );
+    UnlockRange( 0UL, 0UL );
 }
 
 void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )

@@ -112,10 +112,8 @@ long ZCodec::EndCompression()
     return mbStatus ? retvalue : -1;
 }
 
-long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
+void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
 {
-    long nOldTotal_In = PZSTREAM->total_in;
-
     assert(meState == STATE_INIT);
     mpOStm = &rOStm;
     InitCompress();
@@ -130,7 +128,6 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
             break;
         }
     };
-    return ( mbStatus ) ? (long)(PZSTREAM->total_in - nOldTotal_In) : -1;
 }
 
 long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
@@ -170,7 +167,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
 }
 
-long ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
+void ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
 {
     if (meState == STATE_INIT)
     {
@@ -193,7 +190,6 @@ long ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
             break;
         }
     }
-    return ( mbStatus ) ? (long)nSize : -1;
 }
 
 long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )

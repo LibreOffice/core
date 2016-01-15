@@ -158,7 +158,6 @@ class SvCompatWeakHdl : public SvRefBase
 
 public:
     void  ResetWeakBase( ) { _pObj = nullptr; }
-    T*    GetObj()        { return _pObj; }
 };
 
 /** We only have one place that extends this, in include/sfx2/frame.hxx, class SfxFrame.
@@ -176,8 +175,6 @@ public:
     SvCompatWeakBase( T* pObj ) { _xHdl = new SvCompatWeakHdl<T>( pObj ); }
 
     ~SvCompatWeakBase() { _xHdl->ResetWeakBase(); }
-
-    SvCompatWeakHdl<T>* GetHdl() { return _xHdl; }
 };
 
 /** We only have one weak reference in LO, in include/sfx2/frame.hxx, class SfxFrameWeak.
@@ -195,8 +192,6 @@ public:
     inline bool          Is() const
                          { return _xHdl.Is() && _xHdl->GetObj(); }
     inline T*            operator -> () const
-                         { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
-    inline T*            operator &  () const
                          { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
     inline operator T* () const
                          { return _xHdl.Is() ? _xHdl->GetObj() : 0; }

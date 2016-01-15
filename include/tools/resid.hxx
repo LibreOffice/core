@@ -99,11 +99,10 @@ public:
     }
 
     ResMgr *        GetResMgr() const { return m_pResMgr; }
-    const ResId &   SetResMgr( ResMgr * pMgr ) const
+    void            SetResMgr( ResMgr * pMgr ) const
     {
         m_pResMgr = pMgr;
         OSL_ENSURE( m_pResMgr != nullptr, "invalid ResMgr set on ResId" );
-        return *this;
     }
 
     const ResId &  SetAutoRelease(bool bRelease) const

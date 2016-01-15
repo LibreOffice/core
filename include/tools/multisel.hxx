@@ -44,7 +44,7 @@ private:
 
     TOOLS_DLLPRIVATE void           ImplClear();
     TOOLS_DLLPRIVATE size_t         ImplFindSubSelection( long nIndex ) const;
-    TOOLS_DLLPRIVATE bool           ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
+    TOOLS_DLLPRIVATE void           ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
     TOOLS_DLLPRIVATE long           ImplFwdUnselected();
 
 public:
@@ -55,10 +55,6 @@ public:
 
     MultiSelection& operator= ( const MultiSelection& rOrig );
     bool            operator== ( MultiSelection& rOrig );
-    bool            operator!= ( MultiSelection& rOrig )
-                        { return !operator==( rOrig ); }
-    bool            operator !() const
-                        { return nSelCount == 0; }
 
     void            SelectAll( bool bSelect = true );
     bool            Select( long nIndex, bool bSelect = true );

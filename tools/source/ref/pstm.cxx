@@ -461,7 +461,7 @@ SvPersistStream& SvPersistStream::WritePointer
     return *this;
 }
 
-sal_uInt32 SvPersistStream::ReadObj
+void SvPersistStream::ReadObj
 (
     SvPersistBase * &   rpObj,
     bool                bRegister
@@ -503,7 +503,7 @@ sal_uInt32 SvPersistStream::ReadObj
                 (void)nObjLen;
 #endif
                 SetError( ERRCODE_IO_NOFACTORY );
-                return 0;
+                return;
             }
             pFunc( &rpObj );
             // Save reference
@@ -539,7 +539,6 @@ sal_uInt32 SvPersistStream::ReadObj
             DBG_ASSERT( rpObj->GetClassId() == nClassId, "class mismatch" );
         }
     }
-    return nId;
 }
 
 SvPersistStream& SvPersistStream::ReadPointer
