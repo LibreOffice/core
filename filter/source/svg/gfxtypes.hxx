@@ -244,6 +244,7 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.mbIsText==rRHS.mbIsText &&
         rLHS.maFontFamily==rRHS.maFontFamily &&
         rLHS.mnFontSize==rRHS.mnFontSize &&
+        rLHS.mnParentFontSize==rRHS.mnParentFontSize &&
         rLHS.maFontStyle==rRHS.maFontStyle &&
         rLHS.maFontVariant==rRHS.maFontVariant &&
         rLHS.mnFontWeight==rRHS.mnFontWeight &&
@@ -297,6 +298,7 @@ namespace std
                 ^  size_t(rState.mbIsText)
                 ^  size_t(rState.maFontFamily.hashCode())
                 ^  std::hash<double>()(rState.mnFontSize)
+                ^  std::hash<double>()(rState.mnParentFontSize)
                 ^  size_t(rState.maFontStyle.hashCode())
                 ^  size_t(rState.maFontVariant.hashCode())
                 ^  std::hash<double>()(rState.mnFontWeight)
