@@ -82,23 +82,20 @@ CollatorWrapper::loadDefaultCollator (const lang::Locale& rLocale, sal_Int32 nOp
     return 0;
 }
 
-sal_Int32
+void
 CollatorWrapper::loadCollatorAlgorithm (const OUString& rAlgorithm,
         const lang::Locale& rLocale, sal_Int32 nOptions)
 {
     try
     {
         if (mxInternationalCollator.is())
-            return mxInternationalCollator->loadCollatorAlgorithm (
+            mxInternationalCollator->loadCollatorAlgorithm (
                                                         rAlgorithm, rLocale, nOptions);
     }
     catch (const uno::RuntimeException&)
     {
         SAL_WARN( "unotools.i18n","CollatorWrapper: loadCollatorAlgorithm failed");
     }
-
-    return 0;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

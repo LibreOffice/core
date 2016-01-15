@@ -726,32 +726,22 @@ bool SvtViewOptions::Exists() const
 
 //  public method
 
-bool SvtViewOptions::Delete()
+void SvtViewOptions::Delete()
 {
     // Ready for multithreading
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
 
-    bool bState = false;
     switch( m_eViewType )
     {
-        case E_DIALOG       :   {
-                                    bState = m_pDataContainer_Dialogs->Delete( m_sViewName );
-                                }
-                                break;
-        case E_TABDIALOG    :   {
-                                    bState = m_pDataContainer_TabDialogs->Delete( m_sViewName );
-                                }
-                                break;
-        case E_TABPAGE      :   {
-                                    bState = m_pDataContainer_TabPages->Delete( m_sViewName );
-                                }
-                                break;
-        case E_WINDOW       :   {
-                                    bState = m_pDataContainer_Windows->Delete( m_sViewName );
-                                }
-                                break;
+        case E_DIALOG    :  m_pDataContainer_Dialogs->Delete( m_sViewName );
+                            break;
+        case E_TABDIALOG :  m_pDataContainer_TabDialogs->Delete( m_sViewName );
+                            break;
+        case E_TABPAGE   :  m_pDataContainer_TabPages->Delete( m_sViewName );
+                            break;
+        case E_WINDOW    :  m_pDataContainer_Windows->Delete( m_sViewName );
+                            break;
     }
-    return bState;
 }
 
 //  public method
