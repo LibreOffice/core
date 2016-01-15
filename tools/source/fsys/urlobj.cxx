@@ -4937,15 +4937,14 @@ OUString INetURLObject::GetFileExtension(DecodeMechanism eMechanism,
     return getExtension(LAST_SEGMENT, false, eMechanism, eCharset);
 }
 
-bool INetURLObject::CutLastName()
+void INetURLObject::CutLastName()
 {
     INetURLObject aTemp(*this);
     aTemp.clearFragment();
     aTemp.clearQuery();
     if (!aTemp.removeSegment(LAST_SEGMENT, false))
-        return false;
+        return;
     *this = aTemp;
-    return true;
 }
 
 OUString INetURLObject::PathToFileName() const

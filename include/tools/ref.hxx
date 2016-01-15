@@ -196,8 +196,6 @@ public:
                          { return _xHdl.Is() && _xHdl->GetObj(); }
     inline T*            operator -> () const
                          { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
-    inline T*            operator &  () const
-                         { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
     inline operator T* () const
                          { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
 };

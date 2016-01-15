@@ -235,9 +235,8 @@ bool SvFileStream::LockFile()
     return bRetVal;
 }
 
-bool SvFileStream::UnlockFile()
+void SvFileStream::UnlockFile()
 {
-    bool bRetVal = false;
     if( nLockCounter > 0)
     {
         if( nLockCounter == 1)
@@ -245,16 +244,13 @@ bool SvFileStream::UnlockFile()
             if( UnlockRange( 0L, LONG_MAX ) )
             {
                 nLockCounter = 0;
-                bRetVal = true;
             }
         }
         else
         {
             nLockCounter--;
-            bRetVal = true;
         }
     }
-    return bRetVal;
 }
 
 /*
