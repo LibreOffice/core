@@ -12,6 +12,7 @@
 in vec2 texturePosition;
 in float fuzz;
 in vec2 v_center;
+in vec3 normal;
 
 uniform sampler2D slideTexture;
 uniform float selectedTexture;
@@ -25,13 +26,15 @@ bool isBorder(vec2 point)
 
 void main()
 {
-    gl_FragColor = texture2D(slideTexture, texturePosition);
+    vec4 fragment = texture2D(slideTexture, texturePosition);
+    vec3 lightVector = vec3(0.0, 0.0, 1.0);
+    float light = max(dot(lightVector, normal), 0.0);
     if (hexagonSize > 1.0) {
         // The space in-between hexagons.
         if (selectedTexture > 0.5)
-            gl_FragColor.a = 1.0 - time * 8 + gl_FragCoord.x / 1024.;
+            fragment.a = 1.0 - time * 8 + gl_FragCoord.x / 1024.;
         else
-            gl_FragColor.a = time * 8 - 7.7 + gl_FragCoord.x / 1024.;
+            fragment.a = time * 8 - 7.3 + gl_FragCoord.x / 1024.;
     } else {
         // The hexagons themselves.
 
@@ -58,8 +61,17 @@ void main()
             if (time < 0.8)
                 actualTime *= time / 0.8;
         }
-        gl_FragColor.a = actualTime;
+
+        if (selectedTexture > 0.5) {
+            // Leaving texture needs to be transparent to see-through.
+            fragment.a = actualTime;
+        } else {
+            // Entering one though, would look weird with transparency.
+            fragment.rgb *= actualTime;
+        }
     }
+    vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
+    gl_FragColor = mix(black, fragment, light);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
