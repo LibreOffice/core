@@ -2766,7 +2766,12 @@ lok_doc_view_paste (LOKDocView* pDocView,
     }
 
     if (pData)
+    {
+        std::stringstream ss;
+        ss << "lok::Document::paste('" << pMimeType << "', '" << std::string(pData, nSize) << ", "<<nSize<<"')";
+        g_info("%s", ss.str().c_str());
         ret = pDocument->pClass->paste(pDocument, pMimeType, pData, nSize);
+    }
 
     return ret;
 }
