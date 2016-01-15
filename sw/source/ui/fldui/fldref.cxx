@@ -245,6 +245,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
 
     nFieldDlgFormatSel = 0;
 
+    sal_uInt16 nFormatBoxPosition = USHRT_MAX;
     if( !IsRefresh() )
     {
         OUString sUserData = GetUserData();
@@ -256,16 +257,26 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
+                {
                     if(nVal == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i)))
                     {
                         m_pTypeLB->SelectEntryPos(i);
                         break;
                     }
+                }
+                sVal = sUserData.getToken(2, ';');
+                if(!sVal.isEmpty())
+                {
+                    nFormatBoxPosition = static_cast< sal_uInt16 >(sVal.toInt32());
+                }
             }
         }
     }
     TypeHdl(*m_pTypeLB);
-
+    if(nFormatBoxPosition != USHRT_MAX)
+    {
+        m_pFormatLB->SelectEntryPos(nFormatBoxPosition);
+    }
     if (IsFieldEdit())
     {
         m_pTypeLB->SaveValue();
@@ -975,7 +986,11 @@ void    SwFieldRefPage::FillUserData()
         ? USHRT_MAX
         : sal::static_int_cast< sal_uInt16 >
             (reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nEntryPos )));
-    SetUserData( USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
+    const sal_Int32 nFormatEntryPos = m_pFormatLB->GetSelectEntryPos();
+    const sal_uInt32 nFormatSel = LISTBOX_ENTRY_NOTFOUND == nFormatEntryPos ? USHRT_MAX : nFormatEntryPos;
+    SetUserData( USER_DATA_VERSION ";" +
+        OUString::number( nTypeSel ) + ";" +
+        OUString::number( nFormatSel ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
