@@ -1210,7 +1210,6 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nInsPos, sal_Unicode cChar,
                                     bool bInsert, vcl::Window* pFrameWin )
 {
-    sal_uLong nRet = 0;
     bool bIsNextRun = bRunNext;
     bRunNext = false;  // if it was set, then it has to be turned off
 
@@ -1222,7 +1221,6 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 IsAutoCorrFlag( IgnoreDoubleSpace ) &&
                 ' ' == rTxt[ nInsPos - 1 ])
             {
-                nRet = IgnoreDoubleSpace;
                 break;
             }
 
@@ -1240,7 +1238,6 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         ( cEnDash && cEnDash == cPrev );
 
                 InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert );
-                nRet = bSingle ? ChgSglQuotes : ChgQuotes;
                 break;
             }
 
@@ -1255,7 +1252,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 if ( NeedsHardspaceAutocorr( cChar ) &&
                     FnAddNonBrkSpace( rDoc, rTxt, 0, nInsPos, rDoc.GetLanguage( nInsPos ) ) )
                 {
-                    nRet = AddNonBrkSpace;
+                    ;
                 }
                 else if ( bIsNextRun && !IsAutoCorrectChar( cChar ) )
                 {
@@ -1272,7 +1269,6 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                             if ( cTmpChar == cNonBreakingSpace )
                             {
                                 rDoc.Delete( nPos, nPos + 1 );
-                                nRet = AddNonBrkSpace;
                                 bContinue = false;
                             }
                             else if ( !NeedsHardspaceAutocorr( cTmpChar ) || nPos == 0 )
@@ -1295,9 +1291,10 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         // Set bold or underline automatically?
         if (('*' == cChar || '_' == cChar) && (nPos+1 < rTxt.getLength()))
         {
-            if( IsAutoCorrFlag( ChgWeightUnderl ) &&
-                FnChgWeightUnderl( rDoc, rTxt, 0, nPos+1 ) )
-                nRet = ChgWeightUnderl;
+            if( IsAutoCorrFlag( ChgWeightUnderl ) )
+            {
+                FnChgWeightUnderl( rDoc, rTxt, 0, nPos+1 );
+            }
             break;
         }
 
@@ -1353,7 +1350,6 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
             if( bChgWord )
             {
-                nRet = Autocorrect;
                 if( !aPara.isEmpty() )
                 {
                     sal_Int32 nEnd = nCapLttrPos;
@@ -1362,24 +1358,26 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         ++nEnd;
 
                     // Capital letter at beginning of paragraph?
-                    if( IsAutoCorrFlag( CapitalStartSentence ) &&
+                    if( IsAutoCorrFlag( CapitalStartSentence ) )
+                    {
                         FnCapitalStartSentence( rDoc, aPara, false,
-                                                nCapLttrPos, nEnd, eLang ) )
-                        nRet |= CapitalStartSentence;
+                                                nCapLttrPos, nEnd, eLang );
+                    }
 
-                    if( IsAutoCorrFlag( ChgToEnEmDash ) &&
-                        FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nEnd, eLang ) )
-                        nRet |= ChgToEnEmDash;
+                    if( IsAutoCorrFlag( ChgToEnEmDash ) )
+                    {
+                        FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nEnd, eLang );
+                    }
                 }
                 break;
             }
         }
 
-        if( ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
+        if( ( IsAutoCorrFlag( ChgOrdinalNumber ) &&
                 (nInsPos >= 2 ) &&       // fdo#69762 avoid autocorrect for 2e-3
                 ( '-' != cChar || 'E' != toupper(rTxt[nInsPos-1]) || '0' > rTxt[nInsPos-2] || '9' < rTxt[nInsPos-2] ) &&
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
-            ( IsAutoCorrFlag( nRet = SetINetAttr ) &&
+            ( IsAutoCorrFlag( SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
                 FnSetINetAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) )
             ;
@@ -1388,36 +1386,36 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             bool bLockKeyOn = pFrameWin && (pFrameWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK);
             bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, rTxt, nCapLttrPos, nInsPos );
 
-            nRet = 0;
             if ( bLockKeyOn && IsAutoCorrFlag( CorrectCapsLock ) &&
                  FnCorrectCapsLock( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
             {
                 // Correct accidental use of cAPS LOCK key (do this only when
                 // the caps or shift lock key is pressed).  Turn off the caps
                 // lock afterwords.
-                nRet |= CorrectCapsLock;
                 pFrameWin->SimulateKeyPress( KEY_CAPSLOCK );
             }
 
             // Capital letter at beginning of paragraph ?
             if( !bUnsupported &&
-                IsAutoCorrFlag( CapitalStartSentence ) &&
-                FnCapitalStartSentence( rDoc, rTxt, true, nCapLttrPos, nInsPos, eLang ) )
-                nRet |= CapitalStartSentence;
+                IsAutoCorrFlag( CapitalStartSentence ) )
+            {
+                FnCapitalStartSentence( rDoc, rTxt, true, nCapLttrPos, nInsPos, eLang );
+            }
 
             // Two capital letters at beginning of word ??
             if( !bUnsupported &&
-                IsAutoCorrFlag( CapitalStartWord ) &&
-                FnCapitalStartWord( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
-                nRet |= CapitalStartWord;
+                IsAutoCorrFlag( CapitalStartWord ) )
+            {
+                FnCapitalStartWord( rDoc, rTxt, nCapLttrPos, nInsPos, eLang );
+            }
 
-            if( IsAutoCorrFlag( ChgToEnEmDash ) &&
-                FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
-                nRet |= ChgToEnEmDash;
+            if( IsAutoCorrFlag( ChgToEnEmDash ) )
+            {
+                FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nInsPos, eLang );
+            }
         }
 
     } while( false );
-    SAL_INFO_IF(nRet != 0, "editeng", "DoAutoCorrect: did " << nRet);
 }
 
 SvxAutoCorrectLanguageLists& SvxAutoCorrect::_GetLanguageList(
