@@ -65,37 +65,36 @@ ImplFont::ImplFont() :
     mbTransparent( true )
 {}
 
-ImplFont::ImplFont( const ImplFont& rImplFont )
-:   maFamilyName( rImplFont.maFamilyName ),
+ImplFont::ImplFont( const ImplFont& rImplFont ) :
+    mnRefCount( 1 ),
+    maFamilyName( rImplFont.maFamilyName ),
     maStyleName( rImplFont.maStyleName ),
     maSize( rImplFont.maSize ),
     maColor( rImplFont.maColor ),
     maFillColor( rImplFont.maFillColor ),
+    meCharSet( rImplFont.meCharSet ),
     maLanguageTag( rImplFont.maLanguageTag ),
-    maCJKLanguageTag( rImplFont.maCJKLanguageTag )
-{
-    mnRefCount          = 1;
-    meCharSet           = rImplFont.meCharSet;
-    meFamily            = rImplFont.meFamily;
-    mePitch             = rImplFont.mePitch;
-    meAlign             = rImplFont.meAlign;
-    meWeight            = rImplFont.meWeight;
-    meWidthType         = rImplFont.meWidthType;
-    meItalic            = rImplFont.meItalic;
-    meUnderline         = rImplFont.meUnderline;
-    meOverline          = rImplFont.meOverline;
-    meStrikeout         = rImplFont.meStrikeout;
-    meRelief            = rImplFont.meRelief;
-    meEmphasisMark      = rImplFont.meEmphasisMark;
-    mnOrientation       = rImplFont.mnOrientation;
-    mnKerning           = rImplFont.mnKerning;
-    mbWordLine          = rImplFont.mbWordLine;
-    mbOutline           = rImplFont.mbOutline;
-    mbShadow            = rImplFont.mbShadow;
-    mbVertical          = rImplFont.mbVertical;
-    mbTransparent       = rImplFont.mbTransparent;
-    mbConfigLookup      = rImplFont.mbConfigLookup;
-}
+    maCJKLanguageTag( rImplFont.maCJKLanguageTag ),
+    meFamily( rImplFont.meFamily ),
+    mePitch( rImplFont.mePitch ),
+    meAlign( rImplFont.meAlign ),
+    meWeight( rImplFont.meWeight ),
+    meWidthType( rImplFont.meWidthType ),
+    meItalic( rImplFont.meItalic ),
+    meUnderline( rImplFont.meUnderline ),
+    meOverline( rImplFont.meOverline ),
+    meStrikeout( rImplFont.meStrikeout ),
+    meRelief( rImplFont.meRelief ),
+    meEmphasisMark( rImplFont.meEmphasisMark ),
+    mnOrientation( rImplFont.mnOrientation ),
+    mnKerning( rImplFont.mnKerning ),
+    mbWordLine( rImplFont.mbWordLine ),
+    mbOutline( rImplFont.mbOutline ),
+    mbConfigLookup( rImplFont.mbConfigLookup ),
+    mbShadow( rImplFont.mbShadow ),
+    mbVertical( rImplFont.mbVertical ),
+    mbTransparent( rImplFont.mbTransparent )
+{}
 
 bool ImplFont::operator==( const ImplFont& rOther ) const
 {
