@@ -10,7 +10,7 @@
 #version 150
 
 layout(triangles) in;
-layout(triangle_strip, max_vertices=13) out;
+layout(triangle_strip, max_vertices=27) out;
 
 in mat4 modelViewProjectionMatrix[];
 
@@ -20,6 +20,7 @@ uniform sampler2D permTexture;
 out vec2 texturePosition;
 out float fuzz;
 out vec2 v_center;
+out vec3 normal;
 
 const float expandFactor = 0.0318;
 
@@ -51,11 +52,28 @@ void main()
     v_center = (1 + center.xy) / 2;
     fuzz = snoise(center.xy);
 
+    // Draw “walls” to the hexagons.
+    if (hexagonSize < 1.0) {
+        vec3 rearCenter = vec3(center.xy, -0.3);
+        normal = vec3(0.0, 0.0, 0.3);
+        emitHexagonVertex(center, translateVectors[5]);
+        emitHexagonVertex(rearCenter, translateVectors[5]);
+
+        for (int i = 0; i < 6; ++i) {
+            emitHexagonVertex(center, translateVectors[i]);
+            emitHexagonVertex(rearCenter, translateVectors[i]);
+        }
+
+        EndPrimitive();
+    }
+
+    // Draw the main hexagon part.
+    normal = vec3(0.0, 0.0, 1.0);
     emitHexagonVertex(center, translateVectors[5]);
 
     for (int i = 0; i < 6; ++i) {
         emitHexagonVertex(center, translateVectors[i]);
-        emitHexagonVertex(center, vec2(0, 0));
+        emitHexagonVertex(center, vec2(0.0, 0.0));
     }
 
     EndPrimitive();
