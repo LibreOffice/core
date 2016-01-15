@@ -30,16 +30,16 @@
 class ImplFont
 {
 public:
-                        ImplFont();
-                        ImplFont( const ImplFont& );
-
-    bool                operator==( const ImplFont& ) const;
+    explicit            ImplFont();
+    explicit            ImplFont( const ImplFont& );
 
     FontPitch           GetPitch()      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }
     FontFamily          GetFamily()     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
     FontItalic          GetItalic()     { if(meItalic==ITALIC_DONTKNOW)  AskConfig(); return meItalic; }
     FontWeight          GetWeight()     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
     FontWidth           GetWidthType()  { if(meWidthType==WIDTH_DONTKNOW)AskConfig(); return meWidthType; }
+
+    bool                operator==( const ImplFont& ) const;
 
 private:
     friend class vcl::Font;
