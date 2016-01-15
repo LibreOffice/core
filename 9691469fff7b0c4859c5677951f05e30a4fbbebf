@@ -19,6 +19,74 @@
     },
     {
       "key": {
+        "uuid": "dab17558_a5cbad71",
+        "filename": "include/vcl/menu.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-15T11:02:40Z",
+      "side": 1,
+      "message": "const reference ? \u003d)",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_05c9d978",
+        "filename": "include/vcl/menu.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-15T11:02:40Z",
+      "side": 1,
+      "message": "const reference - also lets not return the same thing from the method - why not a void return ? \u003d)",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e5c5b55b",
+        "filename": "include/vcl/window.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-15T11:02:40Z",
+      "side": 1,
+      "message": "can we align the method name cutely ? ;-)",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_45a121a9",
+        "filename": "vcl/source/window/floatwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-15T11:02:40Z",
+      "side": 1,
+      "message": "const ref ? \u003d)",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_0a3566d9",
         "filename": "vcl/source/window/menu.cxx",
         "patchSetId": 1
@@ -30,6 +98,75 @@
       "writtenOn": "2016-01-13T20:19:50Z",
       "side": 1,
       "message": "I thought that since this was part of the original code, there must be some intention to modify this in the future and hence left it as is, without constifying it or deleting it. Also it is overridden below after inheritance.",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_25a69dc1",
+        "filename": "vcl/source/window/menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2312,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-15T11:02:40Z",
+      "side": 1,
+      "message": "this method looks entirely lame - surely  we don\u0027t need a method that just returns the parameter you pass it ? \u003d)\n\nCan we clean it out ?",
+      "parentUuid": "dab17558_0a3566d9",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_65b0a5f5",
+        "filename": "vcl/source/window/menufloatingwindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-15T11:02:40Z",
+      "side": 1,
+      "message": "no need to assign a nullptr - it is init\u0027ed to empty/null.",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c5951141",
+        "filename": "vcl/source/window/menufloatingwindow.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-15T11:02:40Z",
+      "side": 1,
+      "message": "nice to see the const reference \u003d)",
+      "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a5928d55",
+        "filename": "vcl/source/window/window2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-01-15T11:02:40Z",
+      "side": 1,
+      "message": "we can return that in one line not two - without the intermediary \u003d)",
       "revId": "9691469fff7b0c4859c5677951f05e30a4fbbebf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
