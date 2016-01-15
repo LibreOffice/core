@@ -1864,23 +1864,19 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     OSL_ENSURE(pOper, "Sm: missing subnode");
     OSL_ENSURE(pBody, "Sm: missing subnode");
 
+    pBody->Arrange(rDev,rFormat);
+    long nHeight = pBody->GetHeight();
     SmNode *pSymbol = GetSymbol();
-    pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
-                              pSymbol->GetFont().GetFontSize().Height()));
-
-    pBody->Arrange(rDev, rFormat);
     pOper->Arrange(rDev, rFormat);
 
-    long  nOrigHeight = GetFont().GetFontSize().Height(),
-          nDist = nOrigHeight
-                  * rFormat.GetDistance(DIS_OPERATORSPACE) / 100L;
-
-    Point aPos = pOper->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, /*RectVerAlign::CenterY*/RectVerAlign::Mid);
-    aPos.X() -= nDist;
-    pOper->MoveTo(aPos);
+    pSymbol->AdaptToY(rDev,nHeight);
+    pSymbol->Arrange(rDev, rFormat);
+    Point aPos= pSymbol->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, RectVerAlign::Mid);
+    aPos.Y() = pSymbol->GetTop()+pBody->GetBottom() - pSymbol->GetBottom();
+    pSymbol->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
-    ExtendBy(*pOper, RCP_THIS);
+    ExtendBy(*pSymbol, RCP_THIS);
 }
 
 
