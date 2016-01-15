@@ -279,7 +279,7 @@ void ModulWindow::CheckCompileBasic()
 
             bool bWasModified = GetBasic()->IsModified();
 
-            bDone = StarBASIC::Compile( xModule );
+            bDone = xModule->Compile();
             if ( !bWasModified )
                 GetBasic()->SetModified(false);
 

@@ -100,9 +100,7 @@ public:
 
     // Compiler-Interface
     SbModule*       MakeModule( const OUString& rName, const OUString& rSrc );
-    SbModule*       MakeModule32( const OUString& rName, const OUString& rSrc );
-    SbModule*       MakeModule32( const OUString& rName, const css::script::ModuleInfo& mInfo, const OUString& rSrc );
-    static bool     Compile( SbModule* );
+    SbModule*       MakeModule( const OUString& rName, const css::script::ModuleInfo& mInfo, const OUString& rSrc );
     static void     Stop();
     static void     Error( SbError );
     static void     Error( SbError, const OUString& rMsg );

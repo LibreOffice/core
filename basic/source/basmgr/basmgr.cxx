@@ -225,10 +225,10 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
             {
                 ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
                 OSL_TRACE("#addLibraryModulesImpl - aMod");
-                pLib->MakeModule32( aModuleName, mInfo, aMod );
+                pLib->MakeModule( aModuleName, mInfo, aMod );
             }
             else
-        pLib->MakeModule32( aModuleName, aMod );
+        pLib->MakeModule( aModuleName, aMod );
         }
 
         pLib->SetModified( false );
@@ -284,10 +284,10 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
                 if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aName ) )
                 {
                     ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aName );
-                    pLib->MakeModule32( aName, mInfo, aMod );
+                    pLib->MakeModule( aName, mInfo, aMod );
                 }
                 else
-                    pLib->MakeModule32( aName, aMod );
+                    pLib->MakeModule( aName, aMod );
                 pLib->SetModified( false );
             }
         }
@@ -315,7 +315,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
         if( pMod )
                 pMod->SetSource32( aMod );
         else
-                pLib->MakeModule32( aName, aMod );
+                pLib->MakeModule( aName, aMod );
 
         pLib->SetModified( false );
     }
@@ -1111,7 +1111,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference )
         DBG_ASSERT( pModule, "Module not received!" );
         if ( !pModule->IsCompiled() && !StarBASIC::GetErrorCode() )
         {
-            StarBASIC::Compile( pModule );
+            pModule->Compile();
         }
     }
 
@@ -1874,7 +1874,7 @@ void ModuleContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
     }
     uno::Reference< script::XStarBasicModuleInfo > xMod;
     aElement >>= xMod;
-    mpLib->MakeModule32( aName, xMod->getSource() );
+    mpLib->MakeModule( aName, xMod->getSource() );
 }
 
 void ModuleContainer_Impl::removeByName( const OUString& Name )
@@ -2281,7 +2281,7 @@ void SAL_CALL StarBasicAccess_Impl::addModule
     DBG_ASSERT( pLib, "XML Import: Lib for module unknown");
     if( pLib )
     {
-        pLib->MakeModule32( ModuleName, Source );
+        pLib->MakeModule( ModuleName, Source );
     }
 }
 
