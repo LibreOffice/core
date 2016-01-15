@@ -93,14 +93,15 @@ $(call gb_CustomTarget_get_workdir,$(1))/misc/$(5)ids.inc \
 $(call gb_CustomTarget_get_workdir,$(1))/$(5)names.inc \
 $(if $(6),$(call gb_CustomTarget_get_workdir,$(1))/misc/$(6)) \
 $(if $(7),$(call gb_CustomTarget_get_workdir,$(1))/$(7)names.inc) : \
-	$(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx
+		$(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx
 	touch $$@
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx : \
-	$(if $(8),$(SRCDIR)/$(3)/$(8),$(SRCDIR)/solenv/bin/generate-tokens.pl) \
-	$(SRCDIR)/$(3)/$(4).txt \
-	$(SRCDIR)/$(3)/$(4).hxx.head \
-	$(SRCDIR)/$(3)/$(4).hxx.tail
+		$(if $(7),$(SRCDIR)/$(3)/$(7).txt) \
+		$(if $(8),$(SRCDIR)/$(3)/$(8),$(SRCDIR)/solenv/bin/generate-tokens.pl) \
+		$(SRCDIR)/$(3)/$(4).txt \
+		$(SRCDIR)/$(3)/$(4).hxx.head \
+		$(SRCDIR)/$(3)/$(4).hxx.tail
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),build,PRL,1)
 	mkdir -p $(call gb_CustomTarget_get_workdir,$(1))/misc \
 	    	$(call gb_CustomTarget_get_workdir,$(1)) \
