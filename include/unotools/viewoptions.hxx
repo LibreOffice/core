@@ -150,13 +150,9 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions : public utl::detail::Op
                         your view will die relay in configuration...
 
             @seealso    method Exist()
-
-            @return     True if delete OK, False otherwise.
-
-            @onerror    We return sal_False.
         *//*-*****************************************************************************************************/
 
-        bool Delete();
+        void Delete();
 
         /*-****************************************************************************************************
             @short      use it to set/get the window state of your view

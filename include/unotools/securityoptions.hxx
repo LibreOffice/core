@@ -193,7 +193,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions : public utl::detail
 
         // for bool options only!
         bool        IsOptionSet     ( EOption eOption                   ) const;
-        bool        SetOption       ( EOption eOption, bool bValue      );
+        void        SetOption       ( EOption eOption, bool bValue      );
         bool        IsOptionEnabled ( EOption eOption                   ) const;
 
         // xmlsec05 deprecated methods
