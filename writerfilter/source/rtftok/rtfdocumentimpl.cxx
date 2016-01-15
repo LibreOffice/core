@@ -3498,7 +3498,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, std::make_shared<RTFValue>(23)); // bullets, same as \levelnfc23
     }
     break;
-    case RTF_LANDSCAPE:
+    case RTF_LANDSCAPE: // fall through: set the default + current value
     {
         auto pValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_PageOrientation_landscape);
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
