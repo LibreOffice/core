@@ -180,6 +180,7 @@ public:
                         WriteTextShape( css::uno::Reference< css::drawing::XShape > xShape );
     ShapeExport&
                         WriteTableShape( css::uno::Reference< css::drawing::XShape > xShape );
+    void                WriteMathShape(css::uno::Reference<css::drawing::XShape> const& xShape);
     ShapeExport&
                         WriteOLE2Shape( css::uno::Reference< css::drawing::XShape > xShape );
     virtual ShapeExport&
