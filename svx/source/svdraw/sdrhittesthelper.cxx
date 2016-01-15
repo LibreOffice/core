@@ -77,7 +77,7 @@ SdrObject* SdrObjectPrimitiveHit(
                     const sdr::contact::ViewObjectContact& rVOC = rObject.GetViewContact().GetViewObjectContact(
                         rSdrPageView.GetPageWindow(0)->GetObjectContact());
 
-                    if(ViewObjectContactPrimitiveHit(rObject, rVOC, aHitPosition, fLogicTolerance, bTextOnly))
+                    if(ViewObjectContactPrimitiveHit(rVOC, aHitPosition, fLogicTolerance, bTextOnly))
                     {
                           pResult = const_cast< SdrObject* >(&rObject);
                     }
@@ -116,7 +116,6 @@ SdrObject* SdrObjListPrimitiveHit(
 
 
 bool ViewObjectContactPrimitiveHit(
-    const SdrObject& rObject,
     const sdr::contact::ViewObjectContact& rVOC,
     const basegfx::B2DPoint& rHitPosition,
     double fLogicHitTolerance,
@@ -147,8 +146,7 @@ bool ViewObjectContactPrimitiveHit(
                     rViewInformation2D,
                     rHitPosition,
                     fLogicHitTolerance,
-                    bTextOnly,
-                    rObject.GetModel()->isTiledRendering());
+                    bTextOnly);
 
                 // feed it with the primitives
                 aHitTestProcessor2D.process(rSequence);

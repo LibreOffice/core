@@ -71,6 +71,7 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/lok.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace sdr::table;
@@ -251,7 +252,7 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
 
 bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWindow )
 {
-    if (mxTableObj->GetModel()->isTiledRendering() && !pWindow)
+    if (comphelper::LibreOfficeKit::isActive() && !pWindow)
     {
         // Tiled rendering: get the window that has the disabled map mode.
         if (OutputDevice* pOutputDevice = mpView->GetFirstOutputDevice())
@@ -307,7 +308,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         }
     }
 
-    if (mxTableObj->GetModel()->isTiledRendering() && rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && eHit == SDRTABLEHIT_CELLTEXTAREA)
+    if (comphelper::LibreOfficeKit::isActive() && rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && eHit == SDRTABLEHIT_CELLTEXTAREA)
     {
         bool bEmptyOutliner = false;
         if (Outliner* pOutliner = mpView->GetTextEditOutliner())
@@ -2165,7 +2166,7 @@ void SvxTableController::updateSelectionOverlay()
             }
 
             // If tiled rendering, emit callbacks for sdr table selection.
-            if (pOutDev && pTableObj->GetModel()->isTiledRendering())
+            if (pOutDev && comphelper::LibreOfficeKit::isActive())
             {
                 // Left edge of aStartRect.
                 Rectangle aSelectionStart(aStartRect.Left(), aStartRect.Top(), aStartRect.Left(), aStartRect.Bottom());
@@ -2197,7 +2198,7 @@ void SvxTableController::destroySelectionOverlay()
         delete mpSelectionOverlay;
         mpSelectionOverlay = nullptr;
 
-        if (mxTableObj->GetModel()->isTiledRendering())
+        if (comphelper::LibreOfficeKit::isActive())
         {
             // Clear the LOK text selection so far provided by this table.
             mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, "EMPTY");
