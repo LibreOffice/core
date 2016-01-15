@@ -380,11 +380,9 @@ sal_uInt16 SvXMLNamespaceMap::GetNextIndex( sal_uInt16 nOldIdx ) const
     return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second->nKey;
 }
 
-bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix,
+void SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix,
                                     const OUString& rName, sal_uInt16 nKey )
 {
-    bool bRet = false;
-
     if( XML_NAMESPACE_UNKNOWN == nKey )
         nKey = GetKeyByName( rName );
 
@@ -392,9 +390,7 @@ bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix
     if( XML_NAMESPACE_NONE != nKey && ! ( aNameHash.count ( rPrefix ) ) )
     {
         _Add( rPrefix, rName, nKey );
-        bRet = true;
     }
-    return bRet;
 }
 
 OUString SvXMLNamespaceMap::GetAttrNameByIndex( sal_uInt16 nIdx ) const

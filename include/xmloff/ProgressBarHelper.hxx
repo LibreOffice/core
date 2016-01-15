@@ -57,7 +57,7 @@ public:
 
             // set the new reference and returns the new value which gives the
             // Progress Bar the sam position as before
-            sal_Int32 ChangeReference(sal_Int32 nNewReference);
+            void ChangeReference(sal_Int32 nNewReference);
 
             sal_Int32 GetReference() { return nReference; }
             sal_Int32 GetValue() { return nValue; }

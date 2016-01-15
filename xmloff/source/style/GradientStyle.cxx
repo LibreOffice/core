@@ -77,7 +77,7 @@ XMLGradientStyleImport::~XMLGradientStyleImport()
 {
 }
 
-bool XMLGradientStyleImport::importXML(
+void XMLGradientStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
@@ -101,7 +101,6 @@ bool XMLGradientStyleImport::importXML(
     bool bHasName       = false;
     bool bHasStyle      = false;
     bool bHasStartColor = false;
-    bool bHasEndColor   = false;
     OUString aDisplayName;
 
     awt::Gradient aGradient;
@@ -201,10 +200,6 @@ bool XMLGradientStyleImport::importXML(
                                      aDisplayName );
         rStrName = aDisplayName;
     }
-
-    bool bRet = bHasName && bHasStyle && bHasStartColor && bHasEndColor;
-
-    return bRet;
 }
 
 // Export
@@ -219,11 +214,10 @@ XMLGradientStyleExport::~XMLGradientStyleExport()
 {
 }
 
-bool XMLGradientStyleExport::exportXML(
+void XMLGradientStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    bool bRet = false;
     awt::Gradient aGradient;
 
     if( !rStrName.isEmpty() )
@@ -234,11 +228,7 @@ bool XMLGradientStyleExport::exportXML(
             OUStringBuffer aOut;
 
             // Style
-            if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
-            {
-                bRet = false;
-            }
-            else
+            if( SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
             {
                 // Name
                 bool bEncoded = false;
@@ -304,8 +294,6 @@ bool XMLGradientStyleExport::exportXML(
             }
         }
     }
-
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

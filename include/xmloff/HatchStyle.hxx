@@ -42,7 +42,7 @@ public:
     XMLHatchStyleImport( SvXMLImport& rImport );
     ~XMLHatchStyleImport();
 
-    bool importXML(
+    void importXML(
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Any& rValue,
         OUString& rStrName );
@@ -56,7 +56,7 @@ public:
     XMLHatchStyleExport( SvXMLExport& rExport );
     ~XMLHatchStyleExport();
 
-    bool exportXML( const OUString& rStrName, const css::uno::Any& rValue );
+    void exportXML( const OUString& rStrName, const css::uno::Any& rValue );
 };
 
 #endif // _XMLOFF_HATCHELEMENT_HXX

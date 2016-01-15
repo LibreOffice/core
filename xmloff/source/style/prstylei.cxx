@@ -553,11 +553,9 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
 }
 
 //UUUU
-bool XMLPropStyleContext::deactivateOldFillStyleDefinitions(
+void XMLPropStyleContext::deactivateOldFillStyleDefinitions(
     const OldFillStyleDefinitionSet& rHashSetOfTags)
 {
-    bool bRetval(false);
-
     if(!rHashSetOfTags.empty() && maProperties.size())
     {
         const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
@@ -574,21 +572,16 @@ bool XMLPropStyleContext::deactivateOldFillStyleDefinitions(
                     {
                         // mark entry as inactive
                         a->mnIndex = -1;
-                        bRetval = true;
                     }
                 }
             }
         }
     }
-
-    return bRetval;
 }
 
 //UUUU
-bool XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames()
+void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames()
 {
-    bool bRetval(false);
-
     if(maProperties.size())
     {
         const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
@@ -627,14 +620,11 @@ bool XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
                         a->maValue >>= sStyleName;
                         sStyleName = GetImport().GetStyleDisplayName( aStyleFamily, sStyleName );
                         a->maValue <<= sStyleName;
-                        bRetval = true;
                     }
                 }
             }
         }
     }
-
-    return bRetval;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,7 @@ public:
     XMLMarkerStyleImport( SvXMLImport& rImport );
     ~XMLMarkerStyleImport();
 
-    bool importXML(
+    void importXML(
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         css::uno::Any& rValue,
         OUString& rStrName );

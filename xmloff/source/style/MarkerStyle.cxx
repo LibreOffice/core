@@ -48,7 +48,7 @@ XMLMarkerStyleImport::~XMLMarkerStyleImport()
 {
 }
 
-bool XMLMarkerStyleImport::importXML(
+void XMLMarkerStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
@@ -137,8 +137,6 @@ bool XMLMarkerStyleImport::importXML(
     }
 
     delete pViewBox;
-
-    return bHasViewBox && bHasPathData;
 }
 
 // Export

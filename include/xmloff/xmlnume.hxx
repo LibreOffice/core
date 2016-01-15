@@ -59,7 +59,7 @@ protected:
     /// Override this to add attributes to the <list-style> element.
     SAL_DLLPRIVATE void AddListStyleAttributes();
 
-    SAL_DLLPRIVATE bool exportStyle( const css::uno::Reference< css::style::XStyle >& rStyle );
+    SAL_DLLPRIVATE void exportStyle( const css::uno::Reference< css::style::XStyle >& rStyle );
     SAL_DLLPRIVATE void exportOutline();
 
     SvXMLExport& GetExport() { return rExport; }

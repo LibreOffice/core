@@ -99,9 +99,9 @@ void XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rVal
     }
 }
 
-bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
+void XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
 {
-    return ImpImportXML( xAttrList, rValue, rStrName, rImport );
+    ImpImportXML( xAttrList, rValue, rStrName, rImport );
 }
 
 bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList,

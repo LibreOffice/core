@@ -44,7 +44,7 @@ ProgressBarHelper::~ProgressBarHelper()
 {
 }
 
-sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
+void ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
 {
     if((nNewReference > 0) && (nNewReference != nReference))
     {
@@ -61,7 +61,6 @@ sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
             nValue = 0;
         }
     }
-    return nValue;
 }
 
 void ProgressBarHelper::SetValue(sal_Int32 nTempValue)

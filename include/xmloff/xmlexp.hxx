@@ -496,7 +496,7 @@ public:
     // get export flags
     SvXMLExportFlags getExportFlags() const { return mnExportFlags; }
 
-    bool ExportEmbeddedOwnObject(
+    void ExportEmbeddedOwnObject(
         css::uno::Reference<css::lang::XComponent >& rComp );
 
     OUString GetRelativeReference(const OUString& rValue);

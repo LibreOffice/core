@@ -696,7 +696,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     }
 }
 
-bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
+void SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
@@ -709,7 +709,7 @@ bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
         if( !*static_cast<sal_Bool const *>(aAny.getValue()) )
-            return false;
+            return;
     }
 
     aAny = xPropSet->getPropertyValue( sNumberingRules );
@@ -726,8 +726,6 @@ bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
     }
 
     exportNumberingRule( sName, bHidden, xNumRule );
-
-    return true;
 }
 
 void SvxXMLNumRuleExport::exportOutline()

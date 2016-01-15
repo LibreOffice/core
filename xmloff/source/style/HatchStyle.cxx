@@ -68,7 +68,7 @@ XMLHatchStyleImport::~XMLHatchStyleImport()
 {
 }
 
-bool XMLHatchStyleImport::importXML(
+void XMLHatchStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
@@ -158,10 +158,6 @@ bool XMLHatchStyleImport::importXML(
                                      aDisplayName );
         rStrName = aDisplayName;
     }
-
-    bool bRet = bHasName && bHasStyle && bHasColor && bHasDist;
-
-    return bRet;
 }
 
 // Export
@@ -175,11 +171,10 @@ XMLHatchStyleExport::~XMLHatchStyleExport()
 {
 }
 
-bool XMLHatchStyleExport::exportXML(
+void XMLHatchStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    bool bRet = false;
     drawing::Hatch aHatch;
 
     if( !rStrName.isEmpty() )
@@ -193,11 +188,7 @@ bool XMLHatchStyleExport::exportXML(
                 rExport.GetMM100UnitConverter();
 
             // Style
-            if( !SvXMLUnitConverter::convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
-            {
-                bRet = false;
-            }
-            else
+            if( SvXMLUnitConverter::convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
             {
                 // Name
                 bool bEncoded = false;
@@ -232,8 +223,6 @@ bool XMLHatchStyleExport::exportXML(
             }
         }
     }
-
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,14 +68,14 @@ protected:
     // the given OldFillStyleDefinitionSet) in the local maProperties. Deactivation
     // is done setting theindex to -1. It returns true when actually old fill
     // definitions existed and were deactivated
-    bool deactivateOldFillStyleDefinitions(
+    void deactivateOldFillStyleDefinitions(
         const OldFillStyleDefinitionSet& rHashSetOfTags);
 
     //UUUU Helper to translate new DrawingLayer FillStyle values which are name-based
     // from ODF internal name to style display names which can be found in the current
     // document model (using NameOrIndex Items). The change is executed on the internal
     // maProperties. The return value is true when actually names were changed
-    bool translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames();
+    void translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames();
 
     //UUUU provider for often used sets
     static const OldFillStyleDefinitionSet& getStandardSet();

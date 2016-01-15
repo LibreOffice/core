@@ -2141,7 +2141,7 @@ sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& r
     return 0;
 }
 
-bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
+void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 {
     OUString sFilterService;
 
@@ -2168,7 +2168,7 @@ bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
     SAL_WARN_IF( !sFilterService.getLength(), "xmloff.core", "no export filter for own object" );
 
     if( sFilterService.isEmpty() )
-        return false;
+        return;
 
     Reference < XDocumentHandler > xHdl =
         new XMLEmbeddedObjectExportFilter( mxHandler );
@@ -2181,14 +2181,14 @@ bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
         UNO_QUERY);
     SAL_WARN_IF( !xExporter.is(), "xmloff.core", "can't instantiate export filter component for own object" );
     if( !xExporter.is() )
-        return false;
+        return;
 
     xExporter->setSourceDocument( rComp );
 
     Reference<XFilter> xFilter( xExporter, UNO_QUERY );
 
     Sequence < PropertyValue > aMediaDesc( 0 );
-    return xFilter->filter( aMediaDesc );
+    xFilter->filter( aMediaDesc );
 }
 
 OUString SvXMLExport::GetRelativeReference(const OUString& rValue)

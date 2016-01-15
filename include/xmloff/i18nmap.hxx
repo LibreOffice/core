@@ -36,12 +36,6 @@ public:
     {
     }
 
-    bool operator==( const SvI18NMapEntry_Key& r ) const
-    {
-        return nKind == r.nKind &&
-               aName == r.aName;
-    }
-
     bool operator<( const SvI18NMapEntry_Key& r ) const
     {
         return nKind < r.nKind ||

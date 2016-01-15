@@ -42,7 +42,7 @@ public:
     XMLGradientStyleImport( SvXMLImport& rImport );
     ~XMLGradientStyleImport();
 
-    bool importXML(
+    void importXML(
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         css::uno::Any& rValue,
         OUString& rStrName );
@@ -57,7 +57,7 @@ public:
     XMLGradientStyleExport( SvXMLExport& rExport );
     ~XMLGradientStyleExport();
 
-    bool exportXML(
+    void exportXML(
         const OUString& rStrName,
         const css::uno::Any& rValue );
 };

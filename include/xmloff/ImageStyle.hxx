@@ -38,7 +38,7 @@ public:
     ~XMLImageStyle();
 
     void exportXML( const OUString& rStrName, const css::uno::Any& rValue, SvXMLExport& rExport );
-    bool importXML( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList, css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport );
+    void importXML( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList, css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport );
 
 private:
 

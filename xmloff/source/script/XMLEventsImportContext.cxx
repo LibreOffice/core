@@ -157,7 +157,7 @@ void XMLEventsImportContext::SetEvents(
     }
 }
 
-bool XMLEventsImportContext::GetEventSequence(
+void XMLEventsImportContext::GetEventSequence(
     const OUString& rName,
     Sequence<PropertyValue> & rSequence )
 {
@@ -176,10 +176,7 @@ bool XMLEventsImportContext::GetEventSequence(
     if (aIter != aCollectEvents.end())
     {
         rSequence = aIter->second;
-        return true;
     }
-
-    return false;
 }
 
 void XMLEventsImportContext::AddEventValues(
