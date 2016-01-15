@@ -137,6 +137,7 @@ gb_CFLAGS_COMMON += -std=gnu89
 ifeq ($(ENABLE_LTO),TRUE)
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_LTOFLAGS := -flto
+gb_LTOPLUGINFLAGS := --plugin LLVMgold.so
 else
 gb_LTOFLAGS := -flto=$(PARALLELISM) -fuse-linker-plugin -O2
 endif
