@@ -2325,8 +2325,7 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
     }
 }
 
-bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
-                          sal_uInt16 nEvent, const void* pEvent )
+bool ImplWindowFrameProc( vcl::Window* _pWindow, sal_uInt16 nEvent, const void* pEvent )
 {
     DBG_TESTSOLARMUTEX();
 

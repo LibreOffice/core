@@ -104,7 +104,7 @@ void DebugEventInjector::InjectMenuEvent()
 
     sal_uInt16 nEvent = nEvents[ (int)(getRandom() * SAL_N_ELEMENTS( nEvents )) ];
     SalMenuEvent aEvent = aIds[ getRandom() * aIds.size() ];
-    bool bHandled = ImplWindowFrameProc( pSysWin, nullptr, nEvent, &aEvent);
+    bool bHandled = ImplWindowFrameProc( pSysWin, nEvent, &aEvent);
 
     SAL_INFO( "vcl.debugevent",
               "Injected menu event " << aEvent.mpMenu
@@ -160,14 +160,14 @@ void DebugEventInjector::InjectTextEvent()
     if( getRandom() < 0.05 ) // modifier
         aKeyEvent.mnCode |= (sal_uInt16)( getRandom() * KEY_MODIFIERS_MASK ) & KEY_MODIFIERS_MASK;
 
-    bool bHandled = ImplWindowFrameProc( pWindow, nullptr, SALEVENT_KEYINPUT, &aKeyEvent);
+    bool bHandled = ImplWindowFrameProc( pWindow, SALEVENT_KEYINPUT, &aKeyEvent);
 
     SAL_INFO( "vcl.debugevent",
               "Injected key 0x" << std::hex << (int) aKeyEvent.mnCode << std::dec
               << " -> " << bHandled
               << " win " << pWindow );
 
-    ImplWindowFrameProc( pWindow, nullptr, SALEVENT_KEYUP, &aKeyEvent );
+    ImplWindowFrameProc( pWindow, SALEVENT_KEYUP, &aKeyEvent );
 }
 
 /*
@@ -242,13 +242,13 @@ void DebugEventInjector::InjectKeyNavEdit()
 
     aKeyEvent.mnCharCode = 0x0; // hopefully unused.
 
-    bool bHandled = ImplWindowFrameProc( pWindow, nullptr, SALEVENT_KEYINPUT, &aKeyEvent );
+    bool bHandled = ImplWindowFrameProc( pWindow, SALEVENT_KEYINPUT, &aKeyEvent );
 
     SAL_INFO( "vcl.debugevent",
               "Injected edit / move key 0x" << std::hex << (int) aKeyEvent.mnCode << std::dec
               << " -> " << bHandled
               << " win " <<  pWindow );
-    ImplWindowFrameProc( pWindow, nullptr, SALEVENT_KEYUP, &aKeyEvent );
+    ImplWindowFrameProc( pWindow, SALEVENT_KEYUP, &aKeyEvent );
 }
 
 void DebugEventInjector::Invoke()
