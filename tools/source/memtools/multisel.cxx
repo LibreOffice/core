@@ -43,11 +43,11 @@ size_t MultiSelection::ImplFindSubSelection( long nIndex ) const
     return n;
 }
 
-bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
+void MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
 {
     // didn't a sub selection at nPos2 exist?
     if ( nPos2 >= aSels.size() )
-        return false;
+        return;
 
     // did the sub selections touch each other?
     if ( (aSels[ nPos1 ]->Max() + 1) == aSels[ nPos2 ]->Min() )
@@ -58,10 +58,7 @@ bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
         ::std::advance( it, nPos2 );
         delete *it;
         aSels.erase( it );
-        return true;
     }
-
-    return false;
 }
 
 MultiSelection::MultiSelection():

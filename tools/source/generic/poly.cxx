@@ -28,7 +28,6 @@
 #include <tools/gen.hxx>
 #include <poly.h>
 #include <tools/line.hxx>
-#include <tools/vector2d.hxx>
 #include <tools/poly.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -1120,6 +1119,30 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
         rResult = tools::Polygon( (sal_uInt16)aPoints.size() ); // ensure sufficient size for copy
         ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mpPointAry);
     }
+}
+
+class Vector2D
+{
+private:
+    double              mfX;
+    double              mfY;
+public:
+    Vector2D( const Pair& rPair ) : mfX( rPair.A() ), mfY( rPair.B() ) {};
+    double       GetLength() const { return hypot( mfX, mfY ); }
+    Vector2D&    operator-=( const Vector2D& rVec ) { mfX -= rVec.mfX, mfY -= rVec.mfY; return *this; }
+    double       Scalar( const Vector2D& rVec ) const { return mfX * rVec.mfX + mfY * rVec.mfY ; }
+    Vector2D&    Normalize();
+    bool         IsPositive( Vector2D& rVec ) const { return ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0; }
+    bool         IsNegative( Vector2D& rVec ) const { return !IsPositive( rVec ); }
+};
+Vector2D& Vector2D::Normalize()
+{
+    double fLen = Scalar( *this );
+
+    if( ( fLen != 0.0 ) && ( fLen != 1.0 ) && ( ( fLen = sqrt( fLen ) ) != 0.0 ) )
+        mfX /= fLen, mfY /= fLen;
+
+    return *this;
 }
 
 void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_uInt16 nPercent )

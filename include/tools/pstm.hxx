@@ -145,7 +145,7 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 
 protected:
     void                WriteObj( sal_uInt8 nHdr, SvPersistBase * pObj );
-    sal_uInt32          ReadObj( SvPersistBase * & rpObj, bool bRegister );
+    void                ReadObj( SvPersistBase * & rpObj, bool bRegister );
 
 public:
     virtual void        ResetError() override;

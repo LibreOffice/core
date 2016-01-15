@@ -44,8 +44,8 @@ protected:
     { return m_pResMgr->GetClass(); }
 
     // increase the memory pointer gotten by GetClassRes()
-    void* IncrementRes( sal_uInt32 nBytes )
-    { return m_pResMgr->Increment( nBytes ); }
+    void IncrementRes( sal_uInt32 nBytes )
+    { m_pResMgr->Increment( nBytes ); }
 
     // return the memory size of a Resource data block
     static sal_uInt32   GetObjSizeRes( RSHEADER_TYPE * pHT )

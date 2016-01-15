@@ -191,9 +191,6 @@ public:
 
     bool operator <(INetURLObject const & rObject) const;
 
-    inline bool operator >(INetURLObject const & rObject) const
-    { return rObject < *this; }
-
     // Strict Parsing:
 
     inline explicit INetURLObject(
@@ -976,7 +973,7 @@ public:
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return appendSegment(rTheSegment, false, eMechanism, eCharset); }
 
-    bool CutLastName();
+    void CutLastName();
 
     // OBSOLETE File URLs:
 

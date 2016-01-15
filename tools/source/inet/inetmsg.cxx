@@ -272,11 +272,11 @@ OUString INetMIMEMessage::GetDefaultContentType()
     return OUString("text/plain; charset=us-ascii");
 }
 
-bool INetMIMEMessage::EnableAttachMultipartFormDataChild()
+void INetMIMEMessage::EnableAttachMultipartFormDataChild()
 {
     // Check context.
     if (IsContainer())
-        return false;
+        return;
 
     // Generate a unique boundary from current time.
     sal_Char sTail[16 + 1];
@@ -294,21 +294,15 @@ bool INetMIMEMessage::EnableAttachMultipartFormDataChild()
     SetContentType(
         OUString::fromUtf8("multipart/form-data; boundary=" + m_aBoundary));
     SetContentTransferEncoding("7bit");
-
-    // Done.
-    return true;
 }
 
-bool INetMIMEMessage::AttachChild(INetMIMEMessage& rChildMsg, bool bOwner)
+void INetMIMEMessage::AttachChild(INetMIMEMessage& rChildMsg, bool bOwner)
 {
     if (IsContainer())
     {
         if (bOwner) rChildMsg.pParent = this;
         aChildren.push_back( &rChildMsg );
-
-        return true;
     }
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

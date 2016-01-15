@@ -361,7 +361,7 @@ public:
     bool            WriteByteStringLine( const OUString& rStr, rtl_TextEncoding eDestCharSet );
 
     /// Switch to no endian swapping and write 0xfeff
-    bool            StartWritingUnicodeText();
+    void            StartWritingUnicodeText();
 
     /** If eReadBomCharSet==RTL_TEXTENCODING_DONTKNOW: read 16bit, if 0xfeff do
         nothing (UTF-16), if 0xfffe switch endian swapping (UTF-16), if 0xefbb
@@ -372,7 +372,7 @@ public:
 
         If eReadBomCharSet!=RTL_TEXTENCODING_DONTKNOW: only read a BOM of that
         encoding and switch endian swapping if UTF-16 and 0xfffe. */
-    bool            StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
+    void            StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
 
     /** Read a line of Unicode.
 
@@ -621,7 +621,7 @@ private:
     bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
     bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
     bool LockFile();
-    bool UnlockFile();
+    void UnlockFile();
 
 protected:
     virtual sal_Size GetData( void* pData, sal_Size nSize ) override;
@@ -695,10 +695,9 @@ public:
     sal_uInt64     GetSize();
     sal_Size        GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
-    operator const  void*() { Flush(); return pBuf; }
 
     void*           SwitchBuffer( sal_Size nInitSize=512, sal_Size nResize=64 );
-    void*           SetBuffer( void* pBuf, sal_Size nSize,
+    void            SetBuffer( void* pBuf, sal_Size nSize,
                                bool bOwnsData=true, sal_Size nEOF=0 );
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }

@@ -2736,11 +2736,10 @@ void INetMIMEOutputSink::writeSequence(const sal_Char * pBegin,
     m_aBuffer.append(pBegin, pEnd - pBegin);
 }
 
-sal_Size INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
+void INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
 {
     sal_Size nLength = rtl_str_getLength(pSequence);
     writeSequence(pSequence, pSequence + nLength);
-    return nLength;
 }
 
 void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,

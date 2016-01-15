@@ -255,10 +255,8 @@ private:
 
         @param pOctets  A null terminated sequence of octets, must not be
         null.
-
-        @return  The length of pOctets (without the terminating null).
      */
-    sal_Size writeSequence(const sal_Char * pSequence);
+    void writeSequence(const sal_Char * pSequence);
 
     /** Write a sequence of octets.
 
