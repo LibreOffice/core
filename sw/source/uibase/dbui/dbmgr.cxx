@@ -332,7 +332,24 @@ static bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     bool bRet = false;
     try
     {
-        if(pParam->bScrollable)
+        if(pParam->aSelection.getLength())
+        {
+            if(pParam->aSelection.getLength() <= nAbsPos)
+            {
+                pParam->bEndOfDB = true;
+                bRet = false;
+            }
+            else
+            {
+                pParam->nSelectionIndex = nAbsPos;
+                sal_Int32 nPos = 0;
+                pParam->aSelection.getConstArray()[ pParam->nSelectionIndex ] >>= nPos;
+                pParam->bEndOfDB = !pParam->xResultSet->absolute( nPos );
+                pParam->CheckEndOfDB();
+                bRet = !pParam->bEndOfDB;
+            }
+        }
+        else if(pParam->bScrollable)
         {
             bRet = pParam->xResultSet->absolute( nAbsPos );
         }
