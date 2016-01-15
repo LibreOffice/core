@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_85e789e3",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-15T13:22:42Z",
+      "side": 1,
+      "message": "uh, what customer requested this :)",
+      "revId": "9d11fa786a8807a0e4c09f2994c6f9c2622f761e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
