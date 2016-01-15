@@ -136,7 +136,7 @@ inline void FontAttributes::SetSymbolFlag( const bool bSymbolFlag )
 inline void FontAttributes::SetCharSet( const rtl_TextEncoding aEncoding )
 {
     meCharSet = aEncoding;
-    mbSymbolFlag = ( meCharSet == RTL_TEXTENCODING_SYMBOL ? true : false );
+    mbSymbolFlag = meCharSet == RTL_TEXTENCODING_SYMBOL;
 }
 
 #endif // INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
