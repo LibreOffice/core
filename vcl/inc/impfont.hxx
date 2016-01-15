@@ -27,17 +27,59 @@
 
 #include <boost/intrusive_ptr.hpp>
 
+/* The following class is extraordinarily similar to FontAttributes. */
+
 class ImplFont
 {
 public:
     explicit            ImplFont();
     explicit            ImplFont( const ImplFont& );
 
-    FontPitch           GetPitch()      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }
-    FontFamily          GetFamily()     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
-    FontItalic          GetItalic()     { if(meItalic==ITALIC_DONTKNOW)  AskConfig(); return meItalic; }
-    FontWeight          GetWeight()     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
-    FontWidth           GetWidthType()  { if(meWidthType==WIDTH_DONTKNOW)AskConfig(); return meWidthType; }
+    // device independent font functions
+    const OUString&     GetFamilyName() const                           { return maFamilyName; }
+    FontFamily          GetFamily()                                     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
+    FontFamily          GetFamilyType()                                 { return GetFamily(); }
+    const OUString&     GetStyleName() const                            { return maStyleName; }
+
+    FontWeight          GetWeight()                                     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
+    FontItalic          GetSlantType()                                  { return GetItalic(); }
+    FontItalic          GetItalic()                                     { if(meItalic==ITALIC_DONTKNOW)  AskConfig(); return meItalic; }
+    FontPitch           GetPitch()                                      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }
+    FontWidth           GetWidthType()                                  { if(meWidthType==WIDTH_DONTKNOW)AskConfig(); return meWidthType; }
+
+    bool                IsSymbolFont() const                            { return mbSymbol; }
+
+    void                SetFamilyName( const OUString& sFamilyName )    { maFamilyName = sFamilyName; }
+    void                SetStyleName( const OUString& sStyleName )      { maStyleName = sStyleName; }
+    void                SetFamilyType( const FontFamily eFontFamily )   { meFamily = eFontFamily; }
+
+    void                SetPitch( const FontPitch ePitch )              { mePitch = ePitch; }
+    void                SetItalic( const FontItalic eItalic )           { meItalic = eItalic; }
+    void                SetWeight( const FontWeight eWeight )           { meWeight = eWeight; }
+    void                SetWidthType( const FontWidth eWidthType )      { meWidthType = eWidthType; }
+
+    void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbol = bSymbolFlag; }
+
+    // device dependent functions
+    /* Missing function: int GetQuality() const; */
+    /* Missing function: OUString GetMapNames() const; */
+
+    /* Missing function: bool IsBuiltInFont() const; */
+    /* Missing function: bool CanEmbed() const; */
+    /* Missing function: bool CanSubSet() const; */
+    /* Missing function: bool CanRotate() const; */
+    /* Missing function: bool HasMapNames() const; */
+
+    /* Missing function: void SetQuality( int nQuality ); */
+    /* Missing function: void IncreaseQualityBy( int nQualityAmount ); */
+    /* Missing function: void DecreaseQualityBy( int nQualityAmount ); */
+    /* Missing function: void SetNames( OUString const& ); */
+    /* Missing function: Vod AddMapName( OUString const& ); */
+
+    /* Missing function: SetBuiltInFontFlag( bool ); */
+    /* Missing function: SetEmbeddableFlag( bool ); */
+    /* Missing function: SetSettableFlag( bool ); */
+    /* missing function: SetOrientationFlag( bool ); */
 
     bool                operator==( const ImplFont& ) const;
 
