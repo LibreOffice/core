@@ -32,8 +32,7 @@
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-
-
+#include <comphelper/lok.hxx>
 
 namespace drawinglayer
 {
@@ -42,16 +41,14 @@ namespace drawinglayer
         HitTestProcessor2D::HitTestProcessor2D(const geometry::ViewInformation2D& rViewInformation,
             const basegfx::B2DPoint& rLogicHitPosition,
             double fLogicHitTolerance,
-            bool bHitTextOnly,
-            bool bTiledRendering)
+            bool bHitTextOnly)
         :   BaseProcessor2D(rViewInformation),
             maDiscreteHitPosition(),
             mfDiscreteHitTolerance(0.0),
             mbHit(false),
             mbHitToleranceUsed(false),
             mbUseInvisiblePrimitiveContent(true),
-            mbHitTextOnly(bHitTextOnly),
-            mbTiledRendering(bTiledRendering)
+            mbHitTextOnly(bHitTextOnly)
         {
             // init hit tolerance
             mfDiscreteHitTolerance = fLogicHitTolerance;
@@ -445,7 +442,7 @@ namespace drawinglayer
                             const Size& rSizePixel(rBitmapEx.GetSizePixel());
 
                             // When tiled rendering, don't bother with the pixel size of the candidate.
-                            if(rSizePixel.Width() && rSizePixel.Height() && !mbTiledRendering)
+                            if(rSizePixel.Width() && rSizePixel.Height() && !comphelper::LibreOfficeKit::isActive())
                             {
                                 basegfx::B2DHomMatrix aBackTransform(
                                     getViewInformation2D().getObjectToViewTransformation() *

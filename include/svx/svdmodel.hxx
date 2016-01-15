@@ -338,8 +338,6 @@ public:
     OutputDevice*        GetRefDevice() const                   { return pRefOutDev.get(); }
     /// Set if we are doing tiled rendering.
     void                 setTiledRendering(bool bTiledRendering);
-    /// Are we doing tiled rendering?
-    bool                 isTiledRendering() const;
     /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API.
     void                 registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Gets the LOK callback registered by registerLibreOfficeKitCallback().

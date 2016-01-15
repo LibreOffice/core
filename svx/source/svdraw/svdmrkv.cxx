@@ -696,7 +696,7 @@ void SdrMarkView::SetMarkHandles()
         Point aGridOff = GetGridOffset();
 
         // There can be multiple mark views, but we're only interested in the one that has a window associated.
-        const bool bTiledRendering = GetModel()->isTiledRendering() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
+        const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
 
         // check if text edit or ole is active and handles need to be suppressed. This may be the case
         // when a single object is selected

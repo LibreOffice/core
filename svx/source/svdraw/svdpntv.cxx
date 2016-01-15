@@ -59,9 +59,9 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
-
 
 // interface to SdrPaintWindow
 
@@ -720,7 +720,7 @@ void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Reg
 void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
 {
     std::unique_ptr<SdrPaintWindow> pPaintWindow;
-    if (GetModel()->isTiledRendering() && rPaintWindow.getTemporaryTarget())
+    if (comphelper::LibreOfficeKit::isActive() && rPaintWindow.getTemporaryTarget())
     {
         // Tiled rendering, we must paint the TextEdit to the output device.
         pPaintWindow.reset(&rPaintWindow);
@@ -939,7 +939,7 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix)
             Rectangle aOutRect(aOrg, rOutDev.GetOutputSize());
 
             // In case of tiled rendering we want to get all invalidations, so visual area is not interesting.
-            if (aRect.IsOver(aOutRect) || GetModel()->isTiledRendering())
+            if (aRect.IsOver(aOutRect) || comphelper::LibreOfficeKit::isActive())
             {
                 InvalidateOneWin(static_cast<vcl::Window&>(rOutDev), aRect);
             }

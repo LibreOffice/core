@@ -822,11 +822,6 @@ void SdrModel::setTiledRendering(bool bTiledRendering)
     mbTiledRendering = bTiledRendering;
 }
 
-bool SdrModel::isTiledRendering() const
-{
-    return mbTiledRendering;
-}
-
 void SdrModel::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
 {
     mpLibreOfficeKitCallback = pCallback;

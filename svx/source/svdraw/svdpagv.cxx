@@ -44,7 +44,7 @@
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
-
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 
@@ -240,7 +240,7 @@ void SdrPageView::Hide()
 {
     if(IsVisible())
     {
-        if (!GetView().GetModel()->isTiledRendering())
+        if (!comphelper::LibreOfficeKit::isActive())
         {
             InvalidateAllWin();
         }

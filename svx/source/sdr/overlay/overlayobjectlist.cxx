@@ -29,8 +29,7 @@
 #include <algorithm>
 
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
-
-
+#include <comphelper/lok.hxx>
 
 namespace sdr
 {
@@ -77,7 +76,7 @@ namespace sdr
                             Size(DEFAULT_VALUE_FOR_HITTEST_PIXEL, DEFAULT_VALUE_FOR_HITTEST_PIXEL)));
 
                         // When tiled rendering, we always work in logic units, use the non-pixel default.
-                        if (pManager->getModel()->isTiledRendering())
+                        if (comphelper::LibreOfficeKit::isActive())
                         {
                             aSizeLogic = Size(DEFAULT_VALUE_FOR_HITTEST_TWIP, DEFAULT_VALUE_FOR_HITTEST_TWIP);
                             if (pManager->getOutputDevice().GetMapMode().GetMapUnit() == MAP_100TH_MM)
@@ -92,8 +91,7 @@ namespace sdr
                         aViewInformation2D,
                         rLogicPosition,
                         fLogicTolerance,
-                        false,
-                        pManager->getModel()->isTiledRendering());
+                        false);
 
                     for(; aStart != maVector.end(); ++aStart)
                     {
