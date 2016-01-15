@@ -1079,10 +1079,10 @@ bool SvtSecurityOptions::IsOptionSet( EOption eOption ) const
     return m_pDataContainer->IsOptionSet( eOption );
 }
 
-bool SvtSecurityOptions::SetOption( EOption eOption, bool bValue )
+void SvtSecurityOptions::SetOption( EOption eOption, bool bValue )
 {
     MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->SetOption( eOption, bValue );
+    m_pDataContainer->SetOption( eOption, bValue );
 }
 
 bool SvtSecurityOptions::IsOptionEnabled( EOption eOption ) const

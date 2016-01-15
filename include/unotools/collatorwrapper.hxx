@@ -51,7 +51,7 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
         loadDefaultCollator (
                 const css::lang::Locale& rLocale, sal_Int32 nOption);
 
-        sal_Int32
+        void
         loadCollatorAlgorithm (
                 const OUString& rAlgorithm,
                 const css::lang::Locale& rLocale, sal_Int32 nOption);
