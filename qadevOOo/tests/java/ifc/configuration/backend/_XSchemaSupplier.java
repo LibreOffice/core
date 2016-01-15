@@ -36,9 +36,9 @@ public class _XSchemaSupplier extends MultiMethodTest {
 
             if (aSchema == null) {
                 log.println("\treturned Layer is NULL -- FAILED");
+            } else {
+                res &= checkSchema(aSchema);
             }
-
-            res &= checkSchema(aSchema);
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("Unexpected Exception (" + e + ") -- FAILED");
             res &= false;

@@ -50,8 +50,7 @@ public class _XSingleLayerStratum extends MultiMethodTest {
 
             if (aLayer == null) {
                 log.println("\treturned Layer is NULL -- FAILED");
-            }
-            else {
+            } else {
                 res &= checkLayer(aLayer);
             }
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
@@ -89,8 +88,7 @@ public class _XSingleLayerStratum extends MultiMethodTest {
 
             if (aLayer == null) {
                 log.println("\treturned Layer is NULL -- FAILED");
-            }
-            else {
+            } else {
                 res &= checkLayer(aLayer);
             }
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
