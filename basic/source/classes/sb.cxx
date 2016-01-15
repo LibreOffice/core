@@ -1043,16 +1043,11 @@ void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
 
 SbModule* StarBASIC::MakeModule( const OUString& rName, const OUString& rSrc )
 {
-    return MakeModule32( rName, rSrc );
-}
-
-SbModule* StarBASIC::MakeModule32( const OUString& rName, const OUString& rSrc )
-{
     ModuleInfo mInfo;
     mInfo.ModuleType = ModuleType::NORMAL;
-    return MakeModule32(  rName, mInfo, rSrc );
+    return MakeModule(  rName, mInfo, rSrc );
 }
-SbModule* StarBASIC::MakeModule32( const OUString& rName, const ModuleInfo& mInfo, const OUString& rSrc )
+SbModule* StarBASIC::MakeModule( const OUString& rName, const ModuleInfo& mInfo, const OUString& rSrc )
 {
 
     SAL_INFO(
@@ -1118,11 +1113,6 @@ void StarBASIC::Remove( SbxVariable* pVar )
     {
         SbxObject::Remove( pVar );
     }
-}
-
-bool StarBASIC::Compile( SbModule* pMod )
-{
-    return pMod && pMod->Compile();
 }
 
 void StarBASIC::Clear()
