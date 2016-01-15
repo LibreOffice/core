@@ -38,33 +38,32 @@
 using namespace vcl;
 
 ImplFont::ImplFont() :
+    mnRefCount( 1 ),
     maColor( COL_TRANSPARENT ),
     maFillColor( COL_TRANSPARENT ),
+    meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     maLanguageTag( LANGUAGE_DONTKNOW ),
-    maCJKLanguageTag( LANGUAGE_DONTKNOW )
-{
-    mnRefCount          = 1;
-    meCharSet           = RTL_TEXTENCODING_DONTKNOW;
-    meFamily            = FAMILY_DONTKNOW;
-    mePitch             = PITCH_DONTKNOW;
-    meAlign             = ALIGN_TOP;
-    meWeight            = WEIGHT_DONTKNOW;
-    meWidthType         = WIDTH_DONTKNOW;
-    meItalic            = ITALIC_NONE;
-    meUnderline         = UNDERLINE_NONE;
-    meOverline          = UNDERLINE_NONE;
-    meStrikeout         = STRIKEOUT_NONE;
-    meRelief            = RELIEF_NONE;
-    meEmphasisMark      = EMPHASISMARK_NONE;
-    mnOrientation       = 0;
-    mnKerning           = FontKerning::NONE;
-    mbWordLine          = false;
-    mbOutline           = false;
-    mbShadow            = false;
-    mbVertical          = false;
-    mbTransparent       = true;
-    mbConfigLookup      = false;
-}
+    maCJKLanguageTag( LANGUAGE_DONTKNOW ),
+    meFamily( FAMILY_DONTKNOW ),
+    mePitch( PITCH_DONTKNOW ),
+    meAlign( ALIGN_TOP ),
+    meWeight( WEIGHT_DONTKNOW ),
+    meWidthType( WIDTH_DONTKNOW ),
+    meItalic( ITALIC_NONE ),
+    meUnderline( UNDERLINE_NONE ),
+    meOverline( UNDERLINE_NONE ),
+    meStrikeout( STRIKEOUT_NONE ),
+    meRelief( RELIEF_NONE ),
+    meEmphasisMark( EMPHASISMARK_NONE ),
+    mnOrientation( 0 ),
+    mnKerning( FontKerning::NONE ),
+    mbWordLine( false ),
+    mbOutline( false ),
+    mbConfigLookup( false ),
+    mbShadow( false ),
+    mbVertical( false ),
+    mbTransparent( true )
+{}
 
 ImplFont::ImplFont( const ImplFont& rImplFont )
 :   maFamilyName( rImplFont.maFamilyName ),
