@@ -471,7 +471,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
     private boolean checkDrillDownSheetContent(XSpreadsheet xSheet, Object[][] data)
     {
         CellAddress lastCell = getLastUsedCellAddress(xSheet, 0, 0);
-        if (data.length <= 0 || lastCell.Row == 0 || lastCell.Column == 0)
+        if (data.length <= 0 || lastCell == null || lastCell.Row == 0 || lastCell.Column == 0)
         {
             log.println("empty data condition");
             return false;
