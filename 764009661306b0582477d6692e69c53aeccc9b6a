@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_25ccdd34",
+        "filename": "include/vcl/floatwin.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001172
+      },
+      "writtenOn": "2016-01-15T17:45:50Z",
+      "side": 1,
+      "message": "No const because of default assignment",
+      "revId": "764009661306b0582477d6692e69c53aeccc9b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_45c76112",
+        "filename": "include/vcl/menu.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1001172
+      },
+      "writtenOn": "2016-01-15T17:45:50Z",
+      "side": 1,
+      "message": "No const because we modify it.",
+      "revId": "764009661306b0582477d6692e69c53aeccc9b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
