@@ -16,6 +16,24 @@
       "revId": "9d11fa786a8807a0e4c09f2994c6f9c2622f761e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4595a1e2",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-15T23:18:39Z",
+      "side": 1,
+      "message": "Well, that\u0027s how this function is documented, so..",
+      "parentUuid": "dab17558_85e789e3",
+      "revId": "9d11fa786a8807a0e4c09f2994c6f9c2622f761e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
