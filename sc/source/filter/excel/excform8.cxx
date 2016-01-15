@@ -1428,26 +1428,21 @@ void ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& 
         bError |= !rStrm.IsValid();
     }
 
-    ConvErr eRet;
-
     if( bError )
     {
         aPool << ocBad;
         aPool >> aStack;
         rpArray = aPool[ aStack.Get() ];
-        eRet = ConvErrNi;
     }
     else if( rStrm.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
         rpArray = aPool[ aStack.Get() ];
-        eRet = ConvErrCount;
     }
     else
     {
         rpArray = aPool[ aStack.Get() ];
-        eRet = ConvOK;
     }
 
     rStrm.Seek(nEndPos);

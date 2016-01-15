@@ -1677,7 +1677,7 @@ void ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
         return;
 
     const sal_Unicode* p = rStr.getStr();
-    sal_uInt16 nRes = 0, ignored = 0;
+    sal_uInt16 ignored = 0;
 
     (void)pDoc; // make compiler shutup we may need this later
 
@@ -1693,13 +1693,11 @@ void ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
             {
                 if( nullptr != (p = lcl_a1_get_row( p+1, &aEnd, &ignored )))
                 {
-                    nRes = SCA_VALID_COL;
                 }
             }
             else
             {
                 aEnd = aStart;
-                nRes = SCA_VALID_COL;
             }
         }
         break;
@@ -1713,13 +1711,11 @@ void ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
                 if( (p[1] == 'R' || p[1] == 'r') &&
                     nullptr != (p = lcl_r1c1_get_row( p+1, rDetails, &aEnd, &ignored )))
                 {
-                    nRes = SCA_VALID_COL;
                 }
             }
             else
             {
                 aEnd = aStart;
-                nRes = SCA_VALID_COL;
             }
         }
         break;
