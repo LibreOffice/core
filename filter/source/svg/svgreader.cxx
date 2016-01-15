@@ -408,7 +408,7 @@ struct AnnotatingVisitor
                             maElementIdMap.insert(std::make_pair(sAttributeValue,
                                 maElementVector.size() - 1));
                         }
-                        else if ( nTokenId != XML_COLOR || nTokenId != XML_STYLE )
+                        else if (nTokenId != XML_COLOR && nTokenId != XML_STYLE)
                             parseAttribute(nTokenId,
                                 sAttributeValue);
                     }
