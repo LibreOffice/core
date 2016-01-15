@@ -145,7 +145,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)))
 	$(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
 		$(READELF) -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
-		$(NM) --dynamic --extern-only --defined-only --format=posix $(1) \
+		$(NM) $(gb_LTOPLUGINFLAGS) --dynamic --extern-only --defined-only --format=posix $(1) \
 			| cut -d' ' -f1-2 \
 			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp, \
@@ -155,7 +155,7 @@ endef
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(1) && \
-	$(gb_AR) -rsu $(1) \
+	$(gb_AR) $(gb_LTOPLUGINFLAGS) -rsu $(1) \
 		$(if $(LD_PLUGIN),--plugin $(LD_PLUGIN)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
