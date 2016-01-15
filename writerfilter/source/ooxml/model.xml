@@ -5342,7 +5342,7 @@
     </resource>
   </namespace>
   <namespace name="a14">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawingml/2010/main">
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawing/2010/main">
       <!-- Simple types -->
       <define name="ST_ArtisticEffectParam10">
         <data type="integer"/>
