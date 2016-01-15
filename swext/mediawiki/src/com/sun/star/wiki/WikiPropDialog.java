@@ -318,7 +318,7 @@ public class WikiPropDialog extends WikiDialog{
             {
                 try
                 {
-                    if ( m_aWikiEditor != null )
+                    if (m_aWikiEditor != null && aWikiSettings != null)
                     {
                         m_bAction = m_aWikiEditor.SendArticleImpl(
                                 WikiPropDialog.this, aWikiSettings);
