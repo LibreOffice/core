@@ -52,6 +52,7 @@ private:
     Color               maColor;        // compatibility, now on output device
     Color               maFillColor;    // compatibility, now on output device
     rtl_TextEncoding    meCharSet;
+    bool                mbSymbol;
     LanguageTag         maLanguageTag;
     LanguageTag         maCJKLanguageTag;
     FontFamily          meFamily;

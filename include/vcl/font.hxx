@@ -81,6 +81,9 @@ public:
     FontFamily          GetFamily() const;
     void                SetCharSet( rtl_TextEncoding );
     rtl_TextEncoding    GetCharSet() const;
+    void                SetSymbolFlag( bool );
+    bool                IsSymbolFont() const;
+
     // Prefer LanguageTag over LanguageType
     void                SetLanguageTag( const LanguageTag & );
     const LanguageTag&  GetLanguageTag() const;

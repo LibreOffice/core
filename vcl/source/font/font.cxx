@@ -37,191 +37,6 @@
 
 using namespace vcl;
 
-ImplFont::ImplFont() :
-    mnRefCount( 1 ),
-    maColor( COL_TRANSPARENT ),
-    maFillColor( COL_TRANSPARENT ),
-    meCharSet( RTL_TEXTENCODING_DONTKNOW ),
-    maLanguageTag( LANGUAGE_DONTKNOW ),
-    maCJKLanguageTag( LANGUAGE_DONTKNOW ),
-    meFamily( FAMILY_DONTKNOW ),
-    mePitch( PITCH_DONTKNOW ),
-    meAlign( ALIGN_TOP ),
-    meWeight( WEIGHT_DONTKNOW ),
-    meWidthType( WIDTH_DONTKNOW ),
-    meItalic( ITALIC_NONE ),
-    meUnderline( UNDERLINE_NONE ),
-    meOverline( UNDERLINE_NONE ),
-    meStrikeout( STRIKEOUT_NONE ),
-    meRelief( RELIEF_NONE ),
-    meEmphasisMark( EMPHASISMARK_NONE ),
-    mnOrientation( 0 ),
-    mnKerning( FontKerning::NONE ),
-    mbWordLine( false ),
-    mbOutline( false ),
-    mbConfigLookup( false ),
-    mbShadow( false ),
-    mbVertical( false ),
-    mbTransparent( true )
-{}
-
-ImplFont::ImplFont( const ImplFont& rImplFont ) :
-    mnRefCount( 1 ),
-    maFamilyName( rImplFont.maFamilyName ),
-    maStyleName( rImplFont.maStyleName ),
-    maSize( rImplFont.maSize ),
-    maColor( rImplFont.maColor ),
-    maFillColor( rImplFont.maFillColor ),
-    meCharSet( rImplFont.meCharSet ),
-    maLanguageTag( rImplFont.maLanguageTag ),
-    maCJKLanguageTag( rImplFont.maCJKLanguageTag ),
-    meFamily( rImplFont.meFamily ),
-    mePitch( rImplFont.mePitch ),
-    meAlign( rImplFont.meAlign ),
-    meWeight( rImplFont.meWeight ),
-    meWidthType( rImplFont.meWidthType ),
-    meItalic( rImplFont.meItalic ),
-    meUnderline( rImplFont.meUnderline ),
-    meOverline( rImplFont.meOverline ),
-    meStrikeout( rImplFont.meStrikeout ),
-    meRelief( rImplFont.meRelief ),
-    meEmphasisMark( rImplFont.meEmphasisMark ),
-    mnOrientation( rImplFont.mnOrientation ),
-    mnKerning( rImplFont.mnKerning ),
-    mbWordLine( rImplFont.mbWordLine ),
-    mbOutline( rImplFont.mbOutline ),
-    mbConfigLookup( rImplFont.mbConfigLookup ),
-    mbShadow( rImplFont.mbShadow ),
-    mbVertical( rImplFont.mbVertical ),
-    mbTransparent( rImplFont.mbTransparent )
-{}
-
-bool ImplFont::operator==( const ImplFont& rOther ) const
-{
-    // equality tests split up for easier debugging
-    if( (meWeight   != rOther.meWeight)
-    ||  (meItalic   != rOther.meItalic)
-    ||  (meFamily   != rOther.meFamily)
-    ||  (mePitch    != rOther.mePitch) )
-        return false;
-
-    if( (meCharSet        != rOther.meCharSet)
-    ||  (maLanguageTag    != rOther.maLanguageTag)
-    ||  (maCJKLanguageTag != rOther.maCJKLanguageTag)
-    ||  (meAlign          != rOther.meAlign) )
-        return false;
-
-    if( (maSize         != rOther.maSize)
-    ||  (mnOrientation  != rOther.mnOrientation)
-    ||  (mbVertical     != rOther.mbVertical) )
-        return false;
-
-    if( (maFamilyName   != rOther.maFamilyName)
-    ||  (maStyleName    != rOther.maStyleName) )
-        return false;
-
-    if( (maColor        != rOther.maColor)
-    ||  (maFillColor    != rOther.maFillColor) )
-        return false;
-
-    if( (meUnderline    != rOther.meUnderline)
-    ||  (meOverline     != rOther.meOverline)
-    ||  (meStrikeout    != rOther.meStrikeout)
-    ||  (meRelief       != rOther.meRelief)
-    ||  (meEmphasisMark != rOther.meEmphasisMark)
-    ||  (mbWordLine     != rOther.mbWordLine)
-    ||  (mbOutline      != rOther.mbOutline)
-    ||  (mbShadow       != rOther.mbShadow)
-    ||  (mnKerning      != rOther.mnKerning)
-    ||  (mbTransparent  != rOther.mbTransparent) )
-        return false;
-
-    return true;
-}
-
-void ImplFont::AskConfig()
-{
-    if( mbConfigLookup )
-        return;
-
-    mbConfigLookup = true;
-
-    // prepare the FontSubst configuration lookup
-    const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
-
-    OUString      aShortName;
-    OUString      aFamilyName;
-    ImplFontAttrs nType = ImplFontAttrs::None;
-    FontWeight  eWeight = WEIGHT_DONTKNOW;
-    FontWidth   eWidthType = WIDTH_DONTKNOW;
-    OUString    aMapName = GetEnglishSearchFontName( maFamilyName );
-
-    utl::FontSubstConfiguration::getMapName( aMapName,
-        aShortName, aFamilyName, eWeight, eWidthType, nType );
-
-    // lookup the font name in the configuration
-    const utl::FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( aMapName );
-
-    // if the direct lookup failed try again with an alias name
-    if ( !pFontAttr && (aShortName != aMapName) )
-        pFontAttr = rFontSubst.getSubstInfo( aShortName );
-
-    if( pFontAttr )
-    {
-        // the font was found in the configuration
-        if( meFamily == FAMILY_DONTKNOW )
-        {
-            if ( pFontAttr->Type & ImplFontAttrs::Serif )
-                meFamily = FAMILY_ROMAN;
-            else if ( pFontAttr->Type & ImplFontAttrs::SansSerif )
-                meFamily = FAMILY_SWISS;
-            else if ( pFontAttr->Type & ImplFontAttrs::Typewriter )
-                meFamily = FAMILY_MODERN;
-            else if ( pFontAttr->Type & ImplFontAttrs::Italic )
-                meFamily = FAMILY_SCRIPT;
-            else if ( pFontAttr->Type & ImplFontAttrs::Decorative )
-                meFamily = FAMILY_DECORATIVE;
-        }
-
-        if( mePitch == PITCH_DONTKNOW )
-        {
-            if ( pFontAttr->Type & ImplFontAttrs::Fixed )
-                mePitch = PITCH_FIXED;
-        }
-    }
-
-    // if some attributes are still unknown then use the FontSubst magic
-    if( meFamily == FAMILY_DONTKNOW )
-    {
-        if( nType & ImplFontAttrs::Serif )
-            meFamily = FAMILY_ROMAN;
-        else if( nType & ImplFontAttrs::SansSerif )
-            meFamily = FAMILY_SWISS;
-        else if( nType & ImplFontAttrs::Typewriter )
-            meFamily = FAMILY_MODERN;
-        else if( nType & ImplFontAttrs::Italic )
-            meFamily = FAMILY_SCRIPT;
-        else if( nType & ImplFontAttrs::Decorative )
-            meFamily = FAMILY_DECORATIVE;
-    }
-
-    if( meWeight == WEIGHT_DONTKNOW )
-        meWeight = eWeight;
-    if( meWidthType == WIDTH_DONTKNOW )
-        meWidthType = eWidthType;
-}
-
-void Font::MakeUnique()
-{
-    // create a copy if others still reference it
-    if ( mpImplFont->mnRefCount != 1 )
-    {
-        if ( mpImplFont->mnRefCount )
-            mpImplFont->mnRefCount--;
-        mpImplFont = new ImplFont( *mpImplFont );
-    }
-}
-
 Font::Font()
 {
     static ImplFont aStaticImplFont;
@@ -273,6 +88,17 @@ Font::~Font()
             delete mpImplFont;
         else
             mpImplFont->mnRefCount--;
+    }
+}
+
+void Font::MakeUnique()
+{
+    // create a copy if others still reference it
+    if ( mpImplFont->mnRefCount != 1 )
+    {
+        if ( mpImplFont->mnRefCount )
+            mpImplFont->mnRefCount--;
+        mpImplFont = new ImplFont( *mpImplFont );
     }
 }
 
@@ -347,6 +173,31 @@ void Font::SetCharSet( rtl_TextEncoding eCharSet )
     {
         MakeUnique();
         mpImplFont->meCharSet = eCharSet;
+
+        if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
+            mpImplFont->mbSymbol = true;
+        else
+            mpImplFont->mbSymbol = false;
+    }
+}
+
+bool Font::IsSymbolFont() const
+{
+    return mpImplFont->mbSymbol;
+}
+
+void Font::SetSymbolFlag( bool bSymbol )
+{
+    mpImplFont->mbSymbol = bSymbol;
+
+    if ( bSymbol )
+    {
+        mpImplFont->meCharSet = RTL_TEXTENCODING_SYMBOL;
+    }
+    else
+    {
+        if ( mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL )
+            mpImplFont->meCharSet = RTL_TEXTENCODING_DONTKNOW;
     }
 }
 
@@ -984,5 +835,183 @@ FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMa
 bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 
 bool Font::IsSameInstance( const vcl::Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
+
+
+
+ImplFont::ImplFont() :
+    mnRefCount( 1 ),
+    maColor( COL_TRANSPARENT ),
+    maFillColor( COL_TRANSPARENT ),
+    meCharSet( RTL_TEXTENCODING_DONTKNOW ),
+    mbSymbol( false ),
+    maLanguageTag( LANGUAGE_DONTKNOW ),
+    maCJKLanguageTag( LANGUAGE_DONTKNOW ),
+    meFamily( FAMILY_DONTKNOW ),
+    mePitch( PITCH_DONTKNOW ),
+    meAlign( ALIGN_TOP ),
+    meWeight( WEIGHT_DONTKNOW ),
+    meWidthType( WIDTH_DONTKNOW ),
+    meItalic( ITALIC_NONE ),
+    meUnderline( UNDERLINE_NONE ),
+    meOverline( UNDERLINE_NONE ),
+    meStrikeout( STRIKEOUT_NONE ),
+    meRelief( RELIEF_NONE ),
+    meEmphasisMark( EMPHASISMARK_NONE ),
+    mnOrientation( 0 ),
+    mnKerning( FontKerning::NONE ),
+    mbWordLine( false ),
+    mbOutline( false ),
+    mbConfigLookup( false ),
+    mbShadow( false ),
+    mbVertical( false ),
+    mbTransparent( true )
+{}
+
+ImplFont::ImplFont( const ImplFont& rImplFont ) :
+    mnRefCount( 1 ),
+    maFamilyName( rImplFont.maFamilyName ),
+    maStyleName( rImplFont.maStyleName ),
+    maSize( rImplFont.maSize ),
+    maColor( rImplFont.maColor ),
+    maFillColor( rImplFont.maFillColor ),
+    meCharSet( rImplFont.meCharSet ),
+    mbSymbol( false ),
+    maLanguageTag( rImplFont.maLanguageTag ),
+    maCJKLanguageTag( rImplFont.maCJKLanguageTag ),
+    meFamily( rImplFont.meFamily ),
+    mePitch( rImplFont.mePitch ),
+    meAlign( rImplFont.meAlign ),
+    meWeight( rImplFont.meWeight ),
+    meWidthType( rImplFont.meWidthType ),
+    meItalic( rImplFont.meItalic ),
+    meUnderline( rImplFont.meUnderline ),
+    meOverline( rImplFont.meOverline ),
+    meStrikeout( rImplFont.meStrikeout ),
+    meRelief( rImplFont.meRelief ),
+    meEmphasisMark( rImplFont.meEmphasisMark ),
+    mnOrientation( rImplFont.mnOrientation ),
+    mnKerning( rImplFont.mnKerning ),
+    mbWordLine( rImplFont.mbWordLine ),
+    mbOutline( rImplFont.mbOutline ),
+    mbConfigLookup( rImplFont.mbConfigLookup ),
+    mbShadow( rImplFont.mbShadow ),
+    mbVertical( rImplFont.mbVertical ),
+    mbTransparent( rImplFont.mbTransparent )
+{}
+
+bool ImplFont::operator==( const ImplFont& rOther ) const
+{
+    // equality tests split up for easier debugging
+    if( (meWeight   != rOther.meWeight)
+    ||  (meItalic   != rOther.meItalic)
+    ||  (meFamily   != rOther.meFamily)
+    ||  (mePitch    != rOther.mePitch) )
+        return false;
+
+    if( (meCharSet        != rOther.meCharSet)
+    ||  (maLanguageTag    != rOther.maLanguageTag)
+    ||  (maCJKLanguageTag != rOther.maCJKLanguageTag)
+    ||  (meAlign          != rOther.meAlign) )
+        return false;
+
+    if( (maSize         != rOther.maSize)
+    ||  (mnOrientation  != rOther.mnOrientation)
+    ||  (mbVertical     != rOther.mbVertical) )
+        return false;
+
+    if( (maFamilyName   != rOther.maFamilyName)
+    ||  (maStyleName    != rOther.maStyleName) )
+        return false;
+
+    if( (maColor        != rOther.maColor)
+    ||  (maFillColor    != rOther.maFillColor) )
+        return false;
+
+    if( (meUnderline    != rOther.meUnderline)
+    ||  (meOverline     != rOther.meOverline)
+    ||  (meStrikeout    != rOther.meStrikeout)
+    ||  (meRelief       != rOther.meRelief)
+    ||  (meEmphasisMark != rOther.meEmphasisMark)
+    ||  (mbWordLine     != rOther.mbWordLine)
+    ||  (mbOutline      != rOther.mbOutline)
+    ||  (mbShadow       != rOther.mbShadow)
+    ||  (mnKerning      != rOther.mnKerning)
+    ||  (mbTransparent  != rOther.mbTransparent) )
+        return false;
+
+    return true;
+}
+
+void ImplFont::AskConfig()
+{
+    if( mbConfigLookup )
+        return;
+
+    mbConfigLookup = true;
+
+    // prepare the FontSubst configuration lookup
+    const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
+
+    OUString      aShortName;
+    OUString      aFamilyName;
+    ImplFontAttrs nType = ImplFontAttrs::None;
+    FontWeight  eWeight = WEIGHT_DONTKNOW;
+    FontWidth   eWidthType = WIDTH_DONTKNOW;
+    OUString    aMapName = GetEnglishSearchFontName( maFamilyName );
+
+    utl::FontSubstConfiguration::getMapName( aMapName,
+        aShortName, aFamilyName, eWeight, eWidthType, nType );
+
+    // lookup the font name in the configuration
+    const utl::FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( aMapName );
+
+    // if the direct lookup failed try again with an alias name
+    if ( !pFontAttr && (aShortName != aMapName) )
+        pFontAttr = rFontSubst.getSubstInfo( aShortName );
+
+    if( pFontAttr )
+    {
+        // the font was found in the configuration
+        if( meFamily == FAMILY_DONTKNOW )
+        {
+            if ( pFontAttr->Type & ImplFontAttrs::Serif )
+                meFamily = FAMILY_ROMAN;
+            else if ( pFontAttr->Type & ImplFontAttrs::SansSerif )
+                meFamily = FAMILY_SWISS;
+            else if ( pFontAttr->Type & ImplFontAttrs::Typewriter )
+                meFamily = FAMILY_MODERN;
+            else if ( pFontAttr->Type & ImplFontAttrs::Italic )
+                meFamily = FAMILY_SCRIPT;
+            else if ( pFontAttr->Type & ImplFontAttrs::Decorative )
+                meFamily = FAMILY_DECORATIVE;
+        }
+
+        if( mePitch == PITCH_DONTKNOW )
+        {
+            if ( pFontAttr->Type & ImplFontAttrs::Fixed )
+                mePitch = PITCH_FIXED;
+        }
+    }
+
+    // if some attributes are still unknown then use the FontSubst magic
+    if( meFamily == FAMILY_DONTKNOW )
+    {
+        if( nType & ImplFontAttrs::Serif )
+            meFamily = FAMILY_ROMAN;
+        else if( nType & ImplFontAttrs::SansSerif )
+            meFamily = FAMILY_SWISS;
+        else if( nType & ImplFontAttrs::Typewriter )
+            meFamily = FAMILY_MODERN;
+        else if( nType & ImplFontAttrs::Italic )
+            meFamily = FAMILY_SCRIPT;
+        else if( nType & ImplFontAttrs::Decorative )
+            meFamily = FAMILY_DECORATIVE;
+    }
+
+    if( meWeight == WEIGHT_DONTKNOW )
+        meWeight = eWeight;
+    if( meWidthType == WIDTH_DONTKNOW )
+        meWidthType = eWidthType;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

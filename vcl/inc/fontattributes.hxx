@@ -117,8 +117,21 @@ inline void FontAttributes::SetSymbolFlag( const bool bSymbolFlag )
 {
     mbSymbolFlag = bSymbolFlag;
     if ( bSymbolFlag )
+    {
         meCharSet = RTL_TEXTENCODING_SYMBOL;
+    }
+    else
+    {
+        // if the symbol flag is unset, but it was a symbol font before then
+        // until the character set encoding is set via SetCharSet then we
+        // can't know what the characterset is!
+        if ( meCharSet == RTL_TEXTENCODING_SYMBOL )
+        {
+            meCharSet = RTL_TEXTENCODING_DONTKNOW;
+        }
+    }
 }
+
 
 inline void FontAttributes::SetCharSet( const rtl_TextEncoding aEncoding )
 {
