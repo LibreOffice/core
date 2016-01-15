@@ -518,7 +518,7 @@ Reference< XShape > Shape::createAndInsert(
                 const basegfx::B2DPoint& rPreviousPoint = aPoly.getB2DPoint(i - 1);
                 if (aPoint.getX() - rPreviousPoint.getX() == 0)
                     aPoint.setX(aPoint.getX() + 1);
-                if (aPoint.getY() - rPreviousPoint.getX() == 0)
+                if (aPoint.getY() - rPreviousPoint.getY() == 0)
                     aPoint.setY(aPoint.getY() + 1);
             }
 
