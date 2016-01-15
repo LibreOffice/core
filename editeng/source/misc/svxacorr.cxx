@@ -1417,6 +1417,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         }
 
     } while( false );
+    SAL_INFO_IF(nRet != 0, "editeng", "DoAutoCorrect: did " << nRet);
 }
 
 SvxAutoCorrectLanguageLists& SvxAutoCorrect::_GetLanguageList(
