@@ -20,6 +20,7 @@
 #include "i18nlangtag/mslangid.hxx"
 
 #include <unotools/configmgr.hxx>
+#include <rtl/textenc.h>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 #include <vcl/outdev.hxx>
@@ -63,6 +64,7 @@ FontAttributes::FontAttributes()
     mePitch( PITCH_DONTKNOW ),
     meWidthType ( WIDTH_DONTKNOW ),
     meItalic ( ITALIC_NONE ),
+    meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     mbSymbolFlag( false ),
     mnQuality( 0 ),
     mbOrientation( false ),

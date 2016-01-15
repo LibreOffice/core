@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 
 #include <unotools/fontdefs.hxx>
+#include <rtl/textenc.h>
 #include <vcl/vclenum.hxx>
 
 class FontAttributes
@@ -37,6 +38,7 @@ public:
     FontItalic      GetSlantType() const                        { return meItalic; }
     FontPitch       GetPitch() const                            { return mePitch; }
     FontWidth       GetWidthType() const                        { return meWidthType; }
+    rtl_TextEncoding GetCharSet() const                         { return meCharSet; }
 
     bool            IsSymbolFont() const                        { return mbSymbolFlag; }
 
@@ -49,7 +51,7 @@ public:
     void            SetWeight(const FontWeight eWeight )        { meWeight = eWeight; }
     void            SetWidthType(const FontWidth eWidthType)    { meWidthType = eWidthType; }
 
-    void            SetSymbolFlag(const bool bSymbolFlag )      { mbSymbolFlag = bSymbolFlag; }
+    void            SetSymbolFlag(const bool );
 
     bool            CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const;
 
@@ -87,6 +89,7 @@ public:
     void            SetEmbeddableFlag ( bool bEmbeddable )      { mbEmbeddable = bEmbeddable; }
     void            SetSubsettableFlag( bool bSubsettable )     { mbSubsettable = bSubsettable; }
     void            SetOrientationFlag( bool bCanRotate )       { mbOrientation = bCanRotate; }
+    void            SetCharSet( const rtl_TextEncoding );
 
 private:
     // device independent variables
@@ -97,6 +100,7 @@ private:
     FontPitch       mePitch;                    // Pitch Type
     FontWidth       meWidthType;                // Width Type
     FontItalic      meItalic;                   // Slant Type
+    rtl_TextEncoding meCharSet;                 // RTL_TEXTENCODING_SYMBOL or RTL_TEXTENCODING_UNICODE
     bool            mbSymbolFlag;               // Is font a symbol?
 
     // device dependent variables
@@ -108,6 +112,19 @@ private:
     bool            mbEmbeddable;               // true: the font can be embedded
 
 };
+
+inline void FontAttributes::SetSymbolFlag( const bool bSymbolFlag )
+{
+    mbSymbolFlag = bSymbolFlag;
+    if ( bSymbolFlag )
+        meCharSet = RTL_TEXTENCODING_SYMBOL;
+}
+
+inline void FontAttributes::SetCharSet( const rtl_TextEncoding aEncoding )
+{
+    meCharSet = aEncoding;
+    mbSymbolFlag = ( meCharSet == RTL_TEXTENCODING_SYMBOL ? true : false );
+}
 
 #endif // INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 

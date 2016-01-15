@@ -76,7 +76,7 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         const PhysicalFontFace& rData = *mpDeviceFontList->Get( nDevFontIndex );
         aFontMetric.SetName( rData.GetFamilyName() );
         aFontMetric.SetStyleName( rData.GetStyleName() );
-        aFontMetric.SetCharSet( rData.IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+        aFontMetric.SetCharSet( rData.GetCharSet() );
         aFontMetric.SetFamily( rData.GetFamilyType() );
         aFontMetric.SetPitch( rData.GetPitch() );
         aFontMetric.SetWeight( rData.GetWeight() );
