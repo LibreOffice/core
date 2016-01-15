@@ -155,6 +155,7 @@ struct State
         mbIsText(false),
         maFontFamily(), // app-default
         mnFontSize(12),
+        mnParentFontSize(12),
         maFontStyle("normal"),
         maFontVariant("normal"),
         mnFontWeight(400.0),
