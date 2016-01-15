@@ -42,6 +42,8 @@
 #include <osl/file.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <svtools/imagemgr.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
@@ -102,7 +104,10 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
                 {
                     OUString aCmd( pPopupMenu->GetItemCommand( nItemId ) );
                     if ( !aCmd.isEmpty() )
-                        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( aCmd, false, xFrame );
+                    {
+                        INetURLObject aURLObj( aCmd );
+                        aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, false );
+                    }
 
                     if ( !!aImage )
                         pPopupMenu->SetItemImage( nItemId, aImage );
