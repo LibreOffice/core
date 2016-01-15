@@ -78,6 +78,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't create SimpleFileAccess:" + e);
             tRes.tested("execute()", false);
+            return;
         }
 
         log.println("Waiting while the file will be created or timeout "+
