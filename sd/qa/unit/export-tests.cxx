@@ -141,6 +141,7 @@ public:
     void testFdo90607();
     void testTdf91378();
     void testBnc822341();
+    void testMathObject();
     void testTdf80224();
     void testTdf92527();
 
@@ -180,6 +181,7 @@ public:
     CPPUNIT_TEST(testTdf91378);
 
     CPPUNIT_TEST(testBnc822341);
+    CPPUNIT_TEST(testMathObject);
     CPPUNIT_TEST(testTdf80224);
 
     CPPUNIT_TEST(testExportTransitionsPPTX);
@@ -208,10 +210,12 @@ public:
             { "v", "urn:schemas-microsoft-com:vml" },
             { "a", "http://schemas.openxmlformats.org/drawingml/2006/main" },
             { "c", "http://schemas.openxmlformats.org/drawingml/2006/chart" },
+            { "m", "http://schemas.openxmlformats.org/officeDocument/2006/math" },
             { "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture" },
             { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
             { "p", "http://schemas.openxmlformats.org/presentationml/2006/main" },
             { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
+            { "a14", "http://schemas.microsoft.com/office/drawing/2010/main" },
             { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
             { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
         };
@@ -1146,6 +1150,30 @@ void SdExportTest::testBnc822341()
         const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
         CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testMathObject()
+{
+    // Check import / export of math object
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/odp/math.odp"), ODP);
+    utl::TempFile tempFile1;
+    xDocShRef = saveAndReload(xDocShRef, PPTX, &tempFile1);
+
+    // Export an LO specific ole object (imported from an ODP document)
+    {
+        xmlDocPtr pXmlDocContent = parseExport(tempFile1, "ppt/slides/slide1.xml");
+        assertXPath(pXmlDocContent,
+            "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice",
+            "Requires",
+            "a14");
+        assertXPathContent(pXmlDocContent,
+            "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:txBody/a:p/a14:m/m:oMath/m:r[1]/m:t",
+            "a");
+
+        // TODO can't import yet
     }
 
     xDocShRef->DoClose();

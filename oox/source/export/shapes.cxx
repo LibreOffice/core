@@ -93,6 +93,7 @@
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <oox/export/chartexport.hxx>
+#include <oox/mathml/export.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -1579,13 +1580,64 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
     return *this;
 }
 
+void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
+{
+    Reference<XPropertySet> const xPropSet(xShape, UNO_QUERY);
+    assert(xPropSet.is());
+    Reference<XModel> xMathModel;
+    xPropSet->getPropertyValue("Model") >>= xMathModel;
+    assert(xMathModel.is());
+    assert(GetDocumentType() != DOCUMENT_DOCX); // should be written in DocxAttributeOutput
+    SAL_WARN_IF(GetDocumentType() == DOCUMENT_XLSX, "oox", "Math export to XLSX isn't tested, should it happen here?");
+
+    // ECMA standard does not actually allow oMath outside of
+    // WordProcessingML so write a MCE like PPT 2010 does
+    mpFS->startElementNS(XML_mc, XML_AlternateContent, FSEND);
+    mpFS->startElementNS(XML_mc, XML_Choice,
+        FSNS(XML_xmlns, XML_a14), "http://schemas.microsoft.com/office/drawing/2010/main",
+        XML_Requires, "a14",
+        FSEND);
+    mpFS->startElementNS(mnXmlNamespace, XML_sp, FSEND);
+    mpFS->startElementNS(mnXmlNamespace, XML_nvSpPr, FSEND);
+    mpFS->singleElementNS(mnXmlNamespace, XML_cNvPr,
+         XML_id, OString::number(GetNewShapeID(xShape)).getStr(),
+         XML_name, OString("Formula " + OString::number(mnShapeIdMax++)).getStr(),
+         FSEND);
+    mpFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1", FSEND);
+    mpFS->singleElementNS(mnXmlNamespace, XML_nvPr, FSEND);
+    mpFS->endElementNS(mnXmlNamespace, XML_nvSpPr);
+    mpFS->startElementNS(mnXmlNamespace, XML_spPr, FSEND);
+    WriteShapeTransformation(xShape, XML_a);
+    WritePresetShape("rect");
+    mpFS->endElementNS(mnXmlNamespace, XML_spPr);
+    mpFS->startElementNS(mnXmlNamespace, XML_txBody, FSEND);
+    mpFS->startElementNS(XML_a, XML_bodyPr, FSEND);
+    mpFS->endElementNS(XML_a, XML_bodyPr);
+    mpFS->startElementNS(XML_a, XML_p, FSEND);
+    mpFS->startElementNS(XML_a14, XML_m, FSEND);
+
+    oox::FormulaExportBase *const pMagic(dynamic_cast<oox::FormulaExportBase*>(xMathModel.get()));
+    assert(pMagic);
+    pMagic->writeFormulaOoxml(GetFS(), GetFB()->getVersion(), GetDocumentType());
+
+    mpFS->endElementNS(XML_a14, XML_m);
+    mpFS->endElementNS(XML_a, XML_p);
+    mpFS->endElementNS(mnXmlNamespace, XML_txBody);
+    mpFS->endElementNS(mnXmlNamespace, XML_sp);
+    mpFS->endElementNS(XML_mc, XML_Choice);
+    mpFS->startElementNS(XML_mc, XML_Fallback, FSEND);
+    // TODO: export bitmap shape as fallback
+    mpFS->endElementNS(XML_mc, XML_Fallback);
+    mpFS->endElementNS(XML_mc, XML_AlternateContent);
+}
+
 ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
     if (!xPropSet.is())
         return *this;
 
-    bool bIsChart(false);
+    enum { CHART, MATH, OTHER } eType(OTHER);
     OUString clsid;
     xPropSet->getPropertyValue("CLSID") >>= clsid;
     if (!clsid.isEmpty())
@@ -1593,10 +1645,13 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
         SvGlobalName aClassID;
         bool const isValid = aClassID.MakeId(clsid);
         assert(isValid); (void)isValid;
-        bIsChart = SotExchange::IsChart(aClassID);
+        if (SotExchange::IsChart(aClassID))
+            eType = CHART;
+        else if (SotExchange::IsMath(aClassID))
+            eType = MATH;
     }
 
-    if (bIsChart)
+    if (CHART == eType)
     {
         Reference< XChartDocument > xChartDoc;
         xPropSet->getPropertyValue("Model") >>= xChartDoc;
@@ -1606,6 +1661,12 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
         ChartExport aChartExport( mnXmlNamespace, GetFS(), xModel, GetFB(), GetDocumentType() );
         static sal_Int32 nChartCount = 0;
         aChartExport.WriteChartObj( xShape, ++nChartCount );
+        return *this;
+    }
+
+    if (MATH == eType)
+    {
+        WriteMathShape(xShape);
         return *this;
     }
 
