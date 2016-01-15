@@ -105,7 +105,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
                     if ( !aCmd.isEmpty() )
                     {
                         INetURLObject aURLObj( aCmd );
-                        aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, false );
+                        aImage = SvFileInformationManager::GetImageNoDefault( aURLObj );
                     }
 
                     if ( !!aImage )
