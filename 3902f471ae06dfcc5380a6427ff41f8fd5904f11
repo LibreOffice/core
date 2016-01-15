@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_c54b512a",
+        "filename": "external/liblangtag/ExternalPackage_liblangtag.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2016-01-15T05:09:51Z",
+      "side": 1,
+      "message": "I got link to itself kind of problem \u003e\u003e stat: ...instdir/LibreOfficeDev.app/Contents/Frameworks/liblangtag.1.dylib: Too many levels of symbolic links \u003c\u003c\n\nIt is linked as liblangtag.dylib -\u003e liblangtag.1.dylib in .libs\n\nWith .1 added here it is fine",
+      "range": {
+        "startLine": 15,
+        "startChar": 108,
+        "endLine": 15,
+        "endChar": 124
+      },
+      "revId": "3902f471ae06dfcc5380a6427ff41f8fd5904f11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
