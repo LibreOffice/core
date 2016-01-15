@@ -1820,7 +1820,10 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         }
     }
 
+    // Avoid LOK selection notifications before we have all the results.
+    rDoc.GetDrawLayer()->setTiledSearching(true);
     MarkDataChanged();
+    rDoc.GetDrawLayer()->setTiledSearching(false);
 
     if ( bFound )
     {
@@ -1872,6 +1875,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 boost::property_tree::write_json(aStream, aTree);
                 OString aPayload = aStream.str().c_str();
                 rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+
+                // Trigger LOK_CALLBACK_TEXT_SELECTION now.
+                MarkDataChanged();
             }
         }
 

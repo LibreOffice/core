@@ -36,7 +36,9 @@ using namespace desktop;
 class DesktopLOKTest : public UnoApiTest
 {
 public:
-    DesktopLOKTest() : UnoApiTest("/desktop/qa/data/")
+    DesktopLOKTest() : UnoApiTest("/desktop/qa/data/"),
+    m_nSelectionBeforeSearchResult(0),
+    m_nSelectionAfterSearchResult(0)
     {
     }
 
@@ -67,6 +69,7 @@ public:
     void testGetFilterTypes();
     void testGetPartPageRectangles();
     void testSearchCalc();
+    void testSearchAllNotificationsCalc();
     void testPaintTile();
     void testSaveAs();
     void testSaveAsCalc();
@@ -83,6 +86,7 @@ public:
     CPPUNIT_TEST(testGetFilterTypes);
     CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST(testSearchCalc);
+    CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
     CPPUNIT_TEST(testSaveAsCalc);
@@ -97,6 +101,8 @@ public:
     OString m_aTextSelection;
     std::vector<OString> m_aSearchResultSelection;
     std::vector<int> m_aSearchResultPart;
+    int m_nSelectionBeforeSearchResult;
+    int m_nSelectionAfterSearchResult;
 
     // for testCommandResult
     osl::Condition m_aCommandResultCondition;
@@ -149,6 +155,10 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         m_aTextSelection = pPayload;
+        if (m_aSearchResultSelection.empty())
+            ++m_nSelectionBeforeSearchResult;
+        else
+            ++m_nSelectionAfterSearchResult;
     }
     break;
     case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
@@ -307,6 +317,31 @@ void DesktopLOKTest::testSearchCalc()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
     // Result is on the first sheet.
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testSearchAllNotificationsCalc()
+{
+    LibLibreOffice_Impl aOffice;
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("search.ods");
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("foo"))},
+        {"SearchItem.Backward", uno::makeAny(false)},
+        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // This was 1, make sure that we get no notifications about selection changes during search.
+    CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
+    // But we do get the selection afterwards.
+    CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
