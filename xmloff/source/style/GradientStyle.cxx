@@ -98,9 +98,6 @@ void XMLGradientStyleImport::importXML(
         XML_TOKEN_MAP_END
     };
 
-    bool bHasName       = false;
-    bool bHasStyle      = false;
-    bool bHasStartColor = false;
     OUString aDisplayName;
 
     awt::Gradient aGradient;
@@ -127,15 +124,10 @@ void XMLGradientStyleImport::importXML(
         switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
         {
         case XML_TOK_GRADIENT_NAME:
-            {
-                rStrName = rStrValue;
-                bHasName = true;
-            }
+            rStrName = rStrValue;
             break;
         case XML_TOK_GRADIENT_DISPLAY_NAME:
-            {
-                aDisplayName = rStrValue;
-            }
+            aDisplayName = rStrValue;
             break;
         case XML_TOK_GRADIENT_STYLE:
             {
@@ -143,7 +135,6 @@ void XMLGradientStyleImport::importXML(
                 if( SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_GradientStyle_Enum ) )
                 {
                     aGradient.Style = (awt::GradientStyle) eValue;
-                    bHasStyle = true;
                 }
             }
             break;
@@ -156,16 +147,10 @@ void XMLGradientStyleImport::importXML(
             aGradient.YOffset = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_TOK_GRADIENT_STARTCOLOR:
-            {
-                bHasStartColor = ::sax::Converter::convertColor(
-                        aGradient.StartColor, rStrValue);
-            }
+            ::sax::Converter::convertColor(aGradient.StartColor, rStrValue);
             break;
         case XML_TOK_GRADIENT_ENDCOLOR:
-            {
-                bHasStartColor = ::sax::Converter::convertColor(
-                        aGradient.EndColor, rStrValue);
-            }
+            ::sax::Converter::convertColor(aGradient.EndColor, rStrValue);
             break;
         case XML_TOK_GRADIENT_STARTINT:
             ::sax::Converter::convertPercent( nTmpValue, rStrValue );

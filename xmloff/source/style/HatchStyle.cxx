@@ -84,10 +84,7 @@ void XMLHatchStyleImport::importXML(
         XML_TOKEN_MAP_END
     };
 
-    bool bHasName  = false;
     bool bHasStyle = false;
-    bool bHasColor = false;
-    bool bHasDist  = false;
     OUString aDisplayName;
 
     drawing::Hatch aHatch;
@@ -111,10 +108,7 @@ void XMLHatchStyleImport::importXML(
         switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
         {
             case XML_TOK_HATCH_NAME:
-                {
-                    rStrName = rStrValue;
-                    bHasName = true;
-                }
+                rStrName = rStrValue;
                 break;
             case XML_TOK_HATCH_DISPLAY_NAME:
                 aDisplayName = rStrValue;
@@ -128,13 +122,10 @@ void XMLHatchStyleImport::importXML(
                 }
                 break;
             case XML_TOK_HATCH_COLOR:
-                {
-                    bHasColor = ::sax::Converter::convertColor(
-                            aHatch.Color, rStrValue);
-                }
+                ::sax::Converter::convertColor(aHatch.Color, rStrValue);
                 break;
             case XML_TOK_HATCH_DISTANCE:
-                bHasDist = rUnitConverter.convertMeasureToCore(
+                rUnitConverter.convertMeasureToCore(
                         (sal_Int32&)aHatch.Distance, rStrValue );
                 break;
             case XML_TOK_HATCH_ROTATION:
