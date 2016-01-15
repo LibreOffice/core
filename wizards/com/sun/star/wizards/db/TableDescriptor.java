@@ -235,12 +235,12 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             for (int i = 0; i < columncontainer.size(); i++)
             {
                 XPropertySet xColPropertySet = getByIndex(i);
-                if (!isColunnNameDuplicate(xNameAccessColumns, xColPropertySet))
+                if (xColPropertySet != null && !isColunnNameDuplicate(xNameAccessColumns, xColPropertySet))
                 {
                     xAppendColumns.appendByDescriptor(xColPropertySet);	//xColPropertySet.setPropertyValue("Type", 32423)
-                        }
-                        else
-                        {
+                }
+                else
+                {
                     breturn = false;
                 }
             }
