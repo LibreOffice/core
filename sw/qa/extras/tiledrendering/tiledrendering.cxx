@@ -47,6 +47,7 @@ public:
     void testSearchTextFrameWrapAround();
     void testDocumentSizeChanged();
     void testSearchAll();
+    void testSearchAllNotifications();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(testSearchTextFrameWrapAround);
     CPPUNIT_TEST(testDocumentSizeChanged);
     CPPUNIT_TEST(testSearchAll);
+    CPPUNIT_TEST(testSearchAllNotifications);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -74,10 +76,14 @@ private:
     bool m_bFound;
     std::vector<OString> m_aSearchResultSelection;
     std::vector<int> m_aSearchResultPart;
+    int m_nSelectionBeforeSearchResult;
+    int m_nSelectionAfterSearchResult;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
-    : m_bFound(true)
+    : m_bFound(true),
+    m_nSelectionBeforeSearchResult(0),
+    m_nSelectionAfterSearchResult(0)
 {
 }
 
@@ -126,6 +132,10 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         m_aTextSelection = pPayload;
+        if (m_aSearchResultSelection.empty())
+            ++m_nSelectionBeforeSearchResult;
+        else
+            ++m_nSelectionAfterSearchResult;
     }
     break;
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
@@ -457,6 +467,28 @@ void SwTiledRenderingTest::testSearchAll()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
     // Writer documents are always a single part.
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testSearchAllNotifications()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("search.odt");
+    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
+        {"SearchItem.Backward", uno::makeAny(false)},
+        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // This was 5, make sure that we get no notifications about selection changes during search.
+    CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
+    // But we do get the selection afterwards.
+    CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

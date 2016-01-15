@@ -65,6 +65,8 @@
 #include <view.hrc>
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
 
 #include "PostItMgr.hxx"
 
@@ -267,7 +269,14 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
             break;
             case SvxSearchCmd::FIND_ALL:
             {
+                // Disable LOK selection notifications during search.
+                SwDrawModel* pModel = m_pWrtShell->getIDocumentDrawModelAccess().GetDrawModel();
+                if (pModel)
+                    pModel->setTiledSearching(true);
                 bool bRet = SearchAll();
+                if (pModel)
+                    pModel->setTiledSearching(false);
+
                 if( !bRet )
                 {
 #if HAVE_FEATURE_DESKTOP
