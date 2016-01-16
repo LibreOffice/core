@@ -365,7 +365,6 @@ class BasicCollection : public SbxObject
 
 public:
     BasicCollection( const OUString& rClassname );
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
     virtual void Clear() override;
 };
 
