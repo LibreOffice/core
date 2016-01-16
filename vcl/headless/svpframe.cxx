@@ -24,13 +24,10 @@
 #include "headless/svpinst.hxx"
 #include "headless/svpgdi.hxx"
 
-#include <basebmp/bitmapdevice.hxx>
-#include <basebmp/scanlineformats.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
 #include <cairo.h>
 
-using namespace basebmp;
 using namespace basegfx;
 
 SvpSalFrame* SvpSalFrame::s_pFocusFrame = nullptr;
