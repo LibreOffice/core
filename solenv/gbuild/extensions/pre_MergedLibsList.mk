@@ -18,6 +18,8 @@ MERGE_LIBRARY_LIST := \
 	configmgr \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	cppcanvas \
+	cppu \
+	cppuhelper \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	deployment \
 	deploymentmisc \
@@ -34,17 +36,22 @@ MERGE_LIBRARY_LIST := \
 	i18nlangtag \
 	i18npool \
 	i18nutil \
+	$(if $(filter TRUE,$(ENABLE_JAVA)),jvmaccess) \
+	$(if $(filter TRUE,$(ENABLE_JAVA)),jvmfwk) \
 	lng \
 	localebe1 \
 	mcnttype \
 	msfilter \
 	package2 \
+	reg \
+	salhelper \
 	sax \
 	sb \
 	sfx \
 	sofficeapp \
 	sot \
 	$(if $(ENABLE_HEADLESS),,spl) \
+	store \
 	svl \
 	svt \
 	svx \
@@ -56,10 +63,12 @@ MERGE_LIBRARY_LIST := \
 	ucbhelper \
 	ucpexpand1 \
 	ucpfile1 \
+	unoidl \
 	unoxml \
 	utl \
 	uui \
 	vcl \
+	xmlreader \
 	xmlscript \
 	xo \
 	xstor \
