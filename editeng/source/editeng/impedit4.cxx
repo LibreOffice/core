@@ -1661,7 +1661,7 @@ void ImpEditEngine::SetLanguageAndFont(
     {
         // set new font attribute
         SvxFontItem aFontItem = static_cast<const SvxFontItem&>( aNewSet.Get( nFontWhichId ) );
-        aFontItem.SetFamilyName( pFont->GetFamilyName());
+        aFontItem.SetFamilyName( pFont->GetName());
         aFontItem.SetFamily( pFont->GetFamily());
         aFontItem.SetStyleName( pFont->GetStyleName());
         aFontItem.SetPitch( pFont->GetPitch());

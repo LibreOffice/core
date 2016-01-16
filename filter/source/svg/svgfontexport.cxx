@@ -53,7 +53,7 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont 
 {
     FontWeight      eWeight( WEIGHT_NORMAL );
     FontItalic      eItalic( ITALIC_NONE );
-    OUString aFontName( rFont.GetFamilyName() );
+    OUString aFontName( rFont.GetName() );
     sal_Int32       nNextTokenPos( 0 );
 
     switch( rFont.GetWeight() )
@@ -222,7 +222,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                     else
                         aFontStyle = "normal";
 
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-family", GetMappedFontName( rFont.GetFamilyName() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-family", GetMappedFontName( rFont.GetName() ) );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "units-per-em", aUnitsPerEM );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-weight", aFontWeight );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-style", aFontStyle );
@@ -314,7 +314,7 @@ void SVGFontExport::EmbedFonts()
             {
                 vcl::Font aFont;
 
-                aFont.SetFamilyName( (*aGlyphTreeIter).first );
+                aFont.SetName( (*aGlyphTreeIter).first );
                 aFont.SetWeight( (*aFontWeightIter).first );
                 aFont.SetItalic( (*aFontItalicIter).first );
 

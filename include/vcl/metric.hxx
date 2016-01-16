@@ -38,9 +38,9 @@ typedef boost::intrusive_ptr< ImplFontMetric > ImplFontMetricPtr;
 class VCL_DLLPUBLIC FontMetric : public vcl::Font
 {
 public:
-    explicit            FontMetric();
-                        FontMetric( const FontMetric& );  // TODO make this explicit
-    virtual             ~FontMetric();
+                        FontMetric();
+                        FontMetric( const FontMetric& );
+                        ~FontMetric();
 
     FontType            GetType() const;
 
@@ -81,7 +81,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const FontMetric& rMetric )
 {
     stream << "{"
-           << "name=" << "\"" << rMetric.GetFamilyName() << "\""
+           << "name=" << "\"" << rMetric.GetName() << "\""
            << ",size=(" << rMetric.GetSize().Width() << "," << rMetric.GetSize().Height() << ")"
            << ",ascent=" << rMetric.GetAscent()
            << ",descent=" << rMetric.GetDescent()

@@ -151,7 +151,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
         eCharSet = RTL_TEXTENCODING_MS_1252;
     aFont.SetCharSet( eCharSet );
-    aFont.SetFamilyName( rFont.alfFaceName );
+    aFont.SetName( rFont.alfFaceName );
     FontFamily eFamily;
     switch ( rFont.lfPitchAndFamily & 0xf0 )
     {
@@ -852,14 +852,14 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
 {
     mbIsMapWinSet = false;
     mbIsMapDevSet = false;
-    mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) ); // The original clipregion has to be on top
-                                                                             // of the stack so it can always be restored
-                                                                             // this is necessary to be able to support
-                                                                             // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
+    mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) );      // The original clipregion has to be on top
+                                                                            // of the stack so it can always be restored
+                                                                            // this is necessary to be able to support
+                                                                            // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
 
-    maFont.SetFamilyName( "Arial" );                                         // sj: #i57205#, we do have some scaling problems if using
-    maFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );                           // the default font then most times a x11 font is used, we
-    maFont.SetHeight( 423 );                                                 // will prevent this defining a font
+    maFont.SetName( "Arial" );                                              // sj: #i57205#, we do have some scaling problems if using
+    maFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );                          // the default font then most times a x11 font is used, we
+    maFont.SetHeight( 423 );                                                // will prevent this defining a font
 
     maLatestLineStyle.aLineColor = Color( 0x12, 0x34, 0x56 );
     maLatestFillStyle.aFillColor = Color( 0x12, 0x34, 0x56 );

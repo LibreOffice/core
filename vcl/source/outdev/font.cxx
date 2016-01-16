@@ -74,13 +74,13 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
     if( nDevFontIndex < nCount )
     {
         const PhysicalFontFace& rData = *mpDeviceFontList->Get( nDevFontIndex );
-        aFontMetric.SetFamilyName( rData.GetFamilyName() );
+        aFontMetric.SetName( rData.GetFamilyName() );
         aFontMetric.SetStyleName( rData.GetStyleName() );
         aFontMetric.SetCharSet( rData.GetCharSet() );
         aFontMetric.SetFamily( rData.GetFamilyType() );
         aFontMetric.SetPitch( rData.GetPitch() );
         aFontMetric.SetWeight( rData.GetWeight() );
-        aFontMetric.SetItalic( rData.GetItalic() );
+        aFontMetric.SetItalic( rData.GetSlantType() );
         aFontMetric.SetWidthType( rData.GetWidthType() );
         aFontMetric.SetScalableFlag( rData.IsScalable() );
         aFontMetric.SetBuiltInFontFlag( rData.IsBuiltInFont() );
@@ -112,7 +112,7 @@ int OutputDevice::GetDevFontSizeCount( const vcl::Font& rFont ) const
     delete mpDeviceFontSizeList;
 
     ImplInitFontList();
-    mpDeviceFontSizeList = mpFontCollection->GetDeviceFontSizeList( rFont.GetFamilyName() );
+    mpDeviceFontSizeList = mpFontCollection->GetDeviceFontSizeList( rFont.GetName() );
     return mpDeviceFontSizeList->Count();
 }
 
@@ -195,14 +195,14 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.Font::operator=( maFont );
 
     // set aMetric with info from font
-    aMetric.SetFamilyName( maFont.GetFamilyName() );
+    aMetric.SetName( maFont.GetName() );
     aMetric.SetStyleName( xFontMetric->GetStyleName() );
     aMetric.SetSize( PixelToLogic( Size( xFontMetric->GetWidth(), xFontMetric->GetAscent() + xFontMetric->GetDescent() - xFontMetric->GetInternalLeading() ) ) );
     aMetric.SetCharSet( xFontMetric->IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
     aMetric.SetFamily( xFontMetric->GetFamilyType() );
     aMetric.SetPitch( xFontMetric->GetPitch() );
     aMetric.SetWeight( xFontMetric->GetWeight() );
-    aMetric.SetItalic( xFontMetric->GetItalic() );
+    aMetric.SetItalic( xFontMetric->GetSlantType() );
     aMetric.SetWidthType( xFontMetric->GetWidthType() );
     if ( pFontInstance->mnOwnOrientation )
         aMetric.SetOrientation( pFontInstance->mnOwnOrientation );
@@ -879,11 +879,11 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                 }
             }
             while ( nIndex != -1 );
-            aFont.SetFamilyName( aName );
+            aFont.SetName( aName );
         }
 
         // No Name, than set all names
-        if ( aFont.GetFamilyName().isEmpty() )
+        if ( aFont.GetName().isEmpty() )
         {
             if ( nFlags & GetDefaultFontFlags::OnlyOne )
             {
@@ -891,13 +891,13 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                 {
                     SAL_WARN ("vcl.gdi", "No default window has been set for the application - we really shouldn't be able to get here");
                     sal_Int32 nIndex = 0;
-                    aFont.SetFamilyName( aSearch.getToken( 0, ';', nIndex ) );
+                    aFont.SetName( aSearch.getToken( 0, ';', nIndex ) );
                 }
                 else
                 {
                     pOutDev->ImplInitFontList();
 
-                    aFont.SetFamilyName( aSearch );
+                    aFont.SetName( aSearch );
 
                     // convert to pixel height
                     Size aSize = pOutDev->ImplLogicToDevicePixel( aFont.GetSize() );
@@ -920,15 +920,15 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                     if (pFontInstance)
                     {
                         if( pFontInstance->maFontSelData.mpFontData )
-                            aFont.SetFamilyName( pFontInstance->maFontSelData.mpFontData->GetFamilyName() );
+                            aFont.SetName( pFontInstance->maFontSelData.mpFontData->GetFamilyName() );
                         else
-                            aFont.SetFamilyName( pFontInstance->maFontSelData.maTargetName );
+                            aFont.SetName( pFontInstance->maFontSelData.maTargetName );
                         pOutDev->mpFontCache->Release(pFontInstance);
                     }
                 }
             }
             else
-                aFont.SetFamilyName( aSearch );
+                aFont.SetName( aSearch );
         }
     }
 

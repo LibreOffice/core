@@ -103,7 +103,7 @@ static void lcl_SetFontProperties(
         const SvxPostureItem& rPostureItem )
 {
     rFont.SetFamily     ( rFontItem.GetFamily() );
-    rFont.SetFamilyName ( rFontItem.GetFamilyName() );
+    rFont.SetName       ( rFontItem.GetFamilyName() );
     rFont.SetStyleName  ( rFontItem.GetStyleName() );
     rFont.SetCharSet    ( rFontItem.GetCharSet() );
     rFont.SetPitch      ( rFontItem.GetPitch() );

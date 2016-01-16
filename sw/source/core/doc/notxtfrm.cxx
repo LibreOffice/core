@@ -103,7 +103,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
         pFont = new vcl::Font();
         pFont->SetWeight( WEIGHT_BOLD );
         pFont->SetStyleName( OUString() );
-        pFont->SetFamilyName("Arial Unicode");
+        pFont->SetName("Arial Unicode");
         pFont->SetFamily( FAMILY_SWISS );
         pFont->SetTransparent( true );
     }

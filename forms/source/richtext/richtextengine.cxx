@@ -39,6 +39,9 @@
 
 namespace frm
 {
+
+
+
     //= RichTextEngine
 
 
@@ -59,8 +62,8 @@ namespace frm
 
         // defaults
         vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetAppFont();
-        aFont.SetFamilyName( "Times New Roman" );
-        pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetFamilyName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
+        aFont.SetName( "Times New Roman" );
+        pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
 
         // 12 pt font size
         MapMode aPointMapMode( MAP_POINT );

@@ -657,7 +657,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
 
                 // setup the font properties
                 SvxFont aFont;
-                aFont.SetFamilyName(pFontItem->GetFamilyName());
+                aFont.SetName(pFontItem->GetFamilyName());
                 aFont.SetStyleName(pFontItem->GetStyleName());
                 aFont.SetSize(aPixelSize);
 
@@ -1000,13 +1000,13 @@ void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
 {
     if ( pFontItem )
     {
-        aCurFont.SetFamilyName  ( pFontItem->GetFamilyName() );
+        aCurFont.SetName        ( pFontItem->GetFamilyName() );
         aCurFont.SetFamily      ( pFontItem->GetFamily() );
         aCurFont.SetStyleName   ( pFontItem->GetStyleName() );
         aCurFont.SetPitch       ( pFontItem->GetPitch() );
         aCurFont.SetCharSet     ( pFontItem->GetCharSet() );
     }
-    OUString aCurName = aCurFont.GetFamilyName();
+    OUString aCurName = aCurFont.GetName();
     if ( GetText() != aCurName )
         SetText( aCurName );
 }
@@ -1145,7 +1145,7 @@ void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
             aCurFont.GetItalic() ) );
 
         SvxFontItem aFontItem( aFontMetric.GetFamily(),
-            aFontMetric.GetFamilyName(),
+            aFontMetric.GetName(),
             aFontMetric.GetStyleName(),
             aFontMetric.GetPitch(),
             aFontMetric.GetCharSet(),
@@ -1172,7 +1172,7 @@ void SvxFontNameBox_Impl::Select()
         aCurFont = aFontMetric;
 
         pFontItem.reset( new SvxFontItem( aFontMetric.GetFamily(),
-            aFontMetric.GetFamilyName(),
+            aFontMetric.GetName(),
             aFontMetric.GetStyleName(),
             aFontMetric.GetPitch(),
             aFontMetric.GetCharSet(),

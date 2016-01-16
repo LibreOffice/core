@@ -377,12 +377,12 @@ void SVGAttributeWriter::setFontFamily()
 {
     if( mrExport.IsUsePositionedCharacters() )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, mrFontExport.GetMappedFontName( maCurFont.GetFamilyName() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, mrFontExport.GetMappedFontName( maCurFont.GetName() ) );
     }
     else
     {
         sal_Int32       nNextTokenPos( 0 );
-        const OUString& rsFontName = maCurFont.GetFamilyName();
+        const OUString& rsFontName = maCurFont.GetName();
         OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
         FontPitch ePitch = maCurFont.GetPitch();
         if( ePitch == PITCH_FIXED )
@@ -729,12 +729,12 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
 
     if( maCurrentFont !=  maParentFont )
     {
-        const OUString& rsCurFontName               = maCurrentFont.GetFamilyName();
+        const OUString& rsCurFontName               = maCurrentFont.GetName();
         long int nCurFontSize                       = maCurrentFont.GetHeight();
         FontItalic eCurFontItalic                   = maCurrentFont.GetItalic();
         FontWeight eCurFontWeight                   = maCurrentFont.GetWeight();
 
-        const OUString& rsParFontName               = maParentFont.GetFamilyName();
+        const OUString& rsParFontName               = maParentFont.GetName();
         long int nParFontSize                       = maParentFont.GetHeight();
         FontItalic eParFontItalic                   = maParentFont.GetItalic();
         FontWeight eParFontWeight                   = maParentFont.GetWeight();
@@ -840,7 +840,7 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
 void SVGTextWriter::implSetFontFamily()
 {
     sal_Int32       nNextTokenPos( 0 );
-    const OUString& rsFontName = maCurrentFont.GetFamilyName();
+    const OUString& rsFontName = maCurrentFont.GetName();
     OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
     FontPitch ePitch = maCurrentFont.GetPitch();
     if( ePitch == PITCH_FIXED )

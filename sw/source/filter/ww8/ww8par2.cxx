@@ -692,7 +692,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
                                 ePitch, eCharSet ) ){
 
                 vcl::Font aFont;
-                aFont.SetFamilyName( aName );
+                aFont.SetName( aName );
                 aFont.SetFamily( eFamily );
 
                 aFont.SetCharSet( eCharSet );

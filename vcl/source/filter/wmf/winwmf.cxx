@@ -1041,7 +1041,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                         case PRIVATE_ESCAPE_UNICODE :
                                         {
                                             // we will use text instead of polygons only if we have the correct font
-                                            if ( Application::GetDefaultDevice()->IsFontAvailable( pOut->GetFont().GetFamilyName() ) )
+                                            if ( Application::GetDefaultDevice()->IsFontAvailable( pOut->GetFont().GetName() ) )
                                             {
                                                 Point  aPt;
                                                 OUString aString;

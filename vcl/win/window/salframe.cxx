@@ -2787,12 +2787,12 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     // is to wide for the dialogs
     if ( rSettings.GetLanguageTag().getLanguageType() == LANGUAGE_RUSSIAN )
     {
-        OUString aFontName = aAppFont.GetFamilyName();
+        OUString aFontName = aAppFont.GetName();
         OUString aFirstName = aFontName.getToken( 0, ';' );
         if ( aFirstName.equalsIgnoreAsciiCase( "MS Sans Serif" ) )
         {
             aFontName = "Arial;" + aFontName;
-            aAppFont.SetFamilyName( aFontName );
+            aAppFont.SetName( aFontName );
         }
     }
     aStyleSettings.SetAppFont( aAppFont );

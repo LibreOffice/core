@@ -366,7 +366,7 @@ FontItalic VCLUnoHelper::ConvertFontSlant(css::awt::FontSlant eSlant)
 css::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rFont )
 {
     css::awt::FontDescriptor aFD;
-    aFD.Name = rFont.GetFamilyName();
+    aFD.Name = rFont.GetName();
     aFD.StyleName = rFont.GetStyleName();
     aFD.Height = (sal_Int16)rFont.GetSize().Height();
     aFD.Width = (sal_Int16)rFont.GetSize().Width();
@@ -389,7 +389,7 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
 {
     vcl::Font aFont( rInitFont );
     if ( !rDescr.Name.isEmpty() )
-        aFont.SetFamilyName( rDescr.Name );
+        aFont.SetName( rDescr.Name );
     if ( !rDescr.StyleName.isEmpty() )
         aFont.SetStyleName( rDescr.StyleName );
     if ( rDescr.Height )

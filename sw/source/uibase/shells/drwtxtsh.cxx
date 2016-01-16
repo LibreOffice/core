@@ -751,7 +751,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
             const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
             if ( pFontItem )
             {
-                aFont.SetFamilyName( pFontItem->GetFamilyName() );
+                aFont.SetName( pFontItem->GetFamilyName() );
                 aFont.SetStyleName( pFontItem->GetStyleName() );
                 aFont.SetCharSet( pFontItem->GetCharSet() );
                 aFont.SetPitch( pFontItem->GetPitch() );
@@ -760,7 +760,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
             if ( pCItem )
             {
                 sSym  = pCItem->GetValue();
-                aOpt.SetSymbolFont(aFont.GetFamilyName());
+                aOpt.SetSymbolFont(aFont.GetName());
                 SW_MOD()->ApplyUsrPref(aOpt, &rView);
             }
         }
@@ -786,7 +786,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
         // assign attributes (Set font)
         SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
-        SvxFontItem aFontItem (aFont.GetFamily(), aFont.GetFamilyName(),
+        SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );
@@ -813,8 +813,8 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         pOLV->ShowCursor();
 
         rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
-        if(!aFont.GetFamilyName().isEmpty())
-            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetFamilyName() ) );
+        if(!aFont.GetName().isEmpty())
+            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetName() ) );
         rReq.Done();
     }
 }

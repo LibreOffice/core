@@ -1783,7 +1783,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_aStructure[0].m_nParentElement    = 0;
 
     Font aFont;
-    aFont.SetFamilyName( "Times" );
+    aFont.SetName( "Times" );
     aFont.SetSize( Size( 0, 12 ) );
 
     GraphicsState aState;
@@ -2316,7 +2316,7 @@ void PDFWriterImpl::endPage()
 
         // reset the default font
         Font aFont;
-        aFont.SetFamilyName( "Times" );
+        aFont.SetName( "Times" );
         aFont.SetSize( Size( 0, 12 ) );
 
         m_aCurrentPDFState = m_aGraphicsStack.front();
@@ -3532,9 +3532,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
             aErrorComment.append( "GetEmbedFontData failed for font \"" );
             aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
             aErrorComment.append( '\"' );
-            if( pFont->GetItalic() == ITALIC_NORMAL )
+            if( pFont->GetSlantType() == ITALIC_NORMAL )
                 aErrorComment.append( " italic" );
-            else if( pFont->GetItalic() == ITALIC_OBLIQUE )
+            else if( pFont->GetSlantType() == ITALIC_OBLIQUE )
                 aErrorComment.append( " oblique" );
             aErrorComment.append( " weight=" );
             aErrorComment.append( sal_Int32(pFont->GetWeight()) );
@@ -3602,7 +3602,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 pRef->SetMapMode( MapMode( MAP_PIXEL ) );
                 Font aFont( pFont->GetFamilyName(), pFont->GetStyleName(), Size( 0, 1000 ) );
                 aFont.SetWeight( pFont->GetWeight() );
-                aFont.SetItalic( pFont->GetItalic() );
+                aFont.SetItalic( pFont->GetSlantType() );
                 aFont.SetPitch( pFont->GetPitch() );
                 pRef->SetFont( aFont );
                 pRef->ImplNewFont();
@@ -3817,7 +3817,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
     // possibly characters outside Adobe standard encoding
     // so set Symbolic flag
     sal_Int32 nFontFlags = (1<<2);
-    if( pFont->GetItalic() == ITALIC_NORMAL || pFont->GetItalic() == ITALIC_OBLIQUE )
+    if( pFont->GetSlantType() == ITALIC_NORMAL || pFont->GetSlantType() == ITALIC_OBLIQUE )
         nFontFlags |= (1 << 6);
     if( pFont->GetPitch() == PITCH_FIXED )
         nFontFlags |= 1;
@@ -3847,7 +3847,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
     aLine.append( ' ' );
     aLine.append( (sal_Int32)(rInfo.m_aFontBBox.BottomRight().Y()+1) );
     aLine.append( "]/ItalicAngle " );
-    if( pFont->GetItalic() == ITALIC_OBLIQUE || pFont->GetItalic() == ITALIC_NORMAL )
+    if( pFont->GetSlantType() == ITALIC_OBLIQUE || pFont->GetSlantType() == ITALIC_NORMAL )
         aLine.append( "-30" );
     else
         aLine.append( "0" );
@@ -4122,9 +4122,9 @@ bool PDFWriterImpl::emitFonts()
                 aErrorComment.append( "CreateFontSubset failed for font \"" );
                 aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
                 aErrorComment.append( '\"' );
-                if( pFont->GetItalic() == ITALIC_NORMAL )
+                if( pFont->GetSlantType() == ITALIC_NORMAL )
                     aErrorComment.append( " italic" );
-                else if( pFont->GetItalic() == ITALIC_OBLIQUE )
+                else if( pFont->GetSlantType() == ITALIC_OBLIQUE )
                     aErrorComment.append( " oblique" );
                 aErrorComment.append( " weight=" );
                 aErrorComment.append( sal_Int32(pFont->GetWeight()) );
@@ -4691,7 +4691,7 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
     bool bAdjustSize = false;
 
     Font aFont( rControlFont );
-    if( aFont.GetFamilyName().isEmpty() )
+    if( aFont.GetName().isEmpty() )
     {
         aFont = rAppSetFont;
         if( rControlFont.GetHeight() )
@@ -4721,7 +4721,7 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
 sal_Int32 PDFWriterImpl::getBestBuiltinFont( const vcl::Font& rFont )
 {
     sal_Int32 nBest = 4; // default to Helvetica
-    OUString aFontName( rFont.GetFamilyName() );
+    OUString aFontName( rFont.GetName() );
     aFontName = aFontName.toAsciiLowerCase();
 
     if( aFontName.indexOf( "times" ) != -1 )
@@ -8870,8 +8870,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // perform artificial italics if necessary
     if( ( m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_NORMAL ||
           m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_OBLIQUE ) &&
-        !( m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData->GetItalic() == ITALIC_NORMAL ||
-           m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData->GetItalic() == ITALIC_OBLIQUE )
+        !( m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData->GetSlantType() == ITALIC_NORMAL ||
+           m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData->GetSlantType() == ITALIC_OBLIQUE )
         )
     {
         fSkew = M_PI/12.0;

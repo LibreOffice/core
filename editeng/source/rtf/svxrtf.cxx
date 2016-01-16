@@ -563,7 +563,7 @@ void SvxRTFParser::ReadFontTable()
             if (!sAltNm.isEmpty())
                 sFntNm = sFntNm + ";" + sAltNm;
 
-            pFont->SetFamilyName( sFntNm );
+            pFont->SetName( sFntNm );
             m_FontTable.insert(std::make_pair(nInsFontNo, std::move(pFont)));
             pFont.reset(new vcl::Font);
             pFont->SetCharSet( nSystemChar );
@@ -806,7 +806,7 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     }
     const SvxFontItem& rDfltFont = static_cast<const SvxFontItem&>(
                     pAttrPool->GetDefaultItem( aPlainMap.nFont ));
-    pDfltFont->SetFamilyName( rDfltFont.GetStyleName() );
+    pDfltFont->SetName( rDfltFont.GetStyleName() );
     pDfltFont->SetFamily( rDfltFont.GetFamily() );
     return *pDfltFont;
 }

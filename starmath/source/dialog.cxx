@@ -271,7 +271,7 @@ void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
     rRenderContext.SetFont(aFont);
     rRenderContext.SetTextColor(aTextColor);
 
-    OUString sText(rRenderContext.GetFont().GetFamilyName());
+    OUString sText(rRenderContext.GetFont().GetName());
     Size aTextSize(rRenderContext.GetTextWidth(sText), rRenderContext.GetTextHeight());
 
     rRenderContext.DrawText(Point((rRenderContext.GetOutputSize().Width()  - aTextSize.Width())  / 2,
@@ -302,7 +302,7 @@ void SmShowFont::SetFont(const vcl::Font& rFont)
 
 IMPL_LINK_TYPED( SmFontDialog, FontSelectHdl, ComboBox&, rComboBox, void )
 {
-    maFont.SetFamilyName(rComboBox.GetText());
+    maFont.SetName(rComboBox.GetText());
     m_pShowFont->SetFont(maFont);
 }
 
@@ -336,7 +336,7 @@ void SmFontDialog::SetFont(const vcl::Font &rFont)
 {
     maFont = rFont;
 
-    m_pFontBox->SetText(maFont.GetFamilyName());
+    m_pFontBox->SetText(maFont.GetName());
     m_pBoldCheckBox->Check(IsBold(maFont));
     m_pItalicCheckBox->Check(IsItalic(maFont));
     m_pShowFont->SetFont(maFont);
@@ -360,7 +360,7 @@ SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, 
         sal_uInt16  nCount = aFontList.GetFontNameCount();
         for (sal_uInt16 i = 0;  i < nCount; ++i)
         {
-            m_pFontBox->InsertEntry( aFontList.GetFontName(i).GetFamilyName() );
+            m_pFontBox->InsertEntry( aFontList.GetFontName(i).GetName() );
         }
         maFont.SetSize(Size(0, 24));
         maFont.SetWeight(WEIGHT_NORMAL);
@@ -1758,7 +1758,7 @@ void SmSymDefineDialog::FillFonts(bool bDelete)
     {
         sal_uInt16  nCount = pFontList->GetFontNameCount();
         for (sal_uInt16 i = 0;  i < nCount;  i++)
-            pFonts->InsertEntry( pFontList->GetFontName(i).GetFamilyName() );
+            pFonts->InsertEntry( pFontList->GetFontName(i).GetName() );
     }
 }
 
@@ -2018,7 +2018,7 @@ void SmSymDefineDialog::UpdateButtons()
                     && aTmpSymbolSetName.equalsIgnoreAsciiCase(pOldSymbolSetName->GetText())
                     && aTmpSymbolName.equals(pOrigSymbol->GetName())
                     && pFonts->GetSelectEntry().equalsIgnoreAsciiCase(
-                            pOrigSymbol->GetFace().GetFamilyName())
+                            pOrigSymbol->GetFace().GetName())
                     && pStyles->GetText().equalsIgnoreAsciiCase(
                             GetFontStyles().GetStyleName(pOrigSymbol->GetFace()))
                     && pCharsetDisplay->GetSelectCharacter() == pOrigSymbol->GetCharacter();
@@ -2281,7 +2281,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
             {
                 // choose font and style accordingly
                 const vcl::Font &rFont = pSymbol->GetFace();
-                SelectFont(rFont.GetFamilyName(), false);
+                SelectFont(rFont.GetName(), false);
                 SelectStyle(GetFontStyles().GetStyleName(rFont), false);
 
                 // Since setting the Font via the Style name of the SymbolFonts doesn't

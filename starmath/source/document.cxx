@@ -336,7 +336,7 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
             vcl::Font aFont = OutputDevice::GetDefaultFont(
                         rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne );
             rEditEngineItemPool.SetPoolDefaultItem(
-                    SvxFontItem( aFont.GetFamily(), aFont.GetFamilyName(),
+                    SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                         aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
                         rFntDta.nFontInfoId ) );
         }

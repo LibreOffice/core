@@ -35,7 +35,7 @@ public:
     const OUString& GetStyleName() const                        { return maStyleName; }
 
     FontWeight      GetWeight() const                           { return meWeight; }
-    FontItalic      GetItalic() const                           { return meItalic; }
+    FontItalic      GetSlantType() const                        { return meItalic; }
     FontPitch       GetPitch() const                            { return mePitch; }
     FontWidth       GetWidthType() const                        { return meWidthType; }
     rtl_TextEncoding GetCharSet() const                         { return meCharSet; }

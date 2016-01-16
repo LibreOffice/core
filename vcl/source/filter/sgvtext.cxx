@@ -473,7 +473,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
         if (pSgfFont->Fixd) aFont.SetPitch(PITCH_FIXED); else aFont.SetPitch(PITCH_VARIABLE);
         aFont.SetFamily(pSgfFont->SVFamil);
         aFont.SetCharSet(pSgfFont->SVChSet);
-        aFont.SetFamilyName(FNam);
+        aFont.SetName(FNam);
     }
     else
     {  // if not in Inifile, some fonts are hard coded here
@@ -509,7 +509,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
           } break;
           default: FNam = "Helvetica";
         }
-        aFont.SetFamilyName(FNam);
+        aFont.SetName(FNam);
         //aFont.SetCharSet(CHARSET_SYSTEM);
     }
 

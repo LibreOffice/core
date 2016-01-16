@@ -612,7 +612,7 @@ static void lcl_html_setFixedFontProperty(
                                     DefaultFontType::FIXED, LANGUAGE_ENGLISH_US,
                                     GetDefaultFontFlags::OnlyOne )  );
     Any aTmp;
-    aTmp <<= OUString( aFixedFont.GetFamilyName() );
+    aTmp <<= OUString( aFixedFont.GetName() );
     rPropSet->setPropertyValue("FontName", aTmp );
 
     aTmp <<= OUString( aFixedFont.GetStyleName() );

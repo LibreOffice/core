@@ -686,9 +686,9 @@ void ImplStyleData::SetStandardStyles()
     aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
     if (!utl::ConfigManager::IsAvoidConfig())
-        aStdFont.SetFamilyName(utl::DefaultFontConfiguration::get().getUserInterfaceFont(LanguageTag("en")));
+        aStdFont.SetName(utl::DefaultFontConfiguration::get().getUserInterfaceFont(LanguageTag("en")));
     else
-        aStdFont.SetFamilyName("Liberation Serif");
+        aStdFont.SetName("Liberation Serif");
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;

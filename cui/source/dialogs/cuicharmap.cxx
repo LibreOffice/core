@@ -96,7 +96,7 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     else if ( pFontNameItem )
     {
         vcl::Font aTmpFont( GetCharFont() );
-        aTmpFont.SetFamilyName( pFontNameItem->GetValue() );
+        aTmpFont.SetName( pFontNameItem->GetValue() );
         SetCharFont( aTmpFont );
     }
 
@@ -164,9 +164,9 @@ short SvxCharacterMap::Execute()
             const SfxItemPool* pPool = pSet->GetPool();
             const vcl::Font& rFont( GetCharFont() );
             pSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), GetCharacters() ) );
-            pSet->Put( SvxFontItem( rFont.GetFamily(), rFont.GetFamilyName(),
+            pSet->Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(),
                 rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
-            pSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), rFont.GetFamilyName() ) );
+            pSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), rFont.GetName() ) );
             pSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), GetChar() ) );
         }
     }
@@ -325,12 +325,12 @@ void SvxCharacterMap::init()
         m_pShowText->Hide();
     }
 
-    OUString aDefStr( aFont.GetFamilyName() );
+    OUString aDefStr( aFont.GetName() );
     OUString aLastName;
     int nCount = GetDevFontCount();
     for ( int i = 0; i < nCount; i++ )
     {
-        OUString aFontName( GetDevFont( i ).GetFamilyName() );
+        OUString aFontName( GetDevFont( i ).GetName() );
         if ( aFontName != aLastName )
         {
             aLastName = aFontName;
@@ -388,10 +388,10 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
     // like "Times New Roman;Times" resolved
     vcl::Font aTmp( GetFontMetric( rFont ) );
 
-    if ( m_pFontLB->GetEntryPos( aTmp.GetFamilyName() ) == LISTBOX_ENTRY_NOTFOUND )
+    if ( m_pFontLB->GetEntryPos( aTmp.GetName() ) == LISTBOX_ENTRY_NOTFOUND )
         return;
 
-    m_pFontLB->SelectEntry( aTmp.GetFamilyName() );
+    m_pFontLB->SelectEntry( aTmp.GetName() );
     aFont = aTmp;
     FontSelectHdl(*m_pFontLB);
 

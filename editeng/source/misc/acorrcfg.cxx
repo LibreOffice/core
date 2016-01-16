@@ -432,7 +432,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                     case  17:
                     {
                         OUString sTemp; pValues[nProp] >>= sTemp;
-                        rSwFlags.aBulletFont.SetFamilyName(sTemp);
+                        rSwFlags.aBulletFont.SetName(sTemp);
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/Font",
                     case  18:
@@ -508,7 +508,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                     case 43 :
                     {
                         OUString sTemp; pValues[nProp] >>= sTemp;
-                        rSwFlags.aByInputBulletFont.SetFamilyName(sTemp);
+                        rSwFlags.aByInputBulletFont.SetName(sTemp);
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
                     case 44 :
@@ -582,7 +582,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
                 pValues[nProp] <<= (sal_Int32)rSwFlags.cBullet;
             break; // "Format/Option/ChangeToBullets/SpecialCharacter/Char",
             case  17:
-                pValues[nProp] <<= OUString(rSwFlags.aBulletFont.GetFamilyName());
+                pValues[nProp] <<= OUString(rSwFlags.aBulletFont.GetName());
             break; // "Format/Option/ChangeToBullets/SpecialCharacter/Font",
             case  18:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aBulletFont.GetFamily();
@@ -626,7 +626,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
                 pValues[nProp] <<= (sal_Int32)rSwFlags.cByInputBullet;
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",
             case 43 :
-                pValues[nProp] <<= OUString(rSwFlags.aByInputBulletFont.GetFamilyName());
+                pValues[nProp] <<= OUString(rSwFlags.aByInputBulletFont.GetName());
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
             case 44 :
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetFamily();

@@ -332,7 +332,7 @@ void Writer::PutNumFormatFontsInAttrPool()
                         bCheck = true;
 
                     _AddFontItem( rPool, SvxFontItem( pFont->GetFamily(),
-                                pFont->GetFamilyName(), pFont->GetStyleName(),
+                                pFont->GetName(), pFont->GetStyleName(),
                                 pFont->GetPitch(), pFont->GetCharSet(), RES_CHRATR_FONT ));
                 }
 }

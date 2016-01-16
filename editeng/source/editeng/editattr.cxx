@@ -83,7 +83,7 @@ void EditCharAttribFont::SetFont( SvxFont& rFont, OutputDevice* )
 {
     const SvxFontItem& rAttr = static_cast<const SvxFontItem&>(*GetItem());
 
-    rFont.SetFamilyName( rAttr.GetFamilyName() );
+    rFont.SetName( rAttr.GetFamilyName() );
     rFont.SetFamily( rAttr.GetFamily() );
     rFont.SetPitch( rAttr.GetPitch() );
     rFont.SetCharSet( rAttr.GetCharSet() );

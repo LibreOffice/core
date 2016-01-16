@@ -384,7 +384,7 @@ bool ORTFImportExport::Write()
     OString aFonts(OUStringToOString(m_aFont.Name, eDestEnc));
     if (aFonts.isEmpty())
     {
-        OUString aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetFamilyName();
+        OUString aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
         aFonts = OUStringToOString(aName, eDestEnc);
     }
 

@@ -1234,7 +1234,7 @@ void EditorWindow::ImplSetFont()
         vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DefaultFontType::FIXED,
                                                         Application::GetSettings().GetUILanguageTag().getLanguageType(),
                                                         GetDefaultFontFlags::NONE, this));
-        sFontName = aTmpFont.GetFamilyName();
+        sFontName = aTmpFont.GetName();
     }
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
     vcl::Font aFont(sFontName, aFontSize);

@@ -256,9 +256,9 @@ void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _
     _rPage.rSh.GetCurAttr(aSet);
     SvxFontItem aFormatFont(static_cast<const SvxFontItem &>( aSet.Get(_nWhich)));
 
-    _rFont.SetFamily(aFormatFont.GetFamily());
-    _rFont.SetFamilyName(aFormatFont.GetFamilyName());
-    _rFont.SetPitch(aFormatFont.GetPitch());
+    _rFont.SetFamily (aFormatFont.GetFamily());
+    _rFont.SetName   (aFormatFont.GetFamilyName());
+    _rFont.SetPitch  (aFormatFont.GetPitch());
     _rFont.SetCharSet(aFormatFont.GetCharSet());
 }
 
@@ -304,9 +304,9 @@ void SwDropCapsPict::UpdatePaintSettings()
             OSL_ENSURE(pFormat, "character style doesn't exist!");
             const SvxFontItem &rFormatFont = pFormat->GetFont();
 
-            aFont.SetFamily(rFormatFont.GetFamily());
-            aFont.SetFamilyName(rFormatFont.GetFamilyName());
-            aFont.SetPitch(rFormatFont.GetPitch());
+            aFont.SetFamily (rFormatFont.GetFamily());
+            aFont.SetName   (rFormatFont.GetFamilyName());
+            aFont.SetPitch  (rFormatFont.GetPitch());
             aFont.SetCharSet(rFormatFont.GetCharSet());
         }
     }

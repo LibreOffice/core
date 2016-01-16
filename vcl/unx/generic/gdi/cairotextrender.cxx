@@ -447,7 +447,7 @@ FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, 
     psp::FastPrintFontInfo aInfo;
 
     aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
-    aInfo.m_eItalic = rFontAttributes.GetItalic();
+    aInfo.m_eItalic = rFontAttributes.GetSlantType();
     aInfo.m_eWeight = rFontAttributes.GetWeight();
     aInfo.m_eWidth = rFontAttributes.GetWidthType();
 

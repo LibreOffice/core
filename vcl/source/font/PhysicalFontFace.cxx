@@ -50,9 +50,9 @@ sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) 
     else if( GetWeight() > rOther.GetWeight() )
         return 1;
 
-    if( GetItalic() < rOther.GetItalic() )
+    if( GetSlantType() < rOther.GetSlantType() )
         return -1;
-    else if( GetItalic() > rOther.GetItalic() )
+    else if( GetSlantType() > rOther.GetSlantType() )
         return 1;
 
     sal_Int32 nRet = GetFamilyName().compareTo( rOther.GetFamilyName() );
@@ -143,18 +143,18 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     }
 
     // if requiring custom matrix to fake italic, prefer upright font
-    FontItalic ePatternItalic = rFSD.maItalicMatrix != ItalicMatrix() ? ITALIC_NONE : rFSD.GetItalic();
+    FontItalic ePatternItalic = rFSD.maItalicMatrix != ItalicMatrix() ? ITALIC_NONE : rFSD.GetSlantType();
 
     if ( ePatternItalic == ITALIC_NONE )
     {
-        if( GetItalic() == ITALIC_NONE )
+        if( GetSlantType() == ITALIC_NONE )
             nMatch += 900;
     }
     else
     {
-        if( ePatternItalic == GetItalic() )
+        if( ePatternItalic == GetSlantType() )
             nMatch += 900;
-        else if( GetItalic() != ITALIC_NONE )
+        else if( GetSlantType() != ITALIC_NONE )
             nMatch += 600;
     }
 

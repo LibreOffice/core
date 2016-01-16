@@ -196,7 +196,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     aFont = pPrt->GetFontMetric( aFont );
                 }
 
-                pFontItem.reset(new SvxFontItem(aFont.GetFamily(), aFont.GetFamilyName(),
+                pFontItem.reset(new SvxFontItem(aFont.GetFamily(), aFont.GetName(),
                                                 aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
             }
             else
@@ -213,7 +213,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     nFontTypes[i],
                     eLanguage,
                     GetDefaultFontFlags::OnlyOne );
-                pFontItem.reset(new SvxFontItem(aLangDefFont.GetFamily(), aLangDefFont.GetFamilyName(),
+                pFontItem.reset(new SvxFontItem(aLangDefFont.GetFamily(), aLangDefFont.GetName(),
                                                 aEmptyOUStr, aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich));
             }
             m_pDoc->SetDefault(*pFontItem);
@@ -281,7 +281,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     SfxItemState::SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, false ) )
                 {
-                    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamily(), aFont.GetFamilyName(),
+                    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
                                                   aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
                 }
             }

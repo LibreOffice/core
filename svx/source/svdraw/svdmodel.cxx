@@ -727,7 +727,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     // get DEFAULTFONT_LATIN_TEXT and set at pool as dynamic default
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
     aSvxFontItem.SetFamily(aFont.GetFamily());
-    aSvxFontItem.SetFamilyName(aFont.GetFamilyName());
+    aSvxFontItem.SetFamilyName(aFont.GetName());
     aSvxFontItem.SetStyleName(OUString());
     aSvxFontItem.SetPitch( aFont.GetPitch());
     aSvxFontItem.SetCharSet( aFont.GetCharSet() );
@@ -736,7 +736,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     // get DEFAULTFONT_CJK_TEXT and set at pool as dynamic default
     vcl::Font aFontCJK(OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
     aSvxFontItemCJK.SetFamily( aFontCJK.GetFamily());
-    aSvxFontItemCJK.SetFamilyName(aFontCJK.GetFamilyName());
+    aSvxFontItemCJK.SetFamilyName(aFontCJK.GetName());
     aSvxFontItemCJK.SetStyleName(OUString());
     aSvxFontItemCJK.SetPitch( aFontCJK.GetPitch());
     aSvxFontItemCJK.SetCharSet( aFontCJK.GetCharSet());
@@ -745,7 +745,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     // get DEFAULTFONT_CTL_TEXT and set at pool as dynamic default
     vcl::Font aFontCTL(OutputDevice::GetDefaultFont(DefaultFontType::CTL_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
     aSvxFontItemCTL.SetFamily(aFontCTL.GetFamily());
-    aSvxFontItemCTL.SetFamilyName(aFontCTL.GetFamilyName());
+    aSvxFontItemCTL.SetFamilyName(aFontCTL.GetName());
     aSvxFontItemCTL.SetStyleName(OUString());
     aSvxFontItemCTL.SetPitch( aFontCTL.GetPitch() );
     aSvxFontItemCTL.SetCharSet( aFontCTL.GetCharSet());

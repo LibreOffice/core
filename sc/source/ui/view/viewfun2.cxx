@@ -2975,7 +2975,7 @@ void ScViewFunc::InsertSpecialChar( const OUString& rStr, const vcl::Font& rFont
     const sal_Unicode* pChar    = rStr.getStr();
     ScTabViewShell* pViewShell  = GetViewData().GetViewShell();
     SvxFontItem     aFontItem( rFont.GetFamily(),
-                               rFont.GetFamilyName(),
+                               rFont.GetName(),
                                rFont.GetStyleName(),
                                rFont.GetPitch(),
                                rFont.GetCharSet(),

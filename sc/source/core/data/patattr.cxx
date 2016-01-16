@@ -368,8 +368,8 @@ void ScPatternAttr::GetFont(
 
     //  FontItem:
 
-    if (rFont.GetFamilyName() != pFontAttr->GetFamilyName())
-        rFont.SetFamilyName( pFontAttr->GetFamilyName() );
+    if (rFont.GetName() != pFontAttr->GetFamilyName())
+        rFont.SetName( pFontAttr->GetFamilyName() );
     if (rFont.GetStyleName() != pFontAttr->GetStyleName())
         rFont.SetStyleName( pFontAttr->GetStyleName() );
 

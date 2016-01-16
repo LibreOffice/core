@@ -160,7 +160,7 @@ SmFontFormat::SmFontFormat()
 
 SmFontFormat::SmFontFormat( const vcl::Font &rFont )
 {
-    aName       = rFont.GetFamilyName();
+    aName       = rFont.GetName();
     nCharSet    = (sal_Int16) rFont.GetCharSet();
     nFamily     = (sal_Int16) rFont.GetFamily();
     nPitch      = (sal_Int16) rFont.GetPitch();
@@ -172,7 +172,7 @@ SmFontFormat::SmFontFormat( const vcl::Font &rFont )
 const vcl::Font SmFontFormat::GetFont() const
 {
     vcl::Font aRes;
-    aRes.SetFamilyName( aName );
+    aRes.SetName( aName );
     aRes.SetCharSet( (rtl_TextEncoding) nCharSet );
     aRes.SetFamily( (FontFamily) nFamily );
     aRes.SetPitch( (FontPitch) nPitch );
@@ -881,7 +881,7 @@ void SmMathConfig::LoadFormat()
                 if (bUseDefaultFont)
                 {
                     aFnt = pFormat->GetFont( i );
-                    aFnt.SetFamilyName( GetDefaultFontName( nLang, i ) );
+                    aFnt.SetName( GetDefaultFontName( nLang, i ) );
                 }
                 else
                 {

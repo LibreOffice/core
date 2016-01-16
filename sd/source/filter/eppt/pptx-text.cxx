@@ -1410,7 +1410,7 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
         }
         vcl::Font aFont;
         aFont.SetCharSet( rEntry.CharSet );
-        aFont.SetFamilyName( rEntry.Original );
+        aFont.SetName( rEntry.Original );
         aFont.SetHeight( 100 );
 
         if ( !pVDev )
