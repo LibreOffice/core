@@ -42,6 +42,10 @@ CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
     @echo "No nss -> no libxmlsec -> no xmlsecurity/nss"
 .ENDIF
 
+.IF "$(SYSTEM_NSS)" == "YES"
+CFLAGS+=-DSYSTEM_NSS
+.ENDIF
+
 .IF "$(SYSTEM_NSS)" != "YES"
 MOZ_INC = $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 NSS_CFLAGS = -I$(MOZ_INC)$/nss

@@ -234,7 +234,7 @@ void deleteRootsModule()
 //the location of the roots module to the profile, which makes FF2 and TB2 use
 //it instead of there own module.
 //
-//When using SYSTEM_MOZILLA then the libnss3.so lib is typically found in
+//When using SYSTEM_NSS then the libnss3.so lib is typically found in
 ///usr/lib. This folder may, however, NOT contain the roots certificate
 //module. That is, just providing the library name in SECMOD_LoadUserModule or
 //SECMOD_AddNewModule will FAIL to load the mozilla unless the LD_LIBRARY_PATH
@@ -289,7 +289,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
     out_nss_init = true;
 
 #ifdef XMLSEC_CRYPTO_NSS
-#if defined SYSTEM_MOZILLA
+#if defined SYSTEM_NSS
     if (!SECMOD_HasRootCerts())
     {
 #endif
@@ -298,7 +298,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
 #if defined OS2
         // YD the nss system dlls names are ending with 'k'
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM( "nssckbik" SAL_DLLEXTENSION));
-#elif defined SYSTEM_MOZILLA
+#elif defined SYSTEM_NSS
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM( "libnssckbi" SAL_DLLEXTENSION));
 #else
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM( "${OOO_BASE_DIR}/program/libnssckbi" SAL_DLLEXTENSION));
@@ -352,7 +352,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
             xmlsec_trace("Adding new root certificate module failed.");
             return_value = false;
         }
-#if SYSTEM_MOZILLA
+#if SYSTEM_NSS
     }
 #endif
 #endif
