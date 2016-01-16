@@ -59,6 +59,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
     OUString aCDATAString( "CDATA" );
     OUString aWhiteSpace( " " );
 
+    <groupuinames:template-group-list xmlns:groupuinames="http://openoffice.org/2006/groupuinames">
     // write the namespace
     ::comphelper::AttributeList* pRootAttrList = new ::comphelper::AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
