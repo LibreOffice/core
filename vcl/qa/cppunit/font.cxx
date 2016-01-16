@@ -21,12 +21,39 @@ class VclFontTest : public test::BootstrapFixture
 public:
     VclFontTest() : BootstrapFixture(true, false) {}
 
+    void testName();
+    void testWeight();
     void testSymbolFlagAndCharSet();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
+    CPPUNIT_TEST(testName);
+    CPPUNIT_TEST(testWeight);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void VclFontTest::testName()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_MESSAGE( "Family name should be empty", aFont.GetName().isEmpty());
+    CPPUNIT_ASSERT_MESSAGE( "Style name should be empty", aFont.GetStyleName().isEmpty());
+    aFont.SetName("Test family name");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Family name should not be empty", OUString("Test family name"), aFont.GetName());
+    aFont.SetStyleName("Test style name");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Style name should not be empty", OUString("Test style name"), aFont.GetStyleName());
+}
+
+void VclFontTest::testWeight()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Weight should be WEIGHT_DONTKNOW", FontWeight::WEIGHT_DONTKNOW, aFont.GetWeight());
+
+    aFont.SetWeight(FontWeight::WEIGHT_BLACK);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Weight should be WEIGHT_BLACK", FontWeight::WEIGHT_BLACK, aFont.GetWeight());
+}
+
 
 void VclFontTest::testSymbolFlagAndCharSet()
 {

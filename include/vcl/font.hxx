@@ -78,6 +78,7 @@ public:
     long                GetWidth() const;
 
     void                SetFamily( FontFamily );
+    FontFamily          GetFamily();
     FontFamily          GetFamily() const;
     void                SetCharSet( rtl_TextEncoding );
     rtl_TextEncoding    GetCharSet() const;
@@ -94,6 +95,7 @@ public:
     void                SetCJKContextLanguage( LanguageType );
     LanguageType        GetCJKContextLanguage() const;
     void                SetPitch( FontPitch ePitch );
+    FontPitch           GetPitch();
     FontPitch           GetPitch() const;
 
     void                SetOrientation( short nLineOrientation );
@@ -105,10 +107,13 @@ public:
     bool            IsKerning() const;
 
     void                SetWeight( FontWeight );
+    FontWeight          GetWeight();
     FontWeight          GetWeight() const;
     void                SetWidthType( FontWidth );
+    FontWidth           GetWidthType();
     FontWidth           GetWidthType() const;
     void                SetItalic( FontItalic );
+    FontItalic          GetItalic();
     FontItalic          GetItalic() const;
     void                SetOutline( bool bOutline );
     bool                IsOutline() const;
