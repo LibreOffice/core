@@ -32,11 +32,6 @@
 #include "impfont.hxx"
 #include "outdata.hxx"
 
-//#include <config_graphite.h>
-//#if ENABLE_GRAPHITE
-//#include "graphite_features.hxx"
-//#endif
-
 #define UNDERLINE_LAST      UNDERLINE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
