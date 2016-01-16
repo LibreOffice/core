@@ -449,7 +449,7 @@ inline void SwFont::SetFamily( const FontFamily eFamily, const sal_uInt8 nWhich 
 inline void SwSubFont::SetName( const OUString& rName )
 {
     m_pMagic = nullptr;
-    Font::SetName( rName );
+    Font::SetFamilyName( rName );
 }
 
 inline void SwFont::SetName( const OUString& rName, const sal_uInt8 nWhich )

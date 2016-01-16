@@ -751,7 +751,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
             const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
             if ( pFontItem )
             {
-                aFont.SetName( pFontItem->GetFamilyName() );
+                aFont.SetFamilyName( pFontItem->GetFamilyName() );
                 aFont.SetStyleName( pFontItem->GetStyleName() );
                 aFont.SetCharSet( pFontItem->GetCharSet() );
                 aFont.SetPitch( pFontItem->GetPitch() );

@@ -566,7 +566,7 @@ static void lcl_SetFontProperties(
         const SvxPostureItem& rPostureItem )
 {
     rFont.SetFamily     ( rFontItem.GetFamily() );
-    rFont.SetName       ( rFontItem.GetFamilyName() );
+    rFont.SetFamilyName ( rFontItem.GetFamilyName() );
     rFont.SetStyleName  ( rFontItem.GetStyleName() );
     rFont.SetCharSet    ( rFontItem.GetCharSet() );
     rFont.SetPitch      ( rFontItem.GetPitch() );
