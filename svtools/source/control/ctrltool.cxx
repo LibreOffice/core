@@ -649,7 +649,7 @@ FontMetric FontList::Get(const OUString& rName, const OUString& rStyleName) cons
         aInfo = *pFontMetric;
 
     // set Fontname to keep FontAlias
-    aInfo.SetName( rName );
+    aInfo.SetFamilyName( rName );
     aInfo.SetStyleName( rStyleName );
 
     return aInfo;
@@ -686,7 +686,7 @@ FontMetric FontList::Get(const OUString& rName,
         aInfo = *pFontMetric;
 
     // set Fontname to keep FontAlias
-    aInfo.SetName( rName );
+    aInfo.SetFamilyName( rName );
 
     return aInfo;
 }

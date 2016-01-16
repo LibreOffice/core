@@ -878,7 +878,7 @@ static void SetPrevFont(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont
     {
         const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(rSet.Get(nWhich));
         rFont.SetFamily(rFontItem.GetFamily());
-        rFont.SetName(rFontItem.GetFamilyName());
+        rFont.SetFamilyName(rFontItem.GetFamilyName());
         rFont.SetPitch(rFontItem.GetPitch());
         rFont.SetCharSet(rFontItem.GetCharSet());
         rFont.SetStyleName(rFontItem.GetStyleName());
@@ -1415,7 +1415,7 @@ void SvxFontPrevWindow::SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFo
     {
         const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>( rSet.Get(nWhich) );
         rFont.SetFamily( rFontItem.GetFamily() );
-        rFont.SetName( rFontItem.GetFamilyName() );
+        rFont.SetFamilyName( rFontItem.GetFamilyName() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
         rFont.SetStyleName( rFontItem.GetStyleName() );

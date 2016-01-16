@@ -2792,7 +2792,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         if ( aFirstName.equalsIgnoreAsciiCase( "MS Sans Serif" ) )
         {
             aFontName = "Arial;" + aFontName;
-            aAppFont.SetName( aFontName );
+            aAppFont.SetFamilyName( aFontName );
         }
     }
     aStyleSettings.SetAppFont( aAppFont );

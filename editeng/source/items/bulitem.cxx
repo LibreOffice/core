@@ -79,9 +79,9 @@ vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     rStream.ReadUInt16( nTemp ); aFont.SetStrikeout((FontStrikeout)nTemp);
     rStream.ReadUInt16( nTemp ); aFont.SetItalic((FontItalic)nTemp);
 
-    // UNICODE: rStream >> aName; aFont.SetName( aName );
+    // UNICODE: rStream >> aName; aFont.SetFamilyName( aName );
     OUString aName = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
-    aFont.SetName( aName );
+    aFont.SetFamilyName( aName );
 
     if( nVer == 1 )
     {
@@ -231,7 +231,7 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 {
     vcl::Font _aFont = GetFont();
     vcl::Font aNewFont = rCopyFrom.GetFont();
-    _aFont.SetName( aNewFont.GetFamilyName() );
+    _aFont.SetFamilyName( aNewFont.GetFamilyName() );
     _aFont.SetFamily( aNewFont.GetFamily() );
     _aFont.SetStyleName( aNewFont.GetStyleName() );
     _aFont.SetColor( aNewFont.GetColor() );

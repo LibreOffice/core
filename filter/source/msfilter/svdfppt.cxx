@@ -2150,7 +2150,7 @@ bool SdrPowerPointImport::ReadFontCollection()
 
                 vcl::Font aFont;
                 aFont.SetCharSet( pFont->eCharSet );
-                aFont.SetName( pFont->aName );
+                aFont.SetFamilyName( pFont->aName );
                 aFont.SetFamily( pFont->eFamily );
                 aFont.SetPitch( pFont->ePitch );
                 aFont.SetHeight( 100 );
@@ -3631,7 +3631,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
             {
                 vcl::Font aFont;
                 aFont.SetCharSet( pFontEnityAtom->eCharSet );
-                aFont.SetName( pFontEnityAtom->aName );
+                aFont.SetFamilyName( pFontEnityAtom->aName );
                 aFont.SetFamily( pFontEnityAtom->eFamily );
                 aFont.SetPitch( pFontEnityAtom->ePitch );
                 rNumberFormat.SetBulletFont( &aFont );
@@ -3690,7 +3690,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
                     {
                         vcl::Font aFont;
                         aFont.SetCharSet( pFontEnityAtom->eCharSet );
-                        aFont.SetName( pFontEnityAtom->aName );
+                        aFont.SetFamilyName( pFontEnityAtom->aName );
                         aFont.SetFamily( pFontEnityAtom->eFamily );
                         aFont.SetPitch( pFontEnityAtom->ePitch );
                         rNumberFormat.SetBulletFont( &aFont );
@@ -3710,7 +3710,7 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
     if ( pAtom )
     {
         rtl_TextEncoding eCharSet( pAtom->eCharSet );
-        aFont.SetName( pAtom->aName );
+        aFont.SetFamilyName( pAtom->aName );
         aFont.SetCharSet( eCharSet );
         aFont.SetFamily( pAtom->eFamily );
         aFont.SetPitch( pAtom->ePitch );

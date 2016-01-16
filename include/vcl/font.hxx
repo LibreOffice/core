@@ -66,7 +66,7 @@ public:
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
-    void                SetName( const OUString& rFamilyName );
+    void                SetFamilyName( const OUString& rFamilyName );
     const OUString&     GetFamilyName() const;
     void                SetStyleName( const OUString& rStyleName );
     const OUString&     GetStyleName() const;
