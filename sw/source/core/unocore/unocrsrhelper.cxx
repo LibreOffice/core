@@ -816,7 +816,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     if(
                        !pBulletFontNames[i].isEmpty() &&
                        !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
-                       (!aFormat.GetBulletFont() || aFormat.GetBulletFont()->GetName() != pBulletFontNames[i])
+                       (!aFormat.GetBulletFont() || aFormat.GetBulletFont()->GetFamilyName() != pBulletFontNames[i])
                       )
                     {
                         const SvxFontListItem* pFontListItem =

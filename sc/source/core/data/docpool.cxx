@@ -197,7 +197,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
     vcl::Font aStdFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
                                                     GetDefaultFontFlags::OnlyOne );
     SvxFontItem* pStdFont = new SvxFontItem( aStdFont.GetFamily(),
-                                            aStdFont.GetName(), aStdFont.GetStyleName(),
+                                            aStdFont.GetFamilyName(), aStdFont.GetStyleName(),
                                             aStdFont.GetPitch(), aStdFont.GetCharSet(),
                                             ATTR_FONT );
 

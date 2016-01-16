@@ -677,7 +677,7 @@ void SvxNumRule::Store( SvStream &rStream )
             {
                 if(!pConverter)
                     pConverter =
-                        CreateFontToSubsFontConverter(aFmts[i]->GetBulletFont()->GetName(),
+                        CreateFontToSubsFontConverter(aFmts[i]->GetBulletFont()->GetFamilyName(),
                                     FontToSubsFontFlags::EXPORT|FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS);
             }
             aFmts[i]->Store(rStream, pConverter);
