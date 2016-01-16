@@ -87,9 +87,9 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     }
 
     // fake italic
-    if (((pReqFont->GetSlantType() == ITALIC_NORMAL) ||
-         (pReqFont->GetSlantType() == ITALIC_OBLIQUE)) &&
-        (mpFontData->GetSlantType() == ITALIC_NONE))
+    if (((pReqFont->GetItalicNoAsk() == ITALIC_NORMAL) ||
+         (pReqFont->GetItalicNoAsk() == ITALIC_OBLIQUE)) &&
+        (mpFontData->GetItalicNoAsk() == ITALIC_NONE))
     {
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, toRadian(120), 1, 0, 0));
     }
