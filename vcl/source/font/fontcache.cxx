@@ -87,7 +87,7 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
 
     // check font face attributes
     if( (rA.GetWeight()       != rB.GetWeight())
-    ||  (rA.GetSlantType()    != rB.GetSlantType())
+    ||  (rA.GetItalic()    != rB.GetItalic())
 //  ||  (rA.meFamily       != rB.meFamily) // TODO: remove this mostly obsolete member
     ||  (rA.GetPitch()     != rB.GetPitch()) )
         return false;

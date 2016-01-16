@@ -804,7 +804,7 @@ sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLeve
     // determine which font attributes need to be emulated
     bool bArtItalic = false;
     bool bArtBold = false;
-    if( pEntry->GetSlantType() == ITALIC_OBLIQUE || pEntry->GetSlantType() == ITALIC_NORMAL )
+    if( pEntry->GetItalic() == ITALIC_OBLIQUE || pEntry->GetItalic() == ITALIC_NORMAL )
     {
         FontItalic eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
         if( eItalic != ITALIC_NORMAL && eItalic != ITALIC_OBLIQUE )
