@@ -112,6 +112,13 @@ gb_CXXFLAGS_COMMON += -fstack-protector-strong
 gb_LinkTarget_LDFLAGS += -fstack-protector-strong
 endif
 
+ifeq ($(ENABLE_PCH),TRUE)
+ifneq ($(COM_IS_CLANG),TRUE)
+gb_CFLAGS_COMMON += -fpch-preprocess
+gb_CXXFLAGS_COMMON += -fpch-preprocess
+endif
+endif
+
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
 
 # This is the default in non-C++11 mode
