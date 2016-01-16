@@ -21,12 +21,75 @@ class VclFontTest : public test::BootstrapFixture
 public:
     VclFontTest() : BootstrapFixture(true, false) {}
 
+    void testName();
+    void testWeight();
+    void testWidthType();
+    void testPitch();
+    void testItalic();
     void testSymbolFlagAndCharSet();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
+    CPPUNIT_TEST(testName);
+    CPPUNIT_TEST(testWeight);
+    CPPUNIT_TEST(testWidthType);
+    CPPUNIT_TEST(testPitch);
+    CPPUNIT_TEST(testItalic);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void VclFontTest::testName()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_MESSAGE( "Family name should be empty", aFont.GetName().isEmpty());
+    CPPUNIT_ASSERT_MESSAGE( "Style name should be empty", aFont.GetStyleName().isEmpty());
+    aFont.SetName("Test family name");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Family name should not be empty", OUString("Test family name"), aFont.GetName());
+    aFont.SetStyleName("Test style name");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Style name should not be empty", OUString("Test style name"), aFont.GetStyleName());
+}
+
+void VclFontTest::testWeight()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Weight should be WEIGHT_DONTKNOW", FontWeight::WEIGHT_DONTKNOW, aFont.GetWeight());
+
+    aFont.SetWeight(FontWeight::WEIGHT_BLACK);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Weight should be WEIGHT_BLACK", FontWeight::WEIGHT_BLACK, aFont.GetWeight());
+}
+
+void VclFontTest::testWidthType()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font width should be WIDTH_DONTKNOW", FontWidth::WIDTH_DONTKNOW, aFont.GetWidthType());
+
+    aFont.SetWidthType(FontWidth::WIDTH_EXPANDED);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font width should be EXPANDED", FontWidth::WIDTH_EXPANDED, aFont.GetWidthType());
+}
+
+void VclFontTest::testItalic()
+{
+    vcl::Font aFont;
+
+    // shouldn't this be set to ITALIC_DONTKNOW? currently it defaults to ITALIC_NONE
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Italic should be ITALIC_NONE", FontItalic::ITALIC_NONE, aFont.GetItalic());
+
+    aFont.SetItalic(FontItalic::ITALIC_NORMAL);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Italic should be EXPANDED", FontItalic::ITALIC_NORMAL, aFont.GetItalic());
+}
+
+void VclFontTest::testPitch()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Pitch should be PITCH_DONTKNOW", FontPitch::PITCH_DONTKNOW, aFont.GetPitch());
+
+    aFont.SetPitch(FontPitch::PITCH_FIXED);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Pitch should be PITCH_FIXED", FontPitch::PITCH_FIXED, aFont.GetPitch());
+}
 
 void VclFontTest::testSymbolFlagAndCharSet()
 {
