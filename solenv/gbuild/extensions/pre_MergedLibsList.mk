@@ -16,6 +16,7 @@ MERGE_LIBRARY_LIST := \
 	canvastools \
 	comphelper \
 	configmgr \
+	$(call gb_Helper_optional,OPENCL,clew) \
 	cppcanvas \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	deployment \
