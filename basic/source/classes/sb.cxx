@@ -2078,12 +2078,6 @@ void BasicCollection::Initialize()
     }
 }
 
-SbxVariable* BasicCollection::Find( const OUString& rName, SbxClassType t )
-{
-    SbxVariable* pFind = SbxObject::Find( rName, t );
-    return pFind;
-}
-
 void BasicCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
 {
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
