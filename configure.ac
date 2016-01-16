@@ -12950,7 +12950,7 @@ fi
 if test ! -f config_host.mk.stamp; then
     echo > config_host.mk.stamp
 elif test "$config_md5" = `$MD5SUM config_host.mk | sed "s/ .*//"`; then
-    echo "Configuration unchanged - avoiding scp2 stamp update"
+    echo "Host Configuration unchanged - avoiding scp2 stamp update"
 else
     echo > config_host.mk.stamp
 fi
@@ -12959,7 +12959,7 @@ fi
 if test ! -f config_host_lang.mk.stamp; then
     echo > config_host_lang.mk.stamp
 elif test "$config_lang_md5" = `$MD5SUM config_host_lang.mk | sed "s/ .*//"`; then
-    echo "Configuration unchanged - avoiding scp2 stamp update"
+    echo "Language Configuration unchanged - avoiding scp2 stamp update"
 else
     echo > config_host_lang.mk.stamp
 fi
