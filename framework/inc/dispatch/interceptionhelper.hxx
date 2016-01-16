@@ -143,10 +143,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
         /** @short contains all registered interceptor objects. */
         InterceptorList m_lInterceptionRegs;
 
-        /** @short it regulates, which interceptor is used first.
-                   The last or the first registered one. */
-        static bool m_bPreferrFirstInterceptor;
-
     // native interface
 
     public:
