@@ -62,7 +62,7 @@ public:
     void                SetFillColor( const Color& );
     const Color&        GetFillColor() const;
     void                SetTransparent( bool bTransparent );
-    bool            IsTransparent() const;
+    bool                IsTransparent() const;
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
@@ -104,7 +104,7 @@ public:
     bool                IsVertical() const;
     void                SetKerning( FontKerning nKerning );
     FontKerning         GetKerning() const;
-    bool            IsKerning() const;
+    bool                IsKerning() const;
 
     void                SetWeight( FontWeight );
     FontWeight          GetWeight();
