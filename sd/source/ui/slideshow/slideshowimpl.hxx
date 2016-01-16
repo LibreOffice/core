@@ -80,13 +80,13 @@
 
 class SfxViewFrame;
 class SfxRequest;
-class ShowWindow;
 
 namespace sd
 {
 class SlideShowView;
 class AnimationSlideController;
 class PaneHider;
+class ShowWindow;
 
 struct PresentationSettingsEx : public PresentationSettings
 {
@@ -331,7 +331,7 @@ private:
     SdDrawDocument* mpDoc;
 
     VclPtr<vcl::Window>    mpParentWindow;
-    VclPtr<ShowWindow>     mpShowWindow;
+    VclPtr<sd::ShowWindow>     mpShowWindow;
     VclPtr<PushButton>     mpTimeButton;
 
     std::shared_ptr< AnimationSlideController > mpSlideController;
