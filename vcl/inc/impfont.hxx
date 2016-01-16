@@ -38,14 +38,21 @@ public:
     // device independent font functions
     const OUString&     GetFamilyName() const                           { return maFamilyName; }
     FontFamily          GetFamily()                                     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
+    FontFamily          GetFamilyNoAsk() const                          { return meFamily; }
     FontFamily          GetFamilyType()                                 { return GetFamily(); }
+    FontFamily          GetFamilyTypeNoAsk() const                      { return GetFamilyNoAsk(); }
     const OUString&     GetStyleName() const                            { return maStyleName; }
 
     FontWeight          GetWeight()                                     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
+    FontWeight          GetWeightNoAsk() const                          { return meWeight; }
     FontItalic          GetSlantType()                                  { return GetItalic(); }
+    FontItalic          GetSlantType() const                            { return GetItalicNoAsk(); }
     FontItalic          GetItalic()                                     { if(meItalic==ITALIC_DONTKNOW)  AskConfig(); return meItalic; }
+    FontItalic          GetItalicNoAsk() const                          { return meItalic; }
     FontPitch           GetPitch()                                      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }
-    FontWidth           GetWidthType()                                  { if(meWidthType==WIDTH_DONTKNOW)AskConfig(); return meWidthType; }
+    FontPitch           GetPitchNoAsk() const                           { return mePitch; }
+    FontWidth           GetWidthType()                                  { if(meWidthType==WIDTH_DONTKNOW) AskConfig(); return meWidthType; }
+    FontWidth           GetWidthTypeNoAsk() const                       { return meWidthType; }
 
     bool                IsSymbolFont() const                            { return mbSymbol; }
 
