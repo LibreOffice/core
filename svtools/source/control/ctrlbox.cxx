@@ -1036,7 +1036,7 @@ void FontNameBox::Fill( const FontList* pList )
     for ( sal_uInt16 i = 0; i < nFontCount; i++ )
     {
         const FontMetric& rFontMetric = pList->GetFontName( i );
-        sal_uLong nIndex = InsertEntry( rFontMetric.GetName() );
+        sal_uLong nIndex = InsertEntry( rFontMetric.GetFamilyName() );
         if ( nIndex != LISTBOX_ERROR )
         {
             if ( nIndex < mpFontList->size() ) {
@@ -1140,7 +1140,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         Rectangle aTextRect;
 
         // Preview the font name
-        OUString sFontName = rFontMetric.GetName();
+        OUString sFontName = rFontMetric.GetFamilyName();
 
         //If it shouldn't or can't draw its own name because it doesn't have the glyphs
         if (!canRenderNameOfSelectedFont(*pRenderContext))
@@ -1171,7 +1171,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
         if (!bSymbolFont)
         {
-            const bool bNameBeginsWithLatinText = rFontMetric.GetName()[0] <= 'z';
+            const bool bNameBeginsWithLatinText = rFontMetric.GetFamilyName()[0] <= 'z';
 
             if (bNameBeginsWithLatinText || !bUsingCorrectFont)
                 sSampleText = makeShortRepresentativeTextForSelectedFont(*pRenderContext);

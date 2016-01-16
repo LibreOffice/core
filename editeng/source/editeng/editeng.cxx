@@ -2565,7 +2565,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const vcl::Font& rFont 
 void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
 {
     rSet.Put( SvxLanguageItem( rFont.GetLanguage(), EE_CHAR_LANGUAGE ) );
-    rSet.Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(), OUString(), rFont.GetPitch(), rFont.GetCharSet(), EE_CHAR_FONTINFO ) );
+    rSet.Put( SvxFontItem( rFont.GetFamily(), rFont.GetFamilyName(), OUString(), rFont.GetPitch(), rFont.GetCharSet(), EE_CHAR_FONTINFO ) );
     rSet.Put( SvxFontHeightItem( rFont.GetSize().Height(), 100, EE_CHAR_FONTHEIGHT )  );
     rSet.Put( SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH ) );
     rSet.Put( SvxShadowedItem( rFont.IsShadow(), EE_CHAR_SHADOW )  );
