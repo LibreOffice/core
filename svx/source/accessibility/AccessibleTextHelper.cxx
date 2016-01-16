@@ -502,7 +502,7 @@ namespace accessibility
                 {
                     sdr::table::CellRef xCell = pAccessibleCell->getCellRef();
                     if ( xCell.is() )
-                        return xCell->IsTextEditActive();
+                        return xCell->IsActiveCell();
                 }
             }
             if( pViewForwarder->IsValid() )

@@ -64,6 +64,7 @@ public:
     SVX_DLLPRIVATE void dispose();
 
     // SdrTextShape proxy
+    bool IsActiveCell();
     bool IsTextEditActive();
     SVX_DLLPRIVATE bool hasText() const;
 
