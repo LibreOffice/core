@@ -45,21 +45,10 @@ namespace basebmp
 // Temporary. Use like the tools color object
 class Color;
 typedef std::shared_ptr< class BitmapDevice >                BitmapDeviceSharedPtr;
-typedef std::shared_ptr< struct IBitmapDeviceDamageTracker > IBitmapDeviceDamageTrackerSharedPtr;
 typedef boost::shared_array< sal_uInt8 >                       RawMemorySharedArray;
 typedef std::shared_ptr< const std::vector<Color> >          PaletteMemorySharedVector;
 
 struct ImplBitmapDevice;
-
-/// Interface for getting damage tracking events
-struct IBitmapDeviceDamageTracker
-{
-    /// gets called when said region is clobbered
-    virtual void damaged(const basegfx::B2IBox& rDamageRect) const = 0;
-
-protected:
-    ~IBitmapDeviceDamageTracker() {}
-};
 
 /** Definition of BitmapDevice interface
 
@@ -113,18 +102,6 @@ public:
         after this object has been deleted.
      */
     RawMemorySharedArray getBuffer() const;
-
-    /// Query current damage tracking object (if any)
-    IBitmapDeviceDamageTrackerSharedPtr getDamageTracker() const;
-
-    /** Set new damage tracking object
-
-        @param rDamage
-        Object implementing the IBitmapDeviceDamageTracker interface -
-        every time some area of the surface gets clobbered, that object
-        gets notified.
-     */
-    void  setDamageTracker( const IBitmapDeviceDamageTrackerSharedPtr& rDamage );
 
     /** Get pointer to palette
 
@@ -648,9 +625,6 @@ private:
                                                         DrawMode                     drawMode,
                                                         const BitmapDeviceSharedPtr& rClip ) = 0;
 
-    BASEBMP_DLLPRIVATE virtual IBitmapDeviceDamageTrackerSharedPtr getDamageTracker_i() const = 0;
-    BASEBMP_DLLPRIVATE virtual void setDamageTracker_i( const IBitmapDeviceDamageTrackerSharedPtr& rDamage ) = 0;
-
     BitmapDeviceSharedPtr getGenericRenderer() const;
 
     std::unique_ptr< ImplBitmapDevice > mpImpl;
@@ -691,10 +665,6 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
                                                             const RawMemorySharedArray&      rMem,
                                                             const PaletteMemorySharedVector& rPalette );
 
-
-/** Function to create a 1 bit grey clipping mask initialized to white.
- */
-BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createClipDevice( const basegfx::B2IVector&        rSize );
 
 /** Function to retrieve a subsetted BitmapDevice to the same
     memory.
