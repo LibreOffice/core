@@ -983,6 +983,31 @@ void endsWith::test() {
             RTL_CONSTASCII_STRINGPARAM("bar")));
 }
 
+class isEmpty: public CppUnit::TestFixture {
+public:
+    void test();
+
+    CPPUNIT_TEST_SUITE(isEmpty);
+    CPPUNIT_TEST(test);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void isEmpty::test() {
+    OUString aString;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Newly constructed string should be empty", true, aString.isEmpty() );
+
+    aString = "Not empty any more";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "String should not be empty", false, aString.isEmpty() );
+
+    aString.clear();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "aString.clear(), so should now be empty", true, aString.isEmpty() );
+
+    aString = "Not empty any more";
+    aString = "";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "aString = \"\", so should now be empty", true, aString.isEmpty() );
+}
+
+
 class createFromCodePoints: public CppUnit::TestFixture {
 public:
     void test();
@@ -1098,6 +1123,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::convertToString);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::construction);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::indexOfAscii);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::endsWith);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::isEmpty);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::createFromCodePoints);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::iterateCodePoints);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::convertFromString);
