@@ -516,7 +516,7 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI )
     mnLoadFlags |= FT_LOAD_IGNORE_TRANSFORM;
 #endif
 
-    mbArtItalic = (rFSD.GetSlantType() != ITALIC_NONE && pFI->GetFontAttributes().GetSlantType() == ITALIC_NONE);
+    mbArtItalic = (rFSD.GetItalic() != ITALIC_NONE && pFI->GetFontAttributes().GetItalic() == ITALIC_NONE);
     mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
     if( mbArtBold )
     {

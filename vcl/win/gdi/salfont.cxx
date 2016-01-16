@@ -168,7 +168,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 write_uInt16_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.GetFamilyName(), RTL_TEXTENCODING_UTF8);
 
                 aCacheFile.WriteInt16(rDFA.GetWeight());
-                aCacheFile.WriteInt16(rDFA.GetSlantType());
+                aCacheFile.WriteInt16(rDFA.GetItalic());
                 aCacheFile.WriteInt16(rDFA.GetPitch());
                 aCacheFile.WriteInt16(rDFA.GetWidthType());
                 aCacheFile.WriteInt16(rDFA.GetFamilyType());
@@ -549,7 +549,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     pFontFamily = pFontCollection->FindFontFamilyByAttributes( ImplFontAttrs::Symbol,
                                                      rFontSelData.GetWeight(),
                                                      rFontSelData.GetWidthType(),
-                                                     rFontSelData.GetSlantType(),
+                                                     rFontSelData.GetItalic(),
                                                      rFontSelData.maSearchName );
     if( pFontFamily )
     {
@@ -1309,7 +1309,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     rLogFont.lfWidth           = (LONG)pFont->mnWidth;
     rLogFont.lfUnderline       = 0;
     rLogFont.lfStrikeOut       = 0;
-    rLogFont.lfItalic          = (pFont->GetSlantType()) != ITALIC_NONE;
+    rLogFont.lfItalic          = (pFont->GetItalic()) != ITALIC_NONE;
     rLogFont.lfEscapement      = pFont->mnOrientation;
     rLogFont.lfOrientation     = rLogFont.lfEscapement;
     rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;

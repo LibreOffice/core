@@ -80,7 +80,7 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontMetric.SetFamily( rData.GetFamilyType() );
         aFontMetric.SetPitch( rData.GetPitch() );
         aFontMetric.SetWeight( rData.GetWeight() );
-        aFontMetric.SetItalic( rData.GetSlantType() );
+        aFontMetric.SetItalic( rData.GetItalic() );
         aFontMetric.SetWidthType( rData.GetWidthType() );
         aFontMetric.SetScalableFlag( rData.IsScalable() );
         aFontMetric.SetBuiltInFontFlag( rData.IsBuiltInFont() );
@@ -202,7 +202,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetFamily( xFontMetric->GetFamilyType() );
     aMetric.SetPitch( xFontMetric->GetPitch() );
     aMetric.SetWeight( xFontMetric->GetWeight() );
-    aMetric.SetItalic( xFontMetric->GetSlantType() );
+    aMetric.SetItalic( xFontMetric->GetItalic() );
     aMetric.SetWidthType( xFontMetric->GetWidthType() );
     if ( pFontInstance->mnOwnOrientation )
         aMetric.SetOrientation( pFontInstance->mnOwnOrientation );
