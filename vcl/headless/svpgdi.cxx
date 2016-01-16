@@ -1039,37 +1039,76 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect& rTR,
     drawAlphaBitmap(rTR, rSourceBitmap, rTransparentBitmap);
 }
 
-void SvpSalGraphics::drawMask( const SalTwoRect& /*rPosAry*/,
-                               const SalBitmap& /*rSalBitmap*/,
-                               SalColor /*nMaskColor*/ )
+static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
 {
-#if 0
-    const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
-    basegfx::B2IBox aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
-                     rPosAry.mnSrcX+rPosAry.mnSrcWidth,
-                     rPosAry.mnSrcY+rPosAry.mnSrcHeight );
-    basegfx::B2IPoint aDestPoint( rPosAry.mnDestX, rPosAry.mnDestY );
+    return (a > 0) ? (c * 255 + a / 2) / a : 0;
+}
 
-    // BitmapDevice::drawMaskedColor works with 0==transparent,
-    // 255==opaque. drawMask() semantic is the other way
-    // around. Therefore, invert mask.
-    basebmp::BitmapDeviceSharedPtr aCopy =
-        cloneBitmapDevice( basegfx::B2IVector( rPosAry.mnSrcWidth, rPosAry.mnSrcHeight ),
-                           rSrc.getBitmap() );
-    basebmp::Color aBgColor( COL_WHITE );
-    aCopy->clear(aBgColor);
-    basebmp::Color aFgColor( COL_BLACK );
-    aCopy->drawMaskedColor( aFgColor, rSrc.getBitmap(), aSrcRect, basegfx::B2IPoint() );
+static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
+{
+    return (c * a + 127) / 255;
+}
 
-    basebmp::Color aColor( nMaskColor );
-    basegfx::B2IBox aSrcRect2( 0, 0, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight );
-    const basegfx::B2IBox aClipRect( aDestPoint, basegfx::B2ITuple( aSrcRect.getWidth(), aSrcRect.getHeight() ) );
+void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
+                               const SalBitmap& rSalBitmap,
+                               SalColor nMaskColor )
+{
+    /** creates an image from the given rectangle, replacing all black pixels
+     *  with nMaskColor and make all other full transparent */
+    SourceHelper aSurface(rSalBitmap);
+    cairo_surface_t* mask = aSurface.getSurface();
 
-    SvpSalGraphics::ClipUndoHandle aUndo( this );
-    if( !isClippedSetup( aClipRect, aUndo ) )
-        m_aDevice->drawMaskedColor( aColor, aCopy, aSrcRect, aDestPoint, m_aClipMap );
-    dbgOut( m_aDevice );
-#endif
+    cairo_surface_flush(mask);
+
+    unsigned char *mask_data = cairo_image_surface_get_data(mask);
+
+    cairo_format_t nFormat = cairo_image_surface_get_format(mask);
+    assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
+    sal_Int32 nStride = cairo_format_stride_for_width(nFormat,
+                                                      cairo_image_surface_get_width(mask));
+    for (sal_Int32 y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
+    {
+        unsigned char *row = mask_data + (nStride*y);
+        unsigned char *data = row + (rTR.mnSrcX * 4);
+        for (sal_Int32 x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
+        {
+            sal_uInt8 b = unpremultiply(data[0], data[3]);
+            sal_uInt8 g = unpremultiply(data[1], data[3]);
+            sal_uInt8 r = unpremultiply(data[2], data[3]);
+            if (r == 0 && g == 0 && b == 0)
+            {
+                data[0] = SALCOLOR_BLUE(nMaskColor);
+                data[1] = SALCOLOR_GREEN(nMaskColor);
+                data[2] = SALCOLOR_RED(nMaskColor);
+                data[3] = 0xff;
+            }
+            else
+            {
+                data[0] = 0;
+                data[1] = 0;
+                data[2] = 0;
+                data[3] = 0;
+            }
+            data+=4;
+        }
+    }
+    cairo_surface_mark_dirty(mask);
+
+    cairo_t* cr = getCairoContext(false);
+    clipRegion(cr);
+
+    cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
+
+    cairo_rectangle_int_t extents = getFillDamage(cr);
+
+    cairo_clip(cr);
+
+    cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
+    cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
+    cairo_set_source_surface(cr, mask, -rTR.mnSrcX, -rTR.mnSrcY);
+    cairo_paint(cr);
+
+    releaseCairoContext(cr, false, extents);
 }
 
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
@@ -1090,16 +1129,6 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     pBitmap->setBitmap(aCopy);
 
     return pBitmap;
-}
-
-static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
-{
-    return (a > 0) ? (c * 255 + a / 2) / a : 0;
-}
-
-static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
-{
-    return (c * a + 127) / 255;
 }
 
 SalColor SvpSalGraphics::getPixel( long nX, long nY )
