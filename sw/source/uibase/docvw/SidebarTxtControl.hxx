@@ -64,6 +64,7 @@ class SidebarTextControl : public Control
         virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
         virtual void MouseMove(const MouseEvent& rMEvt) override;
 
+        OutlinerView* GetTextView();
         OutlinerView* GetTextView() const;
 
         DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );

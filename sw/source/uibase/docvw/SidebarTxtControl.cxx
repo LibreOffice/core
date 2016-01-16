@@ -83,6 +83,11 @@ void SidebarTextControl::dispose()
     Control::dispose();
 }
 
+OutlinerView* SidebarTextControl::GetTextView()
+{
+    return mrSidebarWin.GetOutlinerView();
+}
+
 OutlinerView* SidebarTextControl::GetTextView() const
 {
     return mrSidebarWin.GetOutlinerView();
