@@ -757,7 +757,7 @@ struct FontAttribSetter
         if(rPropName == "CharFontName")
         {
             OUString aName = rProp.second.get<OUString>();
-            mrFont.SetName(aName);
+            mrFont.SetFamilyName(aName);
         }
         else if(rPropName == "CharColor")
         {

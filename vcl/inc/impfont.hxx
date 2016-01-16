@@ -45,8 +45,8 @@ public:
 
     FontWeight          GetWeight()                                     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
     FontWeight          GetWeightNoAsk() const                          { return meWeight; }
-    FontItalic          GetSlantType()                                  { return GetItalic(); }
-    FontItalic          GetSlantType() const                            { return GetItalicNoAsk(); }
+    FontItalic          GetItalic()                                     { return GetItalic(); }
+    FontItalic          GetItalic() const                               { return GetItalicNoAsk(); }
     FontItalic          GetItalic()                                     { if(meItalic==ITALIC_DONTKNOW)  AskConfig(); return meItalic; }
     FontItalic          GetItalicNoAsk() const                          { return meItalic; }
     FontPitch           GetPitch()                                      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }

@@ -248,7 +248,7 @@ DataSourceTabPage::DataSourceTabPage(
     // set symbol font for arrows
     // note: StarSymbol is substituted to OpenSymbol for OOo
     vcl::Font aSymbolFont( m_pBTN_UP->GetFont());
-    aSymbolFont.SetName( "StarSymbol" );
+    aSymbolFont.SetFamilyName( "StarSymbol" );
     m_pBTN_UP->SetControlFont( aSymbolFont );
     m_pBTN_DOWN->SetControlFont( aSymbolFont );
 

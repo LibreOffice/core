@@ -34,7 +34,7 @@ public:
     long                GetDescent() const                          { return mnDescent; }
     long                GetInternalLeading() const                  { return mnIntLeading; }
     long                GetExternalLeading() const                  { return mnExtLeading; }
-    long                GetLineHeight() const                       { return mnLineHeight; }
+    long                GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
     long                GetSlant() const                            { return mnSlant; }
     long                GetBulletOffset() const                     { return mnBulletOffset; }
 
@@ -42,7 +42,7 @@ public:
     void                SetDescent( long nDescent )                 { mnDescent = nDescent; }
     void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
     void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
-    void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; }
+    void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
     void                SetSlant( long nSlant )                     { mnSlant = nSlant; }
     void                SetBulletOffset( long nOffset )             { mnBulletOffset = nOffset; }
 
