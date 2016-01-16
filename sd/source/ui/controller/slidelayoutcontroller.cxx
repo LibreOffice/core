@@ -81,20 +81,20 @@ private:
     VclPtr<ValueSet> mpLayoutSet2;
 };
 
-struct snewfoil_value_info
+struct snewfoil_value_info_layout
 {
     sal_uInt16 mnBmpResId;
     sal_uInt16 mnStrResId;
     AutoLayout maAutoLayout;
 };
 
-static const snewfoil_value_info notes[] =
+static const snewfoil_value_info_layout notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, AUTOLAYOUT_NOTES},
     {0, 0, AUTOLAYOUT_NONE},
 };
 
-static const snewfoil_value_info handout[] =
+static const snewfoil_value_info_layout handout[] =
 {
     {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, AUTOLAYOUT_HANDOUT1},
     {BMP_FOILH_02, STR_AUTOLAYOUT_HANDOUT2, AUTOLAYOUT_HANDOUT2},
@@ -105,7 +105,7 @@ static const snewfoil_value_info handout[] =
     {0, 0, AUTOLAYOUT_NONE},
 };
 
-static const snewfoil_value_info standard[] =
+static const snewfoil_value_info_layout standard[] =
 {
     {BMP_LAYOUT_EMPTY,    STR_AUTOLAYOUT_NONE,                 AUTOLAYOUT_NONE         },
     {BMP_LAYOUT_HEAD03,   STR_AUTOLAYOUT_TITLE,                AUTOLAYOUT_TITLE        },
@@ -122,7 +122,7 @@ static const snewfoil_value_info standard[] =
     {0, 0, AUTOLAYOUT_NONE}
 };
 
-static const snewfoil_value_info v_standard[] =
+static const snewfoil_value_info_layout v_standard[] =
 {
     // vertical
     {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART,      AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART       },
@@ -132,7 +132,7 @@ static const snewfoil_value_info v_standard[] =
     {0, 0, AUTOLAYOUT_NONE}
 };
 
-static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pInfo )
+static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layout* pInfo )
 {
     Size aLayoutItemSize;
     for( ; pInfo->mnBmpResId; pInfo++ )
@@ -186,7 +186,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     mpLayoutSet1 = createEmptyValueSetControl();
     mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
 
-    const snewfoil_value_info* pInfo = nullptr;
+    const snewfoil_value_info_layout* pInfo = nullptr;
     sal_Int16 nColCount = 4;
     switch( eMode )
     {
