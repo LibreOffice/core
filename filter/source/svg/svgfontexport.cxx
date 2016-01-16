@@ -314,7 +314,7 @@ void SVGFontExport::EmbedFonts()
             {
                 vcl::Font aFont;
 
-                aFont.SetName( (*aGlyphTreeIter).first );
+                aFont.SetFamilyName( (*aGlyphTreeIter).first );
                 aFont.SetWeight( (*aFontWeightIter).first );
                 aFont.SetItalic( (*aFontItalicIter).first );
 

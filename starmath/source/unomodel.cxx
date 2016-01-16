@@ -661,7 +661,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
                     {
                         vcl::Font aFont;
-                        aFont.SetName ( pDescriptor->sFontName );
+                        aFont.SetFamilyName ( pDescriptor->sFontName );
                         aFont.SetCharSet ( static_cast < rtl_TextEncoding > (pDescriptor->nCharSet) );
                         aFont.SetFamily ( static_cast < FontFamily > (pDescriptor->nFamily ) );
                         aFont.SetPitch  ( static_cast < FontPitch >  (pDescriptor->nPitch ) );

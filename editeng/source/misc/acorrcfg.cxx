@@ -432,7 +432,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                     case  17:
                     {
                         OUString sTemp; pValues[nProp] >>= sTemp;
-                        rSwFlags.aBulletFont.SetName(sTemp);
+                        rSwFlags.aBulletFont.SetFamilyName(sTemp);
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/Font",
                     case  18:
@@ -508,7 +508,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                     case 43 :
                     {
                         OUString sTemp; pValues[nProp] >>= sTemp;
-                        rSwFlags.aByInputBulletFont.SetName(sTemp);
+                        rSwFlags.aByInputBulletFont.SetFamilyName(sTemp);
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
                     case 44 :

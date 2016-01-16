@@ -2600,7 +2600,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     if ( ( nScriptTypeI18N == i18n::ScriptType::ASIAN ) || ( nScriptTypeI18N == i18n::ScriptType::COMPLEX ) )
     {
         const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) ));
-        rFont.SetName( rFontItem.GetFamilyName() );
+        rFont.SetFamilyName( rFontItem.GetFamilyName() );
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
