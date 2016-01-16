@@ -38,9 +38,9 @@ typedef boost::intrusive_ptr< ImplFontMetric > ImplFontMetricPtr;
 class VCL_DLLPUBLIC FontMetric : public vcl::Font
 {
 public:
-                        FontMetric();
-                        FontMetric( const FontMetric& );
-                        ~FontMetric();
+    explicit            FontMetric();
+                        FontMetric( const FontMetric& );  // TODO make this explicit
+    virtual             ~FontMetric();
 
     FontType            GetType() const;
 
