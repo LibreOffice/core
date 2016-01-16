@@ -57,8 +57,7 @@ private:
             "M2 2 l7 7 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
                                countPixel( rDevice, aCol ) == 0);
 
@@ -71,8 +70,7 @@ private:
             "M7 2 l-6 6 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0(b)",
                                countPixel( rDevice, aCol ) == 0);
     }
@@ -89,8 +87,7 @@ private:
             "M2 2 h1 l7 7 h-1 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 7",
                                countPixel( rDevice, aCol ) == 7);
 
@@ -103,8 +100,7 @@ private:
             "M7 2 h-1 l-6 6 h1 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 6",
                                countPixel( rDevice, aCol ) == 6);
 
@@ -117,8 +113,7 @@ private:
             "M0 0 l7 7 h-1 l-5-7 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 3",
                                countPixel( rDevice, aCol ) == 3);
     }
@@ -136,8 +131,7 @@ private:
 
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 40",
                                countPixel( rDevice, aCol ) == 40);
     }
@@ -160,8 +154,7 @@ private:
 
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
 
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 39",
                                countPixel( rDevice, aCol ) == 39);
@@ -175,8 +168,7 @@ private:
         rDevice->clear(aBgCol);
         pClippedDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 7",
                                countPixel( rDevice, aCol ) == 7);
     }
@@ -197,47 +189,18 @@ private:
         // clippedlinerenderer.hxx, first point not clipped
         const basegfx::B2IPoint aPt1(3,3);
         const basegfx::B2IPoint aPt2(4,2);
-        pClippedDevice->drawLine( aPt1, aPt2, aCol, DrawMode::Paint );
+        pClippedDevice->drawLine( aPt1, aPt2, aCol );
 
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 1",
                                countPixel( rDevice, aCol ) == 1);
 
-        // trigger "alternate bresenham" case in
-        // clippedlinerenderer.hxx, both start and endpoint clipped
-        const basegfx::B2IPoint aPt3(0,4);
-        pClippedDevice->drawLine( aPt3, aPt2, aCol, DrawMode::XOR );
-
-        CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
-                               countPixel( rDevice, aCol ) == 0);
-
         // trigger "standard bresenham" case in
         // clippedlinerenderer.hxx, first point not clipped
         const basegfx::B2IPoint aPt4(6,2);
-        pClippedDevice->drawLine( aPt1, aPt4, aCol, DrawMode::Paint );
+        pClippedDevice->drawLine( aPt1, aPt4, aCol );
 
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 2",
                                countPixel( rDevice, aCol ) == 2);
-
-        // trigger "clipCode1 & aMinFlag/bMinFlag" cases in
-        // clippedlinerenderer.hxx (note1: needs forcing end point to
-        // be clipped as well, otherwise optimization kicks in. note2:
-        // needs forcing end point to clip on two edges, not only on
-        // one, otherwise swap kicks in)
-        const basegfx::B2IPoint aPt5(1,1);
-        const basegfx::B2IPoint aPt6(6,10);
-        pClippedDevice->drawLine( aPt5, aPt6, aCol, DrawMode::XOR );
-
-        CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 6",
-                               countPixel( rDevice, aCol ) == 6);
-
-        // trigger "clipCode1 & (aMinFlag|aMaxFlag)" case in
-        // clippedlinerenderer.hxx that was not taken for the test
-        // above
-        pClippedDevice->drawLine( aPt3, aPt6, aCol, DrawMode::XOR );
-
-        CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 8",
-                               countPixel( rDevice, aCol ) == 8);
-
     }
 
     void implTestPolyDrawClip(const BitmapDeviceSharedPtr& rDevice)
@@ -260,8 +223,7 @@ private:
         for( unsigned int i=0; i<aPoly.count(); ++i )
             pClippedDevice->drawPolygon(
                 aPoly.getB2DPolygon(i),
-                aCol,
-                DrawMode::Paint );
+                aCol );
 
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 7",
                                countPixel( rDevice, aCol ) == 7);
@@ -283,8 +245,7 @@ private:
                                         false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 46",
                                countPixel( rDevice, aCol ) == 46);
     }

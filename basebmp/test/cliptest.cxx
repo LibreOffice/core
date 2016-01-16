@@ -53,22 +53,22 @@ private:
 
         const basegfx::B2IPoint aPt(0,0);
         const Color aCol(0xFFFFFFFF);
-        rDevice->setPixel( aPt, aCol, DrawMode::Paint, mpClipMask );
+        rDevice->setPixel( aPt, aCol, mpClipMask );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel clip #1",
                                rDevice->getPixel(aPt) == aBgCol);
 
         const basegfx::B2IPoint aPt2(10,10);
-        rDevice->setPixel( aPt2, aCol, DrawMode::Paint, mpClipMask );
+        rDevice->setPixel( aPt2, aCol, mpClipMask );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel clip #2",
                                rDevice->getPixel(aPt2) == aBgCol);
 
         const basegfx::B2IPoint aPt1(10,0);
-        rDevice->setPixel( aPt1, aCol, DrawMode::Paint, mpClipMask );
+        rDevice->setPixel( aPt1, aCol, mpClipMask );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel clip #3",
                                rDevice->getPixel(aPt1) != aBgCol);
 
         const basegfx::B2IPoint aPt3(0,10);
-        rDevice->setPixel( aPt3, aCol, DrawMode::Paint, mpClipMask );
+        rDevice->setPixel( aPt3, aCol, mpClipMask );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel clip #4",
                                rDevice->getPixel(aPt3) != aBgCol);
     }
@@ -81,7 +81,7 @@ private:
         const basegfx::B2IPoint aPt1(0,0);
         const basegfx::B2IPoint aPt2(1,9);
         const Color aCol(0xFFFFFFFF);
-        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode::Paint, mpClipMask );
+        rDevice->drawLine( aPt1, aPt2, aCol, mpClipMask );
 
         const basegfx::B2IPoint aPt3(1,5);
         CPPUNIT_ASSERT_MESSAGE("get line pixel",
@@ -89,11 +89,6 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered line pixel is not 4",
                                countPixel( rDevice,
                                            rDevice->getPixel(aPt3) ) == 4);
-
-        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode::XOR, mpClipMask );
-        CPPUNIT_ASSERT_MESSAGE("number of xor-rendered line pixel is not 0",
-                               countPixel( rDevice,
-                                           rDevice->getPixel(aPt3) ) == 121);
     }
 
     void implTestFillClip(const BitmapDeviceSharedPtr& rDevice)
@@ -105,7 +100,6 @@ private:
         rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
                                       basegfx::tools::createPolygonFromRect(aAllOver)),
                                   aCol,
-                                  DrawMode::Paint,
                                   mpClipMask );
         const basegfx::B2IPoint aPt(0,10);
         CPPUNIT_ASSERT_MESSAGE("number of clipped pixel is not 30",
@@ -113,18 +107,9 @@ private:
 
         rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
                                       basegfx::tools::createPolygonFromRect(aAllOver)),
-                                  aCol,
-                                  DrawMode::Paint );
+                                  aCol );
         CPPUNIT_ASSERT_MESSAGE("number of filled pixel is not 121",
                                countPixel( rDevice, rDevice->getPixel(aPt) ) == 121);
-
-        rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
-                                      basegfx::tools::createPolygonFromRect(aAllOver)),
-                                  aCol,
-                                  DrawMode::XOR,
-                                  mpClipMask );
-        CPPUNIT_ASSERT_MESSAGE("number of xor-cleared pixel is not 91",
-                               countPixel( rDevice, rDevice->getPixel(aPt) ) == 121-30);
     }
 
     void implTestBmpClip(const BitmapDeviceSharedPtr& rDevice)
@@ -135,15 +120,14 @@ private:
         Color aCol1(0);
         Color aCol2(0xFFFFFFFF);
         pBmp->clear(aCol1);
-        pBmp->setPixel(basegfx::B2IPoint(0,0),aCol2,DrawMode::Paint);
-        pBmp->setPixel(basegfx::B2IPoint(1,1),aCol2,DrawMode::Paint);
-        pBmp->setPixel(basegfx::B2IPoint(2,2),aCol2,basebmp::DrawMode::Paint);
+        pBmp->setPixel(basegfx::B2IPoint(0,0),aCol2);
+        pBmp->setPixel(basegfx::B2IPoint(1,1),aCol2);
+        pBmp->setPixel(basegfx::B2IPoint(2,2),aCol2);
 
         rDevice->clear(aCol1);
         rDevice->drawBitmap(pBmp,
                             basegfx::B2IBox(0,0,3,3),
                             basegfx::B2IBox(-1,-1,4,4),
-                            DrawMode::Paint,
                             mpClipMask);
 
         const basegfx::B2IPoint aPt(1,1);
@@ -166,8 +150,7 @@ private:
         pBmp->clear( basebmp::Color(0) );
         pBmp->fillPolyPolygon(
             aPoly,
-            aCol,
-            basebmp::DrawMode::Paint );
+            aCol );
 
         const basegfx::B2IBox aSourceRect(0,0,10,10);
         const basegfx::B2IPoint aDestLeftTop(0,0);
@@ -204,8 +187,7 @@ public:
         mpClipMask->clear(Color(0));
         mpClipMask->drawPolygon(
             aPoly.getB2DPolygon(0),
-            Color(0xFFFFFFFF),
-            DrawMode::Paint );
+            Color(0xFFFFFFFF) );
     }
 
     void testPixelClip()

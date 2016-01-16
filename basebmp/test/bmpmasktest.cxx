@@ -60,8 +60,7 @@ private:
             rBmp,
             mpMaskBmp1bpp,
             aSourceRect,
-            aDestAll,
-            DrawMode::Paint );
+            aDestAll);
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 30",
                                countPixel( rDevice, aCol ) == 30);
     }
@@ -79,8 +78,7 @@ private:
             rBmp,
             mpMaskBmp1bpp,
             aSourceRect,
-            aDestLeftTop,
-            DrawMode::Paint );
+            aDestLeftTop );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 12",
                                countPixel( rDevice, aCol ) == 12);
     }
@@ -115,12 +113,10 @@ public:
         const Color aColBlack(0);
         mpBmp1bpp->fillPolyPolygon(
             aPoly,
-            aColWhite,
-            DrawMode::Paint );
+            aColWhite );
         mpBmp32bpp->fillPolyPolygon(
             aPoly,
-            aColWhite,
-            DrawMode::Paint );
+            aColWhite );
 
         aSvg = "m 0 0 h6 v10 h-6z" ;
 
@@ -129,8 +125,7 @@ public:
         mpMaskBmp1bpp->clear(aColWhite);
         mpMaskBmp1bpp->fillPolyPolygon(
             aPoly,
-            aColBlack,
-            DrawMode::Paint );
+            aColBlack );
     }
 
     void testBmpBasics()
@@ -173,8 +168,7 @@ public:
             basegfx::B2DPolyPolygon aPoly;
             basegfx::tools::importFromSvgD( aPoly, "m 2 2 h4 v8 h-4z",
                                             false, nullptr );
-            xMask->fillPolyPolygon( aPoly, basebmp::Color( 0xff, 0xff, 0xff ),
-                                    DrawMode::Paint );
+            xMask->fillPolyPolygon( aPoly, basebmp::Color( 0xff, 0xff, 0xff ) );
 
             xBitmap = createBitmapDevice( aSize, false,
                                           Format::ThirtyTwoBitTcMaskBGRA );
@@ -192,8 +186,7 @@ public:
 
         xOutput->drawMaskedBitmap(
             xBitmap, xMask,
-            aSourceRect, aDestAll,
-            DrawMode::Paint );
+            aSourceRect, aDestAll );
 
         CPPUNIT_ASSERT_MESSAGE( "output not cleared to white",
                                 xOutput->getPixel( basegfx::B2IPoint( 0, 0 ) ) == Color(0xffffff) );

@@ -294,14 +294,10 @@ namespace
         colorblend_accessor_type                maColorBlendAccessor;
         colorblend_generic_accessor_type        maGenericColorBlendAccessor;
         raw_accessor_type                       maRawAccessor;
-        xor_accessor_type                       maXorAccessor;
-        raw_xor_accessor_type                   maRawXorAccessor;
         masked_accessor_type                    maMaskedAccessor;
         masked_colorblend_accessor_type         maMaskedColorBlendAccessor;
         masked_colorblend_generic_accessor_type maGenericMaskedColorBlendAccessor;
-        masked_xoraccessor_type                 maMaskedXorAccessor;
         raw_maskedaccessor_type                 maRawMaskedAccessor;
-        raw_maskedxor_accessor_type             maRawMaskedXorAccessor;
         raw_maskedmask_accessor_type            maRawMaskedMaskAccessor;
 
 
@@ -326,14 +322,10 @@ namespace
             maColorBlendAccessor( accessor ),
             maGenericColorBlendAccessor( accessor ),
             maRawAccessor( rawAccessor ),
-            maXorAccessor( accessor ),
-            maRawXorAccessor( rawAccessor ),
             maMaskedAccessor( accessor ),
             maMaskedColorBlendAccessor( maColorBlendAccessor ),
             maGenericMaskedColorBlendAccessor( maGenericColorBlendAccessor ),
-            maMaskedXorAccessor( accessor ),
             maRawMaskedAccessor( rawAccessor ),
-            maRawMaskedXorAccessor( rawAccessor ),
             maRawMaskedMaskAccessor( rawAccessor )
         {}
 
@@ -388,23 +380,16 @@ namespace
         }
 
         virtual void setPixel_i( const basegfx::B2IPoint& rPt,
-                                 Color                    pixelColor,
-                                 DrawMode                 drawMode ) override
+                                 Color                    pixelColor ) override
         {
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
                                                     rPt.getY()) );
-            if( drawMode == DrawMode::XOR )
-                maXorAccessor.set( pixelColor,
-                                   pixel );
-            else
-                maAccessor.set( pixelColor,
-                                pixel );
+            maAccessor.set( pixelColor, pixel );
         }
 
         virtual void setPixel_i( const basegfx::B2IPoint&     rPt,
                                  Color                        pixelColor,
-                                 DrawMode                     drawMode,
                                  const BitmapDeviceSharedPtr& rClip ) override
         {
             std::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rClip) );
@@ -417,12 +402,8 @@ namespace
                 maBegin + offset,
                 pMask->maBegin + offset );
 
-            if( drawMode == DrawMode::XOR )
-                maMaskedXorAccessor.set( pixelColor,
-                                         aIter );
-            else
-                maMaskedAccessor.set( pixelColor,
-                                      aIter );
+            maMaskedAccessor.set( pixelColor,
+                                  aIter );
         }
 
         virtual Color getPixel_i(const basegfx::B2IPoint& rPt ) override
@@ -473,33 +454,26 @@ namespace
                              rawAcc );
         }
 
-        template< typename Iterator, typename RawAcc, typename XorAcc >
+        template< typename Iterator, typename RawAcc >
         void implDrawLine( const basegfx::B2IPoint& rPt1,
                            const basegfx::B2IPoint& rPt2,
                            const basegfx::B2IBox&   rBounds,
                            Color                    col,
                            const Iterator&          begin,
-                           const RawAcc&            rawAcc,
-                           const XorAcc&            xorAcc,
-                           DrawMode                 drawMode )
+                           const RawAcc&            rawAcc )
         {
-            if( drawMode == DrawMode::XOR )
-                implRenderLine( rPt1, rPt2, rBounds, col,
-                                begin, maAccessor, xorAcc );
-            else
-                implRenderLine( rPt1, rPt2, rBounds, col,
-                                begin, maAccessor, rawAcc );
+            implRenderLine( rPt1, rPt2, rBounds, col,
+                            begin, maAccessor, rawAcc );
         }
 
         virtual void drawLine_i(const basegfx::B2IPoint& rPt1,
                                 const basegfx::B2IPoint& rPt2,
                                 const basegfx::B2IBox&   rBounds,
-                                Color                    lineColor,
-                                DrawMode                 drawMode ) override
+                                Color                    lineColor ) override
         {
             implDrawLine(rPt1,rPt2,rBounds,lineColor,
                          maBegin,
-                         maRawAccessor,maRawXorAccessor,drawMode);
+                         maRawAccessor);
         }
 
         composite_iterator_type getMaskedIter( const BitmapDeviceSharedPtr& rClip ) const
@@ -515,13 +489,11 @@ namespace
                                 const basegfx::B2IPoint&     rPt2,
                                 const basegfx::B2IBox&       rBounds,
                                 Color                        lineColor,
-                                DrawMode                     drawMode,
                                 const BitmapDeviceSharedPtr& rClip ) override
         {
             implDrawLine(rPt1,rPt2,rBounds,lineColor,
                          getMaskedIter(rClip),
-                         maRawMaskedAccessor,
-                         maRawMaskedXorAccessor,drawMode);
+                         maRawMaskedAccessor);
         }
 
         template< typename Iterator, typename RawAcc >
@@ -558,33 +530,21 @@ namespace
 
         virtual void drawPolygon_i(const basegfx::B2DPolygon& rPoly,
                                    const basegfx::B2IBox&     rBounds,
-                                   Color                      lineColor,
-                                   DrawMode                   drawMode ) override
+                                   Color                      lineColor ) override
         {
-            if( drawMode == DrawMode::XOR )
-                implDrawPolygon( rPoly, rBounds, lineColor,
-                                 maBegin,
-                                 maRawXorAccessor );
-            else
-                implDrawPolygon( rPoly, rBounds, lineColor,
-                                 maBegin,
-                                 maRawAccessor );
+            implDrawPolygon( rPoly, rBounds, lineColor,
+                             maBegin,
+                             maRawAccessor );
         }
 
         virtual void drawPolygon_i(const basegfx::B2DPolygon&   rPoly,
                                    const basegfx::B2IBox&       rBounds,
                                    Color                        lineColor,
-                                   DrawMode                     drawMode,
                                    const BitmapDeviceSharedPtr& rClip ) override
         {
-            if( drawMode == DrawMode::XOR )
-                implDrawPolygon( rPoly, rBounds, lineColor,
-                                 getMaskedIter(rClip),
-                                 maRawMaskedXorAccessor );
-            else
-                implDrawPolygon( rPoly, rBounds, lineColor,
-                                 getMaskedIter(rClip),
-                                 maRawMaskedAccessor );
+            implDrawPolygon( rPoly, rBounds, lineColor,
+                             getMaskedIter(rClip),
+                             maRawMaskedAccessor );
         }
 
         template< typename Iterator, typename RawAcc >
@@ -609,37 +569,23 @@ namespace
 
         virtual void fillPolyPolygon_i(const basegfx::B2DPolyPolygon& rPoly,
                                        Color                          fillColor,
-                                       DrawMode                       drawMode,
                                        const basegfx::B2IBox&         rBounds ) override
         {
-            if( drawMode == DrawMode::XOR )
-                implFillPolyPolygon( rPoly, fillColor,
-                                     maBegin,
-                                     maRawXorAccessor,
-                                     rBounds );
-            else
-                implFillPolyPolygon( rPoly, fillColor,
-                                     maBegin,
-                                     maRawAccessor,
-                                     rBounds );
+            implFillPolyPolygon( rPoly, fillColor,
+                                 maBegin,
+                                 maRawAccessor,
+                                 rBounds );
         }
 
         virtual void fillPolyPolygon_i(const basegfx::B2DPolyPolygon& rPoly,
                                        Color                          fillColor,
-                                       DrawMode                       drawMode,
                                        const basegfx::B2IBox&         rBounds,
                                        const BitmapDeviceSharedPtr&   rClip ) override
         {
-            if( drawMode == DrawMode::XOR )
-                implFillPolyPolygon( rPoly, fillColor,
-                                     getMaskedIter(rClip),
-                                     maRawMaskedXorAccessor,
-                                     rBounds );
-            else
-                implFillPolyPolygon( rPoly, fillColor,
-                                     getMaskedIter(rClip),
-                                     maRawMaskedAccessor,
-                                     rBounds );
+            implFillPolyPolygon( rPoly, fillColor,
+                                 getMaskedIter(rClip),
+                                 maRawMaskedAccessor,
+                                 rBounds );
         }
 
         template< typename Iterator, typename RawAcc >
@@ -733,16 +679,11 @@ namespace
 
         virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
                                   const basegfx::B2IBox&       rSrcRect,
-                                  const basegfx::B2IBox&       rDstRect,
-                                  DrawMode                     drawMode ) override
+                                  const basegfx::B2IBox&       rDstRect ) override
         {
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
-                if( drawMode == DrawMode::XOR )
-                    implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                                   maBegin,
-                                   maRawXorAccessor);
-                else if (bitsPerPixel[getScanlineFormat()] >= 8
+                if (bitsPerPixel[getScanlineFormat()] >= 8
                          && rSrcRect.getWidth() == rDstRect.getWidth() && rSrcRect.getHeight() == rDstRect.getHeight()
                          && rSrcBitmap->getScanlineFormat() == getScanlineFormat())
                     implDrawBitmapDirect(rSrcBitmap, rSrcRect, rDstRect);
@@ -753,44 +694,28 @@ namespace
             }
             else
             {
-                if( drawMode == DrawMode::XOR )
-                    implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
-                                          maBegin,
-                                          maXorAccessor);
-                else
-                    implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
-                                          maBegin,
-                                          maAccessor);
+                implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
+                                      maBegin,
+                                      maAccessor);
             }
         }
 
         virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
                                   const basegfx::B2IBox&       rSrcRect,
                                   const basegfx::B2IBox&       rDstRect,
-                                  DrawMode                     drawMode,
                                   const BitmapDeviceSharedPtr& rClip ) override
         {
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
-                if( drawMode == DrawMode::XOR )
-                    implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                                   getMaskedIter(rClip),
-                                   maRawMaskedXorAccessor);
-                else
-                    implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                                   getMaskedIter(rClip),
-                                   maRawMaskedAccessor);
+                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
+                               getMaskedIter(rClip),
+                               maRawMaskedAccessor);
             }
             else
             {
-                if( drawMode == DrawMode::XOR )
-                    implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
-                                          getMaskedIter(rClip),
-                                          maMaskedXorAccessor);
-                else
-                    implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
-                                          getMaskedIter(rClip),
-                                          maMaskedAccessor);
+                implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
+                                      getMaskedIter(rClip),
+                                      maMaskedAccessor);
             }
         }
 
@@ -970,35 +895,22 @@ namespace
         virtual void drawMaskedBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
                                         const BitmapDeviceSharedPtr& rMask,
                                         const basegfx::B2IBox&       rSrcRect,
-                                        const basegfx::B2IBox&       rDstRect,
-                                        DrawMode                     drawMode ) override
+                                        const basegfx::B2IBox&       rDstRect ) override
         {
             if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
             {
-                if( drawMode == DrawMode::XOR )
-                    implDrawMaskedBitmap(rSrcBitmap, rMask,
-                                         rSrcRect, rDstRect,
-                                         maBegin,
-                                         maXorAccessor);
-                else
-                    implDrawMaskedBitmap(rSrcBitmap, rMask,
-                                         rSrcRect, rDstRect,
-                                         maBegin,
-                                         maAccessor);
+                implDrawMaskedBitmap(rSrcBitmap, rMask,
+                                     rSrcRect, rDstRect,
+                                     maBegin,
+                                     maAccessor);
             }
             else
             {
-                if( drawMode == DrawMode::XOR )
-                    implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
-                                                rSrcRect, rDstRect,
-                                                maBegin,
-                                                maXorAccessor);
-                else
-                    implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
-                                                rSrcRect, rDstRect,
-                                                maBegin,
-                                                maAccessor);
+                implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
+                                            rSrcRect, rDstRect,
+                                            maBegin,
+                                            maAccessor);
             }
         }
 
@@ -1006,35 +918,22 @@ namespace
                                         const BitmapDeviceSharedPtr& rMask,
                                         const basegfx::B2IBox&       rSrcRect,
                                         const basegfx::B2IBox&       rDstRect,
-                                        DrawMode                     drawMode,
                                         const BitmapDeviceSharedPtr& rClip ) override
         {
             if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
             {
-                if( drawMode == DrawMode::XOR )
-                    implDrawMaskedBitmap(rSrcBitmap, rMask,
-                                         rSrcRect, rDstRect,
-                                         getMaskedIter(rClip),
-                                         maMaskedXorAccessor);
-                else
-                    implDrawMaskedBitmap(rSrcBitmap, rMask,
-                                         rSrcRect, rDstRect,
-                                         getMaskedIter(rClip),
-                                         maMaskedAccessor);
+                implDrawMaskedBitmap(rSrcBitmap, rMask,
+                                     rSrcRect, rDstRect,
+                                     getMaskedIter(rClip),
+                                     maMaskedAccessor);
             }
             else
             {
-                if( drawMode == DrawMode::XOR )
-                    implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
-                                                rSrcRect, rDstRect,
-                                                getMaskedIter(rClip),
-                                                maMaskedXorAccessor);
-                else
-                    implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
-                                                rSrcRect, rDstRect,
-                                                getMaskedIter(rClip),
-                                                maMaskedAccessor);
+                implDrawMaskedBitmapGeneric(rSrcBitmap, rMask,
+                                            rSrcRect, rDstRect,
+                                            getMaskedIter(rClip),
+                                            maMaskedAccessor);
             }
         }
     };
@@ -1163,30 +1062,28 @@ void BitmapDevice::clear( Color fillColor )
 }
 
 void BitmapDevice::setPixel( const basegfx::B2IPoint& rPt,
-                             Color                    lineColor,
-                             DrawMode                 drawMode )
+                             Color                    lineColor )
 {
     if( mpImpl->maBounds.isInside(rPt) )
-        setPixel_i(rPt,lineColor,drawMode);
+        setPixel_i(rPt,lineColor);
 }
 
 void BitmapDevice::setPixel( const basegfx::B2IPoint&     rPt,
                              Color                        lineColor,
-                             DrawMode                     drawMode,
                              const BitmapDeviceSharedPtr& rClip )
 {
     if( !rClip )
     {
-        setPixel(rPt,lineColor,drawMode);
+        setPixel(rPt,lineColor);
         return;
     }
 
     if( mpImpl->maBounds.isInside(rPt) )
     {
         if( isCompatibleClipMask( rClip ) )
-            setPixel_i(rPt,lineColor,drawMode,rClip);
+            setPixel_i(rPt,lineColor,rClip);
         else
-            getGenericRenderer()->setPixel( rPt, lineColor, drawMode, rClip );
+            getGenericRenderer()->setPixel( rPt, lineColor, rClip );
     }
 }
 
@@ -1208,25 +1105,22 @@ sal_uInt32 BitmapDevice::getPixelData( const basegfx::B2IPoint& rPt )
 
 void BitmapDevice::drawLine( const basegfx::B2IPoint& rPt1,
                              const basegfx::B2IPoint& rPt2,
-                             Color                    lineColor,
-                             DrawMode                 drawMode )
+                             Color                    lineColor )
 {
     drawLine_i( rPt1,
                 rPt2,
                 mpImpl->maBounds,
-                lineColor,
-                drawMode );
+                lineColor );
 }
 
 void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
                              const basegfx::B2IPoint&     rPt2,
                              Color                        lineColor,
-                             DrawMode                     drawMode,
                              const BitmapDeviceSharedPtr& rClip )
 {
     if( !rClip )
     {
-        drawLine(rPt1,rPt2,lineColor,drawMode);
+        drawLine(rPt1,rPt2,lineColor);
         return;
     }
 
@@ -1235,32 +1129,29 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
                     rPt2,
                     mpImpl->maBounds,
                     lineColor,
-                    drawMode,
                     rClip );
     else
         getGenericRenderer()->drawLine( rPt1, rPt2, lineColor,
-                                        drawMode, rClip );
+                                        rClip );
 }
 
 void BitmapDevice::drawPolygon( const basegfx::B2DPolygon& rPoly,
-                                Color                      lineColor,
-                                DrawMode                   drawMode )
+                                Color                      lineColor )
 {
     const sal_uInt32 numVertices( rPoly.count() );
     if( numVertices )
         drawPolygon_i( rPoly,
                        mpImpl->maBounds,
-                       lineColor, drawMode );
+                       lineColor );
 }
 
 void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
                                 Color                        lineColor,
-                                DrawMode                     drawMode,
                                 const BitmapDeviceSharedPtr& rClip )
 {
     if( !rClip )
     {
-        drawPolygon(rPoly,lineColor,drawMode);
+        drawPolygon(rPoly,lineColor);
         return;
     }
 
@@ -1270,36 +1161,34 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
         if( isCompatibleClipMask( rClip ) )
             drawPolygon_i( rPoly,
                            mpImpl->maBounds,
-                           lineColor, drawMode, rClip );
+                           lineColor, rClip );
         else
             getGenericRenderer()->drawPolygon( rPoly, lineColor,
-                                               drawMode, rClip );
+                                               rClip );
     }
 }
 
 void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
-                                    Color                          fillColor,
-                                    DrawMode                       drawMode )
+                                    Color                          fillColor )
 {
-    fillPolyPolygon_i( rPoly, fillColor, drawMode, mpImpl->maBounds );
+    fillPolyPolygon_i( rPoly, fillColor, mpImpl->maBounds );
 }
 
 void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
                                     Color                          fillColor,
-                                    DrawMode                       drawMode,
                                     const BitmapDeviceSharedPtr&   rClip )
 {
     if( !rClip )
     {
-        fillPolyPolygon(rPoly,fillColor,drawMode);
+        fillPolyPolygon(rPoly,fillColor);
         return;
     }
 
     if( isCompatibleClipMask( rClip ) )
-        fillPolyPolygon_i( rPoly, fillColor, drawMode, mpImpl->maBounds, rClip );
+        fillPolyPolygon_i( rPoly, fillColor, mpImpl->maBounds, rClip );
     else
         getGenericRenderer()->fillPolyPolygon( rPoly, fillColor,
-                                               drawMode, rClip );
+                                               rClip );
 }
 
 
@@ -1450,8 +1339,7 @@ namespace
 
 void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                const basegfx::B2IBox&       rSrcRect,
-                               const basegfx::B2IBox&       rDstRect,
-                               DrawMode                     drawMode )
+                               const basegfx::B2IBox&       rDstRect )
 {
     const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
     const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
@@ -1466,19 +1354,18 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-        drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode );
+        drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange );
     }
 }
 
 void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                const basegfx::B2IBox&       rSrcRect,
                                const basegfx::B2IBox&       rDstRect,
-                               DrawMode                     drawMode,
                                const BitmapDeviceSharedPtr& rClip )
 {
     if( !rClip )
     {
-        drawBitmap(rSrcBitmap,rSrcRect,rDstRect,drawMode);
+        drawBitmap(rSrcBitmap,rSrcRect,rDstRect);
         return;
     }
 
@@ -1497,12 +1384,12 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
 
         if( isCompatibleClipMask( rClip ) )
         {
-            drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode, rClip );
+            drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, rClip );
         }
         else
         {
             getGenericRenderer()->drawBitmap( rSrcBitmap, rSrcRect,
-                                              rDstRect, drawMode, rClip );
+                                              rDstRect, rClip );
         }
     }
 }
@@ -1539,8 +1426,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                                                aSize );
             pAlphaCopy->drawBitmap(rAlphaMask,
                                    aSrcRange,
-                                   aAlphaRange,
-                                   DrawMode::Paint);
+                                   aAlphaRange);
             drawMaskedColor_i( aSrcColor, pAlphaCopy, aAlphaRange, aDestPoint );
         }
         else
@@ -1591,8 +1477,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                                                    aSize );
                 pAlphaCopy->drawBitmap(rAlphaMask,
                                        aSrcRange,
-                                       aAlphaRange,
-                                       DrawMode::Paint);
+                                       aAlphaRange);
                 drawMaskedColor_i( aSrcColor, pAlphaCopy, aAlphaRange, aDestPoint, rClip );
             }
             else
@@ -1611,8 +1496,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
 void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                      const BitmapDeviceSharedPtr& rMask,
                                      const basegfx::B2IBox&       rSrcRect,
-                                     const basegfx::B2IBox&       rDstRect,
-                                     DrawMode                     drawMode )
+                                     const basegfx::B2IBox&       rDstRect )
 {
     OSL_ASSERT( rMask->getSize() == rSrcBitmap->getSize() );
 
@@ -1629,7 +1513,7 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-        drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode );
+        drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange );
     }
 }
 
@@ -1637,12 +1521,11 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                                      const BitmapDeviceSharedPtr& rMask,
                                      const basegfx::B2IBox&       rSrcRect,
                                      const basegfx::B2IBox&       rDstRect,
-                                     DrawMode                     drawMode,
                                      const BitmapDeviceSharedPtr& rClip )
 {
     if( !rClip )
     {
-        drawMaskedBitmap(rSrcBitmap,rMask,rSrcRect,rDstRect,drawMode);
+        drawMaskedBitmap(rSrcBitmap,rMask,rSrcRect,rDstRect);
         return;
     }
 
@@ -1663,12 +1546,12 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
 
         if( isCompatibleClipMask( rClip ) )
         {
-            drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode, rClip );
+            drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, rClip );
         }
         else
         {
             getGenericRenderer()->drawMaskedBitmap( rSrcBitmap, rMask, rSrcRect,
-                                                    rDstRect, drawMode, rClip );
+                                                    rDstRect, rClip );
         }
     }
 }

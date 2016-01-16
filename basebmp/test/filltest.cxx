@@ -54,8 +54,7 @@ private:
         rDevice->fillPolyPolygon(
             basegfx::B2DPolyPolygon(
                 basegfx::tools::createPolygonFromRect( aRect )),
-            aCol,
-            DrawMode::Paint );
+            aCol );
 
         const basegfx::B2IPoint aPt1(1,1);
         CPPUNIT_ASSERT_MESSAGE("first pixel set",
@@ -89,24 +88,21 @@ private:
         rDevice->fillPolyPolygon(
             basegfx::B2DPolyPolygon(
                 basegfx::tools::createPolygonFromRect( aEmpty1 )),
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
                                countPixel( rDevice, aCol ) == 0);
 
         rDevice->fillPolyPolygon(
             basegfx::B2DPolyPolygon(
                 basegfx::tools::createPolygonFromRect( aEmpty2 )),
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
                                countPixel( rDevice, aCol ) == 0);
 
         rDevice->fillPolyPolygon(
             basegfx::B2DPolyPolygon(
                 basegfx::tools::createPolygonFromRect( aVertLineLeft )),
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 11",
                                countPixel( rDevice, aCol ) == 11);
         const basegfx::B2IPoint aPt1(0,0);
@@ -116,8 +112,7 @@ private:
         rDevice->fillPolyPolygon(
             basegfx::B2DPolyPolygon(
                 basegfx::tools::createPolygonFromRect( aVertLineRight )),
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 22",
                                countPixel( rDevice, aCol ) == 22);
         const basegfx::B2IPoint aPt2(10,10);
@@ -127,8 +122,7 @@ private:
         rDevice->fillPolyPolygon(
             basegfx::B2DPolyPolygon(
                 basegfx::tools::createPolygonFromRect( aHorzLineTop )),
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 31",
                                countPixel( rDevice, aCol ) == 31);
         const basegfx::B2IPoint aPt3(5,0);
@@ -138,8 +132,7 @@ private:
         rDevice->fillPolyPolygon(
             basegfx::B2DPolyPolygon(
                 basegfx::tools::createPolygonFromRect( aHorzLineBottom )),
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 40",
                                countPixel( rDevice, aCol ) == 40);
         const basegfx::B2IPoint aPt4(5,10);
@@ -152,8 +145,7 @@ private:
         basegfx::tools::importFromSvgD( aPoly, aSvg, false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
-            aCol,
-            DrawMode::Paint );
+            aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 43",
                                countPixel( rDevice, aCol ) == 43);
     }
@@ -171,36 +163,31 @@ private:
         const Color aCol(0xFFFFFFFF);
         rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
                                       basegfx::tools::createPolygonFromRect(aLeftTop)),
-                                  aCol,
-                                  DrawMode::Paint );
+                                  aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 1",
                                countPixel( rDevice, aCol ) == 1);
 
         rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
                                       basegfx::tools::createPolygonFromRect(aRightTop)),
-                                  aCol,
-                                  DrawMode::Paint );
+                                  aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 2",
                                countPixel( rDevice, aCol ) == 2);
 
         rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
                                       basegfx::tools::createPolygonFromRect(aLeftBottom)),
-                                  aCol,
-                                  DrawMode::Paint );
+                                  aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 3",
                                countPixel( rDevice, aCol ) == 3);
 
         rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
                                       basegfx::tools::createPolygonFromRect(aRightBottom)),
-                                  aCol,
-                                  DrawMode::Paint );
+                                  aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 4",
                                countPixel( rDevice, aCol ) == 4);
 
         rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
                                       basegfx::tools::createPolygonFromRect(aAllOver)),
-                                  aCol,
-                                  DrawMode::Paint );
+                                  aCol );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 121",
                                countPixel( rDevice, aCol ) == 121);
     }

@@ -21,7 +21,6 @@
 #define INCLUDED_BASEBMP_BITMAPDEVICE_HXX
 
 #include <sal/types.h>
-#include <basebmp/drawmodes.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/basebmpdllapi.h>
 
@@ -131,13 +130,9 @@ public:
 
         @param pixelColor
         Color value to set the pixel to
-
-        @param drawMode
-        Draw mode to use when changing the pixel value
      */
     void setPixel( const basegfx::B2IPoint& rPt,
-                   Color                    pixelColor,
-                   DrawMode                 drawMode );
+                   Color                    pixelColor );
 
     /** Set given pixel to specified color
 
@@ -147,16 +142,12 @@ public:
         @param pixelColor
         Color value to set the pixel to
 
-        @param drawMode
-        Draw mode to use when changing the pixel value
-
         @param rClip
         Clip mask to use. If the clip mask is 1 at the given pixel
         position, no change will take place.
      */
     void setPixel( const basegfx::B2IPoint&     rPt,
                    Color                        pixelColor,
-                   DrawMode                     drawMode,
                    const BitmapDeviceSharedPtr& rClip );
 
     /** Get color value at given pixel
@@ -184,14 +175,10 @@ public:
 
         @param lineColor
         Color value to draw the line with
-
-        @param drawMode
-        Draw mode to use when changing the pixel value
      */
     void drawLine( const basegfx::B2IPoint& rPt1,
                    const basegfx::B2IPoint& rPt2,
-                   Color                    lineColor,
-                   DrawMode                 drawMode );
+                   Color                    lineColor );
 
     /** Draw a line
 
@@ -207,9 +194,6 @@ public:
         @param lineColor
         Color value to draw the line with
 
-        @param drawMode
-        Draw mode to use when changing the pixel value
-
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
         pixel is 1 will not be modified.
@@ -217,7 +201,6 @@ public:
     void drawLine( const basegfx::B2IPoint&     rPt1,
                    const basegfx::B2IPoint&     rPt2,
                    Color                        lineColor,
-                   DrawMode                     drawMode,
                    const BitmapDeviceSharedPtr& rClip );
 
     /** Draw a polygon
@@ -229,13 +212,9 @@ public:
 
         @param lineColor
         Color value to draw the polygon with
-
-        @param drawMode
-        Draw mode to use when changing pixel values
      */
     void drawPolygon( const basegfx::B2DPolygon& rPoly,
-                      Color                      lineColor,
-                      DrawMode                   drawMode );
+                      Color                      lineColor );
 
     /** Draw a polygon
 
@@ -247,16 +226,12 @@ public:
         @param lineColor
         Color value to draw the polygon with
 
-        @param drawMode
-        Draw mode to use when changing pixel values
-
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
         pixel is 1 will not be modified.
      */
     void drawPolygon( const basegfx::B2DPolygon&   rPoly,
                       Color                        lineColor,
-                      DrawMode                     drawMode,
                       const BitmapDeviceSharedPtr& rClip );
 
     /** Fill a poly-polygon
@@ -273,13 +248,9 @@ public:
 
         @param fillColor
         Color value to fill the poly-polygon with
-
-        @param drawMode
-        Draw mode to use when changing pixel values
      */
     void fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
-                          Color                          fillColor,
-                          DrawMode                       drawMode );
+                          Color                          fillColor );
 
     /** Fill a poly-polygon
 
@@ -296,16 +267,12 @@ public:
         @param fillColor
         Color value to fill the poly-polygon with
 
-        @param drawMode
-        Draw mode to use when changing pixel values
-
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
         pixel is 1 will not be modified.
      */
     void fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,
                           Color                          fillColor,
-                          DrawMode                       drawMode,
                           const BitmapDeviceSharedPtr&   rClip );
 
     /** Draw another bitmap into this device
@@ -328,14 +295,10 @@ public:
         fillPolyPolygon(), and using the same rectangle as the
         destination rectangle of this method, will affect exactly the
         same set of pixel.
-
-        @param drawMode
-        Draw mode to use when changing pixel values
      */
     void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                      const basegfx::B2IBox&       rSrcRect,
-                     const basegfx::B2IBox&       rDstRect,
-                     DrawMode                     drawMode );
+                     const basegfx::B2IBox&       rDstRect );
 
     /** Draw another bitmap into this device
 
@@ -358,9 +321,6 @@ public:
         destination rectangle of this method, will affect exactly the
         same set of pixel.
 
-        @param drawMode
-        Draw mode to use when changing pixel values
-
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
         pixel is 1 will not be modified.
@@ -368,7 +328,6 @@ public:
     void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                      const basegfx::B2IBox&       rSrcRect,
                      const basegfx::B2IBox&       rDstRect,
-                     DrawMode                     drawMode,
                      const BitmapDeviceSharedPtr& rClip );
 
     /** Draw a color with an alpha-modulation bitmap into this device
@@ -471,15 +430,11 @@ public:
         fillPolyPolygon(), and using the same rectangle as the
         destination rectangle of this method, will affect exactly the
         same set of pixel.
-
-        @param drawMode
-        Draw mode to use when changing pixel values
      */
     void drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                            const BitmapDeviceSharedPtr& rMask,
                            const basegfx::B2IBox&       rSrcRect,
-                           const basegfx::B2IBox&       rDstRect,
-                           DrawMode                     drawMode );
+                           const basegfx::B2IBox&       rDstRect );
 
     /** Draw another bitmap through a mask into this device
 
@@ -513,9 +468,6 @@ public:
         destination rectangle of this method, will affect exactly the
         same set of pixel.
 
-        @param drawMode
-        Draw mode to use when changing pixel values
-
         @param rClip
         Clip mask to use. Pixel where the corresponding clip mask
         pixel is 1 will not be modified.
@@ -524,7 +476,6 @@ public:
                            const BitmapDeviceSharedPtr& rMask,
                            const basegfx::B2IBox&       rSrcRect,
                            const basegfx::B2IBox&       rDstRect,
-                           DrawMode                     drawMode,
                            const BitmapDeviceSharedPtr& rClip );
 
 protected:
@@ -547,11 +498,9 @@ private:
                                              const basegfx::B2IBox& rBounds ) = 0;
 
     BASEBMP_DLLPRIVATE virtual void setPixel_i( const basegfx::B2IPoint& rPt,
-                                               Color                    lineColor,
-                                               DrawMode                 drawMode ) = 0;
+                                               Color                    lineColor) = 0;
     BASEBMP_DLLPRIVATE virtual void setPixel_i( const basegfx::B2IPoint&     rPt,
                                                 Color                        lineColor,
-                                                DrawMode                     drawMode,
                                                 const BitmapDeviceSharedPtr& rClip ) = 0;
 
     BASEBMP_DLLPRIVATE virtual Color getPixel_i( const basegfx::B2IPoint& rPt ) = 0;
@@ -561,44 +510,36 @@ private:
     BASEBMP_DLLPRIVATE virtual void drawLine_i( const basegfx::B2IPoint& rPt1,
                                                 const basegfx::B2IPoint& rPt2,
                                                 const basegfx::B2IBox&   rBounds,
-                                                Color                    lineColor,
-                                                DrawMode                 drawMode ) = 0;
+                                                Color                    lineColor ) = 0;
     BASEBMP_DLLPRIVATE virtual void drawLine_i( const basegfx::B2IPoint&     rPt1,
                                                 const basegfx::B2IPoint&     rPt2,
                                                 const basegfx::B2IBox&       rBounds,
                                                 Color                        lineColor,
-                                                DrawMode                     drawMode,
                                                 const BitmapDeviceSharedPtr& rClip ) = 0;
 
     BASEBMP_DLLPRIVATE virtual void drawPolygon_i( const basegfx::B2DPolygon& rPoly,
                                                    const basegfx::B2IBox&     rBounds,
-                                                   Color                      lineColor,
-                                                   DrawMode                   drawMode ) = 0;
+                                                   Color                      lineColor ) = 0;
     BASEBMP_DLLPRIVATE virtual void drawPolygon_i( const basegfx::B2DPolygon&   rPoly,
                                                    const basegfx::B2IBox&       rBounds,
                                                    Color                        lineColor,
-                                                   DrawMode                     drawMode,
                                                    const BitmapDeviceSharedPtr& rClip ) = 0;
 
     BASEBMP_DLLPRIVATE virtual void fillPolyPolygon_i( const basegfx::B2DPolyPolygon& rPoly,
                                                        Color                          fillColor,
-                                                       DrawMode                       drawMode,
                                                        const basegfx::B2IBox&         rBounds ) = 0;
     BASEBMP_DLLPRIVATE virtual void fillPolyPolygon_i( const basegfx::B2DPolyPolygon& rPoly,
                                                        Color                          fillColor,
-                                                       DrawMode                       drawMode,
                                                        const basegfx::B2IBox&         rBounds,
                                                        const BitmapDeviceSharedPtr&   rClip ) = 0;
 
     // must work with *this == rSrcBitmap!
     BASEBMP_DLLPRIVATE virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
                                                   const basegfx::B2IBox&       rSrcRect,
-                                                  const basegfx::B2IBox&       rDstRect,
-                                                  DrawMode                     drawMode ) = 0;
+                                                  const basegfx::B2IBox&       rDstRect ) = 0;
     BASEBMP_DLLPRIVATE virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
                                                   const basegfx::B2IBox&       rSrcRect,
                                                   const basegfx::B2IBox&       rDstRect,
-                                                  DrawMode                     drawMode,
                                                   const BitmapDeviceSharedPtr& rClip ) = 0;
 
     // must work with *this == rSrcBitmap!
@@ -616,13 +557,11 @@ private:
     BASEBMP_DLLPRIVATE virtual void drawMaskedBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
                                                         const BitmapDeviceSharedPtr& rMask,
                                                         const basegfx::B2IBox&       rSrcRect,
-                                                        const basegfx::B2IBox&       rDstRect,
-                                                        DrawMode                     drawMode ) = 0;
+                                                        const basegfx::B2IBox&       rDstRect ) = 0;
     BASEBMP_DLLPRIVATE virtual void drawMaskedBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
                                                         const BitmapDeviceSharedPtr& rMask,
                                                         const basegfx::B2IBox&       rSrcRect,
                                                         const basegfx::B2IBox&       rDstRect,
-                                                        DrawMode                     drawMode,
                                                         const BitmapDeviceSharedPtr& rClip ) = 0;
 
     BitmapDeviceSharedPtr getGenericRenderer() const;

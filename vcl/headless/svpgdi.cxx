@@ -166,7 +166,7 @@ namespace
                 assert(aTmpBmp.GetBitCount() == 32);
                 basegfx::B2IBox aRect(0, 0, aSize.Width(), aSize.Height());
                 const basebmp::BitmapDeviceSharedPtr& rTmpSrc = aTmpBmp.getBitmap();
-                rTmpSrc->drawBitmap(rSrcBmp, aRect, aRect, basebmp::DrawMode::Paint );
+                rTmpSrc->drawBitmap(rSrcBmp, aRect, aRect);
                 source = SvpSalGraphics::createCairoSurface(rTmpSrc);
             }
             else
