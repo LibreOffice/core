@@ -150,10 +150,10 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
             mnTypeFaces |= FONT_FAMILY_NORMAL;
     }
 
-    if( pNewFontFace->GetSlantType() == ITALIC_NONE )
+    if( pNewFontFace->GetItalic() == ITALIC_NONE )
         mnTypeFaces |= FONT_FAMILY_NONEITALIC;
-    else if( (pNewFontFace->GetSlantType() == ITALIC_NORMAL)
-         ||  (pNewFontFace->GetSlantType() == ITALIC_OBLIQUE) )
+    else if( (pNewFontFace->GetItalic() == ITALIC_NORMAL)
+         ||  (pNewFontFace->GetItalic() == ITALIC_OBLIQUE) )
         mnTypeFaces |= FONT_FAMILY_ITALIC;
 
     // reassign name (sharing saves memory)
