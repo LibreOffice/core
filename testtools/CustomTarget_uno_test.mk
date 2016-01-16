@@ -12,6 +12,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,testtools/uno_test))
 # this target is phony to run it every time
 .PHONY : $(call gb_CustomTarget_get_target,testtools/uno_test)
 
+ifneq ($(OS)$(CPUNAME),MACOSXPOWERPC)
+
 $(call gb_CustomTarget_get_target,testtools/uno_test) : \
 		$(call gb_Executable_get_runtime_dependencies,uno) \
 		$(call gb_InternalUnoApi_get_target,bridgetest) \
@@ -26,5 +28,7 @@ $(call gb_CustomTarget_get_target,testtools/uno_test) : \
 		-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_WORKDIR_FOR_BUILD)) \
 		-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services)) \
 		-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb))
+
+endif
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
