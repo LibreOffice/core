@@ -565,6 +565,16 @@ void Cell::notifyModified()
 // SdrTextShape proxy
 
 
+bool Cell::IsActiveCell()
+{
+    bool isActive = false;
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    if( rTableObj.getActiveCell().get() == this )
+        isActive = true;
+
+    return isActive;
+}
+
 bool Cell::IsTextEditActive()
 {
     bool isActive = false;

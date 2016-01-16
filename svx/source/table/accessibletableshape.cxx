@@ -85,6 +85,7 @@ public:
     sal_Int32 mRowCount, mColCount;
     //get the cached AccessibleCell from XCell
     Reference< AccessibleCell > getAccessibleCell (Reference< XCell > xCell);
+    Reference< AccessibleCell > getAccessibleCell (sal_Int32 nRow, sal_Int32 nColumn) throw (IndexOutOfBoundsException, RuntimeException);
 };
 
 
@@ -148,6 +149,27 @@ Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (Referen
         return xChild;
     }
     return Reference< AccessibleCell >();
+}
+
+Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (sal_Int32 nRow, sal_Int32 nColumn)
+    throw (IndexOutOfBoundsException, RuntimeException)
+{
+    Reference< XCell > xCell( mxTable->getCellByPosition( nColumn, nRow ) );
+    Reference< AccessibleCell > xChild = getAccessibleCell( xCell );
+
+    if( !xChild.is() && mxTable.is() )
+    {
+        sal_Int32 nChildIndex = mxTable->getColumnCount() * nRow + nColumn;
+        CellRef xCellRef( dynamic_cast< Cell* >( xCell.get() ) );
+
+        rtl::Reference< AccessibleCell > xAccessibleCell( new AccessibleCell( mxAccessible, xCellRef, nChildIndex, mrShapeTreeInfo ) );
+
+        xAccessibleCell->Init();
+        maChildMap[xCell] = xAccessibleCell;
+
+        xChild = Reference< AccessibleCell >( xAccessibleCell.get() );
+    }
+    return xChild;
 }
 
 
@@ -978,6 +1000,18 @@ AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
                     xAccCell = mxImpl->getAccessibleCell(Reference< XCell >( xCellRef.get() ));
                     if (xAccCell.is())
                         pAccCell = xAccCell.get();
+                }
+                else
+                {
+                    try
+                    {
+                        CellPos rPos;
+                        pTableObj->getActiveCellPos( rPos );
+                        xAccCell = mxImpl->getAccessibleCell( rPos.mnRow, rPos.mnCol );
+                        if ( xAccCell.is() )
+                            pAccCell = xAccCell.get();
+                    }
+                    catch ( IndexOutOfBoundsException& ) {}
                 }
             }
         }
