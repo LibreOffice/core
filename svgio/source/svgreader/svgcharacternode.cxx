@@ -510,7 +510,7 @@ namespace svgio
                     rSvgTextPosition,
                     rSvgStyleAttributes));
 
-            if(xRef.is())
+            if(xRef.is() && (Visibility_visible == getSvgStyleAttributes()->getVisibility()))
             {
                 if(!rSvgTextPosition.isRotated())
                 {
