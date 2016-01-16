@@ -657,7 +657,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
 
                 // setup the font properties
                 SvxFont aFont;
-                aFont.SetName(pFontItem->GetFamilyName());
+                aFont.SetFamilyName(pFontItem->GetFamilyName());
                 aFont.SetStyleName(pFontItem->GetStyleName());
                 aFont.SetSize(aPixelSize);
 
@@ -1000,7 +1000,7 @@ void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
 {
     if ( pFontItem )
     {
-        aCurFont.SetName        ( pFontItem->GetFamilyName() );
+        aCurFont.SetFamilyName  ( pFontItem->GetFamilyName() );
         aCurFont.SetFamily      ( pFontItem->GetFamily() );
         aCurFont.SetStyleName   ( pFontItem->GetStyleName() );
         aCurFont.SetPitch       ( pFontItem->GetPitch() );

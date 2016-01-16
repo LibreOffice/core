@@ -817,7 +817,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplReadColor( rIStm, aActionColor ); aFont.SetColor( aActionColor );
                     ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
                     rIStm.Read( aName, 32 );
-                    aFont.SetName( OUString( aName, strlen(aName), rIStm.GetStreamCharSet() ) );
+                    aFont.SetFamilyName( OUString( aName, strlen(aName), rIStm.GetStreamCharSet() ) );
                     rIStm.ReadInt32( nWidth ).ReadInt32( nHeight );
                     rIStm.ReadInt16( nCharOrient ).ReadInt16( nLineOrient );
                     rIStm.ReadInt16( nCharSet ).ReadInt16( nFamily ).ReadInt16( nPitch ).ReadInt16( nAlign ).ReadInt16( nWeight ).ReadInt16( nUnderline ).ReadInt16( nStrikeout );

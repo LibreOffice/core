@@ -105,7 +105,7 @@ css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
 vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
 {
     vcl::Font aFont;
-    aFont.SetName( rDescr.Name );
+    aFont.SetFamilyName( rDescr.Name );
     aFont.SetStyleName( rDescr.StyleName );
     aFont.SetSize( ::Size( rDescr.Width, rDescr.Height ) );
     aFont.SetFamily( (FontFamily)rDescr.Family );
