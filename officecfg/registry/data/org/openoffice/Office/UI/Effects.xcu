@@ -1921,7 +1921,7 @@
           <value>cover</value>
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
-          <value>top-left-bottom-right</value>
+          <value>top-right-bottom-left</value>
         </prop>
       </node>
       <node oor:name="cover-left-up" oor:op="replace">
@@ -1929,7 +1929,7 @@
           <value>cover</value>
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
-          <value>bottom-left-top-right</value>
+          <value>bottom-right-top-left</value>
         </prop>
       </node>
       <node oor:name="cover-right-down" oor:op="replace">
@@ -2104,7 +2104,7 @@
           <value>diagonal-squares</value>
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
-          <value>top-left-bottom-right</value>
+          <value>top-right-bottom-left</value>
         </prop>
       </node>
       <node oor:name="diagonal-squares-left-up" oor:op="replace">
@@ -2112,7 +2112,7 @@
           <value>diagonal-squares</value>
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
-          <value>bottom-left-top-right</value>
+          <value>bottom-right-top-left</value>
         </prop>
       </node>
       <node oor:name="diagonal-squares-right-down" oor:op="replace">
@@ -2184,7 +2184,7 @@
           <value>uncover</value>
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
-          <value>top-right-bottom-left</value>
+          <value>top-left-bottom-right</value>
         </prop>
       </node>
       <node oor:name="uncover-right-up" oor:op="replace">
