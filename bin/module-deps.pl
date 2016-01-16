@@ -222,7 +222,7 @@ sub collapse_lib_to_module($)
     my %unknown_libs;
     for my $lib_name (sort keys %{$tree}) {
         my $result = $tree->{$lib_name};
-        $unknown_libs{$lib_name} = 1 && next if (!grep {/$lib_name/} keys $l2m);
+        $unknown_libs{$lib_name} = 1 && next if (!grep {/$lib_name/} keys %$l2m);
 
     # new collapsed name.
         my $name = $l2m->{$lib_name};
@@ -295,7 +295,7 @@ sub prune_leaves($)
 sub annotate_mergelibs($)
 {
     my $tree = shift;
-    print STDERR "annotating mergelibs";
+    print STDERR "annotating mergelibs\n";
     for my $name (keys %{$tree}) {
     if (defined $merged_libs{$name}) {
         $tree->{$name}->{merged} = 1;
