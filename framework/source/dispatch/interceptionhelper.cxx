@@ -27,8 +27,6 @@
 namespace framework{
 
 
-sal_Bool InterceptionHelper::m_bPreferrFirstInterceptor = sal_True;
-
 
 
 DEFINE_XINTERFACE_3(InterceptionHelper                                         ,
@@ -148,9 +146,8 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     //    because we created it. But we have to look for the static bool which
     //    regulate direction of using of interceptor objects!
 
-    // b1) If "m_bPreferrFirstInterceptor" is set to true, we have to
     //     insert it behind any other existing interceptor - means at the end of our list.
-    else if (m_bPreferrFirstInterceptor)
+    else
     {
         css::uno::Reference< css::frame::XDispatchProvider >            xMasterD = m_lInterceptionRegs.rbegin()->xInterceptor;
         css::uno::Reference< css::frame::XDispatchProviderInterceptor > xMasterI (xMasterD, css::uno::UNO_QUERY);
@@ -160,20 +157,6 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
         xMasterI->setSlaveDispatchProvider     (aInfo.xInterceptor);
 
         m_lInterceptionRegs.push_back(aInfo);
-    }
-
-    // b2) If "m_bPreferrFirstInterceptor" is set to false, we have to
-    //     insert it before any other existing interceptor - means at the beginning of our list.
-    else
-    {
-        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD = m_lInterceptionRegs.begin()->xInterceptor;
-        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI (xSlaveD , css::uno::UNO_QUERY);
-
-        xInterceptor->setMasterDispatchProvider(xThis             );
-        xInterceptor->setSlaveDispatchProvider (xSlaveD           );
-        xSlaveI->setMasterDispatchProvider     (aInfo.xInterceptor);
-
-        m_lInterceptionRegs.push_front(aInfo);
     }
 
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
