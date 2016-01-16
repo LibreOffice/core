@@ -723,7 +723,7 @@ IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                 aFmt.SetSuffix(OUString());
                 if( !pLevelSettings->sBulletFont.isEmpty() &&
                     pLevelSettings->sBulletFont.compareTo(
-                            rActBulletFont.GetName()))
+                            rActBulletFont.GetFamilyName()))
                 {
                     //search for the font
                     if(!pList)
