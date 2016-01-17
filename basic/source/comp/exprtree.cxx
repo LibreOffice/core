@@ -920,9 +920,8 @@ short SbiConstExpression::GetShortValue()
 |*
 ***************************************************************************/
 
-SbiExprList::SbiExprList( SbiParser* p )
+SbiExprList::SbiExprList( )
 {
-    pParser = p;
     pFirst = nullptr;
     nExpr  =
     nDim   = 0;
@@ -984,8 +983,7 @@ void SbiExprList::addExpression( SbiExpression* pExpr )
 // #i79918/#i80532: bConst has never been set to true
 // -> reused as bStandaloneExpression
 //SbiParameters::SbiParameters( SbiParser* p, sal_Bool bConst, sal_Bool bPar) :
-SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPar) :
-    SbiExprList( p )
+SbiParameters::SbiParameters( SbiParser* pParser, bool bStandaloneExpression, bool bPar)
 {
     if( !bPar )
     {
@@ -1150,9 +1148,9 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
 // A list of array dimensions is parsed. The expressions are tested for being
 // numeric. The bCONST-Bit is reset when all expressions are Integer constants.
 
-SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
+SbiDimList::SbiDimList( SbiParser* pParser )
 {
-    bConst = true;
+    bool bConst = true;// true: everything integer constants
 
     if( pParser->Next() != LPAREN )
     {

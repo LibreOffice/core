@@ -223,21 +223,20 @@ public:                             // numeric constant
 
 class SbiExprList {                  // base class for parameters and dims
 protected:
-    SbiParser* pParser;
     SbiExpression* pFirst;
     short nExpr;
     short nDim;
     bool  bError;
     bool  bBracket;
 public:
-    SbiExprList( SbiParser* );
+    SbiExprList();
     virtual ~SbiExprList();
     bool  IsBracket()               { return bBracket;        }
     bool  IsValid()                 { return !bError; }
     short GetSize()                 { return nExpr;           }
     short GetDims()                 { return nDim;            }
     SbiExpression* Get( short );
-    void  Gen();                    // code generation
+    void  Gen( SbiCodeGen& rGen);                    // code generation
     void addExpression( SbiExpression* pExpr );
 };
 
@@ -247,7 +246,6 @@ public:
 };
 
 class SbiDimList : public SbiExprList {
-    bool  bConst;                   // true: everything integer constants
 public:
     SbiDimList( SbiParser* );         // parsing Ctor
 };
