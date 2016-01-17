@@ -31,6 +31,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 	-DRTL_OS="\"$(RTL_OS)\"" \
 	-DRTL_ARCH="\"$(RTL_ARCH)\"" \
 	-DSRCDIR="\"$(SRCDIR)\"" \
+	-DENABLE_MERGELIBS=$(if $(MERGELIBS),1,0) \
 ))
 
 $(eval $(call gb_Library_use_libraries,sal,\
