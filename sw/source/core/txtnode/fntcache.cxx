@@ -361,7 +361,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
             bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
             GuessLeading( *pSh, aMet );
             nExtLeading = static_cast<sal_uInt16>(aMet.GetExternalLeading());
-            /* HACK: There is something wrong with Writer's bullet rendering, causing lines
+            /* HACK: FIXME There is something wrong with Writer's bullet rendering, causing lines
                with bullets to be higher than they should be. I think this is because
                Writer uses font's external leading incorrect, as the vertical distance
                added to every line instead of only a distance between multiple lines,
@@ -376,7 +376,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
                Interestingly enough, bSymbol is false for 'StarSymbol; Arial Unicode MS', so
                also check explicitly.
             */
-            if( bSymbol || IsStarSymbol( pPrtFont->GetName()))
+            if( bSymbol || IsStarSymbol( pPrtFont->GetFamilyName()))
                 nExtLeading = 0;
         }
 
@@ -516,7 +516,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
         pWin->SetFont( *pPrtFont );
         const FontMetric aWinMet( pWin->GetFontMetric() );
         const sal_uInt16 nWinHeight = sal_uInt16( aWinMet.GetSize().Height() );
-        if( pPrtFont->GetName().indexOf( aWinMet.GetName() ) != -1 )
+        if( pPrtFont->GetFamilyName().indexOf( aWinMet.GetName() ) != -1 )
         {
             // If the Leading on the Window is also 0, then it has to stay
             // that way (see also StarMath).
