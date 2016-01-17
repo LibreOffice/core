@@ -340,7 +340,7 @@ AC_ARG_WITH(android-sdk,
 ,)
 
 ANDROID_NDK_HOME=
-if test -z "$with_android_ndk" -a -e "$SRC_ROOT/external/android-ndk"; then
+if test -z "$with_android_ndk" -a -e "$SRC_ROOT/external/android-ndk" -a "$build" != "$host"; then
     with_android_ndk="$SRC_ROOT/external/android-ndk"
 fi
 if test -n "$with_android_ndk"; then
@@ -568,7 +568,7 @@ dnl ===================================================================
 dnl --with-android-sdk
 dnl ===================================================================
 ANDROID_SDK_HOME=
-if test -z "$with_android_sdk" -a -e "$SRC_ROOT/external/android-sdk-linux"; then
+if test -z "$with_android_sdk" -a -e "$SRC_ROOT/external/android-sdk-linux" -a "$build" != "$host"; then
     with_android_sdk="$SRC_ROOT/external/android-sdk-linux"
 fi
 if test -n "$with_android_sdk"; then
