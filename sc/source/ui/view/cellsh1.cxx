@@ -2352,7 +2352,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 SfxAllItemSet aSet( GetPool() );
                 aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
-                aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhich(SID_ATTR_CHAR_FONT) ) );
+                aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhich(SID_ATTR_CHAR_FONT) ) );
 
                 std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( pTabViewShell->GetDialogParent(), aSet,
                     pTabViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
