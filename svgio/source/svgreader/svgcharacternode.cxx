@@ -272,8 +272,8 @@ namespace svgio
                     bRTL,
                     bBiDiStrong);
 
-                // prepare FontSize
-                double fFontWidth(rSvgStyleAttributes.getFontSize().solve(*this));
+                // prepare FontSizeNumber
+                double fFontWidth(rSvgStyleAttributes.getFontSizeNumber().solve(*this));
                 double fFontHeight(fFontWidth);
 
                 // prepare locale

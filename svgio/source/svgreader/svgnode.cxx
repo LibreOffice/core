@@ -624,7 +624,7 @@ namespace svgio
         double SvgNode::getCurrentFontSize() const
         {
             if(getSvgStyleAttributes())
-                return getSvgStyleAttributes()->getFontSize().solve(*this, xcoordinate);
+                return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, xcoordinate);
 
             return getCurrentFontSizeInherited();
         }
@@ -645,7 +645,7 @@ namespace svgio
         {
             if(getSvgStyleAttributes())
                 // for XHeight, use FontSize currently
-                return getSvgStyleAttributes()->getFontSize().solve(*this, ycoordinate);
+                return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, ycoordinate);
 
             return getCurrentXHeightInherited();
         }
