@@ -92,16 +92,7 @@ void ParserTest::parse()
     mxParser->parseStream( maInput );
 
     maInput.aInputStream = createStream("<b></a>");
-    bool bException = false;
-    try
-    {
-        mxParser->parseStream( maInput );
-    }
-    catch (const SAXParseException &)
-    {
-        bException = true;
-    }
-    CPPUNIT_ASSERT_MESSAGE("No Exception!", bException);
+    CPPUNIT_ASSERT_THROW( mxParser->parseStream( maInput ), css::xml::sax::SAXParseException );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ParserTest);
