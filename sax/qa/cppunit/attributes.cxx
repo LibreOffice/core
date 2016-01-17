@@ -22,8 +22,6 @@ namespace {
 
 class AttributesTest: public CppUnit::TestFixture
 {
-    bool mbException;
-
 public:
     void test();
 
@@ -51,14 +49,7 @@ void AttributesTest::test()
     CPPUNIT_ASSERT_EQUAL( xAttributeList->getOptionalValue(3), OUString() );
 
     CPPUNIT_ASSERT_EQUAL( xAttributeList->getValue(1), OUString("1") );
-    mbException = false;
-
-    try { xAttributeList->getValue(3); }
-    catch (const sax::SAXException& )
-    {
-        mbException = true;
-    }
-    CPPUNIT_ASSERT( mbException );
+    CPPUNIT_ASSERT_THROW( xAttributeList->getValue(3), xml::sax::SAXException );
 
     xAttributeList->addUnknown("a", "a");
     xAttributeList->addUnknown("b", "b", "b");
