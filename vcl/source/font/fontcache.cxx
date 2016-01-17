@@ -143,7 +143,7 @@ ImplFontCache::~ImplFontCache()
 LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection* pFontList,
     const vcl::Font& rFont, const Size& rSize, float fExactHeight )
 {
-    OUString aSearchName = rFont.GetName();
+    OUString aSearchName = rFont.GetFamilyName();
 
     // initialize internal font request object
     FontSelectPattern aFontSelData( rFont, aSearchName, rSize, fExactHeight );
