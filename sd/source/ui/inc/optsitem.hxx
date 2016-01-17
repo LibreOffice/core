@@ -207,6 +207,7 @@ private:
     bool    bEnablePresenterScreen : 1;    // Misc/Start/EnablePresenterDisplay
     bool    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
     bool    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
+    bool    bTabBarVisible          : 1;    // Misc/TabBarVisible
     bool    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
     // #i75315#
     bool    bSlideshowRespectZOrder : 1;    // Misc/SlideshowRespectZOrder
@@ -215,6 +216,7 @@ private:
     bool    bPreviewNewEffects;
     bool    bPreviewChangedEffects;
     bool    bPreviewTransitions;
+
 
     sal_Int32   mnDisplay;
 
@@ -256,6 +258,7 @@ public:
     bool    IsEnablePresenterScreen() const { Init(); return bEnablePresenterScreen; }
     bool    IsSolidDragging() const { Init(); return bSolidDragging; }
     bool    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs; };
+    bool    IsTabBarVisible() const { Init(); return bTabBarVisible; };
 
     /** Return the currently selected printer independent layout mode.
         @return
@@ -294,6 +297,7 @@ public:
     void    SetEnableSdremote( bool bOn = true ) { if( bEnableSdremote != bOn ) { OptionsChanged(); bEnableSdremote = bOn; } }
     void    SetEnablePresenterScreen( bool bOn = true ) { if( bEnablePresenterScreen != bOn ) { OptionsChanged(); bEnablePresenterScreen = bOn; } }
     void    SetSummationOfParagraphs( bool bOn = true ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
+    void    SetTabBarVisible( bool bOn = true ){ if ( bOn != bTabBarVisible ) { OptionsChanged(); bTabBarVisible = bOn; } }
     /** Set the printer independent layout mode.
         @param nOn
             The default value is to switch printer independent layout on,
