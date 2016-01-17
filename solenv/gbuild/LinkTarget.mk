@@ -824,6 +824,7 @@ gb_BUILD_HELPER_LIBS := basegfx \
 	i18nlangtag \
 	reg \
 	sal \
+	sal_textenc \
 	salhelper \
 	sax \
 	store \

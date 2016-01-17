@@ -44,6 +44,8 @@ MERGE_LIBRARY_LIST := \
 	msfilter \
 	package2 \
 	reg \
+	sal \
+	sal_textenc \
 	salhelper \
 	sax \
 	sb \
