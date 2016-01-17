@@ -184,13 +184,13 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
 
-    SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
+    SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetFamilyName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
                               aLatinFont.GetCharSet(), EE_CHAR_FONTINFO );
 
-    SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
+    SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetFamilyName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
                                  aCJKFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
 
-    SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
+    SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetFamilyName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
                                  aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
 
     rISet.Put( aSvxFontItem );
@@ -563,13 +563,13 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
 
-    SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
+    SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetFamilyName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
                               aLatinFont.GetCharSet(), EE_CHAR_FONTINFO );
 
-    SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
+    SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetFamilyName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
                                  aCJKFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
 
-    SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
+    SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetFamilyName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
                                  aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
 
     rISet.Put( aSvxFontItem );

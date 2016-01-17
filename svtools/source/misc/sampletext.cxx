@@ -18,7 +18,7 @@
 // that caused it to be added
 static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevice)
 {
-    const OUString &rName = rDevice.GetFont().GetName();
+    const OUString &rName = rDevice.GetFont().GetFamilyName();
 
     if (rName == "GB18030 Bitmap")
     {
@@ -104,49 +104,49 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
 
 bool isOpenSymbolFont(const vcl::Font &rFont)
 {
-    return rFont.GetName().equalsIgnoreAsciiCase("starsymbol") ||
-           rFont.GetName().equalsIgnoreAsciiCase("opensymbol");
+    return rFont.GetFamilyName().equalsIgnoreAsciiCase("starsymbol") ||
+           rFont.GetFamilyName().equalsIgnoreAsciiCase("opensymbol");
 }
 
 bool isSymbolFont(const vcl::Font &rFont)
 {
     return (rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL) ||
-            rFont.GetName().equalsIgnoreAsciiCase("Apple Color Emoji") ||
-            rFont.GetName().equalsIgnoreAsciiCase("cmsy10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("cmex10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("esint10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("feta26") ||
-            rFont.GetName().equalsIgnoreAsciiCase("jsMath-cmsy10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("jsMath-cmex10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("msam10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("msbm10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("wasy10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("Denemo") ||
-            rFont.GetName().equalsIgnoreAsciiCase("GlyphBasic1") ||
-            rFont.GetName().equalsIgnoreAsciiCase("GlyphBasic2") ||
-            rFont.GetName().equalsIgnoreAsciiCase("GlyphBasic3") ||
-            rFont.GetName().equalsIgnoreAsciiCase("GlyphBasic4") ||
-            rFont.GetName().equalsIgnoreAsciiCase("Letters Laughing") ||
-            rFont.GetName().equalsIgnoreAsciiCase("MusiQwik") ||
-            rFont.GetName().equalsIgnoreAsciiCase("MusiSync") ||
-            rFont.GetName().equalsIgnoreAsciiCase("stmary10") ||
-            rFont.GetName().equalsIgnoreAsciiCase("Symbol") ||
-            rFont.GetName().startsWith("STIXIntegrals") ||
-            rFont.GetName().startsWith("STIXNonUnicode") ||
-            rFont.GetName().startsWith("STIXSize") ||
-            rFont.GetName().startsWith("STIXVariants") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Apple Color Emoji") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("cmsy10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("cmex10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("esint10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("feta26") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("jsMath-cmsy10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("jsMath-cmex10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("msam10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("msbm10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("wasy10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Denemo") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("GlyphBasic1") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("GlyphBasic2") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("GlyphBasic3") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("GlyphBasic4") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Letters Laughing") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("MusiQwik") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("MusiSync") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("stmary10") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Symbol") ||
+            rFont.GetFamilyName().startsWith("STIXIntegrals") ||
+            rFont.GetFamilyName().startsWith("STIXNonUnicode") ||
+            rFont.GetFamilyName().startsWith("STIXSize") ||
+            rFont.GetFamilyName().startsWith("STIXVariants") ||
             isOpenSymbolFont(rFont);
 }
 
 bool canRenderNameOfSelectedFont(OutputDevice &rDevice)
 {
     const vcl::Font &rFont = rDevice.GetFont();
-    return !isSymbolFont(rFont) && ( -1 == rDevice.HasGlyphs(rFont, rFont.GetName()) );
+    return !isSymbolFont(rFont) && ( -1 == rDevice.HasGlyphs(rFont, rFont.GetFamilyName()) );
 }
 
 OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 {
-    if (rDevice.GetFont().GetName() == "Symbol")
+    if (rDevice.GetFont().GetFamilyName() == "Symbol")
     {
         static const sal_Unicode aImplAppleSymbolText[] = {
             0x03BC, 0x2202, 0x2211, 0x220F, 0x03C0, 0x222B, 0x03A9, 0x221A, 0};

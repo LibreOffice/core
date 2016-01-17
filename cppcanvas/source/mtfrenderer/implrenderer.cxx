@@ -759,7 +759,7 @@ namespace cppcanvas
             if( rParms.mrParms.maFontName.is_initialized() )
                 aFontRequest.FontDescription.FamilyName = *rParms.mrParms.maFontName;
             else
-                aFontRequest.FontDescription.FamilyName = rFont.GetName();
+                aFontRequest.FontDescription.FamilyName = rFont.GetFamilyName();
 
             aFontRequest.FontDescription.StyleName = rFont.GetStyleName();
 

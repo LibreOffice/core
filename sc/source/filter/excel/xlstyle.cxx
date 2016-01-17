@@ -198,7 +198,7 @@ void XclFontData::Clear()
 
 void XclFontData::FillFromVclFont( const vcl::Font& rFont )
 {
-    maName = XclTools::GetXclFontName( rFont.GetName() );   // substitute with MS fonts
+    maName = XclTools::GetXclFontName( rFont.GetFamilyName() );   // substitute with MS fonts
     maStyle.clear();
     maColor = rFont.GetColor();
     SetScUnderline( rFont.GetUnderline() );

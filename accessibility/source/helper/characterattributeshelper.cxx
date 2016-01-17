@@ -30,7 +30,7 @@ CharacterAttributesHelper::CharacterAttributesHelper( const vcl::Font& rFont, sa
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharColor" ),         makeAny( (sal_Int32) nColor ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontCharSet" ),   makeAny( (sal_Int16) rFont.GetCharSet() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontFamily" ),    makeAny( (sal_Int16) rFont.GetFamily() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontName" ),      makeAny( rFont.GetName() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontName" ),      makeAny( rFont.GetFamilyName() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontPitch" ),     makeAny( (sal_Int16) rFont.GetPitch() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontStyleName" ), makeAny( rFont.GetStyleName() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharHeight" ),        makeAny( (sal_Int16) rFont.GetSize().Height() ) ) );

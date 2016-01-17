@@ -687,20 +687,20 @@ void PictWriter::WriteOpcode_FontName(const vcl::Font & rFont)
         default:                nFontId=1;
     }
 
-    if (!bDstFontNameValid || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
+    if (!bDstFontNameValid || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetFamilyName())
     {
-        OString aString(OUStringToOString(rFont.GetName(), osl_getThreadTextEncoding()));
+        OString aString(OUStringToOString(rFont.GetFamilyName(), osl_getThreadTextEncoding()));
         sal_uInt16 nFontNameLen = aString.getLength();
         if ( nFontNameLen )
         {
             nDataLen = 3 + nFontNameLen;
             pPict->WriteUInt16( 0x002c ).WriteUInt16( nDataLen ).WriteUInt16( nFontId );
-            WriteString( rFont.GetName() );
+            WriteString( rFont.GetFamilyName() );
             if ( ( nFontNameLen & 1 ) == 0 )
                 pPict->WriteUChar( 0 );
         }
         pPict->WriteUInt16( 0x0003 ).WriteUInt16( nFontId );
-        aDstFontName=rFont.GetName();
+        aDstFontName=rFont.GetFamilyName();
         nDstFontNameId=nFontId;
         bDstFontNameValid=true;
     }

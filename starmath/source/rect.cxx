@@ -129,7 +129,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
 
     const FontMetric  aFM (rDev.GetFontMetric());
-    bool              bIsMath  = aFM.GetName().equalsIgnoreAsciiCase( FONTNAME_MATH );
+    bool              bIsMath  = aFM.GetFamilyName().equalsIgnoreAsciiCase( FONTNAME_MATH );
     bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
     const long        nFontHeight = rDev.GetFont().GetSize().Height();
 

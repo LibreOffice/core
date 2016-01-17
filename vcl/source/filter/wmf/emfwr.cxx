@@ -504,7 +504,7 @@ void EMFWriter::ImplCheckTextAttr()
     if( mbTextChanged && ImplPrepareHandleSelect( mnTextHandle, TEXT_SELECT ) )
     {
         const vcl::Font& rFont = maVDev->GetFont();
-        OUString         aFontName( rFont.GetName() );
+        OUString         aFontName( rFont.GetFamilyName() );
         sal_Int32        nWeight;
         sal_uInt16       i;
         sal_uInt8        nPitchAndFamily;

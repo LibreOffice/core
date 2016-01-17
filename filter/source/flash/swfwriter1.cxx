@@ -355,7 +355,7 @@ void Writer::setClipping( const tools::PolyPolygon* pClipPolyPolygon )
 //  that we care about.
 bool compare_fonts_for_me(const vcl::Font& rFont1, const vcl::Font& rFont2)
 {
-    return rFont1.GetName() == rFont2.GetName() &&
+    return rFont1.GetFamilyName() == rFont2.GetFamilyName() &&
             rFont1.GetWeight() == rFont2.GetWeight() &&
             rFont1.GetItalic() == rFont2.GetItalic() &&
             rFont1.IsOutline() == rFont2.IsOutline() &&

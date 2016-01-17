@@ -430,7 +430,7 @@ void METWriter::CreateChrSet(const vcl::Font & rFont)
         pCS = new METChrSet;
         pCS->pSucc = pChrSetList; pChrSetList=pCS;
         pCS->nSet = nNextChrSetId++;
-        pCS->aName = rFont.GetName();
+        pCS->aName = rFont.GetFamilyName();
         pCS->eWeight = rFont.GetWeight();
     }
 }
@@ -442,7 +442,7 @@ sal_uInt8 METWriter::FindChrSet(const vcl::Font & rFont)
 
     for (pCS=pChrSetList; pCS!=nullptr; pCS=pCS->pSucc)
     {
-        if (pCS->aName==rFont.GetName() && pCS->eWeight==rFont.GetWeight() )
+        if (pCS->aName==rFont.GetFamilyName() && pCS->eWeight==rFont.GetWeight() )
             return pCS->nSet;
     }
 

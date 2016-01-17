@@ -67,7 +67,7 @@ public:
     FontAlign           GetAlign() const;
 
     void                SetName( const OUString& rFamilyName );
-    const OUString&     GetName() const;
+    const OUString&     GetFamilyName() const;
     void                SetStyleName( const OUString& rStyleName );
     const OUString&     GetStyleName() const;
     void                SetSize( const Size& );

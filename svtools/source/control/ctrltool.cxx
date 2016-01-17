@@ -259,7 +259,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
         if ( !bAll && (aFontInfo.GetType() == TYPE_RASTER) )
             continue;
 
-        OUString aSearchName(aFontInfo.GetName());
+        OUString aSearchName(aFontInfo.GetFamilyName());
         ImplFontListNameInfo*   pData;
         sal_uLong                   nIndex;
         aSearchName = ImplMakeSearchString(aSearchName);
@@ -483,13 +483,13 @@ OUString FontList::GetStyleName(const vcl::FontInfo& rInfo) const
 
 OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
 {
-    if ( rInfo.GetName().isEmpty() )
+    if ( rInfo.GetFamilyName().isEmpty() )
     {
         return OUString();
     }
 
     // Search Fontname
-    ImplFontListNameInfo* pData = ImplFindByName( rInfo.GetName() );
+    ImplFontListNameInfo* pData = ImplFindByName( rInfo.GetFamilyName() );
     if ( !pData )
     {
         if (maMapNotAvailable.isEmpty())
@@ -734,12 +734,12 @@ const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
     }
 
     // use standard sizes if no name
-    if ( rInfo.GetName().isEmpty() )
+    if ( rInfo.GetFamilyName().isEmpty() )
         return aStdSizeAry;
 
     // first search fontname in order to use device from the matching font
     OutputDevice*           pDevice = mpDev;
-    ImplFontListNameInfo*   pData = ImplFindByName( rInfo.GetName() );
+    ImplFontListNameInfo*   pData = ImplFindByName( rInfo.GetFamilyName() );
     if ( pData )
         pDevice = pData->mpFirst->GetDevice();
 

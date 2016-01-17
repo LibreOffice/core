@@ -85,7 +85,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const FontMetric& rMetric )
 {
     stream << "{"
-           << "name=" << "\"" << rMetric.GetName() << "\""
+           << "name=" << "\"" << rMetric.GetFamilyName() << "\""
            << ",size=(" << rMetric.GetSize().Width() << "," << rMetric.GetSize().Height() << ")"
            << ",ascent=" << rMetric.GetAscent()
            << ",descent=" << rMetric.GetDescent()

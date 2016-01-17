@@ -313,7 +313,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
             mpEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem(
                     aFont.GetFamily(),
-                    aFont.GetName(),
+                    aFont.GetFamilyName(),
                     aFont.GetStyleName(),
                     aFont.GetPitch(),
                     aFont.GetCharSet(),

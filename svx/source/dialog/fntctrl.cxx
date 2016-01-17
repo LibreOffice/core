@@ -672,7 +672,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
                 if ((pImpl->m_bCJKEnabled) || (pImpl->m_bCTLEnabled))
                     pImpl->maText = makeRepresentativeTextForFont(LATIN, rFont);
                 else
-                    pImpl->maText = rFont.GetName();
+                    pImpl->maText = rFont.GetFamilyName();
 
                 if (pImpl->m_bCJKEnabled)
                 {

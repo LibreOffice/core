@@ -192,13 +192,13 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     mpDoc->getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
 
     // Font for title and outline
-    SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
+    SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetFamilyName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
                               aLatinFont.GetCharSet(), EE_CHAR_FONTINFO );
 
-    SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
+    SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetFamilyName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
                                  aCJKFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
 
-    SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
+    SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetFamilyName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
                                  aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
 
     vcl::Font aBulletFont( GetBulletFont() );

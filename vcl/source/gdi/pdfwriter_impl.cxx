@@ -4714,7 +4714,7 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
     bool bAdjustSize = false;
 
     Font aFont( rControlFont );
-    if( aFont.GetName().isEmpty() )
+    if( aFont.GetFamilyName().isEmpty() )
     {
         aFont = rAppSetFont;
         if( rControlFont.GetHeight() )
@@ -4744,7 +4744,7 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
 sal_Int32 PDFWriterImpl::getBestBuiltinFont( const vcl::Font& rFont )
 {
     sal_Int32 nBest = 4; // default to Helvetica
-    OUString aFontName( rFont.GetName() );
+    OUString aFontName( rFont.GetFamilyName() );
     aFontName = aFontName.toAsciiLowerCase();
 
     if( aFontName.indexOf( "times" ) != -1 )

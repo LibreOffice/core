@@ -559,9 +559,9 @@ bool Font::operator==( const vcl::Font& rFont ) const
 
 void Font::Merge( const vcl::Font& rFont )
 {
-    if ( !rFont.GetName().isEmpty() )
+    if ( !rFont.GetFamilyName().isEmpty() )
     {
-        SetName( rFont.GetName() );
+        SetName( rFont.GetFamilyName() );
         SetStyleName( rFont.GetStyleName() );
         SetCharSet( GetCharSet() );
         SetLanguageTag( rFont.GetLanguageTag() );
@@ -928,7 +928,7 @@ bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
 
 FontAlign Font::GetAlign() const { return mpImplFont->meAlign; }
 
-const OUString& Font::GetName() const { return mpImplFont->maFamilyName; }
+const OUString& Font::GetFamilyName() const { return mpImplFont->maFamilyName; }
 
 const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }
 

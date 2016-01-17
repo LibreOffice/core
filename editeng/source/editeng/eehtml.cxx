@@ -650,13 +650,13 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
     if ( nHLevel == STYLE_PRE )
     {
         vcl::Font aFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE );
-        SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
+        SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetFamilyName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
         aItems.Put( aFontItem );
 
-        SvxFontItem aFontItemCJK( aFont.GetFamily(), aFont.GetName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
+        SvxFontItem aFontItemCJK( aFont.GetFamily(), aFont.GetFamilyName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
         aItems.Put( aFontItemCJK );
 
-        SvxFontItem aFontItemCTL( aFont.GetFamily(), aFont.GetName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
+        SvxFontItem aFontItemCTL( aFont.GetFamily(), aFont.GetFamilyName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
         aItems.Put( aFontItemCTL );
     }
 

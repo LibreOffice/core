@@ -1015,7 +1015,7 @@ Document::retrieveCharacterAttributes(
     //character font name
     aAttribs[i].Name = "CharFontName";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( aFont.GetName() );
+    aAttribs[i].Value = css::uno::makeAny( aFont.GetFamilyName() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 

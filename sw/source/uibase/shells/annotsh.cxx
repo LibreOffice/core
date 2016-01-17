@@ -1723,7 +1723,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
             if ( pCItem )
             {
                 sSym  = pCItem->GetValue();
-                aOpt.SetSymbolFont(aFont.GetName());
+                aOpt.SetSymbolFont(aFont.GetFamilyName());
                 SW_MOD()->ApplyUsrPref(aOpt, &rView);
             }
         }
@@ -1749,7 +1749,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
         // Attributing (set font)
         SfxItemSet aSetFont( *aFontSet.GetPool(), aFontSet.GetRanges() );
-        SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
+        SvxFontItem aFontItem (aFont.GetFamily(), aFont.GetFamilyName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );
@@ -1776,8 +1776,8 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         pOLV->ShowCursor();
 
         rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
-        if(!aFont.GetName().isEmpty())
-            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetName() ) );
+        if(!aFont.GetFamilyName().isEmpty())
+            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetFamilyName() ) );
         rReq.Done();
     }
 }

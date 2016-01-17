@@ -358,7 +358,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
     }
     pWMF->WriteUChar( nPitchFamily );
 
-    OString aFontName(OUStringToOString(rFont.GetName(), eFontNameEncoding));
+    OString aFontName(OUStringToOString(rFont.GetFamilyName(), eFontNameEncoding));
     for ( i = 0; i < W_LF_FACESIZE; i++ )
     {
         sal_Char nChar = ( i < aFontName.getLength() ) ? aFontName[i] : 0;
@@ -490,7 +490,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                 }
             }
 
-            if ( ( i != nStringLen ) || IsStarSymbol( aSrcFont.GetName() ) )    // after conversion the characters are not original, so we
+            if ( ( i != nStringLen ) || IsStarSymbol( aSrcFont.GetFamilyName() ) )    // after conversion the characters are not original, so we
             {                                                                   // will store the unicode string and a polypoly replacement
                 Color aOldFillColor( aSrcFillColor );
                 Color aOldLineColor( aSrcLineColor );
@@ -945,7 +945,7 @@ void WMFWriter::SetAllAttr()
     if ( aDstFont != aSrcFont )
     {
         pVirDev->SetFont(aSrcFont);
-        if ( aDstFont.GetName() != aSrcFont.GetName() )
+        if ( aDstFont.GetFamilyName() != aSrcFont.GetFamilyName() )
         {
             FontCharMapPtr pFontCharMap;
             if ( pVirDev->GetFontCharMap( pFontCharMap ) )

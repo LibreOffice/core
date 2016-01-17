@@ -483,7 +483,7 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
             else
                 nType = DefaultFontType::UI_SANS;
             vcl::Font aTempFont = OutputDevice::GetDefaultFont(nType, rRenderContext.GetSettings().GetLanguageTag().getLanguageType(), GetDefaultFontFlags::NONE);
-            aFont.SetName(aTempFont.GetName());
+            aFont.SetName(aTempFont.GetFamilyName());
             SetPointFont(rRenderContext, aFont);
         }
     }

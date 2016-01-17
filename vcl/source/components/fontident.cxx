@@ -93,7 +93,7 @@ Any SAL_CALL FontIdentificator::getMaterial() throw(RuntimeException, std::excep
         return Any(); // VCL not initialized
 
     FontDescriptor aFD;
-    aFD.Name                = m_aFont.GetName();
+    aFD.Name                = m_aFont.GetFamilyName();
     aFD.Height              = 0;
     aFD.Width               = 0;
     aFD.StyleName           = m_aFont.GetStyleName();

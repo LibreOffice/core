@@ -1078,7 +1078,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                                     DefaultFontType::FIXED, LANGUAGE_ENGLISH_US,
                                     GetDefaultFontFlags::OnlyOne ) );
                 OUString aFName( *static_cast<OUString const *>(aTmp.getValue()) );
-                if( !bEdit || aFName != aFixedFont.GetName() )
+                if( !bEdit || aFName != aFixedFont.GetFamilyName() )
                 {
                     FontFamily eFamily = FAMILY_DONTKNOW;
                     if( xPropSetInfo->hasPropertyByName( "FontFamily" ) )

@@ -81,7 +81,7 @@ using ::com::sun::star::awt::XVclWindowPeer;
 css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
 {
     css::awt::FontDescriptor aFD;
-    aFD.Name = rFont.GetName();
+    aFD.Name = rFont.GetFamilyName();
     aFD.StyleName = rFont.GetStyleName();
     aFD.Height = (sal_Int16)rFont.GetSize().Height();
     aFD.Width = (sal_Int16)rFont.GetSize().Width();

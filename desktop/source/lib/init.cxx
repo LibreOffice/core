@@ -1688,7 +1688,7 @@ static char* getFonts (const char* pCommand)
                 aChildren.push_back(std::make_pair("", aChild));
                 nSizeCount++;
             }
-            aValues.add_child(rInfo.GetName().toUtf8().getStr(), aChildren);
+            aValues.add_child(rInfo.GetFamilyName().toUtf8().getStr(), aChildren);
         }
     }
     aTree.add_child("commandValues", aValues);
@@ -2000,7 +2000,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
         for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
             const vcl::FontInfo& rInfo = pList->GetFontName(i);
-            OUString aFontName = rInfo.GetName();
+            OUString aFontName = rInfo.GetFamilyName();
             if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
                 continue;
 

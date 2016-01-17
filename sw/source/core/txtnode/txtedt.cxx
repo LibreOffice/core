@@ -1086,7 +1086,7 @@ void SwTextNode::SetLanguageAndFont( const SwPaM &rPaM,
     if (pFont)
     {
         SvxFontItem aFontItem = static_cast<const SvxFontItem&>( aSet.Get( nFontWhichId ) );
-        aFontItem.SetFamilyName(   pFont->GetName());
+        aFontItem.SetFamilyName(   pFont->GetFamilyName());
         aFontItem.SetFamily(       pFont->GetFamily());
         aFontItem.SetStyleName(    pFont->GetStyleName());
         aFontItem.SetPitch(        pFont->GetPitch());

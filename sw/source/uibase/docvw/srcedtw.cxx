@@ -981,7 +981,7 @@ void SwSrcEditWindow::SetFont()
         else
             aFont = OutputDevice::GetDefaultFont(DefaultFontType::SANS_UNICODE,
                         Application::GetSettings().GetLanguageTag().getLanguageType(), GetDefaultFontFlags::NONE, this);
-        sFontName = aFont.GetName();
+        sFontName = aFont.GetFamilyName();
     }
     const SvxFontListItem* pFontListItem =
         static_cast<const SvxFontListItem* >(pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ));

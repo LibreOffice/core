@@ -231,7 +231,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     {
                         OUString aFontName(pFontItem->GetValue());
                         vcl::Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
-                        aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
+                        aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetFamilyName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
                                     aFont.GetCharSet(), ATTR_FONT  );
                     }
@@ -261,7 +261,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SfxItemState::SET )
                 {
                     const SvxHyperlinkItem* pHyper = static_cast<const SvxHyperlinkItem*>(pItem);
-                    const OUString& rName     = pHyper->GetName();
+                    const OUString& rName = pHyper->GetName();
                     const OUString& rURL      = pHyper->GetURL();
                     const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();

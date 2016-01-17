@@ -399,7 +399,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     {
                         OUString aFontName(pFontItem->GetValue());
                         vcl::Font aFont(aFontName, Size(1,1)); // Size just because CTOR
-                        aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
+                        aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetFamilyName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
                                     aFont.GetCharSet(), ATTR_FONT  );
                     }

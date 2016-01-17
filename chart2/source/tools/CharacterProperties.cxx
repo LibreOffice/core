@@ -414,7 +414,7 @@ void CharacterProperties::AddDefaultsToMap(
     nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aDefaultLocale_CTL, false), COMPLEX);
     vcl::Font aFontCTL = OutputDevice::GetDefaultFont( DefaultFontType::CTL_SPREADSHEET, nLang, GetDefaultFontFlags::OnlyOne );
 
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, OUString( aFont.GetName() ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, OUString( aFont.GetFamilyName() ) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_STYLE_NAME, OUString(aFont.GetStyleName()) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_FAMILY, sal_Int16(aFont.GetFamily()) );//awt::FontFamily::SWISS
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_CHAR_SET, sal_Int16(aFont.GetCharSet()) );//use awt::CharSet::DONTKNOW instead of SYSTEM to avoid assertion issue 50249
@@ -444,7 +444,7 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_WEIGHT, awt::FontWeight::NORMAL );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_POSTURE, awt::FontSlant_NONE );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_LOCALE, aDefaultLocale_CJK );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_NAME, OUString( aFontCJK.GetName() ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_NAME, OUString( aFontCJK.GetFamilyName() ) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_STYLE_NAME, OUString(aFontCJK.GetStyleName()) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_FAMILY, sal_Int16(aFontCJK.GetFamily()) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_SET, sal_Int16(aFontCJK.GetCharSet()) );
@@ -455,7 +455,7 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_WEIGHT, awt::FontWeight::NORMAL );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_POSTURE, awt::FontSlant_NONE );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_LOCALE, aDefaultLocale_CTL );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_NAME, OUString( aFontCTL.GetName() ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_NAME, OUString( aFontCTL.GetFamilyName() ) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_STYLE_NAME, OUString(aFontCTL.GetStyleName()) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_FAMILY, sal_Int16(aFontCTL.GetFamily()) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_SET, sal_Int16(aFontCTL.GetCharSet()) );

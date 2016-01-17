@@ -206,7 +206,7 @@ void ImplWriteFont( SvStream& rOStm, const vcl::Font& rFont,
     char    aName[33];
     short   nWeight;
 
-    OString aByteName(OUStringToOString(rFont.GetName(),
+    OString aByteName(OUStringToOString(rFont.GetFamilyName(),
         rOStm.GetStreamCharSet()));
     strncpy( aName, aByteName.getStr(), 32 );
     aName[32] = 0;

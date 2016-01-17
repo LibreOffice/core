@@ -1620,7 +1620,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 m_aDelPam.GetMark()->nContent = 1;
                 SetAllScriptItem( aSet,
                      SvxFontItem( m_aFlags.aBulletFont.GetFamily(),
-                                  m_aFlags.aBulletFont.GetName(),
+                                  m_aFlags.aBulletFont.GetFamilyName(),
                                   m_aFlags.aBulletFont.GetStyleName(),
                                   m_aFlags.aBulletFont.GetPitch(),
                                   m_aFlags.aBulletFont.GetCharSet(),

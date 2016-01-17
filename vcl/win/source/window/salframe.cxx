@@ -2787,7 +2787,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     // is to wide for the dialogs
     if ( rSettings.GetLanguageTag().getLanguageType() == LANGUAGE_RUSSIAN )
     {
-        OUString aFontName = aAppFont.GetName();
+        OUString aFontName = aAppFont.GetFamilyName();
         OUString aFirstName = aFontName.getToken( 0, ';' );
         if ( aFirstName.equalsIgnoreAsciiCase( "MS Sans Serif" ) )
         {

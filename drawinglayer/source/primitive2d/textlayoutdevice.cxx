@@ -440,7 +440,7 @@ namespace drawinglayer
             bool bBiDiStrong)
         {
             const attribute::FontAttribute aRetval(
-                rFont.GetName(),
+                rFont.GetFamilyName(),
                 rFont.GetStyleName(),
                 static_cast<sal_uInt16>(rFont.GetWeight()),
                 RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet(),

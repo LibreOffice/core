@@ -73,7 +73,7 @@ vcl::Font SmFontPickList::Get(sal_uInt16 nPos) const
 
 bool SmFontPickList::CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont)
 {
-  return rFirstFont.GetName() == rSecondFont.GetName() &&
+  return rFirstFont.GetFamilyName() == rSecondFont.GetFamilyName() &&
         rFirstFont.GetFamily()  == rSecondFont.GetFamily()  &&
         rFirstFont.GetCharSet() == rSecondFont.GetCharSet() &&
         rFirstFont.GetWeight()  == rSecondFont.GetWeight()  &&
@@ -82,7 +82,7 @@ bool SmFontPickList::CompareItem(const vcl::Font & rFirstFont, const vcl::Font &
 
 OUString SmFontPickList::GetStringItem(const vcl::Font &rFont)
 {
-    OUStringBuffer aString(rFont.GetName());
+    OUStringBuffer aString(rFont.GetFamilyName());
 
     if (IsItalic( rFont ))
     {

@@ -191,7 +191,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
             for( int i = 0; i < nFontNames; i++ )
             {
                 vcl::FontInfo aInf( pPrt->GetDevFont( i ) );
-                aFontNames.insert( aInf.GetName() );
+                aFontNames.insert( aInf.GetFamilyName() );
             }
 
             // insert into listbox
@@ -205,7 +205,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
             {
                 LanguageType eLang = aOpt.GetLanguage();
                 vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DefaultFontType::FIXED, eLang, GetDefaultFontFlags::OnlyOne, pPrt));
-                aOpt.SetFontName(aTmpFont.GetName());
+                aOpt.SetFontName(aTmpFont.GetFamilyName());
             }
 
             m_pFontLB->SelectEntry( aOpt.GetFontName() );

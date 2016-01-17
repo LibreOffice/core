@@ -158,7 +158,7 @@ SmFontFormat::SmFontFormat()
 
 SmFontFormat::SmFontFormat( const vcl::Font &rFont )
 {
-    aName       = rFont.GetName();
+    aName       = rFont.GetFamilyName();
     nCharSet    = (sal_Int16) rFont.GetCharSet();
     nFamily     = (sal_Int16) rFont.GetFamily();
     nPitch      = (sal_Int16) rFont.GetPitch();

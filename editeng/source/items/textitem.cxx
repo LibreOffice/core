@@ -149,7 +149,7 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
         aFontNameSeq.realloc( nCount );
 
         for ( sal_Int32 i = 0; i < nCount; i++ )
-            aFontNameSeq[i] = pFontList->GetFontName(i).GetName();
+            aFontNameSeq[i] = pFontList->GetFontName(i).GetFamilyName();
     }
 }
 
@@ -3401,7 +3401,7 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
                                                   GetDefaultFontFlags::OnlyOne ) );
         SvxFontItem* pItem = aItemArr[ n ];
         pItem->SetFamily( aFont.GetFamily() );
-        pItem->SetFamilyName( aFont.GetName() );
+        pItem->SetFamilyName( aFont.GetFamilyName() );
         pItem->SetStyleName( OUString() );
         pItem->SetPitch( aFont.GetPitch());
         pItem->SetCharSet(aFont.GetCharSet());

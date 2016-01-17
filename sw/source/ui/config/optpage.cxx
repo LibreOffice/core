@@ -641,7 +641,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
     if( pPrt )
         aFont = pPrt->GetFontMetric( aFont );
     SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(nType);
-    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamily(), aFont.GetFamilyName(),
                 aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
 }
 
@@ -717,7 +717,7 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
             vcl::Font aFont( sStandard, Size( 0, 10 ) );
             if( pPrinter )
                 aFont = pPrinter->GetFontMetric( aFont );
-            m_pWrtShell->SetDefault(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+            m_pWrtShell->SetDefault(SvxFontItem(aFont.GetFamily(), aFont.GetFamilyName(),
                                   aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
             SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFormatAttr(nFontWhich);
@@ -829,7 +829,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         for( int i = 0; i < nFontNames; i++ )
         {
             vcl::FontInfo aInf( m_pPrt->GetDevFont( i ) );
-            aFontNames.insert( aInf.GetName() );
+            aFontNames.insert( aInf.GetFamilyName() );
         }
 
         // insert to listboxes

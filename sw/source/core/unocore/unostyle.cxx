@@ -1884,7 +1884,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                             // same for fonts:
                             if (!pBulletFontNames[i].isEmpty() &&
                                 !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
-                                (!pFormat->GetBulletFont() || pFormat->GetBulletFont()->GetName() != pBulletFontNames[i]) )
+                                (!pFormat->GetBulletFont() || pFormat->GetBulletFont()->GetFamilyName() != pBulletFontNames[i]) )
                             {
                                 const SvxFontListItem* pFontListItem =
                                         static_cast<const SvxFontListItem*>(pDoc->GetDocShell()

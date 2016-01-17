@@ -499,7 +499,7 @@ namespace cairocanvas
                     << (rSysFontData.bAntialias ? "AA " : "")
                     << (rSysFontData.bFakeBold ? "FB " : "")
                     << (rSysFontData.bFakeItalic ? "FI " : "") << " || Name:"
-                    << aFont.GetName() << " - "
+                    << aFont.GetFamilyName() << " - "
                     << maText.Text.copy(maText.StartPosition, maText.Length));
 
             cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());

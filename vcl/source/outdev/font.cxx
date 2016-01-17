@@ -121,7 +121,7 @@ int OutputDevice::GetDevFontSizeCount( const vcl::Font& rFont ) const
     delete mpGetDevSizeList;
 
     ImplInitFontList();
-    mpGetDevSizeList = mpFontCollection->GetDevSizeList( rFont.GetName() );
+    mpGetDevSizeList = mpFontCollection->GetDevSizeList( rFont.GetFamilyName() );
     return mpGetDevSizeList->Count();
 }
 
@@ -204,7 +204,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.Font::operator=( maFont );
 
     // set aMetric with info from font
-    aMetric.SetName( maFont.GetName() );
+    aMetric.SetName( maFont.GetFamilyName() );
     aMetric.SetStyleName( pMetric->GetStyleName() );
     aMetric.SetSize( PixelToLogic( Size( pMetric->mnWidth, pMetric->mnAscent+pMetric->mnDescent-pMetric->mnIntLeading ) ) );
     aMetric.SetCharSet( pMetric->IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
@@ -898,7 +898,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
         }
 
         // No Name, than set all names
-        if ( aFont.GetName().isEmpty() )
+        if ( aFont.GetFamilyName().isEmpty() )
         {
             if ( nFlags & GetDefaultFontFlags::OnlyOne )
             {
@@ -1268,7 +1268,7 @@ ImplFontCache::~ImplFontCache()
 ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     const vcl::Font& rFont, const Size& rSize, float fExactHeight )
 {
-    OUString aSearchName = rFont.GetName();
+    OUString aSearchName = rFont.GetFamilyName();
 
     // initialize internal font request object
     FontSelectPattern aFontSelData( rFont, aSearchName, rSize, fExactHeight );

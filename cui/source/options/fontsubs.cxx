@@ -361,7 +361,7 @@ IMPL_LINK_TYPED(SvxFontSubstTabPage, NonPropFontsHdl, Button*, pBox, void)
     {
         const vcl::FontInfo& rInfo = aFntLst.GetFontName( nFont );
         if(!bNonPropOnly || rInfo.GetPitch() == PITCH_FIXED)
-            m_pFontNameLB->InsertEntry(rInfo.GetName());
+            m_pFontNameLB->InsertEntry(rInfo.GetFamilyName());
     }
     m_pFontNameLB->SelectEntry(sFontName);
 }

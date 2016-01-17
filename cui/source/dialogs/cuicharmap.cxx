@@ -159,9 +159,9 @@ short SvxCharacterMap::Execute()
             const SfxItemPool* pPool = pSet->GetPool();
             const vcl::Font& rFont( GetCharFont() );
             pSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), GetCharacters() ) );
-            pSet->Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(),
+            pSet->Put( SvxFontItem( rFont.GetFamily(), rFont.GetFamilyName(),
                 rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
-            pSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), rFont.GetName() ) );
+            pSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), rFont.GetFamilyName() ) );
             pSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), GetChar() ) );
         }
     }
@@ -317,12 +317,12 @@ void SvxCharacterMap::init()
         m_pShowText->Hide();
     }
 
-    OUString aDefStr( aFont.GetName() );
+    OUString aDefStr( aFont.GetFamilyName() );
     OUString aLastName;
     int nCount = GetDevFontCount();
     for ( int i = 0; i < nCount; i++ )
     {
-        OUString aFontName( GetDevFont( i ).GetName() );
+        OUString aFontName( GetDevFont( i ).GetFamilyName() );
         if ( aFontName != aLastName )
         {
             aLastName = aFontName;
@@ -379,10 +379,10 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
     // like "Times New Roman;Times" resolved
     vcl::Font aTmp( GetFontMetric( rFont ) );
 
-    if ( m_pFontLB->GetEntryPos( aTmp.GetName() ) == LISTBOX_ENTRY_NOTFOUND )
+    if ( m_pFontLB->GetEntryPos( aTmp.GetFamilyName() ) == LISTBOX_ENTRY_NOTFOUND )
         return;
 
-    m_pFontLB->SelectEntry( aTmp.GetName() );
+    m_pFontLB->SelectEntry( aTmp.GetFamilyName() );
     aFont = aTmp;
     FontSelectHdl(*m_pFontLB);
 
