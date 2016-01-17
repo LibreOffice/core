@@ -83,16 +83,15 @@ void UndoTextAPIChanged::Redo()
 
 struct TextAPIEditSource_Impl
 {
-    // needed for "internal" refcounting
     SdDrawDocument*                 mpDoc;
     Outliner*                       mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
-    sal_Int32                       mnRef;
 };
 
 class TextAPIEditSource : public SvxEditSource
 {
-    TextAPIEditSource_Impl* pImpl;
+    // refcounted
+    std::shared_ptr<TextAPIEditSource_Impl> m_xImpl;
 
     virtual SvxEditSource*      Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;
@@ -100,14 +99,13 @@ class TextAPIEditSource : public SvxEditSource
     explicit            TextAPIEditSource( const TextAPIEditSource& rSource );
 
 public:
-                        explicit TextAPIEditSource(SdDrawDocument* pDoc);
-    virtual             ~TextAPIEditSource();
+    explicit            TextAPIEditSource(SdDrawDocument* pDoc);
 
     void                Dispose();
     void                SetText( OutlinerParaObject& rText );
     OutlinerParaObject* CreateText();
     OUString            GetText();
-    SdDrawDocument*     GetDoc() { return pImpl->mpDoc; }
+    SdDrawDocument*     GetDoc() { return m_xImpl->mpDoc; }
 };
 
 const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
@@ -191,8 +189,7 @@ TextAPIEditSource::TextAPIEditSource( const TextAPIEditSource& rSource )
 : SvxEditSource( *this )
 {
     // shallow copy; uses internal refcounting
-    pImpl = rSource.pImpl;
-    pImpl->mnRef++;
+    m_xImpl = rSource.m_xImpl;
 }
 
 SvxEditSource* TextAPIEditSource::Clone() const
@@ -206,75 +203,68 @@ void TextAPIEditSource::UpdateData()
 }
 
 TextAPIEditSource::TextAPIEditSource(SdDrawDocument* pDoc)
-: pImpl(new TextAPIEditSource_Impl)
+: m_xImpl(new TextAPIEditSource_Impl)
 {
-    pImpl->mpDoc = pDoc;
-    pImpl->mpOutliner = nullptr;
-    pImpl->mpTextForwarder = nullptr;
-    pImpl->mnRef = 1;
-}
-
-TextAPIEditSource::~TextAPIEditSource()
-{
-    if (!--pImpl->mnRef)
-        delete pImpl;
+    m_xImpl->mpDoc = pDoc;
+    m_xImpl->mpOutliner = nullptr;
+    m_xImpl->mpTextForwarder = nullptr;
 }
 
 void TextAPIEditSource::Dispose()
 {
-    pImpl->mpDoc=nullptr;
-    delete pImpl->mpTextForwarder;
-    pImpl->mpTextForwarder = nullptr;
+    m_xImpl->mpDoc=nullptr;
+    delete m_xImpl->mpTextForwarder;
+    m_xImpl->mpTextForwarder = nullptr;
 
-    delete pImpl->mpOutliner;
-    pImpl->mpOutliner = nullptr;
+    delete m_xImpl->mpOutliner;
+    m_xImpl->mpOutliner = nullptr;
 }
 
 SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
 {
-    if( !pImpl->mpDoc )
+    if(!m_xImpl->mpDoc)
         return nullptr; // mpDoc == 0 can be used to flag this as disposed
 
-    if( !pImpl->mpOutliner )
+    if (!m_xImpl->mpOutliner)
     {
         //init draw model first
-        pImpl->mpOutliner = new Outliner( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
-        pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+        m_xImpl->mpOutliner = new Outliner(m_xImpl->mpDoc, OUTLINERMODE_TEXTOBJECT);
+        m_xImpl->mpDoc->SetCalcFieldValueHdl(m_xImpl->mpOutliner);
     }
 
-    if( !pImpl->mpTextForwarder )
-        pImpl->mpTextForwarder = new SvxOutlinerForwarder( *pImpl->mpOutliner, false );
+    if (!m_xImpl->mpTextForwarder)
+        m_xImpl->mpTextForwarder = new SvxOutlinerForwarder(*m_xImpl->mpOutliner, false);
 
-    return pImpl->mpTextForwarder;
+    return m_xImpl->mpTextForwarder;
 }
 
 void TextAPIEditSource::SetText( OutlinerParaObject& rText )
 {
-    if ( pImpl->mpDoc )
+    if (m_xImpl->mpDoc)
     {
-        if( !pImpl->mpOutliner )
+        if (!m_xImpl->mpOutliner)
         {
             //init draw model first
-            pImpl->mpOutliner = new Outliner( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
-            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+            m_xImpl->mpOutliner = new Outliner(m_xImpl->mpDoc, OUTLINERMODE_TEXTOBJECT);
+            m_xImpl->mpDoc->SetCalcFieldValueHdl(m_xImpl->mpOutliner);
         }
 
-        pImpl->mpOutliner->SetText( rText );
+        m_xImpl->mpOutliner->SetText( rText );
     }
 }
 
 OutlinerParaObject* TextAPIEditSource::CreateText()
 {
-    if ( pImpl->mpDoc && pImpl->mpOutliner )
-        return pImpl->mpOutliner->CreateParaObject();
+    if (m_xImpl->mpDoc && m_xImpl->mpOutliner)
+        return m_xImpl->mpOutliner->CreateParaObject();
     else
         return nullptr;
 }
 
 OUString TextAPIEditSource::GetText()
 {
-    if ( pImpl->mpDoc && pImpl->mpOutliner )
-        return pImpl->mpOutliner->GetEditEngine().GetText();
+    if (m_xImpl->mpDoc && m_xImpl->mpOutliner)
+        return m_xImpl->mpOutliner->GetEditEngine().GetText();
     else
         return OUString();
 }
