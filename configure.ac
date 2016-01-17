@@ -8358,8 +8358,9 @@ if test "$with_java" != "no"; then
         if test -z $HSQLDB_JAR; then
             HSQLDB_JAR=/usr/share/java/hsqldb.jar
         fi
-        AC_CHECK_FILE($HSQLDB_JAR, [],
-               [AC_MSG_ERROR(hsqldb.jar not found.)], [])
+        if ! test -f $HSQLDB_JAR; then
+               AC_MSG_ERROR(hsqldb.jar not found.)]
+        fi
         AC_MSG_CHECKING([whether hsqldb is 1.8.0.x])
         export HSQLDB_JAR
         if $PERL -e \
@@ -10569,157 +10570,128 @@ if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
         if test -z $SAC_JAR; then
             SAC_JAR=/usr/share/java/sac.jar
         fi
-        AC_CHECK_FILE($SAC_JAR, [],
-             [AC_MSG_ERROR(sac.jar not found.)], [])
+        if ! test -f $SAC_JAR; then
+             AC_MSG_ERROR(sac.jar not found.)
+        fi
 
         if test -z $LIBXML_JAR; then
-            AC_CHECK_FILE(/usr/share/java/libxml-1.0.0.jar,
-                [ LIBXML_JAR=/usr/share/java/libxml-1.0.0.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/libxml.jar,
-                       [ LIBXML_JAR=/usr/share/java/libxml.jar ],
-                       [AC_MSG_ERROR(libxml.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($LIBXML_JAR, [],
-                 [AC_MSG_ERROR(libxml.jar not found.)], [])
+            if test -f /usr/share/java/libxml-1.0.0.jar; then
+                LIBXML_JAR=/usr/share/java/libxml-1.0.0.jar
+            elif test -f /usr/share/java/libxml.jar; then
+                LIBXML_JAR=/usr/share/java/libxml.jar
+            else
+                AC_MSG_ERROR(libxml.jar replacement not found.)
+            fi
+        elif ! test -f $LIBXML_JAR; then
+            AC_MSG_ERROR(libxml.jar not found.)
         fi
 
         if test -z $FLUTE_JAR; then
-            AC_CHECK_FILE(/usr/share/java/flute-1.3.0.jar,
-                [ FLUTE_JAR=/usr/share/java/flute-1.3.0.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/flute.jar,
-                        [ FLUTE_JAR=/usr/share/java/flute.jar ],
-                        [ AC_MSG_ERROR(flute-1.3.0.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($FLUTE_JAR, [],
-                 [AC_MSG_ERROR(flute-1.3.0.jar not found.)], [])
+            if test -f/usr/share/java/flute-1.3.0.jar; then
+                FLUTE_JAR=/usr/share/java/flute-1.3.0.jar
+            elif test -f /usr/share/java/flute.jar; then
+                FLUTE_JAR=/usr/share/java/flute.jar
+            else
+                AC_MSG_ERROR(flute-1.3.0.jar replacement not found.)
+            fi
+        elif ! test -f $FLUTE_JAR; then
+            AC_MSG_ERROR(flute-1.3.0.jar not found.)
         fi
 
         if test -z $JFREEREPORT_JAR; then
-            AC_CHECK_FILE(/usr/share/java/flow-engine-0.9.2.jar,
-                [ JFREEREPORT_JAR=/usr/share/java/flow-engine-0.9.2.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/flow-engine.jar,
-                        [ JFREEREPORT_JAR=/usr/share/java/flow-engine.jar ],
-                        [AC_MSG_ERROR(jfreereport.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($JFREEREPORT_JAR, [],
-                 [AC_MSG_ERROR(jfreereport.jar not found.)], [])
+            if test -f /usr/share/java/flow-engine-0.9.2.jar; then
+                JFREEREPORT_JAR=/usr/share/java/flow-engine-0.9.2.jar
+            elif test -f /usr/share/java/flow-engine.jar; then
+                JFREEREPORT_JAR=/usr/share/java/flow-engine.jar
+            else
+                AC_MSG_ERROR(jfreereport.jar replacement not found.)
+            fi
+        elif ! test -f  $JFREEREPORT_JAR; then
+                AC_MSG_ERROR(jfreereport.jar not found.)
         fi
 
         if test -z $LIBLAYOUT_JAR; then
-            AC_CHECK_FILE(/usr/share/java/liblayout-0.2.9.jar,
-                [ LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.9.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/liblayout.jar,
-                        [ LIBLAYOUT_JAR=/usr/share/java/liblayout.jar ],
-                        [AC_MSG_ERROR(liblayout.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($LIBLAYOUT_JAR, [],
-                 [AC_MSG_ERROR(liblayout.jar not found.)], [])
+            if test -f /usr/share/java/liblayout-0.2.9.jar; then
+                LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.9.jar
+            elif test -f /usr/share/java/liblayout.jar; then
+                LIBLAYOUT_JAR=/usr/share/java/liblayout.jar
+            else
+                AC_MSG_ERROR(liblayout.jar replacement not found.)
+            fi
+        elif ! test -f $LIBLAYOUT_JAR; then
+                AC_MSG_ERROR(liblayout.jar not found.)
         fi
 
         if test -z $LIBLOADER_JAR; then
-            AC_CHECK_FILE(/usr/share/java/libloader-1.0.0.jar,
-                [ LIBLOADER_JAR=/usr/share/java/libloader-1.0.0.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/libloader.jar,
-                       [ LIBLOADER_JAR=/usr/share/java/libloader.jar ],
-                       [AC_MSG_ERROR(libloader.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($LIBLOADER_JAR, [],
-                [AC_MSG_ERROR(libloader.jar not found.)], [])
+            if test -f /usr/share/java/libloader-1.0.0.jar; then
+                LIBLOADER_JAR=/usr/share/java/libloader-1.0.0.jar
+            elif test -f /usr/share/java/libloader.jar; then
+                LIBLOADER_JAR=/usr/share/java/libloader.jar
+            else
+                AC_MSG_ERROR(libloader.jar replacement not found.)
+            fi
+        elif ! test -f  $LIBLOADER_JAR; then
+            AC_MSG_ERROR(libloader.jar not found.)
         fi
 
         if test -z $LIBFORMULA_JAR; then
-            AC_CHECK_FILE(/usr/share/java/libformula-0.2.0.jar,
-                 [ LIBFORMULA_JAR=/usr/share/java/libformula-0.2.0.jar ],
-                 [
-                     AC_CHECK_FILE(/usr/share/java/libformula.jar,
-                         [ LIBFORMULA_JAR=/usr/share/java/libformula.jar ],
-                         [AC_MSG_ERROR(libformula.jar replacement not found.)]
-                     )
-                 ]
-            )
-        else
-            AC_CHECK_FILE($LIBFORMULA_JAR, [],
-                [AC_MSG_ERROR(libformula.jar not found.)], [])
+            if test -f /usr/share/java/libformula-0.2.0.jar; then
+                LIBFORMULA_JAR=/usr/share/java/libformula-0.2.0.jar
+            elif test -f /usr/share/java/libformula.jar; then
+                LIBFORMULA_JAR=/usr/share/java/libformula.jar
+            else
+                AC_MSG_ERROR(libformula.jar replacement not found.)
+            fi
+        elif ! test -f $LIBFORMULA_JAR; then
+                AC_MSG_ERROR(libformula.jar not found.)
         fi
 
         if test -z $LIBREPOSITORY_JAR; then
-            AC_CHECK_FILE(/usr/share/java/librepository-1.0.0.jar,
-                [ LIBREPOSITORY_JAR=/usr/share/java/librepository-1.0.0.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/librepository.jar,
-                        [ LIBREPOSITORY_JAR=/usr/share/java/librepository.jar ],
-                        [AC_MSG_ERROR(librepository.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($LIBREPOSITORY_JAR, [],
-                [AC_MSG_ERROR(librepository.jar not found.)], [])
+            if test -f /usr/share/java/librepository-1.0.0.jar; then
+                LIBREPOSITORY_JAR=/usr/share/java/librepository-1.0.0.jar
+            elif test -f /usr/share/java/librepository.jar; then
+                LIBREPOSITORY_JAR=/usr/share/java/librepository.jar
+            else
+                AC_MSG_ERROR(librepository.jar replacement not found.)
+            fi
+        elif ! test -f $LIBREPOSITORY_JAR; then
+            AC_MSG_ERROR(librepository.jar not found.)
         fi
 
         if test -z $LIBFONTS_JAR; then
-            AC_CHECK_FILE(/usr/share/java/libfonts-1.0.0.jar,
-                [ LIBFONTS_JAR=/usr/share/java/libfonts-1.0.0.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/libfonts.jar,
-                        [ LIBFONTS_JAR=/usr/share/java/libfonts.jar ],
-                        [AC_MSG_ERROR(libfonts.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($LIBFONTS_JAR, [],
-                [AC_MSG_ERROR(libfonts.jar not found.)], [])
+            if test -f /usr/share/java/libfonts-1.0.0.jar; then
+                LIBFONTS_JAR=/usr/share/java/libfonts-1.0.0.jar
+            elif test -f /usr/share/java/libfonts.jar; then
+                LIBFONTS_JAR=/usr/share/java/libfonts.jar
+            else
+                AC_MSG_ERROR(libfonts.jar replacement not found.)
+            fi
+        elif ! test -f $LIBFONTS_JAR; then
+                AC_MSG_ERROR(libfonts.jar not found.)
         fi
 
         if test -z $LIBSERIALIZER_JAR; then
-            AC_CHECK_FILE(/usr/share/java/libserializer-1.0.0.jar,
-                [ LIBSERIALIZER_JAR=/usr/share/java/libserializer-1.0.0.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/libserializer.jar,
-                        [ LIBSERIALIZER_JAR=/usr/share/java/libserializer.jar ],
-                        [AC_MSG_ERROR(libserializer.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($LIBSERIALIZER_JAR, [],
-                [AC_MSG_ERROR(libserializer.jar not found.)], [])
+            if test -f /usr/share/java/libserializer-1.0.0.jar; then
+                LIBSERIALIZER_JAR=/usr/share/java/libserializer-1.0.0.jar
+            elif test -f /usr/share/java/libserializer.jar; then
+                LIBSERIALIZER_JAR=/usr/share/java/libserializer.jar
+            else
+                AC_MSG_ERROR(libserializer.jar replacement not found.)
+            fi
+        elif ! test -f $LIBSERIALIZER_JAR; then
+                AC_MSG_ERROR(libserializer.jar not found.)
         fi
 
         if test -z $LIBBASE_JAR; then
-            AC_CHECK_FILE(/usr/share/java/libbase-1.0.0.jar,
-                [ LIBBASE_JAR=/usr/share/java/libbase-1.0.0.jar ],
-                [
-                    AC_CHECK_FILE(/usr/share/java/libbase.jar,
-                        [ LIBBASE_JAR=/usr/share/java/libbase.jar ],
-                        [AC_MSG_ERROR(libbase.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($LIBBASE_JAR, [],
-                [AC_MSG_ERROR(libbase.jar not found.)], [])
+            if test -f /usr/share/java/libbase-1.0.0.jar; then
+                LIBBASE_JAR=/usr/share/java/libbase-1.0.0.jar
+            elif test -f /usr/share/java/libbase.jar; then
+                LIBBASE_JAR=/usr/share/java/libbase.jar
+            else
+                AC_MSG_ERROR(libbase.jar replacement not found.)
+            fi
+        elif ! test -f $LIBBASE_JAR; then
+            AC_MSG_ERROR(libbase.jar not found.)
         fi
 
     else
@@ -10755,18 +10727,15 @@ if test "$ENABLE_REPORTBUILDER" = "TRUE"; then
         SYSTEM_APACHE_COMMONS=TRUE
         AC_MSG_RESULT([external])
         if test -z $COMMONS_LOGGING_JAR; then
-            AC_CHECK_FILE(/usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar,
-               [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar ],
-               [
-                    AC_CHECK_FILE(/usr/share/java/commons-logging.jar,
-                        [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
-                        [AC_MSG_ERROR(commons-logging.jar replacement not found.)]
-                    )
-                ]
-            )
-        else
-            AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
-                [AC_MSG_ERROR(commons-logging.jar not found.)], [])
+            if test -f /usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar; then
+               COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar
+           elif test -f /usr/share/java/commons-logging.jar; then
+                COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar
+            else
+                AC_MSG_ERROR(commons-logging.jar replacement not found.)
+            fi
+        elif ! test -f $COMMONS_LOGGING_JAR; then
+            AC_MSG_ERROR(commons-logging.jar not found.)
         fi
     else
         AC_MSG_RESULT([internal])
@@ -10794,8 +10763,9 @@ if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
         if test -z $BSH_JAR; then
             BSH_JAR=/usr/share/java/bsh.jar
         fi
-        AC_CHECK_FILE($BSH_JAR, [],
-                   [AC_MSG_ERROR(bsh.jar not found.)], [])
+        if ! test -f $BSH_JAR; then
+            AC_MSG_ERROR(bsh.jar not found.)
+        fi
     else
         AC_MSG_RESULT([internal])
         SYSTEM_BSH=
@@ -10826,8 +10796,9 @@ if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
         if test -z $RHINO_JAR; then
             RHINO_JAR=/usr/share/java/js.jar
         fi
-        AC_CHECK_FILE($RHINO_JAR, [],
-                   [AC_MSG_ERROR(js.jar not found.)], [])
+        if ! test -f $RHINO_JAR; then
+            AC_MSG_ERROR(js.jar not found.)
+        fi
     else
         AC_MSG_RESULT([internal])
         SYSTEM_RHINO=
