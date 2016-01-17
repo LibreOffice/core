@@ -454,7 +454,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if(sFontName.isEmpty())
                     throw IllegalArgumentException();
 
-                if(OUString(aFormat.GetFont((*ppEntries)->mnMemberId).GetName()) != sFontName)
+                if(OUString(aFormat.GetFont((*ppEntries)->mnMemberId).GetFamilyName()) != sFontName)
                 {
                     const SmFace rOld = aFormat.GetFont((*ppEntries)->mnMemberId);
 
@@ -661,7 +661,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
                     {
                         vcl::Font aFont;
-                        aFont.SetName ( pDescriptor->sFontName );
+                        aFont.SetFamilyName ( pDescriptor->sFontName );
                         aFont.SetCharSet ( static_cast < rtl_TextEncoding > (pDescriptor->nCharSet) );
                         aFont.SetFamily ( static_cast < FontFamily > (pDescriptor->nFamily ) );
                         aFont.SetPitch  ( static_cast < FontPitch >  (pDescriptor->nPitch ) );
@@ -727,7 +727,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_CUSTOM_FONT_NAME_FIXED             :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                *pValue <<= OUString(rFace.GetName());
+                *pValue <<= OUString(rFace.GetFamilyName());
             }
             break;
             case HANDLE_CUSTOM_FONT_FIXED_POSTURE:
@@ -879,7 +879,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                     pDescriptor->nCharacter = static_cast < sal_Int32 > ((*aIter)->GetCharacter());
 
                     vcl::Font rFont = (*aIter)->GetFace();
-                    pDescriptor->sFontName = rFont.GetName();
+                    pDescriptor->sFontName = rFont.GetFamilyName();
                     pDescriptor->nCharSet  = sal::static_int_cast< sal_Int16 >(rFont.GetCharSet());
                     pDescriptor->nFamily   = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
                     pDescriptor->nPitch    = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());

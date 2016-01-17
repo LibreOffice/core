@@ -239,7 +239,7 @@ void SwInsFootNoteDlg::Init()
             aFont = m_pNumberCharEdit->GetFont();
             m_aFontName = rFont.GetFamilyName();
             eCharSet = rFont.GetCharSet();
-            aFont.SetName(m_aFontName);
+            aFont.SetFamilyName(m_aFontName);
             aFont.SetCharSet(eCharSet);
             bExtCharAvailable = true;
             rSh.Left( CRSR_SKIP_CHARS, false, 1, false );

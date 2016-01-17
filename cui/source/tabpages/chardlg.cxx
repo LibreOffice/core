@@ -498,7 +498,7 @@ namespace
             if ( eState >= SfxItemState::DEFAULT )
             {
                 const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(&( _pPage->GetItemSet().Get( _nFontWhich ) ));
-                aFontMetrics.SetName(pFontItem->GetFamilyName());
+                aFontMetrics.SetFamilyName(pFontItem->GetFamilyName());
                 aFontMetrics.SetStyleName(pFontItem->GetStyleName());
                 aFontMetrics.SetFamily(pFontItem->GetFamily());
                 aFontMetrics.SetPitch(pFontItem->GetPitch());
@@ -530,7 +530,7 @@ namespace
         _rFont.SetLanguage(_pLanguageLB->GetSelectLanguage());
 
         _rFont.SetFamily( aFontMetrics.GetFamily() );
-        _rFont.SetName( aFontMetrics.GetName() );
+        _rFont.SetFamilyName( aFontMetrics.GetFamilyName() );
         _rFont.SetStyleName( aFontMetrics.GetStyleName() );
         _rFont.SetPitch( aFontMetrics.GetPitch() );
         _rFont.SetCharSet( aFontMetrics.GetCharSet() );
@@ -934,7 +934,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         aStyleBoxText.clear();
     FontMetric aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
-    SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetName(), aInfo.GetStyleName(),
+    SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetFamilyName(), aInfo.GetStyleName(),
                            aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );
     pOld = GetOldItem( rSet, nSlot );
 

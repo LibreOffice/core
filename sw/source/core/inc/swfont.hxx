@@ -287,7 +287,7 @@ public:
     sal_uInt16 GetOrientation( const bool bVertLayout = false ) const;
 
     inline const OUString& GetName( const sal_uInt8 nWhich ) const
-        { return m_aSub[nWhich].GetName(); }
+        { return m_aSub[nWhich].GetFamilyName(); }
     inline LanguageType GetLanguage( const sal_uInt8 nWhich ) const
         { return m_aSub[nWhich].GetLanguage(); }
     inline rtl_TextEncoding GetCharSet( const sal_uInt8 nWhich ) const
@@ -449,7 +449,7 @@ inline void SwFont::SetFamily( const FontFamily eFamily, const sal_uInt8 nWhich 
 inline void SwSubFont::SetName( const OUString& rName )
 {
     m_pMagic = nullptr;
-    Font::SetName( rName );
+    Font::SetFamilyName( rName );
 }
 
 inline void SwFont::SetName( const OUString& rName, const sal_uInt8 nWhich )

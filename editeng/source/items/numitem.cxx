@@ -249,7 +249,7 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     {
         cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
         OUString sFontName = GetFontToSubsFontName(pConverter);
-        pBulletFont->SetName(sFontName);
+        pBulletFont->SetFamilyName(sFontName);
     }
 
     rStream.WriteUInt16( NUMITEM_VERSION_04 );
@@ -677,7 +677,7 @@ void SvxNumRule::Store( SvStream &rStream )
             {
                 if(!pConverter)
                     pConverter =
-                        CreateFontToSubsFontConverter(aFmts[i]->GetBulletFont()->GetName(),
+                        CreateFontToSubsFontConverter(aFmts[i]->GetBulletFont()->GetFamilyName(),
                                     FontToSubsFontFlags::EXPORT|FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS);
             }
             aFmts[i]->Store(rStream, pConverter);

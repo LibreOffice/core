@@ -1783,7 +1783,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_aStructure[0].m_nParentElement    = 0;
 
     Font aFont;
-    aFont.SetName( "Times" );
+    aFont.SetFamilyName( "Times" );
     aFont.SetSize( Size( 0, 12 ) );
 
     GraphicsState aState;
@@ -2316,7 +2316,7 @@ void PDFWriterImpl::endPage()
 
         // reset the default font
         Font aFont;
-        aFont.SetName( "Times" );
+        aFont.SetFamilyName( "Times" );
         aFont.SetSize( Size( 0, 12 ) );
 
         m_aCurrentPDFState = m_aGraphicsStack.front();
@@ -4691,7 +4691,7 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
     bool bAdjustSize = false;
 
     Font aFont( rControlFont );
-    if( aFont.GetName().isEmpty() )
+    if( aFont.GetFamilyName().isEmpty() )
     {
         aFont = rAppSetFont;
         if( rControlFont.GetHeight() )
@@ -4721,7 +4721,7 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
 sal_Int32 PDFWriterImpl::getBestBuiltinFont( const vcl::Font& rFont )
 {
     sal_Int32 nBest = 4; // default to Helvetica
-    OUString aFontName( rFont.GetName() );
+    OUString aFontName( rFont.GetFamilyName() );
     aFontName = aFontName.toAsciiLowerCase();
 
     if( aFontName.indexOf( "times" ) != -1 )

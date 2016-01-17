@@ -946,7 +946,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
             if ( pFontItem )
             {
-                aNewFont.SetName( pFontItem->GetFamilyName() );
+                aNewFont.SetFamilyName( pFontItem->GetFamilyName() );
                 aNewFont.SetStyleName( pFontItem->GetStyleName() );
                 aNewFont.SetCharSet( pFontItem->GetCharSet() );
                 aNewFont.SetPitch( pFontItem->GetPitch() );
@@ -955,7 +955,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             if ( pCItem )
             {
                 aChars  = pCItem->GetValue();
-                aOpt.SetSymbolFont(aNewFont.GetName());
+                aOpt.SetSymbolFont(aNewFont.GetFamilyName());
                 SW_MOD()->ApplyUsrPref(aOpt, &GetView());
             }
         }
@@ -991,10 +991,10 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         rSh.Insert( aChars );
 
         // #108876# a font attribute has to be set always due to a guessed script type
-        if( !aNewFont.GetName().isEmpty() )
+        if( !aNewFont.GetFamilyName().isEmpty() )
         {
             SvxFontItem aNewFontItem( aFont );
-            aNewFontItem.SetFamilyName( aNewFont.GetName());
+            aNewFontItem.SetFamilyName( aNewFont.GetFamilyName() );
             aNewFontItem.SetFamily(  aNewFont.GetFamily());
             aNewFontItem.SetPitch(   aNewFont.GetPitch());
             aNewFontItem.SetCharSet( aNewFont.GetCharSet() );
@@ -1045,7 +1045,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         if ( !aChars.isEmpty() )
         {
             rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), aChars ) );
-            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aNewFont.GetName() ) );
+            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aNewFont.GetFamilyName() ) );
             rReq.Done();
         }
     }

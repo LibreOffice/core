@@ -1571,7 +1571,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         pPict->Read( &sFName, nLen );
         sFName[ nLen ] = 0;
         OUString aString( sFName, strlen(sFName), osl_getThreadTextEncoding() );
-        aActFont.SetName( aString );
+        aActFont.SetFamilyName( aString );
         eActMethod=PDM_UNDEFINED;
         break;
     }
