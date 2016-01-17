@@ -1289,7 +1289,6 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
 void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         const OUString& rTargetNm, bool bFileToFile )
 {
-    bool bRet = false;
     INetURLObject aFileUrl, aTargetUrl;
     aFileUrl.SetSmartURL( rFileNm );
     aTargetUrl.SetSmartURL( rTargetNm );
@@ -1314,6 +1313,7 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
             pFileNameMap.reset( new std::map<OUString, OUString>() );
         }
 
+        bool bRet = false;
         SvFileStream aTmp( aFileUrl.PathToFileName(), StreamMode::READ );
 
         OUString aSrc = rFileNm;

@@ -5157,8 +5157,6 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     SCROW nStartRow = rOldRange.aStart.Row();
     SCTAB nTab = rOldRange.aStart.Tab();
 
-    bool bRet = false;
-
     OUString aFormula;
     rDoc.GetFormula( nStartCol, nStartRow, nTab, aFormula );
     if ( aFormula.startsWith("{") && aFormula.endsWith("}") )
@@ -5178,8 +5176,7 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         if ( DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, bApi ) )
         {
             // GRAM_PODF_A1 for API compatibility.
-            bRet = EnterMatrix( aNewRange, &aMark, nullptr, aFormula, bApi, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
-            if (!bRet)
+            if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, bApi, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 ))
             {
                 //  versuchen, alten Zustand wiederherzustellen
                 EnterMatrix( rOldRange, &aMark, nullptr, aFormula, bApi, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
