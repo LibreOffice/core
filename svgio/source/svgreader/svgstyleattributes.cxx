@@ -2314,6 +2314,10 @@ namespace svgio
 
         SvgNumber SvgStyleAttributes::getFontSizeNumber() const
         {
+            // default size is 'medium' or 16px, which is equal to the default PPI used in svgio ( 96.0 )
+            // converted to pixels
+            const double aDefaultSize = F_SVG_PIXEL_PER_INCH / 6.0;
+
             if(maFontSizeNumber.isSet())
             {
                 // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
@@ -2332,14 +2336,14 @@ namespace svgio
                             aParentNumber.getUnit(),
                             true);
                     }
+                    // if there's no parent style, set the font size based on the default size
+                    // 100% = 16px
+                    return SvgNumber(
+                        maFontSizeNumber.getNumber() * aDefaultSize / 100.0, Unit_px, true);
                 }
 
                 return maFontSizeNumber;
             }
-
-            // default size is 'medium' or 16px, which is equal to the default PPI used in svgio ( 96.0 )
-            // converted to pixels
-            const double aDefaultSize = F_SVG_PIXEL_PER_INCH / 6.0;
 
             //In CSS2, the suggested scaling factor between adjacent indexes is 1.2
             switch(maFontSize)
