@@ -56,6 +56,21 @@ namespace svgio
             StrokeLinejoin_bevel
         };
 
+        enum FontSize
+        {
+            FontSize_notset,
+            FontSize_xx_small,
+            FontSize_x_small,
+            FontSize_small,
+            FontSize_smaller,
+            FontSize_medium,
+            FontSize_large,
+            FontSize_larger,
+            FontSize_x_large,
+            FontSize_xx_large,
+            FontSize_initial
+        };
+
         enum FontStretch
         {
             FontStretch_notset,
@@ -183,7 +198,8 @@ namespace svgio
             SvgNumber                   maStrokeMiterLimit;
             SvgNumber                   maStrokeOpacity;
             SvgStringVector             maFontFamily;
-            SvgNumber                   maFontSize;
+            FontSize                    maFontSize;
+            SvgNumber                   maFontSizeNumber;
             FontStretch                 maFontStretch;
             FontStyle                   maFontStyle;
             FontVariant                 maFontVariant;
@@ -369,8 +385,9 @@ namespace svgio
             void setFontFamily(const SvgStringVector& rSvgStringVector = SvgStringVector()) { maFontFamily = rSvgStringVector; }
 
             /// FontSize content
-            SvgNumber getFontSize() const;
-            void setFontSize(const SvgNumber& rFontSize = SvgNumber()) { maFontSize = rFontSize; }
+            void setFontSize(const FontSize aFontSize = FontSize_notset) { maFontSize = aFontSize; }
+            void setFontSizeNumber(const SvgNumber& rFontSize = SvgNumber()) { maFontSizeNumber = rFontSize; }
+            SvgNumber getFontSizeNumber() const;
 
             /// FontStretch content
             FontStretch getFontStretch() const;
