@@ -16,7 +16,6 @@ $(eval $(call gb_Library_use_library_objects,merged,\
 ))
 
 $(eval $(call gb_Library_use_libraries,merged,\
-	sal \
 	$(gb_UWINAPI) \
 ))
 
