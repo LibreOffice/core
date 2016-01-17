@@ -380,8 +380,15 @@ void SAL_CALL thisModule() {}
 class FullTextEncodingData: private boost::noncopyable {
 public:
     FullTextEncodingData() {
-        if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenclo")))
-        {
+#if ENABLE_MERGELIBS
+        if (!module_.loadRelative(&thisModule, SAL_MODULENAME("mergedlo"))) {
+            SAL_INFO( "sal.textenc", "Loading merged library failed, falling back to sal_textenc" );
+        } else {
+            function_ = reinterpret_cast< TextEncodingFunction * >(
+                module_.getFunctionSymbol("sal_getFullTextEncodingData"));
+        }
+#endif
+        if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenclo"))) {
             SAL_WARN( "sal.textenc", "Loading sal_textenc library failed" );
             std::abort();
         }
