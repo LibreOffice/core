@@ -120,22 +120,12 @@ void TextConvWrapper::FindConvText_impl()
 {
     // modified version of SvxSpellWrapper::FindSpellError
 
-    bool bFound = false;
-
     m_pWin->EnterWait();
-    bool bConvert = true;
 
-    while ( bConvert )
+    while ( true )
     {
-        bFound = ConvContinue_impl();
-        if (bFound)
-        {
-            bConvert = false;
-        }
-        else
-        {
-            bConvert = ConvNext_impl();
-        }
+        if (ConvContinue_impl() || !ConvNext_impl())
+            break;
     }
     m_pWin->LeaveWait();
 }
