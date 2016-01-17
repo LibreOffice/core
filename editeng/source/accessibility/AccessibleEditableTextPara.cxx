@@ -1711,9 +1711,9 @@ namespace accessibility
                 }
             }
         }
-        bool bExtend = false;
         if( nFoundFieldIndex >= 0 )
         {
+            bool bExtend = false;
             if( Segment.SegmentEnd < reeEnd )
             {
                 Segment.SegmentEnd  = reeEnd;
