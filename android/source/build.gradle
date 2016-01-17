@@ -30,7 +30,7 @@ dependencies {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
     compileOptions {
         // silence some java-language features hints
         sourceCompatibility 6
