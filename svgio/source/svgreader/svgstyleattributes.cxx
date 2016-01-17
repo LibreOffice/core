@@ -2314,6 +2314,9 @@ namespace svgio
 
         SvgNumber SvgStyleAttributes::getFontSizeNumber() const
         {
+            // default is 'medium' = 12px
+            const double aDefaultSize = 12.0;
+
             if(maFontSizeNumber.isSet())
             {
                 // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
@@ -2332,13 +2335,14 @@ namespace svgio
                             aParentNumber.getUnit(),
                             true);
                     }
+
+                    // 100% is equal to 12px
+                    return SvgNumber(
+                        maFontSizeNumber.getNumber() * aDefaultSize / 100.0, Unit_px, true);
                 }
 
                 return maFontSizeNumber;
             }
-
-            // default is 'medium'
-            const double aDefaultSize = 12.0;
 
             //In CSS2, the suggested scaling factor between adjacent indexes is 1.2
             switch(maFontSize)
