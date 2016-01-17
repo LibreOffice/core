@@ -20,6 +20,12 @@ gb_STDLIBS := \
 
 endif
 
+ifeq ($(ENABLE_LTO),TRUE)
+	gb_LTOPLUGINFLAGS := --plugin $(realpath $(shell $(CC) --print-prog-name=liblto_plugin.so))
+	AR_FLAGS := rcs --plugin $(realpath $(shell $(CC) --print-prog-name=liblto_plugin.so))
+	RANLIB := $(RANLIB) --plugin $(realpath $(shell $(CC) --print-prog-name=liblto_plugin.so))
+endif
+
 # No unit testing can be run
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 
