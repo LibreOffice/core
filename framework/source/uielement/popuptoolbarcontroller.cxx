@@ -349,11 +349,13 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException ) override;
 
 private:
+    bool m_bModified;
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
 };
 
 SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : ImplInheritanceHelper( rxContext, ".uno:SaveAsMenu" )
+    , m_bModified( false )
 {
 }
 
@@ -417,7 +419,7 @@ void SaveToolbarController::updateImage()
     {
         aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( ".uno:SaveAs", bLargeIcons, m_xFrame );
     }
-    else if ( m_xModifiable.is() && m_xModifiable->isModified() )
+    else if ( m_bModified )
     {
         Image aResImage( bLargeIcons ? FwkResId( IMG_SAVEMODIFIED_LARGE ) : FwkResId( IMG_SAVEMODIFIED_SMALL ) );
         aImage = aResImage;
@@ -459,7 +461,12 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
 void SaveToolbarController::modified( const css::lang::EventObject& /*rEvent*/ )
     throw ( css::uno::RuntimeException, std::exception )
 {
-    updateImage();
+    bool bModified = m_xModifiable->isModified();
+    if ( bModified != m_bModified )
+    {
+        m_bModified = bModified;
+        updateImage();
+    }
 }
 
 void SaveToolbarController::disposing( const css::lang::EventObject& rEvent )
