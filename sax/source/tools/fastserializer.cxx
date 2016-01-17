@@ -94,7 +94,7 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::write( const OUString& sOutput, bool bEscape )
     {
-        write( sOutput.toUtf8(), bEscape );
+        write( OUStringToOString(sOutput, RTL_TEXTENCODING_UTF8), bEscape );
 
     }
 
