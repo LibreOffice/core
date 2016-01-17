@@ -202,7 +202,7 @@ static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, DefaultFontType
     if ( eLang != LANGUAGE_NONE && eLang != LANGUAGE_DONTKNOW && eLang != LANGUAGE_SYSTEM )
     {
         vcl::Font aDefFont = OutputDevice::GetDefaultFont( nFontType, eLang, GetDefaultFontFlags::OnlyOne );
-        SvxFontItem aNewItem( aDefFont.GetFamily(), aDefFont.GetName(), aDefFont.GetStyleName(),
+        SvxFontItem aNewItem( aDefFont.GetFamily(), aDefFont.GetFamilyName(), aDefFont.GetStyleName(),
                               aDefFont.GetPitch(), aDefFont.GetCharSet(), nItemId );
         if ( aNewItem != rSet.Get( nItemId ) )
         {

@@ -112,7 +112,7 @@ int OutputDevice::GetDevFontSizeCount( const vcl::Font& rFont ) const
     delete mpDeviceFontSizeList;
 
     ImplInitFontList();
-    mpDeviceFontSizeList = mpFontCollection->GetDeviceFontSizeList( rFont.GetName() );
+    mpDeviceFontSizeList = mpFontCollection->GetDeviceFontSizeList( rFont.GetFamilyName() );
     return mpDeviceFontSizeList->Count();
 }
 
@@ -195,7 +195,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.Font::operator=( maFont );
 
     // set aMetric with info from font
-    aMetric.SetName( maFont.GetName() );
+    aMetric.SetName( maFont.GetFamilyName() );
     aMetric.SetStyleName( xFontMetric->GetStyleName() );
     aMetric.SetSize( PixelToLogic( Size( xFontMetric->GetWidth(), xFontMetric->GetAscent() + xFontMetric->GetDescent() - xFontMetric->GetInternalLeading() ) ) );
     aMetric.SetCharSet( xFontMetric->IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
@@ -883,7 +883,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
         }
 
         // No Name, than set all names
-        if ( aFont.GetName().isEmpty() )
+        if ( aFont.GetFamilyName().isEmpty() )
         {
             if ( nFlags & GetDefaultFontFlags::OnlyOne )
             {

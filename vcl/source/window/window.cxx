@@ -1883,7 +1883,7 @@ void Window::ImplNewInputContext()
 
     SalInputContext         aNewContext;
     const vcl::Font&        rFont = rInputContext.GetFont();
-    const OUString&         rFontName = rFont.GetName();
+    const OUString&         rFontName = rFont.GetFamilyName();
     LogicalFontInstance*    pFontInstance = nullptr;
     aNewContext.mpFont = nullptr;
     if (!rFontName.isEmpty())
