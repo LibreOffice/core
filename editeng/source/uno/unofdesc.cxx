@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 
 void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, vcl::Font& rFont )
 {
-    rFont.SetName( rDesc.Name );
+    rFont.SetFamilyName( rDesc.Name );
     rFont.SetStyleName( rDesc.StyleName );
     rFont.SetSize( Size( rDesc.Width, rDesc.Height ) );
     rFont.SetFamily( (FontFamily)rDesc.Family );

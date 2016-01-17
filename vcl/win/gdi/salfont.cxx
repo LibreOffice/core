@@ -868,7 +868,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
     OUString aFontName( reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName) );
     if (!aFontName.isEmpty())
     {
-        rFont.SetName( aFontName );
+        rFont.SetFamilyName( aFontName );
         rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
         rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
         rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );

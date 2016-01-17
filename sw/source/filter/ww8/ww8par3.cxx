@@ -1096,11 +1096,11 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         else
         {
             const SvxFontItem& rFontItem = pFormat->GetFont();
-            aFont.SetFamily(    rFontItem.GetFamily()     );
-            aFont.SetName(      rFontItem.GetFamilyName() );
-            aFont.SetStyleName( rFontItem.GetStyleName()  );
-            aFont.SetPitch(     rFontItem.GetPitch()      );
-            aFont.SetCharSet(   rFontItem.GetCharSet()    );
+            aFont.SetFamily(        rFontItem.GetFamily()     );
+            aFont.SetFamilyName(    rFontItem.GetFamilyName() );
+            aFont.SetStyleName(     rFontItem.GetStyleName()  );
+            aFont.SetPitch(         rFontItem.GetPitch()      );
+            aFont.SetCharSet(       rFontItem.GetCharSet()    );
         }
         aNumFormat.SetBulletFont( &aFont );
     }
@@ -2350,7 +2350,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
                 }
 
                 aTmp <<= OUString( pFontItem->GetFamilyName());
-                aFont.SetName( pFontItem->GetFamilyName() );
+                aFont.SetFamilyName( pFontItem->GetFamilyName() );
                 aFont.SetStyleName( pFontItem->GetStyleName() );
                 aFont.SetFamily( pFontItem->GetFamily() );
                 aFont.SetCharSet( pFontItem->GetCharSet() );

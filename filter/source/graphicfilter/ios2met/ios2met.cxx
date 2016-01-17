@@ -2292,7 +2292,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                         OUString aStr( str, strlen(str), osl_getThreadTextEncoding() );
                         if ( aStr.compareToIgnoreAsciiCase( "Helv" ) == 0 )
                             aStr = "Helvetica";
-                        pF->aFont.SetName( aStr );
+                        pF->aFont.SetFamilyName( aStr );
                         break;
                     }
                 }
