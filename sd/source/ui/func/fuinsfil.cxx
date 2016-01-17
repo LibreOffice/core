@@ -258,20 +258,20 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     mpDocSh->SetWaitCursor( true );
 
-    SfxMedium*          pMedium = new SfxMedium( aFile, StreamMode::READ | StreamMode::NOCREATE );
+    std::unique_ptr<SfxMedium>  xMedium(new SfxMedium(aFile, StreamMode::READ | StreamMode::NOCREATE));
     const SfxFilter*    pFilter = nullptr;
 
-    SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter );
+    SfxGetpApp()->GetFilterMatcher().GuessFilter(*xMedium, &pFilter);
 
     bool                bDrawMode = mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr;
     bool                bInserted = false;
 
     if( pFilter )
     {
-        pMedium->SetFilter( pFilter );
+        xMedium->SetFilter( pFilter );
         aFilterName = pFilter->GetFilterName();
 
-        if( pMedium->IsStorage() || ( pMedium->GetInStream() && SotStorage::IsStorageFile( pMedium->GetInStream() ) ) )
+        if( xMedium->IsStorage() || ( xMedium->GetInStream() && SotStorage::IsStorageFile( xMedium->GetInStream() ) ) )
         {
             if ( pFilter->GetServiceName() == "com.sun.star.presentation.PresentationDocument" ||
                  pFilter->GetServiceName() == "com.sun.star.drawing.DrawingDocument" )
@@ -279,11 +279,11 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 // Draw, Impress or PowerPoint document
                 // the ownership of the Medium is transferred
                 if( bDrawMode )
-                    InsSDDinDrMode( pMedium );
+                    InsSDDinDrMode(xMedium.release());
                 else
-                    InsSDDinOlMode( pMedium );
+                    InsSDDinOlMode(xMedium.release());
 
-                // don't delete Medium here, ownership of pMedium has changed in this case
+                // ownership of pMedium has changed in this case
                 bInserted = true;
             }
         }
@@ -302,12 +302,12 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
             if( bFound )
             {
                 if( bDrawMode )
-                    InsTextOrRTFinDrMode(pMedium);
+                    InsTextOrRTFinDrMode(xMedium.get());
                 else
-                    InsTextOrRTFinOlMode(pMedium);
+                    InsTextOrRTFinOlMode(xMedium.get());
 
                 bInserted = true;
-                delete pMedium;
+                xMedium.reset();
             }
         }
     }
@@ -318,7 +318,6 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     {
         ScopedVclPtrInstance< MessageDialog > aErrorBox(mpWindow, SD_RESSTR( STR_READ_DATA_ERROR));
         aErrorBox->Execute();
-        delete pMedium;
     }
 }
 
