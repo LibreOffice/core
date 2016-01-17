@@ -29,6 +29,8 @@
 
 # default location for external downloads
 /external/tarballs
+/external/android-ndk
+/external/android-sdk-linux
 
 # autoconf generated stuff
 /aclocal.m4
