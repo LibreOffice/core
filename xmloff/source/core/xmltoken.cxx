@@ -45,7 +45,7 @@ namespace xmloff { namespace token {
 #if OSL_DEBUG_LEVEL > 0
     #define TOKEN( s, e ) { sizeof(s)-1, s, nullptr, e }
 #else
-    #define TOKEN( s, e ) { sizeof(s)-1, s, NULL }
+    #define TOKEN( s, e ) { sizeof(s)-1, s, nullptr }
 #endif
 
     struct XMLTokenEntry aTokenList[] =
@@ -53,7 +53,7 @@ namespace xmloff { namespace token {
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr, XML_TOKEN_START },
 #else
-        { 0, NULL, NULL },                            // XML_TOKEN_START
+        { 0, nullptr, nullptr },                            // XML_TOKEN_START
 #endif
 
         // common XML
@@ -3260,7 +3260,7 @@ namespace xmloff { namespace token {
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }
 #else
-        { 0, NULL, NULL                       /* XML_TOKEN_END */ }
+        { 0, nullptr, nullptr                       /* XML_TOKEN_END */ }
 #endif
     };
 
