@@ -1201,6 +1201,7 @@ namespace svgio
             maStrokeOpacity(),
             maFontFamily(),
             maFontSize(),
+            maFontSizeNumber(),
             maFontStretch(FontStretch_notset),
             maFontStyle(FontStyle_notset),
             maFontVariant(FontVariant_notset),
@@ -1484,11 +1485,57 @@ namespace svgio
                 }
                 case SVGTokenFontSize:
                 {
-                    SvgNumber aNum;
-
-                    if(readSingleNumber(aContent, aNum))
+                    if(!aContent.isEmpty())
                     {
-                        setFontSize(aNum);
+                        if(aContent.startsWith("xx-small"))
+                        {
+                            setFontSize(FontSize_xx_small);
+                        }
+                        else if(aContent.startsWith("x-small"))
+                        {
+                            setFontSize(FontSize_x_small);
+                        }
+                        else if(aContent.startsWith("small"))
+                        {
+                            setFontSize(FontSize_small);
+                        }
+                        else if(aContent.startsWith("smaller"))
+                        {
+                            setFontSize(FontSize_smaller);
+                        }
+                        else if(aContent.startsWith("medium"))
+                        {
+                            setFontSize(FontSize_medium);
+                        }
+                        else if(aContent.startsWith("larger"))
+                        {
+                            setFontSize(FontSize_larger);
+                        }
+                        else if(aContent.startsWith("large"))
+                        {
+                            setFontSize(FontSize_large);
+                        }
+                        else if(aContent.startsWith("x-large"))
+                        {
+                            setFontSize(FontSize_x_large);
+                        }
+                        else if(aContent.startsWith("xx-large"))
+                        {
+                            setFontSize(FontSize_xx_large);
+                        }
+                        else if(aContent.startsWith("initial"))
+                        {
+                            setFontSize(FontSize_initial);
+                        }
+                        else
+                        {
+                            SvgNumber aNum;
+
+                            if(readSingleNumber(aContent, aNum))
+                            {
+                                setFontSizeNumber(aNum);
+                            }
+                        }
                     }
                     break;
                 }
@@ -2265,40 +2312,96 @@ namespace svgio
             return maFontFamily;
         }
 
-        SvgNumber SvgStyleAttributes::getFontSize() const
+        SvgNumber SvgStyleAttributes::getFontSizeNumber() const
         {
-            if(maFontSize.isSet())
+            if(maFontSizeNumber.isSet())
             {
                 // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
                 // spec 10.10 Font selection properties \91font-size\92, lastline (click 'normative
                 // definition of the property')
-                if(Unit_percent == maFontSize.getUnit())
+                if(Unit_percent == maFontSizeNumber.getUnit())
                 {
                     const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
                     if(pSvgStyleAttributes)
                     {
-                        const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSize();
+                        const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
 
                         return SvgNumber(
-                            aParentNumber.getNumber() * maFontSize.getNumber() * 0.01,
+                            aParentNumber.getNumber() * maFontSizeNumber.getNumber() * 0.01,
                             aParentNumber.getUnit(),
                             true);
                     }
                 }
 
-                return maFontSize;
+                return maFontSizeNumber;
+            }
+
+            // default is 'medium'
+            const double aDefaultSize = 12.0;
+
+            //In CSS2, the suggested scaling factor between adjacent indexes is 1.2
+            switch(maFontSize)
+            {
+                case FontSize_notset:
+                    break;
+                case FontSize_xx_small:
+                {
+                    return SvgNumber(aDefaultSize / 1.728);
+                }
+                case FontSize_x_small:
+                {
+                    return SvgNumber(aDefaultSize / 1.44);
+                }
+                case FontSize_small:
+                {
+                    return SvgNumber(aDefaultSize / 1.2);
+                }
+                case FontSize_smaller:
+                {
+                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                    if(pSvgStyleAttributes)
+                    {
+                        const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
+                        return SvgNumber(aParentNumber.getNumber() / 1.2, aParentNumber.getUnit());
+                    }
+                }
+                case FontSize_medium:
+                case FontSize_initial:
+                {
+                    return SvgNumber(aDefaultSize);
+                }
+                case FontSize_large:
+                {
+                    return SvgNumber(aDefaultSize * 1.2);
+                }
+                case FontSize_larger:
+                {
+                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                    if(pSvgStyleAttributes)
+                    {
+                        const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
+                        return SvgNumber(aParentNumber.getNumber() * 1.2, aParentNumber.getUnit());
+                    }
+                }
+                case FontSize_x_large:
+                {
+                    return SvgNumber(aDefaultSize * 1.44);
+                }
+                case FontSize_xx_large:
+                {
+                    return SvgNumber(aDefaultSize * 1.728);
+                }
             }
 
             const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
             if(pSvgStyleAttributes)
             {
-                return pSvgStyleAttributes->getFontSize();
+                return pSvgStyleAttributes->getFontSizeNumber();
             }
 
-            // default is 'medium'
-            return SvgNumber(12.0);
+            return SvgNumber(aDefaultSize);
         }
 
         FontStretch SvgStyleAttributes::getFontStretch() const
