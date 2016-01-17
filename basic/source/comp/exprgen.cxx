@@ -184,7 +184,7 @@ void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
     if( aVar.pPar && aVar.pPar->GetSize() )
     {
         nId |= 0x8000;
-        aVar.pPar->Gen();
+        aVar.pPar->Gen(rGen);
     }
 
     rGen.Gen( eOp, nId, sal::static_int_cast< sal_uInt16 >( GetType() ) );
@@ -193,7 +193,7 @@ void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
     {
         for( auto& pExprList: *aVar.pvMorePar )
         {
-            pExprList->Gen();
+            pExprList->Gen(rGen);
             rGen.Gen( _ARRAYACCESS );
         }
     }
@@ -203,11 +203,11 @@ void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
 // The first element remain available for return value etc.
 // See as well SbiProcDef::SbiProcDef() in symtbl.cxx
 
-void SbiExprList::Gen()
+void SbiExprList::Gen(SbiCodeGen& rGen)
 {
     if( pFirst )
     {
-        pParser->aGen.Gen( _ARGC );
+        rGen.Gen( _ARGC );
         // Type adjustment at DECLARE
         sal_uInt16 nCount = 1;
 
@@ -217,8 +217,8 @@ void SbiExprList::Gen()
             if( !pExpr->GetName().isEmpty() )
             {
                 // named arg
-                sal_uInt16 nSid = pParser->aGblStrings.Add( pExpr->GetName() );
-                pParser->aGen.Gen( _ARGN, nSid );
+                sal_uInt16 nSid = rGen.GetParser()->aGblStrings.Add( pExpr->GetName() );
+                rGen.Gen( _ARGN, nSid );
 
                 /* TODO: Check after Declare concept change
                 // From 1996-01-10: Type adjustment at named -> search suitable parameter
@@ -247,7 +247,7 @@ void SbiExprList::Gen()
             }
             else
             {
-                pParser->aGen.Gen( _ARGV );
+                rGen.Gen( _ARGV );
             }
         }
     }
