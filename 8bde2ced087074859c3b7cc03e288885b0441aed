@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_1b949a35",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2365,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2016-01-17T20:51:59Z",
+      "side": 1,
+      "message": "It seems to me, that here and in FontSize_larger the unit of the parent font size is missing.",
+      "revId": "8bde2ced087074859c3b7cc03e288885b0441aed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
