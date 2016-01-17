@@ -88,14 +88,13 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mnDefine(0),
   mnToken(oox::XML_TOKEN_COUNT),
   mpStream(pContext->mpStream),
+  mpParserState(pContext->mpParserState),
   mnTableDepth(pContext->mnTableDepth),
   inPositionV(pContext->inPositionV),
   m_xContext(pContext->m_xContext),
   m_bDiscardChildren(pContext->m_bDiscardChildren),
   m_bTookChoice(pContext->m_bTookChoice)
 {
-    mpParserState = pContext->mpParserState;
-
     if (mpParserState.get() == nullptr)
         mpParserState.reset(new OOXMLParserState());
 
