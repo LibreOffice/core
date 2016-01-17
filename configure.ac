@@ -1511,6 +1511,11 @@ dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
 
+AC_ARG_WITH(gcc-home,
+    AS_HELP_STRING([--with-gcc-home],
+        [Specify the location of icecream gcc/g++ wrappers when --enable-icecream is turned on.]),
+,)
+
 AC_ARG_WITH(gnu-patch,
     AS_HELP_STRING([--with-gnu-patch],
         [Specify location of GNU patch on Solaris or FreeBSD.]),
