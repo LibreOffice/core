@@ -788,7 +788,7 @@ const SfxPoolItem* MSWordExportBase::HasItem( sal_uInt16 nWhich ) const
 
 const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
 {
-    const SfxPoolItem* pItem;
+    assert((m_pISet || m_pChpIter) && "Where is my ItemSet / pChpIter ?");
     if (m_pISet)
     {
         // if write a EditEngine text, then the WhichIds are greater as
@@ -796,16 +796,9 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
         // EditEngine Range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);
         OSL_ENSURE(nWhich != 0, "All broken, Impossible");
-        pItem = &m_pISet->Get(nWhich);
+        return m_pISet->Get(nWhich);
     }
-    else if( m_pChpIter )
-        pItem = &m_pChpIter->GetItem( nWhich );
-    else
-    {
-        OSL_ENSURE( false, "Where is my ItemSet / pChpIter ?" );
-        pItem = nullptr;
-    }
-    return *pItem;
+    return m_pChpIter->GetItem( nWhich );
 }
 
 WW8_WrPlc1::WW8_WrPlc1( sal_uInt16 nStructSz )
