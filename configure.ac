@@ -6337,45 +6337,40 @@ if test "$cxx11_ref_qualifier" = yes; then
 fi
 
 AC_MSG_CHECKING([whether $CXX supports C++14 sized deallocation])
-if test "$CROSS_COMPILING" = TRUE; then
-    cxx14_sized_deallocation=no
-    AC_MSG_RESULT([$cxx14_sized_deallocation (assumed; cross compiling)])
-else
-    dnl At least Clang -fsanitize=address causes "multiple definition of
-    dnl `operator delete(void*, unsigned long)'" also defined in
-    dnl projects/compiler-rt/lib/asan/asan_new_delete.cc:
-    save_CXX=$CXX
-    if test "$COM_IS_CLANG" = TRUE; then
-        my_CXX=
-        for i in $CXX; do
-            case $i in
-            -fsanitize=address)
-                ;;
-            *)
-                my_CXX="$my_CXX $i"
-                ;;
-            esac
-        done
-        CXX=$my_CXX
-    fi
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-    AC_LANG_PUSH([C++])
-    AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-        #include <cstddef>
-        #include <cstdlib>
-        void operator delete(void *) throw () { std::exit(1); }
-        void operator delete(void *, std::size_t) throw () { std::exit(0); }
-        struct S { S() { throw 0; } };
-        ]],[[
-        try { new S; } catch (...) {}
-        return 1;
-        ]])], [cxx14_sized_deallocation=yes], [cxx14_sized_deallocation=no])
-    AC_LANG_POP([C++])
-    CXX=$save_CXX
-    CXXFLAGS=$save_CXXFLAGS
-    AC_MSG_RESULT([$cxx14_sized_deallocation])
+dnl At least Clang -fsanitize=address causes "multiple definition of
+dnl `operator delete(void*, unsigned long)'" also defined in
+dnl projects/compiler-rt/lib/asan/asan_new_delete.cc:
+save_CXX=$CXX
+if test "$COM_IS_CLANG" = TRUE; then
+    my_CXX=
+    for i in $CXX; do
+        case $i in
+        -fsanitize=address)
+            ;;
+        *)
+            my_CXX="$my_CXX $i"
+            ;;
+        esac
+    done
+    CXX=$my_CXX
 fi
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LANG_PUSH([C++])
+AC_RUN_IFELSE([AC_LANG_PROGRAM([[
+    #include <cstddef>
+    #include <cstdlib>
+    void operator delete(void *) throw () { std::exit(1); }
+    void operator delete(void *, std::size_t) throw () { std::exit(0); }
+    struct S { S() { throw 0; } };
+    ]],[[
+    try { new S; } catch (...) {}
+    return 1;
+    ]])], [cxx14_sized_deallocation=yes], [cxx14_sized_deallocation=no], [cxx14_sized_deallocation=no])
+AC_LANG_POP([C++])
+CXX=$save_CXX
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([$cxx14_sized_deallocation])
 if test "$cxx14_sized_deallocation" = yes; then
     AC_DEFINE([HAVE_CXX14_SIZED_DEALLOCATION])
 fi
@@ -8126,32 +8121,30 @@ case $enable_python in
 system)
     SYSTEM_PYTHON=TRUE
 
-    if test "$CROSS_COMPILING" != TRUE; then
-        dnl Check if the headers really work
-        save_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
-        AC_CHECK_HEADER(Python.h, [],
-           [AC_MSG_ERROR([Python headers not found. You probably want to set both the PYTHON_CFLAGS and PYTHON_LIBS environment variables.])],
-           [])
-        CPPFLAGS="$save_CPPFLAGS"
+    dnl Check if the headers really work
+    save_CPPFLAGS="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
+    AC_CHECK_HEADER(Python.h, [],
+       [AC_MSG_ERROR([Python headers not found. You probably want to set both the PYTHON_CFLAGS and PYTHON_LIBS environment variables.])],
+       [])
+    CPPFLAGS="$save_CPPFLAGS"
 
-        AC_LANG_PUSH(C)
-        CFLAGS="$CFLAGS $PYTHON_CFLAGS"
-        AC_MSG_CHECKING([for correct python library version])
-           AC_RUN_IFELSE([AC_LANG_SOURCE([[
+    AC_LANG_PUSH(C)
+    CFLAGS="$CFLAGS $PYTHON_CFLAGS"
+    AC_MSG_CHECKING([for correct python library version])
+       AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <Python.h>
 
 int main(int argc, char **argv) {
-       if ((PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION >= 6) ||
-           (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3)) return 0;
-       else return 1;
+   if ((PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION >= 6) ||
+       (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3)) return 0;
+   else return 1;
 }
-           ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3, or Python >= 2.6 when building with Python 2])],[])
-        CFLAGS=$save_CFLAGS
-        AC_LANG_POP(C)
+       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3, or Python >= 2.6 when building with Python 2])],[AC_MSG_RESULT([skipped; cross-compiling])])
+    CFLAGS=$save_CFLAGS
+    AC_LANG_POP(C)
 
-        dnl FIXME Check if the Python library can be linked with, too?
-    fi
+    dnl FIXME Check if the Python library can be linked with, too?
     ;;
 
 internal)
@@ -8333,7 +8326,7 @@ int main(int argc, char **argv) {
       else
         return 1;
 }
-      ]])],[AC_MSG_RESULT(OK)],[AC_MSG_ERROR([not suitable, we need >= 1.0.6])],[])
+      ]])],[AC_MSG_RESULT(OK)],[AC_MSG_ERROR([not suitable, we need >= 1.0.6])],[AC_MSG_ERROR([MySQL C++ Connecter not tested with cross-compilation])])
 
         AC_LANG_POP([C++])
         LIBS=$save_LIBS
@@ -11148,7 +11141,7 @@ int main(int argc, char **argv) {
        if (KDE_VERSION_MAJOR == 4 && KDE_VERSION_MINOR >= 2) return 0;
        else return 1;
 }
-       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
+]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[AC_MSG_ERROR([KDE support not tested with cross-compilation])])
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
 
@@ -11205,7 +11198,7 @@ int main(int argc, char *argv[])
                 fi
                 qt4_fix_warning=1
                 add_warning "  https://bugreports.qt-project.org/browse/QTBUG-37380 (needed)"
-            ])
+                ],[AC_MSG_ERROR([KDE4 file pickers not tested with cross-compilation])])
 
             # Remove meta object data
             rm -f "${TSTBASE}."*
@@ -11238,7 +11231,7 @@ int main(int argc, char *argv[])
                 fi
                 qt4_fix_warning=1
                 add_warning "  https://bugreports.qt-project.org/browse/QTBUG-34614 (needed)"
-            ])
+            ],[AC_MSG_ERROR([KDE4 file pickers not tested with cross-compilation])])
 
             # Remove meta object data
             rm -f "${TSTBASE}."*
@@ -11297,7 +11290,8 @@ int main(int argc, char **argv) {
        if (TDE_VERSION_MAJOR >= 14) return 0;
        else return 1;
 }
-       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([TDE version too old or too recent, please use another version of TDE or disable TDE address book support])],[])
+       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([TDE version too old or too recent, please use another version of TDE or disable TDE address book support])],
+       [AC_MSG_ERROR([TDE support not tested with cross compilation])])
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
     ENABLE_TDEAB=TRUE
@@ -12601,37 +12595,33 @@ fi
 
 
 AC_MSG_CHECKING([whether $CXX has broken static initializer_list support])
-if test "$CROSS_COMPILING" = "TRUE"; then
-    broken='assuming not (cross-compiling)'
-else
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-    save_LIBS=$LIBS
-    if test -n "$ILIB1"; then
-        LIBS="$LIBS $ILIB1"
-    fi
-    AC_LANG_PUSH([C++])
-    AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-        // Exit with failure if the static initializer_list is stored on the
-        // stack (as done by Clang < 3.4):
-        #include <initializer_list>
-        struct S {};
-        bool g(void const * p1, void const * p2) {
-            int n;
-            return !((p1 > p2 && p2 > &n) || (p1 < p2 && p2 < &n));
-        }
-        bool f(void const * p1) {
-            static std::initializer_list<S> s { S() };
-            return g(p1, s.begin());
-        }
-        ]],[[
-            int n;
-            return f(&n) ? 0 : 1;
-        ]])], [broken=no], [broken=yes])
-    AC_LANG_POP([C++])
-    LIBS=$save_LIBS
-    CXXFLAGS=$save_CXXFLAGS
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+save_LIBS=$LIBS
+if test -n "$ILIB1"; then
+    LIBS="$LIBS $ILIB1"
 fi
+AC_LANG_PUSH([C++])
+AC_RUN_IFELSE([AC_LANG_PROGRAM([[
+    // Exit with failure if the static initializer_list is stored on the
+    // stack (as done by Clang < 3.4):
+    #include <initializer_list>
+    struct S {};
+    bool g(void const * p1, void const * p2) {
+        int n;
+        return !((p1 > p2 && p2 > &n) || (p1 < p2 && p2 < &n));
+    }
+    bool f(void const * p1) {
+        static std::initializer_list<S> s { S() };
+        return g(p1, s.begin());
+    }
+    ]],[[
+        int n;
+        return f(&n) ? 0 : 1;
+    ]])], [broken=no], [broken=yes],[broken='assuming not (cross-compiling)'])
+AC_LANG_POP([C++])
+LIBS=$save_LIBS
+CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$broken])
 if test "$broken" = yes; then
     AC_DEFINE([HAVE_BROKEN_STATIC_INITILIZER_LIST])
