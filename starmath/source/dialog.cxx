@@ -302,7 +302,7 @@ void SmShowFont::SetFont(const vcl::Font& rFont)
 
 IMPL_LINK_TYPED( SmFontDialog, FontSelectHdl, ComboBox&, rComboBox, void )
 {
-    maFont.SetName(rComboBox.GetText());
+    maFont.SetFamilyName(rComboBox.GetText());
     m_pShowFont->SetFont(maFont);
 }
 

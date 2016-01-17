@@ -380,7 +380,7 @@ namespace
         if ( SfxItemState::SET == _rItemSet.GetItemState( _nFont,true,&pItem) && dynamic_cast< const SvxFontItem *>( pItem ) !=  nullptr)
         {
             const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
-            aNewFont.SetName( pFontItem->GetFamilyName());
+            aNewFont.SetFamilyName(pFontItem->GetFamilyName());
             aNewFont.SetStyleName(pFontItem->GetStyleName());
             aNewFont.SetFamily(pFontItem->GetFamily());
             aNewFont.SetPitch(pFontItem->GetPitch());

@@ -492,7 +492,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
             m_aSub[SW_LATIN].SetFamily( pFont->GetFamily() );
-            m_aSub[SW_LATIN].Font::SetName( pFont->GetFamilyName() );
+            m_aSub[SW_LATIN].Font::SetFamilyName( pFont->GetFamilyName() );
             m_aSub[SW_LATIN].Font::SetStyleName( pFont->GetStyleName() );
             m_aSub[SW_LATIN].Font::SetPitch( pFont->GetPitch() );
             m_aSub[SW_LATIN].Font::SetCharSet( pFont->GetCharSet() );
@@ -522,7 +522,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
             m_aSub[SW_CJK].SetFamily( pFont->GetFamily() );
-            m_aSub[SW_CJK].Font::SetName( pFont->GetFamilyName() );
+            m_aSub[SW_CJK].Font::SetFamilyName( pFont->GetFamilyName() );
             m_aSub[SW_CJK].Font::SetStyleName( pFont->GetStyleName() );
             m_aSub[SW_CJK].Font::SetPitch( pFont->GetPitch() );
             m_aSub[SW_CJK].Font::SetCharSet( pFont->GetCharSet() );
@@ -558,7 +558,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
             m_aSub[SW_CTL].SetFamily( pFont->GetFamily() );
-            m_aSub[SW_CTL].Font::SetName( pFont->GetFamilyName() );
+            m_aSub[SW_CTL].Font::SetFamilyName( pFont->GetFamilyName() );
             m_aSub[SW_CTL].Font::SetStyleName( pFont->GetStyleName() );
             m_aSub[SW_CTL].Font::SetPitch( pFont->GetPitch() );
             m_aSub[SW_CTL].Font::SetCharSet( pFont->GetCharSet() );
@@ -758,7 +758,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     {
         const SvxFontItem& rFont = pAttrSet->GetFont();
         m_aSub[SW_LATIN].SetFamily( rFont.GetFamily() );
-        m_aSub[SW_LATIN].SetName( rFont.GetFamilyName() );
+        m_aSub[SW_LATIN].SetFamilyName( rFont.GetFamilyName() );
         m_aSub[SW_LATIN].SetStyleName( rFont.GetStyleName() );
         m_aSub[SW_LATIN].SetPitch( rFont.GetPitch() );
         m_aSub[SW_LATIN].SetCharSet( rFont.GetCharSet() );
@@ -774,7 +774,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     {
         const SvxFontItem& rFont = pAttrSet->GetCJKFont();
         m_aSub[SW_CJK].SetFamily( rFont.GetFamily() );
-        m_aSub[SW_CJK].SetName( rFont.GetFamilyName() );
+        m_aSub[SW_CJK].SetFamilyName( rFont.GetFamilyName() );
         m_aSub[SW_CJK].SetStyleName( rFont.GetStyleName() );
         m_aSub[SW_CJK].SetPitch( rFont.GetPitch() );
         m_aSub[SW_CJK].SetCharSet( rFont.GetCharSet() );
@@ -794,7 +794,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     {
         const SvxFontItem& rFont = pAttrSet->GetCTLFont();
         m_aSub[SW_CTL].SetFamily( rFont.GetFamily() );
-        m_aSub[SW_CTL].SetName( rFont.GetFamilyName() );
+        m_aSub[SW_CTL].SetFamilyName( rFont.GetFamilyName() );
         m_aSub[SW_CTL].SetStyleName( rFont.GetStyleName() );
         m_aSub[SW_CTL].SetPitch( rFont.GetPitch() );
         m_aSub[SW_CTL].SetCharSet( rFont.GetCharSet() );

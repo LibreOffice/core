@@ -137,7 +137,7 @@ void Font::SetAlign( FontAlign eAlign )
     }
 }
 
-void Font::SetName( const OUString& rFamilyName )
+void Font::SetFamilyName( const OUString& rFamilyName )
 {
     MakeUnique();
     mpImplFont->SetFamilyName( rFamilyName );
@@ -411,7 +411,7 @@ void Font::Merge( const vcl::Font& rFont )
 {
     if ( !rFont.GetFamilyName().isEmpty() )
     {
-        SetName( rFont.GetFamilyName() );
+        SetFamilyName( rFont.GetFamilyName() );
         SetStyleName( rFont.GetStyleName() );
         SetCharSet( GetCharSet() );
         SetLanguageTag( rFont.GetLanguageTag() );
@@ -573,9 +573,9 @@ namespace
             GetTTGlobalFontInfo( pTTF, &aInfo );
             // most importantly: the family name
             if( aInfo.ufamily )
-                o_rResult.SetName( aInfo.ufamily );
+                o_rResult.SetFamilyName( aInfo.ufamily );
             else if( aInfo.family )
-                o_rResult.SetName( OStringToOUString( aInfo.family, RTL_TEXTENCODING_ASCII_US ) );
+                o_rResult.SetFamilyName( OStringToOUString( aInfo.family, RTL_TEXTENCODING_ASCII_US ) );
             // set weight
             if( aInfo.weight )
             {
@@ -690,7 +690,7 @@ namespace
                     pClose++;
                 if( pClose - pOpen > 1 )
                 {
-                    o_rResult.SetName( OStringToOUString( OString( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
+                    o_rResult.SetFamilyName( OStringToOUString( OString( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
                 }
             }
 

@@ -2111,7 +2111,7 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
                     vcl::Font aFont;
                     if(pI && dynamic_cast< const SvxFontItem *>( pI ) !=  nullptr)
                     {
-                        aFont.SetName( static_cast<const SvxFontItem*>(pI)->GetFamilyName());
+                        aFont.SetFamilyName( static_cast<const SvxFontItem*>(pI)->GetFamilyName());
                         aFont.SetStyleName(static_cast<const SvxFontItem*>(pI)->GetStyleName());
                         aFont.SetFamily(static_cast<const SvxFontItem*>(pI)->GetFamily());
                         aFont.SetPitch(static_cast<const SvxFontItem*>(pI)->GetPitch());

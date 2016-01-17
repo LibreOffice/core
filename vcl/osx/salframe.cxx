@@ -1101,7 +1101,7 @@ static vcl::Font getFont( NSFont* pFont, long nDPIY, const vcl::Font& rDefault )
     vcl::Font aResult( rDefault );
     if( pFont )
     {
-        aResult.SetName( GetOUString( [pFont familyName] ) );
+        aResult.SetFamilyName( GetOUString( [pFont familyName] ) );
         aResult.SetHeight( static_cast<int>(([pFont pointSize] * 72.0 / (float)nDPIY)+0.5) );
         aResult.SetItalic( ([pFont italicAngle] != 0.0) ? ITALIC_NORMAL : ITALIC_NONE );
         // FIMXE: bold ?

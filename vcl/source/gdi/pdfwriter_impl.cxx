@@ -1783,7 +1783,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_aStructure[0].m_nParentElement    = 0;
 
     Font aFont;
-    aFont.SetName( "Times" );
+    aFont.SetFamilyName( "Times" );
     aFont.SetSize( Size( 0, 12 ) );
 
     GraphicsState aState;
@@ -2316,7 +2316,7 @@ void PDFWriterImpl::endPage()
 
         // reset the default font
         Font aFont;
-        aFont.SetName( "Times" );
+        aFont.SetFamilyName( "Times" );
         aFont.SetSize( Size( 0, 12 ) );
 
         m_aCurrentPDFState = m_aGraphicsStack.front();

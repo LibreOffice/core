@@ -389,7 +389,7 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
 {
     vcl::Font aFont( rInitFont );
     if ( !rDescr.Name.isEmpty() )
-        aFont.SetName( rDescr.Name );
+        aFont.SetFamilyName( rDescr.Name );
     if ( !rDescr.StyleName.isEmpty() )
         aFont.SetStyleName( rDescr.StyleName );
     if ( rDescr.Height )

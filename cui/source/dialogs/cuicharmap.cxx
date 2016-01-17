@@ -96,7 +96,7 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     else if ( pFontNameItem )
     {
         vcl::Font aTmpFont( GetCharFont() );
-        aTmpFont.SetName( pFontNameItem->GetValue() );
+        aTmpFont.SetFamilyName( pFontNameItem->GetValue() );
         SetCharFont( aTmpFont );
     }
 
