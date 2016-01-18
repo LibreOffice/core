@@ -25,13 +25,6 @@ $(eval $(call gb_CppunitTest_use_libraries,basebmp,\
 
 $(eval $(call gb_CppunitTest_add_exception_objects,basebmp,\
     basebmp/test/basictest \
-    basebmp/test/bmpmasktest \
-    basebmp/test/bmptest \
-    basebmp/test/cliptest \
-    basebmp/test/filltest \
-    basebmp/test/linetest \
-    basebmp/test/masktest \
-    basebmp/test/polytest \
     basebmp/test/tools \
 ))
 
