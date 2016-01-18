@@ -71,7 +71,8 @@ private:
         // avoid warnings about virtual members and non-virtual dtor
 
 public:
-    static void dummy(DerivedInterface1 * p) { p->~DerivedInterface1(); }
+    static void dummy(DerivedInterface1 * p)
+    { p->DerivedInterface1::~DerivedInterface1(); }
         // ...and avoid warnings about unused ~DerivedInterface1 (see below)
 };
 
@@ -81,7 +82,8 @@ private:
         // avoid warnings about virtual members and non-virtual dtor
 
 public:
-    static void dummy(DerivedInterface2 * p) { p->~DerivedInterface2(); }
+    static void dummy(DerivedInterface2 * p)
+    { p->DerivedInterface2::~DerivedInterface2(); }
         // ...and avoid warnings about unused ~DerivedInterface2 (see below)
 };
 
