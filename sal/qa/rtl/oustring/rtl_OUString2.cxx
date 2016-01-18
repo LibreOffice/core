@@ -1001,10 +1001,6 @@ void isEmpty::test() {
 
     aString.clear();
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "aString.clear(), so should now be empty", true, aString.isEmpty() );
-
-    aString = "Not empty any more";
-    aString = "";
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "aString = \"\", so should now be empty", true, aString.isEmpty() );
 }
 
 
