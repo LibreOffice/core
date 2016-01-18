@@ -674,10 +674,16 @@ class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
 /// Extracts information about the command + args, and stores that.
 void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::PropertyValue>& rArgs)
 {
-    bool bCollecting = officecfg::Office::Common::Misc::CollectUsageInformation::get();
-    theUsageInfo::get().setCollecting(bCollecting);
-    if (!bCollecting)
-        return;
+    static bool bCollecting = officecfg::Office::Common::Misc::CollectUsageInformation::get();
+    if (!bCollecting){
+        bCollecting = getenv("LO_COLLECT_USAGE");
+        theUsageInfo::get().setCollecting(bCollecting);
+        if(!bCollecting) {
+            bCollecting = 1;
+        }
+        else {
+            return;}
+        }
 
     OUStringBuffer aBuffer;
 
