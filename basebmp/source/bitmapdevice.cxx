@@ -366,7 +366,7 @@ namespace
                 isSharedBuffer(rSrcBitmap) );
         }
 
-        template< typename Iterator, typename Acc >
+        template< typename Iterator, typename Acc > static
         void implDrawBitmapGeneric(const BitmapDeviceSharedPtr& rSrcBitmap,
                                    const basegfx::B2IBox&       rSrcRect,
                                    const basegfx::B2IBox&       rDstRect,
