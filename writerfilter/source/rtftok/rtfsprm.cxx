@@ -124,7 +124,7 @@ bool RTFSprms::erase(Id nKeyword)
     return false;
 }
 
-bool RTFSprms::eraseLast(Id nKeyword)
+void RTFSprms::eraseLast(Id nKeyword)
 {
     ensureCopyBeforeWrite();
     for (RTFSprms::ReverseIterator_t i = m_pSprms->rbegin(); i != m_pSprms->rend(); ++i)
@@ -132,10 +132,9 @@ bool RTFSprms::eraseLast(Id nKeyword)
         if (i->first == nKeyword)
         {
             m_pSprms->erase(std::next(i).base());
-            return true;
+            return;
         }
     }
-    return false;
 }
 
 static RTFValue::Pointer_t getDefaultSPRM(Id const id)
