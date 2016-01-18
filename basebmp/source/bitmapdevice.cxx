@@ -177,8 +177,6 @@ namespace
         typedef AccessorTraits< dest_accessor_type >                       accessor_traits;
         typedef CompositeIterator2D< dest_iterator_type,
                                      mask_iterator_type >                  composite_iterator_type;
-        typedef CompositeIterator2D< vigra::Diff2D,
-                                     vigra::Diff2D >                       generic_composite_iterator_type;
 
         typedef BitmapRenderer<mask_iterator_type,
                                mask_rawaccessor_type,
@@ -506,40 +504,6 @@ namespace
                               rDstRect),
                 isSharedBuffer(rSrcBitmap));
         }
-
-        template< typename Iterator, typename Acc >
-        void implDrawMaskedBitmapGeneric(const BitmapDeviceSharedPtr& rSrcBitmap,
-                                         const BitmapDeviceSharedPtr& rMask,
-                                         const basegfx::B2IBox&       rSrcRect,
-                                         const basegfx::B2IBox&       rDstRect,
-                                         const Iterator&              begin,
-                                         const Acc&                   acc)
-        {
-            GenericColorImageAccessor aSrcAcc( rSrcBitmap );
-            GenericColorImageAccessor aMaskAcc( rMask );
-
-            const vigra::Diff2D aTopLeft(rSrcRect.getMinX(),
-                                         rSrcRect.getMinY());
-            const vigra::Diff2D aBottomRight(rSrcRect.getMaxX(),
-                                             rSrcRect.getMaxY());
-            scaleImage(
-                vigra::make_triple(
-                    generic_composite_iterator_type(
-                        aTopLeft,aTopLeft),
-                    generic_composite_iterator_type(
-                        aBottomRight,aBottomRight),
-                    joined_generic_image_accessor_type(
-                        aSrcAcc,
-                        aMaskAcc)),
-                destIterRange(begin,
-                              typename masked_input_splitting_accessor<
-                                       Acc,
-                                       joined_generic_image_accessor_type,
-                                       Masks::clipmask_polarity,
-                                       NoFastMask >::type(acc),
-                              rDstRect));
-        }
-
     };
 } // namespace
 
@@ -1180,7 +1144,6 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
               "createBitmapDevice: "
               << rSize.getX() << "x" << rSize.getY()
               << (bTopDown ? " top-down " : " bottom-up ")
-              << formatName(nScanlineFormat)
               << subset.str()
               << " = " << result.get() );
 #endif
