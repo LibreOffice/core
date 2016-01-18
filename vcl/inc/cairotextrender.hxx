@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
 
 #include "textrender.hxx"
-#include <basebmp/bitmapdevice.hxx>
 #include <vcl/region.hxx>
 #include <deque>
 

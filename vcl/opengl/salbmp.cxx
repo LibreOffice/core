@@ -726,7 +726,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
     // maUserBuffer must be unique when we are doing the write access
     if (nMode == BITMAP_WRITE_ACCESS && maUserBuffer && !maUserBuffer.unique())
     {
-        basebmp::RawMemorySharedArray aBuffer(maUserBuffer);
+        boost::shared_array<sal_uInt8> aBuffer(maUserBuffer);
 
         maUserBuffer.reset();
         AllocateUserData();

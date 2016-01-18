@@ -41,7 +41,6 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
 $(eval $(call gb_Library_set_precompiled_header,sofficeapp,$(SRCDIR)/desktop/inc/pch/precompiled_sofficeapp))
 
 $(eval $(call gb_Library_use_libraries,sofficeapp,\
-    $(if $(filter $(OS),ANDROID),,basebmp) \
     comphelper \
     cppu \
     cppuhelper \

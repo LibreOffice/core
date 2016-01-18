@@ -103,7 +103,7 @@ typedef struct
 
 // We need a shared_array for passing into the BitmapDevice (via
 // VirtualDevice.SetOutputSizePixelScaleOffsetAndBuffer which goes via the
-// SvpVirtualDevice, ending up in the basebmp BitmapDevice. However as we're
+// SvpVirtualDevice, ending up in the cairo surface. However as we're
 // given the array externally we can't delete it, and hence need to override
 // shared_array's default of deleting its pointer.
 template<typename T>

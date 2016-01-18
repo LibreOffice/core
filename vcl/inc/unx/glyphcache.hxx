@@ -26,7 +26,6 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
-#include <basebmp/bitmapdevice.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>

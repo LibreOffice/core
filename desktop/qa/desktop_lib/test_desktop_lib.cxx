@@ -14,7 +14,6 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <basebmp/bitmapdevice.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/objsh.hxx>
@@ -27,6 +26,7 @@
 #include <svl/srchitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/tempfile.hxx>
+#include <cairo.h>
 
 #include "../../inc/lib/init.hxx"
 
@@ -351,8 +351,7 @@ void DesktopLOKTest::testPaintTile()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     int nCanvasWidth = 100;
     int nCanvasHeight = 300;
-    sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(basebmp::Format::ThirtyTwoBitTcMaskBGRA,
-                                                               nCanvasWidth);
+    sal_Int32 nStride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nCanvasWidth);
     std::vector<unsigned char> aBuffer(nStride * nCanvasHeight);
     int nTilePosX = 0;
     int nTilePosY = 0;

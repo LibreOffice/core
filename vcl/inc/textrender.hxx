@@ -24,7 +24,6 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/metric.hxx>
-#include <basebmp/bitmapdevice.hxx>
 #include "salgdi.hxx"
 #include "salglyphid.hxx"
 #include "fontsubset.hxx"

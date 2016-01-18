@@ -25,12 +25,10 @@
 #include "headless/svpgdi.hxx"
 
 #include <basegfx/vector/b2ivector.hxx>
-#include <basebmp/scanlineformats.hxx>
 
 #include <cairo.h>
 
 using namespace basegfx;
-using namespace basebmp;
 
 SvpSalVirtualDevice::~SvpSalVirtualDevice()
 {
@@ -52,11 +50,11 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
-    return SetSizeUsingBuffer(nNewDX, nNewDY, basebmp::RawMemorySharedArray());
+    return SetSizeUsingBuffer(nNewDX, nNewDY, boost::shared_array<sal_uInt8>());
 }
 
 bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
-        const basebmp::RawMemorySharedArray &pBuffer )
+        const boost::shared_array<sal_uInt8> &pBuffer )
 {
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )

@@ -63,7 +63,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
     sot \
     ucbhelper \
     basegfx \
-    basebmp \
     comphelper \
     cppuhelper \
     i18nlangtag \

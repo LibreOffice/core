@@ -18,7 +18,6 @@
 #include <unx/gendata.hxx>
 #include <osl/detail/android-bootstrap.h>
 #include <rtl/strbuf.hxx>
-#include <basebmp/scanlineformats.hxx>
 #include <vcl/settings.hxx>
 
 #define LOGTAG "LibreOffice/androidinst"

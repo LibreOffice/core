@@ -22,8 +22,6 @@
 
 #include "tools/gen.hxx"
 
-#include "basebmp/bitmapdevice.hxx"
-
 #include "vcl/salbtype.hxx"
 
 #include "quartz/salgdi.h"
@@ -31,6 +29,8 @@
 #include "salinst.hxx"
 #include "salvd.hxx"
 #include "salbmp.hxx"
+
+#include <boost/shared_array.hpp>
 
 // - SalBitmap  -
 
@@ -43,8 +43,8 @@ public:
     CGContextRef                    mxGraphicContext;
     mutable CGImageRef              mxCachedImage;
     BitmapPalette                   maPalette;
-    basebmp::RawMemorySharedArray   maUserBuffer;
-    basebmp::RawMemorySharedArray   maContextBuffer;
+    boost::shared_array<sal_uInt8>  maUserBuffer;
+    boost::shared_array<sal_uInt8>  maContextBuffer;
     sal_uInt16                      mnBits;
     int                             mnWidth;
     int                             mnHeight;

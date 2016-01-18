@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <basebmp/color.hxx>
-#include <basebmp/scanlineformats.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>

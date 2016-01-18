@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <config_folders.h>
 
-#include <basebmp/scanlineformats.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

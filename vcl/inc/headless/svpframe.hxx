@@ -22,7 +22,6 @@
 
 #include <vcl/sysdata.hxx>
 #include <basegfx/range/b2ibox.hxx>
-#include <basebmp/bitmapdevice.hxx>
 
 #include <salframe.hxx>
 

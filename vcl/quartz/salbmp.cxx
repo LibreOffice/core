@@ -22,8 +22,6 @@
 #include <cstddef>
 #include <limits>
 
-#include <basebmp/scanlineformats.hxx>
-#include <basebmp/color.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <tools/color.hxx>
 #include <vcl/bitmap.hxx>

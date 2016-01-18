@@ -39,8 +39,6 @@
 
 #include "tools/link.hxx"
 
-#include <basebmp/bitmapdevice.hxx>
-#include <basebmp/scanlineformats.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 
 #include <list>

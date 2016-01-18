@@ -176,9 +176,6 @@
 #include <IMark.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <SwGetPoolIdFromName.hxx>
-#include <basebmp/basebmpdllapi.h>
-#include <basebmp/bitmapdevice.hxx>
-#include <basebmp/scanlineformats.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>

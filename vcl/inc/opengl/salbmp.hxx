@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_SALBMP_H
 #define INCLUDED_VCL_INC_OPENGL_SALBMP_H
 
-#include <basebmp/bitmapdevice.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
 #include "vcl/salbtype.hxx"
@@ -30,6 +29,7 @@
 #include <salbmp.hxx>
 
 #include <deque>
+#include <boost/shared_array.hpp>
 
 struct  BitmapBuffer;
 class   BitmapPalette;
@@ -40,7 +40,7 @@ private:
     OpenGLTexture                       maTexture;
     bool                                mbDirtyTexture;
     BitmapPalette                       maPalette;
-    basebmp::RawMemorySharedArray       maUserBuffer;
+    boost::shared_array<sal_uInt8>      maUserBuffer;
     sal_uInt16                          mnBits;
     sal_uInt16                          mnBytesPerRow;
     int                                 mnWidth;
