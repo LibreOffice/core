@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
 #include <basebmp/bitmapdevice.hxx>
-#include <basebmp/color.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
 #include <config_cairo_canvas.h>
@@ -66,14 +65,10 @@ struct VCL_DLLPUBLIC DamageHandler
 
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
-    cairo_surface_t*                     m_pSurface;
-
-    bool                                 m_bUseLineColor;
-    basebmp::Color                       m_aLineColor;
-    bool                                 m_bUseFillColor;
-    basebmp::Color                       m_aFillColor;
-
-    PaintMode                            m_ePaintMode;
+    cairo_surface_t*               m_pSurface;
+    SalColor                       m_aLineColor;
+    SalColor                       m_aFillColor;
+    PaintMode                      m_ePaintMode;
 
 public:
     static GlyphCache& getPlatformGlyphCache();
@@ -84,7 +79,7 @@ private:
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
     void setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPoly);
-    void applyColor(cairo_t *cr, const basebmp::Color &rColor);
+    void applyColor(cairo_t *cr, const SalColor &rColor);
     void drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly);
 protected:
     vcl::Region                         m_aClipRegion;

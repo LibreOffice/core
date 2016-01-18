@@ -357,24 +357,24 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 
     cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-    if (m_bUseFillColor)
+    if (m_aFillColor != SALCOLOR_NONE)
     {
-        cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
-                                  m_aFillColor.getGreen()/255.0,
-                                  m_aFillColor.getBlue()/255.0,
+        cairo_set_source_rgba(cr, SALCOLOR_RED(m_aFillColor)/255.0,
+                                  SALCOLOR_GREEN(m_aFillColor)/255.0,
+                                  SALCOLOR_BLUE(m_aFillColor)/255.0,
                                   fTransparency);
 
-        if (!m_bUseLineColor)
+        if (m_aLineColor == SALCOLOR_NONE)
             extents = getFillDamage(cr);
 
         cairo_fill_preserve(cr);
     }
 
-    if (m_bUseLineColor)
+    if (m_aLineColor != SALCOLOR_NONE)
     {
-        cairo_set_source_rgba(cr, m_aLineColor.getRed()/255.0,
-                                  m_aLineColor.getGreen()/255.0,
-                                  m_aLineColor.getBlue()/255.0,
+        cairo_set_source_rgba(cr, SALCOLOR_RED(m_aLineColor)/255.0,
+                                  SALCOLOR_GREEN(m_aLineColor)/255.0,
+                                  SALCOLOR_BLUE(m_aLineColor)/255.0,
                                   fTransparency);
 
         extents = getStrokeDamage(cr);
@@ -387,14 +387,12 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     return true;
 }
 
-SvpSalGraphics::SvpSalGraphics() :
-    m_pSurface( nullptr ),
-    m_bUseLineColor( true ),
-    m_aLineColor( COL_BLACK ),
-    m_bUseFillColor( false ),
-    m_aFillColor( COL_WHITE ),
-    m_ePaintMode( OVERPAINT ),
-    m_aTextRenderImpl(*this)
+SvpSalGraphics::SvpSalGraphics()
+    : m_pSurface(nullptr)
+    , m_aLineColor(MAKE_SALCOLOR(0x00, 0x00, 0x00))
+    , m_aFillColor(MAKE_SALCOLOR(0xFF, 0xFF, 0XFF))
+    , m_ePaintMode(OVERPAINT)
+    , m_aTextRenderImpl(*this)
 {
 }
 
@@ -440,24 +438,22 @@ bool SvpSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 
 void SvpSalGraphics::SetLineColor()
 {
-    m_bUseLineColor = false;
+    m_aLineColor = SALCOLOR_NONE;
 }
 
 void SvpSalGraphics::SetLineColor( SalColor nSalColor )
 {
-    m_bUseLineColor = true;
-    m_aLineColor = basebmp::Color( nSalColor );
+    m_aLineColor = nSalColor;
 }
 
 void SvpSalGraphics::SetFillColor()
 {
-    m_bUseFillColor = false;
+    m_aFillColor = SALCOLOR_NONE;
 }
 
 void SvpSalGraphics::SetFillColor( SalColor nSalColor )
 {
-    m_bUseFillColor = true;
-    m_aFillColor = basebmp::Color( nSalColor );
+    m_aFillColor = nSalColor;
 }
 
 void SvpSalGraphics::SetXORMode(bool bSet, bool bInvert)
@@ -467,90 +463,86 @@ void SvpSalGraphics::SetXORMode(bool bSet, bool bInvert)
 
 void SvpSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
-    m_bUseLineColor = true;
     switch( nROPColor )
     {
         case SAL_ROP_0:
-            m_aLineColor = basebmp::Color( 0 );
+            m_aLineColor = MAKE_SALCOLOR(0, 0, 0);
             break;
         case SAL_ROP_1:
-            m_aLineColor = basebmp::Color( 0xffffff );
+            m_aLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
         case SAL_ROP_INVERT:
-            m_aLineColor = basebmp::Color( 0xffffff );
+            m_aLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
     }
 }
 
 void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
-    m_bUseFillColor = true;
     switch( nROPColor )
     {
         case SAL_ROP_0:
-            m_aFillColor = basebmp::Color( 0 );
+            m_aFillColor = MAKE_SALCOLOR(0, 0, 0);
             break;
         case SAL_ROP_1:
-            m_aFillColor = basebmp::Color( 0xffffff );
+            m_aFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
         case SAL_ROP_INVERT:
-            m_aFillColor = basebmp::Color( 0xffffff );
+            m_aFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
     }
 }
 
 void SvpSalGraphics::drawPixel( long nX, long nY )
 {
-    if( m_bUseLineColor )
+    if (m_aLineColor != SALCOLOR_NONE)
     {
-        drawPixel(nX, nY, m_aLineColor.toInt32());
+        drawPixel(nX, nY, m_aLineColor);
     }
 }
 
 void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
-    basebmp::Color aOrigFillColor = m_aFillColor;
-    bool bOrigUseFillColor = m_bUseFillColor;
-    bool bOrigUseLineColor = m_bUseLineColor;
+    SalColor aOrigFillColor = m_aFillColor;
+    SalColor aOrigLineColor = m_aLineColor;
 
     basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+1, nY+1));
-    m_bUseLineColor = false;
-    m_bUseFillColor = true;
-    m_aFillColor = basebmp::Color(nSalColor);
+    m_aLineColor = SALCOLOR_NONE;
+    m_aFillColor = nSalColor;
+
     drawPolyPolygon(basegfx::B2DPolyPolygon(aRect));
 
-    m_bUseFillColor = bOrigUseFillColor;
-    m_bUseLineColor = bOrigUseLineColor;
     m_aFillColor = aOrigFillColor;
+    m_aLineColor = aOrigLineColor;
 }
 
 void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     // because of the -1 hack we have to do fill and draw separately
-    bool bOrigUseFillColor = m_bUseFillColor;
-    bool bOrigUseLineColor = m_bUseLineColor;
-    m_bUseFillColor = false;
-    m_bUseLineColor = false;
+    SalColor aOrigFillColor = m_aFillColor;
+    SalColor aOrigLineColor = m_aLineColor;
+    m_aFillColor = SALCOLOR_NONE;
+    m_aLineColor = SALCOLOR_NONE;
 
-    if (bOrigUseFillColor)
+    if (aOrigFillColor != SALCOLOR_NONE)
     {
         basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
-        m_bUseFillColor = true;
+        m_aFillColor = aOrigFillColor;
         drawPolyPolygon(basegfx::B2DPolyPolygon(aRect));
-        m_bUseFillColor = false;
+        m_aFillColor = SALCOLOR_NONE;
     }
 
-    if (bOrigUseLineColor)
+    if (aOrigLineColor != SALCOLOR_NONE)
     {
         // need same -1 hack as X11SalGraphicsImpl::drawRect
         basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1));
-        m_bUseLineColor = true;
+        m_aLineColor = aOrigLineColor;
         drawPolyPolygon(basegfx::B2DPolyPolygon(aRect));
-        m_bUseLineColor = false;
+        m_aLineColor = SALCOLOR_NONE;
     }
 
-    m_bUseFillColor = bOrigUseFillColor;
-    m_bUseLineColor = bOrigUseLineColor;
+    m_aFillColor = aOrigFillColor;
+    m_aLineColor = aOrigLineColor;
 }
 
 void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
@@ -778,9 +770,9 @@ bool SvpSalGraphics::drawPolyLine(
 
     AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
 
-    cairo_set_source_rgba(cr, m_aLineColor.getRed()/255.0,
-                              m_aLineColor.getGreen()/255.0,
-                              m_aLineColor.getBlue()/255.0,
+    cairo_set_source_rgba(cr, SALCOLOR_RED(m_aLineColor)/255.0,
+                              SALCOLOR_GREEN(m_aLineColor)/255.0,
+                              SALCOLOR_BLUE(m_aLineColor)/255.0,
                               1.0-fTransparency);
 
     cairo_set_line_join(cr, eCairoLineJoin);
@@ -826,7 +818,7 @@ void SvpSalGraphics::setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon
     clipRegion(cr);
 
     for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
-        AddPolygonToPath(cr, *pPoly, true, !getAntiAliasB2DDraw(), m_bUseLineColor);
+        AddPolygonToPath(cr, *pPoly, true, !getAntiAliasB2DDraw(), m_aLineColor != SALCOLOR_NONE);
 }
 
 bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
@@ -837,24 +829,24 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
 
-    if (m_bUseFillColor)
+    if (m_aFillColor != SALCOLOR_NONE)
     {
-        cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
-                                  m_aFillColor.getGreen()/255.0,
-                                  m_aFillColor.getBlue()/255.0,
+        cairo_set_source_rgba(cr, SALCOLOR_RED(m_aFillColor)/255.0,
+                                  SALCOLOR_GREEN(m_aFillColor)/255.0,
+                                  SALCOLOR_BLUE(m_aFillColor)/255.0,
                                   1.0-fTransparency);
 
-        if (!m_bUseLineColor)
+        if (m_aLineColor == SALCOLOR_NONE)
             extents = getFillDamage(cr);
 
         cairo_fill_preserve(cr);
     }
 
-    if (m_bUseLineColor)
+    if (m_aLineColor != SALCOLOR_NONE)
     {
-        cairo_set_source_rgba(cr, m_aLineColor.getRed()/255.0,
-                                  m_aLineColor.getGreen()/255.0,
-                                  m_aLineColor.getBlue()/255.0,
+        cairo_set_source_rgba(cr, SALCOLOR_RED(m_aLineColor)/255.0,
+                                  SALCOLOR_GREEN(m_aLineColor)/255.0,
+                                  SALCOLOR_BLUE(m_aLineColor)/255.0,
                                   1.0-fTransparency);
 
         extents = getStrokeDamage(cr);
@@ -867,18 +859,18 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     return true;
 }
 
-void SvpSalGraphics::applyColor(cairo_t *cr, const basebmp::Color &rColor)
+void SvpSalGraphics::applyColor(cairo_t *cr, const SalColor &rColor)
 {
     if (CAIRO_FORMAT_ARGB32 == cairo_image_surface_get_format(m_pSurface))
     {
-        cairo_set_source_rgba(cr, rColor.getRed()/255.0,
-                                  rColor.getGreen()/255.0,
-                                  rColor.getBlue()/255.0,
+        cairo_set_source_rgba(cr, SALCOLOR_RED(rColor)/255.0,
+                                  SALCOLOR_GREEN(rColor)/255.0,
+                                  SALCOLOR_BLUE(rColor)/255.0,
                                   1.0);
     }
     else
     {
-        double fSet = rColor.toInt32() == COL_BLACK ? 0.0 : 1.0;
+        double fSet = rColor == COL_BLACK ? 0.0 : 1.0;
         cairo_set_source_rgba(cr, 1, 1, 1, fSet);
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     }
@@ -892,15 +884,15 @@ void SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly)
 
     cairo_rectangle_int_t extents = {0, 0, 0, 0};
 
-    if (m_bUseFillColor)
+    if (m_aFillColor != SALCOLOR_NONE)
     {
         applyColor(cr, m_aFillColor);
-        if (!m_bUseLineColor)
+        if (m_aLineColor == SALCOLOR_NONE)
             extents = getFillDamage(cr);
         cairo_fill_preserve(cr);
     }
 
-    if (m_bUseLineColor)
+    if (m_aLineColor != SALCOLOR_NONE)
     {
         applyColor(cr, m_aLineColor);
         extents = getStrokeDamage(cr);
