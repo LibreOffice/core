@@ -1228,7 +1228,8 @@ void ScInputHandler::UseFormulaData()
         if ( aParagraph.getLength() > aSel.nEndPos &&
              ( ScGlobal::pCharClass->isLetterNumeric( aParagraph, aSel.nEndPos ) ||
                aParagraph[ aSel.nEndPos ] == '_' ||
-               aParagraph[ aSel.nEndPos ] == '.'   ) )
+               aParagraph[ aSel.nEndPos ] == '.' ||
+               aParagraph[ aSel.nEndPos ] == '$'   ) )
             return;
 
         //  Is the cursor at the end of a word?
