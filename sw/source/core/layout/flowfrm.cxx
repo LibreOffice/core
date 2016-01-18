@@ -118,7 +118,7 @@ bool SwFlowFrame::IsKeepFwdMoveAllowed( bool bIgnoreMyOwnKeepValue )
     // the 'keep' attribute set, and the first of the chain's
     // IsFwdMoveAllowed returns false, then we're not allowed to move.
     SwFrame *pFrame = &m_rThis;
-    if ( !pFrame->IsInFootnote() )
+    if ( !pFrame->IsInFootnote() ) {
         if ( bIgnoreMyOwnKeepValue && pFrame->GetIndPrev() )
             pFrame = pFrame->GetIndPrev();
         do
@@ -127,7 +127,7 @@ bool SwFlowFrame::IsKeepFwdMoveAllowed( bool bIgnoreMyOwnKeepValue )
             else
                 return true;
         } while ( pFrame );
-
+    }
                   //See IsFwdMoveAllowed()
     bool bRet = false;
     if ( pFrame && pFrame->GetIndPrev() )
