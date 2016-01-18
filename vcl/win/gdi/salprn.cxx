@@ -1650,7 +1650,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobDat
     return mpGraphics;
 }
 
-bool WinSalPrinter::EndPage()
+void WinSalPrinter::EndPage()
 {
     HDC hDC = mhDC;
     if ( hDC && mpGraphics )
@@ -1661,20 +1661,17 @@ bool WinSalPrinter::EndPage()
     }
 
     if( ! isValid() )
-        return FALSE;
+        return;
 
     volatile int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::EndPage( hDC );
     CATCH_DRIVER_EX_END( "exception in EndPage", this );
 
-    if ( nRet > 0 )
-        return TRUE;
-    else
+    if ( nRet <= 0 )
     {
         GetLastError();
         mnError = SAL_PRINTER_ERROR_GENERALERROR;
-        return FALSE;
     }
 }
 
