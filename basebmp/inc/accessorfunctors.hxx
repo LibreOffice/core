@@ -28,18 +28,6 @@
 namespace basebmp
 {
 
-// Some common accessor functors
-
-
-
-/// combine two values via XOR
-template< typename T > struct XorFunctor : public std::binary_function<T,T,T>
-{
-    T operator()( T v1, T v2 ) const { return v1 ^ v2; }
-};
-
-
-
 /// Base class, passing on the arg types
 template< typename T, typename M > struct MaskFunctorBase :
         public TernaryFunctorBase<T,M,T,T> {};
