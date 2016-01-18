@@ -44,27 +44,6 @@
 #include <sys/stat.h>
 #endif
 
-inline void dbgOut( const basebmp::BitmapDeviceSharedPtr&
-#if OSL_DEBUG_LEVEL > 2
-rDevice
-#endif
-)
-{
-    #if OSL_DEBUG_LEVEL > 2
-    static int dbgStreamNum = 0;
-    OStringBuffer aBuf( 256 );
-    aBuf.append( "debug" );
-    mkdir( aBuf.getStr(), 0777 );
-    aBuf.append( "/" );
-    aBuf.append( sal_Int64(reinterpret_cast<sal_IntPtr>(rDevice.get())), 16 );
-    mkdir( aBuf.getStr(), 0777 );
-    aBuf.append( "/bmp" );
-    aBuf.append( sal_Int32(dbgStreamNum++) );
-    std::fstream bmpstream( aBuf.getStr(), std::ios::out );
-    debugDump( rDevice, bmpstream );
-    #endif
-}
-
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
 
 #   define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
