@@ -4849,12 +4849,10 @@ void DomainMapper_Impl::RegisterFrameConversion(
 }
 
 
-bool DomainMapper_Impl::ExecuteFrameConversion()
+void DomainMapper_Impl::ExecuteFrameConversion()
 {
-    bool bRet = false;
     if( m_xFrameStartRange.is() && m_xFrameEndRange.is() && !m_bDiscardHeaderFooter )
     {
-        bRet = true;
         try
         {
             uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( GetTopTextAppend(), uno::UNO_QUERY_THROW );
@@ -4866,13 +4864,11 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
         catch( const uno::Exception& rEx)
         {
             SAL_WARN( "writerfilter", "Exception caught when converting to frame: " + rEx.Message );
-            bRet = false;
         }
     }
     m_xFrameStartRange = nullptr;
     m_xFrameEndRange = nullptr;
     m_aFrameProperties.clear();
-    return bRet;
 }
 
 void DomainMapper_Impl::AddNewRedline( sal_uInt32 sprmId )

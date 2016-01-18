@@ -138,12 +138,6 @@ public:
     virtual OOXMLValue * clone() const override;
 };
 
-struct OOXMLPropertySetCompare
-{
-    bool operator()(const OOXMLProperty::Pointer_t& x,
-                    const OOXMLProperty::Pointer_t& y) const;
-};
-
 class OOXMLPropertySet : public writerfilter::Reference<Properties>
 {
 public:

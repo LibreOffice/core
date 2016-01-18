@@ -335,23 +335,6 @@ OOXMLValue * OOXMLInputStreamValue::clone() const
     return new OOXMLInputStreamValue(mxInputStream);
 }
 
-/*
-  struct OOXMLPropertySetImplCompare
- */
-
-bool OOXMLPropertySetCompare::operator()(const OOXMLProperty::Pointer_t& x,
-                                         const OOXMLProperty::Pointer_t& y) const
-{
-    bool bResult = false;
-
-    if (x.get() == nullptr && y.get() != nullptr)
-        bResult = true;
-    else if (x.get() != nullptr && y.get() != nullptr)
-        bResult = x->getId() < y->getId();
-
-    return bResult;
-}
-
 /**
    class OOXMLPropertySet
 */

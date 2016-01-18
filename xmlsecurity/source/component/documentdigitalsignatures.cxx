@@ -204,7 +204,7 @@ OUString DocumentDigitalSignatures::getPackageSignatureDefaultStreamName(  )
 }
 
 
-bool DocumentDigitalSignatures::ImplViewSignatures(
+void DocumentDigitalSignatures::ImplViewSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignStream,
     DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException, std::exception)
@@ -212,7 +212,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     Reference< io::XStream > xStream;
     if ( xSignStream.is() )
         xStream.set( xSignStream, UNO_QUERY );
-    return ImplViewSignatures( rxStorage, xStream, eMode, bReadOnly );
+    ImplViewSignatures( rxStorage, xStream, eMode, bReadOnly );
 }
 
 bool DocumentDigitalSignatures::ImplViewSignatures(

@@ -206,9 +206,8 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
     return true;
 }
 
-bool FormControlHelper::processField(uno::Reference<text::XFormField> const& xFormField)
+void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFormField)
 {
-    bool bRes = true;
     uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
     uno::Reference<container::XNamed> xNamed( xFormField, uno::UNO_QUERY );
     if ( m_pFFData && xNamed.is() && xNameCont.is() )
@@ -255,20 +254,17 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
             }
         }
     }
-    else
-        bRes = false;
-    return bRes;
 }
 
-bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xTextRange)
+void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xTextRange)
 {
     bool bCreated = false;
     if ( !m_pFFData )
-        return false;
+        return;
     uno::Reference<container::XNameContainer> xFormCompsByName(m_pImpl->getForm(), uno::UNO_QUERY);
     uno::Reference<container::XIndexContainer> xFormComps(m_pImpl->getFormComps());
     if (! xFormComps.is())
-        return false;
+        return;
 
     static const char sControl[] = "Control";
 
@@ -300,23 +296,23 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     }
 
     if (!bCreated)
-        return false;
+        return;
 
     uno::Any aAny(m_pImpl->rFormComponent);
     xFormComps->insertByIndex(xFormComps->getCount(), aAny);
 
     if (! m_pImpl->getServiceFactory().is())
-        return false;
+        return;
 
     uno::Reference<uno::XInterface> xInterface = m_pImpl->getServiceFactory()->createInstance("com.sun.star.drawing.ControlShape");
 
     if (! xInterface.is())
-        return false;
+        return;
 
     uno::Reference<drawing::XShape> xShape(xInterface, uno::UNO_QUERY);
 
     if (! xShape.is())
-        return false;
+        return;
 
     xShape->setSize(m_pImpl->aSize);
 
@@ -340,8 +336,6 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     xControlShape->setControl(xControlModel);
 
     m_pImpl->getDrawPage()->add(xShape);
-
-    return true;
 }
 
 }}
