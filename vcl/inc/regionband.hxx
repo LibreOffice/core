@@ -45,7 +45,6 @@ public:
     ~RegionBand();
 
     bool operator==( const RegionBand& rRegionBand ) const;
-    bool operator!=( const RegionBand& rRegionBand ) const { return !(RegionBand::operator==( rRegionBand )); }
 
     void load(SvStream& rIStrm);
     void save(SvStream& rIStrm) const;
@@ -56,8 +55,8 @@ public:
     void InsertBand(ImplRegionBand* pPreviousBand, ImplRegionBand* pBandToInsert);
     void processPoints();
     void CreateBandRange(long nYTop, long nYBottom);
-    bool InsertLine(const Point& rStartPt, const Point& rEndPt, long nLineId);
-    bool InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, LineType eLineType);
+    void InsertLine(const Point& rStartPt, const Point& rEndPt, long nLineId);
+    void InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, LineType eLineType);
     bool OptimizeBandList();
     void Move(long nHorzMove, long nVertMove);
     void Scale(double fScaleX, double fScaleY);

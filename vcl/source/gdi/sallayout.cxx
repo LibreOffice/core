@@ -1457,17 +1457,16 @@ MultiSalLayout::~MultiSalLayout()
         mpLayouts[ i ]->Release();
 }
 
-bool MultiSalLayout::AddFallback( SalLayout& rFallback,
+void MultiSalLayout::AddFallback( SalLayout& rFallback,
     ImplLayoutRuns& rFallbackRuns, const PhysicalFontFace* pFallbackFont )
 {
     if( mnLevel >= MAX_FALLBACK )
-        return false;
+        return;
 
     mpFallbackFonts[ mnLevel ]  = pFallbackFont;
     mpLayouts[ mnLevel ]        = &rFallback;
     maFallbackRuns[ mnLevel-1 ] = rFallbackRuns;
     ++mnLevel;
-    return true;
 }
 
 bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )

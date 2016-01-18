@@ -149,7 +149,6 @@ public:
     void            SetStartX( short n )            { mnStartX = n; }
 
     inline bool operator == ( const TextLine& rLine ) const;
-    inline bool operator != ( const TextLine& rLine ) const;
 };
 
 inline bool TextLine::operator == ( const TextLine& rLine ) const
@@ -158,11 +157,6 @@ inline bool TextLine::operator == ( const TextLine& rLine ) const
            mnEnd == rLine.mnEnd &&
            mnStartPortion == rLine.mnStartPortion &&
            mnEndPortion == rLine.mnEndPortion;
-}
-
-inline bool TextLine::operator != ( const TextLine& rLine ) const
-{
-    return !( *this == rLine );
 }
 
 class TEParaPortion

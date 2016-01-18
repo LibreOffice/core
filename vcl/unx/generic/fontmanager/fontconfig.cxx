@@ -944,7 +944,7 @@ IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, voi
 }
 #endif
 
-bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes )
+void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes )
 {
     bool bRet = false;
 
@@ -1136,8 +1136,6 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
 
         FcFontSetDestroy( pSet );
     }
-
-    return bRet;
 }
 
 FontConfigFontOptions::~FontConfigFontOptions()
@@ -1231,7 +1229,7 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(
     return pOptions;
 }
 
-bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale )
+void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale )
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
@@ -1255,7 +1253,6 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Loc
     FcResult eResult = FcResultNoMatch;
     FcFontSet *pFontSet = rWrapper.getFontSet();
     FcPattern* pResult = FcFontSetMatch(pConfig, &pFontSet, 1, pPattern, &eResult);
-    bool bSuccess = false;
     if( pResult )
     {
         FcFontSet* pSet = FcFontSetCreate();
@@ -1276,7 +1273,7 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Loc
                 int nDirID = getDirectoryAtom( aDir, true );
                 fontID aFont = findFontFileID( nDirID, aBase, nCollectionEntry );
                 if( aFont > 0 )
-                    bSuccess = getFontFastInfo( aFont, rInfo );
+                    getFontFastInfo( aFont, rInfo );
             }
         }
         // info: destroying the pSet destroys pResult implicitly
@@ -1286,8 +1283,6 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Loc
 
     // cleanup
     FcPatternDestroy( pPattern );
-
-    return bSuccess;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

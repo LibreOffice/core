@@ -592,14 +592,14 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
     DrawGlyphs( rGfx, rPoint, nullptr, pStr, nLen, pDeltaArray, false);
 }
 
-bool
+void
 GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 {
     // only for ps fonts
     if (meBaseType != fonttype::Type1)
-        return false;
+        return;
     if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
-        return false;
+        return;
 
     PrintFontManager &rMgr = rGfx.GetFontMgr();
 
@@ -676,8 +676,6 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 
         PSDefineReencodedFont (pOutFile, nGlyphSetID);
     }
-
-    return true;
 }
 
 struct EncEntry
@@ -727,12 +725,12 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
         &aRequestedGlyphs[0], &aEncoding[0], nGlyphCount );
 }
 
-bool
+void
 GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42, std::list< OString >& rSuppliedFonts )
 {
     // only for truetype fonts
     if (meBaseType != fonttype::TrueType)
-        return false;
+        return;
 
 #if defined( UNX )
     TrueTypeFont *pTTFont;
@@ -740,13 +738,13 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     int nFace = rGfx.GetFontMgr().getFontFaceNumber(mnFontID);
     sal_Int32 nSuccess = OpenTTFontFile(aTTFileName.getStr(), nFace, &pTTFont);
     if (nSuccess != SF_OK)
-        return false;
+        return;
 
     utl::TempFile aTmpFile;
     aTmpFile.EnableKillingFile();
     FILE* pTmpFile = fopen(OUStringToOString(aTmpFile.GetFileName(), osl_getThreadTextEncoding()).getStr(), "w+b");
     if (pTmpFile == nullptr)
-        return false;
+        return;
 
     // array of unicode source characters
     sal_uInt16 pUChars[256];
@@ -836,11 +834,9 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     CloseTTFont (pTTFont);
     fclose (pTmpFile);
 
-    return true;
 #else
     (void)rOutFile; (void)rGfx; (void)bAllowType42; (void)rSuppliedFonts;
 #  warning FIXME: Missing OpenTTFontFile outside of Unix ...
-    return false;
 #endif
 }
 

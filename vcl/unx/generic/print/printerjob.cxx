@@ -579,7 +579,7 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
     mfYScale        = -1.0 * (double)72.0 / (double)mnResolution;
 }
 
-bool
+void
 PrinterJob::StartPage (const JobData& rJobSetup)
 {
     InitPaperSize (rJobSetup);
@@ -594,7 +594,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     maPageList.push_back (pPageBody);
 
     if( ! (pPageHeader && pPageBody) )
-        return false;
+        return;
 
     // write page header according to Document Structuring Conventions (DSC)
     WritePS (pPageHeader, "%%Page: ");
@@ -644,10 +644,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     if ( writePageSetup( pPageHeader, rJobSetup, bWriteFeatures ) )
     {
         m_aLastJobData = rJobSetup;
-        return true;
     }
-
-    return false;
 }
 
 bool

@@ -970,7 +970,7 @@ public:
     void scale( double sx, double sy );
     void rotate( double angle );
     void translate( double tx, double ty );
-    bool invert();
+    void invert();
 
     void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack = nullptr );
 
@@ -1047,20 +1047,20 @@ void Matrix3::translate( double tx, double ty )
     f[5] += ty;
 }
 
-bool Matrix3::invert()
+void Matrix3::invert()
 {
     // short circuit trivial cases
     if( f[1]==f[2] && f[1]==0.0 && f[0]==f[3] && f[0]==1.0 )
     {
         f[4] = -f[4];
         f[5] = -f[5];
-        return true;
+        return;
     }
 
     // check determinant
     const double fDet = f[0]*f[3]-f[1]*f[2];
     if( fDet == 0.0 )
-        return false;
+        return;
 
     // invert the matrix
     double fn[6];
@@ -1074,7 +1074,6 @@ bool Matrix3::invert()
     fn[5] = -(f[4]*fn[1] + f[5]*fn[3]);
 
     set( fn );
-    return true;
 }
 
 void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack )
@@ -2378,6 +2377,7 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
 }
 
 #define CHECK_RETURN( x ) if( !(x) ) return 0
+#define CHECK_RETURN2( x ) if( !(x) ) return
 
 sal_Int32 PDFWriterImpl::emitStructParentTree( sal_Int32 nObject )
 {
@@ -8397,7 +8397,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
     return nFontID;
 }
 
-bool PDFWriterImpl::registerGlyphs( int nGlyphs,
+void PDFWriterImpl::registerGlyphs( int nGlyphs,
                                     sal_GlyphId* pGlyphs,
                                     sal_Int32* pGlyphWidths,
                                     sal_Ucs* pUnicodes,
@@ -8409,7 +8409,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
     SalGraphics *pGraphics = m_pReferenceDevice->GetGraphics();
 
     if (!pGraphics)
-        return false;
+        return;
 
     const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData;
     sal_Ucs* pCurUnicode = pUnicodes;
@@ -8455,7 +8455,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
                 rNewGlyph.m_nSubsetGlyphID = nNewId;
             }
             if (!getReferenceDevice()->AcquireGraphics())
-                return false;
+                return;
             const bool bVertical = ((pGlyphs[i] & GF_ROTMASK) != 0);
             pGlyphWidths[i] = m_aFontCache.getGlyphWidth( pCurrentFont,
                                                           nFontGlyphId,
@@ -8479,7 +8479,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
             const Ucs2SIntMap* pEncoding = nullptr;
             const Ucs2OStrMap* pNonEncoded = nullptr;
             if (!getReferenceDevice()->AcquireGraphics())
-                return false;
+                return;
             pEncoding = pGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded, nullptr);
 
             Ucs2SIntMap::const_iterator enc_it;
@@ -8552,7 +8552,6 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
                                                             pGraphics );
         }
     }
-    return true;
 }
 
 void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines )
@@ -10735,9 +10734,9 @@ void PDFWriterImpl::drawPixel( const Point& rPoint, const Color& rColor )
     setFillColor( aOldFillColor );
 }
 
-bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
+void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
 {
-    CHECK_RETURN( updateObject( rObject.m_nObject ) );
+    CHECK_RETURN2( updateObject( rObject.m_nObject ) );
 
     bool bFlateFilter = compressStream( rObject.m_pContentStream );
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
@@ -10747,7 +10746,7 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     emitComment( "PDFWriterImpl::writeTransparentObject" );
     #endif
     OStringBuffer aLine( 512 );
-    CHECK_RETURN( updateObject( rObject.m_nObject ) );
+    CHECK_RETURN2( updateObject( rObject.m_nObject ) );
     aLine.append( rObject.m_nObject );
     aLine.append( " 0 obj\n"
                   "<</Type/XObject\n"
@@ -10783,15 +10782,15 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
         aLine.append( "/Filter/FlateDecode\n" );
     aLine.append( ">>\n"
                   "stream\n" );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    CHECK_RETURN2( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     checkAndEnableStreamEncryption( rObject.m_nObject );
-    CHECK_RETURN( writeBuffer( rObject.m_pContentStream->GetData(), nSize ) );
+    CHECK_RETURN2( writeBuffer( rObject.m_pContentStream->GetData(), nSize ) );
     disableStreamEncryption();
     aLine.setLength( 0 );
     aLine.append( "\n"
                   "endstream\n"
                   "endobj\n\n" );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    CHECK_RETURN2( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     // write ExtGState dict for this XObject
     aLine.setLength( 0 );
@@ -10854,23 +10853,21 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
             aMask.append( nMaskSize );
             aMask.append( ">>\n"
                           "stream\n" );
-            CHECK_RETURN( updateObject( nMaskObject ) );
+            CHECK_RETURN2( updateObject( nMaskObject ) );
             checkAndEnableStreamEncryption(  nMaskObject );
-            CHECK_RETURN( writeBuffer( aMask.getStr(), aMask.getLength() ) );
-            CHECK_RETURN( writeBuffer( rObject.m_pSoftMaskStream->GetData(), nMaskSize ) );
+            CHECK_RETURN2( writeBuffer( aMask.getStr(), aMask.getLength() ) );
+            CHECK_RETURN2( writeBuffer( rObject.m_pSoftMaskStream->GetData(), nMaskSize ) );
             disableStreamEncryption();
             aMask.setLength( 0 );
             aMask.append( "\nendstream\n"
                           "endobj\n\n" );
-            CHECK_RETURN( writeBuffer( aMask.getStr(), aMask.getLength() ) );
+            CHECK_RETURN2( writeBuffer( aMask.getStr(), aMask.getLength() ) );
         }
     }
     aLine.append( ">>\n"
                   "endobj\n\n" );
-    CHECK_RETURN( updateObject( rObject.m_nExtGStateObject ) );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-
-    return true;
+    CHECK_RETURN2( updateObject( rObject.m_nExtGStateObject ) );
+    CHECK_RETURN2( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 }
 
 bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
@@ -11084,10 +11081,10 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     return true;
 }
 
-bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
+void PDFWriterImpl::writeJPG( JPGEmit& rObject )
 {
-    CHECK_RETURN( rObject.m_pStream );
-    CHECK_RETURN( updateObject( rObject.m_nObject ) );
+    CHECK_RETURN2( rObject.m_pStream );
+    CHECK_RETURN2( updateObject( rObject.m_nObject ) );
 
     sal_Int32 nLength = 0;
     rObject.m_pStream->Seek( STREAM_SEEK_TO_END );
@@ -11134,15 +11131,15 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
         aLine.append( " 0 R " );
     }
     aLine.append( ">>\nstream\n" );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    CHECK_RETURN2( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     checkAndEnableStreamEncryption( rObject.m_nObject );
-    CHECK_RETURN( writeBuffer( rObject.m_pStream->GetData(), nLength ) );
+    CHECK_RETURN2( writeBuffer( rObject.m_pStream->GetData(), nLength ) );
     disableStreamEncryption();
 
     aLine.setLength( 0 );
     aLine.append( "\nendstream\nendobj\n\n" );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    CHECK_RETURN2( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     if( nMaskObject )
     {
@@ -11154,8 +11151,6 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
             aEmit.m_aBitmap = BitmapEx( rObject.m_aMask, AlphaMask( rObject.m_aMask ) );
         writeBitmapObject( aEmit, true );
     }
-
-    return true;
 }
 
 bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
@@ -12117,11 +12112,11 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
     }
 }
 
-bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
+void PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
 {
     basegfx::B2DPolyPolygon aRect( basegfx::tools::createPolygonFromRect(
         basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
-    return intersectClipRegion( aRect );
+    intersectClipRegion( aRect );
 }
 
 bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )

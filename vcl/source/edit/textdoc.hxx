@@ -107,7 +107,7 @@ public:
     std::vector<TextNode*>&       GetNodes()              { return maTextNodes; }
     const std::vector<TextNode*>& GetNodes() const        { return maTextNodes; }
 
-    TextPaM             RemoveChars( const TextPaM& rPaM, sal_Int32 nChars );
+    void                RemoveChars( const TextPaM& rPaM, sal_Int32 nChars );
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
     TextPaM             InsertText( const TextPaM& rPaM, const OUString& rStr );
 

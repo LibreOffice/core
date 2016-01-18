@@ -56,10 +56,10 @@ namespace vcl
         m_rTargetDevice.DrawText( _rStartPoint, _rText, _nStartIndex, _nLength, _pVector, _pDisplayText );
     }
 
-    bool DefaultTextLayout::GetCaretPositions( const OUString& _rText, long* _pCaretXArray,
+    void DefaultTextLayout::GetCaretPositions( const OUString& _rText, long* _pCaretXArray,
         sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
-        return m_rTargetDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength );
+        m_rTargetDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength );
     }
 
     sal_Int32 DefaultTextLayout::GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
@@ -81,7 +81,7 @@ namespace vcl
         // ITextLayout
         virtual long        GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const override;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, MetricVector* _pVector, OUString* _pDisplayText ) override;
-        virtual bool        GetCaretPositions( const OUString& _rText, long* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const override;
+        virtual void        GetCaretPositions( const OUString& _rText, long* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const override;
         virtual sal_Int32   GetTextBreak(const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength) const override;
         virtual bool        DecomposeTextRectAction() const override;
 
@@ -232,17 +232,14 @@ namespace vcl
         m_aCompleteTextRect.Union( Rectangle( _rStartPoint, Size( nTextWidth, m_rTargetDevice.GetTextHeight() ) ) );
     }
 
-    bool ReferenceDeviceTextLayout::GetCaretPositions( const OUString& _rText, long* _pCaretXArray,
+    void ReferenceDeviceTextLayout::GetCaretPositions( const OUString& _rText, long* _pCaretXArray,
                                                        sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
-            return false;
+            return;
 
         // retrieve the caret positions from the reference device
-        if ( !m_rReferenceDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength ) )
-            return false;
-
-        return true;
+        m_rReferenceDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength );
     }
 
     sal_Int32 ReferenceDeviceTextLayout::GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const

@@ -609,9 +609,9 @@ SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJ
     return mpInfoPrinter->StartPage( i_pSetupData, i_bNewJobData );
 }
 
-bool AquaSalPrinter::EndPage()
+void AquaSalPrinter::EndPage()
 {
-    return mpInfoPrinter->EndPage();
+    mpInfoPrinter->EndPage();
 }
 
 sal_uLong AquaSalPrinter::GetErrorCode()

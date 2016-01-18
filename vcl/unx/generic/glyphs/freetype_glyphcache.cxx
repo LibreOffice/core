@@ -747,13 +747,13 @@ static inline void SplitGlyphFlags( const ServerFont& rFont, sal_GlyphId& rGlyph
         rGlyphId = rFont.GetRawGlyphIndex( rGlyphId );
 }
 
-int ServerFont::ApplyGlyphTransform( int nGlyphFlags,
+void ServerFont::ApplyGlyphTransform( int nGlyphFlags,
     FT_Glyph pGlyphFT, bool bForBitmapProcessing ) const
 {
     int nAngle = GetFontSelData().mnOrientation;
     // shortcut most common case
     if( !nAngle && !nGlyphFlags )
-        return nAngle;
+        return;
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     FT_Vector aVector;
@@ -816,8 +816,6 @@ int ServerFont::ApplyGlyphTransform( int nGlyphFlags,
         pBmpGlyphFT->left += (aVector.x + 32) >> 6;
         pBmpGlyphFT->top  += (aVector.y + 32) >> 6;
     }
-
-    return nAngle;
 }
 
 sal_GlyphId ServerFont::GetRawGlyphIndex(sal_UCS4 aChar, sal_UCS4 aVS) const
@@ -1303,7 +1301,7 @@ bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     return true;
 }
 
-bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
+void ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
 {
 #define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 
@@ -1314,13 +1312,13 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
     // TODO: request more features depending on script and language system
 
     if( aReqFeatureTagList.empty()) // nothing to do
-        return true;
+        return;
 
     // load GSUB table into memory
     sal_uLong nLength = 0;
     const FT_Byte* const pGsubBase = mpFontInfo->GetTable( "GSUB", &nLength );
     if( !pGsubBase )
-        return false;
+        return;
 
     // parse GSUB header
     const FT_Byte* pGsubHeader = pGsubBase;
@@ -1383,7 +1381,7 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
     }
 
     if( aFeatureIndexList.empty() )
-        return true;
+        return;
 
     UshortList aLookupIndexList;
     UshortList aLookupOffsetList;
@@ -1530,8 +1528,6 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
                 maGlyphSubstitution[ (*it).first ] =  (*it).second;
         }
     }
-
-    return true;
 }
 
 const unsigned char* ServerFont::GetTable(const char* pName, sal_uLong* pLength)

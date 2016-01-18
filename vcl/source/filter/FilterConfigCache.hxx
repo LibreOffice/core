@@ -48,7 +48,7 @@ class FilterConfigCache
         bool        bIsInternalFilter   : 1;
         bool        bIsPixelFormat      : 1;
 
-        bool        CreateFilterName( const OUString& rUserDataEntry );
+        void            CreateFilterName( const OUString& rUserDataEntry );
         OUString        GetShortName( );
 
         static const char* InternalPixelFilterNameList[];
@@ -88,7 +88,6 @@ public:
     OUString    GetImportFilterName( sal_uInt16 nFormat );
     OUString    GetImportFormatName( sal_uInt16 nFormat );
     OUString    GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
-    OUString    GetImportFormatMediaType( sal_uInt16 nFormat );
     OUString    GetImportFormatShortName( sal_uInt16 nFormat );
     OUString    GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
     OUString    GetImportFilterType( sal_uInt16 nFormat );

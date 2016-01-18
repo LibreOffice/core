@@ -52,7 +52,7 @@ GraphicsStatus::GraphicsStatus() :
  * non graphics graphics routines
  */
 
-bool
+void
 PrinterGfx::Init (PrinterJob &rPrinterJob)
 {
     mpPageHeader = rPrinterJob.GetCurrentPageHeader ();
@@ -65,11 +65,9 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
     rPrinterJob.GetScale (mfScaleX, mfScaleY);
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rPrinterJob.GetPrinterName() ) );
     mbUploadPS42Fonts = rInfo.m_pParser && rInfo.m_pParser->isType42Capable();
-
-    return true;
 }
 
-bool
+void
 PrinterGfx::Init (const JobData& rData)
 {
     mpPageHeader    = nullptr;
@@ -83,8 +81,6 @@ PrinterGfx::Init (const JobData& rData)
     mfScaleY        = (double)72.0 / (double)mnDpi;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
     mbUploadPS42Fonts = rInfo.m_pParser && rInfo.m_pParser->isType42Capable();
-
-    return true;
 }
 
 
@@ -163,12 +159,11 @@ PrinterGfx::BeginSetClipRegion( sal_uInt32 )
     maClipRegion.clear();
 }
 
-bool
+void
 PrinterGfx::UnionClipRegion (sal_Int32 nX,sal_Int32 nY,sal_Int32 nDX,sal_Int32 nDY)
 {
     if( nDX && nDY )
         maClipRegion.push_back (Rectangle(Point(nX,nY ), Size(nDX,nDY)));
-    return true;
 }
 
 bool

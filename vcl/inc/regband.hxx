@@ -92,7 +92,7 @@ public:
     long                        GetXRightBoundary() const;
 
                                 // combine overlapping bands
-    bool                        OptimizeBand();
+    void                        OptimizeBand();
 
                                 // generate separations from lines and process
                                 // union with existing separations

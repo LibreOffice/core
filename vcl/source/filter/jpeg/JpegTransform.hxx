@@ -34,7 +34,7 @@ public:
     virtual ~JpegTransform();
 
     void setRotate(sal_uInt16 aRotate);
-    bool perform();
+    void perform();
 };
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX

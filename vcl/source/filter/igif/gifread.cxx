@@ -84,7 +84,7 @@ void GIFReader::ClearImageExtensions()
     nTimer = 0;
 }
 
-bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
+void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
                                bool bWatchForBackgroundColor )
 {
     const Size aSize( nWidth, nHeight );
@@ -99,7 +99,7 @@ bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     if (nWidth >= 64000 && nHeight >= 64000)
     {
         bStatus = false;
-        return bStatus;
+        return;
     }
 #endif
 
@@ -135,8 +135,6 @@ bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
         pAcc8 = aBmp8.AcquireWriteAccess();
         bStatus = ( pAcc8 != nullptr );
     }
-
-    return bStatus;
 }
 
 bool GIFReader::ReadGlobalHeader()

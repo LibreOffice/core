@@ -76,10 +76,10 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
     }
 }
 
-bool X11SalGraphics::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
+void X11SalGraphics::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
 {
     X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
-    return rImpl.FillPixmapFromScreen( pPixmap, nX, nY );
+    rImpl.FillPixmapFromScreen( pPixmap, nX, nY );
 }
 
 bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )

@@ -126,8 +126,6 @@ struct CharacterMetric
     short int width, height;
 
     CharacterMetric() : width( 0 ), height( 0 ) {}
-    bool operator==( const CharacterMetric& rOther ) const
-    { return rOther.width == width && rOther.height == height; }
     bool operator!=( const CharacterMetric& rOther ) const
     { return rOther.width != width || rOther.height != height; }
 };
@@ -399,7 +397,7 @@ public:
     int getFontDescend( fontID nFontID ) const;
 
     // get a fonts glyph bounding box
-    bool getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
+    void getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
 
     // info whether an array of glyphs has vertical substitutions
     void hasVerticalSubstitutions( fontID nFontID, const sal_Unicode* pCharacters,
@@ -492,15 +490,11 @@ public:
     if <code>rLocal</code> contains non empty strings the corresponding
     locale will be used for font matching also; e.g. "Sans" can result
     in different fonts in e.g. english and japanese
-
-    @returns
-    true if a match was found
-    false else
      */
-    bool matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale );
+    void matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale );
     static FontConfigFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*));
 
-    bool Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes );
+    void Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes );
 
 };
 
