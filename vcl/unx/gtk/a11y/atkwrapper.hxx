@@ -45,6 +45,8 @@ namespace com { namespace sun { namespace star { namespace accessibility {
 
 struct _AtkObjectWrapper
 {
+    AtkObject aParent;
+
     css::uno::Reference<css::accessibility::XAccessible> mpAccessible;
     css::uno::Reference<css::accessibility::XAccessibleContext> mpContext;
     css::uno::Reference<css::accessibility::XAccessibleAction> mpAction;
