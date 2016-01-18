@@ -455,55 +455,6 @@ namespace
                                       maAccessor);
             }
         }
-
-        virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
-                                  const basegfx::B2IBox&       rSrcRect,
-                                  const basegfx::B2IBox&       rDstRect,
-                                  const BitmapDeviceSharedPtr& rClip ) override
-        {
-            if( isCompatibleBitmap( rSrcBitmap ) )
-            {
-                implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
-                               getMaskedIter(rClip),
-                               maRawMaskedAccessor);
-            }
-            else
-            {
-                implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
-                                      getMaskedIter(rClip),
-                                      maMaskedAccessor);
-            }
-        }
-
-        template< typename Iterator, typename Acc >
-        void implDrawMaskedBitmap(const BitmapDeviceSharedPtr& rSrcBitmap,
-                                  const BitmapDeviceSharedPtr& rMask,
-                                  const basegfx::B2IBox&       rSrcRect,
-                                  const basegfx::B2IBox&       rDstRect,
-                                  const Iterator&              begin,
-                                  const Acc&                   acc)
-        {
-            std::shared_ptr<BitmapRenderer>   pSrcBmp( getCompatibleBitmap(rSrcBitmap) );
-            std::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rMask) );
-            OSL_ASSERT( pMask && pSrcBmp );
-
-            scaleImage(
-                srcIterRange(composite_iterator_type(
-                                 pSrcBmp->maBegin,
-                                 pMask->maBegin),
-                             joined_image_accessor_type(
-                                 pSrcBmp->maAccessor,
-                                 pMask->maRawAccessor),
-                             rSrcRect),
-                destIterRange(begin,
-                              typename masked_input_splitting_accessor<
-                                       Acc,
-                                       joined_image_accessor_type,
-                                       Masks::clipmask_polarity,
-                                       FastMask >::type(acc),
-                              rDstRect),
-                isSharedBuffer(rSrcBitmap));
-        }
     };
 } // namespace
 
@@ -779,42 +730,6 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aSrcRange,aSrcBounds);
 
         drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange );
-    }
-}
-
-void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
-                               const basegfx::B2IBox&       rSrcRect,
-                               const basegfx::B2IBox&       rDstRect,
-                               const BitmapDeviceSharedPtr& rClip )
-{
-    if( !rClip )
-    {
-        drawBitmap(rSrcBitmap,rSrcRect,rDstRect);
-        return;
-    }
-
-    const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
-    basegfx::B2IBox           aSrcRange( rSrcRect );
-    basegfx::B2IBox           aDestRange( rDstRect );
-
-    if( clipAreaImpl( aDestRange,
-                      aSrcRange,
-                      mpImpl->maBounds,
-                      aSrcBounds ))
-    {
-        assertImageRange(aDestRange,mpImpl->maBounds);
-        assertImageRange(aSrcRange,aSrcBounds);
-
-        if( isCompatibleClipMask( rClip ) )
-        {
-            drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, rClip );
-        }
-        else
-        {
-            getGenericRenderer()->drawBitmap( rSrcBitmap, rSrcRect,
-                                              rDstRect, rClip );
-        }
     }
 }
 

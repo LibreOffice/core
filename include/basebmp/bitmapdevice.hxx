@@ -179,32 +179,6 @@ public:
                      const basegfx::B2IBox&       rSrcRect,
                      const basegfx::B2IBox&       rDstRect );
 
-    /** Draw another bitmap into this device
-
-        @param rSrcBitmap
-        Bitmap to render into this one. It is permitted that source
-        and destination bitmap are the same.
-
-        @param rSrcRect
-        Rectangle within the source bitmap to take the pixel from.
-
-        @param rDstRect
-        Rectangle in the destination bitmap to put the pixel
-        into. Source and destination rectangle are permitted to have
-        differing sizes; this method will scale the source pixel
-        accordingly. Please note that both source and destination
-        rectangle are interpreted excluding the rightmost pixel column
-        and the bottommost pixel row.
-
-        @param rClip
-        Clip mask to use. Pixel where the corresponding clip mask
-        pixel is 1 will not be modified.
-     */
-    void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
-                     const basegfx::B2IBox&       rSrcRect,
-                     const basegfx::B2IBox&       rDstRect,
-                     const BitmapDeviceSharedPtr& rClip );
-
 protected:
     BASEBMP_DLLPRIVATE BitmapDevice( const basegfx::B2IBox&           rBounds,
                                      const basegfx::B2IVector&        rBufferSize,
@@ -238,10 +212,6 @@ private:
     BASEBMP_DLLPRIVATE virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
                                                   const basegfx::B2IBox&       rSrcRect,
                                                   const basegfx::B2IBox&       rDstRect ) = 0;
-    BASEBMP_DLLPRIVATE virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
-                                                  const basegfx::B2IBox&       rSrcRect,
-                                                  const basegfx::B2IBox&       rDstRect,
-                                                  const BitmapDeviceSharedPtr& rClip ) = 0;
 
     BitmapDeviceSharedPtr getGenericRenderer() const;
 
