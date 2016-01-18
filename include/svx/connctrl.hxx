@@ -54,7 +54,7 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     void         SetAttributes( const SfxItemSet& rInAttrs );
-    sal_uInt16   GetLineDeltaAnz();
+    sal_uInt16   GetLineDeltaCount();
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }

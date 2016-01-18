@@ -463,7 +463,7 @@ void SvxConnectionPage::ChangeAttrHdl_Impl(void* p)
     if( p == m_pLbType )
     {
         // get the number of line displacements
-        sal_uInt16 nCount = m_pCtlPreview->GetLineDeltaAnz();
+        sal_uInt16 nCount = m_pCtlPreview->GetLineDeltaCount();
 
         m_pFtLine3->Enable( nCount > 2 );
         m_pMtrFldLine3->Enable( nCount > 2 );
