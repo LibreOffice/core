@@ -114,8 +114,8 @@ endif
 
 ifeq ($(ENABLE_PCH),TRUE)
 ifneq ($(COM_IS_CLANG),TRUE)
-gb_CFLAGS_COMMON += -fpch-preprocess
-gb_CXXFLAGS_COMMON += -fpch-preprocess
+gb_CFLAGS_COMMON += -fpch-preprocess -Winvalid-pch
+gb_CXXFLAGS_COMMON += -fpch-preprocess -Winvalid-pch
 endif
 endif
 
