@@ -812,6 +812,7 @@ linux-android*)
     enable_lpsolve=no
     enable_report_builder=no
     enable_postgresql_sdbc=no
+    enable_odk=no
     with_theme="tango"
     test_cups=no
     test_dbus=no
