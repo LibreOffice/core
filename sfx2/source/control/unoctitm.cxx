@@ -675,9 +675,13 @@ class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
 void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::PropertyValue>& rArgs)
 {
     bool bCollecting = officecfg::Office::Common::Misc::CollectUsageInformation::get();
-    theUsageInfo::get().setCollecting(bCollecting);
-    if (!bCollecting)
-        return;
+    if (!bCollecting){
+        bCollecting = getenv("LO_COLLECT_USAGE");
+        theUsageInfo::get().setCollecting(bCollecting);
+        if(!bCollecting) {
+            return;
+        }
+    }
 
     OUStringBuffer aBuffer;
 
