@@ -79,10 +79,6 @@ rDevice
 
 #endif
 
-#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 12, 0)
-#   define cairo_surface_create_similar_image cairo_surface_create_similar
-#endif
-
 namespace
 {
     cairo_rectangle_int_t getFillDamage(cairo_t* cr)
@@ -998,10 +994,17 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
     if (pSrc == this)
     {
         //self copy is a problem, so dup source in that case
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 12, 0)
+        pCopy = cairo_surface_create_similar(source,
+                                            cairo_surface_get_content(m_pSurface),
+                                            aTR.mnSrcWidth,
+                                            aTR.mnSrcHeight);
+#else
         pCopy = cairo_surface_create_similar_image(source,
                                             cairo_image_surface_get_format(m_pSurface),
                                             aTR.mnSrcWidth,
                                             aTR.mnSrcHeight);
+#endif
 
         cairo_t* cr = cairo_create(pCopy);
         cairo_set_source_surface(cr, source, -aTR.mnSrcX, -aTR.mnSrcY);
@@ -1322,10 +1325,10 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
     sal_Int32 nExtentsRight(extents.x + extents.width), nExtentsBottom(extents.y + extents.height);
     sal_Int32 nWidth = cairo_image_surface_get_width(m_pSurface);
     sal_Int32 nHeight = cairo_image_surface_get_height(m_pSurface);
-    nExtentsLeft = std::max(nExtentsLeft, 0);
-    nExtentsTop = std::max(nExtentsTop, 0);
-    nExtentsRight = std::min(nExtentsRight, nWidth);
-    nExtentsBottom = std::min(nExtentsBottom, nHeight);
+    nExtentsLeft = std::max<sal_Int32>(nExtentsLeft, 0);
+    nExtentsTop = std::max<sal_Int32>(nExtentsTop, 0);
+    nExtentsRight = std::min<sal_Int32>(nExtentsRight, nWidth);
+    nExtentsBottom = std::min<sal_Int32>(nExtentsBottom, nHeight);
 
     cairo_surface_t* surface = cairo_get_target(cr);
     cairo_surface_flush(surface);

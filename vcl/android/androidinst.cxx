@@ -123,7 +123,6 @@ public:
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
                        pSysParent )
     {
-        enableDamageTracker();
         if (pParent == NULL && viewWidth > 1 && viewHeight > 1)
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
