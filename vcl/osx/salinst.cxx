@@ -976,6 +976,23 @@ SalSession* AquaSalInstance::CreateSalSession()
     return nullptr;
 }
 
+OUString AquaSalInstance::getOSVersion()
+{
+    NSString * versionString = nullptr;
+    NSString * sysVersionDictionaryPath = @"/System/Library/CoreServices/SystemVersion.plist";
+    NSDictionary * sysVersionDict = [ NSDictionary dictionaryWithContentsOfFile: sysVersionDictionaryPath ];
+    if ( sysVersionDict )
+        versionString = [ sysVersionDict valueForKey: @"ProductVersion" ];
+
+    OUString aVersion = "Mac OS X ";
+    if ( versionString )
+        aVersion += OUString::fromUtf8( [ versionString UTF8String ] );
+    else
+        aVersion += "(unknown)";
+
+    return aVersion;
+}
+
 class MacImeStatus : public SalI18NImeStatus
 {
 public:
