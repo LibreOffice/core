@@ -43,7 +43,6 @@
 #define CMD_SID_ATTR_CHAR_FONT                      ".uno:CharFontName"
 #define CMD_SID_FM_CHECKBOX                         ".uno:CheckBox"
 #define CMD_SID_FM_COMBOBOX                         ".uno:ComboBox"
-#define CMD_SID_CONTOUR_DLG                         ".uno:ContourDialog"
 #define CMD_SID_FM_CONVERTTO_BUTTON                 ".uno:ConvertToButton"
 #define CMD_SID_FM_CONVERTTO_CHECKBOX               ".uno:ConvertToCheckBox"
 #define CMD_SID_FM_CONVERTTO_COMBOBOX               ".uno:ConvertToCombo"
@@ -131,7 +130,6 @@
 #define CMD_SID_TABLE_SELECT_COL                    ".uno:EntireColumn"
 #define CMD_SID_TABLE_SELECT_ROW                    ".uno:EntireRow"
 #define CMD_SID_FORMAT_TABLE_DLG                    ".uno:TableDialog"
-#define CMD_SID_OPEN_SMARTTAGMENU                   ".uno:OpenSmartTagMenuOnCursor"
 #define CMD_SID_TABLE_INSERT_COL_DLG                ".uno:InsertColumnDialog"
 #define CMD_SID_TABLE_INSERT_ROW_DLG                ".uno:InsertRowDialog"
 

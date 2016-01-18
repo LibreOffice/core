@@ -28,7 +28,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/fntszctl.hxx>
 #include <svx/fntctl.hxx>
-#include <svx/SmartTagCtl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
@@ -377,7 +376,6 @@ void SwDLL::RegisterControls()
     ::avmedia::MediaToolBoxControl::RegisterControl(SID_AVMEDIA_TOOLBOX, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
 
-    SvxSmartTagsControl::RegisterControl(SID_OPEN_SMARTTAGMENU, pMod);
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
     SwJumpToSpecificPageControl::RegisterControl(SID_JUMP_TO_SPECIFIC_PAGE, pMod);
 }

@@ -48,11 +48,6 @@
     Command = ".uno:FontDialog" ; \
     Text [ en-US ] = "C~haracter..." ;\
 
-#define ITEM_FORMAT_PARA_DLG \
-    Identifier = SID_PARA_DLG ; \
-    Command = ".uno:ParagraphDialog" ; \
-    Text [ en-US ] = "P~aragraph..." ;\
-
 #define ITEM_FORMAT_FONTWORK \
     Identifier = SID_FONTWORK ; \
     Command = ".uno:FontWork" ; \
@@ -218,11 +213,6 @@
     Command = ".uno:FormatArea" ; \
     Text [ en-US ] = "A~rea..." ;\
 
-#define ITEM_FORMAT_ATTR_TRANSFORM \
-    Identifier = SID_ATTR_TRANSFORM ; \
-    Command = ".uno:TransformDialog" ; \
-    Text [ en-US ] = "Position and Si~ze..." ;\
-
 #define ITEM_FORMAT_OBJECT_HEAVEN \
     Identifier = SID_OBJECT_HEAVEN ; \
     Command = ".uno:SetObjectToForeground" ; \
@@ -248,11 +238,6 @@
     Command = ".uno:ExternalEdit" ; \
     Text [ en-US ] = "Edit with External Tool..." ; \
 
-#define ITEM_OBJECT_CROP \
-    Identifier = SID_OBJECT_CROP ; \
-    Command = ".uno:Crop" ; \
-    Text [ en-US ] = "Crop I~mage" ; \
-
 #define ITEM_COMPRESS_GRAPHIC \
     Identifier = SID_COMPRESS_GRAPHIC ; \
     Command = ".uno:CompressGraphic" ; \
@@ -267,11 +252,6 @@
     Identifier = SID_CHANGE_PICTURE ; \
     Command = ".uno:ChangePicture" ; \
     Text [ en-US ] = "Replace Image..." ; \
-
-#define ITEM_VIEW_ATTR_ZOOM \
-    Identifier = SID_ATTR_ZOOM ; \
-    Command = ".uno:Zoom" ; \
-    Text [ en-US ] = "~Zoom..." ; \
 
 #define ITEM_FORMAT_NUMBERING \
     MenuItem\
@@ -374,66 +354,6 @@
             };\
         };\
     };
-
-/*------------------------------------------------------------------------
-                             Context Menus
-------------------------------------------------------------------------*/
-
-#define ITEM_POPUP_TEMPLATE_EDIT \
-    Identifier = SID_STYLE_EDIT ; \
-    Command = ".uno:EditStyle" ; \
-    Text [ en-US ] = "Edit Paragraph Style..." ; \
-
- // Gruppen-/Kombination-Funktionen
-#define ITEM_POPUP_GROUP \
-    Identifier = SID_GROUP ; \
-    Command = ".uno:FormatGroup" ; \
-    Text [ en-US ] = "~Group" ; \
-
-#define ITEM_POPUP_UNGROUP \
-    Identifier = SID_UNGROUP ; \
-    Command = ".uno:FormatUngroup" ; \
-    Text [ en-US ] = "~Ungroup" ; \
-
-#define ITEM_POPUP_ENTER_GROUP \
-    Identifier = SID_ENTER_GROUP ; \
-    Command = ".uno:EnterGroup" ; \
-    Text [ en-US ] = "~Enter Group" ; \
-
-#define ITEM_POPUP_LEAVE_GROUP \
-    Identifier = SID_LEAVE_GROUP ; \
-    Command = ".uno:LeaveGroup" ; \
-    Text [ en-US ] = "E~xit Group" ; \
-
-#define ITEM_GROUP_MENU \
-    MenuItem\
-    {\
-        Identifier = SID_MN_GROUP ; \
-        Command = ".uno:GroupMenu" ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MenuItem\
-                {\
-                    ITEM_POPUP_GROUP\
-                };\
-                MenuItem\
-                {\
-                    ITEM_POPUP_UNGROUP\
-                };\
-                MenuItem\
-                {\
-                    ITEM_POPUP_ENTER_GROUP\
-                };\
-                MenuItem\
-                {\
-                    ITEM_POPUP_LEAVE_GROUP\
-                };\
-            };\
-        };\
-        Text [ en-US ] = "~Group" ; \
-            };
 
 /*------------------------------------------------------------------------
                              Toolbar-IDs
@@ -541,11 +461,6 @@
     Identifier = SID_OPEN_HYPERLINK ; \
     Command = CMD_SID_OPEN_HYPERLINK; \
     Text [ en-US ] = "~Open Hyperlink" ;    \
-
-#define ITEM_OPEN_SMARTTAGMENU \
-    Identifier = SID_OPEN_SMARTTAGMENU ; \
-    Command = CMD_SID_OPEN_SMARTTAGMENU; \
-    Text [ en-US ] = "Open ~Smart Tag Menu" ;   \
 
 #endif // #ifndef _GLOBLMN_HRC
 

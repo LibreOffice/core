@@ -106,38 +106,9 @@ String STR_SAVEAS_SRC
 {
     Text [ en-US ] = "~Export source..." ;
 };
-String MN_SRCVIEW_POPUPMENU
-{
-    Text [ en-US ] = "HTML source" ;
-};
 String RID_PVIEW_TOOLBOX
 {
     Text [ en-US ] = "Print Preview" ;
-};
-
-Menu MN_SRCVIEW_POPUPMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            ITEM_FORMAT_ATTR_CHAR_FONT
-        };
-        MenuItem
-        {
-            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = SID_SOURCEVIEW ;
-            HelpID = HID_SOURCEVIEW ;
-            Text [ en-US ] = "HTML Source" ;
-        };
-    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

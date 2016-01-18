@@ -165,7 +165,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/mnuctrls/clipboardctl \
     svx/source/mnuctrls/fntctl \
     svx/source/mnuctrls/fntszctl \
-    svx/source/mnuctrls/SmartTagCtl \
     svx/source/mnuctrls/smarttagmenu \
     svx/source/sidebar/ContextChangeEventMultiplexer \
     svx/source/sidebar/EmptyPanel \
