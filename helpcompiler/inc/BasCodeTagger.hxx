@@ -38,7 +38,7 @@ class L10N_DLLPUBLIC BasicCodeTagger
     void tagBasCodeParagraphs();
 
   public:
-    enum TaggerException { FILE_WRITING, NULL_DOCUMENT, EMPTY_DOCUMENT };
+    enum TaggerException { NULL_DOCUMENT, EMPTY_DOCUMENT };
     BasicCodeTagger( xmlDocPtr rootDoc );
     ~BasicCodeTagger();
     void tagBasicCodes();
