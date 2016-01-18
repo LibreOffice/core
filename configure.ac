@@ -304,6 +304,13 @@ if test -z "$SED"; then
     AC_MSG_ERROR([install sed to run this script])
 fi
 
+AC_PROG_AWK
+AC_PATH_PROG(AWK, $AWK)
+if test -z "$AWK"; then
+    AC_MSG_ERROR([install awk to run this script])
+fi
+
+
 # Set the ENABLE_LTO variable
 # ===================================================================
 AC_MSG_CHECKING([whether to use link-time optimization])
@@ -316,6 +323,143 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_LTO)
+
+TAB=`printf '\t'`
+
+AC_MSG_CHECKING([the GNU Make version])
+_make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
+_make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+if test "$_make_longver" -ge "038200"; then
+    AC_MSG_RESULT([$GNUMAKE $_make_version])
+
+elif test "$_make_longver" -ge "038100"; then
+    if test "$build_os" = "cygwin"; then
+        AC_MSG_ERROR([failed ($GNUMAKE version >= 3.82 needed])
+    fi
+    AC_MSG_RESULT([$GNUMAKE $_make_version])
+
+    AC_MSG_CHECKING([for GNU Make bug 20033])
+    TESTGMAKEBUG20033=`mktemp -d tmp.XXXXXX`
+    $SED -e "s/<TAB>/$TAB/g" > $TESTGMAKEBUG20033/Makefile << EOF
+A := \$(wildcard *.a)
+
+.PHONY: all
+all: \$(A:.a=.b)
+<TAB>@echo survived bug20033.
+
+.PHONY: setup
+setup:
+<TAB>@touch 1.a 2.a 3.a 4.a 5.a 6.a
+
+define d1
+@echo lala \$(1)
+@sleep 1
+endef
+
+define d2
+@echo tyty \$(1)
+@sleep 1
+endef
+
+%.b : %.a
+<TAB>\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
+<TAB>\$(call d1,\$(CHECKSUM)),\
+<TAB>\$(call d2,\$(CHECKSUM)))
+EOF
+    if test -z "`(cd $TESTGMAKEBUG20033 && $GNUMAKE setup && $GNUMAKE -j)|grep survived`"; then
+        no_parallelism_make="YES"
+        AC_MSG_RESULT([yes, disable parallelism])
+    else
+        AC_MSG_RESULT([no, keep parallelism enabled])
+    fi
+    rm -rf $TESTGMAKEBUG20033
+else
+    AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
+fi
+
+# find if gnumake support file function
+AC_MSG_CHECKING([whether GNU Make supports the 'file' function])
+TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+    TESTGMAKEFILEFUNC=`cygpath -m $TESTGMAKEFILEFUNC`
+fi
+$SED -e "s/<TAB>/$TAB/" > $TESTGMAKEFILEFUNC/Makefile << EOF
+\$(file >test.txt,Success )
+
+.PHONY: all
+all:
+<TAB>@cat test.txt
+
+EOF
+$GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
+if test -f $TESTGMAKEFILEFUNC/test.txt; then
+    HAVE_GNUMAKE_FILE_FUNC=TRUE
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+rm -rf $TESTGMAKEFILEFUNC
+AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
+AC_SUBST(GNUMAKE_WIN_NATIVE)
+
+_make_ver_check=`$GNUMAKE --version | grep "Built for Windows"`
+STALE_MAKE=
+if test "$_make_ver_check" = ""; then
+   STALE_MAKE=TRUE
+fi
+
+
+dnl ===================================================================
+dnl Number of CPUs to use during the build
+dnl ===================================================================
+AC_MSG_CHECKING([for number of processors to use])
+# plain --with-parallelism is just the default
+if test -n "$with_parallelism" -a "$with_parallelism" != "yes"; then
+    if test "$with_parallelism" = "no"; then
+        PARALLELISM=0
+    else
+        PARALLELISM=$with_parallelism
+    fi
+else
+    if test "$enable_icecream" = "yes"; then
+        PARALLELISM="10"
+    else
+        case `uname -s` in
+
+        Darwin|FreeBSD|NetBSD|OpenBSD)
+            PARALLELISM=`sysctl -n hw.ncpu`
+            ;;
+
+        Linux)
+            PARALLELISM=`getconf _NPROCESSORS_ONLN`
+        ;;
+        # what else than above does profit here *and* has /proc?
+        *)
+            PARALLELISM=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
+            ;;
+        esac
+
+        # If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
+        # unexpected format, 'wc -l' will have returned 0 (and we won't use -j at all).
+    fi
+fi
+
+if test "$no_parallelism_make" = "YES" && test $PARALLELISM -gt 1; then
+    if test -z "$with_parallelism"; then
+            AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])
+            add_warning "gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this."
+            PARALLELISM="1"
+    else
+        add_warning "make 3.81 is prone to crashes with parallelism > 1. Since --with-parallelism was explicitly given, it is honored, but do not complain when make segfaults on you."
+    fi
+fi
+
+if test $PARALLELISM -eq 0; then
+    AC_MSG_RESULT([explicit make -j option needed])
+else
+    AC_MSG_RESULT([$PARALLELISM])
+fi
+AC_SUBST(PARALLELISM)
 
 dnl ===================================================================
 dnl When building for Android, --with-android-ndk,
@@ -514,9 +658,13 @@ if test -n "$with_android_ndk"; then
     esac
 
     if test "$ENABLE_LTO" = TRUE; then
-        # -flto comes from com_GCC_degs.mk, too, but we need to make sure it gets passed as part of
+        # -flto comes from com_GCC_defs.mk, too, but we need to make sure it gets passed as part of
         # $CC and $CXX when building external libraries
-        ANDROIDCFLAGS="$ANDROIDCFLAGS -flto"
+        if test "$COM_IS_CLANG" = TRUE; then
+            ANDROIDCFLAGS="$ANDROIDCFLAGS -flto"
+        else
+            ANDROIDCFLAGS="$ANDROIDCFLAGS -flto=$(PARALLELISM) -fuse-linker-plugin -O2"
+        fi
     fi
 
     # gdbserver can be in different locations
@@ -2467,12 +2615,6 @@ pathmunge ()
         unset new_path
     fi
 }
-
-AC_PROG_AWK
-AC_PATH_PROG( AWK, $AWK)
-if test -z "$AWK"; then
-    AC_MSG_ERROR([install awk to run this script])
-fi
 
 AC_PATH_PROG(BASH, bash)
 if test -z "$BASH"; then
@@ -4957,97 +5099,14 @@ else
 fi
 AC_SUBST(ENABLE_PCH)
 
-TAB=`printf '\t'`
-
-AC_MSG_CHECKING([the GNU Make version])
-_make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
-_make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-if test "$_make_longver" -ge "038200"; then
-    AC_MSG_RESULT([$GNUMAKE $_make_version])
-
-elif test "$_make_longver" -ge "038100"; then
-    if test "$build_os" = "cygwin"; then
-        AC_MSG_ERROR([failed ($GNUMAKE version >= 3.82 needed])
-    fi
-    AC_MSG_RESULT([$GNUMAKE $_make_version])
-
-    dnl ===================================================================
-    dnl Search all the common names for sha1sum
-    dnl ===================================================================
-    AC_CHECK_PROGS(SHA1SUM, sha1sum sha1 shasum openssl)
-    if test -z "$SHA1SUM"; then
-        AC_MSG_ERROR([install the approproate SHA-1 checksumming program for this OS])
-    elif test "$SHA1SUM" = "openssl"; then
-        SHA1SUM="openssl sha1"
-    fi
-    AC_MSG_CHECKING([for GNU Make bug 20033])
-    TESTGMAKEBUG20033=`mktemp -d tmp.XXXXXX`
-    $SED -e "s/<TAB>/$TAB/g" > $TESTGMAKEBUG20033/Makefile << EOF
-A := \$(wildcard *.a)
-
-.PHONY: all
-all: \$(A:.a=.b)
-<TAB>@echo survived bug20033.
-
-.PHONY: setup
-setup:
-<TAB>@touch 1.a 2.a 3.a 4.a 5.a 6.a
-
-define d1
-@echo lala \$(1)
-@sleep 1
-endef
-
-define d2
-@echo tyty \$(1)
-@sleep 1
-endef
-
-%.b : %.a
-<TAB>\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
-<TAB>\$(call d1,\$(CHECKSUM)),\
-<TAB>\$(call d2,\$(CHECKSUM)))
-EOF
-    if test -z "`(cd $TESTGMAKEBUG20033 && $GNUMAKE setup && $GNUMAKE -j)|grep survived`"; then
-        no_parallelism_make="YES"
-        AC_MSG_RESULT([yes, disable parallelism])
-    else
-        AC_MSG_RESULT([no, keep parallelism enabled])
-    fi
-    rm -rf $TESTGMAKEBUG20033
-else
-    AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
-fi
-
-# find if gnumake support file function
-AC_MSG_CHECKING([whether GNU Make supports the 'file' function])
-TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
-if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-    TESTGMAKEFILEFUNC=`cygpath -m $TESTGMAKEFILEFUNC`
-fi
-$SED -e "s/<TAB>/$TAB/" > $TESTGMAKEFILEFUNC/Makefile << EOF
-\$(file >test.txt,Success )
-
-.PHONY: all
-all:
-<TAB>@cat test.txt
-
-EOF
-$GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
-if test -f $TESTGMAKEFILEFUNC/test.txt; then
-    HAVE_GNUMAKE_FILE_FUNC=TRUE
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-rm -rf $TESTGMAKEFILEFUNC
-AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
-AC_SUBST(GNUMAKE_WIN_NATIVE)
-
-_make_ver_check=`$GNUMAKE --version | grep "Built for Windows"`
-STALE_MAKE=
-if test "$_make_ver_check" = ""; then
-   STALE_MAKE=TRUE
+dnl ===================================================================
+dnl Search all the common names for sha1sum
+dnl ===================================================================
+AC_CHECK_PROGS(SHA1SUM, sha1sum sha1 shasum openssl)
+if test -z "$SHA1SUM"; then
+    AC_MSG_ERROR([install the approproate SHA-1 checksumming program for this OS])
+elif test "$SHA1SUM" = "openssl"; then
+    SHA1SUM="openssl sha1"
 fi
 
 HAVE_LD_HASH_STYLE=FALSE
@@ -12442,58 +12501,6 @@ else
     AC_MSG_RESULT([yes])
 fi
 AC_SUBST(nodep)
-
-dnl ===================================================================
-dnl Number of CPUs to use during the build
-dnl ===================================================================
-AC_MSG_CHECKING([for number of processors to use])
-# plain --with-parallelism is just the default
-if test -n "$with_parallelism" -a "$with_parallelism" != "yes"; then
-    if test "$with_parallelism" = "no"; then
-        PARALLELISM=0
-    else
-        PARALLELISM=$with_parallelism
-    fi
-else
-    if test "$enable_icecream" = "yes"; then
-        PARALLELISM="10"
-    else
-        case `uname -s` in
-
-        Darwin|FreeBSD|NetBSD|OpenBSD)
-            PARALLELISM=`sysctl -n hw.ncpu`
-            ;;
-
-        Linux)
-            PARALLELISM=`getconf _NPROCESSORS_ONLN`
-        ;;
-        # what else than above does profit here *and* has /proc?
-        *)
-            PARALLELISM=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
-            ;;
-        esac
-
-        # If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
-        # unexpected format, 'wc -l' will have returned 0 (and we won't use -j at all).
-    fi
-fi
-
-if test "$no_parallelism_make" = "YES" && test $PARALLELISM -gt 1; then
-    if test -z "$with_parallelism"; then
-            AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])
-            add_warning "gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this."
-            PARALLELISM="1"
-    else
-        add_warning "make 3.81 is prone to crashes with parallelism > 1. Since --with-parallelism was explicitly given, it is honored, but do not complain when make segfaults on you."
-    fi
-fi
-
-if test $PARALLELISM -eq 0; then
-    AC_MSG_RESULT([explicit make -j option needed])
-else
-    AC_MSG_RESULT([$PARALLELISM])
-fi
-AC_SUBST(PARALLELISM)
 
 IWYU_PATH="$with_iwyu"
 AC_SUBST(IWYU_PATH)
