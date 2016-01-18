@@ -287,6 +287,7 @@ public:
             case CTRL_CHECKBOX:
             case CTRL_RADIOBUTTON:
             case CTRL_LISTNODE:
+            case CTRL_SLIDER:
                 return false;
 
             case CTRL_MENUBAR:
