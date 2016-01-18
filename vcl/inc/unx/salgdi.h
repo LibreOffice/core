@@ -268,7 +268,7 @@ public:
                                      ControlCacheKey& aControlCacheKey);
 
     // fill a pixmap from a screen region
-    bool                            FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY );
+    void                            FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY );
 
     // render a pixmap to the screen
     bool                            RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY );

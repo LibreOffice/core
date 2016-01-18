@@ -138,7 +138,7 @@ class AquaSalPrinter : public SalPrinter
 
     virtual bool                    EndJob() override;
     virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData ) override;
-    virtual bool                    EndPage() override;
+    virtual void                    EndPage() override;
     virtual sal_uLong               GetErrorCode() override;
 
     private:

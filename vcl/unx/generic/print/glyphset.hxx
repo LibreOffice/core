@@ -114,8 +114,8 @@ public:
                                 sal_Int16 nLen,
                                 const sal_Int32* pDeltaArray,
                                 bool bUseGlyphs=true);
-    bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
-    bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
+    void        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
+    void        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
 };
 
 } /* namespace psp */

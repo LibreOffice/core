@@ -1584,9 +1584,8 @@ bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo
     return pFont != nullptr;
 }
 
-bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin, int& xMax, int& yMax )
+void PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin, int& xMax, int& yMax )
 {
-    bool bSuccess = false;
     PrintFont* pFont = getFont( nFontID );
     if( pFont )
     {
@@ -1598,13 +1597,11 @@ bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin,
             else if( pFont->m_eType == fonttype::TrueType )
                 analyzeTrueTypeFile( pFont );
         }
-        bSuccess = true;
         xMin = pFont->m_nXMin;
         yMin = pFont->m_nYMin;
         xMax = pFont->m_nXMax;
         yMax = pFont->m_nYMax;
     }
-    return bSuccess;
 }
 
 int PrintFontManager::getFontFaceNumber( fontID nFontID ) const

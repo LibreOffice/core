@@ -267,7 +267,7 @@ protected:
     void            InitXinerama();
     void            InitRandR( ::Window aRoot ) const;
     void            DeInitRandR();
-    int             processRandREvent( XEvent* );
+    void            processRandREvent( XEvent* );
 
     void            doDestruct();
     void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
@@ -332,7 +332,6 @@ public:
     Time            GetLastUserEventTime( bool bAlwaysReget = false ) const;
 
     bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate, long i_nTimeout = 1000 ) const;
-    SalXLib*        GetXLib() const { return pXLib_; }
 
     SalI18N_InputMethod*        GetInputMethod()  const { return mpInputMethod;  }
     SalI18N_KeyboardExtension*  GetKbdExtension() const { return mpKbdExtension; }
@@ -365,7 +364,7 @@ public:
     virtual ~SalX11Display();
 
     virtual bool        Dispatch( XEvent *pEvent ) override;
-    virtual bool        Yield();
+    virtual void        Yield();
     virtual void        PostUserEvent() override;
 
     bool                IsEvent();

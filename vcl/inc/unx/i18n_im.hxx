@@ -38,9 +38,9 @@ public:
     bool        UseMethod()             { return mbUseable; }
     XIM         GetMethod()             { return maMethod;  }
     void        HandleDestroyIM();
-    bool        CreateMethod( Display *pDisplay );
+    void        CreateMethod( Display *pDisplay );
     XIMStyles  *GetSupportedStyles()    { return mpStyles;  }
-    bool        SetLocale( const char* pLocale = "" );
+    void        SetLocale( const char* pLocale = "" );
     bool        FilterEvent( XEvent *pEvent, ::Window window );
 
     SalI18N_InputMethod();

@@ -540,12 +540,10 @@ TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, TextNode* pRight )
     return aPaM;
 }
 
-TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, sal_Int32 nChars )
+void TextDoc::RemoveChars( const TextPaM& rPaM, sal_Int32 nChars )
 {
     TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     pNode->RemoveText( rPaM.GetIndex(), nChars );
-
-    return rPaM;
 }
 
 bool TextDoc::IsValidPaM( const TextPaM& rPaM )

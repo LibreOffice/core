@@ -343,10 +343,8 @@ public:
     bool        hasSubFilters( ) const;
 
     /** retrieves the filters belonging to the entry
-    @return
-        the number of sub filters
     */
-    sal_Int32       getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList );
+    void       getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList );
 
     // helpers for iterating the sub filters
     const css::beans::StringPair*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
@@ -358,10 +356,9 @@ bool FilterEntry::hasSubFilters() const
     return( 0 < m_aSubFilters.getLength() );
 }
 
-sal_Int32 FilterEntry::getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList )
+void FilterEntry::getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList )
 {
     _rSubFilterList = m_aSubFilters;
-    return m_aSubFilters.getLength();
 }
 
 static bool

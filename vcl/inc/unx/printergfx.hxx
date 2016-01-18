@@ -287,7 +287,7 @@ public:
     void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
-    bool            drawVerticalizedText (const Point& rPoint,
+    void            drawVerticalizedText (const Point& rPoint,
                                           const sal_Unicode* pStr,
                                           sal_Int16 nLen,
                                           const sal_Int32* pDeltaArray );
@@ -303,8 +303,8 @@ public:
 public:
     PrinterGfx();
     ~PrinterGfx();
-    bool        Init (PrinterJob &rPrinterSpec);
-    bool        Init (const JobData& rData);
+    void            Init (PrinterJob &rPrinterSpec);
+    void            Init (const JobData& rData);
     void            Clear();
 
     // query depth
@@ -313,7 +313,7 @@ public:
     // clip region
     void            ResetClipRegion ();
     void            BeginSetClipRegion (sal_uInt32);
-    bool        UnionClipRegion (sal_Int32 nX, sal_Int32 nY,
+    void            UnionClipRegion (sal_Int32 nX, sal_Int32 nY,
                                      sal_Int32 nDX, sal_Int32 nDY);
     void            EndSetClipRegion ();
 

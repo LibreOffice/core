@@ -323,7 +323,7 @@ void ImplRegionBand::ScaleX( double fHorzScale )
 
 // combine overlapping separations
 
-bool ImplRegionBand::OptimizeBand()
+void ImplRegionBand::OptimizeBand()
 {
     ImplRegionBandSep* pPrevSep = nullptr;
     ImplRegionBandSep* pSep = mpFirstSep;
@@ -360,8 +360,6 @@ bool ImplRegionBand::OptimizeBand()
         pPrevSep = pSep;
         pSep = pSep->mpNextSep;
     }
-
-    return true;
 }
 
 void ImplRegionBand::Union( long nXLeft, long nXRight )

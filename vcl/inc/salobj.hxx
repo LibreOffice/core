@@ -60,8 +60,8 @@ public:
 
     void                            SetCallback( void* pInst, SALOBJECTPROC pProc )
                                         { m_pInst = pInst; m_pCallback = pProc; }
-    long                            CallCallback( sal_uInt16 nEvent, const void* pEvent )
-                                        { return m_pCallback ? m_pCallback( m_pInst, this, nEvent, pEvent ) : 0; }
+    void                            CallCallback( sal_uInt16 nEvent, const void* pEvent )
+                                        { if (m_pCallback) m_pCallback( m_pInst, this, nEvent, pEvent ); }
 
     void                            SetMouseTransparent( bool bMouseTransparent )
                                         { m_bMouseTransparent = bMouseTransparent; }

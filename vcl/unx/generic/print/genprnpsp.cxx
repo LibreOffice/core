@@ -973,12 +973,11 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, bool )
     return m_pGraphics;
 }
 
-bool PspSalPrinter::EndPage()
+void PspSalPrinter::EndPage()
 {
-    bool bResult = m_aPrintJob.EndPage();
+    m_aPrintJob.EndPage();
     m_aPrinterGfx.Clear();
     OSL_TRACE("PspSalPrinter::EndPage");
-    return bResult;
 }
 
 sal_uLong PspSalPrinter::GetErrorCode()

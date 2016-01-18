@@ -40,13 +40,6 @@ namespace vcl
             FontIdentifier( const PhysicalFontFace*, bool bVertical );
             FontIdentifier() : m_nFontId(0), m_bVertical( false ) {}
 
-            bool operator==( const FontIdentifier& rRight ) const
-            {
-                return m_nFontId == rRight.m_nFontId &&
-                       m_typeFontFace == rRight.m_typeFontFace &&
-                       m_bVertical == rRight.m_bVertical;
-            }
-
             // Less than needed for std::set and std::map
             bool operator<( const FontIdentifier& rRight ) const
             {

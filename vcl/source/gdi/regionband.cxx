@@ -426,14 +426,14 @@ void RegionBand::CreateBandRange(long nYTop, long nYBottom)
 
 }
 
-bool RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLineId)
+void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLineId)
 {
     long nX, nY;
 
     // lines consisting of a single point do not interest here
     if ( rStartPt == rEndPt )
     {
-        return true;
+        return;
     }
 
     LineType eLineType = (rStartPt.Y() > rEndPt.Y()) ? LINE_DESCENDING : LINE_ASCENDING;
@@ -513,18 +513,16 @@ bool RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
         // last point
         InsertPoint( Point( nEndX, nEndY ), nLineId, true, eLineType );
     }
-
-    return true;
 }
 
-bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, LineType eLineType)
+void RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, LineType eLineType)
 {
     DBG_ASSERT( mpFirstBand != nullptr, "RegionBand::InsertPoint - no bands available!" );
 
     if ( rPoint.Y() == mpLastCheckedBand->mnYTop )
     {
         mpLastCheckedBand->InsertPoint( rPoint.X(), nLineID, bEndPoint, eLineType );
-        return true;
+        return;
     }
 
     if ( rPoint.Y() > mpLastCheckedBand->mnYTop )
@@ -536,7 +534,7 @@ bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, 
             if ( rPoint.Y() == mpLastCheckedBand->mnYTop )
             {
                 mpLastCheckedBand->InsertPoint( rPoint.X(), nLineID, bEndPoint, eLineType );
-                return true;
+                return;
             }
 
             mpLastCheckedBand = mpLastCheckedBand->mpNextBand;
@@ -553,7 +551,7 @@ bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, 
             if ( rPoint.Y() == mpLastCheckedBand->mnYTop )
             {
                 mpLastCheckedBand->InsertPoint( rPoint.X(), nLineID, bEndPoint, eLineType );
-                return true;
+                return;
             }
 
             mpLastCheckedBand = mpLastCheckedBand->mpPrevBand;
@@ -566,8 +564,6 @@ bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, 
 
     // reinitialize pointer (should never be reached!)
     mpLastCheckedBand = mpFirstBand;
-
-    return false;
 }
 
 bool RegionBand::OptimizeBandList()

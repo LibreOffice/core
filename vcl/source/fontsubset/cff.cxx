@@ -1716,7 +1716,7 @@ public:
     void        emitAllHex();
     void        emitAllCrypted();
     int         tellPos() const;
-    size_t      updateLen( int nTellPos, size_t nLength);
+    void        updateLen( int nTellPos, size_t nLength);
     void        emitValVector( const char* pLineHead, const char* pLineTail, const ValVector&);
 private:
     FILE*       mpFileOut;
@@ -1765,7 +1765,7 @@ int Type1Emitter::tellPos() const
     return nTellPos;
 }
 
-size_t Type1Emitter::updateLen( int nTellPos, size_t nLength)
+void Type1Emitter::updateLen( int nTellPos, size_t nLength)
 {
     // update PFB segment header length
     U8 cData[4];
@@ -1775,13 +1775,12 @@ size_t Type1Emitter::updateLen( int nTellPos, size_t nLength)
     cData[3] = static_cast<U8>(nLength >> 24);
     const long nCurrPos = ftell(mpFileOut);
     if (nCurrPos < 0)
-        return 0;
+        return;
     if (fseek( mpFileOut, nTellPos, SEEK_SET) != 0)
-        return 0;
-    size_t nWrote = fwrite(cData, 1, sizeof(cData), mpFileOut);
+        return;
+    fwrite(cData, 1, sizeof(cData), mpFileOut);
     if( nCurrPos >= 0)
         (void)fseek(mpFileOut, nCurrPos, SEEK_SET);
-    return nWrote;
 }
 
 inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const

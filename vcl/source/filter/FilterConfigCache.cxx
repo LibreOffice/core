@@ -62,7 +62,7 @@ sal_Int32 FilterConfigCache::nIndUserData = -1;
 sal_Int32 FilterConfigCache::nIndFileFormatVersion = -1;
 sal_Int32 FilterConfigCache::nIndTemplateName = -1;
 
-bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
+void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
     bIsPixelFormat = bIsInternalFilter = false;
     sFilterName = rUserDataEntry;
@@ -90,7 +90,6 @@ bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString
         sExternalFilterName = sFilterName;
         sFilterName = SVLIBRARY("gie");
     }
-    return ! sFilterName.isEmpty();
 }
 
 OUString FilterConfigCache::FilterConfigCacheEntry::GetShortName()
@@ -368,13 +367,6 @@ OUString FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sUIName;
-    return OUString("");
-}
-
-OUString FilterConfigCache::GetImportFormatMediaType( sal_uInt16 nFormat )
-{
-    if( nFormat < aImport.size() )
-        return aImport[ nFormat ].sMediaType;
     return OUString("");
 }
 
