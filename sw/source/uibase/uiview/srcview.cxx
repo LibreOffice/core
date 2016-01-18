@@ -118,7 +118,7 @@ SFX_IMPL_SUPERCLASS_INTERFACE(SwSrcView, SfxViewShell)
 
 void SwSrcView::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_SRCVIEW_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("source");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             RID_WEBTOOLS_TOOLBOX);

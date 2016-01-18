@@ -41,7 +41,7 @@ SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell)
 
 void SwOleShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_OLE_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("oleobject");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_OLE_TOOLBOX);
 }

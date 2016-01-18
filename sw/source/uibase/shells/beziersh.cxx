@@ -47,7 +47,7 @@ SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell)
 
 void SwBezierShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAW_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("draw");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_BEZIER_TOOLBOX);
 }

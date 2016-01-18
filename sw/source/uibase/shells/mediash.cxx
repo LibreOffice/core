@@ -73,7 +73,7 @@ SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell)
 
 void SwMediaShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_MEDIA_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("media");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_MEDIA_TOOLBOX);
 }

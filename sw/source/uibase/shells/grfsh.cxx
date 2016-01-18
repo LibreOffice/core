@@ -111,7 +111,7 @@ SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell)
 
 void SwGrfShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_GRF_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("graphic");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_GRAFIK_TOOLBOX);
 }

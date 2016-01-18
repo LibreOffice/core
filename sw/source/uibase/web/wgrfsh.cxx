@@ -45,7 +45,7 @@ SFX_IMPL_INTERFACE(SwWebGrfShell, SwGrfShell)
 
 void SwWebGrfShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_GRF_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("graphic");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_WEBGRAPHIC_TOOLBOX);
 }

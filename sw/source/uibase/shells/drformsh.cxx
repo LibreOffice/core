@@ -61,7 +61,7 @@ SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell)
 
 void SwDrawFormShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAWFORM_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("form");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_TEXT_TOOLBOX);
 }

@@ -120,7 +120,7 @@ SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell)
 
 void SwTextShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_TEXT_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("text");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_TEXT_TOOLBOX);
 

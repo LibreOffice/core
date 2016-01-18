@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
+  <menu:menuitem menu:id=".uno:Cut"/>
+  <menu:menuitem menu:id=".uno:Copy"/>
+  <menu:menuitem menu:id=".uno:Paste"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:Crop"/>
+  <menu:menuitem menu:id=".uno:ExternalEdit"/>
+  <menu:menuitem menu:id=".uno:ChangePicture"/>
+  <menu:menuitem menu:id=".uno:CompressGraphic"/>
+  <menu:menuitem menu:id=".uno:SaveGraphic"/>
+  <menu:menuseparator/>
+  <menu:menu menu:id=".uno:AnchorMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:SetAnchorToPara" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:SetAnchorAtChar" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:SetAnchorToChar" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:SetAnchorToFrame" menu:style="radio"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id=".uno:WrapMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:WrapOff"/>
+      <menu:menuitem menu:id=".uno:WrapOn"/>
+      <menu:menuitem menu:id=".uno:WrapIdeal"/>
+      <menu:menuitem menu:id=".uno:WrapLeft"/>
+      <menu:menuitem menu:id=".uno:WrapRight"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:WrapThrough"/>
+      <menu:menuitem menu:id=".uno:WrapThroughTransparent"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:WrapContour"/>
+      <menu:menuitem menu:id=".uno:ContourDialog"/>
+      <menu:menuitem menu:id=".uno:WrapAnchorOnly"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id=".uno:AlignFrameMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:AlignLeft"/>
+      <menu:menuitem menu:id=".uno:AlignHorizontalCenter"/>
+      <menu:menuitem menu:id=".uno:AlignRight"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:AlignTop"/>
+      <menu:menuitem menu:id=".uno:AlignVerticalCenter"/>
+      <menu:menuitem menu:id=".uno:AlignBottom"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id=".uno:ArrangeFrameMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:BringToFront"/>
+      <menu:menuitem menu:id=".uno:ObjectForwardOne"/>
+      <menu:menuitem menu:id=".uno:ObjectBackOne"/>
+      <menu:menuitem menu:id=".uno:SendToBack"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id=".uno:RotateMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:RotateLeft"/>
+      <menu:menuitem menu:id=".uno:RotateRight"/>
+    </menu:menupopup>
+  </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
+  <menu:menuitem menu:id=".uno:GraphicDialog"/>
+</menu:menupopup>

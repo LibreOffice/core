@@ -110,7 +110,7 @@ SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell)
 
 void SwFrameShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_FRM_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("frame");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_FRAME_TOOLBOX);
 }

@@ -14,8 +14,16 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/swform,\
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swform,\
+	sw/uiconfig/swform/popupmenu/draw \
+	sw/uiconfig/swform/popupmenu/drawtext \
+	sw/uiconfig/swform/popupmenu/form \
+	sw/uiconfig/swform/popupmenu/frame \
+	sw/uiconfig/swform/popupmenu/graphic \
+	sw/uiconfig/swform/popupmenu/media \
+	sw/uiconfig/swform/popupmenu/oleobject \
 	sw/uiconfig/swform/popupmenu/preview \
 	sw/uiconfig/swform/popupmenu/table \
+	sw/uiconfig/swform/popupmenu/text \
 ))
 
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/swform,\

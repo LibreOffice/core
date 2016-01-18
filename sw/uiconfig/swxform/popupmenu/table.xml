@@ -65,6 +65,7 @@
   <menu:menuitem menu:id=".uno:EditFootnote"/>
   <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
   <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
   <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
   <menu:menuitem menu:id=".uno:NextTrackedChange"/>
