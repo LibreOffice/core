@@ -34,7 +34,8 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 		./configure \
 		$(if $(filter MACOSX IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 		$(if $(filter ANDROID,$(OS)),--disable-arm-simd --disable-arm-neon --disable-arm-iwmmxt) \
-		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+		$(if $(filter INTEL,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 		&& $(MAKE) \
 	)
 
