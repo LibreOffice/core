@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_db821100",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T14:35:40Z",
+      "side": 1,
+      "message": "This obtains the default standard Text format for the global system locale.",
+      "revId": "bea655aec9880a77b91195608921733548e82573",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_fb79d530",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T14:35:40Z",
+      "side": 1,
+      "message": "This would fail if the applied format was a user defined text format or a text format of a different locale.\n\nInstead of obtaining and comparing a standard text format, check if the format is of type text, i.e.\n\n pNumberFormatter-\u003eGetType( nCurrentNumberFormat) \u003d\u003d css::util::NumberFormat::TEXT",
+      "revId": "bea655aec9880a77b91195608921733548e82573",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
