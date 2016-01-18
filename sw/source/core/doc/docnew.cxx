@@ -109,6 +109,7 @@
 #include <fldbas.hxx>
 #include <wrtsh.hxx>
 #include <unocrsr.hxx>
+#include <fmthdft.hxx>
 
 #include <cmdid.h>
 
@@ -894,7 +895,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     SAL_INFO( "sw.createcopy", "CC-Nd-Src: " << CNTNT_DOC( this ) );
     SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
 #endif
-    pRet->AppendDoc(*this, 0, nullptr, bCallInitNew);
+    pRet->AppendDoc(*this, 0, bCallInitNew, 0, 0);
 #ifdef DBG_UTIL
     SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
 #endif
@@ -907,9 +908,45 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     return pRetShell;
 }
 
+// save bulk letters as single documents
+static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, const OUString& rStartingPageDesc, sal_uLong nDocNo )
+{
+    do
+    {
+        OUString sTest = rStartingPageDesc;
+        sTest += OUString::number( nDocNo );
+        if( !pTargetShell->FindPageDescByName( sTest ) )
+            return sTest;
+        ++nDocNo;
+    }
+    while( true );
+}
+
+static void lcl_CopyFollowPageDesc(
+                            SwWrtShell& rTargetShell,
+                            const SwPageDesc& rSourcePageDesc,
+                            const SwPageDesc& rTargetPageDesc,
+                            const sal_uLong nDocNo )
+{
+    //now copy the follow page desc, too
+    const SwPageDesc* pFollowPageDesc = rSourcePageDesc.GetFollow();
+    OUString sFollowPageDesc = pFollowPageDesc->GetName();
+    if( sFollowPageDesc != rSourcePageDesc.GetName() )
+    {
+        SwDoc* pTargetDoc = rTargetShell.GetDoc();
+        OUString sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo );
+        SwPageDesc* pTargetFollowPageDesc = pTargetDoc->MakePageDesc(sNewFollowPageDesc);
+
+        pTargetDoc->CopyPageDesc(*pFollowPageDesc, *pTargetFollowPageDesc, false);
+        SwPageDesc aDesc(rTargetPageDesc);
+        aDesc.SetFollow(pTargetFollowPageDesc);
+        pTargetDoc->ChgPageDesc(rTargetPageDesc.GetName(), aDesc);
+    }
+}
+
 // appends all pages of source SwDoc - based on SwFEShell::Paste( SwDoc* )
 SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNumber,
-            SwPageDesc *const pTargetPageDesc, bool const bDeletePrevious, int pageOffset)
+                             bool const bDeletePrevious, int pageOffset, const sal_uLong nDocNo)
 {
     // GetEndOfExtras + 1 = StartOfContent == no content node!
     // this ensures, that we have at least two nodes in the SwPaM.
@@ -951,11 +988,42 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 #endif
 
     SwWrtShell* pTargetShell = GetDocShell()->GetWrtShell();
+    SwPageDesc* pTargetPageDesc = nullptr;
+
     if ( pTargetShell ) {
 #ifdef DBG_UTIL
         SAL_INFO( "sw.docappend", "Has target write shell" );
 #endif
         pTargetShell->StartAllAction();
+
+        if( nDocNo > 0 )
+        {
+            // #i72517# put the styles to the target document
+            // if the source uses headers or footers the target document
+            // needs inidividual page styles
+            const SwWrtShell *pSourceShell = rSource.GetDocShell()->GetWrtShell();
+            const SwPageDesc *pSourcePageDesc = &pSourceShell->GetPageDesc(
+                                                    pSourceShell->GetCurPageDesc());
+            const OUString sStartingPageDesc = pSourcePageDesc->GetName();
+            const SwFrameFormat& rMaster = pSourcePageDesc->GetMaster();
+            const bool bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive() ||
+                                                     rMaster.GetFooter().IsActive();
+            if( bPageStylesWithHeaderFooter )
+            {
+                // create a new pagestyle
+                // copy the pagedesc from the current document to the new
+                // document and change the name of the to-be-applied style
+                OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                pTargetPageDesc = this->MakePageDesc( sNewPageDescName );
+                if( pTargetPageDesc )
+                {
+                    this->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, false );
+                    lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
+                }
+            }
+            else
+                pTargetPageDesc = pTargetShell->FindPageDescByName( sStartingPageDesc );
+        }
 
         // Otherwise we have to handle SwPlaceholderNodes as first node
         if ( pTargetPageDesc ) {

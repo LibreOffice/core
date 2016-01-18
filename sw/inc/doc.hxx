@@ -1624,7 +1624,8 @@ public:
 
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
     SwNodeIndex AppendDoc(const SwDoc& rSource, sal_uInt16 nStartPageNumber,
-                 SwPageDesc* pTargetPageDesc, bool bDeletePrevious = false, int physicalPageOffset = 0 );
+                 bool bDeletePrevious = false, int physicalPageOffset = 0,
+                 const sal_uLong nDocNo = 1);
 
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
