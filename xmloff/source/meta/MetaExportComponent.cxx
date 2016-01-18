@@ -188,25 +188,6 @@ void XMLMetaExportComponent::_ExportAutoStyles() {}
 void XMLMetaExportComponent::_ExportMasterStyles() {}
 void XMLMetaExportComponent::_ExportContent() {}
 
-
-uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames()
-    throw()
-{
-    return uno::Sequence< OUString > { "com.sun.star.document.XMLOasisMetaExporter" };
-}
-
-OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw()
-{
-    return OUString( "XMLMetaExportComponent" );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
-{
-    return static_cast<cppu::OWeakObject*>(new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportComponent_getImplementationName(), SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
-}
-
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
     throw()
 {
