@@ -59,6 +59,8 @@
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
 #include "DocumentRenderer.hxx"
+#include "sdattr.hxx"
+#include "optsitem.hxx"
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -368,8 +370,10 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
         if (pFrameView != nullptr)
             pFrameView->SetViewShellTypeOnLoad(pViewShell->GetShellType());
     }
-    // Hide the TabBar
-    mpImpl->SetUserWantsTabBar(false);
+    // Show/Hide the TabBar
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDocument()->GetDocumentType());
+    bool bIsTabBarVisible = pOptions->IsTabBarVisible();
+    mpImpl->SetUserWantsTabBar( bIsTabBarVisible );
 }
 
 std::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager() const
@@ -637,9 +641,14 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             break;
 
         case SID_TOGGLE_TABBAR_VISIBILITY:
-            mpImpl->SetUserWantsTabBar(!mpImpl->GetUserWantsTabBar());
+        {
+            SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDocument()->GetDocumentType());
+            bool bIsTabBarVisible = pOptions->IsTabBarVisible();
+            pOptions->SetTabBarVisible( !bIsTabBarVisible );
+            mpImpl->SetUserWantsTabBar( !bIsTabBarVisible );
             rRequest.Done();
-            break;
+        }
+        break;
 
         // draw
         case SID_DRAWINGMODE:
@@ -1305,9 +1314,6 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             catch (const DeploymentException&)
             {
             }
-
-            // Determine the state for the resource.
-            bState = xConfiguration->hasResource(xResourceId);
 
             // Take the master page mode into account.
             switch (nItemId)
