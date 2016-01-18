@@ -33,7 +33,6 @@ $(eval $(call gb_StaticLibrary_add_defs,basebmp,\
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,basebmp,\
 	basebmp/source/bitmapdevice \
-	basebmp/source/debug \
 ))
 
 # vim: set noet sw=4 ts=4:
