@@ -69,12 +69,10 @@ rDevice
 
 #   define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
 
-    struct cairo_rectangle_int_t
+    struct _cairo_rectangle_int
     {
-        double x;
-        double y;
-        double width;
-        double height;
+        int x, y;
+        int width, height;
     };
 
 #endif
