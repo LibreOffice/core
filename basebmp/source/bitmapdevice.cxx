@@ -404,22 +404,6 @@ namespace
             return maToUInt32Converter(maRawAccessor(pixel));
         }
 
-        template< typename Iterator, typename Col, typename RawAcc >
-        void implRenderLine2( const basegfx::B2IPoint& rPt1,
-                              const basegfx::B2IPoint& rPt2,
-                              const basegfx::B2IBox&   rBounds,
-                              Col                      col,
-                              const Iterator&          begin,
-                              const RawAcc&            rawAcc )
-        {
-            renderClippedLine( rPt1,
-                               rPt2,
-                               rBounds,
-                               col,
-                               begin,
-                               rawAcc );
-        }
-
         template< typename Iterator, typename Accessor, typename RawAcc >
         void implRenderLine( const basegfx::B2IPoint& rPt1,
                              const basegfx::B2IPoint& rPt2,
@@ -429,7 +413,7 @@ namespace
                              const Accessor&          acc,
                              const RawAcc&            rawAcc )
         {
-            implRenderLine2( rPt1,rPt2,rBounds,
+            renderClippedLine( rPt1,rPt2,rBounds,
                              maColorLookup( acc,
                                             col ),
                              begin,
@@ -494,7 +478,7 @@ namespace
                                                                           col));
             const sal_uInt32                              nVertices( aPoly.count() );
             for( sal_uInt32 i=1; i<nVertices; ++i )
-                implRenderLine2( basegfx::fround(aPoly.getB2DPoint(i-1)),
+                renderClippedLine( basegfx::fround(aPoly.getB2DPoint(i-1)),
                                  basegfx::fround(aPoly.getB2DPoint(i)),
                                  rBounds,
                                  colorIndex,
@@ -502,7 +486,7 @@ namespace
                                  acc );
 
             if( nVertices > 1 && aPoly.isClosed() )
-                implRenderLine2( basegfx::fround(aPoly.getB2DPoint(nVertices-1)),
+                renderClippedLine( basegfx::fround(aPoly.getB2DPoint(nVertices-1)),
                                  basegfx::fround(aPoly.getB2DPoint(0)),
                                  rBounds,
                                  colorIndex,
