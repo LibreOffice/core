@@ -750,7 +750,7 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
 }
 
 SwDBManager::SwDBManager(SwDoc* pDoc)
-    : m_bCancel(false)
+    : m_aMergeStatus( MergeStatus::OK )
     , bInitDBFields(false)
     , bInMerge(false)
     , bMergeSilent(false)
@@ -984,10 +984,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     OUString                            sMailBodyMimeType;
     rtl_TextEncoding                    sMailEncoding = ::osl_getThreadTextEncoding();
 
-    // bNoError should be handled together with m_bCancel. while an error
-    // should always also set cancel, cancel doesn't indicate an / set error.
-    bool bNoError = true;
-
     uno::Reference< beans::XPropertySet > xColumnProp;
     {
         // Check for (mandatory) email or (optional) filename column
@@ -1067,7 +1063,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             }
             const bool bIsPDFexport = pStoreToFilter && pStoreToFilter->GetFilterName() == "writer_pdf_Export";
 
-            m_bCancel = false;
+            m_aMergeStatus = MergeStatus::OK;
 
             // in case of creating a single resulting file this has to be created here
             SwView*           pTargetView     = rMergeDescriptor.pMailMergeConfigItem ?
@@ -1238,12 +1234,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         if( !aTempFile->IsValid() )
                         {
                             ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
-                            bNoError = false;
-                            m_bCancel = true;
+                            m_aMergeStatus = MergeStatus::ERROR;
                         }
                     }
 
-                    if( !m_bCancel )
+                    if( IsMergeOk() )
                     {
                         std::unique_ptr< INetURLObject > aTempFileURL;
                         if( bNeedsTempFiles )
@@ -1391,12 +1386,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 // some GetPrinter functions have a true default, so keep the false
                                 SfxPrinter* pDocPrt = pWorkView->GetPrinter( false );
                                 JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
-                                m_bCancel = !Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
+                                if( !Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup ) )
+                                    MergeCancel();
                             }
-                            if( !m_bCancel && !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
+                            if( IsMergeOk() && !Printer::ExecutePrintJob( pWorkView->GetPrinterController()) )
                             {
-                                m_bCancel = true;
-                                bNoError = false;
+                                m_aMergeStatus = MergeStatus::ERROR;
                             }
                         }
                         else
@@ -1408,10 +1403,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                               &rMergeDescriptor.aSaveToFilterData, bIsPDFexport,
                                               xWorkDocSh, rWorkShell, &sFileURL ) )
                             {
-                                m_bCancel = true;
-                                bNoError = false;
+                                m_aMergeStatus = MergeStatus::ERROR;
                             }
-                            if( bMT_EMAIL && bNoError )
+                            if( bMT_EMAIL && !IsMergeError() )
                             {
                                 if( !SwMailMergeHelper::CheckMailAddress( sColumnData ) )
                                 {
@@ -1505,7 +1499,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         aLayout->FreezeLayout(true);
                     bFreezedLayouts = true;
                 }
-            } while( !m_bCancel &&
+            } while( IsMergeOk() &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
             if ( xWorkDocSh.Is() && pWorkView->GetWrtShell().IsExpFieldsLocked() )
@@ -1524,7 +1518,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     xWorkDocSh->DoClose();
                 }
             }
-            else if( !m_bCancel ) // && bCreateSingleFile
+            else if( IsMergeOk() ) // && bCreateSingleFile
             {
                 RESCHEDULE_GUI;
 
@@ -1543,7 +1537,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                 RESCHEDULE_GUI;
 
-                if( !m_bCancel && bMT_FILE )
+                if( IsMergeOk() && bMT_FILE )
                 {
                     // save merged document
                     assert( aTempFile.get() );
@@ -1556,11 +1550,14 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         // remove the unneeded temporary file
                         aTempFile->EnableKillingFile();
                     }
-                    bNoError = lcl_SaveDoc( &aTempFileURL, pStoreToFilter,
+                    if( !lcl_SaveDoc( &aTempFileURL, pStoreToFilter,
                             pStoreToFilterOptions, &rMergeDescriptor.aSaveToFilterData,
-                            bIsPDFexport, xTargetDocShell, *pTargetShell );
+                            bIsPDFexport, xTargetDocShell, *pTargetShell ) )
+                    {
+                        m_aMergeStatus = MergeStatus::ERROR;
+                    }
                 }
-                else if( !m_bCancel && bMT_PRINTER )
+                else if( IsMergeOk() && bMT_PRINTER )
                 {
                     // print the target document
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
@@ -1568,7 +1565,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     pTargetView->ExecPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
                 }
 
-                if( !m_bCancel && bMT_SHELL )
+                if( IsMergeOk() && bMT_SHELL )
                     // leave docshell available for caller (e.g. MM wizard)
                     rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
                 else
@@ -1601,12 +1598,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         xMailDispatcher->shutdown();
     }
 
-    return bNoError;
+    return !IsMergeError();
 }
 
 void SwDBManager::MergeCancel()
 {
-    m_bCancel = true;
+    if (m_aMergeStatus < MergeStatus::CANCEL)
+        m_aMergeStatus = MergeStatus::CANCEL;
 }
 
 IMPL_LINK_TYPED( SwDBManager, PrtCancelHdl, Button *, pButton, void )
