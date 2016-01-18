@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_3bf07d90",
+        "filename": "svgio/source/svgreader/svgcharacternode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-01-18T15:38:12Z",
+      "side": 1,
+      "message": "No need to construct the SimpleTextPrimitive if not visible. I would propose to do the check at the start of the method (or even on caller side) and either encapsulate in an if statement or just return when not visible.",
+      "range": {
+        "startLine": 509,
+        "startChar": 16,
+        "endLine": 509,
+        "endChar": 41
+      },
+      "revId": "ea702739c95ebf8401c1483c45cbe26cdabb7d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_fbf55583",
+        "filename": "svgio/source/svgreader/svgcharacternode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-01-18T15:38:12Z",
+      "side": 1,
+      "message": "No need to call this again, it is handed to this function in rSvgStyleAttributes, so call rSvgStyleAttributes-\u003egetVisibility()",
+      "range": {
+        "startLine": 513,
+        "startChar": 51,
+        "endLine": 513,
+        "endChar": 74
+      },
+      "revId": "ea702739c95ebf8401c1483c45cbe26cdabb7d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
