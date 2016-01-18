@@ -72,24 +72,6 @@
 #include <vigra/copyimage.hxx>
 #include <vigra/tuple.hxx>
 
-
-namespace vigra
-{
-
-/// componentwise xor of an RGBValue (missing from rgbvalue.hxx)
-template< class Value, unsigned int RedIndex, unsigned int BlueIndex, unsigned int GreenIndex >
-inline RGBValue<Value, RedIndex, GreenIndex, BlueIndex>
-operator^( RGBValue<Value, RedIndex, GreenIndex, BlueIndex> const& lhs,
-           RGBValue<Value, RedIndex, GreenIndex, BlueIndex> const& rhs )
-{
-    RGBValue<Value, RedIndex, GreenIndex, BlueIndex> res(
-        lhs[0] ^ rhs[0],
-        lhs[1] ^ rhs[1],
-        lhs[2] ^ rhs[2]);
-    return res;
-}
-}
-
 namespace basebmp
 {
 
