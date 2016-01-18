@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_dbe8517f",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T17:41:17Z",
+      "side": 1,
+      "message": "One blank line would be appreciated between functions.",
+      "revId": "2928654edd7698962d7769b62adbb93cebe5ef98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_5be621b5",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T17:41:17Z",
+      "side": 1,
+      "message": "As this function doesn\u0027t modify rFuncStrVec it should be const.",
+      "revId": "2928654edd7698962d7769b62adbb93cebe5ef98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9beec989",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T17:41:17Z",
+      "side": 1,
+      "message": "And then here have a const_iterator",
+      "range": {
+        "startLine": 1157,
+        "startChar": 29,
+        "endLine": 1157,
+        "endChar": 37
+      },
+      "revId": "2928654edd7698962d7769b62adbb93cebe5ef98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_bbed8d8d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T17:41:17Z",
+      "side": 1,
+      "message": "For readability it is helpful to have the else keyword not between block braces, but instead\n\n if (...)\n {\n     ...\n }\n else\n {\n     ...\n }",
+      "revId": "2928654edd7698962d7769b62adbb93cebe5ef98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_7bf32574",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T17:41:17Z",
+      "side": 1,
+      "message": "Multiple use of (*itStr) suggests to have a dedicated const OUString\u0026",
+      "revId": "2928654edd7698962d7769b62adbb93cebe5ef98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
