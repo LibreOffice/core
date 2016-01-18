@@ -266,8 +266,8 @@ class AddonsOptions_Impl : public ConfigItem
         bool                 HasAssociatedImages( const OUString& aURL );
         void                 SubstituteVariables( OUString& aURL );
 
-        bool                 ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
-        OUString          GeneratePrefixURL();
+        void                 ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
+        OUString             GeneratePrefixURL();
 
         Sequence< OUString > GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const;
@@ -1235,7 +1235,7 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
     return bResult;
 }
 
-bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
+void AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
 {
     Sequence< PropertyValue > aMenuItem( PROPERTYCOUNT_MENUITEM );
 
@@ -1258,8 +1258,6 @@ bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMen
             rSubMenuSeq[nIndex++] = aMenuItem;
         }
     }
-
-    return true;
 }
 
 bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )

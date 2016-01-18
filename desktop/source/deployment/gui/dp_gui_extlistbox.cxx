@@ -919,7 +919,7 @@ void ExtensionBox_Impl::addEventListenerOnce(
 }
 
 
-long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
+void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bLicenseMissing )
 {
     long         nPos = 0;
@@ -930,7 +930,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
 
     // Don't add empty entries
     if ( pEntry->m_sTitle.isEmpty() )
-        return 0;
+        return;
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
@@ -969,8 +969,6 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
         Invalidate();
 
     m_bNeedsRecalc = true;
-
-    return nPos;
 }
 
 

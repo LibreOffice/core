@@ -115,7 +115,7 @@ void HWPStyle::SetParaShape(int n, ParaShape * pshapep)
 }
 
 
-bool HWPStyle::Read(HWPFile & hwpf)
+void HWPStyle::Read(HWPFile & hwpf)
 {
     CharShape cshape;
     ParaShape pshape;
@@ -123,7 +123,7 @@ bool HWPStyle::Read(HWPFile & hwpf)
     hwpf.Read2b(&nstyles, 1);
     style = ::comphelper::newArray_null<StyleData>(nstyles);
     if (!style)
-        return false;
+        return;
 
     for (int ii = 0; ii < nstyles; ii++)
     {
@@ -135,9 +135,8 @@ bool HWPStyle::Read(HWPFile & hwpf)
         SetCharShape(ii, &cshape);
         SetParaShape(ii, &pshape);
         if (hwpf.State())
-            return false;
+            return;
     }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

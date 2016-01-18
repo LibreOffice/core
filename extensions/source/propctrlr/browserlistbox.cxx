@@ -721,7 +721,7 @@ namespace pcr
     }
 
 
-    sal_uInt16 OBrowserListBox::InsertEntry(const OLineDescriptor& _rPropertyData, sal_uInt16 _nPos)
+    void OBrowserListBox::InsertEntry(const OLineDescriptor& _rPropertyData, sal_uInt16 _nPos)
     {
         // create a new line
         BrowserLinePointer pBrowserLine( new OBrowserLine( _rPropertyData.sName, m_aLinesPlayground.get() ) );
@@ -757,8 +757,6 @@ namespace pcr
         while ( nUpdatePos < m_aLines.size() )
             m_aOutOfDateLines.insert( nUpdatePos++ );
         UpdatePosNSize( );
-
-        return nInsertPos;
     }
 
 

@@ -226,11 +226,6 @@ bool ContentInfo::operator==( const ContentInfo& rCompare ) const
     return false;
 }
 
-bool ContentInfo::operator!=(const ContentInfo& rCompare) const
-{
-    return !operator==(rCompare);
-}
-
 EditTextObject::EditTextObject( SfxItemPool* pPool ) :
     mpImpl(new EditTextObjectImpl(this, pPool))
 {

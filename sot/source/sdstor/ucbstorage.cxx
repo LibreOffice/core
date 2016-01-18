@@ -449,7 +449,7 @@ public:
 
     sal_uInt64                  ReadSourceWriteTemporary( sal_uInt64 aLength ); // read aLength from source and copy to temporary,
                                                                            // no seeking is produced
-    sal_uLong                   ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
+    void                        ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
 
     void                        CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
                                                                         // but the writing is done at the end of temporary
@@ -793,12 +793,10 @@ bool UCBStorageStream_Impl::Init()
     return true;
 }
 
-sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
+void UCBStorageStream_Impl::ReadSourceWriteTemporary()
 {
     // read source stream till the end and copy all the data to
     // the current position of the temporary stream
-
-    sal_uLong aResult = 0;
 
     if( m_bSourceRead )
     {
@@ -810,7 +808,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
             do
             {
                 aReaded = m_rSource->readBytes( aData, 32000 );
-                aResult += m_pStream->Write( aData.getArray(), aReaded );
+                m_pStream->Write( aData.getArray(), aReaded );
             } while( aReaded == 32000 );
         }
         catch (const Exception &e)
@@ -821,9 +819,6 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
     }
 
     m_bSourceRead = false;
-
-    return aResult;
-
 }
 
 sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)

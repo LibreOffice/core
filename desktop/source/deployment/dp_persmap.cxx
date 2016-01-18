@@ -158,7 +158,7 @@ void PersistentMap::open()
 }
 
 
-bool PersistentMap::readAll()
+void PersistentMap::readAll()
 {
     // prepare for re-reading the map-file
     const osl::FileBase::RC nRes = m_MapFile.setPos( osl_Pos_Absolut, 0);
@@ -171,11 +171,11 @@ bool PersistentMap::readAll()
     m_MapFile.read( aHeaderBytes, sizeof(aHeaderBytes), nBytesRead);
     OSL_ASSERT( nBytesRead == sizeof(aHeaderBytes));
     if( nBytesRead != sizeof(aHeaderBytes))
-        return false;
+        return;
     // check header magic
     for( int i = 0; i < (int)sizeof(PmapMagic); ++i)
         if( aHeaderBytes[i] != PmapMagic[i])
-            return false;
+            return;
 
     // read key value pairs and add them to the map
     ByteSequence aKeyLine;
@@ -185,11 +185,11 @@ bool PersistentMap::readAll()
         // read key-value line pair
         // an empty key name indicates the end of the line pairs
         if( m_MapFile.readLine( aKeyLine) != osl::File::E_None)
-            return false;
+            return;
         if( !aKeyLine.getLength())
             break;
         if( m_MapFile.readLine( aValLine) != osl::File::E_None)
-            return false;
+            return;
         // decode key and value strings
         const OString aKeyName = decodeString( reinterpret_cast<char const *>(aKeyLine.getConstArray()), aKeyLine.getLength());
         const OString aValName = decodeString( reinterpret_cast<char const *>(aValLine.getConstArray()), aValLine.getLength());
@@ -198,13 +198,12 @@ bool PersistentMap::readAll()
         // check end-of-file status
         sal_Bool bIsEOF = true;
         if( m_MapFile.isEndOfFile( &bIsEOF) != osl::File::E_None )
-            return false;
+            return;
         if( bIsEOF )
             break;
     }
 
     m_bIsDirty = false;
-    return true;
 }
 
 void PersistentMap::flush()

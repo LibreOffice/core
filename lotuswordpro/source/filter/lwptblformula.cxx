@@ -133,16 +133,13 @@ bool LwpFormulaInfo::ReadCellID()
     return readSucceeded;
 }
 
-bool LwpFormulaInfo::ReadCellRange()
+void LwpFormulaInfo::ReadCellRange()
 {
-    bool readSucceeded = true;
-    if (!ReadCellID( )) // start
-        readSucceeded = false;
+    ReadCellID( ); // start
     LwpFormulaCellAddr* pStartCellAddr = static_cast<LwpFormulaCellAddr*>(m_aStack.back());
     m_aStack.pop_back();
 
-    if (!ReadCellID()) // end
-        readSucceeded = false;
+    ReadCellID(); // end
     LwpFormulaCellAddr* pEndCellAddr = static_cast<LwpFormulaCellAddr*>(m_aStack.back());
     m_aStack.pop_back();
 
@@ -152,8 +149,6 @@ bool LwpFormulaInfo::ReadCellRange()
                                                     pEndCellAddr->GetRow()) );
     delete pStartCellAddr;
     delete pEndCellAddr;
-
-    return readSucceeded;
 }
 
 /**
@@ -264,12 +259,11 @@ void LwpFormulaInfo::MarkUnsupported(sal_uInt16 TokenType)
 *   Read arguments of functions from wordpro file
 *   @param  LwpFormulaFunc& aFunc, functions object
 */
-bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
+void LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 {
     sal_uInt16 NumberOfArguments = m_pObjStrm->QuickReaduInt16();
     sal_uInt16 ArgumentDiskLength, Count;
     sal_uInt8 ArgumentType;
-    bool readSucceeded = true;
 
     for (Count = 0; Count < NumberOfArguments; Count++)
     {
@@ -302,7 +296,6 @@ bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
             default:
                 bArgument = false;
                 m_pObjStrm->SeekRel(ArgumentDiskLength);
-                readSucceeded = false;
                 break;
         }
 
@@ -312,7 +305,6 @@ bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
             m_aStack.pop_back();
         }
     }
-    return readSucceeded;
 }
 
 void LwpFormulaInfo::Read()

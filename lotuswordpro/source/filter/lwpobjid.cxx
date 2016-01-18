@@ -71,11 +71,10 @@ LwpObjectID::LwpObjectID(sal_uInt32 low, sal_uInt16 high)
  * @descr       Read object id with format: low(4bytes)+high(2bytes) from stream
  *          for LWP7 record
 */
-sal_uInt32 LwpObjectID::Read(LwpSvStream *pStrm)
+void LwpObjectID::Read(LwpSvStream *pStrm)
 {
     pStrm->ReadUInt32( m_nLow );
     pStrm->ReadUInt16( m_nHigh );
-    return DiskSize();
 }
 /**
  * @descr       Read object id with format: low(4bytes)+high(2bytes) from object stream

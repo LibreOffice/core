@@ -42,7 +42,6 @@ namespace basegfx
 
         // compare operators
         bool operator==(const B2DEllipse& rEllipse) const;
-        bool operator!=(const B2DEllipse& rEllipse) const;
 
         // Coordinate interface
         basegfx::B2DPoint getB2DEllipseCenter() const { return maCenter; }
