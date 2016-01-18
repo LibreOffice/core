@@ -75,13 +75,11 @@ bool Exif::read(SvStream& rStream)
     return result;
 }
 
-bool Exif::write(SvStream& rStream)
+void Exif::write(SvStream& rStream)
 {
     sal_Int32 nStreamPosition = rStream.Tell();
-    bool result = processJpeg(rStream, true);
+    processJpeg(rStream, true);
     rStream.Seek( nStreamPosition );
-
-    return result;
 }
 
 bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
@@ -150,7 +148,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     return false;
 }
 
-bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bSwap)
+void Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bSwap)
 {
     ExifIFD* ifd = nullptr;
 
@@ -189,7 +187,6 @@ bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
         aNumberOfTags--;
         aOffset += 12;
     }
-    return true;
 }
 
 bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetValue)

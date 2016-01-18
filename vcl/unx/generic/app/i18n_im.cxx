@@ -195,7 +195,7 @@ IsXWindowCompatibleLocale( const char* p_locale )
 // see i8988, i9188, i8930, i16318
 // on Solaris the environment needs to be set equivalent to the locale (#i37047#)
 
-bool
+void
 SalI18N_InputMethod::SetLocale( const char* pLocale )
 {
     // check whether we want an Input Method engine, if we don't we
@@ -229,8 +229,6 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
             mbUseable = False;
         }
     }
-
-    return mbUseable;
 }
 
 Bool
@@ -331,7 +329,7 @@ PrintInputStyle( XIMStyles *pStyle )
 // this is the real constructing routine, since locale setting has to be done
 // prior to xopendisplay, the xopenim call has to be delayed
 
-bool
+void
 SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 {
     if ( mbUseable )
@@ -371,8 +369,6 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
     maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
     if (mbUseable && maMethod != nullptr)
         XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, nullptr);
-
-    return mbUseable;
 }
 
 // give IM the opportunity to look at the event, and possibly hide it

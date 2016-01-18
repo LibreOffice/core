@@ -247,7 +247,7 @@ public:
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,
                                     const PhysicalFontFace* pBaseFont = nullptr );
-    bool            AddFallback( SalLayout& rFallbackLayout,
+    void            AddFallback( SalLayout& rFallbackLayout,
                                  ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;

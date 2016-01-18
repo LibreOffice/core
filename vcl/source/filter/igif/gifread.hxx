@@ -92,7 +92,7 @@ class GIFReader : public GraphicReader
 
     void                ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount );
     void                ClearImageExtensions();
-    bool                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, bool bWatchForBackgroundColor );
+    void                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, bool bWatchForBackgroundColor );
     bool                ReadGlobalHeader();
     bool                ReadExtension();
     bool                ReadLocalHeader();

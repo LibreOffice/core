@@ -1418,7 +1418,7 @@ void WMFReader::ReadWMF()
         pWMF->Seek( nStartPos );
 }
 
-bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
+void WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 {
     bool bRet = true;
 
@@ -1794,8 +1794,6 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
     }
-
-    return bRet;
 }
 
 WMFReader::WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,

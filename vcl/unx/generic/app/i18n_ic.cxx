@@ -523,11 +523,11 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
 
 // handle extended and normal key input
 
-int
+void
 SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
 {
     if (nLength == 1 && IsControlCode(pText[0]))
-        return 0;
+        return;
 
     if( maClientData.pFrame )
     {
@@ -547,8 +547,6 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
     else
         fprintf(stderr, "CommitKeyEvent without frame\n" );
 #endif
-
-    return 0;
 }
 
 int

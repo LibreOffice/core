@@ -330,13 +330,6 @@ struct WinMtfFillStyle
             && aType == rStyle.aType;
     }
 
-    bool operator==(WinMtfFillStyle* pStyle)
-    {
-        return aFillColor == pStyle->aFillColor
-            && bTransparent == pStyle->bTransparent
-            && aType == pStyle->aType;
-    }
-
     WinMtfFillStyle& operator=(const WinMtfFillStyle& rStyle)
     {
         aFillColor = rStyle.aFillColor;
@@ -383,13 +376,6 @@ struct WinMtfLineStyle
         return aLineColor == rStyle.aLineColor
             && bTransparent == rStyle.bTransparent
             && aLineInfo == rStyle.aLineInfo;
-    }
-
-    bool operator==(WinMtfLineStyle* pStyle)
-    {
-        return aLineColor == pStyle->aLineColor
-            && bTransparent == pStyle->bTransparent
-            && aLineInfo == pStyle->aLineInfo;
     }
 
     WinMtfLineStyle& operator=( const WinMtfLineStyle& rStyle )
@@ -600,7 +586,7 @@ class WinMtfOutput
     void                ImplMap( vcl::Font& rFont );
     tools::Polygon&     ImplMap( tools::Polygon& rPolygon );
     tools::PolyPolygon& ImplMap( tools::PolyPolygon& rPolyPolygon );
-    tools::Polygon&     ImplScale( tools::Polygon& rPolygon );
+    void                ImplScale( tools::Polygon& rPolygon );
     tools::PolyPolygon& ImplScale( tools::PolyPolygon& rPolyPolygon );
     void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
     void                ImplSetNonPersistentLineColorTransparenz();
@@ -646,7 +632,6 @@ public:
     void                DeleteObject( sal_Int32 nIndex );
     void                SelectObject( sal_Int32 nIndex );
     rtl_TextEncoding    GetCharSet(){ return maFont.GetCharSet(); };
-    WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
     const vcl::Font&    GetFont() const { return maFont;}
     void                SetTextLayoutMode( ComplexTextLayoutMode nLayoutMode );
 
@@ -805,7 +790,7 @@ private:
     Point           ReadYX();                   // reads and converts a point (first Y then X)
     Rectangle       ReadRectangle();            // reads and converts a rectangle
     Size            ReadYXExt();
-    bool        GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
+    void            GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
 
 public:
 

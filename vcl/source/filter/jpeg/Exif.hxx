@@ -54,7 +54,7 @@ private:
 
     bool processJpeg(SvStream& rStream, bool bSetValue);
     bool processExif(SvStream& rStream, sal_uInt16 aLength, bool bSetValue);
-    bool processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bMoto);
+    void processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bMoto);
 
     struct ExifIFD {
         sal_uInt16 tag;
@@ -83,7 +83,7 @@ public:
     void setOrientation(Orientation orientation);
 
     bool read(SvStream& rStream);
-    bool write(SvStream& rStream);
+    void write(SvStream& rStream);
 
 };
 

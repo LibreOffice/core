@@ -426,7 +426,7 @@ PrinterGfx::DrawText (
              );
 }
 
-bool PrinterGfx::drawVerticalizedText(
+void PrinterGfx::drawVerticalizedText(
                                       const Point& rPoint,
                                       const sal_Unicode* pStr,
                                       sal_Int16 nLen,
@@ -436,7 +436,7 @@ bool PrinterGfx::drawVerticalizedText(
     PrintFontManager &rMgr = PrintFontManager::get();
     PrintFontInfo aInfo;
     if (!rMgr.getFontInfo(mnFontID, aInfo))
-        return false;
+        return;
 
     sal_Int32* pDelta = static_cast<sal_Int32*>(alloca( nLen * sizeof(sal_Int32) ));
 
@@ -521,7 +521,6 @@ bool PrinterGfx::drawVerticalizedText(
         nLastPos = i;
     }
     mnTextAngle = nNormalAngle;
-    return true;
 }
 
 void

@@ -791,7 +791,7 @@ i12626
     void appendLiteralStringEncrypt( OStringBuffer& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    bool registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const PhysicalFontFace* pFallbackFonts[] );
+    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const PhysicalFontFace* pFallbackFonts[] );
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -809,14 +809,14 @@ i12626
     void updateGraphicsState(Mode mode = DEFAULT);
 
     /* writes a transparency group object */
-    bool writeTransparentObject( TransparencyEmit& rObject );
+    void writeTransparentObject( TransparencyEmit& rObject );
 
     /* writes an XObject of type image, may create
        a second for the mask
      */
     bool writeBitmapObject( BitmapEmit& rObject, bool bMask = false );
 
-    bool writeJPG( JPGEmit& rEmit );
+    void writeJPG( JPGEmit& rEmit );
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
@@ -1131,7 +1131,7 @@ public:
 
     void moveClipRegion( sal_Int32 nX, sal_Int32 nY );
 
-    bool intersectClipRegion( const Rectangle& rRect );
+    void intersectClipRegion( const Rectangle& rRect );
 
     bool intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 

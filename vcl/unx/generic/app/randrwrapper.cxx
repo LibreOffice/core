@@ -279,10 +279,10 @@ void SalDisplay::DeInitRandR()
     #endif
 }
 
-int SalDisplay::processRandREvent( XEvent* pEvent )
+void SalDisplay::processRandREvent( XEvent* pEvent )
 {
+#ifdef USE_RANDR
     int nRet = 0;
-    #ifdef USE_RANDR
     XConfigureEvent* pCnfEvent=reinterpret_cast<XConfigureEvent*>(pEvent);
     if( m_bUseRandRWrapper && pWrapper && pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) != -1 )
     {
@@ -323,11 +323,10 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
                 emitDisplayChanged();
         }
     }
-    #else
+#else
     (void)this;
     (void)pEvent;
-    #endif
-    return nRet;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

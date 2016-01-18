@@ -32,10 +32,9 @@ JpegTransform::JpegTransform(SvStream& rInputStream, SvStream& rOutputStream) :
 JpegTransform::~JpegTransform()
 {}
 
-bool JpegTransform::perform()
+void JpegTransform::perform()
 {
-    long result = Transform( &mrInputStream, &mrOutputStream, maRotate );
-    return result;
+    Transform( &mrInputStream, &mrOutputStream, maRotate );
 }
 
 void JpegTransform::setRotate(sal_uInt16 aRotate)

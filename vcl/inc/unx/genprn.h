@@ -87,7 +87,7 @@ public:
                                               vcl::PrinterController& i_rController ) override;
     virtual bool                    EndJob() override;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) override;
-    virtual bool                    EndPage() override;
+    virtual void                    EndPage() override;
     virtual sal_uIntPtr                 GetErrorCode() override;
 };
 

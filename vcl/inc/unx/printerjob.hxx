@@ -119,7 +119,7 @@ public:
                               );
     bool        EndJob ();
 
-    bool        StartPage (const JobData& rJobSetup);
+    void        StartPage (const JobData& rJobSetup);
     bool        EndPage ();
 };
 
