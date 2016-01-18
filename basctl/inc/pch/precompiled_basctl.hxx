@@ -186,7 +186,6 @@
 #include <vcl/xtextedt.hxx>
 #include <basebmp/basebmpdllapi.h>
 #include <basebmp/bitmapdevice.hxx>
-#include <basebmp/drawmodes.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
