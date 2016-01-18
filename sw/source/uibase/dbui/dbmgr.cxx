@@ -789,41 +789,6 @@ SwDBManager::~SwDBManager()
     }
 }
 
-// save bulk letters as single documents
-static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, const OUString& rStartingPageDesc, sal_uLong nDocNo )
-{
-    do
-    {
-        OUString sTest = rStartingPageDesc;
-        sTest += OUString::number( nDocNo );
-        if( !pTargetShell->FindPageDescByName( sTest ) )
-            return sTest;
-        ++nDocNo;
-    }while(true);
-}
-
-static void lcl_CopyFollowPageDesc(
-                            SwWrtShell& rTargetShell,
-                            const SwPageDesc& rSourcePageDesc,
-                            const SwPageDesc& rTargetPageDesc,
-                            const sal_uLong nDocNo )
-{
-    //now copy the follow page desc, too
-    const SwPageDesc* pFollowPageDesc = rSourcePageDesc.GetFollow();
-    OUString sFollowPageDesc = pFollowPageDesc->GetName();
-    if( sFollowPageDesc != rSourcePageDesc.GetName() )
-    {
-        SwDoc* pTargetDoc = rTargetShell.GetDoc();
-        OUString sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo );
-        SwPageDesc* pTargetFollowPageDesc = pTargetDoc->MakePageDesc(sNewFollowPageDesc);
-
-        pTargetDoc->CopyPageDesc(*pFollowPageDesc, *pTargetFollowPageDesc, false);
-        SwPageDesc aDesc(rTargetPageDesc);
-        aDesc.SetFollow(pTargetFollowPageDesc);
-        pTargetDoc->ChgPageDesc(rTargetPageDesc.GetName(), aDesc);
-    }
-}
-
 static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
 {
     //reset all links of the sections of synchronized labels
@@ -1075,10 +1040,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             SfxObjectShellRef xTargetDocShell;
 
             std::unique_ptr< utl::TempFile > aTempFile;
-            OUString sModifiedStartingPageDesc;
-            OUString sStartingPageDesc;
             sal_uInt16 nStartingPageNo = 0;
-            bool bPageStylesWithHeaderFooter = false;
 
             vcl::Window *pSourceWindow = nullptr;
             VclPtr<CancelableDialog> pProgressDlg;
@@ -1133,14 +1095,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 //determine the page style and number used at the start of the source document
                 pSourceShell->SttEndDoc(true);
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
-                sStartingPageDesc = sModifiedStartingPageDesc = pSourceShell->GetPageDesc(
-                                            pSourceShell->GetCurPageDesc()).GetName();
-
-                // #i72517#
-                const SwPageDesc* pSourcePageDesc = pSourceShell->FindPageDescByName( sStartingPageDesc );
-                const SwFrameFormat& rMaster = pSourcePageDesc->GetMaster();
-                bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive() ||
-                                                rMaster.GetFooter().IsActive();
 
                 // copy compatibility options
                 pTargetDoc->ReplaceCompatibilityOptions( *pSourceShell->GetDoc() );
@@ -1327,29 +1281,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 lcl_RemoveSectionLinks( rWorkShell );
                             }
 
-                            // #i72517# put the styles to the target document
-                            // if the source uses headers or footers each working document
-                            // needs inidividual page styles
-                            SwPageDesc* pTargetPageDesc = nullptr;
-                            if( bPageStylesWithHeaderFooter )
-                            {
-                                // create a new pagestyle
-                                // copy the pagedesc from the current document to the new
-                                // document and change the name of the to-be-applied style
-                                OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
-                                pTargetPageDesc = pTargetDoc->MakePageDesc( sNewPageDescName );
-                                const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
-
-                                if(pWorkPageDesc && pTargetPageDesc)
-                                {
-                                    pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, false );
-                                    sModifiedStartingPageDesc = sNewPageDescName;
-                                    lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
-                                }
-                            }
-                            else
-                                pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
-
                             if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                 lcl_SaveDebugDoc( xWorkDocSh, "WorkDoc", nDocNo );
 
@@ -1357,7 +1288,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             if( targetDocPageCount % 2 == 1 )
                                 ++targetDocPageCount; // Docs always start on odd pages (so offset must be even).
                             SwNodeIndex appendedDocStart = pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
-                                nStartingPageNo, pTargetPageDesc, !bWorkDocInitialized, targetDocPageCount);
+                                nStartingPageNo, !bWorkDocInitialized, targetDocPageCount, nDocNo);
                             targetDocPageCount += rWorkShell.GetPageCnt();
 
                             if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
