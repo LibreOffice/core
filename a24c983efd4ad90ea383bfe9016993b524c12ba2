@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_1b55b94f",
+        "filename": "svx/source/table/accessibletableshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-01-18T17:53:03Z",
+      "side": 1,
+      "message": "Probably the whole \"if(bCellEditing)\" could disappear - the else that I added really doesn\u0027t do anything less.  I left the IF portion in just to minimize code change in case I am missing something. \n\nThe only difference I see is that IF it is possible for the accessible cell to NOT be cached and yet be editActive, then it will fail to return anything valid.\n\nThe big difference is that getAccessibleCell(XCell) does NOT add a new accessible cell to the cache, but getAccessibleCell(row,col) will create a new accessible cell if necessary.",
+      "revId": "a24c983efd4ad90ea383bfe9016993b524c12ba2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9bc7e911",
+        "filename": "svx/source/table/cell.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-01-18T17:53:03Z",
+      "side": 1,
+      "message": "perhaps could add \u0026\u0026 rTableObj.IsTextEditActive() to ensure that the table itself is edit active.",
+      "revId": "a24c983efd4ad90ea383bfe9016993b524c12ba2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
