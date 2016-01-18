@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -119,6 +120,8 @@ public:
                                                      int& rReturnedBytes ) override;
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType,
                                                     const OUString& rDocumentService) override;
+
+    virtual OUString        getOSVersion() override;
 
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard(
