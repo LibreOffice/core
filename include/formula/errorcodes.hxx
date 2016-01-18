@@ -87,14 +87,10 @@ const sal_uInt16 NOTAVAILABLE            = 0x7fff;
     represent an interpreter error code. */
 inline double CreateDoubleError( sal_uInt16 nErr )
 {
-    union
-    {
-        double fVal;
-        sal_math_Double smVal;
-    };
-    ::rtl::math::setNan( &fVal );
+    sal_math_Double smVal;
+    ::rtl::math::setNan( &smVal.value );
     smVal.nan_parts.fraction_lo = nErr;
-    return fVal;
+    return smVal.value;
 }
 
 /** Recreate the error code of a coded double error, if any. */
