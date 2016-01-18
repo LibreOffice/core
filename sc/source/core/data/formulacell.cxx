@@ -1868,9 +1868,21 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         if( p->GetError() && p->GetError() != errCircularReference)
         {
-            ResetDirty();
             bChanged = true;
+
+            if (p->GetError() == errRetryCircular)
+            {
+                // Array formula matrix calculation corner case. Keep dirty
+                // state, do not remove from formula tree or anything else, but
+                // store errCircularReference in case this cell does not get
+                // recalculated.
+                aResult.SetResultError( errCircularReference);
+                return;
+            }
+
+            ResetDirty();
         }
+
         if (eTailParam == SCITP_FROM_ITERATION && IsDirtyOrInTableOpDirty())
         {
             bool bIsValue = aResult.IsValue();  // the previous type

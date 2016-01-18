@@ -78,6 +78,9 @@ const sal_uInt16 errJumpMatHasResult     = 535;
 // string or empty, to be distinguished from the general errNoValue NAN and not
 // to be used as result.
 const sal_uInt16 errElementNaN           = 536;
+// ScInterpreter/ScFormulaCell internal:  keep dirty, retry interpreting next
+// round.
+const sal_uInt16 errRetryCircular        = 537;
 
 // Interpreter: NA() not available condition, not a real error
 const sal_uInt16 NOTAVAILABLE            = 0x7fff;

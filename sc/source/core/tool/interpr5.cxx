@@ -3178,6 +3178,16 @@ void ScInterpreter::ScMatRef()
         return;
     }
 
+    if (aCell.mpFormula->IsRunning())
+    {
+        // Twisted odd corner case where an array element's cell tries to
+        // access the top left matrix while it is still running, see tdf#88737
+        // This is a hackish workaround, not a general solution, the matrix
+        // isn't available anyway and errCircularReference would be set.
+        PushError( errRetryCircular );
+        return;
+    }
+
     const ScMatrix* pMat = aCell.mpFormula->GetMatrix();
     if (pMat)
     {
