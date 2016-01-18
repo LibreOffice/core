@@ -201,9 +201,9 @@ protected:
     void Read() override;
     bool ReadCellID();
     void ReadText();
-    bool ReadCellRange();
+    void ReadCellRange();
     void ReadExpression();
-    bool ReadArguments(LwpFormulaFunc& aFunc);
+    void ReadArguments(LwpFormulaFunc& aFunc);
     bool m_bSupported;
 private:
     virtual ~LwpFormulaInfo();

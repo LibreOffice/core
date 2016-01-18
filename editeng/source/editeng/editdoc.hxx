@@ -780,7 +780,7 @@ public:
 
     EditPaM         Clear();
     EditPaM         RemoveText();
-    EditPaM         RemoveChars( EditPaM aPaM, sal_Int32 nChars );
+    void            RemoveChars( EditPaM aPaM, sal_Int32 nChars );
     EditPaM         InsertText( EditPaM aPaM, const OUString& rStr );
     EditPaM         InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs );
     EditPaM         InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem );

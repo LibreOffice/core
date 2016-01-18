@@ -93,9 +93,9 @@ class SvtViewOptionsBase_Impl
 
         explicit SvtViewOptionsBase_Impl(const OUString& rList);
         virtual                                        ~SvtViewOptionsBase_Impl (                                                                );
-        bool                                        Exists                  ( const OUString&                                sName    );
-        bool                                        Delete                  ( const OUString&                                sName    );
-        OUString                                 GetWindowState          ( const OUString&                                sName    );
+        bool                                            Exists                  ( const OUString&                                sName    );
+        void                                            Delete                  ( const OUString&                                sName    );
+        OUString                                        GetWindowState          ( const OUString&                                sName    );
         void                                            SetWindowState          ( const OUString&                                sName    ,
                                                                                   const OUString&                                sState   );
         css::uno::Sequence< css::beans::NamedValue >    GetUserData             ( const OUString&                                sName    );
@@ -232,32 +232,25 @@ bool SvtViewOptionsBase_Impl::Exists( const OUString& sName )
     @seealso        member m_aList
 
     @param          "sName", name of entry to delete it
-    @return         true , if item not exist(!) or could be deleted (should be the same!)
-                    false, otherwise
 *//*-*************************************************************************************************************/
-bool SvtViewOptionsBase_Impl::Delete( const OUString& sName )
+void SvtViewOptionsBase_Impl::Delete( const OUString& sName )
 {
     #ifdef DEBUG_VIEWOPTIONS
     ++m_nWriteCount;
     #endif
 
-    bool bDeleted = false;
     try
     {
         css::uno::Reference< css::container::XNameContainer > xSet(m_xSet, css::uno::UNO_QUERY_THROW);
         xSet->removeByName(sName);
-        bDeleted = true;
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::container::NoSuchElementException&)
-        { bDeleted = true; }
+        { }
     catch(const css::uno::Exception& ex)
         {
-            bDeleted = false;
             SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
-
-    return bDeleted;
 }
 
 /*-************************************************************************************************************

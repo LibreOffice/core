@@ -433,13 +433,6 @@ ObjectRepresentation& ObjectRepresentation::operator=( const ObjectRepresentatio
 
 
 
-bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresentation ) const
-{
-    return( ( mxObject == rPresentation.mxObject ) &&
-            ( *mpMtf == *rPresentation.mpMtf ) );
-}
-
-
 namespace
 {
 

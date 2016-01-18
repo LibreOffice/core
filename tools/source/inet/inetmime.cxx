@@ -1003,7 +1003,7 @@ public:
 
     inline void write(const sal_Unicode * pBegin, const sal_Unicode * pEnd);
 
-    inline bool flush();
+    inline void flush();
 };
 
 inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
@@ -1035,10 +1035,9 @@ inline void INetMIMEEncodedWordOutputSink::write(const sal_Unicode * pBegin,
         WriteUInt32(*pBegin++);
 }
 
-inline bool INetMIMEEncodedWordOutputSink::flush()
+inline void INetMIMEEncodedWordOutputSink::flush()
 {
     finish(true);
-    return m_ePrevCoding != CODING_NONE;
 }
 
 static const bool aEscape[128]

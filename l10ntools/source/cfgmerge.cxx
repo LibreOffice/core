@@ -161,7 +161,7 @@ void CfgParser::AddText(
     pStackData->sText[ rIsoLang ] = rText;
 }
 
-int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
+void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 {
     OString sToken( pToken );
 
@@ -295,8 +295,6 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 
     if ( sToken != " " && sToken != "\t" )
         sLastWhitespace = "";
-
-    return 1;
 }
 
 void CfgExport::Output(const OString&)

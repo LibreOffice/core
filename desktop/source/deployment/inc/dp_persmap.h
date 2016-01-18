@@ -55,7 +55,7 @@ public:
 
 protected:
     void open();
-    bool readAll();
+    void readAll();
     void add( OString const & key, OString const & value );
     void flush();
 };

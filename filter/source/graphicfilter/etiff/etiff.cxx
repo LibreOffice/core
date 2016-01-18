@@ -95,9 +95,9 @@ private:
     css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uInt32 nPercent );
-    bool            ImplWriteHeader( bool bMultiPage );
+    bool                ImplWriteHeader( bool bMultiPage );
     void                ImplWritePalette();
-    bool            ImplWriteBody();
+    void                ImplWriteBody();
     void                ImplWriteTag( sal_uInt16 TagID, sal_uInt16 DataType, sal_uInt32 NumberOfItems, sal_uInt32 Value);
     void                ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResolutionUnit );
     void                StartCompression();
@@ -358,7 +358,7 @@ void TIFFWriter::ImplWritePalette()
 
 
 
-bool TIFFWriter::ImplWriteBody()
+void TIFFWriter::ImplWriteBody()
 {
     sal_uInt8   nTemp = 0;
     sal_uInt8    nShift;
@@ -461,7 +461,6 @@ bool TIFFWriter::ImplWriteBody()
         m_rOStm.WriteUInt32( nGfxEnd - nGfxBegin );      // mnStripByteCountPos needs the size of the compression data
         m_rOStm.Seek( nGfxEnd );
     }
-    return mbStatus;
 }
 
 

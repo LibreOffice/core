@@ -31,8 +31,8 @@ public:
     ORegKey(const OUString& keyName, ORegistry* pReg);
     ~ORegKey();
 
-      sal_uInt32    acquire()
-        { return ++m_refCount; }
+    void        acquire()
+        { ++m_refCount; }
 
     sal_uInt32  release()
         { return --m_refCount; }

@@ -205,7 +205,7 @@ class DLLEXPORT HWPInfo
         HWPInfo(void);
         ~HWPInfo(void);
 
-        bool Read(HWPFile &hwpf);
+        void Read(HWPFile &hwpf);
 
 };
 

@@ -104,7 +104,7 @@ protected:
     inline  void CopyMBL(const SmRect& rRect);
             void CopyAlignInfo(const SmRect& rRect);
 
-            SmRect & Union(const SmRect &rRect);
+            void Union(const SmRect &rRect);
 
 public:
             SmRect();
@@ -173,7 +173,7 @@ public:
                                 RectHorAlign eHor, RectVerAlign eVer) const;
 
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode);
-            SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
+            void     ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                               long nNewAlignM);
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                       bool bKeepVerAlignParams);

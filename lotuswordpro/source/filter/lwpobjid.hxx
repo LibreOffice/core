@@ -84,7 +84,7 @@ private:
     sal_uInt8 m_nIndex;
     bool m_bIsCompressed;
 public:
-    sal_uInt32 Read( LwpSvStream *pStrm );
+    void Read( LwpSvStream *pStrm );
     sal_uInt32 Read( LwpObjectStream *pStrm );
     void ReadIndexed( LwpSvStream* pStrm );
     sal_uInt32 ReadIndexed( LwpObjectStream *pStrm );

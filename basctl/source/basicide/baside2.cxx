@@ -296,7 +296,7 @@ void ModulWindow::CheckCompileBasic()
     }
 }
 
-bool ModulWindow::BasicExecute()
+void ModulWindow::BasicExecute()
 {
     // #116444# check security settings before macro execution
     ScriptDocument aDocument( GetDocument() );
@@ -305,7 +305,7 @@ bool ModulWindow::BasicExecute()
         if ( !aDocument.allowMacros() )
         {
             ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING)->Execute();
-            return false;
+            return;
         }
     }
 
@@ -341,7 +341,8 @@ bool ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 // If not in a method then prompt the user
-                return ( !ChooseMacro( uno::Reference< frame::XModel >(), false, OUString() ).isEmpty() );
+                ChooseMacro( uno::Reference< frame::XModel >(), false, OUString() );
+                return;
             }
             if ( pMethod )
             {
@@ -357,10 +358,6 @@ bool ModulWindow::BasicExecute()
         else
             aStatus.bIsRunning = false; // cancel of Reschedule()
     }
-
-    bool bDone = !aStatus.bError;
-
-    return bDone;
 }
 
 void ModulWindow::CompileBasic()
@@ -490,18 +487,16 @@ void ModulWindow::ImportDialog()
     implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
-bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
+void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
 {
     DBG_ASSERT( XModule().Is(), "Kein Modul!" );
-
-    bool bNewBreakPoint = false;
 
     if ( XModule().Is() )
     {
         CheckCompileBasic();
         if ( aStatus.bError )
         {
-            return false;
+            return;
         }
 
         BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nLine );
@@ -515,7 +510,6 @@ bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
             if ( xModule->SetBP( (sal_uInt16)nLine) )
             {
                 GetBreakPoints().InsertSorted( new BreakPoint( nLine ) );
-                bNewBreakPoint = true;
                 if ( StarBASIC::IsRunning() )
                 {
                     for ( sal_uInt16 nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
@@ -528,8 +522,6 @@ bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
             }
         }
     }
-
-    return bNewBreakPoint;
 }
 
 void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )

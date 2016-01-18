@@ -842,8 +842,8 @@ public:
     void            IndentBlock( EditView* pView, bool bRight );
 
 //  For Undo/Redo
-    bool            Undo( EditView* pView );
-    bool            Redo( EditView* pView );
+    void            Undo( EditView* pView );
+    void            Redo( EditView* pView );
 
 //  OV-Special
     void            InvalidateFromParagraph( sal_Int32 nFirstInvPara );

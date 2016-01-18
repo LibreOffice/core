@@ -389,14 +389,14 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
 }
 
 
-SmRect & SmRect::Union(const SmRect &rRect)
+void SmRect::Union(const SmRect &rRect)
     // rectangle union of current one with 'rRect'. The result is to be the
     // smallest rectangles that covers the space of both rectangles.
     // (empty rectangles cover no space)
     //! Italic correction is NOT taken into account here!
 {
     if (rRect.IsEmpty())
-        return *this;
+        return;
 
     long  nL  = rRect.GetLeft(),
           nR  = rRect.GetRight(),
@@ -427,8 +427,6 @@ SmRect & SmRect::Union(const SmRect &rRect)
     SetBottom(nB);
     nGlyphTop    = nGT;
     nGlyphBottom = nGB;
-
-    return *this;
 }
 
 
@@ -481,7 +479,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
 }
 
 
-SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
+void SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                           long nNewAlignM)
     // as 'ExtendBy' but sets AlignM value to 'nNewAlignM'.
     // (this version will be used in 'SmBinVerNode' to provide means to
@@ -492,8 +490,6 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
 
     ExtendBy(rRect, eCopyMode);
     nAlignM = nNewAlignM;
-
-    return *this;
 }
 
 
