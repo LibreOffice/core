@@ -50,7 +50,6 @@ class Guess{
 
         string GetLanguage() { return language_str;}
         string GetCountry() { return country_str;}
-        string GetEncoding() { return encoding_str;}
 
     protected:
         string language_str;

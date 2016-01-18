@@ -69,7 +69,7 @@ const char *HWPFont::GetFontName(int lang, int id)
 
 static char buffer[FONTNAMELEN];
 
-bool HWPFont::Read(HWPFile & hwpf)
+void HWPFont::Read(HWPFile & hwpf)
 {
     int lang = 0;
     short nfonts = 0;
@@ -80,7 +80,8 @@ bool HWPFont::Read(HWPFile & hwpf)
         hwpf.Read2b(&nfonts, 1);
         if (!(nfonts > 0 && nfonts < MAXFONTS))
         {
-            return !hwpf.SetState(HWP_InvalidFileFormat);
+            hwpf.SetState(HWP_InvalidFileFormat);
+            return;
         }
         fontnames[lang] = new char[nfonts * FONTNAMELEN];
 
@@ -91,8 +92,6 @@ bool HWPFont::Read(HWPFile & hwpf)
             AddFont(lang, buffer);
         }
     }
-
-    return !hwpf.State();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

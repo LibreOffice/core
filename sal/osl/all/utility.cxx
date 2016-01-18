@@ -36,9 +36,9 @@ public:
         getTime();
     }
 
-    sal_uInt32 getTime()
+    void getTime()
     {
-        return osl_getGlobalTimer();
+        osl_getGlobalTimer();
     }
 
 };

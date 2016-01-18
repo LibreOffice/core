@@ -310,7 +310,7 @@ private:
     OUString            m_aModule;
 
     void                CheckCompileBasic();
-    bool                BasicExecute();
+    void                BasicExecute();
 
     static void         GoOnTop();
 
@@ -373,7 +373,7 @@ public:
 
     void            EditMacro( const OUString& rMacroName );
 
-    bool            ToggleBreakPoint( sal_uLong nLine );
+    void            ToggleBreakPoint( sal_uLong nLine );
 
     BasicStatus&    GetBasicStatus() { return aStatus; }
 

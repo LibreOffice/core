@@ -94,7 +94,6 @@ public:
 
     // equivalence or net:
     bool operator == (const DXFVector & rV) const;
-    bool operator != (const DXFVector & rV) const;
 };
 
 
@@ -245,12 +244,6 @@ inline bool DXFVector::operator == (const DXFVector & rV) const
     else return false;
 }
 
-
-inline bool DXFVector::operator != (const DXFVector & rV) const
-{
-    if (fx!=rV.fx || fy!=rV.fy || fz!=rV.fz) return true;
-    else return false;
-}
 
 #endif
 

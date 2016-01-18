@@ -2393,15 +2393,13 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
     return aPaM;
 }
 
-EditPaM EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
+void EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
 {
     // Maybe remove Features!
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
     aPaM.GetNode()->CollapsAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
 
     SetModified( true );
-
-    return aPaM;
 }
 
 void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem )

@@ -242,7 +242,7 @@ namespace basctl
                     getDocument() const;
         void        setDocumentModified() const;
         bool        isDocumentModified() const;
-        bool        saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const;
+        void        saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const;
 
         OUString    getTitle() const;
         OUString    getURL() const;
@@ -805,11 +805,11 @@ namespace basctl
     }
 
 
-    bool ScriptDocument::Impl::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
+    void ScriptDocument::Impl::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
     {
         Reference< XFrame > xFrame;
         if ( !getCurrentFrame( xFrame ) )
-            return false;
+            return;
 
         Sequence< PropertyValue > aArgs;
         if ( _rxStatusIndicator.is() )
@@ -837,10 +837,7 @@ namespace basctl
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            return false;
         }
-
-        return true;
     }
 
 

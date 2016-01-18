@@ -281,26 +281,22 @@ void ImpEditEngine::EnableUndo( bool bEnable )
     bUndoEnabled = bEnable;
 }
 
-bool ImpEditEngine::Undo( EditView* pView )
+void ImpEditEngine::Undo( EditView* pView )
 {
     if ( HasUndoManager() && GetUndoManager().GetUndoActionCount() )
     {
         SetActiveView( pView );
         GetUndoManager().Undo();
-        return true;
     }
-    return false;
 }
 
-bool ImpEditEngine::Redo( EditView* pView )
+void ImpEditEngine::Redo( EditView* pView )
 {
     if ( HasUndoManager() && GetUndoManager().GetRedoActionCount() )
     {
         SetActiveView( pView );
         GetUndoManager().Redo();
-        return true;
     }
-    return false;
 }
 
 SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnlyHardAttrib )

@@ -62,7 +62,7 @@ class DLLEXPORT HWPFont
  */
         const char    *GetFontName( int lang, int id );
 
-        bool Read( HWPFile &hwpf );
+        void Read( HWPFile &hwpf );
 };
 #endif                                            /* _HWPFONTS+H_ */
 

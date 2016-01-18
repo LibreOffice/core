@@ -142,7 +142,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           );
 
         bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const;
-        bool                SetOption       ( SvtSecurityOptions::EOption eOption, bool bValue  );
+        void                SetOption       ( SvtSecurityOptions::EOption eOption, bool bValue  );
         bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const;
 
         /*-****************************************************************************************************
@@ -878,26 +878,16 @@ bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOption )
     return bRet;
 }
 
-bool SvtSecurityOptions_Impl::SetOption( SvtSecurityOptions::EOption eOption, bool bValue )
+void SvtSecurityOptions_Impl::SetOption( SvtSecurityOptions::EOption eOption, bool bValue )
 {
     bool*   pValue;
     bool*   pRO;
-    bool    bRet = false;
 
-    if( GetOption( eOption, pValue, pRO ) )
+    if( GetOption( eOption, pValue, pRO ) && !*pRO && *pValue != bValue)
     {
-        if( !*pRO )
-        {
-            bRet = true;
-            if( *pValue != bValue )
-            {
-                *pValue = bValue;
-                SetModified();
-            }
-        }
+        *pValue = bValue;
+        SetModified();
     }
-
-    return bRet;
 }
 
 bool SvtSecurityOptions_Impl::IsOptionEnabled( SvtSecurityOptions::EOption eOption ) const

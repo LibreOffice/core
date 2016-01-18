@@ -71,11 +71,6 @@ public:
     void SetItem(const SfxPoolItem& rNew);
 
     inline bool operator==( const XEditAttribute& rCompare ) const;
-
-    bool operator!= (const XEditAttribute& r) const
-    {
-        return !operator==(r);
-    }
 };
 
 inline bool XEditAttribute::operator==( const XEditAttribute& rCompare ) const
@@ -163,7 +158,6 @@ public:
     const WrongList* GetWrongList() const;
     void SetWrongList( WrongList* p );
     bool operator==( const ContentInfo& rCompare ) const;
-    bool operator!=( const ContentInfo& rCompare ) const;
 
     // #i102062#
     bool isWrongListEqual(const ContentInfo& rCompare) const;

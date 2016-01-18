@@ -56,10 +56,6 @@ namespace connectivity
                 return rtl::OUString( _string.c_str(), _string.size(), m_encoding );
             }
 
-            /// Avoid ambigous cast error from the compiler.
-            inline operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
-            { return this; }
-
             sal_Int32 SAL_CALL getColumnCount()                     throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Bool SAL_CALL isAutoIncrement(sal_Int32 column)     throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;

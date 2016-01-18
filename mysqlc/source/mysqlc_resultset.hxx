@@ -104,11 +104,6 @@ namespace connectivity
 
             OResultSet( OCommonStatement* pStmt, sql::ResultSet *result, rtl_TextEncoding _encoding );
 
-            css::uno::Reference< css::uno::XInterface > operator *()
-            {
-                return css::uno::Reference< css::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
-            }
-
             // ::cppu::OComponentHelper
             void SAL_CALL disposing() SAL_OVERRIDE;
 

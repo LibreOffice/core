@@ -75,7 +75,7 @@ HWPInfo::~HWPInfo()
  * Function for reading document information (128 bytes)
  * Document information is the information after the file identification information (30 bytes).
  */
-bool HWPInfo::Read(HWPFile & hwpf)
+void HWPInfo::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&cur_col, 1);                     /* When a document is saving, the paragraph number where the coursor is */
     hwpf.Read2b(&cur_row, 1);                     /* Paragraphs rows */
@@ -86,31 +86,31 @@ bool HWPInfo::Read(HWPFile & hwpf)
 // paper geometry information
     unsigned short tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.paper_height = tmp16;                   /* Paper length */
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.paper_width = tmp16;                    /* Sheet width */
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.top_margin = tmp16;                     /* Top margin */
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.bottom_margin = tmp16;                  /* The bottom margin */
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.left_margin = tmp16;                    /* Left Margin */
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.right_margin = tmp16;                   /* Right margins */
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.header_length = tmp16;                  /* Header length */
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.footer_length = tmp16;                  /* Footer length */
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     paper.gutter_length = tmp16;                  /* The binding margin */
     hwpf.Read2b(&readonly, 1);                    /* Reserve */
     hwpf.Read1b(reserved1, 4);                    /* Reserve */
@@ -129,13 +129,13 @@ bool HWPInfo::Read(HWPFile & hwpf)
     hwpf.Read2b(&countfn,1);                      /* Number of footnote */
 
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     splinetext = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     splinefn = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     spfnfn = tmp16;
     hwpf.Read1b(&fnchar, 1);
     hwpf.Read1b(&fnlinetype, 1);
@@ -143,7 +143,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
     for (int ii = 0; ii < 4; ++ii)
     {
         if (!hwpf.Read2b(tmp16))
-            return false;
+            return;
         bordermargin[ii] = tmp16;
     }
     hwpf.Read2b(&borderline, 1);
@@ -156,17 +156,17 @@ bool HWPInfo::Read(HWPFile & hwpf)
 
     hwpf.Read2b(&info_block_len, 1);
     if (hwpf.State())
-        return false;
+        return;
 
 /* Read the article summary. */
     if (!summary.Read(hwpf))
-        return false;
+        return;
     if (info_block_len > 0)
     {
         info_block = new unsigned char[info_block_len + 1];
 
         if (!HWPReadInfoBlock(info_block, info_block_len, hwpf))
-            return false;
+            return;
     }
 
 /* reset the value of hwpf. */
@@ -174,8 +174,6 @@ bool HWPInfo::Read(HWPFile & hwpf)
     hwpf.encrypted = encrypted != 0;
     hwpf.info_block_len = info_block_len;
     hwpf.SetCompressed(hwpf.compressed);
-
-    return (!hwpf.State());
 }
 
 

@@ -115,7 +115,7 @@ protected:
     static void Error(const OString &rError);
 
 private:
-    int ExecuteAnalyzedToken( int nToken, char *pToken );
+    void ExecuteAnalyzedToken( int nToken, char *pToken );
     void AddText(
         OString &rText,
         const OString &rIsoLang,

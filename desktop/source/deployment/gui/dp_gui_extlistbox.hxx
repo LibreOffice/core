@@ -191,7 +191,7 @@ public:
 
 
     virtual void selectEntry( const long nPos );
-    long addEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage,
+    void addEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage,
                               bool bLicenseMissing = false );
     void updateEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage );
     void removeEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage );

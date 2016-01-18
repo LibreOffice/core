@@ -237,6 +237,8 @@ gotfunc:
     }
     const Stmt* parent = parentStmt(expr);
     if (!parent) {
+        // we will get null parent if it's under a CXXConstructExpr node
+        logCallToRootMethods(calleeFunctionDecl, usedReturnSet);
         return true;
     }
     if (isa<Expr>(parent) || isa<ReturnStmt>(parent) || isa<DeclStmt>(parent)
