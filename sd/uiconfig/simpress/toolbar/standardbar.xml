@@ -41,9 +41,6 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DisplayMode"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleTabBarVisibility" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false"/>
@@ -64,6 +61,8 @@
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AnimationEffects"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DisplayMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleTabBarVisibility"/>
  <toolbar:toolbaritem xlink:href=".uno:PageSetup"/>
  <toolbar:toolbaritem xlink:href=".uno:SlideMasterPage"/>
  <toolbar:toolbarseparator/>
