@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_5bf2a1d3",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T13:49:07Z",
+      "side": 0,
+      "message": "I\u0027d prefer if such \"success status returns\" were not removed. Here for example it looks like the caller should/could actually react on a reported failure. Callers ignoring the return value doesn\u0027t always mean we should remove the return value..",
+      "revId": "a08745551370a052bfb6b91335956ababf435791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
