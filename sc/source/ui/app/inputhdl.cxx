@@ -1198,7 +1198,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     const IFunctionDescription* ppFDesc;
     ::std::vector< OUString > aArgs;
     OUString eqPlusFuncName = "=" + aDescFuncNameStr;
-    if ( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
+    if ( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, nullptr, &ppFDesc, &aArgs ) )
     {
         if ( !ppFDesc->getFunctionName().isEmpty() )
         {
