@@ -54,7 +54,8 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			--with-decimal=none \
 			--with-uuid-library=internal \
 			--with-digest-library=internal \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+			$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \
