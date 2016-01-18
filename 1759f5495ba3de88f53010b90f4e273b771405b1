@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_7bd84554",
+        "filename": "solenv/gbuild/extensions/pre_MergedLibsList.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-18T12:59:06Z",
+      "side": 1,
+      "message": "cppu, cppuhelper and salhelper are part of the URE stable ABI so we can\u0027t just remove them because C++ extensions require them to exist.",
+      "revId": "1759f5495ba3de88f53010b90f4e273b771405b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
