@@ -182,6 +182,7 @@ public:
     ::Window                GetForeignParent() const { return mhForeignParent; }
     ::Window                GetStackingWindow() const { return mhStackingWindow; }
     void                    Close() const { CallCallback( SALEVENT_CLOSE, NULL ); }
+    SalFrameStyleFlags      GetStyle() const { return nStyle_; }
 
     Cursor                  GetCursor() const { return hCursor_; }
     bool                    IsCaptured() const { return nCaptured_ == 1; }

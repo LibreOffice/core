@@ -46,14 +46,14 @@ SalKDEDisplay::~SalKDEDisplay()
     pDisp_ = nullptr;
 }
 
-bool SalKDEDisplay::Yield()
+void SalKDEDisplay::Yield()
 {
     if( DispatchInternalEvent() )
-        return true;
+        return;
 
     // Prevent blocking from Drag'n'Drop events, which may have already have processed the event
     if (XEventsQueued( pDisp_, QueuedAfterReading ) == 0)
-        return false;
+        return;
 
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
                 osl::Thread::getCurrentIdentifier(),
@@ -62,9 +62,8 @@ bool SalKDEDisplay::Yield()
     XEvent event;
     XNextEvent( pDisp_, &event );
     if( checkDirectInputEvent( &event ))
-        return true;
+        return;
     qApp->x11ProcessEvent( &event );
-    return true;
 }
 
 // HACK: When using Qt event loop, input methods (japanese, etc.) will get broken because
