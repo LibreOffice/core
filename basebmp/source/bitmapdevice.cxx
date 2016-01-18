@@ -163,51 +163,14 @@ namespace
         typedef RawAccessor                                                raw_accessor_type;
         typedef AccessorSelector                                           accessor_selector;
 
-        typedef typename Masks::clipmask_format_traits::iterator_type      mask_iterator_type;
-        typedef typename Masks::clipmask_format_traits::raw_accessor_type  mask_rawaccessor_type;
-        typedef typename Masks::clipmask_format_traits::accessor_selector  mask_accessorselector_type;
-
-        typedef typename Masks::alphamask_format_traits::iterator_type     alphamask_iterator_type;
-        typedef typename Masks::alphamask_format_traits::raw_accessor_type alphamask_rawaccessor_type;
-        typedef typename Masks::alphamask_format_traits::accessor_selector alphamask_accessorselector_type;
-
         typedef typename AccessorSelector::template wrap_accessor<
             raw_accessor_type >::type                                      dest_accessor_type;
 
         typedef AccessorTraits< dest_accessor_type >                       accessor_traits;
-        typedef CompositeIterator2D< dest_iterator_type,
-                                     mask_iterator_type >                  composite_iterator_type;
-
-        typedef BitmapRenderer<mask_iterator_type,
-                               mask_rawaccessor_type,
-                               mask_accessorselector_type,
-                               Masks>                                      mask_bitmap_type;
-        typedef BitmapRenderer<alphamask_iterator_type,
-                               alphamask_rawaccessor_type,
-                               alphamask_accessorselector_type,
-                               Masks>                                      alphamask_bitmap_type;
-
-
 
         typedef AccessorTraits< raw_accessor_type >                        raw_accessor_traits;
         typedef typename uInt32Converter<
             typename raw_accessor_type::value_type>::to                    to_uint32_functor;
-
-
-        typedef typename raw_accessor_traits::template masked_accessor<
-            mask_rawaccessor_type,
-            dest_iterator_type,
-            mask_iterator_type,
-            Masks::clipmask_polarity>::type                                raw_maskedaccessor_type;
-        typedef typename accessor_selector::template wrap_accessor<
-            raw_maskedaccessor_type >::type                                masked_accessor_type;
-
-
-        typedef JoinImageAccessorAdapter< dest_accessor_type,
-                                          mask_rawaccessor_type >          joined_image_accessor_type;
-        typedef JoinImageAccessorAdapter< GenericColorImageAccessor,
-                                          GenericColorImageAccessor >      joined_generic_image_accessor_type;
-
 
 
         dest_iterator_type                      maBegin;
@@ -215,8 +178,6 @@ namespace
         to_uint32_functor                       maToUInt32Converter;
         dest_accessor_type                      maAccessor;
         raw_accessor_type                       maRawAccessor;
-        masked_accessor_type                    maMaskedAccessor;
-        raw_maskedaccessor_type                 maRawMaskedAccessor;
 
 
 
@@ -237,9 +198,7 @@ namespace
             maColorLookup(),
             maToUInt32Converter(),
             maAccessor( accessor ),
-            maRawAccessor( rawAccessor ),
-            maMaskedAccessor( accessor ),
-            maRawMaskedAccessor( rawAccessor )
+            maRawAccessor( rawAccessor )
         {}
 
     private:
@@ -256,69 +215,6 @@ namespace
             return getCompatibleBitmap(bmp).get() != nullptr;
         }
 
-        std::shared_ptr<mask_bitmap_type> getCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const
-        {
-            std::shared_ptr<mask_bitmap_type> pMask( std::dynamic_pointer_cast<mask_bitmap_type>( bmp ));
-
-            if( !pMask )
-                return pMask;
-
-            if( pMask->getSize() != getSize() )
-                pMask.reset();
-
-            return pMask;
-        }
-
-        virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const override
-        {
-            // TODO(P1): dynamic_cast usually called twice for
-            // compatible formats
-            return std::dynamic_pointer_cast<mask_bitmap_type>( bmp ).get() != nullptr;
-        }
-
-        static std::shared_ptr<alphamask_bitmap_type> getCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp )
-        {
-            return std::dynamic_pointer_cast<alphamask_bitmap_type>( bmp );
-        }
-
-        virtual void clear_i( Color                   fillColor,
-                              const basegfx::B2IBox&  rBounds ) override
-        {
-            fillImage(destIterRange(maBegin,
-                                    maRawAccessor,
-                                    rBounds),
-                      maColorLookup(
-                          maAccessor,
-                          fillColor) );
-        }
-
-        virtual void setPixel_i( const basegfx::B2IPoint& rPt,
-                                 Color                    pixelColor ) override
-        {
-            const DestIterator pixel( maBegin +
-                                      vigra::Diff2D(rPt.getX(),
-                                                    rPt.getY()) );
-            maAccessor.set( pixelColor, pixel );
-        }
-
-        virtual void setPixel_i( const basegfx::B2IPoint&     rPt,
-                                 Color                        pixelColor,
-                                 const BitmapDeviceSharedPtr& rClip ) override
-        {
-            std::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rClip) );
-            OSL_ASSERT( pMask );
-
-            const vigra::Diff2D offset(rPt.getX(),
-                                       rPt.getY());
-
-            const composite_iterator_type aIter(
-                maBegin + offset,
-                pMask->maBegin + offset );
-
-            maMaskedAccessor.set( pixelColor,
-                                  aIter );
-        }
-
         virtual Color getPixel_i(const basegfx::B2IPoint& rPt ) override
         {
             const DestIterator pixel( maBegin +
@@ -333,15 +229,6 @@ namespace
                                       vigra::Diff2D(rPt.getX(),
                                                     rPt.getY()) );
             return maToUInt32Converter(maRawAccessor(pixel));
-        }
-
-        composite_iterator_type getMaskedIter( const BitmapDeviceSharedPtr& rClip ) const
-        {
-            std::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rClip) );
-            OSL_ASSERT( pMask );
-
-            return composite_iterator_type( maBegin,
-                                            pMask->maBegin );
         }
 
         template< typename Iterator, typename RawAcc >
@@ -398,8 +285,8 @@ namespace
             sal_Int32 dstStride =  getScanlineStride();
             sal_Int32 srcStride =  rSrcBitmap->getScanlineStride();
             sal_Int32 bytesPerPixel = (bitsPerPixel[getScanlineFormat()] + 7) >> 3; // round up to bytes
-            bool dstTopDown = isTopDown();
-            bool srcTopDown = rSrcBitmap->isTopDown();
+            bool dstTopDown = true;
+            bool srcTopDown = true;
 
             if (dstBuf == srcBuf && nSrcY < nDestY) // reverse copy order to avoid overlapping
             {
@@ -539,11 +426,6 @@ basegfx::B2IVector BitmapDevice::getSize() const
         mpImpl->maBounds.getMaxY() - mpImpl->maBounds.getMinY() );
 }
 
-bool BitmapDevice::isTopDown() const
-{
-    return mpImpl->mnScanlineStride >= 0;
-}
-
 basegfx::B2IVector BitmapDevice::getBufferSize() const
 {
     return mpImpl->maBufferSize;
@@ -573,37 +455,6 @@ PaletteMemorySharedVector BitmapDevice::getPalette() const
 bool BitmapDevice::isSharedBuffer( const BitmapDeviceSharedPtr& rOther ) const
 {
     return rOther.get()->getBuffer().get() == getBuffer().get();
-}
-
-void BitmapDevice::clear( Color fillColor )
-{
-    clear_i( fillColor, mpImpl->maBounds );
-}
-
-void BitmapDevice::setPixel( const basegfx::B2IPoint& rPt,
-                             Color                    lineColor )
-{
-    if( mpImpl->maBounds.isInside(rPt) )
-        setPixel_i(rPt,lineColor);
-}
-
-void BitmapDevice::setPixel( const basegfx::B2IPoint&     rPt,
-                             Color                        lineColor,
-                             const BitmapDeviceSharedPtr& rClip )
-{
-    if( !rClip )
-    {
-        setPixel(rPt,lineColor);
-        return;
-    }
-
-    if( mpImpl->maBounds.isInside(rPt) )
-    {
-        if( isCompatibleClipMask( rClip ) )
-            setPixel_i(rPt,lineColor,rClip);
-        else
-            getGenericRenderer()->setPixel( rPt, lineColor, rClip );
-    }
 }
 
 Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )
@@ -863,7 +714,6 @@ BitmapDeviceSharedPtr createRenderer(
 namespace
 {
 BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&                  rSize,
-                                                   bool                                       bTopDown,
                                                    Format                                     nScanlineFormat,
                                                    boost::shared_array< sal_uInt8 >           pMem,
                                                    PaletteMemorySharedVector                  pPal,
@@ -885,9 +735,6 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
     }
 
     sal_Int32 nScanlineStride = getBitmapDeviceStrideForWidth(nScanlineFormat, rSize.getX());
-
-    // factor in bottom-up scanline order case
-    nScanlineStride *= bTopDown ? 1 : -1;
 
     const sal_uInt32 nWidth(nScanlineStride < 0 ? -nScanlineStride : nScanlineStride);
     const sal_uInt32 nHeight(rSize.getY());
@@ -1040,14 +887,13 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 }
 
 BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&                  rSize,
-                                              bool                                       bTopDown,
                                               Format                                     nScanlineFormat,
                                               boost::shared_array< sal_uInt8 >           pMem,
                                               PaletteMemorySharedVector                  pPal,
                                               const basegfx::B2IBox*                     pSubset,
                                               bool bBlack = true)
 {
-    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, bTopDown, nScanlineFormat, pMem, pPal, pSubset, bBlack ) );
+    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, nScanlineFormat, pMem, pPal, pSubset, bBlack ) );
 
 #ifdef SAL_LOG_INFO
     std::ostringstream subset;
@@ -1058,7 +904,6 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
     SAL_INFO( "basebmp.bitmapdevice",
               "createBitmapDevice: "
               << rSize.getX() << "x" << rSize.getY()
-              << (bTopDown ? " top-down " : " bottom-up ")
               << subset.str()
               << " = " << result.get() );
 #endif
@@ -1080,11 +925,9 @@ sal_Int32 getBitmapDeviceStrideForWidth(Format nScanlineFormat, sal_Int32 nWidth
 }
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
-                                          bool                      bTopDown,
                                           Format                    nScanlineFormat )
 {
     return createBitmapDeviceImpl( rSize,
-                                   bTopDown,
                                    nScanlineFormat,
                                    boost::shared_array< sal_uInt8 >(),
                                    PaletteMemorySharedVector(),
@@ -1092,12 +935,10 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
 }
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
-                                          bool                             bTopDown,
                                           Format                           nScanlineFormat,
                                           const PaletteMemorySharedVector& rPalette )
 {
     return createBitmapDeviceImpl( rSize,
-                                   bTopDown,
                                    nScanlineFormat,
                                    boost::shared_array< sal_uInt8 >(),
                                    rPalette,
@@ -1105,13 +946,11 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
 }
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
-                                          bool                             bTopDown,
                                           Format                           nScanlineFormat,
                                           const RawMemorySharedArray&      rMem,
                                           const PaletteMemorySharedVector& rPalette )
 {
     return createBitmapDeviceImpl( rSize,
-                                   bTopDown,
                                    nScanlineFormat,
                                    rMem,
                                    rPalette,
@@ -1122,7 +961,6 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
                                          const BitmapDeviceSharedPtr& rProto )
 {
     return createBitmapDeviceImpl( rSize,
-                                   rProto->isTopDown(),
                                    rProto->getScanlineFormat(),
                                    boost::shared_array< sal_uInt8 >(),
                                    rProto->getPalette(),

@@ -1079,7 +1079,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     basegfx::B2IVector aSize(nWidth, nHeight);
-    basebmp::BitmapDeviceSharedPtr aCopy = createBitmapDevice(aSize, true, SVP_CAIRO_FORMAT);
+    basebmp::BitmapDeviceSharedPtr aCopy = createBitmapDevice(aSize, SVP_CAIRO_FORMAT);
 
     cairo_surface_t* target = SvpSalGraphics::createCairoSurface(aCopy);
     cairo_t* cr = cairo_create(target);

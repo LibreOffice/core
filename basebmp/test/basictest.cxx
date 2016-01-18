@@ -110,12 +110,9 @@ public:
         const basegfx::B2ISize aSize(101,101);
         basegfx::B2ISize       aSize2(aSize);
         BitmapDeviceSharedPtr pDevice( createBitmapDevice( aSize,
-                                                           true,
                                                            Format::OneBitMsbPal ) );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("right size",
                                aSize2, pDevice->getSize() );
-        CPPUNIT_ASSERT_MESSAGE("Top down format",
-                               pDevice->isTopDown() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Scanline format",
                                Format::OneBitMsbPal, pDevice->getScanlineFormat() );
         sal_Int32 nExpectedStride = (aSize2.getY() + 7)/8;
@@ -136,7 +133,6 @@ public:
         const basegfx::B2ISize aSize(101,101);
         basegfx::B2ISize       aSize2(3,3);
         BitmapDeviceSharedPtr  pDevice( createBitmapDevice( aSize,
-                                                            true,
                                                             Format::OneBitMsbPal ) );
 
         BitmapDeviceSharedPtr  pClone( cloneBitmapDevice(
@@ -144,178 +140,6 @@ public:
                                            pDevice ));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("right size",
                                aSize2, pClone->getSize() );
-    }
-
-    void testPixelFuncs()
-    {
-        // 1bpp
-        const basegfx::B2ISize aSize(64,64);
-        BitmapDeviceSharedPtr pDevice( createBitmapDevice( aSize,
-                                                           true,
-                                                           Format::OneBitMsbPal ) );
-
-        const basegfx::B2IPoint aPt(3,3);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("getPixelData for virgin device",
-                               sal_uInt32(0), pDevice->getPixelData(aPt));
-
-        const Color aCol(0xFFFFFFFF);
-        pDevice->setPixel( aPt, aCol );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #1",
-                               aCol, pDevice->getPixel(aPt));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("getPixelData for white pixel",
-                               sal_uInt32(1), pDevice->getPixelData(aPt));
-
-        const basegfx::B2IPoint aPt2(0,0);
-        const Color aCol2(0xFFFFFFFF);
-        pDevice->setPixel( aPt2, aCol2 );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #2",
-                               aCol2, pDevice->getPixel(aPt2));
-
-        const basegfx::B2IPoint aPt3(aSize.getX()-1,aSize.getY()-1);
-        const Color aCol3(0x00000000);
-        pDevice->setPixel( aPt3, aCol3 );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #3",
-                               aCol3, pDevice->getPixel(aPt3));
-
-        pDevice->setPixel( aPt3, aCol2 );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #3.5",
-                               aCol2, pDevice->getPixel(aPt3));
-
-        const basegfx::B2IPoint aPt4(-100000,-100000);
-        pDevice->setPixel( aPt4, aCol3 );
-        const basegfx::B2IPoint aPt5(100000,100000);
-        pDevice->setPixel( aPt5, aCol3 );
-
-        auto nPixel(countPixel(pDevice, aCol2));
-        const basegfx::B2IPoint aPt6(aSize.getX(),aSize.getY());
-        pDevice->setPixel( aPt6, aCol2 );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("setPixel clipping",
-                               nPixel, countPixel(pDevice, aCol2));
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("raw pixel value #1",
-                               sal_uInt8(0x80), pDevice->getBuffer()[0]);
-
-        // 1bit LSB
-        {
-            pDevice = createBitmapDevice( aSize,
-                                          true,
-                                          Format::OneBitLsbPal );
-
-            pDevice->setPixel( aPt2, aCol );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #4",
-                                   aCol, pDevice->getPixel(aPt2));
-
-            const basegfx::B2IPoint aPt222(1,1);
-            pDevice->setPixel( aPt222, aCol );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #5",
-                                   aCol, pDevice->getPixel(aPt222));
-
-            pDevice->setPixel( aPt3, aCol );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #6",
-                                   aCol, pDevice->getPixel(aPt3));
-
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("raw pixel value #2",
-                                   sal_uInt8(0x01), pDevice->getBuffer()[0]);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("raw pixel value #3",
-                                   sal_uInt8(0x02), pDevice->getBuffer()[8]);
-        }
-
-        // 8bit alpha
-        {
-            pDevice = createBitmapDevice( aSize,
-                                          true,
-                                          Format::EightBitGrey );
-
-            const Color aCol4(0x010101);
-            pDevice->setPixel( aPt, aCol4 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #4",
-                                   aCol4, pDevice->getPixel(aPt));
-
-            const Color aCol5(0x0F0F0F);
-            pDevice->setPixel( aPt2, aCol5 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #5",
-                                   aCol5, pDevice->getPixel(aPt2));
-
-            const Color aCol6(0xFFFFFF);
-            pDevice->setPixel( aPt3, aCol6 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #6",
-                                   aCol6, pDevice->getPixel(aPt3));
-        }
-
-        // 16bpp
-        {
-            pDevice = createBitmapDevice( aSize,
-                                          true,
-                                          Format::SixteenBitLsbTcMask );
-            const Color aCol7(0);
-            pDevice->clear( aCol7 );
-
-            const Color aCol4(0x00101010);
-            pDevice->setPixel( aPt, aCol4 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #7",
-                                   aCol4, pDevice->getPixel(aPt));
-
-            const Color aCol5(0x00F0F0F0);
-            pDevice->setPixel( aPt2, aCol5 );
-            CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #8",
-                                   pDevice->getPixel(aPt2) != aCol7);
-
-            const Color aCol6(0x00FFFFFF);
-            pDevice->setPixel( aPt3, aCol6 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #9",
-                                   aCol6, pDevice->getPixel(aPt3));
-        }
-
-        // 24bpp
-        {
-            pDevice = createBitmapDevice( aSize,
-                                          true,
-                                          Format::TwentyFourBitTcMask );
-
-            const Color aCol4(0x01010101);
-            pDevice->setPixel( aPt, aCol4 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #10",
-                                   aCol4, pDevice->getPixel(aPt));
-
-            const Color aCol5(0x0F3F2F1F);
-            pDevice->setPixel( aPt2, aCol5 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #11",
-                                   aCol5, pDevice->getPixel(aPt2));
-
-            const Color aCol6(0xFFFFFFFF);
-            pDevice->setPixel( aPt3, aCol6 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #12",
-                                   aCol6, pDevice->getPixel(aPt3));
-
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("raw pixel value #4",
-                                   sal_uInt8(0x3F), pDevice->getBuffer()[2]);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("raw pixel value #4",
-                                   sal_uInt8(0x2F), pDevice->getBuffer()[1]);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("raw pixel value #4",
-                                   sal_uInt8(0x1F), pDevice->getBuffer()[0]);
-        }
-
-        // 32bpp
-        {
-            pDevice = createBitmapDevice( aSize,
-                                          true,
-                                          Format::ThirtyTwoBitTcMaskBGRA );
-
-            const Color aCol4(0x01010101);
-            pDevice->setPixel( aPt, aCol4 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #13",
-                                   aCol4, pDevice->getPixel(aPt));
-
-            const Color aCol5(0x0F0F0F0F);
-            pDevice->setPixel( aPt2, aCol5 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #14",
-                                   aCol5, pDevice->getPixel(aPt2));
-
-            const Color aCol6(0xFFFFFFFF);
-            pDevice->setPixel( aPt3, aCol6 );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get/setPixel roundtrip #15",
-                                   aCol6, pDevice->getPixel(aPt3));
-        }
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -326,7 +150,6 @@ public:
     CPPUNIT_TEST(colorTest);
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testClone);
-    CPPUNIT_TEST(testPixelFuncs);
     CPPUNIT_TEST_SUITE_END();
 };
 

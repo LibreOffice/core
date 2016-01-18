@@ -64,15 +64,6 @@ public:
      */
     basegfx::B2IVector getSize() const;
 
-    /** Query whether buffer starts with 0th scanline
-
-        @return true, if the buffer memory starts with the 0th
-        scanline, and false if it starts with the last one. The latter
-        is e.g. the typical scan line ordering for the Windows BMP
-        format.
-     */
-    bool isTopDown() const;
-
     /** Query the size of the whole frame buffer
 
         @ return the size of the whole frame buffer, the same as
@@ -111,40 +102,6 @@ public:
 
     /// Check if this and the other BitmapDevice share a buffer
     bool isSharedBuffer( const BitmapDeviceSharedPtr& rOther ) const;
-
-    /** Clear whole device with given color
-
-        This method works like a fill with the given color value,
-        resulting in a bitmap uniformly colored in fillColor.
-     */
-    void clear( Color fillColor );
-
-    /** Set given pixel to specified color
-
-        @param rPt
-        Pixel to set
-
-        @param pixelColor
-        Color value to set the pixel to
-     */
-    void setPixel( const basegfx::B2IPoint& rPt,
-                   Color                    pixelColor );
-
-    /** Set given pixel to specified color
-
-        @param rPt
-        Pixel to set
-
-        @param pixelColor
-        Color value to set the pixel to
-
-        @param rClip
-        Clip mask to use. If the clip mask is 1 at the given pixel
-        position, no change will take place.
-     */
-    void setPixel( const basegfx::B2IPoint&     rPt,
-                   Color                        pixelColor,
-                   const BitmapDeviceSharedPtr& rClip );
 
     /** Get color value at given pixel
      */
@@ -193,16 +150,6 @@ protected:
 
 private:
     BASEBMP_DLLPRIVATE virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const = 0;
-    BASEBMP_DLLPRIVATE virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
-
-    BASEBMP_DLLPRIVATE virtual void clear_i( Color                  fillColor,
-                                             const basegfx::B2IBox& rBounds ) = 0;
-
-    BASEBMP_DLLPRIVATE virtual void setPixel_i( const basegfx::B2IPoint& rPt,
-                                               Color                    lineColor) = 0;
-    BASEBMP_DLLPRIVATE virtual void setPixel_i( const basegfx::B2IPoint&     rPt,
-                                                Color                        lineColor,
-                                                const BitmapDeviceSharedPtr& rClip ) = 0;
 
     BASEBMP_DLLPRIVATE virtual Color getPixel_i( const basegfx::B2IPoint& rPt ) = 0;
 
@@ -226,7 +173,6 @@ sal_Int32 BASEBMP_DLLPUBLIC getBitmapDeviceStrideForWidth(Format nScanlineFormat
 /** Function to create a BitmapDevice for given scanline format
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector& rSize,
-                                                            bool                      bTopDown,
                                                             Format                    nScanlineFormat );
 
 /** Function to create a BitmapDevice for given scanline format
@@ -237,7 +183,6 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
     format.
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
-                                                            bool                             bTopDown,
                                                             Format                           nScanlineFormat,
                                                             const PaletteMemorySharedVector& rPalette );
 
@@ -248,7 +193,6 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
     image of the specified area and format.
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
-                                                            bool                             bTopDown,
                                                             Format                           nScanlineFormat,
                                                             const RawMemorySharedArray&      rMem,
                                                             const PaletteMemorySharedVector& rPalette );
