@@ -88,7 +88,6 @@ template< class Accessor > struct AccessorTraits<                 \
     typedef ColorConvert< accessor_type,                          \
                           data_type >              color_lookup;  \
     typedef Accessor                               raw_accessor;  \
-    typedef vigra::VigraFalseType                  xor_accessor;  \
     template< class MaskAccessor,                                 \
               class Iterator,                                     \
               class MaskIterator > struct          masked_accessor\

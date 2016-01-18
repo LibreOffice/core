@@ -63,13 +63,6 @@ template< class Accessor, typename ColorType > struct AccessorTraits<
     /// Retrieve raw pixel data accessor for given Accessor type
     typedef Accessor                                                          raw_accessor;
 
-    /** accessor for XOR setter access is disabled, since the results
-     *  are usually completely unintended - you'll usually want to
-     *  wrap an xor_accessor with a PaletteAccessor, not the other way
-     *  around.
-     */
-    typedef vigra::VigraFalseType                                             xor_accessor;
-
     /** accessor for masked setter access is disabled, since the
      *  results are usually completely unintended - you'll usually
      *  want to wrap a masked_accessor with a PaletteAccessor, not the

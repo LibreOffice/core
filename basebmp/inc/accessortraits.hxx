@@ -93,11 +93,6 @@ template< class Accessor > struct AccessorTraits
     /// Retrieve raw pixel data accessor for given Accessor type
     typedef Accessor                                raw_accessor;
 
-    /// Retrieve wrapped accessor for XOR setter access
-    typedef BinarySetterFunctionAccessorAdapter<
-        Accessor,
-        XorFunctor< value_type > >                  xor_accessor;
-
     /** Retrieve masked accessor for given types
 
         A masked accessor works like a filter, where the mask gates
