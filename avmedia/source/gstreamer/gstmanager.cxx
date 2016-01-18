@@ -31,8 +31,7 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace gstreamer {
 
-Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
-    mxMgr( rxMgr )
+Manager::Manager()
 {
 }
 

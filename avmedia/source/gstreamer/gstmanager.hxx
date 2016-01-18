@@ -35,7 +35,7 @@ class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
 {
 public:
 
-    explicit Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
+    explicit Manager();
     virtual ~Manager();
 
     // XManager
@@ -45,9 +45,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
-private:
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 };
 
 } // namespace gstreamer

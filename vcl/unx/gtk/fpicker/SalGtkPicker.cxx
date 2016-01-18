@@ -120,10 +120,9 @@ GtkWindow* RunDialog::GetTransientFor()
     return pParent;
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
-    uno::Reference< frame::XDesktop >& rDesktop ) :
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit ) :
     cppu::WeakComponentImplHelper< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
-    mpDialog(pDialog), mxToolkit(rToolkit), mxDesktop(rDesktop)
+    mpDialog(pDialog), mxToolkit(rToolkit)
 {
 }
 
