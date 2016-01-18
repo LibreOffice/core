@@ -48,7 +48,6 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
 			LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
 			CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g)" \
-			AR_FLAGS="$(AR_FLAGS)" \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 		&& $(MAKE) \
 	)
