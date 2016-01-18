@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_7b7e85e5",
+        "filename": "svgio/source/svgreader/svgcharacternode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2016-01-18T15:53:51Z",
+      "side": 1,
+      "message": "Hi Armin, thanks for reviewing.\neven if a text is not visible we have to construct the its SimpleTextPrimitive, otherwise it wouldn\u0027t fit any space, so if we have \u003ctext\u003eSample 1 \u003ctspan visible\u003dhidden\u003eSample 2\u003c/tspan\u003e Sample 3\u003c/text\u003e, it would be displayed as: \"Sample 1 Sample 3\" but we want it as \"Sample 1 [white space where Sample 2 should be] Sample 3\"",
+      "parentUuid": "dab17558_3bf07d90",
+      "range": {
+        "startLine": 509,
+        "startChar": 16,
+        "endLine": 509,
+        "endChar": 41
+      },
+      "revId": "ea702739c95ebf8401c1483c45cbe26cdabb7d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_fbf55583",
         "filename": "svgio/source/svgreader/svgcharacternode.cxx",
         "patchSetId": 1
