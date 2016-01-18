@@ -20,7 +20,7 @@
 en-US = "ActiveX Control"
 
 [STR_DESC_MODULE_OPTIONAL_ACTIVEXCONTROL]
-en-US = "Component to enable Microsoft Internet Explorer to display %PRODUCTNAME documents."
+en-US = "Deprecated Component (see release notes) to enable Microsoft Internet Explorer to display %PRODUCTNAME documents."
 
 
 
