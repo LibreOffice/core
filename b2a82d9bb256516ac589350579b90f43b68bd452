@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_9b4a4982",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-18T18:57:01Z",
+      "side": 1,
+      "message": "Use nullptr instead of NULL; fixed in 7e86e18bac7a79f26dc3082f356e8ca9eca9abf3 follow-up commit.",
+      "range": {
+        "startLine": 1201,
+        "startChar": 66,
+        "endLine": 1201,
+        "endChar": 70
+      },
+      "revId": "b2a82d9bb256516ac589350579b90f43b68bd452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
