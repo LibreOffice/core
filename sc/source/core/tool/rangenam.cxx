@@ -653,11 +653,6 @@ int SAL_CALL ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
             (*static_cast<const ScRangeData* const *>(p2))->GetName() );
 }
 
-bool operator<(const ScRangeData& left, const ScRangeData& right)
-{
-    return left.GetName() < right.GetName();
-}
-
 namespace {
 
 /**
