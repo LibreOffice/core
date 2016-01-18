@@ -230,14 +230,12 @@ class SW_DLLPUBLIC SwDBManager
 {
 friend class SwConnectionDisposedListener_Impl;
 
-    /** Mail merge cancel indicator
+    enum class MergeStatus
+    {
+        OK = 0, CANCEL, ERROR
+    };
 
-       TODO: convert m_bCancel to a three state escalating enum
-       run, cancel, error. Not sure if this helps readability /
-       further code cleanup, but it would be easier to follow the
-       seamantics and we could get rid of bNoError in MergeMailFiles
-     */
-    bool            m_bCancel;
+    MergeStatus     m_aMergeStatus;     ///< current / last merge status
     bool            bInitDBFields : 1;
     bool            bInMerge    : 1;    ///< merge process active
     bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
@@ -295,6 +293,10 @@ public:
     /// Merging of data records into fields.
     bool            MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent = nullptr );
     void            MergeCancel();
+
+    inline bool     IsMergeOk()     { return MergeStatus::OK     == m_aMergeStatus; };
+    inline bool     IsMergeCancel() { return MergeStatus::CANCEL <= m_aMergeStatus; };
+    inline bool     IsMergeError()  { return MergeStatus::ERROR  <= m_aMergeStatus; };
 
     /// Initialize data fields that lack name of database.
     inline bool     IsInitDBFields() const  { return bInitDBFields; }
