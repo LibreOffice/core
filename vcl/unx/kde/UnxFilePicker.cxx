@@ -881,7 +881,7 @@ void UnxFilePicker::sendCommand( const OUString &rCommand )
     ::std::cerr << "UnxFilePicker sent: \"" << aUtfString.getStr() << "\"" << ::std::endl;
 #endif
 
-    write( m_nFilePickerWrite, aUtfString.getStr(), aUtfString.getLength() );
+    (void)write( m_nFilePickerWrite, aUtfString.getStr(), aUtfString.getLength() );
 }
 
 void UnxFilePicker::sendCommand( const OUString &rCommand, ::osl::Condition &rCondition )
