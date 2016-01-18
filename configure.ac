@@ -8359,7 +8359,7 @@ if test "$with_java" != "no"; then
             HSQLDB_JAR=/usr/share/java/hsqldb.jar
         fi
         if ! test -f $HSQLDB_JAR; then
-               AC_MSG_ERROR(hsqldb.jar not found.)]
+               AC_MSG_ERROR(hsqldb.jar not found.)
         fi
         AC_MSG_CHECKING([whether hsqldb is 1.8.0.x])
         export HSQLDB_JAR
