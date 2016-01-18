@@ -350,7 +350,6 @@ private:
     friend class SfxTemplatePanelControl;
 
     VclPtr<vcl::Window>         m_pFloat;
-    bool                        m_bZoomIn;
     VclPtr<DropToolBox_Impl>    m_aActionTbL;
     VclPtr<ToolBox>             m_aActionTbR;
 

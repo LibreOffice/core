@@ -2215,7 +2215,6 @@ static OUString lcl_GetLabel(uno::Any& rAny)
 SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
     : SfxCommonTemplateDialog_Impl(pB, pDlgWindow, true)
     , m_pFloat(pDlgWindow)
-    , m_bZoomIn(false)
     , m_aActionTbL(VclPtrInstance<DropToolBox_Impl>(pDlgWindow, this))
     , m_aActionTbR(VclPtrInstance<ToolBox>(pDlgWindow))
 {

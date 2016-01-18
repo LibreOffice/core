@@ -287,14 +287,13 @@ class MergeData
     friend class MergeDataHashMap;
 
 public:
-    OString sTyp;
     OString sGID;
     OString sLID;
     MergeEntrys* pMergeEntrys;
 private:
     MergeDataHashMap::iterator m_aNextData;
 public:
-    MergeData( const OString &rTyp, const OString &rGID, const OString &rLID );
+    MergeData( const OString &rGID, const OString &rLID );
     ~MergeData();
     MergeEntrys* GetMergeEntries() { return pMergeEntrys;}
 

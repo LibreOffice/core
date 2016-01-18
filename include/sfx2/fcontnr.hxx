@@ -53,17 +53,6 @@ public:
     {   return static_cast<const SfxRefItem&>(rL).maRef == maRef; }
 };
 
-class SfxFrameWindow
-{
-    ScopedVclPtr<vcl::Window> pWindow;
-public:
-                SfxFrameWindow( vcl::Window *pWin )
-                 : pWindow( pWin )
-                {}
-
-    virtual     ~SfxFrameWindow()  {}
-};
-
 typedef sal_uIntPtr (*SfxDetectFilter)( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust, SfxFilterFlags nDont );
 
 class SFX2_DLLPUBLIC SfxFilterContainer

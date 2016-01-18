@@ -80,7 +80,6 @@ private:
     osl::Mutex maLock;
     GtkWidget *mpDialog;
     css::uno::Reference< css::awt::XExtendedToolkit>  mxToolkit;
-    css::uno::Reference< css::frame::XDesktop >  mxDesktop;
 public:
 
     // XTopWindowListener
@@ -109,8 +108,7 @@ public:
         throw(css::uno::RuntimeException, std::exception) override;
 public:
     RunDialog(GtkWidget *pDialog,
-        css::uno::Reference< css::awt::XExtendedToolkit > &rToolkit,
-        css::uno::Reference< css::frame::XDesktop > &rDesktop
+        css::uno::Reference< css::awt::XExtendedToolkit > &rToolkit
         );
     virtual ~RunDialog();
     gint run();

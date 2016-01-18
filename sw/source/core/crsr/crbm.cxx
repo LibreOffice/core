@@ -33,8 +33,7 @@ namespace
     struct CursorStateHelper
     {
         explicit CursorStateHelper(SwCursorShell& rShell)
-            : m_aLink(rShell)
-            , m_pCursor(rShell.GetSwCursor())
+            : m_pCursor(rShell.GetSwCursor())
             , m_aSaveState(*m_pCursor)
         { }
 
@@ -61,7 +60,6 @@ namespace
             return false;
         }
 
-        SwCallLink m_aLink;
         SwCursor* m_pCursor;
         SwCursorSaveState m_aSaveState;
     };

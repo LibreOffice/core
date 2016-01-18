@@ -98,7 +98,6 @@ class StringResourceImpl : public StringResourceImpl_BASE
 {
 protected:
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
-    css::uno::Reference< css::lang::XMultiComponentFactory >  m_xMCF;
 
     LocaleItem*                                               m_pCurrentLocaleItem;
     LocaleItem*                                               m_pDefaultLocaleItem;

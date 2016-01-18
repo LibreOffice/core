@@ -190,11 +190,9 @@ MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
 // class MergeData
 
 
-MergeData::MergeData(
-    const OString &rTyp, const OString &rGID,
+MergeData::MergeData(const OString &rGID,
     const OString &rLID )
-    : sTyp( rTyp ),
-    sGID( rGID ),
+    : sGID( rGID ),
     sLID( rLID ) ,
     pMergeEntrys( new MergeEntrys() )
 {
@@ -403,7 +401,7 @@ void MergeDataFile::InsertEntry(
 
     if( !pData )
     {
-        pData = new MergeData( rTYP, rGID, rLID );
+        pData = new MergeData( rGID, rLID );
         aMap.insert( sKey, pData );
     }
 

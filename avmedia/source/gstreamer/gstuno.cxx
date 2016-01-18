@@ -34,9 +34,9 @@ using namespace ::com::sun::star;
 #  define SERVICE_NAME AVMEDIA_MANAGER_SERVICE_NAME // "com.sun.star.comp.avmedia.Manager_GStreamer"
 #endif
 
-static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
+static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >&  )
 {
-    return uno::Reference< uno::XInterface >( *new ::avmedia::gstreamer::Manager( rxFact ) );
+    return uno::Reference< uno::XInterface >( *new ::avmedia::gstreamer::Manager );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediagst_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
