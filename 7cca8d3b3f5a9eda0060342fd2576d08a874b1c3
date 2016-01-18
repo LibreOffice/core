@@ -16,6 +16,24 @@
       "revId": "7cca8d3b3f5a9eda0060342fd2576d08a874b1c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_fbf6f5d5",
+        "filename": "sd/source/ui/view/ViewShellBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1000981
+      },
+      "writtenOn": "2016-01-18T12:24:14Z",
+      "side": 0,
+      "message": "The full block above from 1233 to this line is about cleanly computing bState. Then, during merge, line 1309 survived and is expected to produce non expected behaviours",
+      "parentUuid": "dab17558_1bc5b98d",
+      "revId": "7cca8d3b3f5a9eda0060342fd2576d08a874b1c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
