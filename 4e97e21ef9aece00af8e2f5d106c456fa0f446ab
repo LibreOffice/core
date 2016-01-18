@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_1b7819c4",
+        "filename": "bin/gen-iwyu-dummy-lib",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-18T18:50:50Z",
+      "side": 1,
+      "message": "ok that\u0027s clearly better than my hardcoded number but what if somebody is has several clangs installed and llvm-config from PATH doesn\u0027t match CC? (surely something like that must be possible on Debian or Gentoo)",
+      "revId": "4e97e21ef9aece00af8e2f5d106c456fa0f446ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
