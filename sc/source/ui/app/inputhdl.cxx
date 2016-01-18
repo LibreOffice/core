@@ -1189,7 +1189,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     {
         OUString aBufStr( aTipStr );
         OUString aMessage( ScGlobal::GetRscString( STR_FUNCTIONS_FOUND ) );
-        aMessage = aMessage.replaceFirst("%2", OUString::number( nRemainNumber, 10));
+        aMessage = aMessage.replaceFirst("%2", OUString::number(nRemainNumber));
         aMessage = aMessage.replaceFirst("%1", aBufStr);
         aTipStr = aMessage;
     }
