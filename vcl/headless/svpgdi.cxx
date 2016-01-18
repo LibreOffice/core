@@ -37,13 +37,6 @@
 
 #include <cairo.h>
 
-#if OSL_DEBUG_LEVEL > 2
-#include <basebmp/debug.hxx>
-#include <fstream>
-#include <rtl/strbuf.hxx>
-#include <sys/stat.h>
-#endif
-
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
 
 #   define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
