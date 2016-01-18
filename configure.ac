@@ -6573,7 +6573,7 @@ __attribute__ ((visibility ("default"))) void TestFunc() {
   TestStruct::Init();
 }
 _ACEOF
-        if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
+        if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx; then
             gccvisbroken=yes
         else
             case "$host_cpu" in
@@ -6581,7 +6581,7 @@ _ACEOF
                 if test "$_os" = "Darwin" -o "$WITH_MINGW" = "yes"; then
                     gccvisbroken=no
                 else
-                    if $EGREP -q '@PLT|@GOT' visibility.s; then
+                    if $EGREP -q '@PLT|@GOT' visibility.s -o "$ENABLE_LTO" = "TRUE"; then
                         gccvisbroken=no
                     else
                         gccvisbroken=yes
