@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_fbc1d581",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-18T10:30:34Z",
+      "side": 1,
+      "message": "Tab bar is visible (statement, not a question)",
+      "revId": "a99859d38534b9fc5dee1454917b5b705819543c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_bbcf4daf",
+        "filename": "sd/source/ui/view/ViewShellBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-18T10:30:34Z",
+      "side": 1,
+      "message": "nitpicking: odd  indentation",
+      "revId": "a99859d38534b9fc5dee1454917b5b705819543c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

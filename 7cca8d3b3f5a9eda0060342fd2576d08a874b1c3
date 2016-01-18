@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_1bc5b98d",
+        "filename": "sd/source/ui/view/ViewShellBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-18T10:30:34Z",
+      "side": 0,
+      "message": "Uhm, why did you remove this one?",
+      "revId": "7cca8d3b3f5a9eda0060342fd2576d08a874b1c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
