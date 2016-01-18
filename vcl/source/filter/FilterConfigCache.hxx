@@ -88,6 +88,7 @@ public:
     OUString    GetImportFilterName( sal_uInt16 nFormat );
     OUString    GetImportFormatName( sal_uInt16 nFormat );
     OUString    GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
+    OUString    GetImportFormatMediaType( sal_uInt16 nFormat );
     OUString    GetImportFormatShortName( sal_uInt16 nFormat );
     OUString    GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
     OUString    GetImportFilterType( sal_uInt16 nFormat );
