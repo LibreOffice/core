@@ -380,8 +380,7 @@ Format BitmapDevice::getScanlineFormat() const
 
 sal_Int32 BitmapDevice::getScanlineStride() const
 {
-    return mpImpl->mnScanlineStride < 0 ?
-        -mpImpl->mnScanlineStride : mpImpl->mnScanlineStride;
+    return mpImpl->mnScanlineStride;
 }
 
 RawMemorySharedArray BitmapDevice::getBuffer() const
@@ -525,9 +524,7 @@ namespace
 BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&                  rSize,
                                                    Format                                     nScanlineFormat,
                                                    boost::shared_array< sal_uInt8 >           pMem,
-                                                   PaletteMemorySharedVector                  pPal,
-                                                   const basegfx::B2IBox*                     pSubset,
-                                                   bool bBlack = true)
+                                                   PaletteMemorySharedVector                  pPal )
 {
     OSL_ASSERT(rSize.getX() > 0 && rSize.getY() > 0);
 
@@ -543,18 +540,17 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
         return BitmapDeviceSharedPtr();
     }
 
-    sal_Int32 nScanlineStride = getBitmapDeviceStrideForWidth(nScanlineFormat, rSize.getX());
+    const sal_uInt32 nScanlineStride = getBitmapDeviceStrideForWidth(nScanlineFormat, rSize.getX());
 
-    const sal_uInt32 nWidth(nScanlineStride < 0 ? -nScanlineStride : nScanlineStride);
     const sal_uInt32 nHeight(rSize.getY());
 
-    if (nHeight && nWidth && nWidth > SAL_MAX_INT32 / nHeight)
+    if (nHeight && nScanlineStride && nScanlineStride > SAL_MAX_INT32 / nHeight)
     {
-        SAL_WARN( "basebmp", "suspicious massive alloc " << nWidth << " * " << nHeight);
+        SAL_WARN( "basebmp", "suspicious massive alloc " << nScanlineStride << " * " << nHeight);
         return BitmapDeviceSharedPtr();
     }
 
-    const std::size_t nMemSize(nWidth * nHeight);
+    const std::size_t nMemSize(nScanlineStride * nHeight);
 
     if( !pMem )
     {
@@ -563,19 +559,12 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
             &rtl_freeMemory );
         if (pMem.get() == nullptr && nMemSize != 0)
             return BitmapDeviceSharedPtr();
-        if (bBlack)
-            memset(pMem.get(), 0, nMemSize);
-        else
-            memset(pMem.get(), 0xFF, nMemSize);
+        memset(pMem.get(), 0, nMemSize);
     }
 
-    sal_uInt8* pFirstScanline = nScanlineStride < 0 ?
-        pMem.get() + nMemSize + nScanlineStride : pMem.get();
+    sal_uInt8* pFirstScanline = pMem.get();
 
-    // shrink render area to given subset, if given
     basegfx::B2IBox aBounds(0,0,rSize.getX(),rSize.getY());
-    if( pSubset )
-        aBounds.intersect( *pSubset );
 
     switch( nScanlineFormat )
     {
@@ -698,17 +687,12 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&                  rSize,
                                               Format                                     nScanlineFormat,
                                               boost::shared_array< sal_uInt8 >           pMem,
-                                              PaletteMemorySharedVector                  pPal,
-                                              const basegfx::B2IBox*                     pSubset,
-                                              bool bBlack = true)
+                                              PaletteMemorySharedVector                  pPal )
 {
-    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, nScanlineFormat, pMem, pPal, pSubset, bBlack ) );
+    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, nScanlineFormat, pMem, pPal ) );
 
 #ifdef SAL_LOG_INFO
     std::ostringstream subset;
-
-    if (pSubset)
-        subset << " subset=" << pSubset->getWidth() << "x" << pSubset->getHeight() << "@(" << pSubset->getMinX() << "," << pSubset->getMinY() << ")";
 
     SAL_INFO( "basebmp.bitmapdevice",
               "createBitmapDevice: "
@@ -739,8 +723,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
     return createBitmapDeviceImpl( rSize,
                                    nScanlineFormat,
                                    boost::shared_array< sal_uInt8 >(),
-                                   PaletteMemorySharedVector(),
-                                   nullptr );
+                                   PaletteMemorySharedVector() );
 }
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
@@ -750,8 +733,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
     return createBitmapDeviceImpl( rSize,
                                    nScanlineFormat,
                                    boost::shared_array< sal_uInt8 >(),
-                                   rPalette,
-                                   nullptr );
+                                   rPalette );
 }
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
@@ -762,8 +744,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
     return createBitmapDeviceImpl( rSize,
                                    nScanlineFormat,
                                    rMem,
-                                   rPalette,
-                                   nullptr );
+                                   rPalette );
 }
 
 BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
@@ -772,8 +753,7 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
     return createBitmapDeviceImpl( rSize,
                                    rProto->getScanlineFormat(),
                                    boost::shared_array< sal_uInt8 >(),
-                                   rProto->getPalette(),
-                                   nullptr );
+                                   rProto->getPalette() );
 }
 
 
