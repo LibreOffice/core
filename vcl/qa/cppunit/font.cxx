@@ -26,6 +26,7 @@ public:
     void testWidthType();
     void testPitch();
     void testItalic();
+    void testQuality();
     void testSymbolFlagAndCharSet();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
@@ -34,6 +35,7 @@ public:
     CPPUNIT_TEST(testWidthType);
     CPPUNIT_TEST(testPitch);
     CPPUNIT_TEST(testItalic);
+    CPPUNIT_TEST(testQuality);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -90,6 +92,17 @@ void VclFontTest::testPitch()
     aFont.SetPitch(FontPitch::PITCH_FIXED);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Pitch should be PITCH_FIXED", FontPitch::PITCH_FIXED, aFont.GetPitch());
 }
+
+void VclFontTest::testQuality()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL( (int)0, aFont.GetQuality() );
+
+    aFont.SetQuality( 100 );
+    CPPUNIT_ASSERT_EQUAL( (int)100, aFont.GetQuality());
+}
+
 
 void VclFontTest::testSymbolFlagAndCharSet()
 {

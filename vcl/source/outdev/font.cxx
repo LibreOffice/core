@@ -84,6 +84,7 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontMetric.SetWidthType( rData.GetWidthType() );
         aFontMetric.SetScalableFlag( rData.IsScalable() );
         aFontMetric.SetBuiltInFontFlag( rData.IsBuiltInFont() );
+        aFontMetric.SetQuality( rData.GetQuality() );
     }
 
     return aFontMetric;
