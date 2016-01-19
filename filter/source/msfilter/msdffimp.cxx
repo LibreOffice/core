@@ -2215,11 +2215,26 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     nCnt = (sal_Int16)( nTmp & 0x1fff );//Last 13 bits for segment points number
                     switch( nTmp >> 13 )//First 3 bits for command type
                     {
-                        case 0x0: nCommand = EnhancedCustomShapeSegmentCommand::LINETO; if ( !nCnt ) nCnt = 1; break;
-                        case 0x1: nCommand = EnhancedCustomShapeSegmentCommand::CURVETO; if ( !nCnt ) nCnt = 1; break;
-                        case 0x2: nCommand = EnhancedCustomShapeSegmentCommand::MOVETO; if ( !nCnt ) nCnt = 1; break;
-                        case 0x3: nCommand = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH; nCnt = 0; break;
-                        case 0x4: nCommand = EnhancedCustomShapeSegmentCommand::ENDSUBPATH; nCnt = 0; break;
+                        case 0x0:
+                            nCommand = EnhancedCustomShapeSegmentCommand::LINETO;
+                            if ( !nCnt ) nCnt = 1;
+                            break;
+                        case 0x1:
+                            nCommand = EnhancedCustomShapeSegmentCommand::CURVETO;
+                            if ( !nCnt ) nCnt = 1;
+                            break;
+                        case 0x2:
+                            nCommand = EnhancedCustomShapeSegmentCommand::MOVETO;
+                            if ( !nCnt ) nCnt = 1;
+                            break;
+                        case 0x3:
+                            nCommand = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+                            nCnt = 0;
+                            break;
+                        case 0x4:
+                            nCommand = EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                            nCnt = 0;
+                            break;
                         case 0x5:
                         case 0x6:
                         {
