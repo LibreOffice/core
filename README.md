@@ -63,7 +63,6 @@ There are several other libraries that are helpful from a graphical perspective:
 
 Module    | Description
 ----------|-------------------------------------------------
-basebmp/  | enables a VCL compatible rendering API to render to bitmaps, as used for LibreOffice Online, Android, iOS, etc.
 basegfx/  | algorithms and data-types for graphics as used in the canvas
 canvas/   | new (UNO) canvas rendering model with various backends
 cppcanvas/ | C++ helper classes for using the UNO canvas

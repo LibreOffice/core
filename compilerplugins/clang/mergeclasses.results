@@ -188,7 +188,6 @@ merge abp::OModuleResourceClient with abp::OABSPilotUno
 merge accessibility::GridControlAccessibleElement with accessibility::AccessibleGridControlTableBase
 merge accessibility::IComboListBoxHelper with VCLListBoxHelper
 merge basctl::docs::IDocumentDescriptorFilter with basctl::(anonymous namespace)::FilterDocuments
-merge basebmp::BitmapDevice with basebmp::(anonymous namespace)::BitmapRenderer
 merge basegfx::InterpolatorProvider3D with basegfx::RasterConverter3D
 merge bib::OComponentListener with bib::OLoadListener
 merge bib::OLoadListener with bib::FormControlContainer

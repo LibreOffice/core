@@ -11,7 +11,6 @@
 # we link all object files from these libraries into one, merged library
 MERGE_LIBRARY_LIST := \
 	avmedia \
-	$(if $(filter $(OS),ANDROID),,basebmp) \
 	basegfx \
 	canvastools \
 	comphelper \

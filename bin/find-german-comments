@@ -236,7 +236,6 @@ class Parser:
             "animations" : 1,
             "avmedia" : 1,
             "basctl" : 1,
-            "basebmp" : 1,
             "basegfx" : 1,
             "basic" : 1,
             "binaryurp" : 1,

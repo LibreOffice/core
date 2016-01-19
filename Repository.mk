@@ -281,9 +281,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		basctl \
 		basprov \
 	) \
-	$(if $(filter $(OS),ANDROID),, \
-		basebmp \
-	) \
 	basegfx \
 	bib \
 	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \

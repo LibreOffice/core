@@ -35,10 +35,6 @@ certain functionality.
 
 @li @c basctl.basicide
 
-@section basebmp
-
-@li @c basebmp.bitmapdevice
-
 @section basic
 
 @li @c basic
@@ -521,7 +517,6 @@ certain functionality.
 @section other
 
 @li @c accessibility
-@li @c basebmp
 @li @c basegfx
 @li @c binaryurp
 @li @c configmgr
