@@ -62,4 +62,7 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_uiwriter,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_uiwriter))
 
+$(call gb_CppunitTest_get_target,sw_uiwriter): \
+    $(call gb_Library_get_target,textconv_dict)
+
 # vim: set noet sw=4 ts=4:
