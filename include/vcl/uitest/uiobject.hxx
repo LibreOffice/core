@@ -21,6 +21,7 @@ enum class UIObjectType
     BUTTON,
     EDIT,
     CHECKBOX,
+    LISTBOX,
     UNKNOWN
 };
 
