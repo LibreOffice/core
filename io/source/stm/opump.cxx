@@ -35,7 +35,7 @@
 #include <uno/mapping.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -63,7 +63,7 @@ namespace io_stm {
         Reference< XConnectable >               m_xSucc;
         Reference< XInputStream >               m_xInput;
         Reference< XOutputStream >              m_xOutput;
-        OInterfaceContainerHelper               m_cnt;
+        OInterfaceContainerHelper2              m_cnt;
         bool                                m_closeFired;
 
         void run();
@@ -123,7 +123,7 @@ Pump::~Pump()
 
 void Pump::fireError( const  Any & exception )
 {
-    OInterfaceIteratorHelper iter( m_cnt );
+    OInterfaceIteratorHelper2 iter( m_cnt );
     while( iter.hasMoreElements() )
     {
         try
@@ -151,7 +151,7 @@ void Pump::fireClose()
 
     if( bFire )
     {
-        OInterfaceIteratorHelper iter( m_cnt );
+        OInterfaceIteratorHelper2 iter( m_cnt );
         while( iter.hasMoreElements() )
         {
             try
@@ -168,7 +168,7 @@ void Pump::fireClose()
 
 void Pump::fireStarted()
 {
-    OInterfaceIteratorHelper iter( m_cnt );
+    OInterfaceIteratorHelper2 iter( m_cnt );
     while( iter.hasMoreElements() )
     {
         try
@@ -184,7 +184,7 @@ void Pump::fireStarted()
 
 void Pump::fireTerminated()
 {
-    OInterfaceIteratorHelper iter( m_cnt );
+    OInterfaceIteratorHelper2 iter( m_cnt );
     while( iter.hasMoreElements() )
     {
         try

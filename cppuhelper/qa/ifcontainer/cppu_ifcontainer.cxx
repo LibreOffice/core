@@ -26,6 +26,7 @@
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -58,17 +59,17 @@ public:
 
 namespace cppu_ifcontainer
 {
+    static const int nTests = 10;
     class IfTest : public CppUnit::TestFixture
     {
         osl::Mutex m_aGuard;
-        static const int nTests = 10;
     public:
         void testCreateDispose()
         {
             ContainerStats aStats;
-            cppu::OInterfaceContainerHelper *pContainer;
+            cppu::OInterfaceContainerHelper2 *pContainer;
 
-            pContainer = new cppu::OInterfaceContainerHelper(m_aGuard);
+            pContainer = new cppu::OInterfaceContainerHelper2(m_aGuard);
 
             CPPUNIT_ASSERT_MESSAGE("Empty container not empty",
                                    pContainer->getLength() == 0);
@@ -102,8 +103,8 @@ namespace cppu_ifcontainer
         {
             int i;
             ContainerStats aStats;
-            cppu::OInterfaceContainerHelper *pContainer;
-            pContainer = new cppu::OInterfaceContainerHelper(m_aGuard);
+            cppu::OInterfaceContainerHelper2 *pContainer;
+            pContainer = new cppu::OInterfaceContainerHelper2(m_aGuard);
 
             std::vector< Reference< XEventListener > > aListeners;
             for (i = 0; i < nTests; i++)
@@ -112,12 +113,12 @@ namespace cppu_ifcontainer
                 pContainer->addInterface(xRef);
                 aListeners.push_back(xRef);
             }
-            Sequence< Reference< XInterface > > aElements;
+            std::vector< Reference< XInterface > > aElements;
             aElements = pContainer->getElements();
 
-            CPPUNIT_ASSERT_MESSAGE("query contents",
-                                   (int)aElements.getLength() == nTests);
-            if ((int)aElements.getLength() == nTests)
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("query contents",
+                                   (int)aElements.size(), nTests);
+            if ((int)aElements.size() == nTests)
             {
                 for (i = 0; i < nTests; i++)
                 {

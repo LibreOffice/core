@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <memory>
@@ -238,7 +239,7 @@ void SAL_CALL SortedResultSet::addEventListener(
 
     if ( !mpDisposeEventListeners )
         mpDisposeEventListeners =
-                    new OInterfaceContainerHelper( getContainerMutex() );
+                    new OInterfaceContainerHelper2( getContainerMutex() );
 
     mpDisposeEventListeners->addInterface( Listener );
 }

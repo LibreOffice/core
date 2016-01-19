@@ -100,6 +100,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>

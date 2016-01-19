@@ -254,13 +254,7 @@ void PropertyChgHelper::RemoveAsPropListener()
 
 void PropertyChgHelper::LaunchEvent( const LinguServiceEvent &rEvt )
 {
-    cppu::OInterfaceIteratorHelper aIt( aLngSvcEvtListeners );
-    while (aIt.hasMoreElements())
-    {
-        Reference< XLinguServiceEventListener > xRef( aIt.next(), UNO_QUERY );
-        if (xRef.is())
-            xRef->processLinguServiceEvent( rEvt );
-    }
+    aLngSvcEvtListeners.notifyEach( &XLinguServiceEventListener::processLinguServiceEvent, rEvt );
 }
 
 

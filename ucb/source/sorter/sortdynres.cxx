@@ -19,7 +19,7 @@
 
 #include <vector>
 #include <sortdynres.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
@@ -158,7 +158,7 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
 
     if ( !mpDisposeEventListeners )
         mpDisposeEventListeners =
-                    new OInterfaceContainerHelper( getContainerMutex() );
+                    new OInterfaceContainerHelper2( getContainerMutex() );
 
     mpDisposeEventListeners->addInterface( Listener );
 }

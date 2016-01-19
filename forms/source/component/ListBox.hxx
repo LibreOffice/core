@@ -252,8 +252,8 @@ class OListBoxControl   :public OBoundControl
                         ,public IEventProcessor
 {
 private:
-    ::cppu::OInterfaceContainerHelper       m_aChangeListeners;
-    ::cppu::OInterfaceContainerHelper       m_aItemListeners;
+    ::cppu::OInterfaceContainerHelper2       m_aChangeListeners;
+    ::cppu::OInterfaceContainerHelper2       m_aItemListeners;
 
     css::uno::Any                           m_aCurrentSelection;
     Idle                                    m_aChangeIdle;

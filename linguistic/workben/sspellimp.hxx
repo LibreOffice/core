@@ -53,7 +53,7 @@ class SpellChecker :
     >
 {
     Sequence< Locale >                      aSuppLocales;
-    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ::cppu::OInterfaceContainerHelper2       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     PropertyHelper_Spell *                  pPropHelper;
     sal_Bool                                    bDisposing;

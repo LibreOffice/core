@@ -79,8 +79,8 @@ class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
     css::uno::Type mType;
     css::uno::XInterface* mpxEventSource;
 
-    ::cppu::OInterfaceContainerHelper maContainerListeners;
-    ::cppu::OInterfaceContainerHelper maChangesListeners;
+    ::cppu::OInterfaceContainerHelper2 maContainerListeners;
+    ::cppu::OInterfaceContainerHelper2 maChangesListeners;
 
 public:
     NameContainer( const css::uno::Type& rType )
@@ -157,7 +157,7 @@ public:
 class ModifiableHelper
 {
 private:
-    ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
+    ::cppu::OInterfaceContainerHelper2   m_aModifyListeners;
     ::cppu::OWeakObject&                m_rEventSource;
     bool                                mbModified;
 
