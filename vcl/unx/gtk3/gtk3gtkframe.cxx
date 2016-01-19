@@ -2367,6 +2367,13 @@ void GtkSalFrame::SetModal(bool bModal)
     if (!m_pWindow)
         return;
     gtk_window_set_modal(GTK_WINDOW(m_pWindow), bModal);
+    if (bModal)
+    {
+        //gtk_window_set_modal bTrue adds a grab, so ungrab here. Quite
+        //possibly we should alternatively call grab_add grab_ungrab on
+        //show/hide of menus ?
+        gtk_grab_remove(m_pWindow);
+    }
 }
 
 gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
