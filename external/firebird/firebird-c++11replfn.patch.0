@@ -1,6 +1,6 @@
 --- src/common/classes/alloc.h
 +++ src/common/classes/alloc.h
-@@ -489,23 +489,11 @@
+@@ -489,23 +489,7 @@
  inline static MemoryPool* getDefaultMemoryPool() { return Firebird::MemoryPool::processMemoryPool; }
  
  // Global versions of operators new and delete
@@ -12,8 +12,6 @@
 -{
 -	return Firebird::MemoryPool::globalAlloc(s);
 -}
-+void* operator new(size_t s) THROW_BAD_ALLOC;
-+void* operator new[](size_t s) THROW_BAD_ALLOC;
  
 -inline void operator delete(void* mem) throw()
 -{
@@ -23,8 +21,6 @@
 -{
 -	Firebird::MemoryPool::globalFree(mem);
 -}
-+void operator delete(void* mem) throw();
-+void operator delete[](void* mem) throw();
  
  #ifdef DEBUG_GDS_ALLOC
  inline void* operator new(size_t s, Firebird::MemoryPool& pool, const char* file, int line)
