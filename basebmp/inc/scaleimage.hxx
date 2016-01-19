@@ -104,10 +104,6 @@ void scaleLine( SourceIter      s_begin,
 
     @param d_acc
     Destination accessor
-
-    @param bMustCopy
-    When true, scaleImage always copies source, even when doing 1:1
-    copy
  */
 template< class SourceIter, class SourceAcc,
           class DestIter, class DestAcc >
@@ -116,8 +112,7 @@ void scaleImage( SourceIter      s_begin,
                  SourceAcc       s_acc,
                  DestIter        d_begin,
                  DestIter        d_end,
-                 DestAcc         d_acc,
-                 bool            bMustCopy=false )
+                 DestAcc         d_acc )
 {
     const int src_width ( s_end.x - s_begin.x );
     const int src_height( s_end.y - s_begin.y );
@@ -125,9 +120,8 @@ void scaleImage( SourceIter      s_begin,
     const int dest_width ( d_end.x - d_begin.x );
     const int dest_height( d_end.y - d_begin.y );
 
-    if( !bMustCopy &&
-        src_width == dest_width &&
-        src_height == dest_height )
+    if ( src_width == dest_width &&
+         src_height == dest_height )
     {
         // no scaling involved, can simply copy
         vigra::copyImage( s_begin, s_end, s_acc,
@@ -166,20 +160,14 @@ void scaleImage( SourceIter      s_begin,
 }
 
 /** Scale an image, range tuple version
-
-    @param bMustCopy
-    When true, scaleImage always copies source, even when doing 1:1
-    copy
  */
 template< class SourceIter, class SourceAcc,
           class DestIter, class DestAcc >
 inline void scaleImage( vigra::triple<SourceIter,SourceIter,SourceAcc> const& src,
-                        vigra::triple<DestIter,DestIter,DestAcc> const&       dst,
-                        bool                                                  bMustCopy=false )
+                        vigra::triple<DestIter,DestIter,DestAcc> const&       dst )
 {
     scaleImage(src.first,src.second,src.third,
-               dst.first,dst.second,dst.third,
-               bMustCopy);
+               dst.first,dst.second,dst.third);
 }
 
 }

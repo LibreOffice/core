@@ -248,8 +248,7 @@ namespace
                              aRect),
                 destIterRange(begin,
                               acc,
-                              aRect),
-                isSharedBuffer(rSrcBitmap) );
+                              aRect));
         }
 
         template< typename Iterator, typename Acc > static
@@ -423,11 +422,6 @@ RawMemorySharedArray BitmapDevice::getBuffer() const
 PaletteMemorySharedVector BitmapDevice::getPalette() const
 {
     return mpImpl->mpPalette;
-}
-
-bool BitmapDevice::isSharedBuffer( const BitmapDeviceSharedPtr& rOther ) const
-{
-    return rOther.get()->getBuffer().get() == getBuffer().get();
 }
 
 Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )

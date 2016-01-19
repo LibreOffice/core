@@ -100,9 +100,6 @@ public:
      */
     PaletteMemorySharedVector getPalette() const;
 
-    /// Check if this and the other BitmapDevice share a buffer
-    bool isSharedBuffer( const BitmapDeviceSharedPtr& rOther ) const;
-
     /** Get color value at given pixel
      */
     Color getPixel( const basegfx::B2IPoint& rPt );
