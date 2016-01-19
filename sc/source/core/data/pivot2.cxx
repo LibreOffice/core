@@ -47,18 +47,6 @@ using std::endl;
 using css::sheet::DataPilotFieldReference;
 using std::vector;
 
-namespace
-{
-
-bool equals(const DataPilotFieldReference& left, const DataPilotFieldReference& right)
-{
-    return (left.ReferenceType     == right.ReferenceType)
-        && (left.ReferenceField    == right.ReferenceField)
-        && (left.ReferenceItemType == right.ReferenceItemType)
-        && (left.ReferenceItemName == right.ReferenceItemName);
-}
-
-} // namespace
 
 // ScDPName
 
@@ -125,14 +113,6 @@ ScPivotField::ScPivotField( const ScPivotField& rPivotField ) :
 long ScPivotField::getOriginalDim() const
 {
     return mnOriginalDim >= 0 ? mnOriginalDim : static_cast<long>(nCol);
-}
-
-bool ScPivotField::operator==( const ScPivotField& r ) const
-{
-    return (nCol          == r.nCol)
-        && (mnOriginalDim == r.mnOriginalDim)
-        && (nFuncMask     == r.nFuncMask)
-        && equals(maFieldRef, r.maFieldRef);
 }
 
 // ScPivotParam

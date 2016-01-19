@@ -155,8 +155,6 @@ struct SC_DLLPUBLIC ScRefCellValue
     bool equalsWithoutFormat( const ScRefCellValue& r ) const;
 
     ScRefCellValue& operator= ( const ScRefCellValue& r );
-
-    void swap( ScRefCellValue& r );
 };
 
 #endif

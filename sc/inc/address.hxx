@@ -709,7 +709,6 @@ public:
         return aRange[n];
     }
     inline bool operator==( const ScRangePair& ) const;
-    inline bool operator!=( const ScRangePair& ) const;
 };
 
 inline ScRangePair& ScRangePair::operator= ( const ScRangePair& rRange )
@@ -723,11 +722,6 @@ inline bool ScRangePair::operator==( const ScRangePair& rRange ) const
 {
     return (aRange[0] == rRange.aRange[0]) &&
            (aRange[1] == rRange.aRange[1]);
-}
-
-inline bool ScRangePair::operator!=( const ScRangePair& rRange ) const
-{
-    return !operator==( rRange );
 }
 
 //  ScRefAddress
@@ -809,10 +803,6 @@ public:
     }
 
     inline bool operator == ( const ScRefAddress& r ) const;
-    inline bool operator != ( const ScRefAddress& r ) const
-    {
-        return !(operator==(r));
-    }
 
     OUString  GetRefString( ScDocument* pDocument, SCTAB nActTab,
                             const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;

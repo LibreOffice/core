@@ -601,13 +601,4 @@ ScRefCellValue& ScRefCellValue::operator= ( const ScRefCellValue& r )
     return *this;
 }
 
-void ScRefCellValue::swap( ScRefCellValue& r )
-{
-    std::swap(meType, r.meType);
-
-    // double is 8 bytes, whereas a pointer may be 4 or 8 bytes depending on
-    // the platform. Swap by double values.
-    std::swap(mfValue, r.mfValue);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

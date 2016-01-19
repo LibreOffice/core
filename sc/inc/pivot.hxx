@@ -124,7 +124,6 @@ struct ScPivotField
     ScPivotField( const ScPivotField& r );
 
     long getOriginalDim() const;
-    bool                operator==( const ScPivotField& r ) const;
 };
 
 typedef std::vector< ScPivotField > ScPivotFieldVector;

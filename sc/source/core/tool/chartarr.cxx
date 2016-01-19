@@ -84,12 +84,6 @@ ScChartArray::ScChartArray( const ScChartArray& rArr ) :
 
 ScChartArray::~ScChartArray() {}
 
-bool ScChartArray::operator==(const ScChartArray& rCmp) const
-{
-    return aPositioner == rCmp.aPositioner
-        && aName == rCmp.aName;
-}
-
 ScMemChart* ScChartArray::CreateMemChart()
 {
     ScRangeListRef aRangeListRef(GetRangeList());

@@ -84,8 +84,6 @@ public:
     bool    HasRowHeaders() const { return aPositioner.HasRowHeaders(); }
     const OUString& GetName() const { return aName; }
 
-    bool operator==(const ScChartArray& rCmp) const;
-
     ScMemChart* CreateMemChart();
 };
 

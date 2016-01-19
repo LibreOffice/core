@@ -27,10 +27,6 @@ inline void operator <<= (rtl::OString& _rAsciiString, rtl::OUString const & _rU
 {
     _rAsciiString = rtl::OUStringToOString(_rUnicodeString,RTL_TEXTENCODING_ASCII_US);
 }
-inline void operator <<= (rtl::OUString& _rUnicodeString, rtl::OString const & _rAsciiString )
-{
-    _rUnicodeString = rtl::OStringToOUString(_rAsciiString, RTL_TEXTENCODING_ASCII_US);
-}
 
 #endif
 
