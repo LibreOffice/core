@@ -64,13 +64,6 @@ public:
      */
     basegfx::B2IVector getSize() const;
 
-    /** Query the size of the whole frame buffer
-
-        @ return the size of the whole frame buffer, the same as
-        getSize() unless this is a "subset" device.
-    */
-    basegfx::B2IVector getBufferSize() const;
-
     /** Query type of scanline memory format
      */
     Format getScanlineFormat() const;
@@ -121,7 +114,6 @@ public:
 
 protected:
     BASEBMP_DLLPRIVATE BitmapDevice( const basegfx::B2IBox&           rBounds,
-                                     const basegfx::B2IVector&        rBufferSize,
                                      Format                           nScanlineFormat,
                                      sal_Int32                        nScanlineStride,
                                      sal_uInt8*                       pFirstScanline,
