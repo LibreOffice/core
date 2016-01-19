@@ -41,11 +41,8 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <unx/gendata.hxx>
-#include <basebmp/scanlineformats.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
-
-using namespace basebmp;
 
 bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 {
@@ -415,41 +412,6 @@ void SvpSalTimer::Stop()
 void SvpSalTimer::Start( sal_uLong nMS )
 {
     m_pInstance->StartTimer( nMS );
-}
-
-Format SvpSalInstance::getBaseBmpFormatForBitCount( sal_uInt16 nBitCount )
-{
-    switch( nBitCount )
-    {
-        case 1:
-            return Format::OneBitMsbPal;
-        case 4:
-            return Format::FourBitMsbPal;
-        case 8:
-            return Format::EightBitPal;
-        case 16:
-#ifdef OSL_BIGENDIAN
-            return Format::SixteenBitMsbTcMask;
-#else
-            return Format::SixteenBitLsbTcMask;
-#endif
-        case 32:
-            return Format::ThirtyTwoBitTcMaskBGRA;
-        default:
-            return SVP_CAIRO_FORMAT;
-     }
-
-}
-
-Format SvpSalInstance::getBaseBmpFormatForDeviceFormat(DeviceFormat eFormat)
-{
-    switch (eFormat)
-    {
-        case DeviceFormat::BITMASK:
-            return Format::OneBitMsbPal;
-        default:
-            return SVP_CAIRO_FORMAT;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

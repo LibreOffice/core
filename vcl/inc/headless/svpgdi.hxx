@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
-#include <basebmp/bitmapdevice.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
 #include <config_cairo_canvas.h>
@@ -39,11 +38,12 @@
 //cairo then matches the OpenGL GL_RGBA format so we can use it there
 //where we don't have GL_BGRA support.
 #ifdef ANDROID
-#   define SVP_CAIRO_FORMAT basebmp::Format::ThirtyTwoBitTcMaskRGBA
+#   define SVP_CAIRO_FORMAT (BMP_FORMAT_32BIT_TC_RGBA | BMP_FORMAT_TOP_DOWN)
 #else
-#   define SVP_CAIRO_FORMAT basebmp::Format::ThirtyTwoBitTcMaskBGRA
+#   define SVP_CAIRO_FORMAT (BMP_FORMAT_32BIT_TC_BGRA | BMP_FORMAT_TOP_DOWN)
 #endif
 
+class BitmapBuffer;
 class GlyphCache;
 class ServerFont;
 typedef struct _cairo cairo_t;
@@ -219,7 +219,7 @@ public:
 
     cairo_t*                getCairoContext(bool bXorModeAllowed) const;
     void                    releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const cairo_rectangle_int_t& extents) const;
-    static cairo_surface_t* createCairoSurface(const basebmp::BitmapDeviceSharedPtr &rBuffer);
+    static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
     void                    clipRegion(cairo_t* cr);
 };
 

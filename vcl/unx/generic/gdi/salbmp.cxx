@@ -117,8 +117,8 @@ namespace
 BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     const Size& rSize,
     sal_uInt16 nBitCount,
-    const BitmapPalette& rPal
-) {
+    const BitmapPalette& rPal)
+{
     DBG_ASSERT(
            nBitCount ==  1
         || nBitCount ==  4

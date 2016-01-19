@@ -592,10 +592,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     $(vcl_headless_freetype_code) \
 ))
 
-$(eval $(call gb_Library_use_libraries,vcl,\
-	basebmp \
-))
-
 $(eval $(call gb_Library_use_externals,vcl,\
 	cairo \
 	cups \
@@ -614,10 +610,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/headless/headlessinst \
     $(vcl_headless_code) \
     $(vcl_headless_freetype_code) \
-))
-
-$(eval $(call gb_Library_use_libraries,vcl,\
-	basebmp \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
@@ -644,10 +636,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/android/androidinst \
     $(vcl_headless_code) \
     $(vcl_headless_freetype_code) \
-))
-
-$(eval $(call gb_Library_use_static_libraries,vcl,\
-	basebmp \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\

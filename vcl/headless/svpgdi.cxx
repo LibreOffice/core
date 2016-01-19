@@ -33,7 +33,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basebmp/scanlineformats.hxx>
 
 #include <cairo.h>
 
@@ -118,24 +117,26 @@ namespace
     public:
         SourceHelper(const SalBitmap& rSourceBitmap)
         {
-            const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSourceBitmap);
-            const basebmp::BitmapDeviceSharedPtr& rSrcBmp = rSrc.getBitmap();
+            const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
 
-            if (rSourceBitmap.GetBitCount() != 32)
+            if (rSrcBmp.GetBitCount() != 32)
             {
                 //big stupid copy here
                 static bool bWarnedOnce;
                 SAL_WARN_IF(!bWarnedOnce, "vcl.gdi", "non default depth bitmap, slow convert, upscale the input");
                 bWarnedOnce = true;
-                Size aSize = rSourceBitmap.GetSize();
-                aTmpBmp.Create(aSize, 0, BitmapPalette());
+
+                const BitmapBuffer* pSrc = rSrcBmp.GetBuffer();
+                const SalTwoRect aTwoRect = { 0, 0, pSrc->mnWidth, pSrc->mnHeight,
+                                              0, 0, pSrc->mnWidth, pSrc->mnHeight };
+                aTmpBmp.Create(StretchAndConvert(*pSrc, aTwoRect, SVP_CAIRO_FORMAT));
+
+
                 assert(aTmpBmp.GetBitCount() == 32);
-                const basebmp::BitmapDeviceSharedPtr& rTmpSrc = aTmpBmp.getBitmap();
-                rTmpSrc->convertBitmap(rSrcBmp);
-                source = SvpSalGraphics::createCairoSurface(rTmpSrc);
+                source = SvpSalGraphics::createCairoSurface(aTmpBmp.GetBuffer());
             }
             else
-                source = SvpSalGraphics::createCairoSurface(rSrcBmp);
+                source = SvpSalGraphics::createCairoSurface(rSrcBmp.GetBuffer());
         }
         ~SourceHelper()
         {
@@ -156,20 +157,15 @@ namespace
         MaskHelper(const SalBitmap& rAlphaBitmap)
         {
             const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
-            const basebmp::BitmapDeviceSharedPtr& rMaskBmp = rMask.getBitmap();
-
-            basegfx::B2IVector size = rMaskBmp->getSize();
-            sal_Int32 nStride = rMaskBmp->getScanlineStride();
-            basebmp::RawMemorySharedArray data = rMaskBmp->getBuffer();
+            const BitmapBuffer* pMaskBuf = rMask.GetBuffer();
 
             if (rAlphaBitmap.GetBitCount() == 8)
             {
                 // the alpha values need to be inverted for Cairo
                 // so big stupid copy and invert here
-                const int nImageSize = size.getY() * nStride;
-                const unsigned char* pSrcBits = data.get();
+                const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
                 pAlphaBits = new unsigned char[nImageSize];
-                memcpy(pAlphaBits, pSrcBits, nImageSize);
+                memcpy(pAlphaBits, pMaskBuf->mpBits, nImageSize);
 
                 // TODO: make upper layers use standard alpha
                 sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits);
@@ -179,17 +175,18 @@ namespace
 
                 mask = cairo_image_surface_create_for_data(pAlphaBits,
                                                 CAIRO_FORMAT_A8,
-                                                size.getX(), size.getY(),
-                                                nStride);
+                                                pMaskBuf->mnWidth, pMaskBuf->mnHeight,
+                                                pMaskBuf->mnScanlineSize);
             }
             else
             {
                 // the alpha values need to be inverted for Cairo
                 // so big stupid copy and invert here
-                const int nImageSize = size.getY() * nStride;
-                const unsigned char* pSrcBits = data.get();
+                const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
                 pAlphaBits = new unsigned char[nImageSize];
-                memcpy(pAlphaBits, pSrcBits, nImageSize);
+                memcpy(pAlphaBits, pMaskBuf->mpBits, nImageSize);
+                pAlphaBits = new unsigned char[nImageSize];
+                memcpy(pAlphaBits, pMaskBuf->mpBits, nImageSize);
 
                 // TODO: make upper layers use standard alpha
                 unsigned char* pDst = pAlphaBits;
@@ -198,8 +195,8 @@ namespace
 
                 mask = cairo_image_surface_create_for_data(pAlphaBits,
                                                 CAIRO_FORMAT_A1,
-                                                size.getX(), size.getY(),
-                                                nStride);
+                                                pMaskBuf->mnWidth, pMaskBuf->mnHeight,
+                                                pMaskBuf->mnScanlineSize);
             }
         }
         ~MaskHelper()
@@ -1077,10 +1074,10 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
 
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
-    basegfx::B2IVector aSize(nWidth, nHeight);
-    basebmp::BitmapDeviceSharedPtr aCopy = createBitmapDevice(aSize, SVP_CAIRO_FORMAT);
+    SvpSalBitmap* pBitmap = new SvpSalBitmap();
+    pBitmap->Create(Size(nWidth, nHeight), 32, BitmapPalette());
 
-    cairo_surface_t* target = SvpSalGraphics::createCairoSurface(aCopy);
+    cairo_surface_t* target = SvpSalGraphics::createCairoSurface(pBitmap->GetBuffer());
     cairo_t* cr = cairo_create(target);
 
     SalTwoRect aTR(nX, nY, nWidth, nHeight, 0, 0, nWidth, nHeight);
@@ -1088,9 +1085,6 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
 
     cairo_destroy(cr);
     cairo_surface_destroy(target);
-
-    SvpSalBitmap* pBitmap = new SvpSalBitmap();
-    pBitmap->setBitmap(aCopy);
 
     return pBitmap;
 }
@@ -1206,47 +1200,41 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 
 namespace
 {
-    cairo_format_t getCairoFormat(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+    cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
     {
         cairo_format_t nFormat;
-        if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
+        assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 1);
+        if (rBuffer.mnBitCount == 32)
             nFormat = CAIRO_FORMAT_ARGB32;
         else
             nFormat = CAIRO_FORMAT_A1;
         return nFormat;
     }
 
-    bool isCairoCompatible(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+    bool isCairoCompatible(const BitmapBuffer* pBuffer)
     {
-        if (!rBuffer)
+        if (!pBuffer)
             return false;
 
-        if (rBuffer->getScanlineFormat() != SVP_CAIRO_FORMAT &&
-            rBuffer->getScanlineFormat() != basebmp::Format::OneBitMsbPal)
+        if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 1)
             return false;
 
-        basegfx::B2IVector size = rBuffer->getSize();
-        sal_Int32 nStride = rBuffer->getScanlineStride();
-        cairo_format_t nFormat = getCairoFormat(rBuffer);
-        return (cairo_format_stride_for_width(nFormat, size.getX()) == nStride);
+        cairo_format_t nFormat = getCairoFormat(*pBuffer);
+        return (cairo_format_stride_for_width(nFormat, pBuffer->mnWidth) == pBuffer->mnScanlineSize);
     }
 }
 
-cairo_surface_t* SvpSalGraphics::createCairoSurface(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+cairo_surface_t* SvpSalGraphics::createCairoSurface(const BitmapBuffer *pBuffer)
 {
-    if (!isCairoCompatible(rBuffer))
+    if (!isCairoCompatible(pBuffer))
         return nullptr;
 
-    basegfx::B2IVector size = rBuffer->getSize();
-    sal_Int32 nStride = rBuffer->getScanlineStride();
-
-    basebmp::RawMemorySharedArray data = rBuffer->getBuffer();
-    cairo_format_t nFormat = getCairoFormat(rBuffer);
+    cairo_format_t nFormat = getCairoFormat(*pBuffer);
     cairo_surface_t *target =
-        cairo_image_surface_create_for_data(data.get(),
+        cairo_image_surface_create_for_data(pBuffer->mpBits,
                                         nFormat,
-                                        size.getX(), size.getY(),
-                                        nStride);
+                                        pBuffer->mnWidth, pBuffer->mnHeight,
+                                        pBuffer->mnScanlineSize);
     return target;
 }
 

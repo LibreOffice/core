@@ -21,8 +21,6 @@
 #include <UIKit/UIKit.h>
 #include <postmac.h>
 
-#include <basebmp/scanlineformats.hxx>
-
 #include "ios/iosinst.hxx"
 #include "headless/svpdummies.hxx"
 #include "generic/gendata.hxx"
@@ -92,7 +90,6 @@ public:
                      SalFrameStyleFlags  nSalFrameStyle,
                      SystemParentData   *pSysParent )
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
-                       basebmp::Format::ThirtyTwoBitTcMaskRGBA,
                        pSysParent )
     {
         if (pParent == NULL && viewWidth > 1 && viewHeight > 1)

@@ -27,7 +27,6 @@
 #include <saltimer.hxx>
 #include <unx/geninst.h>
 #include <unx/genprn.h>
-#include <basebmp/scanlineformats.hxx>
 
 #include <list>
 
@@ -166,9 +165,6 @@ public:
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     virtual GenPspGraphics *CreatePrintGraphics() override;
-
-    static ::basebmp::Format getBaseBmpFormatForBitCount(sal_uInt16);
-    static ::basebmp::Format getBaseBmpFormatForDeviceFormat(DeviceFormat);
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX

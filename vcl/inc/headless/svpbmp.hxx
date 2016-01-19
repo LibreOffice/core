@@ -23,19 +23,14 @@
 #include "sal/config.h"
 #include "tools/solar.h"
 
-#include "basebmp/bitmapdevice.hxx"
-
 #include <salbmp.hxx>
 
 class VCL_DLLPUBLIC SvpSalBitmap : public SalBitmap
 {
-    basebmp::BitmapDeviceSharedPtr     m_aBitmap;
+    BitmapBuffer*   mpDIB;
 public:
-    SvpSalBitmap() {}
+    SvpSalBitmap() : mpDIB(nullptr) {}
     virtual ~SvpSalBitmap();
-
-    const basebmp::BitmapDeviceSharedPtr& getBitmap() const { return m_aBitmap; }
-    void setBitmap( const basebmp::BitmapDeviceSharedPtr& rSrc ) { m_aBitmap = rSrc; }
 
     // SalBitmap
     virtual bool            Create( const Size& rSize,
@@ -49,6 +44,11 @@ public:
     virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) override;
+    bool                    Create(BitmapBuffer *pBuf);
+    const BitmapBuffer*     GetBuffer() const
+    {
+        return mpDIB;
+    }
     virtual void            Destroy() override;
     virtual Size            GetSize() const override;
     virtual sal_uInt16      GetBitCount() const override;
@@ -59,8 +59,6 @@ public:
 
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) override;
-
-    static sal_uInt32 getBitCountFromScanlineFormat( basebmp::Format nFormat );
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
