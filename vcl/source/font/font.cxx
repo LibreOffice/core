@@ -810,6 +810,8 @@ FontFamily Font::GetFamily() const { return mpImplFont->GetFamilyNoAsk(); }
 
 int Font::GetQuality() const { return mpImplFont->GetQuality(); }
 void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
+void Font::IncreaseQualityBy( int nQualityAmount ) { mpImplFont->IncreaseQualityBy( nQualityAmount ); }
+void Font::DecreaseQualityBy( int nQualityAmount ) { mpImplFont->DecreaseQualityBy( nQualityAmount ); }
 
 bool Font::IsOutline() const { return mpImplFont->mbOutline; }
 bool Font::IsShadow() const { return mpImplFont->mbShadow; }
