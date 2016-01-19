@@ -1931,7 +1931,7 @@ Point ScTabView::GetMousePosPixel()
     return aPos;
 }
 
-void ScTabView::FreezeSplitters( bool bFreeze )
+void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
 {
     ScSplitMode eOldH = aViewData.GetHSplitMode();
     ScSplitMode eOldV = aViewData.GetVSplitMode();
@@ -1949,19 +1949,20 @@ void ScTabView::FreezeSplitters( bool bFreeze )
         aViewData.GetDocShell()->SetDocumentModified();
 
         Point aSplit;
-        SCsCOL nPosX;
-        SCsROW nPosY;
-        if (eOldH != SC_SPLIT_NONE || eOldV != SC_SPLIT_NONE)
+        SCsCOL nPosX = 1;
+        SCsROW nPosY = 1;
+        if (eOldV != SC_SPLIT_NONE || eOldH != SC_SPLIT_NONE)
         {
-            if (eOldH != SC_SPLIT_NONE)
+            if ( eOldV != SC_SPLIT_NONE && (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW || eSplitMetod == SC_SPLIT_METHOD_CURSOR))
+                aSplit.Y() = aViewData.GetVSplitPos() - aWinStart.Y();
+
+            if ( eOldH != SC_SPLIT_NONE && (eSplitMetod == SC_SPLIT_METHOD_FIRST_COL || eSplitMetod == SC_SPLIT_METHOD_CURSOR))
             {
                 long nSplitPos = aViewData.GetHSplitPos();
                 if ( bLayoutRTL )
                     nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
                 aSplit.X() = nSplitPos - aWinStart.X();
             }
-            if (eOldV != SC_SPLIT_NONE)
-                aSplit.Y() = aViewData.GetVSplitPos() - aWinStart.Y();
 
             aViewData.GetPosFromPixel( aSplit.X(), aSplit.Y(), ePos, nPosX, nPosY );
             bool bLeft;
@@ -1974,51 +1975,80 @@ void ScTabView::FreezeSplitters( bool bFreeze )
         }
         else
         {
-            nPosX = static_cast<SCsCOL>( aViewData.GetCurX());
-            nPosY = static_cast<SCsROW>( aViewData.GetCurY());
+            switch(eSplitMetod)
+            {
+                case SC_SPLIT_METHOD_FIRST_ROW:
+                {
+                    nPosX = 0;
+                    nPosY = 1;
+                }
+                break;
+                case SC_SPLIT_METHOD_FIRST_COL:
+                {
+                    nPosX = 1;
+                    nPosY = 0;
+                }
+                break;
+                case SC_SPLIT_METHOD_CURSOR:
+                {
+                    nPosX = static_cast<SCsCOL>( aViewData.GetCurX());
+                    nPosY = static_cast<SCsROW>( aViewData.GetCurY());
+                }
+                break;
+            }
         }
 
-        SCCOL nLeftPos = aViewData.GetPosX(SC_SPLIT_LEFT);
         SCROW nTopPos = aViewData.GetPosY(SC_SPLIT_BOTTOM);
-        SCCOL nRightPos = static_cast<SCCOL>(nPosX);
         SCROW nBottomPos = static_cast<SCROW>(nPosY);
-        if (eOldH != SC_SPLIT_NONE)
-            if (aViewData.GetPosX(SC_SPLIT_RIGHT) > nRightPos)
-                nRightPos = aViewData.GetPosX(SC_SPLIT_RIGHT);
-        if (eOldV != SC_SPLIT_NONE)
+        SCCOL nLeftPos = aViewData.GetPosX(SC_SPLIT_LEFT);
+        SCCOL nRightPos = static_cast<SCCOL>(nPosX);
+
+        if (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW || eSplitMetod == SC_SPLIT_METHOD_CURSOR)
         {
-            nTopPos = aViewData.GetPosY(SC_SPLIT_TOP);
-            if (aViewData.GetPosY(SC_SPLIT_BOTTOM) > nBottomPos)
-                nBottomPos = aViewData.GetPosY(SC_SPLIT_BOTTOM);
+             if (eOldV != SC_SPLIT_NONE)
+             {
+                 nTopPos = aViewData.GetPosY(SC_SPLIT_TOP);
+                 if (aViewData.GetPosY(SC_SPLIT_BOTTOM) > nBottomPos)
+                     nBottomPos = aViewData.GetPosY(SC_SPLIT_BOTTOM);
+             }
+             aSplit = aViewData.GetScrPos( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), ePos, true );
+             if (aSplit.Y() > 0)
+             {
+                 aViewData.SetVSplitMode( SC_SPLIT_FIX );
+                 aViewData.SetVSplitPos( aSplit.Y() + aWinStart.Y() );
+                 aViewData.SetFixPosY( nPosY );
+
+                 aViewData.SetPosY(SC_SPLIT_TOP, nTopPos);
+                 aViewData.SetPosY(SC_SPLIT_BOTTOM, nBottomPos);
+             }
+             else
+                 aViewData.SetVSplitMode( SC_SPLIT_NONE );
         }
 
-        aSplit = aViewData.GetScrPos( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), ePos, true );
-        if (nPosX > aViewData.GetPosX(SC_SPLIT_LEFT))       // (aSplit.X() > 0) doesn't work for RTL
+        if (eSplitMetod == SC_SPLIT_METHOD_FIRST_COL || eSplitMetod == SC_SPLIT_METHOD_CURSOR)
         {
-            long nSplitPos = aSplit.X() + aWinStart.X();
-            if ( bLayoutRTL )
-                nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
+            if (eOldH != SC_SPLIT_NONE)
+            {
+                if (aViewData.GetPosX(SC_SPLIT_RIGHT) > nRightPos)
+                    nRightPos = aViewData.GetPosX(SC_SPLIT_RIGHT);
+            }
+            aSplit = aViewData.GetScrPos( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), ePos, true );
+            if (nPosX > aViewData.GetPosX(SC_SPLIT_LEFT))       // (aSplit.X() > 0) doesn't work for RTL
+            {
+                long nSplitPos = aSplit.X() + aWinStart.X();
+                if ( bLayoutRTL )
+                    nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
 
-            aViewData.SetHSplitMode( SC_SPLIT_FIX );
-            aViewData.SetHSplitPos( nSplitPos );
-            aViewData.SetFixPosX( nPosX );
+                aViewData.SetHSplitMode( SC_SPLIT_FIX );
+                aViewData.SetHSplitPos( nSplitPos );
+                aViewData.SetFixPosX( nPosX );
 
-            aViewData.SetPosX(SC_SPLIT_LEFT, nLeftPos);
-            aViewData.SetPosX(SC_SPLIT_RIGHT, nRightPos);
+                aViewData.SetPosX(SC_SPLIT_LEFT, nLeftPos);
+                aViewData.SetPosX(SC_SPLIT_RIGHT, nRightPos);
+            }
+            else
+                aViewData.SetHSplitMode( SC_SPLIT_NONE );
         }
-        else
-            aViewData.SetHSplitMode( SC_SPLIT_NONE );
-        if (aSplit.Y() > 0)
-        {
-            aViewData.SetVSplitMode( SC_SPLIT_FIX );
-            aViewData.SetVSplitPos( aSplit.Y() + aWinStart.Y() );
-            aViewData.SetFixPosY( nPosY );
-
-            aViewData.SetPosY(SC_SPLIT_TOP, nTopPos);
-            aViewData.SetPosY(SC_SPLIT_BOTTOM, nBottomPos);
-        }
-        else
-            aViewData.SetVSplitMode( SC_SPLIT_NONE );
     }
     else                        // unfreeze
     {
@@ -2104,6 +2134,8 @@ void ScTabView::InvalidateSplit()
     SfxBindings& rBindings = aViewData.GetBindings();
     rBindings.Invalidate( SID_WINDOW_SPLIT );
     rBindings.Invalidate( SID_WINDOW_FIX );
+    rBindings.Invalidate( SID_WINDOW_FIX_COL );
+    rBindings.Invalidate( SID_WINDOW_FIX_ROW );
 
     pHSplitter->SetFixed( aViewData.GetHSplitMode() == SC_SPLIT_FIX );
     pVSplitter->SetFixed( aViewData.GetVSplitMode() == SC_SPLIT_FIX );

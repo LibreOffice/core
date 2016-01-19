@@ -169,10 +169,15 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     throw ( css::uno::RuntimeException, std::exception )
 {
-    // TODO move to base class
-
-    svt::ToolboxController::statusChanged( rEvent );
-    enable( rEvent.IsEnabled );
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nItemId = 0;
+    if ( getToolboxId( nItemId, &pToolBox ) )
+    {
+        pToolBox->EnableItem( nItemId, rEvent.IsEnabled );
+        bool bValue;
+        if ( rEvent.State >>= bValue )
+            pToolBox->CheckItem( nItemId, bValue );
+    }
 }
 
 css::uno::Reference< css::awt::XWindow > SAL_CALL

@@ -2080,6 +2080,39 @@ SfxVoidItem FreezePanes SID_WINDOW_FIX
     GroupId = GID_VIEW;
 ]
 
+SfxVoidItem FreezePanesFirstColumn SID_WINDOW_FIX_COL
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+SfxVoidItem FreezePanesFirstRow SID_WINDOW_FIX_ROW
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
 
 SfxVoidItem FunctionBox FID_FUNCTION_BOX
 
