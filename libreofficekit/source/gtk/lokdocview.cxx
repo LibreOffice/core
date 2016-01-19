@@ -34,8 +34,8 @@
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
 #endif
 
-// Cursor bitmaps from the Android app.
-#define CURSOR_HANDLE_DIR "/android/source/res/drawable/"
+// Cursor bitmaps from the installation set.
+#define CURSOR_HANDLE_DIR "/../share/libreofficekit/"
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
 // Maximum Zoom allowed
@@ -1311,7 +1311,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     if (priv->m_bEdit && priv->m_bCursorVisible && !isEmptyRectangle(priv->m_aVisibleCursor) && priv->m_aTextSelectionRectangles.empty())
     {
         // Have a cursor, but no selection: we need the middle handle.
-        gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_middle.png", nullptr);
+        gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath, CURSOR_HANDLE_DIR, "handle_image_middle.png", nullptr);
         if (!priv->m_pHandleMiddle)
         {
             priv->m_pHandleMiddle = cairo_image_surface_create_from_png(handleMiddlePath);
@@ -1339,7 +1339,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (!isEmptyRectangle(priv->m_aTextSelectionStart))
         {
             // Have a start position: we need a start handle.
-            gchar* handleStartPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_start.png", nullptr);
+            gchar* handleStartPath = g_strconcat (priv->m_aLOPath, CURSOR_HANDLE_DIR, "handle_image_start.png", nullptr);
             if (!priv->m_pHandleStart)
             {
                 priv->m_pHandleStart = cairo_image_surface_create_from_png(handleStartPath);
@@ -1351,7 +1351,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (!isEmptyRectangle(priv->m_aTextSelectionEnd))
         {
             // Have a start position: we need an end handle.
-            gchar* handleEndPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_end.png", nullptr);
+            gchar* handleEndPath = g_strconcat (priv->m_aLOPath, CURSOR_HANDLE_DIR, "handle_image_end.png", nullptr);
             if (!priv->m_pHandleEnd)
             {
                 priv->m_pHandleEnd = cairo_image_surface_create_from_png(handleEndPath);
@@ -1364,7 +1364,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
 
     if (!isEmptyRectangle(priv->m_aGraphicSelection))
     {
-        gchar* handleGraphicPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_graphic.png", nullptr);
+        gchar* handleGraphicPath = g_strconcat (priv->m_aLOPath, CURSOR_HANDLE_DIR, "handle_graphic.png", nullptr);
         if (!priv->m_pGraphicHandle)
         {
             priv->m_pGraphicHandle = cairo_image_surface_create_from_png(handleGraphicPath);

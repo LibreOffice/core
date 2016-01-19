@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
     Library_libreofficekitgtk \
     Executable_gtktiledviewer \
     Executable_tilebench \
+    Package_selectionhandles \
 ))
 endif # ($(ENABLE_GTK3),)
 
