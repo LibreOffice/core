@@ -137,10 +137,6 @@
 #include <dbfld.hxx>
 
 #include <memory>
-#include <config_cups.h>
-#if ENABLE_CUPS && !defined(MACOSX)
-#include <vcl/printerinfomanager.hxx>
-#endif
 #include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -910,27 +906,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     bool bNoError = true;
     const bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_EMAIL;
     const bool bMergeShell = rMergeDescriptor.nMergeType == DBMGR_MERGE_SHELL;
-    bool bCreateSingleFile = rMergeDescriptor.bCreateSingleFile;
-
-    if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
-    {
-        // It is possible to do MM printing in both modes for the same result, but the singlefile mode
-        // is slower because of all the temporary document copies and merging them together
-        // into the single file, while the other mode simply updates fields and prints for every record.
-        // However, this would cause one print job for every record, and e.g. CUPS refuses new jobs
-        // if it has many jobs enqueued (500 by default), and with the current printing framework
-        // (which uses a pull model) it's rather complicated to create a single print job
-        // in steps.
-        // To handle this, CUPS backend has been changed to cache all the documents to print
-        // and send them to CUPS only as one job at the very end. Therefore, with CUPS, it's ok
-        // to use the faster mode. As I have no idea about other platforms, keep them using
-        // the slower singlefile mode (or feel free to check them, or rewrite the printing code).
-#if ENABLE_CUPS && !defined(MACOSX)
-        bCreateSingleFile = !psp::PrinterInfoManager::get().supportsBatchPrint();
-#else
-        bCreateSingleFile = true;
-#endif
-    }
+    const bool bCreateSingleFile = rMergeDescriptor.bCreateSingleFile;
 
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     OUString sBodyMimeType;
@@ -1305,7 +1281,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         }
                         else if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
                         {
-                            assert(!bCreateSingleFile);
                             if( 1 == nDocNo ) // set up printing only once at the beginning
                             {
                                 // printing should be done synchronously otherwise the document
@@ -1332,13 +1307,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                 }
                                 pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-                                SfxPrinter* pDocPrt = pWorkView->GetPrinter();
-                                JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
+                                // some GetPrinter functions have a true default, so keep the false
+                                SfxPrinter* pDocPrt = pWorkView->GetPrinter( false );
+                                JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
                                 bCancel = !Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
-#if ENABLE_CUPS && !defined(MACOSX)
-                                if( !bCancel )
-                                    psp::PrinterInfoManager::get().startBatchPrint();
-#endif
                             }
                             if( !bCancel && !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
                                 bCancel = true;
@@ -1481,12 +1453,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             if( !bCreateSingleFile )
             {
                 if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
-                {
                     Printer::FinishPrintJob( pWorkView->GetPrinterController());
-#if ENABLE_CUPS && !defined(MACOSX)
-                    psp::PrinterInfoManager::get().flushBatchPrint();
-#endif
-                }
                 if( !bIsPDFexport )
                 {
                     pWorkDoc->SetDBManager( pOldDBManager );
