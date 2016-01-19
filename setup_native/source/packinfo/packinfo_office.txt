@@ -1177,3 +1177,17 @@ destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End
 
+Start
+module = "gid_Module_Libreofficekit"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-libreofficekit-data"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-libreofficekit-data"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "2016 The Document Foundation"
+solariscopyright = "solariscopyrightfile"
+vendor = "The Document Foundation"
+description = "Libreofficekit data files for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End

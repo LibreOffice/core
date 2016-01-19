@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+Module gid_Module_Libreofficekit
+    Name = "Libreofficekit Data";
+    Description = "Libreofficekit Data";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Root_Brand;
+    Styles = (HIDDEN_ROOT);
+    Dirs = (gid_Dir_Share_Libreofficekit);
+    Files = (
+        gid_File_Dat_HandleImageStart,
+        gid_File_Dat_HandleImageMiddle,
+        gid_File_Dat_HandleImageEnd,
+        gid_File_Dat_HandleGraphic);
+End
+
+Directory gid_Dir_Share_Libreofficekit
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "libreofficekit";
+End
+
+File gid_File_Dat_HandleImageStart
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Libreofficekit;
+    Name = "handle_image_start.png";
+    Styles = (PACKED);
+End
+
+File gid_File_Dat_HandleImageMiddle
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Libreofficekit;
+    Name = "handle_image_middle.png";
+    Styles = (PACKED);
+End
+
+File gid_File_Dat_HandleImageEnd
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Libreofficekit;
+    Name = "handle_image_end.png";
+    Styles = (PACKED);
+End
+
+File gid_File_Dat_HandleGraphic
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Libreofficekit;
+    Name = "handle_graphic.png";
+    Styles = (PACKED);
+End
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
