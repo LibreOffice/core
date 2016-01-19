@@ -29,7 +29,7 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 
-namespace cppu { class OInterfaceContainerHelper; }
+namespace comphelper { class OInterfaceContainerHelper2; }
 
 namespace hierarchy_ucp {
 
@@ -44,7 +44,7 @@ class HierarchyDataSource : public cppu::OWeakObject,
     osl::Mutex m_aMutex;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
-    cppu::OInterfaceContainerHelper * m_pDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper2 * m_pDisposeEventListeners;
 
 public:
     explicit HierarchyDataSource( const css::uno::Reference< css::uno::XComponentContext > & rxContext );

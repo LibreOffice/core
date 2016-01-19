@@ -1466,14 +1466,7 @@ void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt )
                                                         rEvt.PropertyName );
     if ( pPropsContainer )
     {
-        cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            uno::Reference< beans::XPropertyChangeListener > xListener(
-                aIter.next(), uno::UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertyChange( rEvt );
-        }
+        pPropsContainer->notifyEach(&beans::XPropertyChangeListener::propertyChange, rEvt);
     }
 
     // Notify listeners interested in all properties.

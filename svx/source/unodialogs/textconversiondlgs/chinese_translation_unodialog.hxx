@@ -29,6 +29,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <vcl/vclptr.hxx>
 
 
@@ -119,7 +120,7 @@ private:
     bool m_bDisposed; ///Dispose call ready.
     bool m_bInDispose;///In dispose call
     osl::Mutex                      m_aContainerMutex;
-    cppu::OInterfaceContainerHelper m_aDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper2 m_aDisposeEventListeners;
 };
 
 

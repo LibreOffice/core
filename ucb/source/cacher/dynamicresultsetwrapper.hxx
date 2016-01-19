@@ -24,6 +24,7 @@
 #include <osl/conditn.hxx>
 #include <ucbhelper/macros.hxx>
 #include <cppuhelper/weak.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -46,7 +47,7 @@ private:
     bool                    m_bDisposed; ///Dispose call ready.
     bool                    m_bInDispose;///In dispose call
     osl::Mutex              m_aContainerMutex;
-    cppu::OInterfaceContainerHelper*
+    comphelper::OInterfaceContainerHelper2*
                             m_pDisposeEventListeners;
 protected:
     css::uno::Reference< css::ucb::XDynamicResultSetListener >

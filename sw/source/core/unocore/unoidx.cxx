@@ -30,6 +30,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
@@ -318,7 +319,7 @@ class SwXDocumentIndex::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
@@ -1536,7 +1537,7 @@ class SwXDocumentIndexMark::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
     SwXDocumentIndexMark & m_rThis;
     bool m_bInReplaceMark;
 
@@ -1545,7 +1546,7 @@ public:
     uno::WeakReference<uno::XInterface> m_wThis;
     SfxItemPropertySet const&   m_rPropSet;
     const TOXTypes              m_eTOXType;
-    ::cppu::OInterfaceContainerHelper m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
     bool                        m_bIsDescriptor;
     SwDepend                    m_TypeDepend;
     const SwTOXMark *           m_pTOXMark;

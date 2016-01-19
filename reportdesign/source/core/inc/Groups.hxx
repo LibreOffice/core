@@ -21,6 +21,7 @@
 
 #include <com/sun/star/report/XGroups.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <list>
@@ -37,7 +38,7 @@ namespace reportdesign
                     public GroupsBase
     {
         typedef ::std::list< css::uno::Reference< css::report::XGroup > > TGroups;
-        ::cppu::OInterfaceContainerHelper                             m_aContainerListeners;
+        ::comphelper::OInterfaceContainerHelper2                            m_aContainerListeners;
         css::uno::Reference< css::uno::XComponentContext >            m_xContext;
         css::uno::WeakReference< css::report::XReportDefinition >     m_xParent;
         TGroups                                                       m_aGroups;

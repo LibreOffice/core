@@ -22,7 +22,7 @@
 #include <vector>
 #include <osl/file.hxx>
 
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -604,10 +604,10 @@ class XResultSet_impl : public Notifier,
 
         osl::Mutex                          m_aMutex;
         osl::Mutex                          m_aEventListenerMutex;
-        cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
+        comphelper::OInterfaceContainerHelper2*   m_pDisposeEventListeners;
 
-        cppu::OInterfaceContainerHelper*    m_pRowCountListeners;
-        cppu::OInterfaceContainerHelper*    m_pIsFinalListeners;
+        comphelper::OInterfaceContainerHelper2*   m_pRowCountListeners;
+        comphelper::OInterfaceContainerHelper2*   m_pIsFinalListeners;
 
         css::uno::Reference< css::ucb::XDynamicResultSetListener >       m_xListener;
         bool                            m_bStatic;

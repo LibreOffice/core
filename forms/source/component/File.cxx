@@ -238,7 +238,7 @@ void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxIn
 
 void SAL_CALL OFileControlModel::reset() throw ( css::uno::RuntimeException, std::exception)
 {
-    ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
     bool bContinue = true;
     while (aIter.hasMoreElements() && bContinue)

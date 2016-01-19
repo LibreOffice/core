@@ -123,7 +123,7 @@ void SbaExternalSourceBrowser::modified(const css::lang::EventObject& aEvent) th
 
     // multiplex this event to all my listeners
     css::lang::EventObject aEvt(*this);
-    ::cppu::OInterfaceIteratorHelper aIt(m_aModifyListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIt(m_aModifyListeners);
     while (aIt.hasMoreElements())
         static_cast< css::util::XModifyListener*>(aIt.next())->modified(aEvt);
 }

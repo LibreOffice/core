@@ -94,7 +94,7 @@ void SourceContext::fire_dragDropEnd( sal_Bool success, sal_Int8 effect)
     e.DragSourceContext= static_cast<XDragSourceContext*>( this);
     e.Source.set( static_cast<XDragSourceContext*>( this), UNO_QUERY);
 
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer(
+    OInterfaceContainerHelper2* pContainer= rBHelper.getContainer(
         cppu::UnoType<XDragSourceListener>::get());
 
     if( pContainer)
@@ -121,7 +121,7 @@ void SourceContext::fire_dropActionChanged( sal_Int8 dropAction, sal_Int8 userAc
         e.DragSourceContext= static_cast<XDragSourceContext*>( this);
         e.Source.set( static_cast<XDragSourceContext*>( this), UNO_QUERY);
 
-        OInterfaceContainerHelper* pContainer= rBHelper.getContainer(
+        OInterfaceContainerHelper2* pContainer= rBHelper.getContainer(
             cppu::UnoType<XDragSourceListener>::get());
 
         if( pContainer)

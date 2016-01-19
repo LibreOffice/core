@@ -305,8 +305,8 @@ namespace pcr
             throw NullPointerException();
 
         // revoke old property change listeners
-        ::cppu::OInterfaceIteratorHelper iterRemove( m_aPropertyListeners );
-        ::cppu::OInterfaceIteratorHelper iterReAdd( m_aPropertyListeners ); // this holds a copy of the container ...
+        ::comphelper::OInterfaceIteratorHelper2 iterRemove( m_aPropertyListeners );
+        ::comphelper::OInterfaceIteratorHelper2 iterReAdd( m_aPropertyListeners ); // this holds a copy of the container ...
         while ( iterRemove.hasMoreElements() )
             m_xComponent->removePropertyChangeListener( OUString(), static_cast< XPropertyChangeListener* >( iterRemove.next() ) );
 

@@ -18,8 +18,9 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UNOTXVW_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UNOTXVW_HXX
+
 #include <sfx2/sfxbasecontroller.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -58,7 +59,7 @@ class SwXTextView :
     public css::datatransfer::XTransferableSupplier,
     public SfxBaseController
 {
-    ::cppu::OInterfaceContainerHelper m_SelChangedListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_SelChangedListeners;
 
     SwView*                     m_pView;
     const SfxItemPropertySet*   m_pPropSet;   // property map for SwXTextView properties

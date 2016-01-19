@@ -20,7 +20,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/guarding.hxx>
 
 #include <map>
@@ -37,7 +37,7 @@ namespace
             AccessibleEventObject > ClientEvent;
 
     typedef ::std::map< AccessibleEventNotifier::TClientId,
-                ::cppu::OInterfaceContainerHelper*,
+                ::comphelper::OInterfaceContainerHelper2*,
                 ::std::less< AccessibleEventNotifier::TClientId > > ClientMap;
 
     /// key is the end of the interval, value is the start of the interval
@@ -153,8 +153,8 @@ namespace comphelper
         TClientId nNewClientId = generateId( );
 
         // the event listeners for the new client
-        ::cppu::OInterfaceContainerHelper *const pNewListeners =
-            new ::cppu::OInterfaceContainerHelper( lclMutex::get() );
+        ::comphelper::OInterfaceContainerHelper2 *const pNewListeners =
+            new ::comphelper::OInterfaceContainerHelper2( lclMutex::get() );
             // note that we're using our own mutex here, so the listener containers for all
             // our clients share this same mutex.
             // this is a reminiscence to the days where the notifier was asynchronous. Today this is
@@ -187,7 +187,7 @@ namespace comphelper
     void AccessibleEventNotifier::revokeClientNotifyDisposing( const TClientId _nClient,
             const Reference< XInterface >& _rxEventSource )
     {
-        ::cppu::OInterfaceContainerHelper* pListeners(nullptr);
+        ::comphelper::OInterfaceContainerHelper2* pListeners(nullptr);
 
         {
             // rhbz#1001768 drop the mutex before calling disposeAndClear
@@ -255,7 +255,7 @@ namespace comphelper
 
     void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent )
     {
-        Sequence< Reference< XInterface > > aListeners;
+        std::vector< Reference< XInterface > > aListeners;
 
         // --- <mutex lock> -------------------------------
         {
@@ -272,20 +272,17 @@ namespace comphelper
         // --- </mutex lock> ------------------------------
 
             // default handling: loop through all listeners, and notify them
-        const Reference< XInterface >* pListeners = aListeners.getConstArray();
-        const Reference< XInterface >* pListenersEnd = pListeners + aListeners.getLength();
-        while ( pListeners != pListenersEnd )
+        for ( const auto& rListener : aListeners )
         {
             try
             {
-                static_cast< XAccessibleEventListener* >( pListeners->get() )->notifyEvent( _rEvent );
+                static_cast< XAccessibleEventListener* >( rListener.get() )->notifyEvent( _rEvent );
             }
             catch( const Exception& )
             {
                 // no assertion, because a broken access remote bridge or something like this
                 // can cause this exception
             }
-            ++pListeners;
         }
     }
 

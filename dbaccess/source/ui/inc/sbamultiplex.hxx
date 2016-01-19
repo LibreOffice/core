@@ -41,6 +41,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -64,7 +65,7 @@ namespace dbaui
     class classname                                                                         \
             :public OSbaWeakSubObject                                                           \
             ,public listenerclass                                                           \
-            ,public ::cppu::OInterfaceContainerHelper                                       \
+            ,public ::comphelper::OInterfaceContainerHelper2                                       \
     {                                                                                       \
     public:                                                                                 \
         classname( ::cppu::OWeakObject& rSource,                                            \
@@ -83,7 +84,7 @@ namespace dbaui
         virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) override;   \
 
     #define END_DECLARE_LISTENER_MULTIPLEXER()                                              \
-    /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators */    \
+    /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators */    \
         void * SAL_CALL operator new( size_t size ) throw() { return OSbaWeakSubObject::operator new(size); }   \
         void SAL_CALL operator delete( void * p ) throw() { OSbaWeakSubObject::operator delete(p); }    \
     };                                                                                      \
@@ -94,7 +95,7 @@ namespace dbaui
                                                                                             \
     classname::classname(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)               \
             :OSbaWeakSubObject(rSource)                                                     \
-            ,OInterfaceContainerHelper(_rMutex)                                             \
+            ,OInterfaceContainerHelper2(_rMutex)                                             \
     {                                                                                       \
     }                                                                                       \
                                                                                             \
@@ -120,7 +121,7 @@ namespace dbaui
     {                                                                                       \
         eventtype aMulti(e);                                                                \
         aMulti.Source = &m_rParent;                                                         \
-        ::cppu::OInterfaceIteratorHelper aIt(*this);                                        \
+        ::comphelper::OInterfaceIteratorHelper2 aIt(*this);                                        \
         while (aIt.hasMoreElements())                                                       \
             static_cast< listenerclass*>(aIt.next())->methodname(aMulti);               \
     }                                                                                       \
@@ -130,7 +131,7 @@ namespace dbaui
     {                                                                                       \
         eventtype aMulti(e);                                                                \
         aMulti.Source = &m_rParent;                                                         \
-        ::cppu::OInterfaceIteratorHelper aIt(*this);                                        \
+        ::comphelper::OInterfaceIteratorHelper2 aIt(*this);                                        \
         bool bResult = true;                                                        \
         while (bResult && aIt.hasMoreElements())                                            \
             bResult = static_cast< listenerclass*>(aIt.next())->methodname(aMulti);     \

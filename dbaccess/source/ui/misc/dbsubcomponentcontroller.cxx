@@ -41,6 +41,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
@@ -126,7 +127,7 @@ namespace dbaui
         OModuleClient                   m_aModuleClient;
         ::dbtools::SQLExceptionInfo     m_aCurrentError;
 
-        ::cppu::OInterfaceContainerHelper
+        ::comphelper::OInterfaceContainerHelper2
                                         m_aModifyListeners;
 
         // <properties>

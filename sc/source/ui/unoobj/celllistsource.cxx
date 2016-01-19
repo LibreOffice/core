@@ -247,7 +247,7 @@ namespace calc
         EventObject aEvent;
         aEvent.Source.set(*this);
 
-        ::cppu::OInterfaceIteratorHelper aIter( m_aListEntryListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aListEntryListeners );
         while ( aIter.hasMoreElements() )
         {
             try

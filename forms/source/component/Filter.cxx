@@ -361,7 +361,7 @@ namespace frm
             m_aText = sText;
             TextEvent aEvt;
             aEvt.Source = *this;
-            ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
+            ::comphelper::OInterfaceIteratorHelper2 aIt( m_aTextListeners );
             while( aIt.hasMoreElements() )
                 static_cast<XTextListener *>(aIt.next())->textChanged( aEvt );
         }
@@ -537,7 +537,7 @@ namespace frm
             setText(aNewText);
             TextEvent aEvt;
             aEvt.Source = *this;
-            ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
+            ::comphelper::OInterfaceIteratorHelper2 aIt( m_aTextListeners );
             while( aIt.hasMoreElements() )
                 static_cast< XTextListener* >( aIt.next() )->textChanged( aEvt );
         }

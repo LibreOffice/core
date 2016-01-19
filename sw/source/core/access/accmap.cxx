@@ -60,6 +60,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <pagepreviewlayout.hxx>
 #include <dcontact.hxx>
 #include <svx/unoapi.hxx>
@@ -120,7 +121,7 @@ class SwDrawModellListener_Impl : public SfxListener,
     public ::cppu::WeakImplHelper< document::XEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
-    ::cppu::OInterfaceContainerHelper maEventListeners;
+    ::comphelper::OInterfaceContainerHelper2 maEventListeners;
     SdrModel *mpDrawModel;
 protected:
     virtual ~SwDrawModellListener_Impl();
@@ -180,7 +181,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )
         return;
 
-    ::cppu::OInterfaceIteratorHelper aIter( maEventListeners );
+    ::comphelper::OInterfaceIteratorHelper2 aIter( maEventListeners );
     while( aIter.hasMoreElements() )
     {
         uno::Reference < document::XEventListener > xListener( aIter.next(),

@@ -37,6 +37,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <osl/mutex.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -63,7 +64,7 @@ private:
     ScAddress               aCellPos;
     ScEditSource* mpEditSource;
     /// List of refresh listeners.
-    cppu::OInterfaceContainerHelper* mpRefreshListeners;
+    comphelper::OInterfaceContainerHelper2* mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex              aMutex;
 
@@ -129,7 +130,7 @@ private:
     ScEditSource* mpEditSource;
 
     /// List of refresh listeners.
-    cppu::OInterfaceContainerHelper* mpRefreshListeners;
+    comphelper::OInterfaceContainerHelper2* mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex                  aMutex;
 

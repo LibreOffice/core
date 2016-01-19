@@ -91,8 +91,8 @@ namespace dbaui
         svx::ODataAccessDescriptor    m_aDocumentDataSource;
             // if we're part of a document, this is the state of the DocumentDataSource slot
 
-        ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
-        ::cppu::OInterfaceContainerHelper   m_aContextMenuInterceptors;
+        ::comphelper::OInterfaceContainerHelper2   m_aSelectionListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aContextMenuInterceptors;
 
         OTableCopyHelper::DropDescriptor    m_aAsyncDrop;
         OTableCopyHelper                    m_aTableCopyHelper;
@@ -232,7 +232,7 @@ namespace dbaui
         // IContextMenuProvider
         virtual PopupMenu*      getContextMenu( Control& _rControl ) const override;
         virtual IController&    getCommandController() override;
-        virtual ::cppu::OInterfaceContainerHelper*
+        virtual ::comphelper::OInterfaceContainerHelper2*
                                 getContextMenuInterceptors() override;
         virtual css::uno::Any
                                 getCurrentSelection( Control& _rControl ) const override;

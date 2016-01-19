@@ -160,10 +160,10 @@ class ODatabaseForm :public OFormComponents
     friend class OFormSubmitResetThread;
 
     // listener administration
-    ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
-    ::cppu::OInterfaceContainerHelper   m_aRowSetApproveListeners;
-    ::cppu::OInterfaceContainerHelper   m_aSubmitListeners;
-    ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aLoadListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aRowSetApproveListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aSubmitListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aErrorListeners;
     ResetListeners                      m_aResetListeners;
     ::osl::Mutex                        m_aResetSafety;
     css::uno::Any                       m_aCycle;

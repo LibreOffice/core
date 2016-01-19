@@ -104,7 +104,7 @@ void SAL_CALL OInstanceLocker::addEventListener( const uno::Reference< lang::XEv
         throw lang::DisposedException(); // TODO
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
 
     m_pListenersContainer->addInterface( xListener );
 }

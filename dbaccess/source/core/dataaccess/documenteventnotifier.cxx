@@ -22,7 +22,7 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 
 #include <comphelper/asyncnotification.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -59,8 +59,8 @@ namespace dbaccess
         bool                                                    m_bInitialized;
         bool                                                    m_bDisposed;
         ::rtl::Reference< ::comphelper::AsyncEventNotifier >    m_pEventBroadcaster;
-        ::cppu::OInterfaceContainerHelper                       m_aLegacyEventListeners;
-        ::cppu::OInterfaceContainerHelper                       m_aDocumentEventListeners;
+        ::comphelper::OInterfaceContainerHelper2                      m_aLegacyEventListeners;
+        ::comphelper::OInterfaceContainerHelper2                      m_aDocumentEventListeners;
 
     public:
         DocumentEventNotifier_Impl( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex )

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 
 #include "intercept.hxx"
 #include "docholder.hxx"

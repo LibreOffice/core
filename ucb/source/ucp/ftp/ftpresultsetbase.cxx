@@ -105,7 +105,7 @@ ResultSetBase::addEventListener(
 
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners =
-            new cppu::OInterfaceContainerHelper( m_aMutex );
+            new comphelper::OInterfaceContainerHelper2( m_aMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -567,7 +567,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
             m_pIsFinalListeners =
-                new cppu::OInterfaceContainerHelper( m_aMutex );
+                new comphelper::OInterfaceContainerHelper2( m_aMutex );
 
         m_pIsFinalListeners->addInterface( xListener );
     }
@@ -576,7 +576,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
             m_pRowCountListeners =
-                new cppu::OInterfaceContainerHelper( m_aMutex );
+                new comphelper::OInterfaceContainerHelper2( m_aMutex );
         m_pRowCountListeners->addInterface( xListener );
     }
     else

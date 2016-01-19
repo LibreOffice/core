@@ -123,7 +123,7 @@ struct SvxShapeImpl
     ::tools::WeakReference< SdrObject > mpCreatedObj;
 
     // for xComponent
-    ::cppu::OInterfaceContainerHelper   maDisposeListeners;
+    ::comphelper::OInterfaceContainerHelper2   maDisposeListeners;
     svx::PropertyChangeNotifier       maPropertyNotifier;
 
     SvxShapeImpl( SvxShape& _rAntiImpl, ::osl::Mutex& _rMutex )

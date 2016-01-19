@@ -349,7 +349,7 @@ css::uno::Sequence<OUString> SAL_CALL OGridControlModel::getColumnTypes() throw 
 // XReset
 void SAL_CALL OGridControlModel::reset() throw ( css::uno::RuntimeException, std::exception)
 {
-    ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
     bool bContinue = true;
     while (aIter.hasMoreElements() && bContinue)

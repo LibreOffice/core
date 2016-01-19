@@ -54,7 +54,7 @@ class PropertyChgHelper :
 {
     Sequence< OUString >                aPropNames;
     Reference< XInterface >             xMyEvtObj;
-    ::cppu::OInterfaceContainerHelper   aLngSvcEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2   aLngSvcEvtListeners;
     Reference< XPropertySet >           xPropSet;
 
     // disallow use of copy-constructor and assignment-operator

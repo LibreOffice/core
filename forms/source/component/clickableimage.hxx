@@ -188,13 +188,13 @@ namespace frm
 
     private:
         OImageProducerThread_Impl*          m_pThread;
-        ::cppu::OInterfaceContainerHelper   m_aSubmissionVetoListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aSubmissionVetoListeners;
         ::std::unique_ptr< ControlFeatureInterception >
                                             m_pFeatureInterception;
 
     protected:
-        ::cppu::OInterfaceContainerHelper m_aApproveActionListeners;
-        ::cppu::OInterfaceContainerHelper m_aActionListeners;
+        ::comphelper::OInterfaceContainerHelper2 m_aApproveActionListeners;
+        ::comphelper::OInterfaceContainerHelper2 m_aActionListeners;
         OUString m_aActionCommand;
 
         // XSubmission

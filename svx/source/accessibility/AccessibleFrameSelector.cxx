@@ -475,7 +475,7 @@ void AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
     Reference < XAccessibleContext > xThis( this );
     aEvent.Source = xThis;
 
-    ::cppu::OInterfaceIteratorHelper aIter( maFocusListeners );
+    ::comphelper::OInterfaceIteratorHelper2 aIter( maFocusListeners );
     while( aIter.hasMoreElements() )
     {
         Reference < XFocusListener > xListener( aIter.next(), UNO_QUERY );

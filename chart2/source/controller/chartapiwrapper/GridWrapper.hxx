@@ -22,7 +22,7 @@
 #include "WrappedPropertySet.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -89,7 +89,7 @@ protected:
 
 private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
 
     tGridType           m_eType;
 };

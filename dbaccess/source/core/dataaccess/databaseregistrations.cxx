@@ -20,7 +20,7 @@
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/pathoptions.hxx>
@@ -134,7 +134,7 @@ namespace dbaccess
     private:
         Reference<XComponentContext>        m_aContext;
         ::utl::OConfigurationTreeRoot       m_aConfigurationRoot;
-        ::cppu::OInterfaceContainerHelper   m_aRegistrationListeners;
+        ::comphelper::OInterfaceContainerHelper2  m_aRegistrationListeners;
     };
 
     // DatabaseRegistrations - implementation

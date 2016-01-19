@@ -38,6 +38,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <sot/storage.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -99,7 +100,7 @@ namespace dbaui
                                 m_xDataSource;
         css::uno::Reference< css::frame::XModel >
                                 m_xModel;
-        ::cppu::OInterfaceContainerHelper
+        ::comphelper::OInterfaceContainerHelper2
                                 m_aContextMenuInterceptors;
 
         TContainerVector        m_aCurrentContainers;       // the containers where we are listener on
@@ -536,7 +537,7 @@ namespace dbaui
         // IContextMenuProvider
         virtual PopupMenu*      getContextMenu( Control& _rControl ) const override;
         virtual IController&    getCommandController() override;
-        virtual ::cppu::OInterfaceContainerHelper*
+        virtual ::comphelper::OInterfaceContainerHelper2*
                                 getContextMenuInterceptors() override;
         virtual css::uno::Any
                                 getCurrentSelection( Control& _rControl ) const override;

@@ -25,7 +25,7 @@
 #include <map>
 #include <vector>
 
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -64,7 +64,7 @@ protected:
 
 protected:
     ::cppu::OWeakObject&    m_rParent;      // for the ref counting
-    ::cppu::OInterfaceContainerHelper
+    ::comphelper::OInterfaceContainerHelper2
                             m_aContainerListeners;
     ::osl::Mutex&           m_rMutex;
 

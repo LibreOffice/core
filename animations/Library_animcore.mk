@@ -26,6 +26,7 @@ $(eval $(call gb_Library_set_componentfile,animcore,animations/source/animcore/a
 $(eval $(call gb_Library_use_sdk_api,animcore))
 
 $(eval $(call gb_Library_use_libraries,animcore,\
+	comphelper \
     cppu \
 	cppuhelper \
     sal \

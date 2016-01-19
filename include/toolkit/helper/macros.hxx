@@ -142,7 +142,7 @@ void ClassName::disposing( const css::lang::EventObject& ) throw(css::uno::Runti
 #define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( ClassName, InterfaceName, MethodName, ParamType1 ) \
 { \
     ParamType1 aMulti( evt ); \
-    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
+    ::comphelper::OInterfaceIteratorHelper2 aIt( *this ); \
     while( aIt.hasMoreElements() ) \
     { \
         css::uno::Reference< InterfaceName > xListener( \
@@ -168,7 +168,7 @@ void ClassName::disposing( const css::lang::EventObject& ) throw(css::uno::Runti
 { \
     EventType aMulti( evt ); \
     aMulti.Source = &GetContext(); \
-    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
+    ::comphelper::OInterfaceIteratorHelper2 aIt( *this ); \
     while( aIt.hasMoreElements() ) \
     { \
         css::uno::Reference< InterfaceName > xListener( \

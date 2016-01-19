@@ -120,9 +120,9 @@ protected:
     DocumentsIndexAccess    m_aDocuments;               // for a efficient index access
     Documents               m_aDocumentMap;             // for a efficient name access
 
-    ::cppu::OInterfaceContainerHelper
+    ::comphelper::OInterfaceContainerHelper2
                             m_aApproveListeners;
-    ::cppu::OInterfaceContainerHelper
+    ::comphelper::OInterfaceContainerHelper2
                             m_aContainerListeners;
 
     bool                    m_bInPropertyChange;

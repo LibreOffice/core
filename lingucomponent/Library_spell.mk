@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,spell,\
 $(eval $(call gb_Library_use_sdk_api,spell))
 
 $(eval $(call gb_Library_use_libraries,spell,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	i18nlangtag \

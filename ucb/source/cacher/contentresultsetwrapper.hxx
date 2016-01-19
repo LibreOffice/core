@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 
 
@@ -132,7 +133,7 @@ private:
     bool                m_bDisposed; ///Dispose call ready.
     bool                m_bInDispose;///In dispose call
     osl::Mutex              m_aContainerMutex;
-    cppu::OInterfaceContainerHelper*
+    comphelper::OInterfaceContainerHelper2*
                             m_pDisposeEventListeners;
     PropertyChangeListenerContainer_Impl*
                             m_pPropertyChangeListeners;

@@ -24,7 +24,7 @@
 //  class ListenerMultiplexerBase
 
 ListenerMultiplexerBase::ListenerMultiplexerBase( ::cppu::OWeakObject& rSource )
-    : ::cppu::OInterfaceContainerHelper( GetMutex() ), mrContext( rSource )
+    : ::comphelper::OInterfaceContainerHelper2( GetMutex() ), mrContext( rSource )
 {
 }
 
@@ -166,7 +166,7 @@ void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< c
 {
     sal_Int32 aMulti( evt );
     css::uno::Sequence< css::beans::NamedValue > aMulti2( evt2 );
-    ::cppu::OInterfaceIteratorHelper aIt( *this );
+    ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
     while( aIt.hasMoreElements() )
     {
         css::uno::Reference< css::awt::XTabListener > xListener(

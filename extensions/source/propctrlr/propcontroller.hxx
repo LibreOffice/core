@@ -101,8 +101,8 @@ namespace pcr
         css::uno::Reference< css::frame::XFrame > m_xFrame;
         css::uno::Reference< css::awt::XWindow >  m_xView;
 
-        ::cppu::OInterfaceContainerHelper   m_aDisposeListeners;
-        ::cppu::OInterfaceContainerHelper   m_aControlObservers;
+        ::comphelper::OInterfaceContainerHelper2   m_aDisposeListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aControlObservers;
         // meta data about the properties
         VclPtr<OPropertyBrowserView>        m_pView;
 

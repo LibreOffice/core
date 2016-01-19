@@ -54,7 +54,7 @@ class DicList :
 
     LinguOptions    aOpt;
 
-    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
 
     typedef std::vector< css::uno::Reference< css::linguistic2::XDictionary > >   DictionaryVec_t;
     DictionaryVec_t                          aDicList;

@@ -4326,7 +4326,7 @@ IMPL_LINK_NOARG_TYPED(FmXListBoxCell, OnDoubleClick, ListBox&, void)
 {
     if (m_pBox)
     {
-        ::cppu::OInterfaceIteratorHelper aIt( m_aActionListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIt( m_aActionListeners );
 
         css::awt::ActionEvent aEvent;
         aEvent.Source = *this;
@@ -4686,7 +4686,7 @@ void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ ) throw( RuntimeE
 
 IMPL_LINK_NOARG_TYPED(FmXFilterCell, OnCommit, DbFilterField&, void)
 {
-    ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
+    ::comphelper::OInterfaceIteratorHelper2 aIt( m_aTextListeners );
     css::awt::TextEvent aEvt;
     aEvt.Source = *this;
     while( aIt.hasMoreElements() )

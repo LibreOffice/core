@@ -400,7 +400,7 @@ struct IMPL_SfxBaseController_DataContainer
     Reference< XCloseListener >             m_xCloseListener        ;
     ::sfx2::UserInputInterception           m_aUserInputInterception;
     ::cppu::OMultiTypeInterfaceContainerHelper      m_aListenerContainer    ;
-    ::cppu::OInterfaceContainerHelper               m_aInterceptorContainer ;
+    ::comphelper::OInterfaceContainerHelper2               m_aInterceptorContainer ;
     Reference< XStatusIndicator >           m_xIndicator            ;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;

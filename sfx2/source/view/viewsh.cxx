@@ -1891,7 +1891,7 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
     aEvent.Selection.set( GetController(), uno::UNO_QUERY );
 
     // call interceptors
-    ::cppu::OInterfaceIteratorHelper aIt( pImp->aInterceptorContainer );
+    ::comphelper::OInterfaceIteratorHelper2 aIt( pImp->aInterceptorContainer );
     while( aIt.hasMoreElements() )
     {
         try
@@ -1953,7 +1953,7 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rMenu, const OUString& rMen
     aEvent.Selection = css::uno::Reference< css::view::XSelectionSupplier >( GetController(), css::uno::UNO_QUERY );
 
     // call interceptors
-    ::cppu::OInterfaceIteratorHelper aIt( pImp->aInterceptorContainer );
+    ::comphelper::OInterfaceIteratorHelper2 aIt( pImp->aInterceptorContainer );
     while( aIt.hasMoreElements() )
     {
         try

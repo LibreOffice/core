@@ -75,7 +75,7 @@ namespace frm
         if ( m_aErrorListeners.getLength() )
         {
 
-            ::cppu::OInterfaceIteratorHelper aIter( m_aErrorListeners );
+            ::comphelper::OInterfaceIteratorHelper2 aIter( m_aErrorListeners );
             while ( aIter.hasMoreElements() )
                 static_cast< XSQLErrorListener* >( aIter.next() )->errorOccured( _rError );
         }

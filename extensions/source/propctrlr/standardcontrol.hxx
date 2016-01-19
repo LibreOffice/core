@@ -178,7 +178,7 @@ namespace pcr
     class OHyperlinkControl : public OHyperlinkControl_Base
     {
     private:
-        ::cppu::OInterfaceContainerHelper   m_aActionListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aActionListeners;
 
     public:
         OHyperlinkControl( vcl::Window* _pParent, WinBits _nWinStyle );

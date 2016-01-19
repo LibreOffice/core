@@ -19,7 +19,7 @@
 
 #include <unobookmark.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
@@ -45,11 +45,11 @@ class SwXBookmark::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::cppu::OInterfaceContainerHelper m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper2  m_EventListeners;
     SwDoc *                     m_pDoc;
     ::sw::mark::IMark *         m_pRegisteredBookmark;
     OUString             m_sMarkName;

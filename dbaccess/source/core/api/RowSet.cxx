@@ -103,26 +103,25 @@ com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* co
 }
 
 #define NOTIFY_LISTENERS_CHECK(_rListeners,T,method)                             \
-    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
+    std::vector< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
                                                                                   \
-    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
-    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
+    auto it = aListenerSeq.rbegin();                                              \
+    const auto itEnd = aListenerSeq.rend();                                       \
                                                                                   \
     _rGuard.clear();                                                              \
     bool bCheck = true;                                                           \
-    while( pxInt > pxIntBegin && bCheck )                                         \
+    for ( ; it != itEnd; )                                                        \
     {                                                                             \
         try                                                                       \
         {                                                                         \
-            while( pxInt > pxIntBegin && bCheck )                                 \
-            {                                                                     \
-                --pxInt;                                                          \
-                bCheck = static_cast< T* >( pxInt->get() )->method(aEvt);         \
-            }                                                                     \
+            bCheck = static_cast< T* >( it->get() )->method(aEvt);                \
+            if (!bCheck)                                                          \
+                break;                                                            \
         }                                                                         \
         catch( RuntimeException& )                                                \
         {                                                                         \
         }                                                                         \
+        ++it;                                                                     \
     }                                                                             \
     _rGuard.reset();
 
@@ -1514,7 +1513,7 @@ void ORowSet::approveExecution() throw (RowSetVetoException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     EventObject aEvt(*this);
 
-    OInterfaceIteratorHelper aApproveIter( m_aApproveListeners );
+    OInterfaceIteratorHelper2 aApproveIter( m_aApproveListeners );
     while ( aApproveIter.hasMoreElements() )
     {
         Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aApproveIter.next() ) );

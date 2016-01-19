@@ -3660,7 +3660,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aRowSetApproveListeners);
     bool bValid = true;
     if (aIter.hasMoreElements())
     {
@@ -3748,7 +3748,7 @@ sal_Bool SAL_CALL FormController::approveCursorMove(const EventObject& event) th
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aRowSetApproveListeners);
     if (aIter.hasMoreElements())
     {
         EventObject aEvt(event);
@@ -3765,7 +3765,7 @@ sal_Bool SAL_CALL FormController::approveRowSetChange(const EventObject& event) 
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aRowSetApproveListeners);
     if (aIter.hasMoreElements())
     {
         EventObject aEvt(event);
@@ -3802,7 +3802,7 @@ void SAL_CALL FormController::errorOccured(const SQLErrorEvent& aEvent) throw( R
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::cppu::OInterfaceIteratorHelper aIter(m_aErrorListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aErrorListeners);
     if (aIter.hasMoreElements())
     {
         SQLErrorEvent aEvt(aEvent);
@@ -3875,7 +3875,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::cppu::OInterfaceIteratorHelper aIter(m_aParameterListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aParameterListeners);
     if (aIter.hasMoreElements())
     {
         DatabaseParameterEvent aEvt(aEvent);
@@ -3971,7 +3971,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    ::cppu::OInterfaceIteratorHelper aIter(m_aDeleteListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aDeleteListeners);
     if (aIter.hasMoreElements())
     {
         RowChangeEvent aEvt(aEvent);

@@ -490,7 +490,7 @@ void UnoTreeControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
 void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNode >& Node ) throw (RuntimeException, css::util::VetoException, std::exception)
 {
-    ::cppu::OInterfaceIteratorHelper aIt( *this );
+    ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
     while( aIt.hasMoreElements() )
     {
         Reference< XTreeEditListener > xListener(static_cast< XTreeEditListener* >( aIt.next() ) );
@@ -514,7 +514,7 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNo
 
 void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNode >& Node, const OUString& NewText ) throw (RuntimeException, std::exception)
 {
-    ::cppu::OInterfaceIteratorHelper aIt( *this );
+    ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
     while( aIt.hasMoreElements() )
     {
         Reference< XTreeEditListener > xListener( static_cast< XTreeEditListener* >( aIt.next() ) );

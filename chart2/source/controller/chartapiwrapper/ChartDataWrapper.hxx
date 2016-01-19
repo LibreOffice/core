@@ -21,7 +21,7 @@
 
 #include "MutexContainer.hxx"
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart/XDateCategories.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -157,7 +157,7 @@ private: //member
         ::com::sun::star::chart2::XAnyDescriptionAccess > m_xDataAccess;
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
 };
 
 } //  namespace wrapper

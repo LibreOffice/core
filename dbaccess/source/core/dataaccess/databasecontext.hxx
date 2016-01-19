@@ -106,7 +106,7 @@ protected:
         // recreated afterwards. So it's our (the context's) responsibility to store the session-persistent
         // properties.
 
-    ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
+    ::comphelper::OInterfaceContainerHelper2       m_aContainerListeners;
     DatabaseDocumentLoader*                 m_pDatabaseDocumentLoader;
 
 public:

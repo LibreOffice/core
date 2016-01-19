@@ -63,7 +63,7 @@
 #include <tools/datetime.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequence.hxx>
@@ -292,7 +292,7 @@ protected:
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     /// for notification
-    ::cppu::OInterfaceContainerHelper m_NotifyListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_NotifyListeners;
     /// flag: false means not initialized yet, or disposed
     bool m_isInitialized;
     /// flag
@@ -2274,12 +2274,11 @@ void SfxDocumentMetaData::createUserDefined()
             m_xUserDefined, css::uno::UNO_QUERY);
         if (xMB.is())
         {
-            const css::uno::Sequence<css::uno::Reference<css::uno::XInterface> >
+            const std::vector<css::uno::Reference<css::uno::XInterface> >
                 listeners(m_NotifyListeners.getElements());
-            for (css::uno::Reference< css::uno::XInterface > const * iter = listeners.begin(); iter != listeners.end(); ++iter) {
+            for (const auto& l : listeners) {
                 xMB->addModifyListener(
-                    css::uno::Reference< css::util::XModifyListener >(*iter,
-                        css::uno::UNO_QUERY));
+                    css::uno::Reference< css::util::XModifyListener >(l, css::uno::UNO_QUERY) );
             }
         }
     }

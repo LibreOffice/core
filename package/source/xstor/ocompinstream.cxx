@@ -270,7 +270,7 @@ void SAL_CALL OInputCompStream::addEventListener( const uno::Reference< lang::XE
     }
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OInterfaceContainerHelper( m_rMutexRef->GetMutex() );
+        m_pInterfaceContainer = new ::comphelper::OInterfaceContainerHelper2( m_rMutexRef->GetMutex() );
 
     m_pInterfaceContainer->addInterface( xListener );
 }

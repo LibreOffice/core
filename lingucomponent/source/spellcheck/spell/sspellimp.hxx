@@ -61,7 +61,7 @@ class SpellChecker :
     OUString *                         aDNames;
     sal_Int32                          numdict;
 
-    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
     linguistic::PropertyHelper_Spelling*    pPropHelper;
     bool                                    bDisposing;
 

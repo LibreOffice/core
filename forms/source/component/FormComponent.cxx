@@ -1883,7 +1883,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException, std::exce
         // we reach this only if we're not working with an external binding
     if ( !hasField() )
         return sal_True;
-    ::cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
+    ::comphelper::OInterfaceIteratorHelper2 aIter( m_aUpdateListeners );
     EventObject aEvent;
     aEvent.Source = static_cast< XWeak* >( this );
     bool bSuccess = true;

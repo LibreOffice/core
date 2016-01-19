@@ -29,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -47,6 +48,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
+using namespace comphelper;
 using namespace cppu;
 
 
@@ -1094,8 +1096,8 @@ struct PersistentPropertySet_Impl
     OUString                    m_aKey;
     OUString                    m_aFullKey;
     osl::Mutex                  m_aMutex;
-    OInterfaceContainerHelper*  m_pDisposeEventListeners;
-    OInterfaceContainerHelper*  m_pPropSetChangeListeners;
+    OInterfaceContainerHelper2*  m_pDisposeEventListeners;
+    OInterfaceContainerHelper2*  m_pPropSetChangeListeners;
     PropertyListeners_Impl*     m_pPropertyChangeListeners;
 
     PersistentPropertySet_Impl( PropertySetRegistry& rCreator,
@@ -1197,7 +1199,7 @@ void SAL_CALL PersistentPropertySet::addEventListener(
 {
     if ( !m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners =
-                    new OInterfaceContainerHelper( m_pImpl->m_aMutex );
+                    new OInterfaceContainerHelper2( m_pImpl->m_aMutex );
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -1813,7 +1815,7 @@ void SAL_CALL PersistentPropertySet::addPropertySetInfoChangeListener(
 {
     if ( !m_pImpl->m_pPropSetChangeListeners )
         m_pImpl->m_pPropSetChangeListeners =
-                    new OInterfaceContainerHelper( m_pImpl->m_aMutex );
+                    new OInterfaceContainerHelper2( m_pImpl->m_aMutex );
 
     m_pImpl->m_pPropSetChangeListeners->addInterface( Listener );
 }
@@ -2144,7 +2146,7 @@ void PersistentPropertySet::notifyPropertySetInfoChange(
         return;
 
     // Notify event listeners.
-    OInterfaceIteratorHelper aIter( *( m_pImpl->m_pPropSetChangeListeners ) );
+    OInterfaceIteratorHelper2 aIter( *( m_pImpl->m_pPropSetChangeListeners ) );
     while ( aIter.hasMoreElements() )
     {
         // Propagate event.

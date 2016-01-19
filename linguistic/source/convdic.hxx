@@ -24,7 +24,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 
 #include <memory>
 #include <set>
@@ -79,7 +79,7 @@ class ConvDic :
 
 protected:
 
-    ::cppu::OInterfaceContainerHelper       aFlushListeners;
+    ::comphelper::OInterfaceContainerHelper2       aFlushListeners;
 
     ConvMap                         aFromLeft;
     std::unique_ptr< ConvMap >        pFromRight;     // only available for bidirectional conversion dictionaries

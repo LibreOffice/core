@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <cmdid.h>
@@ -102,13 +102,13 @@ class SwXTextSection::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
     SwXTextSection &            m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
     const SfxItemPropertySet &  m_rPropSet;
-    ::cppu::OInterfaceContainerHelper m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
     const bool                  m_bIndexHeader;
     bool                        m_bIsDescriptor;
     OUString             m_sName;

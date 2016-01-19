@@ -30,7 +30,7 @@ class OFileControlModel
                 :public OControlModel
                 ,public css::form::XReset
 {
-    ::cppu::OInterfaceContainerHelper       m_aResetListeners;
+    ::comphelper::OInterfaceContainerHelper2       m_aResetListeners;
     OUString                         m_sDefaultValue;
 
 protected:

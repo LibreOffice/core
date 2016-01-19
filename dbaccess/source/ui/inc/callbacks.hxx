@@ -31,7 +31,7 @@ class Control;
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
 
-namespace cppu { class OInterfaceContainerHelper; }
+namespace comphelper { class OInterfaceContainerHelper2; }
 
 namespace dbaui
 {
@@ -84,7 +84,7 @@ namespace dbaui
         /** returns the container of registered context menu interceptors, or NULL if the implementation
             does not support context menu interception
         */
-        virtual ::cppu::OInterfaceContainerHelper*
+        virtual ::comphelper::OInterfaceContainerHelper2*
                                 getContextMenuInterceptors() = 0;
 
         /** returns the current selection in the given control

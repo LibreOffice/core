@@ -24,7 +24,7 @@
 #include "rtl/ustring.hxx"
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -275,9 +275,9 @@ namespace fileaccess {
         osl::Mutex                         m_aMutex;
 
         osl::Mutex                          m_aEventListenerMutex;
-        cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
-        cppu::OInterfaceContainerHelper*    m_pContentEventListeners;
-        cppu::OInterfaceContainerHelper*    m_pPropertySetInfoChangeListeners;
+        comphelper::OInterfaceContainerHelper2*   m_pDisposeEventListeners;
+        comphelper::OInterfaceContainerHelper2*   m_pContentEventListeners;
+        comphelper::OInterfaceContainerHelper2*   m_pPropertySetInfoChangeListeners;
         PropertyListeners*                  m_pPropertyListener;
 
 

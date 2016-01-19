@@ -26,7 +26,7 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
@@ -94,7 +94,7 @@ private:
         css::uno::Any                aUID;
         css::uno::Reference< css::sdbc::XResultSet >                  xBibCursor;
 
-        ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aLoadListeners;
 
         VclPtr< ::bib::BibView>      pBibView;
         VclPtr<BibToolBar>           pToolbar;

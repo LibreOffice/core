@@ -57,7 +57,7 @@ namespace toolkit
     struct WindowStyleSettings_Data
     {
         VCLXWindow*                         pOwningWindow;
-        ::cppu::OInterfaceContainerHelper   aStyleChangeListeners;
+        ::comphelper::OInterfaceContainerHelper2   aStyleChangeListeners;
 
         WindowStyleSettings_Data( ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
             : pOwningWindow( &i_rOwningWindow )

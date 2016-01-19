@@ -33,7 +33,7 @@
 #include <com/sun/star/table/XAutoFormattable.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 
 #include <comphelper/uno3.hxx>
 
@@ -451,7 +451,7 @@ class SwXCellRange : public cppu::WeakImplHelper
     public SwClient
 {
     ::osl::Mutex m_Mutex;
-    ::cppu::OInterfaceContainerHelper m_ChartListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_ChartListeners;
 
     SwRangeDescriptor           aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;

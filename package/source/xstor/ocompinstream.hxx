@@ -28,7 +28,7 @@
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 
 #include "mutexholder.hxx"
 
@@ -43,7 +43,7 @@ protected:
     OWriteStream_Impl* m_pImpl;
     rtl::Reference<SotMutexHolder> m_rMutexRef;
     css::uno::Reference < css::io::XInputStream > m_xStream;
-    ::cppu::OInterfaceContainerHelper* m_pInterfaceContainer;
+    ::comphelper::OInterfaceContainerHelper2* m_pInterfaceContainer;
     css::uno::Sequence < css::beans::PropertyValue > m_aProperties;
     bool m_bDisposed;
     sal_Int32 m_nStorageType;

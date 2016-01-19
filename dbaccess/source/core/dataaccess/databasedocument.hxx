@@ -165,9 +165,9 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     typedef std::map< OUString, css::uno::Reference< css::frame::XUntitledNumbers > > TNumberedController;
     css::uno::Reference< css::ui::XUIConfigurationManager2>                                     m_xUIConfigurationManager;
 
-    ::cppu::OInterfaceContainerHelper                                                           m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                                                           m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                                                           m_aStorageListeners;
+    ::comphelper::OInterfaceContainerHelper2                                                           m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper2                                                           m_aCloseListener;
+    ::comphelper::OInterfaceContainerHelper2                                                           m_aStorageListeners;
 
     DocumentEvents*                                                                             m_pEventContainer;
     ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;

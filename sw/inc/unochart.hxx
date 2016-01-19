@@ -42,7 +42,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/table/XCell.hpp>
 
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -135,9 +135,9 @@ class SwChartDataProvider :
     // all tables of the document.
     mutable Map_Set_DataSequenceRef_t       aDataSequences;
 
-    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2      aEvtListeners;
     const SwDoc *                           pDoc;
-    bool                                bDisposed;
+    bool                                    bDisposed;
 
     SwChartDataProvider( const SwChartDataProvider & ) = delete;
     SwChartDataProvider & operator = ( const SwChartDataProvider & ) = delete;
@@ -251,8 +251,8 @@ class SwChartDataSequence :
     public SwChartDataSequenceBaseClass,
     public SwClient
 {
-    ::cppu::OInterfaceContainerHelper          m_aEvtListeners;
-    ::cppu::OInterfaceContainerHelper          m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper2          m_aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2          m_aModifyListeners;
     css::chart2::data::DataSequenceRole        m_aRole;
 
     OUString  m_aRowLabelText;
@@ -362,8 +362,8 @@ SwChartLabeledDataSequenceBaseClass;
 class SwChartLabeledDataSequence :
     public SwChartLabeledDataSequenceBaseClass
 {
-    ::cppu::OInterfaceContainerHelper                           aEvtListeners;
-    ::cppu::OInterfaceContainerHelper                           aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper2                           aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2                           aModifyListeners;
 
     css::uno::Reference< css::chart2::data::XDataSequence >     xData;
     css::uno::Reference< css::chart2::data::XDataSequence >     xLabels;

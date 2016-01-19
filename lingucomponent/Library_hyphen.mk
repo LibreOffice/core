@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,hyphen,\
 $(eval $(call gb_Library_use_sdk_api,hyphen))
 
 $(eval $(call gb_Library_use_libraries,hyphen,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	i18nlangtag \

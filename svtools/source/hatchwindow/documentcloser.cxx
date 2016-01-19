@@ -28,7 +28,7 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
@@ -49,7 +49,7 @@ class ODocumentCloser : public ::cppu::WeakImplHelper< css::lang::XComponent,
 {
     ::osl::Mutex m_aMutex;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
-    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
 
     bool m_bDisposed;
 
@@ -208,7 +208,7 @@ void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEv
         throw lang::DisposedException(); // TODO
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
 
     m_pListenersContainer->addInterface( xListener );
 }

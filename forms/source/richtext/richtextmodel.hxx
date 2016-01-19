@@ -95,7 +95,7 @@ namespace frm
                                     m_pEngine;
         bool                        m_bSettingEngineText;
 
-        ::cppu::OInterfaceContainerHelper
+        ::comphelper::OInterfaceContainerHelper2
                                     m_aModifyListeners;
 
     public:

@@ -124,7 +124,7 @@ typedef ::cppu::ImplHelper3<    css::awt::XFocusListener,
 class OEditControl : public OBoundControl
                       ,public OEditControl_BASE
 {
-    ::cppu::OInterfaceContainerHelper
+    ::comphelper::OInterfaceContainerHelper2
                         m_aChangeListeners;
 
     OUString         m_aHtmlChangeValue;

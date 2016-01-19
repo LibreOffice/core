@@ -72,7 +72,7 @@ namespace pcr
         /// cache of our supported properties
         PropertyMap                                                                         m_aProperties;
         /// property change listeners
-        ::cppu::OInterfaceContainerHelper                                                   m_aPropertyListeners;
+        ::comphelper::OInterfaceContainerHelper2                                                   m_aPropertyListeners;
         ::std::map< css::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess >
                                                                                             m_aEnumConverters;
 

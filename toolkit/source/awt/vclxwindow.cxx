@@ -97,8 +97,8 @@ private:
     bool                            mbDirectVisible;
 
     ::osl::Mutex                        maListenerContainerMutex;
-    ::cppu::OInterfaceContainerHelper   maWindow2Listeners;
-    ::cppu::OInterfaceContainerHelper   maDockableWindowListeners;
+    ::comphelper::OInterfaceContainerHelper2   maWindow2Listeners;
+    ::comphelper::OInterfaceContainerHelper2   maDockableWindowListeners;
     EventListenerMultiplexer            maEventListeners;
     FocusListenerMultiplexer            maFocusListeners;
     WindowListenerMultiplexer           maWindowListeners;
@@ -173,8 +173,8 @@ public:
 
     /** returns the container of registered XWindowListener2 listeners
     */
-    inline ::cppu::OInterfaceContainerHelper&   getWindow2Listeners()       { return maWindow2Listeners; }
-    inline ::cppu::OInterfaceContainerHelper&   getDockableWindowListeners(){ return maDockableWindowListeners; }
+    inline ::comphelper::OInterfaceContainerHelper2&   getWindow2Listeners()       { return maWindow2Listeners; }
+    inline ::comphelper::OInterfaceContainerHelper2&   getDockableWindowListeners(){ return maDockableWindowListeners; }
     inline EventListenerMultiplexer&            getEventListeners()         { return maEventListeners; }
     inline FocusListenerMultiplexer&            getFocusListeners()         { return maFocusListeners; }
     inline WindowListenerMultiplexer&           getWindowListeners()        { return maWindowListeners; }
@@ -416,7 +416,7 @@ namespace
 {
     struct CallWindow2Listener
     {
-        CallWindow2Listener( ::cppu::OInterfaceContainerHelper& i_rWindow2Listeners, const bool i_bEnabled, const EventObject& i_rEvent )
+        CallWindow2Listener( ::comphelper::OInterfaceContainerHelper2& i_rWindow2Listeners, const bool i_bEnabled, const EventObject& i_rEvent )
             :m_rWindow2Listeners( i_rWindow2Listeners )
             ,m_bEnabled( i_bEnabled )
             ,m_aEvent( i_rEvent )
@@ -428,7 +428,7 @@ namespace
             m_rWindow2Listeners.notifyEach( m_bEnabled ? &XWindowListener2::windowEnabled : &XWindowListener2::windowDisabled, m_aEvent );
         }
 
-        ::cppu::OInterfaceContainerHelper&  m_rWindow2Listeners;
+        ::comphelper::OInterfaceContainerHelper2&  m_rWindow2Listeners;
         const bool                          m_bEnabled;
         const EventObject                   m_aEvent;
     };
@@ -774,7 +774,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.bInteractive = pData->mbInteractive;
 
                     Reference< XDockableWindowListener > xFirstListener;
-                    ::cppu::OInterfaceIteratorHelper aIter( mpImpl->getDockableWindowListeners() );
+                    ::comphelper::OInterfaceIteratorHelper2 aIter( mpImpl->getDockableWindowListeners() );
                     while ( aIter.hasMoreElements() && !xFirstListener.is() )
                     {
                         xFirstListener.set( aIter.next(), UNO_QUERY );
@@ -816,7 +816,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
 
                 Reference< XDockableWindowListener > xFirstListener;
-                ::cppu::OInterfaceIteratorHelper aIter( mpImpl->getDockableWindowListeners() );
+                ::comphelper::OInterfaceIteratorHelper2 aIter( mpImpl->getDockableWindowListeners() );
                 while ( aIter.hasMoreElements() && !xFirstListener.is() )
                 {
                     xFirstListener.set( aIter.next(), UNO_QUERY );
@@ -1340,12 +1340,12 @@ void VCLXWindow::GetPropertyIds( std::list< sal_uInt16 >& _out_rIds )
     return ImplGetPropertyIds( _out_rIds, mpImpl->mbWithDefaultProps );
 }
 
-::cppu::OInterfaceContainerHelper& VCLXWindow::GetContainerListeners()
+::comphelper::OInterfaceContainerHelper2& VCLXWindow::GetContainerListeners()
 {
     return mpImpl->getContainerListeners();
 }
 
-::cppu::OInterfaceContainerHelper& VCLXWindow::GetTopWindowListeners()
+::comphelper::OInterfaceContainerHelper2& VCLXWindow::GetTopWindowListeners()
 {
     return mpImpl->getTopWindowListeners();
 }

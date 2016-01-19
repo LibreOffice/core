@@ -66,7 +66,7 @@ class DicEvtListenerHelper :
         XDictionaryEventListener
     >
 {
-    cppu::OInterfaceContainerHelper         aDicListEvtListeners;
+    comphelper::OInterfaceContainerHelper2         aDicListEvtListeners;
     uno::Sequence< DictionaryEvent >        aCollectDicEvt;
     uno::Reference< XDictionaryList >       xMyDicList;
 
@@ -254,13 +254,7 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
         DictionaryListEvent aEvent( xMyDicList, nCondensedEvt, aDicEvents );
 
         // pass on event
-        cppu::OInterfaceIteratorHelper aIt( aDicListEvtListeners );
-        while (aIt.hasMoreElements())
-        {
-            uno::Reference< XDictionaryListEventListener > xRef( aIt.next(), UNO_QUERY );
-            if (xRef.is())
-                xRef->processDictionaryListEvent( aEvent );
-        }
+        aDicListEvtListeners.notifyEach( &XDictionaryListEventListener::processDictionaryListEvent, aEvent );
 
         // clear "list" of events
         nCondensedEvt = 0;

@@ -249,10 +249,10 @@ static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
 class SwXTextDocument::Impl
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
-    ::cppu::OInterfaceContainerHelper m_RefreshListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_RefreshListeners;
 
     Impl() : m_RefreshListeners(m_Mutex) { }
 

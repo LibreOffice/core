@@ -46,7 +46,7 @@
 
 
 
-namespace cppu { class OInterfaceContainerHelper; }
+namespace comphelper { class OInterfaceContainerHelper2; }
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XCommandInfo;
@@ -209,7 +209,7 @@ private:
     css::uno::Sequence< css::uno::Any > m_aArguments;
     ProviderMap_Impl m_aProviders;
     osl::Mutex m_aMutex;
-    cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper2* m_pDisposeEventListeners;
     sal_Int32 m_nCommandId;
 };
 

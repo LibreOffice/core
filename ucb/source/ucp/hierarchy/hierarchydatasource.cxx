@@ -31,7 +31,7 @@
 
 #include "osl/doublecheckedlocking.h"
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -322,7 +322,7 @@ void SAL_CALL HierarchyDataSource::addEventListener(
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+            = new comphelper::OInterfaceContainerHelper2( m_aMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

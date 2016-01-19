@@ -31,7 +31,7 @@
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <osl/mutex.hxx>
 
 class OFSStreamContainer : public cppu::OWeakObject,
@@ -56,7 +56,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
     bool m_bInputClosed;
     bool m_bOutputClosed;
 
-    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
 
 public:

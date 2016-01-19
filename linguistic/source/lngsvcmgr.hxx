@@ -21,7 +21,7 @@
 #define INCLUDED_LINGUISTIC_SOURCE_LNGSVCMGR_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 
 
 #include <com/sun/star/uno/Reference.h>
@@ -66,7 +66,7 @@ class LngSvcMgr :
 {
     friend class LngSvcMgrListenerHelper;
 
-    ::cppu::OInterfaceContainerHelper                   aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2                   aEvtListeners;
 
     css::uno::Reference<
         css::linguistic2::XSpellChecker >              xSpellDsp;

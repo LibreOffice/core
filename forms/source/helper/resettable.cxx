@@ -58,7 +58,7 @@ namespace frm
 
     bool ResetHelper::approveReset()
     {
-        ::cppu::OInterfaceIteratorHelper aIter( m_aResetListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aResetListeners );
         EventObject aResetEvent( m_rParent );
 
         bool bContinue = true;

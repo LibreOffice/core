@@ -187,7 +187,7 @@ Reference< XInterface > SAL_CALL OApplicationController::Create(const Reference<
 class SelectionNotifier : public ::boost::noncopyable
 {
 private:
-    ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aSelectionListeners;
     ::cppu::OWeakObject&                m_rContext;
     sal_Int32                           m_nSelectionNestingLevel;
 
@@ -2340,7 +2340,7 @@ IController& OApplicationController::getCommandController()
     return *this;
 }
 
-::cppu::OInterfaceContainerHelper* OApplicationController::getContextMenuInterceptors()
+::comphelper::OInterfaceContainerHelper2* OApplicationController::getContextMenuInterceptors()
 {
     return &m_aContextMenuInterceptors;
 }

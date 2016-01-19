@@ -3491,7 +3491,7 @@ IController& SbaTableQueryBrowser::getCommandController()
     return *this;
 }
 
-::cppu::OInterfaceContainerHelper* SbaTableQueryBrowser::getContextMenuInterceptors()
+::comphelper::OInterfaceContainerHelper2* SbaTableQueryBrowser::getContextMenuInterceptors()
 {
     return &m_aContextMenuInterceptors;
 }

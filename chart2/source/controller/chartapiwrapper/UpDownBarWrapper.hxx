@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_UPDOWNBARWRAPPER_HXX
 
 #include "MutexContainer.hxx"
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 #include <com/sun/star/chart2/XDiagram.hpp>
 
@@ -114,7 +114,7 @@ private: //methods
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
 
     OUString       m_aPropertySetName;
 };

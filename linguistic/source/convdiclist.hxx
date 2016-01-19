@@ -52,7 +52,7 @@ class ConvDicList :
     };
 
 
-    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
 
     ConvDicNameContainer                   *pNameContainer;
     css::uno::Reference<

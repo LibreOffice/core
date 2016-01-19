@@ -23,7 +23,7 @@
 #include "ReferenceSizePropertyProvider.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -126,7 +126,7 @@ protected:
 
 private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
 
     eType               m_eType;
     sal_Int32           m_nSeriesIndexInNewAPI;

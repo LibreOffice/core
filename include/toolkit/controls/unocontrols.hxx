@@ -877,7 +877,7 @@ private:
 
 protected:
     std::unique_ptr<UnoControlListBoxModel_Data>  m_xData;
-    ::cppu::OInterfaceContainerHelper             m_aItemListListeners;
+    ::comphelper::OInterfaceContainerHelper2             m_aItemListListeners;
 };
 
 

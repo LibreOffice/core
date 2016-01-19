@@ -260,7 +260,7 @@ vcl::Window* VCLXTopWindow::GetWindowImpl()
     return VCLXContainer::GetWindow();
 }
 
-::cppu::OInterfaceContainerHelper& VCLXTopWindow::GetTopWindowListenersImpl()
+::comphelper::OInterfaceContainerHelper2& VCLXTopWindow::GetTopWindowListenersImpl()
 {
     return GetTopWindowListeners();
 }

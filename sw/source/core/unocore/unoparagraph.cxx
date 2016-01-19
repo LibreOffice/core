@@ -19,7 +19,7 @@
 
 #include <unoparagraph.hxx>
 
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <cmdid.h>
@@ -105,12 +105,12 @@ class SwXParagraph::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
     SwXParagraph &              m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::cppu::OInterfaceContainerHelper m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
     SfxItemPropertySet const&   m_rPropSet;
     bool                        m_bIsDescriptor;
     sal_Int32                   m_nSelectionStartPos;

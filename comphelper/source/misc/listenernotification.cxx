@@ -48,7 +48,7 @@ namespace comphelper
     void OListenerContainer::impl_removeListener( const Reference< XEventListener >& _rxListener )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ::cppu::OInterfaceIteratorHelper aIter( m_aListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aListeners );
         bool bFound = false;
         while ( aIter.hasMoreElements() && !bFound )
         {
@@ -74,7 +74,7 @@ namespace comphelper
 
     bool OListenerContainer::impl_notify( const EventObject& _rEvent )
     {
-        ::cppu::OInterfaceIteratorHelper aIter( m_aListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aListeners );
         bool bCancelled = false;
         while ( aIter.hasMoreElements() && !bCancelled )
         {

@@ -587,8 +587,8 @@ private:
     bool                                m_bValuePropertyMayBeVoid;
 
     ResetHelper                         m_aResetHelper;
-    ::cppu::OInterfaceContainerHelper   m_aUpdateListeners;
-    ::cppu::OInterfaceContainerHelper   m_aFormComponentListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aUpdateListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aFormComponentListeners;
 
     css::uno::Reference< css::form::binding::XValueBinding >
                                         m_xExternalBinding;

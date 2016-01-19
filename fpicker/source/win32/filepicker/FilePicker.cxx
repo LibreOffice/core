@@ -179,7 +179,7 @@ OUString SAL_CALL CFilePicker::helpRequested(FilePickerEvent aEvent) const
 {
     OUString aHelpText;
 
-    ::cppu::OInterfaceContainerHelper* pICHelper =
+    ::comphelper::OInterfaceContainerHelper2* pICHelper =
         rBHelper.getContainer( cppu::UnoType<XFilePickerListener>::get());
 
     if (pICHelper)

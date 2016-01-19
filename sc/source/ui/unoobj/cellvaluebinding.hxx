@@ -23,6 +23,7 @@
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <cppuhelper/compbase5.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -66,7 +67,7 @@ namespace calc
                     m_xCell;                /// the cell we're bound to, for double value access
         css::uno::Reference< css::text::XTextRange >
                     m_xCellText;            /// the cell we're bound to, for text access
-        ::cppu::OInterfaceContainerHelper
+        ::comphelper::OInterfaceContainerHelper2
                     m_aModifyListeners;     /// our modify listeners
         bool        m_bInitialized;         /// has XInitialization::initialize been called?
         bool        m_bListPos;             /// constructed as ListPositionCellBinding?

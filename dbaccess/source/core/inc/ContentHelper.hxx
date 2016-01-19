@@ -32,6 +32,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -101,7 +102,7 @@ namespace dbaccess
         void impl_rename_throw(const OUString& _sNewName,bool _bNotify = true);
 
     protected:
-        ::cppu::OInterfaceContainerHelper       m_aContentListeners;
+        ::comphelper::OInterfaceContainerHelper2      m_aContentListeners;
         PropertyChangeListenerContainer         m_aPropertyChangeListeners;
         css::uno::Reference< css::uno::XInterface >
                                                 m_xParentContainer;

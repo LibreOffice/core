@@ -475,11 +475,11 @@ uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Seque
 struct OReportDefinitionImpl
 {
     uno::WeakReference< uno::XInterface >                   m_xParent;
-    ::cppu::OInterfaceContainerHelper                       m_aStorageChangeListeners;
-    ::cppu::OInterfaceContainerHelper                       m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                       m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                       m_aLegacyEventListeners;
-    ::cppu::OInterfaceContainerHelper                       m_aDocEventListeners;
+    ::comphelper::OInterfaceContainerHelper2                      m_aStorageChangeListeners;
+    ::comphelper::OInterfaceContainerHelper2                      m_aCloseListener;
+    ::comphelper::OInterfaceContainerHelper2                      m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper2                      m_aLegacyEventListeners;
+    ::comphelper::OInterfaceContainerHelper2                      m_aDocEventListeners;
     ::std::vector< uno::Reference< frame::XController> >    m_aControllers;
     uno::Sequence< beans::PropertyValue >                   m_aArgs;
 

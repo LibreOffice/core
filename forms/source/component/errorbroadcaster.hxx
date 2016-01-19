@@ -22,7 +22,8 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
-#include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 
@@ -37,7 +38,7 @@ namespace frm
     {
     private:
         ::cppu::OBroadcastHelper&           m_rBHelper;
-        ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
+        ::comphelper::OInterfaceContainerHelper2  m_aErrorListeners;
 
     protected:
         explicit OErrorBroadcaster( ::cppu::OBroadcastHelper& _rBHelper );

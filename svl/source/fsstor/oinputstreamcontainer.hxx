@@ -26,7 +26,7 @@
 
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 
 #include <osl/mutex.hxx>
 
@@ -43,7 +43,7 @@ class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStr
 
     bool m_bDisposed;
 
-    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
 
 public:
     explicit OFSInputStreamContainer( const css::uno::Reference < css::io::XInputStream >& xStream );
