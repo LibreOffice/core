@@ -79,12 +79,6 @@ struct VCL_DLLPUBLIC JobData
     static bool constructFromStreamBuffer( void* pData, sal_uInt32 bytes, JobData& rJobData );
 };
 
-bool operator==(const psp::JobData& rLeft, const psp::JobData& rRight);
-inline bool operator!=(const psp::JobData& rLeft, const psp::JobData& rRight)
-{
-    return !( rLeft == rRight );
-}
-
 } // namespace
 
 

@@ -934,21 +934,6 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     }
 }
 
-bool PrinterInfoManager::startBatchPrint()
-{
-    return false; // not implemented
-}
-
-bool PrinterInfoManager::supportsBatchPrint() const
-{
-    return false;
-}
-
-bool PrinterInfoManager::flushBatchPrint()
-{
-    return false;
-}
-
 SystemQueueInfo::SystemQueueInfo() :
     m_bChanged( false )
 {

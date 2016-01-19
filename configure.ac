@@ -4824,7 +4824,7 @@ if test "$test_cups" = "yes"; then
     if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -o "$ac_cv_header_cups_cups_h" != "yes"; then
         AC_MSG_ERROR([Could not find CUPS. Install libcups2-dev or cups-devel.])
     fi
-    AC_DEFINE(ENABLE_CUPS)
+
 else
     AC_MSG_RESULT([no])
 fi
@@ -12940,7 +12940,6 @@ AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extension_update.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
-AC_CONFIG_HEADERS([config_host/config_cups.h])
 AC_CONFIG_HEADERS([config_host/config_cxxabi.h])
 AC_CONFIG_HEADERS([config_host/config_dbus.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
