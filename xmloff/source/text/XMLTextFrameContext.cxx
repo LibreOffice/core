@@ -587,7 +587,8 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
             {
                 bool bSuccess = xTextImportHelper->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
                                              sOldName, sName );
-                if (!bSuccess)
+
+                if (!bSuccess && !sOldName.isEmpty())
                 {
                     bCreateFailed = true;
                     return;
