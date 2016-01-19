@@ -171,6 +171,7 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
     sal_Int32 nTempPosHTw(0);
     bool bHasVSplitInTwips = false;
     bool bHasHSplitInTwips = false;
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         OUString sName(aSettings[i].Name);
@@ -222,22 +223,26 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         else if (sName == SC_POSITIONLEFT)
         {
             aSettings[i].Value >>= nTemp32;
-            nPosX[SC_SPLIT_LEFT] = SanitizeCol( static_cast<SCCOL>(nTemp32));
+            nPosX[SC_SPLIT_LEFT] = bIsTiledRendering ? 0 :
+                                   SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName == SC_POSITIONRIGHT)
         {
             aSettings[i].Value >>= nTemp32;
-            nPosX[SC_SPLIT_RIGHT] = SanitizeCol( static_cast<SCCOL>(nTemp32));
+            nPosX[SC_SPLIT_RIGHT] = bIsTiledRendering ? 0 :
+                                    SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName == SC_POSITIONTOP)
         {
             aSettings[i].Value >>= nTemp32;
-            nPosY[SC_SPLIT_TOP] = SanitizeRow( static_cast<SCROW>(nTemp32));
+            nPosY[SC_SPLIT_TOP] = bIsTiledRendering ? 0 :
+                                  SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName == SC_POSITIONBOTTOM)
         {
             aSettings[i].Value >>= nTemp32;
-            nPosY[SC_SPLIT_BOTTOM] = SanitizeRow( static_cast<SCROW>(nTemp32));
+            nPosY[SC_SPLIT_BOTTOM] = bIsTiledRendering ? 0 :
+                                     SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName == SC_ZOOMTYPE)
         {
