@@ -26,7 +26,7 @@ namespace
         GError* m_pError;
         public:
             explicit GErrorWrapper(GError* pError) : m_pError(pError) {}
-            ~GErrorWrapper()
+            ~GErrorWrapper() noexcept(false)
             {
                 if(!m_pError)
                     return;
@@ -39,15 +39,17 @@ namespace
     static inline GDBusProxy* lcl_GetPackageKitProxy(const OUString& sInterface)
     {
         const OString sFullInterface = OUStringToOString("org.freedesktop.PackageKit." + sInterface, RTL_TEXTENCODING_ASCII_US);
-        GErrorWrapper error(nullptr);
         GDBusProxy* proxy = nullptr;
-        proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+        {
+            GErrorWrapper error(nullptr);
+            proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                G_DBUS_PROXY_FLAGS_NONE, nullptr,
                                "org.freedesktop.PackageKit",
                                "/org/freedesktop/PackageKit",
                                reinterpret_cast<const gchar*>(sFullInterface.getStr()),
                                nullptr,
                                &error.getRef());
+        }
         if(!proxy)
             throw RuntimeException("couldnt get a proxy!");
         return proxy;
