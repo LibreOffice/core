@@ -87,7 +87,6 @@ boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
 
 boost_patches += clang-cl.patch.0
 boost_patches += gcc6-warnings.patch.0
-boost_patches += gcc-pr69327.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
