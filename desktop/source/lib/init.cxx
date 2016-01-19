@@ -1576,7 +1576,7 @@ static char* lo_getError (LibreOfficeKit *pThis)
 }
 static void lo_freeError(const char *pfree)
 {
-    free((void *) pfree);
+    free(const_cast<char *>(pfree));
 }
 
 static char* lo_getFilterTypes(LibreOfficeKit* pThis)
