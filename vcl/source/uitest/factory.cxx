@@ -53,6 +53,13 @@ std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindo
             return std::unique_ptr<UIObject>(new EditUIObject(pEdit));
         }
         break;
+        case WINDOW_CHECKBOX:
+        {
+            CheckBox* pCheckBox = dynamic_cast<CheckBox*>(pWindow);
+            assert(pCheckBox);
+            return std::unique_ptr<UIObject>(new CheckBoxUIObject(pCheckBox));
+        }
+        break;
         default:
         break;
     }

@@ -380,4 +380,38 @@ OUString EditUIObject::get_name() const
     return OUString("EditUIObject");
 }
 
+CheckBoxUIObject::CheckBoxUIObject(VclPtr<CheckBox> xCheckbox):
+    WindowUIObject(xCheckbox),
+    mxCheckBox(xCheckbox)
+{
+}
+
+void CheckBoxUIObject::execute(const OUString& rAction,
+        const StringMap& /*rParameters*/)
+{
+    if (rAction == "CLICK")
+    {
+        // don't use toggle directly, it does not set the value
+        mxCheckBox->ImplCheck();
+    }
+}
+
+StringMap CheckBoxUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["Selected"] = OUString::boolean(mxCheckBox->IsChecked());
+    aMap["TriStateEnabled"] = OUString::boolean(mxCheckBox->IsTriStateEnabled());
+    return aMap;
+}
+
+UIObjectType CheckBoxUIObject::get_type() const
+{
+    return UIObjectType::CHECKBOX;
+}
+
+OUString CheckBoxUIObject::get_name() const
+{
+    return OUString("CheckBoxUIObject");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
