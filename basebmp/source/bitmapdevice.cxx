@@ -117,31 +117,21 @@ namespace
         typedef typename AccessorSelector::template wrap_accessor<
             raw_accessor_type >::type                                      dest_accessor_type;
 
-        typedef AccessorTraits< dest_accessor_type >                       accessor_traits;
-
-        typedef AccessorTraits< raw_accessor_type >                        raw_accessor_traits;
-
         dest_iterator_type                      maBegin;
         dest_accessor_type                      maAccessor;
-        raw_accessor_type                       maRawAccessor;
-
-
-
 
         BitmapRenderer( const basegfx::B2IBox&                     rBounds,
                         Format                                     nScanlineFormat,
                         sal_Int32                                  nScanlineStride,
                         sal_uInt8*                                 pFirstScanline,
                         dest_iterator_type                         begin,
-                        raw_accessor_type                          rawAccessor,
                         dest_accessor_type                         accessor,
                         const RawMemorySharedArray&                rMem,
                         const PaletteMemorySharedVector&           rPalette ) :
             BitmapDevice( rBounds, nScanlineFormat,
                           nScanlineStride, pFirstScanline, rMem, rPalette ),
             maBegin( begin ),
-            maAccessor( accessor ),
-            maRawAccessor( rawAccessor )
+            maAccessor( accessor )
         {}
 
     private:
@@ -275,7 +265,6 @@ BitmapDeviceSharedPtr createRenderer(
     Format                                                       nScanlineFormat,
     sal_Int32                                                    nScanlineStride,
     sal_uInt8*                                                   pFirstScanline,
-    typename FormatTraits::raw_accessor_type const&              rRawAccessor,
     typename FormatTraits::accessor_selector::template wrap_accessor<
           typename FormatTraits::raw_accessor_type>::type const& rAccessor,
     boost::shared_array< sal_uInt8 >                             pMem,
@@ -296,7 +285,6 @@ BitmapDeviceSharedPtr createRenderer(
                           reinterpret_cast<typename Iterator::value_type*>(
                               pFirstScanline),
                           nScanlineStride),
-                      rRawAccessor,
                       rAccessor,
                       pMem,
                       pPal ));
@@ -336,7 +324,6 @@ BitmapDeviceSharedPtr createRenderer(
                                       nScanlineFormat,
                                       nScanlineStride,
                                       pFirstScanline,
-                                      typename FormatTraits::raw_accessor_type(),
                                       typename FormatTraits::accessor_selector::template
                                       wrap_accessor<
                                           typename FormatTraits::raw_accessor_type>::type(),
@@ -362,7 +349,6 @@ BitmapDeviceSharedPtr createRenderer(
                                       nScanlineFormat,
                                       nScanlineStride,
                                       pFirstScanline,
-                                      typename FormatTraits::raw_accessor_type(),
                                       typename FormatTraits::accessor_selector::template
                                           wrap_accessor<
                                       typename FormatTraits::raw_accessor_type>::type(
