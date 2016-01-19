@@ -39,7 +39,7 @@ SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell)
 
 void SwWebOleShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("ole");
+    GetStaticInterface()->RegisterPopupMenu("oleobject");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_WEBOLE_TOOLBOX);
 }
