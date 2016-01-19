@@ -229,6 +229,8 @@ public:
                     ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ~ScTabView();
 
+    enum SplitMethod { SC_SPLIT_METHOD_FIRST_COL, SC_SPLIT_METHOD_FIRST_ROW, SC_SPLIT_METHOD_CURSOR };
+
     void            MakeDrawLayer();
 
     void            HideListBox();
@@ -493,7 +495,7 @@ public:
 
     Point           GetMousePosPixel();
 
-    void            FreezeSplitters( bool bFreeze );
+    void            FreezeSplitters( bool bFreeze, SplitMethod aSplitMethod = SC_SPLIT_METHOD_CURSOR );
     void            RemoveSplit();
     void            SplitAtCursor();
     void            SplitAtPixel( const Point& rPixel, bool bHor, bool bVer );
