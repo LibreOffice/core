@@ -43,7 +43,7 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
@@ -54,7 +54,7 @@
 
 
 class TOOLKIT_DLLPUBLIC ListenerMultiplexerBase : public MutexHelper,
-                                public ::cppu::OInterfaceContainerHelper,
+                                public ::comphelper::OInterfaceContainerHelper2,
                                 public css::uno::XInterface
 {
 private:

@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Type.hxx>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -66,8 +66,8 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
 {
     css::uno::Reference< css::container::XNameReplace > m_xEvents;
     css::uno::Reference< css::document::XEventListener > m_xJobExecutorListener;
-    ::cppu::OInterfaceContainerHelper m_aLegacyListeners;
-    ::cppu::OInterfaceContainerHelper m_aDocumentListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_aLegacyListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_aDocumentListeners;
     TModelList m_lModels;
     GlobalEventConfig* pImp;
 

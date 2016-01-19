@@ -114,8 +114,8 @@ class GrammarCheckingIterator:
 
     //! beware of initilization order !
     struct MyMutex : public rtl::Static< osl::Mutex, MyMutex > {};
-    cppu::OInterfaceContainerHelper     m_aEventListeners;
-    cppu::OInterfaceContainerHelper     m_aNotifyListeners;
+    comphelper::OInterfaceContainerHelper2     m_aEventListeners;
+    comphelper::OInterfaceContainerHelper2     m_aNotifyListeners;
 
     css::uno::Reference< css::i18n::XBreakIterator > m_xBreakIterator;
     mutable css::uno::Reference< css::util::XChangesBatch >  m_xUpdateAccess;

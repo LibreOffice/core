@@ -81,7 +81,7 @@
 
 #include <boost/bind.hpp>
 
-using ::cppu::OInterfaceContainerHelper;
+using ::comphelper::OInterfaceContainerHelper2;
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationListener;
 using ::com::sun::star::awt::XWindow;

@@ -79,7 +79,7 @@ public:
 
 protected:
     ContainerListenerMultiplexer        maContainerListeners;
-    ::cppu::OInterfaceContainerHelper   maChangeListeners;
+    ::comphelper::OInterfaceContainerHelper2   maChangeListeners;
     UnoControlModelHolderList           maModels;
 
     AllGroups                           maGroups;

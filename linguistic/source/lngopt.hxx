@@ -22,6 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -76,7 +77,7 @@ class LinguProps :
         css::lang::XServiceInfo
     >
 {
-    ::cppu::OInterfaceContainerHelper           aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2           aEvtListeners;
     OPropertyListenerContainerHelper            aPropListeners;
 
     SfxItemPropertyMap                          aPropertyMap;

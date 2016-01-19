@@ -31,7 +31,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 
 
 class OLockListener;
@@ -47,7 +47,7 @@ class OInstanceLocker : public ::cppu::WeakImplHelper< css::lang::XComponent,
     css::uno::Reference< css::uno::XInterface > m_xLockListener;
     OLockListener* m_pLockListener;
 
-    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
 
     bool m_bDisposed;
     bool m_bInitialized;

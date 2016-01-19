@@ -241,7 +241,7 @@ protected:
 
 private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper2           m_aEventListenerContainer;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart::XAxis >        m_xXAxis;

@@ -693,7 +693,7 @@ namespace dbtools
             // TODO: shouldn't we subtract all the parameters which were already visited?
         if ( nParamsLeft )
         {
-            ::cppu::OInterfaceIteratorHelper aIter( m_aParameterListeners );
+            ::comphelper::OInterfaceIteratorHelper2 aIter( m_aParameterListeners );
             Reference< XPropertySet > xProp = m_xComponent;
             OSL_ENSURE(xProp.is(),"Some already released my component!");
             DatabaseParameterEvent aEvent( xProp.get(), m_pOuterParameters.get() );

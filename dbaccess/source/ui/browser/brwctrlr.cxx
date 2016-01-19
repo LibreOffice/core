@@ -154,7 +154,7 @@ class SbaXDataBrowserController::FormControllerImpl
                                          css::frame::XFrameActionListener >
 {
     friend class SbaXDataBrowserController;
-    ::cppu::OInterfaceContainerHelper   m_aActivateListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aActivateListeners;
     SbaXDataBrowserController*          m_pOwner;
 
 public:
@@ -935,7 +935,7 @@ void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/) th
 {
     // notify our activate listeners (registered on the form controller aggregate)
     EventObject aEvt(*this);
-    ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_pFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
         static_cast<XFormControllerListener*>(aIter.next())->formActivated(aEvt);
 }
@@ -961,7 +961,7 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( R
 
     // notify the listeners that the "form" we represent has been deactivated
     EventObject aEvt(*this);
-    ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_pFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
         static_cast<XFormControllerListener*>(aIter.next())->formDeactivated(aEvt);
 

@@ -25,7 +25,7 @@
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 
 namespace svx
@@ -38,7 +38,7 @@ namespace svx
     {
     private:
         ::osl::Mutex&                       m_rMutex;
-        ::cppu::OInterfaceContainerHelper   m_aStatusListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aStatusListeners;
         css::uno::Reference< css::form::runtime::XFormOperations >
                                             m_xFormOperations;
         const css::util::URL                m_aFeatureURL;

@@ -102,8 +102,8 @@ protected:
                                         bool bWithDefaults = false );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds );
 
-    ::cppu::OInterfaceContainerHelper&  GetContainerListeners();
-    ::cppu::OInterfaceContainerHelper&  GetTopWindowListeners();
+    ::comphelper::OInterfaceContainerHelper2&  GetContainerListeners();
+    ::comphelper::OInterfaceContainerHelper2&  GetTopWindowListeners();
 
 public:
     typedef ::std::function<void ()>  Callback;

@@ -64,7 +64,7 @@ class OGridControlModel :public OControlModel
                         ,public FontControlModel
                         ,public OGridControlModel_BASE
 {
-    ::cppu::OInterfaceContainerHelper       m_aSelectListeners,
+    ::comphelper::OInterfaceContainerHelper2       m_aSelectListeners,
                                             m_aResetListeners,
                                             m_aRowSetChangeListeners;
 

@@ -124,7 +124,7 @@ vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
 
 FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
-                    ,OInterfaceContainerHelper( _rMutex )
+                    ,OInterfaceContainerHelper2( _rMutex )
 {
 }
 
@@ -158,7 +158,7 @@ void FmXModifyMultiplexer::modified(const EventObject& e) throw( RuntimeExceptio
 
 FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
-                    ,OInterfaceContainerHelper( _rMutex )
+                    ,OInterfaceContainerHelper2( _rMutex )
 {
 }
 
@@ -191,7 +191,7 @@ sal_Bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e) throw( Runtim
     bool bResult = true;
     if (getLength())
     {
-        ::cppu::OInterfaceIteratorHelper aIter(*this);
+        ::comphelper::OInterfaceIteratorHelper2 aIter(*this);
         while ( bResult && aIter.hasMoreElements() )
             bResult = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aMulti );
     }
@@ -209,7 +209,7 @@ void FmXUpdateMultiplexer::updated(const EventObject &e) throw( RuntimeException
 
 FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
-    ,OInterfaceContainerHelper( _rMutex )
+    ,OInterfaceContainerHelper2( _rMutex )
 {
 }
 
@@ -243,7 +243,7 @@ void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEv
 
 FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                         :OWeakSubObject( rSource )
-                        ,OInterfaceContainerHelper( _rMutex )
+                        ,OInterfaceContainerHelper2( _rMutex )
 {
 }
 
@@ -293,7 +293,7 @@ void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e) throw( Ru
 
 FmXGridControlMultiplexer::FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
-    ,OInterfaceContainerHelper( _rMutex )
+    ,OInterfaceContainerHelper2( _rMutex )
 {
 }
 
@@ -1499,7 +1499,7 @@ sal_Bool FmXGridPeer::commit() throw( RuntimeException, std::exception )
         return sal_True;
 
     EventObject aEvt(static_cast< ::cppu::OWeakObject* >(this));
-    ::cppu::OInterfaceIteratorHelper aIter(m_aUpdateListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_aUpdateListeners);
     bool bCancel = false;
     while (aIter.hasMoreElements() && !bCancel)
         if ( !static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvt ) )

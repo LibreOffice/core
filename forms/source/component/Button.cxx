@@ -448,7 +448,7 @@ IMPL_LINK_NOARG_TYPED(OButtonControl, OnClick, void*, void)
         if (FormButtonType_PUSH == *static_cast<FormButtonType const *>(xSet->getPropertyValue(PROPERTY_BUTTONTYPE).getValue()))
         {
             // notify the action listeners for a push button
-            ::cppu::OInterfaceIteratorHelper aIter(m_aActionListeners);
+            ::comphelper::OInterfaceIteratorHelper2 aIter(m_aActionListeners);
             ActionEvent aEvt(static_cast<XWeak*>(this), m_aActionCommand);
             while(aIter.hasMoreElements() )
             {

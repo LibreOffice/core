@@ -157,7 +157,7 @@ private:
 
 
     typedef std::map<ShapeSharedPtr,
-                     boost::shared_ptr< ::cppu::OInterfaceContainerHelper >,
+                     boost::shared_ptr< ::comphelper::OInterfaceContainerHelper2 >,
                      Shape::lessThanShape>        ShapeToListenersMap;
     typedef std::map<ShapeSharedPtr, sal_Int16,
                        Shape::lessThanShape>      ShapeToCursorMap;

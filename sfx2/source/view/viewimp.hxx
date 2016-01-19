@@ -24,7 +24,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svtools/acceleratorexecute.hxx>
@@ -42,7 +42,7 @@ class SfxInPlaceClientList;
 struct SfxViewShell_Impl
 {
     ::osl::Mutex                aMutex;
-    ::cppu::OInterfaceContainerHelper aInterceptorContainer;
+    ::comphelper::OInterfaceContainerHelper2 aInterceptorContainer;
     bool                        m_bControllerSet;
     SfxShellArr_Impl            aArr;
     Size                        aMargin;

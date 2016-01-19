@@ -168,7 +168,7 @@ void SbaXFormAdapter::AttachForm(const Reference< css::sdbc::XRowSet >& xNewMast
         if (xLoadable->isLoaded())
         {
             css::lang::EventObject aEvt(*this);
-            ::cppu::OInterfaceIteratorHelper aIt(m_aLoadListeners);
+            ::comphelper::OInterfaceIteratorHelper2 aIt(m_aLoadListeners);
             while (aIt.hasMoreElements())
                 static_cast< css::form::XLoadListener*>(aIt.next())->unloaded(aEvt);
         }
@@ -185,7 +185,7 @@ void SbaXFormAdapter::AttachForm(const Reference< css::sdbc::XRowSet >& xNewMast
         if (xLoadable->isLoaded())
         {
             css::lang::EventObject aEvt(*this);
-            ::cppu::OInterfaceIteratorHelper aIt(m_aLoadListeners);
+            ::comphelper::OInterfaceIteratorHelper2 aIt(m_aLoadListeners);
             while (aIt.hasMoreElements())
                 static_cast< css::form::XLoadListener*>(aIt.next())->loaded(aEvt);
         }
@@ -1421,7 +1421,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     aEvt.Source = *this;
     aEvt.Accessor <<= nIndex;
     aEvt.Element <<= xElement;
-    ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
         static_cast< css::container::XContainerListener*>(aIt.next())->elementInserted(aEvt);
 }
@@ -1526,7 +1526,7 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( css::lang
     css::container::ContainerEvent aEvt;
     aEvt.Source = *this;
     aEvt.Element <<= xAffected;
-    ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
         static_cast< css::container::XContainerListener*>(aIt.next())->elementRemoved(aEvt);
 
@@ -1589,7 +1589,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
     aEvt.Element <<= xElement;
     aEvt.ReplacedElement <<= xOld;
 
-    ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
         static_cast< css::container::XContainerListener*>(aIt.next())->elementReplaced(aEvt);
 }

@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <osl/mutex.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -45,7 +45,7 @@ private:
 
     // for xComponent
     ::osl::Mutex aDisposeContainerMutex;
-    ::cppu::OInterfaceContainerHelper aDisposeListeners;
+    ::comphelper::OInterfaceContainerHelper2 aDisposeListeners;
     bool bDisposing;
 
 public:

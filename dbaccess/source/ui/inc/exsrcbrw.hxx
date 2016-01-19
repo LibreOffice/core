@@ -34,7 +34,7 @@ namespace dbaui
                 :public SbaXDataBrowserController
                 ,public css::util::XModifyBroadcaster
     {
-        ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aModifyListeners;
             // for multiplexing the modify events
         SbaXFormAdapter*                    m_pDataSourceImpl;
         bool                            m_bInQueryDispatch;

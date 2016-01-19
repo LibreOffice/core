@@ -74,6 +74,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 
@@ -148,7 +149,7 @@ namespace svxform
         css::uno::Reference< css::form::runtime::XFormControllerContext > m_xFormControllerContext;
 
         css::uno::Sequence< css::uno::Reference< css::awt::XControl> >   m_aControls;
-        ::cppu::OInterfaceContainerHelper
+        ::comphelper::OInterfaceContainerHelper2
                                     m_aActivateListeners,
                                     m_aModifyListeners,
                                     m_aErrorListeners,

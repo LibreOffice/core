@@ -144,7 +144,7 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
             // shape hit, and shape is visible. Raise
             // event.
 
-            boost::shared_ptr<cppu::OInterfaceContainerHelper> const pCont(
+            boost::shared_ptr<comphelper::OInterfaceContainerHelper2> const pCont(
                 aCurrBroadcaster->second );
             uno::Reference<drawing::XShape> const xShape(
                 aCurrBroadcaster->first->getXShape() );

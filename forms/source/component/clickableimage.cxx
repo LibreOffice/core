@@ -178,7 +178,7 @@ namespace frm
         bool bCancelled = false;
         EventObject aEvent( static_cast< XWeak* >( this ) );
 
-        ::cppu::OInterfaceIteratorHelper aIter( m_aApproveActionListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aApproveActionListeners );
         while( !bCancelled && aIter.hasMoreElements() )
         {
             // Every approveAction method must be thread-safe!

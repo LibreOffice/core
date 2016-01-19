@@ -25,6 +25,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
@@ -52,7 +53,7 @@ namespace reportdesign
                     public SectionBase,
                     public SectionPropertySet
     {
-        ::cppu::OInterfaceContainerHelper                                                   m_aContainerListeners;
+        ::comphelper::OInterfaceContainerHelper2                                                  m_aContainerListeners;
         css::uno::Reference< css::uno::XComponentContext >                                  m_xContext;
         css::uno::Reference< css::drawing::XDrawPage >                                      m_xDrawPage;
         css::uno::Reference< css::drawing::XShapeGrouper >                                  m_xDrawPage_ShapeGrouper;

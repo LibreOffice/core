@@ -112,7 +112,7 @@ namespace frm
         (void)_nAttributeId;
 
         FeatureStateEvent aEvent( buildStatusEvent() );
-        ::cppu::OInterfaceIteratorHelper aIter( getStatusListeners() );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( getStatusListeners() );
         while ( aIter.hasMoreElements() )
             doNotify( static_cast< XStatusListener* >( aIter.next() ), aEvent );
     }

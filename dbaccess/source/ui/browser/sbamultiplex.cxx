@@ -29,7 +29,7 @@ void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStat
 {
     m_aLastKnownStatus = e;
     m_aLastKnownStatus.Source = &m_rParent;
-    ::cppu::OInterfaceIteratorHelper aIt( *this );
+    ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
     while ( aIt.hasMoreElements() )
         static_cast< css::frame::XStatusListener* >( aIt.next() )->statusChanged( m_aLastKnownStatus );
 }                                                                                       \
@@ -89,7 +89,7 @@ void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence<
     for (sal_Int32 i=0; i<aMulti.getLength(); ++i, ++pMulti)
         pMulti->Source = &m_rParent;
 
-    ::cppu::OInterfaceIteratorHelper aIt(*this);
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
     while (aIt.hasMoreElements())
         static_cast< css::beans::XPropertiesChangeListener*>(aIt.next())->propertiesChange(aMulti);
 }

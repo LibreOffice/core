@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -4297,7 +4297,7 @@ class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
     SbxObjectRef        m_xScopeObj;
     bool                m_bProxyIsClassModuleObject;
 
-    ::cppu::OInterfaceContainerHelper m_aListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_aListeners;
 
 public:
     ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj );

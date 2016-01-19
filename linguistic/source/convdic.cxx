@@ -618,13 +618,7 @@ void SAL_CALL ConvDic::flush(  )
     // notify listeners
     EventObject aEvtObj;
     aEvtObj.Source = uno::Reference< XFlushable >( this );
-    cppu::OInterfaceIteratorHelper aIt( aFlushListeners );
-    while (aIt.hasMoreElements())
-    {
-        uno::Reference< util::XFlushListener > xRef( aIt.next(), UNO_QUERY );
-        if (xRef.is())
-            xRef->flushed( aEvtObj );
-    }
+    aFlushListeners.notifyEach( &util::XFlushListener::flushed, aEvtObj );
 }
 
 

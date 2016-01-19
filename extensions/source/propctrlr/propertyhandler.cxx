@@ -78,8 +78,8 @@ namespace pcr
             return;
 
         // remove all old property change listeners
-        ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper > removeListener = m_aPropertyListeners.createIterator();
-        ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper > readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
+        ::std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > removeListener = m_aPropertyListeners.createIterator();
+        ::std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
         while ( removeListener->hasMoreElements() )
             removePropertyChangeListener( static_cast< XPropertyChangeListener* >( removeListener->next() ) );
         OSL_ENSURE( m_aPropertyListeners.empty(), "PropertyHandler::inspect: derived classes are expected to forward the removePropertyChangeListener call to their base class (me)!" );

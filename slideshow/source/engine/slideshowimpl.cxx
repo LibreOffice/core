@@ -422,7 +422,7 @@ private:
     UnoViewContainer                        maViewContainer;
 
     /// all registered slide show listeners
-    cppu::OInterfaceContainerHelper         maListenerContainer;
+    comphelper::OInterfaceContainerHelper2         maListenerContainer;
 
     /// map of vectors, containing all registered listeners for a shape
     ShapeEventListenerMap                   maShapeEventListeners;
@@ -1855,8 +1855,8 @@ void SlideShowImpl::addShapeEventListener(
         aIter = maShapeEventListeners.insert(
             ShapeEventListenerMap::value_type(
                 xShape,
-                boost::shared_ptr<cppu::OInterfaceContainerHelper>(
-                    new cppu::OInterfaceContainerHelper(m_aMutex)))).first;
+                boost::shared_ptr<comphelper::OInterfaceContainerHelper2>(
+                    new comphelper::OInterfaceContainerHelper2(m_aMutex)))).first;
     }
 
     // add new listener to broadcaster

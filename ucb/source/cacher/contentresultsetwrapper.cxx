@@ -33,6 +33,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
+using namespace comphelper;
 using namespace cppu;
 
 
@@ -427,7 +428,7 @@ void SAL_CALL ContentResultSetWrapper::addEventListener( const Reference< XEvent
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners =
-                    new OInterfaceContainerHelper( m_aContainerMutex );
+                    new OInterfaceContainerHelper2( m_aContainerMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

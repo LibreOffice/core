@@ -410,35 +410,9 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
     if (mpRefreshListeners)
     {
         //  Call all listeners.
-        uno::Sequence< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElements());
-        sal_uInt32 nLength(aListeners.getLength());
-        if (nLength)
-        {
-            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
-            if (pInterfaces)
-            {
-                lang::EventObject aEvent;
-                aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
-                sal_uInt32 i(0);
-                while (i < nLength)
-                {
-                    try
-                    {
-                        while(i < nLength)
-                        {
-                            static_cast< util::XRefreshListener* >(pInterfaces->get())->refreshed(aEvent);
-                            ++pInterfaces;
-                            ++i;
-                        }
-                    }
-                    catch(uno::RuntimeException&)
-                    {
-                        ++pInterfaces;
-                        ++i;
-                    }
-                }
-            }
-        }
+        lang::EventObject aEvent;
+        aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
+        mpRefreshListeners->notifyEach( &util::XRefreshListener::refreshed, aEvent );
     }
 }
 
@@ -449,7 +423,7 @@ void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::X
     {
         SolarMutexGuard aGuard;
         if (!mpRefreshListeners)
-            mpRefreshListeners = new cppu::OInterfaceContainerHelper(aMutex);
+            mpRefreshListeners = new comphelper::OInterfaceContainerHelper2(aMutex);
         mpRefreshListeners->addInterface(xListener);
     }
 }
@@ -590,35 +564,9 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
     if (mpRefreshListeners)
     {
         //  Call all listeners.
-        uno::Sequence< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElements());
-        sal_uInt32 nLength(aListeners.getLength());
-        if (nLength)
-        {
-            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
-            if (pInterfaces)
-            {
-                lang::EventObject aEvent;
-                aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
-                sal_uInt32 i(0);
-                while (i < nLength)
-                {
-                    try
-                    {
-                        while(i < nLength)
-                        {
-                            static_cast< util::XRefreshListener* >(pInterfaces->get())->refreshed(aEvent);
-                            ++pInterfaces;
-                            ++i;
-                        }
-                    }
-                    catch(uno::RuntimeException&)
-                    {
-                        ++pInterfaces;
-                        ++i;
-                    }
-                }
-            }
-        }
+        lang::EventObject aEvent;
+        aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
+        mpRefreshListeners->notifyEach( &util::XRefreshListener::refreshed, aEvent);
     }
 }
 
@@ -629,7 +577,7 @@ void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util:
     {
         SolarMutexGuard aGuard;
         if (!mpRefreshListeners)
-            mpRefreshListeners = new cppu::OInterfaceContainerHelper(aMutex);
+            mpRefreshListeners = new comphelper::OInterfaceContainerHelper2(aMutex);
         mpRefreshListeners->addInterface(xListener);
     }
 }

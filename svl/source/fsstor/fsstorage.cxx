@@ -68,7 +68,7 @@ struct FSStorage_Impl
     ::ucbhelper::Content* m_pContent;
     sal_Int32 m_nMode;
 
-    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
 
     uno::Reference< uno::XComponentContext > m_xContext;
@@ -1166,7 +1166,7 @@ void SAL_CALL FSStorage::addEventListener(
         throw lang::DisposedException();
 
     if ( !m_pImpl->m_pListenersContainer )
-        m_pImpl->m_pListenersContainer = new ::cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pImpl->m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
 
     m_pImpl->m_pListenersContainer->addInterface( xListener );
 }

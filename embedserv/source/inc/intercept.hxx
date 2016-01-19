@@ -166,7 +166,7 @@ private:
 
     static css::uno::Sequence< OUString > m_aInterceptedURL;
 
-    cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper2*    m_pDisposeEventListeners;
     StatusChangeListenerContainer*      m_pStatCL;
 
     sal_Bool m_bLink;

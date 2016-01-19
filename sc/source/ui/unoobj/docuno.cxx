@@ -2676,7 +2676,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
             rChange.ReplacedElement <<= xRangeObj;
         }
 
-        ::cppu::OInterfaceIteratorHelper aIter( maChangesListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( maChangesListeners );
         while ( aIter.hasMoreElements() )
         {
             try

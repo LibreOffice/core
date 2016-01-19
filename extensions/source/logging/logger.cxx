@@ -28,7 +28,7 @@
 #include <com/sun/star/logging/XLoggerPool.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -56,7 +56,7 @@ namespace logging
                         public cppu::WeakImplHelper<css::logging::XLogger>
     {
     private:
-        cppu::OInterfaceContainerHelper     m_aHandlers;
+        comphelper::OInterfaceContainerHelper2     m_aHandlers;
         oslInterlockedCount                 m_nEventNumber;
 
         // <attributes>

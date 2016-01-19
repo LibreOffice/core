@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 
 namespace frm
@@ -53,7 +53,7 @@ namespace frm
                         m_xListSource;      /// our external list source
         css::uno::Sequence< OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
-        ::cppu::OInterfaceContainerHelper
+        ::comphelper::OInterfaceContainerHelper2
                         m_aRefreshListeners;
 
 

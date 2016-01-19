@@ -2151,7 +2151,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
 
     if (_bAproveByListeners)
     {
-        ::cppu::OInterfaceIteratorHelper aIter(m_aSubmitListeners);
+        ::comphelper::OInterfaceIteratorHelper2 aIter(m_aSubmitListeners);
         EventObject aEvt(static_cast<XWeak*>(this));
         bool bCanceled = false;
         while (aIter.hasMoreElements() && !bCanceled)
@@ -2944,7 +2944,7 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
         // the approvement is done by the aggregate
         if (!m_aRowSetApproveListeners.getLength())
         {
-            ::cppu::OInterfaceIteratorHelper aIter(m_aLoadListeners);
+            ::comphelper::OInterfaceIteratorHelper2 aIter(m_aLoadListeners);
             aGuard.clear();
 
             while (aIter.hasMoreElements())
@@ -2967,7 +2967,7 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
 
     if (bSuccess)
     {
-        ::cppu::OInterfaceIteratorHelper aIter(m_aLoadListeners);
+        ::comphelper::OInterfaceIteratorHelper2 aIter(m_aLoadListeners);
         aGuard.clear();
         while (aIter.hasMoreElements())
             static_cast<XLoadListener*>(aIter.next())->reloaded(aEvent);
@@ -3047,7 +3047,7 @@ void SAL_CALL ODatabaseForm::rowSetChanged(const EventObject& /*event*/) throw( 
 bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, const bool _bAllowSQLException,
     ::osl::ClearableMutexGuard& _rGuard )
 {
-    ::cppu::OInterfaceIteratorHelper aIter( m_aRowSetApproveListeners );
+    ::comphelper::OInterfaceIteratorHelper2 aIter( m_aRowSetApproveListeners );
     _rGuard.clear();
     while ( aIter.hasMoreElements() )
     {
@@ -3092,7 +3092,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event) thr
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
         // So we have to multiplex this approve request.
-        ::cppu::OInterfaceIteratorHelper aIter( m_aRowSetApproveListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aRowSetApproveListeners );
         while ( aIter.hasMoreElements() )
         {
             Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aIter.next() ) );
@@ -3141,7 +3141,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event) t
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
         // So we have to multiplex this approve request.
-        ::cppu::OInterfaceIteratorHelper aIter( m_aRowSetApproveListeners );
+        ::comphelper::OInterfaceIteratorHelper2 aIter( m_aRowSetApproveListeners );
         while ( aIter.hasMoreElements() )
         {
             Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aIter.next() ) );

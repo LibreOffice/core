@@ -136,8 +136,8 @@ namespace dbaui
         SbaXVetoableChangeMultiplexer       m_aVetoablePropertyChangeListeners;
         SbaXPropertiesChangeMultiplexer     m_aPropertiesChangeListeners;
 
-        ::cppu::OInterfaceContainerHelper   m_aDisposeListeners;
-        ::cppu::OInterfaceContainerHelper   m_aContainerListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aDisposeListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aContainerListeners;
 
         // hierarchy administration
         css::uno::Reference< css::uno::XInterface >                           m_xParent;

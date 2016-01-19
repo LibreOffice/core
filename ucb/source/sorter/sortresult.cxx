@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <memory>
@@ -40,6 +41,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
+using namespace comphelper;
 using namespace cppu;
 
 
@@ -238,7 +240,7 @@ void SAL_CALL SortedResultSet::addEventListener(
 
     if ( !mpDisposeEventListeners )
         mpDisposeEventListeners =
-                    new OInterfaceContainerHelper( getContainerMutex() );
+                    new OInterfaceContainerHelper2( getContainerMutex() );
 
     mpDisposeEventListeners->addInterface( Listener );
 }

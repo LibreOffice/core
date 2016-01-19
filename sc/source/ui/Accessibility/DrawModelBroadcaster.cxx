@@ -62,7 +62,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )
         return;
 
-    ::cppu::OInterfaceIteratorHelper aIter( maEventListeners );
+    ::comphelper::OInterfaceIteratorHelper2 aIter( maEventListeners );
     while( aIter.hasMoreElements() )
     {
         uno::Reference < document::XEventListener > xListener( aIter.next(), uno::UNO_QUERY );

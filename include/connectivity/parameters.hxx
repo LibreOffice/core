@@ -35,7 +35,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/paramwrapper.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 
 namespace dbtools
@@ -98,7 +98,7 @@ namespace dbtools
 
     private:
         ::osl::Mutex&                       m_rMutex;
-        ::cppu::OInterfaceContainerHelper   m_aParameterListeners;
+        ::comphelper::OInterfaceContainerHelper2  m_aParameterListeners;
 
         css::uno::Reference< css::uno::XComponentContext >
                                             m_xContext;

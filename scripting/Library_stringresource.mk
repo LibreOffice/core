@@ -21,6 +21,7 @@ $(eval $(call gb_Library_use_external,stringresource,boost_headers))
 $(eval $(call gb_Library_use_sdk_api,stringresource))
 
 $(eval $(call gb_Library_use_libraries,stringresource,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <tools/solar.h>
 
 #include "defs.hxx"
@@ -43,7 +43,7 @@ class DictionaryNeo :
     >
 {
 
-    ::cppu::OInterfaceContainerHelper                           aDicEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2                          aDicEvtListeners;
     css::uno::Sequence< css::uno::Reference<  css::linguistic2::XDictionaryEntry > >
                                                                 aEntries;
     OUString                                                    aDicName;

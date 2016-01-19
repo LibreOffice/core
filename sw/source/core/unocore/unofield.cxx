@@ -412,11 +412,11 @@ class SwXFieldMaster::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::cppu::OInterfaceContainerHelper m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
 
     SwDoc*          m_pDoc;
 
@@ -1127,11 +1127,11 @@ class SwXTextField::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::cppu::OInterfaceContainerHelper m_EventListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
 
     SwFormatField const*     m_pFormatField;
     SwDoc *             m_pDoc;
@@ -2858,10 +2858,10 @@ sal_Bool SwXTextFieldMasters::hasElements() throw( uno::RuntimeException, std::e
 class SwXTextFieldTypes::Impl
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
-    ::cppu::OInterfaceContainerHelper m_RefreshListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_RefreshListeners;
 
     Impl() : m_RefreshListeners(m_Mutex) { }
 };

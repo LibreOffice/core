@@ -27,7 +27,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 
 namespace connectivity
 {
@@ -57,7 +57,7 @@ namespace connectivity
                                 ,public IMethodGuardAccess
         {
         private:
-            ::cppu::OInterfaceContainerHelper                                                           m_aFlushListeners;
+            ::comphelper::OInterfaceContainerHelper2                                                          m_aFlushListeners;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                         m_xDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
             bool                                                                                        m_bIni;

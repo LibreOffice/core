@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <dbaccess/IController.hxx>
@@ -565,7 +565,7 @@ std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
     // set images
     lcl_insertMenuItemImages( *pContextMenu, m_pContextMenuProvider->getCommandController() );
     // allow context menu interception
-    ::cppu::OInterfaceContainerHelper* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
+    ::comphelper::OInterfaceContainerHelper2* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
     if ( !pInterceptors || !pInterceptors->getLength() )
         return pContextMenu;
 
@@ -577,7 +577,7 @@ std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
         pContextMenu.get(), nullptr );
     aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
 
-    ::cppu::OInterfaceIteratorHelper aIter( *pInterceptors );
+    ::comphelper::OInterfaceIteratorHelper2 aIter( *pInterceptors );
     bool bModifiedMenu = false;
     bool bAskInterceptors = true;
     while ( aIter.hasMoreElements() && bAskInterceptors )

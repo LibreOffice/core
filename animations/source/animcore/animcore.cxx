@@ -47,7 +47,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -60,8 +60,8 @@
 
 using ::osl::Mutex;
 using ::osl::Guard;
-using ::cppu::OInterfaceContainerHelper;
-using ::cppu::OInterfaceIteratorHelper;
+using ::comphelper::OInterfaceContainerHelper2;
+using ::comphelper::OInterfaceIteratorHelper2;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
@@ -287,7 +287,7 @@ public:
     void fireChangeListener();
 
 private:
-    OInterfaceContainerHelper   maChangeListener;
+    OInterfaceContainerHelper2   maChangeListener;
 
     static void initTypeProvider( sal_Int16 nNodeType ) throw();
 
@@ -2129,7 +2129,7 @@ void AnimationNode::fireChangeListener()
 {
     Guard< Mutex > aGuard( maMutex );
 
-    OInterfaceIteratorHelper aIterator( maChangeListener );
+    OInterfaceIteratorHelper2 aIterator( maChangeListener );
     if( aIterator.hasMoreElements() )
     {
         Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );

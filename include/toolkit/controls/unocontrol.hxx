@@ -92,7 +92,7 @@ protected:
     MouseListenerMultiplexer            maMouseListeners;
     MouseMotionListenerMultiplexer      maMouseMotionListeners;
     PaintListenerMultiplexer            maPaintListeners;
-    ::cppu::OInterfaceContainerHelper   maModeChangeListeners;
+    ::comphelper::OInterfaceContainerHelper2   maModeChangeListeners;
 
     css::uno::Reference< css::uno::XInterface >       mxContext;
     css::uno::Reference< css::awt::XControlModel >    mxModel;

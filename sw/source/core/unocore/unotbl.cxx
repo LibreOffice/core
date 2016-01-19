@@ -152,6 +152,23 @@ static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
 }
 
 static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
+                               ::comphelper::OInterfaceContainerHelper2 & rListeners)
+{
+    if (!rListeners.getLength())
+        return;
+    //TODO: find appropriate settings of the Event
+    chart::ChartDataChangeEvent event;
+    event.Source = & rSource;
+    event.Type = chart::ChartDataChangeType_ALL;
+    event.StartColumn = 0;
+    event.EndColumn = 1;
+    event.StartRow = 0;
+    event.EndRow = 1;
+    rListeners.notifyEach(
+            & chart::XChartDataChangeEventListener::chartDataChanged, event);
+}
+
+static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
                                ::cppu::OMultiTypeInterfaceContainerHelper & rListeners)
 {
     ::cppu::OInterfaceContainerHelper *const pContainer(rListeners.getContainer(
@@ -1772,7 +1789,7 @@ void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNe
 class SwXTextTable::Impl
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;

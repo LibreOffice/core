@@ -19,7 +19,7 @@
 
 #include <vector>
 #include <sortdynres.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
@@ -33,7 +33,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace cppu;
+using namespace comphelper;
 
 
 //  The mutex to synchronize access to containers.
@@ -158,7 +158,7 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
 
     if ( !mpDisposeEventListeners )
         mpDisposeEventListeners =
-                    new OInterfaceContainerHelper( getContainerMutex() );
+                    new OInterfaceContainerHelper2( getContainerMutex() );
 
     mpDisposeEventListeners->addInterface( Listener );
 }

@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/asyncnotification.hxx>
@@ -197,8 +197,8 @@ namespace framework
         bool                                m_bAPIActionRunning;
         bool                                m_bProcessingEvents;
         sal_Int32                           m_nLockCount;
-        ::cppu::OInterfaceContainerHelper   m_aUndoListeners;
-        ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aUndoListeners;
+        ::comphelper::OInterfaceContainerHelper2   m_aModifyListeners;
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
         ::std::stack< bool >                m_aContextVisibilities;
 #if OSL_DEBUG_LEVEL > 0

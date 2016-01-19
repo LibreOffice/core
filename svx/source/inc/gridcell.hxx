@@ -40,6 +40,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 
 #include <comphelper/propmultiplex.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -717,11 +718,11 @@ protected:
     DbCellControl*      m_pCellControl;
 
 private:
-    ::cppu::OInterfaceContainerHelper   m_aWindowListeners;
-    ::cppu::OInterfaceContainerHelper   m_aFocusListeners;
-    ::cppu::OInterfaceContainerHelper   m_aKeyListeners;
-    ::cppu::OInterfaceContainerHelper   m_aMouseListeners;
-    ::cppu::OInterfaceContainerHelper   m_aMouseMotionListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aWindowListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aFocusListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aKeyListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aMouseListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aMouseMotionListeners;
 
 protected:
     virtual ~FmXGridCell();
@@ -870,8 +871,8 @@ private:
     OUString                     m_sValueOnEnter;
 
 protected:
-    ::cppu::OInterfaceContainerHelper   m_aTextListeners;
-    ::cppu::OInterfaceContainerHelper   m_aChangeListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aTextListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aChangeListeners;
     ::svt::IEditImplementation*         m_pEditImplementation;
     bool                                m_bOwnEditImplementation;
 
@@ -924,8 +925,8 @@ typedef ::cppu::ImplHelper2 <   css::awt::XCheckBox
 class FmXCheckBoxCell : public FmXDataCell,
                         public FmXCheckBoxCell_Base
 {
-    ::cppu::OInterfaceContainerHelper   m_aItemListeners;
-    ::cppu::OInterfaceContainerHelper   m_aActionListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aItemListeners;
+    ::comphelper::OInterfaceContainerHelper2   m_aActionListeners;
     OUString                            m_aActionCommand;
     VclPtr<CheckBox>                    m_pBox;
 
@@ -969,7 +970,7 @@ typedef ::cppu::ImplHelper1 <   css::awt::XListBox
 class FmXListBoxCell    :public FmXTextCell
                         ,public FmXListBoxCell_Base
 {
-    ::cppu::OInterfaceContainerHelper   m_aItemListeners,
+    ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
     VclPtr<ListBox>                     m_pBox;
 
@@ -1024,7 +1025,7 @@ class FmXComboBoxCell   :public FmXTextCell
                         ,public FmXComboBoxCell_Base
 {
 private:
-    ::cppu::OInterfaceContainerHelper   m_aItemListeners,
+    ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
     VclPtr<ComboBox>                    m_pComboBox;
 
@@ -1067,7 +1068,7 @@ typedef ::cppu::ImplHelper2 <   css::awt::XTextComponent
 class FmXFilterCell :public FmXGridCell
                     ,public FmXFilterCell_Base
 {
-    ::cppu::OInterfaceContainerHelper m_aTextListeners;
+    ::comphelper::OInterfaceContainerHelper2 m_aTextListeners;
 protected:
     virtual ~FmXFilterCell();
 public:

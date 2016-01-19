@@ -66,7 +66,7 @@ class Thesaurus :
 {
     Sequence< Locale >                      aSuppLocales;
 
-    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
     linguistic::PropertyHelper_Thesaurus*       pPropHelper;
     bool                                    bDisposing;
     CharClass **                            aCharSetInfo;

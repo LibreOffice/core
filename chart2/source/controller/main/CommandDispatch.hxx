@@ -21,6 +21,7 @@
 
 #include "MutexContainer.hxx"
 #include <cppuhelper/compbase.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -130,7 +131,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >  m_xURLTransformer;
 
 private:
-    typedef ::std::map< OUString, ::cppu::OInterfaceContainerHelper* >
+    typedef ::std::map< OUString, ::comphelper::OInterfaceContainerHelper2* >
         tListenerMap;
 
     tListenerMap m_aListeners;

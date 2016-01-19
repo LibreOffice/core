@@ -60,7 +60,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <svtools/grfmgr.hxx>
 
 #include <memory>
@@ -130,7 +130,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > m_xDocumentProperties;
     ::rtl::Reference< UndoManager >                                             m_pUndoManager;
 
-    ::cppu::OInterfaceContainerHelper                                           m_aControllers;
+    ::comphelper::OInterfaceContainerHelper2                                           m_aControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    m_xCurrentController;
     sal_uInt16                                                                  m_nControllerLockCount;
 

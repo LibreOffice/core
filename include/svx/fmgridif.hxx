@@ -67,7 +67,7 @@ public:
 // FmXModifyMultiplexer
 
 class SAL_WARN_UNUSED FmXModifyMultiplexer  :public OWeakSubObject
-                            ,public ::cppu::OInterfaceContainerHelper
+                            ,public ::comphelper::OInterfaceContainerHelper2
                             ,public css::util::XModifyListener
 {
 public:
@@ -81,7 +81,7 @@ public:
 // css::util::XModifyListener
     virtual void SAL_CALL modified(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;
 
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
@@ -90,7 +90,7 @@ public:
 // FmXUpdateMultiplexer
 
 class SAL_WARN_UNUSED FmXUpdateMultiplexer : public OWeakSubObject,
-                             public ::cppu::OInterfaceContainerHelper,
+                             public ::comphelper::OInterfaceContainerHelper2,
                              public css::form::XUpdateListener
 {
 public:
@@ -106,7 +106,7 @@ public:
     virtual sal_Bool SAL_CALL approveUpdate(const css::lang::EventObject &) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL updated(const css::lang::EventObject &) throw(css::uno::RuntimeException, std::exception) override;
 
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
@@ -115,7 +115,7 @@ public:
 // FmXSelectionMultiplexer
 
 class SAL_WARN_UNUSED FmXSelectionMultiplexer   :public OWeakSubObject
-                                ,public ::cppu::OInterfaceContainerHelper
+                                ,public ::comphelper::OInterfaceContainerHelper2
                                 ,public css::view::XSelectionChangeListener
 {
 public:
@@ -130,7 +130,7 @@ public:
 // css::view::XSelectionChangeListener
     virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
@@ -139,7 +139,7 @@ public:
 // FmXGridControlMultiplexer
 
 class SAL_WARN_UNUSED FmXGridControlMultiplexer :public OWeakSubObject
-                                ,public ::cppu::OInterfaceContainerHelper
+                                ,public ::comphelper::OInterfaceContainerHelper2
                                 ,public css::form::XGridControlListener
 {
 public:
@@ -154,7 +154,7 @@ public:
 // css::view::XSelectionChangeListener
     virtual void SAL_CALL columnChanged( const css::lang::EventObject& _event ) throw (css::uno::RuntimeException, std::exception) override;
 
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
@@ -163,7 +163,7 @@ public:
 // FmXContainerMultiplexer
 
 class SAL_WARN_UNUSED FmXContainerMultiplexer : public OWeakSubObject,
-                                public ::cppu::OInterfaceContainerHelper,
+                                public ::comphelper::OInterfaceContainerHelper2,
                                 public css::container::XContainerListener
 {
 public:
@@ -179,7 +179,7 @@ public:
     virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) throw(css::uno::RuntimeException, std::exception) override;
 
-// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper2 have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
     void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
 };
@@ -336,7 +336,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmXGridPeer:
 {
     css::uno::Reference< css::container::XIndexContainer >    m_xColumns;
     css::uno::Reference< css::sdbc::XRowSet >                 m_xCursor;
-    ::cppu::OInterfaceContainerHelper       m_aModifyListeners,
+    ::comphelper::OInterfaceContainerHelper2       m_aModifyListeners,
                                             m_aUpdateListeners,
                                             m_aContainerListeners,
                                             m_aSelectionListeners,

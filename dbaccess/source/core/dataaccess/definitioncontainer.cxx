@@ -289,7 +289,7 @@ void ODefinitionContainer::notifyByName( ResettableMutexGuard& _rGuard, const OU
 {
     bool bApprove = ( _eType == ApproveListeners );
 
-    ::cppu::OInterfaceContainerHelper& rContainer( bApprove ? m_aApproveListeners : m_aContainerListeners );
+    ::comphelper::OInterfaceContainerHelper2& rContainer( bApprove ? m_aApproveListeners : m_aContainerListeners );
     if ( !rContainer.getLength() )
         return;
 

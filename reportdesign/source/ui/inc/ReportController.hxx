@@ -48,6 +48,7 @@
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
@@ -86,7 +87,7 @@ namespace rptui
     {
     private:
         OModuleClient           m_aModuleClient;
-        ::cppu::OInterfaceContainerHelper
+        ::comphelper::OInterfaceContainerHelper2
                                 m_aSelectionListeners;
         css::uno::Sequence< css::beans::PropertyValue>
                                 m_aCollapsedSections;

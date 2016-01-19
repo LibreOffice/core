@@ -24,6 +24,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <boost/bind.hpp>
 
 #include <editeng/outliner.hxx>
@@ -58,7 +59,7 @@
 
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
-using ::cppu::OInterfaceContainerHelper;
+using ::comphelper::OInterfaceContainerHelper2;
 using ::com::sun::star::table::BorderLine;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -345,7 +346,7 @@ bool SdStyleSheet::IsUsed() const
     {
         MutexGuard aGuard( mrBHelper.rMutex );
 
-        OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
+        cppu::OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
         if( pContainer )
         {
             Sequence< Reference< XInterface > > aModifyListeners( pContainer->getElements() );
@@ -837,7 +838,7 @@ void SdStyleSheet::notifyModifyListener()
 {
     MutexGuard aGuard( mrBHelper.rMutex );
 
-    OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
+    cppu::OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
     if( pContainer )
     {
         EventObject aEvt( static_cast< OWeakObject * >( this ) );

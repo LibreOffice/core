@@ -183,8 +183,8 @@ class LngSvcMgrListenerHelper :
 {
     LngSvcMgr  &rMyManager;
 
-    ::cppu::OInterfaceContainerHelper           aLngSvcMgrListeners;
-    ::cppu::OInterfaceContainerHelper           aLngSvcEvtBroadcasters;
+    ::comphelper::OInterfaceContainerHelper2           aLngSvcMgrListeners;
+    ::comphelper::OInterfaceContainerHelper2           aLngSvcEvtBroadcasters;
     uno::Reference< linguistic2::XSearchableDictionaryList >           xDicList;
 
     sal_Int16   nCombinedLngSvcEvt;
@@ -276,13 +276,7 @@ void LngSvcMgrListenerHelper::Timeout()
             rMyManager.pSpellDsp->FlushSpellCache();
 
         // pass event on to linguistic2::XLinguServiceEventListener's
-        cppu::OInterfaceIteratorHelper aIt( aLngSvcMgrListeners );
-        while (aIt.hasMoreElements())
-        {
-            uno::Reference< linguistic2::XLinguServiceEventListener > xRef( aIt.next(), uno::UNO_QUERY );
-            if (xRef.is())
-                xRef->processLinguServiceEvent( aEvtObj );
-        }
+        aLngSvcMgrListeners.notifyEach( &linguistic2::XLinguServiceEventListener::processLinguServiceEvent, aEvtObj );
     }
 }
 
@@ -318,13 +312,7 @@ void SAL_CALL
     // we do keep the original event source here though...
 
     // pass event on to linguistic2::XDictionaryListEventListener's
-    cppu::OInterfaceIteratorHelper aIt( aLngSvcMgrListeners );
-    while (aIt.hasMoreElements())
-    {
-        uno::Reference< linguistic2::XDictionaryListEventListener > xRef( aIt.next(), uno::UNO_QUERY );
-        if (xRef.is())
-            xRef->processDictionaryListEvent( rDicListEvent );
-    }
+    aLngSvcMgrListeners.notifyEach( &linguistic2::XDictionaryListEventListener::processDictionaryListEvent, rDicListEvent );
 
     // "translate" DictionaryList event into linguistic2::LinguServiceEvent
     sal_Int16 nLngSvcEvt = 0;
@@ -365,13 +353,7 @@ void LngSvcMgrListenerHelper::LaunchEvent( sal_Int16 nLngSvcEvtFlags )
         static_cast<css::linguistic2::XLinguServiceManager*>(&rMyManager), nLngSvcEvtFlags );
 
     // pass event on to linguistic2::XLinguServiceEventListener's
-    cppu::OInterfaceIteratorHelper aIt( aLngSvcMgrListeners );
-    while (aIt.hasMoreElements())
-    {
-        uno::Reference< linguistic2::XLinguServiceEventListener > xRef( aIt.next(), uno::UNO_QUERY );
-        if (xRef.is())
-            xRef->processLinguServiceEvent( aEvt );
-    }
+    aLngSvcMgrListeners.notifyEach( &linguistic2::XLinguServiceEventListener::processLinguServiceEvent, aEvt );
 }
 
 
@@ -397,7 +379,7 @@ void LngSvcMgrListenerHelper::DisposeAndClear( const lang::EventObject &rEvtObj 
     aLngSvcMgrListeners   .disposeAndClear( rEvtObj );
 
     // remove references to this object hold by the broadcasters
-    cppu::OInterfaceIteratorHelper aIt( aLngSvcEvtBroadcasters );
+    comphelper::OInterfaceIteratorHelper2 aIt( aLngSvcEvtBroadcasters );
     while (aIt.hasMoreElements())
     {
         uno::Reference< linguistic2::XLinguServiceEventBroadcaster > xRef( aIt.next(), uno::UNO_QUERY );

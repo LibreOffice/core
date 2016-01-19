@@ -31,7 +31,8 @@
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
+
 #include <osl/mutex.hxx>
 #include <sot/stg.hxx>
 
@@ -46,7 +47,7 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
     SvStream* m_pStream;
     BaseStorage* m_pStorage;
 
-    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     bool m_bNoTemporaryCopy;

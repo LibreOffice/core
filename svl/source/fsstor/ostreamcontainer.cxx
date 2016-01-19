@@ -266,7 +266,7 @@ void SAL_CALL OFSStreamContainer::addEventListener( const uno::Reference< lang::
         throw lang::DisposedException();
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper2( m_aMutex );
 
     m_pListenersContainer->addInterface( xListener );
 }

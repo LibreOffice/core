@@ -30,6 +30,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <cppuhelper/implbase5.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertybag.hxx>
@@ -84,7 +85,7 @@ namespace comphelper
         bool            m_bAutoAddProperties;
 
         /// for notification
-        ::cppu::OInterfaceContainerHelper m_NotifyListeners;
+        ::comphelper::OInterfaceContainerHelper2 m_NotifyListeners;
         /// modify flag
         bool            m_isModified;
 

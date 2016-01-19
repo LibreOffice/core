@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 
 
 namespace reportdesign
@@ -81,7 +81,7 @@ namespace reportdesign
         OReportControlModel(OReportControlModel&) = delete;
         void operator =(OReportControlModel&) = delete;
     public:
-        ::cppu::OInterfaceContainerHelper                   aContainerListeners;
+        ::comphelper::OInterfaceContainerHelper2                  aContainerListeners;
         OReportComponentProperties                          aComponent;
         OFormatProperties                                   aFormatProperties;
         css::container::XContainer*                         m_pOwner;

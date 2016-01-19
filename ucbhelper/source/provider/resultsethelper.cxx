@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <ucbhelper/resultsethelper.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
 

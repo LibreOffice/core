@@ -22,7 +22,7 @@
 #include <utility>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
@@ -49,15 +49,15 @@ class SwXFootnote::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
 
 public:
 
     SwXFootnote &               m_rThis;
     uno::WeakReference<uno::XInterface> m_wThis;
     const bool                  m_bIsEndnote;
-    ::cppu::OInterfaceContainerHelper m_EventListeners;
-    bool                        m_bIsDescriptor;
+    ::comphelper::OInterfaceContainerHelper2  m_EventListeners;
+    bool                                m_bIsDescriptor;
     const SwFormatFootnote *            m_pFormatFootnote;
     OUString             m_sLabel;
 
