@@ -40,9 +40,6 @@ namespace basegfx
         // assignment operator
         B2DEllipse& operator=(const B2DEllipse& rEllipse);
 
-        // compare operators
-        bool operator==(const B2DEllipse& rEllipse) const;
-
         // Coordinate interface
         basegfx::B2DPoint getB2DEllipseCenter() const { return maCenter; }
         basegfx::B2DTuple getB2DEllipseRadius() const { return maRadius; }

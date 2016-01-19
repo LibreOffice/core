@@ -206,26 +206,6 @@ void ContentInfo::Dump() const
 }
 #endif
 
-bool ContentInfo::operator==( const ContentInfo& rCompare ) const
-{
-    if( (maText == rCompare.maText) &&
-            (aStyle == rCompare.aStyle ) &&
-            (aAttribs.size() == rCompare.aAttribs.size()) &&
-            (eFamily == rCompare.eFamily ) &&
-            (aParaAttribs == rCompare.aParaAttribs ) )
-    {
-        for (size_t i = 0, n = aAttribs.size(); i < n; ++i)
-        {
-            if (aAttribs[i] != rCompare.aAttribs[i])
-                return false;
-        }
-
-        return true;
-    }
-
-    return false;
-}
-
 EditTextObject::EditTextObject( SfxItemPool* pPool ) :
     mpImpl(new EditTextObjectImpl(this, pPool))
 {

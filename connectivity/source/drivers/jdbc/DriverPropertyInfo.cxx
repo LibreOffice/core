@@ -48,18 +48,6 @@ jclass java_sql_DriverPropertyInfo::getMyClass() const
 }
 
 
-java_sql_DriverPropertyInfo::operator css::sdbc::DriverPropertyInfo()
-{
-    css::sdbc::DriverPropertyInfo aInfo;
-    aInfo.Name = name();
-    aInfo.Description = description();
-    aInfo.IsRequired = required();
-    aInfo.Value = value();
-    aInfo.Choices = choices();
-
-    return aInfo;
-}
-
 OUString java_sql_DriverPropertyInfo::name()
 {
     OUString aStr;

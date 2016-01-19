@@ -63,7 +63,6 @@ private:
 
 public:
     void           Append( const OUString & rCommand, const OUString & rArg );
-    void           AppendCommands( const OUString & rCmd, sal_Int32 * pEaten );
 
     void FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& );
     void FillSequence( css::uno::Sequence < css::beans::PropertyValue >& );

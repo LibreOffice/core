@@ -22,11 +22,6 @@ namespace basegfx
     {
     }
 
-    bool B2DEllipse::operator==(const B2DEllipse& rEllipse) const
-    {
-        return (maCenter == rEllipse.maCenter) && (maRadius == rEllipse.maRadius);
-    }
-
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

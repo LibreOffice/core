@@ -69,18 +69,7 @@ public:
 
     bool IsFeature() const;
     void SetItem(const SfxPoolItem& rNew);
-
-    inline bool operator==( const XEditAttribute& rCompare ) const;
 };
-
-inline bool XEditAttribute::operator==( const XEditAttribute& rCompare ) const
-{
-    return  (nStart == rCompare.nStart) &&
-            (nEnd == rCompare.nEnd) &&
-            ( (pItem == rCompare.pItem) ||
-            ( pItem->Which() != rCompare.pItem->Which()) ||
-            (*pItem == *rCompare.pItem));
-}
 
 struct XParaPortion
 {
@@ -157,7 +146,6 @@ public:
 
     const WrongList* GetWrongList() const;
     void SetWrongList( WrongList* p );
-    bool operator==( const ContentInfo& rCompare ) const;
 
     // #i102062#
     bool isWrongListEqual(const ContentInfo& rCompare) const;

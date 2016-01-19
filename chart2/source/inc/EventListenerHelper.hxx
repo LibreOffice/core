@@ -73,44 +73,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xListener;
 };
 
-template< class Pair >
-struct addListenerToMappedElementFunctor : public ::std::unary_function< Pair, void >
-{
-    explicit addListenerToMappedElementFunctor( const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::lang::XEventListener > & xListener ) :
-            m_xListener( xListener )
-    {}
-
-    void operator() ( const Pair & aPair )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-              xBroadcaster( aPair.second, ::com::sun::star::uno::UNO_QUERY );
-        if( xBroadcaster.is() && m_xListener.is())
-            xBroadcaster->addEventListener( m_xListener );
-    }
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xListener;
-};
-
-template< class Pair >
-struct removeListenerFromMappedElementFunctor : public ::std::unary_function< Pair, void >
-{
-    explicit removeListenerFromMappedElementFunctor( const ::com::sun::star::uno::Reference<
-                                                         ::com::sun::star::lang::XEventListener > & xListener ) :
-            m_xListener( xListener )
-    {}
-
-    void operator() ( const Pair & aPair )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-              xBroadcaster( aPair.second, ::com::sun::star::uno::UNO_QUERY );
-        if( xBroadcaster.is() && m_xListener.is())
-            xBroadcaster->removeEventListener( m_xListener );
-    }
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xListener;
-};
-
 } //  namespace impl
 
 template< class InterfaceRef >
