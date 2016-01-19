@@ -2116,6 +2116,14 @@ DECLARE_OOXMLIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.docx")
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE, getProperty<sal_Int16>(getRun(xParagraph, 1), "CharUnderline"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf85523, "tdf85523.docx")
+{
+    auto xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 6), "TextField");
+    auto xText = getProperty< uno::Reference<text::XText> >(xTextField, "TextRange");
+    // This was "commentX": an unexpected extra char was added at the comment end.
+    getParagraphOfText(1, xText, "comment");
+}
+
 DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.docx")
 {
     // Fonts defined by w:rFonts was not imported and so the font specified by a:fontRef was used.
