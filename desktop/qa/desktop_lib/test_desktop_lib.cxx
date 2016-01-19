@@ -14,6 +14,7 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 #ifdef WNT
 #include <prewin.h>
@@ -81,6 +82,7 @@ public:
     void testSaveAs();
     void testSaveAsCalc();
     void testPasteWriter();
+    void testPasteWriterJPEG();
     void testRowColumnHeaders();
     void testCommandResult();
     void testWriterComments();
@@ -97,6 +99,7 @@ public:
     CPPUNIT_TEST(testSaveAs);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
+    CPPUNIT_TEST(testPasteWriterJPEG);
     CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
@@ -410,6 +413,27 @@ void DesktopLOKTest::testPasteWriter()
     CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
     // Writer is expected to support text/html.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testPasteWriterJPEG()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    OString aText("hello");
+
+    OUString aFileURL;
+    createFileURL(OUString::createFromAscii("paste.jpg"), aFileURL);
+    std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
+    std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
+
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // This was 0, JPEG was not handled as a format for clipboard paste.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
 
     comphelper::LibreOfficeKit::setActive(false);
 }
