@@ -430,6 +430,7 @@ static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
+static void                    lo_freeError     (const char *pfree);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
@@ -451,6 +452,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->destroy = lo_destroy;
         m_pOfficeClass->documentLoad = lo_documentLoad;
         m_pOfficeClass->getError = lo_getError;
+        m_pOfficeClass->freeError = lo_freeError;
         m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
         m_pOfficeClass->registerCallback = lo_registerCallback;
         m_pOfficeClass->getFilterTypes = lo_getFilterTypes;
@@ -1570,6 +1572,10 @@ static char* lo_getError (LibreOfficeKit *pThis)
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
     strcpy(pMemory, aString.getStr());
     return pMemory;
+}
+static void lo_freeError(const char *pfree)
+{
+    free((void *) pfree);
 }
 
 static char* lo_getFilterTypes(LibreOfficeKit* pThis)

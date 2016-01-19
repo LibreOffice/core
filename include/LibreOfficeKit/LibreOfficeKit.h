@@ -51,6 +51,7 @@ struct _LibreOfficeKitClass
                                              const char* pURL);
 
     char* (*getError) (LibreOfficeKit* pThis);
+    void  (*freeError)     (const char *pfree);
 
     LibreOfficeKitDocument* (*documentLoadWithOptions) (LibreOfficeKit* pThis,
                                                         const char* pURL,
@@ -82,6 +83,7 @@ struct _LibreOfficeKitDocumentClass
                    const char* pUrl,
                    const char* pFormat,
                    const char* pFilterOptions);
+    void  (*freeError)     (const char *pfree);
 
 #if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /// @see lok::Document::getDocumentType().
