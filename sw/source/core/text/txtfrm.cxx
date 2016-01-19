@@ -681,7 +681,15 @@ sal_Int32 SwTextFrame::FindBrk( const OUString &rText,
 
 bool SwTextFrame::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const
 {
+// Silence over-eager warning emitted at least by GCC trunk towards 6:
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-overflow"
+#endif
     if( nLen != COMPLETE_STRING && GetOfst() > nPos + nLen ) // the range preceded us
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
         return false;
 
     if( !GetFollow() ) // the range doesn't precede us,
