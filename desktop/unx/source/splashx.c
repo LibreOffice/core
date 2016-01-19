@@ -304,7 +304,7 @@ static void create_pixmap(struct splash* splash)
         else if ( bpp == 24 )
         {
             if ( machine_byte_order == byte_order && byte_order == LSBFirst )
-                COPY_IN_OUT( 3, *( (color_t *)out ) = *( (color_t *)( &pixel ) ); out += 3; )
+                COPY_IN_OUT( 3, memcpy(out, &pixel, sizeof (color_t)); out += 3; )
             else if ( machine_byte_order == byte_order && byte_order == MSBFirst )
                 COPY_IN_OUT( 3, tmp = pixel;
                              *( (uint8_t *)out     ) = *( (uint8_t *)(&tmp) + 1 );
