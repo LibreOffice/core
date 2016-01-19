@@ -1,0 +1,28 @@
+--- a/Makefile.orig	2016-01-19 14:38:00.124312444 -0500
++++ b/Makefile	2016-01-19 14:39:00.728011296 -0500
+@@ -67,6 +67,7 @@
+ #   - use LN= on gmake command-line
+ 
+ AR      ?= ar
++AR_FLAGS ?= cr
+ INSTALL ?= install
+ STRIP   ?= strip
+ RM      ?= rm -f
+@@ -106,7 +107,7 @@
+ 	mkdir lib
+ 
+ lib/$(LIB.STATIC): $(LIB.OBJS)
+-	$(AR) cr $@ $^
++	$(AR) $(AR_FLAGS) $@ $^
+ ifneq ($(STRIP),)
+ 	$(STRIP) -x $@
+ endif
+@@ -150,7 +151,7 @@
+ glew.lib.mx:  lib lib/$(LIB.SHARED.MX) lib/$(LIB.STATIC.MX) glewmx.pc
+ 
+ lib/$(LIB.STATIC.MX): $(LIB.OBJS.MX)
+-	$(AR) cr $@ $^
++	$(AR) $(AR_FLAGS) $@ $^
+ 
+ lib/$(LIB.SHARED.MX): $(LIB.SOBJS.MX)
+ 	$(LD) $(LDFLAGS.SO.MX) -o $@ $^ $(LIB.LDFLAGS) $(LIB.LIBS)
