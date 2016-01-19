@@ -771,41 +771,29 @@ Font Font::identifyFont( const void* i_pBuffer, sal_uInt32 i_nSize )
 
 // The inlines from the font.hxx header are now instantiated for pImpl-ification
 const Color& Font::GetColor() const { return mpImplFont->maColor; }
-
 const Color& Font::GetFillColor() const { return mpImplFont->maFillColor; }
-
 bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
 
 FontAlign Font::GetAlign() const { return mpImplFont->meAlign; }
 
 const OUString& Font::GetFamilyName() const { return mpImplFont->GetFamilyName(); }
-
 const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }
 
 const Size& Font::GetSize() const { return mpImplFont->maSize; }
-
 void Font::SetHeight( long nHeight ) { SetSize( Size( mpImplFont->maSize.Width(), nHeight ) ); }
-
 long Font::GetHeight() const { return mpImplFont->maSize.Height(); }
-
 void Font::SetWidth( long nWidth ) { SetSize( Size( nWidth, mpImplFont->maSize.Height() ) ); }
-
 long Font::GetWidth() const { return mpImplFont->maSize.Width(); }
 
 rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->meCharSet; }
 
 const LanguageTag& Font::GetLanguageTag() const { return mpImplFont->maLanguageTag; }
-
 const LanguageTag& Font::GetCJKContextLanguageTag() const { return mpImplFont->maCJKLanguageTag; }
-
 LanguageType Font::GetLanguage() const { return mpImplFont->maLanguageTag.getLanguageType( false); }
-
 LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->maCJKLanguageTag.getLanguageType( false); }
 
 short Font::GetOrientation() const { return mpImplFont->mnOrientation; }
-
 bool Font::IsVertical() const { return mpImplFont->mbVertical; }
-
 FontKerning Font::GetKerning() const { return mpImplFont->mnKerning; }
 
 FontPitch Font::GetPitch() { return mpImplFont->GetPitch(); }
@@ -820,22 +808,17 @@ FontWidth Font::GetWidthType() const { return mpImplFont->GetWidthTypeNoAsk(); }
 FontItalic Font::GetItalic() const { return mpImplFont->GetItalicNoAsk(); }
 FontFamily Font::GetFamily() const { return mpImplFont->GetFamilyNoAsk(); }
 
+int Font::GetQuality() const { return mpImplFont->GetQuality(); }
+void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
+
 bool Font::IsOutline() const { return mpImplFont->mbOutline; }
-
 bool Font::IsShadow() const { return mpImplFont->mbShadow; }
-
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
-
 FontUnderline Font::GetUnderline() const { return mpImplFont->meUnderline; }
-
 FontUnderline Font::GetOverline()  const { return mpImplFont->meOverline; }
-
 FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
-
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
-
 bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
-
 bool Font::IsSameInstance( const vcl::Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
 
 
@@ -866,7 +849,8 @@ ImplFont::ImplFont() :
     mbConfigLookup( false ),
     mbShadow( false ),
     mbVertical( false ),
-    mbTransparent( true )
+    mbTransparent( true ),
+    mnQuality( 0 )
 {}
 
 ImplFont::ImplFont( const ImplFont& rImplFont ) :
@@ -898,7 +882,8 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     mbConfigLookup( rImplFont.mbConfigLookup ),
     mbShadow( rImplFont.mbShadow ),
     mbVertical( rImplFont.mbVertical ),
-    mbTransparent( rImplFont.mbTransparent )
+    mbTransparent( rImplFont.mbTransparent ),
+    mnQuality( rImplFont.mnQuality )
 {}
 
 bool ImplFont::operator==( const ImplFont& rOther ) const

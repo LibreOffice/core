@@ -82,6 +82,11 @@ public:
 
     void                SetSymbolFlag( bool );
 
+    // Device dependent functions
+    int                 GetQuality() const;
+
+    void                SetQuality(int);
+
     // setting the color on the font is obsolete, the only remaining
     // valid use is for keeping backward compatibility with old MetaFiles
     const Color&        GetColor() const;

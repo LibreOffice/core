@@ -66,7 +66,11 @@ public:
     void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbol = bSymbolFlag; }
 
     // device dependent functions
-    /* Missing function: int GetQuality() const; */
+    int                 GetQuality() const                              { return mnQuality; }
+
+    void            SetQuality( int nQuality )                  { mnQuality = nQuality; }
+    void            IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
+    void            DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
     /* Missing function: OUString GetMapNames() const; */
 
     /* Missing function: bool IsBuiltInFont() const; */
@@ -121,6 +125,7 @@ private:
                         mbShadow:1,
                         mbVertical:1,
                         mbTransparent:1;    // compatibility, now on output device
+    int                 mnQuality;
 
     friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
     friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );
