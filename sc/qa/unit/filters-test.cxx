@@ -289,7 +289,6 @@ void ScFiltersTest::testContentLotus123()
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(&rDoc);
     testContentImpl(rDoc, FORMAT_LOTUS123);
     xDocSh->DoClose();
 }
@@ -298,8 +297,7 @@ void ScFiltersTest::testContentDIF()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_DIF);
 
-    ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(&rDoc);
+    xDocSh->GetDocument();
     xDocSh->DoClose();
 }
 
@@ -319,7 +317,6 @@ void ScFiltersTest::testContentXLSB()
 //     CPPUNIT_ASSERT(xDocSh);
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();
-//     CPPUNIT_ASSERT(&rDoc);
 //     testContentImpl(pDoc, FORMAT_XLS_XML);
 //     xDocSh->DoClose();
 // }
@@ -397,7 +394,6 @@ void ScFiltersTest::testSharedFormulaXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("shared-formula/basic.", FORMAT_XLSX);
     ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(&rDoc);
     xDocSh->DoHardRecalc(true);
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 18; ++i)
@@ -472,7 +468,6 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedclippedshape.", FORMAT_ODS);
 
         ScDocument& rDoc = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(&rDoc);
         // ensure the imported legacy rotated shape is in the expected position
         Rectangle aRect( 6000, -2000, 8000, 4000 );
         // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
@@ -488,7 +483,6 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // a core dump in editeng ( so moved to here )
         xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
         ScDocument& rDoc2 = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(&rDoc2);
         impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 
         xDocSh->DoClose();
@@ -500,7 +494,6 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // are hidden
         ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedhiddenshape.", FORMAT_ODS, true);
         ScDocument& rDoc = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(&rDoc);
         // ensure the imported legacy rotated shape is in the expected position
         // when a shape is fully hidden reloading seems to result is in some errors, usually
         // ( same but different error happens pre-patch ) - we should do better here, I regard it
@@ -528,7 +521,6 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedshape.", FORMAT_ODS);
 
         ScDocument& rDoc = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(&rDoc);
         // ensure the imported legacy rotated shape is in the expected position
         Rectangle aRect( 6000, 3000, 8000, 9000 );
         // ensure the imported (and converted) anchor (note we internally now store the anchor in
@@ -544,7 +536,6 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // test save and reload
         xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
         ScDocument& rDoc2 = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(&rDoc2);
         impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 
         xDocSh->DoClose();
