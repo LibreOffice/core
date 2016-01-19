@@ -668,13 +668,14 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    rPalette );
 }
 
-BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
-                                         const BitmapDeviceSharedPtr& rProto )
+BitmapDeviceSharedPtr cloneBitmapDevice(const BitmapDeviceSharedPtr& rProto)
 {
-    return createBitmapDeviceImpl( rSize,
+    BitmapDeviceSharedPtr aCopy = createBitmapDeviceImpl(rProto->getSize(),
                                    rProto->getScanlineFormat(),
                                    boost::shared_array< sal_uInt8 >(),
                                    rProto->getPalette() );
+    aCopy->copyBitmap(rProto);
+    return aCopy;
 }
 
 } // namespace basebmp

@@ -161,13 +161,8 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
 
 
 /** Function to clone a BitmapDevice from a given prototype.
-
-    All attributes (like scanline format and top-down state) are
-    copied, only the size can be varied. Note that the prototype's
-    bitmap content is <em>not</em> copied, only a palette (if any).
  */
-BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC cloneBitmapDevice(const basegfx::B2IVector& rSize,
-                                                          const BitmapDeviceSharedPtr& rProto);
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC cloneBitmapDevice(const BitmapDeviceSharedPtr& rProto);
 
 }
 

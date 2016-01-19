@@ -77,9 +77,7 @@ bool SvpSalBitmap::Create( const SalBitmap& rSalBmp )
     const BitmapDeviceSharedPtr& rSrcBmp = rSrc.getBitmap();
     if( rSrcBmp.get() )
     {
-        B2IVector aSize = rSrcBmp->getSize();
-        m_aBitmap = cloneBitmapDevice( aSize, rSrcBmp );
-        m_aBitmap->copyBitmap(rSrcBmp);
+        m_aBitmap = cloneBitmapDevice(rSrcBmp);
     }
     else
         m_aBitmap.reset();

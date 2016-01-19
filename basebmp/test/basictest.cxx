@@ -131,15 +131,13 @@ public:
     void testClone()
     {
         const basegfx::B2ISize aSize(101,101);
-        basegfx::B2ISize       aSize2(3,3);
         BitmapDeviceSharedPtr  pDevice( createBitmapDevice( aSize,
                                                             Format::OneBitMsbPal ) );
 
         BitmapDeviceSharedPtr  pClone( cloneBitmapDevice(
-                                           aSize2,
                                            pDevice ));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("right size",
-                               aSize2, pClone->getSize() );
+                               aSize, pClone->getSize() );
     }
 
     // Change the following lines only, if you add, remove or rename
