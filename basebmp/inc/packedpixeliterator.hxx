@@ -78,7 +78,7 @@ public:
         num_intraword_positions=sizeof(value_type)*8/bits_per_pixel,
         /** Bit mask for one pixel (least significant bits)
          */
-        bit_mask=~(~0 << bits_per_pixel)
+        bit_mask=~(~0u << bits_per_pixel)
     };
 
 private:
@@ -238,7 +238,7 @@ public:
         num_intraword_positions=sizeof(value_type)*8/bits_per_pixel,
         /** Bit mask for one pixel (least significant bits)
          */
-        bit_mask=~(~0 << bits_per_pixel)
+        bit_mask=~(~0u << bits_per_pixel)
     };
 
 private:
@@ -477,7 +477,7 @@ public:
         num_intraword_positions=sizeof(value_type)*8/bits_per_pixel,
         /** Bit mask for one pixel (least significant bits)
          */
-        bit_mask=~(~0 << bits_per_pixel)
+        bit_mask=~(~0u << bits_per_pixel)
     };
 
     // TODO(F2): direction of iteration (ImageIterator can be made to
