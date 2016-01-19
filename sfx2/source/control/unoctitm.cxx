@@ -1097,7 +1097,8 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
         aEvent.FeatureURL.Path == "SubScript" ||
         aEvent.FeatureURL.Path == "SuperScript" ||
         aEvent.FeatureURL.Path == "Strikeout" ||
-        aEvent.FeatureURL.Path == "Underline")
+        aEvent.FeatureURL.Path == "Underline" ||
+        aEvent.FeatureURL.Path == "ModifiedStatus")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;
