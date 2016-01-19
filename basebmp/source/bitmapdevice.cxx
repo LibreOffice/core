@@ -30,11 +30,9 @@
 #include <accessor.hxx>
 #include <accessortraits.hxx>
 #include <accessoradapters.hxx>
-#include <colorblendaccessoradapter.hxx>
 
 #include <basebmp/color.hxx>
 #include <colormisc.hxx>
-#include <colortraits.hxx>
 
 #include <greylevelformats.hxx>
 #include <paletteformats.hxx>
@@ -46,7 +44,6 @@
 #include <genericcolorimageaccessor.hxx>
 
 #include <tools.hxx>
-#include "intconversion.hxx"
 
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
@@ -63,11 +60,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-
-#include <vigra/iteratortraits.hxx>
-#include <vigra/rgbvalue.hxx>
-#include <vigra/copyimage.hxx>
-#include <vigra/tuple.hxx>
 
 namespace basebmp
 {
@@ -96,38 +88,6 @@ static const o3tl::enumarray<Format,sal_uInt8> bitsPerPixel =
 
 namespace
 {
-    /** Create the type for an accessor that takes the (mask,bitmap)
-        input value generated from a JoinImageAccessorAdapter, and
-        pipe that through a mask functor.
-
-        @tpl DestAccessor
-        Destination bitmap accessor
-
-        @tpl JoinedAccessor
-        Input accessor, is expected to generate a std::pair as the
-        value type
-
-        @tpl MaskFunctorMode
-        Either FastMask or NoFastMask, depending on whether the mask
-        is guaranteed to contain only 0s and 1s.
-     */
-    template< class    DestAccessor,
-              class    JoinedAccessor,
-              bool     polarity,
-              typename MaskFunctorMode > struct masked_input_splitting_accessor
-    {
-        typedef BinarySetterFunctionAccessorAdapter<
-            DestAccessor,
-            BinaryFunctorSplittingWrapper<
-                typename outputMaskFunctorSelector<
-                         typename JoinedAccessor::value_type::first_type,
-                         typename JoinedAccessor::value_type::second_type,
-                         polarity,
-                         MaskFunctorMode >::type > > type;
-    };
-
-
-
     // Actual BitmapDevice implementation (templatized by accessor and iterator)
 
     /** Implementation of the BitmapDevice interface
@@ -160,13 +120,8 @@ namespace
         typedef AccessorTraits< dest_accessor_type >                       accessor_traits;
 
         typedef AccessorTraits< raw_accessor_type >                        raw_accessor_traits;
-        typedef typename uInt32Converter<
-            typename raw_accessor_type::value_type>::to                    to_uint32_functor;
-
 
         dest_iterator_type                      maBegin;
-        typename accessor_traits::color_lookup  maColorLookup;
-        to_uint32_functor                       maToUInt32Converter;
         dest_accessor_type                      maAccessor;
         raw_accessor_type                       maRawAccessor;
 
@@ -185,8 +140,6 @@ namespace
             BitmapDevice( rBounds, nScanlineFormat,
                           nScanlineStride, pFirstScanline, rMem, rPalette ),
             maBegin( begin ),
-            maColorLookup(),
-            maToUInt32Converter(),
             maAccessor( accessor ),
             maRawAccessor( rawAccessor )
         {}
@@ -211,14 +164,6 @@ namespace
                                       vigra::Diff2D(rPt.getX(),
                                                     rPt.getY()) );
             return maAccessor(pixel);
-        }
-
-        virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) override
-        {
-            const DestIterator pixel( maBegin +
-                                      vigra::Diff2D(rPt.getX(),
-                                                    rPt.getY()) );
-            return maToUInt32Converter(maRawAccessor(pixel));
         }
 
         template< typename Iterator, typename RawAcc >
@@ -325,22 +270,6 @@ struct ImplBitmapDevice
 
     /// raw ptr to 0th scanline. used for cloning a generic renderer
     sal_uInt8*                mpFirstScanline;
-
-    /** (Optional) device sharing the same memory, and used for input
-        clip masks/alpha masks/bitmaps that don't match our exact
-        bitmap format.
-
-        This is to avoid the combinatorial explosion when dealing
-        with n bitmap formats, which could be combined with n clip
-        masks, alpha masks and bitmap masks (yielding a total of n^4
-        combinations). Since each BitmapRenderer is specialized for
-        one specific combination of said formats, a lot of duplicate
-        code would be generated, most of which probably never
-        used. Therefore, only the most common combinations are
-        specialized templates, the remainder gets handled by this
-        generic renderer (via runtime polymorphism).
-     */
-    BitmapDeviceSharedPtr     mpGenericRenderer;
 };
 
 
@@ -399,14 +328,6 @@ Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )
         return getPixel_i(rPt);
 
     return Color();
-}
-
-sal_uInt32 BitmapDevice::getPixelData( const basegfx::B2IPoint& rPt )
-{
-    if( mpImpl->maBounds.isInside(rPt) )
-        return getPixelData_i(rPt);
-
-    return 0;
 }
 
 void BitmapDevice::copyBitmap( const BitmapDeviceSharedPtr& rSrcBitmap )
@@ -754,13 +675,6 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
                                    rProto->getScanlineFormat(),
                                    boost::shared_array< sal_uInt8 >(),
                                    rProto->getPalette() );
-}
-
-
-/// Clone our device, with GenericImageAccessor to handle all formats
-BitmapDeviceSharedPtr BitmapDevice::getGenericRenderer() const
-{
-    return mpImpl->mpGenericRenderer;
 }
 
 } // namespace basebmp

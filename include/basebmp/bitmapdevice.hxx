@@ -97,14 +97,6 @@ public:
      */
     Color getPixel( const basegfx::B2IPoint& rPt );
 
-    /** Get underlying pixel data value at given position
-
-        This method returns the raw pixel data. In the case of
-        paletted bitmaps, this is the palette index, not the final
-        color value.
-     */
-    sal_uInt32 getPixelData( const basegfx::B2IPoint& rPt );
-
     /** Draw another bitmap into this device
 
         @param rSrcBitmap
@@ -127,8 +119,6 @@ private:
     BASEBMP_DLLPRIVATE virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const = 0;
 
     BASEBMP_DLLPRIVATE virtual Color getPixel_i( const basegfx::B2IPoint& rPt ) = 0;
-
-    BASEBMP_DLLPRIVATE virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) = 0;
 
     BASEBMP_DLLPRIVATE virtual void copyBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap ) = 0;
 
