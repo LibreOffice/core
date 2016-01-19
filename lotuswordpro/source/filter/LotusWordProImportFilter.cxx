@@ -97,6 +97,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportLWP(const OUString &rURL
     return ( ReadWordproFile(aFileStream, xHandler) == 0 );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+LotusWordProImportFilter_get_implementation(
+    css::uno::XComponentContext *context)
+ {
+    return cppu::acquire(new LotusWordProImportFilter(context));
+ }
+
 sal_Bool SAL_CALL LotusWordProImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException, std::exception)
 {
