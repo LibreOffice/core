@@ -123,7 +123,15 @@ int __lxstat(int n, const char *path, struct stat *buf)
         p_lstat = (int (*)(int n, const char *path, struct stat *buf))
             dlsym (RTLD_NEXT, "__lxstat");
     ret = (*p_lstat)(n, path, buf);
+#if defined __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+    // __lxstat may be declared in system headers as taking nonnull argument
+#endif
     assert(buf != NULL);
+#if defined __GNUC__
+#pragma GCC diagnostic pop
+#endif
     buf->st_uid = 0; /* root */
     buf->st_gid = 0; /* root */
     return ret;
