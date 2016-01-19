@@ -176,7 +176,7 @@ class ScValidationDlg
 
 public:
     explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = nullptr );
-    virtual                     ~ScValidationDlg() { disposeOnce(); }
+    virtual                     ~ScValidationDlg();
     virtual void                dispose() override
     {
         if( m_bOwnRefHdlr )
