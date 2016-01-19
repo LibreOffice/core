@@ -60,6 +60,7 @@
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <vcl/graphicfilter.hxx>
 
 // - Namespaces -
 
@@ -1667,11 +1668,19 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
     DataFlavor aSubstFlavor;
     bool bRet(GetSotStorageStream(rFlavor, xStm));
     bool bSuppressPNG(false); // #122982# If PNG stream not accessed, but BMP one, suppress trying to load PNG
+    bool bSuppressJPEG(false);
 
     if(!bRet && HasFormat(SotClipboardFormatId::PNG) && SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PNG, aSubstFlavor))
     {
         // when no direct success, try if PNG is available
         bRet = GetSotStorageStream(aSubstFlavor, xStm);
+        bSuppressJPEG = bRet;
+    }
+
+    if(!bRet && HasFormat(SotClipboardFormatId::JPEG) && SotExchange::GetFormatDataFlavor(SotClipboardFormatId::JPEG, aSubstFlavor))
+    {
+        bRet = GetSotStorageStream(aSubstFlavor, xStm);
+        bSuppressPNG = bRet;
     }
 
     if(!bRet && HasFormat(SotClipboardFormatId::BMP) && SotExchange::GetFormatDataFlavor(SotClipboardFormatId::BMP, aSubstFlavor))
@@ -1679,6 +1688,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
         // when no direct success, try if BMP is available
         bRet = GetSotStorageStream(aSubstFlavor, xStm);
         bSuppressPNG = bRet;
+        bSuppressJPEG = bRet;
     }
 
     if(bRet)
@@ -1689,6 +1699,14 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
             vcl::PNGReader aPNGReader(*xStm);
 
             rBmpEx = aPNGReader.Read();
+        }
+        else if(!bSuppressJPEG && rFlavor.MimeType.equalsIgnoreAsciiCase("image/jpeg"))
+        {
+            // it's a JPEG, import to BitmapEx
+            GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+            Graphic aGraphic;
+            if (rFilter.ImportGraphic(aGraphic, "", *xStm) == GRFILTER_OK)
+                rBmpEx = aGraphic.GetBitmapEx();
         }
 
         if(rBmpEx.IsEmpty())
@@ -1838,6 +1856,13 @@ bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::D
 
         if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) )
             rGraphic = aBmpEx;
+    }
+    else if (SotExchange::GetFormatDataFlavor(SotClipboardFormatId::JPEG, aFlavor) && TransferableDataHelper::IsEqual(aFlavor, rFlavor))
+    {
+        BitmapEx aBitmapEx;
+
+        if ((bRet = GetBitmapEx(aFlavor, aBitmapEx)))
+            rGraphic = aBitmapEx;
     }
     else if(SotExchange::GetFormatDataFlavor( SotClipboardFormatId::BITMAP, aFlavor ) &&
         TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
