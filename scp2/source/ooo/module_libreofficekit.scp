@@ -28,6 +28,7 @@ Directory gid_Dir_Share_Libreofficekit
     DosName = "libreofficekit";
 End
 
+#ifdef ENABLE_GTK3
 File gid_File_Dat_HandleImageStart
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Libreofficekit;
@@ -55,5 +56,6 @@ File gid_File_Dat_HandleGraphic
     Name = "handle_graphic.png";
     Styles = (PACKED);
 End
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
