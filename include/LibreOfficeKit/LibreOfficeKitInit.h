@@ -76,8 +76,7 @@ extern "C"
 
 #else
 
-    #include "prewin.h"
-    #include "postwin.h"
+    #include  <windows.h>
     #define TARGET_LIB        "sofficeapp" ".dll"
     #define TARGET_MERGED_LIB "mergedlo" ".dll"
     #define SEPARATOR         '\\'
@@ -85,7 +84,7 @@ extern "C"
 
     void *lok_loadlib(const char *pFN)
     {
-        return (void *) LoadLibrary(pFN);
+        return (void *) LoadLibraryA(pFN);
     }
 
     char *lok_dlerror(void)
@@ -111,11 +110,11 @@ extern "C"
             return;
 
         char* sEnvPath = NULL;
-        DWORD  cChars = GetEnvironmentVariable("PATH", sEnvPath, 0);
+        DWORD  cChars = GetEnvironmentVariableA("PATH", sEnvPath, 0);
         if (cChars > 0)
         {
             sEnvPath = new char[cChars];
-            cChars = GetEnvironmentVariable("PATH", sEnvPath, cChars);
+            cChars = GetEnvironmentVariableA("PATH", sEnvPath, cChars);
             //If PATH is not set then it is no error
             if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
             {
@@ -125,17 +124,18 @@ extern "C"
         }
         //prepare the new PATH. Add the Ure/bin directory at the front.
         //note also adding ';'
-        char * sNewPath = new char[strlen(sEnvPath) + strlen(pPath) + strlen(UNOPATH) + 2];
+        char * sNewPath = new char[strlen(sEnvPath) + strlen(pPath) * 2 + strlen(UNOPATH) + 4];
         sNewPath[0] = L'\0';
-        strcat(sNewPath, pPath);
-        strcat(sNewPath, UNOPATH);
+        strcat(sNewPath, pPath);     // program to PATH
+        strcat(sNewPath, ";");
+        strcat(sNewPath, UNOPATH);   // UNO to PATH
         if (strlen(sEnvPath))
         {
             strcat(sNewPath, ";");
             strcat(sNewPath, sEnvPath);
         }
 
-        SetEnvironmentVariable("PATH", sNewPath);
+        SetEnvironmentVariableA("PATH", sNewPath);
 
         delete[] sEnvPath;
         delete[] sNewPath;

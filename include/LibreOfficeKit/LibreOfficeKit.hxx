@@ -56,6 +56,10 @@ public:
 
     /// Gives access to the underlying C pointer.
     inline LibreOfficeKitDocument *get() { return mpDoc; }
+    inline void freeError(const char *pfree)
+    {
+        mpDoc->pClass->freeError(pfree);
+    }
 
 #ifdef LOK_USE_UNSTABLE_API
     /**
@@ -422,6 +426,11 @@ public:
     {
         return mpThis->pClass->getError(mpThis);
     }
+    inline void freeError(const char *pfree)
+    {
+        mpThis->pClass->freeError(pfree);
+    }
+
 
 #ifdef LOK_USE_UNSTABLE_API
     /**
