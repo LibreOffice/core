@@ -640,13 +640,38 @@ void UsageInfo::save()
     if (!mbIsCollecting)
         return;
 
-    // TODO - do a real saving here, not only dump to the screen
-    std::cerr << "Usage information:" << std::endl;
-    for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+    OUString path(SvtPathOptions().GetConfigPath());
+    path += "usage/";
+    osl::Directory::createPath(path);
+
+    //get system time information.
+    TimeValue systemTime;
+    TimeValue localTime;
+    oslDateTime localDateTime;
+    osl_getSystemTime( &systemTime );
+    osl_getLocalTimeFromSystemTime( &systemTime, &localTime );
+    osl_getDateTimeFromTimeValue( &localTime, &localDateTime );
+
+    sal_Char time[1024];
+    sprintf(time,"%4i-%02i-%02iT%02i_%02i_%02i", localDateTime.Year, localDateTime.Month, localDateTime.Day, localDateTime.Hours, localDateTime.Minutes, localDateTime.Seconds);
+
+    //filename type: usage-YYYY-MM-DDTHH_MM_SS.csv
+    OUString filename = "usage-" + OUString::createFromAscii(time) + ".csv";
+    path += filename;
+
+    osl::File file(path);
+
+    if( file.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) == osl::File::E_None )
     {
-        std::cerr << it->first << ';' << it->second << std::endl;
+        OString aUsageInfoMsg = "Document Type,Command,Count";
+
+        for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+            aUsageInfoMsg += "\n" + it->first.toUtf8() + ";" + OString::number(it->second);
+
+        sal_uInt64 written = 0;
+        file.write(aUsageInfoMsg.pData->buffer, aUsageInfoMsg.getLength(), written);
+        file.close();
     }
-    std::cerr << "Usage information end" << std::endl;
 }
 
 class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
