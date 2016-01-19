@@ -42,6 +42,8 @@
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
@@ -233,6 +235,16 @@ void ImplWindowAutoMnemonic( vcl::Window* pWindow )
         }
 
         pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
+    }
+}
+
+void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
+{
+    Control *pControl = dynamic_cast<Control*>(pWindow->ImplGetWindow());
+    if (pControl && pControl->GetText().indexOf('~') != -1)
+    {
+        pControl->SetShowAccelerator( bShow );
+        pControl->Invalidate(InvalidateFlags::Update);
     }
 }
 
@@ -590,20 +602,28 @@ bool Dialog::ImplHandleCmdEvent( const CommandEvent& rCEvent )
     if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
     {
         const CommandModKeyData *pCData = rCEvent.GetModKeyData ();
+        bool bShowAccel =  pCData && pCData->IsMod2();
 
         Window *pGetChild = firstLogicalChildOfParent(this);
         while (pGetChild)
         {
-            Control *pControl = dynamic_cast<Control*>(pGetChild->ImplGetWindow());
-            if (pControl && pControl->GetText().indexOf('~') != -1)
+            if ( pGetChild->GetType() == WINDOW_TABCONTROL )
             {
-                if (pCData && pCData->IsMod2())
-                    pControl->SetShowAccelerator(true);
-                else
-                    pControl->SetShowAccelerator(false);
-                pControl->Invalidate(InvalidateFlags::Update);
-            }
-            pGetChild = nextLogicalChildOfParent(this, pGetChild);
+                 // find currently shown tab page
+                 TabControl* pTabControl = static_cast<TabControl*>( pGetChild );
+                 TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
+                 vcl::Window* pTabPageChild =  firstLogicalChildOfParent( pTabPage );
+
+                 // and go through its children
+                 while ( pTabPageChild )
+                 {
+                     ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
+                     pTabPageChild = nextLogicalChildOfParent(pTabPage, pTabPageChild);
+                 }
+             }
+
+             ImplHandleControlAccelerator( pGetChild, bShowAccel );
+             pGetChild = nextLogicalChildOfParent(this, pGetChild);
         }
         return true;
     }
