@@ -28,6 +28,11 @@ std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindo
             return std::unique_ptr<UIObject>(new ButtonUIObject(pButton));
         }
         break;
+        case WINDOW_MESSBOX:
+        case WINDOW_INFOBOX:
+        case WINDOW_WARNINGBOX:
+        case WINDOW_ERRORBOX:
+        case WINDOW_QUERYBOX:
         case WINDOW_DIALOG:
         case WINDOW_MODALDIALOG:
         case WINDOW_MODELESSDIALOG:
