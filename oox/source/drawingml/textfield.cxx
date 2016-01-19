@@ -79,10 +79,12 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             {
             case 1: // Date dd/mm/yyyy
                 // this is the default format...
+                xProps->setPropertyValue("NumberFormat", makeAny(5));
                 break;
             case 2: // Date Day, Month dd, yyyy
                 break;
             case 3: // Date dd Month yyyy
+                xProps->setPropertyValue("NumberFormat", makeAny(3));
                 break;
             case 4: // Date Month dd, yyyy
                 break;
@@ -100,17 +102,23 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
                 break;
             case 10: // Time H:MM
                 bIsDate = false;
+                xProps->setPropertyValue("NumberFormat", makeAny(3));
                 break;
             case 11: // Time H:MM:SS
                 bIsDate = false;
                 // this is the default format
+                xProps->setPropertyValue("NumberFormat", makeAny(2));
                 break;
             case 12: // Time H:MM PM
                 bIsDate = false;
+                xProps->setPropertyValue("NumberFormat", makeAny(6));
                 break;
             case 13: // Time H:MM:SS PM
                 bIsDate = false;
+                xProps->setPropertyValue("NumberFormat", makeAny(7));
                 break;
+            default:
+                xProps->setPropertyValue("NumberFormat", makeAny(0));
             }
             xProps->setPropertyValue( "IsDate", makeAny( bIsDate ) );
             xProps->setPropertyValue( "IsFixed", makeAny( false ) );
