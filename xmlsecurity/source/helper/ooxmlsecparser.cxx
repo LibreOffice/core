@@ -17,6 +17,7 @@ OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     ,m_bInDigestValue(false)
     ,m_bInSignatureValue(false)
     ,m_bInX509Certificate(false)
+    ,m_bInMdssiValue(false)
 {
 }
 
@@ -71,6 +72,11 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         m_aX509Certificate.clear();
         m_bInX509Certificate = true;
     }
+    else if (rName == "mdssi:Value")
+    {
+        m_aMdssiValue.clear();
+        m_bInMdssiValue = true;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->startElement(rName, xAttribs);
@@ -94,6 +100,11 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
         m_pXSecController->setX509Certificate(m_aX509Certificate);
         m_bInX509Certificate = false;
     }
+    else if (rName == "mdssi:Value")
+    {
+        m_pXSecController->setDate(m_aMdssiValue);
+        m_bInMdssiValue = false;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->endElement(rName);
@@ -107,6 +118,8 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax
         m_aSignatureValue += rChars;
     else if (m_bInX509Certificate)
         m_aX509Certificate += rChars;
+    else if (m_bInMdssiValue)
+        m_aMdssiValue += rChars;
 
     if (m_xNextHandler.is())
         m_xNextHandler->characters(rChars);
