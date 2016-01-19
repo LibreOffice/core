@@ -42,8 +42,7 @@
 #include <rgb24pixelformats.hxx>
 
 #include <basebmp/scanlineformats.hxx>
-#include <fillimage.hxx>
-#include <scaleimage.hxx>
+#include <vigra/copyimage.hxx>
 #include <genericcolorimageaccessor.hxx>
 
 #include <tools.hxx>
@@ -242,13 +241,8 @@ namespace
             std::shared_ptr<BitmapRenderer> pSrcBmp( getCompatibleBitmap(rSrcBitmap) );
             OSL_ASSERT( pSrcBmp );
 
-            scaleImage(
-                srcIterRange(pSrcBmp->maBegin,
-                             pSrcBmp->maRawAccessor,
-                             aRect),
-                destIterRange(begin,
-                              acc,
-                              aRect));
+            vigra::copyImage( pSrcBmp->maBegin, pSrcBmp->maBegin + bottomRight(aRect), pSrcBmp->maRawAccessor,
+                              begin, acc );
         }
 
         template< typename Iterator, typename Acc > static
@@ -261,13 +255,8 @@ namespace
 
             GenericColorImageAccessor aSrcAcc( rSrcBitmap );
 
-            scaleImage(
-                srcIterRange(vigra::Diff2D(),
-                             aSrcAcc,
-                             aRect),
-                destIterRange(begin,
-                              acc,
-                              aRect));
+            vigra::copyImage( vigra::Diff2D(), vigra::Diff2D() + bottomRight(aRect), aSrcAcc,
+                              begin, acc );
         }
 
         void implDrawBitmapDirect(const BitmapDeviceSharedPtr& rSrcBitmap)
