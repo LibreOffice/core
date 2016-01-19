@@ -635,6 +635,10 @@ void PDFIProcessor::endIndicator()
 
 static bool lr_tb_sort( Element* pLeft, Element* pRight )
 {
+    // Ensure irreflexivity (which could be compromised if h or w is negative):
+    if (pLeft == pRight)
+        return false;
+
     // first: top-bottom sorting
 
     // Note: allow for 10% overlap on text lines since text lines are usually
