@@ -620,8 +620,6 @@ namespace basegfx
             {
                 const B2DRange aRange(rCurr, rNext);
                 const B2DVector aEdgeVector(rNext - rCurr);
-                B2DVector aNormalizedEdgeVector(aEdgeVector);
-                aNormalizedEdgeVector.normalize();
                 bool bTestUsingX(fabs(aEdgeVector.getX()) > fabs(aEdgeVector.getY()));
 
                 for(sal_uInt32 a(0L); a < nPointCount; a++)
@@ -634,7 +632,7 @@ namespace basegfx
                         {
                             const B2DVector aTestVector(aTestPoint - rCurr);
 
-                            if(areParallel(aNormalizedEdgeVector, aTestVector))
+                            if(areParallel(aEdgeVector, aTestVector))
                             {
                                 const double fCut((bTestUsingX)
                                     ? aTestVector.getX() / aEdgeVector.getX()
