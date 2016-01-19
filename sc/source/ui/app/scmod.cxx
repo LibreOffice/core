@@ -467,8 +467,9 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_PSZ_FUNCTION:
             if (pReqArgs)
             {
-                const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(pReqArgs->Get(SID_PSZ_FUNCTION));
-                OSL_ENSURE(dynamic_cast<const SfxUInt16Item*>( &rItem) !=  nullptr,"wrong Parameter");
+                auto const & p = pReqArgs->Get(SID_PSZ_FUNCTION);
+                OSL_ENSURE(dynamic_cast<const SfxUInt16Item*>(&p) !=  nullptr,"wrong Parameter");
+                const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(p);
 
                 ScAppOptions aNewOpts( GetAppOptions() );
                 aNewOpts.SetStatusFunc( rItem.GetValue() );
