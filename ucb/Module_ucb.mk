@@ -31,6 +31,20 @@ $(eval $(call gb_Module_add_targets,ucb,\
 ))
 endif
 
+ifeq ($(WITH_WEBDAV),neon)
+
+$(eval $(call gb_Module_add_check_targets,ucb,\
+    CppunitTest_ucb_webdav_local_neon \
+))
+
+endif
+
+ifeq ($(WITH_WEBDAV),serf)
+
+## Placeholder for future serf local test implementation
+
+endif
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,ucb,\
 	JunitTest_ucb_complex \
 	JunitTest_ucb_unoapi \
