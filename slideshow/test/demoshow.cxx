@@ -192,10 +192,10 @@ private:
     }
 
     uno::Reference< rendering::XSpriteCanvas > mxCanvas;
-    ::cppu::OInterfaceContainerHelper          maPaintListeners;
-    ::cppu::OInterfaceContainerHelper          maTransformationListeners;
-    ::cppu::OInterfaceContainerHelper          maMouseListeners;
-    ::cppu::OInterfaceContainerHelper          maMouseMotionListeners;
+    ::cppu::OInterfaceContainerHelper2          maPaintListeners;
+    ::cppu::OInterfaceContainerHelper2          maTransformationListeners;
+    ::cppu::OInterfaceContainerHelper2          maMouseListeners;
+    ::cppu::OInterfaceContainerHelper2          maMouseMotionListeners;
     basegfx::B2DHomMatrix                      maTransform;
     Size                                       maSize;
 };

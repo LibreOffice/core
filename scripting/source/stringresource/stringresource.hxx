@@ -29,7 +29,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <osl/mutex.hxx>
 
 #include <unordered_map>
@@ -103,7 +103,7 @@ protected:
     LocaleItem*                                               m_pDefaultLocaleItem;
     bool                                                      m_bDefaultModified;
 
-    ::cppu::OInterfaceContainerHelper                         m_aListenerContainer;
+    ::cppu::OInterfaceContainerHelper2                        m_aListenerContainer;
 
     LocaleItemVector                                          m_aLocaleItemVector;
     LocaleItemVector                                          m_aDeletedLocaleItemVector;

@@ -178,7 +178,7 @@ void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEvent
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners =
-                    new OInterfaceContainerHelper( m_aContainerMutex );
+                    new OInterfaceContainerHelper2( m_aContainerMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

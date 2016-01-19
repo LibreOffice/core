@@ -97,7 +97,7 @@ namespace svx
         }
         else
         {
-            ::cppu::OInterfaceIteratorHelper aIter( m_aStatusListeners );
+            ::cppu::OInterfaceIteratorHelper2 aIter( m_aStatusListeners );
             _rFreeForNotification.clear();
 
             while ( aIter.hasMoreElements() )

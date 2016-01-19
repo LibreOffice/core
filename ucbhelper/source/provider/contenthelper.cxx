@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -91,10 +92,10 @@ struct ContentImplHelper_Impl
 {
     rtl::Reference< ::ucbhelper::PropertySetInfo >      m_xPropSetInfo;
     rtl::Reference< ::ucbhelper::CommandProcessorInfo > m_xCommandsInfo;
-    cppu::OInterfaceContainerHelper*              m_pDisposeEventListeners;
-    cppu::OInterfaceContainerHelper*              m_pContentEventListeners;
-    cppu::OInterfaceContainerHelper*              m_pPropSetChangeListeners;
-    cppu::OInterfaceContainerHelper*              m_pCommandChangeListeners;
+    cppu::OInterfaceContainerHelper2*             m_pDisposeEventListeners;
+    cppu::OInterfaceContainerHelper2*             m_pContentEventListeners;
+    cppu::OInterfaceContainerHelper2*             m_pPropSetChangeListeners;
+    cppu::OInterfaceContainerHelper2*             m_pCommandChangeListeners;
     PropertyChangeListeners*                      m_pPropertyChangeListeners;
 
     ContentImplHelper_Impl()
@@ -252,7 +253,7 @@ void SAL_CALL ContentImplHelper::addEventListener(
 
     if ( !m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+            = new cppu::OInterfaceContainerHelper2( m_aMutex );
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -285,7 +286,7 @@ void SAL_CALL ContentImplHelper::addContentEventListener(
 
     if ( !m_pImpl->m_pContentEventListeners )
         m_pImpl->m_pContentEventListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+            = new cppu::OInterfaceContainerHelper2( m_aMutex );
 
     m_pImpl->m_pContentEventListeners->addInterface( Listener );
 }
@@ -385,7 +386,7 @@ void SAL_CALL ContentImplHelper::addCommandInfoChangeListener(
 
     if ( !m_pImpl->m_pCommandChangeListeners )
         m_pImpl->m_pCommandChangeListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+            = new cppu::OInterfaceContainerHelper2( m_aMutex );
 
     m_pImpl->m_pCommandChangeListeners->addInterface( Listener );
 }
@@ -600,7 +601,7 @@ void SAL_CALL ContentImplHelper::addPropertySetInfoChangeListener(
 
     if ( !m_pImpl->m_pPropSetChangeListeners )
         m_pImpl->m_pPropSetChangeListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+            = new cppu::OInterfaceContainerHelper2( m_aMutex );
 
     m_pImpl->m_pPropSetChangeListeners->addInterface( Listener );
 }
@@ -771,7 +772,7 @@ void ContentImplHelper::notifyPropertySetInfoChange(
         return;
 
     // Notify event listeners.
-    cppu::OInterfaceIteratorHelper aIter( *m_pImpl->m_pPropSetChangeListeners );
+    cppu::OInterfaceIteratorHelper2 aIter( *m_pImpl->m_pPropSetChangeListeners );
     while ( aIter.hasMoreElements() )
     {
         // Propagate event.
@@ -789,7 +790,7 @@ void ContentImplHelper::notifyContentEvent(
         return;
 
     // Notify event listeners.
-    cppu::OInterfaceIteratorHelper aIter( *m_pImpl->m_pContentEventListeners );
+    cppu::OInterfaceIteratorHelper2 aIter( *m_pImpl->m_pContentEventListeners );
     while ( aIter.hasMoreElements() )
     {
         // Propagate event.

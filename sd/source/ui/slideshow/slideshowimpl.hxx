@@ -26,6 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/propertysetmixin.hxx"
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <com/sun/star/awt/XActivateListener.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
@@ -151,7 +152,7 @@ public:
     // css::presentation::XShapeEventListener:
     virtual void SAL_CALL click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent) throw (css::uno::RuntimeException, std::exception) override;
 
-    ::cppu::OInterfaceContainerHelper maListeners;
+    ::cppu::OInterfaceContainerHelper2 maListeners;
 
     rtl::Reference< SlideshowImpl > mxController;
     css::uno::Reference< css::presentation::XSlideShow > mxSlideShow;

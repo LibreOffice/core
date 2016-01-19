@@ -24,6 +24,7 @@
 
  *************************************************************************/
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/resultset.hxx>
@@ -154,7 +155,7 @@ struct ResultSet_Impl
     uno::Sequence< beans::Property >                m_aProperties;
     rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
     osl::Mutex                          m_aMutex;
-    cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
+    cppu::OInterfaceContainerHelper2*   m_pDisposeEventListeners;
     PropertyChangeListeners*            m_pPropertyChangeListeners;
     sal_Int32                           m_nPos;
     bool                            m_bWasNull;
@@ -328,7 +329,7 @@ void SAL_CALL ResultSet::addEventListener(
 
     if ( !m_pImpl->m_pDisposeEventListeners )
         m_pImpl->m_pDisposeEventListeners =
-            new cppu::OInterfaceContainerHelper( m_pImpl->m_aMutex );
+            new cppu::OInterfaceContainerHelper2( m_pImpl->m_aMutex );
 
     m_pImpl->m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -1466,14 +1467,7 @@ void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt )
                                                         rEvt.PropertyName );
     if ( pPropsContainer )
     {
-        cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
-        while ( aIter.hasMoreElements() )
-        {
-            uno::Reference< beans::XPropertyChangeListener > xListener(
-                aIter.next(), uno::UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertyChange( rEvt );
-        }
+        pPropsContainer->notifyEach(&beans::XPropertyChangeListener::propertyChange, rEvt);
     }
 
     // Notify listeners interested in all properties.

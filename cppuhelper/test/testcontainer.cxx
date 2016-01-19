@@ -52,7 +52,7 @@ void test_interfacecontainer()
     Mutex mutex;
 
     {
-        OInterfaceContainerHelper helper( mutex );
+        OInterfaceContainerHelper2 helper( mutex );
 
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
@@ -66,7 +66,7 @@ void test_interfacecontainer()
     }
 
     {
-        OInterfaceContainerHelper helper( mutex );
+        OInterfaceContainerHelper2 helper( mutex );
 
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
@@ -85,7 +85,7 @@ void test_interfacecontainer()
     }
 
     {
-        OInterfaceContainerHelper helper( mutex );
+        OInterfaceContainerHelper2 helper( mutex );
 
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
@@ -109,7 +109,7 @@ void test_interfacecontainer()
     }
 
     {
-        OInterfaceContainerHelper helper( mutex );
+        OInterfaceContainerHelper2 helper( mutex );
 
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();

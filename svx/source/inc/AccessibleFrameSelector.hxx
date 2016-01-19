@@ -31,7 +31,7 @@
 #include <tools/resary.hxx>
 #include <tools/rc.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <svx/framebordertype.hxx>
 #include <vcl/vclptr.hxx>
@@ -116,8 +116,8 @@ private:
 
     FrameBorderType     meBorder;
 
-    ::cppu::OInterfaceContainerHelper maFocusListeners;
-    ::cppu::OInterfaceContainerHelper maPropertyListeners;
+    ::cppu::OInterfaceContainerHelper2 maFocusListeners;
+    ::cppu::OInterfaceContainerHelper2 maPropertyListeners;
 
     ResStringArray      maNames;
     ResStringArray      maDescriptions;

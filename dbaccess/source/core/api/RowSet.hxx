@@ -42,6 +42,7 @@
 #include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
 
 #include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <connectivity/paramwrapper.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/warningscontainer.hxx>
@@ -91,9 +92,9 @@ namespace dbaccess
         ::std::vector<bool>                         m_aParametersSet;
         ::std::vector<bool>                         m_aReadOnlyDataColumns;
 
-        ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
-        ::cppu::OInterfaceContainerHelper           m_aApproveListeners;
-        ::cppu::OInterfaceContainerHelper           m_aRowsChangeListener;
+        ::cppu::OInterfaceContainerHelper2          m_aRowsetListeners;
+        ::cppu::OInterfaceContainerHelper2          m_aApproveListeners;
+        ::cppu::OInterfaceContainerHelper2          m_aRowsChangeListener;
 
         ::dbtools::WarningsContainer                m_aWarnings;
 

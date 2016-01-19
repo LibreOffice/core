@@ -25,7 +25,7 @@
  *************************************************************************/
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
@@ -318,7 +318,7 @@ void SAL_CALL UniversalContentBroker::addEventListener(
     throw( css::uno::RuntimeException, std::exception )
 {
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners = new OInterfaceContainerHelper( m_aMutex );
+        m_pDisposeEventListeners = new OInterfaceContainerHelper2( m_aMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
