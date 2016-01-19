@@ -58,23 +58,6 @@ endef
 
 endif # SYSTEM_ODBC_HEADERS
 
-ifneq ($(SYSTEM_VIGRA),)
-
-gb_LinkTarget__use_vigra_headers :=
-
-else
-
-define gb_LinkTarget__use_vigra_headers
-$(call gb_LinkTarget_use_unpacked,$(1),vigra)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,vigra/include) \
-	$$(INCLUDE) \
-)
-
-endef
-
-endif
-
 ifneq ($(SYSTEM_MDDS),)
 
 gb_ExternalProject__use_mdds_headers :=

@@ -4034,32 +4034,6 @@
    <text:h text:style-name="Heading_20_2" text:outline-level="2">UnixODBC</text:h>
    <text:p text:style-name="Standard">The following software may be included in this product: unixODBC. Use of any of this software is governed by the terms of the license below:</text:p>
    <text:p text:style-name="Standard"><text:a xlink:type="simple" xlink:href="#7.GNU Lesser General Public License Version 2.1|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Jump to LGPL Version 2.1</text:a></text:p>
-   <text:h text:style-name="Heading_20_2" text:outline-level="2">vigra</text:h>
-   <text:p text:style-name="Standard">The following software may be included in this product: vigra. Use of any of this software is governed by the terms of the license below:</text:p>
-   <text:h text:style-name="Heading_20_3" text:outline-level="3">The VIGRA Artistic License</text:h>
-   <text:p text:style-name="Standard">(modeled after the Perl Artistic License)</text:p>
-   <text:h text:style-name="Heading_20_4" text:outline-level="4">Preamble</text:h>
-   <text:p text:style-name="Standard">The intent of this document is to state the conditions under which VIGRA may be copied, such that the author maintains some semblance of artistic control over the development of the library, while giving the users of the library the right to use and distribute VIGRA in a more-or-less customary fashion, plus the right to make reasonable modifications.</text:p>
-   <text:h text:style-name="Heading_20_4" text:outline-level="4">Definitions</text:h>
-   <text:p text:style-name="Standard">&quot;Copyright Holder&quot; of the VIGRA library is Ullrich Koethe, Cognitive Systems Group, University of Hamburg, Germany.</text:p>
-   <text:p text:style-name="Standard">&quot;Library&quot; refers to the collection of files distributed by the Copyright Holder under the name &quot;VIGRA&quot; (including this LICENSE file and all accompanying documentation), and derivatives of that collection of files created through <text:soft-page-break/>textual modification.</text:p>
-   <text:p text:style-name="Standard">&quot;Standard Version&quot; refers to the Library if it has not been modified, or has been modified in accordance with the wishes of the Copyright Holder as specified below.</text:p>
-   <text:p text:style-name="Standard">&quot;You&quot; is you, if you&apos;re thinking about using, copying, modifying or distributing this Library.</text:p>
-   <text:p text:style-name="Standard">&quot;Freely Available&quot; means that no fee is charged for the item. It also means that recipients of the item may redistribute it under the same conditions they received it.</text:p>
-   <text:p text:style-name="Standard">&quot;Reasonable copying fee&quot; is whatever you can justify on the basis of media cost, duplication charges, time of people involved, and so on. (You will not be required to justify it to the Copyright Holder, but only to the computing community at large as a market that must bear the fee.)</text:p>
-   <text:h text:style-name="Heading_20_4" text:outline-level="4">License terms</text:h>
-   <text:p text:style-name="Standard">1. You may make and give away verbatim copies of the Standard Version of this Library without restriction, provided that you duplicate all of the original copyright notices, this license, and associated disclaimers.</text:p>
-   <text:p text:style-name="Standard">2. The Standard Version of the Library may be distributed as part of a collection of software, provided no more than a reasonable copying fee is charged for the software collection.</text:p>
-   <text:p text:style-name="Standard">3. You may apply bug fixes and portability fixes derived from the Public Domain or from the Copyright Holder. A Library modified in such a way shall still be considered the Standard Version.</text:p>
-   <text:p text:style-name="Standard">4. You may otherwise modify your copy of this Library in any way, provided that you insert a prominent notice in each changed file stating how and when you changed that file, and provided that you do at least ONE of the following:</text:p>
-   <text:p text:style-name="Standard">a. place your modifications in the Public Domain or otherwise make them Freely Available, for example by allowing the Copyright Holder to include your modifications in the Standard Version of the Library.</text:p>
-   <text:p text:style-name="Standard">b. use the modified Library only within your corporation or organization.</text:p>
-   <text:p text:style-name="Standard">c. make other distribution arrangements with the Copyright Holder.</text:p>
-   <text:p text:style-name="Standard">5. You may distribute programs which use this Library in object code or executable form without restriction.</text:p>
-   <text:p text:style-name="Standard">6. Any object code generated as a result of using this Library does not fall <text:soft-page-break/>under the copyright of this Library, but belongs to whomever generated it, and may be sold commercially.</text:p>
-   <text:p text:style-name="Standard">7. The name of the Copyright Holder or the Library may not be used to endorse or promote products derived from this software without specific prior written permission.</text:p>
-   <text:p text:style-name="Standard">8. THIS LIBRARY IS PROVIDED AS IS AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</text:p>
-   <text:p text:style-name="Standard">IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS LIBRARY.</text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2">W3C Simple API for CSS (SAC)</text:h>
    <text:p text:style-name="Standard">The following software may be included in this product: W3C Simple API for CSS (SAC). Use of any of this software is governed by the terms of the license below:</text:p>
    <text:h text:style-name="Heading_20_3" text:outline-level="3">W3C IPR SOFTWARE NOTICE</text:h>

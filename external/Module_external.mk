@@ -92,7 +92,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,RHINO,rhino) \
 	$(call gb_Helper_optional,SERF,serf) \
 	$(call gb_Helper_optional,UCPP,ucpp) \
-	$(call gb_Helper_optional,VIGRA,vigra) \
 	$(call gb_Helper_optional,VISIO,libvisio) \
 	$(call gb_Helper_optional,WPD,libwpd) \
 	$(call gb_Helper_optional,WPG,libwpg) \
@@ -104,7 +103,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 			$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
 			$(call gb_Helper_optional,LCMS2,lcms2) \
 			$(call gb_Helper_optional,NSS,nss) \
-			$(call gb_Helper_optional,VIGRA,vigra) \
 		) \
 	) \
 ))

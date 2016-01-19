@@ -1619,7 +1619,7 @@ AC_ARG_WITH(system-headers,
     AS_HELP_STRING([--with-system-headers],
         [Use headers already on system -- enables all --with-system-* flags for
          external packages whose headers are the only entities used i.e.
-         boost/vigra/odbc/sane-header(s).]),,
+         boost/odbc/sane-header(s).]),,
     [with_system_headers="$with_system_libs"])
 
 AC_ARG_WITH(system-jars,
@@ -1919,11 +1919,6 @@ AC_ARG_WITH(system-glm,
     AS_HELP_STRING([--with-system-glm],
         [Use glm already on system.]),,
     [with_system_glm="$with_system_headers"])
-
-AC_ARG_WITH(system-vigra,
-    AS_HELP_STRING([--with-system-vigra],
-        [Use vigra already on system.]),,
-    [with_system_vigra="$with_system_headers"])
 
 AC_ARG_WITH(system-hunspell,
     AS_HELP_STRING([--with-system-hunspell],
@@ -8828,24 +8823,6 @@ dnl We currently use GLyphy only on Windows
 if test $_os = WINNT; then
     libo_CHECK_SYSTEM_MODULE([glyphy], [GLYPHY], [glyphy >= 0.12.0], ["-I${WORKDIR}/UnpackedTarball/glyphy/src"])
 fi
-
-dnl ===================================================================
-dnl Check for system vigra
-dnl ===================================================================
-AC_MSG_CHECKING([which vigra to use])
-if test "$with_system_vigra" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_VIGRA=TRUE
-    AC_LANG_PUSH([C++])
-    AC_CHECK_HEADER(vigra/copyimage.hxx, [],
-       [AC_MSG_ERROR(vigra/copyimage.hxx not found. install vigra)], [])
-    AC_LANG_POP([C++])
-else
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE VIGRA"
-    SYSTEM_VIGRA=
-fi
-AC_SUBST(SYSTEM_VIGRA)
 
 dnl ===================================================================
 dnl Check for system odbc
