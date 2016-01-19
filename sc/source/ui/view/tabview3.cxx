@@ -1067,6 +1067,11 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
         nCurY = (nMovY != 0) ? nOldY+nMovY : (SCsROW) aViewData.GetOldCurY();
     }
 
+    if (nMovX < 0 && nCurX < 0)
+        return;
+    if (nMovY < 0 && nCurY < 0)
+        return;
+
     aViewData.ResetOldCursor();
 
     if (nMovX != 0 && ValidColRow(nCurX,nCurY))
