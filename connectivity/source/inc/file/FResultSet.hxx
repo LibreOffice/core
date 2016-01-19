@@ -163,11 +163,6 @@ namespace connectivity
             // a Constructor, that is needed for when Returning the Object is needed:
             OResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator);
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
-            {
-                return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
-            }
-
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface

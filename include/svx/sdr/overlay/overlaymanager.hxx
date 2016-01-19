@@ -109,8 +109,6 @@ namespace sdr
 
             // get the OutputDevice
             OutputDevice& getOutputDevice() const { return mrOutputDevice; }
-            // Get the draw model.
-            const SdrModel* getModel() const { return mpModel; }
 
             // add and remove OverlayObjects
             void add(OverlayObject& rOverlayObject);

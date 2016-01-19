@@ -167,29 +167,6 @@ int MzString::rfind(char ch, int pos)
 }
 
 
-// += operator
-
-MzString &MzString::operator += (char ch)
-{
-    append(&ch, 1);
-    return *this;
-}
-
-
-MzString &MzString::operator += (const char *str)
-{
-    append(str);
-    return *this;
-}
-
-
-MzString &MzString::operator += (MzString const &s)
-{
-    append(s);
-    return *this;
-}
-
-
 // << operator
 MzString &MzString::operator << (const char *str)
 {

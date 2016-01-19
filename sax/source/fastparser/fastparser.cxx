@@ -228,11 +228,8 @@ public:
     void pushEntity( const Entity& rEntity );
     void popEntity();
     Entity& getEntity()             { return *mpTop; }
-    const Entity& getEntity() const { return *mpTop; }
     void parse();
     void produce( bool bForceFlush = false );
-
-    bool hasNamespaceURL( const OUString& rPrefix ) const;
 
 private:
     bool consume(EventList *);
@@ -909,27 +906,6 @@ void FastSaxParserImpl::produce( bool bForceFlush )
     }
 }
 
-bool FastSaxParserImpl::hasNamespaceURL( const OUString& rPrefix ) const
-{
-    if (maEntities.empty())
-        return false;
-
-    const Entity& rEntity = getEntity();
-
-    if (rEntity.maNamespaceCount.empty())
-        return false;
-
-    OString aPrefix = OUStringToOString(rPrefix, RTL_TEXTENCODING_UTF8);
-    sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
-    while (nNamespace--)
-    {
-        if (rEntity.maNamespaceDefines[nNamespace]->maPrefix == aPrefix)
-            return true;
-    }
-
-    return false;
-}
-
 bool FastSaxParserImpl::consume(EventList *pEventList)
 {
     Entity& rEntity = getEntity();
@@ -1355,11 +1331,6 @@ uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
 {
     Sequence<OUString> seq { "com.sun.star.xml.sax.FastParser" };
     return seq;
-}
-
-bool FastSaxParser::hasNamespaceURL( const OUString& rPrefix ) const
-{
-    return mpImpl->hasNamespaceURL(rPrefix);
 }
 
 } // namespace sax_fastparser

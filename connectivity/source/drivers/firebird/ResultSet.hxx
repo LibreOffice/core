@@ -128,11 +128,6 @@ namespace connectivity
                        isc_stmt_handle& aStatementHandle,
                        XSQLDA* aSqlda);
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
-            {
-                return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
-            }
-
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                     const ::com::sun::star::uno::Type& rType)
