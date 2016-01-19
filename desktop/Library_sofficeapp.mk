@@ -117,7 +117,7 @@ endif
 endif
 
 # LibreOfficeKit bits
-ifneq ($(filter $(OS),ANDROID IOS MACOSX),)
+ifneq ($(filter $(OS),ANDROID IOS MACOSX WNT),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 	desktop/source/lib/lokinteractionhandler \
