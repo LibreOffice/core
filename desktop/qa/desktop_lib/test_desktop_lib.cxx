@@ -15,6 +15,7 @@
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 #ifdef WNT
 #include <prewin.h>
@@ -47,7 +48,8 @@ class DesktopLOKTest : public UnoApiTest
 public:
     DesktopLOKTest() : UnoApiTest("/desktop/qa/data/"),
     m_nSelectionBeforeSearchResult(0),
-    m_nSelectionAfterSearchResult(0)
+    m_nSelectionAfterSearchResult(0),
+    m_bModified(false)
     {
     }
 
@@ -99,9 +101,9 @@ public:
     void testHiddenRowHeaders();
     void testCommandResult();
     void testWriterComments();
+    void testModifiedStatus();
     void testSheetOperations();
     void testNotificationCompression();
-
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
@@ -120,6 +122,7 @@ public:
     CPPUNIT_TEST(testHiddenRowHeaders);
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
+    CPPUNIT_TEST(testModifiedStatus);
     CPPUNIT_TEST(testSheetOperations);
     CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST_SUITE_END();
@@ -134,6 +137,10 @@ public:
     // for testCommandResult
     osl::Condition m_aCommandResultCondition;
     OString m_aCommandResult;
+
+    // for testModifiedStatus
+    osl::Condition m_aStateChangedCondition;
+    bool m_bModified;
 };
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
@@ -205,6 +212,17 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
     {
         m_aCommandResult = pPayload;
         m_aCommandResultCondition.set();
+    }
+    break;
+    case LOK_CALLBACK_STATE_CHANGED:
+    {
+        OString aPayload(pPayload);
+        OString aPrefix(".uno:ModifiedStatus=");
+        if (aPayload.startsWith(aPrefix))
+        {
+            m_bModified = aPayload.copy(aPrefix.getLength()).toBoolean();
+            m_aStateChangedCondition.set();
+        }
     }
     break;
     }
@@ -365,7 +383,7 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
-    flushTimers();
+    Scheduler::ProcessEventsToIdle();
 
     // This was 1, make sure that we get no notifications about selection changes during search.
     CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
@@ -661,6 +679,28 @@ void DesktopLOKTest::testWriterComments()
     auto xTextField = xTextPortion->getPropertyValue("TextField").get< uno::Reference<beans::XPropertySet> >();
     // This was empty, typed characters ended up in the body text.
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xTextField->getPropertyValue("Content").get<OUString>());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testModifiedStatus()
+{
+    LibLibreOffice_Impl aOffice;
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    // Set the document as modified.
+    m_aStateChangedCondition.reset();
+    uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);
+    xModifiable->setModified(true);
+    TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
+    m_aStateChangedCondition.wait(&aTimeValue);
+    Scheduler::ProcessEventsToIdle();
+
+    // This was false, there was no callback about the modified status change.
+    CPPUNIT_ASSERT(m_bModified);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
