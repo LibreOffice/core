@@ -30,4 +30,7 @@ $(eval $(call gb_Library_add_cobjects,clew,\
     clew/source/clew \
 ))
 
+# This is required for module-deps.pl to produce correct dependencies.
+$(eval $(call gb_Library_use_libraries,clew,))
+
 # vim: set noet sw=4 ts=4:
