@@ -70,6 +70,8 @@ portable C++ class library for GUIs, with very old roots, that was
 developed by StarDivision. Nowadays it is not used by anything except
 LibreOffice (and OpenOffice).
 
+"svp" stands for "StarView Plugin".
+
 == COM threading ==
 
 The way COM is used in LO generally:
