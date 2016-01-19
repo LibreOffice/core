@@ -201,6 +201,7 @@ namespace
             /*140 SotClipboardFormatId::GDIMETAFILE*/                  { "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"", "High Contrast GDIMetaFile", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*141 SotClipboardFormatId::PNG*/                    { "image/png", "PNG Bitmap", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*142 SotClipboardFormatId::STARWRITERGLOB_8_TEMPLATE*/      { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII, "Writer/Global 8 Template", &cppu::UnoType<Sequence<sal_Int8>>::get() },
+            /*143 SotClipboardFormatId::JPEG*/ { "image/jpeg", "JPEG Bitmap", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             };
         return &aInstance[0];
         }
