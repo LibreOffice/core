@@ -15,7 +15,7 @@
   <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
-  <menu:menuitem menu:id=".uno:RenameObject"/>
+  <menu:menuitem menu:id=".uno:NameGroup"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:ArrangeMenu">
     <menu:menupopup>
