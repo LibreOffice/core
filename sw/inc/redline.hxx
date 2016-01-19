@@ -227,8 +227,6 @@ public:
     bool HasValidRange() const;
 
     const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
-    bool operator==( const SwRedlineData& rCmp ) const
-        { return *pRedlineData == rCmp; }
     bool operator!=( const SwRedlineData& rCmp ) const
         { return *pRedlineData != rCmp; }
     void SetAutoFormatFlag()               { pRedlineData->SetAutoFormatFlag(); }
@@ -292,7 +290,6 @@ public:
      */
     OUString GetDescr(sal_uInt16 nPos = 0);
 
-    bool operator==( const SwRangeRedline& ) const;
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };

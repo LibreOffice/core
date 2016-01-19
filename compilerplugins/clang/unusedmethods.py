@@ -178,15 +178,13 @@ for d in definitionSet:
         continue
     if d in callSet:
         continue
-    # ignore operators, they are normally called from inside STL code
-    if "::operator" in d[1]:
-        continue
-    # ignore the custom RTTI stuff
-    if (    ("::CreateType()" in d[1])
-        or ("::IsA(" in d[1])
-        or ("::Type()" in d[1])):
-        continue
     if isOtherConstness(d, callSet):
+        continue
+    # include assigment operators, if we remove them, the compiler creates a default one, which can have odd consequences
+    if "::operator=(" in d[1]:
+        continue
+    # these are only invoked implicitly, so the plugin does not see the calls
+    if "::operator new(" in d[1] or "::operator delete(" in d[1]:
         continue
     # just ignore iterators, they normally occur in pairs, and we typically want to leave one constness version alone
     # alone if the other one is in use.
@@ -197,9 +195,6 @@ for d in definitionSet:
        continue
     # used by Windows build
     if any(x in d[1] for x in ["DdeTopic::", "DdeData::", "DdeService::", "DdeTransaction::", "DdeConnection::", "DdeLink::", "DdeItem::", "DdeGetPutItem::"]):
-       continue
-    # the include/tools/rtti.hxx stuff
-    if ("::StaticType()" in d[1]) or ("::IsOf(void *(*)(void))" in d[1]):
        continue
     # too much template magic here for my plugin
     if (   ("cairocanvas::" in d[1])
@@ -231,6 +226,9 @@ for d in definitionSet:
        continue
     if d[0] == "basic_ostream<type-parameter-?-?, type-parameter-?-?> &" and d[1].startswith("operator<<(basic_ostream<type-parameter-?-?"):
        continue
+    # ignore the SfxPoolItem CreateDefault methods for now
+    if d[1].endswith("::CreateDefault()"):
+        continue
 
     tmp1set.add((clazz, definitionToSourceLocationMap[d]))
 
@@ -243,10 +241,10 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 tmp1list = sorted(tmp1set, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
-#for t in tmp1list:
-#    print t[1]
-#    print "    ", t[0]
-
+for t in tmp1list:
+    print t[1]
+    print "    ", t[0]
+sys.exit(0)
 
 # -------------------------------------------
 # Do the "unused return types" part
@@ -279,7 +277,7 @@ for d in definitionSet:
     if definitionToSourceLocationMap[d].startswith("external/"):
        continue
     # ignore the SfxPoolItem CreateDefault methods for now
-    if "::CreateDefault" in d[1]:
+    if d[1].endswith("::CreateDefault()"):
         continue
     tmp2set.add((clazz, definitionToSourceLocationMap[d]))
 

@@ -115,7 +115,6 @@ public:
     SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
     ~SwBoxAutoFormat();
 
-    int operator==( const SwBoxAutoFormat& rCmp ) const;
     SwBoxAutoFormat& operator=( const SwBoxAutoFormat& rNew );
 
     // The get-methods.

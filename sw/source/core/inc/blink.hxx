@@ -60,8 +60,6 @@ public:
     sal_uInt16 GetDirection() const { return nDir; }
     bool operator<( const SwBlinkPortion& rBlinkPortion ) const
     { return reinterpret_cast<sal_IntPtr>(pPor) < reinterpret_cast<sal_IntPtr>(rBlinkPortion.pPor); }
-    bool operator==( const SwBlinkPortion& rBlinkPortion ) const
-    { return reinterpret_cast<sal_IntPtr>(pPor) == reinterpret_cast<sal_IntPtr>(rBlinkPortion.pPor); }
 };
 
 typedef std::set<std::unique_ptr<SwBlinkPortion>,

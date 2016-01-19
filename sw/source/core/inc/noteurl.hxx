@@ -41,8 +41,6 @@ public:
     const OUString& GetURL()      const { return aURL; }
     const OUString& GetTarget()   const { return aTarget; }
     const SwRect& GetRect()     const { return aRect; }
-    bool operator==( const SwURLNote& rSwURLNote ) const
-    { return aRect == rSwURLNote.aRect; }
 };
 
 class SwNoteURL

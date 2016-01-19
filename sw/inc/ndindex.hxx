@@ -89,8 +89,6 @@ public:
 
     inline sal_uLong operator+=( sal_uLong );
     inline sal_uLong operator-=( sal_uLong );
-    inline sal_uLong operator+=( const  SwNodeIndex& );
-    inline sal_uLong operator-=( const SwNodeIndex& );
 
     inline bool operator< ( const SwNodeIndex& ) const;
     inline bool operator<=( const SwNodeIndex& ) const;
@@ -246,16 +244,6 @@ inline sal_uLong SwNodeIndex::operator+=( sal_uLong const nOffset )
 inline sal_uLong SwNodeIndex::operator-=( sal_uLong const nOffset )
 {
     m_pNode = GetNodes()[ m_pNode->GetIndex() - nOffset ];
-    return m_pNode->GetIndex();
-}
-inline sal_uLong SwNodeIndex::operator+=( const  SwNodeIndex& rIndex )
-{
-    m_pNode = GetNodes()[ m_pNode->GetIndex() + rIndex.GetIndex() ];
-    return m_pNode->GetIndex();
-}
-inline sal_uLong SwNodeIndex::operator-=( const SwNodeIndex& rIndex )
-{
-    m_pNode = GetNodes()[ m_pNode->GetIndex() - rIndex.GetIndex() ];
     return m_pNode->GetIndex();
 }
 

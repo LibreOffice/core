@@ -655,19 +655,6 @@ protected:
 
 };
 
-/**
-   Functor. Checks if a certain node is less than the functor's member.
- */
-struct SwNumberTreeNodeIsLessThan
-{
-    const SwNumberTreeNode * pNode;
-
-    SwNumberTreeNodeIsLessThan(const SwNumberTreeNode * _pNode)
-        : pNode(_pNode) {}
-
-    bool operator()(const SwNumberTreeNode * _pNode) const
-    { return SwNumberTreeNodeLessThan(_pNode, pNode); }
-};
 #endif // INCLUDED_SW_INC_SWNUMBERTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

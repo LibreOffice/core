@@ -158,11 +158,6 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
     return nCmp;
 }
 
-bool SwSortElement::operator==(const SwSortElement& ) const
-{
-    return false;
-}
-
 bool SwSortElement::operator<(const SwSortElement& rCmp) const
 {
     // The actual comparison

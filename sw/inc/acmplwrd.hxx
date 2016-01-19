@@ -54,9 +54,6 @@ public:
 
     bool InsertWord( const OUString& rWord, SwDoc& rDoc );
 
-    const OUString& operator[](size_t n) const
-        { return m_WordList[n]->GetAutoCompleteString(); }
-
     bool IsLockWordLstLocked() const           { return bLockWordLst; }
     void SetLockWordLstLocked( bool bFlag ) { bLockWordLst = bFlag; }
 

@@ -59,7 +59,6 @@ public:
     SwTabCols( sal_uInt16 nSize = 0 );
     SwTabCols( const SwTabCols& );
     SwTabCols &operator=( const SwTabCols& );
-    bool operator==( const SwTabCols& rCmp ) const;
     long& operator[]( size_t nPos ) { return aData[nPos].nPos; }
     long operator[]( size_t nPos ) const { return aData[nPos].nPos; }
     size_t Count() const { return aData.size(); }

@@ -101,21 +101,6 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
     return *this;
 }
 
-bool SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
-{
-    return  GetRegisteredIn() == rInf.GetRegisteredIn() &&
-            aType.GetNumberingType() == rInf.GetNumType().GetNumberingType() &&
-            aDivider == rInf.GetDivider() &&
-            nPosFromLeft == rInf.GetPosFromLeft() &&
-            nCountBy == rInf.GetCountBy() &&
-            nDividerCountBy == rInf.GetDividerCountBy() &&
-            ePos == rInf.GetPos() &&
-            bPaintLineNumbers == rInf.IsPaintLineNumbers() &&
-            bCountBlankLines == rInf.IsCountBlankLines() &&
-            bCountInFlys == rInf.IsCountInFlys() &&
-            bRestartEachPage == rInf.IsRestartEachPage();
-}
-
 SwCharFormat* SwLineNumberInfo::GetCharFormat( IDocumentStylePoolAccess& rIDSPA ) const
 {
     if ( !GetRegisteredIn() )

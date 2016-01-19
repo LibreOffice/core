@@ -96,7 +96,6 @@ public:
     SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
                      const SdrObject *pSdrObj, sal_uInt8 nOutMode );
 
-    bool operator==( const SwHTMLPosFlyFrame& ) const { return false; }
     bool operator<( const SwHTMLPosFlyFrame& ) const;
 
     const SwFrameFormat& GetFormat() const { return *pFrameFormat; }

@@ -352,12 +352,8 @@ public:
                             SvNumberFormatter* pNFormatr,
                             long nLanguage );
 
-    sal_Int32   GetRowCount(const OUString& rDBName, const OUString& rTableName);
-
     static sal_Int32 GetRowCount(css::uno::Reference< css::sdbc::XConnection> xConnection,
                                  const OUString& rTableName);
-
-    sal_Int32 GetRowCount() const;
 
     sal_uLong GetColumnFormat( const OUString& rDBName,
                             const OUString& rTableName,

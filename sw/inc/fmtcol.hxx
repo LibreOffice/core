@@ -197,8 +197,6 @@ private:
 public:
 
     bool operator==( const SwCollCondition& rCmp ) const;
-    bool operator!=( const SwCollCondition& rCmp ) const
-                            { return ! (*this == rCmp); }
 
     sal_uLong GetCondition() const      { return m_nCondition; }
     sal_uLong GetSubCondition() const   { return m_aSubCondition.nSubCondition; }

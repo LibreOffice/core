@@ -82,7 +82,6 @@ struct SwSortElement
     virtual OUString GetKey(sal_uInt16 nKey ) const = 0;
     virtual double GetValue(sal_uInt16 nKey ) const;
 
-    bool operator==(const SwSortElement& ) const;
     bool operator<(const SwSortElement& ) const;
 
     static double StrToDouble(const OUString& rStr);

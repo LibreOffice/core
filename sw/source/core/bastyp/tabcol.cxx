@@ -55,27 +55,6 @@ SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
     return *this;
 }
 
-bool SwTabCols::operator==( const SwTabCols& rCmp ) const
-{
-    if ( !(nLeftMin == rCmp.GetLeftMin() &&
-           nLeft    == rCmp.GetLeft()    &&
-           nRight   == rCmp.GetRight()   &&
-           nRightMax== rCmp.GetRightMax()&&
-           bLastRowAllowedToChange== rCmp.IsLastRowAllowedToChange() &&
-           Count()== rCmp.Count()) )
-        return false;
-
-    for ( size_t i = 0; i < Count(); ++i )
-    {
-        SwTabColsEntry aEntry1 = aData[i];
-        SwTabColsEntry aEntry2 = rCmp.GetData()[i];
-        if ( aEntry1.nPos != aEntry2.nPos || aEntry1.bHidden != aEntry2.bHidden )
-            return false;
-    }
-
-    return true;
-}
-
 void SwTabCols::Insert( long nValue, long nMin, long nMax,
                         bool bValue, size_t nPos )
 {

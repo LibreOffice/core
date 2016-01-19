@@ -43,7 +43,6 @@ public:
     SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName );
 
     /// For sorting in the array
-    bool operator==( const SwBlockName& r ) const { return aShort == r.aShort; }
     bool operator< ( const SwBlockName& r ) const { return aShort <  r.aShort; }
 };
 

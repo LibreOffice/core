@@ -1554,11 +1554,6 @@ const OUString& SwRangeRedline::GetComment( sal_uInt16 nPos ) const
     return GetRedlineData(nPos).sComment;
 }
 
-bool SwRangeRedline::operator==( const SwRangeRedline& rCmp ) const
-{
-    return this == &rCmp;
-}
-
 bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
 {
     if (*Start() < *rCmp.Start())

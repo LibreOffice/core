@@ -757,26 +757,6 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
 }
 
 
-sal_Int32 SwDBManager::GetRowCount(const OUString& rDBName, const OUString& rTableName)
-{
-    SwDBData aData;
-    aData.sDataSource = rDBName;
-    aData.sCommand = rTableName;
-    aData.nCommandType = -1;
-    SwDSParam* pParam = FindDSData(aData, false);
-    uno::Reference<sdbc::XConnection> xConnection;
-    if(pParam && pParam->xConnection.is())
-        xConnection = pParam->xConnection;
-    else
-    {
-        OUString sDBName(rDBName);
-        xConnection = RegisterConnection( sDBName );
-    }
-
-    return GetRowCount(xConnection, rTableName);
-}
-
-
 sal_Int32 SwDBManager::GetRowCount(uno::Reference<sdbc::XConnection> xConnection,
                              const OUString& rTableName)
 {
@@ -789,21 +769,6 @@ sal_Int32 SwDBManager::GetRowCount(uno::Reference<sdbc::XConnection> xConnection
     return nCnt;
 }
 
-
-
-sal_Int32 SwDBManager::GetRowCount() const
-{
-    sal_Int32 nCnt = pImpl->pMergeData->aSelection.getLength();
-
-    if(nCnt == 0)
-    {
-        uno::Reference<beans::XPropertySet> xProp(pImpl->pMergeData->xResultSet, uno::UNO_QUERY);
-        if(xProp.is())
-            xProp->getPropertyValue("RowCount") >>= nCnt;
-    }
-
-    return nCnt;
-}
 
 
 SwDBManager::SwDBManager(SwDoc* pDoc)

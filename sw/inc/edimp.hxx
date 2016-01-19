@@ -49,8 +49,6 @@ public:
 
     size_t Count() const
                 { return maVector.size(); }
-    SwPamRange operator[]( size_t nPos ) const
-                { return maVector[nPos]; }
 private:
     o3tl::sorted_vector<SwPamRange> maVector;
 };
