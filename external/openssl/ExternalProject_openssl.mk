@@ -87,6 +87,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 				$(if $(SYSBASE),-I$(SYSBASE)/usr/include -L$(SYSBASE)/usr/lib)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) build_libs \
+			AR="$(AR) $(AR_FLAGS)" \
 			CC="$(CC) -fPIC $(if $(filter-out WNT MACOSX,$(OS)),\
 			$(if $(filter TRUE,$(HAVE_GCC_VISIBILITY_FEATURE)),\
 			-fvisibility=hidden))" \
