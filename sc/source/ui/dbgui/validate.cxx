@@ -96,6 +96,11 @@ ScValidationDlg::ScValidationDlg(vcl::Window* pParent, const SfxItemSet* pArgSet
     get(m_pHBox, "refinputbox");
 }
 
+ScValidationDlg::~ScValidationDlg()
+{
+    disposeOnce();
+}
+
 void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pDoc )
 {
     if ( rRange.aStart != rRange.aEnd )
