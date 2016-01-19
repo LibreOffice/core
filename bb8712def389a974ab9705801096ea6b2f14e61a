@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_5e828f95",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-19T15:00:58Z",
+      "side": 1,
+      "message": "While this works when moving up/left by one row or column if already at the sheet border, it could fail if MoveCursorRel() was called with smaller values and the previous cursor position was somewhere else, resulting in beyond border access, e.g. cursor on B2 and nMovY\u003d-2 previously moved the cursor to B1 in MoveCursorAbs() but now would prematurely return and not move at all.\n\nSo I\u0027d rather check if the old position is already at the sheet border and only in that case not move at all if we\u0027d travel beyond.",
+      "revId": "bb8712def389a974ab9705801096ea6b2f14e61a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
