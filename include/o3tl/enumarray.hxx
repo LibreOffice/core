@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 #include <iterator>
+#include <type_traits>
 
 namespace o3tl {
 
@@ -86,7 +87,10 @@ public:
     typedef typename EA::value_type value_type;
     typedef typename EA::key_type   key_type;
     typedef std::bidirectional_iterator_tag iterator_category; //should be random access, but that would require define subtraction operators on the enums
-    typedef typename EA::key_type   difference_type;
+    typedef
+        typename std::make_signed<
+            typename std::underlying_type<typename EA::key_type>::type>::type
+        difference_type;
     typedef typename EA::value_type*   pointer;
     typedef typename EA::value_type&   reference;
 
@@ -95,8 +99,8 @@ public:
     value_type &operator*()  { return (*m_buf)[static_cast<key_type>(m_pos)]; }
     value_type *operator->() { return &(operator*()); }
     self_type  &operator++() { ++m_pos; return *this; }
-    bool        operator!=(const self_type& other) { return m_buf != other.m_buf || m_pos != other.m_pos; }
-    bool        operator==(const self_type& other) { return m_buf == other.m_buf && m_pos == other.m_pos; }
+    bool        operator!=(const self_type& other) const { return m_buf != other.m_buf || m_pos != other.m_pos; }
+    bool        operator==(const self_type& other) const { return m_buf == other.m_buf && m_pos == other.m_pos; }
 };
 
 }; // namespace o3tl
