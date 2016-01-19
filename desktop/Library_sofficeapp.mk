@@ -120,7 +120,7 @@ endif
 endif
 
 # LibreOfficeKit bits
-ifneq ($(filter $(OS),ANDROID IOS),)
+ifneq ($(filter $(OS),ANDROID IOS MACOSX WNT),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 	$(if $(filter $(OS),ANDROID), \
