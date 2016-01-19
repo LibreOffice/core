@@ -67,7 +67,7 @@ class MacSpellChecker :
     NSSpellChecker *        macSpell;
     int                     macTag;   // unique tag for this doc
 
-    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ::cppu::OInterfaceContainerHelper2       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Spell *      pPropHelper;
     bool                                    bDisposing;

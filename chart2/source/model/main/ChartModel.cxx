@@ -227,10 +227,10 @@ bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XContr
 {
     try
     {
-        uno::Sequence< uno::Reference<uno::XInterface> > aSeq = m_aControllers.getElements();
-        for( sal_Int32 nN = aSeq.getLength(); nN--; )
+        std::vector< uno::Reference<uno::XInterface> > aSeq = m_aControllers.getElements();
+        for( const auto & r : aSeq )
         {
-            if( aSeq[nN] == xController )
+            if( r == xController )
                 return true;
         }
     }

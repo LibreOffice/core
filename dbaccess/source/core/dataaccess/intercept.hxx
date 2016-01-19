@@ -131,7 +131,7 @@ private:
 
     css::uno::Sequence< OUString >      m_aInterceptedURL;
 
-    cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
+    cppu::OInterfaceContainerHelper2*    m_pDisposeEventListeners;
     PropertyChangeListenerContainer*    m_pStatCL;
 };
 

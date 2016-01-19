@@ -100,7 +100,7 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
         oldOwner->lostOwnership(static_cast < XClipboard * > (this), oldContents);
 
     // notify all listeners on content changes
-    OInterfaceContainerHelper *pContainer =
+    OInterfaceContainerHelper2 *pContainer =
         rBHelper.aLC.getContainer(cppu::UnoType<XClipboardListener>::get());
     if (pContainer)
     {

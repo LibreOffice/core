@@ -32,7 +32,7 @@
 
 
 namespace cppu {
-    class OInterfaceContainerHelper;
+    class OInterfaceContainerHelper2;
 }
 
 #define DYNAMIC_RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedDynamicResultSet"
@@ -44,7 +44,7 @@ class SortedDynamicResultSet: public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XDynamicResultSet >
 {
-    cppu::OInterfaceContainerHelper *mpDisposeEventListeners;
+    cppu::OInterfaceContainerHelper2 *mpDisposeEventListeners;
 
     css::uno::Reference < css::ucb::XDynamicResultSetListener > mxListener;
     css::uno::Reference < css::ucb::XDynamicResultSetListener > mxOwnListener;

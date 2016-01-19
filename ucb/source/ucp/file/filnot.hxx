@@ -25,6 +25,7 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include "filglob.hxx"
 #include <unordered_map>
+#include <vector>
 
 namespace fileaccess {
 
@@ -37,21 +38,21 @@ namespace fileaccess {
         css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
         css::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
         css::uno::Reference< css::ucb::XContentIdentifier > m_xOldId;
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > m_sListeners;
+        std::vector< css::uno::Reference< css::uno::XInterface > > m_sListeners;
     public:
 
         ContentEventNotifier(
             shell* pMyShell,
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
-            const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& sListeners );
+            const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
         ContentEventNotifier(
             shell* pMyShell,
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
-            const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& sListeners );
+            const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
         void notifyChildInserted( const OUString& aChildName );
         void notifyDeleted();
@@ -64,11 +65,11 @@ namespace fileaccess {
     {
     private:
         css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > m_sListeners;
+        std::vector< css::uno::Reference< css::uno::XInterface > > m_sListeners;
     public:
         PropertySetInfoChangeNotifier(
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& sListeners );
+            const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
         void SAL_CALL notifyPropertyAdded( const OUString & aPropertyName );
         void SAL_CALL notifyPropertyRemoved( const OUString & aPropertyName );

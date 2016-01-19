@@ -32,7 +32,7 @@
 #include <ucbhelper/ucbhelperdllapi.h>
 
 namespace cppu {
-    class OInterfaceContainerHelper;
+    class OInterfaceContainerHelper2;
 }
 
 namespace ucbhelper {
@@ -58,7 +58,7 @@ class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
                 public css::lang::XServiceInfo,
                 public css::ucb::XDynamicResultSet
 {
-    cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;
+    cppu::OInterfaceContainerHelper2* m_pDisposeEventListeners;
     bool                         m_bStatic;
     bool                         m_bInitDone;
 
