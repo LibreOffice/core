@@ -35,6 +35,8 @@ class OOXMLSecParser: public cppu::WeakImplHelper
     OUString m_aSignatureValue;
     bool m_bInX509Certificate;
     OUString m_aX509Certificate;
+    bool m_bInMdssiValue;
+    OUString m_aMdssiValue;
 
 public:
     OOXMLSecParser(XSecController* pXSecController);
