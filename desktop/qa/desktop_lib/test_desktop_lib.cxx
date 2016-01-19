@@ -435,7 +435,6 @@ void DesktopLOKTest::testPasteWriterJPEG()
 {
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    OString aText("hello");
 
     OUString aFileURL;
     createFileURL(OUString::createFromAscii("paste.jpg"), aFileURL);
