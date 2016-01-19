@@ -24,6 +24,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
@@ -744,6 +745,8 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream)
         uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
         maSignatureHelper.ReadAndVerifySignature( xInputStream );
     }
+    else if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStorage.is())
+        maSignatureHelper.ReadAndVerifySignatureStorage(aStreamHelper.xSignatureStorage);
     maSignatureHelper.EndMission();
 
     maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
