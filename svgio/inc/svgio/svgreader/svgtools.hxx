@@ -36,7 +36,7 @@ namespace svgio
 #endif
 
 // recommended value for this device dependent unit, see CSS2 section 4.3.2 Lengths
-#define F_SVG_PIXEL_PER_INCH  90.0
+#define F_SVG_PIXEL_PER_INCH  96.0
 
         // common non-token strings
         struct commonStrings

@@ -2337,8 +2337,9 @@ namespace svgio
                 return maFontSizeNumber;
             }
 
-            // default is 'medium'
-            const double aDefaultSize = 12.0;
+            // default size is 'medium' or 16px, which is equal to the default PPI used in svgio ( 96.0 )
+            // converted to pixels
+            const double aDefaultSize = F_SVG_PIXEL_PER_INCH / 6.0;
 
             //In CSS2, the suggested scaling factor between adjacent indexes is 1.2
             switch(maFontSize)
