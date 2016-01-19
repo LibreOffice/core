@@ -493,7 +493,7 @@ public:
 
     Point           GetMousePosPixel();
 
-    void            FreezeSplitters( bool bFreeze );
+    void            FreezeSplitters( bool bFreeze, OUString splitmethod = "both");
     void            RemoveSplit();
     void            SplitAtCursor();
     void            SplitAtPixel( const Point& rPixel, bool bHor, bool bVer );

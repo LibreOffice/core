@@ -1656,7 +1656,7 @@ void SAL_CALL ScTabViewObj::splitAtPosition( sal_Int32 nPixelX, sal_Int32 nPixel
     if (pViewSh)
     {
         pViewSh->SplitAtPixel( Point( nPixelX, nPixelY ), true, true );
-        pViewSh->FreezeSplitters( false );
+        pViewSh->FreezeSplitters( false, "both" );
         pViewSh->InvalidateSplit();
     }
 }
@@ -1682,7 +1682,7 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
         aSplit += aWinStart;
 
         pViewSh->SplitAtPixel( aSplit, true, true );
-        pViewSh->FreezeSplitters( true );
+        pViewSh->FreezeSplitters( true, "both" );
         pViewSh->InvalidateSplit();
     }
 }
