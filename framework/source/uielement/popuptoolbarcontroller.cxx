@@ -50,6 +50,7 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/frame/status/ItemStatus.hpp>
 
 using namespace framework;
 
@@ -169,10 +170,34 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     throw ( css::uno::RuntimeException, std::exception )
 {
-    // TODO move to base class
+   // svt::ToolboxController::statusChanged( rEvent );
+    VclPtr< ToolBox > pToolbox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
+    sal_uInt16 nItemId = 0;
 
-    svt::ToolboxController::statusChanged( rEvent );
-    enable( rEvent.IsEnabled );
+    if ( pToolbox )
+    {
+        pToolbox->EnableItem( nItemId, rEvent.IsEnabled );
+
+        ToolBoxItemBits nItemBits = pToolbox->GetItemBits( nItemId );
+        nItemBits &= ~ToolBoxItemBits::CHECKABLE;
+        TriState eTri = TRISTATE_FALSE;
+
+        bool        bValue;
+        css::frame::status::ItemStatus  aItemState;
+
+        if ( rEvent.State >>= bValue )
+        {
+            // Boolean, treat it as checked/unchecked
+            pToolbox->SetItemBits( nItemId, nItemBits );
+            pToolbox->CheckItem( nItemId, bValue );
+            if ( bValue )
+                eTri = TRISTATE_TRUE;
+            nItemBits |= ToolBoxItemBits::CHECKABLE;
+        }
+
+        pToolbox->SetItemState( nItemId, eTri );
+        pToolbox->SetItemBits( nItemId, nItemBits );
+    }
 }
 
 css::uno::Reference< css::awt::XWindow > SAL_CALL
