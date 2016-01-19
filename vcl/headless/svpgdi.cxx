@@ -131,7 +131,7 @@ namespace
                 aTmpBmp.Create(aSize, 0, BitmapPalette());
                 assert(aTmpBmp.GetBitCount() == 32);
                 const basebmp::BitmapDeviceSharedPtr& rTmpSrc = aTmpBmp.getBitmap();
-                rTmpSrc->copyBitmap(rSrcBmp);
+                rTmpSrc->convertBitmap(rSrcBmp);
                 source = SvpSalGraphics::createCairoSurface(rTmpSrc);
             }
             else

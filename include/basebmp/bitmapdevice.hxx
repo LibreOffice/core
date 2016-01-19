@@ -102,7 +102,7 @@ public:
         @param rSrcBitmap
         Bitmap to render into this one.
      */
-    void copyBitmap( const BitmapDeviceSharedPtr& rSrcBitmap );
+    void convertBitmap( const BitmapDeviceSharedPtr& rSrcBitmap );
 
 protected:
     BASEBMP_DLLPRIVATE BitmapDevice( const basegfx::B2IBox&           rBounds,
@@ -116,13 +116,10 @@ protected:
     BitmapDevice& operator=( const BitmapDevice& ) = delete;
 
 private:
-    BASEBMP_DLLPRIVATE virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const = 0;
 
     BASEBMP_DLLPRIVATE virtual Color getPixel_i( const basegfx::B2IPoint& rPt ) = 0;
 
-    BASEBMP_DLLPRIVATE virtual void copyBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap ) = 0;
-
-    BitmapDeviceSharedPtr getGenericRenderer() const;
+    BASEBMP_DLLPRIVATE virtual void convertBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap ) = 0;
 
     std::unique_ptr< ImplBitmapDevice > mpImpl;
 };

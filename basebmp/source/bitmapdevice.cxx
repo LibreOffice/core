@@ -146,39 +146,12 @@ namespace
 
     private:
 
-        static std::shared_ptr<BitmapRenderer> getCompatibleBitmap( const BitmapDeviceSharedPtr& bmp )
-        {
-            return std::dynamic_pointer_cast< BitmapRenderer >( bmp );
-        }
-
-        virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const override
-        {
-            // TODO(P1): dynamic_cast usually called twice for
-            // compatible formats
-            return getCompatibleBitmap(bmp).get() != nullptr;
-        }
-
         virtual Color getPixel_i(const basegfx::B2IPoint& rPt ) override
         {
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
                                                     rPt.getY()) );
             return maAccessor(pixel);
-        }
-
-        template< typename Iterator, typename RawAcc >
-        void implDrawBitmap(const BitmapDeviceSharedPtr& rSrcBitmap,
-                            const Iterator&              begin,
-                            const RawAcc&                acc)
-        {
-            const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-            const basegfx::B2IBox     aRect(0, 0, rSrcSize.getX(),rSrcSize.getY());
-
-            std::shared_ptr<BitmapRenderer> pSrcBmp( getCompatibleBitmap(rSrcBitmap) );
-            OSL_ASSERT( pSrcBmp );
-
-            vigra::copyImage( pSrcBmp->maBegin, pSrcBmp->maBegin + bottomRight(aRect), pSrcBmp->maRawAccessor,
-                              begin, acc );
         }
 
         template< typename Iterator, typename Acc > static
@@ -195,49 +168,9 @@ namespace
                               begin, acc );
         }
 
-        void implDrawBitmapDirect(const BitmapDeviceSharedPtr& rSrcBitmap)
+        virtual void convertBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap) override
         {
-            const basegfx::B2IVector& rSrcSize(rSrcBitmap->getSize());
-
-            sal_Int32 nSrcWidth = rSrcSize.getX();
-            sal_Int32 nSrcHeight = rSrcSize.getY();
-
-            char* dstBuf =  reinterpret_cast<char*>(getBuffer().get());
-            char* srcBuf =  reinterpret_cast<char*>(rSrcBitmap->getBuffer().get());
-            sal_Int32 dstStride =  getScanlineStride();
-            sal_Int32 srcStride =  rSrcBitmap->getScanlineStride();
-            sal_Int32 bytesPerPixel = (bitsPerPixel[getScanlineFormat()] + 7) >> 3; // round up to bytes
-
-            char* dstline = dstBuf;
-            char* srcline = srcBuf;
-            sal_Int32 lineBytes = nSrcWidth * bytesPerPixel;
-
-            for(; 0 < nSrcHeight; nSrcHeight--)
-            {
-                memmove(dstline, srcline, lineBytes);
-                dstline += dstStride;
-                srcline += srcStride;
-            }
-        }
-
-        virtual void copyBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap) override
-        {
-            if( isCompatibleBitmap( rSrcBitmap ) )
-            {
-                if (bitsPerPixel[getScanlineFormat()] >= 8
-                         && rSrcBitmap->getScanlineFormat() == getScanlineFormat())
-                    implDrawBitmapDirect(rSrcBitmap);
-                else
-                    implDrawBitmap(rSrcBitmap,
-                                   maBegin,
-                                   maRawAccessor);
-            }
-            else
-            {
-                implDrawBitmapGeneric(rSrcBitmap,
-                                      maBegin,
-                                      maAccessor);
-            }
+            implDrawBitmapGeneric(rSrcBitmap, maBegin, maAccessor);
         }
     };
 } // namespace
@@ -330,11 +263,10 @@ Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )
     return Color();
 }
 
-void BitmapDevice::copyBitmap( const BitmapDeviceSharedPtr& rSrcBitmap )
+void BitmapDevice::convertBitmap( const BitmapDeviceSharedPtr& rSrcBitmap )
 {
-    copyBitmap_i( rSrcBitmap );
+    convertBitmap_i(rSrcBitmap);
 }
-
 
 /// Produces a specialized renderer for the given pixel format
 template< class FormatTraits >
@@ -670,11 +602,19 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
 
 BitmapDeviceSharedPtr cloneBitmapDevice(const BitmapDeviceSharedPtr& rProto)
 {
-    BitmapDeviceSharedPtr aCopy = createBitmapDeviceImpl(rProto->getSize(),
+    const basegfx::B2IVector& rSrcSize(rProto->getSize());
+
+    BitmapDeviceSharedPtr aCopy = createBitmapDeviceImpl(rSrcSize,
                                    rProto->getScanlineFormat(),
                                    boost::shared_array< sal_uInt8 >(),
                                    rProto->getPalette() );
-    aCopy->copyBitmap(rProto);
+
+    const sal_Int32 nSrcHeight = rSrcSize.getY();
+    char* dstBuf =  reinterpret_cast<char*>(aCopy->getBuffer().get());
+    char* srcBuf =  reinterpret_cast<char*>(rProto->getBuffer().get());
+    const sal_Int32 nStride = rProto->getScanlineStride();
+    memcpy(dstBuf, srcBuf, nStride * nSrcHeight);
+
     return aCopy;
 }
 
