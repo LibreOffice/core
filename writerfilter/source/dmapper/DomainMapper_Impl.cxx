@@ -1135,9 +1135,10 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 else
                 {
                     uno::Reference<text::XTextCursor> xCursor;
-                    if (m_bParaHadField)
+                    if (m_bParaHadField && !m_bIsInComments)
                     {
                         // Workaround to make sure char props of the field are not lost.
+                        // Not relevant for editeng-based comments.
                         OUString sMarker("X");
                         xCursor = xTextAppend->getText()->createTextCursor();
                         if (xCursor.is())
