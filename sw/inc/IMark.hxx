@@ -137,6 +137,18 @@ namespace sw { namespace mark
         {
             return pMark->StartsAfter(rPos);
         }
+#ifdef DBG_UTIL
+        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark,
+                        SwPosition const& rPos)
+        {
+            return pMark->StartsBefore(rPos);
+        }
+        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark1,
+                        std::shared_ptr<sw::mark::IMark> const& pMark2)
+        {
+            return (*pMark1) < (*pMark2);
+        }
+#endif
     };
 
     // MSVC 2008 with _DEBUG calls this with parameters in wrong order
@@ -148,6 +160,18 @@ namespace sw { namespace mark
         {
             return pMark->StartsBefore(rPos);
         }
+#ifdef DBG_UTIL
+        bool operator()(SwPosition const& rPos,
+                        std::shared_ptr<sw::mark::IMark> const& pMark)
+        {
+            return pMark->StartsAfter(rPos);
+        }
+        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark1,
+                        std::shared_ptr<sw::mark::IMark> const& pMark2)
+        {
+            return (*pMark1) < (*pMark2);
+        }
+#endif
     };
 
     OUString ExpandFieldmark(IFieldmark* pBM);
