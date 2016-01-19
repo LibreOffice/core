@@ -73,7 +73,6 @@
 #define DMAP( _def_nVal, _def_nThres )  ((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
 
 #define SAL_POLY_STACKBUF       32
-#define USE_GDI_BEZIERS
 
 namespace {
 
@@ -1775,22 +1774,15 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
 
 bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
-#ifdef USE_GDI_BEZIERS
-    // for NT, we can handover the array directly
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     ImplRenderPath( mrParent.getHDC(), nPoints, pPtAry, pFlgAry );
 
     return true;
-#else
-    return false;
-#endif
 }
 
 bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
-#ifdef USE_GDI_BEZIERS
-    // for NT, we can handover the array directly
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     POINT   aStackAry1[SAL_POLY_STACKBUF];
@@ -1831,16 +1823,11 @@ bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* 
     }
 
     return bRet;
-#else
-    return false;
-#endif
 }
 
 bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
-#ifdef USE_GDI_BEZIERS
-    // for NT, we can handover the array directly
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
     sal_uLong nCurrPoly, nTotalPoints;
@@ -1885,9 +1872,6 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
     }
 
     return bRet;
-#else
-    return false;
-#endif
 }
 
 void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GpPath *pPath, const basegfx::B2DPolygon& rPolygon, bool bNoLineJoin)
