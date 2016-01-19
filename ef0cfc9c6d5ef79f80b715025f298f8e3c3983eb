@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_416ab081",
+        "filename": "sc/source/ui/inc/tabview.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-19T20:15:49Z",
+      "side": 1,
+      "message": "Although i sent this parameter by default \"both\", i had to change other function calls because of \"This method expects 2 arguments, you\u0027ve sent 1 argument\"",
+      "range": {
+        "startLine": 496,
+        "startChar": 51,
+        "endLine": 496,
+        "endChar": 80
+      },
+      "revId": "ef0cfc9c6d5ef79f80b715025f298f8e3c3983eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
