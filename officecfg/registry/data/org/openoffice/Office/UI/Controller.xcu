@@ -305,6 +305,17 @@
           <value>conditional</value>
         </prop>
       </node>
+      <node oor:name="c26" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FreezePanesMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.FreezePanesMenuController</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">
@@ -1052,6 +1063,20 @@
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.comp.framework.SaveToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="FreezePanesToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FreezePanes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:FreezePanesMenu</value>
         </prop>
       </node>
       <node oor:name="org.apache.openoffice.comp.framework.NewToolbarController" oor:op="replace">
