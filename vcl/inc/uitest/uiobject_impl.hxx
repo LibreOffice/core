@@ -117,4 +117,25 @@ protected:
     virtual OUString get_name() const override;
 };
 
+class ListBoxUIObject : public WindowUIObject
+{
+private:
+    VclPtr<ListBox> mxListBox;
+
+public:
+
+    ListBoxUIObject(VclPtr<ListBox> xListBox);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    virtual UIObjectType get_type() const override;
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -11,6 +11,7 @@
 #include "uitest/factory.hxx"
 
 #include <vcl/event.hxx>
+#include <vcl/lstbox.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -420,6 +421,54 @@ UIObjectType CheckBoxUIObject::get_type() const
 OUString CheckBoxUIObject::get_name() const
 {
     return OUString("CheckBoxUIObject");
+}
+
+ListBoxUIObject::ListBoxUIObject(VclPtr<ListBox> xListBox):
+    WindowUIObject(xListBox),
+    mxListBox(xListBox)
+{
+}
+
+void ListBoxUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SELECT")
+    {
+        bool bSelect = true;
+        if (rParameters.find("POS") != rParameters.end())
+        {
+            auto itr = rParameters.find("POS");
+            OUString aVal = itr->second;
+            sal_Int32 nPos = aVal.toInt32();
+            mxListBox->SelectEntryPos(nPos, bSelect);
+        }
+        else if (rParameters.find("TEXT") != rParameters.end())
+        {
+            auto itr = rParameters.find("TEXT");
+            OUString aText = itr->second;
+            mxListBox->SelectEntry(aText, bSelect);
+        }
+        mxListBox->Select();
+    }
+}
+
+StringMap ListBoxUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["ReadOnly"] = OUString::boolean(mxListBox->IsReadOnly());
+    aMap["MultiSelect"] = OUString::boolean(mxListBox->IsMultiSelectionEnabled());
+
+    return aMap;
+}
+
+UIObjectType ListBoxUIObject::get_type() const
+{
+    return UIObjectType::LISTBOX;
+}
+
+OUString ListBoxUIObject::get_name() const
+{
+    return OUString("ListBoxUIObject");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

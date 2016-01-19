@@ -10,6 +10,8 @@
 #include "uitest/factory.hxx"
 #include "uitest/uiobject_impl.hxx"
 
+#include <vcl/lstbox.hxx>
+
 std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindow)
 {
     if (!pWindow)
@@ -63,6 +65,13 @@ std::unique_ptr<UIObject> UITestWrapperFactory::createObject(vcl::Window* pWindo
             CheckBox* pCheckBox = dynamic_cast<CheckBox*>(pWindow);
             assert(pCheckBox);
             return std::unique_ptr<UIObject>(new CheckBoxUIObject(pCheckBox));
+        }
+        break;
+        case WINDOW_LISTBOX:
+        {
+            ListBox* pListBox = dynamic_cast<ListBox*>(pWindow);
+            assert(pListBox);
+            return std::unique_ptr<UIObject>(new ListBoxUIObject(pListBox));
         }
         break;
         default:
