@@ -30,6 +30,7 @@ $(eval $(call gb_Library_add_libs,libreofficekitgtk,\
 
 $(eval $(call gb_Library_add_defs,libreofficekitgtk,\
 	-DLOK_PATH="\"$(LIBDIR)/libreoffice/$(LIBO_LIB_FOLDER)\"" \
+	-DLOK_ASSETS="\"$(INSTDIR)/$(LIBO_SHARE_FOLDER)/libreofficekit/\"" \
 ))
 
 ifeq ($(OS),$(filter LINUX %BSD SOLARIS, $(OS)))
