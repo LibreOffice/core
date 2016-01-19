@@ -12,8 +12,8 @@
 -{
 -	return Firebird::MemoryPool::globalAlloc(s);
 -}
-+void* operator new(size_t s) THROW_BAD_ALLOC;
-+void* operator new[](size_t s) THROW_BAD_ALLOC;
++void* operator new(size_t s);
++void* operator new[](size_t s);
  
 -inline void operator delete(void* mem) throw()
 -{
@@ -35,11 +35,11 @@
  
  } // namespace Firebird
 +
-+void* operator new(size_t s) THROW_BAD_ALLOC
++void* operator new(size_t s)
 +{
 +	return Firebird::MemoryPool::globalAlloc(s);
 +}
-+void* operator new[](size_t s) THROW_BAD_ALLOC
++void* operator new[](size_t s)
 +{
 +	return Firebird::MemoryPool::globalAlloc(s);
 +}
