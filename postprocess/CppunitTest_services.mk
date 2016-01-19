@@ -45,6 +45,7 @@ ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_CppunitTest_use_java_ure,services))
 
 $(eval $(call gb_CppunitTest_use_jars,services,\
+	ScriptProviderForJava \
 	smoketest \
 ))
 endif
