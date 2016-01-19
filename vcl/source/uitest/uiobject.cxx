@@ -61,7 +61,15 @@ namespace {
 bool isDialogWindow(vcl::Window* pWindow)
 {
     WindowType nType = pWindow->GetType();
-    if (nType >= 0x13a && nType <= 0x13c)
+    // DIALOG to FONTDIALOG
+    if (nType >= 0x13a && nType <= 0x143)
+        return true;
+
+    // MESSBOX, INFOBOX, QUERYBOX, WARNINGBOX, ERRORBOX
+    if (nType >= 0x130 && nType <= 0x134)
+        return true;
+
+    if (nType == WINDOW_TABDIALOG)
         return true;
 
     return false;
