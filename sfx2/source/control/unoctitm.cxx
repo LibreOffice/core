@@ -68,6 +68,7 @@
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/pathoptions.hxx>
+#include <osl/time.h>
 
 #include <iostream>
 #include <map>
@@ -76,8 +77,6 @@
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-
-#define USAGE "file:///~/.config/libreofficedev/4/user/usage.txt"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -645,27 +644,37 @@ void UsageInfo::save()
     if (!mbIsCollecting)
         return;
 
-    const OUString path(USAGE);
+    OUString path(SvtPathOptions().GetConfigPath());
+    path += "usage/";
+    osl::Directory::createPath(path);
+
+    //get system time information.
+    TimeValue systemTime;
+    TimeValue localTime;
+    oslDateTime localDateTime;
+    osl_getSystemTime( &systemTime );
+    osl_getLocalTimeFromSystemTime( &systemTime, &localTime );
+    osl_getDateTimeFromTimeValue( &localTime, &localDateTime );
+
+    sal_Char time[1024];
+    sprintf(time,"%4i-%02i-%02iT%02i_%02i_%02i", localDateTime.Year, localDateTime.Month, localDateTime.Day, localDateTime.Hours, localDateTime.Minutes, localDateTime.Seconds);
+
+    //filename type: usage-YYYY-MM-DDTHH_MM_SS.csv
+    OUString filename = "usage-" + OUString::createFromAscii(time) + ".csv";
+    path += filename;
+
     osl::File file(path);
 
     if( file.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) == osl::File::E_None )
     {
-        OString aUsageInfoMsg = "Usage information:\n";
+        OString aUsageInfoMsg = "Document Type,Command,Count";
 
         for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
             aUsageInfoMsg += "\n" + it->first.toUtf8() + ";" + OString::number(it->second);
 
-        aUsageInfoMsg += "\nUsage information end\n";
         sal_uInt64 written = 0;
         file.write(aUsageInfoMsg.pData->buffer, aUsageInfoMsg.getLength(), written);
         file.close();
-    }
-
-    else{
-        std::cerr << "Usage information:" << std::endl;
-        for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
-            std::cerr << it->first << ';' << it->second << std::endl;
-        std::cerr << "Usage information end" << std::endl;
     }
 }
 
