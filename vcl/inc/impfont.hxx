@@ -68,9 +68,9 @@ public:
     // device dependent functions
     int                 GetQuality() const                              { return mnQuality; }
 
-    void            SetQuality( int nQuality )                  { mnQuality = nQuality; }
-    void            IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
-    void            DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
+    void                SetQuality( int nQuality )                  { mnQuality = nQuality; }
+    void                IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
+    void                DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
     /* Missing function: OUString GetMapNames() const; */
 
     /* Missing function: bool IsBuiltInFont() const; */
@@ -79,16 +79,13 @@ public:
     /* Missing function: bool CanRotate() const; */
     /* Missing function: bool HasMapNames() const; */
 
-    /* Missing function: void SetQuality( int nQuality ); */
-    /* Missing function: void IncreaseQualityBy( int nQualityAmount ); */
-    /* Missing function: void DecreaseQualityBy( int nQualityAmount ); */
     /* Missing function: void SetNames( OUString const& ); */
-    /* Missing function: Vod AddMapName( OUString const& ); */
+    /* Missing function: void AddMapName( OUString const& ); */
 
-    /* Missing function: SetBuiltInFontFlag( bool ); */
-    /* Missing function: SetEmbeddableFlag( bool ); */
-    /* Missing function: SetSettableFlag( bool ); */
-    /* missing function: SetOrientationFlag( bool ); */
+    /* Missing function: void SetBuiltInFontFlag( bool ); */
+    /* Missing function: void SetEmbeddableFlag( bool ); */
+    /* Missing function: void SetSettableFlag( bool ); */
+    /* missing function: void SetOrientationFlag( bool ); */
 
     bool                operator==( const ImplFont& ) const;
 
