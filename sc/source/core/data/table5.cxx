@@ -620,7 +620,7 @@ void ScTable::CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
     SCCOL nCol = nStartCol;
     while (nCol <= nEndCol)
     {
-        SCCOL nLastCol;
+        SCCOL nLastCol = -1;
         bool bHidden = rTable.ColHidden(nCol, nullptr, &nLastCol);
         if (nLastCol > nEndCol)
             nLastCol = nEndCol;
