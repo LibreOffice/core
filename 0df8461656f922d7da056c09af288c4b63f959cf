@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_3e1eabba",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2016-01-19T11:46:22Z",
+      "side": 1,
+      "message": "Append working copy to the single document.",
+      "revId": "0df8461656f922d7da056c09af288c4b63f959cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9e7997ff",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2016-01-19T11:46:22Z",
+      "side": 1,
+      "message": "You actually use the printing controller of the merged document and not the working document!",
+      "revId": "0df8461656f922d7da056c09af288c4b63f959cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
