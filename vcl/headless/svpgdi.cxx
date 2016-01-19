@@ -130,9 +130,8 @@ namespace
                 Size aSize = rSourceBitmap.GetSize();
                 aTmpBmp.Create(aSize, 0, BitmapPalette());
                 assert(aTmpBmp.GetBitCount() == 32);
-                basegfx::B2IBox aRect(0, 0, aSize.Width(), aSize.Height());
                 const basebmp::BitmapDeviceSharedPtr& rTmpSrc = aTmpBmp.getBitmap();
-                rTmpSrc->drawBitmap(rSrcBmp, aRect, aRect);
+                rTmpSrc->copyBitmap(rSrcBmp);
                 source = SvpSalGraphics::createCairoSurface(rTmpSrc);
             }
             else

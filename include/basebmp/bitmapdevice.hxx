@@ -118,23 +118,9 @@ public:
     /** Draw another bitmap into this device
 
         @param rSrcBitmap
-        Bitmap to render into this one. It is permitted that source
-        and destination bitmap are the same.
-
-        @param rSrcRect
-        Rectangle within the source bitmap to take the pixel from.
-
-        @param rDstRect
-        Rectangle in the destination bitmap to put the pixel
-        into. Source and destination rectangle are permitted to have
-        differing sizes; this method will scale the source pixel
-        accordingly. Please note that both source and destination
-        rectangle are interpreted excluding the rightmost pixel column
-        and the bottommost pixel row
+        Bitmap to render into this one.
      */
-    void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
-                     const basegfx::B2IBox&       rSrcRect,
-                     const basegfx::B2IBox&       rDstRect );
+    void copyBitmap( const BitmapDeviceSharedPtr& rSrcBitmap );
 
 protected:
     BASEBMP_DLLPRIVATE BitmapDevice( const basegfx::B2IBox&           rBounds,
@@ -155,10 +141,7 @@ private:
 
     BASEBMP_DLLPRIVATE virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) = 0;
 
-    // must work with *this == rSrcBitmap!
-    BASEBMP_DLLPRIVATE virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
-                                                  const basegfx::B2IBox&       rSrcRect,
-                                                  const basegfx::B2IBox&       rDstRect ) = 0;
+    BASEBMP_DLLPRIVATE virtual void copyBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap ) = 0;
 
     BitmapDeviceSharedPtr getGenericRenderer() const;
 

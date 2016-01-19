@@ -79,8 +79,7 @@ bool SvpSalBitmap::Create( const SalBitmap& rSalBmp )
     {
         B2IVector aSize = rSrcBmp->getSize();
         m_aBitmap = cloneBitmapDevice( aSize, rSrcBmp );
-        B2IBox aRect( 0, 0, aSize.getX(), aSize.getY() );
-        m_aBitmap->drawBitmap(rSrcBmp, aRect, aRect);
+        m_aBitmap->copyBitmap(rSrcBmp);
     }
     else
         m_aBitmap.reset();

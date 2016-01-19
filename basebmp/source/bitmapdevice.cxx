@@ -233,83 +233,59 @@ namespace
 
         template< typename Iterator, typename RawAcc >
         void implDrawBitmap(const BitmapDeviceSharedPtr& rSrcBitmap,
-                            const basegfx::B2IBox&       rSrcRect,
-                            const basegfx::B2IBox&       rDstRect,
                             const Iterator&              begin,
                             const RawAcc&                acc)
         {
+            const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
+            const basegfx::B2IBox     aRect(0, 0, rSrcSize.getX(),rSrcSize.getY());
+
             std::shared_ptr<BitmapRenderer> pSrcBmp( getCompatibleBitmap(rSrcBitmap) );
             OSL_ASSERT( pSrcBmp );
 
             scaleImage(
                 srcIterRange(pSrcBmp->maBegin,
                              pSrcBmp->maRawAccessor,
-                             rSrcRect),
+                             aRect),
                 destIterRange(begin,
                               acc,
-                              rDstRect),
+                              aRect),
                 isSharedBuffer(rSrcBitmap) );
         }
 
         template< typename Iterator, typename Acc > static
         void implDrawBitmapGeneric(const BitmapDeviceSharedPtr& rSrcBitmap,
-                                   const basegfx::B2IBox&       rSrcRect,
-                                   const basegfx::B2IBox&       rDstRect,
                                    const Iterator&              begin,
                                    const Acc&                   acc)
         {
+            const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
+            const basegfx::B2IBox     aRect(0, 0, rSrcSize.getX(),rSrcSize.getY());
+
             GenericColorImageAccessor aSrcAcc( rSrcBitmap );
 
             scaleImage(
                 srcIterRange(vigra::Diff2D(),
                              aSrcAcc,
-                             rSrcRect),
+                             aRect),
                 destIterRange(begin,
                               acc,
-                              rDstRect));
+                              aRect));
         }
 
-        void implDrawBitmapDirect(const BitmapDeviceSharedPtr& rSrcBitmap,
-                                  const basegfx::B2IBox&       rSrcRect,
-                                  const basegfx::B2IBox&       rDstRect)
+        void implDrawBitmapDirect(const BitmapDeviceSharedPtr& rSrcBitmap)
         {
-            sal_Int32 nSrcX = rSrcRect.getMinX();
-            sal_Int32 nSrcY = rSrcRect.getMinY();
-            sal_Int32 nSrcWidth = rSrcRect.getWidth();
-            sal_Int32 nSrcHeight = rSrcRect.getHeight();
-            sal_Int32 nDestX = rDstRect.getMinX();
-            sal_Int32 nDestY = rDstRect.getMinY();
+            const basegfx::B2IVector& rSrcSize(rSrcBitmap->getSize());
+
+            sal_Int32 nSrcWidth = rSrcSize.getX();
+            sal_Int32 nSrcHeight = rSrcSize.getY();
 
             char* dstBuf =  reinterpret_cast<char*>(getBuffer().get());
             char* srcBuf =  reinterpret_cast<char*>(rSrcBitmap->getBuffer().get());
             sal_Int32 dstStride =  getScanlineStride();
             sal_Int32 srcStride =  rSrcBitmap->getScanlineStride();
             sal_Int32 bytesPerPixel = (bitsPerPixel[getScanlineFormat()] + 7) >> 3; // round up to bytes
-            bool dstTopDown = true;
-            bool srcTopDown = true;
 
-            if (dstBuf == srcBuf && nSrcY < nDestY) // reverse copy order to avoid overlapping
-            {
-                nSrcY = getBufferSize().getY() - nSrcY - nSrcHeight;
-                nDestY = getBufferSize().getY() - nDestY - nSrcHeight;
-                srcTopDown = !srcTopDown;
-                dstTopDown = !dstTopDown;
-            }
-
-            if (!dstTopDown)
-            {
-                dstBuf += dstStride * (getBufferSize().getY() - 1);
-                dstStride = -dstStride;
-            }
-
-            if (!srcTopDown)
-            {
-                srcBuf += srcStride * (rSrcBitmap->getBufferSize().getY() - 1);
-                srcStride = -srcStride;
-            }
-
-            char* dstline = dstBuf + dstStride * nDestY + nDestX * bytesPerPixel;
-            char* srcline = srcBuf + srcStride * nSrcY + nSrcX * bytesPerPixel;
+            char* dstline = dstBuf;
+            char* srcline = srcBuf;
             sal_Int32 lineBytes = nSrcWidth * bytesPerPixel;
 
             for(; 0 < nSrcHeight; nSrcHeight--)
@@ -320,24 +296,21 @@ namespace
             }
         }
 
-        virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
-                                  const basegfx::B2IBox&       rSrcRect,
-                                  const basegfx::B2IBox&       rDstRect ) override
+        virtual void copyBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap) override
         {
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
                 if (bitsPerPixel[getScanlineFormat()] >= 8
-                         && rSrcRect.getWidth() == rDstRect.getWidth() && rSrcRect.getHeight() == rDstRect.getHeight()
                          && rSrcBitmap->getScanlineFormat() == getScanlineFormat())
-                    implDrawBitmapDirect(rSrcBitmap, rSrcRect, rDstRect);
+                    implDrawBitmapDirect(rSrcBitmap);
                 else
-                    implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
+                    implDrawBitmap(rSrcBitmap,
                                    maBegin,
                                    maRawAccessor);
             }
             else
             {
-                implDrawBitmapGeneric(rSrcBitmap, rSrcRect, rDstRect,
+                implDrawBitmapGeneric(rSrcBitmap,
                                       maBegin,
                                       maAccessor);
             }
@@ -473,115 +446,9 @@ sal_uInt32 BitmapDevice::getPixelData( const basegfx::B2IPoint& rPt )
     return 0;
 }
 
-namespace
+void BitmapDevice::copyBitmap( const BitmapDeviceSharedPtr& rSrcBitmap )
 {
-    void assertImageRange( const basegfx::B2IBox& rRange,
-                           const basegfx::B2IBox& rPermittedRange )
-    {
-#if OSL_DEBUG_LEVEL > 0
-        basegfx::B2IBox aRange( rRange );
-        aRange.intersect( rPermittedRange );
-
-        OSL_ASSERT( aRange == rRange );
-#else
-        (void)rRange; (void)rPermittedRange;
-#endif
-    }
-
-    // TODO(Q3): Move canvas/canvastools.hxx clipBlit() down
-    // to basegfx, and use here!
-    bool clipAreaImpl( ::basegfx::B2IBox&       io_rDestArea,
-                       ::basegfx::B2IBox&       io_rSourceArea,
-                       const ::basegfx::B2IBox& rDestBounds,
-                       const ::basegfx::B2IBox& rSourceBounds )
-    {
-        // extract inherent scale
-        double fWidth = io_rSourceArea.getWidth();
-        if (fWidth == 0.0)
-            return false;
-
-        double fHeight = io_rSourceArea.getHeight();
-        if (fHeight == 0.0)
-            return false;
-
-        const double nScaleX( io_rDestArea.getWidth() / fWidth );
-        const double nScaleY( io_rDestArea.getHeight() / fHeight );
-
-        // extract range origins
-        const basegfx::B2IPoint   aDestTopLeft(
-            io_rDestArea.getMinimum() );
-        const ::basegfx::B2IPoint aSourceTopLeft(
-            io_rSourceArea.getMinimum() );
-
-        ::basegfx::B2IBox aLocalSourceArea( io_rSourceArea );
-
-        // clip source area (which must be inside rSourceBounds)
-        aLocalSourceArea.intersect( rSourceBounds );
-
-        if( aLocalSourceArea.isEmpty() )
-            return false;
-
-        // calc relative new source area points (relative to orig
-        // source area)
-        const ::basegfx::B2IVector aUpperLeftOffset(
-            aLocalSourceArea.getMinimum()-aSourceTopLeft );
-        const ::basegfx::B2IVector aLowerRightOffset(
-            aLocalSourceArea.getMaximum()-aSourceTopLeft );
-
-        ::basegfx::B2IBox aLocalDestArea( basegfx::fround(aDestTopLeft.getX() + nScaleX*aUpperLeftOffset.getX()),
-                                          basegfx::fround(aDestTopLeft.getY() + nScaleY*aUpperLeftOffset.getY()),
-                                          basegfx::fround(aDestTopLeft.getX() + nScaleX*aLowerRightOffset.getX()),
-                                          basegfx::fround(aDestTopLeft.getY() + nScaleY*aLowerRightOffset.getY()) );
-
-        // clip dest area (which must be inside rDestBounds)
-        aLocalDestArea.intersect( rDestBounds );
-
-        if( aLocalDestArea.isEmpty() )
-            return false;
-
-        // calc relative new dest area points (relative to orig
-        // source area)
-        const ::basegfx::B2IVector aDestUpperLeftOffset(
-            aLocalDestArea.getMinimum()-aDestTopLeft );
-        const ::basegfx::B2IVector aDestLowerRightOffset(
-            aLocalDestArea.getMaximum()-aDestTopLeft );
-
-        io_rSourceArea = ::basegfx::B2IBox( basegfx::fround(aSourceTopLeft.getX() + aDestUpperLeftOffset.getX()/nScaleX),
-                                            basegfx::fround(aSourceTopLeft.getY() + aDestUpperLeftOffset.getY()/nScaleY),
-                                            basegfx::fround(aSourceTopLeft.getX() + aDestLowerRightOffset.getX()/nScaleX),
-                                            basegfx::fround(aSourceTopLeft.getY() + aDestLowerRightOffset.getY()/nScaleY) );
-        io_rDestArea   = aLocalDestArea;
-
-        // final source area clip (chopping round-offs)
-        io_rSourceArea.intersect( rSourceBounds );
-
-        if( io_rSourceArea.isEmpty() )
-            return false;
-
-
-        return true;
-    }
-}
-
-void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
-                               const basegfx::B2IBox&       rSrcRect,
-                               const basegfx::B2IBox&       rDstRect )
-{
-    const basegfx::B2IVector& rSrcSize( rSrcBitmap->getSize() );
-    const basegfx::B2IBox     aSrcBounds( 0,0,rSrcSize.getX(),rSrcSize.getY() );
-    basegfx::B2IBox           aSrcRange( rSrcRect );
-    basegfx::B2IBox           aDestRange( rDstRect );
-
-    if( clipAreaImpl( aDestRange,
-                      aSrcRange,
-                      mpImpl->maBounds,
-                      aSrcBounds ))
-    {
-        assertImageRange(aDestRange,mpImpl->maBounds);
-        assertImageRange(aSrcRange,aSrcBounds);
-
-        drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange );
-    }
+    copyBitmap_i( rSrcBitmap );
 }
 
 /** Standard clip and alpha masks
