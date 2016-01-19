@@ -68,6 +68,7 @@
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/pathoptions.hxx>
+#include <sys/time.h>
 
 #include <iostream>
 #include <map>
@@ -76,8 +77,6 @@
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-
-#define USAGE "file:///~/.config/libreofficedev/4/user/usage.txt"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -645,7 +644,24 @@ void UsageInfo::save()
     if (!mbIsCollecting)
         return;
 
-    const OUString path(USAGE);
+    OUString path = "file:///~/.config/libreofficedev/4/user/";
+    path += "usage/";
+    osl::Directory::createPath(path);
+
+    //get system time information.
+    TimeValue systemTime;
+    TimeValue localTime;
+    oslDateTime localDateTime;
+    osl_getSystemTime( &systemTime );
+    osl_getLocalTimeFromSystemTime( &systemTime, &localTime );
+    osl_getDateTimeFromTimeValue( &localTime, &localDateTime );
+
+    OUString time = OUString::number(localDateTime.Year) + "-" + OUString::number(localDateTime.Month) + "-" + OUString::number(localDateTime.Day) + "T" + OUString::number(localDateTime.Hours) + "_" + OUString::number(localDateTime.Minutes) + "_" + OUString::number(localDateTime.Seconds);
+
+    //filename type: usage-YYYY-MM-DDTHH_MM_SS.csv
+    OUString filename = "usage-" + time + ".csv";
+    path += filename;
+
     osl::File file(path);
 
     if( file.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) == osl::File::E_None )
