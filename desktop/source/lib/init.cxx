@@ -692,7 +692,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:SuperScript"),
         OUString(".uno:Strikeout"),
         OUString(".uno:StyleApply"),
-        OUString(".uno:Underline")
+        OUString(".uno:Underline"),
+        OUString(".uno:ModifiedStatus")
     };
 
     util::URL aCommandURL;
