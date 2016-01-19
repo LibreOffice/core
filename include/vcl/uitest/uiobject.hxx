@@ -20,6 +20,7 @@ enum class UIObjectType
     DIALOG,
     BUTTON,
     EDIT,
+    CHECKBOX,
     UNKNOWN
 };
 

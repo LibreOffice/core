@@ -96,4 +96,25 @@ protected:
     virtual OUString get_name() const override;
 };
 
+// TODO: moggi: maybe let it inherit from the button case
+class CheckBoxUIObject : public WindowUIObject
+{
+private:
+    VclPtr<CheckBox> mxCheckBox;
+
+public:
+    CheckBoxUIObject(VclPtr<CheckBox> xCheckbox);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    virtual UIObjectType get_type() const override;
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
