@@ -501,13 +501,7 @@ void DictionaryNeo::launchEvent(sal_Int16 nEvent,
     aEvt.nEvent = nEvent;
     aEvt.xDictionaryEntry = xEntry;
 
-    cppu::OInterfaceIteratorHelper aIt( aDicEvtListeners );
-    while (aIt.hasMoreElements())
-    {
-        uno::Reference< XDictionaryEventListener > xRef( aIt.next(), UNO_QUERY );
-        if (xRef.is())
-            xRef->processDictionaryEvent( aEvt );
-    }
+    aDicEvtListeners.notifyEach( &XDictionaryEventListener::processDictionaryEvent, aEvt);
 }
 
 int DictionaryNeo::cmpDicEntry(const OUString& rWord1,

@@ -224,7 +224,7 @@ public:
 private:
 
     osl::Mutex m_aMutex;
-    cppu::OInterfaceContainerHelper *m_pDisposeEventListeners;
+    cppu::OInterfaceContainerHelper2 *m_pDisposeEventListeners;
 
     HWND m_aHwnd;
 };

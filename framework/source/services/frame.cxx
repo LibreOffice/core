@@ -2832,7 +2832,7 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
     // Send css::frame::FrameAction event to all listener.
     // Get container for right listener.
     // FOLLOW LINES ARE THREADSAFE!!!
-    // ( OInterfaceContainerHelper is synchronized with m_aListenerContainer! )
+    // ( OInterfaceContainerHelper2 is synchronized with m_aListenerContainer! )
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XFrameActionListener>::get());
 
     if( pContainer != nullptr )

@@ -430,6 +430,24 @@ global:
     _ZN4cppu15supportsServiceEPN3com3sun4star4lang12XServiceInfoERKN3rtl8OUStringE; # cppu::supportsService(com::sun::star::lang::XServiceInfo*, rtl::OUString const&)
 } UDK_3.8;
 
+LIBO_UDK_5.2 { # LibO 5.2
+global:
+    ## class InterfaceContainerHelper2
+    _ZN4cppu26OInterfaceContainerHelper2C1ERN3osl5MutexE;
+    _ZN4cppu26OInterfaceContainerHelper2D1Ev;
+    _ZNK4cppu26OInterfaceContainerHelper29getLengthEv;
+    _ZNK4cppu26OInterfaceContainerHelper211getElementsEv;
+    _ZN4cppu26OInterfaceContainerHelper212addInterfaceERKN3com3sun4star3uno9ReferenceINS4_10XInterfaceEEE;
+    _ZN4cppu26OInterfaceContainerHelper215removeInterfaceERKN3com3sun4star3uno9ReferenceINS4_10XInterfaceEEE;
+    _ZN4cppu26OInterfaceContainerHelper215disposeAndClearERKN3com3sun4star4lang11EventObjectE;
+    _ZN4cppu26OInterfaceContainerHelper25clearEv;
+    ## class InterfaceIteratorHelper2
+    _ZN4cppu25OInterfaceIteratorHelper2C1ERNS_26OInterfaceContainerHelper2E;
+    _ZN4cppu25OInterfaceIteratorHelper2D1Ev;
+    _ZN4cppu25OInterfaceIteratorHelper24nextEv;
+    _ZN4cppu25OInterfaceIteratorHelper26removeEv;
+} LIBO_UDK_3.9;
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:

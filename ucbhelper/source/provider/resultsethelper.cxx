@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <ucbhelper/resultsethelper.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
 
@@ -144,7 +144,7 @@ void SAL_CALL ResultSetImplHelper::addEventListener(
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+            = new cppu::OInterfaceContainerHelper2( m_aMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

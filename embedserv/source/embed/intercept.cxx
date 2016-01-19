@@ -52,7 +52,7 @@ Interceptor::addEventListener(
 
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners =
-            new cppu::OInterfaceContainerHelper( m_aMutex );
+            new cppu::OInterfaceContainerHelper2( m_aMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -216,7 +216,7 @@ void Interceptor::generateFeatureStateEvent()
             if( i == 1 || (m_bLink && i != 5) )
                 continue;
 
-            cppu::OInterfaceContainerHelper* pICH =
+            cppu::OInterfaceContainerHelper2* pICH =
                 m_pStatCL->getContainer(m_aInterceptedURL[i]);
             uno::Sequence<uno::Reference<uno::XInterface> > aSeq;
             if(pICH)

@@ -607,16 +607,7 @@ void ChartDataWrapper::fireChartDataChangeEvent(
     if( xSrc.is() )
         aEvent.Source = xSrc;
 
-    ::cppu::OInterfaceIteratorHelper aIter( m_aEventListenerContainer );
-
-    while( aIter.hasMoreElements() )
-    {
-        uno::Reference<
-            ::com::sun::star::chart::XChartDataChangeEventListener > xListener(
-                aIter.next(), uno::UNO_QUERY );
-        if( xListener.is() )
-            xListener->chartDataChanged( aEvent );
-    }
+    m_aEventListenerContainer.notifyEach( &css::chart::XChartDataChangeEventListener::chartDataChanged, aEvent );
 }
 
 void ChartDataWrapper::switchToInternalDataProvider()

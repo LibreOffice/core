@@ -194,7 +194,7 @@ namespace pcr
 
     private:
         ::cppu::OWeakObject&                m_rParent;
-        ::cppu::OInterfaceContainerHelper   m_aPropertyChangeListeners;
+        ::cppu::OInterfaceContainerHelper2   m_aPropertyChangeListeners;
         Reference< XShape >                 m_xShape;
     };
 

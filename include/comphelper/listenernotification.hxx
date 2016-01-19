@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_LISTENERNOTIFICATION_HXX
 #define INCLUDED_COMPHELPER_LISTENERNOTIFICATION_HXX
 
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <comphelper/comphelperdllapi.h>
@@ -57,7 +57,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OListenerContainer
     {
     private:
-        ::cppu::OInterfaceContainerHelper    m_aListeners;
+        ::cppu::OInterfaceContainerHelper2    m_aListeners;
 
     public:
         /** sends a XEventObject::disposing notification to all listeners, and clears the
@@ -79,9 +79,9 @@ namespace comphelper
 
         /** creates an iterator for looping through all registered listeners
         */
-        ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper > createIterator()
+        ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper2 > createIterator()
         {
-            ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper > pIterator( new ::cppu::OInterfaceIteratorHelper( m_aListeners ) );
+            ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper2 > pIterator( new ::cppu::OInterfaceIteratorHelper2( m_aListeners ) );
             return pIterator;
         }
 

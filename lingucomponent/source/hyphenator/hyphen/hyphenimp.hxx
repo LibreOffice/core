@@ -69,7 +69,7 @@ class Hyphenator :
     HDInfo * aDicts;
     sal_Int32 numdict;
 
-    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ::cppu::OInterfaceContainerHelper2       aEvtListeners;
     linguistic::PropertyHelper_Hyphenation* pPropHelper;
     bool                                    bDisposing;
 

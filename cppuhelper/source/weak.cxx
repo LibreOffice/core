@@ -22,7 +22,7 @@
 #include <boost/noncopyable.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
@@ -78,7 +78,7 @@ private:
     /// The weak object
     OWeakObject*                m_pObject;
     /// The container to hold the weak references
-    OInterfaceContainerHelper   m_aReferences;
+    OInterfaceContainerHelper2   m_aReferences;
 };
 
 // XInterface
@@ -105,7 +105,7 @@ void SAL_CALL OWeakConnectionPoint::release() throw()
 void SAL_CALL OWeakConnectionPoint::dispose() throw(css::uno::RuntimeException)
 {
     Any ex;
-    OInterfaceIteratorHelper aIt( m_aReferences );
+    OInterfaceIteratorHelper2 aIt( m_aReferences );
     while( aIt.hasMoreElements() )
     {
         try

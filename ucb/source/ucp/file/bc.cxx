@@ -186,7 +186,7 @@ BaseContent::addEventListener( const Reference< lang::XEventListener >& Listener
 
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners =
-            new cppu::OInterfaceContainerHelper( m_aEventListenerMutex );
+            new cppu::OInterfaceContainerHelper2( m_aEventListenerMutex );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -208,9 +208,9 @@ BaseContent::dispose()
     throw( RuntimeException, std::exception )
 {
     lang::EventObject aEvt;
-    cppu::OInterfaceContainerHelper* pDisposeEventListeners;
-    cppu::OInterfaceContainerHelper* pContentEventListeners;
-    cppu::OInterfaceContainerHelper* pPropertySetInfoChangeListeners;
+    cppu::OInterfaceContainerHelper2* pDisposeEventListeners;
+    cppu::OInterfaceContainerHelper2* pContentEventListeners;
+    cppu::OInterfaceContainerHelper2* pPropertySetInfoChangeListeners;
     PropertyListeners* pPropertyListener;
 
     {
@@ -545,7 +545,7 @@ BaseContent::addContentEventListener(
 
     if ( ! m_pContentEventListeners )
         m_pContentEventListeners =
-            new cppu::OInterfaceContainerHelper( m_aEventListenerMutex );
+            new cppu::OInterfaceContainerHelper2( m_aEventListenerMutex );
 
 
     m_pContentEventListeners->addInterface( Listener );
@@ -688,7 +688,7 @@ BaseContent::addPropertySetInfoChangeListener(
 {
     osl::MutexGuard aGuard( m_aMutex );
     if( ! m_pPropertySetInfoChangeListeners )
-        m_pPropertySetInfoChangeListeners = new cppu::OInterfaceContainerHelper( m_aEventListenerMutex );
+        m_pPropertySetInfoChangeListeners = new cppu::OInterfaceContainerHelper2( m_aEventListenerMutex );
 
     m_pPropertySetInfoChangeListeners->addInterface( Listener );
 }

@@ -52,6 +52,7 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/implbase_ex \
 	cppuhelper/source/implementationentry \
 	cppuhelper/source/interfacecontainer \
+	cppuhelper/source/interfacecontainer2 \
 	cppuhelper/source/macro_expander \
 	cppuhelper/source/paths \
 	cppuhelper/source/propertysetmixin \

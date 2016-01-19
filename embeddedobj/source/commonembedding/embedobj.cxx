@@ -38,6 +38,7 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 
 #include <vcl/svapp.hxx>
 
