@@ -3579,10 +3579,9 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                 }
                 else
                 {
-                     uno::Reference< io::XStream > xStream(
-                        xMetaInf->openStreamElement( xSigner->getDocumentContentSignatureDefaultStreamName(),
-                                                     embed::ElementModes::READWRITE ),
-                        uno::UNO_SET_THROW );
+                     uno::Reference< io::XStream > xStream;
+                     if (GetFilter() && GetFilter()->IsOwnFormat())
+                         xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
 
                     if ( xSigner->signDocumentContent( GetZipStorageToSign_Impl(), xStream ) )
                     {
