@@ -99,9 +99,6 @@ class MzString
         MzString  &operator = (const char *s);
 
 // Appending
-        MzString  &operator += (char);
-        MzString  &operator += (const char *);
-        MzString  &operator += (MzString const &);
 
         MzString  &operator << (const char *);
         MzString  &operator << (char);

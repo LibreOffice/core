@@ -350,24 +350,6 @@ void SfxItemSet::ClearInvalidItems( bool bHardDefault )
         }
 }
 
-void SfxItemSet::InvalidateDefaultItems()
-{
-    sal_uInt16* pPtr = m_pWhichRanges;
-    SfxItemArray ppFnd = m_pItems;
-
-    while( *pPtr )
-    {
-        for ( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
-            if (*ppFnd && *ppFnd != reinterpret_cast<SfxPoolItem *>(-1)
-                && **ppFnd == m_pPool->GetDefaultItem(nWhich))
-            {
-                m_pPool->Remove( **ppFnd );
-                *ppFnd = reinterpret_cast<SfxPoolItem*>(-1);
-            }
-        pPtr += 2;
-    }
-}
-
 void SfxItemSet::InvalidateAllItems()
 {
     assert( !m_nCount && "There are still Items set" );

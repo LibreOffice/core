@@ -115,7 +115,6 @@ public:
     void evaluate();
 
     // Compare to AstExpressions
-    bool operator==(AstExpression *pExpr);
     bool compare(AstExpression *pExpr);
 
     OString toString();

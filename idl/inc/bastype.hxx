@@ -134,12 +134,6 @@ class SvVersion
     sal_uInt16  nMinorVersion;
 public:
                 SvVersion() : nMajorVersion( 1 ), nMinorVersion( 0 ) {}
-    bool        operator == ( const SvVersion & r )
-                {
-                    return (r.nMajorVersion == nMajorVersion)
-                             && (r.nMinorVersion == nMinorVersion);
-                }
-
     bool        ReadSvIdl( SvTokenStream & rInStm );
 };
 

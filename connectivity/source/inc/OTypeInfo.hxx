@@ -72,8 +72,6 @@ namespace connectivity
         inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
             {  }
 
-        bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
-        bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
     };
 }
 

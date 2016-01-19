@@ -61,13 +61,6 @@ public:
     /// construct list with single element
     explicit LinkedListIterator( LinkedList<T>* pList = 0 );
     ~LinkedListIterator();
-
-    // bug-compatible with original LinkedList.h/cxx: Ignore parameter!
-    void operator++( int );   /// advance iterator by one step (ignore n !!!)
-    void operator--( int );   /// go one step backwards (ignore n !!!)
-    void operator++();        /// advance iterator by one step
-    void operator--();        /// go one step backwards
-
 };
 
 
@@ -109,38 +102,6 @@ LinkedListIterator<T>::LinkedListIterator( LinkedList<T>* pList ) :
 template<class T>
 LinkedListIterator<T>::~LinkedListIterator()
 {
-}
-
-template<class T>
-void LinkedListIterator<T>::operator++( int )
-{
-    ASSERT( mpList != nullptr );
-
-    // bug-compatible with LinkedList.cxx: ignore parameter!
-    mnPosition ++;
-}
-
-template<class T>
-void LinkedListIterator<T>::operator--( int )
-{
-    ASSERT( mpList != nullptr );
-
-    // bug-compatible with LinkedList.cxx: ignore parameter!
-    mnPosition --;
-}
-
-template<class T>
-void LinkedListIterator<T>::operator++()
-{
-    ASSERT( mpList != nullptr );
-    mnPosition ++;
-}
-
-template<class T>
-void LinkedListIterator<T>::operator--()
-{
-    ASSERT( mpList != nullptr );
-    mnPosition --;
 }
 
 #endif
