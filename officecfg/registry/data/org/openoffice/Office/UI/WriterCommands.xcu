@@ -2452,6 +2452,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Comments...</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Format All Comments...</value>
+        </prop>
       </node>
       <node oor:name=".uno:WordCountDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">

@@ -85,6 +85,7 @@
 #include <edtwin.hxx>
 #include <swwait.hxx>
 #include <docstat.hxx>
+#include <SwRewriter.hxx>
 
 #include <cmdid.h>
 #include <globals.hrc>
@@ -141,7 +142,7 @@ void SwAnnotationShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_TEXT_TOOLBOX);
 
-    GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_ANNOTATION_POPUPMENU));
+    GetStaticInterface()->RegisterPopupMenu("annotation");
 }
 
 
@@ -1117,6 +1118,8 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(nSlot);
             if ( pItem )
                 pPostItMgr->Delete( pItem->GetValue() );
+            else
+                pPostItMgr->Delete( pPostItMgr->GetActiveSidebarWin()->GetAuthor() );
             break;
         }
         case FN_HIDE_NOTE:
@@ -1129,6 +1132,8 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(nSlot);
             if ( pItem )
                 pPostItMgr->Hide( pItem->GetValue() );
+            else
+                pPostItMgr->Hide( pPostItMgr->GetActiveSidebarWin()->GetAuthor() );
         }
     }
 }
@@ -1144,11 +1149,9 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
         switch( nSlotId )
         {
         case FN_POSTIT:
-        case FN_DELETE_NOTE_AUTHOR:
         case FN_DELETE_ALL_NOTES:
         case FN_FORMAT_ALL_NOTES:
         case FN_HIDE_NOTE:
-        case FN_HIDE_NOTE_AUTHOR:
         case FN_HIDE_ALL_NOTES:
         case FN_DELETE_COMMENT:
             {
@@ -1159,7 +1162,26 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
                 }
                 break;
             }
-
+        case FN_DELETE_NOTE_AUTHOR:
+        case FN_HIDE_NOTE_AUTHOR:
+        {
+            if( !pPostItMgr
+                || !pPostItMgr->HasActiveAnnotationWin() )
+            {
+                rSet.DisableItem(nWhich);
+            }
+            else
+            {
+                OUString aText( nSlotId == FN_DELETE_NOTE_AUTHOR ?
+                                SW_RES( STR_DELETE_NOTE_AUTHOR ) : SW_RES( STR_HIDE_NOTE_AUTHOR ) );
+                SwRewriter aRewriter;
+                aRewriter.AddRule( UndoArg1, pPostItMgr->GetActiveSidebarWin()->GetAuthor() );
+                aText = aRewriter.Apply( aText );
+                SfxStringItem aItem( nSlotId, aText );
+                rSet.Put( aItem );
+            }
+            break;
+        }
         case FN_REPLY:
             {
                 if ( !pPostItMgr ||

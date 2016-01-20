@@ -466,6 +466,16 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text [ en-US ] = "Unknown Author";
 };
 
+String STR_DELETE_NOTE_AUTHOR
+{
+    Text [ en-US ] = "Delete ~All Comments by $1";
+};
+
+String STR_HIDE_NOTE_AUTHOR
+{
+    Text [ en-US ] = "H~ide All Comments by $1";
+};
+
 String  STR_DONT_ASK_AGAIN
 {
     Text [ en-US ] = "~Do not show warning again" ;

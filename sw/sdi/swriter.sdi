@@ -9746,6 +9746,9 @@ SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_
     RecordPerSet;
     Synchron;
 
+    /* status: */
+    SlotType = SfxStringItem
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9840,6 +9843,9 @@ SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR ( SfxStringItem Author FN_HIDE_NOTE_A
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = FALSE,

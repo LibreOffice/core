@@ -86,14 +86,6 @@
 
 /*--Popups---------------------------------------------------------------*/
 
-Menu MN_ANNOTATION_POPUPMENU
-{
-    ItemList =
-    {
-        MN_ANNOTATIONS
-    };
-};
-
 Menu MN_ANNOTATION_BUTTON
 {
     ItemList =

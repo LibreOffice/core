@@ -35,7 +35,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/mnumgr.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -55,7 +54,6 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <shellres.hxx>
-#include <SwRewriter.hxx>
 #include <memory>
 
 namespace sw { namespace sidebarwindows {
@@ -366,12 +364,6 @@ IMPL_LINK_TYPED( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rI
     }
 }
 
-IMPL_LINK_TYPED( SidebarTextControl, Select, Menu*, pSelMenu, bool )
-{
-    mrSidebarWin.ExecuteCommand( pSelMenu->GetCurItemId() );
-    return false;
-}
-
 void SidebarTextControl::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
@@ -384,32 +376,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
             GetTextView()->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
         }
         else
-        {
-            std::unique_ptr<SfxPopupMenuManager> pMgr(SfxDispatcher::Popup(0, this,&rCEvt.GetMousePosPixel()));
-            static_cast<PopupMenu*>(pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTextControl, Select) );
-
-            {
-                OUString aText = static_cast<PopupMenu*>(pMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
-                SwRewriter aRewriter;
-                aRewriter.AddRule(UndoArg1, mrSidebarWin.GetAuthor());
-                aText = aRewriter.Apply(aText);
-                static_cast<PopupMenu*>(pMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
-            }
-
-            Point aPos;
-            if (rCEvt.IsMouseEvent())
-                aPos = rCEvt.GetMousePosPixel();
-            else
-            {
-                const Size aSize = GetSizePixel();
-                aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
-            }
-
-            //!! call different Execute function to get rid of the new thesaurus sub menu
-            //!! pointer created in the call to Popup.
-            //!! Otherwise we would have a memory leak (see also #i107205#)
-            pMgr->Execute( aPos, this );
-        }
+            SfxDispatcher::ExecutePopup(this, &rCEvt.GetMousePosPixel());
     }
     else
     if (rCEvt.GetCommand() == CommandEventId::Wheel)

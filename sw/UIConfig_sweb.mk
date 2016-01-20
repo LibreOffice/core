@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/sweb,\
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sweb,\
+	sw/uiconfig/sweb/popupmenu/annotation \
 	sw/uiconfig/sweb/popupmenu/form \
 	sw/uiconfig/sweb/popupmenu/frame \
 	sw/uiconfig/sweb/popupmenu/graphic \
