@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a4744a9c",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-20T16:15:05Z",
+      "side": 0,
+      "message": "Moving this to the ScColContainer dtor doesn\u0027t work, the notes have to be freed before their drawing layer page is removed.",
+      "revId": "659526a33619a74730843a06158b22592ae06a0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

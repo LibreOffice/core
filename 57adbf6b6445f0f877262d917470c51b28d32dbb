@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_84794696",
+        "filename": "sc/source/core/data/colcontainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-20T16:15:05Z",
+      "side": 1,
+      "message": "Nitpick: can we please have a blank between the keyword and the opening parenthesis, i.e.\n\n if (...)\n\nand\n\n for (...)",
+      "revId": "57adbf6b6445f0f877262d917470c51b28d32dbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
