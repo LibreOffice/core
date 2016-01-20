@@ -303,12 +303,8 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
                 // usage. Removed it, former fallback is used now
                 if ( pProperty->nWID == OWN_ATTR_OLEMODEL || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT )
                 {
-#if OSL_DEBUG_LEVEL > 0
                     const bool bSuccess(pObj->AddOwnLightClient());
-                    OSL_ENSURE( bSuccess, "An object without client is provided!" );
-#else
-                    pObj->AddOwnLightClient();
-#endif
+                    SAL_WARN_IF(!bSuccess, "svx.svdraw", "An object without client is provided!");
                 }
 
                 if ( pProperty->nWID == OWN_ATTR_OLEMODEL )
