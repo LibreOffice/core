@@ -203,15 +203,8 @@ public class utils {
      *
      */
     public static String getOfficeUserPath(XMultiServiceFactory msf) {
-        String userPath = null;
-
         // get a folder located in the user dir
-        try {
-            userPath = getOfficeSettingsValue(msf, "UserConfig");
-        } catch (Exception e) {
-            System.out.println("Couldn't get Office User Path");
-            e.printStackTrace();
-        }
+        String userPath = getOfficeSettingsValue(msf, "UserConfig");
 
         // strip the returned folder to the user dir
         if (userPath.charAt(userPath.length() - 1) == '/') {
