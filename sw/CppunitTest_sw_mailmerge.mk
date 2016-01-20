@@ -80,7 +80,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_mailmerge, \
     xmloff/util/xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_mailmerge))
+$(eval $(call gb_CppunitTest_use_instdir_configuration,sw_mailmerge))
 $(eval $(call gb_CppunitTest_use_ure,sw_mailmerge))
 $(eval $(call gb_CppunitTest_use_vcl,sw_mailmerge))
 
