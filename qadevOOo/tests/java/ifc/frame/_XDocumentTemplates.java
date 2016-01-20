@@ -188,19 +188,20 @@ public class _XDocumentTemplates extends MultiMethodTest {
      * Returns the string representation of content passed as parameter.
      */
     protected String getContentList(XContent content) {
-        XResultSet statRes = getStatResultSet(content);
         StringBuilder ret = new StringBuilder();
-        try {
-            statRes.first();
-            XRow row = UnoRuntime.queryInterface(XRow.class, statRes);
-            while(! statRes.isAfterLast()) {
-                ret.append("\n    ").append(row.getString(1));
-                statRes.next();
+        XResultSet statRes = getStatResultSet(content);
+        if (statRes != null) {
+            try {
+                statRes.first();
+                XRow row = UnoRuntime.queryInterface(XRow.class, statRes);
+                while(! statRes.isAfterLast()) {
+                    ret.append("\n    ").append(row.getString(1));
+                    statRes.next();
+                }
+            } catch (com.sun.star.sdbc.SQLException e) {
+                log.println("Exception occurred:" + e);
             }
-        } catch (com.sun.star.sdbc.SQLException e) {
-            log.println("Exception occurred:" + e);
         }
-
         return ret.toString();
     }
 
