@@ -109,14 +109,12 @@ struct SwDSParam : public SwDBData
     css::uno::Sequence<  css::uno::Any >               aSelection;
     bool bScrollable;
     bool bEndOfDB;
-    bool bAfterSelection;
     long nSelectionIndex;
 
     SwDSParam(const SwDBData& rData) :
         SwDBData(rData),
         bScrollable(false),
         bEndOfDB(false),
-        bAfterSelection(false),
         nSelectionIndex(0)
         {}
 
@@ -128,16 +126,13 @@ struct SwDSParam : public SwDBData
         aSelection(rSelection),
         bScrollable(true),
         bEndOfDB(false),
-        bAfterSelection(false),
         nSelectionIndex(0)
         {}
 
-        void CheckEndOfDB()
-        {
-            if(bEndOfDB)
-                bAfterSelection = true;
-        }
+    inline bool HasValidRecord() const
+        { return( !bEndOfDB && xResultSet.is() ); }
 };
+
 typedef std::vector<std::unique_ptr<SwDSParam>> SwDSParams_t;
 
 struct SwMergeDescriptor
@@ -266,6 +261,9 @@ friend class SwConnectionDisposedListener_Impl;
                                         const SwMergeDescriptor& rMergeDescriptor,
                                         vcl::Window* pParent );
 
+    SAL_DLLPRIVATE bool ToNextMergeRecord( const sal_uInt16 nSkip = 0 );
+    SAL_DLLPRIVATE bool IsValidMergeRecord() const;
+
     SwDBManager(SwDBManager const&) = delete;
     SwDBManager& operator=(SwDBManager const&) = delete;
 
@@ -362,10 +360,8 @@ public:
                                       OUString &rResult, double *pNumber);
     bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
                                           sal_uInt16 nLanguage, bool asString, SwCalc &aCalc);
-    bool            ToNextMergeRecord(const sal_uInt16 nSkip = 0);
     bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery);
 
-    bool            ExistsNextRecord()const;
     sal_uInt32      GetSelectedRecordId();
     bool            ToRecordId(sal_Int32 nSet);
 
