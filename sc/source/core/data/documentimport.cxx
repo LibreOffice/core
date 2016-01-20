@@ -593,10 +593,9 @@ void ScDocumentImport::finalize()
             continue;
 
         ScTable& rTab = **itTab;
-        ScColumn* pCol = &rTab.aCol[0];
-        ScColumn* pColEnd = pCol + static_cast<size_t>(MAXCOLCOUNT);
-        for (; pCol != pColEnd; ++pCol)
-            initColumn(*pCol);
+        SCCOL nNumCols = rTab.aCol.size();
+        for (SCCOL nColIdx = 0; nColIdx < nNumCols; ++nColIdx)
+            initColumn(rTab.aCol[nColIdx]);
     }
 }
 
