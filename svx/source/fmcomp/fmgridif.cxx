@@ -86,7 +86,7 @@ css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
     aFD.StyleName = rFont.GetStyleName();
     aFD.Height = (sal_Int16)rFont.GetSize().Height();
     aFD.Width = (sal_Int16)rFont.GetSize().Width();
-    aFD.Family = (sal_Int16)rFont.GetFamily();
+    aFD.Family = (sal_Int16)rFont.GetFamilyType();
     aFD.CharSet = rFont.GetCharSet();
     aFD.Pitch = (sal_Int16)rFont.GetPitch();
     aFD.CharacterWidth = VCLUnoHelper::ConvertFontWidth( rFont.GetWidthType() );

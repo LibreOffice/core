@@ -619,7 +619,7 @@ static void lcl_html_setFixedFontProperty(
     rPropSet->setPropertyValue("FontStyleName",
                                 aTmp );
 
-    aTmp <<= (sal_Int16) aFixedFont.GetFamily();
+    aTmp <<= (sal_Int16) aFixedFont.GetFamilyType();
     rPropSet->setPropertyValue("FontFamily", aTmp );
 
     aTmp <<= (sal_Int16) aFixedFont.GetCharSet();

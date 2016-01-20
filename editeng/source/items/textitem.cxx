@@ -231,7 +231,7 @@ SvxFontItem& SvxFontItem::operator=(const SvxFontItem& rFont)
     aFamilyName =  rFont.GetFamilyName();
     aStyleName =   rFont.GetStyleName();
     eFamily =      rFont.GetFamily();
-    ePitch =   rFont.GetPitch();
+    ePitch =       rFont.GetPitch();
     eTextEncoding = rFont.GetCharSet();
     return *this;
 }
@@ -3540,7 +3540,7 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
                                                   aOutTypeArr[ n ].nLanguage,
                                                   GetDefaultFontFlags::OnlyOne ) );
         SvxFontItem* pItem = aItemArr[ n ];
-        pItem->SetFamily( aFont.GetFamily() );
+        pItem->SetFamily( aFont.GetFamilyType() );
         pItem->SetFamilyName( aFont.GetFamilyName() );
         pItem->SetStyleName( OUString() );
         pItem->SetPitch( aFont.GetPitch());

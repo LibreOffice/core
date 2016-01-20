@@ -38,7 +38,7 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const vcl::Font& rFont )
     sal_uInt16 nTemp;
 
     WriteColor( rStream, rFont.GetColor() );
-    nTemp = (sal_uInt16)rFont.GetFamily(); rStream.WriteUInt16( nTemp );
+    nTemp = (sal_uInt16)rFont.GetFamilyType(); rStream.WriteUInt16( nTemp );
 
     nTemp = (sal_uInt16)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet());
     rStream.WriteUInt16( nTemp );
@@ -232,7 +232,7 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
     vcl::Font _aFont = GetFont();
     vcl::Font aNewFont = rCopyFrom.GetFont();
     _aFont.SetFamilyName( aNewFont.GetFamilyName() );
-    _aFont.SetFamily( aNewFont.GetFamily() );
+    _aFont.SetFamily( aNewFont.GetFamilyType() );
     _aFont.SetStyleName( aNewFont.GetStyleName() );
     _aFont.SetColor( aNewFont.GetColor() );
     SetSymbol( rCopyFrom.GetSymbol() );

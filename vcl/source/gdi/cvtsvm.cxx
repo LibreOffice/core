@@ -246,7 +246,7 @@ void ImplWriteFont( SvStream& rOStm, const vcl::Font& rFont,
     rOStm.WriteInt16( 0 ); // no character orientation anymore
     rOStm.WriteInt16( rFont.GetOrientation() );
     rOStm.WriteInt16( rActualCharSet );
-    rOStm.WriteInt16( rFont.GetFamily() );
+    rOStm.WriteInt16( rFont.GetFamilyType() );
     rOStm.WriteInt16( rFont.GetPitch() );
     rOStm.WriteInt16( rFont.GetAlign() );
     rOStm.WriteInt16( nWeight );

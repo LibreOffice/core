@@ -370,7 +370,7 @@ css::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rF
     aFD.StyleName = rFont.GetStyleName();
     aFD.Height = (sal_Int16)rFont.GetSize().Height();
     aFD.Width = (sal_Int16)rFont.GetSize().Width();
-    aFD.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
+    aFD.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamilyType());
     aFD.CharSet = rFont.GetCharSet();
     aFD.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
     aFD.CharacterWidth = VCLUnoHelper::ConvertFontWidth( rFont.GetWidthType() );

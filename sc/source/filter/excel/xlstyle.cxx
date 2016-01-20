@@ -205,7 +205,7 @@ void XclFontData::FillFromVclFont( const vcl::Font& rFont )
     mnEscapem = EXC_FONTESC_NONE;
     SetScHeight( rFont.GetSize().Height() );
     SetScWeight( rFont.GetWeight() );
-    SetScFamily( rFont.GetFamily() );
+    SetScFamily( rFont.GetFamilyType() );
     SetFontEncoding( rFont.GetCharSet() );
     SetScPosture( rFont.GetItalic() );
     SetScStrikeout( rFont.GetStrikeout() );

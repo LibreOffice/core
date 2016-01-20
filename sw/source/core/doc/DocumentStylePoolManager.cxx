@@ -127,7 +127,7 @@ namespace
             vcl::Font aFnt( OutputDevice::GetDefaultFont( nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
 
-            rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetFamilyName(),
+            rSet.Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(),
                                 OUString(), aFnt.GetPitch(),
                                 aFnt.GetCharSet(), aArr[n].nResFntId ));
         }
@@ -156,7 +156,7 @@ namespace
             vcl::Font aFnt( OutputDevice::GetDefaultFont( aArr[n].nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
 
-            rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetFamilyName(),
+            rSet.Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(),
                                 OUString(), aFnt.GetPitch(),
                                 aFnt.GetCharSet(), aArr[n].nResFntId ));
         }
@@ -469,7 +469,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                     vcl::Font aFnt( OutputDevice::GetDefaultFont( nFontTypes[i],
                                             nLng, GetDefaultFontFlags::OnlyOne ) );
 
-                    aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetFamilyName(),
+                    aSet.Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(),
                                             OUString(), aFnt.GetPitch(),
                                             aFnt.GetCharSet(), aFontWhich[i] ));
                 }
@@ -1201,7 +1201,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     case RES_POOLCHR_BUL_LEVEL:             // Bullet character
         {
             const vcl::Font& rBulletFont = numfunc::GetDefBulletFont();
-            SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
+            SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamilyType(),
                         rBulletFont.GetFamilyName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet(), RES_CHRATR_FONT ));
         }
