@@ -250,7 +250,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         }
         else if (aLine.startsWith(collateEquals))
         {
-            rJobData.m_bCollate = aLine.copy(RTL_CONSTASCII_LENGTH(collateEquals)).toInt32();
+            rJobData.m_bCollate = aLine.copy(RTL_CONSTASCII_LENGTH(collateEquals)).toBoolean();
         }
         else if (aLine.startsWith(margindajustmentEquals))
         {
