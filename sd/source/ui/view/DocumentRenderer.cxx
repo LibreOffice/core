@@ -33,10 +33,12 @@
 #include "FrameView.hxx"
 #include "Outliner.hxx"
 #include "OutlineViewShell.hxx"
+#include "SlideSorterViewShell.hxx"
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
@@ -333,8 +335,9 @@ namespace {
     class DialogCreator : public Resource
     {
     public:
-        DialogCreator (bool bImpress, sal_Int32 nCurPage)
+        DialogCreator (ViewShellBase &rBase, bool bImpress, sal_Int32 nCurPage)
             : Resource(SdResId(_STR_IMPRESS_PRINT_UI_OPTIONS))
+            , mrBase(rBase)
             , mbImpress(bImpress)
             , mnCurPage(nCurPage)
         {
@@ -359,6 +362,7 @@ namespace {
         }
 
     private:
+        ViewShellBase &mrBase;
         std::vector<beans::PropertyValue> maProperties;
         std::vector<sal_Int32> maSlidesPerPage;
         bool mbImpress;
@@ -584,19 +588,48 @@ namespace {
             aWidgetIds[0] = "printallpages";
             aWidgetIds[1] = "printpages";
             aWidgetIds[2] = "printselection";
+
+            // check if there is a selection of slides
+            OUString aPageRange(OUString::number(mnCurPage + 1));
+            int nPrintRange(0);
+            using sd::slidesorter::SlideSorterViewShell;
+            SlideSorterViewShell* const pSSViewSh(SlideSorterViewShell::GetSlideSorter(mrBase));
+            if (pSSViewSh)
+            {
+                const std::shared_ptr<SlideSorterViewShell::PageSelection> pPageSelection(pSSViewSh->GetPageSelection());
+                if (bool(pPageSelection) && pPageSelection->size() > 1)
+                {
+                    OUStringBuffer aBuf;
+                    // TODO: this could be improved by writing ranges instead of consecutive page
+                    // numbers if appropriate. Do we have a helper function for that somewhere?
+                    bool bFirst(true);
+                    for (auto pPage: *pPageSelection)
+                    {
+                        if (!bFirst)
+                        {
+                            aBuf.append(',');
+                            bFirst = false;
+                        }
+                        aBuf.append(OUString::number(pPage->GetPageNum() / 2 + 1));
+                    }
+                    aPageRange = aBuf.getStr();
+                    nPrintRange = 1;
+                }
+            }
+
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(aWidgetIds, "",
                                 aHelpIds,
                                 aPrintRangeName,
                                 CreateChoice(mbImpress
                                              ? _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
                                              : _STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE),
-                                0 )
+                                nPrintRange )
                             );
             // create a an Edit dependent on "Pages" selected
             vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
             AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("pagerange", "",
                                 ".HelpID:vcl:PrintDialog:PageRange:Edit", "PageRange",
-                                OUString::number(mnCurPage + 1), aPageRangeOpt));
+                                aPageRange, aPageRangeOpt));
 
             FreeResource();
         }
@@ -1140,7 +1173,7 @@ public:
         , mpPrintView()
         , mbHasOrientationWarningBeenShown(false)
     {
-        DialogCreator aCreator( mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS, GetCurrentPageIndex() );
+        DialogCreator aCreator( mrBase, mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS, GetCurrentPageIndex() );
         m_aUIProperties = aCreator.GetDialogControls();
         maSlidesPerPage = aCreator.GetSlidesPerPage();
 
