@@ -605,11 +605,10 @@ namespace {
                     bool bFirst(true);
                     for (auto pPage: *pPageSelection)
                     {
-                        if (!bFirst)
-                        {
-                            aBuf.append(',');
+                        if (bFirst)
                             bFirst = false;
-                        }
+                        else
+                            aBuf.append(',');
                         aBuf.append(OUString::number(pPage->GetPageNum() / 2 + 1));
                     }
                     aPageRange = aBuf.getStr();
