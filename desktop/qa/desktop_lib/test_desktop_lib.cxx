@@ -437,7 +437,7 @@ void DesktopLOKTest::testPasteWriterJPEG()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     OUString aFileURL;
-    createFileURL(OUString::createFromAscii("paste.jpg"), aFileURL);
+    createFileURL("paste.jpg", aFileURL);
     std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
     std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
 
