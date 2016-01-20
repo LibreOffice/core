@@ -1586,7 +1586,7 @@ void VortexTransition::prepare( double, double, double, double, double )
 
 GLuint VortexTransition::makeShader() const
 {
-    return OpenGLHelper::LoadShaders( "vortexVertexShader", "basicFragmentShader" );
+    return OpenGLHelper::LoadShaders( "vortexVertexShader", "basicFragmentShader", "vortexGeometryShader" );
 }
 
 void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
@@ -1690,6 +1690,7 @@ std::shared_ptr<OGLTransitionImpl> makeVortex()
 
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+    aSettings.mnRequiredGLVersion = 3.2f;
 
     return makeVortexTransition(aLeavingSlide, aEnteringSlide, aSettings, NX, NY);
 }

@@ -7,73 +7,32 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#version 120
+#version 150
 
 #define M_PI 3.1415926535897932384626433832795
 
-attribute vec3 a_position;
-attribute vec3 a_normal;
-attribute vec2 a_texCoord;
+in vec3 a_position;
+in vec3 a_normal;
+in vec2 a_texCoord;
+in float tileInfo;
 
-uniform mat4 u_projectionMatrix;
 uniform mat4 u_modelViewMatrix;
 uniform mat4 u_sceneTransformMatrix;
 uniform mat4 u_primitiveTransformMatrix;
 uniform mat4 u_operationsTransformMatrix;
 
-varying vec2 v_texturePosition;
-varying vec3 v_normal;
-
 uniform float time;
 uniform ivec2 numTiles;
 uniform sampler2D permTexture;
-attribute float tileInfo;
 uniform float slide;
 
-varying vec4 debug;
-
-#if __VERSION__ < 140
-mat4 inverse(mat4 m)
-{
-    float a00 = m[0][0], a01 = m[0][1], a02 = m[0][2], a03 = m[0][3];
-    float a10 = m[1][0], a11 = m[1][1], a12 = m[1][2], a13 = m[1][3];
-    float a20 = m[2][0], a21 = m[2][1], a22 = m[2][2], a23 = m[2][3];
-    float a30 = m[3][0], a31 = m[3][1], a32 = m[3][2], a33 = m[3][3];
-
-    float b00 = a00 * a11 - a01 * a10;
-    float b01 = a00 * a12 - a02 * a10;
-    float b02 = a00 * a13 - a03 * a10;
-    float b03 = a01 * a12 - a02 * a11;
-    float b04 = a01 * a13 - a03 * a11;
-    float b05 = a02 * a13 - a03 * a12;
-    float b06 = a20 * a31 - a21 * a30;
-    float b07 = a20 * a32 - a22 * a30;
-    float b08 = a20 * a33 - a23 * a30;
-    float b09 = a21 * a32 - a22 * a31;
-    float b10 = a21 * a33 - a23 * a31;
-    float b11 = a22 * a33 - a23 * a32;
-
-    float det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
-
-    return mat4(
-        a11 * b11 - a12 * b10 + a13 * b09,
-        a02 * b10 - a01 * b11 - a03 * b09,
-        a31 * b05 - a32 * b04 + a33 * b03,
-        a22 * b04 - a21 * b05 - a23 * b03,
-        a12 * b08 - a10 * b11 - a13 * b07,
-        a00 * b11 - a02 * b08 + a03 * b07,
-        a32 * b02 - a30 * b05 - a33 * b01,
-        a20 * b05 - a22 * b02 + a23 * b01,
-        a10 * b10 - a11 * b08 + a13 * b06,
-        a01 * b08 - a00 * b10 - a03 * b06,
-        a30 * b04 - a31 * b02 + a33 * b00,
-        a21 * b02 - a20 * b04 - a23 * b00,
-        a11 * b07 - a10 * b09 - a12 * b06,
-        a00 * b09 - a01 * b07 + a02 * b06,
-        a31 * b01 - a30 * b03 - a32 * b00,
-        a20 * b03 - a21 * b01 + a22 * b00) / det;
-}
-#endif
+out vec2 g_texturePosition;
+out vec3 g_normal;
+out mat4 modelViewMatrix;
+out mat4 transform;
+out float nTime;
+out float startTime;
+out float endTime;
 
 float snoise(vec2 p)
 {
@@ -110,9 +69,6 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 void main( void )
 {
-    vec4 v = vec4(a_position, 1.0);
-    vec4 normal = vec4(a_normal, 1.0);
-
     // Each tile moves during only half of the transition. The leftmost
     // tiles start moving at the start and arrive at their end
     // position around time=0.5, when the tiles there (the rightmost
@@ -131,13 +87,11 @@ void main( void )
     // The additional 0.5 on each side is because we want some tiles to rotate outside.
     float rotationFuzz = snoise(vec2(float(numTiles.x + tileXIndex)/(numTiles.x-1), float(tileYIndex)/(numTiles.y-1))) * 3.0 - 1.5;
 
-    float startTime = float(tileXIndex)/(numTiles.x-1) * 0.2 + startTimeFuzz * 0.2;
-    float endTime = min(startTime + 0.7, 1.0);
+    startTime = float(tileXIndex)/(numTiles.x-1) * 0.2 + startTimeFuzz * 0.2;
+    endTime = min(startTime + 0.7, 1.0);
 
     bool isLeavingSlide = (slide < 0.5);
     const vec4 invalidPosition = vec4(-256.0, -256.0, -256.0, -256.0);
-
-    float nTime;
 
     // Don’t display the tile before or after its rotation, depending on the slide.
     if (!isLeavingSlide)
@@ -159,18 +113,25 @@ void main( void )
         nTime = time;
     }
 
-    mat4 transform = identityMatrix();
+    transform = identityMatrix();
     if (nTime > startTime && nTime <= endTime)
     {
         // We are in the rotation part.
-        float rotation = -(nTime - startTime) / (endTime - startTime);
+        float rotation = (nTime - startTime) / (endTime - startTime);
+        if (isLeavingSlide)
+            rotation *= -1.0;
+
+        if (rotation < -0.5 || rotation > 0.5) {
+            gl_Position = invalidPosition;
+            return;
+        }
 
         // Translation vector to set the origin of the rotation.
         vec3 translationVector = vec3(rotationFuzz, 0.0, 0.0);
 
         // Compute the actual rotation matrix.
         transform = translationMatrix(translationVector)
-                  * rotationMatrix(vec3(0, 1, 0), clamp(rotation, -1.0, 1.0) * M_PI)
+                  * rotationMatrix(vec3(0.0, 1.0, 0.0), clamp(rotation, -1.0, 1.0) * M_PI)
                   * translationMatrix(-translationVector)
                   * transform;
 
@@ -182,16 +143,11 @@ void main( void )
         }
     }
 
-    // Apply our transform operations.
-    v = transform * v;
-    normal = transform * normal;
+    modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
+    gl_Position = vec4(a_position, 1.0);
 
-    mat4 modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
-    mat3 normalMatrix = mat3(transpose(inverse(modelViewMatrix)));
-    gl_Position = u_projectionMatrix * modelViewMatrix * v;
-
-    v_texturePosition = a_texCoord;
-    v_normal = normalize(normalMatrix * vec3(normal));
+    g_texturePosition = a_texCoord;
+    g_normal = a_normal;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
