@@ -26,6 +26,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "column.hxx"
+#include "colcontainer.hxx"
 #include "sortparam.hxx"
 #include "compressedarray.hxx"
 #include "postit.hxx"
@@ -129,7 +130,7 @@ private:
 
     typedef ::std::vector< ScRange > ScRangeVec;
 
-    ScColumn        aCol[MAXCOLCOUNT];
+    ScColContainer  aCol;
 
     OUString aName;
     OUString aCodeName;
