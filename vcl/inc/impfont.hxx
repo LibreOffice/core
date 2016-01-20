@@ -51,6 +51,7 @@ public:
     FontPitch           GetPitchNoAsk() const                           { return mePitch; }
     FontWidth           GetWidthType()                                  { if(meWidthType==WIDTH_DONTKNOW) AskConfig(); return meWidthType; }
     FontWidth           GetWidthTypeNoAsk() const                       { return meWidthType; }
+    rtl_TextEncoding    GetCharSet() const                              { return meCharSet; }
 
     bool                IsSymbolFont() const                            { return mbSymbol; }
 
@@ -68,9 +69,9 @@ public:
     // device dependent functions
     int                 GetQuality() const                              { return mnQuality; }
 
-    void                SetQuality( int nQuality )                  { mnQuality = nQuality; }
-    void                IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
-    void                DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
+    void                SetQuality( int nQuality )                      { mnQuality = nQuality; }
+    void                IncreaseQualityBy( int nQualityAmount )         { mnQuality += nQualityAmount; }
+    void                DecreaseQualityBy( int nQualityAmount )         { mnQuality -= nQualityAmount; }
     /* Missing function: OUString GetMapNames() const; */
 
     /* Missing function: bool IsBuiltInFont() const; */
@@ -86,6 +87,7 @@ public:
     /* Missing function: void SetEmbeddableFlag( bool ); */
     /* Missing function: void SetSettableFlag( bool ); */
     /* missing function: void SetOrientationFlag( bool ); */
+    void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
 
     bool                operator==( const ImplFont& ) const;
 
