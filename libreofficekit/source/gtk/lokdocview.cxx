@@ -2405,14 +2405,21 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
 SAL_DLLPUBLIC_EXPORT GtkWidget*
 lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 {
-    return GTK_WIDGET (g_initable_new (LOK_TYPE_DOC_VIEW, cancellable, error, "lopath", pPath == nullptr ? LOK_PATH : pPath, nullptr));
+    return GTK_WIDGET (g_initable_new (LOK_TYPE_DOC_VIEW, cancellable, error,
+                                       "lopath", pPath == nullptr ? LOK_PATH : pPath,
+                                       "halign", GTK_ALIGN_CENTER,
+                                       nullptr));
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOKDocView)
 {
     LOKDocViewPrivate& pOldPriv = getPrivate(pOldLOKDocView);
     GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/nullptr, /*error=*/nullptr,
-                                                       "lopath", pOldPriv->m_aLOPath, "lopointer", pOldPriv->m_pOffice, "docpointer", pOldPriv->m_pDocument, nullptr));
+                                                       "lopath", pOldPriv->m_aLOPath,
+                                                       "lopointer", pOldPriv->m_pOffice,
+                                                       "docpointer", pOldPriv->m_pDocument,
+                                                       "halign", GTK_ALIGN_CENTER,
+                                                       nullptr));
 
     // No documentLoad(), just a createView().
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));
