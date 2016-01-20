@@ -86,6 +86,7 @@ public:
     void testRowColumnHeaders();
     void testCommandResult();
     void testWriterComments();
+    void testSheetOperations();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
+    CPPUNIT_TEST(testSheetOperations);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -583,6 +585,38 @@ void DesktopLOKTest::testWriterComments()
     auto xTextField = xTextPortion->getPropertyValue("TextField").get< uno::Reference<beans::XPropertySet> >();
     // This was empty, typed characters ended up in the body text.
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xTextField->getPropertyValue("Content").get<OUString>());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testSheetOperations()
+{
+    comphelper::LibreOfficeKit::setActive(true);
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
+
+    // insert the last sheet
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Insert",
+          "{ \"Name\": { \"type\": \"string\", \"value\": \"LastSheet\" }, \"Index\": { \"type\": \"long\", \"value\": 0 } }", false);
+
+    // insert the first sheet
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Insert",
+          "{ \"Name\": { \"type\": \"string\", \"value\": \"FirstSheet\" }, \"Index\": { \"type\": \"long\", \"value\": 1 } }", false);
+
+    // rename the \"Sheet1\" (2nd now) to \"Renamed\"
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Name",
+          "{ \"Name\": { \"type\": \"string\", \"value\": \"Renamed\" }, \"Index\": { \"type\": \"long\", \"value\": 2 } }", false);
+
+    // delete the \"Sheet2\" (3rd)
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Remove",
+          "{ \"Index\": { \"type\": \"long\", \"value\": 3 } }", false);
+
+    CPPUNIT_ASSERT_EQUAL(pDocument->pClass->getParts(pDocument), 6);
+
+    std::vector<OString> pExpected = { "FirstSheet", "Renamed", "Sheet3", "Sheet4", "Sheet5", "LastSheet" };
+    for (int i = 0; i < 6; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(pExpected[i], OString(pDocument->pClass->getPartName(pDocument, i)));
+    }
 
     comphelper::LibreOfficeKit::setActive(false);
 }
