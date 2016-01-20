@@ -51,7 +51,6 @@ struct _LibreOfficeKitClass
                                              const char* pURL);
 
     char* (*getError) (LibreOfficeKit* pThis);
-    void  (*freeError)     (const char *pfree);
 
     LibreOfficeKitDocument* (*documentLoadWithOptions) (LibreOfficeKit* pThis,
                                                         const char* pURL,
@@ -64,6 +63,8 @@ struct _LibreOfficeKitClass
     /// @see lok::Office::getFilterTypes().
     char* (*getFilterTypes) (LibreOfficeKit* pThis);
 #endif
+    void  (*freeError)     (const char *pfree);
+
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
