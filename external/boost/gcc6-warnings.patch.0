@@ -1,13 +1,19 @@
 --- boost/function/function_base.hpp
 +++ boost/function/function_base.hpp
-@@ -305,7 +305,15 @@
+@@ -305,7 +305,21 @@
            if (op == clone_functor_tag || op == move_functor_tag) {
              const functor_type* in_functor = 
                static_cast<const functor_type*>(static_cast<void*>(&in_buffer.data));
 +#if defined __GNUC__
 +#pragma GCC diagnostic push
++#if defined __clang__
++#if __has_warning("-Wplacement-new")
++#pragma GCC diagnostic ignored "-Wplacement-new"
++#endif
++#else
 +#pragma GCC diagnostic ignored "-Wpragmas"
 +#pragma GCC diagnostic ignored "-Wplacement-new"
++#endif
 +#endif
              new (reinterpret_cast<void*>(&out_buffer.data)) functor_type(*in_functor);
 +#if defined __GNUC__
@@ -18,14 +24,20 @@
                functor_type* f = static_cast<functor_type*>(static_cast<void*>(&in_buffer.data));
 --- boost/function/function_template.hpp
 +++ boost/function/function_template.hpp
-@@ -569,7 +569,15 @@
+@@ -569,7 +569,21 @@
          void 
          assign_functor(FunctionObj f, function_buffer& functor, mpl::true_) const
          {
 +#if defined __GNUC__
 +#pragma GCC diagnostic push
++#if defined __clang__
++#if __has_warning("-Wplacement-new")
++#pragma GCC diagnostic ignored "-Wplacement-new"
++#endif
++#else
 +#pragma GCC diagnostic ignored "-Wpragmas"
 +#pragma GCC diagnostic ignored "-Wplacement-new"
++#endif
 +#endif
            new (reinterpret_cast<void*>(&functor.data)) FunctionObj(f);
 +#if defined __GNUC__

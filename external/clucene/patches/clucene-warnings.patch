@@ -69,7 +69,7 @@
  #endif
 --- src/core/CLucene/util/Array.h	2012-02-22 12:37:22.510637696 +0000
 +++ src/core/CLucene/util/Array.h	2012-02-22 12:38:33.714444884 +0000
-@@ -7,6 +7,14 @@
+@@ -7,6 +7,20 @@
  #ifndef _lucene_util_Array_
  #define _lucene_util_Array_
  
@@ -77,8 +77,14 @@
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wshadow"
 +# pragma GCC diagnostic ignored "-Wunused-parameter"
++#if defined __clang__
++#if __has_warning("-Wmisleading-indentation")
++#pragma GCC diagnostic ignored "-Wmisleading-indentation"
++#endif
++#else
 +# pragma GCC diagnostic ignored "-Wpragmas"
 +# pragma GCC diagnostic ignored "-Wmisleading-indentation"
++#endif
 +#endif
 +
  #include <stdlib.h>
