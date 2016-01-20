@@ -725,7 +725,7 @@ SwContentNode *SwTextNode::JoinNext()
     return this;
 }
 
-SwContentNode *SwTextNode::JoinPrev()
+void SwTextNode::JoinPrev()
 {
     SwNodes& rNds = GetNodes();
     SwNodeIndex aIdx( *this );
@@ -815,8 +815,6 @@ SwContentNode *SwTextNode::JoinPrev()
     else {
         OSL_FAIL( "kein TextNode." );
     }
-
-    return this;
 }
 
 // erzeugt einen AttrSet mit Bereichen fuer Frame-/Para/Char-Attributen

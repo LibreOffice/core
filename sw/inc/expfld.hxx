@@ -175,7 +175,7 @@ public:
     /// Overlay, because set-field takes care for its being updated by itself.
     inline OUString         GetSetRefName() const;
 
-    sal_uInt16 SetSeqRefNo( SwSetExpField& rField );
+    void   SetSeqRefNo( SwSetExpField& rField );
 
     size_t GetSeqFieldList( SwSeqFieldList& rList );
 

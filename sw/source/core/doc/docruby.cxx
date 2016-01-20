@@ -90,7 +90,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
     return rList.size();
 }
 
-sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
+void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             sal_uInt16 nMode )
 {
     GetIDocumentUndoRedo().StartUndo( UNDO_SETRUBYATTR, nullptr );
@@ -175,8 +175,6 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
         (_pStartCursor = _pStartCursor->GetNext()) != __pStartCursor );
 
     GetIDocumentUndoRedo().EndUndo( UNDO_SETRUBYATTR, nullptr );
-
-    return nListEntry;
 }
 
 bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt16 )

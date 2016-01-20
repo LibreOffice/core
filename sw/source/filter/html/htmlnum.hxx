@@ -71,8 +71,8 @@ public:
 
     void SetDepth( sal_uInt16 nDepth ) { nDeep = nDepth; }
     sal_uInt16 GetDepth() const { return nDeep; }
-    sal_uInt16 IncDepth() { return ++nDeep; }
-    sal_uInt16 DecDepth() { return nDeep==0 ? 0 : --nDeep; }
+    void IncDepth() { ++nDeep; }
+    void DecDepth() { if (nDeep!=0) --nDeep; }
     inline sal_uInt8 GetLevel() const;
 
     bool IsRestart() const { return bRestart; }

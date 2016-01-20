@@ -298,12 +298,11 @@ public:
     }
 
 /** retrieves kashida opportunities for a given text range.
-   returns the number of kashida positions in the given text range
 
    pKashidaPositions: buffer to receive the char indices of the
                       kashida opportunties relative to the paragraph
 */
-    sal_Int32 GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
+    void GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
        sal_Int32* pKashidaPosition);
 
 /** Use regular blank justification instead of kashdida justification for the given line of text.

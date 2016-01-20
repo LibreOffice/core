@@ -75,8 +75,8 @@ class Desktop : public Application
         virtual void            Init() override;
         virtual void            InitFinished() override;
         virtual void            DeInit() override;
-        virtual bool        QueryExit() override;
-        virtual sal_uInt16      Exception(sal_uInt16 nError) override;
+        virtual bool            QueryExit() override;
+        virtual void            Exception(sal_uInt16 nError) override;
         virtual void            OverrideSystemSettings( AllSettings& rSettings ) override;
         virtual void            AppEvent( const ApplicationEvent& rAppEvent ) override;
 

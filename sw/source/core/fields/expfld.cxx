@@ -532,10 +532,10 @@ sal_uLong SwSetExpFieldType::GetSeqFormat()
     return pField->GetFormat();
 }
 
-sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
+void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
 {
     if( !HasWriterListeners() || !(nsSwGetSetExpType::GSE_SEQ & nType) )
-        return USHRT_MAX;
+        return;
 
     std::vector<sal_uInt16> aArr;
 
@@ -563,7 +563,7 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
                 break;
 
         if( n == aArr.size() || aArr[ n ] > nNum )
-            return nNum;            // no -> use it
+            return;            // no -> use it
     }
 
     // flagged all numbers, so determine the right number
@@ -578,7 +578,6 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
     }
 
     rField.SetSeqNumber( n );
-    return n;
 }
 
 size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )

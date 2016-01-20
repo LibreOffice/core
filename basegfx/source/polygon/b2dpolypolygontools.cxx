@@ -170,35 +170,6 @@ namespace basegfx
             }
         }
 
-        B2DPolyPolygon adaptiveSubdivideByCount(const B2DPolyPolygon& rCandidate, sal_uInt32 nCount)
-        {
-            if(rCandidate.areControlPointsUsed())
-            {
-                const sal_uInt32 nPolygonCount(rCandidate.count());
-                B2DPolyPolygon aRetval;
-
-                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-                {
-                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-
-                    if(aCandidate.areControlPointsUsed())
-                    {
-                        aRetval.append(tools::adaptiveSubdivideByCount(aCandidate, nCount));
-                    }
-                    else
-                    {
-                        aRetval.append(aCandidate);
-                    }
-                }
-
-                return aRetval;
-            }
-            else
-            {
-                return rCandidate;
-            }
-        }
-
         bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder)
         {
             const sal_uInt32 nPolygonCount(rCandidate.count());

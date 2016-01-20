@@ -415,7 +415,7 @@ public:
     void    DeleteTOXMark(SwTOXMark* pMark);
 
     /// Get all marks at current SPoint.
-    sal_uInt16  GetCurTOXMarks(SwTOXMarks& rMarks) const ;
+    void    GetCurTOXMarks(SwTOXMarks& rMarks) const ;
 
     /// Insert content table. Renew if required.
     void                InsertTableOf(const SwTOXBase& rTOX,
@@ -926,7 +926,7 @@ public:
     bool IsLabelDoc() const;
 
     /// Interface for TextInputData - (for input of Japanese/Chinese chars.)
-    SwExtTextInput* CreateExtTextInput(LanguageType eInputLanguage);
+    void CreateExtTextInput(LanguageType eInputLanguage);
     OUString DeleteExtTextInput( SwExtTextInput* pDel = nullptr, bool bInsText = true);
     void SetExtTextInputData( const CommandExtTextInputData& );
 

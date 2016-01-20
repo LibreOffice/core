@@ -429,11 +429,9 @@ public:
 
      @param nError      The error code identifier
 
-     @returns sal_uInt16 value - if it is 0, then the error wasn't handled.
-
      @see Abort
     */
-    virtual sal_uInt16          Exception( sal_uInt16 nError );
+    virtual void          Exception( sal_uInt16 nError );
 
     /** Ends the program prematurely with an error message.
 

@@ -40,11 +40,7 @@ namespace connectivity
         // A ctor that is needed for returning the object
         java_sql_DriverPropertyInfo( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
-        OUString name();
-        OUString description();
-        OUString value();
         bool        required();
-        ::com::sun::star::uno::Sequence< OUString> choices();
     };
 }
 

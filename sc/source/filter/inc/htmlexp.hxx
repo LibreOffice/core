@@ -178,7 +178,7 @@ public:
                         ScHTMLExport( SvStream&, const OUString&, ScDocument*, const ScRange&,
                                       bool bAll, const OUString& aStreamPath, const OUString& rFilterOptions );
     virtual             ~ScHTMLExport();
-    sal_uLong           Write();
+    void                Write();
     const OUString&     GetNonConvertibleChars() const
     {
         return aNonConvertibleChars;

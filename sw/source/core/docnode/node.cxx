@@ -1385,9 +1385,8 @@ SwContentNode *SwContentNode::JoinNext()
     return this;
 }
 
-SwContentNode *SwContentNode::JoinPrev()
+void SwContentNode::JoinPrev()
 {
-    return this;
 }
 
 /// Get info from Modify

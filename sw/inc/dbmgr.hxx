@@ -352,9 +352,6 @@ public:
                             SvNumberFormatter* pNFormatr,
                             long nLanguage );
 
-    static sal_Int32 GetRowCount(css::uno::Reference< css::sdbc::XConnection> xConnection,
-                                 const OUString& rTableName);
-
     sal_uLong GetColumnFormat( const OUString& rDBName,
                             const OUString& rTableName,
                             const OUString& rColNm,
@@ -389,8 +386,8 @@ public:
     css::uno::Reference< css::sdbc::XConnection>
                     RegisterConnection(OUString const& rSource);
 
-    const SwDSParam* CreateDSData(const SwDBData& rData)
-                        {return FindDSData(rData, true);}
+    void            CreateDSData(const SwDBData& rData)
+                        { FindDSData(rData, true); }
     const SwDSParams_t& GetDSParamArray() const { return m_DataSourceParams; }
 
     /// close all data sources - after fields were updated

@@ -89,7 +89,7 @@ public:
     virtual ~UnoTreeListBoxImpl();
     virtual void dispose() override;
 
-    sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
+    void            insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
 
@@ -1535,12 +1535,12 @@ IMPL_LINK_NOARG_TYPED(UnoTreeListBoxImpl, OnExpandedHdl, SvTreeListBox*, void)
 
 
 
-sal_uInt32 UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos )
+void UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos )
 {
     if( pParent )
-        return SvTreeListBox::Insert( pEntry, pParent, nPos );
+        SvTreeListBox::Insert( pEntry, pParent, nPos );
     else
-        return SvTreeListBox::Insert( pEntry, nPos );
+        SvTreeListBox::Insert( pEntry, nPos );
 }
 
 

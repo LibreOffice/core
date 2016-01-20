@@ -78,10 +78,8 @@ public:
     bool            hasSubFilters( ) const;
 
     /** retrieves the filters belonging to the entry
-    @return
-        the number of sub filters
     */
-    sal_Int32           getSubFilters( UnoFilterList& _rSubFilterList );
+    void            getSubFilters( UnoFilterList& _rSubFilterList );
 
     // helpers for iterating the sub filters
     const UnoFilterEntry*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
@@ -104,10 +102,9 @@ bool FilterEntry::hasSubFilters( ) const
 }
 
 
-sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
+void FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 {
     _rSubFilterList = m_aSubFilters;
-    return m_aSubFilters.getLength();
 }
 
 struct ElementEntry_Impl

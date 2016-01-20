@@ -60,7 +60,7 @@ ScRTFExport::~ScRTFExport()
     delete [] pCellX;
 }
 
-sal_uLong ScRTFExport::Write()
+void ScRTFExport::Write()
 {
     rStrm.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
@@ -74,7 +74,6 @@ sal_uLong ScRTFExport::Write()
     }
 
     rStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
-    return rStrm.GetError();
 }
 
 void ScRTFExport::WriteTab( SCTAB nTab )

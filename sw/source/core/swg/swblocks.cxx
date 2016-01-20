@@ -329,7 +329,7 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
     return false;
 }
 
-sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
+void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
 {
     sal_uInt16 nIdx = USHRT_MAX;
     if( pImp && !pImp->bInPutMuchBlocks )
@@ -345,7 +345,7 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString
         {
             OSL_ENSURE( false, "No short name provided in the rename" );
             nErr = ERR_SWG_INTERNAL_ERROR;
-            return USHRT_MAX;
+            return;
         }
 
         if( pImp->IsFileChanged() )
@@ -369,7 +369,6 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString
         if( !nErr )
             nIdx = pImp->GetIndex( aNew );
     }
-    return nIdx;
 }
 
 sal_uLong SwTextBlocks::CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,

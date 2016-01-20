@@ -95,7 +95,7 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
                             XML_NAMESPACE_TEXT );
 }
 
-sal_uInt32 SwXMLTextBlockExport::exportDoc(const OUString &rText)
+void SwXMLTextBlockExport::exportDoc(const OUString &rText)
 {
     GetDocHandler()->startDocument();
 
@@ -130,7 +130,6 @@ sal_uInt32 SwXMLTextBlockExport::exportDoc(const OUString &rText)
         }
     }
     GetDocHandler()->endDocument();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

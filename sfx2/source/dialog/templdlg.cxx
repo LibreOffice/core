@@ -929,13 +929,13 @@ const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() con
     return nullptr;
 }
 
-SfxStyleSheetBase *SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
+void SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
 {
     if (!IsInitialized() || !pStyleSheetPool || !HasSelectedStyle())
-        return nullptr;
+        return;
     const OUString aTemplName( GetSelectedEntry() );
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
-    return pStyleSheetPool->Find( aTemplName, pItem->GetFamily() );
+    pStyleSheetPool->Find( aTemplName, pItem->GetFamily() );
 }
 
 /**

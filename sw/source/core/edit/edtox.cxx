@@ -90,9 +90,9 @@ void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
 }
 
 /// Collect all listing markers
-sal_uInt16 SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
+void SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
 {
-    return SwDoc::GetCurTOXMark( *GetCursor()->Start(), rMarks );
+    SwDoc::GetCurTOXMark( *GetCursor()->Start(), rMarks );
 }
 
 bool SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase)
