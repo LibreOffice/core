@@ -1832,8 +1832,6 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
 
-    bool bIs3DChart = false;
-
     msStringBuffer.setLength( 0 );
 
     // plot-area element
@@ -1901,6 +1899,8 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             addPosition( xShape );
             addSize( xShape );
         }
+
+        bool bIs3DChart = false;
 
         if( xPropSet.is())
         {

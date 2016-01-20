@@ -366,9 +366,6 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
 void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                             sal_uInt16 nTransparencePercent )
 {
-    // debug helper:
-    static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA" );
-
     // #110958# Disable alpha VDev, we perform the necessary
     VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
 
@@ -391,6 +388,9 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     if( !aDstRect.IsEmpty() )
     {
         bool bDrawn = false;
+
+        // debug helper:
+        static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA" );
 
         // #i66849# Added fast path for exactly rectangular
         // polygons

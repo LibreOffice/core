@@ -234,9 +234,9 @@ static bool is_tde_desktop( Display* pDisplay )
 static bool is_kde3_desktop( Display* pDisplay )
 {
     static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
-    static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
     if ( pFullVersion )
     {
+        static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
         if ( !pSessionVersion || pSessionVersion[0] == '0' )
         {
             return true; // does not exist => KDE3
