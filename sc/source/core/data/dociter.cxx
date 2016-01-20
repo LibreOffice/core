@@ -2674,7 +2674,7 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
         pColIter = pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
         while ( nIterEndCol < nEndCol &&
                 pDoc->maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
-                    pDoc->maTabs[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
+                    pDoc->maTabs[nTab]->aCol[static_cast<SCCOL>( nIterEndCol+1 )], nStartRow, nEndRow ) )
             ++nIterEndCol;
     }
     else
@@ -2717,7 +2717,7 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
             pColIter = pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
             while ( nIterEndCol < nEndCol &&
                     pDoc->maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
-                        pDoc->maTabs[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
+                        pDoc->maTabs[nTab]->aCol[static_cast<SCCOL>( nIterEndCol+1 )], nStartRow, nEndRow ) )
                 ++nIterEndCol;
         }
         else
