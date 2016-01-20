@@ -153,19 +153,11 @@ public abstract class Configuration
         }
     }
 
-    public static XNameAccess getChildNodebyIndex(XNameAccess _xNameAccess, int _index)
+    public static XNameAccess getChildNodebyIndex(XNameAccess _xNameAccess, int _index) throws com.sun.star.uno.Exception
     {
-        try
-        {
-            String[] snames = _xNameAccess.getElementNames();
-            Object oNode = _xNameAccess.getByName(snames[_index]);
-            return UnoRuntime.queryInterface(XNameAccess.class, oNode);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-            return null;
-        }
+        String[] snames = _xNameAccess.getElementNames();
+        Object oNode = _xNameAccess.getByName(snames[_index]);
+        return UnoRuntime.queryInterface(XNameAccess.class, oNode);
     }
 
     public static XNameAccess getChildNodebyName(XNameAccess _xNameAccessNode, String _SubNodeName)
