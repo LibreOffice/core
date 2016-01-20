@@ -343,7 +343,7 @@ LwpParaStyle* LwpPara::GetParaStyle()
 void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyle)
 {
     // get paraborder in parastyle
-    LwpParaStyle* pParaStyle = this->GetParaStyle();
+    LwpParaStyle* pParaStyle = GetParaStyle();
     if (!pParaStyle)
     {
         return;
@@ -375,7 +375,7 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
 void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyle)
 {
     // get breaks in parastyle
-    LwpParaStyle* pParaStyle = this->GetParaStyle();
+    LwpParaStyle* pParaStyle = GetParaStyle();
     if (!pParaStyle)
     {
         return;
@@ -441,7 +441,7 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
 void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
 {
     // get bulletoverride in parastyle
-    LwpParaStyle* pParaStyle = this->GetParaStyle();
+    LwpParaStyle* pParaStyle = GetParaStyle();
     if (!pParaStyle)
     {
         return;
@@ -518,7 +518,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
 void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
 {
     // get numbering override in parastyle
-    LwpParaStyle* pParaStyle = this->GetParaStyle();
+    LwpParaStyle* pParaStyle = GetParaStyle();
     if (!pParaStyle)
     {
         return;

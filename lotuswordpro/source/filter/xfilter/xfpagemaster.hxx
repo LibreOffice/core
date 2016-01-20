@@ -147,7 +147,7 @@ private:
 
 inline void XFPageMaster::SetPageUsage(enumXFPageUsage usage)
 {
-    this->m_eUsage = usage;
+    m_eUsage = usage;
 }
 
 inline void XFPageMaster::SetTextDir(enumXFTextDir dir)

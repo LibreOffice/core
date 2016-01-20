@@ -276,7 +276,7 @@ void LwpSuperTableLayout::ApplyShadow(XFTableStyle *pTableStyle)
  */
 void LwpSuperTableLayout::ApplyPatternFill(XFTableStyle* pTableStyle)
 {
-    XFBGImage* pXFBGImage = this->GetFillPattern();
+    XFBGImage* pXFBGImage = GetFillPattern();
     if (pXFBGImage)
     {
         pTableStyle->SetBackImage(pXFBGImage);
@@ -290,7 +290,7 @@ void LwpSuperTableLayout::ApplyPatternFill(XFTableStyle* pTableStyle)
  */
 void LwpSuperTableLayout::ApplyBackGround(XFTableStyle* pTableStyle)
 {
-    if (this->IsPatternFill())
+    if (IsPatternFill())
     {
         ApplyPatternFill(pTableStyle);
     }

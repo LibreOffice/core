@@ -222,7 +222,7 @@ void LwpPageLayout::ParseShadow(XFPageMaster *pm1)
 */
 void LwpPageLayout::ParsePatternFill(XFPageMaster* pm1)
 {
-    XFBGImage* pXFBGImage = this->GetFillPattern();
+    XFBGImage* pXFBGImage = GetFillPattern();
     if (pXFBGImage)
     {
         pm1->SetBackImage(pXFBGImage);
@@ -234,7 +234,7 @@ void LwpPageLayout::ParsePatternFill(XFPageMaster* pm1)
 */
 void LwpPageLayout::ParseBackGround(XFPageMaster* pm1)
 {
-    if (this->IsPatternFill())
+    if (IsPatternFill())
     {
         ParsePatternFill(pm1);
     }
@@ -575,7 +575,7 @@ double LwpPageLayout::GetMarginWidth()
 sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
 {
     sal_Int16 nPageNumber = -1;
-    LwpFoundry* pFoundry = this->GetFoundry();
+    LwpFoundry* pFoundry = GetFoundry();
     if (!pFoundry)
         return nPageNumber;
     LwpDocument* pDoc = pFoundry->GetDocument();
@@ -586,7 +586,7 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
     LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetHead().obj().get());
     while(pPageHint)
     {
-        if(this->GetObjectID() == pPageHint->GetPageLayoutID())
+        if(GetObjectID() == pPageHint->GetPageLayoutID())
         {
             sal_uInt16 nNumber = pPageHint->GetPageNumber();
             if(nLayoutNumber==FIRST_LAYOUTPAGENO && pPageHint->GetLayoutPageNumber()==1)
@@ -830,7 +830,7 @@ void LwpHeaderLayout::ParseShadow(XFHeaderStyle* pHeaderStyle)
 */
 void LwpHeaderLayout::ParsePatternFill(XFHeaderStyle* pHeaderStyle)
 {
-    XFBGImage* pXFBGImage = this->GetFillPattern();
+    XFBGImage* pXFBGImage = GetFillPattern();
     if (pXFBGImage)
     {
         pHeaderStyle->SetBackImage(pXFBGImage);
@@ -842,7 +842,7 @@ void LwpHeaderLayout::ParsePatternFill(XFHeaderStyle* pHeaderStyle)
 */
 void LwpHeaderLayout::ParseBackGround(XFHeaderStyle* pHeaderStyle)
 {
-    if (this->IsPatternFill())
+    if (IsPatternFill())
     {
         ParsePatternFill(pHeaderStyle);
     }
@@ -993,7 +993,7 @@ void LwpFooterLayout::ParseShadow(XFFooterStyle* pFooterStyle)
 */
 void LwpFooterLayout::ParsePatternFill(XFFooterStyle* pFooterStyle)
 {
-    XFBGImage* pXFBGImage = this->GetFillPattern();
+    XFBGImage* pXFBGImage = GetFillPattern();
     if (pXFBGImage)
     {
         pFooterStyle->SetBackImage(pXFBGImage);
@@ -1005,7 +1005,7 @@ void LwpFooterLayout::ParsePatternFill(XFFooterStyle* pFooterStyle)
 */
 void LwpFooterLayout::ParseBackGround(XFFooterStyle* pFooterStyle)
 {
-    if (this->IsPatternFill())
+    if (IsPatternFill())
     {
         ParsePatternFill(pFooterStyle);
     }

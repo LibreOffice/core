@@ -115,9 +115,9 @@ void LwpSilverBullet::RegisterStyle()
     XFListStyle* pListStyle = new XFListStyle();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
 
-    this->GetBulletPara();
+    GetBulletPara();
 
-    if (this->IsBulletOrdered() && this->HasName())
+    if (IsBulletOrdered() && HasName())
     {
         //todo: find the flag in the file
         bool bCumulative = false;
@@ -133,9 +133,9 @@ void LwpSilverBullet::RegisterStyle()
                 if (pParaNumber->GetStyleID() != NUMCHAR_other)
                 {
                     m_pHideLevels[nPos] = aParaNumbering.nNumLevel;
-                    sal_uInt16 nDisplayLevel = this->GetDisplayLevel(nPos);
+                    sal_uInt16 nDisplayLevel = GetDisplayLevel(nPos);
                     bCumulative = (nDisplayLevel > 1);
-                    OUString aPrefix = this->GetAdditionalName(nPos);
+                    OUString aPrefix = GetAdditionalName(nPos);
 
                     XFNumFmt aFmt;
                     if (!bCumulative && aParaNumbering.pPrefix)
@@ -398,11 +398,11 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
 
     if (bDivisionName)
     {
-        aRet += this->GetDivisionName();
+        aRet += GetDivisionName();
     }
     if (bSectionName)
     {
-        aRet += this->GetSectionName();
+        aRet += GetSectionName();
     }
 
     return aRet;
@@ -445,7 +445,7 @@ OUString LwpSilverBullet::GetSectionName()
 
 bool LwpSilverBullet::HasName()
 {
-    LwpAtomHolder& rName = this->GetName();
+    LwpAtomHolder& rName = GetName();
     return (!rName.str().isEmpty());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

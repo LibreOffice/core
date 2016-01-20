@@ -104,7 +104,7 @@ LwpColor* LwpBackgroundStuff::GetFillColor()
 XFBGImage* LwpBackgroundStuff::GetFillPattern()
 {
     // not pattern fill?
-    if (!this->IsPatternFill())
+    if (!IsPatternFill())
     {
         return nullptr;
     }

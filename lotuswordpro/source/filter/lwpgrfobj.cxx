@@ -199,7 +199,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
             pCont->Add(iter->get());
         }
     }
-    else if (this->IsGrafFormatValid() && !m_vXFDrawObjects.empty())
+    else if (IsGrafFormatValid() && !m_vXFDrawObjects.empty())
     {
         XFImage* pImage = static_cast<XFImage*>(m_vXFDrawObjects.front().get());
 
@@ -211,7 +211,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
         else
         {
             sal_uInt8* pGrafData = nullptr;
-            sal_uInt32 nDataLen = this->GetRawGrafData(pGrafData);
+            sal_uInt32 nDataLen = GetRawGrafData(pGrafData);
 
             if (pGrafData)
             {
@@ -263,12 +263,12 @@ void LwpGraphicObject::RegisterStyle()
 {
     if (m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w')
     {
-        this->CreateDrawObjects();
+        CreateDrawObjects();
     }
     // test codes for importing pictures
-    else if(this->IsGrafFormatValid())
+    else if(IsGrafFormatValid())
     {
-        this->CreateGrafObject();
+        CreateGrafObject();
     }
 
     if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
@@ -302,7 +302,7 @@ void LwpGraphicObject::CreateDrawObjects()
     SvStream* pDrawObjStream = nullptr;
 
     // get graphic object's bento objet name
-    LwpObjectID& rMyID = this->GetObjectID();
+    LwpObjectID& rMyID = GetObjectID();
     std::string aGrfObjName;
     GetBentoNamebyID(rMyID,  aGrfObjName);
 
@@ -354,7 +354,7 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     SvStream* pGrafStream = nullptr;
 
     // get graphic object's bento objet name
-    LwpObjectID& rMyID = this->GetObjectID();
+    LwpObjectID& rMyID = GetObjectID();
     std::string aGrfObjName;
     GetBentoNamebyID(rMyID,  aGrfObjName);
 
@@ -397,7 +397,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     SvStream* pGrafStream = nullptr;
 
     // get graphic object's bento objet name
-    LwpObjectID& rMyID = this->GetObjectID();
+    LwpObjectID& rMyID = GetObjectID();
     std::string aGrfObjName;
     GetBentoNamebyID(rMyID,  aGrfObjName);
 
@@ -649,7 +649,7 @@ void LwpGraphicObject::CreateGrafObject()
     pImage->SetAnchorType(enumXFAnchorFrame);
 
     // set object name
-    LwpAtomHolder& rHolder = this->GetName();
+    LwpAtomHolder& rHolder = GetName();
     if ( !rHolder.str().isEmpty() )
     {
         pImage->SetName(rHolder.str());
@@ -666,7 +666,7 @@ void LwpGraphicObject::CreateGrafObject()
 void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 {
     sal_uInt8* pGrafData = nullptr;
-    sal_uInt32 nDataLen = this->GetGrafData(pGrafData);
+    sal_uInt32 nDataLen = GetGrafData(pGrafData);
     if(pGrafData)
     {
         //convert equation

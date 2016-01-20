@@ -225,7 +225,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
     //load draw object
     for (unsigned short i = 0; i < nRecCount; i++)
     {
-        XFFrame* pXFDrawObj = this->CreateDrawObject();
+        XFFrame* pXFDrawObj = CreateDrawObject();
 
         if (pXFDrawObj)
         {
@@ -278,7 +278,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     //load draw object
     for (unsigned short i = 0; i < nRecCount; i++)
     {
-        XFFrame* pXFDrawObj = this->CreateDrawObject();
+        XFFrame* pXFDrawObj = CreateDrawObject();
 
         if (pXFDrawObj)
         {
@@ -369,7 +369,7 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
         // read out the object header
         pDrawObj = new LwpDrawGroup(m_pStream);
 
-        pRetObjct = this->CreateDrawGroupObject();
+        pRetObjct = CreateDrawGroupObject();
 
         // set anchor type
         pRetObjct->SetAnchorType(enumXFAnchorFrame);

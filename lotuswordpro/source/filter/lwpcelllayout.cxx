@@ -222,7 +222,7 @@ void LwpCellLayout::ApplyWatermark(XFCellStyle *pCellStyle)
  */
 void LwpCellLayout::ApplyPatternFill(XFCellStyle* pCellStyle)
 {
-    XFBGImage* pXFBGImage = this->GetFillPattern();
+    XFBGImage* pXFBGImage = GetFillPattern();
     if (pXFBGImage)
     {
         pCellStyle->SetBackImage(pXFBGImage);
@@ -236,7 +236,7 @@ void LwpCellLayout::ApplyPatternFill(XFCellStyle* pCellStyle)
  */
 void LwpCellLayout::ApplyBackGround(XFCellStyle* pCellStyle)
 {
-    if (this->IsPatternFill())
+    if (IsPatternFill())
     {
         ApplyPatternFill(pCellStyle);
     }
@@ -344,7 +344,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
 
 LwpPara* LwpCellLayout::GetLastParaOfPreviousStory()
 {
-    LwpObjectID* pPreStoryID = this->GetPreviousCellStory();
+    LwpObjectID* pPreStoryID = GetPreviousCellStory();
     if (pPreStoryID && !(pPreStoryID->IsNull()))
     {
         LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY).get());

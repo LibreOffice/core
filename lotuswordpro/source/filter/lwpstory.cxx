@@ -407,7 +407,7 @@ XFContentContainer* LwpStory::GetXFContent()
 
 LwpPara* LwpStory::GetLastParaOfPreviousStory()
 {
-    rtl::Reference<LwpVirtualLayout> xVLayout(this->GetLayout(nullptr));
+    rtl::Reference<LwpVirtualLayout> xVLayout(GetLayout(nullptr));
     if (xVLayout.is())
     {
         return xVLayout->GetLastParaOfPreviousStory();

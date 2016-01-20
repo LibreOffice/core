@@ -295,7 +295,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
     }
     else if (m_pXFContainer)
     {
-        LwpBulletStyleMgr* pBulletStyleMgr = this->GetBulletStyleMgr();
+        LwpBulletStyleMgr* pBulletStyleMgr = GetBulletStyleMgr();
         if (pBulletStyleMgr)
         {
             pBulletStyleMgr->SetCurrentSilverBullet(LwpObjectID());
@@ -530,7 +530,7 @@ void LwpPara::RegisterStyle()
     OverrideParaNumbering(pNumberingProps);
 
     //register bullet style
-    LwpBulletStyleMgr* pBulletStyleMgr = this->GetBulletStyleMgr();
+    LwpBulletStyleMgr* pBulletStyleMgr = GetBulletStyleMgr();
     if (pBulletStyleMgr)
     {
         // if has bullet or numbering
@@ -552,7 +552,7 @@ void LwpPara::RegisterStyle()
                 if (m_pSilverBullet->IsBulletOrdered())
                 {
                     OUString aPreBullStyleName;
-                    LwpNumberingOverride* pNumbering = this->GetParaNumbering();
+                    LwpNumberingOverride* pNumbering = GetParaNumbering();
                     sal_uInt16 nPosition = pNumbering->GetPosition();
                     bool bLesser = m_pSilverBullet->IsLesserLevel(nPosition);
                     LwpPara* pPara = this;
@@ -579,7 +579,7 @@ void LwpPara::RegisterStyle()
                         LwpSilverBullet* pParaSilverBullet = pPara->GetSilverBullet();
                         pNumbering = pPara->GetParaNumbering();
 
-                        if (pPara->GetObjectID() != this->GetObjectID())
+                        if (pPara->GetObjectID() != GetObjectID())
                         {
                             if (!pParaSilverBullet)
                             {
@@ -688,7 +688,7 @@ void LwpPara::RegisterStyle()
                     else
                     {
                         m_bBullContinue = false;
-                        if (this->IsInCell())
+                        if (IsInCell())
                         {
                             XFListStyle* pOldStyle = static_cast<XFListStyle*>(pXFStyleManager->FindStyle(m_aBulletStyleName));
                             if (pOldStyle)
@@ -699,7 +699,7 @@ void LwpPara::RegisterStyle()
                         }
                     }
 
-                    LwpStory* pMyStory = this->GetStory();
+                    LwpStory* pMyStory = GetStory();
                     if (pMyStory)
                     {
                         if (pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, m_pParaNumbering->GetPosition()))
@@ -739,7 +739,7 @@ void LwpPara::RegisterStyle()
         XFParaStyle* pNewParaStyle = new XFParaStyle;
         *pNewParaStyle = *GetXFParaStyle();
         //pOverStyle->SetStyleName("");
-        this->RegisterTabStyle(pNewParaStyle);
+        RegisterTabStyle(pNewParaStyle);
         if (!m_ParentStyleName.isEmpty())
                     pNewParaStyle->SetParentStyleName(m_ParentStyleName);
         m_StyleName = pXFStyleManager->AddStyle(pNewParaStyle).m_pStyle->GetStyleName();
