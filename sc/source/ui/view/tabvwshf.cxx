@@ -332,7 +332,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OUString      aName;
 
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
+                    {
                         nTabNr = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+
+                        // inserting is 1-based, let's be consistent
+                        if (nTabNr > 0)
+                            --nTabNr;
+                    }
 
                     if( pReqArgs->HasItem( nSlot, &pItem ) )
                         aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -570,12 +576,18 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 bool bHasIndex = (pReqArgs != nullptr);
 
                 // allow removing via the Index/FID_DELETE_TABLE parameter
-                SCTAB nIndexTab = nCurrentTab;
+                SCTAB nTabNr = nCurrentTab;
                 if (bHasIndex)
                 {
                     const SfxPoolItem* pItem;
                     if (pReqArgs->HasItem(FID_DELETE_TABLE, &pItem))
-                        nIndexTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    {
+                        nTabNr = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+
+                        // inserting is 1-based, let's be consistent
+                        if (nTabNr > 0)
+                            --nTabNr;
+                    }
                 }
 
                 bool bDoIt = bHasIndex;
@@ -597,8 +609,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     if (bHasIndex)
                     {
                         // sheet no. provided by the parameter
-                        TheTabs.push_back(nIndexTab);
-                        if (nNewTab > nIndexTab && nNewTab > 0)
+                        TheTabs.push_back(nTabNr);
+                        if (nNewTab > nTabNr && nNewTab > 0)
                             --nNewTab;
                     }
                     else
