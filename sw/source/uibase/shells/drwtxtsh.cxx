@@ -786,7 +786,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
         // assign attributes (Set font)
         SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
-        SvxFontItem aFontItem (aFont.GetFamily(), aFont.GetFamilyName(),
+        SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );

@@ -544,7 +544,7 @@ void EMFWriter::ImplCheckTextAttr()
             default:             nPitchAndFamily = 0x00; break;
         }
 
-        switch( rFont.GetFamily() )
+        switch( rFont.GetFamilyType() )
         {
             case FAMILY_DECORATIVE: nPitchAndFamily |= 0x50; break;
             case FAMILY_MODERN:     nPitchAndFamily |= 0x30; break;

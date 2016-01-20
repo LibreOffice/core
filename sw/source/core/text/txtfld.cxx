@@ -536,7 +536,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 if ( pFormatFnt )
                 {
                     const sal_uInt8 nAct = pNumFnt->GetActual();
-                    pNumFnt->SetFamily( pFormatFnt->GetFamily(), nAct );
+                    pNumFnt->SetFamily( pFormatFnt->GetFamilyType(), nAct );
                     pNumFnt->SetName( pFormatFnt->GetFamilyName(), nAct );
                     pNumFnt->SetStyleName( pFormatFnt->GetStyleName(), nAct );
                     pNumFnt->SetCharSet( pFormatFnt->GetCharSet(), nAct );

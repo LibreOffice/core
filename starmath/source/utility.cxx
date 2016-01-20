@@ -74,10 +74,10 @@ vcl::Font SmFontPickList::Get(sal_uInt16 nPos) const
 bool SmFontPickList::CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont)
 {
   return rFirstFont.GetFamilyName() == rSecondFont.GetFamilyName() &&
-        rFirstFont.GetFamily()  == rSecondFont.GetFamily()  &&
-        rFirstFont.GetCharSet() == rSecondFont.GetCharSet() &&
-        rFirstFont.GetWeight()  == rSecondFont.GetWeight()  &&
-        rFirstFont.GetItalic()  == rSecondFont.GetItalic();
+         rFirstFont.GetFamilyType() == rSecondFont.GetFamilyType() &&
+         rFirstFont.GetCharSet()    == rSecondFont.GetCharSet()    &&
+         rFirstFont.GetWeight()     == rSecondFont.GetWeight()     &&
+         rFirstFont.GetItalic()     == rSecondFont.GetItalic();
 }
 
 OUString SmFontPickList::GetStringItem(const vcl::Font &rFont)

@@ -425,7 +425,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
 
                 eChrSet = pBulletFont->GetCharSet();
                 sFontName = pBulletFont->GetFamilyName();
-                eFamily = pBulletFont->GetFamily();
+                eFamily = pBulletFont->GetFamilyType();
 
                 if ( IsStarSymbol(sFontName) )
                     SubstituteBullet( sNumStr, eChrSet, sFontName );

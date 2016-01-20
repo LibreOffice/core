@@ -52,8 +52,8 @@ public:
     virtual             ~Font();
 
     const OUString&     GetFamilyName() const;
-    FontFamily          GetFamily();
-    FontFamily          GetFamily() const;
+    FontFamily          GetFamilyType();
+    FontFamily          GetFamilyType() const;
     const OUString&     GetStyleName() const;
 
     FontWeight          GetWeight();
