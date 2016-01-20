@@ -82,7 +82,7 @@ public class utils {
                     }
                 });
 
-                if (list[0] != null) {
+                if (list != null && list[0] != null) {
                     String tDoc = srcRoot.concat(pthSep).concat(list[0]).concat(pthSep).concat("testdocs");
 
                     if (new File(tDoc).exists()) {
