@@ -1067,6 +1067,17 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
         nCurY = (nMovY != 0) ? nOldY+nMovY : (SCsROW) aViewData.GetOldCurY();
     }
 
+    if (nMovX < 0 && nOldX == 0)
+    { // trying to go left from 1st column
+        if (nMovY == 0) // done, because no vertical move is requested
+            return;
+    }
+    if (nMovY < 0 && nOldY == 0)
+    { // trying to go up from 1st row
+        if (nMovX == 0) // done, because no horizontal move is requested
+            return;
+    }
+
     aViewData.ResetOldCursor();
 
     if (nMovX != 0 && ValidColRow(nCurX,nCurY))
