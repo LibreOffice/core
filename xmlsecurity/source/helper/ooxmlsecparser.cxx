@@ -18,6 +18,7 @@ OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     ,m_bInSignatureValue(false)
     ,m_bInX509Certificate(false)
     ,m_bInMdssiValue(false)
+    ,m_bInSignatureComments(false)
 {
 }
 
@@ -77,6 +78,11 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         m_aMdssiValue.clear();
         m_bInMdssiValue = true;
     }
+    else if (rName == "SignatureComments")
+    {
+        m_aSignatureComments.clear();
+        m_bInSignatureComments = true;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->startElement(rName, xAttribs);
@@ -105,6 +111,11 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
         m_pXSecController->setDate(m_aMdssiValue);
         m_bInMdssiValue = false;
     }
+    else if (rName == "SignatureComments")
+    {
+        m_pXSecController->setDescription(m_aSignatureComments);
+        m_bInSignatureComments = false;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->endElement(rName);
@@ -120,6 +131,8 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax
         m_aX509Certificate += rChars;
     else if (m_bInMdssiValue)
         m_aMdssiValue += rChars;
+    else if (m_bInSignatureComments)
+        m_aSignatureComments += rChars;
 
     if (m_xNextHandler.is())
         m_xNextHandler->characters(rChars);
