@@ -567,37 +567,60 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_DELETE_TABLE:
             {
-                //  unnecessary parameter ->  method depends on table
+                bool bHasIndex = (pReqArgs != nullptr);
 
-                bool bDoIt = rReq.IsAPI();
-                if( !bDoIt )
+                // allow removing via the Index/FID_DELETE_TABLE parameter
+                SCTAB nIndexTab = nCurrentTab;
+                if (bHasIndex)
                 {
-                    //  source isn't basic -> ask again
-
-                        bDoIt = ( RET_YES ==
-                                  ScopedVclPtr<QueryBox>::Create( GetDialogParent(),
-                                            WinBits( WB_YES_NO | WB_DEF_YES ),
-                                            ScGlobal::GetRscString(STR_QUERY_DELTAB)
-                                      )->Execute() );
+                    const SfxPoolItem* pItem;
+                    if (pReqArgs->HasItem(FID_DELETE_TABLE, &pItem))
+                        nIndexTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 }
-                if( bDoIt )
+
+                bool bDoIt = bHasIndex;
+                if (!bDoIt)
                 {
-                    SCTAB nNewTab   = nCurrentTab;
-                    SCTAB nFirstTab=0;
-                    bool   bTabFlag=false;
-                    ScMarkData& rMark = rViewData.GetMarkData();
+                    // no parameter given, ask for confirmation
+                    bDoIt = ( RET_YES ==
+                              ScopedVclPtr<QueryBox>::Create( GetDialogParent(),
+                                        WinBits( WB_YES_NO | WB_DEF_YES ),
+                                        ScGlobal::GetRscString(STR_QUERY_DELTAB)
+                                  )->Execute() );
+                }
+
+                if (bDoIt)
+                {
+                    SCTAB nNewTab = nCurrentTab;
                     std::vector<SCTAB> TheTabs;
-                    for(SCTAB i=0;i<nTabCount;i++)
+
+                    if (bHasIndex)
                     {
-                        if(rMark.GetTableSelect(i) &&!pDoc->IsTabProtected(i))
-                        {
-                            TheTabs.push_back(i);
-                            bTabFlag=true;
-                            if(nNewTab==i) nNewTab++;
-                        }
-                        if(!bTabFlag) nFirstTab=i;
+                        // sheet no. provided by the parameter
+                        TheTabs.push_back(nIndexTab);
+                        if (nNewTab > nIndexTab && nNewTab > 0)
+                            --nNewTab;
                     }
-                    if(nNewTab>=nTabCount) nNewTab=nFirstTab;
+                    else
+                    {
+                        SCTAB nFirstTab = 0;
+                        bool bTabFlag = false;
+                        ScMarkData& rMark = rViewData.GetMarkData();
+                        for (SCTAB i = 0; i < nTabCount; i++)
+                        {
+                            if (rMark.GetTableSelect(i) && !pDoc->IsTabProtected(i))
+                            {
+                                TheTabs.push_back(i);
+                                bTabFlag = true;
+                                if (nNewTab == i)
+                                    nNewTab++;
+                            }
+                            if (!bTabFlag)
+                                nFirstTab = i;
+                        }
+                        if (nNewTab >= nTabCount)
+                            nNewTab = nFirstTab;
+                    }
 
                     rViewData.SetTabNo(nNewTab);
                     DeleteTables(TheTabs);

@@ -738,6 +738,9 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 // sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
 
+                if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
+                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+
                 bValid = true;
             }
         }
@@ -824,6 +827,9 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 }
                 // sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
+
+                if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
+                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
 
                 bValid = true;
             }
