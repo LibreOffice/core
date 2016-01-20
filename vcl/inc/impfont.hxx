@@ -74,7 +74,7 @@ public:
     void                DecreaseQualityBy( int nQualityAmount )         { mnQuality -= nQualityAmount; }
     /* Missing function: OUString GetMapNames() const; */
 
-    /* Missing function: bool IsBuiltInFont() const; */
+    bool                IsBuiltInFont() const                           { return mbDevice; }
     /* Missing function: bool CanEmbed() const; */
     /* Missing function: bool CanSubSet() const; */
     /* Missing function: bool CanRotate() const; */
@@ -83,7 +83,7 @@ public:
     /* Missing function: void SetNames( OUString const& ); */
     /* Missing function: void AddMapName( OUString const& ); */
 
-    /* Missing function: void SetBuiltInFontFlag( bool ); */
+    void                SetBuiltInFontFlag( bool bIsBuiltInFont )       { mbDevice = bIsBuiltInFont; }
     /* Missing function: void SetEmbeddableFlag( bool ); */
     /* Missing function: void SetSettableFlag( bool ); */
     /* missing function: void SetOrientationFlag( bool ); */
@@ -123,7 +123,8 @@ private:
                         mbConfigLookup:1,   // there was a config lookup
                         mbShadow:1,
                         mbVertical:1,
-                        mbTransparent:1;    // compatibility, now on output device
+                        mbTransparent:1,    // compatibility, now on output device
+                        mbDevice:1;
     int                 mnQuality;
 
     friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
