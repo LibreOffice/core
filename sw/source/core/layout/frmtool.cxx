@@ -2232,7 +2232,7 @@ SwOrderIter::SwOrderIter( const SwPageFrame *pPg, bool bFlys ) :
 {
 }
 
-const SdrObject *SwOrderIter::Top()
+void SwOrderIter::Top()
 {
     m_pCurrent = nullptr;
     if ( m_pPage->GetSortedObjs() )
@@ -2256,7 +2256,6 @@ const SdrObject *SwOrderIter::Top()
             }
         }
     }
-    return m_pCurrent;
 }
 
 const SdrObject *SwOrderIter::Bottom()
@@ -2314,7 +2313,7 @@ const SdrObject *SwOrderIter::Next()
     return m_pCurrent;
 }
 
-const SdrObject *SwOrderIter::Prev()
+void SwOrderIter::Prev()
 {
     const sal_uInt32 nCurOrd = m_pCurrent ? m_pCurrent->GetOrdNumDirect() : 0;
     m_pCurrent = nullptr;
@@ -2339,7 +2338,6 @@ const SdrObject *SwOrderIter::Prev()
             }
         }
     }
-    return m_pCurrent;
 }
 
 /// Keep and restore the substructure of a layout frame for an action.

@@ -431,12 +431,12 @@ public:
     virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
     // a kind of CopyCtor - check if the TOXBase is at TOXType of the doc.
-    // If not, so create it an copy all other used things. The return is this
-    SwTOXBase& CopyTOXBase( SwDoc*, const SwTOXBase& );
+    // If not, so create it an copy all other used things.
+    void                CopyTOXBase( SwDoc*, const SwTOXBase& );
 
     const SwTOXType*    GetTOXType() const;
 
-    sal_uInt16              GetCreateType() const;      // creation types
+    sal_uInt16          GetCreateType() const;      // creation types
 
     OUString            GetTOXName() const {return m_aName;}
     void                SetTOXName(const OUString& rSet) {m_aName = rSet;}

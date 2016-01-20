@@ -934,12 +934,11 @@ void SwEditShell::SetLinkUpdMode( sal_uInt16 nMode )
 }
 
 // Interface for TextInputData - (for text input of japanese/chinese characters)
-SwExtTextInput* SwEditShell::CreateExtTextInput(LanguageType eInputLanguage)
+void SwEditShell::CreateExtTextInput(LanguageType eInputLanguage)
 {
     SwExtTextInput* pRet = GetDoc()->CreateExtTextInput( *GetCursor() );
     pRet->SetLanguage(eInputLanguage);
     pRet->SetOverwriteCursor( SwCursorShell::IsOverwriteCursor() );
-    return pRet;
 }
 
 OUString SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, bool bInsText )

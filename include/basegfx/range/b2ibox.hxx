@@ -152,24 +152,6 @@ namespace basegfx
             return maRangeY.getRange();
         }
 
-        /// get lower bound of the set. returns arbitrary values for empty sets.
-        B2IPoint getMinimum() const
-        {
-            return B2IPoint(
-                maRangeX.getMinimum(),
-                maRangeY.getMinimum()
-                );
-        }
-
-        /// get upper bound of the set. returns arbitrary values for empty sets.
-        B2IPoint getMaximum() const
-        {
-            return B2IPoint(
-                maRangeX.getMaximum(),
-                maRangeY.getMaximum()
-                );
-        }
-
         /// yields true if point is contained in set
         bool isInside(const B2ITuple& rTuple) const
         {

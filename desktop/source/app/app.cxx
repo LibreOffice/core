@@ -1184,7 +1184,7 @@ void restartOnMac(bool passArguments) {
 
 }
 
-sal_uInt16 Desktop::Exception(sal_uInt16 nError)
+void Desktop::Exception(sal_uInt16 nError)
 {
     // protect against recursive calls
     static bool bInException = false;
@@ -1250,7 +1250,6 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
     }
 
     OSL_ASSERT(false); // unreachable
-    return 0;
 }
 
 void Desktop::AppEvent( const ApplicationEvent& rAppEvent )

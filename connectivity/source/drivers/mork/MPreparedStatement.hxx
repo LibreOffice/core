@@ -71,7 +71,7 @@ namespace connectivity
             void checkAndResizeParameters(sal_Int32 parameterIndex);
             void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
 
-            size_t AddParameter(connectivity::OSQLParseNode * pParameter,
+            void AddParameter(connectivity::OSQLParseNode * pParameter,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
             void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
             void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);

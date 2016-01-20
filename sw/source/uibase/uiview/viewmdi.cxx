@@ -280,7 +280,7 @@ IMPL_LINK_TYPED( SwView, WindowChildEventListener, VclWindowEvent&, rEvent, void
     }
 }
 
-int SwView::_CreateScrollbar( bool bHori )
+void SwView::_CreateScrollbar( bool bHori )
 {
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? m_pHScrollbar : m_pVScrollbar;
@@ -302,8 +302,6 @@ int SwView::_CreateScrollbar( bool bHori )
 
     if (!m_bShowAtResize)
         ppScrollbar->ExtendedShow();
-
-    return 1;
 }
 
 IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )

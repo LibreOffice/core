@@ -93,10 +93,8 @@ public:
             window and with it the SlideSorterView is resized event when its
             size does not change (the size does change when the visibility
             of scroll bars changes.)
-        @return
-            Returns the space occupied by the browser window.
     */
-    Rectangle Rearrange (bool bForce = false);
+    void Rearrange (bool bForce = false);
 
     /** Return the descriptor of the page that is rendered under the
         given position.  This takes the IsOnlyPreviewTriggersMouseOver

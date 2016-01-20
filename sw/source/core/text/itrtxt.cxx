@@ -290,13 +290,12 @@ sal_uInt16 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
     return nOfst;
 }
 
-const SwLineLayout *SwTextIter::TwipsToLine( const SwTwips y)
+void SwTextIter::TwipsToLine( const SwTwips y)
 {
     while( m_nY + GetLineHeight() <= y && Next() )
         ;
     while( m_nY > y && Prev() )
         ;
-    return m_pCurr;
 }
 
 // Local helper function to check, if pCurr needs a field rest portion:

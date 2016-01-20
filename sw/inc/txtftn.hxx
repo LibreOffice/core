@@ -58,7 +58,7 @@ public:
     void CheckCondColl();
 
     // For references to footnotes.
-    sal_uInt16 SetSeqRefNo();
+    void SetSeqRefNo();
     void SetSeqNo( sal_uInt16 n )       { m_nSeqNo = n; }   // For Readers.
     sal_uInt16 GetSeqRefNo() const      { return m_nSeqNo; }
 

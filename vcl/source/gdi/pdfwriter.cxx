@@ -42,9 +42,9 @@ OutputDevice* PDFWriter::GetReferenceDevice()
     return xImplementation->getReferenceDevice();
 }
 
-sal_Int32 PDFWriter::NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, Orientation eOrientation )
+void PDFWriter::NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, Orientation eOrientation )
 {
-    return xImplementation->newPage( nPageWidth, nPageHeight, eOrientation );
+    xImplementation->newPage( nPageWidth, nPageHeight, eOrientation );
 }
 
 bool PDFWriter::Emit()
@@ -347,14 +347,14 @@ sal_Int32 PDFWriter::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFW
     return xImplementation->createDest( rRect, nPageNr, eType );
 }
 
-sal_Int32 PDFWriter::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
+void PDFWriter::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 {
-    return xImplementation->setLinkDest( nLinkId, nDestId );
+    xImplementation->setLinkDest( nLinkId, nDestId );
 }
 
-sal_Int32 PDFWriter::SetLinkURL( sal_Int32 nLinkId, const OUString& rURL )
+void PDFWriter::SetLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
-    return xImplementation->setLinkURL( nLinkId, rURL );
+    xImplementation->setLinkURL( nLinkId, rURL );
 }
 
 void PDFWriter::SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyId )
@@ -367,19 +367,19 @@ sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, const OUString& rText
     return xImplementation->createOutlineItem( nParent, rText, nDestID );
 }
 
-sal_Int32 PDFWriter::SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
+void PDFWriter::SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
 {
-    return xImplementation->setOutlineItemParent( nItem, nNewParent );
+    xImplementation->setOutlineItemParent( nItem, nNewParent );
 }
 
-sal_Int32 PDFWriter::SetOutlineItemText( sal_Int32 nItem, const OUString& rText )
+void PDFWriter::SetOutlineItemText( sal_Int32 nItem, const OUString& rText )
 {
-    return  xImplementation->setOutlineItemText( nItem, rText );
+    xImplementation->setOutlineItemText( nItem, rText );
 }
 
-sal_Int32 PDFWriter::SetOutlineItemDest( sal_Int32 nItem, sal_Int32 nDest )
+void PDFWriter::SetOutlineItemDest( sal_Int32 nItem, sal_Int32 nDest )
 {
-    return xImplementation->setOutlineItemDest( nItem, nDest );
+    xImplementation->setOutlineItemDest( nItem, nDest );
 }
 
 void PDFWriter::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )

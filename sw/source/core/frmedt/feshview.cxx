@@ -684,7 +684,7 @@ long SwFEShell::Drag( const Point *pPt, bool )
     return 0;
 }
 
-long SwFEShell::EndDrag( const Point *, bool )
+void SwFEShell::EndDrag( const Point *, bool )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "EndDrag without DrawView?" );
     SdrView *pView = Imp()->GetDrawView();
@@ -721,10 +721,7 @@ long SwFEShell::EndDrag( const Point *, bool )
 
         GetDoc()->getIDocumentState().SetModified();
         ::FrameNotify( this );
-
-        return 1;
     }
-    return 0;
 }
 
 void SwFEShell::BreakDrag()

@@ -590,28 +590,26 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
     }
 }
 
-long Slider::ImplDoSlide( long nNewPos )
+void Slider::ImplDoSlide( long nNewPos )
 {
     if ( meScrollType != SCROLL_DONTKNOW )
-        return 0;
+        return;
 
     meScrollType = SCROLL_DRAG;
-    long nDelta = ImplSlide( nNewPos, true );
+    ImplSlide( nNewPos, true );
     meScrollType = SCROLL_DONTKNOW;
-    return nDelta;
 }
 
-long Slider::ImplDoSlideAction( ScrollType eScrollType )
+void Slider::ImplDoSlideAction( ScrollType eScrollType )
 {
     if ( (meScrollType != SCROLL_DONTKNOW) ||
          (eScrollType == SCROLL_DONTKNOW) ||
          (eScrollType == SCROLL_DRAG) )
-        return 0;
+        return;
 
     meScrollType = eScrollType;
-    long nDelta = ImplDoAction( true );
+    ImplDoAction( true );
     meScrollType = SCROLL_DONTKNOW;
-    return nDelta;
 }
 
 void Slider::MouseButtonDown( const MouseEvent& rMEvt )

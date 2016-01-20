@@ -1815,7 +1815,7 @@ void SwScriptInfo::MarkKashidaInvalid(sal_Int32 nKashPos)
 }
 
 // retrieve the kashida positions in the given text range
-sal_Int32 SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
+void SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
     sal_Int32* pKashidaPosition)
 {
     size_t nCntKash = 0;
@@ -1836,7 +1836,6 @@ sal_Int32 SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
         pKashidaPosition [ nCntKashEnd - nCntKash ] = GetKashida ( nCntKashEnd );
         nCntKashEnd++;
     }
-    return nCntKashEnd - nCntKash;
 }
 
 void SwScriptInfo::SetNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)

@@ -695,17 +695,15 @@ void SlideSorterController::Resize (const Rectangle& rAvailableSpace)
     }
 }
 
-Rectangle  SlideSorterController::Rearrange (bool bForce)
+void  SlideSorterController::Rearrange (bool bForce)
 {
-    Rectangle aNewContentArea (maTotalWindowArea);
-
-    if (aNewContentArea.IsEmpty())
-        return aNewContentArea;
+    if (maTotalWindowArea.IsEmpty())
+        return;
 
     if (mnModelChangeLockCount>0)
     {
         mbIsForcedRearrangePending |= bForce;
-        return aNewContentArea;
+        return;
     }
     else
         mbIsForcedRearrangePending = false;
@@ -717,7 +715,7 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
             mrView.UpdateOrientation();
 
         // Place the scroll bars.
-        aNewContentArea = GetScrollBarManager().PlaceScrollBars(
+        Rectangle aNewContentArea = GetScrollBarManager().PlaceScrollBars(
             maTotalWindowArea,
             mrView.GetOrientation() != view::Layouter::VERTICAL,
             mrView.GetOrientation() != view::Layouter::HORIZONTAL);
@@ -746,8 +744,6 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
 
         mrView.RequestRepaint();
     }
-
-    return aNewContentArea;
 }
 
 rtl::Reference<FuPoor> SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)

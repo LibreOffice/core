@@ -277,17 +277,15 @@ OUString Application::GetAppFileName()
     return aAppFileName;
 }
 
-sal_uInt16 Application::Exception( sal_uInt16 nError )
+void Application::Exception( sal_uInt16 nError )
 {
     switch ( nError & EXC_MAJORTYPE )
     {
         // System has precedence (so do nothing)
         case EXC_SYSTEM:
-            return 0;
-
         case EXC_DISPLAY:
         case EXC_REMOTE:
-            return 0;
+            break;
 
 #ifdef DBG_UTIL
         case EXC_RSCNOTLOADED:
@@ -302,8 +300,6 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
             break;
 #endif
     }
-
-    return 0;
 }
 
 void Application::Abort( const OUString& rErrorText )
