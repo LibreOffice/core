@@ -876,13 +876,15 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                 if ( nCurX < nDeltaX || nCurX >= nDeltaX+nSizeX )
                 {
                     nNewDeltaX = nCurX - static_cast<SCsCOL>(aViewData.CellsAtX( nCurX, -1, eAlignX, static_cast<sal_uInt16>(nSpaceX) ));
-                    if (nNewDeltaX < 0) nNewDeltaX = 0;
+                    if (nNewDeltaX < 0)
+                        nNewDeltaX = 0;
                     nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
                 }
                 if ( nCurY < nDeltaY || nCurY >= nDeltaY+nSizeY || bForceNew )
                 {
                     nNewDeltaY = nCurY - static_cast<SCsROW>(aViewData.CellsAtY( nCurY, -1, eAlignY, static_cast<sal_uInt16>(nSpaceY) ));
-                    if (nNewDeltaY < 0) nNewDeltaY = 0;
+                    if (nNewDeltaY < 0)
+                        nNewDeltaY = 0;
                     nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
                 bDoLine = true;
@@ -896,13 +898,15 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                 if ( nCurX < nDeltaX || nCurX >= nDeltaX+nSizeX )
                 {
                     nNewDeltaX = nDeltaX + nCurX - aViewData.GetCurX();
-                    if (nNewDeltaX < 0) nNewDeltaX = 0;
+                    if (nNewDeltaX < 0)
+                        nNewDeltaX = 0;
                     nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
                 }
                 if ( nCurY < nDeltaY || nCurY >= nDeltaY+nSizeY )
                 {
                     nNewDeltaY = nDeltaY + nCurY - aViewData.GetCurY();
-                    if (nNewDeltaY < 0) nNewDeltaY = 0;
+                    if (nNewDeltaY < 0)
+                        nNewDeltaY = 0;
                     nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
 
@@ -911,13 +915,15 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                 if ( nCurX < nNewDeltaX || nCurX >= nNewDeltaX+nSizeX )
                 {
                     nNewDeltaX = nCurX - (nSizeX / 2);
-                    if (nNewDeltaX < 0) nNewDeltaX = 0;
+                    if (nNewDeltaX < 0)
+                        nNewDeltaX = 0;
                     nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
                 }
                 if ( nCurY < nNewDeltaY || nCurY >= nNewDeltaY+nSizeY )
                 {
                     nNewDeltaY = nCurY - (nSizeY / 2);
-                    if (nNewDeltaY < 0) nNewDeltaY = 0;
+                    if (nNewDeltaY < 0)
+                        nNewDeltaY = 0;
                     nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
 
@@ -951,22 +957,30 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                     ++nNewDeltaY;
                 nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
             }
-            if ( nCurX < nNewDeltaX ) nNewDeltaX = nCurX;
-            if ( nCurY < nNewDeltaY ) nNewDeltaY = nCurY;
+            if ( nCurX < nNewDeltaX )
+                nNewDeltaX = nCurX;
+            if ( nCurY < nNewDeltaY )
+                nNewDeltaY = nCurY;
         }
 
         if ( nNewDeltaX != nDeltaX )
             nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
-        if (nNewDeltaX+nSizeX-1 > MAXCOL) nNewDeltaX = MAXCOL-nSizeX+1;
-        if (nNewDeltaX < 0) nNewDeltaX = 0;
+        if (nNewDeltaX+nSizeX-1 > MAXCOL)
+            nNewDeltaX = MAXCOL-nSizeX+1;
+        if (nNewDeltaX < 0)
+            nNewDeltaX = 0;
 
         if ( nNewDeltaY != nDeltaY )
             nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
-        if (nNewDeltaY+nSizeY-1 > MAXROW) nNewDeltaY = MAXROW-nSizeY+1;
-        if (nNewDeltaY < 0) nNewDeltaY = 0;
+        if (nNewDeltaY+nSizeY-1 > MAXROW)
+            nNewDeltaY = MAXROW-nSizeY+1;
+        if (nNewDeltaY < 0)
+            nNewDeltaY = 0;
 
-        if ( nNewDeltaX != nDeltaX ) ScrollX( nNewDeltaX - nDeltaX, eAlignX );
-        if ( nNewDeltaY != nDeltaY ) ScrollY( nNewDeltaY - nDeltaY, eAlignY );
+        if ( nNewDeltaX != nDeltaX )
+            ScrollX( nNewDeltaX - nDeltaX, eAlignX );
+        if ( nNewDeltaY != nDeltaY )
+            ScrollY( nNewDeltaY - nDeltaY, eAlignY );
     }
 
     // switch active part again
@@ -1577,18 +1591,21 @@ void ScTabView::MarkDataChanged()
 
 void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
 {
-    if (!nDir) return;
+    if (!nDir)
+        return;
     OSL_ENSURE( nDir==-1 || nDir==1, "SelectNextTab: invalid value");
 
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
     if (nDir<0)
     {
-        if (!nTab) return;
+        if (!nTab)
+            return;
         --nTab;
         while (!pDoc->IsVisible(nTab))
         {
-            if (!nTab) return;
+            if (!nTab)
+                return;
             --nTab;
         }
     }
@@ -1596,11 +1613,13 @@ void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
     {
         SCTAB nCount = pDoc->GetTableCount();
         ++nTab;
-        if (nTab >= nCount) return;
+        if (nTab >= nCount)
+            return;
         while (!pDoc->IsVisible(nTab))
         {
             ++nTab;
-            if (nTab >= nCount) return;
+            if (nTab >= nCount)
+                return;
         }
     }
 
@@ -2051,7 +2070,8 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 
         SCCOL nScrX = aViewData.GetPosX( eHWhich );
         SCROW nScrY = aViewData.GetPosY( eVWhich );
-        if (nCol1 < nScrX) nCol1 = nScrX;
+        if (nCol1 < nScrX)
+            nCol1 = nScrX;
         if (nCol2 < nScrX)
         {
             if ( eMode == SC_UPDATE_ALL )   // for UPDATE_ALL, paint anyway
@@ -2059,15 +2079,21 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             else
                 bOut = true;                // completely outside the window
         }
-        if (nRow1 < nScrY) nRow1 = nScrY;
-        if (nRow2 < nScrY) bOut = true;
+        if (nRow1 < nScrY)
+            nRow1 = nScrY;
+        if (nRow2 < nScrY)
+            bOut = true;
 
         SCCOL nLastX = nScrX + aViewData.VisibleCellsX( eHWhich ) + 1;
         SCROW nLastY = nScrY + aViewData.VisibleCellsY( eVWhich ) + 1;
-        if (nCol1 > nLastX) bOut = true;
-        if (nCol2 > nLastX) nCol2 = nLastX;
-        if (nRow1 > nLastY) bOut = true;
-        if (nRow2 > nLastY) nRow2 = nLastY;
+        if (nCol1 > nLastX)
+            bOut = true;
+        if (nCol2 > nLastX)
+            nCol2 = nLastX;
+        if (nRow1 > nLastY)
+            bOut = true;
+        if (nRow2 > nLastY)
+            nRow2 = nLastY;
 
         if (bOut)
             continue;
