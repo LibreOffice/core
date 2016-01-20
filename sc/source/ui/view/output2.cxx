@@ -283,7 +283,7 @@ bool lcl_isNumberFormatText(const ScDocument* pDoc, SCCOL nCellX, SCROW nCellY, 
     sal_uInt32 nCurrentNumberFormat;
     pDoc->GetNumberFormat( nCellX, nCellY, nTab, nCurrentNumberFormat);
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-    return(pNumberFormatter->GetType( nCurrentNumberFormat ) == css::util::NumberFormat::TEXT);
+    return pNumberFormatter->GetType( nCurrentNumberFormat ) == css::util::NumberFormat::TEXT;
 }
 
 void ScDrawStringsVars::SetPattern(
@@ -1413,7 +1413,8 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
                eHorJustContext = bNumberFormatIsText ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
             else
                 eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
-        }else if (bCellIsValue) //If language is not RTL
+        }
+        else if (bCellIsValue) //If language is not RTL
             eHorJustContext = bNumberFormatIsText ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
         else
             bUseWritingDirection = true;
