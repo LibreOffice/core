@@ -83,12 +83,16 @@ public class _XOutputStream extends MultiMethodTest {
             res = false;
         }
 
-        XInputStream xInStream = checker.getInStream();
         byte[][] readData = new byte[1][data.length];
-        try {
-            xInStream.readBytes(readData, data.length);
-        } catch(com.sun.star.io.IOException e) {
-            log.println("Couldn't read data:" + e);
+        XInputStream xInStream = checker.getInStream();
+        if (xInStream == null) {
+            try {
+                xInStream.readBytes(readData, data.length);
+            } catch(com.sun.star.io.IOException e) {
+                log.println("Couldn't read data:" + e);
+                res = false;
+            }
+        } else {
             res = false;
         }
 
