@@ -1568,7 +1568,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEnt
                && (!pFormat->GetCharFormat() || pFormat->GetCharFormat()->GetName() != pCharName))
         {
             auto pCharFormatIt(std::find_if(m_pDoc->GetCharFormats()->begin(), m_pDoc->GetCharFormats()->end(),
-                    [pCharName] (SwCharFormat* pF) { return pF->GetName() == pCharName; }));
+                    [&pCharName] (SwCharFormat* pF) { return pF->GetName() == pCharName; }));
             if(pCharFormatIt != m_pDoc->GetCharFormats()->end())
                 aFormat.SetCharFormat(*pCharFormatIt);
             else if(m_pBasePool)
