@@ -44,15 +44,20 @@ public class java_complex implements TestBase
      */
     public boolean executeTest(TestParameters param)
     {
-
         // get the test job
         String testJob = ((String) param.get("TestJob"));
 
         DescGetter descGetter = new ComplexDescGetter();
         // get the test jobs
         DescEntry[] entries = descGetter.getDescriptionFor(testJob, null, true);
-        return executeTest(param, entries);
 
+        if (entries == null) {
+            System.out.println("Couldn't get Description for Job: " + testJob);
+
+            return false;
+        }
+
+        return executeTest(param, entries);
     }
 
     /**
