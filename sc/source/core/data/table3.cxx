@@ -414,7 +414,7 @@ public:
 namespace {
 
 void initDataRows(
-    ScSortInfoArray& rArray, ScTable& rTab, ScColumn* pCols,
+    ScSortInfoArray& rArray, ScTable& rTab, ScColContainer& rCols,
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     bool bPattern, bool bHiddenFiltered )
 {
@@ -423,7 +423,7 @@ void initDataRows(
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
     {
-        ScColumn& rCol = pCols[nCol];
+        ScColumn& rCol = rCols[nCol];
 
         // Skip reordering of cell formats if the whole span is on the same pattern entry.
         bool bUniformPattern = rCol.GetPatternCount(nRow1, nRow2) < 2u;

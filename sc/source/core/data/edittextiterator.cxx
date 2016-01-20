@@ -16,12 +16,26 @@ namespace sc {
 
 EditTextIterator::EditTextIterator( const ScDocument& rDoc, SCTAB nTab ) :
     mrTable(*rDoc.maTabs.at(nTab)),
-    mpCol(&mrTable.aCol[0]),
-    mpColEnd(mpCol + static_cast<size_t>(MAXCOLCOUNT)),
-    mpCells(&mpCol->maCells),
-    maPos(mpCells->position(0)),
-    miEnd(mpCells->end())
+    mnCol(0),
+    mpCells(nullptr),
+    maPos(sc::CellStoreType::const_position_type()),
+    miEnd(maPos.first)
 {
+    init();
+}
+
+void EditTextIterator::init()
+{
+    mnCol = 0;
+    if (mnCol >= mrTable.aCol.size())
+        mnCol = -1;
+
+    if (mnCol != -1)
+    {
+        mpCells = &mrTable.aCol[mnCol].maCells;
+        maPos = mpCells->position(0);
+        miEnd = mpCells->end();
+    }
 }
 
 const EditTextObject* EditTextIterator::seek()
@@ -32,12 +46,12 @@ const EditTextObject* EditTextIterator::seek()
         if (maPos.first == miEnd)
         {
             // Move to the next column.
-            ++mpCol;
-            if (mpCol == mpColEnd)
+            ++mnCol;
+            if (mnCol >= mrTable.aCol.size())
                 // No more columns.
                 return nullptr;
 
-            mpCells = &mpCol->maCells;
+            mpCells = &mrTable.aCol[mnCol].maCells;
             maPos = mpCells->position(0);
             miEnd = mpCells->end();
         }
@@ -64,16 +78,17 @@ void EditTextIterator::incBlock()
 
 const EditTextObject* EditTextIterator::first()
 {
-    mpCol = &mrTable.aCol[0];
-    mpColEnd = mpCol + static_cast<size_t>(MAXCOLCOUNT);
-    mpCells = &mpCol->maCells;
-    maPos = mpCells->position(0);
-    miEnd = mpCells->end();
+    init();
+    if (mnCol == -1)
+        return nullptr;
     return seek();
 }
 
 const EditTextObject* EditTextIterator::next()
 {
+    if (mnCol == -1)
+        return nullptr;
+
     if (maPos.first == miEnd)
         return nullptr;
 
