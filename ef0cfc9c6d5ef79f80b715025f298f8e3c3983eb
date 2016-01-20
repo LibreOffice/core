@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_010a6826",
+        "filename": "sc/source/ui/inc/tabview.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-20T14:26:49Z",
+      "side": 1,
+      "message": "Oh, btw, when using a string parameter it should be const OUString\u0026 to pass by reference instead of by value. So that would be\n\n const OUString\u0026 rSplitMethod \u003d \"both\"\n\nStill, an enum is preferrable here.",
+      "parentUuid": "dab17558_6159b45a",
+      "range": {
+        "startLine": 496,
+        "startChar": 51,
+        "endLine": 496,
+        "endChar": 80
+      },
+      "revId": "ef0cfc9c6d5ef79f80b715025f298f8e3c3983eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_c1406059",
         "filename": "sc/source/ui/view/tabview.cxx",
         "patchSetId": 4
