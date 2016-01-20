@@ -355,7 +355,6 @@ static bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
                 sal_Int32 nPos = 0;
                 pParam->aSelection.getConstArray()[ pParam->nSelectionIndex ] >>= nPos;
                 pParam->bEndOfDB = !pParam->xResultSet->absolute( nPos );
-                pParam->CheckEndOfDB();
                 bRet = !pParam->bEndOfDB;
             }
         }
@@ -1425,7 +1424,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     bFreezedLayouts = true;
                 }
             } while( IsMergeOk() &&
-                (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+                ((bSynchronizedDoc && (nStartRow != nEndRow)) ? IsValidMergeRecord() : ToNextMergeRecord()));
 
             if ( xWorkDocSh.Is() && pWorkView->GetWrtShell().IsExpFieldsLocked() )
             {
@@ -1954,7 +1953,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
         if(!bFound)
             return false;
     }
-    if(pFound->xResultSet.is() && !pFound->bAfterSelection)
+    if( pFound->HasValidRecord() )
     {
         sal_Int32 nOldRow = 0;
         try
@@ -1981,7 +1980,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
 bool    SwDBManager::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
                                    OUString &rResult, double *pNumber)
 {
-    if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
+    if( !IsValidMergeRecord() )
     {
         rResult.clear();
         return false;
@@ -2000,30 +1999,21 @@ bool SwDBManager::ToNextMergeRecord( const sal_uInt16 nSkip )
 bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
                                          sal_uInt16 nLanguage, bool asString, SwCalc &rCalc )
 {
-    if (!(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is()))
+    if( !IsValidMergeRecord() )
         return false;
 
     uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
-    if(xColsSupp.is())
+    if( !xColsSupp.is() )
+        return false;
+
     {
         uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
         const uno::Sequence<OUString> aColNames = xCols->getElementNames();
         const OUString* pColNames = aColNames.getConstArray();
         OUString aString;
 
-        const bool bExistsNextRecord = ExistsNextRecord();
-
         for( int nCol = 0; nCol < aColNames.getLength(); nCol++ )
         {
-            const OUString &rColName = pColNames[nCol];
-
-            // empty variables, if no more records;
-            if( !bExistsNextRecord )
-            {
-                rCalc.VarChange( rColName, 0 );
-                continue;
-            }
-
             // get the column type
             sal_Int32 nColumnType = sdbc::DataType::SQLNULL;
             uno::Any aCol = xCols->getByName( pColNames[nCol] );
@@ -2063,9 +2053,9 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
                 rCalc.VarChange( pColNames[nCol], aValue );
             }
         }
-        return bExistsNextRecord;
     }
-    return false;
+
+    return true;
 }
 
 bool SwDBManager::ToNextRecord(
@@ -2093,35 +2083,33 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const sal_uInt16 nSkip, const S
 {
     bool bRet = true;
 
-    assert( action == SwDBNextRecord::NEXT || action == SwDBNextRecord::FIRST );
+    assert( SwDBNextRecord::NEXT == action ||
+         (SwDBNextRecord::FIRST == action && pParam) );
+    if( nullptr == pParam )
+        return false;
 
     if( action == SwDBNextRecord::FIRST )
     {
         pParam->nSelectionIndex = 0;
-        pParam->bEndOfDB        =
-        pParam->bAfterSelection = false;
+        pParam->bEndOfDB        = false;
     }
 
-    if( !pParam || !pParam->xResultSet.is() || pParam->bEndOfDB ||
-            (pParam->aSelection.getLength() &&
-             pParam->aSelection.getLength() <= pParam->nSelectionIndex) )
-    {
-        if( pParam )
-            pParam->CheckEndOfDB();
+    if( !pParam->HasValidRecord() )
         return false;
-    }
+
     try
     {
         if( pParam->aSelection.getLength() )
         {
-            sal_Int32 nPos = 0;
-            pParam->aSelection.getConstArray()[ pParam->nSelectionIndex ] >>= nPos;
-            pParam->nSelectionIndex += 1 + nSkip;
-            pParam->bEndOfDB = !pParam->xResultSet->absolute( nPos );
-            pParam->CheckEndOfDB();
-            bRet = !pParam->bEndOfDB;
             if( pParam->nSelectionIndex >= pParam->aSelection.getLength() )
                 pParam->bEndOfDB = true;
+            else
+            {
+                sal_Int32 nPos = 0;
+                pParam->aSelection.getConstArray()[ pParam->nSelectionIndex ] >>= nPos;
+                pParam->nSelectionIndex += 1 + nSkip;
+                pParam->bEndOfDB = !pParam->xResultSet->absolute( nPos );
+            }
         }
         else if( action == SwDBNextRecord::FIRST )
         {
@@ -2129,8 +2117,6 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const sal_uInt16 nSkip, const S
                 pParam->bEndOfDB = !pParam->xResultSet->first();
             else
                 pParam->bEndOfDB = !pParam->xResultSet->absolute( nSkip );
-            pParam->CheckEndOfDB();
-            bRet = !pParam->bEndOfDB;
         }
         else
         {
@@ -2144,15 +2130,15 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const sal_uInt16 nSkip, const S
                 // next returned true but it didn't move
                 pParam->bEndOfDB = true;
             }
-            pParam->CheckEndOfDB();
-            bRet = !pParam->bEndOfDB;
             pParam->nSelectionIndex += 1 + nSkip;
         }
+
+        bRet = !pParam->bEndOfDB;
     }
     catch( const uno::Exception &e )
     {
         pParam->bEndOfDB = true;
-        pParam->CheckEndOfDB();
+        bRet = false;
         // we allow merging with empty databases, so don't warn on init
         SAL_WARN_IF(action == SwDBNextRecord::NEXT,
                     "sw.mailmerge", "exception in ToNextRecord(): " << e.Message);
@@ -2163,9 +2149,9 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const sal_uInt16 nSkip, const S
 // synchronized labels contain a next record field at their end
 // to assure that the next page can be created in mail merge
 // the cursor position must be validated
-bool SwDBManager::ExistsNextRecord() const
+bool SwDBManager::IsValidMergeRecord() const
 {
-    return pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB;
+    return( pImpl->pMergeData && pImpl->pMergeData->HasValidRecord() );
 }
 
 sal_uInt32  SwDBManager::GetSelectedRecordId()
@@ -2198,7 +2184,6 @@ bool SwDBManager::ToRecordId(sal_Int32 nSet)
     {
         bRet = lcl_MoveAbsolute(pImpl->pMergeData, nAbsPos);
         pImpl->pMergeData->bEndOfDB = !bRet;
-        pImpl->pMergeData->CheckEndOfDB();
     }
     return bRet;
 }
@@ -2250,8 +2235,6 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
 
             //after executeQuery the cursor must be positioned
             pFound->bEndOfDB = !pFound->xResultSet->next();
-            pFound->bAfterSelection = false;
-            pFound->CheckEndOfDB();
             ++pFound->nSelectionIndex;
         }
         catch (const uno::Exception&)
@@ -2334,7 +2317,6 @@ void    SwDBManager::CloseAll(bool bIncludingMerge)
         if(bIncludingMerge || pParam.get() != pImpl->pMergeData)
         {
             pParam->nSelectionIndex = 0;
-            pParam->bAfterSelection = false;
             pParam->bEndOfDB = false;
             try
             {
