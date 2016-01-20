@@ -481,7 +481,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     ReadPair( rIStm, rImplFont.maSize );
 
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetCharSet( (rtl_TextEncoding) nTmp16 );
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.meFamily = (FontFamily) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rImplFont.SetFamilyType( (FontFamily) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetPitch( (FontPitch) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetWeight( (FontWeight) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.meUnderline = (FontUnderline) nTmp16;
