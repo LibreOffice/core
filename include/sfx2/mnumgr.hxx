@@ -68,12 +68,6 @@ class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 {
 private:
     Menu*               pSVMenu;
-
-    // when #i107205 gets fixed this one should be superfluous.
-    // But right now we want to avoid the memory leak that would otherwise occur,
-    // if we don't delete the pointer that got created in SfxPopupMenuManager::Popup
-    static PopupMenu *  pStaticThesSubMenu;
-
     SfxPopupMenuManager( const SfxPopupMenuManager& ) = delete;
     SfxPopupMenuManager& operator=( const SfxPopupMenuManager& ) = delete;
 
@@ -81,11 +75,6 @@ public:
                         SfxPopupMenuManager( PopupMenu*, SfxBindings& );
                         ~SfxPopupMenuManager();
     static void         ExecutePopup( const ResId&, SfxViewFrame* pViewFrame, const Point& rPoint, vcl::Window* pWindow );
-    // @deprecated!!
-    // Don't use this method any longer. The whole class will be removed in the future.
-    // Changing code which relies on Popup would need much more effort.
-    static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, vcl::Window* pWindow );
-
     void                Execute( const Point& rPos, vcl::Window *pWindow );
 
     void                RemoveDisabledEntries();

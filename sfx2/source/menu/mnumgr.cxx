@@ -64,9 +64,6 @@
 #include <sfx2/objface.hxx>
 #include "thessubmenu.hxx"
 
-// static member initialization
-PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = nullptr;
-
 using namespace com::sun::star;
 
 void TryToHideDisabledEntries_Impl( Menu* pMenu )
@@ -254,7 +251,6 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
 void SfxPopupMenuManager::Execute( const Point& rPos, vcl::Window* pWindow )
 {
     static_cast<PopupMenu*>( GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
-    delete pStaticThesSubMenu;  pStaticThesSubMenu = nullptr;
 }
 
 
@@ -273,58 +269,6 @@ SfxPopupMenuManager::SfxPopupMenuManager( PopupMenu* pMenuArg, SfxBindings& rBin
     , pSVMenu( pMenuArg )
 {
 }
-
-SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, vcl::Window* pWindow )
-{
-    PopupMenu *pSVMenu = new PopupMenu( rResId );
-    sal_uInt16 n, nCount = pSVMenu->GetItemCount();
-    for ( n=0; n<nCount; n++ )
-    {
-        sal_uInt16 nId = pSVMenu->GetItemId( n );
-        if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
-            break;
-    }
-
-    PopupMenu* pThesSubMenu = InsertThesaurusSubmenu_Impl( &pFrame->GetBindings(), pSVMenu );
-    // #i107205# (see comment in header file)
-    pStaticThesSubMenu = pThesSubMenu;
-
-    if ( n == nCount )
-    {
-        PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
-        nCount = aPop.GetItemCount();
-        for ( n=0; n<nCount; n++ )
-        {
-            sal_uInt16 nId = aPop.GetItemId( n );
-            pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ), OString(), n );
-            pSVMenu->SetHelpId( nId, aPop.GetHelpId( nId ));
-        }
-        pSVMenu->InsertSeparator( OString(), n );
-    }
-
-    InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
-    Menu* pMenu = nullptr;
-    css::ui::ContextMenuExecuteEvent aEvent;
-    aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
-    aEvent.ExecutePosition.X = rPoint.X();
-    aEvent.ExecutePosition.Y = rPoint.Y();
-    OUString sDummyMenuName;
-    if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, sDummyMenuName, pMenu, aEvent ) )
-    {
-        if ( pMenu )
-        {
-            delete pSVMenu;
-            pSVMenu = static_cast<PopupMenu*>( pMenu );
-        }
-
-        SfxPopupMenuManager* aMgr = new SfxPopupMenuManager( pSVMenu, pFrame->GetBindings());
-        aMgr->RemoveDisabledEntries();
-        return aMgr;
-    }
-
-    return nullptr;
-}
-
 
 void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, vcl::Window* pWindow )
 {

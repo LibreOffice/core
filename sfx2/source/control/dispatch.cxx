@@ -1849,30 +1849,6 @@ bool SfxDispatcher::_FillState(const SfxSlotServer& rSvr, SfxItemSet& rState,
     return false;
 }
 
-SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId, vcl::Window *pWin, const Point *pPos )
-{
-    SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();
-    sal_uInt16 nShLevel = 0;
-    SfxShell *pSh;
-
-    if ( rDisp.xImp->bQuiet )
-    {
-        nConfigId = 0;
-        nShLevel = rDisp.xImp->aStack.size();
-    }
-
-    vcl::Window *pWindow = pWin ? pWin : rDisp.xImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
-    for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
-    {
-        const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
-        if ( ( nConfigId == 0 && rResId.GetId() ) || ( nConfigId != 0 && rResId.GetId() == nConfigId ) )
-        {
-                return SfxPopupMenuManager::Popup( rResId, rDisp.GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
-        }
-    }
-    return nullptr;
-}
-
 void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
 {
     SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();

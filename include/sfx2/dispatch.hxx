@@ -154,8 +154,6 @@ public:
     SfxShell*           GetShell(sal_uInt16 nIdx) const;
     SfxViewFrame*       GetFrame() const;
     SfxModule*          GetModule() const;
-    // caller has to clean up the Manager on his own
-    static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId, vcl::Window *pWin, const Point *pPos );
 
     void                ExecutePopup( const ResId &rId, vcl::Window *pWin = nullptr, const Point *pPos = nullptr );
     void                ExecutePopup( const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr );
