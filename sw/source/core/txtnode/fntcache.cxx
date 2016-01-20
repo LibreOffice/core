@@ -208,61 +208,61 @@ struct CalcLinePosData
 static void lcl_calcLinePos( const CalcLinePosData &rData,
     Point &rStart, Point &rEnd, sal_Int32 nStart, sal_Int32 nWrLen )
 {
-   long nBlank = 0;
-   const sal_Int32 nEnd = nStart + nWrLen;
-   const long nTmpSpaceAdd = rData.rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+    long nBlank = 0;
+    const sal_Int32 nEnd = nStart + nWrLen;
+    const long nTmpSpaceAdd = rData.rInf.GetSpace() / SPACING_PRECISION_FACTOR;
 
-   if ( nEnd < rData.nCnt
+    if ( nEnd < rData.nCnt
        && CH_BLANK == rData.rInf.GetText()[ rData.rInf.GetIdx() + nEnd ] )
-   {
-       if( nEnd + 1 == rData.nCnt )
-           nBlank -= nTmpSpaceAdd;
-       else
-           nBlank -= rData.nHalfSpace;
-   }
+    {
+        if( nEnd + 1 == rData.nCnt )
+            nBlank -= nTmpSpaceAdd;
+        else
+            nBlank -= rData.nHalfSpace;
+    }
 
-   // determine start, end and length of wave line
-   sal_Int32 nKernStart = nStart ? rData.pKernArray[ nStart - 1 ] : 0;
-   sal_Int32 nKernEnd = rData.pKernArray[ nEnd - 1 ];
+    // determine start, end and length of wave line
+    sal_Int32 nKernStart = nStart ? rData.pKernArray[ nStart - 1 ] : 0;
+    sal_Int32 nKernEnd = rData.pKernArray[ nEnd - 1 ];
 
-   const sal_uInt16 nDir = rData.bBidiPor ? 1800 :
-       UnMapDirection( rData.rFont.GetOrientation(), rData.bSwitchH2V );
+    const sal_uInt16 nDir = rData.bBidiPor ? 1800 :
+        UnMapDirection( rData.rFont.GetOrientation(), rData.bSwitchH2V );
 
-   switch ( nDir )
-   {
-   case 0 :
-       rStart.X() += nKernStart;
-       rEnd.X() = nBlank + rData.rInf.GetPos().X() + nKernEnd;
-       rEnd.Y() = rData.rInf.GetPos().Y();
-       break;
-   case 900 :
-       rStart.Y() -= nKernStart;
-       rEnd.X() = rData.rInf.GetPos().X();
-       rEnd.Y() = nBlank + rData.rInf.GetPos().Y() - nKernEnd;
-       break;
-   case 1800 :
-       rStart.X() -= nKernStart;
-       rEnd.X() = rData.rInf.GetPos().X() - nKernEnd - nBlank;
-       rEnd.Y() = rData.rInf.GetPos().Y();
-       break;
-   case 2700 :
-       rStart.Y() += nKernStart;
-       rEnd.X() = rData.rInf.GetPos().X();
-       rEnd.Y() = nBlank + rData.rInf.GetPos().Y() + nKernEnd;
-       break;
-   }
+    switch ( nDir )
+    {
+    case 0 :
+        rStart.X() += nKernStart;
+        rEnd.X() = nBlank + rData.rInf.GetPos().X() + nKernEnd;
+        rEnd.Y() = rData.rInf.GetPos().Y();
+        break;
+    case 900 :
+        rStart.Y() -= nKernStart;
+        rEnd.X() = rData.rInf.GetPos().X();
+        rEnd.Y() = nBlank + rData.rInf.GetPos().Y() - nKernEnd;
+        break;
+    case 1800 :
+        rStart.X() -= nKernStart;
+        rEnd.X() = rData.rInf.GetPos().X() - nKernEnd - nBlank;
+        rEnd.Y() = rData.rInf.GetPos().Y();
+        break;
+    case 2700 :
+        rStart.Y() += nKernStart;
+        rEnd.X() = rData.rInf.GetPos().X();
+        rEnd.Y() = nBlank + rData.rInf.GetPos().Y() + nKernEnd;
+        break;
+    }
 
-   if ( rData.bSwitchL2R )
-   {
-       rData.rInf.GetFrame()->SwitchLTRtoRTL( rStart );
-       rData.rInf.GetFrame()->SwitchLTRtoRTL( rEnd );
-   }
+    if ( rData.bSwitchL2R )
+    {
+        rData.rInf.GetFrame()->SwitchLTRtoRTL( rStart );
+        rData.rInf.GetFrame()->SwitchLTRtoRTL( rEnd );
+    }
 
-   if ( rData.bSwitchH2V )
-   {
-       rData.rInf.GetFrame()->SwitchHorizontalToVertical( rStart );
-       rData.rInf.GetFrame()->SwitchHorizontalToVertical( rEnd );
-   }
+    if ( rData.bSwitchH2V )
+    {
+        rData.rInf.GetFrame()->SwitchHorizontalToVertical( rStart );
+        rData.rInf.GetFrame()->SwitchHorizontalToVertical( rEnd );
+    }
 }
 
 // Returns the Ascent of the Font on the given output device;

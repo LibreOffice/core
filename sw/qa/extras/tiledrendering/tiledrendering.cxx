@@ -82,8 +82,8 @@ private:
 
 SwTiledRenderingTest::SwTiledRenderingTest()
     : m_bFound(true),
-    m_nSelectionBeforeSearchResult(0),
-    m_nSelectionAfterSearchResult(0)
+      m_nSelectionBeforeSearchResult(0),
+      m_nSelectionAfterSearchResult(0)
 {
 }
 
