@@ -813,6 +813,8 @@ void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
 void Font::IncreaseQualityBy( int nQualityAmount ) { mpImplFont->IncreaseQualityBy( nQualityAmount ); }
 void Font::DecreaseQualityBy( int nQualityAmount ) { mpImplFont->DecreaseQualityBy( nQualityAmount ); }
 
+bool Font::IsBuiltInFont() const { return mpImplFont->IsBuiltInFont(); }
+void Font::SetBuiltInFontFlag( bool bIsBuiltInFontFlag ) { mpImplFont->SetBuiltInFontFlag( bIsBuiltInFontFlag ); }
 bool Font::IsOutline() const { return mpImplFont->mbOutline; }
 bool Font::IsShadow() const { return mpImplFont->mbShadow; }
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
@@ -852,6 +854,7 @@ ImplFont::ImplFont() :
     mbShadow( false ),
     mbVertical( false ),
     mbTransparent( true ),
+    mbDevice( false ),
     mnQuality( 0 )
 {}
 
@@ -885,6 +888,7 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     mbShadow( rImplFont.mbShadow ),
     mbVertical( rImplFont.mbVertical ),
     mbTransparent( rImplFont.mbTransparent ),
+    mbDevice( rImplFont.mbDevice ),
     mnQuality( rImplFont.mnQuality )
 {}
 
