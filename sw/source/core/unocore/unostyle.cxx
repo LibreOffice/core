@@ -1693,14 +1693,18 @@ void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPrope
 
         // check for correct context and style name
         const auto nIdx(GetCommandContextIndex(rNamedValue.Name));
-        if(nIdx == -1)
+        if (nIdx == -1)
             throw lang::IllegalArgumentException();
         m_pBasePool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
-        for(auto pBase = m_pBasePool->First(); pBase->GetName() != aStyleName; pBase = m_pBasePool->Next())
+        bool bStyleFound = false;
+        for(auto pBase = m_pBasePool->First(); pBase; pBase = m_pBasePool->Next())
         {
-            if(!pBase)
-                throw lang::IllegalArgumentException();
+            bStyleFound = pBase->GetName() == aStyleName;
+            if (bStyleFound)
+                break;
         }
+        if (!bStyleFound)
+            throw lang::IllegalArgumentException();
         aCondItem.SetStyle(&aStyleName, nIdx);
     }
     o_rStyleBase.GetItemSet().Put(aCondItem);
