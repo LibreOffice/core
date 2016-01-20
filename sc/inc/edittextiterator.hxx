@@ -13,7 +13,7 @@
 #include "address.hxx"
 #include "mtvelements.hxx"
 
-class ScColumn;
+class ScColContainer;
 class ScTable;
 class ScDocument;
 class EditTextObject;
@@ -29,8 +29,7 @@ namespace sc {
 class EditTextIterator
 {
     const ScTable& mrTable;
-    const ScColumn* mpCol;
-    const ScColumn* mpColEnd;
+    SCCOL mnCol;
     const CellStoreType* mpCells;
     CellStoreType::const_position_type maPos;
     CellStoreType::const_iterator miEnd;
@@ -46,6 +45,10 @@ class EditTextIterator
      */
     void incPos();
     void incBlock();
+    /**
+     * Initialize members w.r.t the dynamic column container in the given table.
+     */
+    void init();
 
 public:
     EditTextIterator( const ScDocument& rDoc, SCTAB nTab );

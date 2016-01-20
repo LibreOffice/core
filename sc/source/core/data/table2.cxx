@@ -67,16 +67,16 @@ namespace {
 
 class ColumnRegroupFormulaCells
 {
-    ScColumn* mpCols;
+    ScColContainer& mrCols;
     std::vector<ScAddress>* mpGroupPos;
 
 public:
-    ColumnRegroupFormulaCells( ScColumn* pCols, std::vector<ScAddress>* pGroupPos ) :
-        mpCols(pCols), mpGroupPos(pGroupPos) {}
+    ColumnRegroupFormulaCells( ScColContainer& rCols, std::vector<ScAddress>* pGroupPos ) :
+        mrCols(rCols), mpGroupPos(pGroupPos) {}
 
     void operator() (SCCOL nCol)
     {
-        mpCols[nCol].RegroupFormulaCells(mpGroupPos);
+        mrCols[nCol].RegroupFormulaCells(mpGroupPos);
     }
 };
 

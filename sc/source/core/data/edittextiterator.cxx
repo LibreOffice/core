@@ -16,28 +16,49 @@ namespace sc {
 
 EditTextIterator::EditTextIterator( const ScDocument& rDoc, SCTAB nTab ) :
     mrTable(*rDoc.maTabs.at(nTab)),
-    mpCol(&mrTable.aCol[0]),
-    mpColEnd(mpCol + static_cast<size_t>(MAXCOLCOUNT)),
-    mpCells(&mpCol->maCells),
-    maPos(mpCells->position(0)),
-    miEnd(mpCells->end())
+    mnCol(0),
+    mpCells(nullptr),
+    maPos(sc::CellStoreType::const_position_type()),
+    miEnd(maPos.first)
 {
+    init();
+}
+
+void EditTextIterator::init()
+{
+    mnCol = 0;
+    if(mnCol > mrTable.aCol.GetLastIndex())
+        mnCol = -1;
+    else
+        while(!mrTable.aCol.ColumnExists(mnCol))
+            ++mnCol;
+    if(mnCol != -1)
+    {
+        mpCells = &mrTable.aCol[mnCol].maCells;
+        maPos = mpCells->position(0);
+        miEnd = mpCells->end();
+    }
 }
 
 const EditTextObject* EditTextIterator::seek()
 {
+    SCCOL nLastCol = mrTable.aCol.GetLastIndex();
     while (maPos.first->type != sc::element_type_edittext)
     {
         incBlock();
         if (maPos.first == miEnd)
         {
             // Move to the next column.
-            ++mpCol;
-            if (mpCol == mpColEnd)
+            ++mnCol;
+            if (mnCol > nLastCol)
                 // No more columns.
                 return nullptr;
 
-            mpCells = &mpCol->maCells;
+            // Keep incrementing till we find a valid column.
+            while(!mrTable.aCol.ColumnExists(mnCol))
+                ++mnCol;
+
+            mpCells = &mrTable.aCol[mnCol].maCells;
             maPos = mpCells->position(0);
             miEnd = mpCells->end();
         }
@@ -64,11 +85,9 @@ void EditTextIterator::incBlock()
 
 const EditTextObject* EditTextIterator::first()
 {
-    mpCol = &mrTable.aCol[0];
-    mpColEnd = mpCol + static_cast<size_t>(MAXCOLCOUNT);
-    mpCells = &mpCol->maCells;
-    maPos = mpCells->position(0);
-    miEnd = mpCells->end();
+    init();
+    if(mnCol == -1)
+        return nullptr;
     return seek();
 }
 

@@ -81,7 +81,7 @@ ScProgress* GetProgressBar(
 }
 
 void GetOptimalHeightsInColumn(
-    sc::RowHeightContext& rCxt, ScColumn* pCol, SCROW nStartRow, SCROW nEndRow,
+    sc::RowHeightContext& rCxt, ScColContainer& rCol, SCROW nStartRow, SCROW nEndRow,
     ScProgress* pProgress, sal_uInt32 nProgressStart )
 {
     assert(nStartRow <= nEndRow);
@@ -94,7 +94,7 @@ void GetOptimalHeightsInColumn(
 
     std::vector<sal_uInt16>& rHeights = rCxt.getHeightArray();
 
-    pCol[MAXCOL].GetOptimalHeight(rCxt, nStartRow, nEndRow, 0, 0);
+    rCol[MAXCOL].GetOptimalHeight(rCxt, nStartRow, nEndRow, 0, 0);
 
     //  from there search for the standard height that is in use in the lower part
 
@@ -107,11 +107,11 @@ void GetOptimalHeightsInColumn(
     sal_uLong nWeightedCount = 0;
     for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL already above
     {
-        pCol[nCol].GetOptimalHeight(rCxt, nStartRow, nEndRow, nMinHeight, nMinStart);
+        rCol[nCol].GetOptimalHeight(rCxt, nStartRow, nEndRow, nMinHeight, nMinStart);
 
         if (pProgress)
         {
-            sal_uLong nWeight = pCol[nCol].GetWeightedCount();
+            sal_uLong nWeight = rCol[nCol].GetWeightedCount();
             if (nWeight)        // does not have to be the same Status
             {
                 nWeightedCount += nWeight;
@@ -227,6 +227,7 @@ bool SetOptimalHeightsToRows(
 
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                     bool bColInfo, bool bRowInfo ) :
+    aCol( pDoc, MAXCOL + 1 ),
     aName( rNewName ),
     aCodeName( rNewName ),
     nLinkRefreshDelay( 0 ),
@@ -324,10 +325,6 @@ ScTable::~ScTable()
 {
     if (!pDocument->IsInDtorClear())
     {
-        for (SCCOL nCol = 0; nCol < MAXCOL; ++nCol)
-        {
-            aCol[nCol].FreeNotes();
-        }
         //  In the dtor, don't delete the pages in the wrong order.
         //  (or else nTab does not reflect the page number!)
         //  In ScDocument::Clear is afterwards used from Clear at the Draw Layer to delete everything.
@@ -349,9 +346,6 @@ ScTable::~ScTable()
     delete mpRangeName;
     delete pDBDataNoName;
     DestroySortCollator();
-
-    for (SCCOL k=0; k<=MAXCOL; k++)
-        aCol[k].PrepareBroadcastersForDestruction();
 }
 
 void ScTable::GetName( OUString& rName ) const
