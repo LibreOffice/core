@@ -4912,7 +4912,7 @@ SfxVoidItem Move FID_TAB_MOVE
 
 
 SfxStringItem Name FID_TAB_RENAME
-
+(SfxStringItem Name FID_TAB_RENAME,SfxUInt16Item Index FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4926,8 +4926,6 @@ SfxStringItem Name FID_TAB_RENAME
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,

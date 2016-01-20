@@ -866,6 +866,9 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool /* bUpdateRe
                 for (; it != maTabs.end(); ++it)
                     if ( *it && (*it)->IsStreamValid())
                         (*it)->SetStreamValid( false );
+
+                if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
+                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
             }
         }
     }
