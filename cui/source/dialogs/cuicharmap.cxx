@@ -164,7 +164,7 @@ short SvxCharacterMap::Execute()
             const SfxItemPool* pPool = pSet->GetPool();
             const vcl::Font& rFont( GetCharFont() );
             pSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), GetCharacters() ) );
-            pSet->Put( SvxFontItem( rFont.GetFamily(), rFont.GetFamilyName(),
+            pSet->Put( SvxFontItem( rFont.GetFamilyType(), rFont.GetFamilyName(),
                 rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
             pSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), rFont.GetFamilyName() ) );
             pSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), GetChar() ) );

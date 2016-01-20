@@ -151,7 +151,7 @@ SwHHCWrapper::~SwHHCWrapper()
         const vcl::Font *pFont = GetTargetFont();
         if (pFont)
         {
-            SvxFontItem aFontItem( pFont->GetFamily(), pFont->GetFamilyName(),
+            SvxFontItem aFontItem( pFont->GetFamilyType(), pFont->GetFamilyName(),
                     pFont->GetStyleName(), pFont->GetPitch(),
                     pFont->GetCharSet(), RES_CHRATR_CJK_FONT );
             pDoc->SetDefault( aFontItem );
@@ -493,7 +493,7 @@ void SwHHCWrapper::ReplaceUnit(
             {
                 SvxFontItem aFontItem(static_cast<const SvxFontItem&>( aSet.Get( RES_CHRATR_CJK_FONT ) ));
                 aFontItem.SetFamilyName(    pTargetFont->GetFamilyName());
-                aFontItem.SetFamily(        pTargetFont->GetFamily());
+                aFontItem.SetFamily(        pTargetFont->GetFamilyType());
                 aFontItem.SetStyleName(     pTargetFont->GetStyleName());
                 aFontItem.SetPitch(         pTargetFont->GetPitch());
                 aFontItem.SetCharSet( pTargetFont->GetCharSet() );

@@ -261,7 +261,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
 
             // set attributes (set font)
             SfxItemSet aSet(pOL->GetEmptyItemSet());
-            SvxFontItem aFontItem (aFont.GetFamily(), aFont.GetFamilyName(),
+            SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
                                    aFont.GetStyleName(), aFont.GetPitch(),
                                    aFont.GetCharSet(),
                                    EE_CHAR_FONTINFO);

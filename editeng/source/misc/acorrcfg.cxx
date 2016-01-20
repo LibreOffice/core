@@ -585,7 +585,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
                 pValues[nProp] <<= OUString(rSwFlags.aBulletFont.GetFamilyName());
             break; // "Format/Option/ChangeToBullets/SpecialCharacter/Font",
             case  18:
-                pValues[nProp] <<= (sal_Int32)rSwFlags.aBulletFont.GetFamily();
+                pValues[nProp] <<= (sal_Int32)rSwFlags.aBulletFont.GetFamilyType();
             break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily",
             case  19:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aBulletFont.GetCharSet();
@@ -629,7 +629,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
                 pValues[nProp] <<= OUString(rSwFlags.aByInputBulletFont.GetFamilyName());
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
             case 44 :
-                pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetFamily();
+                pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetFamilyType();
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",
             case 45 :
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetCharSet();

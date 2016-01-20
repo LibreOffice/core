@@ -2192,7 +2192,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
             ImplDefineFont( "Courier", "Oblique" );
         else if ( maFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             ImplWriteLine( "/Symbol findfont" );
-        else if ( maFont.GetFamily() == FAMILY_SWISS )
+        else if ( maFont.GetFamilyType() == FAMILY_SWISS )
             ImplDefineFont( "Helvetica", "Oblique" );
         else
             ImplDefineFont( "Times", "Italic" );
