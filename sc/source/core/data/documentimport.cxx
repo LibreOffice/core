@@ -593,10 +593,10 @@ void ScDocumentImport::finalize()
             continue;
 
         ScTable& rTab = **itTab;
-        ScColumn* pCol = &rTab.aCol[0];
-        ScColumn* pColEnd = pCol + static_cast<size_t>(MAXCOLCOUNT);
-        for (; pCol != pColEnd; ++pCol)
-            initColumn(*pCol);
+        SCCOL nLastIdx = rTab.aCol.GetLastIndex();
+        for (SCCOL nColIdx = 0; nColIdx <= nLastIdx; ++nColIdx)
+            if (rTab.aCol.ColumnExists(nColIdx))
+                initColumn(rTab.aCol[nColIdx]);
     }
 }
 
