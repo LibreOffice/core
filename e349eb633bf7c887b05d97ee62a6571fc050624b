@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_c40eae33",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-01-20T15:09:17Z",
+      "side": 1,
+      "message": "Why should we add the LibreOfficeKit* if it is not needed?",
+      "revId": "e349eb633bf7c887b05d97ee62a6571fc050624b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
