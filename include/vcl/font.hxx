@@ -86,6 +86,8 @@ public:
     int                 GetQuality() const;
 
     void                SetQuality(int);
+    void                IncreaseQualityBy(int);
+    void                DecreaseQualityBy(int);
 
     // setting the color on the font is obsolete, the only remaining
     // valid use is for keeping backward compatibility with old MetaFiles

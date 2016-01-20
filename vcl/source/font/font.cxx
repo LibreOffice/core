@@ -169,35 +169,35 @@ void Font::SetFamily( FontFamily eFamily )
 
 void Font::SetCharSet( rtl_TextEncoding eCharSet )
 {
-    if( mpImplFont->meCharSet != eCharSet )
+    if( mpImplFont->GetCharSet() != eCharSet )
     {
         MakeUnique();
-        mpImplFont->meCharSet = eCharSet;
+        mpImplFont->SetCharSet( eCharSet );
 
         if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
-            mpImplFont->mbSymbol = true;
+            mpImplFont->SetSymbolFlag( true );
         else
-            mpImplFont->mbSymbol = false;
+            mpImplFont->SetSymbolFlag( false );
     }
 }
 
 bool Font::IsSymbolFont() const
 {
-    return mpImplFont->mbSymbol;
+    return mpImplFont->IsSymbolFont();
 }
 
 void Font::SetSymbolFlag( bool bSymbol )
 {
-    mpImplFont->mbSymbol = bSymbol;
+    mpImplFont->SetSymbolFlag( bSymbol );
 
-    if ( bSymbol )
+    if ( IsSymbolFont() )
     {
-        mpImplFont->meCharSet = RTL_TEXTENCODING_SYMBOL;
+        mpImplFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
     }
     else
     {
-        if ( mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL )
-            mpImplFont->meCharSet = RTL_TEXTENCODING_DONTKNOW;
+        if ( mpImplFont->GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+            mpImplFont->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
     }
 }
 
@@ -466,7 +466,7 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
     rAttrs.SetItalic( mpImplFont->GetItalicNoAsk() );
     rAttrs.SetWeight( mpImplFont->GetWeightNoAsk() );
     rAttrs.SetWidthType( WIDTH_DONTKNOW );
-    rAttrs.SetSymbolFlag( mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL );
+    rAttrs.SetSymbolFlag( mpImplFont->GetCharSet() == RTL_TEXTENCODING_SYMBOL );
 }
 
 SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
@@ -480,7 +480,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     rImplFont.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
     ReadPair( rIStm, rImplFont.maSize );
 
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.meCharSet = (rtl_TextEncoding) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rImplFont.SetCharSet( (rtl_TextEncoding) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.meFamily = (FontFamily) nTmp16;
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetPitch( (FontPitch) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetWeight( (FontWeight) nTmp16 );
@@ -521,7 +521,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     rOStm.WriteUniOrByteString( rImplFont.maStyleName, rOStm.GetStreamCharSet() );
     WritePair( rOStm, rImplFont.maSize );
 
-    rOStm.WriteUInt16( GetStoreCharSet( rImplFont.meCharSet ) );
+    rOStm.WriteUInt16( GetStoreCharSet( rImplFont.GetCharSet() ) );
     rOStm.WriteUInt16( rImplFont.GetFamilyNoAsk() );
     rOStm.WriteUInt16( rImplFont.GetPitchNoAsk() );
     rOStm.WriteUInt16( rImplFont.GetWeightNoAsk() );
@@ -785,7 +785,7 @@ long Font::GetHeight() const { return mpImplFont->maSize.Height(); }
 void Font::SetWidth( long nWidth ) { SetSize( Size( nWidth, mpImplFont->maSize.Height() ) ); }
 long Font::GetWidth() const { return mpImplFont->maSize.Width(); }
 
-rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->meCharSet; }
+rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->GetCharSet(); }
 
 const LanguageTag& Font::GetLanguageTag() const { return mpImplFont->maLanguageTag; }
 const LanguageTag& Font::GetCJKContextLanguageTag() const { return mpImplFont->maCJKLanguageTag; }
@@ -810,6 +810,8 @@ FontFamily Font::GetFamily() const { return mpImplFont->GetFamilyNoAsk(); }
 
 int Font::GetQuality() const { return mpImplFont->GetQuality(); }
 void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
+void Font::IncreaseQualityBy( int nQualityAmount ) { mpImplFont->IncreaseQualityBy( nQualityAmount ); }
+void Font::DecreaseQualityBy( int nQualityAmount ) { mpImplFont->DecreaseQualityBy( nQualityAmount ); }
 
 bool Font::IsOutline() const { return mpImplFont->mbOutline; }
 bool Font::IsShadow() const { return mpImplFont->mbShadow; }

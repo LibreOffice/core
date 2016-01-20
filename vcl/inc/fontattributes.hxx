@@ -50,6 +50,7 @@ public:
     void            SetItalic(const FontItalic eItalic )        { meItalic = eItalic; }
     void            SetWeight(const FontWeight eWeight )        { meWeight = eWeight; }
     void            SetWidthType(const FontWidth eWidthType)    { meWidthType = eWidthType; }
+    void            SetCharSet( const rtl_TextEncoding );
 
     void            SetSymbolFlag(const bool );
 
@@ -89,7 +90,6 @@ public:
     void            SetEmbeddableFlag ( bool bEmbeddable )      { mbEmbeddable = bEmbeddable; }
     void            SetSubsettableFlag( bool bSubsettable )     { mbSubsettable = bSubsettable; }
     void            SetOrientationFlag( bool bCanRotate )       { mbOrientation = bCanRotate; }
-    void            SetCharSet( const rtl_TextEncoding );
 
 private:
     // device independent variables
