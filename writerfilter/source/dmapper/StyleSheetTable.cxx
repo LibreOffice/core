@@ -25,6 +25,7 @@
 #include <LatentStyleHandler.hxx>
 #include <ooxml/resourceids.hxx>
 #include <vector>
+#include <iterator>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
