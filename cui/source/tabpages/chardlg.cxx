@@ -529,7 +529,7 @@ namespace
 
         _rFont.SetLanguage(_pLanguageLB->GetSelectLanguage());
 
-        _rFont.SetFamily( aFontMetrics.GetFamily() );
+        _rFont.SetFamily( aFontMetrics.GetFamilyType() );
         _rFont.SetFamilyName( aFontMetrics.GetFamilyName() );
         _rFont.SetStyleName( aFontMetrics.GetStyleName() );
         _rFont.SetPitch( aFontMetrics.GetPitch() );
@@ -934,7 +934,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         aStyleBoxText.clear();
     FontMetric aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
-    SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetFamilyName(), aInfo.GetStyleName(),
+    SvxFontItem aFontItem( aInfo.GetFamilyType(), aInfo.GetFamilyName(), aInfo.GetStyleName(),
                            aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );
     pOld = GetOldItem( rSet, nSlot );
 

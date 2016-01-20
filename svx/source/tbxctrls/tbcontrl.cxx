@@ -1144,7 +1144,7 @@ void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
             aCurFont.GetWeight(),
             aCurFont.GetItalic() ) );
 
-        SvxFontItem aFontItem( aFontMetric.GetFamily(),
+        SvxFontItem aFontItem( aFontMetric.GetFamilyType(),
             aFontMetric.GetFamilyName(),
             aFontMetric.GetStyleName(),
             aFontMetric.GetPitch(),
@@ -1171,7 +1171,7 @@ void SvxFontNameBox_Impl::Select()
             aCurFont.GetItalic() ) );
         aCurFont = aFontMetric;
 
-        pFontItem.reset( new SvxFontItem( aFontMetric.GetFamily(),
+        pFontItem.reset( new SvxFontItem( aFontMetric.GetFamilyType(),
             aFontMetric.GetFamilyName(),
             aFontMetric.GetStyleName(),
             aFontMetric.GetPitch(),

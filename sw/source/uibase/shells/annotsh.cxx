@@ -1771,7 +1771,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
         // Attributing (set font)
         SfxItemSet aSetFont( *aFontSet.GetPool(), aFontSet.GetRanges() );
-        SvxFontItem aFontItem (aFont.GetFamily(), aFont.GetFamilyName(),
+        SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );

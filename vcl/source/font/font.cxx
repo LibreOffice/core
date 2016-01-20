@@ -800,13 +800,13 @@ FontPitch Font::GetPitch() { return mpImplFont->GetPitch(); }
 FontWeight Font::GetWeight() { return mpImplFont->GetWeight(); }
 FontWidth Font::GetWidthType() { return mpImplFont->GetWidthType(); }
 FontItalic Font::GetItalic() { return mpImplFont->GetItalic(); }
-FontFamily Font::GetFamily() { return mpImplFont->GetFamily(); }
+FontFamily Font::GetFamilyType() { return mpImplFont->GetFamily(); }
 
 FontPitch Font::GetPitch() const { return mpImplFont->GetPitchNoAsk(); }
 FontWeight Font::GetWeight() const { return mpImplFont->GetWeightNoAsk(); }
 FontWidth Font::GetWidthType() const { return mpImplFont->GetWidthTypeNoAsk(); }
 FontItalic Font::GetItalic() const { return mpImplFont->GetItalicNoAsk(); }
-FontFamily Font::GetFamily() const { return mpImplFont->GetFamilyNoAsk(); }
+FontFamily Font::GetFamilyType() const { return mpImplFont->GetFamilyNoAsk(); }
 
 int Font::GetQuality() const { return mpImplFont->GetQuality(); }
 void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }

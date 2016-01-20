@@ -61,7 +61,7 @@ void SvxUnoFontDescriptor::ConvertFromFont( const vcl::Font& rFont, awt::FontDes
     rDesc.StyleName = rFont.GetStyleName();
     rDesc.Width = sal::static_int_cast< sal_Int16 >(rFont.GetSize().Width());
     rDesc.Height = sal::static_int_cast< sal_Int16 >(rFont.GetSize().Height());
-    rDesc.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
+    rDesc.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamilyType());
     rDesc.CharSet = rFont.GetCharSet();
     rDesc.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
     rDesc.Orientation = static_cast< float >(rFont.GetOrientation() / 10);

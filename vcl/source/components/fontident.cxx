@@ -105,7 +105,7 @@ Any SAL_CALL FontIdentificator::getMaterial() throw(RuntimeException, std::excep
     aFD.Kerning             = false;
     aFD.WordLineMode        = false;
     aFD.Type                = 0;
-    switch( m_aFont.GetFamily() )
+    switch( m_aFont.GetFamilyType() )
     {
     case FAMILY_DECORATIVE: aFD.Family = css::awt::FontFamily::DECORATIVE;break;
     case FAMILY_MODERN: aFD.Family = css::awt::FontFamily::MODERN;break;

@@ -641,7 +641,7 @@ SET_FONTALIGNMENT:
             case RTF_AF:
                 {
                     const vcl::Font& rSVFont = GetFont( sal_uInt16(nTokenValue) );
-                    SvxFontItem aTmpItem( rSVFont.GetFamily(),
+                    SvxFontItem aTmpItem( rSVFont.GetFamilyType(),
                                     rSVFont.GetFamilyName(), rSVFont.GetStyleName(),
                                     rSVFont.GetPitch(), rSVFont.GetCharSet(),
                                     SID_ATTR_CHAR_FONT );
@@ -1823,7 +1823,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
                 nValue = 0;
             const vcl::Font& rSVFont = GetFont( sal_uInt16(nValue) );
             SvxFontItem aTmpItem(
-                                rSVFont.GetFamily(), rSVFont.GetFamilyName(),
+                                rSVFont.GetFamilyType(), rSVFont.GetFamilyName(),
                                 rSVFont.GetStyleName(), rSVFont.GetPitch(),
                                 rSVFont.GetCharSet(), SID_ATTR_CHAR_FONT );
             SetScriptAttr( NOTDEF_CHARTYPE, aTmp, aTmpItem );

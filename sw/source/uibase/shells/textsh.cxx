@@ -995,7 +995,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         {
             SvxFontItem aNewFontItem( aFont );
             aNewFontItem.SetFamilyName( aNewFont.GetFamilyName() );
-            aNewFontItem.SetFamily(  aNewFont.GetFamily());
+            aNewFontItem.SetFamily(  aNewFont.GetFamilyType());
             aNewFontItem.SetPitch(   aNewFont.GetPitch());
             aNewFontItem.SetCharSet( aNewFont.GetCharSet() );
 

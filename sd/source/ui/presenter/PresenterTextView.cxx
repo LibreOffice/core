@@ -311,7 +311,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
                 rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne);
             mpEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem(
-                    aFont.GetFamily(),
+                    aFont.GetFamilyType(),
                     aFont.GetFamilyName(),
                     aFont.GetStyleName(),
                     aFont.GetPitch(),

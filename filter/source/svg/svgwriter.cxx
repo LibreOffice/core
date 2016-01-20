@@ -391,7 +391,7 @@ void SVGAttributeWriter::setFontFamily()
         }
         else
         {
-            FontFamily eFamily = maCurFont.GetFamily();
+            FontFamily eFamily = maCurFont.GetFamilyType();
             if( eFamily == FAMILY_ROMAN )
                 sFontFamily += ", serif";
             else if( eFamily == FAMILY_SWISS )
@@ -849,7 +849,7 @@ void SVGTextWriter::implSetFontFamily()
     }
     else
     {
-        FontFamily eFamily = maCurrentFont.GetFamily();
+        FontFamily eFamily = maCurrentFont.GetFamilyType();
         if( eFamily == FAMILY_ROMAN )
             sFontFamily += ", serif";
         else if( eFamily == FAMILY_SWISS )

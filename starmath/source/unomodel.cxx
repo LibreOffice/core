@@ -881,7 +881,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                     vcl::Font rFont = (*aIter)->GetFace();
                     pDescriptor->sFontName = rFont.GetFamilyName();
                     pDescriptor->nCharSet  = sal::static_int_cast< sal_Int16 >(rFont.GetCharSet());
-                    pDescriptor->nFamily   = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
+                    pDescriptor->nFamily   = sal::static_int_cast< sal_Int16 >(rFont.GetFamilyType());
                     pDescriptor->nPitch    = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
                     pDescriptor->nWeight   = sal::static_int_cast< sal_Int16 >(rFont.GetWeight());
                     pDescriptor->nItalic   = sal::static_int_cast< sal_Int16 >(rFont.GetItalic());
