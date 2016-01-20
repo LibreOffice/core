@@ -1151,13 +1151,13 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
         pProps->dumpXml();
 #endif
 
-    m_pRowSeq = RowSequencePointer_t(new RowSequence_t(nCells));
+    m_aRowSeq = RowSequence_t(nCells);
     m_nCellIndex = 0;
 }
 
 void DomainMapperTableHandler::endRow()
 {
-    m_aTableSeq[m_nRowIndex] = *m_pRowSeq;
+    m_aTableSeq[m_nRowIndex] = m_aRowSeq;
     ++m_nRowIndex;
     m_nCellIndex = 0;
 #ifdef DEBUG_WRITERFILTER
@@ -1207,7 +1207,7 @@ void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTe
     if (!end.get())
         return;
     (*m_pCellSeq)[1] = end->getEnd();
-    (*m_pRowSeq)[m_nCellIndex] = *m_pCellSeq;
+    m_aRowSeq[m_nCellIndex] = *m_pCellSeq;
     ++m_nCellIndex;
 }
 
