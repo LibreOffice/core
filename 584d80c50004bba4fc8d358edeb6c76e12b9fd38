@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_e47c9274",
+        "filename": "svgio/source/svgreader/svgcharacternode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-01-20T16:58:04Z",
+      "side": 1,
+      "message": "rSvgStyleAttributes is handed in, calling again may need time",
+      "range": {
+        "startLine": 513,
+        "startChar": 51,
+        "endLine": 513,
+        "endChar": 72
+      },
+      "revId": "584d80c50004bba4fc8d358edeb6c76e12b9fd38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
