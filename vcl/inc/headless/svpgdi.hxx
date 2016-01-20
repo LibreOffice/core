@@ -43,7 +43,7 @@
 #   define SVP_CAIRO_FORMAT (BMP_FORMAT_32BIT_TC_BGRA | BMP_FORMAT_TOP_DOWN)
 #endif
 
-class BitmapBuffer;
+struct BitmapBuffer;
 class GlyphCache;
 class ServerFont;
 typedef struct _cairo cairo_t;
