@@ -59,6 +59,7 @@
 #include <gridwin.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <boost/checked_delete.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
