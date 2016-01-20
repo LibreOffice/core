@@ -58,7 +58,7 @@ public class _XViewDataSupplier extends MultiMethodTest {
             oObj.setViewData(xAccess);
             XIndexAccess xAccess2 = oObj.getViewData();
             String newView = getViewID(xAccess2);
-            tRes.tested("setViewData()", newView.equals(myview));
+            tRes.tested("setViewData()", newView != null && newView.equals(myview));
         }
     }
 
