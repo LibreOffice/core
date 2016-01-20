@@ -35,7 +35,7 @@ public:
                         ScRTFExport( SvStream&, ScDocument*, const ScRange& );
     virtual             ~ScRTFExport();
 
-    sal_uLong               Write();
+    void                Write();
 };
 
 #endif // INCLUDED_SC_SOURCE_FILTER_INC_RTFEXP_HXX

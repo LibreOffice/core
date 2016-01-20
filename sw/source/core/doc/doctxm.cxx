@@ -370,18 +370,18 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
     return pNewSection;
 }
 
-const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
+void SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet )
 {
-    // check for recursiv TOX
+    // check for recursive TOX
     SwNode* pNd = GetNodes()[ nSttNd ];
     SwSectionNode* pSectNd = pNd->FindSectionNode();
     while( pSectNd )
     {
         SectionType eT = pSectNd->GetSection().GetType();
         if( TOX_HEADER_SECTION == eT || TOX_CONTENT_SECTION == eT )
-            return nullptr;
+            return;
         pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
 
@@ -399,14 +399,13 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd
     if (!pNewSectionNode)
     {
         DelSectionFormat( pFormat );
-        return nullptr;
+        return;
     }
 
     SwTOXBaseSection *const pNewSection(
         dynamic_cast<SwTOXBaseSection*>(& pNewSectionNode->GetSection()));
     if (pNewSection)
         pNewSection->SetTOXName(sSectNm); // rTOX may have had no name...
-    return pNewSection;
 }
 
 /// Get current table of contents

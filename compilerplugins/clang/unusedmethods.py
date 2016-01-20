@@ -241,10 +241,10 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 tmp1list = sorted(tmp1set, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
-for t in tmp1list:
-    print t[1]
-    print "    ", t[0]
-sys.exit(0)
+#for t in tmp1list:
+#    print t[1]
+#    print "    ", t[0]
+#sys.exit(0)
 
 # -------------------------------------------
 # Do the "unused return types" part
@@ -260,6 +260,9 @@ for d in definitionSet:
     if isOtherConstness(d, returnSet):
         continue
     if d[0] == "void":
+        continue
+    # ignore bool returns, provides important documentation in the code
+    if d[0] == "_Bool":
         continue
     # ignore UNO constructor method entrypoints
     if "_get_implementation" in d[1] or "_getFactory" in d[1]:

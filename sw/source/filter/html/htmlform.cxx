@@ -206,7 +206,7 @@ public:
     }
 
     const uno::Reference< XMultiServiceFactory >& GetServiceFactory();
-    const uno::Reference< drawing::XDrawPage >& GetDrawPage();
+    void GetDrawPage();
     const uno::Reference< drawing::XShapes >& GetShapes();
     const uno::Reference< script::XEventAttacherManager >& GetControlEventManager();
     const uno::Reference< script::XEventAttacherManager >& GetFormEventManager();
@@ -276,7 +276,7 @@ const uno::Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory
     return xServiceFactory;
 }
 
-const uno::Reference< drawing::XDrawPage >& SwHTMLForm_Impl::GetDrawPage()
+void SwHTMLForm_Impl::GetDrawPage()
 {
     if( !xDrawPage.is() && pDocSh )
     {
@@ -287,7 +287,6 @@ const uno::Reference< drawing::XDrawPage >& SwHTMLForm_Impl::GetDrawPage()
         xDrawPage = xTextDoc->getDrawPage();
         OSL_ENSURE( xDrawPage.is(), "drawing::XDrawPage nicht erhalten" );
     }
-    return xDrawPage;
 }
 
 const uno::Reference< container::XIndexContainer >& SwHTMLForm_Impl::GetForms()

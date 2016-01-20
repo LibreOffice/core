@@ -471,14 +471,6 @@ namespace basegfx
                                         rRect.Y + rRect.Height );
         }
 
-        ::basegfx::B2IBox b2ISurroundingBoxFromB2DRange( const ::basegfx::B2DRange& rRange )
-        {
-            return ::basegfx::B2IBox( static_cast<sal_Int32>( floor(rRange.getMinX()) ),
-                                      static_cast<sal_Int32>( floor(rRange.getMinY()) ),
-                                      static_cast<sal_Int32>( ceil(rRange.getMaxX()) ),
-                                      static_cast<sal_Int32>( ceil(rRange.getMaxY()) ) );
-        }
-
         ::basegfx::B2IRange b2ISurroundingRangeFromB2DRange( const ::basegfx::B2DRange& rRange )
         {
             return ::basegfx::B2IRange( static_cast<sal_Int32>( floor(rRange.getMinX()) ),

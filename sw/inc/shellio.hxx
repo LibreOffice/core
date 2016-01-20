@@ -313,7 +313,7 @@ public:
     OUString GetLongName( sal_uInt16 ) const;           // Get long name for index.
 
     bool   Delete( sal_uInt16 );
-    sal_uInt16 Rename( sal_uInt16, const OUString*, const OUString* );
+    void   Rename( sal_uInt16, const OUString*, const OUString* );
     sal_uLong  CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
                                     const OUString& rLong );
 

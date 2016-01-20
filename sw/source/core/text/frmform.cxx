@@ -663,7 +663,7 @@ SwContentFrame *SwTextFrame::JoinFrame()
     return pNxt;
 }
 
-SwContentFrame *SwTextFrame::SplitFrame( const sal_Int32 nTextPos )
+void SwTextFrame::SplitFrame( const sal_Int32 nTextPos )
 {
     SwSwapIfSwapped swap( this );
 
@@ -737,8 +737,6 @@ SwContentFrame *SwTextFrame::SplitFrame( const sal_Int32 nTextPos )
     // No SetOfst or CalcFollow, because an AdjustFollow follows immediately anyways
 
     pNew->ManipOfst( nTextPos );
-
-    return pNew;
 }
 
 void SwTextFrame::_SetOfst( const sal_Int32 nNewOfst )

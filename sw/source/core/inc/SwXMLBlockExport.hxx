@@ -57,7 +57,7 @@ public:
 
     virtual ~SwXMLTextBlockExport() {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) override {return 0;}
-    sal_uInt32 exportDoc(const OUString & rText);
+    void exportDoc(const OUString & rText);
     void _ExportAutoStyles() override {}
     void _ExportMasterStyles () override {}
     void _ExportContent() override {}

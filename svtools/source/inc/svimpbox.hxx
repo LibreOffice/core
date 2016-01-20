@@ -201,7 +201,7 @@ private:
     bool ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry*,long nY );
 
     void                PositionScrollBars( Size& rOSize, sal_uInt16 nMask );
-    sal_uInt16              AdjustScrollBars( Size& rSize );
+    void                AdjustScrollBars( Size& rSize );
 
     void                BeginScroll();
     void                EndScroll();

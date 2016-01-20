@@ -307,7 +307,7 @@ public:
                             bool& bRight, bool bInsertCursor );
 
     /// Methods to manage the FollowFrame
-    SwContentFrame *SplitFrame( const sal_Int32 nTextPos );
+    void            SplitFrame( const sal_Int32 nTextPos );
     SwContentFrame *JoinFrame();
     inline sal_Int32  GetOfst() const { return mnOffset; }
            void        _SetOfst( const sal_Int32 nNewOfst );

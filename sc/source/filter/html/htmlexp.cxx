@@ -315,7 +315,7 @@ Size ScHTMLExport::MMToPixel( const Size& rSize )
     return aSize;
 }
 
-sal_uLong ScHTMLExport::Write()
+void ScHTMLExport::Write()
 {
     if (!mbSkipHeaderFooter)
     {
@@ -329,8 +329,6 @@ sal_uLong ScHTMLExport::Write()
     OUT_LF();
     if (!mbSkipHeaderFooter)
         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_html );
-
-    return rStrm.GetError();
 }
 
 void ScHTMLExport::WriteHeader()

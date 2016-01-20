@@ -282,7 +282,7 @@ public:
        @param bPointFirst true: If the point is behind the mark then swap.
                           false: If the mark is behind the point then swap.
     */
-    SwPaM & Normalize(bool bPointFirst = true);
+    void Normalize(bool bPointFirst = true);
 
     /// @return the document (SwDoc) at which the PaM is registered
     SwDoc* GetDoc() const   { return m_pPoint->nNode.GetNode().GetDoc(); }

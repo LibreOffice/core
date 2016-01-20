@@ -757,20 +757,6 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
 }
 
 
-sal_Int32 SwDBManager::GetRowCount(uno::Reference<sdbc::XConnection> xConnection,
-                             const OUString& rTableName)
-{
-    uno::Reference<beans::XPropertySet> xRow = GetRowSupplier(xConnection, rTableName, SwDBSelect::UNKNOWN);
-    sal_Int32 nCnt = 0;
-
-    if(xRow.is())
-        xRow->getPropertyValue( "RowCount" ) >>= nCnt;
-
-    return nCnt;
-}
-
-
-
 SwDBManager::SwDBManager(SwDoc* pDoc)
     : bCancel(false)
     , bInitDBFields(false)

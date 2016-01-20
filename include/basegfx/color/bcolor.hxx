@@ -174,12 +174,11 @@ namespace basegfx
             return *this;
         }
 
-        BColor& invert()
+        void invert()
         {
             mfX = 1.0 - mfX;
             mfY = 1.0 - mfY;
             mfZ = 1.0 - mfZ;
-            return *this;
         }
 
         static const BColor& getEmptyBColor()

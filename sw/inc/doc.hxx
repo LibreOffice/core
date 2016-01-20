@@ -960,7 +960,7 @@ public:
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = nullptr,
                                             bool bExpand = false );
-    const SwTOXBaseSection* InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
+    void              InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = nullptr );
     static SwTOXBase* GetCurTOX( const SwPosition& rPos );
@@ -1523,7 +1523,7 @@ public:
     // Interface for the list of Ruby - texts/attributes
     static sal_uInt16 FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                         sal_uInt16 nMode );
-    sal_uInt16 SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
+    void SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         sal_uInt16 nMode );
 
     void ReadLayoutCache( SvStream& rStream );

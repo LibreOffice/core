@@ -370,7 +370,7 @@ public:
                          vcl::RenderContext& rRenderContext, const Rectangle& rRect );
 
     // Fill temporary doc with selected text for Print or PDF export.
-    SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
+    void FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     // Called internally for Shell. Formats pages.
     void CalcPagesForPrint( sal_uInt16 nMax );

@@ -48,45 +48,6 @@ jclass java_sql_DriverPropertyInfo::getMyClass() const
 }
 
 
-OUString java_sql_DriverPropertyInfo::name()
-{
-    OUString aStr;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
-    {
-        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"name","Ljava/lang/String;");
-        if(id)
-            aStr = JavaString2String(t.pEnv, static_cast<jstring>(t.pEnv->GetObjectField( object, id)));
-    } //t.pEnv
-    return aStr;
-}
-
-OUString java_sql_DriverPropertyInfo::description()
-{
-    OUString aStr;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
-    {
-        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"description","Ljava/lang/String;");
-        if(id)
-            aStr = JavaString2String(t.pEnv, static_cast<jstring>(t.pEnv->GetObjectField( object, id)));
-    } //t.pEnv
-    return aStr;
-}
-
-OUString java_sql_DriverPropertyInfo::value()
-{
-    OUString aStr;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
-    {
-        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"value","Ljava/lang/String;");
-        if(id)
-            aStr = JavaString2String(t.pEnv, static_cast<jstring>(t.pEnv->GetObjectField( object, id)));
-    } //t.pEnv
-    return aStr;
-}
-
 bool java_sql_DriverPropertyInfo::required()
 {
     jboolean out(0);
@@ -99,22 +60,5 @@ bool java_sql_DriverPropertyInfo::required()
     } //t.pEnv
     return out;
 }
-
-Sequence< OUString> java_sql_DriverPropertyInfo::choices()
-{
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
-    {
-        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"choices","[Ljava/lang/String;");
-        if(id)
-        {
-            const java_lang_String * pEmpty = nullptr;
-            const OUString * pEmpty2 = nullptr;
-            return copyArrayAndDelete(t.pEnv, static_cast<jobjectArray>(t.pEnv->GetObjectField( object, id)), pEmpty2, pEmpty);
-        }
-    } //t.pEnv
-    return Sequence< OUString>();
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -109,7 +109,7 @@ public:
     const SwLineLayout *GetPrevLine();
 
     void CharToLine( const sal_Int32 );
-    const SwLineLayout *TwipsToLine(const SwTwips);
+    void TwipsToLine(const SwTwips);
 
     // Truncates all after pCurr
     void TruncLines( bool bNoteFollow = false );

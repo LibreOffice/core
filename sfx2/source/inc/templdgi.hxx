@@ -265,7 +265,7 @@ protected:
 
     void SelectStyle( const OUString& rStyle );
     bool HasSelectedStyle() const;
-    SfxStyleSheetBase* GetSelectedStyle() const;
+    void GetSelectedStyle() const;
     void FillTreeBox();
     void Update_Impl();
     void UpdateFamily_Impl();

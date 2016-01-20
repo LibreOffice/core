@@ -401,10 +401,10 @@ public:
 
     void             Current( const SdrObject *pNew ) { m_pCurrent = pNew; }
     const SdrObject *operator()() const { return m_pCurrent; }
-    const SdrObject *Top();
+    void             Top();
     const SdrObject *Bottom();
     const SdrObject *Next();
-    const SdrObject *Prev();
+    void             Prev();
 };
 
 class StackHack

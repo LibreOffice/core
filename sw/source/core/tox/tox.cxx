@@ -455,7 +455,7 @@ void SwTOXBase::RegisterToTOXType( SwTOXType& rType )
     rType.Add( this );
 }
 
-SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
+void SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 {
     maMSTOCExpression = rSource.maMSTOCExpression;
     SwTOXType* pType = const_cast<SwTOXType*>(rSource.GetTOXType());
@@ -507,8 +507,6 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
         m_aName = rSource.GetTOXName();
     else
         m_aName = pDoc->GetUniqueTOXBaseName( *pType, rSource.GetTOXName() );
-
-    return *this;
 }
 
 // TOX specific functions

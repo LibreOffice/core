@@ -1181,12 +1181,11 @@ void SvImpLBox::PositionScrollBars( Size& rSize, sal_uInt16 nMask )
         aScrBarBox->Hide();
 }
 
-// nResult: Bit0 == VerSBar Bit1 == HorSBar
-sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
+void SvImpLBox::AdjustScrollBars( Size& rSize )
 {
     long nEntryHeight = pView->GetEntryHeight();
     if( !nEntryHeight )
-        return 0;
+        return;
 
     sal_uInt16 nResult = 0;
 
@@ -1303,7 +1302,6 @@ sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
         aHorSBar->Hide();
     }
     rSize = aOSize;
-    return nResult;
 }
 
 void SvImpLBox::InitScrollBarBox()

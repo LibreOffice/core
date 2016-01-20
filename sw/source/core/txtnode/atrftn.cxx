@@ -497,23 +497,23 @@ void SwTextFootnote::DelFrames( const SwFrame* pSib )
 
 /// Set the sequence number for the current footnote.
 /// @returns The new sequence number or USHRT_MAX if invalid.
-sal_uInt16 SwTextFootnote::SetSeqRefNo()
+void SwTextFootnote::SetSeqRefNo()
 {
     if( !m_pTextNode )
-        return USHRT_MAX;
+        return;
 
     SwDoc* pDoc = m_pTextNode->GetDoc();
     if( pDoc->IsInReading() )
-        return USHRT_MAX;
+        return;
 
     std::set<sal_uInt16> aUsedNums;
     std::vector<SwTextFootnote*> badRefNums;
     ::lcl_FillUsedFootnoteRefNumbers(*pDoc, this, aUsedNums, badRefNums);
     if ( ::lcl_IsRefNumAvailable(aUsedNums, m_nSeqNo) )
-        return m_nSeqNo;
+        return;
     std::vector<sal_uInt16> unused;
     ::lcl_FillUnusedSeqRefNums(unused, aUsedNums, 1);
-    return m_nSeqNo = unused[0];
+    m_nSeqNo = unused[0];
 }
 
 /// Set a unique sequential reference number for every footnote in the document.
