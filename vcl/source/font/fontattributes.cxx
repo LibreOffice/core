@@ -61,6 +61,7 @@
 
 FontAttributes::FontAttributes()
 :   meWeight( WEIGHT_DONTKNOW ),
+    meFamily( FAMILY_DONTKNOW ),
     mePitch( PITCH_DONTKNOW ),
     meWidthType ( WIDTH_DONTKNOW ),
     meItalic ( ITALIC_NONE ),
