@@ -19,7 +19,8 @@
 
 #include <sal/config.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
+#include <vector>
 
 #include <sal/types.h>
 #include <tools/debug.hxx>
@@ -79,7 +80,7 @@ private:
     mutable double  mfBaseAdv;
 
     mutable bool  bLayouted; // true if the glyph layout information are cached and current;
-    mutable boost::ptr_vector<CTRunData> m_vRunData;
+    mutable std::vector<std::unique_ptr<CTRunData>> m_vRunData;
 
 };
 
@@ -109,7 +110,7 @@ CTLayout::~CTLayout()
 
 bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    m_vRunData.release();
+    m_vRunData.clear();
     bLayouted = false;
 
     // release an eventual older layout
@@ -452,7 +453,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
 
 bool CTLayout::CacheGlyphLayout() const // eew!
 {
-    m_vRunData.release();
+    m_vRunData.clear();
     if(!mpCTLine)
     {
         return false;
@@ -465,7 +466,7 @@ bool CTLayout::CacheGlyphLayout() const // eew!
     {
         CTRunRef pRun = static_cast<CTRunRef>(CFArrayGetValueAtIndex( aRuns, i ));
         CTRunData* pRunData = new CTRunData(pRun, nPos);
-        m_vRunData.push_back(pRunData);
+        m_vRunData.push_back(std::unique_ptr<CTRunData>(pRunData));
         nPos += pRunData->m_nGlyphs;
     }
     bLayouted = true;
@@ -494,9 +495,9 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
     CTFontDescriptorRef pFontDesc = nullptr;
     FontAttributes rDevFontAttr;
 
-    boost::ptr_vector<CTRunData>::const_iterator iter = m_vRunData.begin();
+    auto iter = m_vRunData.begin();
 
-    while(iter != m_vRunData.end() && iter->m_EndPos <= nStart)
+    while (iter != m_vRunData.end() && (*iter)->m_EndPos <= nStart)
     {
         ++iter;
     }
@@ -509,7 +510,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
         if( pFallbackFonts )
         {
             pFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName ));
-            pFontDesc = CTFontCopyFontDescriptor( iter->m_pFont );
+            pFontDesc = CTFontCopyFontDescriptor( (*iter)->m_pFont );
             rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, nullptr );
         }
     }
@@ -518,19 +519,19 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
     while( i < nStart + nLen )
     {
             // convert glyph details for VCL
-        int j = i - iter->m_StartPos;
-        *(pOutGlyphIds++) = iter->m_pGlyphs[ j ];
+        int j = i - (*iter)->m_StartPos;
+        *(pOutGlyphIds++) = (*iter)->m_pGlyphs[ j ];
         if( pGlyphAdvances )
         {
-            *(pGlyphAdvances++) = lrint(iter->m_pAdvances[ j ].width);
+            *(pGlyphAdvances++) = lrint((*iter)->m_pAdvances[ j ].width);
         }
         if( pCharIndexes )
         {
-            *(pCharIndexes++) = iter->m_pStringIndices[ j ] + mnMinCharPos;
+            *(pCharIndexes++) = (*iter)->m_pStringIndices[ j ] + mnMinCharPos;
         }
         if( pFallbackFonts )
         {
-            if ( !CFEqual( iter->m_pFont,  pFont ) )
+            if (!CFEqual((*iter)->m_pFont,  pFont))
             {
                 pFallbackFont = new CoreTextFontFace( rDevFontAttr, reinterpret_cast<sal_IntPtr>(pFontDesc) );
                 *(pFallbackFonts++) = pFallbackFont;
@@ -542,23 +543,23 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
         }
         if( i == nStart )
         {
-            const CGPoint& rFirstPos = iter->m_pPositions[ j ];
+            const CGPoint& rFirstPos = (*iter)->m_pPositions[ j ];
             rPos = GetDrawPosition( Point( rFirstPos.x, rFirstPos.y) );
         }
         i += 1;
         count += 1;
-        if(i == iter->m_EndPos)
+        if (i == (*iter)->m_EndPos)
         {
             // note: we assume that we do not have empty runs in the middle of things
             ++iter;
-            if( iter == m_vRunData.end())
+            if (iter == m_vRunData.end())
             {
                 break;
             }
             if( pFallbackFonts )
             {
                 pFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName ));
-                pFontDesc = CTFontCopyFontDescriptor( iter->m_pFont );
+                pFontDesc = CTFontCopyFontDescriptor( (*iter)->m_pFont );
                 rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, nullptr );
             }
         }
