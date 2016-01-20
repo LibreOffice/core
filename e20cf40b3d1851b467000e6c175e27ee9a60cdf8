@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_c4cfceae",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-20T20:14:34Z",
+      "side": 1,
+      "message": "Just a nitpick: we prefer block opening braces on a separate line, makes things more readable. Also, if you jump between matching braces in your editor the cursor stays in the same column.\n\nI\u0027ll submit am amended commit.",
+      "revId": "e20cf40b3d1851b467000e6c175e27ee9a60cdf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
