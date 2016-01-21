@@ -118,6 +118,9 @@ public class _XBackend extends MultiMethodTest {
         } catch (com.sun.star.container.NoSuchElementException e) {
             log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
+        } catch (com.sun.star.uno.Exception e) {
+            log.println("unexpected Exception " + e + " -- FAILED");
+            res = false;
         }
 
         tRes.tested("getUpdateHandler()", res);
@@ -127,8 +130,7 @@ public class _XBackend extends MultiMethodTest {
         boolean res = true;
 
         try {
-            XStringSubstitution sts = createStringSubstitution(
-                                              tParam.getMSF());
+            XStringSubstitution sts = createStringSubstitution(tParam.getMSF());
             String ent = sts.getSubstituteVariableValue("$(inst)") +
                          "/share/registry";
             XLayer[] Layers = oObj.listLayers(
@@ -145,6 +147,9 @@ public class _XBackend extends MultiMethodTest {
             log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
         } catch (com.sun.star.container.NoSuchElementException e) {
+            log.println("unexpected Exception " + e + " -- FAILED");
+            res = false;
+        } catch (com.sun.star.uno.Exception e) {
             log.println("unexpected Exception " + e + " -- FAILED");
             res = false;
         }
@@ -236,21 +241,10 @@ public class _XBackend extends MultiMethodTest {
         return res;
     }
 
-    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) {
-        Object xPathSubst = null;
-
-        try {
-            xPathSubst = xMSF.createInstance(
-                                 "com.sun.star.util.PathSubstitution");
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace();
-        }
-
-        if (xPathSubst != null) {
-            return UnoRuntime.queryInterface(
-                           XStringSubstitution.class, xPathSubst);
-        } else {
-            return null;
-        }
+    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) throws com.sun.star.uno.Exception
+    {
+        Object xPathSubst = xMSF.createInstance(
+                    "com.sun.star.util.PathSubstitution");
+        return UnoRuntime.queryInterface(XStringSubstitution.class, xPathSubst);
     }
 }
