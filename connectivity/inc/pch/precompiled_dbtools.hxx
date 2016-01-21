@@ -40,7 +40,6 @@
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/spirit/include/classic_core.hpp>
 #include <boost/type_traits.hpp>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
