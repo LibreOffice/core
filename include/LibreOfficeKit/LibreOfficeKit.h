@@ -55,6 +55,8 @@ struct _LibreOfficeKitClass
     LibreOfficeKitDocument* (*documentLoadWithOptions) (LibreOfficeKit* pThis,
                                                         const char* pURL,
                                                         const char* pOptions);
+    void (*freeError) (char* pFree);
+
 #ifdef LOK_USE_UNSTABLE_API
     void (*registerCallback) (LibreOfficeKit* pThis,
                               LibreOfficeKitCallback pCallback,
@@ -63,7 +65,6 @@ struct _LibreOfficeKitClass
     /// @see lok::Office::getFilterTypes().
     char* (*getFilterTypes) (LibreOfficeKit* pThis);
 #endif
-    void  (*freeError)     (const char *pfree);
 
 };
 
@@ -84,7 +85,6 @@ struct _LibreOfficeKitDocumentClass
                    const char* pUrl,
                    const char* pFormat,
                    const char* pFilterOptions);
-    void  (*freeError)     (const char *pfree);
 
 #ifdef LOK_USE_UNSTABLE_API
     /// @see lok::Document::getDocumentType().
