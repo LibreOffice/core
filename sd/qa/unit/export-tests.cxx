@@ -142,6 +142,7 @@ public:
     void testTdf91378();
     void testBnc822341();
     void testMathObject();
+    void testMathObjectPPT2010();
     void testTdf80224();
     void testTdf92527();
 
@@ -182,6 +183,7 @@ public:
 
     CPPUNIT_TEST(testBnc822341);
     CPPUNIT_TEST(testMathObject);
+    CPPUNIT_TEST(testMathObjectPPT2010);
     CPPUNIT_TEST(testTdf80224);
 
     CPPUNIT_TEST(testExportTransitionsPPTX);
@@ -1177,6 +1179,35 @@ void SdExportTest::testMathObject()
     }
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testMathObjectPPT2010()
+{
+    // Check import / export of math object
+#if 0 // disabled on release branch, needs 332a796366b7cb91dff41de4b9ffb17843112a3e
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/Math.pptx"), PPTX);
+    utl::TempFile tempFile1;
+    xDocShRef = saveAndReload(xDocShRef, PPTX, &tempFile1);
+
+    // Export an MS specific ole object (imported from a PPTX document)
+    {
+        xmlDocPtr pXmlDocContent = parseExport(tempFile1, "ppt/slides/slide1.xml");
+        assertXPath(pXmlDocContent,
+            "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice",
+            "Requires",
+            "a14");
+        assertXPathContent(pXmlDocContent,
+            "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:txBody/a:p/a14:m/m:oMath/m:sSup/m:e/m:r[1]/m:t",
+            OUString::fromUtf8("\xf0\x9d\x91\x8e")); // non-BMP char
+
+        const SdrPage *pPage = GetPage(1, xDocShRef);
+        const SdrObject* pObj = dynamic_cast<SdrObject*>(pPage->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier());
+    }
+
+    xDocShRef->DoClose();
+#endif
 }
 
 void SdExportTest::testBulletMarginAndIndentation()
