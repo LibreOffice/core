@@ -63,6 +63,7 @@ public:
     void                SetItalic( const FontItalic eItalic )           { meItalic = eItalic; }
     void                SetWeight( const FontWeight eWeight )           { meWeight = eWeight; }
     void                SetWidthType( const FontWidth eWidthType )      { meWidthType = eWidthType; }
+    void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
 
     void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbol = bSymbolFlag; }
 
@@ -75,7 +76,7 @@ public:
     /* Missing function: OUString GetMapNames() const; */
 
     bool                IsBuiltInFont() const                           { return mbDevice; }
-    /* Missing function: bool CanEmbed() const; */
+    bool                CanEmbed() const                                { return mbEmbeddable; }
     /* Missing function: bool CanSubSet() const; */
     /* Missing function: bool CanRotate() const; */
     /* Missing function: bool HasMapNames() const; */
@@ -84,10 +85,9 @@ public:
     /* Missing function: void AddMapName( OUString const& ); */
 
     void                SetBuiltInFontFlag( bool bIsBuiltInFont )       { mbDevice = bIsBuiltInFont; }
-    /* Missing function: void SetEmbeddableFlag( bool ); */
+    void                SetEmbeddableFlag( bool bEmbeddable )           { mbEmbeddable = bEmbeddable; }
     /* Missing function: void SetSettableFlag( bool ); */
     /* missing function: void SetOrientationFlag( bool ); */
-    void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
 
     bool                operator==( const ImplFont& ) const;
 
@@ -124,7 +124,8 @@ private:
                         mbShadow:1,
                         mbVertical:1,
                         mbTransparent:1,    // compatibility, now on output device
-                        mbDevice:1;
+                        mbDevice:1,
+                        mbEmbeddable:1;
     int                 mnQuality;
 
     friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );

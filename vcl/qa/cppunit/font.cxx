@@ -28,6 +28,7 @@ public:
     void testItalic();
     void testQuality();
     void testBuiltInFontFlag();
+    void testEmbeddableFontFlag();
     void testSymbolFlagAndCharSet();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
@@ -38,6 +39,7 @@ public:
     CPPUNIT_TEST(testItalic);
     CPPUNIT_TEST(testQuality);
     CPPUNIT_TEST(testBuiltInFontFlag);
+    CPPUNIT_TEST(testEmbeddableFontFlag);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -119,6 +121,16 @@ void VclFontTest::testBuiltInFontFlag()
 
     aFont.SetBuiltInFontFlag( true );
     CPPUNIT_ASSERT_EQUAL( true, aFont.IsBuiltInFont() );
+}
+
+void VclFontTest::testEmbeddableFontFlag()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL( false, aFont.CanEmbed() );
+
+    aFont.SetEmbeddableFlag( true );
+    CPPUNIT_ASSERT_EQUAL( true, aFont.CanEmbed() );
 }
 
 void VclFontTest::testSymbolFlagAndCharSet()
