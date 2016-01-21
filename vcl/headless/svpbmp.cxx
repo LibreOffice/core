@@ -19,6 +19,10 @@
 
 #ifndef IOS
 
+#include <sal/config.h>
+
+#include <cstring>
+
 #include "headless/svpbmp.hxx"
 #include "headless/svpgdi.hxx"
 #include "headless/svpinst.hxx"
@@ -117,15 +121,17 @@ BitmapBuffer* ImplCreateDIB(
                 pDIB->maPalette.SetEntryCount( nColors );
             }
 
+            auto size = pDIB->mnScanlineSize * pDIB->mnHeight;
             try
             {
-                pDIB->mpBits = new sal_uInt8[ pDIB->mnScanlineSize * pDIB->mnHeight ];
+                pDIB->mpBits = new sal_uInt8[size];
             }
             catch (const std::bad_alloc&)
             {
                 delete pDIB;
                 pDIB = nullptr;
             }
+            std::memset(pDIB->mpBits, 0, size);
         }
     }
     else
