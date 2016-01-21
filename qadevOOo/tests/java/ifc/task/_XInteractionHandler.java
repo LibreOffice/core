@@ -60,8 +60,6 @@ public class _XInteractionHandler extends MultiMethodTest {
     */
     @Override
     public void before() {
-        XInteractionRequest request = (XInteractionRequest)
-            tEnv.getObjRelation("XInteractionHandler.Request") ;
     }
 
     /**
