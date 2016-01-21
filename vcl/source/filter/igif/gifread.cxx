@@ -802,33 +802,30 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 
 VCL_DLLPUBLIC bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 {
-    GIFReader*  pGIFReader = static_cast<GIFReader*>(rGraphic.GetContext());
-    SvStreamEndian nOldFormat = rStm.GetEndian();
-    ReadState   eReadState;
-    bool        bRet = true;
+    std::unique_ptr<GIFReader>  xGIFReader(static_cast<GIFReader*>(rGraphic.GetContext()));
+    rGraphic.SetContext(nullptr);
 
+    SvStreamEndian nOldFormat = rStm.GetEndian();
     rStm.SetEndian( SvStreamEndian::LITTLE );
 
-    if( !pGIFReader )
-        pGIFReader = new GIFReader( rStm );
+    if (!xGIFReader)
+        xGIFReader.reset(new GIFReader(rStm));
 
-    rGraphic.SetContext( nullptr );
-    eReadState = pGIFReader->ReadGIF( rGraphic );
+    bool bRet = true;
 
-    if( eReadState == GIFREAD_ERROR )
+    ReadState eReadState = xGIFReader->ReadGIF(rGraphic);
+
+    if (eReadState == GIFREAD_ERROR)
     {
         bRet = false;
-        delete pGIFReader;
     }
-    else if( eReadState == GIFREAD_OK )
-        delete pGIFReader;
-    else
+    else if (eReadState == GIFREAD_NEED_MORE)
     {
-        rGraphic = pGIFReader->GetIntermediateGraphic();
-        rGraphic.SetContext( pGIFReader );
+        rGraphic = xGIFReader->GetIntermediateGraphic();
+        rGraphic.SetContext(xGIFReader.release());
     }
 
-    rStm.SetEndian( nOldFormat );
+    rStm.SetEndian(nOldFormat);
 
     return bRet;
 }
