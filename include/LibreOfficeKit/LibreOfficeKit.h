@@ -50,14 +50,15 @@ struct _LibreOfficeKitClass
     LibreOfficeKitDocument* (*documentLoadWithOptions) (LibreOfficeKit* pThis,
                                                         const char* pURL,
                                                         const char* pOptions);
-#ifdef LOK_USE_UNSTABLE_API
+    void (*freeError) (char* pFree);
+
+#if defined LOK_USE_UNSTABLE_API
     void (*registerCallback) (LibreOfficeKit* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);
 
     bool (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
 #endif
-    void  (*freeError)     (const char *pfree);
 
 };
 
@@ -78,7 +79,6 @@ struct _LibreOfficeKitDocumentClass
                    const char* pUrl,
                    const char* pFormat,
                    const char* pFilterOptions);
-    void  (*freeError)     (const char *pfree);
 
 #ifdef LOK_USE_UNSTABLE_API
     /// @see lok::Document::getDocumentType().

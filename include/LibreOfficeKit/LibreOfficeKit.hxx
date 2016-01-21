@@ -247,10 +247,6 @@ public:
         mpDoc->pClass->resetSelection(mpDoc);
     }
 #endif // LOK_USE_UNSTABLE_API
-    inline void freeError(const char *pfree)
-    {
-        mpDoc->pClass->freeError(pfree);
-    }
 };
 
 /// The lok::Office class represents one started LibreOfficeKit instance.
@@ -296,12 +292,14 @@ public:
     {
         return mpThis->pClass->getError(mpThis);
     }
-    inline void freeError(const char *pfree)
+
+    /// Frees the memory pointed to by pFree.
+    inline void freeError(char* pFree)
     {
-        mpThis->pClass->freeError(pfree);
+        mpThis->pClass->freeError(pFree);
     }
 
-#ifdef LOK_USE_UNSTABLE_API
+#if defined LOK_USE_UNSTABLE_API
     /**
      * Run a macro.
      *

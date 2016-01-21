@@ -300,7 +300,7 @@ static int                     lo_initialize    (LibreOfficeKit* pThis, const ch
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
 static bool                    lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
-static void                    lo_freeError     (const char *pfree);
+static void                    lo_freeError     (char* pFree);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
@@ -974,7 +974,7 @@ static char* lo_getError (LibreOfficeKit *pThis)
     return pMemory;
 }
 
-static void lo_freeError(const char *pfree)
+static void lo_freeError(char *pfree)
 {
     free((void *) pfree);
 }
