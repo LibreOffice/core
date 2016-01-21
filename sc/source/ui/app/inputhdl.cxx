@@ -2982,13 +2982,16 @@ void ScInputHandler::AddRefEntry()
         return;                             // E.g. FillMode
 
     DataChanging();                         // Cannot be new
-
     RemoveSelection();
+    OUString aText;
+    aText = GetEditText(pEngine);
     if (pTableView)
-        pTableView->InsertText( OUString(cSep) );
+        {
+            if (isalpha(aText[aText.getLength()-1]) || isdigit(aText[aText.getLength()-1]))
+                pTableView->InsertText( OUString(cSep) );
+        }
     if (pTopView)
         pTopView->InsertText( OUString(cSep) );
-
     DataChanged();
 }
 
