@@ -1325,7 +1325,14 @@ void SaveInData::ApplyMenu(
 void
 MenuSaveInData::Reset()
 {
-    GetConfigManager()->reset();
+    try
+    {
+        GetConfigManager()->removeSettings( m_aMenuResourceURL );
+    }
+    catch ( const css::uno::Exception& )
+    {}
+
+    PersistChanges( GetConfigManager() );
 
     delete pRootEntry;
     pRootEntry = nullptr;
