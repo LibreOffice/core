@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_cffec76a",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-21T17:10:58Z",
+      "side": 1,
+      "message": "This look wrong....\n\nIF is not set in ENV, then it is set to true ? while if ENV sets it to true in ENV the function just returns ?",
+      "revId": "f4563a3b469151cc3613f69d5f6e373f94f11471",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
