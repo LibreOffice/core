@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -2982,12 +2983,22 @@ void ScInputHandler::AddRefEntry()
         return;                             // E.g. FillMode
 
     DataChanging();                         // Cannot be new
-
     RemoveSelection();
+    OUString aText;
+    aText = GetEditText(pEngine);
+    if (aText.endsWith(" "))
+        aText = aText.trim();
+
     if (pTableView)
-        pTableView->InsertText( OUString(cSep) );
+    {
+        if (!aText.endsWith("(") && !aText.endsWith(",") && !aText.endsWith("="))
+            pTableView->InsertText(OUString(cSep));
+    }
     if (pTopView)
-        pTopView->InsertText( OUString(cSep) );
+    {
+        if (!aText.endsWith("(") && !aText.endsWith(",") && !aText.endsWith("="))
+            pTopView->InsertText(OUString(cSep));
+    }
 
     DataChanged();
 }
