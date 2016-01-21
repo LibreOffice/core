@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_24269ace",
+        "filename": "ucb/CppunitTest_ucb_webdav_local.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-21T11:15:29Z",
+      "side": 1,
+      "message": "$(gb_UWINAPI) should not appear here",
+      "revId": "17503d4eee37cb06c3fbfcb9a256d2ced1c4fc1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_442d9ea6",
+        "filename": "ucb/qa/cppunit/webdav/webdav_local_neon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-21T11:15:29Z",
+      "side": 1,
+      "message": "it is better to use an unnamed namespace; the compiler can then produce better warnings in case there is unused code (e.g., you forgot to actually register the test code)",
+      "revId": "17503d4eee37cb06c3fbfcb9a256d2ced1c4fc1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_841dc675",
+        "filename": "ucb/qa/cppunit/webdav/webdav_local_neon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-21T11:15:29Z",
+      "side": 1,
+      "message": "use CPPUNIT_ASSERT_EQUAL[_MESSAGE] (taking arguments in the somewhat odd \"expected, actual\" order; you also need to wrap \"http\" in OUString(...) then) instead of  CPPUNIT_ASSERT[_MESSAGE]; that way, CppUnit will print out the values when they don\u0027t match",
+      "revId": "17503d4eee37cb06c3fbfcb9a256d2ced1c4fc1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
