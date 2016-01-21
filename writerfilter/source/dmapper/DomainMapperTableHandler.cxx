@@ -71,7 +71,7 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
                                           TablePropertyMapPtr pProps)
 {
     m_aTableProperties = pProps;
-    m_aTableSeq.realloc(nRows);
+    m_aTableSeq = TableSequence_t(nRows);
     m_nRowIndex = 0;
 
 #ifdef DEBUG_WRITERFILTER
@@ -629,7 +629,6 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
     PropertyMapVector2::const_iterator aLastRowIterator = m_aCellProperties.end() - 1;
     sal_Int32 nRow = 0;
 
-    //it's a uno::Sequence< beans::PropertyValues >*
     css::uno::Sequence<css::beans::PropertyValues>* pCellProperties = aCellProperties.getArray();
     PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
     while( aRowOfCellsIterator != aRowOfCellsIteratorEnd )
@@ -1189,10 +1188,10 @@ void DomainMapperTableHandler::startCell(const css::uno::Reference< css::text::X
 #endif
 
     //add a new 'row' of properties
-    m_pCellSeq = CellSequencePointer_t(new CellSequence_t(2));
+    m_aCellSeq = CellSequence_t(2);
     if (!start.get())
         return;
-    (*m_pCellSeq)[0] = start->getStart();
+    m_aCellSeq[0] = start->getStart();
 }
 
 void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTextRange > & end)
@@ -1206,8 +1205,8 @@ void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTe
 
     if (!end.get())
         return;
-    (*m_pCellSeq)[1] = end->getEnd();
-    m_aRowSeq[m_nCellIndex] = *m_pCellSeq;
+    m_aCellSeq[1] = end->getEnd();
+    m_aRowSeq[m_nCellIndex] = m_aCellSeq;
     ++m_nCellIndex;
 }
 
