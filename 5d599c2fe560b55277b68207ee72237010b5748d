@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_6f04fb14",
+        "filename": "sc/inc/colcontainer.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "Do we really need nLast? That should be always the same as aCols.size()",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a431ea0d",
+        "filename": "sc/inc/colcontainer.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "Do we really need the int version? That one looks like it is going to hurt us at some point.",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_84366601",
+        "filename": "sc/inc/colcontainer.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_042396be",
+        "filename": "sc/inc/edittextiterator.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "No need for that.",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_44047e16",
+        "filename": "sc/source/core/data/colcontainer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "Put the nCol in the for header.",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a418ca85",
+        "filename": "sc/source/core/data/colcontainer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "Please add an assert for the \u003c0 case. We should fix the callers in that case.",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6407021d",
+        "filename": "sc/source/core/data/colcontainer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "Please put the declaration into the for header.\n\nfor (SCCOL nIdx \u003d 0; nIdx \u003c\u003d nLast; ++nIdx)",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6430a202",
+        "filename": "sc/source/core/data/edittextiterator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "This will fail if there are no valid columns.",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8fff9f00",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-01-21T11:31:13Z",
+      "side": 1,
+      "message": "MAXCOL + 1 \u003d\u003d MAXCOLCOUNT",
+      "revId": "5d599c2fe560b55277b68207ee72237010b5748d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
