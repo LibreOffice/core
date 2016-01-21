@@ -39,6 +39,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xflclit.hxx>
+#include <sax/tools/converter.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -129,6 +130,7 @@ public:
     void testCellLeftAndRightMargin();
     void testRightToLeftParaghraph();
     void testTextboxWithHyperlink();
+    void testDatetimeExport();
     void testTableCellBorder();
     void testBulletColor();
     void testTdf62176();
@@ -171,6 +173,7 @@ public:
     CPPUNIT_TEST(testCellLeftAndRightMargin);
     CPPUNIT_TEST(testRightToLeftParaghraph);
     CPPUNIT_TEST(testTextboxWithHyperlink);
+    CPPUNIT_TEST(testDatetimeExport);
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testBulletColor);
     CPPUNIT_TEST(testTdf62176);
@@ -974,6 +977,21 @@ void SdExportTest::testTextboxWithHyperlink()
     xPropSet->getPropertyValue("URL") >>= aURL;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("http://www.xkcd.com/"), aURL);
 
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testDatetimeExport()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/datetime3.pptx"), PPTX);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+    util::DateTime aDate = xDocumentProperties->getCreationDate();
+    OUStringBuffer aBuffer;
+    sax::Converter::convertDateTime(aBuffer, aDate, nullptr);
+    // Metadata wasn't imported, this was 0000-00-00.
+    CPPUNIT_ASSERT_EQUAL(OUString("2016-01-19T20:57:43"), aBuffer.makeStringAndClear());
     xDocShRef->DoClose();
 }
 
