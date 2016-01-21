@@ -94,19 +94,14 @@ public class MutableTreeNode extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
-    private void fillNode( XMutableTreeNode xNode ){
+    private void fillNode( XMutableTreeNode xNode ) throws com.sun.star.uno.Exception {
 
         if( xNode.getChildCount() == 0 )
         {
             xNode.getDataValue();
 
             String officeUserPath = utils.getOfficeUserPath(mxMSF);
-            Object fileacc = null;
-            try {
-                fileacc = mxMSF.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            } catch (com.sun.star.uno.Exception ex) {
-                ex.printStackTrace();
-            }
+            Object fileacc = mxMSF.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
             UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
 
 
