@@ -117,7 +117,7 @@ bool ScDocument::CopyOneCellFromClip(
     SCTAB nTabEnd = rCxt.getTabEnd();
     for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); ++i)
     {
-        maTabs[i]->CopyOneCellFromClip(rCxt, nCol1, nRow1, nCol2, nRow2);
+        maTabs[i]->CopyOneCellFromClip(rCxt, nCol1, nRow1, nCol2, nRow2,  aClipRange.aStart.Row(), pSrcTab);
         if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
