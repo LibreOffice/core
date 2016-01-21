@@ -75,6 +75,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
     m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
     const SmTextNode* pTemp = static_cast<const SmTextNode* >(pNode);
     SAL_INFO( "starmath.ooxml", "Text:" << OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
+    OUStringBuffer buf(pTemp->GetText());
     for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
     {
 #if 0
@@ -94,9 +95,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
             nFace = 0x7;
         *pS << sal_uInt8(nFace+128); //typeface
 #endif
-        sal_uInt16 nChar = pTemp->GetText()[i];
-        m_pSerializer->writeEscaped( OUString( SmTextNode::ConvertSymbolToUnicode(nChar)));
-
+        buf[i] = SmTextNode::ConvertSymbolToUnicode(buf[i]);
 #if 0
         //Mathtype can only have these sort of character
         //attributes on a single character, starmath can put them
@@ -127,6 +126,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
         }
 #endif
     }
+    m_pSerializer->writeEscaped(buf.makeStringAndClear());
     m_pSerializer->endElementNS( XML_m, XML_t );
     m_pSerializer->endElementNS( XML_m, XML_r );
 }
