@@ -75,16 +75,16 @@ private:
 
     enum ScanState
     {
-        ssGetChar,
-        ssGetValue,
-        ssGetWord,
-        ssGetWordFirstChar,
-        ssGetString,
-        ssGetBool,
-        ssRewindFromValue,
-        ssIgnoreLeadingInRewind,
-        ssStopBack,
-        ssBounce,
+        ssGetChar, // initial state; -> ssBounce, ssGetValue, ssRewindFromValue, ssGetWord, ssGetWordFirstChar, ssGetString, ssGetBool, ssStop
+        ssGetValue, // -> ssBounce, ssRewindFromValue, ssStopBack, ssGetWord
+        ssGetWord, // -> ssBounce, ssStop, ssStopBack
+        ssGetWordFirstChar, // -> ssBounce, ssGetWord, ssStop, ssStopBack
+        ssGetString, // -> ssBounce, ssStop
+        ssGetBool, // -> ssBounce, ssStop, ssStopBack
+        ssRewindFromValue, // -> ssBounce, ssGetValue, ssGetWord, ssGetWordFirstChar, ssGetString, ssGetBool, ssStop, ssIgnoreLeadingInRewind
+        ssIgnoreLeadingInRewind, // -> ssBounce, ssGetValue, ssRewindFromValue, ssGetWord, ssGetWordFirstChar, ssGetString, ssGetBool, ssStop
+        ssStopBack, // -> ssStop
+        ssBounce, // -> ssStopBack
         ssStop
     };
 
