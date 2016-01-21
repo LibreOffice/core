@@ -105,6 +105,7 @@
 #include "FrameControlsManager.hxx"
 
 #include <sfx2/msgpool.hxx>
+#include <comphelper/lok.hxx>
 #include <memory>
 
 using namespace sw::mark;
@@ -275,6 +276,10 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         // because of the DEF-Framesize
         // These must be removed explicitly for the optimal size.
         pFrameMgr->DelAttr(RES_FRM_SIZE);
+
+        if (comphelper::LibreOfficeKit::isActive())
+            // LOK: anchor inserted images as-char by default.
+            pFrameMgr->SetAnchor(FLY_AS_CHAR);
     }
     else
     {
