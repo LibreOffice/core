@@ -18,15 +18,11 @@
  */
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <comphelper/processfactory.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
 #include <tools/stream.hxx>
@@ -39,23 +35,15 @@
 
 using namespace com::sun::star;
 using com::sun::star::uno::Sequence;
-using com::sun::star::lang::XComponent;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::io::XInputStream;
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XFilter;
-using com::sun::star::document::XExtendedFilterDetection;
 using com::sun::star::ucb::XCommandEnvironment;
-
 using com::sun::star::document::XImporter;
-using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
-using com::sun::star::xml::sax::XParser;
 
 //                                 W     o     r     d     P     r     o
 static const sal_Int8 header[] = { 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f };
@@ -96,14 +84,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportLWP(const OUString &rURL
     uno::Reference< XDocumentHandler > xHandler;
     return ( ReadWordproFile(aFileStream, xHandler) == 0 );
 }
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-LotusWordProImportFilter_get_implementation(
-    css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
- {
-    return cppu::acquire(new LotusWordProImportFilter(context));
- }
 
 sal_Bool SAL_CALL LotusWordProImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException, std::exception)
@@ -190,24 +170,30 @@ void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& aArgu
 }
 
 // XServiceInfo
-OUString SAL_CALL LotusWordProImportFilter::getImplementationName(  )
+OUString SAL_CALL LotusWordProImportFilter::getImplementationName()
     throw (RuntimeException, std::exception)
 {
-    return OUString ( "com.sun.star.comp.Writer.LotusWordProImportFilter" );
+    return OUString("com.sun.star.comp.Writer.LotusWordProImportFilter");
 }
-sal_Bool SAL_CALL LotusWordProImportFilter::supportsService( const OUString& rServiceName )
+
+sal_Bool SAL_CALL LotusWordProImportFilter::supportsService(const OUString& rServiceName)
     throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
-Sequence< OUString > SAL_CALL LotusWordProImportFilter::getSupportedServiceNames(  )
+
+Sequence<OUString> SAL_CALL LotusWordProImportFilter::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+LotusWordProImportFilter_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new LotusWordProImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

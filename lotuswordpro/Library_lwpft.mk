@@ -47,7 +47,6 @@ $(eval $(call gb_Library_add_exception_objects,lwpft,\
     lotuswordpro/source/filter/benobj \
     lotuswordpro/source/filter/benval \
     lotuswordpro/source/filter/explode \
-    lotuswordpro/source/filter/genericfilter \
     lotuswordpro/source/filter/localtime \
     lotuswordpro/source/filter/LotusWordProImportFilter \
     lotuswordpro/source/filter/lwp9reader \
