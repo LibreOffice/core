@@ -27,89 +27,89 @@
 class FontAttributes
 {
 public:
-    explicit        FontAttributes();
+    explicit            FontAttributes();
 
     // device independent font functions
-    const OUString& GetFamilyName() const                       { return maFamilyName; }
-    FontFamily      GetFamilyType() const                       { return meFamily; }
-    const OUString& GetStyleName() const                        { return maStyleName; }
+    const OUString&     GetFamilyName() const                       { return maFamilyName; }
+    FontFamily          GetFamilyType() const                       { return meFamily; }
+    const OUString&     GetStyleName() const                        { return maStyleName; }
 
-    FontWeight      GetWeight() const                           { return meWeight; }
-    FontItalic      GetItalic() const                           { return meItalic; }
-    FontPitch       GetPitch() const                            { return mePitch; }
-    FontWidth       GetWidthType() const                        { return meWidthType; }
-    rtl_TextEncoding GetCharSet() const                         { return meCharSet; }
+    FontWeight          GetWeight() const                           { return meWeight; }
+    FontItalic          GetItalic() const                           { return meItalic; }
+    FontPitch           GetPitch() const                            { return mePitch; }
+    FontWidth           GetWidthType() const                        { return meWidthType; }
+    rtl_TextEncoding    GetCharSet() const                         { return meCharSet; }
 
-    bool            IsSymbolFont() const                        { return mbSymbolFlag; }
+    bool                IsSymbolFont() const                        { return mbSymbolFlag; }
 
-    void            SetFamilyName(const OUString& sFamilyName)  { maFamilyName = sFamilyName; }
-    void            SetStyleName( const OUString& sStyleName)   { maStyleName = sStyleName; }
-    void            SetFamilyType(const FontFamily eFontFamily) { meFamily = eFontFamily; }
+    void                SetFamilyName(const OUString& sFamilyName)  { maFamilyName = sFamilyName; }
+    void                SetStyleName( const OUString& sStyleName)   { maStyleName = sStyleName; }
+    void                SetFamilyType(const FontFamily eFontFamily) { meFamily = eFontFamily; }
 
-    void            SetPitch(const FontPitch ePitch )           { mePitch = ePitch; }
-    void            SetItalic(const FontItalic eItalic )        { meItalic = eItalic; }
-    void            SetWeight(const FontWeight eWeight )        { meWeight = eWeight; }
-    void            SetWidthType(const FontWidth eWidthType)    { meWidthType = eWidthType; }
-    void            SetCharSet( const rtl_TextEncoding );
+    void                SetPitch(const FontPitch ePitch )           { mePitch = ePitch; }
+    void                SetItalic(const FontItalic eItalic )        { meItalic = eItalic; }
+    void                SetWeight(const FontWeight eWeight )        { meWeight = eWeight; }
+    void                SetWidthType(const FontWidth eWidthType)    { meWidthType = eWidthType; }
+    void                SetCharSet( const rtl_TextEncoding );
 
-    void            SetSymbolFlag(const bool );
+    void                SetSymbolFlag(const bool );
 
-    bool            CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const;
+    bool                CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const;
 
     // Device dependent functions
-    int             GetQuality() const                          { return mnQuality; }
-    OUString        GetMapNames() const                         { return maMapNames; }
+    int                 GetQuality() const                          { return mnQuality; }
+    OUString            GetMapNames() const                         { return maMapNames; }
 
-    bool            IsBuiltInFont() const                       { return mbDevice; }
-    bool            CanEmbed() const                            { return mbEmbeddable; }
-    bool            CanSubset() const                           { return mbSubsettable; }
-    bool            CanRotate() const                           { return mbOrientation; }
-    bool            HasMapNames() const                         { return (maMapNames.getLength() > 0); }
+    bool                IsBuiltInFont() const                       { return mbDevice; }
+    bool                CanEmbed() const                            { return mbEmbeddable; }
+    bool                CanSubset() const                           { return mbSubsettable; }
+    bool                CanRotate() const                           { return mbOrientation; }
+    bool                HasMapNames() const                         { return (maMapNames.getLength() > 0); }
 
-    void            SetQuality( int nQuality )                  { mnQuality = nQuality; }
-    void            IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
-    void            DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
-    void            SetMapNames( OUString const & aMapNames )   { maMapNames = aMapNames; }
-    void            AddMapName( OUString const & aMapName )
-                    {
-                        if( maMapNames.getLength() > 0 )
+    void                SetQuality( int nQuality )                  { mnQuality = nQuality; }
+    void                IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
+    void                DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
+    void                SetMapNames( OUString const & aMapNames )   { maMapNames = aMapNames; }
+    void                AddMapName( OUString const & aMapName )
                         {
-                            maMapNames += ";";
+                            if( maMapNames.getLength() > 0 )
+                            {
+                                maMapNames += ";";
+                            }
+
+                            if (aMapName.getLength() == 0)
+                            {
+                                SAL_WARN("vcl.fonts", "New map name is empty");
+                                return;
+                            }
+
+                            maMapNames += aMapName;
                         }
 
-                        if (aMapName.getLength() == 0)
-                        {
-                            SAL_WARN("vcl.fonts", "New map name is empty");
-                            return;
-                        }
-
-                        maMapNames += aMapName;
-                    }
-
-    void            SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
-    void            SetEmbeddableFlag ( bool bEmbeddable )      { mbEmbeddable = bEmbeddable; }
-    void            SetSubsettableFlag( bool bSubsettable )     { mbSubsettable = bSubsettable; }
-    void            SetOrientationFlag( bool bCanRotate )       { mbOrientation = bCanRotate; }
+    void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
+    void                SetEmbeddableFlag ( bool bEmbeddable )      { mbEmbeddable = bEmbeddable; }
+    void                SetSubsettableFlag( bool bSubsettable )     { mbSubsettable = bSubsettable; }
+    void                SetOrientationFlag( bool bCanRotate )       { mbOrientation = bCanRotate; }
 
 private:
     // device independent variables
-    OUString        maFamilyName;               // Font Family Name
-    OUString        maStyleName;                // Font Style Name
-    FontWeight      meWeight;                   // Weight Type
-    FontFamily      meFamily;                   // Family Type
-    FontPitch       mePitch;                    // Pitch Type
-    FontWidth       meWidthType;                // Width Type
-    FontItalic      meItalic;                   // Slant Type
-    rtl_TextEncoding meCharSet;                 // RTL_TEXTENCODING_SYMBOL or RTL_TEXTENCODING_UNICODE
-    bool            mbSymbolFlag;               // Is font a symbol?
+    OUString            maFamilyName;               // Font Family Name
+    OUString            maStyleName;                // Font Style Name
+    FontWeight          meWeight;                   // Weight Type
+    FontFamily          meFamily;                   // Family Type
+    FontPitch           mePitch;                    // Pitch Type
+    FontWidth           meWidthType;                // Width Type
+    FontItalic          meItalic;                   // Slant Type
+    rtl_TextEncoding    meCharSet;                  // RTL_TEXTENCODING_SYMBOL or RTL_TEXTENCODING_UNICODE
+    bool                mbSymbolFlag;               // Is font a symbol?
 
     // device dependent variables
-    OUString        maMapNames;                 // List of family name aliases separated with ';'
-    int             mnQuality;                  // Quality (used when similar fonts compete)
-    bool            mbOrientation;              // true: physical font can be rotated
-    bool            mbDevice;                   // true: built in font
-    bool            mbSubsettable;              // true: a subset of the font can be created
-    bool            mbEmbeddable;               // true: the font can be embedded
+    OUString            maMapNames;                 // List of family name aliases separated with ';'
+    int                 mnQuality;                  // Quality (used when similar fonts compete)
+    bool                mbOrientation;              // true: physical font can be rotated
+    bool                mbDevice;                   // true: built in font
+    bool                mbSubsettable;              // true: a subset of the font can be created
+    bool                mbEmbeddable;               // true: the font can be embedded
 
 };
 
