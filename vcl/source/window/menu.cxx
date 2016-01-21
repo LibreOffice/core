@@ -2514,12 +2514,16 @@ void MenuBar::ClosePopup(Menu *pMenu)
 void MenuBar::DeactivateMenuBar(VclPtr<vcl::Window>& xFocusId)
 {
     MenuBarWindow* pMenuWin = getMenuBarWindow();
-    xFocusId = pMenuWin ? pMenuWin->GetFocusId() : nullptr;
-    if (xFocusId != nullptr)
+    if (!pMenuWin)
     {
-        pMenuWin->SetFocusId(nullptr);
-        ImplGetSVData()->maWinData.mbNoDeactivate = false;
+        xFocusId = nullptr;
+        return;
     }
+    xFocusId = pMenuWin->GetFocusId();
+    if (xFocusId == nullptr)
+        return;
+    pMenuWin->SetFocusId(nullptr);
+    ImplGetSVData()->maWinData.mbNoDeactivate = false;
 }
 
 void MenuBar::MenuBarKeyInput(const KeyEvent& rEvent)
