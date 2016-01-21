@@ -80,7 +80,7 @@ void HWPFont::Read(HWPFile & hwpf)
         hwpf.Read2b(&nfonts, 1);
         if (!(nfonts > 0 && nfonts < MAXFONTS))
         {
-            hwpf.SetState(HWP_InvalidFileFormat);
+            (void)hwpf.SetState(HWP_InvalidFileFormat);
             return;
         }
         fontnames[lang] = new char[nfonts * FONTNAMELEN];
