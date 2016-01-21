@@ -135,13 +135,13 @@ private:
     sal_Unicode                 cDecimalSep;
 
     /// Get corresponding KParseTokens flag for a character
-    static sal_Int32 getParseTokensType( const sal_Unicode* aStr, sal_Int32 nPos );
+    static sal_Int32 getParseTokensType(sal_uInt32 c, bool isFirst);
 
     /// Access parser table flags.
-    UPT_FLAG_TYPE getFlags( const sal_Unicode* aStr, sal_Int32 nPos );
+    UPT_FLAG_TYPE getFlags(sal_uInt32 c);
 
     /// Access parser flags via International and special definitions.
-    UPT_FLAG_TYPE getFlagsExtended( const sal_Unicode* aStr, sal_Int32 nPos );
+    UPT_FLAG_TYPE getFlagsExtended(sal_uInt32 c);
 
     /// Access parser table flags for user defined start characters.
     UPT_FLAG_TYPE getStartCharsFlags( sal_Unicode c );

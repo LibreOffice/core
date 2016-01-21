@@ -351,16 +351,15 @@ const sal_Unicode* cclass_Unicode::StrChr( const sal_Unicode* pStr, sal_Unicode 
 }
 
 
-sal_Int32 cclass_Unicode::getParseTokensType( const sal_Unicode* aStr, sal_Int32 nPos )
+sal_Int32 cclass_Unicode::getParseTokensType(sal_uInt32 const c, bool const isFirst)
 {
-    sal_Unicode c = aStr[nPos];
     if ( c < nDefCnt )
         return pParseTokensType[ sal_uInt8(c) ];
     else
     {
 
         //! all KParseTokens::UNI_... must be matched
-        switch ( u_charType( (sal_uInt32) c ) )
+        switch (u_charType(c))
         {
             case U_UPPERCASE_LETTER :
                 return KParseTokens::UNI_UPALPHA;
@@ -372,7 +371,7 @@ sal_Int32 cclass_Unicode::getParseTokensType( const sal_Unicode* aStr, sal_Int32
                 return KParseTokens::UNI_MODIFIER_LETTER;
             case U_OTHER_LETTER :
                 // Non_Spacing_Mark could not be as leading character
-                if (nPos == 0) break;
+                if (isFirst) break;
                 // fall through, treat it as Other_Letter.
             case U_NON_SPACING_MARK :
                 return KParseTokens::UNI_OTHER_LETTER;
@@ -571,14 +570,13 @@ void cclass_Unicode::destroyParserTable()
 }
 
 
-UPT_FLAG_TYPE cclass_Unicode::getFlags( const sal_Unicode* aStr, sal_Int32 nPos )
+UPT_FLAG_TYPE cclass_Unicode::getFlags(sal_uInt32 const c)
 {
     UPT_FLAG_TYPE nMask;
-    sal_Unicode c = aStr[nPos];
     if ( c < nDefCnt )
         nMask = pTable[ sal_uInt8(c) ];
     else
-        nMask = getFlagsExtended( aStr, nPos );
+        nMask = getFlagsExtended(c);
     switch ( eState )
     {
         case ssGetChar :
@@ -608,9 +606,8 @@ UPT_FLAG_TYPE cclass_Unicode::getFlags( const sal_Unicode* aStr, sal_Int32 nPos 
 }
 
 
-UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( const sal_Unicode* aStr, sal_Int32 nPos )
+UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended(sal_uInt32 const c)
 {
-    sal_Unicode c = aStr[nPos];
     if ( c == cGroupSep )
         return TOKEN_VALUE;
     else if ( c == cDecimalSep )
@@ -621,7 +618,7 @@ UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( const sal_Unicode* aStr, sal_Int
     sal_Int32 nTypes = (bStart ? nStartTypes : nContTypes);
 
     //! all KParseTokens::UNI_... must be matched
-    switch ( u_charType( (sal_uInt32) c ) )
+    switch (u_charType(c))
     {
         case U_UPPERCASE_LETTER :
             return (nTypes & KParseTokens::UNI_UPALPHA) ?
@@ -712,25 +709,29 @@ UPT_FLAG_TYPE cclass_Unicode::getContCharsFlags( sal_Unicode c )
 
 void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32 nPos, sal_Int32 nTokenType )
 {
+    assert(r.LeadingWhiteSpace == 0);
     using namespace i18n;
-    const sal_Unicode* const pTextStart = rText.getStr() + nPos;
     eState = ssGetChar;
 
     //! All the variables below (plus ParseResult) have to be resetted on ssRewindFromValue!
-    const sal_Unicode* pSym = pTextStart;
-    const sal_Unicode* pSrc = pSym;
     OUString aSymbol;
-    sal_Unicode c = *pSrc;
-    sal_Unicode cLast = 0;
+    bool isFirst(true);
+    sal_Int32 index(nPos); // index of next code point after current
+    sal_Int32 postSymbolIndex(index); // index of code point following last quote
+    sal_uInt32 current((index < rText.getLength()) ? rText.iterateCodePoints(&index) : 0);
+    sal_uInt32 cLast = 0;
+    sal_Int32 nCodePoints(0);
     int nDecSeps = 0;
     bool bQuote = false;
     bool bMightBeWord = true;
     bool bMightBeWordLast = true;
     //! All the variables above (plus ParseResult) have to be resetted on ssRewindFromValue!
+    sal_Int32 nextCharIndex(0); // == index of nextChar
 
-    while ( (c != 0) && (eState != ssStop) )
+    while ((current != 0) && (eState != ssStop))
     {
-        UPT_FLAG_TYPE nMask = getFlags( pTextStart, pSrc - pTextStart );
+        ++nCodePoints;
+        UPT_FLAG_TYPE nMask = getFlags(current);
         if ( nMask & TOKEN_EXCLUDED )
             eState = ssBounce;
         if ( bMightBeWord )
@@ -741,8 +742,11 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             else
                 bMightBeWord = ((nMask & TOKEN_WORD) != 0);
         }
-        sal_Int32 nParseTokensType = getParseTokensType( pTextStart, pSrc - pTextStart );
-        pSrc++;
+        sal_Int32 nParseTokensType = getParseTokensType(current, isFirst);
+        isFirst = false;
+        sal_Int32 const nextIndex(nextCharIndex); // == index of char following current
+        nextCharIndex = index; // == index of nextChar
+        sal_uInt32 nextChar((index < rText.getLength()) ? rText.iterateCodePoints(&index) : 0);
         switch (eState)
         {
             case ssGetChar :
@@ -755,14 +759,14 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     eState = ssGetValue;
                     if ( nMask & TOKEN_VALUE_DIGIT )
                     {
-                        if ( 128 <= c )
+                        if (128 <= current)
                             r.TokenType = KParseType::UNI_NUMBER;
                         else
                             r.TokenType = KParseType::ASC_NUMBER;
                     }
-                    else if ( c == cDecimalSep )
+                    else if (current == cDecimalSep)
                     {
-                        if ( *pSrc )
+                        if (nextChar)
                             ++nDecSeps;
                         else
                             eState = ssRewindFromValue;
@@ -778,14 +782,14 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     eState = ssGetWordFirstChar;
                     bQuote = true;
-                    pSym++;
+                    postSymbolIndex = nextCharIndex;
                     nParseTokensType = 0;   // will be taken of first real character
                     r.TokenType = KParseType::SINGLE_QUOTE_NAME;
                 }
                 else if ( nMask & TOKEN_CHAR_STRING )
                 {
                     eState = ssGetString;
-                    pSym++;
+                    postSymbolIndex = nextCharIndex;
                     nParseTokensType = 0;   // will be taken of first real character
                     r.TokenType = KParseType::DOUBLE_QUOTE_STRING;
                 }
@@ -795,8 +799,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     {
                         if (eState == ssRewindFromValue)
                             eState = ssIgnoreLeadingInRewind;
-                        r.LeadingWhiteSpace++;
-                        pSym++;
+                        r.LeadingWhiteSpace = nextCharIndex - nPos;
+                        nCodePoints--; // exclude leading whitespace
+                        postSymbolIndex = nextCharIndex;
                         nParseTokensType = 0;   // wait until real character
                         bMightBeWord = true;
                     }
@@ -821,16 +826,16 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             {
                 if ( nMask & TOKEN_VALUE_DIGIT )
                 {
-                    if ( 128 <= c )
+                    if (128 <= current)
                         r.TokenType = KParseType::UNI_NUMBER;
                     else if ( r.TokenType != KParseType::UNI_NUMBER )
                         r.TokenType = KParseType::ASC_NUMBER;
                 }
                 if ( nMask & TOKEN_VALUE )
                 {
-                    if ( c == cDecimalSep && ++nDecSeps > 1 )
+                    if (current == cDecimalSep && ++nDecSeps > 1)
                     {
-                        if ( pSrc - pTextStart == 2 )
+                        if (nCodePoints == 2)
                             eState = ssRewindFromValue;
                             // consecutive separators
                         else
@@ -838,12 +843,12 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     }
                     // else keep it going
                 }
-                else if ( c == 'E' || c == 'e' )
+                else if (current == 'E' || current == 'e')
                 {
-                    UPT_FLAG_TYPE nNext = getFlags( pTextStart, pSrc - pTextStart );
+                    UPT_FLAG_TYPE nNext = getFlags(nextChar);
                     if ( nNext & TOKEN_VALUE_EXP )
                         ;   // keep it going
-                    else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
+                    else if (bMightBeWord && ((nNext & TOKEN_WORD) || !nextChar))
                     {   // might be a numerical name (1.2efg)
                         eState = ssGetWord;
                         r.TokenType = KParseType::IDENTNAME;
@@ -855,10 +860,10 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( (cLast == 'E') || (cLast == 'e') )
                     {
-                        UPT_FLAG_TYPE nNext = getFlags( pTextStart, pSrc - pTextStart );
+                        UPT_FLAG_TYPE nNext = getFlags(nextChar);
                         if ( nNext & TOKEN_VALUE_EXP_VALUE )
                             ;   // keep it going
-                        else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
+                        else if (bMightBeWord && ((nNext & TOKEN_WORD) || !nextChar))
                         {   // might be a numerical name (1.2e+fg)
                             eState = ssGetWord;
                             r.TokenType = KParseType::IDENTNAME;
@@ -896,15 +901,15 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     {
                         if ( cLast == '\\' )
                         {   // escaped
-                            aSymbol += OUString( pSym, pSrc - pSym - 2 );
-                            aSymbol += OUString( &c, 1);
+                            aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
+                            aSymbol += OUString(&current, 1);
                         }
                         else
                         {
                             eState = ssStop;
-                            aSymbol += OUString( pSym, pSrc - pSym - 1 );
+                            aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
                         }
-                        pSym = pSrc;
+                        postSymbolIndex = nextCharIndex;
                     }
                     else
                         eState = ssStopBack;
@@ -921,21 +926,23 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( cLast == '\\' )
                     {   // escaped
-                        aSymbol += OUString( pSym, pSrc - pSym - 2 );
-                        aSymbol += OUString( &c, 1);
+                        aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 2);
+                        aSymbol += OUString(&current, 1);
                     }
-                    else if ( c == *pSrc &&
+                    else if (current == nextChar &&
                             !(nContTypes & KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING) )
                     {   // "" => literal " escaped
-                        aSymbol += OUString( pSym, pSrc - pSym );
-                        pSrc++;
+                        aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex);
+                        nextCharIndex = index;
+                        if (index < rText.getLength()) { ++nCodePoints; }
+                        nextChar = (index < rText.getLength()) ? rText.iterateCodePoints(&index) : 0;
                     }
                     else
                     {
                         eState = ssStop;
-                        aSymbol += OUString( pSym, pSrc - pSym - 1 );
+                        aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
                     }
-                    pSym = pSrc;
+                    postSymbolIndex = nextCharIndex;
                 }
             }
             break;
@@ -956,10 +963,13 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
         if ( eState == ssRewindFromValue )
         {
             r = ParseResult();
-            pSym = pTextStart;
-            pSrc = pSym;
+            index = nPos;
+            postSymbolIndex = nPos;
+            nextCharIndex = 0;
             aSymbol.clear();
-            c = *pSrc;
+            current = (index < rText.getLength()) ? rText.iterateCodePoints(&index) : 0;
+            nCodePoints = (nPos < rText.getLength()) ? 1 : 0;
+            isFirst = true;
             cLast = 0;
             nDecSeps = 0;
             bQuote = false;
@@ -973,7 +983,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 if ( (r.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
                         && (nTokenType & KParseType::IDENTNAME) && bMightBeWord )
                     ;   // keep a number that might be a word
-                else if ( r.LeadingWhiteSpace == (pSrc - pTextStart) )
+                else if (r.LeadingWhiteSpace == (nextCharIndex - nPos))
                     ;   // keep ignored white space
                 else if ( !r.TokenType && eState == ssGetValue && (nMask & TOKEN_VALUE_SEP) )
                     ;   // keep uncertain value
@@ -987,7 +997,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             }
             if ( eState == ssStopBack )
             {   // put back
-                pSrc--;
+                nextChar = rText.iterateCodePoints(&index, -1);
+                nextCharIndex = nextIndex;
+                --nCodePoints;
                 bMightBeWord = bMightBeWordLast;
                 eState = ssStop;
             }
@@ -999,19 +1011,18 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     r.ContFlags |= nParseTokensType;
             }
             bMightBeWordLast = bMightBeWord;
-            cLast = c;
-            c = *pSrc;
+            cLast = current;
+            current = nextChar;
         }
     }
-    // r.CharLen is the length in characters (not code points) of the parsed
-    // token not including any leading white space, change this calculation if
-    // multi-code-point Unicode characters are to be supported.
-    r.CharLen = pSrc - pTextStart - r.LeadingWhiteSpace;
-    r.EndPos = nPos + (pSrc - pTextStart);
+    // r.CharLen is the length in characters (not code units) of the parsed
+    // token not including any leading white space.
+    r.CharLen = nCodePoints;
+    r.EndPos = nextCharIndex;
     if ( r.TokenType & KParseType::ASC_NUMBER )
     {
-        r.Value = rtl_math_uStringToDouble( pTextStart + r.LeadingWhiteSpace,
-                pTextStart + r.EndPos, cDecimalSep, cGroupSep, nullptr, nullptr );
+        r.Value = rtl_math_uStringToDouble(rText.getStr() + nPos + r.LeadingWhiteSpace,
+            rText.getStr() + r.EndPos, cDecimalSep, cGroupSep, nullptr, nullptr);
         if ( bMightBeWord )
             r.TokenType |= KParseType::IDENTNAME;
     }
@@ -1024,8 +1035,8 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 xNatNumSup = NativeNumberSupplier::create( m_xContext );
             }
         }
-        OUString aTmp( pTextStart + r.LeadingWhiteSpace, r.EndPos - nPos +
-                r.LeadingWhiteSpace );
+        OUString aTmp(rText.getStr() + nPos + r.LeadingWhiteSpace,
+                r.EndPos - nPos - r.LeadingWhiteSpace);
         // transliterate to ASCII
         aTmp = xNatNumSup->getNativeNumberString( aTmp, aParserLocale,
                 NativeNumberMode::NATNUM0 );
@@ -1035,9 +1046,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     }
     else if ( r.TokenType & (KParseType::SINGLE_QUOTE_NAME | KParseType::DOUBLE_QUOTE_STRING) )
     {
-        if ( pSym < pSrc )
+        if (postSymbolIndex < nextCharIndex)
         {   //! open quote
-            aSymbol += OUString( pSym, pSrc - pSym );
+            aSymbol += rText.copy(postSymbolIndex, nextCharIndex - postSymbolIndex - 1);
             r.TokenType |= KParseType::MISSING_QUOTE;
         }
         r.DequotedNameOrString = aSymbol;
