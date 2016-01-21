@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_8f603f37",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-21T19:06:09Z",
+      "side": 1,
+      "message": "A small thing. The variable is static, so it \"survices\" between function calls, but it is anyhow set everytime. \n\nEither have it static, and make sure it is only set once, or let it stay dynamic.",
+      "revId": "77457bfd1db795aa9b31a440d241360d9be2d97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2f75d3f8",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-21T19:06:09Z",
+      "side": 1,
+      "message": "Why the \"else\" ?? \n\nSetting bCollecting to 1 after having checked it is not 0 seems unneeded.",
+      "revId": "77457bfd1db795aa9b31a440d241360d9be2d97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
