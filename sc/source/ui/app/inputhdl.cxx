@@ -2975,10 +2975,20 @@ void ScInputHandler::AddRefEntry()
     DataChanging();                         // Cannot be new
 
     RemoveSelection();
-    if (pTableView)
-        pTableView->InsertText( OUString(cSep) );
-    if (pTopView)
-        pTopView->InsertText( OUString(cSep) );
+    OUString aText = GetEditText(pEngine);
+    sal_Unicode cLastChar = 0;
+    sal_Int32 nPos = aText.getLength() - 1;
+    while (nPos >= 0 && ((cLastChar = aText[nPos]) == ' ')) //checking space
+        --nPos;
+
+    bool bAppendSeparator = (cLastChar != '(' && cLastChar != cSep && cLastChar != '=');
+    if (bAppendSeparator)
+    {
+        if (pTableView)
+            pTableView->InsertText( OUString(cSep) );
+        if (pTopView)
+            pTopView->InsertText( OUString(cSep) );
+    }
 
     DataChanged();
 }
