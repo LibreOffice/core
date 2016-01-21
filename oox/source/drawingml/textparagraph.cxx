@@ -22,6 +22,7 @@
 #include "drawingml/textcharacterproperties.hxx"
 
 #include <rtl/ustring.hxx>
+#include <oox/mathml/importutils.hxx>
 #include "oox/helper/propertyset.hxx"
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -136,6 +137,15 @@ void TextParagraph::insertAt(
     {
         SAL_INFO("oox", "exception in TextParagraph::insertAt");
     }
+}
+
+formulaimport::XmlStreamBuilder & TextParagraph::GetMathXml()
+{
+    if (!m_pMathXml)
+    {
+        m_pMathXml.reset(new formulaimport::XmlStreamBuilder);
+    }
+    return *m_pMathXml;
 }
 
 } }

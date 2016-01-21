@@ -28,6 +28,11 @@
 #include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 
+
+namespace oox { namespace formulaimport {
+    class XmlStreamBuilder;
+} }
+
 namespace oox { namespace drawingml {
 
 typedef RefVector< TextRun > TextRunVector;
@@ -57,10 +62,18 @@ public:
                                     bool bFirst = false,
                                     float nDefaultCharHeight = 0) const;
 
+    bool HasMathXml() const
+    {
+        return m_pMathXml != nullptr;
+    }
+    formulaimport::XmlStreamBuilder & GetMathXml();
+
 private:
     TextParagraphProperties     maProperties;
     TextCharacterProperties     maEndProperties;
     TextRunVector               maRuns;
+    // temporarily store this here
+    std::unique_ptr<formulaimport::XmlStreamBuilder> m_pMathXml;
 };
 
 } }

@@ -27,6 +27,7 @@
 #include "effectproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "drawingml/textbody.hxx"
+#include <drawingml/textparagraph.hxx>
 #include <drawingml/ThemeOverrideFragmentHandler.hxx>
 #include "drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
@@ -40,8 +41,12 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
+#include <oox/mathml/importutils.hxx>
+#include <oox/mathml/import.hxx>
 
+#include <comphelper/classids.hxx>
 #include <tools/gen.hxx>
+#include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/awt/Size.hpp>
@@ -55,6 +60,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -407,6 +413,25 @@ Reference< XShape > Shape::createAndInsert(
     bool bIsEmbMedia = false;
     SAL_INFO("oox.drawingml", OSL_THIS_FUNC << " id: " << msId);
 
+    formulaimport::XmlStreamBuilder * pMathXml(nullptr);
+    if (mpTextBody.get())
+    {
+        for (auto const& it : mpTextBody->getParagraphs())
+        {
+            if (it->HasMathXml())
+            {
+                if (!mpTextBody->isEmpty() || pMathXml != nullptr)
+                {
+                    SAL_WARN("oox.drawingml", "losing a Math object...");
+                }
+                else
+                {
+                    pMathXml = &it->GetMathXml();
+                }
+            }
+        }
+    }
+
     // tdf#90403 PowerPoint ignores a:ext cx and cy values of p:xfrm, and uses real table width and height
     if ( mpTablePropertiesPtr.get() && rServiceName == "com.sun.star.drawing.TableShape" )
     {
@@ -427,7 +452,15 @@ Reference< XShape > Shape::createAndInsert(
     awt::Rectangle aShapeRectHmm( maPosition.X / EMU_PER_HMM, maPosition.Y / EMU_PER_HMM, maSize.Width / EMU_PER_HMM, maSize.Height / EMU_PER_HMM );
 
     OUString aServiceName;
-    if( rServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
+    if (pMathXml)
+    {
+        // convert this shape to OLE
+        aServiceName = "com.sun.star.drawing.OLE2Shape";
+        msServiceName = aServiceName;
+        meFrameType = FRAMETYPE_GENERIC; // not OLEOBJECT, no stream in package
+        mnSubType = 0;
+    }
+    else if (rServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
         mpGraphicPropertiesPtr && !mpGraphicPropertiesPtr->m_sMediaPackageURL.isEmpty())
     {
         aServiceName = finalizeServiceName( rFilterBase, "com.sun.star.presentation.MediaShape", aShapeRectHmm );
@@ -603,6 +636,22 @@ Reference< XShape > Shape::createAndInsert(
             {
                 xText->setString( "" );
             }
+        }
+
+        if (pMathXml)
+        {
+            // the "EmbeddedObject" property is read-only, so we have to create
+            // the shape first, and it can be read only after the shape is
+            // inserted into the document, so delay the actual import until here
+            SvGlobalName name(SO3_SM_CLASSID);
+            xSet->setPropertyValue("CLSID", uno::makeAny(name.GetHexName()));
+            uno::Reference<embed::XEmbeddedObject> const xObj(
+                xSet->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
+            uno::Reference<uno::XInterface> const xMathModel(xObj->getComponent());
+            oox::FormulaImportBase *const pMagic(
+                    dynamic_cast<oox::FormulaImportBase*>(xMathModel.get()));
+            assert(pMagic);
+            pMagic->readFormulaOoxml(*pMathXml);
         }
 
         const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();

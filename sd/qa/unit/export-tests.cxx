@@ -1173,7 +1173,30 @@ void SdExportTest::testMathObject()
             "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:txBody/a:p/a14:m/m:oMath/m:r[1]/m:t",
             "a");
 
-        // TODO can't import yet
+        const SdrPage *pPage = GetPage(1, xDocShRef);
+        const SdrObject* pObj = dynamic_cast<SdrObject*>(pPage->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier());
+    }
+
+    utl::TempFile tempFile2;
+    xDocShRef = saveAndReload( xDocShRef, PPTX, &tempFile2 );
+
+    // Export an MS specific ole object (imported from a PPTX document)
+    {
+        xmlDocPtr pXmlDocContent = parseExport(tempFile1, "ppt/slides/slide1.xml");
+        assertXPath(pXmlDocContent,
+            "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice",
+            "Requires",
+            "a14");
+        assertXPathContent(pXmlDocContent,
+            "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:txBody/a:p/a14:m/m:oMath/m:r[1]/m:t",
+            "a");
+
+        const SdrPage *pPage = GetPage(1, xDocShRef);
+        const SdrObject* pObj = dynamic_cast<SdrObject*>(pPage->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier());
     }
 
     xDocShRef->DoClose();

@@ -9,10 +9,11 @@
 #ifndef INCLUDED_OOX_MATHML_IMPORT_HXX
 #define INCLUDED_OOX_MATHML_IMPORT_HXX
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <oox/dllapi.h>
+
 #include <tools/gen.hxx>
 
-#include <oox/dllapi.h>
+#include <rtl/ref.hxx>
 
 namespace oox
 {
@@ -38,6 +39,12 @@ protected:
 
     ~FormulaImportBase() {}
 };
+
+namespace core { class ContextHandler; }
+namespace drawingml { class TextParagraph; }
+
+::rtl::Reference<core::ContextHandler> CreateLazyMathBufferingContext(
+        core::ContextHandler const& rParent, drawingml::TextParagraph & rPara);
 
 } // namespace
 

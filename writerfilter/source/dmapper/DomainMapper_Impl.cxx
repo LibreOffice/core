@@ -32,6 +32,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
