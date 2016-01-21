@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_6fd51b42",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2989,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-21T15:39:09Z",
+      "side": 1,
+      "message": "We don\u0027t do an extra indent for block braces.",
+      "revId": "0554a0b277d8da61876a136331ea163e213da654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_efc10b82",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-21T15:39:09Z",
+      "side": 1,
+      "message": "Please never use isalpha() or isdigit() or any of those functions. On some systems they are localized, on some they are not, and they are not Unicode aware.\n\nWe have CharClass::isAlphaNumeric() and the like that are Unicode aware, which in Calc can be used via the ScGlobal::pCharClass pointer.",
+      "revId": "0554a0b277d8da61876a136331ea163e213da654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4fbf77fb",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2991,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-21T15:39:09Z",
+      "side": 1,
+      "message": "However, I\u0027m not convinced of this solution. I\u0027m afraid that there might be situations where the last character before a separator may be not alphanumeric. Or could you elaborate why this would never be the case?",
+      "revId": "0554a0b277d8da61876a136331ea163e213da654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2fbcb304",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-21T15:39:09Z",
+      "side": 1,
+      "message": "Now IF we did such change as above for pTableView then we should also do it for pTopView.",
+      "revId": "0554a0b277d8da61876a136331ea163e213da654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

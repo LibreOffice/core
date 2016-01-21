@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_2fe5d336",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2991,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-21T15:39:09Z",
+      "side": 0,
+      "message": "Please don\u0027t arbitrarily remove blank lines, sometimes they are helpful for reading the source. In this case it makes the corresponsing DataChanging() and DataChanged() calls visually stick out, which is nice to the reader. Also, please don\u0027t mix such cosmetical changes with the real patch.",
+      "revId": "0eebf260b20dae7a73b0abb1d461e29b6b8446fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
