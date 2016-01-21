@@ -31,15 +31,15 @@ module com {  module sun {  module star {  module i18n {
 
 published struct ParseResult
 {
-    /** Count of ignored leading whitespace, in code points, not
-        characters. */
+    /** Count of ignored leading whitespace, in UTF-16 code units, not
+        Unicode code points. */
     long    LeadingWhiteSpace;
 
-    /** Code point index of first unprocessed character. */
+    /** UTF-16 code unit index of first unprocessed character. */
     long    EndPos;
 
-    /** Number of characters (not code points) of the parsed token, not
-        including leading whitespace. */
+    /** Number of code points (not UTF-16 code units) of the parsed token,
+        not including leading whitespace. */
     long    CharLen;
 
     /** Value of token in case of numeric. */
