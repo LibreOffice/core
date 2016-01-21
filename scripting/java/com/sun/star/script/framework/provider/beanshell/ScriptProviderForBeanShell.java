@@ -294,7 +294,7 @@ class ScriptImpl implements XScript {
             if (editor != null) {
                 editor.indicateErrorLine(lineNum);
             }
-        } catch (Exception ignore) {
+        } catch (java.net.MalformedURLException ignore) {
         }
     }
 
