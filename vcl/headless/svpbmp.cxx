@@ -121,17 +121,17 @@ BitmapBuffer* ImplCreateDIB(
                 pDIB->maPalette.SetEntryCount( nColors );
             }
 
-            auto size = pDIB->mnScanlineSize * pDIB->mnHeight;
             try
             {
+                size_t size = pDIB->mnScanlineSize * pDIB->mnHeight;
                 pDIB->mpBits = new sal_uInt8[size];
+                std::memset(pDIB->mpBits, 0, size);
             }
             catch (const std::bad_alloc&)
             {
                 delete pDIB;
                 pDIB = nullptr;
             }
-            std::memset(pDIB->mpBits, 0, size);
         }
     }
     else
@@ -167,16 +167,15 @@ bool SvpSalBitmap::Create(const SalBitmap& rBmp)
         // TODO: get rid of this when BitmapBuffer gets copy constructor
         try
         {
-            mpDIB->mpBits = new sal_uInt8[ mpDIB->mnScanlineSize * mpDIB->mnHeight ];
+            size_t size = mpDIB->mnScanlineSize * mpDIB->mnHeight;
+            mpDIB->mpBits = new sal_uInt8[size];
+            std::memcpy(mpDIB->mpBits, rSalBmp.mpDIB->mpBits, size);
         }
         catch (const std::bad_alloc&)
         {
             delete mpDIB;
             mpDIB = nullptr;
         }
-
-        if (mpDIB)
-            memcpy(mpDIB->mpBits, rSalBmp.mpDIB->mpBits, mpDIB->mnScanlineSize * mpDIB->mnHeight);
     }
 
     return !rSalBmp.mpDIB || (rSalBmp.mpDIB && mpDIB != nullptr);
