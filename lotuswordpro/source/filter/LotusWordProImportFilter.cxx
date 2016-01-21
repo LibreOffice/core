@@ -99,7 +99,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportLWP(const OUString &rURL
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 LotusWordProImportFilter_get_implementation(
-    css::uno::XComponentContext *context)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
  {
     return cppu::acquire(new LotusWordProImportFilter(context));
  }
