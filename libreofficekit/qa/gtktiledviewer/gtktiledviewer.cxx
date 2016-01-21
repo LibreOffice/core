@@ -733,17 +733,35 @@ static void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
 
     GdkAtom* pTargets;
     gint nTargets;
-    boost::optional<GdkAtom> oTarget;
+    std::map<std::string, GdkAtom> aTargets;
     if (gtk_clipboard_wait_for_targets(pClipboard, &pTargets, &nTargets))
     {
         for (gint i = 0; i < nTargets; ++i)
         {
             gchar* pName = gdk_atom_name(pTargets[i]);
-            if (std::string(pName) == "text/html")
-                oTarget = pTargets[i];
+            aTargets[pName] = pTargets[i];
             g_free(pName);
         }
         g_free(pTargets);
+    }
+
+    boost::optional<GdkAtom> oTarget;
+    std::string aTargetName;
+
+    std::vector<std::string> aPreferredNames =
+    {
+        std::string("image/png"),
+        std::string("text/html")
+    };
+    for (const std::string& rName : aPreferredNames)
+    {
+        std::map<std::string, GdkAtom>::iterator it = aTargets.find(rName);
+        if (it != aTargets.end())
+        {
+            aTargetName = it->first;
+            oTarget = it->second;
+            break;
+        }
     }
 
     if (oTarget)
@@ -755,7 +773,7 @@ static void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
         }
         gint nLength;
         const guchar* pData = gtk_selection_data_get_data_with_length(pSelectionData, &nLength);
-        bool bSuccess = lok_doc_view_paste(pLOKDocView, "text/html", reinterpret_cast<const char*>(pData), nLength);
+        bool bSuccess = lok_doc_view_paste(pLOKDocView, aTargetName.c_str(), reinterpret_cast<const char*>(pData), nLength);
         gtk_selection_data_free(pSelectionData);
         if (bSuccess)
             return;
