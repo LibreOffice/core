@@ -1118,7 +1118,7 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(nSlot);
             if ( pItem )
                 pPostItMgr->Delete( pItem->GetValue() );
-            else
+            else if ( pPostItMgr->HasActiveSidebarWin() )
                 pPostItMgr->Delete( pPostItMgr->GetActiveSidebarWin()->GetAuthor() );
             break;
         }
@@ -1132,7 +1132,7 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(nSlot);
             if ( pItem )
                 pPostItMgr->Hide( pItem->GetValue() );
-            else
+            else if ( pPostItMgr->HasActiveSidebarWin() )
                 pPostItMgr->Hide( pPostItMgr->GetActiveSidebarWin()->GetAuthor() );
         }
     }
