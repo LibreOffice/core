@@ -37,10 +37,8 @@ public:
 
     // device independent font functions
     const OUString&     GetFamilyName() const                           { return maFamilyName; }
-    FontFamily          GetFamily()                                     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
-    FontFamily          GetFamilyNoAsk() const                          { return meFamily; }
-    FontFamily          GetFamilyType()                                 { return GetFamily(); }
-    FontFamily          GetFamilyTypeNoAsk() const                      { return GetFamilyNoAsk(); }
+    FontFamily          GetFamilyType()                                     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
+    FontFamily          GetFamilyTypeNoAsk() const                          { return meFamily; }
     const OUString&     GetStyleName() const                            { return maStyleName; }
 
     FontWeight          GetWeight()                                     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
