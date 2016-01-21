@@ -94,7 +94,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 return false;
             }
             final RowSetProperties other = (RowSetProperties) obj;
-            if (this.escapeProcessing != other.escapeProcessing && (this.escapeProcessing == null || !this.escapeProcessing.equals(other.escapeProcessing)))
+            if ((this.escapeProcessing == null) ? (other.escapeProcessing != null) : !this.escapeProcessing.equals(other.escapeProcessing))
             {
                 return false;
             }
@@ -102,7 +102,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             {
                 return false;
             }
-            if (this.maxRows != other.maxRows && (this.maxRows == null || !this.maxRows.equals(other.maxRows)))
+            if ((this.maxRows == null) ? (other.maxRows != null) : !this.maxRows.equals(other.maxRows))
             {
                 return false;
             }
