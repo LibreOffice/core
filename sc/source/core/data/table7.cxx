@@ -52,7 +52,7 @@ void ScTable::DeleteBeforeCopyFromClip(
 }
 
 void ScTable::CopyOneCellFromClip(
-    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCROW nSrcRow, ScTable* pSrcTab )
 {
     ScRange aSrcRange = rCxt.getClipDoc()->GetClipParam().getWholeRange();
     SCCOL nSrcColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
@@ -63,6 +63,14 @@ void ScTable::CopyOneCellFromClip(
         nColOffset = nColOffset % nSrcColSize;
         assert(nColOffset >= 0);
         aCol[nCol].CopyOneCellFromClip(rCxt, nRow1, nRow2, nColOffset);
+    }
+
+    if ( nCol1==0 && nCol2==MAXCOL && mpRowHeights && pSrcTab->mpRowHeights)
+    {
+         ScFlatUInt16RowSegments::RangeData aSrcData;
+         if (!pSrcTab->mpRowHeights->getRangeData(nSrcRow, aSrcData))
+             return;
+         mpRowHeights->setValue(nRow1, nRow2, aSrcData.mnValue);
     }
 }
 
