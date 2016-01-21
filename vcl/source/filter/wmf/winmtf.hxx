@@ -470,7 +470,7 @@ struct BSaveStruct
     {}
 };
 
-typedef ::std::vector< BSaveStruct* > BSaveStructList_impl;
+typedef std::vector<std::unique_ptr<BSaveStruct>> BSaveStructList_impl;
 
 enum GDIObjectType
 {
