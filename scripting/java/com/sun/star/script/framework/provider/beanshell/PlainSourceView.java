@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 
 public class PlainSourceView extends JScrollPane implements
     ScriptSourceView, DocumentListener {
@@ -71,7 +72,7 @@ public class PlainSourceView extends JScrollPane implements
             int line = ta.getLineStartOffset(model.getCurrentPosition());
             Rectangle rect = ta.modelToView(line);
             ta.scrollRectToVisible(rect);
-        } catch (Exception e) {
+        } catch (BadLocationException e) {
             // couldn't scroll to line, do nothing
         }
 
