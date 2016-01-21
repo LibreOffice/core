@@ -644,7 +644,7 @@ void DesktopLOKTest::testModifiedStatus()
 
 void DesktopLOKTest::testSheetOperations()
 {
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
 
     // insert the last sheet
