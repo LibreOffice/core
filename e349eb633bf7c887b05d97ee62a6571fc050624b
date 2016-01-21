@@ -16,6 +16,24 @@
       "revId": "e349eb633bf7c887b05d97ee62a6571fc050624b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_043d562b",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-01-21T07:21:39Z",
+      "side": 1,
+      "message": "For consistency?",
+      "parentUuid": "dab17558_c40eae33",
+      "revId": "e349eb633bf7c887b05d97ee62a6571fc050624b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
