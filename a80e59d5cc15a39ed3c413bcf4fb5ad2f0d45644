@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_0f428f3e",
+        "filename": "sw/source/core/inc/pagefrm.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-21T13:21:17Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to return the modified nDiff rather than change it in-place? Looks like a waste of return value that forces callers to keep a temp nOldDiff... as you did yourself :)",
+      "range": {
+        "startLine": 339,
+        "startChar": 4,
+        "endLine": 339,
+        "endChar": 51
+      },
+      "revId": "a80e59d5cc15a39ed3c413bcf4fb5ad2f0d45644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4f4c9770",
+        "filename": "sw/source/core/layout/pagechg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2312,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2016-01-21T13:21:17Z",
+      "side": 1,
+      "message": "If this is the outcome we are interested in (i.e. nDiff is 0 or old value) then a better API would be to return a bool and rename the function to a question (CheckPageHeightValidForHideWhitespace or some such?).",
+      "range": {
+        "startLine": 2312,
+        "startChar": 16,
+        "endLine": 2312,
+        "endChar": 26
+      },
+      "revId": "a80e59d5cc15a39ed3c413bcf4fb5ad2f0d45644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
