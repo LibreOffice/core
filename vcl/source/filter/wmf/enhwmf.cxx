@@ -1244,7 +1244,7 @@ bool EnhWMFReader::ReadEnhWMF()
                                 Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                 aBitmap.Crop( aCropRect );
                             }
-                            aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop ) );
+                            aBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
                         }
                     }
                 }
@@ -1305,7 +1305,7 @@ bool EnhWMFReader::ReadEnhWMF()
                                 Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                 aBitmap.Crop( aCropRect );
                             }
-                            aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop ) );
+                            aBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
                         }
                     }
                 }
@@ -1372,7 +1372,7 @@ bool EnhWMFReader::ReadEnhWMF()
                                 Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                 aBitmap.Crop( aCropRect );
                             }
-                        aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop ) );
+                            aBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
                         }
                     }
                 }

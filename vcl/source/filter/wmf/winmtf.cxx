@@ -1575,7 +1575,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
         size_t          nObjectsOfSameSize = 0;
         size_t          nObjectStartIndex = nObjects - nObjectsLeft;
 
-        BSaveStruct*    pSave = rSaveList[ nObjectStartIndex ];
+        BSaveStruct*    pSave = rSaveList[nObjectStartIndex].get();
         Rectangle       aRect( pSave->aOutRect );
 
         for ( i = nObjectStartIndex; i < nObjects; )
@@ -1583,7 +1583,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
             nObjectsOfSameSize++;
             if ( ++i < nObjects )
             {
-                pSave = rSaveList[ i ];
+                pSave = rSaveList[i].get();
                 if ( pSave->aOutRect != aRect )
                     break;
             }
@@ -1593,7 +1593,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
 
         for ( i = nObjectStartIndex; i < ( nObjectStartIndex + nObjectsOfSameSize ); i++ )
         {
-            pSave = rSaveList[ i ];
+            pSave = rSaveList[i].get();
 
             sal_uInt32  nWinRop = pSave->nWinRop;
             sal_uInt8   nRasterOperation = (sal_uInt8)( nWinRop >> 16 );
@@ -1621,7 +1621,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                 {
                     if ( nObjectsOfSameSize == 2 )
                     {
-                        BSaveStruct* pSave2 = rSaveList[ i + 1 ];
+                        BSaveStruct* pSave2 = rSaveList[i + 1].get();
                         if ( ( pSave->aBmp.GetPrefSize() == pSave2->aBmp.GetPrefSize() ) &&
                              ( pSave->aBmp.GetPrefMapMode() == pSave2->aBmp.GetPrefMapMode() ) )
                         {
@@ -1790,8 +1790,6 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
         nObjectsLeft -= nObjectsOfSameSize;
     }
 
-    for( size_t i = 0, n = rSaveList.size(); i < n; ++i )
-        delete rSaveList[ i ];
     rSaveList.clear();
 }
 
