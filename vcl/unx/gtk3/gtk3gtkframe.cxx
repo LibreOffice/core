@@ -1534,9 +1534,19 @@ void GtkSalFrame::AllocateFrame()
 
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
+
+
+#if GTK_CHECK_VERSION(3,10,0)
+        m_pSurface = gdk_window_create_similar_image_surface(widget_get_window(m_pWindow),
+                                                             CAIRO_FORMAT_ARGB32,
+                                                             aFrameSize.getX(),
+                                                             aFrameSize.getY(),
+                                                             0);
+#else
         m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                            aFrameSize.getX(),
-                            aFrameSize.getY());
+                                                aFrameSize.getX(),
+                                                aFrameSize.getY());
+#endif
         cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);
         SAL_INFO("vcl.gtk3", "allocated Frame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
 
