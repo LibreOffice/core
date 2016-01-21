@@ -109,6 +109,12 @@ public class OfficeGroupLayoutController extends SectionLayoutController
 
             final OfficeGroup group = (OfficeGroup) getElement();
             final OfficeGroupSection header = group.getHeader();
+
+            if (header == null)
+            {
+                return controller;
+            }
+
             controller.waitForJoin = true;
             return processChild(controller, header, getFlowController());
         }
@@ -127,6 +133,12 @@ public class OfficeGroupLayoutController extends SectionLayoutController
 
             final OfficeGroup group = (OfficeGroup) getElement();
             final OfficeGroupSection footer = group.getFooter();
+
+            if (footer == null)
+            {
+                return controller;
+            }
+
             controller.waitForJoin = true;
             return processChild(controller, footer, getFlowController());
         }
