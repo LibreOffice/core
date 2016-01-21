@@ -2984,10 +2984,21 @@ void ScInputHandler::AddRefEntry()
     DataChanging();                         // Cannot be new
 
     RemoveSelection();
+    OUString aText;
+    aText = GetEditText(pEngine);
+    if (aText.endsWith(" "))
+        aText = aText.trim();
+
     if (pTableView)
-        pTableView->InsertText( OUString(cSep) );
+    {
+        if (!aText.endsWith("(") && !aText.endsWith(",") && !aText.endsWith("="))
+            pTableView->InsertText( OUString(cSep) );
+    }
     if (pTopView)
-        pTopView->InsertText( OUString(cSep) );
+    {
+        if (!aText.endsWith("(") && !aText.endsWith(",") && !aText.endsWith("="))
+            pTopView->InsertText( OUString(cSep) );
+    }
 
     DataChanged();
 }
