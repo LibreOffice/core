@@ -475,8 +475,15 @@ public class _XAccessibleText extends MultiMethodTest {
             } catch (com.sun.star.lang.IllegalArgumentException e) {
             }
 
+            if (aRect == null) {
+                res = false;
+                log.print("aRect unexpected null");
+                break;
+            }
+
             int x = aRect.X + (aRect.Width / 2);
             int y = aRect.Y + (aRect.Height / 2);
+
             Point aPoint = new Point(x, y);
             int nIndex = oObj.getIndexAtPoint(aPoint);
 
