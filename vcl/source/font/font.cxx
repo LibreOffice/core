@@ -417,7 +417,7 @@ void Font::Merge( const vcl::Font& rFont )
         SetLanguageTag( rFont.GetLanguageTag() );
         SetCJKContextLanguageTag( rFont.GetCJKContextLanguageTag() );
         // don't use access methods here, might lead to AskConfig(), if DONTKNOW
-        SetFamily( rFont.mpImplFont->GetFamilyNoAsk() );
+        SetFamily( rFont.mpImplFont->GetFamilyTypeNoAsk() );
         SetPitch( rFont.mpImplFont->GetPitchNoAsk() );
     }
 
@@ -461,7 +461,7 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
 {
     rAttrs.SetFamilyName( mpImplFont->GetFamilyName() );
     rAttrs.SetStyleName( mpImplFont->maStyleName );
-    rAttrs.SetFamilyType( mpImplFont->GetFamilyNoAsk() );
+    rAttrs.SetFamilyType( mpImplFont->GetFamilyTypeNoAsk() );
     rAttrs.SetPitch( mpImplFont->GetPitchNoAsk() );
     rAttrs.SetItalic( mpImplFont->GetItalicNoAsk() );
     rAttrs.SetWeight( mpImplFont->GetWeightNoAsk() );
@@ -522,7 +522,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     WritePair( rOStm, rImplFont.maSize );
 
     rOStm.WriteUInt16( GetStoreCharSet( rImplFont.GetCharSet() ) );
-    rOStm.WriteUInt16( rImplFont.GetFamilyNoAsk() );
+    rOStm.WriteUInt16( rImplFont.GetFamilyTypeNoAsk() );
     rOStm.WriteUInt16( rImplFont.GetPitchNoAsk() );
     rOStm.WriteUInt16( rImplFont.GetWeightNoAsk() );
     rOStm.WriteUInt16( rImplFont.meUnderline );
@@ -800,13 +800,13 @@ FontPitch Font::GetPitch() { return mpImplFont->GetPitch(); }
 FontWeight Font::GetWeight() { return mpImplFont->GetWeight(); }
 FontWidth Font::GetWidthType() { return mpImplFont->GetWidthType(); }
 FontItalic Font::GetItalic() { return mpImplFont->GetItalic(); }
-FontFamily Font::GetFamilyType() { return mpImplFont->GetFamily(); }
+FontFamily Font::GetFamilyType() { return mpImplFont->GetFamilyType(); }
 
 FontPitch Font::GetPitch() const { return mpImplFont->GetPitchNoAsk(); }
 FontWeight Font::GetWeight() const { return mpImplFont->GetWeightNoAsk(); }
 FontWidth Font::GetWidthType() const { return mpImplFont->GetWidthTypeNoAsk(); }
 FontItalic Font::GetItalic() const { return mpImplFont->GetItalicNoAsk(); }
-FontFamily Font::GetFamilyType() const { return mpImplFont->GetFamilyNoAsk(); }
+FontFamily Font::GetFamilyType() const { return mpImplFont->GetFamilyTypeNoAsk(); }
 
 int Font::GetQuality() const { return mpImplFont->GetQuality(); }
 void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
