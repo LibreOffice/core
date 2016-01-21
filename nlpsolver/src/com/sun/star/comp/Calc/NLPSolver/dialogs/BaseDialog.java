@@ -71,20 +71,16 @@ public abstract class BaseDialog extends BaseControl {
         return xMSF;
     }
 
-    private XFrame getCurrentFrame() {
-        try {
-            Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", context);
-            XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, oDesktop);
-            XComponent xComponent = xDesktop.getCurrentComponent();
-            XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
-            XController xController = xModel.getCurrentController();
-            return xController.getFrame();
-        } catch (Exception e) {
-            return null;
-        }
+    private XFrame getCurrentFrame() throws Exception {
+        Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", context);
+        XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, oDesktop);
+        XComponent xComponent = xDesktop.getCurrentComponent();
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
+        XController xController = xModel.getCurrentController();
+        return xController.getFrame();
     }
 
-    private Rectangle getWorkspaceDimensions() {
+    private Rectangle getWorkspaceDimensions() throws Exception {
         return getCurrentFrame().getComponentWindow().getPosSize();
     }
 
