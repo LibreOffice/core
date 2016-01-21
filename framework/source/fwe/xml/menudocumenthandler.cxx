@@ -80,8 +80,6 @@ static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 
 // special popup menus (filled during runtime) must be saved as an empty popup menu or menuitem!!!
-static const sal_Int32 CMD_PROTOCOL_SIZE        = 5;
-static const char CMD_PROTOCOL[]                = ".uno:";
 static const char ADDDIRECT_CMD[]               = ".uno:AddDirect";
 static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu";
 
@@ -839,7 +837,7 @@ throw ( SAXException, RuntimeException )
                                             m_aAttributeType,
                                             aCommandURL );
 
-                    if ( aCommandURL.copy( CMD_PROTOCOL_SIZE ) != CMD_PROTOCOL )
+                    if ( !aLabel.isEmpty() )
                         pListMenu->AddAttribute( ATTRIBUTE_NS_LABEL,
                                                  m_aAttributeType,
                                                  aLabel );
@@ -897,13 +895,13 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
                              aHelpURL );
     }
 
-    if ( !aLabel.isEmpty() && aCommandURL.copy( CMD_PROTOCOL_SIZE ) != CMD_PROTOCOL )
+    if ( !aLabel.isEmpty() )
     {
         pList->AddAttribute( ATTRIBUTE_NS_LABEL,
                                 m_aAttributeType,
                                 aLabel );
     }
-    if (( nStyle > 0 ) && aCommandURL.copy( CMD_PROTOCOL_SIZE ) != CMD_PROTOCOL )
+    if ( nStyle > 0 )
     {
         OUString aValue;
         MenuStyleItem* pStyle = MenuItemStyles;
