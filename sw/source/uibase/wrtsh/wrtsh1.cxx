@@ -104,6 +104,7 @@
 #include "PostItMgr.hxx"
 #include <sfx2/msgpool.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <comphelper/lok.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -274,6 +275,10 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         // because of the DEF-Framesize
         // These must be removed explicitly for the optimal size.
         pFrmMgr->DelAttr(RES_FRM_SIZE);
+
+        if (comphelper::LibreOfficeKit::isActive())
+            // LOK: anchor inserted images as-char by default.
+            pFrmMgr->SetAnchor(FLY_AS_CHAR);
     }
     else
     {

@@ -19,6 +19,7 @@
 #ifdef WNT
 #include <prewin.h>
 #endif
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #ifdef WNT
 #include <postwin.h>
@@ -436,6 +437,10 @@ void DesktopLOKTest::testPasteWriterJPEG()
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 0, JPEG was not handled as a format for clipboard paste.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
+
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // This was text::TextContentAnchorType_AT_PARAGRAPH.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
 
     comphelper::LibreOfficeKit::setActive(false);
 }
