@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_4f4f77bd",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-21T19:36:49Z",
+      "side": 1,
+      "message": "We would not like to have a \"libreofficedev\" directory on a product installation.",
+      "revId": "11fd2f00da20086da870f3c2b8eef1d87df4bd2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
