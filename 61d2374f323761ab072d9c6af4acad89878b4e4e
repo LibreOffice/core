@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_efff4b32",
+        "filename": "sc/source/ui/inc/tabview.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T22:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_0f40cfa4",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 37
+      },
+      "revId": "61d2374f323761ab072d9c6af4acad89878b4e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_ef3c6b31",
         "filename": "sc/source/ui/inc/tabview.hxx",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2016-01-21T18:32:07Z",
       "side": 1,
       "message": "Nitpick: sticking with our naming conventions it would be eSplitMethod (\u0027e\u0027 prefix for enums).",
+      "range": {
+        "startLine": 499,
+        "startChar": 63,
+        "endLine": 499,
+        "endChar": 75
+      },
+      "revId": "61d2374f323761ab072d9c6af4acad89878b4e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8fee7f89",
+        "filename": "sc/source/ui/inc/tabview.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T22:55:33Z",
+      "side": 1,
+      "message": "Nice, is there any dictionary for rules like this?",
+      "parentUuid": "dab17558_ef3c6b31",
       "range": {
         "startLine": 499,
         "startChar": 63,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_2ffaf342",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T22:55:33Z",
+      "side": 1,
+      "message": "You\u0027re right :D Thats why, it was shadowed the aSplitMetod variable. But local variable solves it.",
+      "parentUuid": "dab17558_4f4ad7c6",
+      "range": {
+        "startLine": 1933,
+        "startChar": 59,
+        "endLine": 1933,
+        "endChar": 68
+      },
+      "revId": "61d2374f323761ab072d9c6af4acad89878b4e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_2f4793bc",
         "filename": "sc/source/ui/view/tabview.cxx",
         "patchSetId": 5
@@ -82,6 +154,24 @@
       "writtenOn": "2016-01-21T18:32:07Z",
       "side": 1,
       "message": "This duplicates too much code. It probably can be simplified by replacing the entire switch{} block with\n\n    if (eOldH !\u003d SC_SPLIT_NONE \u0026\u0026\n            (eSplitMethod \u003d\u003d SC_SPLIT_METHOD_CURSOR || eSplitMethod \u003d\u003d SC_SPLIT_METHOD_FIRST_COL))\n    {\n        long nSplitPos \u003d aViewData.GetHSplitPos();\n        if ( bLayoutRTL )\n            nSplitPos \u003d pFrameWin-\u003eGetOutputSizePixel().Width() - nSplitPos - 1;\n        aSplit.X() \u003d nSplitPos - aWinStart.X();\n    }\n    if (eOldV !\u003d SC_SPLIT_NONE \u0026\u0026\n            (eSplitMethod \u003d\u003d SC_SPLIT_METHOD_CURSOR || eSplitMethod \u003d\u003d SC_SPLIT_METHOD_FIRST_ROW))\n        aSplit.Y() \u003d aViewData.GetVSplitPos() - aWinStart.Y();",
+      "revId": "61d2374f323761ab072d9c6af4acad89878b4e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4f59375a",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T22:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_2f4793bc",
       "revId": "61d2374f323761ab072d9c6af4acad89878b4e4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -116,6 +206,24 @@
       "writtenOn": "2016-01-21T18:32:07Z",
       "side": 1,
       "message": "Declare a\n\n SplitMethod eSplitMethod;\n\nhere and use that local variable instead of the member variable to pass the argument.",
+      "revId": "61d2374f323761ab072d9c6af4acad89878b4e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2f567329",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T22:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_cf8367cb",
       "revId": "61d2374f323761ab072d9c6af4acad89878b4e4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
