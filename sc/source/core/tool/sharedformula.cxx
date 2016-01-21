@@ -119,11 +119,13 @@ void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
     for (++it; it != itEnd; ++it)
     {
         nRow = *it;
-        aPos = rCells.position(aPos.first, nRow);
-        if (aPos.first == rCells.end())
-            return;
-
-        splitFormulaCellGroup(aPos, nullptr);
+        if (ValidRow(nRow))
+        {
+            aPos = rCells.position(aPos.first, nRow);
+            if (aPos.first == rCells.end())
+                return;
+            splitFormulaCellGroup(aPos, nullptr);
+        }
     }
 }
 
