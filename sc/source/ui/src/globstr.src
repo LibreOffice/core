@@ -2101,10 +2101,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "%1 and %2 more";
     };
-    String STR_FUNCTIONS_NAMEDESCS
-    {
-        Text [ en-US ] = " : ";
-    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

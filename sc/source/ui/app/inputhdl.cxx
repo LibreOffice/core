@@ -1024,7 +1024,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 }
                                 if ( nVarArgsSet > 0 && nActive > nArgs )
                                     nActive = nArgs - (nActive - nArgs) % nVarArgsSet;
-                                aBuf.append( ScGlobal::GetRscString( STR_FUNCTIONS_NAMEDESCS ) );
+                                aBuf.append( " : " );
                                 aBuf.append( ppFDesc->getParameterDescription(nActive-1) );
                                 aNew = aBuf.makeStringAndClear();
                                 ShowTip( aNew );
@@ -1202,7 +1202,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     {
         if ( !ppFDesc->getFunctionName().isEmpty() )
         {
-            aTipStr += ScGlobal::GetRscString( STR_FUNCTIONS_NAMEDESCS ) + ppFDesc->getDescription();
+            aTipStr += " : " + ppFDesc->getDescription();
         }
     }
     ShowTip( aTipStr );
