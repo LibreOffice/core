@@ -688,6 +688,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
         sal_Int32 nMinHeight = 0;
 
         bool bIsEmpty = true; // check if all cells in this row are merged
+        bool bRowHasText = false;
 
         for( nCol = 0; nCol < nColCount; ++nCol )
         {
@@ -704,7 +705,16 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
                 }
                 else
                 {
-                    nMinHeight = std::max( nMinHeight, xCell->getMinimumHeight() );
+                    bool bCellHasText = xCell->hasText();
+                    if ( (!bRowHasText && !bCellHasText) || ( bRowHasText && bCellHasText ) )
+                    {
+                        nMinHeight = std::max( nMinHeight, xCell->getMinimumHeight() );
+                    }
+                    else if ( !bRowHasText && bCellHasText )
+                    {
+                        bRowHasText = true;
+                        nMinHeight = xCell->getMinimumHeight();
+                    }
                 }
             }
         }
