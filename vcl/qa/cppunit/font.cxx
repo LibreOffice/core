@@ -29,6 +29,7 @@ public:
     void testQuality();
     void testBuiltInFontFlag();
     void testEmbeddableFontFlag();
+    void testSubsettableFontFlag();
     void testSymbolFlagAndCharSet();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
@@ -40,6 +41,7 @@ public:
     CPPUNIT_TEST(testQuality);
     CPPUNIT_TEST(testBuiltInFontFlag);
     CPPUNIT_TEST(testEmbeddableFontFlag);
+    CPPUNIT_TEST(testSubsettableFontFlag);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -131,6 +133,17 @@ void VclFontTest::testEmbeddableFontFlag()
 
     aFont.SetEmbeddableFlag( true );
     CPPUNIT_ASSERT_EQUAL( true, aFont.CanEmbed() );
+}
+
+
+void VclFontTest::testSubsettableFontFlag()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL( false, aFont.CanSubset() );
+
+    aFont.SetSubsettableFlag( true );
+    CPPUNIT_ASSERT_EQUAL( true, aFont.CanSubset() );
 }
 
 void VclFontTest::testSymbolFlagAndCharSet()

@@ -37,8 +37,8 @@ public:
 
     // device independent font functions
     const OUString&     GetFamilyName() const                           { return maFamilyName; }
-    FontFamily          GetFamilyType()                                     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
-    FontFamily          GetFamilyTypeNoAsk() const                          { return meFamily; }
+    FontFamily          GetFamilyType()                                 { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
+    FontFamily          GetFamilyTypeNoAsk() const                      { return meFamily; }
     const OUString&     GetStyleName() const                            { return maStyleName; }
 
     FontWeight          GetWeight()                                     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
@@ -75,7 +75,7 @@ public:
 
     bool                IsBuiltInFont() const                           { return mbDevice; }
     bool                CanEmbed() const                                { return mbEmbeddable; }
-    /* Missing function: bool CanSubSet() const; */
+    bool                CanSubset() const                               { return mbSubsettable; }
     /* Missing function: bool CanRotate() const; */
     /* Missing function: bool HasMapNames() const; */
 
@@ -84,7 +84,7 @@ public:
 
     void                SetBuiltInFontFlag( bool bIsBuiltInFont )       { mbDevice = bIsBuiltInFont; }
     void                SetEmbeddableFlag( bool bEmbeddable )           { mbEmbeddable = bEmbeddable; }
-    /* Missing function: void SetSettableFlag( bool ); */
+    void                SetSubsettableFlag( bool bSubsettable )         { mbSubsettable = bSubsettable; }
     /* missing function: void SetOrientationFlag( bool ); */
 
     bool                operator==( const ImplFont& ) const;
@@ -123,7 +123,8 @@ private:
                         mbVertical:1,
                         mbTransparent:1,    // compatibility, now on output device
                         mbDevice:1,
-                        mbEmbeddable:1;
+                        mbEmbeddable:1,
+                        mbSubsettable:1;
     int                 mnQuality;
 
     friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
