@@ -2984,10 +2984,19 @@ void ScInputHandler::AddRefEntry()
     DataChanging();                         // Cannot be new
 
     RemoveSelection();
-    if (pTableView)
-        pTableView->InsertText( OUString(cSep) );
-    if (pTopView)
-        pTopView->InsertText( OUString(cSep) );
+    OUString aText = GetEditText(pEngine);
+    sal_Unicode lastChar = aText[aText.getLength()-1];
+    if (lastChar == 0x20)                    //checking hex value space
+        lastChar = aText[aText.getLength()-2];
+
+    bool bAppendComma = (lastChar != 0x28 && lastChar != 0x2C && lastChar != 0x3D); //checking ( , =
+    if(bAppendComma)
+    {
+        if (pTableView)
+            pTableView->InsertText( OUString(cSep) );
+        if (pTopView)
+            pTopView->InsertText( OUString(cSep) );
+    }
 
     DataChanged();
 }
