@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_8f12ffb2",
+        "filename": "sc/source/ui/inc/tabview.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T18:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_6159b45a",
+      "range": {
+        "startLine": 496,
+        "startChar": 51,
+        "endLine": 496,
+        "endChar": 80
+      },
+      "revId": "ef0cfc9c6d5ef79f80b715025f298f8e3c3983eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_c1406059",
         "filename": "sc/source/ui/view/tabview.cxx",
         "patchSetId": 4
@@ -84,6 +108,24 @@
       "writtenOn": "2016-01-20T14:20:32Z",
       "side": 1,
       "message": "If I understood https://bugs.documentfoundation.org/show_bug.cgi?id\u003d91013 correctly, the feature request is to add methods that split always at the first column or row, not at the cursor position. Or did I get that wrong? Let\u0027s clarify there, I\u0027ll add a comment.\n\nIn which case I\u0027d name the enum values SC_SPLIT_METHOD_FIRST_COL, SC_SPLIT_METHOD_FIRST_ROW, SC_SPLIT_METHOD_CURSOR for clarity.",
+      "revId": "ef0cfc9c6d5ef79f80b715025f298f8e3c3983eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6f17dba3",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T18:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_c1406059",
       "revId": "ef0cfc9c6d5ef79f80b715025f298f8e3c3983eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -107,6 +149,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_cf0c0797",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1973,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T18:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_a118bc85",
+      "revId": "ef0cfc9c6d5ef79f80b715025f298f8e3c3983eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_811db875",
         "filename": "sc/source/ui/view/tabview.cxx",
         "patchSetId": 4
@@ -124,6 +184,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_af11c3ae",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T18:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_811db875",
+      "revId": "ef0cfc9c6d5ef79f80b715025f298f8e3c3983eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_e13be4e9",
         "filename": "sc/source/ui/view/tabvwsh3.cxx",
         "patchSetId": 4
@@ -135,6 +213,30 @@
       "writtenOn": "2016-01-20T14:20:32Z",
       "side": 1,
       "message": "Nitpick: please stick to our naming conventions, so this variable name should be something like aSplitMethod.",
+      "range": {
+        "startLine": 902,
+        "startChar": 25,
+        "endLine": 902,
+        "endChar": 36
+      },
+      "revId": "ef0cfc9c6d5ef79f80b715025f298f8e3c3983eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_0f272f13",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-21T18:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_e13be4e9",
       "range": {
         "startLine": 902,
         "startChar": 25,
