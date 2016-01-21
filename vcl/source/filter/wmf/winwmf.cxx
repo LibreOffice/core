@@ -676,7 +676,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         aBmp.Crop( aCropRect );
                     }
                     Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
-                    aBmpSaveList.push_back( new BSaveStruct( aBmp, aDestRect, nWinROP, pOut->GetFillStyle () ) );
+                    aBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP, pOut->GetFillStyle ()));
                 }
             }
         }
@@ -726,7 +726,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                         aBmp.Crop( aCropRect );
                     }
-                    aBmpSaveList.push_back( new BSaveStruct( aBmp, aDestRect, nWinROP, pOut->GetFillStyle () ) );
+                    aBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP, pOut->GetFillStyle ()));
                 }
             }
         }
