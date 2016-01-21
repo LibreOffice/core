@@ -1093,9 +1093,8 @@ void SdImportTest::testRowHeight()
     uno::Reference< css::table::XTableRows > xRows( xTable->getRows(), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
     xRefRow->getPropertyValue( sHeight ) >>= nHeight;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(508), nHeight);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(507), nHeight);
 }
-
 void SdImportTest::testTdf93830()
 {
     // Text shape offset was ignored
