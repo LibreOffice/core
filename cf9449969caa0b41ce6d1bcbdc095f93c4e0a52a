@@ -16,6 +16,24 @@
       "revId": "cf9449969caa0b41ce6d1bcbdc095f93c4e0a52a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ef746bd0",
+        "filename": "vcl/source/gdi/dibtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-01-21T22:26:06Z",
+      "side": 1,
+      "message": "Of course this should check nBitCount instead of nPlanes... How did I ever do this?\n\nFor the other question: IIRC for bit counts 1 and 4 the bits are packed.",
+      "parentUuid": "dab17558_0f8a8fbf",
+      "revId": "cf9449969caa0b41ce6d1bcbdc095f93c4e0a52a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
