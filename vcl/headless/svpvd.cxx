@@ -32,6 +32,7 @@ using namespace basegfx;
 
 SvpSalVirtualDevice::~SvpSalVirtualDevice()
 {
+    cairo_surface_destroy(m_pSurface);
 }
 
 SalGraphics* SvpSalVirtualDevice::AcquireGraphics()
