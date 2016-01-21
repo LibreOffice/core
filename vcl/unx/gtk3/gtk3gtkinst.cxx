@@ -13,12 +13,12 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/datatransfer/XTransferable.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardEx.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboardListener.hpp"
+#include "com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp"
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
@@ -275,6 +275,7 @@ static void clipboard_owner_init(ClipboardOwner *)
 class VclGtkClipboard :
         public cppu::WeakComponentImplHelper<
         datatransfer::clipboard::XSystemClipboard,
+        datatransfer::clipboard::XFlushableClipboard,
         XServiceInfo>
 {
     GdkAtom                                                  m_nSelection;
@@ -323,6 +324,12 @@ public:
      */
 
     virtual sal_Int8 SAL_CALL getRenderingCapabilities()
+        throw(RuntimeException, std::exception) override;
+
+    /*
+     * XFlushableClipboard
+     */
+    virtual void SAL_CALL flushClipboard()
         throw(RuntimeException, std::exception) override;
 
     /*
@@ -502,7 +509,8 @@ namespace
 }
 
 VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
-    : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard, XServiceInfo>
+    : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
+                                    datatransfer::clipboard::XFlushableClipboard, XServiceInfo>
         (m_aMutex)
     , m_nSelection(nSelection)
 {
@@ -511,6 +519,16 @@ VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
                                                G_CALLBACK(handle_owner_change), this);
     m_pOwner = CLIPBOARD_OWNER(g_object_new(CLIPBOARD_OWNER_OBJECT, nullptr));
     m_pOwner->m_pThis = this;
+}
+
+void VclGtkClipboard::flushClipboard()
+  throw (RuntimeException, std::exception)
+{
+    if (GDK_SELECTION_CLIPBOARD != m_nSelection)
+        return;
+
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    gtk_clipboard_store(clipboard);
 }
 
 VclGtkClipboard::~VclGtkClipboard()
@@ -524,7 +542,7 @@ VclGtkClipboard::~VclGtkClipboard()
 void VclGtkClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-    throw( RuntimeException, std::exception )
+    throw(RuntimeException, std::exception)
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
@@ -584,6 +602,7 @@ void VclGtkClipboard::setContents(
             //if we have gained or lost ownership of the clipboard
             gtk_clipboard_set_with_owner(clipboard, aGtkTargets.data(), aGtkTargets.size(),
                                         ClipboardGetFunc, ClipboardClearFunc, G_OBJECT(m_pOwner));
+            gtk_clipboard_set_can_store(clipboard, aGtkTargets.data(), aGtkTargets.size());
         }
         m_aGtkTargets = aGtkTargets;
     }
