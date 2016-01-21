@@ -1505,11 +1505,12 @@ bool ScViewFunc::PasteMultiRangesFromClip(
             return false;
     }
 
+    bool bRowInfo = ( aMarkedRange.aStart.Col()==0 && aMarkedRange.aEnd.Col()==MAXCOL );
     ::std::unique_ptr<ScDocument> pUndoDoc;
     if (pDoc->IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pUndoDoc->InitUndoSelected(pDoc, aMark);
+        pUndoDoc->InitUndoSelected(pDoc, aMark, false, bRowInfo);
         pDoc->CopyToDocument(aMarkedRange, nUndoFlags, false, pUndoDoc.get(), &aMark);
     }
 
@@ -1549,10 +1550,15 @@ bool ScViewFunc::PasteMultiRangesFromClip(
                                      true, false, false, true);
     }
 
-    ScRange aTmp = aMarkedRange;
-    aTmp.aStart.SetTab(nTab1);
-    aTmp.aEnd.SetTab(nTab1);
-    pDocSh->PostPaint(aTmp, PAINT_GRID);
+    if (bRowInfo)
+        pDocSh->PostPaint(aMarkedRange.aStart.Col(), aMarkedRange.aStart.Row(), nTab1, MAXCOL, MAXROW, nTab1, PAINT_GRID|PAINT_LEFT);
+    else
+    {
+        ScRange aTmp = aMarkedRange;
+        aTmp.aStart.SetTab(nTab1);
+        aTmp.aEnd.SetTab(nTab1);
+        pDocSh->PostPaint(aTmp, PAINT_GRID);
+    }
 
     if (pDoc->IsUndoEnabled())
     {
@@ -1712,7 +1718,11 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     // Refresh the range that includes all pasted ranges.  We only need to
     // refresh the current sheet.
-    pDocSh->PostPaint(aRanges, PAINT_GRID);
+    sal_uInt16 nPaint = PAINT_GRID;
+    bool bRowInfo = (aSrcRange.aStart.Col()==0 &&  aSrcRange.aEnd.Col()==MAXCOL);
+    if (bRowInfo)
+        nPaint |= PAINT_LEFT;
+    pDocSh->PostPaint(aRanges, nPaint);
 
     if (pDoc->IsUndoEnabled())
     {
