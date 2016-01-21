@@ -75,7 +75,7 @@ public class Control extends Shape
         try
         {
             icontroltype = _icontroltype;
-            String sServiceName = oFormHandler.sModelServices[getControlType()];
+            String sServiceName = oFormHandler.sModelServices[icontroltype];
             Object oControlModel = oFormHandler.xMSFDoc.createInstance(sServiceName);
             xControlModel = UnoRuntime.queryInterface( XControlModel.class, oControlModel );
             xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, oControlModel );
@@ -185,15 +185,21 @@ public class Control extends Shape
         else
         {
             Size aPeerSize = getPeerSize();
+            int  aWidth;
+            if (aPeerSize == null)
+                aWidth = 0;
+            else
+                aWidth = aPeerSize.Width;
+
             // We increase the preferred Width a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
             if (getControlType() == FormHandler.SOCHECKBOX)
             {
-                return aPeerSize.Width * oFormHandler.getXPixelFactor();
+                return aWidth * oFormHandler.getXPixelFactor();
             }
             else
             {
-                return (aPeerSize.Width * oFormHandler.getXPixelFactor()) + 200;
+                return (aWidth * oFormHandler.getXPixelFactor()) + 200;
             }
         }
     }
@@ -208,6 +214,11 @@ public class Control extends Shape
         {
             Size aPeerSize = getPeerSize();
             int nHeight = aPeerSize.Height;
+            if (aPeerSize == null)
+                 nHeight = 0;
+            else
+                 nHeight = aPeerSize.Height;
+
             // We increase the preferred Height a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
             return ((nHeight + 1) * oFormHandler.getYPixelFactor());
