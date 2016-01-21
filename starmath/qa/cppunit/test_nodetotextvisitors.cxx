@@ -26,7 +26,6 @@ typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 using namespace ::com::sun::star;
 
-namespace {
 
 class Test : public test::BootstrapFixture {
 
@@ -53,6 +52,7 @@ public:
     void testBinHorInSubSup();
     void testUnaryInMixedNumberAsNumerator();
     void testMiscEquivalent();
+    void testParser();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(SimpleUnaryOp);
@@ -72,6 +72,7 @@ public:
     CPPUNIT_TEST(testBinHorInSubSup);
     CPPUNIT_TEST(testUnaryInMixedNumberAsNumerator);
     CPPUNIT_TEST(testMiscEquivalent);
+    CPPUNIT_TEST(testParser);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -486,13 +487,13 @@ void Test::ParseAndCompare(const char *formula1, const char *formula2, const cha
     SmNode *pNode1, *pNode2;
 
     // parse formula1
-    OUString sInput1 = OUString::createFromAscii(formula1);
+    OUString sInput1 = OUString(formula1, strlen(formula1), RTL_TEXTENCODING_UTF8);
     pNode1 = SmParser().ParseExpression(sInput1);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode1, sOutput1);
 
     // parse formula2
-    OUString sInput2 = OUString::createFromAscii(formula2);
+    OUString sInput2 = OUString(formula2, strlen(formula2), RTL_TEXTENCODING_UTF8);
     pNode2 = SmParser().ParseExpression(sInput2);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode2, sOutput2);
@@ -652,10 +653,27 @@ void Test::testMiscEquivalent()
     // fdo#66081
     ParseAndCompare("{x}", "x", "Variable in brace");
     ParseAndCompare("{{x+{{y}}}}", "x+y", "Nested braces");
+
+    // check non-BMP Unicode char
+    ParseAndCompare("{\xf0\x9d\x91\x8e}", "\xf0\x9d\x91\x8e", "non-BMP variable in brace");
+    ParseAndCompare("{ \xf0\x9d\x91\x8e }", "\xf0\x9d\x91\x8e", "non-BMP variable in brace");
+}
+
+void Test::testParser()
+{
+    char const* formula = "{ \xf0\x9d\x91\x8e }"; // non-BMP Unicode
+    char const* expected = "\xf0\x9d\x91\x8e";
+
+    OUString sOutput;
+    OUString sInput = OUString(formula, strlen(formula), RTL_TEXTENCODING_UTF8);
+    OUString sExpected = OUString(expected, strlen(expected), RTL_TEXTENCODING_UTF8);
+    std::unique_ptr<SmNode> pNode(SmParser().ParseExpression(sInput));
+    pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+    SmNodeToTextVisitor(pNode.get(), sOutput);
+    CPPUNIT_ASSERT_EQUAL(sExpected, sOutput);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
