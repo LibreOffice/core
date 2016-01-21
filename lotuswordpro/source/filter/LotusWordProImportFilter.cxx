@@ -189,33 +189,11 @@ void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& aArgu
     }
 }
 
-OUString LotusWordProImportFilter_getImplementationName ()
-    throw (RuntimeException)
-{
-    return OUString ( "com.sun.star.comp.Writer.LotusWordProImportFilter" );
-}
-
-Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(  )
-    throw (RuntimeException)
-{
-    Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
-}
-
-uno::Reference< XInterface > SAL_CALL LotusWordProImportFilter_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
-{
-    return static_cast<cppu::OWeakObject*>(new LotusWordProImportFilter( comphelper::getComponentContext(rSMgr) ));
-}
-
 // XServiceInfo
 OUString SAL_CALL LotusWordProImportFilter::getImplementationName(  )
     throw (RuntimeException, std::exception)
 {
-    return LotusWordProImportFilter_getImplementationName();
+    return OUString ( "com.sun.star.comp.Writer.LotusWordProImportFilter" );
 }
 sal_Bool SAL_CALL LotusWordProImportFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException, std::exception)
@@ -225,7 +203,11 @@ sal_Bool SAL_CALL LotusWordProImportFilter::supportsService( const OUString& rSe
 Sequence< OUString > SAL_CALL LotusWordProImportFilter::getSupportedServiceNames(  )
     throw (RuntimeException, std::exception)
 {
-    return LotusWordProImportFilter_getSupportedServiceNames();
+    Sequence < OUString > aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.document.ImportFilter";
+    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
