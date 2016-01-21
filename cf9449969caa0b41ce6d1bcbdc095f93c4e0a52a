@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_0f8a8fbf",
+        "filename": "vcl/source/gdi/dibtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-21T21:24:41Z",
+      "side": 1,
+      "message": "it looks like we already require nPlanes \u003d\u003d 1 above?\n\n... should this perhaps check nBitCount instead? how do 1 and 4 bit work, are they packed and thus end up taking less bytes than nWidth * nHeight?\n\n(wonder what nBitCount \u003d\u003d 0 does, which is apparently allowed?)",
+      "revId": "cf9449969caa0b41ce6d1bcbdc095f93c4e0a52a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
