@@ -123,9 +123,14 @@ namespace connectivity
                     {
                         isRelative = sIsRelative.toInt32();
                     }
+                    if (isRelative)
+                    {
+                        // Make it absolute
+                        profilePath = regDir + profilePath;
+                    }
 
                     ProfileStruct*  profileItem     = new ProfileStruct(product,profileName,
-                            regDir + profilePath);
+                            profilePath);
                     m_Product.mProfileList[profileName] = profileItem;
 
                     sal_Int32 isDefault = 0;
