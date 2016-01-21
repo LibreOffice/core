@@ -430,7 +430,7 @@ static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
-static void                    lo_freeError     (const char *pfree);
+static void                    lo_freeError     (char* pFree);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
@@ -1574,9 +1574,10 @@ static char* lo_getError (LibreOfficeKit *pThis)
     strcpy(pMemory, aString.getStr());
     return pMemory;
 }
-static void lo_freeError(const char *pfree)
+
+static void lo_freeError(char* pFree)
 {
-    free(const_cast<char *>(pfree));
+    free(pFree);
 }
 
 static char* lo_getFilterTypes(LibreOfficeKit* pThis)
