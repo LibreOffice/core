@@ -301,6 +301,17 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         return false;
     }
 
+    if (rHeader.nCompression == 0)
+    {
+        sal_uInt64 nMaxSize = rIStm.remainingSize();
+        if (rHeader.nHeight != 0)
+            nMaxSize /= rHeader.nHeight;
+        if (rHeader.nPlanes != 0)
+            nMaxSize /= rHeader.nPlanes;
+        if (sal_Int64(nMaxSize) < rHeader.nWidth)
+            return false;
+    }
+
     return rIStm.good();
 }
 
