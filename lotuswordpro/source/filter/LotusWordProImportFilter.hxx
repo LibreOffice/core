@@ -87,19 +87,6 @@ public:
 
 };
 
-OUString LotusWordProImportFilter_getImplementationName()
-    throw ( css::uno::RuntimeException );
-
-bool SAL_CALL LotusWordProImportFilter_supportsService( const OUString& ServiceName )
-    throw ( css::uno::RuntimeException );
-
-css::uno::Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(  )
-    throw ( css::uno::RuntimeException );
-
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL LotusWordProImportFilter_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
-    throw ( css::uno::Exception );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
