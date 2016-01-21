@@ -2607,11 +2607,14 @@ elif test -z "$enable_dynamic_loading"; then
 fi
 
 DISABLE_DYNLOADING=''
+AC_MSG_CHECKING([Whether to disable dynamic loading])
 if test "$enable_dynamic_loading" = yes; then
     BUILD_TYPE="$BUILD_TYPE DYNLOADING"
+    AC_MSG_RESULT([no])
 else
     DISABLE_DYNLOADING='TRUE'
     SCPDEFS="$SCPDEFS -DDISABLE_DYNLOADING"
+    AC_MSG_RESULT([yes])
 fi
 AC_SUBST(DISABLE_DYNLOADING)
 
