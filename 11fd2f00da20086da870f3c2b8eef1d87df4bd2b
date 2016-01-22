@@ -16,6 +16,47 @@
       "revId": "11fd2f00da20086da870f3c2b8eef1d87df4bd2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_caa51505",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-01-22T06:33:37Z",
+      "side": 1,
+      "message": "And there is no .config directory on Windows. Wasn\u0027t there a comment a long time ago already in the bug report that told what API should be used to get the path to this folder?",
+      "parentUuid": "dab17558_4f4f77bd",
+      "revId": "11fd2f00da20086da870f3c2b8eef1d87df4bd2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_aaaa51d2",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-01-22T06:33:37Z",
+      "side": 1,
+      "message": "This else branch should go away; in no cases does it make any sense to print this to stderr. If the css file can\u0027t be opened, just return from the function. No error message necessary, IMHO.",
+      "range": {
+        "startLine": 679,
+        "startChar": 4,
+        "endLine": 679,
+        "endChar": 8
+      },
+      "revId": "11fd2f00da20086da870f3c2b8eef1d87df4bd2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
