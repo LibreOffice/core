@@ -904,8 +904,8 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     mbVertical( rImplFont.mbVertical ),
     mbTransparent( rImplFont.mbTransparent ),
     mbDevice( rImplFont.mbDevice ),
-    mbEmbeddable( false ),
-    mbSubsettable( false ),
+    mbEmbeddable( rImplFont.mbEmbeddable ),
+    mbSubsettable( rImplFont.mbSubsettable ),
     mbRotatable( rImplFont.mbRotatable ),
     mnQuality( rImplFont.mnQuality )
 {}
