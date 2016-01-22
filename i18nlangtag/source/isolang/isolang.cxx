@@ -239,7 +239,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_ARABIC_SOMALIA,         "ar", "SO", 0     },
     { LANGUAGE_USER_ARABIC_SUDAN,           "ar", "SD", 0     },
     { LANGUAGE_ARABIC_PRIMARY_ONLY,         "ar", ""  , 0     },
-    { LANGUAGE_BASQUE,                      "eu", ""  , 0     },
+    { LANGUAGE_BASQUE,                      "eu", "ES", 0     },
+    { LANGUAGE_BASQUE,                      "eu", ""  , kSAME },    // our earlier definition
     { LANGUAGE_BULGARIAN,                   "bg", "BG", 0     },
     { LANGUAGE_CZECH,                       "cs", "CZ", 0     },
     { LANGUAGE_CZECH,                       "cz", ""  , kSAME },
@@ -1114,7 +1115,6 @@ css::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
                 switch (pEntry->mnLang)
                 {
                     // These are known to have no country assigned.
-                    case LANGUAGE_BASQUE:
                     case LANGUAGE_USER_ESPERANTO:
                     case LANGUAGE_USER_INTERLINGUA:
                     case LANGUAGE_USER_INTERLINGUE:
