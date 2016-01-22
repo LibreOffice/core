@@ -797,6 +797,8 @@ public class APIDescGetter extends DescGetter
             if (dirs.exists()) {
                 modules = dirs.list();
             }
+            if (modules == null)
+                throw new IllegalStateException("missing dirs");
         }
 
         for (int i = 0; i < modules.length; i++)
