@@ -386,7 +386,11 @@ public final class TypeDescription implements ITypeDescription {
         this.componentType = componentType;
         TypeDescription[] args = calculateTypeArguments();
         this.hasTypeArguments = args != null;
-        this.fieldDescriptions = calculateFieldDescriptions(args);
+        if (this.hasTypeArguments)
+            this.fieldDescriptions = calculateFieldDescriptions(args);
+        else
+            this.fieldDescriptions =  new IFieldDescription[0];
+
         // methodDescriptions must be initialized lazily, to avoid problems with
         // circular dependencies (a super-interface that has a sub-interface as
         // method parameter type; an interface that has a struct as method

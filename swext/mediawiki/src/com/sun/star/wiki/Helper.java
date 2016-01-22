@@ -190,8 +190,10 @@ public class Helper
                 e.printStackTrace();
             }
         }
-
-        return m_bShowInBrowser.booleanValue();
+        if (m_bShowInBrowser == null)
+            return false;
+        else
+            return m_bShowInBrowser.booleanValue();
     }
 
     synchronized protected static void SetShowInBrowserByDefault( XComponentContext xContext, boolean bValue )
