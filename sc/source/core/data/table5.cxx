@@ -859,37 +859,6 @@ void ScTable::CopyRowFiltered(ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
 
 void ScTable::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, bool bFiltered)
 {
-    // First adjust the maFilteredRowCount cache
-    if( ( nStartRow >= maFilteredRowCount.nStartRow ) || ( nEndRow <= maFilteredRowCount.nEndRow ) )
-    {
-        if( ( nStartRow >= maFilteredRowCount.nStartRow ) && ( nEndRow <= maFilteredRowCount.nEndRow ) &&
-            ( maFilteredRowCount.nCount != SCSIZE_MAX ) )
-        {
-            SCSIZE nChange = 0;
-            ScFlatBoolRowSegments::RangeData aData;
-            SCROW nRowItr = nStartRow;
-            while( nRowItr <= nEndRow )
-            {
-                if( !mpFilteredRows->getRangeData( nRowItr, aData ) )
-                    break;
-                if( aData.mnRow2 > nEndRow )
-                    aData.mnRow2 = nEndRow;
-                // rows not filtered and going to be filtered
-                if( bFiltered && !aData.mbValue )
-                    nChange += aData.mnRow2 - nRowItr + 1;
-                // rows filtered and not going to be filtered any more
-                else if( !bFiltered && aData.mbValue )
-                    nChange -= aData.mnRow2 - nRowItr + 1;
-
-                nRowItr = aData.mnRow2 + 1;
-            }
-
-            maFilteredRowCount.nCount += nChange;
-        }
-        else
-            maFilteredRowCount.nCount = SCSIZE_MAX;
-    }
-
     if (bFiltered)
         mpFilteredRows->setTrue(nStartRow, nEndRow);
     else

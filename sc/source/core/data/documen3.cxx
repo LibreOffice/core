@@ -1470,37 +1470,9 @@ void ScDocument::GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& 
     nTotal = 0;
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
-        const ScDBData* pDBData = GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
+        ScDBData* pDBData = GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
         if( pDBData && pDBData->HasAutoFilter() )
-        {
-            SCTAB nAreaTab;
-            SCCOL nStartCol;
-            SCROW nStartRow;
-            SCCOL nEndCol;
-            SCROW nEndRow;
-            pDBData->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
-
-            if( pDBData->HasHeader() )
-                ++nStartRow;
-
-            nTotal = nEndRow - nStartRow + 1;
-
-            ScTable::FilteredRowCountData* pFilteredRowCount = &(maTabs[nTab]->maFilteredRowCount);
-            // Exact range match, cache hit, early exit
-            if( ( pFilteredRowCount->nStartRow == nStartRow ) && ( pFilteredRowCount->nEndRow == nEndRow ) &&
-                ( pFilteredRowCount->nCount != SCSIZE_MAX ) )
-            {
-                nSelected = nTotal - pFilteredRowCount->nCount;
-                return;
-            }
-
-            // Compute the count
-            nSelected = CountNonFilteredRows( nStartRow, nEndRow, nTab );
-            // and store it in the cache
-            pFilteredRowCount->nStartRow = nStartRow;
-            pFilteredRowCount->nEndRow   = nEndRow;
-            pFilteredRowCount->nCount    = nTotal - nSelected;
-        }
+            pDBData->GetFilterSelCount( nSelected, nTotal );
     }
 }
 

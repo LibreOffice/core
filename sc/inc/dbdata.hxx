@@ -97,6 +97,7 @@ private:
 
     ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
     bool            mbTableColumnNamesDirty;
+    SCSIZE          nFilteredRowCount;
 
     using ScRefreshTimer::operator==;
 
@@ -214,6 +215,8 @@ public:
                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
     void ExtendDataArea(ScDocument* pDoc);
+    void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
+    void GetFilterSelCount(SCSIZE& nSelected, SCSIZE& nTotal);
 
 private:
 
