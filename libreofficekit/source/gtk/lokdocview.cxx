@@ -592,6 +592,12 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     case GDK_KEY_Right:
         nKeyCode = com::sun::star::awt::Key::RIGHT;
         break;
+    case GDK_KEY_Page_Down:
+        nKeyCode = com::sun::star::awt::Key::PAGEDOWN;
+        break;
+    case GDK_KEY_Page_Up:
+        nKeyCode = com::sun::star::awt::Key::PAGEUP;
+        break;
     case GDK_KEY_Shift_L:
     case GDK_KEY_Shift_R:
         if (pEvent->type == GDK_KEY_PRESS)
