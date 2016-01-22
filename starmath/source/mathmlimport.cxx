@@ -2978,7 +2978,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                     {
                         // dealing with read-only properties here. Nothing to do...
                     }
-                    catch( Exception& rEx)
+                    catch (const Exception& rEx)
                     {
                         SAL_WARN("starmath", "SmXMLImport::SetConfigurationSettings: Exception: " << rEx.Message );
                     }
