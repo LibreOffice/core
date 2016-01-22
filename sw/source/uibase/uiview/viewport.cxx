@@ -49,6 +49,7 @@
 #include <IDocumentSettingAccess.hxx>
 
 #include <basegfx/tools/zoomtools.hxx>
+#include <comphelper/lok.hxx>
 
 // The SetVisArea of the DocShell must not be called from InnerResizePixel.
 // But our adjustments must take place.
@@ -212,7 +213,10 @@ m_aDocSz = rSz;
 
 void SwView::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
 {
-    const Size aOldSz( m_aVisArea.GetSize() );
+    Size aOldSz( m_aVisArea.GetSize() );
+    if (comphelper::LibreOfficeKit::isActive() && m_pWrtShell)
+        // If m_pWrtShell's visible area is the whole document, do the same here.
+        aOldSz = m_pWrtShell->VisArea().SSize();
 
     const Point aTopLeft(     AlignToPixel( rRect.TopLeft() ));
     const Point aBottomRight( AlignToPixel( rRect.BottomRight() ));
