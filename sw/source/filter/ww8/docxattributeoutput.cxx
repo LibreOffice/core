@@ -5179,6 +5179,13 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
     if (nWwId == ww::stiUser)
         return true;
 
+    // Allow exported built-in styles UI language neutral
+    if ( nWwId == ww::stiNormal || ( nWwId>= ww::stiLev1 && nWwId <= ww::stiLev9 ) ||
+            nWwId == ww::stiCaption || nWwId == ww::stiTitle ||
+            nWwId == ww::stiSubtitle || nWwId == ww::stiStrong ||
+            nWwId == ww::stiEmphasis )
+        return true;
+
     static std::set<OUString, OUStringIgnoreCase> aWhitelist;
     if (aWhitelist.empty())
     {

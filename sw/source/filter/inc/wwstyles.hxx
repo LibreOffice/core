@@ -133,6 +133,8 @@ namespace ww
         stiNil = 0x0fff                 // max for 12 bits
     };
 
+    const sal_Char **GetStiNames() throw();
+
     /** Find the WinWord sti index of an old <= Word2 stc (style code)
 
         When importing a Word 2 document we would like to treat styles as

@@ -317,7 +317,15 @@ void MSWordStyles::BuildStyleIds()
     {
         OUString aName;
         if(m_pFormatA[n])
-            aName = m_pFormatA[n]->GetName();
+        {
+            sal_uInt16 nWwId = GetWWId( *m_pFormatA[n] ) ;
+            if ( nWwId != ww::stiUser && nWwId < ww::stiMax )
+            {
+                aName = OUString::createFromAscii( ww::GetStiNames()[nWwId] );
+            }
+            else
+                aName = m_pFormatA[n]->GetName();
+        }
         else if (m_aNumRules.find(n) != m_aNumRules.end())
             aName = m_aNumRules[n]->GetName();
         OStringBuffer aStyleIdBuf(aName.getLength());
