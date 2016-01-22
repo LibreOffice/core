@@ -187,8 +187,6 @@ void Shell::Init()
     bCreatingWindow = false;
 
     pTabBar.reset(VclPtr<TabBar>::Create(&GetViewFrame()->GetWindow()));
-    pTabBar->SetSplitHdl( LINK( this, Shell, TabBarSplitHdl ) );
-    bTabBarSplitted = false;
 
     nCurKey = 100;
     InitScrollBars();
@@ -441,12 +439,6 @@ void Shell::OuterResizePixel( const Point &rPos, const Size &rSize )
 }
 
 
-IMPL_LINK_NOARG_TYPED( Shell, TabBarSplitHdl, ::TabBar *, void )
-{
-    bTabBarSplitted = true;
-    ArrangeTabBar();
-}
-
 IMPL_LINK_TYPED( Shell, TabBarHdl, ::TabBar *, pCurTabBar, void )
 {
     sal_uInt16 nCurId = pCurTabBar->GetCurPageId();
@@ -476,25 +468,6 @@ bool Shell::NextPage( bool bPrev )
 
     return bRet;
 }
-
-
-
-void Shell::ArrangeTabBar()
-{
-    long nBoxPos = aScrollBarBox->GetPosPixel().X() - 1;
-    long nPos = pTabBar->GetSplitSize();
-    if ( nPos <= nBoxPos )
-    {
-        Point aPnt( pTabBar->GetPosPixel() );
-        long nH = aHScrollBar->GetSizePixel().Height();
-        pTabBar->SetPosSizePixel( aPnt, Size( nPos, nH ) );
-        long nScrlStart = aPnt.X() + nPos;
-        aHScrollBar->SetPosSizePixel( Point( nScrlStart, aPnt.Y() ), Size( nBoxPos - nScrlStart + 2, nH ) );
-        aHScrollBar->Update();
-    }
-}
-
-
 
 ::svl::IUndoManager* Shell::GetUndoManager()
 {

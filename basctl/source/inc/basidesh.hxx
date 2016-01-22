@@ -75,7 +75,6 @@ private:
     VclPtr<ScrollBar>         aVScrollBar;
     VclPtr<ScrollBarBox>      aScrollBarBox;
     VclPtr<TabBar> pTabBar; // basctl::TabBar
-    bool                bTabBarSplitted;
     bool                bCreatingWindow;
     // layout windows
     VclPtr<ModulWindowLayout> pModulLayout;
@@ -106,7 +105,6 @@ private:
     void                ImplStartListening( StarBASIC* pBasic );
 
     DECL_LINK_TYPED( TabBarHdl, ::TabBar*, void );
-    DECL_LINK_TYPED( TabBarSplitHdl, ::TabBar *, void );
 
     static unsigned nShellCount;
 
@@ -118,7 +116,6 @@ private:
 
     void                SetCurWindow (BaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true);
     void                ManageToolbars();
-    void                ArrangeTabBar();
 
     VclPtr<ModulWindow>  CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
     VclPtr<DialogWindow> CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
