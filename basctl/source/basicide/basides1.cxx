@@ -1186,30 +1186,21 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
     if ( GetViewFrame()->GetWindow().GetOutputSizePixel().Height() == 0 )
         return;
 
+    Size aTabBarSize;
+    aTabBarSize.Height() = GetViewFrame()->GetWindow().GetFont().GetHeight() + 4;
+    aTabBarSize.Width() = rSize.Width();
+
     Size aSz( rSize );
     Size aScrollBarBoxSz( aScrollBarBox->GetSizePixel() );
     aSz.Height() -= aScrollBarBoxSz.Height();
+    aSz.Height() -= aTabBarSize.Height();
 
     Size aOutSz( aSz );
     aSz.Width() -= aScrollBarBoxSz.Width();
     aScrollBarBox->SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );
     aVScrollBar->SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( aScrollBarBoxSz.Width(), aSz.Height() ) );
-    if ( bTabBarSplitted )
-    {
-        // SplitSize is 0 at a resize!
-        long nSplitPos = pTabBar->GetSizePixel().Width();
-        if ( nSplitPos > aSz.Width() )
-            nSplitPos = aSz.Width();
-        pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( nSplitPos, aScrollBarBoxSz.Height() ) );
-        long nScrlStart = rPos.X() + nSplitPos;
-        aHScrollBar->SetPosSizePixel( Point( nScrlStart, rPos.Y()+aSz.Height() ), Size( aSz.Width() - nScrlStart + 1, aScrollBarBoxSz.Height() ) );
-        aHScrollBar->Update();
-    }
-    else
-    {
-        aHScrollBar->SetPosSizePixel( Point( rPos.X()+ aSz.Width()/2 - 1, rPos.Y()+aSz.Height() ), Size( aSz.Width()/2 + 2, aScrollBarBoxSz.Height() ) );
-        pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width()/2, aScrollBarBoxSz.Height() ) );
-    }
+    aHScrollBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width(), aScrollBarBoxSz.Height() ) );
+    pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aScrollBarBoxSz.Height()+aSz.Height()), aTabBarSize );
 
     if (pLayout)
         pLayout->SetPosSizePixel(rPos, dynamic_cast<DialogWindow*>(pCurWin.get()) ? aSz : aOutSz);
