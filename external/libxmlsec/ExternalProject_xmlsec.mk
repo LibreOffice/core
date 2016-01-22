@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 else
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_ExternalProject_run,build,\
-		cscript configure.js crypto=mscrypto xslt=no iconv=no static=no \
+		cscript /e:javascript configure.js crypto=mscrypto xslt=no iconv=no static=no \
 			lib=$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 		&& unset MAKEFLAGS \
