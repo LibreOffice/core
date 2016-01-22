@@ -233,7 +233,7 @@ IMPL_LINK_NOARG_TYPED(MenuBarWindow, CloseHdl, ToolBox *, void)
         // #i106052# call close hdl asynchronously to ease handler implementation
         // this avoids still being in the handler while the DecoToolBox already
         // gets destroyed
-        Application::PostUserEvent(static_cast<MenuBar*>(pMenu)->GetCloseButtonClickHdl(), pMenu);
+        Application::PostUserEvent(static_cast<MenuBar*>(pMenu)->GetCloseButtonClickHdl());
     }
     else
     {
