@@ -77,7 +77,7 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
         {}
     };
 
-    oslMutex                m_aEventGuard;
+    osl::Mutex              m_aEventGuard;
     std::list< SalUserEvent > m_aUserEvents;
 
     std::list< SalFrame* >  m_aFrames;

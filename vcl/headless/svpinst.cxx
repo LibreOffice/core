@@ -96,7 +96,6 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
             (void)fcntl(m_pTimeoutFDS[1], F_SETFL, flags);
         }
     }
-    m_aEventGuard = osl_createMutex();
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
 }
@@ -109,15 +108,13 @@ SvpSalInstance::~SvpSalInstance()
     // close 'wakeup' pipe.
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
-    osl_destroyMutex( m_aEventGuard );
 }
 
 void SvpSalInstance::PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent)
 {
-    if( osl_acquireMutex( m_aEventGuard ) )
     {
+        osl::MutexGuard g(m_aEventGuard);
         m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
-        osl_releaseMutex( m_aEventGuard );
     }
     Wakeup();
 }
@@ -126,10 +123,9 @@ void SvpSalInstance::PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_u
 bool SvpSalInstance::PostedEventsInQueue()
 {
     bool result = false;
-    if( osl_acquireMutex( m_aEventGuard ) )
     {
+        osl::MutexGuard g(m_aEventGuard);
         result = m_aUserEvents.size() > 0;
-        osl_releaseMutex( m_aEventGuard );
     }
     return result;
 }
@@ -139,23 +135,20 @@ void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 {
     m_aFrames.remove( pFrame );
 
-    if( osl_acquireMutex( m_aEventGuard ) )
+    osl::MutexGuard g(m_aEventGuard);
+    // cancel outstanding events for this frame
+    if( ! m_aUserEvents.empty() )
     {
-        // cancel outstanding events for this frame
-        if( ! m_aUserEvents.empty() )
+        std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
+        do
         {
-            std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-            do
+            if( it->m_pFrame    == pFrame )
             {
-                if( it->m_pFrame    == pFrame )
-                {
-                    it = m_aUserEvents.erase( it );
-                }
-                else
-                    ++it;
-            } while( it != m_aUserEvents.end() );
-        }
-        osl_releaseMutex( m_aEventGuard );
+                it = m_aUserEvents.erase( it );
+            }
+            else
+                ++it;
+        } while( it != m_aUserEvents.end() );
     }
 }
 
@@ -267,8 +260,8 @@ SalYieldResult SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
     // release yield mutex
     std::list< SalUserEvent > aEvents;
     sal_uLong nAcquireCount = ReleaseYieldMutex();
-    if( osl_acquireMutex( m_aEventGuard ) )
     {
+        osl::MutexGuard g(m_aEventGuard);
         if( ! m_aUserEvents.empty() )
         {
             if( bHandleAllCurrentEvents )
@@ -282,7 +275,6 @@ SalYieldResult SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
                 m_aUserEvents.pop_front();
             }
         }
-        osl_releaseMutex( m_aEventGuard );
     }
     // acquire yield mutex again
     AcquireYieldMutex( nAcquireCount );
