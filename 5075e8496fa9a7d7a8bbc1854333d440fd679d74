@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_ca5875fd",
+        "filename": "jurt/com/sun/star/lib/uno/protocols/urp/urp.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-22T08:49:22Z",
+      "side": 1,
+      "message": "rather check for null and throw an IOException, otherwise you are potentially hiding a real problem (null should never happen here)",
+      "revId": "5075e8496fa9a7d7a8bbc1854333d440fd679d74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_8a5e6de7",
+        "filename": "qadevOOo/tests/java/ifc/accessibility/_XAccessibleText.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-22T08:49:22Z",
+      "side": 1,
+      "message": "rather just set res \u003d false, log a message, and exit the loop, because a null value here indicates a problem in the test",
+      "revId": "5075e8496fa9a7d7a8bbc1854333d440fd679d74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
