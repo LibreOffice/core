@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_75796e93",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 9
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-22T22:21:07Z",
+      "side": 1,
+      "message": "I\u0027d be explicit here and name it .uno:FreezePanesFirstColumn\nto clarify the first column aspect (and spell out column as the command name is part of an API)",
+      "range": {
+        "startLine": 76,
+        "startChar": 22,
+        "endLine": 76,
+        "endChar": 41
+      },
+      "revId": "3e9a4ef18f7bd7f1af5b74999e8567779dad9849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_d56e5ac8",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-22T22:21:07Z",
+      "side": 1,
+      "message": ".uno:FreezePanesFirstRow",
+      "range": {
+        "startLine": 84,
+        "startChar": 22,
+        "endLine": 84,
+        "endChar": 41
+      },
+      "revId": "3e9a4ef18f7bd7f1af5b74999e8567779dad9849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_55638adc",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 9
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-22T22:21:07Z",
+      "side": 1,
+      "message": "Best clarify in the enhancement-bug with the UX team if and which keyboard shortcut the new labels \"Freeze First Column\" and \"Freeze First Row\" should have, maybe even reassigning the ~R of \"Freeze ~Rows and Columns\" to \"Freeze First ~Row\" and choose something different for \"Freeze Rows and Columns\". But that can be easily changed after we have pushed this patch.",
+      "range": {
+        "startLine": 86,
+        "startChar": 34,
+        "endLine": 86,
+        "endChar": 50
+      },
+      "revId": "3e9a4ef18f7bd7f1af5b74999e8567779dad9849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b573d6b0",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-22T22:21:07Z",
+      "side": 1,
+      "message": "ditto, .uno:FreezePanesFirstColumn and .uno:FreezePanesFirstRow",
+      "revId": "3e9a4ef18f7bd7f1af5b74999e8567779dad9849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
