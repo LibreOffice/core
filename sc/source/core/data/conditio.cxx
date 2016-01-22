@@ -1112,12 +1112,12 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             {
                 OUString aStr = OUString::number(nVal1);
                 OUString aStr2 = OUString::number(nArg);
-                bValid = !aStr2.endsWith(aStr);
+                bValid = aStr2.endsWith(aStr);
             }
             else
             {
                 OUString aStr2 = OUString::number(nArg);
-                bValid = !aStr2.endsWith(aStrVal1);
+                bValid = aStr2.endsWith(aStrVal1);
             }
             break;
         case SC_COND_CONTAINS_TEXT:
