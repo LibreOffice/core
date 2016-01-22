@@ -57,7 +57,7 @@ if not exist "%OO_USER_SDKENV_SCRIPT%". (
    echo  ******************************************************************
    echo.
 
-   cscript //I //Nologo "%SDK_DIR%\cfgWin.js"
+   cscript //e:javascript //I //Nologo "%SDK_DIR%\cfgWin.js"
    goto setenv
 )
 
