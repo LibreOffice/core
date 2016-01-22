@@ -619,10 +619,8 @@ public final class urp implements IProtocol {
         for (int i = releaseQueue.size(); i > 0;) {
             --i;
             QueuedRelease r = releaseQueue.get(i);
-            if (r == null)
-              throw new IOException("releaseQueue unexpected empty");
             writeRequest(
-                 r.internal, r.objectId, r.type, r.method, r.threadId, null,
+                r.internal, r.objectId, r.type, r.method, r.threadId, null,
                 false);
             releaseQueue.remove(i);
         }
