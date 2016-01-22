@@ -336,7 +336,7 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
 {
     if (& rFormat == this) { return *this; }
 
-    SetNumberingType(rFormat.GetNumberingType());
+    SvxNumberType::SetNumberingType(rFormat.GetNumberingType());
         eNumAdjust          = rFormat.eNumAdjust ;
         mbNumAdjustChanged  = rFormat.mbNumAdjustChanged;
         nInclUpperLevels    = rFormat.nInclUpperLevels ;
