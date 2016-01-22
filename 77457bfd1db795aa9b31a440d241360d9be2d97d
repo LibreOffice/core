@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_ca7cf574",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-01-22T06:40:56Z",
+      "side": 1,
+      "message": "What should be done is to have also the getenv() call in the initialisation of the static variable. Use an ||.",
+      "parentUuid": "dab17558_8f603f37",
+      "revId": "77457bfd1db795aa9b31a440d241360d9be2d97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_2f75d3f8",
         "filename": "sfx2/source/control/unoctitm.cxx",
         "patchSetId": 3
