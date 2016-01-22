@@ -1068,12 +1068,7 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
         DBG_ASSERT( nUserEvent->mbCall,
                     "Application::RemoveUserEvent(): Event is already removed" );
 
-        if ( nUserEvent->mpWindow )
-        {
-            if( ! nUserEvent->maDelData.IsDead() )
-                nUserEvent->mpWindow->ImplRemoveDel( &(nUserEvent->maDelData) );
-            nUserEvent->mpWindow.clear();
-        }
+        nUserEvent->mpWindow.clear();
         nUserEvent->mpInstanceRef.clear();
         nUserEvent->mbCall = false;
     }

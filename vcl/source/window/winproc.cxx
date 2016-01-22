@@ -1970,7 +1970,7 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
 {
     if ( pSVEvent )
     {
-        if ( pSVEvent->mbCall && !pSVEvent->maDelData.IsDead() )
+        if ( pSVEvent->mbCall )
         {
             pSVEvent->maLink.Call( pSVEvent->mpData );
         }

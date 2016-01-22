@@ -412,7 +412,6 @@ struct ImplSVEvent
     Link<void*,void>    maLink;
     VclPtr<vcl::Window> mpInstanceRef;
     VclPtr<vcl::Window> mpWindow;
-    ImplDelData         maDelData;
     bool                mbCall;
 };
 
