@@ -778,7 +778,7 @@ public class APIDescGetter extends DescGetter
         return scenario;
     }
 
-    private String[] getScenarioFromDirectory(String descPath, String job)
+    private String[] getScenarioFromDirectory(String descPath, String job) throws IllegalStateException
     {
         String[] modules = null;
         ArrayList<String> componentList = new ArrayList<String>();
@@ -798,6 +798,9 @@ public class APIDescGetter extends DescGetter
                 modules = dirs.list();
             }
         }
+
+        if (modules == null)
+            throw new IllegalStateException("missing dirs");
 
         for (int i = 0; i < modules.length; i++)
         {
