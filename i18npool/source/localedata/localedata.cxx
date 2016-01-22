@@ -152,7 +152,7 @@ static const struct {
     { "sr_CS",  lcl_DATA_EURO },
     { "hr_HR",  lcl_DATA_EURO },
     { "bs_BA",  lcl_DATA_EURO },
-    { "eu",     lcl_DATA_EURO },
+    { "eu_ES",  lcl_DATA_EURO },
     { "fo_FO",  lcl_DATA_EURO },
     { "ga_IE",  lcl_DATA_EURO },
     { "gd_GB",  lcl_DATA_EURO },
