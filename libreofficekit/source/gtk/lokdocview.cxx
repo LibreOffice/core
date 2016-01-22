@@ -2750,6 +2750,10 @@ lok_doc_view_copy_selection (LOKDocView* pDocView,
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
     if (!pDocument)
         return nullptr;
+
+    std::stringstream ss;
+    ss << "lok::Document::getTextSelection('" << pMimeType << "')";
+    g_info("%s", ss.str().c_str());
     return pDocument->pClass->getTextSelection(pDocument, pMimeType, pUsedMimeType);
 }
 
