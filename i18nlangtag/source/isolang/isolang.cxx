@@ -240,6 +240,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_ARABIC_SUDAN,           "ar", "SD", 0     },
     { LANGUAGE_ARABIC_PRIMARY_ONLY,         "ar", ""  , 0     },
     { LANGUAGE_BASQUE,                      "eu", ""  , 0     },
+    { LANGUAGE_BASQUE,                      "eu", "ES", kSAME },
     { LANGUAGE_BULGARIAN,                   "bg", "BG", 0     },
     { LANGUAGE_CZECH,                       "cs", "CZ", 0     },
     { LANGUAGE_CZECH,                       "cz", ""  , kSAME },
