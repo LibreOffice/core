@@ -461,7 +461,6 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     }
     pOutlView->SetControlWord(nStat);
     pOutlView->SetBackgroundColor( aBackground );
-    pOutlView->setTiledRendering(comphelper::LibreOfficeKit::isActive());
     pOutlView->registerLibreOfficeKitCallback(GetModel()->getLibreOfficeKitCallback(), GetModel()->getLibreOfficeKitData(), GetModel());
     if (pText!=nullptr)
     {

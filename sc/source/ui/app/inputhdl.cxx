@@ -731,14 +731,6 @@ void ScInputHandler::ImplCreateEditEngine()
         pEngine->SetControlWord( pEngine->GetControlWord() | EEControlBits::AUTOCORRECT );
         pEngine->SetModifyHdl( LINK( this, ScInputHandler, ModifyHdl ) );
     }
-
-    // set the EditEngine so that it invalidates the view instead of direct
-    // paint
-    if (pActiveViewSh)
-    {
-        if (EditView* pEditView = pEngine->GetActiveView())
-            pEditView->setTiledRendering(comphelper::LibreOfficeKit::isActive());
-    }
 }
 
 void ScInputHandler::UpdateAutoCorrFlag()
@@ -1890,7 +1882,6 @@ void ScInputHandler::UpdateActiveView()
         {
             ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
             pTableView->registerLibreOfficeKitCallback(pDrawLayer->getLibreOfficeKitCallback(), pDrawLayer->getLibreOfficeKitData(), pDrawLayer);
-            pTableView->setTiledRendering(true);
         }
     }
 

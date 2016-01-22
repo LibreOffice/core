@@ -1431,11 +1431,6 @@ void OutlinerView::SetBackgroundColor( const Color& rColor )
     pEditView->SetBackgroundColor( rColor );
 }
 
-void OutlinerView::setTiledRendering(bool bTiledRendering)
-{
-    pEditView->setTiledRendering(bTiledRendering);
-}
-
 void OutlinerView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable* pSearchable)
 {
     pEditView->registerLibreOfficeKitCallback(pCallback, pLibreOfficeKitData, pSearchable);
