@@ -173,6 +173,43 @@ public class Message {
         return arguments;
     }
 
+    public final String toString()
+    {
+	String aResult;
+	aResult = request ? "request: " : "reply: ";
+	aResult = aResult + (synchronous ? "sync " : "async ");
+	if (abnormalTermination)
+		aResult = aResult + "!abnormal! ";
+	aResult = aResult + "tid: " + threadId + " ";
+	aResult = aResult + "oid: " + objectId + " ";
+
+	if (type != null)
+		aResult = aResult + type.getTypeName() + " ";
+	else
+		aResult = aResult + "<null type> ";
+
+	if (method != null)
+		aResult = aResult + method.getName() + " ";
+	else
+		aResult = aResult + "<null method> ";
+
+	if (arguments != null)
+	{
+		aResult = aResult + "( ";
+		for (int i = 0; i < arguments.length; ++i)
+			aResult = aResult + arguments[i] + ", ";
+		aResult = aResult + ") ";
+	}
+	else
+		aResult = aResult + "<nullargs> ";
+
+	if (result != null)
+		aResult = aResult + "result " + result;
+	else
+		aResult = aResult + "<noresult> ";
+	return aResult;
+    }
+
     private final ThreadId threadId;
     private final boolean request;
     private final String objectId;

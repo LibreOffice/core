@@ -18,6 +18,7 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
+import java.text.*;
 import com.sun.star.lang.DisposedException;
 
 /**
@@ -40,7 +41,7 @@ public class JobQueue {
     /**
      * When set to true, enables various debugging output.
      */
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     protected Job _head;                 // the head of the job list
     protected Job _tail;                 // the tail of the job list
@@ -62,6 +63,28 @@ public class JobQueue {
 
     protected JavaThreadPoolFactory _javaThreadPoolFactory;
 
+    public static String getTime()
+    {
+	    try {
+		    DecimalFormat df = new DecimalFormat("000000.000000000");
+		    return "T" + df.format((double)System.currentTimeMillis()/1000) + " ";
+	    } catch (Exception e) {
+		    return "Texcept " + e;
+	    }
+    }
+
+    public static void printDebug(String str)
+    {
+	if (DEBUG)
+	{
+
+		String print = getTime() + " [" +
+			Thread.currentThread().getId() + "] " + str;
+		System.err.println(print);
+		System.err.flush();
+	}
+    }
+
     /**
      * A thread for dispatching jobs.
      */
@@ -71,7 +94,7 @@ public class JobQueue {
         JobDispatcher(Object disposeId) {
             super("JobDispatcher");
 
-            if(DEBUG) System.err.println("JobQueue$JobDispatcher.<init>:" + _threadId);
+            if(DEBUG) printDebug("JobQueue$JobDispatcher.<init>:" + _threadId);
 
             _disposeId = disposeId;
         }
@@ -82,13 +105,13 @@ public class JobQueue {
 
         @Override
         public void run() {
-            if(DEBUG) System.err.println("ThreadPool$JobDispatcher.run: " + Thread.currentThread());
+            if(DEBUG) printDebug("ThreadPool$JobDispatcher.run");
 
             try {
                   enter(2000, _disposeId);
             } catch(Throwable throwable) {
                 if(_head != null || _active) { // there was a job in progress, so give a stack
-                    System.err.println(getClass().getName() + " - exception occurred:" + throwable);
+                    printDebug(getClass().getName() + " - exception occurred:" + throwable);
                     throwable.printStackTrace(System.err);
                 }
             }
@@ -96,7 +119,7 @@ public class JobQueue {
                 release();
             }
 
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".run - exit:" + _threadId);
+            if(DEBUG) printDebug("##### " + getClass().getName() + ".run - exit:" + _threadId);
         }
     }
 
@@ -125,7 +148,7 @@ public class JobQueue {
 
         acquire();
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + " - init:" +  _threadId);
+        if(DEBUG) printDebug("##### " + getClass().getName() + " - init:" +  _threadId);
     }
 
     /**
@@ -141,7 +164,7 @@ public class JobQueue {
         _createThread     = createThread;
         _createThread_now = createThread;
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + " - init:" +  _threadId + " " + createThread);
+        if(DEBUG) printDebug("##### " + getClass().getName() + " - init:" +  _threadId + " " + createThread);
     }
 
     /**
@@ -185,7 +208,7 @@ public class JobQueue {
      * @return a job or null if timed out.
      */
     private Job removeJob(int waitTime) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".removeJob:" + _head + " " + _threadId);
+        if(DEBUG) printDebug("##### " + getClass().getName() + ".removeJob:" + _head + " " + _threadId);
 
         Job job = null;
         synchronized (this) {
@@ -230,7 +253,7 @@ public class JobQueue {
             synchronized(_async_jobQueue) {
                 // wait for async queue to be empty and last job to be done
                 while(_async_jobQueue._active || _async_jobQueue._head != null) {
-                    if(DEBUG) System.err.println("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
+                    if(DEBUG) printDebug("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
 
                     if(_doDispose == _disposeId) {
                         _doDispose = null;
@@ -247,6 +270,9 @@ public class JobQueue {
             }
         }
 
+        if(DEBUG)
+		printDebug("##### " + getClass().getName() + ".removeJob: - returns job: " + job);
+
         return job;
     }
 
@@ -257,7 +283,23 @@ public class JobQueue {
      * @param  disposeId  a dispose id.
      */
     synchronized void putJob(Job job, Object disposeId) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".putJob todoes: " + " job:" + job);
+
+	boolean multipleReturns = false;
+	int count = 0;
+	for (Job i = _head; i != null; i = i._next)
+	{
+		if (i.isRequest())
+			multipleReturns = true;
+		count++;
+	}
+
+	if (multipleReturns)
+		printDebug("ERROR: MULTIPLE RETURNS");
+        if(DEBUG) printDebug("##### " + getClass().getName() + ".putJob to queue of " + count);
+	printDebug("new job : " + job.toString());
+	for (Job i = _head; i != null; i = i._next)
+		printDebug("queued : " + i.toString());
+	printDebug("");
 
         if(_tail != null)
             _tail._next = job;
@@ -296,7 +338,7 @@ public class JobQueue {
      * @return the result of the final job (reply).
      */
     Object enter(int waitTime, Object disposeId) throws Throwable {
-        if(DEBUG) System.err.println("#####" + getClass().getName() + ".enter: " + _threadId);
+        if(DEBUG) printDebug("##### " + getClass().getName() + ".enter: " + _threadId);
 
         boolean quit = false;
 
@@ -332,11 +374,9 @@ public class JobQueue {
                 }
                 else
                     quit = true;
-
-
             }
             finally { // ensure that this queue becomes disposed, if necessary
-                if(DEBUG) System.err.println("##### " + getClass().getName() + ".enter leaving: " + _threadId + " " + _worker_thread + " " + hold_worker_thread + " " + result);
+                if(DEBUG) printDebug("##### " + getClass().getName() + ".enter leaving: " + _threadId + " " + _worker_thread + " " + hold_worker_thread + " " + result);
 
                 synchronized(this) {
                     if(job != null || (quit && _head == null)) {
@@ -356,6 +396,8 @@ public class JobQueue {
             }
         }
 
+        if(DEBUG) printDebug("##### " + getClass().getName() + ".enter: returns " + result + "  on thread: " + _threadId);
+
         return result;
     }
 
@@ -370,7 +412,7 @@ public class JobQueue {
             _throwable = throwable;
 
             // get thread out of wait and let it throw the throwable
-            if(DEBUG) System.err.println(getClass().getName() + ".dispose - notifying thread");
+            if(DEBUG) printDebug(getClass().getName() + ".dispose - notifying thread");
 
             notifyAll();
         }
