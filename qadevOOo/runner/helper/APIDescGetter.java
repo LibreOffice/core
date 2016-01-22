@@ -799,26 +799,27 @@ public class APIDescGetter extends DescGetter
             }
         }
 
-        for (int i = 0; i < modules.length; i++)
-        {
-            if (!isUnusedModule(modules[i]))
+        if (modules != null)
+            for (int i = 0; i < modules.length; i++)
             {
-                File moduleDir = new File(descPath + System.getProperty("file.separator") + modules[i]);
-                if (moduleDir.exists())
+                if (!isUnusedModule(modules[i]))
                 {
-                    String[] components = moduleDir.list();
-                    for (int j = 0; j < components.length; j++)
+                    File moduleDir = new File(descPath + System.getProperty("file.separator") + modules[i]);
+                    if (moduleDir.exists())
                     {
-                        if (components[j].endsWith(".csv"))
+                        String[] components = moduleDir.list();
+                        for (int j = 0; j < components.length; j++)
                         {
-                            String toAdd = getComponentForString(components[j], modules[i]);
-                            toAdd = "-o " + modules[i] + "." + toAdd;
-                            componentList.add(toAdd);
+                            if (components[j].endsWith(".csv"))
+                            {
+                                String toAdd = getComponentForString(components[j], modules[i]);
+                                toAdd = "-o " + modules[i] + "." + toAdd;
+                                componentList.add(toAdd);
+                            }
                         }
                     }
                 }
             }
-        }
 
         Collections.sort(componentList);
         String[] scenario = componentList.toArray(new String[componentList.size()]);
