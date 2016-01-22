@@ -38,7 +38,6 @@ endif
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-static-only.patch.1 \
-	external/glew/glew-ar-lto.patch.1 \
 ))
 endif
 
