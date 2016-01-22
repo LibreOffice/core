@@ -77,12 +77,12 @@ public:
     bool                IsBuiltInFont() const                           { return mbDevice; }
     bool                CanEmbed() const                                { return mbEmbeddable; }
     bool                CanSubset() const                               { return mbSubsettable; }
-    /* Missing function: bool CanRotate() const; */
+    bool                CanRotate() const                               { return mbRotatable; }
 
     void                SetBuiltInFontFlag( bool bIsBuiltInFont )       { mbDevice = bIsBuiltInFont; }
     void                SetEmbeddableFlag( bool bEmbeddable )           { mbEmbeddable = bEmbeddable; }
     void                SetSubsettableFlag( bool bSubsettable )         { mbSubsettable = bSubsettable; }
-    /* missing function: void SetOrientationFlag( bool ); */
+    void                SetOrientationFlag( bool bCanRotate )           { mbRotatable = bCanRotate; }
 
     bool                operator==( const ImplFont& ) const;
 
@@ -121,7 +121,8 @@ private:
                         mbTransparent:1,    // compatibility, now on output device
                         mbDevice:1,
                         mbEmbeddable:1,
-                        mbSubsettable:1;
+                        mbSubsettable:1,
+                        mbRotatable:1;      // is "rotatable" even a word?!? I'll keep it for consistency for now
     int                 mnQuality;
     OUString            maMapNames;
 
