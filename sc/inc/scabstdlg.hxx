@@ -485,13 +485,10 @@ public:
     virtual SfxAbstractTabDialog * CreateScParagraphDlg(vcl::Window* pParent,
         const SfxItemSet* pAttr) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScValidationDlg(vcl::Window* pParent,
-        const SfxItemSet* pArgSet, ScTabViewShell *pTabVwSh) = 0;
     virtual SfxAbstractTabDialog * CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) = 0;
 
     // for tabpage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
-    virtual GetTabPageRanges            GetTabPageRangesFunc() = 0;
 
 protected:
     ~ScAbstractDialogFactory() {}

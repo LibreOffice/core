@@ -55,7 +55,6 @@
 #include "styledlg.hxx"
 #include "subtdlg.hxx"
 #include "textdlgs.hxx"
-#include "validate.hxx"
 #include "sortdlg.hxx"
 #include "textimportoptions.hxx"
 #include "opredlin.hxx"
@@ -998,13 +997,6 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
     return new ScAbstractTabDialog_Impl(pDlg);
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg(vcl::Window* pParent,
-    const SfxItemSet* pArgSet, ScTabViewShell *pTabVwSh)
-{
-    VclPtr<SfxTabDialog> pDlg = VclPtr<ScValidationDlg>::Create(pParent, pArgSet, pTabVwSh);
-    return new ScAbstractTabDialog_Impl(pDlg);
-}
-
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
 {
     VclPtr<SfxTabDialog> pDlg = VclPtr<ScSortDlg>::Create( pParent, pArgSet );
@@ -1041,11 +1033,6 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
     }
 
     return nullptr;
-}
-
-GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc()
-{
-    return ScTPValidationValue::GetRanges;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

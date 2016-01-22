@@ -549,15 +549,10 @@ public:
     virtual SfxAbstractTabDialog * CreateScParagraphDlg(vcl::Window* pParent,
         const SfxItemSet* pAttr) override;
 
-    virtual SfxAbstractTabDialog * CreateScValidationDlg(vcl::Window* pParent,
-        const SfxItemSet* pArgSet, ScTabViewShell *pTabVwSh) override;
-
     virtual SfxAbstractTabDialog * CreateScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet) override;
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) override;
-
-    virtual GetTabPageRanges            GetTabPageRangesFunc() override;
 
 };
 

@@ -52,6 +52,7 @@
 #include "dbnamdlg.hxx"
 #include "reffact.hxx"
 #include "validat.hxx"
+#include "validate.hxx"
 #include "scresid.hxx"
 
 #include "scui_def.hxx"
@@ -199,15 +200,6 @@ static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
         pTabViewShell->ClearHighlightRanges();
     }
     return bSort;
-}
-
-//after end execute from !IsModalInputMode, it is safer to delay deleting
-namespace
-{
-    void DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
-    {
-        delete static_cast<SfxAbstractTabDialog*>( pAbstractDialog );
-    }
 }
 
 void ScCellShell::ExecuteDB( SfxRequest& rReq )
@@ -798,11 +790,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
                 else
                 {
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-                    ::GetTabPageRanges ScTPValidationValueGetRanges = pFact->GetTabPageRangesFunc();
-                    OSL_ENSURE(ScTPValidationValueGetRanges, "TabPage create fail!");
-                    SfxItemSet aArgSet( GetPool(), (*ScTPValidationValueGetRanges)() );
+                    SfxItemSet aArgSet( GetPool(), ScTPValidationValue::GetRanges() );
                     ScValidationMode eMode = SC_VALID_ANY;
                     ScConditionMode eOper = SC_COND_EQUAL;
                     OUString aExpr1, aExpr2;
@@ -861,8 +849,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
 
                     // cell range picker
-                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg(nullptr, &aArgSet, pTabViewShell);
-                    assert(pDlg); //Dialog create fail!
+                    auto pDlg = VclPtr<ScValidationDlg>::Create(nullptr, &aArgSet, pTabViewShell);
 
                     short nResult = pDlg->Execute();
                     if ( nResult == RET_OK )
@@ -961,9 +948,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pTabViewShell->TestHintWindow();
                         rReq.Done( *pOutSet );
                     }
-                    //after end execute from !IsModalInputMode, it is safer to delay deleting
-                    //delete pDlg;
-                    Application::PostUserEvent( Link<void*,void>( pDlg, &DelayDeleteAbstractDialog ) );
                 }
             }
             break;

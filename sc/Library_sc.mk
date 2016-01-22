@@ -403,6 +403,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/dbgui/PivotLayoutTreeListLabel \
     sc/source/ui/dbgui/PivotLayoutTreeList \
     sc/source/ui/dbgui/sfiltdlg \
+    sc/source/ui/dbgui/validate \
     sc/source/ui/dialogs/searchresults \
     sc/source/ui/docshell/arealink \
     sc/source/ui/docshell/autostyl \

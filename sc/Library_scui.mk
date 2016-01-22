@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/dbgui/textimportoptions \
     sc/source/ui/dbgui/tpsort \
     sc/source/ui/dbgui/tpsubt \
-    sc/source/ui/dbgui/validate \
     sc/source/ui/docshell/tpstat \
     sc/source/ui/miscdlgs/crdlg \
     sc/source/ui/miscdlgs/datafdlg \
