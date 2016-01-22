@@ -107,6 +107,16 @@ typedef unsigned short LanguageType;
 /* NOTE: this is taken from the MS documentation! Not supported by OOo/SO! */
 #define LANGUAGE_INVARIANT                  0x007F
 
+/* Naming conventions:
+ * * ..._LSO suffix indicates a Language-Script-Only mapping, i.e. no country
+ *   assignment in i18nlangtag/source/isolang/isolang.cxx.
+ *   Used for backward compatibility or where MS assigned such values and they
+ *   should be explicitly handled.
+ * * LANGUAGE_USER_... for our user-defined IDs.
+ * * LANGUAGE_OBSOLETE_USER_... for a user-defined ID that has been replaced by
+ *   a value defined by MS.
+ */
+
 #define LANGUAGE_AFRIKAANS                  0x0436
 #define LANGUAGE_ALBANIAN                   0x041C
 #define LANGUAGE_ALSATIAN_FRANCE            0x0484
