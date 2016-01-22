@@ -631,7 +631,8 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     ScDrawView* pDrawView = pViewData->GetScDrawView();
 
     // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(1, 1), Fraction(1, 1), true);
+    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
+                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
 
     bool bHandled = false;
 
@@ -786,7 +787,8 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
     // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(1, 1), Fraction(1, 1), true);
+    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
+                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
 
     int nPixelX = nX * pViewData->GetPPTX();
     int nPixelY = nY * pViewData->GetPPTY();
