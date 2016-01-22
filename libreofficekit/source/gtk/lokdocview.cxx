@@ -804,6 +804,14 @@ globalCallback (gpointer pData)
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, 1.0);
     }
     break;
+    case LOK_CALLBACK_DOCUMENT_PASSWORD:
+    case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
+    {
+        char const*const pURL(pCallback->m_aPayload.c_str());
+        // TODO maybe allow more passwords
+        priv->m_pOffice->pClass->setDocumentPassword(priv->m_pOffice, pURL, "1");
+    }
+    break;
     default:
         g_assert(false);
         break;
@@ -2027,6 +2035,8 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
                      priv->m_aLOPath);
         return FALSE;
     }
+
+//    priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, LOK_FEATURE_DOCUMENT_PASSWORD|LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY);
 
     return TRUE;
 }
