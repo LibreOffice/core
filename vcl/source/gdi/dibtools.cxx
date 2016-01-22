@@ -835,6 +835,8 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
             // read coding information
             rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
+            if (nCodedSize > rIStm.remainingSize())
+               nCodedSize = sal_uInt32(rIStm.remainingSize());
             pData = static_cast<sal_uInt8*>(rtl_allocateMemory( nUncodedSize ));
 
             // decode buffer
