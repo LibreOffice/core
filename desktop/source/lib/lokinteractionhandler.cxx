@@ -58,15 +58,19 @@ void SAL_CALL LOKInteractionHandler::initialize(uno::Sequence<uno::Any> const & 
 {
 }
 
-void SAL_CALL LOKInteractionHandler::handle(uno::Reference<task::XInteractionRequest> const & rRequest) throw (uno::RuntimeException, std::exception)
+void SAL_CALL LOKInteractionHandler::handle(
+        uno::Reference<task::XInteractionRequest> const & xRequest)
+throw (uno::RuntimeException, std::exception)
 {
     // just do the same thing in both cases
-    handleInteractionRequest(rRequest);
+    handleInteractionRequest(xRequest);
 }
 
-sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(const uno::Reference<task::XInteractionRequest >& rRequest) throw ( uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
+        const uno::Reference<task::XInteractionRequest>& xRequest)
+throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations = rRequest->getContinuations();
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations = xRequest->getContinuations();
 
     // TODO: add LOK api that allows handling this for real, for the moment we
     // just set the interaction as 'Approved'
