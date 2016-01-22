@@ -845,8 +845,8 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             aCodec.Read( rIStm, pData, nUncodedSize );
             aCodec.EndCompression();
 
-            // skip unread bytes from coded buffer
-            rIStm.SeekRel( nCodedSize - ( rIStm.Tell() - nCodedPos ) );
+            // Seek behind the encoded block. There might have been bytes left or the codec might have read more than necessary.
+            rIStm.Seek(nCodedSize + nCodedPos);
 
             // set decoded bytes to memory stream,
             // from which we will read the bitmap data
