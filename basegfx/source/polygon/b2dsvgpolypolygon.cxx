@@ -471,10 +471,10 @@ namespace basegfx
                                 nY += nLastY;
                             }
 
-                            if( nX == nLastX && nY == nLastY )
+                            if( rtl::math::approxEqual(nX, nLastX) && rtl::math::approxEqual(nY, nLastY) )
                                 continue; // start==end -> skip according to SVG spec
 
-                            if( fRX == 0.0 || fRY == 0.0 )
+                            if( rtl::math::approxEqual(fRX, 0.0) || rtl::math::approxEqual(fRY, 0.0) )
                             {
                                 // straight line segment according to SVG spec
                                 aCurrPoly.append(B2DPoint(nX, nY));
@@ -857,8 +857,8 @@ namespace basegfx
                             }
                             else
                             {
-                                const bool bXEqual(aEdgeStart.getX() == aEdgeEnd.getX());
-                                const bool bYEqual(aEdgeStart.getY() == aEdgeEnd.getY());
+                                const bool bXEqual(rtl::math::approxEqual(aEdgeStart.getX(), aEdgeEnd.getX()));
+                                const bool bYEqual(rtl::math::approxEqual(aEdgeStart.getY(), aEdgeEnd.getY()));
 
                                 if(bXEqual && bYEqual)
                                 {

@@ -715,7 +715,7 @@ namespace basegfx
                     double fCutPos(0.0);
                     tools::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CutFlagValue::ALL, &fCutPos);
 
-                    if(0.0 != fCutPos)
+                    if(!rtl::math::approxEqual(0.0, fCutPos))
                     {
                         const B2DPoint aCutPoint(aStartPoint + (rTangentPrev * fCutPos));
                         aEdgePolygon.append(aCutPoint);

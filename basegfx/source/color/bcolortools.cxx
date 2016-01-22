@@ -43,9 +43,9 @@ namespace basegfx { namespace tools
             s = l > 0.5 ? d/(2.0-maxVal-minVal) :
                 d/(maxVal + minVal);
 
-            if( r == maxVal )
+            if( rtl::math::approxEqual(r, maxVal) )
                 h = (g - b)/d;
-            else if( g == maxVal )
+            else if( rtl::math::approxEqual(g, maxVal) )
                 h = 2.0 + (b - r)/d;
             else
                 h = 4.0 + (r - g)/d;
@@ -117,11 +117,11 @@ namespace basegfx { namespace tools
 
         if( !fTools::equalZero(s) )
         {
-            if( maxVal == r )
+            if( rtl::math::approxEqual(maxVal, r) )
             {
                 h = (g - b) / delta;
             }
-            else if( maxVal == g )
+            else if( rtl::math::approxEqual(maxVal, g) )
             {
                 h = 2.0 + (b - r) / delta;
             }
