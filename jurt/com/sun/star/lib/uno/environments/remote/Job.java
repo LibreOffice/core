@@ -139,6 +139,10 @@ public class Job {
         return _iMessage.isSynchronous();
     }
 
+    public String toString() {
+        return _iMessage.toString();
+    }
+
     public void dispose() {
 //          _oId        = null;
 //          _iReceiver  = null;
