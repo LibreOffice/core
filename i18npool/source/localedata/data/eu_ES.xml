@@ -24,8 +24,8 @@
       <DefaultName>Basque</DefaultName>
     </Language>
     <Country>
-      <CountryID/>
-      <DefaultName/>
+      <CountryID>ES</CountryID>
+      <DefaultName>Spain</DefaultName>
     </Country>
   </LC_INFO>
   <LC_CTYPE>
