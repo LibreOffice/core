@@ -301,17 +301,6 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         return false;
     }
 
-    if (rHeader.nCompression == 0)
-    {
-        sal_uInt64 nMaxSize = rIStm.remainingSize();
-        if (rHeader.nHeight != 0)
-            nMaxSize /= rHeader.nHeight;
-        if (rHeader.nPlanes != 0)
-            nMaxSize /= rHeader.nPlanes;
-        if (sal_Int64(nMaxSize) < rHeader.nWidth)
-            return false;
-    }
-
     return rIStm.good();
 }
 
@@ -480,13 +469,8 @@ bool ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
     return true;
 }
 
-bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapWriteAccess* pAccAlpha, bool bTopDown, bool& rAlphaUsed)
+bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapWriteAccess* pAccAlpha, bool bTopDown, bool& rAlphaUsed, const sal_uInt64 nAlignedWidth)
 {
-    const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(rHeader.nWidth) * static_cast<sal_Int64>(rHeader.nBitCount));
-    if (nBitsPerLine > SAL_MAX_UINT32)
-        return false;
-
-    const sal_uLong nAlignedWidth = AlignedWidth4Bytes(static_cast<sal_uLong>(nBitsPerLine));
     sal_uInt32 nRMask(( rHeader.nBitCount == 16 ) ? 0x00007c00UL : 0x00ff0000UL);
     sal_uInt32 nGMask(( rHeader.nBitCount == 16 ) ? 0x000003e0UL : 0x0000ff00UL);
     sal_uInt32 nBMask(( rHeader.nBitCount == 16 ) ? 0x0000001fUL : 0x000000ffUL);
@@ -860,6 +844,20 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             pIStm = &rIStm;
         }
 
+        const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(aHeader.nWidth) * static_cast<sal_Int64>(aHeader.nBitCount));
+        const sal_uInt64 nAlignedWidth(AlignedWidth4Bytes(static_cast<sal_uLong>(nBitsPerLine)));
+        bRet = nBitsPerLine <= SAL_MAX_UINT32;
+
+        // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
+        if (aHeader.nCompression == ZCOMPRESS || aHeader.nCompression == COMPRESS_NONE)
+        {
+            sal_uInt64 nMaxWidth = rIStm.remainingSize();
+            if (aHeader.nHeight != 0)
+                nMaxWidth /= aHeader.nHeight;
+            if (nMaxWidth < nAlignedWidth)
+                return false;
+        }
+
         const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
         BitmapPalette aDummyPal;
         Bitmap aNewBmp(aSizePixel, nBitCount, &aDummyPal);
@@ -896,6 +894,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             aNewBmpAlpha = Bitmap(aSizePixel, 8);
             pAccAlpha = aNewBmpAlpha.AcquireWriteAccess();
         }
+
         // read palette
         if(nColors)
         {
@@ -913,7 +912,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
                 pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
             }
 
-            bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha, bTopDown, bAlphaUsed);
+            bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha, bTopDown, bAlphaUsed, nAlignedWidth);
 
             if(bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
             {
