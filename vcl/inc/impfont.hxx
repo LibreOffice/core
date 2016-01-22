@@ -88,24 +88,22 @@ public:
 
 private:
     friend class vcl::Font;
+    friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
+    friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );
+
     void                AskConfig();
 
     sal_uInt32          mnRefCount;
+
+    // Device independent variables
     OUString            maFamilyName;
     OUString            maStyleName;
-    Size                maSize;
-    Color               maColor;        // compatibility, now on output device
-    Color               maFillColor;    // compatibility, now on output device
-    rtl_TextEncoding    meCharSet;
-    bool                mbSymbol;
-    LanguageTag         maLanguageTag;
-    LanguageTag         maCJKLanguageTag;
+    FontWeight          meWeight;
     FontFamily          meFamily;
     FontPitch           mePitch;
-    TextAlign           meAlign;
-    FontWeight          meWeight;
     FontWidth           meWidthType;
     FontItalic          meItalic;
+    TextAlign           meAlign;
     FontUnderline       meUnderline;
     FontUnderline       meOverline;
     FontStrikeout       meStrikeout;
@@ -113,21 +111,34 @@ private:
     FontEmphasisMark    meEmphasisMark;
     short               mnOrientation;
     FontKerning         mnKerning;
-    bool                mbWordLine:1,
+    Size                maSize;
+    rtl_TextEncoding    meCharSet;
+
+    LanguageTag         maLanguageTag;
+    LanguageTag         maCJKLanguageTag;
+
+    // Flags - device independent
+    bool                mbSymbol:1,
                         mbOutline:1,
                         mbConfigLookup:1,   // there was a config lookup
                         mbShadow:1,
                         mbVertical:1,
-                        mbTransparent:1,    // compatibility, now on output device
-                        mbDevice:1,
+                        mbTransparent:1;    // compatibility, now on output device
+
+    // deprecated variables - device independent
+    Color               maColor;        // compatibility, now on output device
+    Color               maFillColor;    // compatibility, now on output device
+
+    // Device dependent variables
+    OUString            maMapNames;
+    bool                mbWordLine:1,
                         mbEmbeddable:1,
                         mbSubsettable:1,
-                        mbRotatable:1;      // is "rotatable" even a word?!? I'll keep it for consistency for now
-    int                 mnQuality;
-    OUString            maMapNames;
+                        mbRotatable:1,      // is "rotatable" even a word?!? I'll keep it for consistency for now
+                        mbDevice:1;
 
-    friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
-    friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );
+    int                 mnQuality;
+
 };
 
 #endif // INCLUDED_VCL_INC_IMPFONT_HXX
