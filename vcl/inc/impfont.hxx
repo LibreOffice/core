@@ -84,6 +84,11 @@ public:
     void                SetSubsettableFlag( bool bSubsettable )         { mbSubsettable = bSubsettable; }
     void                SetOrientationFlag( bool bCanRotate )           { mbRotatable = bCanRotate; }
 
+    // Metric data
+    const Size&         GetFontSize() const                             { return maSize; }
+
+    void                SetFontSize( const Size& rSize )                { maSize = rSize; }
+
     bool                operator==( const ImplFont& ) const;
 
 private:

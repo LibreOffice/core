@@ -58,24 +58,24 @@ Font::Font( const vcl::Font& rFont )
 
 Font::Font( const OUString& rFamilyName, const Size& rSize )
 {
-    mpImplFont               = new ImplFont;
+    mpImplFont = new ImplFont;
     mpImplFont->SetFamilyName( rFamilyName );
-    mpImplFont->maSize       = rSize;
+    mpImplFont->SetFontSize( rSize );
 }
 
 Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize )
 {
-    mpImplFont              = new ImplFont;
+    mpImplFont = new ImplFont;
     mpImplFont->SetFamilyName( rFamilyName );
-    mpImplFont->maStyleName = rStyleName;
-    mpImplFont->maSize      = rSize;
+    mpImplFont->SetStyleName( rStyleName );
+    mpImplFont->SetFontSize( rSize );
 }
 
 Font::Font( FontFamily eFamily, const Size& rSize )
 {
-    mpImplFont              = new ImplFont;
-    mpImplFont->meFamily    = eFamily;
-    mpImplFont->maSize      = rSize;
+    mpImplFont = new ImplFont;
+    mpImplFont->SetFamilyType( eFamily );
+    mpImplFont->SetFontSize( rSize );
 }
 
 Font::~Font()
@@ -151,19 +151,19 @@ void Font::SetStyleName( const OUString& rStyleName )
 
 void Font::SetSize( const Size& rSize )
 {
-    if( mpImplFont->maSize != rSize )
+    if( mpImplFont->GetFontSize() != rSize )
     {
         MakeUnique();
-        mpImplFont->maSize = rSize;
+        mpImplFont->SetFontSize( rSize );
     }
 }
 
 void Font::SetFamily( FontFamily eFamily )
 {
-    if( mpImplFont->meFamily != eFamily )
+    if( mpImplFont->GetFamilyType() != eFamily )
     {
         MakeUnique();
-        mpImplFont->meFamily = eFamily;
+        mpImplFont->SetFamilyType( eFamily );
     }
 }
 
@@ -520,7 +520,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 3 );
     rOStm.WriteUniOrByteString( rImplFont.GetFamilyName(), rOStm.GetStreamCharSet() );
-    rOStm.WriteUniOrByteString( rImplFont.maStyleName, rOStm.GetStreamCharSet() );
+    rOStm.WriteUniOrByteString( rImplFont.GetStyleName(), rOStm.GetStreamCharSet() );
     WritePair( rOStm, rImplFont.maSize );
 
     rOStm.WriteUInt16( GetStoreCharSet( rImplFont.GetCharSet() ) );
@@ -782,10 +782,10 @@ const OUString& Font::GetFamilyName() const { return mpImplFont->GetFamilyName()
 const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }
 
 const Size& Font::GetSize() const { return mpImplFont->maSize; }
-void Font::SetHeight( long nHeight ) { SetSize( Size( mpImplFont->maSize.Width(), nHeight ) ); }
-long Font::GetHeight() const { return mpImplFont->maSize.Height(); }
-void Font::SetWidth( long nWidth ) { SetSize( Size( nWidth, mpImplFont->maSize.Height() ) ); }
-long Font::GetWidth() const { return mpImplFont->maSize.Width(); }
+void Font::SetHeight( long nHeight ) { SetSize( Size( mpImplFont->GetFontSize().Width(), nHeight ) ); }
+long Font::GetHeight() const { return mpImplFont->GetFontSize().Height(); }
+void Font::SetWidth( long nWidth ) { SetSize( Size( nWidth, mpImplFont->GetFontSize().Height() ) ); }
+long Font::GetWidth() const { return mpImplFont->GetFontSize().Width(); }
 
 rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->GetCharSet(); }
 
