@@ -22,6 +22,30 @@
       "revId": "48cc50f551900d910c15da24238005a311054192",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4a59255a",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-22T19:10:23Z",
+      "side": 1,
+      "message": "I think i couldn\u0027t understand. Did you mean patchset 7 is true for that. But windows build failed because of i didn\u0027t initilize nPosX and nPosY. :/",
+      "parentUuid": "dab17558_8a602d37",
+      "range": {
+        "startLine": 1977,
+        "startChar": 0,
+        "endLine": 1987,
+        "endChar": 13
+      },
+      "revId": "48cc50f551900d910c15da24238005a311054192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
