@@ -79,7 +79,8 @@ ScDBData::ScDBData( const OUString& rName,
     nIndex      (0),
     bAutoFilter (false),
     bModified   (false),
-    mbTableColumnNamesDirty(true)
+    mbTableColumnNamesDirty(true),
+    nFilteredRowCount(0)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
@@ -113,7 +114,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
-    mbTableColumnNamesDirty(rData.mbTableColumnNamesDirty)
+    mbTableColumnNamesDirty(rData.mbTableColumnNamesDirty),
+    nFilteredRowCount   (rData.nFilteredRowCount)
 {
 }
 
@@ -146,7 +148,8 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
-    mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty)
+    mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty),
+    nFilteredRowCount   (rData.nFilteredRowCount)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
@@ -196,6 +199,8 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
 
     if (bNeedsListening)
         StartTableColumnNamesListener();
+
+    nFilteredRowCount = rData.nFilteredRowCount;
 
     return *this;
 }
@@ -913,6 +918,22 @@ void ScDBData::Notify( const SfxHint& rHint )
 
     // Do not refresh column names here, which might trigger unwanted
     // recalculation.
+}
+
+void ScDBData::CalcSaveFilteredCount( SCSIZE nNonFilteredRowCount )
+{
+    SCSIZE nTotal = nEndRow - nStartRow + 1;
+    if ( bHasHeader )
+        nTotal -= 1;
+    nFilteredRowCount = nTotal - nNonFilteredRowCount;
+}
+
+void ScDBData::GetFilterSelCount( SCSIZE& nSelected, SCSIZE& nTotal )
+{
+    nTotal = nEndRow - nStartRow + 1;
+    if ( bHasHeader )
+        nTotal -= 1;
+    nSelected = nTotal - nFilteredRowCount;
 }
 
 namespace {
