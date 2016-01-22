@@ -37,6 +37,29 @@
     },
     {
       "key": {
+        "uuid": "dab17558_2a0141af",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-01-22T09:17:35Z",
+      "side": 1,
+      "message": "We want leading zeros here for month, day, hour, minute and second. I would hope there is some existing function to produce a such timestamp. But if not, just need to do it tediously and manually. Or then, dare I say it, use sprintf...",
+      "range": {
+        "startLine": 659,
+        "startChar": 18,
+        "endLine": 659,
+        "endChar": 19
+      },
+      "revId": "11fd2f00da20086da870f3c2b8eef1d87df4bd2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_aaaa51d2",
         "filename": "sfx2/source/control/unoctitm.cxx",
         "patchSetId": 5
