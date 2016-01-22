@@ -799,6 +799,9 @@ public class APIDescGetter extends DescGetter
             }
         }
 
+        if (modules == null)
+            throw new IllegalStateException("missing dirs");
+
         for (int i = 0; i < modules.length; i++)
         {
             if (!isUnusedModule(modules[i]))
