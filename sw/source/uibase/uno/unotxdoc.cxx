@@ -3096,7 +3096,7 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     // SfxObjectShellRef is used here, since the model should control object lifetime after creation
     // and thus SfxObjectShellLock is not allowed here
     // the model holds reference to the shell, so the shell will not destructed at the end of method
-    SfxObjectShellRef pShell = pDocShell->GetDoc()->CreateCopy(false);
+    SfxObjectShellRef pShell = pDocShell->GetDoc()->CreateCopy(false, false);
     uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
     uno::Reference< embed::XStorage > xNewStorage = ::comphelper::OStorageHelper::GetTemporaryStorage( );
     uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;

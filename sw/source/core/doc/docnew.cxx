@@ -868,7 +868,7 @@ void SwDoc::ReplaceCompatibilityOptions(const SwDoc& rSource)
     ((idx).GetNode().GetIndex() - GetNodes().GetEndOfExtras().GetIndex() - 1)
 #endif
 
-SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
+SfxObjectShell* SwDoc::CreateCopy( bool bCallInitNew, bool bEmpty ) const
 {
     SwDoc* pRet = new SwDoc;
 
@@ -891,14 +891,17 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
     pRet->ReplaceStyles(*this);
 
+    if( !bEmpty )
+    {
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.createcopy", "CC-Nd-Src: " << CNTNT_DOC( this ) );
-    SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
+        SAL_INFO( "sw.createcopy", "CC-Nd-Src: " << CNTNT_DOC( this ) );
+        SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
 #endif
-    pRet->AppendDoc(*this, 0, bCallInitNew, 0, 0);
+        pRet->AppendDoc(*this, 0, bCallInitNew, 0, 0);
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
+        SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
 #endif
+    }
 
     // remove the temporary shell if it is there as it was done before
     pRet->SetTmpDocShell( nullptr );

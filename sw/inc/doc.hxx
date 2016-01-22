@@ -1622,7 +1622,7 @@ public:
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
 
-    SfxObjectShell* CreateCopy(bool bCallInitNew) const;
+    SfxObjectShell* CreateCopy(bool bCallInitNew, bool bEmpty) const;
     SwNodeIndex AppendDoc(const SwDoc& rSource, sal_uInt16 nStartPageNumber,
                  bool bDeletePrevious = false, int physicalPageOffset = 0,
                  const sal_uLong nDocNo = 1);
