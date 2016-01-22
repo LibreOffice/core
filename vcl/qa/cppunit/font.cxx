@@ -30,6 +30,7 @@ public:
     void testBuiltInFontFlag();
     void testEmbeddableFontFlag();
     void testSubsettableFontFlag();
+    void testOrientationFlag();
     void testSymbolFlagAndCharSet();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
@@ -42,6 +43,7 @@ public:
     CPPUNIT_TEST(testBuiltInFontFlag);
     CPPUNIT_TEST(testEmbeddableFontFlag);
     CPPUNIT_TEST(testSubsettableFontFlag);
+    CPPUNIT_TEST(testOrientationFlag);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -145,6 +147,18 @@ void VclFontTest::testSubsettableFontFlag()
     aFont.SetSubsettableFlag( true );
     CPPUNIT_ASSERT_EQUAL( true, aFont.CanSubset() );
 }
+
+
+void VclFontTest::testOrientationFlag()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL( false, aFont.CanRotate() );
+
+    aFont.SetOrientationFlag( true );
+    CPPUNIT_ASSERT_EQUAL( true, aFont.CanRotate() );
+}
+
 
 void VclFontTest::testSymbolFlagAndCharSet()
 {

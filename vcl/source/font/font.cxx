@@ -824,6 +824,9 @@ bool Font::CanEmbed() const { return mpImplFont->CanEmbed(); }
 void Font::SetEmbeddableFlag( bool bEmbeddable ) { mpImplFont->SetEmbeddableFlag( bEmbeddable ); }
 bool Font::CanSubset() const { return mpImplFont->CanSubset(); }
 void Font::SetSubsettableFlag( bool bSubsettable ) { mpImplFont->SetSubsettableFlag( bSubsettable ); }
+bool Font::CanRotate() const { return mpImplFont->CanRotate(); }
+void Font::SetOrientationFlag( bool bCanRotate ) { mpImplFont->SetOrientationFlag( bCanRotate ); }
+
 bool Font::IsOutline() const { return mpImplFont->mbOutline; }
 bool Font::IsShadow() const { return mpImplFont->mbShadow; }
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
@@ -866,6 +869,7 @@ ImplFont::ImplFont() :
     mbDevice( false ),
     mbEmbeddable( false ),
     mbSubsettable( false ),
+    mbRotatable( false ),
     mnQuality( 0 )
 {}
 
@@ -902,6 +906,7 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     mbDevice( rImplFont.mbDevice ),
     mbEmbeddable( false ),
     mbSubsettable( false ),
+    mbRotatable( rImplFont.mbRotatable ),
     mnQuality( rImplFont.mnQuality )
 {}
 

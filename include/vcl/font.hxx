@@ -89,6 +89,7 @@ public:
     bool                IsBuiltInFont() const;
     bool                CanEmbed() const;
     bool                CanSubset() const;
+    bool                CanRotate() const;
 
     void                SetQuality(int);
     void                IncreaseQualityBy(int);
@@ -98,6 +99,7 @@ public:
     void                SetBuiltInFontFlag(bool);
     void                SetEmbeddableFlag(bool);
     void                SetSubsettableFlag(bool);
+    void                SetOrientationFlag(bool);
 
     // setting the color on the font is obsolete, the only remaining
     // valid use is for keeping backward compatibility with old MetaFiles
