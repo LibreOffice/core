@@ -84,6 +84,7 @@ public:
 
     // Device dependent functions
     int                 GetQuality() const;
+    OUString            GetMapNames() const;
 
     bool                IsBuiltInFont() const;
     bool                CanEmbed() const;
@@ -92,6 +93,7 @@ public:
     void                SetQuality(int);
     void                IncreaseQualityBy(int);
     void                DecreaseQualityBy(int);
+    void                SetMapNames(OUString const &);
 
     void                SetBuiltInFontFlag(bool);
     void                SetEmbeddableFlag(bool);

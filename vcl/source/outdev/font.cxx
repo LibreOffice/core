@@ -85,6 +85,7 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontMetric.SetScalableFlag( rData.IsScalable() );
         aFontMetric.SetBuiltInFontFlag( rData.IsBuiltInFont() );
         aFontMetric.SetQuality( rData.GetQuality() );
+        aFontMetric.SetMapNames( rData.GetMapNames() );
     }
 
     return aFontMetric;
@@ -224,6 +225,10 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetExternalLeading( ImplDevicePixelToLogicHeight( GetFontExtLeading() ) );
     aMetric.SetLineHeight( ImplDevicePixelToLogicHeight( xFontMetric->GetAscent() + xFontMetric->GetDescent() + mnEmphasisAscent + mnEmphasisDescent ) );
     aMetric.SetSlant( ImplDevicePixelToLogicHeight( xFontMetric->GetSlant() ) );
+
+    // get miscellaneous data
+    aMetric.SetQuality( xFontMetric->GetQuality() );
+    aMetric.SetMapNames( xFontMetric->GetMapNames() );
 
     SAL_INFO("vcl.gdi.fontmetric", "OutputDevice::GetFontMetric:" << aMetric);
 
