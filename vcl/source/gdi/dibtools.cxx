@@ -772,42 +772,6 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
         }
 
         const sal_uInt16 nBitCount(discretizeBitcount(aHeader.nBitCount));
-        const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
-        BitmapPalette aDummyPal;
-        Bitmap aNewBmp(aSizePixel, nBitCount, &aDummyPal);
-        BitmapWriteAccess* pAcc = aNewBmp.AcquireWriteAccess();
-        if (!pAcc)
-            return false;
-        if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
-        {
-            Bitmap::ReleaseAccess(pAcc);
-            return false;
-        }
-        Bitmap aNewBmpAlpha;
-        BitmapWriteAccess* pAccAlpha = nullptr;
-        bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
-
-        if (bAlphaPossible)
-        {
-            const bool bRedSet(0 != aHeader.nV5RedMask);
-            const bool bGreenSet(0 != aHeader.nV5GreenMask);
-            const bool bBlueSet(0 != aHeader.nV5BlueMask);
-
-            // some clipboard entries have alpha mask on zero to say that there is
-            // no alpha; do only use this when the other masks are set. The MS docu
-            // says that masks are only to be set when bV5Compression is set to
-            // BI_BITFIELDS, but there seem to exist a wild variety of usages...
-            if((bRedSet || bGreenSet || bBlueSet) && (0 == aHeader.nV5AlphaMask))
-            {
-                bAlphaPossible = false;
-            }
-        }
-
-        if (bAlphaPossible)
-        {
-            aNewBmpAlpha = Bitmap(aSizePixel, 8);
-            pAccAlpha = aNewBmpAlpha.AcquireWriteAccess();
-        }
 
         sal_uInt16 nColors(0);
         SvStream* pIStm;
@@ -896,6 +860,42 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             pIStm = &rIStm;
         }
 
+        const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
+        BitmapPalette aDummyPal;
+        Bitmap aNewBmp(aSizePixel, nBitCount, &aDummyPal);
+        BitmapWriteAccess* pAcc = aNewBmp.AcquireWriteAccess();
+        if (!pAcc)
+            return false;
+        if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
+        {
+            Bitmap::ReleaseAccess(pAcc);
+            return false;
+        }
+        Bitmap aNewBmpAlpha;
+        BitmapWriteAccess* pAccAlpha = nullptr;
+        bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
+
+        if (bAlphaPossible)
+        {
+            const bool bRedSet(0 != aHeader.nV5RedMask);
+            const bool bGreenSet(0 != aHeader.nV5GreenMask);
+            const bool bBlueSet(0 != aHeader.nV5BlueMask);
+
+            // some clipboard entries have alpha mask on zero to say that there is
+            // no alpha; do only use this when the other masks are set. The MS docu
+            // says that masks are only to be set when bV5Compression is set to
+            // BI_BITFIELDS, but there seem to exist a wild variety of usages...
+            if((bRedSet || bGreenSet || bBlueSet) && (0 == aHeader.nV5AlphaMask))
+            {
+                bAlphaPossible = false;
+            }
+        }
+
+        if (bAlphaPossible)
+        {
+            aNewBmpAlpha = Bitmap(aSizePixel, 8);
+            pAccAlpha = aNewBmpAlpha.AcquireWriteAccess();
+        }
         // read palette
         if(nColors)
         {
