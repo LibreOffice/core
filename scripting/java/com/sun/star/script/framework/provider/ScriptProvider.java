@@ -217,6 +217,9 @@ public abstract class ScriptProvider implements
 
                     if (originalContextURL.endsWith("uno_packages")) {
                         isPkgProvider = true;
+                        if (extensionRepository == null)
+                          throw new com.sun.star.uno.RuntimeException(
+                                    "ScriptProvider missing extensionRepository");
 
                         if (!originalContextURL.equals(contextUrl)
                             && !extensionRepository.equals("bundled")) {
@@ -226,6 +229,9 @@ public abstract class ScriptProvider implements
                     }
 
                     if (isPkgProvider) {
+                        if (extensionDb == null)
+                          throw new com.sun.star.uno.RuntimeException(
+                                    "ScriptProvider missing extensionDb");
                         m_container =
                             new UnoPkgContainer(m_xContext, contextUrl, extensionDb, extensionRepository,
                                                 language);
