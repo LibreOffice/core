@@ -155,7 +155,7 @@ public:
     bool            operator==( const SvxNumberFormat&  ) const;
     bool            operator!=( const SvxNumberFormat& rFmt) const {return !(*this == rFmt);}
 
-    void            SetNumberingType(sal_Int16 nSet);
+    void            SetNumberingType(sal_Int16 nSet) override;
     void            SetNumAdjust(SvxAdjust eSet);
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
     void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
