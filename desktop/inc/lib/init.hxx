@@ -7,14 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <boost/shared_ptr.hpp>
+#include <map>
 #include "../../source/inc/desktopdllapi.h"
 #include <osl/thread.h>
 
 using namespace css;
 using namespace boost;
+
+class LOKInteractionHandler;
 
 namespace desktop {
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument
@@ -35,7 +39,15 @@ namespace desktop {
         oslThread maThread;
         LibreOfficeKitCallback mpCallback;
         void *mpCallbackData;
+        int64_t mOptionalFeatures;
+        std::map<OString, rtl::Reference<LOKInteractionHandler>> mInteractionMap;
 
         LibLibreOffice_Impl();
+        ~LibLibreOffice_Impl();
+
+        bool hasOptionalFeature(LibreOfficeKitOptionalFeatures const feature)
+        {
+            return (mOptionalFeatures & feature) != 0;
+        }
     };
 }

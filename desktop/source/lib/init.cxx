@@ -449,11 +449,16 @@ static void                    lo_registerCallback (LibreOfficeKit* pThis,
                                                     LibreOfficeKitCallback pCallback,
                                                     void* pData);
 static char* lo_getFilterTypes(LibreOfficeKit* pThis);
+static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t features);
+static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
+                                                       const char* pURL,
+                                                       const char* pPassword);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : maThread(0)
     , mpCallback(nullptr)
     , mpCallbackData(nullptr)
+    , mOptionalFeatures(0)
 {
     if(!(m_pOfficeClass = gOfficeClass.lock())) {
         m_pOfficeClass.reset(new LibreOfficeKitClass);
@@ -466,11 +471,17 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
         m_pOfficeClass->registerCallback = lo_registerCallback;
         m_pOfficeClass->getFilterTypes = lo_getFilterTypes;
+        m_pOfficeClass->setOptionalFeatures = lo_setOptionalFeatures;
+        m_pOfficeClass->setDocumentPassword = lo_setDocumentPassword;
 
         gOfficeClass = m_pOfficeClass;
     }
 
     pClass = m_pOfficeClass.get();
+}
+
+LibLibreOffice_Impl::~LibLibreOffice_Impl()
+{
 }
 
 namespace
@@ -534,7 +545,10 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                                                        uno::makeAny(OUString::createFromAscii(pOptions)),
                                                        beans::PropertyState_DIRECT_VALUE);
 
-        uno::Reference<task::XInteractionHandler2> xInteraction(new LOKInteractionHandler(::comphelper::getProcessComponentContext()));
+        rtl::Reference<LOKInteractionHandler> const pInteraction(
+            new LOKInteractionHandler(::comphelper::getProcessComponentContext(), pLib));
+        auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
+        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
         aFilterOptions[1].Name = "InteractionHandler";
         aFilterOptions[1].Value <<= xInteraction;
 
@@ -552,6 +566,12 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, OUString("_blank"), 0,
                                             aFilterOptions);
+
+        assert(!xComponent.is() || pair.second); // concurrent loading of same URL ought to fail
+        if (!pair.second)
+        {
+            pLib->mInteractionMap.erase(aURL.toUtf8());
+        }
 
         if (!xComponent.is())
         {
@@ -1655,6 +1675,22 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     return strdup(aStream.str().c_str());
+}
+
+static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t const features)
+{
+    LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    pLib->mOptionalFeatures = features;
+}
+
+static void lo_setDocumentPassword(LibreOfficeKit* pThis,
+        const char* pURL, const char* pPassword)
+{
+    assert(pThis);
+    assert(pURL);
+    LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    assert(pLib->mInteractionMap.find(OString(pURL)) != pLib->mInteractionMap.end());
+    pLib->mInteractionMap.find(OString(pURL))->second->SetPassword(pPassword);
 }
 
 static void force_c_locale()
