@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_8a602d37",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-22T18:55:34Z",
+      "side": 1,
+      "message": "So this actually would be a case for a switch-case, to not initialize with view data first and then overwrite for the special cases, i.e.\n\n    switch(eSplitMetod)\n    {\n        case SC_SPLIT_METHOD_FIRST_ROW:\n            nPosX \u003d 0;\n            nPosY \u003d 1;\n            break;\n        case SC_SPLIT_METHOD_FIRST_COL:\n            nPosX \u003d 1;\n            nPosY \u003d 0;\n            break;\n        case SC_SPLIT_METHOD_FIRST_CURSOR:\n            nPosX \u003d static_cast\u003cSCsCOL\u003e( aViewData.GetCurX());\n            nPosY \u003d static_cast\u003cSCsROW\u003e( aViewData.GetCurY());\n            break;\n    }",
+      "range": {
+        "startLine": 1977,
+        "startChar": 0,
+        "endLine": 1987,
+        "endChar": 13
+      },
+      "revId": "48cc50f551900d910c15da24238005a311054192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
