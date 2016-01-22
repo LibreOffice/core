@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_8a12edb2",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-22T14:50:17Z",
+      "side": 1,
+      "message": "What is the reason for having this variable static. Content is overwritten with every call.\n\nA static would make sense, if the first call sets it, and the following calls only references it (no getenv() etc call).",
+      "revId": "9ec260c0f4abd63be80616eb781011f3dfd44e97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
