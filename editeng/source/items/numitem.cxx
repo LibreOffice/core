@@ -181,7 +181,8 @@ SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
 }
 
 SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
-    : nStart(0)
+    : mbNumAdjustChanged(false)
+    , nStart(0)
     , nBulletRelSize(100)
     , nFirstLineOffset(0)
     , nAbsLSpace(0)
