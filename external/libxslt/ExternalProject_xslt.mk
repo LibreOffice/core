@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(call gb_ExternalProject_run,build,\
-		cscript configure.js \
+		cscript /e:javascript configure.js \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 			vcmanifest=yes \
 			lib=$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc \
