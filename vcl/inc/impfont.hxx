@@ -67,20 +67,17 @@ public:
 
     // device dependent functions
     int                 GetQuality() const                              { return mnQuality; }
+    OUString            GetMapNames() const                             { return maMapNames; }
 
     void                SetQuality( int nQuality )                      { mnQuality = nQuality; }
     void                IncreaseQualityBy( int nQualityAmount )         { mnQuality += nQualityAmount; }
     void                DecreaseQualityBy( int nQualityAmount )         { mnQuality -= nQualityAmount; }
-    /* Missing function: OUString GetMapNames() const; */
+    void                SetMapNames( OUString const & aMapNames )       { maMapNames = aMapNames; }
 
     bool                IsBuiltInFont() const                           { return mbDevice; }
     bool                CanEmbed() const                                { return mbEmbeddable; }
     bool                CanSubset() const                               { return mbSubsettable; }
     /* Missing function: bool CanRotate() const; */
-    /* Missing function: bool HasMapNames() const; */
-
-    /* Missing function: void SetNames( OUString const& ); */
-    /* Missing function: void AddMapName( OUString const& ); */
 
     void                SetBuiltInFontFlag( bool bIsBuiltInFont )       { mbDevice = bIsBuiltInFont; }
     void                SetEmbeddableFlag( bool bEmbeddable )           { mbEmbeddable = bEmbeddable; }
@@ -126,6 +123,7 @@ private:
                         mbEmbeddable:1,
                         mbSubsettable:1;
     int                 mnQuality;
+    OUString            maMapNames;
 
     friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
     friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );

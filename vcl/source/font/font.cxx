@@ -472,9 +472,9 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
 SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
-    sal_uInt16          nTmp16;
+    sal_uInt16      nTmp16;
     bool            bTmp;
-    sal_uInt8           nTmp8;
+    sal_uInt8       nTmp8;
 
     rImplFont.SetFamilyName( rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet()) );
     rImplFont.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
@@ -500,14 +500,16 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     if( aCompat.GetVersion() >= 2 )
     {
         rIStm.ReadUChar( nTmp8 );     rImplFont.meRelief = (FontRelief)nTmp8;
-        rIStm.ReadUInt16( nTmp16 );    rImplFont.maCJKLanguageTag.reset( (LanguageType)nTmp16);
-        rIStm.ReadCharAsBool( bTmp );      rImplFont.mbVertical = bTmp;
-        rIStm.ReadUInt16( nTmp16 );    rImplFont.meEmphasisMark = (FontEmphasisMark)nTmp16;
+        rIStm.ReadUInt16( nTmp16 );   rImplFont.maCJKLanguageTag.reset( (LanguageType)nTmp16);
+        rIStm.ReadCharAsBool( bTmp ); rImplFont.mbVertical = bTmp;
+        rIStm.ReadUInt16( nTmp16 );   rImplFont.meEmphasisMark = (FontEmphasisMark)nTmp16;
     }
+
     if( aCompat.GetVersion() >= 3 )
     {
         rIStm.ReadUInt16( nTmp16 ); rImplFont.meOverline = (FontUnderline) nTmp16;
     }
+
     // Relief
     // CJKContextLanguage
 
@@ -812,6 +814,9 @@ int Font::GetQuality() const { return mpImplFont->GetQuality(); }
 void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
 void Font::IncreaseQualityBy( int nQualityAmount ) { mpImplFont->IncreaseQualityBy( nQualityAmount ); }
 void Font::DecreaseQualityBy( int nQualityAmount ) { mpImplFont->DecreaseQualityBy( nQualityAmount ); }
+
+OUString Font::GetMapNames() const { return mpImplFont->GetMapNames(); }
+void Font::SetMapNames( OUString const & aMapNames ) { mpImplFont->SetMapNames(aMapNames); }
 
 bool Font::IsBuiltInFont() const { return mpImplFont->IsBuiltInFont(); }
 void Font::SetBuiltInFontFlag( bool bIsBuiltInFontFlag ) { mpImplFont->SetBuiltInFontFlag( bIsBuiltInFontFlag ); }
