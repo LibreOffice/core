@@ -23,6 +23,11 @@
 #include <vcl/dibtools.hxx>
 #include <memory>
 
+#ifdef DBG_UTIL
+#include <tools/stream.hxx>
+#include <vcl/pngwrite.hxx>
+#endif
+
 using namespace std;
 
 // GDI-Array
@@ -1208,43 +1213,110 @@ bool EnhWMFReader::ReadEnhWMF()
                                .ReadUInt32( offBitsSrc ).ReadUInt32( cbBitsSrc ).ReadInt32( cxSrc ).ReadInt32( cySrc ) ;
 
                     sal_uInt32  dwRop = SRCAND|SRCINVERT;
-
-                    Bitmap      aBitmap;
                     Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
 
                     if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
                         bStatus = false;
                     else
                     {
-                        sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
-                        if ( nSize <= ( nEndPos - nStartPos ) )
+                        const sal_uInt32 nSourceSize = cbBmiSrc + cbBitsSrc + 14;
+                        if ( nSourceSize <= ( nEndPos - nStartPos ) )
                         {
-                            char* pBuf = new char[ nSize ];
-                            SvMemoryStream aTmp( pBuf, nSize, StreamMode::READ | StreamMode::WRITE );
+                            // we need to read alpha channel data if AlphaFormat of BLENDFUNCTION is
+                            // AC_SRC_ALPHA (==0x01). To read it, create a temp DIB-File which is ready
+                            // for DIB-5 format
+                            const bool bReadAlpha(0x01 == aFunc.aAlphaFormat);
+                            const sal_uInt32 nDeltaToDIB5HeaderSize(bReadAlpha ? getDIBV5HeaderSize() - cbBmiSrc : 0);
+                            const sal_uInt32 nTargetSize(cbBmiSrc + nDeltaToDIB5HeaderSize + cbBitsSrc + 14);
+                            char* pBuf = new char[ nTargetSize ];
+                            SvMemoryStream aTmp( pBuf, nTargetSize, StreamMode::READ | StreamMode::WRITE );
+
                             aTmp.ObjectOwnsMemory( true );
+
+                            // write BM-Header (14 bytes)
                             aTmp.WriteUChar( 'B' )
                                 .WriteUChar( 'M' )
                                 .WriteUInt32( cbBitsSrc )
                                 .WriteUInt16( 0 )
                                 .WriteUInt16( 0 )
-                                .WriteUInt32( cbBmiSrc + 14 );
+                                .WriteUInt32( cbBmiSrc + nDeltaToDIB5HeaderSize + 14 );
+
+                            // copy DIBInfoHeader from source (cbBmiSrc bytes)
                             pWMF->Seek( nStart + offBmiSrc );
                             pWMF->Read( pBuf + 14, cbBmiSrc );
-                            pWMF->Seek( nStart + offBitsSrc );
-                            pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
-                            aTmp.Seek( 0 );
-                            ReadDIB(aBitmap, aTmp, true);
 
-                            // test if it is sensible to crop
-                            if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
-                                ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                                    ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                                        ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                            if(bReadAlpha)
                             {
-                                Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                                aBitmap.Crop( aCropRect );
+                                // need to add values for all stuff that DIBV5Header is bigger
+                                // than DIBInfoHeader, all values are correctly initialized to zero,
+                                // so we can use memset here
+                                memset(pBuf + cbBmiSrc + 14, 0, nDeltaToDIB5HeaderSize);
                             }
-                            aBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
+
+                            // copy bitmap data from source (offBitsSrc bytes)
+                            pWMF->Seek( nStart + offBitsSrc );
+                            pWMF->Read( pBuf + 14 + nDeltaToDIB5HeaderSize + cbBmiSrc, cbBitsSrc );
+                            aTmp.Seek( 0 );
+
+                            // prepare to read and fill BitmapEx
+                            BitmapEx aBitmapEx;
+
+                            if(bReadAlpha)
+                            {
+                                Bitmap aBitmap;
+                                AlphaMask aAlpha;
+
+                                if(ReadDIBV5(aBitmap, aAlpha, aTmp))
+                                {
+                                    aBitmapEx = BitmapEx(aBitmap, aAlpha);
+                                }
+                            }
+                            else
+                            {
+                                Bitmap aBitmap;
+
+                                if(ReadDIB(aBitmap, aTmp, true))
+                                {
+                                    if(0xff != aFunc.aSrcConstantAlpha)
+                                    {
+                                        // add const alpha channel
+                                        aBitmapEx = BitmapEx(
+                                            aBitmap,
+                                            AlphaMask(aBitmap.GetSizePixel(), &aFunc.aSrcConstantAlpha));
+                                    }
+                                    else
+                                    {
+                                        // just use Bitmap
+                                        aBitmapEx = BitmapEx(aBitmap);
+                                    }
+                                }
+                            }
+
+                            if(!aBitmapEx.IsEmpty())
+                            {
+                                // test if it is sensible to crop
+                                if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                                    ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                                        ( xSrc + cxSrc < aBitmapEx.GetSizePixel().Width() ) &&
+                                            ( ySrc + cySrc < aBitmapEx.GetSizePixel().Height() ) )
+                                {
+                                    const Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+
+                                    aBitmapEx.Crop( aCropRect );
+                                }
+
+#ifdef DBG_UTIL
+                                static bool bDoSaveForVisualControl(false);
+
+                                if(bDoSaveForVisualControl)
+                                {
+                                    SvFileStream aNew(OUString("c:\\metafile_content.png"), StreamMode::WRITE|StreamMode::TRUNC);
+                                    vcl::PNGWriter aPNGWriter(aBitmapEx);
+                                    aPNGWriter.Write(aNew);
+                                }
+#endif
+                                aBmpSaveList.emplace_back(new BSaveStruct(aBitmapEx, aRect, dwRop));
+                            }
                         }
                     }
                 }

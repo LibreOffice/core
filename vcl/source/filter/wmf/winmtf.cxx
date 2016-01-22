@@ -1543,19 +1543,68 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
 
         // #i50672# Extract whole VDev content (to match size of rBitmap)
         pVDev->EnableMapMode( false );
-        Bitmap aMask( pVDev->GetBitmap( aEmptyPoint, aSizePixel ).CreateMask( Color( COL_WHITE ) ) );
+        const Bitmap aVDevMask(pVDev->GetBitmap(aEmptyPoint, aSizePixel));
 
-        if ( aBmpEx.IsTransparent() )
+        if(aBmpEx.IsTransparent())
         {
-            if ( rBitmap.GetTransparentColor() == Color( COL_WHITE ) )
-                aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_OR );
+            // bitmap already uses a Mask or Alpha, we need to blend that with
+            // the new masking in pVDev
+            if(aBmpEx.IsAlpha())
+            {
+                // need to blend in AlphaMask quality (8Bit)
+                AlphaMask fromVDev(aVDevMask);
+                AlphaMask fromBmpEx(aBmpEx.GetAlpha());
+                BitmapReadAccess* pR = fromVDev.AcquireReadAccess();
+                BitmapWriteAccess* pW = fromBmpEx.AcquireWriteAccess();
+
+                if(pR && pW)
+                {
+                    const long nWidth(std::min(pR->Width(), pW->Width()));
+                    const long nHeight(std::min(pR->Height(), pW->Height()));
+
+                    for(long nY(0); nY < nHeight; nY++) for(long nX(0); nX < nWidth; nX++)
+                    {
+                        const sal_uInt8 nIndR(pR->GetPixelIndex(nY, nX));
+                        const sal_uInt8 nIndW(pW->GetPixelIndex(nY, nX));
+
+                        // these values represent transparency (0 == no, 255 == fully transparent),
+                        // so to blend these we have to multiply the inverse (opacity)
+                        // and re-invert the result to transparence
+                        const sal_uInt8 nCombined(0x00ff - (((0x00ff - nIndR) * (0x00ff - nIndW)) >> 8));
+
+                        pW->SetPixelIndex(nY, nX, nCombined);
+                    }
+                }
+
+                fromVDev.ReleaseAccess(pR);
+                fromBmpEx.ReleaseAccess(pW);
+                aBmpEx = BitmapEx(aBmpEx.GetBitmap(), fromBmpEx);
+            }
             else
-                aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_AND );
-            aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
+            {
+                // need to blend in Mask quality (1Bit)
+                Bitmap aMask(aVDevMask.CreateMask(Color(COL_WHITE)));
+
+                if ( rBitmap.GetTransparentColor() == Color( COL_WHITE ) )
+                {
+                    aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_OR );
+                }
+                else
+                {
+                    aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_AND );
+                }
+
+                aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
+            }
         }
         else
-            aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
+        {
+            // no mask yet, create and add new mask. For better quality, use Alpha,
+            // this allws the drawn mask being processed with AnitAliasing (AAed)
+            aBmpEx = BitmapEx(rBitmap.GetBitmap(), aVDevMask);
+        }
     }
+
     if ( aBmpEx.IsTransparent() )
         mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( rPos, rSize, aBmpEx ) );
     else
@@ -1622,8 +1671,8 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                     if ( nObjectsOfSameSize == 2 )
                     {
                         BSaveStruct* pSave2 = rSaveList[i + 1].get();
-                        if ( ( pSave->aBmp.GetPrefSize() == pSave2->aBmp.GetPrefSize() ) &&
-                             ( pSave->aBmp.GetPrefMapMode() == pSave2->aBmp.GetPrefMapMode() ) )
+                        if ( ( pSave->aBmpEx.GetPrefSize() == pSave2->aBmpEx.GetPrefSize() ) &&
+                             ( pSave->aBmpEx.GetPrefMapMode() == pSave2->aBmpEx.GetPrefMapMode() ) )
                         {
                             // TODO: Strictly speaking, we should
                             // check whether mask is monochrome, and
@@ -1633,8 +1682,8 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                             // bitmap.
                             if ( ( nWinRop == SRCPAINT ) && ( pSave2->nWinRop == SRCAND ) )
                             {
-                                Bitmap aMask( pSave->aBmp ); aMask.Invert();
-                                BitmapEx aBmpEx( pSave2->aBmp, aMask );
+                                Bitmap aMask( pSave->aBmpEx.GetBitmap() ); aMask.Invert();
+                                BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 bDrawn = true;
                                 i++;
@@ -1644,8 +1693,8 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                             // is inverted
                             else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCPAINT ) )
                             {
-                                Bitmap aMask( pSave->aBmp );
-                                BitmapEx aBmpEx( pSave2->aBmp, aMask );
+                                Bitmap aMask( pSave->aBmpEx.GetBitmap() );
+                                BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 bDrawn = true;
                                 i++;
@@ -1653,8 +1702,8 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                             // tdf#90539
                             else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCINVERT ) )
                             {
-                                Bitmap aMask( pSave->aBmp );
-                                BitmapEx aBmpEx( pSave2->aBmp, aMask );
+                                Bitmap aMask( pSave->aBmpEx.GetBitmap() );
+                                BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 bDrawn = true;
                                 i++;
@@ -1667,24 +1716,31 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                 {
                     Push();
                     sal_uInt32  nOldRop = SetRasterOp( R2_COPYPEN );
-                    Bitmap      aBitmap( pSave->aBmp );
+                    Bitmap      aBitmap( pSave->aBmpEx.GetBitmap() );
                     sal_uInt32  nOperation = ( nRasterOperation & 0xf );
                     switch( nOperation )
                     {
                         case 0x1 :
                         case 0xe :
                         {
-                            SetRasterOp( R2_XORPEN );
-                            ImplDrawBitmap( aPos, aSize, aBitmap );
-                            SetRasterOp( R2_COPYPEN );
-                            Bitmap  aMask( aBitmap );
-                            aMask.Invert();
-                            BitmapEx aBmpEx( aBitmap, aMask );
-                            ImplDrawBitmap( aPos, aSize, aBmpEx );
-                            if ( nOperation == 0x1 )
+                            if(pSave->aBmpEx.IsAlpha())
                             {
-                                SetRasterOp( R2_NOT );
-                                DrawRect( aRect, false );
+                                ImplDrawBitmap( aPos, aSize, pSave->aBmpEx );
+                            }
+                            else
+                            {
+                                SetRasterOp( R2_XORPEN );
+                                ImplDrawBitmap( aPos, aSize, aBitmap );
+                                SetRasterOp( R2_COPYPEN );
+                                Bitmap  aMask( aBitmap );
+                                aMask.Invert();
+                                BitmapEx aBmpEx( aBitmap, aMask );
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
+                                if ( nOperation == 0x1 )
+                                {
+                                    SetRasterOp( R2_NOT );
+                                    DrawRect( aRect, false );
+                                }
                             }
                         }
                         break;

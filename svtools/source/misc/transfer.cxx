@@ -1673,13 +1673,13 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
         if(rBmpEx.IsEmpty())
         {
             Bitmap aBitmap;
-            Bitmap aMask;
+            AlphaMask aMask;
 
             // explicitely use Bitmap::Read with bFileHeader = sal_True
             // #i124085# keep DIBV5 for read from clipboard, but should not happen
             ReadDIBV5(aBitmap, aMask, *xStm);
 
-            if(aMask.IsEmpty())
+            if(aMask.GetBitmap().IsEmpty())
             {
                 rBmpEx = aBitmap;
             }

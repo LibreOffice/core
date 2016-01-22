@@ -443,15 +443,20 @@ typedef std::shared_ptr<SaveStruct> SaveStructPtr;
 
 struct BSaveStruct
 {
-    Bitmap          aBmp;
+    BitmapEx        aBmpEx;
     Rectangle       aOutRect;
     sal_uInt32      nWinRop;
 
-    BSaveStruct(const Bitmap& rBmp, const Rectangle& rOutRect,
-                sal_uInt32 nRop)
-        : aBmp(rBmp)
-        , aOutRect(rOutRect)
-        , nWinRop(nRop)
+    BSaveStruct(const Bitmap& rBmp, const Rectangle& rOutRect, sal_uInt32 nRop)
+    :   aBmpEx(rBmp)
+    ,   aOutRect(rOutRect)
+    ,   nWinRop(nRop)
+    {}
+
+    BSaveStruct(const BitmapEx& rBmpEx, const Rectangle& rOutRect, sal_uInt32 nRop)
+    :   aBmpEx(rBmpEx)
+    ,   aOutRect(rOutRect)
+    ,   nWinRop(nRop)
     {}
 };
 
