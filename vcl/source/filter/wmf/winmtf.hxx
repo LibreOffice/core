@@ -456,14 +456,22 @@ typedef std::shared_ptr<SaveStruct> SaveStructPtr;
 
 struct BSaveStruct
 {
-    Bitmap          aBmp;
+    BitmapEx        aBmpEx;
     Rectangle       aOutRect;
     sal_uInt32      nWinRop;
     WinMtfFillStyle aStyle;
 
     BSaveStruct(const Bitmap& rBmp, const Rectangle& rOutRect,
                 sal_uInt32 nRop, WinMtfFillStyle& rStyle)
-        : aBmp(rBmp)
+        : aBmpEx(rBmp)
+        , aOutRect(rOutRect)
+        , nWinRop(nRop)
+        , aStyle (rStyle)
+    {}
+
+    BSaveStruct(const BitmapEx& rBmpEx, const Rectangle& rOutRect,
+                sal_uInt32 nRop, WinMtfFillStyle& rStyle)
+        : aBmpEx(rBmpEx)
         , aOutRect(rOutRect)
         , nWinRop(nRop)
         , aStyle (rStyle)
