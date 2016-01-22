@@ -220,10 +220,7 @@ void CUPSManager::runDests()
              ippPort(),
              cupsEncryption())) != nullptr )
     {
-        // neat, cups is up, clean up the canary
-        httpClose(p_http);
-
-        int nDests = cupsGetDests( &pDests );
+        int nDests = cupsGetDests2(p_http,  &pDests);
         SAL_INFO("vcl.unx.print", "came out of cupsGetDests");
 
         osl::MutexGuard aGuard( m_aCUPSMutex );
@@ -231,6 +228,8 @@ void CUPSManager::runDests()
         m_pDests = pDests;
         m_bNewDests = true;
         SAL_INFO("vcl.unx.print", "finished cupsGetDests");
+
+        httpClose(p_http);
     }
 }
 
