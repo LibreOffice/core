@@ -587,7 +587,8 @@ public class utils {
         } catch (com.sun.star.uno.Exception e) {
         }
 
-        xTrans.parseStrict(rUrl);
+        if (xTrans != null)
+            xTrans.parseStrict(rUrl);
 
         return rUrl[0];
     }
