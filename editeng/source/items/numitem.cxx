@@ -248,7 +248,8 @@ SvxNumberFormat::~SvxNumberFormat()
 void SvxNumberFormat::SetNumberingType(sal_Int16 nSet)
 {
     if(!mbNumAdjustChanged)
-    {//Romain numbers alignment to right, issue-42788
+    {
+        // Right align Roman numbers, tdf#42788
         if(nSet == SVX_NUM_ROMAN_UPPER || nSet == SVX_NUM_ROMAN_LOWER)
             eNumAdjust = SVX_ADJUST_RIGHT;
         else if (eNumAdjust == SVX_ADJUST_RIGHT && (GetNumberingType() == SVX_NUM_ROMAN_UPPER || GetNumberingType() == SVX_NUM_ROMAN_LOWER))
