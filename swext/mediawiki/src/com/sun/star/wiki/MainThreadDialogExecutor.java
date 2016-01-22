@@ -60,40 +60,40 @@ public class MainThreadDialogExecutor implements XCallback
 
     private static boolean GetCallback( XComponentContext xContext, MainThreadDialogExecutor aExecutor )
     {
+        if (aExecutor == null)
+          return false;
+
         try
         {
-            if ( aExecutor != null )
+            String aThreadName = null;
+            Thread aCurThread = Thread.currentThread();
+            if ( aCurThread != null )
+                aThreadName = aCurThread.getName();
+
+            if ( aThreadName != null && aThreadName.equals( "com.sun.star.thread.WikiEditorSendingThread" ) )
             {
-                String aThreadName = null;
-                Thread aCurThread = Thread.currentThread();
-                if ( aCurThread != null )
-                    aThreadName = aCurThread.getName();
+                // the main thread should be accessed asynchronously
+                XMultiComponentFactory xFactory = xContext.getServiceManager();
+                if ( xFactory == null )
+                    throw new com.sun.star.uno.RuntimeException();
 
-                if ( aThreadName != null && aThreadName.equals( "com.sun.star.thread.WikiEditorSendingThread" ) )
+                XRequestCallback xRequest = UnoRuntime.queryInterface(
+                    XRequestCallback.class,
+                    xFactory.createInstanceWithContext( "com.sun.star.awt.AsyncCallback", xContext ) );
+                if ( xRequest != null )
                 {
-                    // the main thread should be accessed asynchronously
-                    XMultiComponentFactory xFactory = xContext.getServiceManager();
-                    if ( xFactory == null )
-                        throw new com.sun.star.uno.RuntimeException();
-
-                    XRequestCallback xRequest = UnoRuntime.queryInterface(
-                        XRequestCallback.class,
-                        xFactory.createInstanceWithContext( "com.sun.star.awt.AsyncCallback", xContext ) );
-                    if ( xRequest != null )
+                    xRequest.addCallback( aExecutor, Any.VOID );
+                    do
                     {
-                        xRequest.addCallback( aExecutor, Any.VOID );
-                        do
-                        {
-                            Thread.yield();
-                        }
-                        while( !aExecutor.m_bCalled );
+                        Thread.yield();
                     }
+                    while( !aExecutor.m_bCalled );
                 }
-                else
-                {
-                    // handle it as a main thread
-                    aExecutor.notify( Any.VOID );
-                }
+            }
+            else
+            {
+                // handle it as a main thread
+                aExecutor.notify( Any.VOID );
             }
         }
         catch( Exception e )

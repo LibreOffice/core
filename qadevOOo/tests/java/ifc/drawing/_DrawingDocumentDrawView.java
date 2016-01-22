@@ -164,7 +164,8 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
         }
         log.println("oldZoomValue: "+oldValue);
         log.println("newZoomValue: "+newValue);
-        tRes.tested("ZoomType",(!oldValue.equals(newValue)));
+        if (oldValue != null)
+            tRes.tested("ZoomType",(!oldValue.equals(newValue)));
     }
 
 }

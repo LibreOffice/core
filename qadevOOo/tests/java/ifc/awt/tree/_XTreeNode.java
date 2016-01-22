@@ -137,12 +137,18 @@ public class _XTreeNode extends MultiMethodTest {
         }
 
         log.println("try to get parrent of children");
-        XTreeNode xParrent = xNode.getParent();
+        if (xNode == null) {
+            log.println("missing xNode");
+            tRes.tested("getParent()", false);
+        }
+        else {
+            XTreeNode xParrent = xNode.getParent();
 
 
-        bOK = oObj.equals(xParrent);
-        log.println("original object and parrent should be the same: " + bOK);
-        tRes.tested("getParent()", bOK);
+            bOK = oObj.equals(xParrent);
+            log.println("original object and parrent should be the same: " + bOK);
+            tRes.tested("getParent()", bOK);
+        }
     }
 
 
