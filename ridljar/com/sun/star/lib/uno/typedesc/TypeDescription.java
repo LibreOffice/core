@@ -387,6 +387,7 @@ public final class TypeDescription implements ITypeDescription {
         TypeDescription[] args = calculateTypeArguments();
         this.hasTypeArguments = args != null;
         this.fieldDescriptions = calculateFieldDescriptions(args);
+
         // methodDescriptions must be initialized lazily, to avoid problems with
         // circular dependencies (a super-interface that has a sub-interface as
         // method parameter type; an interface that has a struct as method
@@ -577,6 +578,9 @@ public final class TypeDescription implements ITypeDescription {
         if (superCount != 0) {
             System.arraycopy(superDescs, 0, descs, 0, superCount);
         }
+        if (typeArguments == null)
+            throw new IllegalArgumentException("typeArguments unexpected null");
+
         for (int i = 0; i < infoCount; ++i) {
             MemberTypeInfo info = (MemberTypeInfo) infos[i];
             if (info.getIndex() != i) {
