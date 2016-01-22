@@ -812,7 +812,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
         sal_uInt16 nColors(0);
         SvStream* pIStm;
         std::unique_ptr<SvMemoryStream> pMemStm;
-        sal_uInt8* pData = nullptr;
+        std::vector<sal_uInt8> aData;
 
         if (aHeader.nBitCount <= 8)
         {
@@ -837,22 +837,58 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
             if (nCodedSize > rIStm.remainingSize())
                nCodedSize = sal_uInt32(rIStm.remainingSize());
-            pData = static_cast<sal_uInt8*>(rtl_allocateMemory( nUncodedSize ));
+            size_t nSizeInc(4 * rIStm.remainingSize());
+            if (nUncodedSize < nSizeInc)
+                nSizeInc = nUncodedSize;
 
-            // decode buffer
-            nCodedPos = rIStm.Tell();
-            aCodec.BeginCompression();
-            aCodec.Read( rIStm, pData, nUncodedSize );
-            aCodec.EndCompression();
+            if (nSizeInc > 0)
+            {
+                // decode buffer
+                nCodedPos = rIStm.Tell();
+                aCodec.BeginCompression();
+                aData.resize(nSizeInc);
+                size_t nDataPos(0);
+                while (nUncodedSize > nDataPos)
+                {
+                    assert(aData.size() > nDataPos);
+                    const size_t nToRead((std::min)(nUncodedSize - nDataPos, aData.size() - nDataPos));
+                    assert(nToRead > 0);
+                    assert(!aData.empty());
+                    const long nRead = aCodec.Read(rIStm, &aData.front() + nDataPos, sal_uInt32(nToRead));
+                    if (nRead > 0)
+                    {
+                        nDataPos += static_cast<unsigned long>(nRead);
+                        // we haven't read everything yet: resize buffer and continue
+                        if (nDataPos < nUncodedSize)
+                            aData.resize(aData.size() + nSizeInc);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                // truncate the data buffer to actually read size
+                aData.resize(nDataPos);
+                // set the real uncoded size
+                nUncodedSize = sal_uInt32(aData.size());
+                aCodec.EndCompression();
 
-            // Seek behind the encoded block. There might have been bytes left or the codec might have read more than necessary.
-            rIStm.Seek(nCodedSize + nCodedPos);
+                // Seek behind the encoded block. There might have been bytes left or the codec might have read more than necessary.
+                rIStm.Seek(nCodedSize + nCodedPos);
+            }
+            else
+            {
+                // add something so we can take address of the first element
+                aData.resize(1);
+                nUncodedSize = 0;
+            }
 
             // set decoded bytes to memory stream,
             // from which we will read the bitmap data
             pMemStm.reset( new SvMemoryStream);
             pIStm = pMemStm.get();
-            pMemStm->SetBuffer( pData, nUncodedSize, false, nUncodedSize );
+            assert(!aData.empty());
+            pMemStm->SetBuffer( &aData.front(), nUncodedSize, false, nUncodedSize );
             nOffset = 0;
         }
         else
@@ -890,11 +926,6 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
                 aNewBmp.SetPrefMapMode(aMapMode);
                 aNewBmp.SetPrefSize(Size(aHeader.nWidth, aHeader.nHeight));
             }
-        }
-
-        if( pData )
-        {
-            rtl_freeMemory(pData);
         }
 
         Bitmap::ReleaseAccess(pAcc);
