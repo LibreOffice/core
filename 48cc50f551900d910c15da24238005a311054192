@@ -46,6 +46,30 @@
       "revId": "48cc50f551900d910c15da24238005a311054192",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1542a23e",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-22T22:06:27Z",
+      "side": 1,
+      "message": "Yes, patch set 7 was ok, for the compiler complaining about an uninitialized case either add a default label to case SC_SPLIT_METHOD_CURSOR, so\n\n case SC_SPLIT_METHOD_CURSOR:\n default:\n     ...\n\nor explicitly initialize nPosX \u003d 1; nPosY \u003d 1; in the declaration at the top of the function.\n\nPersonally I prefer to handle only defined enum cases in a switch and use default labels rarely, because then when adding a new value to the enum declaration the compiler detects it is not handled in the switch and outputs a warning/error, which using a default label silences. So here I would init with nPosX \u003d 1; nPosY \u003d 1; in the declaration.",
+      "parentUuid": "dab17558_4a59255a",
+      "range": {
+        "startLine": 1977,
+        "startChar": 0,
+        "endLine": 1987,
+        "endChar": 13
+      },
+      "revId": "48cc50f551900d910c15da24238005a311054192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
