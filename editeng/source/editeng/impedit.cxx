@@ -79,7 +79,6 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pOutWin             = pWindow;
     pPointer            = nullptr;
     pBackgroundColor    = nullptr;
-    mbTiledRendering    = false;
     mpLibreOfficeKitCallback = nullptr;
     mpLibreOfficeKitData = nullptr;
     mpLibreOfficeKitSearchable = nullptr;
@@ -119,12 +118,6 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
     delete pBackgroundColor;
     pBackgroundColor = new Color( rColor );
 }
-
-void ImpEditView::setTiledRendering(bool bTiledRendering)
-{
-    mbTiledRendering = bTiledRendering;
-}
-
 
 void ImpEditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData, OutlinerSearchable* pSearchable)
 {

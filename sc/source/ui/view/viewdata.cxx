@@ -950,7 +950,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             pEditView[eWhich]->registerLibreOfficeKitCallback(pDoc->GetDrawLayer()->getLibreOfficeKitCallback(),
                                                               pDoc->GetDrawLayer()->getLibreOfficeKitData(),
                                                               pDoc->GetDrawLayer());
-            pEditView[eWhich]->setTiledRendering(true);
         }
     }
 

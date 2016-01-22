@@ -53,6 +53,7 @@
 #include <comphelper/string.hxx>
 #include <formula/formulahelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include "inputwin.hxx"
 #include "tabvwsh.hxx"
@@ -85,8 +86,6 @@
 #define RANGEFIND_MAX   32
 
 using namespace formula;
-
-// STATIC DATA -----------------------------------------------------------
 
 bool ScInputHandler::bOptLoaded = false;            // Evaluate App options
 bool ScInputHandler::bAutoComplete = false;         // Is set in KeyInput
@@ -635,15 +634,6 @@ void ScInputHandler::ImplCreateEditEngine()
 
         pEngine->SetControlWord( pEngine->GetControlWord() | EEControlBits::AUTOCORRECT );
         pEngine->SetModifyHdl( LINK( this, ScInputHandler, ModifyHdl ) );
-    }
-
-    // set the EditEngine so that it invalidates the view instead of direct
-    // paint
-    if (pActiveViewSh)
-    {
-        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
-        if (EditView* pEditView = pEngine->GetActiveView())
-            pEditView->setTiledRendering(rDoc.GetDrawLayer()->isTiledRendering());
     }
 }
 
@@ -1722,12 +1712,10 @@ void ScInputHandler::UpdateActiveView()
     if (pActiveViewSh && pTableView)
     {
         ScDocShell* pDocShell = pActiveViewSh->GetViewData().GetDocShell();
-        ScDocument& rDoc = pDocShell->GetDocument();
-        if (rDoc.GetDrawLayer()->isTiledRendering())
+        if (comphelper::LibreOfficeKit::isActive())
         {
             ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
             pTableView->registerLibreOfficeKitCallback(pDrawLayer->getLibreOfficeKitCallback(), pDrawLayer->getLibreOfficeKitData(), pDrawLayer);
-            pTableView->setTiledRendering(true);
         }
     }
 
@@ -3473,7 +3461,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                         if ( pInputWin )
                             pInputWin->SetTextString(aString);
-                        else if ( rDoc.GetDrawLayer()->isTiledRendering() )
+                        else if ( comphelper::LibreOfficeKit::isActive() )
                             rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
                     }
 

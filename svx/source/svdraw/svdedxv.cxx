@@ -62,9 +62,9 @@
 #include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <comphelper/lok.hxx>
 
 #include <memory>
-
 
 void SdrObjEditView::ImpClearVars()
 {
@@ -316,7 +316,7 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
                     // compare against that; that's how double-buffering can
                     // still find the matching OutlinerView.
                     OutputDevice* pOutputDevice = rPaintWindow.GetWindow() ? rPaintWindow.GetWindow() : &rPaintWindow.GetOutputDevice();
-                    if(pOLV->GetWindow() == pOutputDevice || GetModel()->isTiledRendering())
+                    if(pOLV->GetWindow() == pOutputDevice || comphelper::LibreOfficeKit::isActive())
                     {
                         ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
                         return;
@@ -342,7 +342,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     // clipped; happens in case of editing text inside a shape in Calc.
     // FIXME would be better to complete the setup so that we don't get an
     // empty rRect here
-    if (!GetModel()->isTiledRendering() || !rRect.IsEmpty())
+    if (!comphelper::LibreOfficeKit::isActive() || !rRect.IsEmpty())
         aBlankRect.Intersection(rRect);
 
     rOutlView.GetOutliner()->SetUpdateMode(true); // Bugfix #22596#
@@ -461,7 +461,6 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     }
     pOutlView->SetControlWord(nStat);
     pOutlView->SetBackgroundColor( aBackground );
-    pOutlView->setTiledRendering(GetModel()->isTiledRendering());
     pOutlView->registerLibreOfficeKitCallback(GetModel()->getLibreOfficeKitCallback(), GetModel()->getLibreOfficeKitData(), GetModel());
     if (pText!=nullptr)
     {
