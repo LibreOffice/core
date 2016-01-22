@@ -593,7 +593,7 @@ protected:
             mxComponent->dispose();
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         if (pName)
-            std::cout << pName << ",";
+            std::cout << pName << ":\n";
         mnStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(rURL, "com.sun.star.text.TextDocument");
         discardDumpedLayout();
