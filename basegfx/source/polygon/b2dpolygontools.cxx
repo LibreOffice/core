@@ -200,7 +200,7 @@ namespace basegfx
                             // add curved edge and generate DistanceBound
                             double fBound(0.0);
 
-                            if(0.0 == fDistanceBound)
+                            if(rtl::math::approxEqual(0.0, fDistanceBound))
                             {
                                 // If not set, use B2DCubicBezier functionality to guess a rough value
                                 const double fRoughLength((aBezier.getEdgeLength() + aBezier.getControlPolygonLength()) / 2.0);
@@ -270,7 +270,7 @@ namespace basegfx
                     aRetval.append(aBezier.getStartPoint());
 
                     // #i37443# prepare convenient AngleBound if none was given
-                    if(0.0 == fAngleBound)
+                    if(rtl::math::approxEqual(0.0, fAngleBound))
                     {
 #ifdef DBG_UTIL
                         fAngleBound = fAngleBoundStartValue;
@@ -855,7 +855,7 @@ namespace basegfx
                                 bStartDone = true;
 
                                 // if same point, end is done, too.
-                                if(fFrom == fTo)
+                                if(rtl::math::approxEqual(fFrom, fTo))
                                 {
                                     bEndDone = true;
                                 }
@@ -1588,7 +1588,7 @@ namespace basegfx
                 fRadiusY = fOne;
             }
 
-            if(fZero == fRadiusX || fZero == fRadiusY)
+            if(rtl::math::approxEqual(fZero, fRadiusX) || rtl::math::approxEqual(fZero, fRadiusY))
             {
                 B2DPolygon aRetval;
 
@@ -1610,7 +1610,7 @@ namespace basegfx
 
                 return aRetval;
             }
-            else if(fOne == fRadiusX && fOne == fRadiusY)
+            else if(rtl::math::approxEqual(fOne, fRadiusX) && rtl::math::approxEqual(fOne, fRadiusY))
             {
                 // in both directions full radius, use ellipse
                 const B2DPoint aCenter(rRect.getCenter());
@@ -1627,7 +1627,7 @@ namespace basegfx
                 const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
 
                 // create start point at bottom center
-                if(fOne != fRadiusX)
+                if(!rtl::math::approxEqual(fOne, fRadiusX))
                 {
                     const B2DPoint aBottomCenter(rRect.getCenter().getX(), rRect.getMaxY());
                     aRetval.append(aBottomCenter);
@@ -1673,7 +1673,7 @@ namespace basegfx
                 aRetval.setClosed( true );
 
                 // remove double created points if there are extreme radii involved
-                if(fOne == fRadiusX || fOne == fRadiusY)
+                if(rtl::math::approxEqual(fOne, fRadiusX) || rtl::math::approxEqual(fOne, fRadiusY))
                 {
                     aRetval.removeDoublePoints();
                 }
@@ -2235,7 +2235,7 @@ namespace basegfx
             /// return 0 for input of 0, -1 for negative and 1 for positive input
             inline int lcl_sgn( const double n )
             {
-                return n == 0.0 ? 0 : 1 - 2*int(rtl::math::isSignBitSet(n));
+                return rtl::math::approxEqual(n, 0.0) ? 0 : 1 - 2*int(rtl::math::isSignBitSet(n));
             }
         }
 
@@ -2484,7 +2484,7 @@ namespace basegfx
                     aBezier.setStartPoint(aBezier.getEndPoint());
                 }
 
-                if(1.0 == rCut)
+                if(rtl::math::approxEqual(1.0, rCut))
                 {
                     // correct rEdgeIndex when not last point
                     if(rCandidate.isClosed())
@@ -2531,7 +2531,7 @@ namespace basegfx
         {
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount && 0.0 != rOriginal.getWidth() && 0.0 != rOriginal.getHeight())
+            if(nPointCount && !rtl::math::approxEqual(0.0, rOriginal.getWidth()) && !rtl::math::approxEqual(0.0, rOriginal.getHeight()))
             {
                 B2DPolygon aRetval;
 
@@ -2770,7 +2770,7 @@ namespace basegfx
 
         B2DPolygon growInNormalDirection(const B2DPolygon& rCandidate, double fValue)
         {
-            if(0.0 != fValue)
+            if(!rtl::math::approxEqual(0.0, fValue))
             {
                 if(rCandidate.areControlPointsUsed())
                 {
