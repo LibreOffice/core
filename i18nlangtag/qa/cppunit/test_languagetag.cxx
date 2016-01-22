@@ -684,6 +684,7 @@ static bool checkMapping( const OUString& rStr1, const OUString& rStr2 )
     if (rStr1 == "ku-SY"       ) return rStr2 == "kmr-Latn-SY";
     if (rStr1 == "ku-IQ"       ) return rStr2 == "ckb-IQ";
     if (rStr1 == "ku-IR"       ) return rStr2 == "ckb-IR";
+    if (rStr1 == "eu"          ) return rStr2 == "eu-ES";
     return rStr1 == rStr2;
 }
 
