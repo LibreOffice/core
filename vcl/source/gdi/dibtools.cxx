@@ -753,7 +753,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     return( rIStm.GetError() == 0UL );
 }
 
-bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLong nOffset, bool bMSOFormat = false )
+bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uLong nOffset, bool bMSOFormat = false )
 {
     DIBV5Header aHeader;
     const sal_uLong nStmPos = rIStm.Tell();
@@ -783,7 +783,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             Bitmap::ReleaseAccess(pAcc);
             return false;
         }
-        Bitmap aNewBmpAlpha;
+        AlphaMask aNewBmpAlpha;
         BitmapWriteAccess* pAccAlpha = nullptr;
         bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
 
@@ -805,7 +805,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
         if (bAlphaPossible)
         {
-            aNewBmpAlpha = Bitmap(aSizePixel, 8);
+            aNewBmpAlpha = AlphaMask(aSizePixel);
             pAccAlpha = aNewBmpAlpha.AcquireWriteAccess();
         }
 
@@ -1491,8 +1491,8 @@ bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDI
 }
 
 bool ImplReadDIB(
-    Bitmap& rTarget, Bitmap*
-    pTargetAlpha,
+    Bitmap& rTarget,
+    AlphaMask* pTargetAlpha,
     SvStream& rIStm,
     bool bFileHeader,
     bool bMSOFormat=false)
@@ -1694,7 +1694,7 @@ bool ReadDIBBitmapEx(
 
 bool ReadDIBV5(
     Bitmap& rTarget,
-    Bitmap& rTargetAlpha,
+    AlphaMask& rTargetAlpha,
     SvStream& rIStm)
 {
     return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
@@ -1731,6 +1731,16 @@ bool WriteDIBBitmapEx(
     }
 
     return false;
+}
+
+sal_uInt32 getDIBInfoHeaderSize()
+{
+    return DIBINFOHEADERSIZE;
+}
+
+sal_uInt32 getDIBV5HeaderSize()
+{
+    return DIBV5HEADERSIZE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

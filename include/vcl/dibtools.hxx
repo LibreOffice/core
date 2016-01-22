@@ -51,7 +51,7 @@ bool VCL_DLLPUBLIC ReadDIBBitmapEx(
 
 bool VCL_DLLPUBLIC ReadDIBV5(
     Bitmap& rTarget,
-    Bitmap& rTargetAlpha,
+    AlphaMask& rTargetAlpha,
     SvStream& rIStm);
 
 
@@ -65,6 +65,9 @@ bool VCL_DLLPUBLIC WriteDIB( // WriteDIB(rBitmap, rOStm, false, true);
 bool VCL_DLLPUBLIC WriteDIBBitmapEx(
     const BitmapEx& rSource,
     SvStream& rOStm);
+
+sal_uInt32 getDIBInfoHeaderSize();
+sal_uInt32 getDIBV5HeaderSize();
 
 #endif // INCLUDED_VCL_DIBTOOLS_HXX
 
