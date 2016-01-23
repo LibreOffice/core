@@ -259,11 +259,6 @@ void LinePropertyPanelBase::Initialize()
     mpLBEnd->AdaptDropDownLineCountToMaximum();
 
     mpMFTransparent->SetModifyHdl(LINK(this, LinePropertyPanelBase, ChangeTransparentHdl));
-    mpMFTransparent->SetAccessibleName("Transparency");  //wj acc
-
-    mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
-    mpMFTransparent->SetAccessibleRelationLabeledBy(mpFTTransparency);
-    mpLBEnd->SetAccessibleRelationLabeledBy(mpLBEnd);
 
     mpLBEdgeStyle->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeEdgeStyleHdl ) );
     mpLBEdgeStyle->SetAccessibleName("Corner Style");

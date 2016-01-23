@@ -85,6 +85,14 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup" translatable="yes">Select the effect to apply.</property>
                     <property name="tooltip_text" translatable="yes">Select the effect to apply.</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="filllabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fillattr-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Hatching/Bitmap</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -121,6 +129,14 @@
                 <property name="tooltip_text" translatable="yes">Select the fill type to apply.</property>
                 <property name="entry_text_column">0</property>
                 <property name="id_column">1</property>
+                <accessibility>
+                  <relation type="labelled-by" target="fillstyle"/>
+                </accessibility>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="fillstyle-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Fill Type</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -171,6 +187,14 @@
                   <item translatable="yes">Quadratic</item>
                   <item translatable="yes">Square</item>
                 </items>
+                <accessibility>
+                  <relation type="labelled-by" target="transparencylabel"/>
+                </accessibility>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="transtype-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Transparency Type</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -210,9 +234,14 @@
               <object class="GtkSpinButton" id="gradangle:0degrees">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="adjustment">adjustment2</property>
                 <property name="tooltip_markup" translatable="yes">Select the gradient angle.</property>
                 <property name="tooltip_text" translatable="yes">Select the gradient angle.</property>
+                <property name="adjustment">adjustment2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="gradangle:0degrees-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Gradient angle</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -223,6 +252,8 @@
               <object class="GtkComboBoxText" id="gradientstyle">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_markup" translatable="yes">Select the gradient style.</property>
+                <property name="tooltip_text" translatable="yes">Select the gradient style.</property>
                 <items>
                   <item translatable="yes">Linear</item>
                   <item translatable="yes">Axial</item>
@@ -231,8 +262,11 @@
                   <item translatable="yes">Quadratic</item>
                   <item translatable="yes">Square</item>
                 </items>
-                <property name="tooltip_markup" translatable="yes">Select the gradient style.</property>
-                <property name="tooltip_text" translatable="yes">Select the gradient style.</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="gradientstyle-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Gradient Type</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -258,11 +292,11 @@
               <object class="GtkScale" id="transparencyslider">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_markup" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
+                <property name="tooltip_text" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="hexpand">True</property>
                 <property name="round_digits">1</property>
                 <property name="draw_value">False</property>
-                <property name="tooltip_markup" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
-                <property name="tooltip_text" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -283,6 +317,11 @@
                 <property name="adjustment">adjustment1</property>
                 <property name="climb_rate">5</property>
                 <property name="numeric">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="settransparency:0%-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">3</property>

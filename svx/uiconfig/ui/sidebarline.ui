@@ -125,6 +125,9 @@
                         <property name="action_name">.uno:SelectWidth</property>
                         <property name="use_underline">True</property>
                       </object>
+                      <accessibility>
+                        <relation type="labelled-by" target="widthlabel"/>
+                      </accessibility>
                       <packing>
                         <property name="expand">True</property>
                         <property name="homogeneous">True</property>
@@ -211,6 +214,14 @@
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="climb_rate">5</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="translabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="linetransparency:0%-atkobject">
+                          <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

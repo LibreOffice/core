@@ -97,18 +97,14 @@ void GraphicPropertyPanel::dispose()
 void GraphicPropertyPanel::Initialize()
 {
     mpMtrBrightness->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyBrightnessHdl ) );
-    mpMtrBrightness->SetAccessibleName("Brightness");
     mpMtrContrast->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyContrastHdl ) );
-    mpMtrContrast->SetAccessibleName("Contrast");
     mpMtrTrans->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyTransHdl ) );
-    mpMtrTrans->SetAccessibleName("Transparency");
 
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_STANDARD));
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_GREYS));
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_MONO));
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_WATERMARK));
     mpLBColorMode->SetSelectHdl( LINK( this, GraphicPropertyPanel, ClickColorModeHdl ));
-    mpLBColorMode->SetAccessibleName("Color mode");
 
     mpMtrRed->SetModifyHdl( LINK( this, GraphicPropertyPanel, RedHdl ) );
     mpMtrGreen->SetModifyHdl( LINK( this, GraphicPropertyPanel, GreenHdl ) );
@@ -117,12 +113,6 @@ void GraphicPropertyPanel::Initialize()
     mpMtrRed->SetAccessibleName(mpMtrRed->GetQuickHelpText());
     mpMtrGreen->SetAccessibleName(mpMtrGreen->GetQuickHelpText());
     mpMtrBlue->SetAccessibleName(mpMtrBlue->GetQuickHelpText());
-    mpMtrGamma->SetAccessibleName("Gamma value");
-
-    mpMtrRed->SetAccessibleRelationLabeledBy(mpMtrRed);
-    mpMtrGreen->SetAccessibleRelationLabeledBy(mpMtrGreen);
-    mpMtrBlue->SetAccessibleRelationLabeledBy(mpMtrBlue);
-    mpMtrGamma->SetAccessibleRelationLabeledBy(mpMtrGamma);
 
     // Fix left position of some controls that may be wrong due to
     // rounding errors.
