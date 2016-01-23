@@ -110,6 +110,8 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
         URL[] urlS = new URL[1];
         urlS[0] = new URL();
         urlS[0].Complete = url;
+        if (xURLTrans == null)
+          throw new IllegalStateException("xURLTrans unexpected null");
         boolean res = xURLTrans.parseStrict(urlS);
         log.println("Parsing URL '" + url + "': " + res);
         descr = new PropertyValue[1] ;
