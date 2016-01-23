@@ -455,7 +455,6 @@ res/sx03247.png res/odf_16_8.png
 res/sx03248.png res/odm_16_8.png
 res/sx03249.png res/odp_16_8.png
 res/sx03250.png res/ods_16_8.png
-res/sx03251.png res/odt_16_8.png
 res/sx03256.png cmd/sc_addons.png
 sc/imglst/lc26047.png cmd/lc_insertformula.png
 sc/imglst/lc26048.png cmd/lc_autosum.png
