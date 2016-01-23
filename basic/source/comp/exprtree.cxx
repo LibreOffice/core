@@ -121,7 +121,7 @@ static bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
 // definition of a new symbol
 
 static SbiSymDef* AddSym ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExpr,
-                           const OUString& rName, SbxDataType eType, SbiParameters* pPar )
+                           const OUString& rName, SbxDataType eType, SbiExprList* pPar )
 {
     SbiSymDef* pDef;
     // A= is not a procedure
@@ -202,7 +202,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     pParser->LockColumn();
     OUString aSym( (pKeywordSymbolInfo == nullptr) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
     SbxDataType eType = (pKeywordSymbolInfo == nullptr) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
-    SbiParameters* pPar = nullptr;
+    SbiExprList* pPar = nullptr;
     SbiExprListVector* pvMoreParLcl = nullptr;
     // are there parameters following?
     SbiToken eNextTok = pParser->Peek();
@@ -225,7 +225,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     if( DoParametersFollow( pParser, eCurExpr, eTok = eNextTok ) )
     {
         bool bStandaloneExpression = (m_eMode == EXPRMODE_STANDALONE);
-        pPar = new SbiParameters( pParser, bStandaloneExpression );
+        pPar = SbiExprList::ParseParameters( pParser, bStandaloneExpression );
         bError = bError || !pPar->IsValid();
         if( !bError )
             bBracket = pPar->IsBracket();
@@ -238,7 +238,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             {
                 pvMoreParLcl = new SbiExprListVector();
             }
-            SbiParameters* pAddPar = new SbiParameters( pParser );
+            SbiExprList* pAddPar = SbiExprList::ParseParameters( pParser );
             pvMoreParLcl->push_back( pAddPar );
             bError = bError || !pAddPar->IsValid();
             eTok = pParser->Peek();
@@ -363,7 +363,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     SbiExprNode* pNd = new SbiExprNode( *pDef, eType );
     if( !pPar )
     {
-        pPar = new SbiParameters( pParser,false,false );
+        pPar = SbiExprList::ParseParameters( pParser,false,false );
     }
     pNd->aVar.pPar = pPar;
     pNd->aVar.pvMorePar = pvMoreParLcl;
@@ -418,14 +418,14 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     }
     OUString aSym( pParser->GetSym() );
     SbxDataType eType = pParser->GetType();
-    SbiParameters* pPar = nullptr;
+    SbiExprList* pPar = nullptr;
     SbiExprListVector* pvMoreParLcl = nullptr;
     eTok = pParser->Peek();
 
     if( DoParametersFollow( pParser, eCurExpr, eTok ) )
     {
         bool bStandaloneExpression = false;
-        pPar = new SbiParameters( pParser, bStandaloneExpression );
+        pPar = SbiExprList::ParseParameters( pParser, bStandaloneExpression );
         bError = bError || !pPar->IsValid();
         eTok = pParser->Peek();
 
@@ -436,7 +436,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             {
                 pvMoreParLcl = new SbiExprListVector();
             }
-            SbiParameters* pAddPar = new SbiParameters( pParser );
+            SbiExprList* pAddPar = SbiExprList::ParseParameters( pParser );
             pvMoreParLcl->push_back( pAddPar );
             bError = bError || !pPar->IsValid();
             eTok = pParser->Peek();
@@ -968,13 +968,6 @@ void SbiExprList::addExpression( SbiExpression* pExpr )
 }
 
 
-/***************************************************************************
-|*
-|*      SbiParameters
-|*
-***************************************************************************/
-
-// parsing constructor:
 // the parameter list is completely parsed
 // "procedurename()" is OK
 // it's a function without parameters then
@@ -983,12 +976,14 @@ void SbiExprList::addExpression( SbiExpression* pExpr )
 // #i79918/#i80532: bConst has never been set to true
 // -> reused as bStandaloneExpression
 //SbiParameters::SbiParameters( SbiParser* p, sal_Bool bConst, sal_Bool bPar) :
-SbiParameters::SbiParameters( SbiParser* pParser, bool bStandaloneExpression, bool bPar)
+SbiExprList* SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneExpression, bool bPar)
 {
+    SbiExprList* pExprList = new SbiExprList;
     if( !bPar )
     {
-        return;
+        return pExprList;
     }
+
     SbiExpression *pExpr;
     SbiToken eTok = pParser->Peek();
 
@@ -1002,25 +997,25 @@ SbiParameters::SbiParameters( SbiParser* pParser, bool bStandaloneExpression, bo
         }
         else
         {
-            bBracket = true;
+            pExprList->bBracket = true;
             pParser->Next();
             eTok = pParser->Peek();
         }
     }
 
 
-    if( ( bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
+    if( ( pExprList->bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
     {
         if( eTok == RPAREN )
         {
             pParser->Next();
         }
-        return;
+        return pExprList;
     }
     // read in parameter table and lay down in correct order!
     SbiExpression* pLast = nullptr;
     OUString aName;
-    while( !bError )
+    while( !pExprList->bError )
     {
         aName.clear();
         // missing argument
@@ -1047,22 +1042,22 @@ SbiParameters::SbiParameters( SbiParser* pParser, bool bStandaloneExpression, bo
                 SbiExprMode eModeAfter = pExpr->m_eMode;
                 if( eModeAfter == EXPRMODE_LPAREN_NOT_NEEDED )
                 {
-                    bBracket = true;
+                    pExprList->bBracket = true;
                 }
                 else if( eModeAfter == EXPRMODE_ARRAY_OR_OBJECT )
                 {
                     // Expression "looks" like an array assignment
                     // a(...)[(...)] = ? or a(...).b(...)
                     // RPAREN is already parsed
-                    bBracket = true;
+                    pExprList->bBracket = true;
                     bAssumeArrayMode = true;
                     eTok = NIL;
                 }
                 else if( eModeAfter == EXPRMODE_EMPTY_PAREN )
                 {
-                    bBracket = true;
+                    pExprList->bBracket = true;
                     delete pExpr;
-                    return;
+                    return pExprList;
                 }
             }
             else
@@ -1090,14 +1085,14 @@ SbiParameters::SbiParameters( SbiParser* pParser, bool bStandaloneExpression, bo
         pExpr->pNext = nullptr;
         if( !pLast )
         {
-            pFirst = pLast = pExpr;
+            pExprList->pFirst = pLast = pExpr;
         }
         else
         {
             pLast->pNext = pExpr, pLast = pExpr;
         }
-        nExpr++;
-        bError = bError || !pExpr->IsValid();
+        pExprList->nExpr++;
+        pExprList->bError = pExprList->bError || !pExpr->IsValid();
 
         if( bAssumeArrayMode )
         {
@@ -1107,18 +1102,18 @@ SbiParameters::SbiParameters( SbiParser* pParser, bool bStandaloneExpression, bo
         eTok = pParser->Peek();
         if( eTok != COMMA )
         {
-            if( ( bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
+            if( ( pExprList->bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
             {
                 break;
             }
-            pParser->Error( bBracket ? ERRCODE_BASIC_BAD_BRACKETS : ERRCODE_BASIC_EXPECTED, COMMA );
-            bError = true;
+            pParser->Error( pExprList->bBracket ? ERRCODE_BASIC_BAD_BRACKETS : ERRCODE_BASIC_EXPECTED, COMMA );
+            pExprList->bError = true;
         }
         else
         {
             pParser->Next();
             eTok = pParser->Peek();
-            if( ( bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
+            if( ( pExprList->bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
             {
                 break;
             }
@@ -1129,33 +1124,26 @@ SbiParameters::SbiParameters( SbiParser* pParser, bool bStandaloneExpression, bo
     {
         pParser->Next();
         pParser->Peek();
-        if( !bBracket )
+        if( !pExprList->bBracket )
         {
             pParser->Error( ERRCODE_BASIC_BAD_BRACKETS );
-            bError = true;
+            pExprList->bError = true;
         }
     }
-    nDim = nExpr;
+    pExprList->nDim = pExprList->nExpr;
+    return pExprList;
 }
 
-/***************************************************************************
-|*
-|*      SbiDimList
-|*
-***************************************************************************/
+// A list of array dimensions is parsed.
 
-// parsing constructor:
-// A list of array dimensions is parsed. The expressions are tested for being
-// numeric. The bCONST-Bit is reset when all expressions are Integer constants.
-
-SbiDimList::SbiDimList( SbiParser* pParser )
+SbiExprList* SbiExprList::ParseDimList( SbiParser* pParser )
 {
-    bool bConst = true;// true: everything integer constants
+    SbiExprList* pExprList = new SbiExprList;
 
     if( pParser->Next() != LPAREN )
     {
         pParser->Error( ERRCODE_BASIC_EXPECTED, LPAREN );
-        bError = true; return;
+        pExprList->bError = true; return pExprList;
     }
 
     if( pParser->Peek() != RPAREN )
@@ -1170,37 +1158,35 @@ SbiDimList::SbiDimList( SbiParser* pParser )
             {
                 pExpr2 = new SbiExpression( pParser );
                 eTok = pParser->Next();
-                bConst = bConst && pExpr1->IsIntConstant() && pExpr2->IsIntConstant();
-                bError = bError || !pExpr1->IsValid() || !pExpr2->IsValid();
+                pExprList->bError = pExprList->bError || !pExpr1->IsValid() || !pExpr2->IsValid();
                 pExpr1->pNext = pExpr2;
                 if( !pLast )
                 {
-                    pFirst = pExpr1;
+                    pExprList->pFirst = pExpr1;
                 }
                 else
                 {
                     pLast->pNext = pExpr1;
                 }
                 pLast = pExpr2;
-                nExpr += 2;
+                pExprList->nExpr += 2;
             }
             else
             {
                 pExpr1->SetBased();
                 pExpr1->pNext = nullptr;
-                bConst = bConst && pExpr1->IsIntConstant();
-                bError = bError || !pExpr1->IsValid();
+                pExprList->bError = pExprList->bError || !pExpr1->IsValid();
                 if( !pLast )
                 {
-                    pFirst = pLast = pExpr1;
+                    pExprList->pFirst = pLast = pExpr1;
                 }
                 else
                 {
                     pLast->pNext = pExpr1, pLast = pExpr1;
                 }
-                nExpr++;
+                pExprList->nExpr++;
             }
-            nDim++;
+            pExprList->nDim++;
             if( eTok == RPAREN ) break;
             if( eTok != COMMA )
             {
@@ -1211,6 +1197,7 @@ SbiDimList::SbiDimList( SbiParser* pParser )
         }
     }
     else pParser->Next();
+    return pExprList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

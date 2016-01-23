@@ -37,9 +37,9 @@ using namespace ::com::sun::star::uno;
 // Declaration of a variable
 // If there are errors it will be parsed up to the comma or the newline.
 // Return-value: a new instance, which were inserted and then deleted.
-// Array-Index were returned as SbiDimList
+// Array-Index were returned as SbiExprList
 
-SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
+SbiSymDef* SbiParser::VarDecl( SbiExprList** ppDim, bool bStatic, bool bConst )
 {
     bool bWithEvents = false;
     if( Peek() == WITHEVENTS )
@@ -50,11 +50,11 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
     if( !TestSymbol() ) return nullptr;
     SbxDataType t = eScanType;
     SbiSymDef* pDef = bConst ? new SbiConstDef( aSym ) : new SbiSymDef( aSym );
-    SbiDimList* pDim = nullptr;
+    SbiExprList* pDim = nullptr;
     // Brackets?
     if( Peek() == LPAREN )
     {
-        pDim = new SbiDimList( this );
+        pDim = SbiExprList::ParseDimList( this );
         if( !pDim->GetDims() )
             pDef->SetWithBrackets();
     }
@@ -294,7 +294,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             Error( ERRCODE_BASIC_UNEXPECTED, eCurTok );
     }
     SbiSymDef* pDef;
-    SbiDimList* pDim;
+    SbiExprList* pDim;
 
     // #40689, Statics -> Modul-Initialising, skip in Sub
     sal_uInt32 nEndOfStaticLbl = 0;
@@ -589,7 +589,7 @@ void SbiParser::DefType( bool bPrivate )
     SbxObject *pType = new SbxObject(aSym);
 
     std::unique_ptr<SbiSymDef> pElem;
-    SbiDimList* pDim = nullptr;
+    SbiExprList* pDim = nullptr;
     bool bDone = false;
 
     while( !bDone && !IsEof() )
@@ -713,7 +713,7 @@ void SbiParser::DefEnum( bool bPrivate )
         pEnum->SetFlag( SbxFlagBits::Private );
     }
     SbiSymDef* pElem;
-    SbiDimList* pDim;
+    SbiExprList* pDim;
     bool bDone = false;
 
     // Starting with -1 to make first default value 0 after ++
