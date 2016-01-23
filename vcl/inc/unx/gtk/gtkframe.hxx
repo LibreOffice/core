@@ -54,6 +54,8 @@ typedef ::Window GdkNativeWindow;
 #define GDK_WINDOW_XWINDOW(o) GDK_WINDOW_XID(o)
 #define gdk_set_sm_client_id(i) gdk_x11_set_sm_client_id(i)
 #define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
+class GtkDropTarget;
+class GtkDnDTransferable;
 #endif
 
 #if !(GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 26)
@@ -206,6 +208,9 @@ class GtkSalFrame : public SalFrame
     long                            m_nWidthRequest;
     long                            m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
+    GtkDropTarget*                  m_pDropTarget;
+    bool                            m_bInDrag;
+    GtkDnDTransferable*             m_pFormatConversionRequest;
 #else
     GdkRegion*                      m_pRegion;
 #endif
@@ -237,6 +242,13 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalTooltipQuery(GtkWidget*, gint x, gint y,
                                      gboolean keyboard_mode, GtkTooltip *tooltip,
                                      gpointer frame);
+    static gboolean     signalDragMotion(GtkWidget *widget, GdkDragContext *context, gint x, gint y,
+                                         guint time, gpointer frame);
+    static gboolean     signalDragDrop(GtkWidget* widget, GdkDragContext *context, gint x, gint y,
+                                       guint time, gpointer frame);
+    static void         signalDragDropReceived(GtkWidget *widget, GdkDragContext *context, gint x, gint y,
+                                               GtkSelectionData *data, guint ttype, guint time, gpointer frame);
+    static void         signalDragLeave(GtkWidget *widget, GdkDragContext *context, guint time, gpointer frame);
 #if GTK_CHECK_VERSION(3,14,0)
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
     static void         gestureLongPress(GtkGestureLongPress* gesture, gpointer frame);
@@ -360,6 +372,24 @@ public:
     cairo_t* getCairoContext() const;
     void damaged(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
                  sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom) const;
+
+    void registerDropTarget(GtkDropTarget* pDropTarget)
+    {
+        assert(!m_pDropTarget);
+        m_pDropTarget = pDropTarget;
+    }
+
+    void deregisterDropTarget(GtkDropTarget* pDropTarget)
+    {
+        assert(m_pDropTarget == pDropTarget); (void)pDropTarget;
+        m_pDropTarget = nullptr;
+    }
+
+    void SetFormatConversionRequest(GtkDnDTransferable *pRequest)
+    {
+        m_pFormatConversionRequest = pRequest;
+    }
+
 #endif
     virtual ~GtkSalFrame();
 

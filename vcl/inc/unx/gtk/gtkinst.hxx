@@ -23,6 +23,11 @@
 #include <unx/salinst.h>
 #include <unx/gensys.h>
 #include <headless/svpinst.hxx>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/compbase.hxx>
 #include <gtk/gtk.h>
 
 namespace vcl
@@ -43,6 +48,82 @@ public:
     void ThreadsEnter();
     void ThreadsLeave();
 };
+
+#if GTK_CHECK_VERSION(3,0,0)
+class GtkSalFrame;
+
+struct VclToGtkHelper
+{
+    std::vector<css::datatransfer::DataFlavor> aInfoToFlavor;
+    std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+private:
+    GtkTargetEntry makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
+};
+
+class GtkTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
+{
+protected:
+    std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
+
+    std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets);
+public:
+
+    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor)
+        throw(css::datatransfer::UnsupportedFlavorException,
+              css::io::IOException,
+              css::uno::RuntimeException, std::exception) override = 0;
+
+    virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() = 0;
+
+    virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors()
+        throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
+        throw(css::uno::RuntimeException, std::exception) override;
+};
+
+class GtkDropTarget : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
+                                                           css::lang::XInitialization,
+                                                           css::lang::XServiceInfo>
+{
+    osl::Mutex m_aMutex;
+    GtkSalFrame* m_pFrame;
+    bool m_bActive;
+    sal_Int8 m_nDefaultActions;
+    std::list<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+public:
+    GtkDropTarget();
+    virtual ~GtkDropTarget();
+
+    // XInitialization
+    virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs)
+                                    throw (css::uno::Exception, std::exception) override;
+            void        deinitialize();
+
+    // XDropTarget
+    virtual void        SAL_CALL addDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&)
+                                    throw (std::exception) override;
+    virtual void        SAL_CALL removeDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&)
+                                    throw (std::exception) override;
+    virtual sal_Bool    SAL_CALL isActive() throw(std::exception) override;
+    virtual void        SAL_CALL setActive(sal_Bool active) throw(std::exception) override;
+    virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception) override;
+    virtual void        SAL_CALL setDefaultActions(sal_Int8 actions) throw(std::exception) override;
+
+    OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException, std::exception) override;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+                throw (css::uno::RuntimeException, std::exception) override;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+                throw (css::uno::RuntimeException, std::exception) override;
+
+    void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee);
+    void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde);
+    void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
+    void fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte);
+};
+#endif
 
 class GtkSalTimer;
 #if GTK_CHECK_VERSION(3,0,0)

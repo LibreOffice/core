@@ -62,8 +62,8 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
 #else
         static int nWindow = 0;
         m_aSystemData.aWindow       = nWindow;
-        m_aSystemData.aShellWindow  = pParent->GetSystemData()->aWindow;
         ++nWindow;
+        m_aSystemData.aShellWindow  = reinterpret_cast<long>(this);
 #endif
         m_aSystemData.pSalFrame     = nullptr;
         m_aSystemData.pWidget       = m_pSocket;
