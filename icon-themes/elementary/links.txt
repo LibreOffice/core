@@ -416,7 +416,6 @@ res/lc06300.png cmd/lc_navigateforward.png
 res/lc06301.png cmd/lc_navigateback.png
 res/lc10853.png cmd/lc_searchdialog.png
 res/lx03189.png svx/res/galdefl.png
-res/lx03248.png res/odm_32_8.png
 res/lx03256.png cmd/lc_addons.png
 res/minus.png sfx2/res/minus.png
 res/plugin.png cmd/lc_addons.png
@@ -449,12 +448,16 @@ res/sx03227.png res/sx03160.png
 res/sx03228.png res/sx03160.png
 res/sx03243.png res/so03123.png
 res/sx03244.png res/so03123.png
+<<<<<<< HEAD
 res/sx03245.png res/odb_16_8.png
 res/sx03246.png res/odg_16_8.png
 res/sx03247.png res/odf_16_8.png
 res/sx03248.png res/odm_16_8.png
 res/sx03249.png res/odp_16_8.png
 res/sx03250.png res/ods_16_8.png
+=======
+res/sx03251.png res/odt_16_8.png
+>>>>>>> tdf#95360 Fix use of icons used only from help, but not in the code
 res/sx03256.png cmd/sc_addons.png
 sc/imglst/lc26047.png cmd/lc_insertformula.png
 sc/imglst/lc26048.png cmd/lc_autosum.png
