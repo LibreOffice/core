@@ -154,8 +154,6 @@ void AreaPropertyPanelBase::Initialize()
     maGradientRect = maGradientLinear;
     maGradientRect.SetGradientStyle(css::awt::GradientStyle_RECT);
 
-    mpLbFillType->SetAccessibleName("Fill");    //wj acc
-    mpLbFillAttr->SetAccessibleName("Fill");    //wj acc
 
     mpLbFillType->SetSelectHdl( LINK( this, AreaPropertyPanelBase, SelectFillTypeHdl ) );
 
@@ -166,12 +164,10 @@ void AreaPropertyPanelBase::Initialize()
     mpLbFillGradTo->SetSelectHdl( aLink );
 
     mpLBTransType->SetSelectHdl(LINK(this, AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl));
-    mpLBTransType->SetAccessibleName("Transparency");    //wj acc
 
     SetTransparency( 50 );
     mpMTRTransparent->SetModifyHdl(LINK(this, AreaPropertyPanelBase, ModifyTransparentHdl_Impl));
     mpSldTransparent->SetSlideHdl(LINK(this, AreaPropertyPanelBase, ModifyTransSliderHdl));
-    mpMTRTransparent->SetAccessibleName("Transparency");    //wj acc
 
     const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
     mpBTNGradient->SetItemBits( nIdGradient, mpBTNGradient->GetItemBits( nIdGradient ) | ToolBoxItemBits::DROPDOWNONLY );
@@ -181,11 +177,7 @@ void AreaPropertyPanelBase::Initialize()
     mpBTNGradient->SetItemImage(nIdGradient,maImgLinear);
     mpBTNGradient->Hide();
 
-    mpLbFillType->SetAccessibleRelationLabeledBy(mpColorTextFT);
-    mpLbFillAttr->SetAccessibleRelationLabeledBy(mpLbFillAttr);
     mpToolBoxColor->SetAccessibleRelationLabeledBy(mpToolBoxColor);
-    mpLBTransType->SetAccessibleRelationLabeledBy(mpTrspTextFT);
-    mpMTRTransparent->SetAccessibleRelationLabeledBy(mpMTRTransparent);
     mpBTNGradient->SetAccessibleRelationLabeledBy(mpBTNGradient);
 
     mpSidebarController = sfx2::sidebar::SidebarController::GetSidebarControllerForFrame(mxFrame);
