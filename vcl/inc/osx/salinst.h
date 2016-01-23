@@ -71,7 +71,7 @@ public:
     bool                                    mbWaitingYield;
     int                                     mnActivePrintJobs;
     std::list< SalUserEvent >               maUserEvents;
-    oslMutex                                maUserEventListMutex;
+    osl::Mutex                              maUserEventListMutex;
     oslCondition                            maWaitingYieldCond;
 
     typedef std::list<const ApplicationEvent*> AppEventList;
