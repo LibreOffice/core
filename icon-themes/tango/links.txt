@@ -64,7 +64,6 @@ res/lx03256.png cmd/lc_addons.png
 res/plugin.png cmd/lc_addons.png
 res/extension_plus_32.png desktop/res/extension_32.png
 svtools/res/fp011.png fpicker/res/fp015.png
-res/sx03250.png res/ods_16_8.png
 res/sx03132.png res/sx03127.png
 res/sx03251.png res/odt_16_8.png
 res/sc10854.png res/target.png
