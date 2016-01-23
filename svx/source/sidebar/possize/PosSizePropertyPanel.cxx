@@ -275,6 +275,7 @@ void PosSizePropertyPanel::HandleContextChange(
     switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application_WriterVariants, Context_Draw):
+        case CombinedEnumContext(Application_WriterVariants, Context_DrawLine):
             bShowAngle = true;
             bShowFlip = true;
             break;
@@ -286,6 +287,7 @@ void PosSizePropertyPanel::HandleContextChange(
         case CombinedEnumContext(Application_Calc, Context_Draw):
         case CombinedEnumContext(Application_Calc, Context_Graphic):
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
+        case CombinedEnumContext(Application_DrawImpress, Context_DrawLine):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
             bShowPosition = true;
