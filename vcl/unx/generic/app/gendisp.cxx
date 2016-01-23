@@ -22,16 +22,13 @@
 #include <unx/geninst.h>
 
 SalGenericDisplay::SalGenericDisplay()
+ : m_aEventGuard()
 {
     m_pCapture = nullptr;
-    m_aEventGuard = osl_createMutex();
 }
 
 SalGenericDisplay::~SalGenericDisplay()
 {
-    if (m_aEventGuard)
-        osl_destroyMutex( m_aEventGuard );
-    m_aEventGuard = nullptr;
 }
 
 void SalGenericDisplay::registerFrame( SalFrame* pFrame )
@@ -41,8 +38,8 @@ void SalGenericDisplay::registerFrame( SalFrame* pFrame )
 
 void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
 {
-    if( osl_acquireMutex( m_aEventGuard ) )
     {
+        osl::MutexGuard g( m_aEventGuard );
         std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
         while ( it != m_aUserEvents.end() )
         {
@@ -56,10 +53,7 @@ void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
             else
                 ++it;
         }
-        osl_releaseMutex( m_aEventGuard );
     }
-    else
-        OSL_FAIL( "SalGenericDisplay::deregisterFrame !acquireMutex\n" );
 
     m_aFrames.remove( pFrame );
 }
@@ -76,8 +70,8 @@ bool SalGenericDisplay::DispatchInternalEvent()
     SalFrame* pFrame = nullptr;
     sal_uInt16 nEvent = 0;
 
-    if( osl_acquireMutex( m_aEventGuard ) )
     {
+        osl::MutexGuard g( m_aEventGuard );
         if( !m_aUserEvents.empty() )
         {
             pFrame	= m_aUserEvents.front().m_pFrame;
@@ -86,10 +80,7 @@ bool SalGenericDisplay::DispatchInternalEvent()
 
             m_aUserEvents.pop_front();
         }
-        osl_releaseMutex( m_aEventGuard );
     }
-    else
-        OSL_FAIL( "SalGenericDisplay::Yield !acquireMutex\n" );
 
     if( pFrame )
         pFrame->CallCallback( nEvent, pData );
@@ -99,54 +90,37 @@ bool SalGenericDisplay::DispatchInternalEvent()
 
 void SalGenericDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
 {
-    if( osl_acquireMutex( m_aEventGuard ) )
-    {
-        m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
+    osl::MutexGuard g( m_aEventGuard );
 
-        PostUserEvent(); // wakeup the concrete mainloop
+    m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
 
-        osl_releaseMutex( m_aEventGuard );
-    }
-    else
-        OSL_FAIL( "SalGenericDisplay::SendInternalEvent !acquireMutex\n" );
+    PostUserEvent(); // wakeup the concrete mainloop
 }
 
 void SalGenericDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
 {
-    if( osl_acquireMutex( m_aEventGuard ) )
+    osl::MutexGuard g( m_aEventGuard );
+    if( ! m_aUserEvents.empty() )
     {
-        if( ! m_aUserEvents.empty() )
+        std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
+        while (it != m_aUserEvents.end())
         {
-            std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-            while (it != m_aUserEvents.end())
+            if( it->m_pFrame    == pFrame   &&
+                it->m_pData     == pData    &&
+                it->m_nEvent    == nEvent )
             {
-                if( it->m_pFrame    == pFrame   &&
-                    it->m_pData     == pData    &&
-                    it->m_nEvent    == nEvent )
-                {
-                    it = m_aUserEvents.erase( it );
-                }
-                else
-                    ++it;
+                it = m_aUserEvents.erase( it );
             }
+            else
+                ++it;
         }
-
-        osl_releaseMutex( m_aEventGuard );
     }
-    else
-        OSL_FAIL( "SalGenericDisplay::CancelInternalEvent !acquireMutex\n" );
 }
 
 bool SalGenericDisplay::HasUserEvents() const
 {
-    bool bRet = false;
-    if( osl_acquireMutex( m_aEventGuard ) )
-    {
-        if( !m_aUserEvents.empty() )
-            bRet = true;
-        osl_releaseMutex( m_aEventGuard );
-    }
-    return bRet;
+    osl::MutexGuard g( m_aEventGuard );
+    return !m_aUserEvents.empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

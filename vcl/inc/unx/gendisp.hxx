@@ -31,7 +31,7 @@
 class SalFrame;
 class VCL_DLLPUBLIC SalGenericDisplay
 {
-    oslMutex m_aEventGuard;
+    mutable osl::Mutex m_aEventGuard;
     struct SalUserEvent
     {
         SalFrame*  m_pFrame;
@@ -53,8 +53,7 @@ public:
                  SalGenericDisplay();
     virtual      ~SalGenericDisplay();
 
-    inline void  EventGuardAcquire() { osl_acquireMutex( m_aEventGuard ); }
-    inline void  EventGuardRelease() { osl_releaseMutex( m_aEventGuard ); }
+    inline osl::Mutex& getEventGuardMutex() { return m_aEventGuard; }
 
     void registerFrame( SalFrame* pFrame );
     virtual void deregisterFrame( SalFrame* pFrame );

@@ -349,13 +349,13 @@ void DestroySalInstance( SalInstance* pInst )
 }
 
 AquaSalInstance::AquaSalInstance()
+ : maUserEventListMutex()
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
     ::comphelper::SolarMutex::setSolarMutex( mpSalYieldMutex );
     maMainThread = osl::Thread::getCurrentIdentifier();
     mbWaitingYield = false;
-    maUserEventListMutex = osl_createMutex();
     mnActivePrintJobs = 0;
     maWaitingYieldCond = osl_createCondition();
 }
@@ -365,7 +365,6 @@ AquaSalInstance::~AquaSalInstance()
     ::comphelper::SolarMutex::setSolarMutex( nullptr );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
-    osl_destroyMutex( maUserEventListMutex );
     osl_destroyCondition( maWaitingYieldCond );
 }
 
@@ -391,10 +390,10 @@ void AquaSalInstance::wakeupYield()
 
 void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, void* pData )
 {
-    osl_acquireMutex( maUserEventListMutex );
-    maUserEvents.push_back( SalUserEvent( pFrame, pData, nType ) );
-    osl_releaseMutex( maUserEventListMutex );
-
+    {
+        osl::MutexGuard g( maUserEventListMutex );
+        maUserEvents.push_back( SalUserEvent( pFrame, pData, nType ) );
+    }
     // notify main loop that an event has arrived
     wakeupYield();
 }
@@ -582,17 +581,17 @@ SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents
         sal_uLong nCount = ReleaseYieldMutex();
 
         // get one user event
-        osl_acquireMutex( maUserEventListMutex );
         SalUserEvent aEvent( nullptr, nullptr, 0 );
-        if( ! maUserEvents.empty() )
         {
-            aEvent = maUserEvents.front();
-            maUserEvents.pop_front();
+            osl::MutexGuard g( maUserEventListMutex );
+            if( ! maUserEvents.empty() )
+            {
+                aEvent = maUserEvents.front();
+                maUserEvents.pop_front();
+            }
+            else
+                bDispatchUser = false;
         }
-        else
-            bDispatchUser = false;
-        osl_releaseMutex( maUserEventListMutex );
-
         AcquireYieldMutex( nCount );
 
         // dispatch it

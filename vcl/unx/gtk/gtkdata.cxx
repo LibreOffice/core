@@ -525,10 +525,10 @@ GtkData::GtkData( SalInstance *pInstance )
 #else
     : SalGenericData( SAL_DATA_GTK, pInstance )
 #endif
+    , m_aDispatchMutex()
     , blockIdleTimeout( false )
 {
     m_pUserEvent = nullptr;
-    m_aDispatchMutex = osl_createMutex();
     m_aDispatchCondition = osl_createCondition();
 }
 
@@ -557,7 +557,7 @@ GtkData::~GtkData()
      // up anyway before the condition they're waiting on gets destroyed.
     osl_setCondition( m_aDispatchCondition );
 
-    osl_acquireMutex( m_aDispatchMutex );
+    osl::MutexGuard g( m_aDispatchMutex );
     if (m_pUserEvent)
     {
         g_source_destroy (m_pUserEvent);
@@ -565,8 +565,6 @@ GtkData::~GtkData()
         m_pUserEvent = nullptr;
     }
     osl_destroyCondition( m_aDispatchCondition );
-    osl_releaseMutex( m_aDispatchMutex );
-    osl_destroyMutex( m_aDispatchMutex );
 #if defined(GDK_WINDOWING_X11)
     if (GDK_IS_X11_DISPLAY(gdk_display_get_default()))
         XSetIOErrorHandler(aOrigXIOErrorHandler);
@@ -593,7 +591,7 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     {
         // release YieldMutex (and re-acquire at block end)
         SalYieldMutexReleaser aReleaser;
-        if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
+        if( m_aDispatchMutex.tryToAcquire() )
             bDispatchThread = true;
         else if( ! bWait )
         {
@@ -627,7 +625,7 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     if( bDispatchThread )
     {
-        osl_releaseMutex( m_aDispatchMutex );
+        m_aDispatchMutex.release();
         if( bWasEvent )
             osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
     }
@@ -969,22 +967,21 @@ gboolean GtkData::userEventFn( gpointer data )
     if (pDisplay)
     {
         OSL_ASSERT(static_cast<const SalGenericDisplay *>(pThis->GetGtkDisplay()) == pDisplay);
-        pThis->GetGtkDisplay()->EventGuardAcquire();
-
-        if( !pThis->GetGtkDisplay()->HasUserEvents() )
         {
-            if( pThis->m_pUserEvent )
+            osl::MutexGuard g (pThis->GetGtkDisplay()->getEventGuardMutex());
+
+            if( !pThis->GetGtkDisplay()->HasUserEvents() )
             {
-                g_source_unref (pThis->m_pUserEvent);
-                pThis->m_pUserEvent = nullptr;
+                if( pThis->m_pUserEvent )
+                {
+                    g_source_unref (pThis->m_pUserEvent);
+                    pThis->m_pUserEvent = nullptr;
+                }
+                bContinue = FALSE;
             }
-            bContinue = FALSE;
+            else
+                bContinue = TRUE;
         }
-        else
-            bContinue = TRUE;
-
-        pThis->GetGtkDisplay()->EventGuardRelease();
-
         pThis->GetGtkDisplay()->DispatchInternalEvent();
     }
 
