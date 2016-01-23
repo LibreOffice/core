@@ -45,6 +45,11 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <o3tl/make_unique.hxx>
 
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <pagedesc.hxx>
+
+using namespace ::com::sun::star;
+
 // Move methods
 
 /// Return value tells whether the Frame should be moved.
@@ -705,6 +710,105 @@ size_t SwPageFrame::GetContentHeight(const long nTop, const long nBottom) const
 
     return nBot;
 }
+
+bool lcl_PageVerticalAdjust( SwTextFrame* pTextFrame, drawing::TextVerticalAdjust nVA )
+{
+    bool bAdjusted = false;
+    //nVA = drawing::TextVerticalAdjust_BLOCK;  //Testing option - force all pages to act as if vertically adjusted(CENTER, BOTTOM, BLOCK).
+    //? top adjustment may be needed later - when able to change from some adjustment to none/top?
+    if( !pTextFrame || !pTextFrame->IsInDocBody() || nVA == drawing::TextVerticalAdjust_TOP )
+        return bAdjusted;
+
+    SwPageFrame* const pPageFrame = pTextFrame->FindPageFrame();
+    if( !pPageFrame )
+        return bAdjusted;
+
+    SwFrame* const rFirst = pPageFrame->FindFirstBodyContent();
+    SwFrame* const rLast  = pPageFrame->FindLastBodyContent();
+    //nothing to do if all page content is not yet valid.
+    if( !rLast || !rLast->IsValid() || !rFirst || !rFirst->IsValid() )
+        return bAdjusted;
+
+    SWRECTFN( pTextFrame );
+
+    long nCumSize = 0;
+    long nTextFramesCounter = 0;
+    SwFrame* pFrameIter = rLast;
+    //get the cumulative frame size and the number of textframes on the page.
+    while( pFrameIter )
+    {
+        const long nFrameSize = (pFrameIter->Frame().*fnRect->fnGetBottom)() - (pFrameIter->Frame().*fnRect->fnGetTop)();
+        if( pFrameIter->IsTextFrame() )
+            nTextFramesCounter++;
+        nCumSize += nFrameSize;
+        pFrameIter = pFrameIter->GetPrev();
+    }
+
+    if( nTextFramesCounter )
+    {
+        long nPageTop = (pPageFrame->FindBodyCont()->*fnRect->fnGetPrtTop)();
+        long nPageBot = (pPageFrame->FindBodyCont()->*fnRect->fnGetPrtBottom)();
+        if( (rFirst->*fnRect->fnGetPrtTop)() < nPageTop ) //? just a precaution - not something that was experienced
+            nPageTop = (rFirst->*fnRect->fnGetPrtTop)();
+        if( (rLast->*fnRect->fnGetPrtBottom)() > nPageBot )
+            nPageBot = (rLast->*fnRect->fnGetPrtBottom)();
+
+        long nPad=0;
+        long nNewStart = 0;
+        const long nMaxCumSize = nCumSize;
+        const long nMaxTextFrames = nTextFramesCounter;
+        //? leave font-sized gap at bottom to allow editing without looping problems.
+        long nLastFontSize = 0
+        if ( rLast->IsTextFrame() )
+            nLastFontSize = static_cast<SwTextFrame*>(rLast)->GetHeightOfLastLine();
+        pFrameIter = rLast;
+        while( pFrameIter )
+        {
+            const long nFrameSize = (pFrameIter->Frame().*fnRect->fnGetBottom)() - (pFrameIter->Frame().*fnRect->fnGetTop)();
+            nCumSize -= nFrameSize;
+            if( pFrameIter->IsTextFrame() && nTextFramesCounter-- )
+            {
+                switch( nVA )
+                {
+                    case drawing::TextVerticalAdjust_CENTER:
+                        nPad = (nPageBot - nPageTop - nMaxCumSize) / 2;
+                        if( nPad <= 0 )
+                            return bAdjusted;
+                        nNewStart = nPageTop + nPad + nCumSize;
+                        break;
+                    case drawing::TextVerticalAdjust_BOTTOM:
+                        nPad = nPageBot - nPageTop - nMaxCumSize - nLastFontSize;
+                        if( nPad <= 0 )
+                            return bAdjusted;
+                        nNewStart = nPageTop + nPad + nCumSize;
+                        break;
+                    case drawing::TextVerticalAdjust_BLOCK:
+                        if( nMaxTextFrames <= 1 )
+                            return bAdjusted;
+                        else
+                            nPad = (nPageBot - nPageTop - nMaxCumSize - nLastFontSize) / (nMaxTextFrames-1);
+                        if( nPad <= 0 )
+                            return bAdjusted;
+                        nNewStart = nPageTop + (nPad * nTextFramesCounter) + nCumSize;
+                        break;
+                    default:
+                        break;
+                }
+                if( (pFrameIter->Frame().*fnRect->fnGetTop)() != nNewStart )
+                {
+                    bAdjusted = true;
+                    (pFrameIter->Frame().*fnRect->fnSetTop)( nNewStart );
+                    (pFrameIter->Frame().*fnRect->fnSetBottom)( nNewStart+nFrameSize );
+//                    pFrameIter->InvalidatePrt();  //THIS IS THE KEY ONE THAT I ALWAYS COME BACK TO (but no longer needed since adding fnSetBottom)
+//                    pFrameIter->SetCompletePaint();  //NEEDED TO CLEAR UP RESIDUAL MATERIAL WHEN DELETING (but no longer needed since adding fnSetBottom)
+                }
+            }
+            pFrameIter = pFrameIter->GetPrev();
+        }
+    }
+    return bAdjusted;
+}
+
 
 void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
@@ -1738,6 +1842,23 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                          static_cast<SwTextFrame&>(*this) );
 
     delete pSaveFootnote;
+
+    // If the page has imported MSWord's vertical page alignment, adjust the display accordingly.
+    // Only adjust after all other layout and validity issues have been resolved.
+    if( IsTextFrame() && IsValid() /* && FindPageFrame() //? am I setting a bad example? Generally never checked*/
+        && IsInDocBody() && !IsHeaderFrame() && !IsFooterFrame() ) //? are headers and footers by definition not in the doc body?
+    {
+        bool bAdjusted = false;
+        SwPageDesc* rPageDesc = FindPageFrame()->GetPageDesc();
+        if( rPageDesc )
+            bAdjusted = lcl_PageVerticalAdjust( static_cast<SwTextFrame*>(this), rPageDesc->GetVerticalAdjustment() );
+
+        if( bAdjusted /*&& GetUpper() //? am I setting a bad example by checking? GetUpper probably must exist by definition*/ )
+        {
+            GetUpper()->SetCompletePaint(); //GetUpper worked better than FindPageFrame - fewer shadow repaint problems.
+            GetUpper()->InvalidatePage();   //InvalidatePage works as well as InvalidatePrt
+        }
+    }
 
     UnlockJoin();
     if (!bDeleteForbidden)
