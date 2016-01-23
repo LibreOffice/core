@@ -85,6 +85,14 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup" translatable="yes">Select the effect to apply.</property>
                     <property name="tooltip_text" translatable="yes">Select the effect to apply.</property>
+                    <accessibility>
+                        <relation type="labelled-by" target="filllabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                        <object class="AtkObject" id="fillattr">
+                            <property name="AtkObject::accessible-name" translatable="yes">Fill Type</property>
+                        </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -121,6 +129,14 @@
                 <property name="tooltip_text" translatable="yes">Select the fill type to apply.</property>
                 <property name="entry_text_column">0</property>
                 <property name="id_column">1</property>
+                <accessibility>
+                    <relation type="labelled-by" target="fillstyle"/>
+                </accessibility>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="fillstyle">
+                     <property name="AtkObject::accessible-name" translatable="yes">Fill</property>
+                    </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -161,6 +177,14 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_markup" translatable="yes">Select the type of transparency to apply.</property>
                 <property name="tooltip_text" translatable="yes">Select the type of transparency to apply.</property>
+                <accessibility>
+                    <relation type="labelled-by" target="transparencylabel"/>
+                </accessibility>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="transtype">
+                        <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                    </object>
+                </child>
                 <items>
                   <item translatable="yes">None</item>
                   <item translatable="yes">Solid</item>
@@ -213,6 +237,11 @@
                 <property name="adjustment">adjustment2</property>
                 <property name="tooltip_markup" translatable="yes">Select the gradient angle.</property>
                 <property name="tooltip_text" translatable="yes">Select the gradient angle.</property>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="gradangle:0degrees">
+                        <property name="AtkObject::gradient-name" translatable="yes">Transparency</property>
+                    </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -283,6 +312,11 @@
                 <property name="adjustment">adjustment1</property>
                 <property name="climb_rate">5</property>
                 <property name="numeric">True</property>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="settransparency:0%in">
+                        <property name="AtkObject::accessible-name" translatable="yes">Fill</property>
+                    </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">3</property>

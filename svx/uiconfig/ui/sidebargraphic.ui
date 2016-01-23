@@ -63,6 +63,14 @@
                 <property name="invisible_char">•</property>
                 <property name="adjustment">plusminus100adjustment</property>
                 <property name="climb_rate">1</property>
+                <accessibility>
+                    <relation type="labelled-by" target="brightnesslabel"/>
+                </accessibility>
+                    <child internal-child="accessible">
+                        <object class="AtkObject" id="setbrightness:%in">
+                            <property name="AtkObject::accessible-name" translatable="yes">Brightness</property>
+                        </object>
+                    </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -93,6 +101,14 @@
                 <property name="invisible_char">•</property>
                 <property name="adjustment">plusminus100adjustment</property>
                 <property name="climb_rate">1</property>
+              <accessibility>
+                <relation type="labelled-by" target="contrastlabel"/>
+              </accessibility>
+              <child internal-child="accessible">
+                <object class="AtkObject" id="setcontrast:%in">
+                    <property name="AtkObject::accessible-name" translatable="yes">Contrast</property>
+                </object>
+              </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -117,6 +133,14 @@
               <object class="GtkComboBoxText" id="setcolormode">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <accessibility>
+                    <relation type="labelled-by" target="colorlmodelabel"/>
+                </accessibility>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="setcolormode-in">
+                        <property name="AtkObject::accessible-name" translatable="yes">Color mode</property>
+                    </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -147,6 +171,14 @@
                 <property name="invisible_char">•</property>
                 <property name="adjustment">0to100adjustment</property>
                 <property name="climb_rate">1</property>
+                <accessibility>
+                    <relation type="labelled-by" target="transparencylabel"/>
+                </accessibility>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="settransparency:%in">
+                        <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                    </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -310,6 +342,14 @@
                     <property name="adjustment">gammaadjustment</property>
                     <property name="climb_rate">0.10000000000000001</property>
                     <property name="digits">2</property>
+                    <accessibility>
+                        <relation target="image4"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                        <object class="AtkObject" id="setgamma:0in">
+                            <property name="AtkObject::accessible-name" translatable="yes">Gamma value</property>
+                        </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
