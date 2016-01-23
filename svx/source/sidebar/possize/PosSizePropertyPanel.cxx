@@ -284,8 +284,10 @@ void PosSizePropertyPanel::HandleContextChange(
             break;
 
         case CombinedEnumContext(Application_Calc, Context_Draw):
+        case CombinedEnumContext(Application_Calc, Context_DrawLine):
         case CombinedEnumContext(Application_Calc, Context_Graphic):
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
+        case CombinedEnumContext(Application_DrawImpress, Context_DrawLine):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
             bShowPosition = true;
