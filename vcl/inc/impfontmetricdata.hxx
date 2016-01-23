@@ -129,7 +129,6 @@ public:
     void            ImplInitAboveTextLineSize();
 
 private:
-    friend class LogicalFontInstance;
     friend void intrusive_ptr_add_ref(ImplFontMetricData* pImplFontMetricData);
     friend void intrusive_ptr_release(ImplFontMetricData* pImplFontMetricData);
 
