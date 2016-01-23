@@ -28,8 +28,6 @@
 class SbiExprNode;
 class SbiExpression;
 class SbiExprList;
-class SbiDimList;
-class SbiParameters;
 class SbiParser;
 class SbiCodeGen;
 class SbiSymDef;
@@ -159,7 +157,6 @@ public:
 
 class SbiExpression {
     friend class SbiExprList;
-    friend class SbiParameters;
     friend class SbiDimList;
 protected:
     OUString      aArgName;
@@ -231,6 +228,8 @@ protected:
 public:
     SbiExprList();
     virtual ~SbiExprList();
+    static SbiExprList* ParseParameters(SbiParser*, bool bStandaloneExpression = false, bool bPar = true);
+    static SbiExprList* ParseDimList( SbiParser* );
     bool  IsBracket()               { return bBracket;        }
     bool  IsValid()                 { return !bError; }
     short GetSize()                 { return nExpr;           }
@@ -238,16 +237,6 @@ public:
     SbiExpression* Get( short );
     void  Gen( SbiCodeGen& rGen);                    // code generation
     void addExpression( SbiExpression* pExpr );
-};
-
-class SbiParameters : public SbiExprList {
-public:
-    SbiParameters( SbiParser*, bool bStandaloneExpression = false, bool bPar = true);// parsing Ctor
-};
-
-class SbiDimList : public SbiExprList {
-public:
-    SbiDimList( SbiParser* );         // parsing Ctor
 };
 
 #endif
