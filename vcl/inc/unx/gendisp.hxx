@@ -31,7 +31,7 @@
 class SalFrame;
 class VCL_DLLPUBLIC SalGenericDisplay
 {
-    oslMutex m_aEventGuard;
+    osl::Mutex m_aEventGuard;
     struct SalUserEvent
     {
         SalFrame*  m_pFrame;
