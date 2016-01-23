@@ -153,6 +153,10 @@ public class ConverterInfo {
         String version, String vendor, String impl)
         throws RegistryException {
 
+        if (officeMime == null || displayName == null || description == null ||
+            version    == null || vendor      == null || impl        == null)
+          throw new IllegalArgumentException("arguments unexpected null");
+
         if (!isValidOfficeType(officeMime.trim())) {
             RegistryException re = new RegistryException(
                 "Invalid office type");
