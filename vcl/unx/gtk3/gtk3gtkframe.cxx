@@ -74,6 +74,8 @@
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
+#include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -801,6 +803,18 @@ void GtkSalFrame::InvalidateGraphics()
 
 GtkSalFrame::~GtkSalFrame()
 {
+    if (m_pDropTarget)
+    {
+        m_pDropTarget->deinitialize();
+        m_pDropTarget = nullptr;
+    }
+
+    if (m_pDragSource)
+    {
+        m_pDragSource->deinitialize();
+        m_pDragSource= nullptr;
+    }
+
     InvalidateGraphics();
 
     if( m_pParent )
@@ -985,6 +999,21 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
+
+    //Drop Target Stuff
+    gtk_drag_dest_set(GTK_WIDGET(pEventWidget), (GtkDestDefaults)0, nullptr, 0, (GdkDragAction)0);
+    gtk_drag_dest_set_track_motion(GTK_WIDGET(pEventWidget), true);
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-motion", G_CALLBACK(signalDragMotion), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-drop", G_CALLBACK(signalDragDrop), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-received", G_CALLBACK(signalDragDropReceived), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-leave", G_CALLBACK(signalDragLeave), this ));
+
+    //Drag Source Stuff
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-end", G_CALLBACK(signalDragEnd), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-failed", G_CALLBACK(signalDragFailed), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-delete", G_CALLBACK(signalDragDelete), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-get", G_CALLBACK(signalDragDataGet), this ));
+
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
     g_signal_connect( G_OBJECT(m_pFixedContainer), "size-allocate", G_CALLBACK(sizeAllocated), this );
 #if GTK_CHECK_VERSION(3,14,0)
@@ -1028,6 +1057,10 @@ void GtkSalFrame::InitCommon()
     m_hBackgroundPixmap = None;
     m_nExtStyle         = 0;
     m_pRegion           = nullptr;
+    m_pDropTarget       = nullptr;
+    m_pDragSource       = nullptr;
+    m_bInDrag           = false;
+    m_pFormatConversionRequest = nullptr;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
     m_bSetFocusOnMap    = false;
     m_pSalMenu          = nullptr;
@@ -1054,8 +1087,8 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.nSize         = sizeof( SystemEnvData );
     static int nWindow = 0;
     m_aSystemData.aWindow       = nWindow;
-    m_aSystemData.aShellWindow  = nWindow;
     ++nWindow;
+    m_aSystemData.aShellWindow  = reinterpret_cast<long>(this);
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
@@ -3033,6 +3066,288 @@ gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* pEvent, 
     return true;
 }
 
+namespace
+{
+    GdkDragAction VclToGdk(sal_Int8 dragOperation)
+    {
+        GdkDragAction eRet(static_cast<GdkDragAction>(0));
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+            eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_COPY);
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+            eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_MOVE);
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+            eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_LINK);
+        return eRet;
+    }
+
+    sal_Int8 GdkToVcl(GdkDragAction dragOperation)
+    {
+        sal_Int8 nRet(0);
+        if (dragOperation & GDK_ACTION_COPY)
+            nRet |= css::datatransfer::dnd::DNDConstants::ACTION_COPY;
+        if (dragOperation & GDK_ACTION_MOVE)
+            nRet |= css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+        if (dragOperation & GDK_ACTION_LINK)
+            nRet |= css::datatransfer::dnd::DNDConstants::ACTION_LINK;
+        return nRet;
+    }
+}
+
+class GtkDropTargetDropContext : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
+{
+    GdkDragContext *m_pContext;
+    guint m_nTime;
+public:
+    GtkDropTargetDropContext(GdkDragContext *pContext, guint nTime)
+        : m_pContext(pContext)
+        , m_nTime(nTime)
+    {
+    }
+
+    // XDropTargetDropContext
+    virtual void SAL_CALL acceptDrop(sal_Int8 dragOperation) throw(std::exception) override
+    {
+        GdkDragAction eAct(static_cast<GdkDragAction>(0));
+
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+            eAct = GDK_ACTION_MOVE;
+        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+            eAct = GDK_ACTION_COPY;
+        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+            eAct = GDK_ACTION_LINK;
+
+        gdk_drag_status(m_pContext, eAct, m_nTime);
+    }
+
+    virtual void SAL_CALL rejectDrop() throw(std::exception) override
+    {
+        gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
+    }
+
+    virtual void SAL_CALL dropComplete(sal_Bool bSuccess) throw(std::exception) override
+    {
+        gtk_drag_finish(m_pContext, bSuccess, false, m_nTime);
+    }
+};
+
+class GtkDnDTransferable : public GtkTransferable
+{
+    GdkDragContext *m_pContext;
+    guint m_nTime;
+    GtkWidget *m_pWidget;
+    GtkSalFrame *m_pFrame;
+    GMainLoop *m_pLoop;
+    GtkSelectionData *m_pData;
+public:
+    GtkDnDTransferable(GdkDragContext *pContext, guint nTime, GtkWidget *pWidget, GtkSalFrame *pFrame)
+        : m_pContext(pContext)
+        , m_nTime(nTime)
+        , m_pWidget(pWidget)
+        , m_pFrame(pFrame)
+        , m_pLoop(nullptr)
+        , m_pData(nullptr)
+    {
+    }
+
+    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor)
+        throw(css::datatransfer::UnsupportedFlavorException,
+              css::io::IOException,
+              css::uno::RuntimeException, std::exception) override
+    {
+        css::datatransfer::DataFlavor aFlavor(rFlavor);
+        if (aFlavor.MimeType == "text/plain;charset=utf-16")
+            aFlavor.MimeType = "text/plain;charset=utf-8";
+
+        auto it = m_aMimeTypeToAtom.find(aFlavor.MimeType);
+        if (it == m_aMimeTypeToAtom.end())
+            return css::uno::Any();
+
+        /* like gtk_clipboard_wait_for_contents run a sub loop
+         * waiting for drag-data-received triggered from
+         * gtk_drag_get_data
+         */
+        {
+            m_pLoop = g_main_loop_new(nullptr, true);
+            m_pFrame->SetFormatConversionRequest(this);
+
+            gtk_drag_get_data(m_pWidget, m_pContext, it->second, m_nTime);
+
+            if (g_main_loop_is_running(m_pLoop))
+            {
+                gdk_threads_leave();
+                g_main_loop_run(m_pLoop);
+                gdk_threads_enter();
+            }
+
+            g_main_loop_unref(m_pLoop);
+            m_pLoop = nullptr;
+            m_pFrame->SetFormatConversionRequest(nullptr);
+        }
+
+        css::uno::Any aRet;
+
+        if (aFlavor.MimeType == "text/plain;charset=utf-8")
+        {
+            OUString aStr;
+            gchar *pText = reinterpret_cast<gchar*>(gtk_selection_data_get_text(m_pData));
+            if (pText)
+                aStr = OUString(pText, rtl_str_getLength(pText), RTL_TEXTENCODING_UTF8);
+            g_free(pText);
+            aRet <<= aStr.replaceAll("\r\n", "\n");
+        }
+        else
+        {
+            gint length(0);
+            const guchar *rawdata = gtk_selection_data_get_data_with_length(m_pData,
+                                                                            &length);
+            css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
+            aRet <<= aSeq;
+        }
+
+        gtk_selection_data_free(m_pData);
+
+        return aRet;
+    }
+
+    virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() override
+    {
+        std::vector<GdkAtom> targets;
+        for (GList* l = gdk_drag_context_list_targets(m_pContext); l; l = l->next)
+            targets.push_back(static_cast<GdkAtom>(l->data));
+        return GtkTransferable::getTransferDataFlavorsAsVector(targets.data(), targets.size());
+    }
+
+    void LoopEnd(GtkSelectionData *pData)
+    {
+        m_pData = pData;
+        g_main_loop_quit(m_pLoop);
+    }
+};
+
+gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    if (!pThis->m_pDropTarget)
+        return false;
+
+    css::datatransfer::dnd::DropTargetDropEvent aEvent;
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis->m_pDropTarget);
+    aEvent.Context = new GtkDropTargetDropContext(context, time);
+    aEvent.LocationX = x;
+    aEvent.LocationY = y;
+    aEvent.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
+    aEvent.SourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable(new GtkDnDTransferable(context, time, pWidget, pThis));
+    aEvent.Transferable = xTransferable;
+
+    pThis->m_pDropTarget->fire_drop(aEvent);
+
+    return true;
+}
+
+class GtkDropTargetDragContext : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
+{
+    GdkDragContext *m_pContext;
+    guint m_nTime;
+public:
+    GtkDropTargetDragContext(GdkDragContext *pContext, guint nTime)
+        : m_pContext(pContext)
+        , m_nTime(nTime)
+    {
+    }
+
+    virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(std::exception) override
+    {
+        GdkDragAction eAct(static_cast<GdkDragAction>(0));
+
+        if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+            eAct = GDK_ACTION_MOVE;
+        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+            eAct = GDK_ACTION_COPY;
+        else if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+            eAct = GDK_ACTION_LINK;
+
+        gdk_drag_status(m_pContext, eAct, m_nTime);
+    }
+
+    virtual void SAL_CALL rejectDrag() throw(std::exception) override
+    {
+        gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
+    }
+};
+
+void GtkSalFrame::signalDragDropReceived(GtkWidget* /*pWidget*/, GdkDragContext * /*context*/, gint /*x*/, gint /*y*/, GtkSelectionData* data, guint /*ttype*/, guint /*time*/, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    /*
+     * If we get a drop, then we will call like gtk_clipboard_wait_for_contents
+     * with a loop inside a loop to get the right format, so if this is the
+     * case return to the outer loop here with a copy of the desired data
+     *
+     * don't look at me like that.
+     */
+    if (!pThis->m_pFormatConversionRequest)
+        return;
+
+    pThis->m_pFormatConversionRequest->LoopEnd(gtk_selection_data_copy(data));
+}
+
+gboolean GtkSalFrame::signalDragMotion(GtkWidget *widget, GdkDragContext *context, gint x, gint y, guint time, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    if (!pThis->m_pDropTarget)
+        return false;
+
+    if (!pThis->m_bInDrag)
+        gtk_drag_highlight(widget);
+
+    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis->m_pDropTarget);
+    GtkDropTargetDragContext* pContext = new GtkDropTargetDragContext(context, time);
+    //preliminary accept the Drag and select the preferred action, the fire_* will
+    //inform the original caller of our choice and the callsite can decide
+    //to overrule this choice. i.e. typically here we default to ACTION_MOVE
+    pContext->acceptDrag(GdkToVcl(gdk_drag_context_get_actions(context)));
+    aEvent.Context = pContext;
+    aEvent.LocationX = x;
+    aEvent.LocationY = y;
+    aEvent.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
+    aEvent.SourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
+
+    if (!pThis->m_bInDrag)
+    {
+        css::uno::Reference<css::datatransfer::XTransferable> xTrans(new GtkDnDTransferable(context, time, widget, pThis));
+        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTrans->getTransferDataFlavors();
+        aEvent.SupportedDataFlavors = aFormats;
+        pThis->m_pDropTarget->fire_dragEnter(aEvent);
+        pThis->m_bInDrag = true;
+    }
+    else
+    {
+        pThis->m_pDropTarget->fire_dragOver(aEvent);
+    }
+
+    return true;
+}
+
+void GtkSalFrame::signalDragLeave(GtkWidget *widget, GdkDragContext * /*context*/, guint /*time*/, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    if (!pThis->m_pDropTarget)
+        return;
+    pThis->m_bInDrag = false;
+    gtk_drag_unhighlight(widget);
+
+#if 0
+    css::datatransfer::dnd::DropTargetEvent aEvent;
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pThis->m_pDropTarget);
+    pThis->m_pDropTarget->fire_dragExit(aEvent);
+#endif
+}
+
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
@@ -3617,5 +3932,142 @@ Window GtkSalFrame::GetX11Window()
 {
     return widget_get_xid(m_pWindow);
 }
+
+void GtkDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
+                              sal_Int8 sourceActions, sal_Int32 /*cursor*/, sal_Int32 /*image*/,
+                              const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                              const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener) throw(std::exception)
+{
+    m_xListener = rListener;
+    m_xTrans = rTrans;
+
+    if (m_pFrame)
+    {
+        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = rTrans->getTransferDataFlavors();
+        std::vector<GtkTargetEntry> aGtkTargets(m_aConversionHelper.FormatsToGtk(aFormats));
+        GtkTargetList *pTargetList = gtk_target_list_new(aGtkTargets.data(), aGtkTargets.size());
+
+        gint nDragButton = 1; // default to left button
+        css::awt::MouseEvent aEvent;
+        if (rEvent.Event >>= aEvent)
+        {
+            if (aEvent.Buttons & css::awt::MouseButton::LEFT )
+                nDragButton = 1;
+            else if (aEvent.Buttons & css::awt::MouseButton::RIGHT)
+                nDragButton = 3;
+            else if (aEvent.Buttons & css::awt::MouseButton::MIDDLE)
+                nDragButton = 2;
+        }
+
+        m_pFrame->startDrag(nDragButton, rEvent.DragOriginX, rEvent.DragOriginY,
+                            VclToGdk(sourceActions), pTargetList);
+        gtk_target_list_unref(pTargetList);
+        for (auto &a : aGtkTargets)
+            g_free(a.target);
+    }
+    else
+        dragFailed();
+}
+
+void GtkSalFrame::startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
+                            GdkDragAction sourceActions, GtkTargetList* pTargetList)
+{
+    SolarMutexGuard aGuard;
+
+    assert(m_pDragSource);
+
+    GdkEvent aFakeEvent;
+    memset(&aFakeEvent, 0, sizeof(GdkEvent));
+    aFakeEvent.type = GDK_BUTTON_PRESS;
+    aFakeEvent.button.window = widget_get_window(getMouseEventWidget());
+    aFakeEvent.button.time = GDK_CURRENT_TIME;
+    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
+    aFakeEvent.button.device = gdk_device_manager_get_client_pointer(pDeviceManager);
+
+#if GTK_CHECK_VERSION(3,10,0)
+    GdkDragContext *pContext = gtk_drag_begin_with_coordinates(getMouseEventWidget(),
+                                                               pTargetList,
+                                                               sourceActions,
+                                                               nButton,
+                                                               &aFakeEvent,
+                                                               nDragOriginX,
+                                                               nDragOriginY);
+#else
+    GdkDragContext *pContext = gtk_drag_begin(getMouseEventWidget(),
+                                              pTargetList,
+                                              sourceActions,
+                                              nButton,
+                                              &aFakeEvent);
+    (void)nDragOriginX;
+    (void)nDragOriginY;
+#endif
+
+    if (!pContext)
+        m_pDragSource->dragFailed();
+}
+
+void GtkDragSource::dragFailed()
+{
+    datatransfer::dnd::DragSourceDropEvent aEv;
+    aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
+    aEv.DropSuccess = false;
+    m_xListener->dragDropEnd(aEv);
+}
+
+gboolean GtkSalFrame::signalDragFailed(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkDragResult /*result*/, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    if (!pThis->m_pDragSource)
+        return false;
+    pThis->m_pDragSource->dragFailed();
+    return false;
+}
+
+void GtkDragSource::dragDelete()
+{
+    datatransfer::dnd::DragSourceDropEvent aEv;
+    aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    aEv.DropSuccess = true;
+    m_xListener->dragDropEnd(aEv);
+}
+
+void GtkSalFrame::signalDragDelete(GtkWidget* /*widget*/, GdkDragContext* /*context*/, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    if (!pThis->m_pDragSource)
+        return;
+    pThis->m_pDragSource->dragDelete();
+}
+
+void GtkDragSource::dragEnd(GdkDragContext* context)
+{
+    datatransfer::dnd::DragSourceDropEvent aEv;
+    aEv.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
+    aEv.DropSuccess = gdk_drag_drop_succeeded(context);
+    m_xListener->dragDropEnd(aEv);
+}
+
+void GtkSalFrame::signalDragEnd(GtkWidget* /*widget*/, GdkDragContext* context, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    if (!pThis->m_pDragSource)
+        return;
+    pThis->m_pDragSource->dragEnd(context);
+}
+
+void GtkDragSource::dragDataGet(GtkSelectionData *data, guint info)
+{
+    m_aConversionHelper.setSelectionData(m_xTrans, data, info);
+}
+
+void GtkSalFrame::signalDragDataGet(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkSelectionData *data, guint info,
+                                    guint /*time*/, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    if (!pThis->m_pDragSource)
+        return;
+    pThis->m_pDragSource->dragDataGet(data, info);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
