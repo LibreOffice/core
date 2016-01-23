@@ -211,6 +211,14 @@
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="climb_rate">5</property>
+                    <accessibility>
+                        <relation type="labelled-by" target="translabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                        <object class="AtkObject" id="linetransparency:0%in">
+                            <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                        </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
