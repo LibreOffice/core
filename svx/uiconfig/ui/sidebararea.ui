@@ -213,6 +213,22 @@
                 <property name="adjustment">adjustment2</property>
                 <property name="tooltip_markup" translatable="yes">Select the gradient angle.</property>
                 <property name="tooltip_text" translatable="yes">Select the gradient angle.</property>
+              <accessibility>
+                <relation type="labelled-by" target="transparencylabel"/>
+              </accessibility>
+              <child internal-child="accessible">
+                <object class="AtkObject" id="gradangle:0degrees">
+                    <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                </object>
+              </child>
+              <accessibility>
+                <relation type="labelled-by" target="transparencylabel"/>
+              </accessibility>
+              <child internal-child="accessible">
+                <object class="AtkObject" id="gradangle:0degrees-in">
+                    <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                </object>
+              </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -283,6 +299,22 @@
                 <property name="adjustment">adjustment1</property>
                 <property name="climb_rate">5</property>
                 <property name="numeric">True</property>
+                <accessibility>
+                    <relation type="labelled-by" target="filllabel"/>
+                </accessibility>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="settransparency:0%in">
+                        <property name="AtkObject::accessible-name" translatable="yes">Fill</property>
+                    </object>
+                </child>
+                <accessibility>
+                    <relation type="labelled-by" target="filllabel"/>
+                </accessibility>
+                <child internal-child="accessible">
+                    <object class="AtkObject" id="settransparency:0%in-1">
+                        <property name="AtkObject::accessible-name" translatable="yes">Fill</property>
+                    </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">3</property>
