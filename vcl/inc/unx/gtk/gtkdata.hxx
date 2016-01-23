@@ -97,10 +97,10 @@ public:
 
 class GtkData : public SalGenericData
 {
-    GSource *m_pUserEvent;
-    oslMutex m_aDispatchMutex;
+    GSource *    m_pUserEvent;
+    osl::Mutex   m_aDispatchMutex;
     oslCondition m_aDispatchCondition;
-    bool blockIdleTimeout;
+    bool         blockIdleTimeout;
 
 public:
     GtkData( SalInstance *pInstance );
