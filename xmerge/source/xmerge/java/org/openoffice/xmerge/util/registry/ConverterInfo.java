@@ -153,7 +153,7 @@ public class ConverterInfo {
         String version, String vendor, String impl)
         throws RegistryException {
 
-        if (!isValidOfficeType(officeMime.trim())) {
+        if (officeMime == null || !isValidOfficeType(officeMime.trim())) {
             RegistryException re = new RegistryException(
                 "Invalid office type");
             throw re;
@@ -162,11 +162,11 @@ public class ConverterInfo {
         piJarName     = jarName.trim();
         piOfficeMime  = officeMime.trim();
         piDeviceMime  = deviceMime;
-        piDisplayName = displayName.trim();
-        piDescription = description.trim();
-        piVersion     = version.trim();
-        piVendor      = vendor.trim();
-        piClassImpl   = impl.trim();
+        piDisplayName = (displayName == null ? null : displayName.trim());
+        piDescription = (description == null ? null : description.trim());
+        piVersion     = (version == null ? null : version.trim());
+        piVendor      = (vendor == null ? null : vendor.trim());
+        piClassImpl   = (impl == null ? null : impl.trim());
         piClassLoader = this.getClass().getClassLoader();
 
         // Get instance of the PluginFactory.
