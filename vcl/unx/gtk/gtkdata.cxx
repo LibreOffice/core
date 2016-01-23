@@ -969,22 +969,23 @@ gboolean GtkData::userEventFn( gpointer data )
     if (pDisplay)
     {
         OSL_ASSERT(static_cast<const SalGenericDisplay *>(pThis->GetGtkDisplay()) == pDisplay);
-        pThis->GetGtkDisplay()->EventGuardAcquire();
-
-        if( !pThis->GetGtkDisplay()->HasUserEvents() )
         {
-            if( pThis->m_pUserEvent )
+            osl::MutexGuard g (pThis->GetGtkDisplay()->getEventGuardMutex());
+
+            if( !pThis->GetGtkDisplay()->HasUserEvents() )
             {
-                g_source_unref (pThis->m_pUserEvent);
-                pThis->m_pUserEvent = nullptr;
+                if( pThis->m_pUserEvent )
+                {
+                    g_source_unref (pThis->m_pUserEvent);
+                    pThis->m_pUserEvent = nullptr;
+                }
+                bContinue = FALSE;
             }
-            bContinue = FALSE;
+            else
+                bContinue = TRUE;
+
+            pThis->GetGtkDisplay()->EventGuardRelease();
         }
-        else
-            bContinue = TRUE;
-
-        pThis->GetGtkDisplay()->EventGuardRelease();
-
         pThis->GetGtkDisplay()->DispatchInternalEvent();
     }
 
