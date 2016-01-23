@@ -26,7 +26,7 @@ String RID_UPDATE_STR_CHECKING
 
 String RID_UPDATE_STR_CHECKING_ERR
 {
-    Text [ en-US ] = "Checking for an update failed.";
+    Text [ en-US ] = "Checking for an update failed due to a server error.";
 };
 
 String RID_UPDATE_STR_NO_UPD_FOUND
