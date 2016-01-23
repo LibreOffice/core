@@ -451,7 +451,6 @@
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
             WriterVariants, Draw,       visible ;
-            WriterVariants, DrawLine,   visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -505,6 +504,7 @@
           <value oor:separator=";">
             Calc,           Chart,       visible                       ;
             Calc,           Draw,        hidden                        ;
+            Calc,           DrawLine,    visible                       ;
             Calc,           Form,        visible                       ;
             Calc,           Graphic,     hidden                        ;
             Calc,           Media,       visible                       ;
@@ -512,6 +512,7 @@
             Calc,           OLE,         visible                       ;
             DrawImpress,    3DObject,    visible                       ;
             DrawImpress,    Draw,        hidden                        ;
+            DrawImpress,    DrawLine,    visible                       ;
             DrawImpress,    Form,        visible                       ;
             DrawImpress,    Graphic,     hidden                        ;
             DrawImpress,    Media,       visible                       ;
