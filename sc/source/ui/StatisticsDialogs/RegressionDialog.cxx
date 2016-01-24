@@ -53,21 +53,21 @@ namespace
     {
         "=SLOPE(%VARIABLE2_RANGE% ; %VARIABLE1_RANGE%)",
         "=SLOPE(%VARIABLE2_RANGE% ; LN(%VARIABLE1_RANGE%))",
-        "=EXP(INTERCEPT(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%)))"
+        "=SLOPE(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%))"
     };
 
     OUString constTemplatesINTERCEPT[] =
     {
         "=INTERCEPT(%VARIABLE2_RANGE% ; %VARIABLE1_RANGE%)",
         "=INTERCEPT(%VARIABLE2_RANGE% ; LN(%VARIABLE1_RANGE%))",
-        "=SLOPE(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%))"
+        "=EXP(INTERCEPT(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%)))"
     };
 
     OUString constRegressionFormula[] =
     {
         "=%A% * %ADDRESS% + %B%",
         "=%A% * LN(%ADDRESS%) + %B%",
-        "=%A% * %ADDRESS% ^ %B%"
+        "=%B% * %ADDRESS% ^ %A%"
     };
 
 } // end anonymous namespace
