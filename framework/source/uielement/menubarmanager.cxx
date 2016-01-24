@@ -870,7 +870,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
 
                             bool bPopupMenu( false );
                             if ( !pMenuItemHandler->xPopupMenuController.is() &&
-                                 m_xPopupMenuControllerFactory->hasController( aItemCommand, OUString() ))
+                                 m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier ) )
                             {
                                 bPopupMenu = CreatePopupMenuController( pMenuItemHandler );
                             }
@@ -1220,7 +1220,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
 
             if ( m_xPopupMenuControllerFactory.is() &&
                  pPopup->GetItemCount() == 0 &&
-                 m_xPopupMenuControllerFactory->hasController( aItemCommand, OUString() )
+                 m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier )
                   )
             {
                 // Check if we have to create a popup menu for a uno based popup menu controller.
@@ -1352,7 +1352,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             pItemHandler->aMenuItemURL = aItemCommand;
 
             if ( m_xPopupMenuControllerFactory.is() &&
-                 m_xPopupMenuControllerFactory->hasController( aItemCommand, OUString() ))
+                 m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier ) )
             {
                 // Check if we have to create a popup menu for a uno based popup menu controller.
                 // We have to set an empty popup menu into our menu structure so the controller also
@@ -1959,7 +1959,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
                     // We have to set an empty popup menu into our menu structure so the controller also
                     // works with inplace OLE.
                     if ( m_xPopupMenuControllerFactory.is() &&
-                        m_xPopupMenuControllerFactory->hasController( aItemCommand, OUString() ))
+                         m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier ) )
                     {
                         VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                         PopupMenu* pCtlPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
