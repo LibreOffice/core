@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_701d3066",
+        "filename": "qadevOOo/tests/java/ifc/frame/_XSynchronousFrameLoader.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:36:20Z",
+      "side": 1,
+      "message": "this test method looks broken, I don\u0027t see how it could currently be working if frame \u003d\u003d null. \nI would just add an early return to skip the test if frame \u003d\u003d null",
+      "revId": "8346910022336498b2cc43bd5bfafc254bcf828a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_501aac6f",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/registry/ConverterInfo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:36:20Z",
+      "side": 1,
+      "message": "IMO none of these need fixing",
+      "revId": "8346910022336498b2cc43bd5bfafc254bcf828a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
