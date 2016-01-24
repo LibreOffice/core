@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_90789491",
+        "filename": "include/svtools/svparser.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:56:40Z",
+      "side": 1,
+      "message": "maybe mention in the comment that this is UTF-32 ?",
+      "revId": "d98bcce7cac7ae6ef6b333e6fbcf235daaaa207a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_f06da0cd",
+        "filename": "include/svtools/svparser.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:56:40Z",
+      "side": 1,
+      "message": "and also here that it returns UTF-32",
+      "revId": "d98bcce7cac7ae6ef6b333e6fbcf235daaaa207a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_5048ec5b",
+        "filename": "svtools/source/svhtml/parhtml.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:56:40Z",
+      "side": 1,
+      "message": "a comment as to what the 0x10ffff constant means would be nice :-)",
+      "revId": "d98bcce7cac7ae6ef6b333e6fbcf235daaaa207a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_b07318b4",
+        "filename": "sw/qa/extras/htmlexport/htmlexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:56:40Z",
+      "side": 1,
+      "message": "chracter-\u003echaracter",
+      "revId": "d98bcce7cac7ae6ef6b333e6fbcf235daaaa207a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
