@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9abb7d3a_cf0d5d39",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-24T22:47:04Z",
+      "side": 1,
+      "message": "I see altogether 4 relations removed here, but only 2 added to related .ui file -- can you please double-check that?",
+      "revId": "18e92cc0e476307ca498568bdc6256176e4242b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abb7d3a_2f13495e",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-24T22:47:04Z",
+      "side": 1,
+      "message": "While you\u0027re at cleaning up, you may remove this line, it makes no sense (a widget labeled by itself)",
+      "revId": "18e92cc0e476307ca498568bdc6256176e4242b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9abb7d3a_0f10054e",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-24T22:47:04Z",
+      "side": 1,
+      "message": "this one too",
+      "revId": "18e92cc0e476307ca498568bdc6256176e4242b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
