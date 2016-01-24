@@ -5644,6 +5644,7 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::BITMAP:
         case style::NumberingType::CHAR_SPECIAL:
         case style::NumberingType::CHARS_HEBREW:
+        case style::NumberingType::NUMBER_NONE:
             return impl_NumberingType( nNumberingType );
         case style::NumberingType::FULLWIDTH_ARABIC: aType="decimalFullWidth"; break;
         case style::NumberingType::TIAN_GAN_ZH: aType="ideographTraditional"; break;
@@ -5670,8 +5671,39 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::HANGUL_JAMO_KO: aType="chosung";break;
         case style::NumberingType::NUMBER_HANGUL_KO: aType="koreanDigital";break;
         case style::NumberingType::NUMBER_UPPER_KO: aType="koreanLegal"; break;
+        case style::NumberingType::CIRCLE_NUMBER: aType="decimalEnclosedCircle"; break;
+        case style::NumberingType::CHARS_ARABIC: aType="arabicAlpha"; break;
+        case style::NumberingType::CHARS_THAI: aType="thaiLetters"; break;
+        case style::NumberingType::CHARS_PERSIAN: aType="hindiVowels"; break;
+/*
+        Fallback the rest to decimal.
+        case style::NumberingType::NATIVE_NUMBERING:
+        case style::NumberingType::HANGUL_CIRCLED_JAMO_KO:
+        case style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO:
+        case style::NumberingType::CHARS_GREEK_UPPER_LETTER:
+        case style::NumberingType::CHARS_GREEK_LOWER_LETTER:
+        case style::NumberingType::PAGE_DESCRIPTOR:
+        case style::NumberingType::TRANSLITERATION:
+        case style::NumberingType::CHARS_NEPALI:
+        case style::NumberingType::CHARS_KHMER:
+        case style::NumberingType::CHARS_LAO:
+        case style::NumberingType::CHARS_TIBETAN:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_BG:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_BG:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_BG:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_BG:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU:
+        case style::NumberingType::CHARS_MYANMAR:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_SR:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_SR:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR:
+*/
         default:
-            aType = "none";        break;
+            aType = "decimal";        break;
     }
     return aType;
 }
