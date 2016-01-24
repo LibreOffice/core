@@ -618,6 +618,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                 // get initial state
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
                 mbPastePossible = ( aDataHelper.GetFormatCount() != 0 );
+                mpCurrentClipboardFormats = GetSupportedClipboardFormats( aDataHelper );
             }
             else
                 mbPastePossible = false;
