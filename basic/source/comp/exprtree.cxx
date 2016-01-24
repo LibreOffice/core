@@ -1158,6 +1158,7 @@ SbiExprList* SbiExprList::ParseDimList( SbiParser* pParser )
             {
                 pExpr2 = new SbiExpression( pParser );
                 eTok = pParser->Next();
+                pExpr1->ConvertToIntConstIfPossible(), pExpr2->ConvertToIntConstIfPossible();
                 pExprList->bError = pExprList->bError || !pExpr1->IsValid() || !pExpr2->IsValid();
                 pExpr1->pNext = pExpr2;
                 if( !pLast )
@@ -1175,6 +1176,7 @@ SbiExprList* SbiExprList::ParseDimList( SbiParser* pParser )
             {
                 pExpr1->SetBased();
                 pExpr1->pNext = nullptr;
+                pExpr1->ConvertToIntConstIfPossible();
                 pExprList->bError = pExprList->bError || !pExpr1->IsValid();
                 if( !pLast )
                 {
