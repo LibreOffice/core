@@ -798,7 +798,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
                 while (nUncodedSize > nDataPos)
                 {
                     assert(aData.size() > nDataPos);
-                    const size_t nToRead((std::min)(nUncodedSize - nDataPos, aData.size() - nDataPos));
+                    const size_t nToRead(std::min<size_t>(nUncodedSize - nDataPos, aData.size() - nDataPos));
                     assert(nToRead > 0);
                     assert(!aData.empty());
                     const long nRead = aCodec.Read(rIStm, &aData.front() + nDataPos, sal_uInt32(nToRead));
