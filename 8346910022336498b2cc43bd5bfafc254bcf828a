@@ -33,6 +33,24 @@
       "revId": "8346910022336498b2cc43bd5bfafc254bcf828a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_30af28e5",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/registry/ConverterInfo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-24T08:56:28Z",
+      "side": 1,
+      "message": "Look at /xmerge/source/xmerge/java/org/openoffice/xmerge/util/registry/ConverterInfoReader.java line 208, there the function can be called (and will be acc. murphy) with the different null variables.",
+      "parentUuid": "bab6814e_501aac6f",
+      "revId": "8346910022336498b2cc43bd5bfafc254bcf828a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
