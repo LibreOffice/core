@@ -72,7 +72,8 @@ LinePropertyPanel::LinePropertyPanel(
     maTransControl(SID_ATTR_LINE_TRANSPARENCE, *pBindings, *this),
     maEdgeStyle(SID_ATTR_LINE_JOINT, *pBindings, *this),
     maCapStyle(SID_ATTR_LINE_CAP, *pBindings, *this),
-    mpBindings(pBindings)
+    mpBindings(pBindings),
+    maContext()
 {
     Initialize();
 }
@@ -184,6 +185,30 @@ void LinePropertyPanel::NotifyItemUpdate(
         }
     }
     ActivateControls();
+}
+
+void LinePropertyPanel::HandleContextChange(
+    const sfx2::sidebar::EnumContext& rContext)
+{
+    if(maContext == rContext)
+    {
+        // Nothing to do
+        return;
+    }
+
+    maContext = rContext;
+    bool bShowArrows = false;
+
+    switch(maContext.GetCombinedContext_DI())
+    {
+        case CombinedEnumContext(Application_Calc, Context_DrawLine):
+        case CombinedEnumContext(Application_DrawImpress, Context_DrawLine):
+            bShowArrows = true;
+            break;
+    }
+
+    if(!bShowArrows)
+        disableArrowHead();
 }
 
 void LinePropertyPanel::setLineStyle(const XLineStyleItem& rItem)
