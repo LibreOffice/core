@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_b55f5671",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-01-24T00:17:21Z",
+      "side": 1,
+      "message": "Position and Size is already shown on lines in writer\nthis line does nothing\nWriter has no DrawLine context",
+      "range": {
+        "startLine": 524,
+        "startChar": 0,
+        "endLine": 524,
+        "endChar": 72
+      },
+      "revId": "25001c15b2ab8190b6e860e39202b6cb1b1c84b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1555824f",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-01-24T00:17:21Z",
+      "side": 1,
+      "message": "no Context_DrawLine for writer\nflip and angle already shown for lines",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 79
+      },
+      "revId": "25001c15b2ab8190b6e860e39202b6cb1b1c84b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
