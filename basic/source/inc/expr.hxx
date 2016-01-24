@@ -129,7 +129,7 @@ public:
     bool IsValid()                  { return !bError; }
     bool IsConstant()               // true: constant operand
         { return eNodeType == SbxSTRVAL || eNodeType == SbxNUMVAL; }
-    bool IsIntConst();
+    void ConvertToIntConstIfPossible();
     bool IsVariable();
     bool  IsUnary()
         { return pLeft && !pRight; }
@@ -197,7 +197,7 @@ public:
     bool IsValid()                  { return pExpr->IsValid();    }
     bool IsVariable()               { return pExpr->IsVariable(); }
     bool IsLvalue()                 { return pExpr->IsLvalue();   }
-    bool IsIntConstant()            { return pExpr->IsIntConst(); }
+    void ConvertToIntConstIfPossible() { pExpr->ConvertToIntConstIfPossible();     }
     const OUString& GetString()     { return pExpr->GetString();  }
     SbiSymDef* GetRealVar()         { return pExpr->GetRealVar(); }
     SbiExprNode* GetExprNode()      { return pExpr; }

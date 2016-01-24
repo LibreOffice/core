@@ -152,7 +152,7 @@ SbiExprNode* SbiExprNode::GetRealNode()
 
 // This method transform the type, if it fits into the Integer range
 
-bool SbiExprNode::IsIntConst()
+void SbiExprNode::ConvertToIntConstIfPossible()
 {
     if( eNodeType == SbxNUMVAL )
     {
@@ -163,11 +163,9 @@ bool SbiExprNode::IsIntConst()
             {
                 nVal = (double) (short) nVal;
                 eType = SbxINTEGER;
-                return true;
             }
         }
     }
-    return false;
 }
 
 bool SbiExprNode::IsNumber()
