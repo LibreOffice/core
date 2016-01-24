@@ -5644,6 +5644,7 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::BITMAP:
         case style::NumberingType::CHAR_SPECIAL:
         case style::NumberingType::CHARS_HEBREW:
+        case style::NumberingType::NUMBER_NONE:
             return impl_NumberingType( nNumberingType );
         case style::NumberingType::FULLWIDTH_ARABIC: aType="decimalFullWidth"; break;
         case style::NumberingType::TIAN_GAN_ZH: aType="ideographTraditional"; break;
@@ -5670,6 +5671,9 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::HANGUL_JAMO_KO: aType="chosung";break;
         case style::NumberingType::NUMBER_HANGUL_KO: aType="koreanDigital";break;
         case style::NumberingType::NUMBER_UPPER_KO: aType="koreanLegal"; break;
+        case style::NumberingType::CIRCLE_NUMBER: aType="decimalEnclosedCircle"; break;
+        case style::NumberingType::CHARS_GREEK_UPPER_LETTER:
+        case style::NumberingType::CHARS_GREEK_LOWER_LETTER: aType="decimal"; break;
         default:
             aType = "none";        break;
     }

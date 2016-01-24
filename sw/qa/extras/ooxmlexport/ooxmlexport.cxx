@@ -634,10 +634,15 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHCN, "numlist-zhcn.odt")
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt","val","chineseCountingThousand" );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOOxmlOutlineNumNone, "outline-num-none.odt")
+DECLARE_OOXMLEXPORT_TEST(testOOxmlOutlineNumberTypes, "outline-number-types.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/numbering.xml"))
+    {
         assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt", "val", "none");
+        assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[2]/w:numFmt", "val", "decimalEnclosedCircle");
+        assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[3]/w:numFmt", "val", "decimal"); // CHARS_GREEK_UPPER_LETTER fallback to decimal
+        assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[4]/w:numFmt", "val", "decimal"); // CHARS_GREEK_LOWER_LETTER fallback to decimal
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
