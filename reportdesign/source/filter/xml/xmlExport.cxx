@@ -58,6 +58,9 @@
 
 #include <boost/bind.hpp>
 
+#define MIN_WIDTH   80
+#define MIN_HEIGHT  20
+
 
 namespace rptxml
 {
@@ -972,7 +975,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 nEmptyCellColSpan = 0;
             }
         }
-        else
+        //elseTGrid::iterator
         { // empty rows
             nEmptyCellColSpan = aRowIter->second.size();
             if ( nEmptyCellColSpan )
@@ -994,6 +997,8 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             }
         }
     }
+    try{
+
     //set height
     ::std::vector<sal_Int32>::iterator aIter = m_aHeight.begin();
     ::std::vector<sal_Int32>::iterator aEnd = m_aHeight.end();
@@ -1004,13 +1009,15 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
     //set position, widths, and heights
     sal_Int32 nLeftMargin = rptui::getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
     sal_Int32 nPosY = 0;
-    ::std::vector< ::std::vector<TCell> >::iterator aRowIter = m_aGrid.begin();
-    ::std::vector< ::std::vector<TCell> >::iterator aRowEnd = m_aGrid.end();
+    //std::vector<std::vector<rptxml::ORptExport::TCell> >::iterator aRowIter = m_aGrid.begin();
+    //std::vector<std::vector<rptxml::ORptExport::TCell> >::iterator aRowEnd = m_aGrid.end();
     for (sal_Int32 i = 0; aRowIter != aRowEnd; ++aRowIter,++i)
     {
          sal_Int32 nPosX = nLeftMargin;
-         ::std::vector<TCell>::iterator aColIter = (*aRowIter).begin();
-         ::std::vector<TCell>::iterator aColEnd = (*aRowIter).end();
+         ::std::vector< TCell >::iterator aColIter = aRowIter->second.begin();
+         ::std::vector< TCell >::iterator aColEnd = aRowIter->second.end();
+         //::std::vector<TCell>::iterator aColIter = (*aRowIter).begin();
+         //::std::vector<TCell>::iterator aColEnd = (*aRowIter).end();
          for (sal_Int32 j = 0; aColIter != aColEnd; ++aColIter,++j)
          {
              TCell& rCell = *aColIter;
@@ -1042,10 +1049,10 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                           sal_Int32 nRowSpan = rCell.nRowSpan;
                           if ( nRowSpan > 1 )
                           {
-                              ::std::vector< ::std::vector<TCell> >::iterator aHeightIter = aRowIter + 1;
+                              //::std::vector< ::std::vector<TCell> >::iterator aHeightIter = aRowIter + 1;
                               while( nRowSpan > 1)
                               {
-                                   nHeight += (*aHeightIter)[j].nHeight;
+                                   //nHeight += (*aHeightIter)[j].nHeight;
                                    ++aHeightIter;
                                    --nRowSpan;
                               }
@@ -1080,11 +1087,11 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
           nPosY += m_aHeight[i];
             }
         }
-    }
-    catch(Exception&)
-    {
-        OSL_FAIL("OXMLTable::EndElement -> exception catched");
-    }
+
+        catch(Exception&)
+        {
+             OSL_FAIL("OXMLTable::EndElement -> exception catched");
+        }
 }
 
 OUString ORptExport::convertFormula(const OUString& _sFormula)

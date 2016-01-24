@@ -198,8 +198,8 @@ public:
 
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 
-    rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}:
-    sal_Int32 m_aWidth;
+    rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper; }
+    ::std::vector<sal_Int32> m_aWidth;
 };
 
 /** Exports only settings
