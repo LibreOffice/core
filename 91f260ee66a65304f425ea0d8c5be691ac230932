@@ -33,6 +33,24 @@
       "revId": "91f260ee66a65304f425ea0d8c5be691ac230932",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_706250da",
+        "filename": "ridljar/com/sun/star/lib/uno/typedesc/TypeDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-24T08:39:07Z",
+      "side": 1,
+      "message": "have a look at line 389, there is a test args !\u003d null, indicating that args can be null, and then a call to this function with args",
+      "parentUuid": "bab6814e_f01f6059",
+      "revId": "91f260ee66a65304f425ea0d8c5be691ac230932",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
