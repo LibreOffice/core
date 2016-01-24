@@ -778,7 +778,6 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
         {
             sal_uInt32 nCodedSize(0);
             sal_uInt32  nUncodedSize(0);
-            sal_uLong nCodedPos(0);
 
             // read coding information
             rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
@@ -791,7 +790,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             if (nSizeInc > 0)
             {
                 // decode buffer
-                nCodedPos = rIStm.Tell();
+                const sal_uLong nCodedPos = rIStm.Tell();
                 ZCodec aCodec;
                 aCodec.BeginCompression();
                 aData.resize(nSizeInc);
