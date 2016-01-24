@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_902a547d",
+        "filename": "qadevOOo/runner/helper/APIDescGetter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:39:48Z",
+      "side": 1,
+      "message": "would be better to throw an IllegalStateException if the \"dirs.exists()\" test fails, since that is the only path that could result in a null modules",
+      "revId": "91f260ee66a65304f425ea0d8c5be691ac230932",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_f01f6059",
+        "filename": "ridljar/com/sun/star/lib/uno/typedesc/TypeDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:39:48Z",
+      "side": 1,
+      "message": "does not need fixing, it would be invalid to call this method with null typeArguments",
+      "revId": "91f260ee66a65304f425ea0d8c5be691ac230932",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
