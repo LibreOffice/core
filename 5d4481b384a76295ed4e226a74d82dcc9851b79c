@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_303a88ce",
+        "filename": "drawinglayer/source/processor2d/vclhelperbufferdevice.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:46:41Z",
+      "side": 1,
+      "message": "may ber -\u003e may be",
+      "revId": "5d4481b384a76295ed4e226a74d82dcc9851b79c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_103784e4",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:46:41Z",
+      "side": 1,
+      "message": "correctyl-\u003ecorrectly",
+      "revId": "5d4481b384a76295ed4e226a74d82dcc9851b79c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_703410de",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:46:41Z",
+      "side": 1,
+      "message": "I suggest you put this under some other #define before the final commit, because most devs use DBG_UTIL in their normal dev environment",
+      "revId": "5d4481b384a76295ed4e226a74d82dcc9851b79c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_50310cec",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-24T06:46:41Z",
+      "side": 1,
+      "message": "tranparence-\u003etransparent",
+      "revId": "5d4481b384a76295ed4e226a74d82dcc9851b79c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
