@@ -334,17 +334,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:ConditionalFormatMenu">
-              <menu:menupopup>
-                <menu:menuitem menu:id=".uno:ConditionalFormatDialog"/>
-                <menu:menuitem menu:id=".uno:ColorScaleFormatDialog"/>
-                <menu:menuitem menu:id=".uno:DataBarFormatDialog"/>
-                <menu:menuitem menu:id=".uno:IconSetFormatDialog"/>
-                <menu:menuitem menu:id=".uno:CondDateFormatDialog"/>
-                <menu:menuseparator/>
-                <menu:menuitem menu:id=".uno:ConditionalFormatManagerDialog"/>
-              </menu:menupopup>
-            </menu:menu>
+            <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
             <menu:menuitem menu:id=".uno:AutoFormat"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:FormatImageMenu">

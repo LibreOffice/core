@@ -1060,6 +1060,26 @@ SfxVoidItem CommentChange FID_CHG_COMMENT
 ]
 
 
+SfxVoidItem ConditionalFormatMenu SID_POPUP_CONDFRMT
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    NoRecord;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+
 SfxVoidItem ConditionalFormatDialog SID_OPENDLG_CONDFRMT
 ()
 [

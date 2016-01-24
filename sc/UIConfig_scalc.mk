@@ -25,6 +25,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/celledit \
 	sc/uiconfig/scalc/popupmenu/chart \
 	sc/uiconfig/scalc/popupmenu/colheader \
+	sc/uiconfig/scalc/popupmenu/conditional \
 	sc/uiconfig/scalc/popupmenu/draw \
 	sc/uiconfig/scalc/popupmenu/drawtext \
 	sc/uiconfig/scalc/popupmenu/form \
