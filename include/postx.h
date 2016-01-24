@@ -26,7 +26,6 @@
 
 #undef Min
 #undef Max
-#undef DestroyAll
 #undef Success
 
 #undef Printer
@@ -34,8 +33,6 @@
 
 #undef GetToken
 #undef ReleaseToken
-#undef InitializeToken
-#undef NextRequest
 
 #endif
 
