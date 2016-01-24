@@ -4466,7 +4466,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     else
     {
         // Reset the offset to 0 as it was before the insertion
-        pCopyPam->GetPoint()->nContent -= pCopyPam->GetPoint()->nContent;
+        pCopyPam->GetPoint()->nContent = 0;
 
         pCopyPam->GetPoint()->nNode++;
         // If the next node is a start node, then step back: the start node
