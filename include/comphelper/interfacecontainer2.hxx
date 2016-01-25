@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include <comphelper/comphelperdllapi.h>
 
 /** */ //for docpp
 namespace comphelper
@@ -64,7 +64,7 @@ class OInterfaceContainerHelper2;
 
   @see OInterfaceContainerHelper
  */
-class CPPUHELPER_DLLPUBLIC OInterfaceIteratorHelper2
+class COMPHELPER_DLLPUBLIC OInterfaceIteratorHelper2
 {
 public:
     /**
@@ -122,7 +122,7 @@ private:
 
   @see OInterfaceIteratorHelper
  */
-class CPPUHELPER_DLLPUBLIC OInterfaceContainerHelper2
+class COMPHELPER_DLLPUBLIC OInterfaceContainerHelper2
 {
 public:
     // these are here to force memory de/allocation to sal lib.
