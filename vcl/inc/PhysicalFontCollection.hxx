@@ -91,6 +91,33 @@ private:
 
 };
 
+// an ImplDeviceFontList is created by an PhysicalFontCollection
+// it becomes invalid when original PhysicalFontCollection is modified
+class ImplDeviceFontList
+{
+private:
+    std::vector<PhysicalFontFace*> maDevFontVector;
+
+public:
+                        ImplDeviceFontList()        { maDevFontVector.reserve(1024); }
+    void                Add( PhysicalFontFace* pFace )  { maDevFontVector.push_back( pFace ); }
+    PhysicalFontFace*   Get( int nIndex ) const     { return maDevFontVector[ nIndex ]; }
+    int                 Count() const               { return maDevFontVector.size(); }
+};
+
+class ImplDeviceFontSizeList
+{
+private:
+    std::vector<int>    maSizeList;
+
+public:
+                        ImplDeviceFontSizeList()
+                        { maSizeList.reserve( 32 ); }
+    void                Add( int nHeight )      { maSizeList.push_back( nHeight ); }
+    int                 Count() const           { return maSizeList.size(); }
+    int                 Get( int nIndex ) const { return maSizeList[ nIndex ]; }
+};
+
 #endif // INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,9 +21,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include "outdev.h"
-#include "PhysicalFontFace.hxx"
 #include "PhysicalFontCollection.hxx"
+#include "PhysicalFontFace.hxx"
 
 #include "PhysicalFontFamily.hxx"
 

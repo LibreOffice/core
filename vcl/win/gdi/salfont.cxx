@@ -43,7 +43,6 @@
 #include <vcl/fontcharmap.hxx>
 
 #include "fontsubset.hxx"
-#include "outdev.h"
 #include "PhysicalFontCollection.hxx"
 #include "PhysicalFontFace.hxx"
 #include "sft.hxx"

@@ -29,6 +29,9 @@
 class PhysicalFontFace;
 class PhysicalFontCollection;
 
+class ImplDeviceFontList;
+class ImplDeviceFontSizeList;
+
 // flags for mnTypeFaces member
 #define FONT_FAMILY_SCALABLE      (1<<0)
 #define FONT_FAMILY_SYMBOL        (1<<1)

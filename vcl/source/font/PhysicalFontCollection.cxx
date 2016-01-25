@@ -30,12 +30,11 @@
 #include "graphite_features.hxx"
 #endif
 
-#include "outdev.h"
 #include "fontinstance.hxx"
 #include "fontattributes.hxx"
-#include "PhysicalFontFace.hxx"
-
 #include "PhysicalFontCollection.hxx"
+#include "PhysicalFontFace.hxx"
+#include "outdev.h"
 
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )

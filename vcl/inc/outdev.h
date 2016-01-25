@@ -37,33 +37,6 @@ class VirtualDevice;
 class PhysicalFontCollection;
 enum class AddFontSubstituteFlags;
 
-// an ImplDeviceFontList is created by an PhysicalFontCollection
-// it becomes invalid when original PhysicalFontCollection is modified
-class ImplDeviceFontList
-{
-private:
-    std::vector<PhysicalFontFace*> maDevFontVector;
-
-public:
-                        ImplDeviceFontList()        { maDevFontVector.reserve(1024); }
-    void                Add( PhysicalFontFace* pFace )  { maDevFontVector.push_back( pFace ); }
-    PhysicalFontFace*   Get( int nIndex ) const     { return maDevFontVector[ nIndex ]; }
-    int                 Count() const               { return maDevFontVector.size(); }
-};
-
-class ImplDeviceFontSizeList
-{
-private:
-    std::vector<int>    maSizeList;
-
-public:
-                        ImplDeviceFontSizeList()
-                        { maSizeList.reserve( 32 ); }
-    void                Add( int nHeight )      { maSizeList.push_back( nHeight ); }
-    int                 Count() const           { return maSizeList.size(); }
-    int                 Get( int nIndex ) const { return maSizeList[ nIndex ]; }
-};
-
 // nowadays these substitutions are needed for backward compatibility and tight platform integration:
 // - substitutions from configuration entries (Tools->Options->FontReplacement and/or fontconfig)
 // - device specific substitutions (e.g. for PS printer builtin fonts)

@@ -16,7 +16,6 @@
 #include <vcl/svapp.hxx>
 
 #include "fontsubset.hxx"
-#include "outdev.h"
 #include "fontinstance.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "salgdi.hxx"
