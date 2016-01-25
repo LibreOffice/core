@@ -137,6 +137,8 @@ public:
     void testParaMarginAndindentation();
     void testTransparentBackground();
     void testExportTransitionsPPTX();
+    void testDatetimeFieldNumberFormat();
+    void testDatetimeFieldNumberFormatPPTX();
 
     void testFdo90607();
     void testTdf91378();
@@ -188,6 +190,8 @@ public:
 
     CPPUNIT_TEST(testExportTransitionsPPTX);
     CPPUNIT_TEST(testTdf92527);
+    CPPUNIT_TEST(testDatetimeFieldNumberFormat);
+    CPPUNIT_TEST(testDatetimeFieldNumberFormatPPTX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1496,6 +1500,92 @@ void SdExportTest::testTdf92527()
 
     // 5 coordinate pairs, 1 MoveTo, 4 LineTo
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aCoordinates.getLength());
+    xDocShRef->DoClose();
+}
+
+namespace {
+
+void matchNumberFormat( int nPage, uno::Reference< text::XTextRange > xRun)
+{
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+    uno::Reference<text::XTextField> xField;
+    xPropSet->getPropertyValue("TextField") >>= xField;
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    xPropSet.set(xField, uno::UNO_QUERY);
+    sal_Int32 nNumFmt;
+    xPropSet->getPropertyValue("NumberFormat") >>= nNumFmt;
+    switch( nPage )
+    {
+        case 0:     // 13/02/96
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(2), nNumFmt);
+                    break;
+        case 1:     // 13/02/1996
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(5), nNumFmt);
+                    break;
+        case 2:     // 13 February 1996
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(3), nNumFmt);
+                    break;
+        case 3:     // 13:49:38
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(2), nNumFmt);
+                    break;
+        case 4:     // 13:49
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(3), nNumFmt);
+                    break;
+        case 5:     // 01:49 PM
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(6), nNumFmt);
+                    break;
+        case 6:     // 01:49:38 PM
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(7), nNumFmt);
+    }
+}
+
+}
+
+void SdExportTest::testDatetimeFieldNumberFormat()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/numfmt.odp"), ODP);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    for(sal_uInt16 i = 0; i <= 6; ++i)
+    {
+        // get TextShape 1 from page i
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, i, xDocShRef ) );
+
+        // Get first paragraph
+        uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
+
+        // first chunk of text
+        uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
+
+        matchNumberFormat( i, xRun );
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testDatetimeFieldNumberFormatPPTX()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/numfmt.pptx"), PPTX);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    for(sal_uInt16 i = 0; i <= 6; ++i)
+    {
+        // get TextShape 1 from page i
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, i, xDocShRef ) );
+
+        // Get first paragraph
+        uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
+
+        // first chunk of text
+        uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
+
+        matchNumberFormat( i, xRun );
+    }
+
     xDocShRef->DoClose();
 }
 
