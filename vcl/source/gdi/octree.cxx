@@ -21,9 +21,8 @@
 
 #include <vcl/bmpacc.hxx>
 
-#include <impoct.hxx>
-
 #include "octree.hxx"
+#include "impoctree.hxx"
 
 // - pMask -
 

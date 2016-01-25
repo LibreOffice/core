@@ -28,9 +28,9 @@
 
 #include <memory>
 
-#include <impbmp.hxx>
-#include <impoct.hxx>
-#include <impvect.hxx>
+#include "impbmp.hxx"
+#include "impoctree.hxx"
+#include "impvect.hxx"
 
 #include "octree.hxx"
 #include "BitmapScaleConvolution.hxx"
