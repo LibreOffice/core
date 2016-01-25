@@ -288,7 +288,7 @@ namespace drawinglayer
                     fStartWidth = (double)nTempStartWidth;
                 }
 
-                if(0.0 != fStartWidth)
+                if(!rtl::math::approxEqual(0.0, fStartWidth))
                 {
                     aStartPolyPolygon = basegfx::B2DPolyPolygon(static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue());
 
@@ -311,7 +311,7 @@ namespace drawinglayer
                     fEndWidth = (double)nTempEndWidth;
                 }
 
-                if(0.0 != fEndWidth)
+                if(!rtl::math::approxEqual(0.0,fEndWidth))
                 {
                     aEndPolyPolygon = basegfx::B2DPolyPolygon(static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue());
 
@@ -994,11 +994,11 @@ namespace drawinglayer
         {
             rfCornerRadiusX = rfCornerRadiusY = (double)nRadius;
 
-            if(0.0 != rfCornerRadiusX)
+            if(!rtl::math::approxEqual(0.0,rfCornerRadiusX))
             {
                 const double fHalfObjectWidth(rObjectRange.getWidth() * 0.5);
 
-                if(0.0 != fHalfObjectWidth)
+                if(!rtl::math::approxEqual(0.0, fHalfObjectWidth))
                 {
                     if(rfCornerRadiusX < 0.0)
                     {
@@ -1018,11 +1018,11 @@ namespace drawinglayer
                 }
             }
 
-            if(0.0 != rfCornerRadiusY)
+            if(!rtl::math::approxEqual(0.0, rfCornerRadiusY))
             {
                 const double fHalfObjectHeight(rObjectRange.getHeight() * 0.5);
 
-                if(0.0 != fHalfObjectHeight)
+                if(!rtl::math::approxEqual(0.0, fHalfObjectHeight))
                 {
                     if(rfCornerRadiusY < 0.0)
                     {
