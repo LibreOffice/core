@@ -244,17 +244,7 @@ SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rS
 {
     // FIXME: need to detect whether it is a relative file path
     // we need to detect if this is a URL, if not then assume it's a file path
-    OUString sFileUrl;
-    if( !rFilename.isEmpty() )
-    {
-        INetURLObject aObj;
-        aObj.SetURL( rFilename );
-        bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-        if ( bIsURL )
-            sFileUrl = rFilename;
-        else
-            osl::FileBase::getFileURLFromSystemPath( rFilename, sFileUrl);
-    }
+    OUString sFileUrl = INetURLObject::TryUrlFromSystemPathAsString( rFilename );
 
     OString aGroupName(OUStringToOString(rSection, RTL_TEXTENCODING_DONTKNOW));
     OString aKey(OUStringToOString(rKey, RTL_TEXTENCODING_DONTKNOW));

@@ -557,10 +557,7 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
 
 OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 {
-    OUString sRet;
-    INetURLObject aURL( rTopic );
-    if( INetProtocol::NotValid == aURL.GetProtocol() )
-        osl::FileBase::getFileURLFromSystemPath(rTopic, sRet);
+    OUString sRet = INetURLObject::TryUrlFromSystemPathAsString( rTopic );
     if( sRet.isEmpty() )
         sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl() );
     return sRet;
