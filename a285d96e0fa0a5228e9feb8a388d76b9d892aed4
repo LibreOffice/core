@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_4e1df3bc",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-25T15:47:43Z",
+      "side": 1,
+      "message": "thist !\u003d0 check is now superfluous",
+      "revId": "a285d96e0fa0a5228e9feb8a388d76b9d892aed4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
