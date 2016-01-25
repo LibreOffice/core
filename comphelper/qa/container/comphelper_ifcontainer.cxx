@@ -34,8 +34,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-class ContainerListener;
-
 struct ContainerStats {
     int m_nAlive;
     int m_nDisposed;
@@ -128,72 +126,6 @@ namespace comphelper_ifcontainer
 
             CPPUNIT_ASSERT_MESSAGE("non-empty container post clear",
                                    pContainer->getLength() == 0);
-            delete pContainer;
-        }
-
-        template < typename ContainerType, typename ContainedType >
-        void doContainerTest(const ContainedType *pTypes)
-        {
-            ContainerStats aStats;
-            ContainerType *pContainer;
-            pContainer = new ContainerType(m_aGuard);
-
-            int i;
-            Reference<XEventListener> xRefs[nTests * 2];
-
-            // add these interfaces
-            for (i = 0; i < nTests * 2; i++)
-            {
-                xRefs[i] = new ContainerListener(&aStats);
-                pContainer->addInterface(pTypes[i / 2], xRefs[i]);
-            }
-
-            // check it is all there
-            for (i = 0; i < nTests; i++)
-            {
-                cppu::OInterfaceContainerHelper *pHelper;
-
-                pHelper = pContainer->getContainer(pTypes[i]);
-
-                CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != nullptr);
-                Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 2);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[1] == xRefs[i*2+1]);
-            }
-
-            // remove every other interface
-            for (i = 0; i < nTests; i++)
-                pContainer->removeInterface(pTypes[i], xRefs[i*2+1]);
-
-            // check it is half there
-            for (i = 0; i < nTests; i++)
-            {
-                cppu::OInterfaceContainerHelper *pHelper;
-
-                pHelper = pContainer->getContainer(pTypes[i]);
-
-                CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != nullptr);
-                Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 1);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
-            }
-
-            // remove the 1st half of the rest
-            for (i = 0; i < nTests / 2; i++)
-                pContainer->removeInterface(pTypes[i], xRefs[i*2]);
-
-            // check it is half there
-            for (i = 0; i < nTests / 2; i++)
-            {
-                cppu::OInterfaceContainerHelper *pHelper;
-
-                pHelper = pContainer->getContainer(pTypes[i]);
-                CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != nullptr);
-                Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 0);
-            }
-
             delete pContainer;
         }
 

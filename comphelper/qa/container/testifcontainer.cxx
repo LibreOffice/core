@@ -17,21 +17,34 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include <osl/mutex.hxx>
-
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase1.hxx>
-
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 
-using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
+namespace
+{
 
-class TestListener : public WeakImplHelper1< XVetoableChangeListener >
+class TestInterfaceContainer2: public CppUnit::TestFixture
+{
+public:
+    void test1();
+
+    CPPUNIT_TEST_SUITE(TestInterfaceContainer2);
+    CPPUNIT_TEST(test1);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+class TestListener : public cppu::WeakImplHelper1< XVetoableChangeListener >
 {
 public:
     // Methods
@@ -47,12 +60,12 @@ public:
         }
 };
 
-void test_interfacecontainer()
+void TestInterfaceContainer2::test1()
 {
     Mutex mutex;
 
     {
-        OInterfaceContainerHelper helper( mutex );
+        comphelper::OInterfaceContainerHelper2 helper( mutex );
 
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
@@ -66,7 +79,7 @@ void test_interfacecontainer()
     }
 
     {
-        OInterfaceContainerHelper helper( mutex );
+        comphelper::OInterfaceContainerHelper2 helper( mutex );
 
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
@@ -76,7 +89,7 @@ void test_interfacecontainer()
         helper.addInterface( r2 );
         helper.addInterface( r3 );
 
-        OInterfaceIteratorHelper iterator( helper );
+        comphelper::OInterfaceIteratorHelper2 iterator( helper );
 
         while( iterator.hasMoreElements() )
             static_cast<XVetoableChangeListener*>(iterator.next())->vetoableChange( PropertyChangeEvent() );
@@ -85,7 +98,7 @@ void test_interfacecontainer()
     }
 
     {
-        OInterfaceContainerHelper helper( mutex );
+        comphelper::OInterfaceContainerHelper2 helper( mutex );
 
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
@@ -95,7 +108,7 @@ void test_interfacecontainer()
         helper.addInterface( r2 );
         helper.addInterface( r3 );
 
-        OInterfaceIteratorHelper iterator( helper );
+        comphelper::OInterfaceIteratorHelper2 iterator( helper );
 
         static_cast<XVetoableChangeListener*>(iterator.next())->vetoableChange( PropertyChangeEvent() );
         iterator.remove();
@@ -104,12 +117,12 @@ void test_interfacecontainer()
         static_cast<XVetoableChangeListener*>(iterator.next())->vetoableChange( PropertyChangeEvent() );
         iterator.remove();
 
-        OSL_ASSERT( helper.getLength() == 0 );
+        CPPUNIT_ASSERT( helper.getLength() == 0 );
         helper.disposeAndClear( EventObject() );
     }
 
     {
-        OInterfaceContainerHelper helper( mutex );
+        comphelper::OInterfaceContainerHelper2 helper( mutex );
 
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
@@ -120,7 +133,7 @@ void test_interfacecontainer()
         helper.addInterface( r3 );
 
         {
-            OInterfaceIteratorHelper iterator( helper );
+            comphelper::OInterfaceIteratorHelper2 iterator( helper );
             while( iterator.hasMoreElements() )
             {
                 Reference< XVetoableChangeListener > r = static_cast<XVetoableChangeListener*>(iterator.next());
@@ -128,18 +141,22 @@ void test_interfacecontainer()
                     iterator.remove();
             }
         }
-        OSL_ASSERT( helper.getLength() == 2 );
+        CPPUNIT_ASSERT( helper.getLength() == 2 );
         {
-            OInterfaceIteratorHelper iterator( helper );
+            comphelper::OInterfaceIteratorHelper2 iterator( helper );
             while( iterator.hasMoreElements() )
             {
                 Reference< XVetoableChangeListener > r = static_cast<XVetoableChangeListener*>(iterator.next());
-                OSL_ASSERT( r != r1 && ( r == r2 || r == r3 ) );
+                CPPUNIT_ASSERT( r != r1 && ( r == r2 || r == r3 ) );
             }
         }
 
         helper.disposeAndClear( EventObject() );
     }
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TestInterfaceContainer2);
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
