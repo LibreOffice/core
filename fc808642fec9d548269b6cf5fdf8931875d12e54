@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_ce39e343",
+        "filename": "i18npool/source/characterclassification/cclass_unicode_parser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-25T15:54:12Z",
+      "side": 1,
+      "message": "Shouldn\u0027t isFirst be initialized with nPos\u003d\u003d0 instead, given how it originated from getParseTokensType()? If so, let\u0027s do it in a follow-up commit to get this one in now, also for 5-1-0",
+      "revId": "fc808642fec9d548269b6cf5fdf8931875d12e54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
