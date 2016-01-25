@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_2ef987c9",
+        "filename": "ridljar/com/sun/star/lib/uno/typedesc/TypeDescription.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-25T10:27:28Z",
+      "side": 1,
+      "message": "no, this is wrong; typeArguments can legally be null here",
+      "revId": "5e7c4416eca0b3d7c054e4d89f38add1b293780f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
