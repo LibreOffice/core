@@ -28,11 +28,15 @@ typedef sal_uInt32 sal_GlyphId;
 #define GF_IDXMASK  ~GF_FLAGMASK
 #define GF_ISCHAR   0x00800000
 #define GF_ROTL     0x01000000
+
+#ifdef WINNT
 // caution !!!
 #define GF_VERT     0x02000000
 // GF_VERT is only for windows implementation
 // (win/gdi/salgdi3.cxx, win/gdi/winlayout.cxx)
 // don't use this elsewhere !!!
+#endif
+
 #define GF_ROTR     0x03000000
 #define GF_ROTMASK  0x03000000
 #define GF_UNHINTED 0x04000000

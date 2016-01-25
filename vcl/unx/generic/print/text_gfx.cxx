@@ -243,10 +243,6 @@ void PrinterGfx::DrawGlyphs(
                         nRotAngle = 2700;
                         aRotPoint = Point( -nAscend*nTextWidth/nTextHeight, -nDescend*nTextWidth/nTextHeight - nOffset );
                         break;
-                    case GF_VERT:
-                        nRotAngle = 1800;
-                        aRotPoint = Point( -nOffset, (nAscend+nDescend) );
-                        break;
                     case GF_ROTL:
                         nRotAngle = 900;
                         aRotPoint = Point( -nDescend*nTextWidth/nTextHeight, nOffset + nAscend*nTextWidth/nTextHeight );
