@@ -109,8 +109,8 @@ public:
         Init();
     }
 
-    int Parse( SotStorage* pStor );
-    int ConvertFromStarMath( SfxMedium& rMedium );
+    bool Parse( SotStorage* pStor );
+    bool ConvertFromStarMath( SfxMedium& rMedium );
 
 private:
 /*Ver 2 Header*/
@@ -124,23 +124,21 @@ private:
 
     void Init();
 
-    int HandleRecords(int nLevel=0,sal_uInt8 nSelector=0xFF,
-        sal_uInt8 nVariation=0xFF,int nRows=0,int nCols=0);
-    bool HandleSize(sal_Int16 nLSize,sal_Int16 nDSize, int &rSetSize);
-    void HandleAlign(sal_uInt8 nHAlign,sal_uInt8 nVAlign, int &rSetAlign);
-    int HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
-        sal_uInt8 nVariation);
-    int HandleMatrix(int nLevel,sal_uInt8 nSelector,sal_uInt8 nVariarion);
-    void HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,int &rCurCol,
-        int &rCurRow);
-    int HandleTemplate(int nLevel,sal_uInt8 &rSelector,sal_uInt8 &rVariation,
+    bool HandleRecords(int nLevel =0, sal_uInt8 nSelector =0xFF,
+        sal_uInt8 nVariation =0xFF, int nRows =0, int nCols =0);
+    bool HandleSize(sal_Int16 nLSize, sal_Int16 nDSize, int &rSetSize);
+    void HandleAlign(sal_uInt8 nHAlign, sal_uInt8 nVAlign, int &rSetAlign);
+    bool HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation);
+    bool HandleMatrix(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariarion);
+    void HandleMatrixSeparator(int nMatrixRows, int nMatrixCols, int &rCurCol, int &rCurRow);
+    bool HandleTemplate(int nLevel, sal_uInt8 &rSelector, sal_uInt8 &rVariation,
         sal_Int32 &rLastTemplateBracket);
     void HandleEmblishments();
     void HandleSetSize();
-    int HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
-        sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation,
-        bool bSilent);
+    bool HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
+        sal_uInt8 nTag, sal_uInt8 nSelector, sal_uInt8 nVariation, bool bSilent);
     void HandleNudge();
+
     static int xfLMOVE(sal_uInt8 nTest) {return nTest&0x80;}
     static int xfAUTO(sal_uInt8 nTest) {return nTest&0x10;}
     static int xfEMBELL(sal_uInt8 nTest) {return nTest&0x20;}
