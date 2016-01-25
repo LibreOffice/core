@@ -358,7 +358,7 @@ bool lcl_divideBy100( uno::Any& rDoubleAny )
 {
     bool bChanged = false;
     double fValue=0.0;
-    if( (rDoubleAny>>=fValue) && (fValue!=0.0) )
+    if( (rDoubleAny>>=fValue) && !rtl::math::approxEqual(fValue,0.0) )
     {
         fValue/=100.0;
         rDoubleAny = uno::makeAny(fValue);
