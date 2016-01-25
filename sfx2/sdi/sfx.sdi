@@ -4209,30 +4209,6 @@ SfxInt16Item PasteSpecial SID_PASTE_SPECIAL
     GroupId = GID_EDIT;
 ]
 
-SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
-(SfxUInt32Item Format SID_PASTE_UNFORMATTED)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
-]
-
 SfxVoidItem PasteOnly SID_PASTE_ONLY
 ()
 [
