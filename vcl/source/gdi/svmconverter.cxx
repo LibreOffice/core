@@ -30,7 +30,8 @@
 #include <vcl/lineinfo.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <cvtsvm.hxx>
+#include "svmconverter.hxx"
+
 #include <memory>
 
 // Inlines
