@@ -1437,7 +1437,7 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
 
     if ( m_pInterfaceContainer )
     {
-        ::comphelper::OInterfaceContainerHelper2* pContainer =
+        ::cppu::OInterfaceContainerHelper* pContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
@@ -1729,7 +1729,7 @@ void SAL_CALL OleComponent::setModified( sal_Bool bModified )
 
     if ( bModified && m_pInterfaceContainer )
     {
-        ::comphelper::OInterfaceContainerHelper2* pContainer =
+        ::cppu::OInterfaceContainerHelper* pContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<util::XModifyListener>::get());
         if ( pContainer != NULL )
         {

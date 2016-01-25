@@ -190,7 +190,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
 {
     if ( m_pInterfaceContainer )
     {
-        ::comphelper::OInterfaceContainerHelper2* pContainer = m_pInterfaceContainer->getContainer(
+        ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
                             cppu::UnoType<embed::XStateChangeListener>::get());
         if ( pContainer != NULL )
         {
