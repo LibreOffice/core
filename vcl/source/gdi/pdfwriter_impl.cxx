@@ -878,7 +878,7 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
     sal_Int64 nInt = (sal_Int64)fValue;
     fValue -= (double)nInt;
     // optimizing hardware may lead to a value of 1.0 after the subtraction
-    if( fValue == 1.0 || log10( 1.0-fValue ) <= -nPrecision )
+    if( rtl::math::approxEqual(fValue, 1.0) || log10( 1.0-fValue ) <= -nPrecision )
     {
         nInt++;
         fValue = 0.0;
