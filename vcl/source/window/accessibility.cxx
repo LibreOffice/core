@@ -71,7 +71,7 @@
 #include "brdwin.hxx"
 #include "helpwin.hxx"
 #include "sallayout.hxx"
-#include "dndlcon.hxx"
+#include "dndlistenercontainer.hxx"
 #include "dndeventdispatcher.hxx"
 
 #include "com/sun/star/accessibility/XAccessible.hpp"

@@ -18,7 +18,7 @@
  */
 
 #include "dndeventdispatcher.hxx"
-#include <dndlcon.hxx>
+#include "dndlistenercontainer.hxx"
 #include <window.h>
 #include <svdata.hxx>
 

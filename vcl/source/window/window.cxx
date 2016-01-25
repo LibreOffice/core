@@ -55,7 +55,7 @@
 #include <outdev.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
-#include <dndlcon.hxx>
+#include "dndlistenercontainer.hxx"
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XDisplayConnection.hpp>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-10 11:16:04 using:
+ Generated on 2016-01-25 19:34:08 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -36,7 +36,6 @@
 #include <functional>
 #include <iomanip>
 #include <limits.h>
-#include <map>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -44,19 +43,18 @@
 #include <outdev.h>
 #include <set>
 #include <sstream>
-#include <stack>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <type_traits>
-#include <typeinfo>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 #include <window.h>
 #include <boost/dynamic_bitset.hpp>
 #include <boost/functional/hash.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
@@ -72,7 +70,6 @@
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
-#include <osl/module.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <osl/pipe.h>
@@ -181,6 +178,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
@@ -219,7 +217,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -260,7 +257,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <dndlcon.hxx>
+#include <dndlistenercontainer.hxx>
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
 #include <helpwin.hxx>
@@ -292,7 +289,6 @@
 #include <tools/poly.hxx>
 #include <tools/rc.h>
 #include <tools/resid.hxx>
-#include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>

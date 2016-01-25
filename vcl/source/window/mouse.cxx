@@ -37,7 +37,8 @@
 #include <salobj.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
-#include <dndlcon.hxx>
+
+#include "dndlistenercontainer.hxx"
 #include "dndeventdispatcher.hxx"
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>

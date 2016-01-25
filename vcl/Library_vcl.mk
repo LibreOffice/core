@@ -161,7 +161,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/dialog \
     vcl/source/window/dlgctrl \
     vcl/source/window/dndeventdispatcher \
-    vcl/source/window/dndlcon \
+    vcl/source/window/dndlistenercontainer \
     vcl/source/window/dockingarea \
     vcl/source/window/dockmgr \
     vcl/source/window/dockwin \
