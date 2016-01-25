@@ -204,18 +204,11 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 
 bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
-    INetURLObject   aFileURL( rFileName );
     bool            bRet = false;
 
+    INetURLObject aFileURL = INetURLObject::TryUrlFromSystemPathAsObject( rFileName );
     if( aFileURL.GetProtocol() == INetProtocol::NotValid )
-    {
-        OUString aFileURLStr;
-
-        if( osl::FileBase::getFileURLFromSystemPath( rFileName, aFileURLStr ) == osl::FileBase::E_None )
-            aFileURL = INetURLObject( aFileURLStr );
-        else
-            aFileURL.SetSmartURL( rFileName );
-    }
+        aFileURL.SetSmartURL( rFileName );
 
     DBG_ASSERT( aFileURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 

@@ -266,15 +266,6 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
     bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
     bool bInteractive = !xApplication.is() || xApplication->getInteractive();
 
-    // we need to detect if this is a URL, if not then assume it's a file path
-        OUString aURL;
-        INetURLObject aObj;
-    aObj.SetURL( rFileName );
-    bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-    if ( bIsURL )
-        aURL = rFileName;
-    else
-        osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( mxContext );
 
     uno::Sequence< beans::PropertyValue > sProps( rProps );
@@ -294,6 +285,8 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
         }
     }
 
+    // we need to detect if this is a URL, if not then assume it's a file path
+    OUString aURL = INetURLObject::TryUrlFromSystemPathAsString( rFileName );
     uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL( aURL,
         "_default" ,
         frame::FrameSearchFlag::CREATE,

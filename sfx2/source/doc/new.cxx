@@ -189,18 +189,11 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
     if (m_pMoreBt->get_expanded() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
     {
 
-        OUString aFileName = aTemplates.GetPath(m_pRegionLb->GetSelectEntryPos(), nEntry - 1);
-        INetURLObject aTestObj(aFileName);
-        if (aTestObj.GetProtocol() == INetProtocol::NotValid)
-        {
-            // temp. fix until Templates are managed by UCB compatible service
-            // does NOT work with locally cached components !
-            OUString aTemp;
-            osl::FileBase::getFileURLFromSystemPath( aFileName, aTemp );
-            aFileName = aTemp;
-        }
-
-        INetURLObject aObj(aFileName);
+        // temp. fix until Templates are managed by UCB compatible service
+        // does NOT work with locally cached components !
+        OUString aFileName = INetURLObject::TryUrlFromSystemPathAsString(
+            aTemplates.GetPath(m_pRegionLb->GetSelectEntryPos(), nEntry - 1) );
+        INetURLObject aObj( aFileName );
         for (SfxObjectShell* pTmp = SfxObjectShell::GetFirst(); pTmp; pTmp = SfxObjectShell::GetNext(*pTmp))
         {
             //! fsys bug op==

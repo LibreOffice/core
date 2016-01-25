@@ -561,16 +561,8 @@ namespace svt
 
     OUString TemplateFolderCacheImpl::implParseSmart( const OUString& _rPath )
     {
-        INetURLObject aParser;
-        aParser.SetSmartProtocol( INetProtocol::File );
-        aParser.SetURL( _rPath );
-        if ( INetProtocol::NotValid == aParser.GetProtocol() )
-        {
-            OUString sURL;
-            osl::FileBase::getFileURLFromSystemPath( _rPath, sURL );
-            aParser.SetURL( sURL );
-        }
-        return aParser.GetMainURL( INetURLObject::DECODE_TO_IURI );
+        return INetURLObject::TryUrlFromSystemPathAsString(
+            _rPath, true, INetURLObject::DECODE_TO_IURI, INetProtocol::File );
     }
 
 

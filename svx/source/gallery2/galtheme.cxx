@@ -1207,16 +1207,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
             for( sal_uInt32 i = 0, nCount = aFileList.Count(); i < nCount; ++i )
             {
                 const OUString  aFile( aFileList.GetFile( i ) );
-                INetURLObject   aURL( aFile );
-
-                if( aURL.GetProtocol() == INetProtocol::NotValid )
-                {
-                    OUString aLocalURL;
-
-                    if( osl::FileBase::getFileURLFromSystemPath( aFile, aLocalURL ) == osl::FileBase::E_None )
-                        aURL = INetURLObject( aLocalURL );
-                }
-
+                INetURLObject   aURL = INetURLObject::TryUrlFromSystemPathAsObject( aFile );
                 if( aURL.GetProtocol() != INetProtocol::NotValid )
                     bRet = InsertFileOrDirURL( aURL, nInsertPos );
             }
@@ -1461,15 +1452,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                 }
                 else
                 {
-                    OUString aLocalURL;
-
-                    pObj->aURL = INetURLObject( aFileName );
-
-                    if( ( pObj->aURL.GetProtocol() == INetProtocol::NotValid ) &&
-                        osl::FileBase::getFileURLFromSystemPath( aFileName, aLocalURL ) == osl::FileBase::E_None )
-                    {
-                        pObj->aURL = INetURLObject( aLocalURL );
-                    }
+                    pObj->aURL = INetURLObject::TryUrlFromSystemPathAsObject( aFileName );
                 }
             }
             aObjectList.push_back( pObj );

@@ -267,20 +267,11 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate ) thr
     {
         throw uno::RuntimeException();
     }
-    OUString aURL;
-    INetURLObject aObj;
-    aObj.SetURL( sTemplate );
-    bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-    if ( bIsURL )
-        aURL = sTemplate;
-    else
-        osl::FileBase::getFileURLFromSystemPath( sTemplate, aURL );
-
     uno::Reference< word::XTemplate > xTemplate;
     uno::Reference<document::XDocumentPropertiesSupplier> const xDocPropSupp(
             getModel(), uno::UNO_QUERY_THROW );
     uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
-    xDocProps->setTemplateURL( aURL );
+    xDocProps->setTemplateURL( INetURLObject::TryUrlFromSystemPathAsString( sTemplate ) );
 }
 
 uno::Any SAL_CALL

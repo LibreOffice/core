@@ -512,16 +512,7 @@ bool SwXMLTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
 
 bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
 {
-    OUString aName( rFileName );
-    INetURLObject aObj( aName );
-    if ( aObj.GetProtocol() == INetProtocol::NotValid )
-    {
-        OUString aURL;
-        osl::FileBase::getFileURLFromSystemPath( aName, aURL );
-        aObj.SetURL( aURL );
-        aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
-    }
-
+    OUString aName = INetURLObject::TryUrlFromSystemPathAsString( rFileName, true );
     SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ );
     bool bRet = UCBStorage::IsStorageFile( pStm );
     delete pStm;

@@ -203,14 +203,7 @@ uno::Any SAL_CALL
 ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/, const uno::Any& ReadOnly, const uno::Any& Format, const uno::Any& /*Password*/, const uno::Any& /*WriteResPassword*/, const uno::Any& /*IgnoreReadOnlyRecommended*/, const uno::Any& /*Origin*/, const uno::Any& Delimiter, const uno::Any& /*Editable*/, const uno::Any& /*Notify*/, const uno::Any& /*Converter*/, const uno::Any& /*AddToMru*/ ) throw (uno::RuntimeException, std::exception)
 {
     // we need to detect if this is a URL, if not then assume it's a file path
-    OUString aURL;
-    INetURLObject aObj;
-    aObj.SetURL( rFileName );
-    bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-    if ( bIsURL )
-        aURL = rFileName;
-    else
-        osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
+    OUString aURL = INetURLObject::TryUrlFromSystemPathAsString( rFileName );
 
     uno::Sequence< beans::PropertyValue > sProps(0);
 

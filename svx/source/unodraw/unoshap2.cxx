@@ -1500,16 +1500,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 
                 if( !pSfxFilter )
                 {
-                    INetURLObject aURLObj( aURL );
-
-                    if( aURLObj.GetProtocol() == INetProtocol::NotValid )
-                    {
-                        OUString aValidURL;
-
-                        if( osl::FileBase::getFileURLFromSystemPath( aURL, aValidURL ) == osl::FileBase::E_None )
-                            aURLObj = INetURLObject( aValidURL );
-                    }
-
+                    INetURLObject aURLObj = INetURLObject::TryUrlFromSystemPathAsObject( aURL );
                     if( aURLObj.GetProtocol() != INetProtocol::NotValid )
                     {
                         GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
