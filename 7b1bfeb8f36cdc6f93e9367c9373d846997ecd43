@@ -33,6 +33,24 @@
       "revId": "7b1bfeb8f36cdc6f93e9367c9373d846997ecd43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_0e1dab0f",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/ScriptProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-25T11:06:03Z",
+      "side": 1,
+      "message": "Normally I would agree, but extensionRepository is referenced in line 224, thus the tests need to be split",
+      "parentUuid": "7aa08908_4e69738b",
+      "revId": "7b1bfeb8f36cdc6f93e9367c9373d846997ecd43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
