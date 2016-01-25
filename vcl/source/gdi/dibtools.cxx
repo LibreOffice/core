@@ -851,7 +851,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
         // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
         if (aHeader.nCompression == ZCOMPRESS || aHeader.nCompression == COMPRESS_NONE)
         {
-            sal_uInt64 nMaxWidth = rIStm.remainingSize();
+            sal_uInt64 nMaxWidth = pIStm->remainingSize();
             if (aHeader.nHeight != 0)
                 nMaxWidth /= aHeader.nHeight;
             if (nMaxWidth < nAlignedWidth)
