@@ -833,7 +833,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                 if (eKind!=SDREDGE_ORTHOLINES && eKind!=SDREDGE_BEZIER) return true;
             }
             if (ImpGetItem(*pSet,SDRATTR_EDGELINEDELTAANZ,pItem)) {
-                sal_uInt16 nCount=static_cast<const SdrEdgeLineDeltaAnzItem*>(pItem)->GetValue();
+                sal_uInt16 nCount=static_cast<const SdrEdgeLineDeltaCountItem*>(pItem)->GetValue();
                 if (nCount==0) return true;
                 if (nCount==1 && nWhich>SDRATTR_EDGELINE1DELTA) return true;
                 if (nCount==2 && nWhich>SDRATTR_EDGELINE2DELTA) return true;

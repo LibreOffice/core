@@ -23,13 +23,13 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svxdllapi.h>
 
-class SdrEdgeLineDeltaAnzItem: public SfxUInt16Item {
+class SdrEdgeLineDeltaCountItem: public SfxUInt16Item {
 public:
-    SdrEdgeLineDeltaAnzItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,nVal) {}
-    SdrEdgeLineDeltaAnzItem(SvStream& rIn): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,rIn)  {}
+    SdrEdgeLineDeltaCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,nVal) {}
+    SdrEdgeLineDeltaCountItem(SvStream& rIn): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,rIn)  {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override
     {
-        return new SdrEdgeLineDeltaAnzItem(*this);
+        return new SdrEdgeLineDeltaCountItem(*this);
     }
 };
 
