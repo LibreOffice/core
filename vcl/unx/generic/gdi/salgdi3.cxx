@@ -25,8 +25,6 @@
 #include "unx/salvd.h"
 #include "textrender.hxx"
 
-// X11SalGraphics
-
 GC
 X11SalGraphics::GetFontGC()
 {
