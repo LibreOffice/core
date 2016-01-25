@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_6e6c2f9d",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/ScriptProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-25T10:23:10Z",
+      "side": 1,
+      "message": "!originalContextURL.equals(contextUrl)\n\nimplies that one of the three\n\n if (originalContextURL.startsWith(\"...\n\nabove hit, so implies that extensionRepository is non-null\n\nadding the above check can even be wrong, if originalContextURL.equals(contextUrl)",
+      "revId": "7b1bfeb8f36cdc6f93e9367c9373d846997ecd43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_4e69738b",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/ScriptProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-25T10:23:10Z",
+      "side": 1,
+      "message": "if extensionDb and extensionRepository need to be non-null in UnoPkgContainer, it might make more sense to check them there, instead of spreading the checks here and relying on the current logic that both checks will have been passed if isPkgProvider is true",
+      "revId": "7b1bfeb8f36cdc6f93e9367c9373d846997ecd43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
