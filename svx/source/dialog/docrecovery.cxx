@@ -129,7 +129,7 @@ void RecoveryCore::saveBrokenTempEntries(const OUString& rPath)
     // work on a copied list only ...
     // Reason: We will get notifications from the core for every
     // changed or removed element. And that will change our m_lURLs list.
-    // That's not a good idea, if we use a stl iterator inbetween .-)
+    // That's not a good idea, if we use a stl iterator between .-)
     TURLList lURLs = m_lURLs;
     TURLList::const_iterator pIt;
     for (  pIt  = lURLs.begin();
@@ -167,7 +167,7 @@ void RecoveryCore::saveAllTempEntries(const OUString& rPath)
     // work on a copied list only ...
     // Reason: We will get notifications from the core for every
     // changed or removed element. And that will change our m_lURLs list.
-    // That's not a good idea, if we use a stl iterator inbetween .-)
+    // That's not a good idea, if we use a stl iterator between .-)
     TURLList lURLs = m_lURLs;
     TURLList::const_iterator pIt;
     for (  pIt  = lURLs.begin();
@@ -199,7 +199,7 @@ void RecoveryCore::forgetBrokenTempEntries()
     // work on a copied list only ...
     // Reason: We will get notifications from the core for every
     // changed or removed element. And that will change our m_lURLs list.
-    // That's not a good idea, if we use a stl iterator inbetween .-)
+    // That's not a good idea, if we use a stl iterator between .-)
     TURLList lURLs = m_lURLs;
     TURLList::const_iterator pIt;
     for (  pIt  = lURLs.begin();
@@ -231,7 +231,7 @@ void RecoveryCore::forgetAllRecoveryEntries()
     // work on a copied list only ...
     // Reason: We will get notifications from the core for every
     // changed or removed element. And that will change our m_lURLs list.
-    // That's not a good idea, if we use a stl iterator inbetween .-)
+    // That's not a good idea, if we use a stl iterator between .-)
     TURLList lURLs = m_lURLs;
     TURLList::const_iterator pIt;
     for (  pIt  = lURLs.begin();
@@ -260,7 +260,7 @@ void RecoveryCore::forgetBrokenRecoveryEntries()
     // work on a copied list only ...
     // Reason: We will get notifications from the core for every
     // changed or removed element. And that will change our m_lURLs list.
-    // That's not a good idea, if we use a stl iterator inbetween .-)
+    // That's not a good idea, if we use a stl iterator between .-)
     TURLList lURLs = m_lURLs;
     TURLList::const_iterator pIt;
     for (  pIt  = lURLs.begin();

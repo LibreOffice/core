@@ -87,7 +87,7 @@ public:
 private:
     typedef ::std::map< sal_Int32, ValueRangeVector >   ColSpanVectorMap;
 
-    ColSpanVectorMap    maColSpans;             /// Buffereed column spans, mapped by row index.
+    ColSpanVectorMap    maColSpans;             /// Buffered column spans, mapped by row index.
     sal_Int32           mnCurrRow;              /// Current row index used for buffered cell import.
 };
 

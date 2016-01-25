@@ -24,7 +24,7 @@
 #include <string.h>
 #include <limits.h>
 
-// creates the asymetric difference with another bitset
+// creates the asymmetric difference with another bitset
 
 IndexBitSet& IndexBitSet::operator-=(sal_uInt16 nBit)
 {

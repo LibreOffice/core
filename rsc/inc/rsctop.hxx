@@ -106,13 +106,13 @@ public:
                                 RSCINST * pGetInst );
 
                     // returns instance from a value
-                    // returnd pGetInst may be NULL
+                    // returned pGetInst may be NULL
     virtual ERRTYPE GetValueEle( const RSCINST & rInst, sal_Int32 lValue,
                                 RscTop * pCreateClass,
                                 RSCINST * pGetInst );
 
                     // returns instance from an array
-                    // returnd pGetInst may be NULL
+                    // returned pGetInst may be NULL
     virtual ERRTYPE GetArrayEle( const RSCINST & rInst, Atom nId,
                                 RscTop * pCreateClass,
                                 RSCINST * pGetInst );

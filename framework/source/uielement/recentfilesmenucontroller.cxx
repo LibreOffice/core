@@ -308,7 +308,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
     if ( xDispatch.is() )
     {
-        // Call dispatch asychronously as we can be destroyed while dispatch is
+        // Call dispatch asynchronously as we can be destroyed while dispatch is
         // executed. VCL is not able to survive this as it wants to call listeners
         // after select!!!
         LoadRecentFile* pLoadRecentFile = new LoadRecentFile;
