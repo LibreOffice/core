@@ -74,7 +74,7 @@ void MathType::Init()
  between math symbols and ordinary text e.g. 1=2 rather
  than 1 = 2
  */
-bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
+static bool MathType::LookupChar(sal_Unicode nChar, OUString &rStr, sal_uInt8 nVersion,
     sal_uInt8 nTypeFace)
 {
     bool bRet=false;
@@ -110,56 +110,56 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " rightarrow ";
             else
             {
-                rRet += OUString( nChar );
+                rStr += OUString( nChar );
                 bRet=true;
             }
             break;
         case 0x00fb:
             if ((nVersion < 3) && (nTypeFace == 0x81))
                 nChar = 0xDF;
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
         case 'a':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b1;
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
         case 'b':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b2;
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
         case 'l':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bb;
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
         case 'n':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bd;
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
         case 'r':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3c1;
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
         case 'D':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x394;
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
         case 0xa9:
             if ((nVersion < 3) && (nTypeFace == 0x82))
                 nChar = '\'';
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
         case 0x00f1:
@@ -167,7 +167,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " \\rangle ";
             else
             {
-                rRet += OUString( nChar );
+                rStr += OUString( nChar );
                 bRet=true;
             }
             break;
@@ -176,7 +176,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " <= ";
             else
             {
-                rRet += OUString( nChar );
+                rStr += OUString( nChar );
                 bRet=true;
             }
             break;
@@ -185,7 +185,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " drarrow ";
             else
             {
-                rRet += OUString( nChar );
+                rStr += OUString( nChar );
                 bRet=true;
             }
             break;
@@ -194,7 +194,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " %OMEGA ";
             else
             {
-                rRet += OUString( nChar );
+                rStr += OUString( nChar );
                 bRet=true;
             }
             break;
@@ -442,7 +442,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
             break;
         case 0x22b2:
         case 0x22b3:
-            rRet += " " + OUString( nChar ) + " ";
+            rStr += " " + OUString( nChar ) + " ";
             break;
         case 0x22a5:
             pC = " ortho ";
@@ -477,7 +477,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
             pC = " rdbracket ";
             break;
         case 0xe083:
-            rRet += "+";
+            rStr += "+";
             bRet=true;
             break;
         case '^':
@@ -504,25 +504,25 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
         case 0xef05:    //tiny space
         case 0xeb02:    //small space
         case 0xeb04:    //medium space
-            rRet += "`";
+            rStr += "`";
             break;
         case 0xeb05:    //large space
-            rRet += "~";
+            rStr += "~";
             break;
         case 0x3a9:
             pC = " %OMEGA ";
             break;
         default:
-            rRet += OUString( nChar );
+            rStr += OUString( nChar );
             bRet=true;
             break;
     }
     if (pC)
-        rRet += OUString::createFromAscii( pC );
+        rStr += OUString::createFromAscii( pC );
     return bRet;
 }
 
-void MathTypeFont::AppendStyleToText(OUString &rRet)
+void MathTypeFont::AppendStyleToText(OUString &rS)
 {
     const char *pC = nullptr;
     switch (nStyle)
@@ -541,7 +541,7 @@ void MathTypeFont::AppendStyleToText(OUString &rRet)
             break;
     }
     if (pC)
-        rRet += OUString::createFromAscii( pC );
+        rS += OUString::createFromAscii( pC );
 }
 
 void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
@@ -553,13 +553,13 @@ void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
     aFont.AppendStyleToText(rTxt);
 }
 
-int MathType::Parse(SotStorage *pStor)
+bool MathType::ParseMe(SotStorage *pStor)
 {
     tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
         "Equation Native",
         STREAM_STD_READ | StreamMode::NOCREATE);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
-        return 0;
+        return false;
     pS = &xSrc;
     pS->SetEndian( SvStreamEndian::LITTLE );
 
@@ -572,14 +572,14 @@ int MathType::Parse(SotStorage *pStor)
     pS->ReadUChar( nProdSubVersion );
 
     if (nVersion > 3)   // allow only supported versions of MathType to be parsed
-        return 0;
+        return false;
 
-    int nRet = HandleRecords();
+    bool bRet = HandleRecords();
     //little crude hack to close occasionally open expressions
     //a sophisticated system to determine what expressions are
     //opened is required, but this is as much work as rewriting
     //starmaths internals.
-    rRet += "{}";
+    rResult += "{}";
 
 #if OSL_DEBUG_LEVEL > 1
 #   ifdef CAOLAN
@@ -592,36 +592,36 @@ int MathType::Parse(SotStorage *pStor)
         "Possibly unfully parsed formula");
 #   endif
 #endif
-    return nRet;
+    return bRet;
 }
 
-static void lcl_PrependDummyTerm(OUString &rRet, sal_Int32 &rTextStart)
+static void lcl_PrependDummyTerm(OUString &rPrependTo, sal_Int32 &rTextStart)
 {
-    if ((rTextStart < rRet.getLength()) &&
-        (rRet[rTextStart] == '=') &&
-        ((rTextStart == 0) || (rRet[ rTextStart-1 ] == '{'))
+    if ((rTextStart < rPrependTo.getLength()) &&
+        (rPrependTo[rTextStart] == '=') &&
+        ((rTextStart == 0) || (rPrependTo[ rTextStart-1 ] == '{'))
        )
     {
-        rRet = rRet.replaceAt(rTextStart,0," {}");
+        rPrependTo = rPrependTo.replaceAt(rTextStart, 0, " {}");
         rTextStart+=3;
     }
 }
 
-static void lcl_AppendDummyTerm(OUString &rRet)
+static void lcl_AppendDummyTerm(OUString &rAppendTo)
 {
-    bool bOk=false;
-    for(int nI=rRet.getLength()-1;nI >= 0; nI--)
+    bool bOk = false;
+    for (int nI = rAppendTo.getLength() - 1; nI >= 0; nI--)
     {
         sal_Int32 nIdx = sal::static_int_cast< sal_Int32 >(nI);
-        sal_Unicode nChar = rRet[nIdx];
+        sal_Unicode nChar = rAppendTo[nIdx];
         if (nChar == ' ')
             continue;
-        if (rRet[nIdx] != '{')
+        if (rAppendTo[nIdx] != '{')
             bOk=true;
         break;
     }
     if (!bOk)   //No term, use dummy
-        rRet += " {}";
+        rAppendTo += " {}";
 }
 
 void MathType::HandleNudge()
@@ -638,15 +638,16 @@ void MathType::HandleNudge()
         pS->ReadUInt16( nYLongNudge );
     }
 }
+
 /* Fabulously complicated as many tokens have to be reordered and generally
  * moved around from mathtypes paradigm to starmaths. */
-int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
-    sal_uInt8 nVariation, int nMatrixRows,int nMatrixCols)
+bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
+    sal_uInt8 nVariation, int nMatrixRows, int nMatrixCols)
 {
     sal_uInt8 nTag,nRecord;
     sal_uInt8 nTabType,nTabStops;
     sal_uInt16 nTabOffset;
-    int i,nRet=1,newline=0;
+    int i, newline=0;
     bool bSilent=false;
     int nPart=0;
     OUString sPush,sMainTerm;
@@ -656,6 +657,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     sal_Int32 nTextStart = 0;
     sal_Int32 nSubSupStartPos = 0;
     sal_Int32 nLastTemplateBracket=-1;
+    bool bRet = true;
 
     do
     {
@@ -676,27 +678,27 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
         if ((nRecord == CHAR) && (!bIsSilent) && (!bOpenString))
         {
             bOpenString=true;
-            nTextStart = rRet.getLength();
+            nTextStart = rResult.getLength();
         }
         else if ((nRecord != CHAR) && (bOpenString))
         {
             bOpenString=false;
-            if ((rRet.getLength() - nTextStart) > 1)
+            if ( (rResult.getLength() - nTextStart) > 1 )
             {
                 OUString aStr;
                 TypeFaceToString(aStr,nTypeFace);
                 aStr += "\"";
-                rRet = rRet.replaceAt(nTextStart,0,aStr);
-                rRet += "\"";
+                rResult = rResult.replaceAt(nTextStart, 0, aStr);
+                rResult += "\"";
             }
-            else if (nRecord == END && !rRet.isEmpty())
+            else if ( nRecord == END && !rResult.isEmpty() )
             {
                 sal_Unicode cChar = 0;
-                sal_Int32 nI = rRet.getLength()-1;
-                while (nI && ((cChar = rRet[nI]) == ' '))
+                sal_Int32 nI = rResult.getLength() - 1;
+                while (nI && ((cChar = rResult[nI]) == ' '))
                     --nI;
                 if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
-                    rRet += "{}";
+                    rResult += "{}";
             }
         }
 
@@ -708,554 +710,554 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         HandleNudge();
 
                     if (newline>0)
-                        rRet += "\nnewline\n";
+                        rResult += "\nnewline\n";
                     if (!(xfNULL(nTag)))
                     {
                         switch (nSelector)
                         {
                         case 0x0:
                             if (nVariation==0)
-                                rRet += " langle ";
+                                rResult += " langle ";
                             else if (nVariation==1)
-                                rRet += " \\langle ";
+                                rResult += " \\langle ";
                             break;
                         case 0x1:
                             if (nVariation==0)
-                                rRet += " left (";
+                                rResult += " left (";
                             else if (nVariation==1)
-                                rRet += "\\(";
+                                rResult += "\\(";
                             break;
                         case 0x2:
                             if ((nVariation==0) || (nVariation==1))
-                                rRet += " left lbrace ";
+                                rResult += " left lbrace ";
                             else
-                                rRet += " left none ";
+                                rResult += " left none ";
                             break;
                         case 0x3:
                             if (nVariation==0)
-                                rRet += " left [";
+                                rResult += " left [";
                             else if (nVariation==1)
-                                rRet += "\\[";
+                                rResult += "\\[";
                             break;
                         case 0x8:
                         case 0xb:
-                            rRet += " \\[";
+                            rResult += " \\[";
                             break;
                         case 0x4:
                             if (nVariation==0)
-                                rRet += " lline ";
+                                rResult += " lline ";
                             else if (nVariation==1)
-                                rRet += " \\lline ";
+                                rResult += " \\lline ";
                             break;
                         case 0x5:
                             if (nVariation==0)
-                                rRet += " ldline ";
+                                rResult += " ldline ";
                             else if (nVariation==1)
-                                rRet += " \\ldline ";
+                                rResult += " \\ldline ";
                             break;
                         case 0x6:
                             if (nVariation == 0 || nVariation == 1)
-                                rRet += " left lfloor ";
+                                rResult += " left lfloor ";
                             else if (nVariation==1)
-                                rRet += " left none ";
+                                rResult += " left none ";
                             break;
                         case 0x7:
                             if (nVariation==0)
-                                rRet += " lceil ";
+                                rResult += " lceil ";
                             else if (nVariation==1)
-                                rRet += " \\lceil ";
+                                rResult += " \\lceil ";
                             break;
                         case 0x9:
                         case 0xa:
-                            rRet += " \\]";
+                            rResult += " \\]";
                             break;
                         case 0xc:
-                            rRet += " \\(";
+                            rResult += " \\(";
                             break;
                         case 0xd:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " sqrt";
+                                    rResult += " sqrt";
                                 else
                                 {
-                                    rRet += " nroot";
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    rResult += " nroot";
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
-                            rRet += " {";
+                            rResult += " {";
                             break;
                         case 0xe:
                             if (nPart == 0)
-                                rRet += " { ";
+                                rResult += " { ";
 
 
                             if (nPart == 1)
-                                rRet += " over ";
-                            rRet += " {";
+                                rResult += " over ";
+                            rResult += " {";
                             break;
                         case 0xf:
-                            nSubSupStartPos = rRet.getLength();
+                            nSubSupStartPos = rResult.getLength();
                             if ((nVariation == 0) ||
                                     ((nVariation == 2) && (nPart==1)))
                             {
-                                lcl_AppendDummyTerm(rRet);
-                                rRet += " rSup";
+                                lcl_AppendDummyTerm(rResult);
+                                rResult += " rSup";
                             }
                             else if ((nVariation == 1) ||
                                     ((nVariation == 2) && (nPart==0)))
                             {
-                                lcl_AppendDummyTerm(rRet);
-                                rRet += " rSub";
+                                lcl_AppendDummyTerm(rResult);
+                                rResult += " rSub";
                             }
-                            rRet += " {";
+                            rResult += " {";
                             break;
                         case 0x10:
                             if (nVariation == 0)
-                                rRet += " {underline ";
+                                rResult += " {underline ";
                             else if (nVariation == 1)
-                                rRet += " {underline underline ";
-                            rRet += " {";
+                                rResult += " {underline underline ";
+                            rResult += " {";
                             break;
                         case 0x11:
                             if (nVariation == 0)
-                                rRet += " {overline ";
+                                rResult += " {overline ";
                             else if (nVariation == 1)
-                                rRet += " {overline overline ";
-                            rRet += " {";
+                                rResult += " {overline overline ";
+                            rResult += " {";
                             break;
                         case 0x12:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " widevec ";//left arrow above
+                                    rResult += " widevec "; //left arrow above
                                 else if (nVariation == 1)
-                                    rRet += " widevec ";//left arrow below
-                                rRet += " {";
+                                    rResult += " widevec "; //left arrow below
+                                rResult += " {";
                             }
                             break;
                         case 0x13:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " widevec ";//right arrow above
+                                    rResult += " widevec "; //right arrow above
                                 else if (nVariation == 1)
-                                    rRet += " widevec ";//right arrow below
-                                rRet += " {";
+                                    rResult += " widevec "; //right arrow below
+                                rResult += " {";
                             }
                             break;
                         case 0x14:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " widevec ";//double arrow above
+                                    rResult += " widevec "; //double arrow above
                                 else if (nVariation == 1)
-                                    rRet += " widevec ";//double arrow below
-                                rRet += " {";
+                                    rResult += " widevec "; //double arrow below
+                                rResult += " {";
                             }
                             break;
                         case 0x15:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 3) || (nVariation == 4))
-                                    rRet += " lInt";
+                                    rResult += " lInt";
                                 else
-                                    rRet += " Int";
+                                    rResult += " Int";
                                 if ( (nVariation != 0) && (nVariation != 3))
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 4)) && (nPart==1))
-                                rRet += " rSub";
+                                rResult += " rSub";
                             else if ((nVariation == 2) && (nPart==2))
-                                rRet += " rSup";
+                                rResult += " rSup";
                             else if ((nVariation == 2) && (nPart==1))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x16:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 2) || (nVariation == 3))
-                                    rRet += " llInt";
+                                    rResult += " llInt";
                                 else
-                                    rRet += " iInt";
+                                    rResult += " iInt";
                                 if ( (nVariation != 0) && (nVariation != 2))
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 3)) && (nPart==1))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x17:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 2) || (nVariation == 3))
-                                    rRet += " lllInt";
+                                    rResult += " lllInt";
                                 else
-                                    rRet += " iiInt";
+                                    rResult += " iiInt";
                                 if ( (nVariation != 0) && (nVariation != 2))
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 3)) && (nPart==1))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x18:
                             if (nPart == 0)
                             {
                                 if (nVariation == 2)
-                                    rRet += " lInt";
+                                    rResult += " lInt";
                                 else
-                                    rRet += " Int";
-                                sPush = rRet;
-                                rRet.clear();
+                                    rResult += " Int";
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 2)) && (nPart==1))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 0) && (nPart==2))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 0) && (nPart==1))
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x19:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " llInt";
+                                    rResult += " llInt";
                                 else
-                                    rRet += " iInt";
-                                sPush = rRet;
-                                rRet.clear();
+                                    rResult += " iInt";
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if (nPart==1)
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x1a:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet += " lllInt";
+                                    rResult += " lllInt";
                                 else
-                                    rRet += " iiInt";
-                                sPush = rRet;
-                                rRet.clear();
+                                    rResult += " iiInt";
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if (nPart==1)
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x1b:
                         case 0x1c:
-                            rRet += " {";
+                            rResult += " {";
                             break;
                         case 0x1d:
                             if (nPart == 0)
                             {
-                                rRet += " Sum";
+                                rResult += " Sum";
                                 if (nVariation != 2)
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x1e:
                             if (nPart == 0)
                             {
-                                rRet += " Sum";
-                                sPush = rRet;
-                                rRet.clear();
+                                rResult += " Sum";
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " rSub";
+                                rResult += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " rSup";
+                                rResult += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x1f:
                             if (nPart == 0)
                             {
-                                rRet += " Prod";
+                                rResult += " Prod";
                                 if (nVariation != 2)
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x20:
                             if (nPart == 0)
                             {
-                                rRet += " Prod";
-                                sPush = rRet;
-                                rRet.clear();
+                                rResult += " Prod";
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " rSub";
+                                rResult += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " rSup";
+                                rResult += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x21:
                             if (nPart == 0)
                             {
-                                rRet += " coProd";
+                                rResult += " coProd";
                                 if (nVariation != 2)
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x22:
                             if (nPart == 0)
                             {
-                                rRet += " coProd";
-                                sPush = rRet;
-                                rRet.clear();
+                                rResult += " coProd";
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " rSub";
+                                rResult += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " rSup";
+                                rResult += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x23:
                             if (nPart == 0)
                             {
-                                rRet += " union"; //union
+                                rResult += " union"; //union
                                 if (nVariation != 2)
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x24:
                             if (nPart == 0)
                             {
-                                rRet += " union"; //union
-                                sPush = rRet;
-                                rRet.clear();
+                                rResult += " union"; //union
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " rSub";
+                                rResult += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " rSup";
+                                rResult += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x25:
                             if (nPart == 0)
                             {
-                                rRet += " intersect"; //intersect
+                                rResult += " intersect"; //intersect
                                 if (nVariation != 2)
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x26:
                             if (nPart == 0)
                             {
-                                rRet += " intersect"; //intersect
-                                sPush = rRet;
-                                rRet.clear();
+                                rResult += " intersect"; //intersect
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " rSub";
+                                rResult += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                rRet += " rSup";
+                                rResult += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x27:
                             if ((nVariation == 0) && (nPart==1))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 2) && (nPart==1))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 2) && (nPart==2))
-                                rRet += " cSup";
-                            rRet += " {";
+                                rResult += " cSup";
+                            rResult += " {";
                             break;
                         case 0x28:
                             if (nVariation == 0)
                             {
                                 if (nPart == 0)
                                 {
-                                    sPush = rRet;
-                                    rRet.clear();
+                                    sPush = rResult;
+                                    rResult.clear();
                                 }
                             }
-                            rRet += " {";
+                            rResult += " {";
                             if (nVariation == 0)
                             {
                                 if (nPart == 1)
-                                    rRet += "alignr ";
+                                    rResult += "alignr ";
                             }
                             if (nPart == 0)
-                                rRet += "\\lline ";
+                                rResult += "\\lline ";
                             if (nVariation == 1)
-                                rRet += "overline ";
+                                rResult += "overline ";
                             break;
                         case 0x29:
-                            rRet += " {";
+                            rResult += " {";
                             break;
                         case 0x2a:
                             if (nPart == 0)
                             {
-                                sPush = rRet;
-                                rRet.clear();
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if ((nVariation == 0) && (nPart==0))
-                                rRet += " rSup";
+                                rResult += " rSup";
                             else if ((nVariation == 2) && (nPart==1))
-                                rRet += " rSup";
+                                rResult += " rSup";
                             else if ((nVariation == 1) && (nPart==0))
-                                rRet += " rSub";
+                                rResult += " rSub";
                             else if ((nVariation == 2) && (nPart==0))
-                                rRet += " rSub";
-                            rRet += " {";
+                                rResult += " rSub";
+                            rResult += " {";
                             break;
                         case 0x2b:
                             if (nPart == 0)
                             {
-                                sPush = rRet;
-                                rRet.clear();
+                                sPush = rResult;
+                                rResult.clear();
                             }
                             if ((nVariation == 0) && (nPart==0))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 2) && (nPart==1))
-                                rRet += " cSup";
+                                rResult += " cSup";
                             else if ((nVariation == 1) && (nPart==0))
-                                rRet += " cSub";
+                                rResult += " cSub";
                             else if ((nVariation == 2) && (nPart==0))
-                                rRet += " cSub";
-                            rRet += " {";
+                                rResult += " cSub";
+                            rResult += " {";
                             break;
                         case 0x2c:
                             if (nPart == 0)
-                                rRet += "\"\"";
+                                rResult += "\"\"";
                             if ((nVariation == 0)
                                     || ((nVariation == 2) && (nPart==1)))
-                                rRet += " lSup";
+                                rResult += " lSup";
                             else if ((nVariation == 1)
                                     || ((nVariation == 2) && (nPart==0)))
-                                rRet += " lSub";
-                            rRet += " {";
+                                rResult += " lSub";
+                            rResult += " {";
                             break;
                         case 0x2d:
                             if (nVariation==0)
                             {
                                 if (nPart == 0)
-                                    rRet += " langle ";
+                                    rResult += " langle ";
                             }
                             else if (nVariation==1)
                             {
-                                rRet += " \\langle ";
+                                rResult += " \\langle ";
                                 newline--;
                             }
                             else if (nVariation==2)
                             {
-                                rRet += " \\lline ";
+                                rResult += " \\lline ";
                                 newline--;
                             }
                             break;
                         case 0x2e:
                             if (nVariation == 0)
-                                rRet += " widevec ";//left below
+                                rResult += " widevec "; //left below
                             else if (nVariation == 1)
-                                rRet += " widevec ";//right below
+                                rResult += " widevec "; //right below
                             else if (nVariation == 2)
-                                rRet += " widevec ";//double headed below
-                            rRet += " {";
+                                rResult += " widevec "; //double headed below
+                            rResult += " {";
                             break;
                         case 0x2f:
                             if (nVariation == 0)
-                                rRet += " widevec ";//left above
+                                rResult += " widevec "; //left above
                             else if (nVariation == 1)
-                                rRet += " widevec ";//right above
+                                rResult += " widevec "; //right above
                             else if (nVariation == 2)
-                                rRet += " widevec ";//double headed above
-                            rRet += " {";
+                                rResult += " widevec "; //double headed above
+                            rResult += " {";
                             break;
                         default:
                             break;
                         }
                         sal_Int16 nOldCurSize=nCurSize;
-                        sal_Int32 nSizeStartPos = rRet.getLength();
+                        sal_Int32 nSizeStartPos = rResult.getLength();
                         HandleSize(nLSize,nDSize,nSetSize);
-                        nRet = HandleRecords(nLevel+1);
+                        bRet = HandleRecords( nLevel + 1 );
                         while (nSetSize)
                         {
                             bool bOk=false;
-                            sal_Int32 nI = rRet.lastIndexOf('{');
+                            sal_Int32 nI = rResult.lastIndexOf('{');
                             if (nI != -1)
                             {
-                                for(nI=nI+1;nI<rRet.getLength();nI++)
-                                    if (rRet[nI] != ' ')
+                                for (nI = nI + 1; nI < rResult.getLength(); nI++)
+                                    if (rResult[nI] != ' ')
                                     {
                                         bOk=true;
                                         break;
@@ -1265,90 +1267,88 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 bOk=true;
 
                             if (bOk)
-                                rRet += "} ";
+                                rResult += "} ";
                             else
-                                rRet = rRet.replaceAt( nSizeStartPos, rRet.getLength(), "" );
+                                rResult = rResult.replaceAt( nSizeStartPos, rResult.getLength(), "" );
                             nSetSize--;
                             nCurSize=nOldCurSize;
                         }
 
-
-                        HandleMatrixSeparator(nMatrixRows,nMatrixCols,
-                            nCurCol,nCurRow);
+                        HandleMatrixSeparator( nMatrixRows, nMatrixCols, nCurCol, nCurRow );
 
                         switch (nSelector)
                         {
                         case 0x0:
                             if (nVariation==0)
-                                rRet += " rangle ";
+                                rResult += " rangle ";
                             else if (nVariation==2)
-                                rRet += " \\rangle ";
+                                rResult += " \\rangle ";
                             break;
                         case 0x1:
                             if (nVariation==0)
-                                rRet += " right )";
+                                rResult += " right )";
                             else if (nVariation==2)
-                                rRet += "\\)";
+                                rResult += "\\)";
                             break;
                         case 0x2:
                             if ((nVariation==0) || (nVariation==2))
-                                rRet += " right rbrace ";
+                                rResult += " right rbrace ";
                             else
-                                rRet += " right none ";
+                                rResult += " right none ";
                             break;
                         case 0x3:
                             if (nVariation==0)
-                                rRet += " right ]";
+                                rResult += " right ]";
                             else if (nVariation==2)
-                                rRet += "\\]";
+                                rResult += "\\]";
                             break;
                         case 0x4:
                             if (nVariation==0)
-                                rRet += " rline ";
+                                rResult += " rline ";
                             else if (nVariation==2)
-                                rRet += " \\rline ";
+                                rResult += " \\rline ";
                             break;
                         case 0x5:
                             if (nVariation==0)
-                                rRet += " rdline ";
+                                rResult += " rdline ";
                             else if (nVariation==2)
-                                rRet += " \\rdline ";
+                                rResult += " \\rdline ";
                             break;
                         case 0x6:
                             if (nVariation == 0 || nVariation == 2)
-                                rRet += " right rfloor ";
+                                rResult += " right rfloor ";
                             else if (nVariation==2)
-                                rRet += " right none ";
+                                rResult += " right none ";
                             break;
                         case 0x7:
                             if (nVariation==0)
-                                rRet += " rceil ";
+                                rResult += " rceil ";
                             else if (nVariation==2)
-                                rRet += " \\rceil ";
+                                rResult += " \\rceil ";
                             break;
                         case 0x8:
                         case 0xa:
-                            rRet += "\\[";
+                            rResult += "\\[";
                             break;
                         case 0x9:
                         case 0xc:
-                            rRet += "\\]";
+                            rResult += "\\]";
                             break;
                         case 0xd:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nVariation == 1)
                             {
                                 if (nPart == 0)
                                 {
                                     newline--;
-                                    sMainTerm = rRet;
-                                    rRet.clear();
+                                    sMainTerm = rResult;
+                                    rResult.clear();
                                 }
                                 else
                                 {
-                                    sPush += rRet;
-                                    rRet = sPush;
-                                    rRet += sMainTerm;
+                                    sPush += rResult;
+                                    rResult = sPush;
+                                    rResult += sMainTerm;
                                 }
                             }
                             else
@@ -1359,14 +1359,14 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case 0xb:
-                            rRet += "\\)";
+                            rResult += "\\)";
                             break;
                         case 0xe:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                                 newline--;
                             else
-                                rRet += "} ";
+                                rResult += "} ";
                             nPart++;
                             break;
                         case 0xf:
@@ -1376,11 +1376,11 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 newline--;
 
                             bool bOk=false;
-                            sal_Int32 nI = rRet.lastIndexOf('{');
+                            sal_Int32 nI = rResult.lastIndexOf('{');
                             if (nI != -1)
                             {
-                                for(nI=nI+1;nI<rRet.getLength();nI++)
-                                    if (rRet[nI] != ' ')
+                                for (nI = nI + 1; nI < rResult.getLength(); nI++)
+                                    if (rResult[nI] != ' ')
                                     {
                                         bOk=true;
                                         break;
@@ -1390,9 +1390,9 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 bOk=true;
 
                             if (bOk)
-                                rRet += "} ";
+                                rResult += "} ";
                             else
-                                rRet = rRet.replaceAt(nSubSupStartPos, rRet.getLength(), "");
+                                rResult = rResult.replaceAt(nSubSupStartPos, rResult.getLength(), "");
                             nPart++;
                             }
                             break;
@@ -1400,16 +1400,16 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if ((nPart == 0) &&
                                     ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
-                            rRet += "} ";
+                            rResult += "} ";
                             nPart++;
                             break;
                         case 0x2e:
                         case 0x2f:
-                            rRet += "} ";
+                            rResult += "} ";
                             break;
                         case 0x10:
                         case 0x11:
-                            rRet += "}} ";
+                            rResult += "}} ";
                             break;
                         case 0x12:
                         case 0x13:
@@ -1417,25 +1417,25 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 newline--;
-                                rRet += "} ";
+                                rResult += "} ";
                             }
                             nPart++;
                             break;
                         case 0x1b:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                             {
                                 newline--;
-                                rRet += "overbrace";
+                                rResult += "overbrace";
                             }
                             nPart++;
                             break;
                         case 0x1c:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                             {
                                 newline--;
-                                rRet += "underbrace";
+                                rResult += "underbrace";
                             }
                             nPart++;
                             break;
@@ -1445,24 +1445,24 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             else if ((nPart==1) &&
                                     ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
-                            rRet += "} ";
+                            rResult += "} ";
                             nPart++;
                             break;
                         case 0x28:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nVariation == 0)
                             {
                                 if (nPart == 0)
                                 {
-                                    sMainTerm = rRet;
-                                    rRet.clear();
+                                    sMainTerm = rResult;
+                                    rResult.clear();
                                 }
                                 else
                                 {
-                                    sPush += rRet;
-                                    rRet = sPush;
-                                    rRet += " over ";
-                                    rRet += sMainTerm;
+                                    sPush += rResult;
+                                    rResult = sPush;
+                                    rResult += " over ";
+                                    rResult += sMainTerm;
                                 }
                             }
                             if (nPart == 0)
@@ -1470,17 +1470,17 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case 0x29:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                             {
                                 newline--;
                                 switch (nVariation)
                                 {
                                 case 1:
-                                    rRet += "slash";
+                                    rResult += "slash";
                                     break;
                                 default:
-                                    rRet += "wideslash";
+                                    rResult += "wideslash";
                                     break;
                                 }
                             }
@@ -1496,156 +1496,156 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         case 0x24:
                         case 0x25:
                         case 0x26:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                             {
                                 if (nVariation != 2)
                                 {
-                                    sMainTerm = rRet;
-                                    rRet.clear();
+                                    sMainTerm = rResult;
+                                    rResult.clear();
                                 }
                                 newline--;
                             }
                             else if ((nPart == 1) && (nVariation == 0))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                                 newline--;
                             }
                             else if ((nPart == 1) && (nVariation == 1))
                                 newline--;
                             else if ((nPart == 2) && (nVariation == 1))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                                 newline--;
                             }
                             nPart++;
                             break;
                         case 0x15:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                             {
                                 if ((nVariation != 0) && (nVariation != 3))
                                 {
-                                    sMainTerm = rRet;
-                                    rRet.clear();
+                                    sMainTerm = rResult;
+                                    rResult.clear();
                                 }
                                 newline--;
                             }
                             else if ((nPart == 1) &&
                                     ((nVariation == 1) || (nVariation==4)))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                                 newline--;
                             }
                             else if ((nPart == 1) && (nVariation == 2))
                                 newline--;
                             else if ((nPart == 2) && (nVariation == 2))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                                 newline--;
                             }
                             nPart++;
                             break;
                         case 0x16:
                         case 0x17:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                             {
                                 if ((nVariation != 0) && (nVariation != 2))
                                 {
-                                    sMainTerm = rRet;
-                                    rRet.clear();
+                                    sMainTerm = rResult;
+                                    rResult.clear();
                                 }
                                 newline--;
                             }
                             else if ((nPart == 1) &&
                                     ((nVariation == 1) || (nVariation==3)))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                                 newline--;
                             }
                             nPart++;
                             break;
                         case 0x18:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                             {
-                                sMainTerm = rRet;
-                                rRet.clear();
+                                sMainTerm = rResult;
+                                rResult.clear();
                                 newline--;
                             }
                             else if ((nPart == 1) &&
                                     ((nVariation == 1) || (nVariation==2)))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                                 newline--;
                             }
                             else if ((nPart == 1) && (nVariation == 0))
                                 newline--;
                             else if ((nPart == 2) && (nVariation == 0))
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                                 newline--;
                             }
                             nPart++;
                             break;
                         case 0x19:
                         case 0x1a:
-                            rRet += "} ";
+                            rResult += "} ";
                             if (nPart == 0)
                             {
-                                sMainTerm = rRet;
-                                rRet.clear();
+                                sMainTerm = rResult;
+                                rResult.clear();
                                 newline--;
                             }
                             else if (nPart == 1)
                             {
-                                sPush += rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                                 newline--;
                             }
                             nPart++;
                             break;
                         case 0x2a:
                         case 0x2b:
-                            rRet += "} ";
+                            rResult += "} ";
 
                             if ((nPart == 0) &&
                                     ((nVariation == 0) || (nVariation == 1)))
                             {
-                                sMainTerm = rRet;
-                                rRet.clear();
+                                sMainTerm = rResult;
+                                rResult.clear();
                                 newline--;
                             }
                             else if ((nPart == 0) && (nVariation == 2))
                                 newline--;
                             else if ((nPart == 1) && (nVariation == 2))
                             {
-                                sMainTerm = rRet;
-                                rRet.clear();
+                                sMainTerm = rResult;
+                                rResult.clear();
                                 newline--;
                             }
                             else if ((nPart == 2) || ((((nPart == 1) &&
                                     (nVariation == 0)) || (nVariation == 1))))
                             {
-                                sPush+=rRet;
-                                rRet = sPush;
-                                rRet += sMainTerm;
+                                sPush += rResult;
+                                rResult = sPush;
+                                rResult += sMainTerm;
                             }
                             nPart++;
                             break;
@@ -1655,15 +1655,15 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nPart == 0)
                                 {
                                     newline--; //there is another term to arrive
-                                    rRet += " mline ";
+                                    rResult += " mline ";
                                 }
                                 else
-                                    rRet += " rangle ";
+                                    rResult += " rangle ";
                             }
                             else if (nVariation==1)
-                                rRet += " \\lline ";
+                                rResult += " \\lline ";
                             else if (nVariation==2)
-                                rRet += " \\rangle ";
+                                rResult += " \\rangle ";
                             nPart++;
                             break;
                         default:
@@ -1683,26 +1683,24 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
             case CHAR:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                nRet = HandleChar(nTextStart,nSetSize,nLevel,nTag,nSelector,
-                    nVariation,bSilent);
-                 break;
+                bRet = HandleChar( nTextStart, nSetSize, nLevel, nTag, nSelector, nVariation, bSilent );
+                break;
             case TMPL:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                nRet = HandleTemplate(nLevel,nSelector,nVariation,
-                    nLastTemplateBracket);
+                bRet = HandleTemplate( nLevel, nSelector, nVariation, nLastTemplateBracket );
                 break;
             case PILE:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                nRet = HandlePile(nSetAlign,nLevel,nSelector,nVariation);
-                HandleMatrixSeparator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
+                bRet = HandlePile( nSetAlign, nLevel, nSelector, nVariation );
+                HandleMatrixSeparator( nMatrixRows, nMatrixCols, nCurCol, nCurRow );
                 break;
             case MATRIX:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                nRet = HandleMatrix(nLevel,nSelector,nVariation);
-                HandleMatrixSeparator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
+                bRet = HandleMatrix( nLevel, nSelector, nVariation );
+                HandleMatrixSeparator( nMatrixRows, nMatrixCols, nCurCol, nCurRow );
                 break;
             case EMBEL:
                 if (xfLMOVE(nTag))
@@ -1711,7 +1709,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 break;
             case RULER:
                 pS->ReadUChar( nTabStops );
-                for (i=0;i<nTabStops;i++)
+                for (i = 0; i < nTabStops; i++)
                 {
                     pS->ReadUChar( nTabType );
                     pS->ReadUInt16( nTabOffset );
@@ -1760,10 +1758,10 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     while (nRecord != END && !pS->IsEof());
     while (nSetSize)
     {
-        rRet += "}";
+        rResult += "}";
         nSetSize--;
     }
-    return nRet;
+    return bRet;
 }
 
 /*Simply determine if we are at the end of a record or the end of a line,
@@ -1773,15 +1771,15 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
  of a pile, so we must strip the last separator of a pile after this
  is detected in the PILE handler
  */
-void MathType::HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,
-    int &rCurCol,int &rCurRow)
+void MathType::HandleMatrixSeparator(int nMatrixRows, int nMatrixCols,
+    int &rCurCol, int &rCurRow)
 {
     if (nMatrixRows!=0)
     {
         if (rCurCol == nMatrixCols-1)
         {
             if (rCurRow != nMatrixRows-1)
-                rRet += " {} ##\n";
+                rResult += " {} ##\n";
             if (nMatrixRows!=-1)
             {
                 rCurCol=0;
@@ -1790,11 +1788,11 @@ void MathType::HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,
         }
         else
         {
-            rRet += " {} # ";
+            rResult += " {} # ";
             if (nMatrixRows!=-1)
                 rCurCol++;
             else
-                rRet += "\n";
+                rResult += "\n";
         }
     }
 }
@@ -1807,21 +1805,22 @@ void MathType::HandleAlign(sal_uInt8 nHorAlign, sal_uInt8 /*nVAlign*/, int &rSet
     {
     case 1:
     default:
-        rRet += "alignl {";
+        rResult += "alignl";
         break;
     case 2:
-        rRet += "alignc {";
+        rResult += "alignc";
         break;
     case 3:
-        rRet += "alignr {";
+        rResult += "alignr";
         break;
     }
+    rResult += " {";
     rSetAlign++;
 }
 
 /* set size of text, complexity due to overuse of signedness as a flag
  * indicator by mathtype file format*/
-bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
+bool MathType::HandleSize(sal_Int16 nLstSize, sal_Int16 nDefSize, int &rSetSize)
 {
     bool bRet=false;
     if (nLstSize < 0)
@@ -1831,15 +1830,15 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
             if (rSetSize)
             {
                 rSetSize--;
-                rRet += "}";
+                rResult += "}";
                 bRet=true;
             }
             if (-nLstSize/32 != nLastSize)
             {
                 nLastSize = nCurSize;
-                rRet += " size ";
-                rRet += OUString::number(-nLstSize/32);
-                rRet += "{";
+                rResult += " size ";
+                rResult += OUString::number(-nLstSize/32);
+                rResult += "{";
                 bRet=true;
                 rSetSize++;
             }
@@ -1860,15 +1859,15 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
             if (rSetSize)
             {
                 rSetSize--;
-                rRet += "}";
+                rResult += "}";
                 bRet=true;
             }
             if (nLstSize != nLastSize)
             {
                 nLastSize = nCurSize;
-                rRet += " size ";
-                rRet += OUString::number(nLstSize);
-                rRet += "{";
+                rResult += " size ";
+                rResult += OUString::number(nLstSize);
+                rResult += "{";
                 bRet=true;
                 rSetSize++;
             }
@@ -1878,10 +1877,10 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
     return bRet;
 }
 
-int MathType::ConvertFromStarMath( SfxMedium& rMedium )
+bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
 {
     if (!pTree)
-        return 0;
+        return false;
 
     SvStream *pStream = rMedium.GetOutStream();
     if ( pStream )
@@ -1921,7 +1920,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
 
         tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream("Equation Native");
         if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
-            return 0;
+            return false;
 
         pS = &xSrc;
         pS->SetEndian( SvStreamEndian::LITTLE );
@@ -1946,7 +1945,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
         pStor->Commit();
     }
 
-    return 1;
+    return true;
 }
 
 
@@ -2158,7 +2157,6 @@ void MathType::HandleRoot(SmNode *pNode,int nLevel)
         pS->WriteUChar( LINE|0x10 ); //dummy line
 
 
-
     pS->WriteUChar( END );
 }
 
@@ -2216,7 +2214,6 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
     }
     return nVariation2;
 }
-
 
 
 /*
@@ -2598,7 +2595,6 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
         pS->WriteUChar( LINE|0x10 );
     }
 
-
     pS->WriteUChar( 0x0D );
     switch(pNode->GetToken().eType)
     {
@@ -2643,29 +2639,27 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
 }
 
 
-int MathType::HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
-    sal_uInt8 nVariation)
+bool MathType::HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
 {
     pS->ReadUChar( nHAlign );
     pS->ReadUChar( nVAlign );
 
     HandleAlign(nHAlign,nVAlign,rSetAlign);
 
-    rRet += " stack {\n";
-    int nRet = HandleRecords(nLevel+1,nSelector,nVariation,-1,-1);
-    rRet = rRet.replaceAt(rRet.getLength()-3,2,"");
-    rRet += "} ";
+    rResult += " stack {\n";
+    bool bRet = HandleRecords( nLevel+1, nSelector, nVariation, -1, -1 );
+    rResult = rResult.replaceAt( rResult.getLength() - 3, 2, "" );
+    rResult += "} ";
 
     while (rSetAlign)
     {
-        rRet += "} ";
+        rResult += "} ";
         rSetAlign--;
     }
-    return nRet;
+    return bRet;
 }
 
-int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
-    sal_uInt8 nVariation)
+bool MathType::HandleMatrix(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
 {
     sal_uInt8 nH_just,nV_just,nRows,nCols;
     pS->ReadUChar( nVAlign );
@@ -2681,19 +2675,19 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
     if (((nCols+1)*2)%8)
         nBytes++;
     pS->SeekRel(nBytes);
-    rRet += " matrix {\n";
-    int nRet = HandleRecords(nLevel+1,nSelector,nVariation,nRows,nCols);
+    rResult += " matrix {\n";
+    bool bRet = HandleRecords( nLevel+1, nSelector, nVariation, nRows, nCols );
 
-    sal_Int32 nI = rRet.lastIndexOf('#');
+    sal_Int32 nI = rResult.lastIndexOf('#');
     if (nI > 0)
-        if (rRet[nI-1] != '#')  //missing column
-            rRet += "{}";
+        if (rResult[nI-1] != '#')  //missing column
+            rResult += "{}";
 
-    rRet += "\n} ";
-    return nRet;
+    rResult += "\n} ";
+    return bRet;
 }
 
-int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
+bool MathType::HandleTemplate(int nLevel, sal_uInt8 &rSelector,
     sal_uInt8 &rVariation, sal_Int32 &rLastTemplateBracket)
 {
     sal_uInt8 nOption; //This appears utterly unused
@@ -2717,8 +2711,8 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     if ( (rSelector == 0xf) && (rLastTemplateBracket != -1) )
     {
         bRemove=true;
-        for (sal_Int32 nI = rLastTemplateBracket+1; nI < rRet.getLength(); nI++ )
-            if (rRet[nI] != ' ')
+        for (sal_Int32 nI = rLastTemplateBracket+1; nI < rResult.getLength(); nI++ )
+            if (rResult[nI] != ' ')
             {
                 bRemove=false;
                 break;
@@ -2726,21 +2720,21 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     }
 
     //suborderlist
-    int nRet = HandleRecords(nLevel+1,rSelector,rVariation);
+    bool bRet = HandleRecords(nLevel+1,rSelector,rVariation);
 
     if (bRemove)
     {
-        rRet = rRet.replaceAt(rLastTemplateBracket,1,"");
-        rRet += "} ";
+        rResult = rResult.replaceAt(rLastTemplateBracket, 1, "");
+        rResult += "} ";
         rLastTemplateBracket = -1;
     }
     if (rSelector == 0xf)
-        rLastTemplateBracket = rRet.lastIndexOf('}');
+        rLastTemplateBracket = rResult.lastIndexOf('}');
     else
         rLastTemplateBracket = -1;
 
     rSelector = sal::static_int_cast< sal_uInt8 >(-1);
-    return nRet;
+    return bRet;
 }
 
 void MathType::HandleEmblishments()
@@ -2752,13 +2746,13 @@ void MathType::HandleEmblishments()
         switch (nEmbel)
         {
         case 0x02:
-            rRet += " dot ";
+            rResult += " dot ";
             break;
         case 0x03:
-            rRet += " ddot ";
+            rResult += " ddot ";
             break;
         case 0x04:
-            rRet += " dddot ";
+            rResult += " dddot ";
             break;
         case 0x05:
             if (!nPostSup)
@@ -2788,19 +2782,19 @@ void MathType::HandleEmblishments()
             nPostlSup += 3;
             break;
         case 0x08:
-            rRet += " tilde ";
+            rResult += " tilde ";
             break;
         case 0x09:
-            rRet += " hat ";
+            rResult += " hat ";
             break;
         case 0x0b:
-            rRet += " vec ";
+            rResult += " vec ";
             break;
         case 0x10:
-            rRet += " overstrike ";
+            rResult += " overstrike ";
             break;
         case 0x11:
-            rRet += " bar ";
+            rResult += " bar ";
             break;
         case 0x12:
             if (!nPostSup)
@@ -2812,7 +2806,7 @@ void MathType::HandleEmblishments()
             nPostSup += 5;
             break;
         case 0x14:
-            rRet += " breve ";
+            rResult += " breve ";
             break;
         default:
             OSL_ENSURE(nEmbel < 21,"Embel out of range");
@@ -2846,11 +2840,11 @@ void MathType::HandleSetSize()
     }
 }
 
-int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
-    sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation, bool bSilent)
+bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
+    sal_uInt8 nTag, sal_uInt8 nSelector, sal_uInt8 nVariation, bool bSilent)
 {
     sal_Unicode nChar;
-    int nRet=1;
+    bool bRet = true;
 
     if (xfAUTO(nTag))
     {
@@ -2873,7 +2867,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
     bad character, old mathtype < 3 has these
     */
     if (nChar < 0x20)
-        return nRet;
+        return bRet;
 
     if (xfEMBELL(nTag))
     {
@@ -2888,11 +2882,11 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
         //collated together
         sPost.clear();
         nPostSup = nPostlSup = 0;
-        int nOriglen=rRet.getLength()-rTextStart;
-        rRet += " {";  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        int nOriglen = rResult.getLength() - rTextStart;
+        rResult += " {";  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         if ((!bSilent) && ((nOriglen) > 1))
-            rRet += "\"";
-        nRet = HandleRecords(nLevel+1,nSelector,nVariation);
+            rResult += "\"";
+        bRet = HandleRecords( nLevel+1, nSelector, nVariation );
         if (!bSilent)
         {
             if (nOriglen > 1)
@@ -2900,21 +2894,21 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
                 OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
                 aStr += "\"";
-                rRet = rRet.replaceAt(rTextStart,0,aStr);
+                rResult = rResult.replaceAt(rTextStart, 0, aStr);
 
                 aStr.clear();
                 TypeFaceToString(aStr,nTypeFace);
-                rRet += aStr + "{";
+                rResult += aStr + "{";
             }
             else
-                rRet += " {";
-            rTextStart = rRet.getLength();
+                rResult += " {";
+            rTextStart = rResult.getLength();
         }
     }
 
     if (!bSilent)
     {
-        sal_Int32 nOldLen = rRet.getLength();
+        sal_Int32 nOldLen = rResult.getLength();
         if (
             HandleSize(nLSize,nDSize,rSetSize) ||
             (nOldTypeFace != nTypeFace)
@@ -2922,36 +2916,36 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
         {
             if ((nOldLen - rTextStart) > 1)
             {
-                rRet = rRet.replaceAt(nOldLen, 0, "\"");
+                rResult = rResult.replaceAt(nOldLen, 0, "\"");
                 OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
                 aStr += "\"";
-                rRet = rRet.replaceAt(rTextStart,0,aStr);
+                rResult = rResult.replaceAt(rTextStart, 0, aStr);
             }
-            rTextStart = rRet.getLength();
+            rTextStart = rResult.getLength();
         }
-        nOldLen = rRet.getLength();
-        if (!LookupChar(nChar,rRet,nVersion,nTypeFace))
+        nOldLen = rResult.getLength();
+        if (!LookupChar(nChar,rResult,nVersion,nTypeFace))
         {
             if (nOldLen - rTextStart > 1)
             {
-                rRet = rRet.replaceAt(nOldLen,0,"\"");
+                rResult = rResult.replaceAt(nOldLen, 0, "\"");
                 OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
                 aStr += "\"";
-                rRet = rRet.replaceAt(rTextStart, 0, aStr);
+                rResult = rResult.replaceAt(rTextStart, 0, aStr);
             }
-            rTextStart = rRet.getLength();
+            rTextStart = rResult.getLength();
         }
-        lcl_PrependDummyTerm(rRet, rTextStart);
+        lcl_PrependDummyTerm(rResult, rTextStart);
     }
 
     if ((xfEMBELL(nTag)) && (!bSilent))
     {
-        rRet += "}}" + sPost;  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
-        rTextStart = rRet.getLength();
+        rResult += "}}" + sPost;  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        rTextStart = rResult.getLength();
     }
-    return nRet;
+    return bRet;
 }
 
 bool MathType::HandleLim(SmNode *pNode,int nLevel)
