@@ -19,6 +19,7 @@ OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     ,m_bInX509Certificate(false)
     ,m_bInMdssiValue(false)
     ,m_bInSignatureComments(false)
+    ,m_bReferenceUnresolved(false)
 {
 }
 
@@ -56,7 +57,23 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         OUString aURI = xAttribs->getValueByName("URI");
         if (aURI.startsWith("#"))
             m_pXSecController->addReference(aURI.copy(1));
-        // TODO else
+        else
+        {
+            m_aReferenceURI = aURI;
+            m_bReferenceUnresolved = true;
+        }
+    }
+    else if (rName == "Transform")
+    {
+        if (m_bReferenceUnresolved)
+        {
+            OUString aAlgorithm = xAttribs->getValueByName("Algorithm");
+            if (aAlgorithm == ALGO_RELATIONSHIP)
+            {
+                m_pXSecController->addStreamReference(m_aReferenceURI, /*isBinary=*/false);
+                m_bReferenceUnresolved = false;
+            }
+        }
     }
     else if (rName == "DigestValue")
     {
@@ -93,7 +110,15 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
     if (rName == "SignedInfo")
         m_pXSecController->setReferenceCount();
     else if (rName == "Reference")
+    {
+        if (m_bReferenceUnresolved)
+        {
+            // No transform algorithm found, assume binary.
+            m_pXSecController->addStreamReference(m_aReferenceURI, /*isBinary=*/true);
+            m_bReferenceUnresolved = false;
+        }
         m_pXSecController->setDigestValue(m_aDigestValue);
+    }
     else if (rName == "DigestValue")
         m_bInDigestValue = false;
     else if (rName == "SignatureValue")
