@@ -748,16 +748,16 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
                 }
             }
 
-            if( fFinalSkewAngle == -1.0 )
+            if( rtl::math::approxEqual(fFinalSkewAngle, -1.0) )
             {
                 fFinalSkewAngle = fSkewAngle;
             }
-            else if( fSkewAngle != fFinalSkewAngle )
+            else if( !rtl::math::approxEqual(fSkewAngle, fFinalSkewAngle) )
             {
                 fFinalSkewAngle = -1.0;
             }
 
-            if( fFinalSkewAngle == -1.0 )
+            if( rtl::math::approxEqual(fFinalSkewAngle, -1.0) )
                 break;
         }
     }
@@ -956,7 +956,7 @@ void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
             {
                 fFinalDepth = fDepth;
             }
-            else if( fFinalDepth != fDepth )
+            else if( !rtl::math::approxEqual(fFinalDepth, fDepth) )
             {
                 fFinalDepth = -1;
                 break;
