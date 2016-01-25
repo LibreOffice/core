@@ -12,17 +12,15 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/embeddedfontshelper.hxx>
 
 #include "fontsubset.hxx"
 #include "outdev.h"
-#include "fontinstance.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "salgdi.hxx"
 #include "sft.hxx"
 
-#include <vcl/embeddedfontshelper.hxx>
 
 #if ENABLE_EOT
 extern "C"
