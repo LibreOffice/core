@@ -553,13 +553,13 @@ void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
     aFont.AppendStyleToText(rTxt);
 }
 
-int MathType::Parse(SotStorage *pStor)
+bool MathType::Parse(SotStorage *pStor)
 {
     tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
         "Equation Native",
         STREAM_STD_READ | StreamMode::NOCREATE);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
-        return 0;
+        return false;
     pS = &xSrc;
     pS->SetEndian( SvStreamEndian::LITTLE );
 
@@ -572,9 +572,9 @@ int MathType::Parse(SotStorage *pStor)
     pS->ReadUChar( nProdSubVersion );
 
     if (nVersion > 3)   // allow only supported versions of MathType to be parsed
-        return 0;
+        return false;
 
-    int nRet = HandleRecords();
+    bool bRet = HandleRecords();
     //little crude hack to close occasionally open expressions
     //a sophisticated system to determine what expressions are
     //opened is required, but this is as much work as rewriting
@@ -592,7 +592,7 @@ int MathType::Parse(SotStorage *pStor)
         "Possibly unfully parsed formula");
 #   endif
 #endif
-    return nRet;
+    return bRet;
 }
 
 static void lcl_PrependDummyTerm(OUString &rRet, sal_Int32 &rTextStart)
@@ -638,15 +638,16 @@ void MathType::HandleNudge()
         pS->ReadUInt16( nYLongNudge );
     }
 }
+
 /* Fabulously complicated as many tokens have to be reordered and generally
  * moved around from mathtypes paradigm to starmaths. */
-int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
-    sal_uInt8 nVariation, int nMatrixRows,int nMatrixCols)
+bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
+    sal_uInt8 nVariation, int nMatrixRows, int nMatrixCols)
 {
     sal_uInt8 nTag,nRecord;
     sal_uInt8 nTabType,nTabStops;
     sal_uInt16 nTabOffset;
-    int i,nRet=1,newline=0;
+    int i, newline=0;
     bool bSilent=false;
     int nPart=0;
     OUString sPush,sMainTerm;
@@ -656,6 +657,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     sal_Int32 nTextStart = 0;
     sal_Int32 nSubSupStartPos = 0;
     sal_Int32 nLastTemplateBracket=-1;
+    bool bRet = true;
 
     do
     {
@@ -1246,8 +1248,8 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         }
                         sal_Int16 nOldCurSize=nCurSize;
                         sal_Int32 nSizeStartPos = rRet.getLength();
-                        HandleSize(nLSize,nDSize,nSetSize);
-                        nRet = HandleRecords(nLevel+1);
+                        HandleSize( nLSize, nDSize, nSetSize );
+                        bRet = HandleRecords( nLevel+1 );
                         while (nSetSize)
                         {
                             bool bOk=false;
@@ -1683,26 +1685,24 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
             case CHAR:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                nRet = HandleChar(nTextStart,nSetSize,nLevel,nTag,nSelector,
-                    nVariation,bSilent);
-                 break;
+                bRet = HandleChar( nTextStart, nSetSize, nLevel, nTag, nSelector, nVariation, bSilent );
+                break;
             case TMPL:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                nRet = HandleTemplate(nLevel,nSelector,nVariation,
-                    nLastTemplateBracket);
+                bRet = HandleTemplate( nLevel, nSelector, nVariation, nLastTemplateBracket );
                 break;
             case PILE:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                nRet = HandlePile(nSetAlign,nLevel,nSelector,nVariation);
-                HandleMatrixSeparator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
+                bRet = HandlePile( nSetAlign, nLevel, nSelector, nVariation );
+                HandleMatrixSeparator( nMatrixRows, nMatrixCols, nCurCol, nCurRow );
                 break;
             case MATRIX:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                nRet = HandleMatrix(nLevel,nSelector,nVariation);
-                HandleMatrixSeparator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
+                bRet = HandleMatrix( nLevel, nSelector, nVariation );
+                HandleMatrixSeparator( nMatrixRows, nMatrixCols, nCurCol, nCurRow );
                 break;
             case EMBEL:
                 if (xfLMOVE(nTag))
@@ -1763,7 +1763,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
         rRet += "}";
         nSetSize--;
     }
-    return nRet;
+    return bRet;
 }
 
 /*Simply determine if we are at the end of a record or the end of a line,
@@ -1878,10 +1878,10 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
     return bRet;
 }
 
-int MathType::ConvertFromStarMath( SfxMedium& rMedium )
+bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
 {
     if (!pTree)
-        return 0;
+        return false;
 
     SvStream *pStream = rMedium.GetOutStream();
     if ( pStream )
@@ -1921,7 +1921,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
 
         tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream("Equation Native");
         if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
-            return 0;
+            return false;
 
         pS = &xSrc;
         pS->SetEndian( SvStreamEndian::LITTLE );
@@ -1946,7 +1946,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
         pStor->Commit();
     }
 
-    return 1;
+    return true;
 }
 
 
@@ -2158,7 +2158,6 @@ void MathType::HandleRoot(SmNode *pNode,int nLevel)
         pS->WriteUChar( LINE|0x10 ); //dummy line
 
 
-
     pS->WriteUChar( END );
 }
 
@@ -2216,7 +2215,6 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
     }
     return nVariation2;
 }
-
 
 
 /*
@@ -2598,7 +2596,6 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
         pS->WriteUChar( LINE|0x10 );
     }
 
-
     pS->WriteUChar( 0x0D );
     switch(pNode->GetToken().eType)
     {
@@ -2643,8 +2640,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
 }
 
 
-int MathType::HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
-    sal_uInt8 nVariation)
+bool MathType::HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
 {
     pS->ReadUChar( nHAlign );
     pS->ReadUChar( nVAlign );
@@ -2652,7 +2648,7 @@ int MathType::HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
     HandleAlign(nHAlign,nVAlign,rSetAlign);
 
     rRet += " stack {\n";
-    int nRet = HandleRecords(nLevel+1,nSelector,nVariation,-1,-1);
+    bool bRet = HandleRecords( nLevel+1, nSelector, nVariation, -1, -1 );
     rRet = rRet.replaceAt(rRet.getLength()-3,2,"");
     rRet += "} ";
 
@@ -2661,11 +2657,10 @@ int MathType::HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
         rRet += "} ";
         rSetAlign--;
     }
-    return nRet;
+    return bRet;
 }
 
-int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
-    sal_uInt8 nVariation)
+bool MathType::HandleMatrix(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
 {
     sal_uInt8 nH_just,nV_just,nRows,nCols;
     pS->ReadUChar( nVAlign );
@@ -2682,7 +2677,7 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
         nBytes++;
     pS->SeekRel(nBytes);
     rRet += " matrix {\n";
-    int nRet = HandleRecords(nLevel+1,nSelector,nVariation,nRows,nCols);
+    bool bRet = HandleRecords( nLevel+1, nSelector, nVariation, nRows, nCols );
 
     sal_Int32 nI = rRet.lastIndexOf('#');
     if (nI > 0)
@@ -2690,10 +2685,10 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
             rRet += "{}";
 
     rRet += "\n} ";
-    return nRet;
+    return bRet;
 }
 
-int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
+bool MathType::HandleTemplate(int nLevel, sal_uInt8 &rSelector,
     sal_uInt8 &rVariation, sal_Int32 &rLastTemplateBracket)
 {
     sal_uInt8 nOption; //This appears utterly unused
@@ -2726,7 +2721,7 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     }
 
     //suborderlist
-    int nRet = HandleRecords(nLevel+1,rSelector,rVariation);
+    bool bRet = HandleRecords( nLevel+1, rSelector, rVariation );
 
     if (bRemove)
     {
@@ -2740,7 +2735,7 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
         rLastTemplateBracket = -1;
 
     rSelector = sal::static_int_cast< sal_uInt8 >(-1);
-    return nRet;
+    return bRet;
 }
 
 void MathType::HandleEmblishments()
@@ -2846,11 +2841,11 @@ void MathType::HandleSetSize()
     }
 }
 
-int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
-    sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation, bool bSilent)
+bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
+    sal_uInt8 nTag, sal_uInt8 nSelector, sal_uInt8 nVariation, bool bSilent)
 {
     sal_Unicode nChar;
-    int nRet=1;
+    bool bRet = true;
 
     if (xfAUTO(nTag))
     {
@@ -2873,7 +2868,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
     bad character, old mathtype < 3 has these
     */
     if (nChar < 0x20)
-        return nRet;
+        return bRet;
 
     if (xfEMBELL(nTag))
     {
@@ -2892,7 +2887,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
         rRet += " {";  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         if ((!bSilent) && ((nOriglen) > 1))
             rRet += "\"";
-        nRet = HandleRecords(nLevel+1,nSelector,nVariation);
+        bRet = HandleRecords( nLevel+1, nSelector, nVariation );
         if (!bSilent)
         {
             if (nOriglen > 1)
@@ -2951,7 +2946,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
         rRet += "}}" + sPost;  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         rTextStart = rRet.getLength();
     }
-    return nRet;
+    return bRet;
 }
 
 bool MathType::HandleLim(SmNode *pNode,int nLevel)
