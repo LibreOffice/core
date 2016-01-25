@@ -217,7 +217,7 @@ void Interceptor::generateFeatureStateEvent()
             if( i == 1 || (m_bLink && i != 5) )
                 continue;
 
-            comphelper::OInterfaceContainerHelper2* pICH =
+            comphelper::OInterfaceContainerHelper* pICH =
                 m_pStatCL->getContainer(m_aInterceptedURL[i]);
             uno::Sequence<uno::Reference<uno::XInterface> > aSeq;
             if(pICH)
