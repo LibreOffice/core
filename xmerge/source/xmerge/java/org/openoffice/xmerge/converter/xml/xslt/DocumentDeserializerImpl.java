@@ -88,8 +88,8 @@ public final class DocumentDeserializerImpl
         while (enumerate.hasNext()) {
             docOut = (DOMDocument) enumerate.next();
         }
-        domDoc = docOut.getContentDOM();
         try {
+            domDoc = docOut.getContentDOM();
             baos = transform(domDoc);
             sxwDoc.initContentDOM();
             DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();

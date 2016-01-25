@@ -44,6 +44,8 @@ public class FileHelper
         String fs = System.getProperty("file.separator");
         if (! fs.equals("/"))
         {
+            if (sSystemFile == null)
+               throw new IllegalStateException("sSystemFile is unexpected null");
             sSystemFile = sSystemFile.replace ('/', fs.toCharArray ()[0]);
         }
 // FEATURE FOR UNC NEED!!!
