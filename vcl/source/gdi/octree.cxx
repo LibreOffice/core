@@ -24,11 +24,7 @@
 #include "octree.hxx"
 #include "impoctree.hxx"
 
-// - pMask -
-
 static const sal_uInt8 pImplMask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
-
-// - NodeCache -
 
 ImpNodeCache::ImpNodeCache( const sal_uLong nInitSize ) :
             pActNode( nullptr )
@@ -54,8 +50,6 @@ ImpNodeCache::~ImpNodeCache()
         delete pNode;
     }
 }
-
-// - Octree -
 
 Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
             nMax        ( nColors ),
@@ -235,8 +229,6 @@ void Octree::GetPalIndex( NODE* pNode )
         GetPalIndex( pNode->pChild[ nIndex ] );
     }
 }
-
-// - InverseColorMap -
 
 InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
