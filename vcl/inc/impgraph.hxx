@@ -20,13 +20,6 @@
 #ifndef INCLUDED_VCL_INC_IMPGRAPH_HXX
 #define INCLUDED_VCL_INC_IMPGRAPH_HXX
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/animate.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/svgdata.hxx>
-
 struct ImpSwapInfo
 {
     MapMode     maPrefMapMode;
