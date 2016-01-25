@@ -52,11 +52,13 @@ inline long SmFromTo(long nFrom, long nTo, double fRelDist)
 
 
 // possible positions and alignments for the 'AlignTo' function
-enum RectPos
-    // (RP_LEFT : align the current object to the left of the argument, ...)
-{   RP_LEFT, RP_RIGHT,
-    RP_TOP, RP_BOTTOM,
-    RP_ATTRIBUT
+enum class RectPos
+{
+    Left, // align the current object to the left of the argument
+    Right,
+    Top,
+    Bottom,
+    Attribute
 };
 enum RectHorAlign
 {   RHA_LEFT, RHA_CENTER, RHA_RIGHT

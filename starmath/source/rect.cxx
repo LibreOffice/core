@@ -28,7 +28,7 @@
 #include "utility.hxx"
 #include "smmod.hxx"
 
-
+#include <cassert>
 
 
 
@@ -307,32 +307,31 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
 {   Point  aPos (GetTopLeft());
         // will become the topleft point of the new rectangle position
 
-    // set horizontal or vertical new rectangle position depending on
-    // 'ePos' is one of 'RP_LEFT', 'RP_RIGHT' or 'RP_TOP', 'RP_BOTTOM'
+    // set horizontal or vertical new rectangle position depending on ePos
     switch (ePos)
-    {   case RP_LEFT :
+    {   case RectPos::Left:
             aPos.X() = rRect.GetItalicLeft() - GetItalicRightSpace()
                        - GetWidth();
             break;
-        case RP_RIGHT :
+        case RectPos::Right:
             aPos.X() = rRect.GetItalicRight() + 1 + GetItalicLeftSpace();
             break;
-        case RP_TOP :
+        case RectPos::Top:
             aPos.Y() = rRect.GetTop() - GetHeight();
             break;
-        case RP_BOTTOM :
+        case RectPos::Bottom:
             aPos.Y() = rRect.GetBottom() + 1;
             break;
-        case RP_ATTRIBUT :
+        case RectPos::Attribute:
             aPos.X() = rRect.GetItalicCenterX() - GetItalicWidth() / 2
                        + GetItalicLeftSpace();
             break;
-        default :
-            SAL_WARN("starmath", "unknown case");
+        default:
+            assert(false);
     }
 
     // check if horizontal position is already set
-    if (ePos == RP_LEFT  ||  ePos == RP_RIGHT  ||  ePos == RP_ATTRIBUT)
+    if (ePos == RectPos::Left || ePos == RectPos::Right || ePos == RectPos::Attribute)
         // correct error in current vertical position
         switch (eVer)
         {   case RVA_TOP :
@@ -369,7 +368,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
         }
 
     // check if vertical position is already set
-    if (ePos == RP_TOP  ||  ePos == RP_BOTTOM)
+    if (ePos == RectPos::Top || ePos == RectPos::Bottom)
         // correct error in current horizontal position
         switch (eHor)
         {   case RHA_LEFT :
