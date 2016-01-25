@@ -1002,17 +1002,7 @@ OUString SvxExtFileField::GetFormatted() const
 {
     OUString aString;
 
-    INetURLObject aURLObj( aFile );
-
-    if( INetProtocol::NotValid == aURLObj.GetProtocol() )
-    {
-        // invalid? try to interpret string as system file name
-        OUString aURLStr;
-
-        osl::FileBase::getFileURLFromSystemPath( aFile, aURLStr );
-
-        aURLObj.SetURL( aURLStr );
-    }
+    INetURLObject aURLObj = INetURLObject::TryUrlFromSystemPathAsObject( aFile );
 
     // #92009# Be somewhat liberate when trying to
     // get formatted content out of the FileField

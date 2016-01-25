@@ -586,17 +586,8 @@ void SdNavigatorWin::Resize()
 
 bool SdNavigatorWin::InsertFile(const OUString& rFileName)
 {
-    INetURLObject   aURL( rFileName );
-
-    if( aURL.GetProtocol() == INetProtocol::NotValid )
-    {
-        OUString aURLStr;
-        osl::FileBase::getFileURLFromSystemPath( rFileName, aURLStr );
-        aURL = INetURLObject( aURLStr );
-    }
-
     // get adjusted FileName
-    OUString aFileName( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString aFileName = INetURLObject::TryUrlFromSystemPathAsString( rFileName, true );
 
     if (aFileName.isEmpty())
     {
