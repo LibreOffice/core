@@ -24,8 +24,6 @@
 
 #include <unordered_map>
 
-// - ImplImageList -
-
 struct ImageAryData
 {
     OUString maName;
@@ -64,8 +62,6 @@ struct ImplImageList
                    sal_uInt16 nId, const BitmapEx &aBitmapEx );
     void RemoveImage( sal_uInt16 nPos );
 };
-
-// - ImplImage -
 
 struct ImplImage
 {
