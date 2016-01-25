@@ -312,14 +312,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, bool tr
         if( ( ( nMode & ERASEMASK ) == ERASEMASK ) )
             ::utl::UCBContentHelper::Kill( m_aName );
 
-        INetURLObject aObj( m_aName );
-        if ( aObj.GetProtocol() == INetProtocol::NotValid )
-        {
-            OUString aURL;
-            osl::FileBase::getFileURLFromSystemPath( m_aName, aURL );
-            aObj.SetURL( aURL );
-            m_aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
-        }
+        m_aName = INetURLObject::TryUrlFromSystemPathAsString( m_aName, true );
 
         // check the stream
         m_pStorStm = ::utl::UcbStreamHelper::CreateStream( m_aName, nMode );
@@ -494,16 +487,7 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
 
 bool SotStorage::IsStorageFile( const OUString & rFileName )
 {
-    OUString aName( rFileName );
-    INetURLObject aObj( aName );
-    if ( aObj.GetProtocol() == INetProtocol::NotValid )
-    {
-        OUString aURL;
-        osl::FileBase::getFileURLFromSystemPath( aName, aURL );
-        aObj.SetURL( aURL );
-        aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
-    }
-
+    OUString aName = INetURLObject::TryUrlFromSystemPathAsString( rFileName, true );
     std::unique_ptr<SvStream> pStm(::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ ));
     bool bRet = SotStorage::IsStorageFile( pStm.get() );
     return bRet;
