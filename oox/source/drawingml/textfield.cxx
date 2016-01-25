@@ -60,7 +60,6 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
 {
     Reference< XInterface > xIface;
     Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-
     if( sType.startsWith("datetime"))
     {
         OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
@@ -69,6 +68,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
         {
             bool bIsDate = true;
             int idx = p.toInt32();
+            sal_uInt16 nNumFmt;
 //              OSL_TRACE( "OOX: p = %s, %d", p.pData->buffer, idx );
             xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
             aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
@@ -79,10 +79,14 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             {
             case 1: // Date dd/mm/yyyy
                 // this is the default format...
+                nNumFmt = 5;
+                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
                 break;
             case 2: // Date Day, Month dd, yyyy
                 break;
             case 3: // Date dd Month yyyy
+                nNumFmt = 3;
+                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
                 break;
             case 4: // Date Month dd, yyyy
                 break;
@@ -100,17 +104,28 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
                 break;
             case 10: // Time H:MM
                 bIsDate = false;
+                nNumFmt = 3;
+                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
                 break;
             case 11: // Time H:MM:SS
                 bIsDate = false;
                 // this is the default format
+                nNumFmt = 2;
+                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
                 break;
             case 12: // Time H:MM PM
                 bIsDate = false;
+                nNumFmt = 6;
+                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
                 break;
             case 13: // Time H:MM:SS PM
                 bIsDate = false;
+                nNumFmt = 7;
+                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
                 break;
+            default:
+                nNumFmt = 2;
+                xProps->setPropertyValue("NumberFormat", makeAny(nNumFmt));
             }
             xProps->setPropertyValue( "IsDate", makeAny( bIsDate ) );
             xProps->setPropertyValue( "IsFixed", makeAny( false ) );
