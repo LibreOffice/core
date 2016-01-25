@@ -38,7 +38,7 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <dndlcon.hxx>
-#include <dndevdis.hxx>
+#include "dndeventdispatcher.hxx"
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>

@@ -72,7 +72,7 @@
 #include "helpwin.hxx"
 #include "sallayout.hxx"
 #include "dndlcon.hxx"
-#include "dndevdis.hxx"
+#include "dndeventdispatcher.hxx"
 
 #include "com/sun/star/accessibility/XAccessible.hpp"
 #include "com/sun/star/accessibility/AccessibleRole.hpp"

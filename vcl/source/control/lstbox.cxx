@@ -33,7 +33,7 @@
 #include "svdata.hxx"
 #include "controldata.hxx"
 #include "ilstbox.hxx"
-#include "dndevdis.hxx"
+#include "dndeventdispatcher.hxx"
 
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
