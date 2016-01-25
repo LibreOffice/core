@@ -18,26 +18,13 @@
  */
 
 #include <vcl/outdevstate.hxx>
-
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-
 #include <vcl/settings.hxx>
-
-#include <vcl/mapmod.hxx>
-#include <vcl/region.hxx>
-#include <vcl/font.hxx>
-#include <vcl/vclenum.hxx>
-
-#include <tools/gen.hxx>
-#include <tools/color.hxx>
-#include <tools/fontenum.hxx>
 
 #include "outdev.h"
 #include "outdata.hxx"
-#include <outdevstatestack.hxx>
+#include "outdevstatestack.hxx"
 #include "salgdi.hxx"
-#include "sallayout.hxx"
 
 OutDevState::OutDevState()
     : mpMapMode(nullptr)
