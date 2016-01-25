@@ -19,6 +19,7 @@
 
 #include <tools/poly.hxx>
 #include <memory>
+#include <rtl/math.hxx>
 
 #include <sgvspln.hxx>
 #include <cmath>
@@ -498,7 +499,7 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
     if (n<2) return 4;
     nm1=n-1;
     for (i=0;i<=nm1;i++) if (x[i+1]<=x[i]) return 2; // should be strictly monotonically decreasing!
-    if (y[n]!=y[0]) return 3; // begin and end should be equal!
+    if (!rtl::math::approxEqual(y[n],y[0])) return 3; // begin and end should be equal!
 
     a.reset(new double[n+1]);
     lowrow.reset(new double[n+1]);
@@ -577,8 +578,8 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
             alphY=Marg02; betY=MargN2;
         } break;
         case 3: {
-            if (x[n]!=x[0]) return 3;
-            if (y[n]!=y[0]) return 4;
+            if (!rtl::math::approxEqual(x[n],x[0])) return 3;
+            if (!rtl::math::approxEqual(y[n],y[0])) return 4;
         } break;
         case 4: {
             if (std::abs(Marg01)>=MAXROOT) {
