@@ -97,7 +97,7 @@ throw (uno::RuntimeException, std::exception)
                     m_pLOKit->mpCallbackData);
 
         // block until SetPassword is called
-        m_havePassword.wait(nullptr);
+        m_havePassword.wait();
         m_havePassword.reset();
 
         for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
