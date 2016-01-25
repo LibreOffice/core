@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-
-#include <cstdlib>
-#include <limits.h>
-
 #include <o3tl/numeric.hxx>
 #include <tools/bigint.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/cursor.hxx>
 
 #include <svdata.hxx>
 #include <window.h>
