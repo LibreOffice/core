@@ -22,22 +22,15 @@
 
 #include <vcl/dllapi.h>
 
-#include "print.h"
-
-#include "vcl/print.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/button.hxx"
-#include "vcl/gdimtf.hxx"
-#include "vcl/lstbox.hxx"
-#include "vcl/prgsbar.hxx"
-#include "vcl/field.hxx"
-#include "vcl/tabctrl.hxx"
-#include "vcl/tabpage.hxx"
-#include "vcl/virdev.hxx"
-
-#include <memory>
-#include <map>
+#include <vcl/print.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
+#include <vcl/prgsbar.hxx>
+#include <vcl/field.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/virdev.hxx>
 
 namespace vcl
 {
