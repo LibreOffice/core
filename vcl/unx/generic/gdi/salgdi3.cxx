@@ -17,47 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-
-#include <string.h>
-#include <math.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <fontconfig/fontconfig.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <osl/file.hxx>
-#include <osl/module.hxx>
-#include <rtl/tencinfo.h>
-#include <tools/stream.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/jobdata.hxx>
-#include <vcl/printerinfomanager.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include "unx/fontmanager.hxx"
-#include "impfont.hxx"
-#include "gcach_xpeer.hxx"
-#include "unx/genpspgraphics.h"
-#include "unx/printergfx.hxx"
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
-#include "PhysicalFontFace.hxx"
-#include "salframe.hxx"
-#include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 #include "unx/salgdi.h"
-#include "unx/salunx.h"
 #include "unx/salvd.h"
 #include "textrender.hxx"
-#include "xrender_peer.hxx"
 
 // X11SalGraphics
 
