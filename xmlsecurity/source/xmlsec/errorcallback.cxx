@@ -29,21 +29,18 @@ using namespace ::com::sun::star::xml::crypto;
 
 
 extern "C"
-void errorCallback(const char * /*file*/,
-                   int /*line*/,
-                   const char * /*func*/,
-                   const char * /*errorObject*/,
-                   const char * /*errorSubject*/,
-                   int /*reason*/,
-                   const char  * /*msg*/)
+void errorCallback(const char* file,
+                   int line,
+                   const char* func,
+                   const char* errorObject,
+                   const char* errorSubject,
+                   int reason,
+                   const char* msg)
 {
-#if OSL_DEBUG_LEVEL > 1
-//     const char * afunc = func ? func : "";
-//     const char * errObj = errorObject ? errorObject : "";
-//     const char * errSub = errorSubject ? errorSubject : "";
-//     const char * amsg = msg ? msg : "";
-//  fprintf(stdout, "xmlsec error: %s, %s,  %s, %i %s  \n", afunc, errObj, errSub, reason, amsg);
-#endif
+    const char* pErrorObject = errorObject ? errorObject : "";
+    const char* pErrorSubject = errorSubject ? errorSubject : "";
+    const char* pMsg = msg ? msg : "";
+    SAL_WARN("xmlsecurity.xmlsec", file << ":" << line << ": " << func << "() '" << pErrorObject << "' '" << pErrorSubject << "' " << reason << " '" << pMsg << "'");
 }
 
 void setErrorRecorder()
