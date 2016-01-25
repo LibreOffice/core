@@ -491,24 +491,32 @@ bool SwMailMergeDlg::AskUserFilename() const
     return (m_pSaveSingleDocRB->IsChecked() || !m_pGenerateFromDataBaseCB->IsChecked());
 }
 
+OUString SwMailMergeDlg::GetURLfromPath() const
+{
+    SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+    INetURLObject aAbs;
+    if( pMedium )
+        aAbs = pMedium->GetURLObject();
+    if( INetProtocol::NotValid == aAbs.GetProtocol() )
+    {
+        SvtPathOptions aPathOpt;
+        aAbs.SetURL( aPathOpt.GetWorkPath() );
+    }
+    return URIHelper::SmartRel2Abs(
+        aAbs, m_pPathED->GetText(), URIHelper::GetMaybeFileHdl());
+}
+
 bool SwMailMergeDlg::ExecQryShell()
 {
     if(pImpl->xSelSupp.is()) {
-        pImpl->xSelSupp->removeSelectionChangeListener(  pImpl->xChgLstnr );
+        pImpl->xSelSupp->removeSelectionChangeListener( pImpl->xChgLstnr );
     }
 
     if (m_pPrinterRB->IsChecked())
         nMergeType = DBMGR_MERGE_PRINTER;
     else {
         nMergeType = DBMGR_MERGE_FILE;
-        SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
-        INetURLObject aAbs;
-        if( pMedium )
-            aAbs = pMedium->GetURLObject();
-        pModOpt->SetMailingPath(
-            URIHelper::SmartRel2Abs(
-                aAbs, m_pPathED->GetText(), URIHelper::GetMaybeFileHdl()));
-
+        pModOpt->SetMailingPath( GetURLfromPath() );
         pModOpt->SetIsNameFromColumn(m_pGenerateFromDataBaseCB->IsChecked());
 
         if (!AskUserFilename()) {
@@ -593,15 +601,9 @@ OUString SwMailMergeDlg::GetTargetURL() const
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeDlg, InsertPathHdl, Button*, void)
 {
-    OUString sPath( m_pPathED->GetText() );
-    if( sPath.isEmpty() ) {
-        SvtPathOptions aPathOpt;
-        sPath = aPathOpt.GetWorkPath();
-    }
-
     uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < XFolderPicker2 > xFP = FolderPicker::create(xContext);
-    xFP->setDisplayDirectory(sPath);
+    xFP->setDisplayDirectory( GetURLfromPath() );
     if( xFP->execute() == RET_OK ) {
         INetURLObject aURL(xFP->getDirectory());
         if(aURL.GetProtocol() == INetProtocol::File)

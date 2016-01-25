@@ -115,6 +115,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     virtual void    Apply() override;
     bool            ExecQryShell();
     bool            AskUserFilename() const;
+    OUString        GetURLfromPath() const;
 
 public:
     SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rSh,
