@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_aecf37b2",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-01-25T10:03:29Z",
+      "side": 1,
+      "message": "Yes - that is the purpose; I want to have this lines available in my regular debug build in case I want to check the received bitmap, at the same time I want this code not in product versions. This is exactly what DBG_UTIL does, so why use an extra define?",
+      "parentUuid": "bab6814e_703410de",
+      "revId": "5d4481b384a76295ed4e226a74d82dcc9851b79c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bab6814e_50310cec",
         "filename": "vcl/source/filter/wmf/winmtf.cxx",
         "patchSetId": 3
