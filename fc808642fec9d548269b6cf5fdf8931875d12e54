@@ -16,6 +16,24 @@
       "revId": "fc808642fec9d548269b6cf5fdf8931875d12e54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_6e770f03",
+        "filename": "i18npool/source/characterclassification/cclass_unicode_parser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-25T16:09:25Z",
+      "side": 1,
+      "message": "uhm... no, given how in \"pSrc - pTextStart\" the pTextStart is \"rText.getStr() + nPos\"?",
+      "parentUuid": "7aa08908_ce39e343",
+      "revId": "fc808642fec9d548269b6cf5fdf8931875d12e54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
