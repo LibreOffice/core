@@ -719,11 +719,8 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
     DetectChange ();
 
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
-    DBG_ASSERT(pOutlinerView!=NULL && GetEditEngine().HasView( &pOutlinerView->GetEditView() ),
-        "SearchAndReplace without valid view!" );
-
-    if( NULL == pOutlinerView || !GetEditEngine().HasView( &pOutlinerView->GetEditView() ) )
-        return true;
+    if (!pOutlinerView)
+        return true; // end of search
 
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell != 0)

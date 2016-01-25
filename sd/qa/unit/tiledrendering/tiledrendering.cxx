@@ -62,6 +62,7 @@ public:
     void testSearchAll();
     void testSearchAllSelections();
     void testSearchAllNotifications();
+    void testSearchAllFollowedBySearch();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -77,6 +78,7 @@ public:
     CPPUNIT_TEST(testSearchAll);
     //CPPUNIT_TEST(testSearchAllSelections);
     CPPUNIT_TEST(testSearchAllNotifications);
+    CPPUNIT_TEST(testSearchAllFollowedBySearch);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -479,6 +481,21 @@ void SdTiledRenderingTest::testSearchAllNotifications()
     // But we do get the selection of the first hit.
     CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testSearchAllFollowedBySearch()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+
+    lcl_search("third", /*bFindAll=*/true);
+    lcl_search("match", /*bFindAll=*/false);
+
+    OString aUsedFormat;
+    // This used to give wrong result: 'search' after 'search all' still
+    // returned 'third'
+    CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
 }
 
 #endif
