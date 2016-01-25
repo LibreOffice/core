@@ -844,8 +844,9 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
         }
 
         const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(aHeader.nWidth) * static_cast<sal_Int64>(aHeader.nBitCount));
+        if (nBitsPerLine > SAL_MAX_UINT32)
+            return false;
         const sal_uInt64 nAlignedWidth(AlignedWidth4Bytes(static_cast<sal_uLong>(nBitsPerLine)));
-        bRet = nBitsPerLine <= SAL_MAX_UINT32;
 
         // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
         if (aHeader.nCompression == ZCOMPRESS || aHeader.nCompression == COMPRESS_NONE)
