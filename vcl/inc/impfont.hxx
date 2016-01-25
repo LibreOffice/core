@@ -23,7 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/vclenum.hxx>
-#include <fontinstance.hxx>
+
+#include "fontinstance.hxx"
 
 #include <boost/intrusive_ptr.hpp>
 
