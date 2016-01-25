@@ -17,15 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-
 #include <rtl/ustring.hxx>
 
 #include "outdev.h"
-#include "PhysicalFontFace.hxx"
 #include "PhysicalFontCollection.hxx"
-
-#include "PhysicalFontFamily.hxx"
 
 void PhysicalFontFamily::CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
                                    FontFamily eFamily, const utl::FontNameAttr* pFontAttr )
