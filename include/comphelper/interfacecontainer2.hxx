@@ -50,7 +50,7 @@ namespace detail {
     {
         std::vector< css::uno::Reference< css::uno::XInterface > > *pAsVector;
         css::uno::XInterface * pAsInterface;
-        element_alias2() : pAsInterface(NULL) {}
+        element_alias2() : pAsInterface(nullptr) {}
     };
 
 }
