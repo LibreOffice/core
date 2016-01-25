@@ -16,6 +16,24 @@
       "revId": "ec451161fffdce36cf7ebdf059a4f77f119ac8b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_4e7e93af",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-25T19:09:13Z",
+      "side": 1,
+      "message": "why that? ODF 1.1 says\n\n2.1.2 Document Root Attributes\nVersion\nAll root elements take an office:version attribute, which indicates which version of this specification it complies with.\n\n\nactually the same text is in ODF 1.0 already, so i don\u0027t understand why we don\u0027t write the attribute in that case. but we don\u0027t support exporting ODF 1.0 via the UI anyway, if at all.",
+      "parentUuid": "7aa08908_ced563ba",
+      "revId": "ec451161fffdce36cf7ebdf059a4f77f119ac8b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
