@@ -115,7 +115,7 @@ namespace drawinglayer
                     rFill.getColor());
             }
 
-            if(0.0 != rFill.getTransparence())
+            if(!rtl::math::approxEqual(0.0, rFill.getTransparence()))
             {
                 // create simpleTransparencePrimitive, add created fill primitive
                 const Primitive2DReference xRefA(pNewFillPrimitive);
@@ -172,7 +172,7 @@ namespace drawinglayer
                 pNewLinePrimitive = new PolygonStrokePrimitive2D(rPolygon, aLineAttribute, aStrokeAttribute);
             }
 
-            if(0.0 != rLine.getTransparence())
+            if(!rtl::math::approxEqual(0.0, rLine.getTransparence()))
             {
                 // create simpleTransparencePrimitive, add created fill primitive
                 const Primitive2DReference xRefA(pNewLinePrimitive);
@@ -201,7 +201,7 @@ namespace drawinglayer
             if(rText.isContour())
             {
                 // contour text
-                if(!rStroke.isDefault() && 0.0 != rStroke.getWidth())
+                if(!rStroke.isDefault() && !rtl::math::approxEqual(0.0, rStroke.getWidth()))
                 {
                     // take line width into account and shrink contour polygon accordingly
                     // decompose to get scale
@@ -220,8 +220,8 @@ namespace drawinglayer
 
                     // scale back to unit polygon
                     aScaledUnitPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(
-                        0.0 != aScale.getX() ? 1.0 / aScale.getX() : 1.0,
-                        0.0 != aScale.getY() ? 1.0 / aScale.getY() : 1.0));
+                        !rtl::math::approxEqual(0.0, aScale.getX()) ? 1.0 / aScale.getX() : 1.0,
+                        !rtl::math::approxEqual(0.0, aScale.getY()) ? 1.0 / aScale.getY() : 1.0));
 
                     // create with unit polygon
                     pNew = new SdrContourTextPrimitive2D(
@@ -346,7 +346,7 @@ namespace drawinglayer
                 drawinglayer::animation::AnimationEntryList aAnimationList;
                 rText.getBlinkTextTiming(aAnimationList);
 
-                if(0.0 != aAnimationList.getDuration())
+                if(!rtl::math::approxEqual(0.0, aAnimationList.getDuration()))
                 {
                     // create content sequence
                     const Primitive2DReference xRefA(pNew);
@@ -432,7 +432,7 @@ namespace drawinglayer
                         rText.getScrollTextTiming(aAnimationList, aScale.getY(), aScaledRange.getHeight());
                     }
 
-                    if(0.0 != aAnimationList.getDuration())
+                    if(!rtl::math::approxEqual(0.0, aAnimationList.getDuration()))
                     {
                         // create a new Primitive2DContainer containing the animated text in its scaled only state.
                         // use the decomposition to force to simple text primitives, those will no longer
@@ -500,7 +500,7 @@ namespace drawinglayer
                         rShadow.getColor(),
                         rContent));
 
-                if(0.0 != rShadow.getTransparence())
+                if(!rtl::math::approxEqual(0.0, rShadow.getTransparence()))
                 {
                     // create SimpleTransparencePrimitive2D
                     const Primitive2DContainer aTempContent { aRetval[0] };
