@@ -19,21 +19,8 @@
 
 #include "unx/geninst.h"
 #include "unx/genpspgraphics.h"
-#include "unx/glyphcache.hxx"
-
-#include "vcl/sysdata.hxx"
-#include "fontinstance.hxx"
-
-#include "unx/printergfx.hxx"
-#include "salbmp.hxx"
-#include "impfont.hxx"
 #include "outdev.h"
 #include "PhysicalFontCollection.hxx"
-#include "fontsubset.hxx"
-#include "salprn.hxx"
-
-#include <unotools/fontdefs.hxx>
-#include <list>
 
 // platform specific font substitution hooks
 
