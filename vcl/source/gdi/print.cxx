@@ -17,47 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <list>
+#include <sal/types.h>
 
-#include <tools/debug.hxx>
 #include <tools/resary.hxx>
-#include <tools/stream.hxx>
-#include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
 
-#include <vcl/unohelp.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
 
-#include <salinst.hxx>
-#include <salvd.hxx>
-#include <salgdi.hxx>
-#include <salptype.hxx>
-#include <salprn.hxx>
-#include <svdata.hxx>
-#include <svids.hrc>
-#include <jobset.h>
-#include <outdev.h>
-#include "PhysicalFontCollection.hxx"
-#include <print.h>
-
 #include <comphelper/processfactory.hxx>
+
+#include "salinst.hxx"
+#include "salvd.hxx"
+#include "salgdi.hxx"
+#include "salptype.hxx"
+#include "salprn.hxx"
+#include "svdata.hxx"
+#include "svids.hrc"
+#include "jobset.h"
+#include "outdev.h"
+#include "PhysicalFontCollection.hxx"
+#include "print.h"
 
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::container;
-using namespace com::sun::star::configuration;
+#include "com/sun/star/uno/Sequence.h"
 
 int nImplSysDialog = 0;
 
@@ -138,19 +124,19 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
     PrinterOptions aOldValues( *this );
 
     // get the configuration service
-    Reference< XMultiServiceFactory > xConfigProvider;
-    Reference< XNameAccess > xConfigAccess;
+    css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider;
+    css::uno::Reference< css::container::XNameAccess > xConfigAccess;
     try
     {
         // get service provider
-        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
         // create configuration hierarchical access name
         try
         {
-            xConfigProvider = theDefaultProvider::get( xContext );
+            xConfigProvider = css::configuration::theDefaultProvider::get( xContext );
 
-            Sequence< Any > aArgs(1);
-            PropertyValue aVal;
+            css::uno::Sequence< css::uno::Any > aArgs(1);
+            css::beans::PropertyValue aVal;
             aVal.Name = "nodepath";
             if( i_bFile )
                 aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/File" );
@@ -160,10 +146,10 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
             xConfigAccess.set(
                     xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess", aArgs ),
-                        UNO_QUERY );
+                        css::uno::UNO_QUERY );
             if( xConfigAccess.is() )
             {
-                Reference< XPropertySet > xSet( xConfigAccess, UNO_QUERY );
+                css::uno::Reference< css::beans::XPropertySet > xSet( xConfigAccess, css::uno::UNO_QUERY );
                 if( xSet.is() )
                 {
                     sal_Int32 nValue = 0;
@@ -195,11 +181,11 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
                 }
             }
         }
-        catch( const Exception& )
+        catch( const css::uno::Exception& )
         {
         }
     }
-    catch( const WrappedTargetException& )
+    catch( const css::lang::WrappedTargetException& )
     {
     }
 
