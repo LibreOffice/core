@@ -33,7 +33,7 @@
 #include <vcl/settings.hxx>
 
 #include <svdata.hxx>
-#include <ilstbox.hxx>
+#include "listbox.hxx"
 #include <controldata.hxx>
 
 

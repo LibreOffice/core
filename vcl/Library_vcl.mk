@@ -210,10 +210,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/fixed \
     vcl/source/control/fixedhyper \
     vcl/source/control/group \
-    vcl/source/control/ilstbox \
     vcl/source/control/imgctrl \
     vcl/source/control/longcurr \
-    vcl/source/control/lstbox \
+    vcl/source/control/imp_listbox \
+    vcl/source/control/listbox \
     vcl/source/control/menubtn \
     vcl/source/control/morebtn \
     vcl/source/control/quickselectionengine \
