@@ -117,7 +117,7 @@ namespace pcr
             // generic virtual edit properties
             { "com.sun.star.form.inspection.EditPropertyHandler", false },
 
-            // a handler which virtualizes the ButtonType property, to provide additional types like
+            // a handler which virtualize the ButtonType property, to provide additional types like
             // "move to next record"
             { "com.sun.star.form.inspection.ButtonNavigationHandler", false },
 

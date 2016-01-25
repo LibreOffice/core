@@ -109,7 +109,7 @@
  * function at compile time. A constexpr function cannot examine any values
  * except its arguments and can have no side effects except its return value.
  * The MOZ_CONSTEXPR_VAR specifier tells a C++11 compiler that a variable's
- * value may be computed at compile time.  It should be prefered to just
+ * value may be computed at compile time.  It should be preferred to just
  * marking variables as MOZ_CONSTEXPR because if the compiler does not support
  * constexpr it will fall back to making the variable const, and some compilers
  * do not accept variables being marked both const and constexpr.

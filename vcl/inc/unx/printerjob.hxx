@@ -98,7 +98,7 @@ public:
     /*  rFileName: if length is greater than 0 save resulting PostScript
      *  to named file.
      *  nMode: only meaningful when saving to file: if nonzero, try
-     *  to impose the mode on the resulting file's inode; for nonexistant
+     *  to impose the mode on the resulting file's inode; for nonexistent
      *  files use open, for existent files try a chmod
      *  rJobName: text to appear in the %%Title comment
      *  rAppName: text to appear in the %%Creator comment

@@ -217,7 +217,7 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
         }
         /*
         expr->dump();
-        throw "Cant touch this";
+        throw "Can't touch this";
         */
         return true;
     }

@@ -1499,7 +1499,7 @@ throw (uno::RuntimeException, std::exception)
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    // if we're at the para start then we wont move
+    // if we're at the para start then we won't move
     // but bRet is also true if GoSentence failed but
     // the start of the sentence is reached
     bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor)

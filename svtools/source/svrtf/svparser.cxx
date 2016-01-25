@@ -257,7 +257,7 @@ sal_Unicode SvParser::GetNextChar()
                      RTL_TEXTENCODING_SYMBOL == eSrcEnc
                    )
                 {
-                    // no convserion shall take place
+                    // no conversion shall take place
                     c = (sal_Unicode)c1;
                     nChars = 1;
                 }

@@ -750,7 +750,7 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
     GtkPrintUnixDialog* const pDialog(GTK_PRINT_UNIX_DIALOG(m_pDialog));
 
     // XXX: This is a hack that depends on the number and the ordering of
-    // the controls in the rDisabled sequence (cf. the intialization of
+    // the controls in the rDisabled sequence (cf. the initialization of
     // the "PrintContent" UI option in SwPrintUIOptions::SwPrintUIOptions,
     // sw/source/core/view/printdata.cxx)
     if (m_xWrapper->supportsPrintSelection() && !i_rDisabled[2])

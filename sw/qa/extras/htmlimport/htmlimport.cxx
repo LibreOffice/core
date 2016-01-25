@@ -92,7 +92,7 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFill
     CPPUNIT_ASSERT(pTextDoc);
 
     // The document contains embedded pictures inlined for PageBackground and
-    // ParagraphBackground, check for their existance after import
+    // ParagraphBackground, check for their existence after import
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SwEditShell* pEditShell = pDoc->GetEditShell();
     CPPUNIT_ASSERT(pEditShell);

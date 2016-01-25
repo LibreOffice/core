@@ -796,7 +796,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     if (m_aStates.top().aPicture.eStyle != RTFBmpStyle::NONE)
     {
         // In case of PNG/JPEG, the real size is known, don't use the values
-        // provided by picw and pich.
+        // provided by picw and pitch.
         OString aURLBS(OUStringToOString(aGraphicUrl, RTL_TEXTENCODING_UTF8));
         const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
         if (aURLBS.startsWith(aURLBegin))

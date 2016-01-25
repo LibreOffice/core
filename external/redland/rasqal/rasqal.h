@@ -1491,10 +1491,10 @@ int rasqal_data_graph_print(rasqal_data_graph* dg, FILE* fh);
 
 /**
  * rasqal_compare_flags:
- * @RASQAL_COMPARE_NOCASE: String comparisions are case independent.
- * @RASQAL_COMPARE_XQUERY: XQuery comparision rules apply.
- * @RASQAL_COMPARE_RDF:    RDF Term comparision rules apply.
- * @RASQAL_COMPARE_URI:    Allow comparision of URIs and allow strings to have a boolean value (unused; was for RDQL)
+ * @RASQAL_COMPARE_NOCASE: String comparisons are case independent.
+ * @RASQAL_COMPARE_XQUERY: XQuery comparison rules apply.
+ * @RASQAL_COMPARE_RDF:    RDF Term comparison rules apply.
+ * @RASQAL_COMPARE_URI:    Allow comparison of URIs and allow strings to have a boolean value (unused; was for RDQL)
  * @RASQAL_COMPARE_SAMETERM: SPARQL sameTerm() builtin rules apply.
  *
  * Flags for rasqal_expression_evaluate(), rasqal_literal_compare() or
@@ -1988,7 +1988,7 @@ typedef enum {
  * @version: API version - only V1 is defined for now
  * @query: Source for this query.
  * @user_data: Context user data passed into the factory methods.
- * @init_triples_match: Factory method to initalise a new #rasqal_triples_match.
+ * @init_triples_match: Factory method to initialise a new #rasqal_triples_match.
  * @triple_present: Factory method to return presence or absence of a complete triple.
  * @free_triples_source: Factory method to deallocate resources.
  * @support_feature: Factory method to test support for a feature, returning non-0 if supported

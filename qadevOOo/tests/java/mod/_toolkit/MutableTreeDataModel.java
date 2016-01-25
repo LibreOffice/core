@@ -89,7 +89,7 @@ public class MutableTreeDataModel extends TestCase {
             try {
                 xModel.setRoot(node);
             } catch (com.sun.star.lang.IllegalArgumentException ex) {
-                log.println("ERROR: could not preform event: " + ex.toString());
+                log.println("ERROR: could not perform event: " + ex.toString());
                 ex.printStackTrace();
             }
 

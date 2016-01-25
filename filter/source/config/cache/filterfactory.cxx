@@ -496,7 +496,7 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sM
     aLock.clear();
     // <- SAFE ----------------------
 
-    // bring "other" filters in an alphabeticly order
+    // bring "other" filters in an alphabetically order
     // It's needed below.
     ::std::sort(lOtherFilters.begin(), lOtherFilters.end());
 
