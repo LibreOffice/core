@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_INC_REGBAND_HXX
 #define INCLUDED_VCL_INC_REGBAND_HXX
 
-#include <sal/types.h>
-
 /*
 
 class ImplRegionBand
