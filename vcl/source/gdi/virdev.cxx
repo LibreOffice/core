@@ -17,21 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/virdev.hxx>
-
-#include <salinst.hxx>
-#include <salgdi.hxx>
-#include <salframe.hxx>
-#include <salvd.hxx>
-#include <outdev.h>
+#include "salinst.hxx"
+#include "salgdi.hxx"
+#include "salvd.hxx"
+#include "outdev.h"
 #include "PhysicalFontCollection.hxx"
-#include "impfontmetricdata.hxx"
-#include <svdata.hxx>
+#include "svdata.hxx"
 
 #include <vcl/ITiledRenderable.hxx>
 
