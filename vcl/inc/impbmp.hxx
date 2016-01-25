@@ -54,10 +54,10 @@ public:
 
     SalBitmap*          ImplGetSalBitmap() const { return mpSalBitmap; }
 
-    bool            ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
-    bool            ImplCreate( const ImpBitmap& rImpBitmap );
-    bool            ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
-    bool            ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
+    bool                ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
+    bool                ImplCreate( const ImpBitmap& rImpBitmap );
+    bool                ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
+    bool                ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
 
     Size                ImplGetSize() const;
     sal_uInt16          ImplGetBitCount() const;
