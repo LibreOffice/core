@@ -1,0 +1,136 @@
+From 8008aca4daa92316dcd44f2bb8d21b5439d8baf1 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Mon, 25 Jan 2016 11:24:01 +0100
+Subject: [PATCH] NSS glue layer: add SHA-256 support
+
+---
+ include/xmlsec/nss/crypto.h | 16 +++++++++++++
+ src/nss/crypto.c            |  3 +++
+ src/nss/digests.c           | 57 +++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 76 insertions(+)
+
+diff --git a/include/xmlsec/nss/crypto.h b/include/xmlsec/nss/crypto.h
+index 42ba6ca..8164f45 100644
+--- a/include/xmlsec/nss/crypto.h
++++ b/include/xmlsec/nss/crypto.h
+@@ -304,6 +304,22 @@ XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecNssTransformRsaOaepGetKlass(void);
+ XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecNssTransformSha1GetKlass	(void);
+ #endif /* XMLSEC_NO_SHA1 */
+ 
++/********************************************************************
++ *
++ * SHA256 transform
++ *
++ *******************************************************************/
++#ifndef XMLSEC_NO_SHA256
++/**
++ * xmlSecNssTransformSha256Id:
++ *
++ * The SHA256 digest transform klass.
++ */
++#define xmlSecNssTransformSha256Id \
++	xmlSecNssTransformSha256GetKlass()
++XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecNssTransformSha256GetKlass	(void);
++#endif /* XMLSEC_NO_SHA256 */
++
+ #ifdef __cplusplus
+ }
+ #endif /* __cplusplus */
+diff --git a/src/nss/crypto.c b/src/nss/crypto.c
+index 0495165..80adc50 100644
+--- a/src/nss/crypto.c
++++ b/src/nss/crypto.c
+@@ -132,6 +132,9 @@ xmlSecCryptoGetFunctions_nss(void) {
+ #ifndef XMLSEC_NO_SHA1    
+     gXmlSecNssFunctions->transformSha1GetKlass 		= xmlSecNssTransformSha1GetKlass;
+ #endif /* XMLSEC_NO_SHA1 */
++#ifndef XMLSEC_NO_SHA256
++    gXmlSecNssFunctions->transformSha256GetKlass = xmlSecNssTransformSha256GetKlass;
++#endif /* XMLSEC_NO_SHA256 */
+ 
+     /**
+      * High level routines form xmlsec command line utility
+diff --git a/src/nss/digests.c b/src/nss/digests.c
+index 5a1db91..0c4657c 100644
+--- a/src/nss/digests.c
++++ b/src/nss/digests.c
+@@ -70,6 +70,11 @@ xmlSecNssDigestCheckId(xmlSecTransformPtr transform) {
+ 	return(1);
+     }
+ #endif /* XMLSEC_NO_SHA1 */    
++#ifndef XMLSEC_NO_SHA256
++    if(xmlSecTransformCheckId(transform, xmlSecNssTransformSha256Id)) {
++	return(1);
++    }
++#endif /* XMLSEC_NO_SHA256 */
+ 
+     return(0);
+ }
+@@ -92,6 +97,11 @@ xmlSecNssDigestInitialize(xmlSecTransformPtr transform) {
+ 	ctx->digest = SECOID_FindOIDByTag(SEC_OID_SHA1);
+     } else
+ #endif /* XMLSEC_NO_SHA1 */    	
++#ifndef XMLSEC_NO_SHA256
++    if(xmlSecTransformCheckId(transform, xmlSecNssTransformSha256Id)) {
++	ctx->digest = SECOID_FindOIDByTag(SEC_OID_SHA256);
++    } else
++#endif /* XMLSEC_NO_SHA256 */
+ 
+     if(1) {
+ 	xmlSecError(XMLSEC_ERRORS_HERE, 
+@@ -327,5 +337,52 @@ xmlSecNssTransformSha1GetKlass(void) {
+ }
+ #endif /* XMLSEC_NO_SHA1 */
+ 
++#ifndef XMLSEC_NO_SHA256
++/******************************************************************************
++ *
++ * SHA256 Digest transforms
++ *
++ *****************************************************************************/
++static xmlSecTransformKlass xmlSecNssSha256Klass = {
++    /* klass/object sizes */
++    sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
++    xmlSecNssDigestSize,			/* xmlSecSize objSize */
++
++    /* data */
++    xmlSecNameSha256,				/* const xmlChar* name; */
++    xmlSecHrefSha256, 				/* const xmlChar* href; */
++    xmlSecTransformUsageDigestMethod,		/* xmlSecTransformUsage usage; */
++
++    /* methods */
++    xmlSecNssDigestInitialize,			/* xmlSecTransformInitializeMethod initialize; */
++    xmlSecNssDigestFinalize,			/* xmlSecTransformFinalizeMethod finalize; */
++    NULL,					/* xmlSecTransformNodeReadMethod readNode; */
++    NULL,					/* xmlSecTransformNodeWriteMethod writeNode; */
++    NULL,					/* xmlSecTransformSetKeyReqMethod setKeyReq; */
++    NULL,					/* xmlSecTransformSetKeyMethod setKey; */
++    xmlSecNssDigestVerify,			/* xmlSecTransformVerifyMethod verify; */
++    xmlSecTransformDefaultGetDataType,		/* xmlSecTransformGetDataTypeMethod getDataType; */
++    xmlSecTransformDefaultPushBin,		/* xmlSecTransformPushBinMethod pushBin; */
++    xmlSecTransformDefaultPopBin,		/* xmlSecTransformPopBinMethod popBin; */
++    NULL,					/* xmlSecTransformPushXmlMethod pushXml; */
++    NULL,					/* xmlSecTransformPopXmlMethod popXml; */
++    xmlSecNssDigestExecute,			/* xmlSecTransformExecuteMethod execute; */
++
++    NULL,					/* void* reserved0; */
++    NULL,					/* void* reserved1; */
++};
++
++/**
++ * xmlSecNssTransformSha256GetKlass:
++ *
++ * SHA-256 digest transform klass.
++ *
++ * Returns: pointer to SHA-256 digest transform klass.
++ */
++xmlSecTransformId
++xmlSecNssTransformSha256GetKlass(void) {
++    return(&xmlSecNssSha256Klass);
++}
++#endif /* XMLSEC_NO_SHA256 */
+ 
+ 
+-- 
+2.6.2
+

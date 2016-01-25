@@ -27,6 +27,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
 	external/libxmlsec/xmlsec1-customkeymanage.patch \
 	external/libxmlsec/xmlsec1-update-config.guess.patch.1 \
 	external/libxmlsec/xmlsec1-ooxml.patch.1 \
+	external/libxmlsec/xmlsec1-nss-sha256.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,xmlsec,include/xmlsec/mscrypto/akmngr.h,external/libxmlsec/include/akmngr_mscrypto.h))
