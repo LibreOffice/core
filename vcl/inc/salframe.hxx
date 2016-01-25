@@ -20,24 +20,12 @@
 #ifndef INCLUDED_VCL_INC_SALFRAME_HXX
 #define INCLUDED_VCL_INC_SALFRAME_HXX
 
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
+#include "salwtype.hxx"
+#include "salgeom.hxx"
 
-#include <vcl/ptrstyle.hxx>
-
-#include <salwtype.hxx>
-#include <salgeom.hxx>
-#include <tools/gen.hxx>
-#include <vcl/region.hxx>
-
-#include <vcl/impdel.hxx>
-#include <rtl/ustring.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/window.hxx>
-#include <vcl/vclptr.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
-    // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
+// complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
 
 class AllSettings;
 class SalGraphics;
