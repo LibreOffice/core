@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/interfacecontainer.hxx>
 
 #include <embeddoc.hxx>
 #include <docholder.hxx>
