@@ -126,7 +126,7 @@ void Octree::ImplDeleteOctree( NODE** ppNode )
 
 void Octree::ImplAdd( NODE** ppNode )
 {
-    // ggf. neuen Knoten erzeugen
+    // possibly generate new nodes
     if( !*ppNode )
     {
         *ppNode = pNodeCache->ImplGetFreeNode();
