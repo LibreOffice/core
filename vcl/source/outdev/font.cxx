@@ -17,32 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "i18nlangtag/mslangid.hxx"
+#include <i18nlangtag/mslangid.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 
 #include "sallayout.hxx"
+#include "salgdi.hxx"
 #include "svdata.hxx"
-
-#include "impfont.hxx"
-#include "outdata.hxx"
-#include "fontinstance.hxx"
-#include "fontattributes.hxx"
-#include "impfontmetricdata.hxx"
 
 #include "outdev.h"
 #include "window.h"
 
 #include "PhysicalFontCollection.hxx"
-#include "PhysicalFontFace.hxx"
-#include "PhysicalFontFamily.hxx"
 
 #include "svids.hrc"
 
@@ -50,19 +40,6 @@
 #if ENABLE_GRAPHITE
 #include "graphite_features.hxx"
 #endif
-
-#include "../gdi/pdfwriter_impl.hxx"
-
-#include <boost/functional/hash.hpp>
-#include <cmath>
-#include <cstring>
-#include <memory>
-#include <algorithm>
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::rtl;
-using namespace ::utl;
 
 FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
