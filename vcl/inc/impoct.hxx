@@ -22,8 +22,6 @@
 
 #include "octree.hxx"
 
-// - ImpErrorQuad -
-
 class ImpErrorQuad
 {
     long nRed;
@@ -107,8 +105,6 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
                         (sal_uInt8) ( ( nGreen < 0L ? 0L : nGreen > 8160L ? 8160L : nGreen ) >> 5L ),
                         (sal_uInt8) ( ( nBlue < 0L ? 0L : nBlue > 8160L ? 8160L : nBlue ) >> 5L ) );
 }
-
-// - NodeCache -
 
 class ImpNodeCache
 {
