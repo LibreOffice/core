@@ -64,6 +64,11 @@ struct _LibreOfficeKitClass
 
     /// @see lok::Office::getFilterTypes().
     char* (*getFilterTypes) (LibreOfficeKit* pThis);
+
+    /// @see lok::Office::setDocumentPassword().
+    void (*setDocumentPassword) (LibreOfficeKit* pThis,
+            char const* pURL,
+            char const* pPassword);
 #endif
 
 };

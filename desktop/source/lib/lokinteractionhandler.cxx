@@ -19,14 +19,27 @@
 
 #include "lokinteractionhandler.hxx"
 
+#include <rtl/ref.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/task/XInteractionPassword2.hpp>
+#include <com/sun/star/task/DocumentPasswordRequest2.hpp>
+
+#include <../../inc/lib/init.hxx>
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace com::sun::star;
 
-LOKInteractionHandler::LOKInteractionHandler(uno::Reference<uno::XComponentContext> const & /*rxContext*/)
+LOKInteractionHandler::LOKInteractionHandler(
+        uno::Reference<uno::XComponentContext> const & /*rxContext*/,
+        desktop::LibLibreOffice_Impl *const pLOKit)
+    : m_pLOKit(pLOKit)
+    , m_usePassword(false)
 {
+    assert(m_pLOKit);
 }
 
 LOKInteractionHandler::~LOKInteractionHandler()
@@ -72,6 +85,66 @@ throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations = xRequest->getContinuations();
 
+    uno::Any const request(xRequest->getRequest());
+    task::DocumentPasswordRequest2 passwordRequest;
+    if (request >>= passwordRequest)
+    {
+        OString const url(passwordRequest.Name.toUtf8());
+        m_pLOKit->mpCallback(passwordRequest.IsRequestPasswordToModify
+                        ? LOK_CALLBACK_DOCUMENT_PASSWORD
+                        : LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY,
+                    url.getStr(),
+                    m_pLOKit->mpCallbackData);
+
+        // block until SetPassword is called
+        m_havePassword.wait(nullptr);
+        m_havePassword.reset();
+
+        for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+        {
+            if (m_usePassword)
+            {
+                if (passwordRequest.IsRequestPasswordToModify)
+                {
+                    uno::Reference<task::XInteractionPassword2> const xIPW2(
+                            rContinuations[i], uno::UNO_QUERY);
+                    xIPW2->setPasswordToModify(m_Password);
+                    xIPW2->select();
+                }
+                else
+                {
+                    uno::Reference<task::XInteractionPassword> const xIPW(
+                            rContinuations[i], uno::UNO_QUERY);
+                    if (xIPW.is())
+                    {
+                        xIPW->setPassword(m_Password);
+                        xIPW->select();
+                    }
+                }
+            }
+            else
+            {
+                if (passwordRequest.IsRequestPasswordToModify)
+                {
+                    uno::Reference<task::XInteractionPassword2> const xIPW2(
+                            rContinuations[i], uno::UNO_QUERY);
+                    xIPW2->setRecommendReadOnly(true);
+                    xIPW2->select();
+                }
+                else
+                {
+                    uno::Reference<task::XInteractionAbort> const xAbort(
+                            rContinuations[i], uno::UNO_QUERY);
+                    if (xAbort.is())
+                    {
+                        xAbort->select();
+                    }
+                }
+            }
+        }
+        return sal_True;
+    }
+
     // TODO: add LOK api that allows handling this for real, for the moment we
     // just set the interaction as 'Approved'
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
@@ -82,6 +155,20 @@ throw (uno::RuntimeException, std::exception)
     }
 
     return sal_True;
+}
+
+void LOKInteractionHandler::SetPassword(char const*const pPassword)
+{
+    if (pPassword)
+    {
+        m_Password = OUString(pPassword, strlen(pPassword), RTL_TEXTENCODING_UTF8);
+        m_usePassword = true;
+    }
+    else
+    {
+        m_usePassword = false;
+    }
+    m_havePassword.set();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

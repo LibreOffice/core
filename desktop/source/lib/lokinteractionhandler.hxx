@@ -20,11 +20,14 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_LIB_LOKINTERACTIONHANDLER_HXX
 #define INCLUDED_DESKTOP_SOURCE_LIB_LOKINTERACTIONHANDLER_HXX
 
+#include <osl/conditn.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+
+namespace desktop { struct LibLibreOffice_Impl; }
 
 /** InteractionHandler is an interface that provides the user with various dialogs / error messages.
 
@@ -38,11 +41,21 @@ class LOKInteractionHandler: public cppu::WeakImplHelper<com::sun::star::lang::X
                                                          com::sun::star::lang::XInitialization,
                                                          com::sun::star::task::XInteractionHandler2>
 {
+private:
+    desktop::LibLibreOffice_Impl * m_pLOKit;
+    OUString m_Password;
+    bool m_usePassword;
+    osl::Condition m_havePassword;
+
     LOKInteractionHandler(const LOKInteractionHandler&) = delete;
     LOKInteractionHandler& operator=(const LOKInteractionHandler&) = delete;
 
 public:
-    explicit LOKInteractionHandler(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const & rxContext);
+    void SetPassword(char const* pPassword);
+
+    explicit LOKInteractionHandler(
+            com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const & rxContext,
+            desktop::LibLibreOffice_Impl *);
 
     virtual ~LOKInteractionHandler();
 

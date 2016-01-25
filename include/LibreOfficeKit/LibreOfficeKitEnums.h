@@ -221,7 +221,24 @@ typedef enum
     /**
      * The text content of the formula bar in Calc.
      */
-    LOK_CALLBACK_CELL_FORMULA
+    LOK_CALLBACK_CELL_FORMULA,
+
+    /**
+     * Loading a document requires a password.
+     *
+     * Loading the document is blocked until the password is provided via
+     * lok::Office::setDocumentPassword().  The document cannot be loaded
+     * without the password.
+     */
+    LOK_CALLBACK_DOCUMENT_PASSWORD,
+
+    /**
+     * Editing a document requires a password.
+     *
+     * Loading the document is blocked until the password is provided via
+     * lok::Office::setDocumentPassword().
+     */
+    LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY,
 }
 LibreOfficeKitCallbackType;
 

@@ -460,6 +460,30 @@ public:
     {
         return mpThis->pClass->getFilterTypes(mpThis);
     }
+
+    /**
+     * Set password required for loading or editing a document.
+     *
+     * Loading the document is blocked until the password is provided.
+     *
+     * @param pURL      the URL of the document, as sent to the callback
+     * @param pPassword the password, nullptr indicates no password
+     *
+     * In response to LOK_CALLBACK_DOCUMENT_PASSWORD, a vaild password
+     * will continue loading the document, an invalid password will
+     * result in another LOK_CALLBACK_DOCUMENT_PASSWORD request,
+     * and a NULL password will abort loading the document.
+     *
+     * In response to LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY, a vaild
+     * password will continue loading the document, an invalid password will
+     * result in another LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY request,
+     * and a NULL password will continue loading the document in read-only
+     * mode.
+     */
+    inline void setDocumentPassword(char const* pURL, char const* pPassword)
+    {
+        mpThis->pClass->setDocumentPassword(mpThis, pURL, pPassword);
+    }
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
