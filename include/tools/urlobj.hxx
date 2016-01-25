@@ -25,6 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <sal/types.h>
+#include <osl/file.hxx>
 
 #include <memory>
 
@@ -76,7 +77,8 @@ enum class INetProtocol
     Hid,
     Sftp,
     Cmis,
-    LAST = Cmis
+    LAST = Cmis,
+    DEFAULT = Http
 };
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetURLObject
@@ -158,7 +160,7 @@ public:
     // General Structure:
 
     inline INetURLObject():
-        m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http) {}
+        m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::DEFAULT) {}
 
     inline bool HasError() const { return m_eScheme == INetProtocol::NotValid; }
 
@@ -1011,6 +1013,43 @@ public:
 
     static bool IsCaseSensitive() { return true; }
 
+    /** Verify URL and as a fallback handle input as a system path
+
+        Most internal functions work with URLs. But the UI displays system
+        paths in case of URLs with the file schema. Additionally some functions
+        are defined to accept both types as valid input.
+
+        The function tries to get a valid URL by validating it as an URL. In
+        the case of a failure, it assumes it's a system path and tries to
+        convert it to an URL.
+
+        @param rPathOrURL URL or system path to URLify.
+
+        @param bFromURL if false, the converted string is returned, otherwise
+               the decoded main URL with \p eMechanism.
+
+        @param eMechanism the URI decoding mechanism to use.
+
+        @param eSmartSchema schema for smart decoding of \p rPathOrURL.
+
+        @return the URL as string or an empty string in case of failure.
+     */
+    static inline OUString TryUrlFromSystemPathAsString(OUString const & rPathOrURL,
+                                                        const bool bFromURL = false,
+                                                        const DecodeMechanism eMechanism
+                                                            = DECODE_TO_IURI,
+                                                        const INetProtocol eSmartSchema
+                                                            = INetProtocol::DEFAULT);
+
+    /** Verify URL and as a fallback handle input as a system path
+
+        @see TryUrlFromSystemPathAsString
+
+        @param rPathOrURL the string to URLify.
+
+        @return a probably invalid INetURLObject
+     */
+    static inline INetURLObject TryUrlFromSystemPathAsObject(OUString const & rPathOrURL);
 
 private:
     // General Structure:
@@ -1253,7 +1292,7 @@ inline OUString INetURLObject::decode(SubString const & rSubString,
 inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset):
-    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
+    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::DEFAULT)
 {
     setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, false,
                  FSysStyle(0));
@@ -1410,7 +1449,7 @@ inline bool INetURLObject::SetMark(OUString const & rTheFragment,
 
 inline INetURLObject::INetURLObject(OUString const & rFSysPath,
                                     FSysStyle eStyle):
-    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
+    m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::DEFAULT)
 {
     setFSysPath(rFSysPath, eStyle);
 }
@@ -1438,6 +1477,49 @@ inline OUString INetURLObject::decode(OUStringBuffer const & rText,
 {
     return decode(rText.getStr(), rText.getStr() + rText.getLength(),
                   eMechanism, eCharset);
+}
+
+// static
+inline OUString INetURLObject::TryUrlFromSystemPathAsString(OUString const & rPathOrURL,
+                                                            const bool bFromURL,
+                                                            const DecodeMechanism eMechanism,
+                                                            const INetProtocol eTheSmartScheme)
+{
+    if (rPathOrURL.isEmpty())
+        return rPathOrURL;
+    INetURLObject aURLobj( rPathOrURL, eTheSmartScheme );
+    OUString aURL;
+    INetProtocol aProtocol = aURLobj.GetProtocol();
+    if (INetProtocol::NotValid == aProtocol)
+    {
+        if (osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath(rPathOrURL, aURL))
+            aURL.clear();
+        else if (!bFromURL)
+            aURL = rPathOrURL;
+        else
+        {
+            aURLobj.SetURL(aURL);
+            aProtocol = aURLobj.GetProtocol();
+        }
+    }
+    if (bFromURL && (INetProtocol::NotValid != aProtocol))
+        aURL = aURLobj.GetMainURL( eMechanism );
+    return aURL;
+}
+
+// static
+inline INetURLObject INetURLObject::TryUrlFromSystemPathAsObject(OUString const & rPathOrURL)
+{
+    INetURLObject aURLobj(  );
+    if (rPathOrURL.isEmpty())
+        return aURLobj;
+    if (INetProtocol::NotValid == aURLobj.GetProtocol())
+    {
+        OUString aURL;
+        if (osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(rPathOrURL, aURL))
+            aURLobj.SetURL(aURL);
+    }
+    return aURLobj;
 }
 
 #endif

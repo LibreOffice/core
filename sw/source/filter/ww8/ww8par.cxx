@@ -4780,17 +4780,7 @@ static void lcl_createTemplateToProjectEntry( const uno::Reference< container::X
 {
     if ( xPrjNameCache.is() )
     {
-        INetURLObject aObj;
-        aObj.SetURL( sTemplatePathOrURL );
-        bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-        OUString aURL;
-        if ( bIsURL )
-            aURL = sTemplatePathOrURL;
-        else
-        {
-            osl::FileBase::getFileURLFromSystemPath( sTemplatePathOrURL, aURL );
-            aObj.SetURL( aURL );
-        }
+        INetURLObject aObj = INetURLObject::TryUrlFromSystemPathAsObject( sTemplatePathOrURL );
         try
         {
             OUString templateNameWithExt = aObj.GetLastName();
@@ -4866,14 +4856,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     sal_Int32 nEntries = sGlobalTemplates.getLength();
     for ( sal_Int32 i=0; i<nEntries; ++i )
     {
-        INetURLObject aObj;
-        aObj.SetURL( sGlobalTemplates[ i ] );
-        bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-        OUString aURL;
-        if ( bIsURL )
-                aURL = sGlobalTemplates[ i ];
-        else
-                osl::FileBase::getFileURLFromSystemPath( sGlobalTemplates[ i ], aURL );
+        OUString aURL = INetURLObject::TryUrlFromSystemPathAsString( sGlobalTemplates[ i ] );
         if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
             continue; // don't try and read the same document as ourselves
 

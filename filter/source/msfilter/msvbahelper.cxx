@@ -78,17 +78,7 @@ SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
 {
     SfxObjectShell* pFoundShell=nullptr;
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
-    INetURLObject aObj;
-    aObj.SetURL( sMacroURLOrPath );
-    bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-    OUString aURL;
-    if ( bIsURL )
-        aURL = sMacroURLOrPath;
-    else
-    {
-        osl::FileBase::getFileURLFromSystemPath( sMacroURLOrPath, aURL );
-        aObj.SetURL( aURL );
-    }
+    OUString aURL = INetURLObject::TryUrlFromSystemPathAsString( sMacroURLOrPath );
     OSL_TRACE("Trying to find shell for url %s", OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
     while ( pShell )
     {
@@ -396,17 +386,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
             OUString sCreatedFrom = xDocProps->getTemplateURL();
             if ( !sCreatedFrom.isEmpty() )
             {
-                INetURLObject aObj;
-                aObj.SetURL( sCreatedFrom );
-                bool bIsURL = aObj.GetProtocol() != INetProtocol::NotValid;
-                OUString aURL;
-                if ( bIsURL )
-                    aURL = sCreatedFrom;
-                else
-                {
-                    osl::FileBase::getFileURLFromSystemPath( sCreatedFrom, aURL );
-                    aObj.SetURL( aURL );
-                }
+                INetURLObject aObj = INetURLObject::TryUrlFromSystemPathAsObject( sCreatedFrom );
                 sCreatedFrom =  aObj.GetLastName();
             }
 

@@ -411,15 +411,8 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
     while( (aIter != maDropFileVector.end()) && !nError )
     {
         OUString aCurrentDropFile( *aIter );
-        INetURLObject   aURL( aCurrentDropFile );
+        INetURLObject   aURL = INetURLObject::TryUrlFromSystemPathAsObject( aCurrentDropFile );
         bool            bOK = false;
-
-        if( aURL.GetProtocol() == INetProtocol::NotValid )
-        {
-            OUString aURLStr;
-            osl::FileBase::getFileURLFromSystemPath( aCurrentDropFile, aURLStr );
-            aURL = INetURLObject( aURLStr );
-        }
 
         GraphicFilter&  rGraphicFilter = GraphicFilter::GetGraphicFilter();
         Graphic         aGraphic;

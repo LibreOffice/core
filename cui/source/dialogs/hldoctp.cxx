@@ -116,22 +116,13 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 OUString SvxHyperlinkDocTp::GetCurrentURL ()
 {
     // get data from dialog-controls
-    OUString aStrURL;
     OUString aStrPath ( m_pCbbPath->GetText() );
     OUString aStrMark( m_pEdTarget->GetText() );
 
-    if ( !aStrPath.isEmpty() )
-    {
-        INetURLObject aURL( aStrPath );
-        if ( aURL.GetProtocol() != INetProtocol::NotValid )    // maybe the path is already a valid
-            aStrURL = aStrPath;                             // hyperlink, then we can use this path directly
-        else
-            osl::FileBase::getFileURLFromSystemPath( aStrPath, aStrURL );
-
-        //#105788# always create a URL even if it is not valid
-        if( aStrURL.isEmpty() )
-            aStrURL = aStrPath;
-    }
+    OUString aStrURL = INetURLObject::TryUrlFromSystemPathAsString( aStrPath );
+    //#105788# always create a URL even if it is not valid
+    if( aStrURL.isEmpty() )
+        aStrURL = aStrPath;
 
     if( !aStrMark.isEmpty() )
     {
