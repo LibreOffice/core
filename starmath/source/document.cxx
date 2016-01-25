@@ -698,7 +698,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
         }
         Reference<css::frame::XModel> xModel(GetModel());
         SmXMLImportWrapper aEquation(xModel);
-        bSuccess = 0 == aEquation.Import(rMedium);
+        bSuccess = ( ERRCODE_NONE == aEquation.Import(rMedium) );
     }
     else
     {
@@ -712,7 +712,8 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
                 {
                     // is this a MathType Storage?
                     MathType aEquation( aText );
-                    if ( (bSuccess = (1 == aEquation.Parse( aStorage )) ))
+                    bSuccess = aEquation.Parse( aStorage );
+                    if ( bSuccess )
                         Parse();
                 }
             }
@@ -1338,9 +1339,7 @@ void SmDocShell::SetModified(bool bModified)
 bool SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
 {
     MathType aEquation( aText, pTree );
-
-    bool bRet = 0 != aEquation.ConvertFromStarMath( rMedium );
-    return bRet;
+    return aEquation.ConvertFromStarMath( rMedium );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
