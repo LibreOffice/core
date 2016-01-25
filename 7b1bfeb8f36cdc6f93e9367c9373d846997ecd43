@@ -51,6 +51,24 @@
       "revId": "7b1bfeb8f36cdc6f93e9367c9373d846997ecd43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_4e17b3ed",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/ScriptProvider.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-25T11:09:18Z",
+      "side": 1,
+      "message": "...but cannot be null at line 224, and is wrongly forced to non-null at line 220, see my comment at line 225",
+      "parentUuid": "7aa08908_0e1dab0f",
+      "revId": "7b1bfeb8f36cdc6f93e9367c9373d846997ecd43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
