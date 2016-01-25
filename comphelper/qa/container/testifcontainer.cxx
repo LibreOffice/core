@@ -79,7 +79,7 @@ void test_interfacecontainer()
         OInterfaceIteratorHelper iterator( helper );
 
         while( iterator.hasMoreElements() )
-            ((XVetoableChangeListener*)iterator.next())->vetoableChange( PropertyChangeEvent() );
+            static_cast<XVetoableChangeListener*>(iterator.next())->vetoableChange( PropertyChangeEvent() );
 
         helper.disposeAndClear( EventObject() );
     }
@@ -97,11 +97,11 @@ void test_interfacecontainer()
 
         OInterfaceIteratorHelper iterator( helper );
 
-        ((XVetoableChangeListener*)iterator.next())->vetoableChange( PropertyChangeEvent() );
+        static_cast<XVetoableChangeListener*>(iterator.next())->vetoableChange( PropertyChangeEvent() );
         iterator.remove();
-        ((XVetoableChangeListener*)iterator.next())->vetoableChange( PropertyChangeEvent() );
+        static_cast<XVetoableChangeListener*>(iterator.next())->vetoableChange( PropertyChangeEvent() );
         iterator.remove();
-        ((XVetoableChangeListener*)iterator.next())->vetoableChange( PropertyChangeEvent() );
+        static_cast<XVetoableChangeListener*>(iterator.next())->vetoableChange( PropertyChangeEvent() );
         iterator.remove();
 
         OSL_ASSERT( helper.getLength() == 0 );
@@ -123,7 +123,7 @@ void test_interfacecontainer()
             OInterfaceIteratorHelper iterator( helper );
             while( iterator.hasMoreElements() )
             {
-                Reference< XVetoableChangeListener > r = ((XVetoableChangeListener*)iterator.next());
+                Reference< XVetoableChangeListener > r = static_cast<XVetoableChangeListener*>(iterator.next());
                 if( r == r1 )
                     iterator.remove();
             }
@@ -133,7 +133,7 @@ void test_interfacecontainer()
             OInterfaceIteratorHelper iterator( helper );
             while( iterator.hasMoreElements() )
             {
-                Reference< XVetoableChangeListener > r = ((XVetoableChangeListener*)iterator.next());
+                Reference< XVetoableChangeListener > r = static_cast<XVetoableChangeListener*>(iterator.next());
                 OSL_ASSERT( r != r1 && ( r == r2 || r == r3 ) );
             }
         }
