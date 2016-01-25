@@ -545,9 +545,9 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
     double otherWidth  = rOther.getEnd().getX() -  rOther.getStart().getX();
     // check for same orientation, same line width, same style and matching colors
     if (    ((thisHeight > thisWidth) == (otherHeight > otherWidth))
-        &&  (rThis.getLeftWidth()     == rOther.getLeftWidth())
-        &&  (rThis.getDistance()      == rOther.getDistance())
-        &&  (rThis.getRightWidth()    == rOther.getRightWidth())
+        &&  (rtl::math::approxEqual(rThis.getLeftWidth(),  rOther.getLeftWidth()))
+        &&  (rtl::math::approxEqual(rThis.getDistance(),   rOther.getDistance()))
+        &&  (rtl::math::approxEqual(rThis.getRightWidth(), rOther.getRightWidth()))
         &&  (rThis.getStyle()         == rOther.getStyle())
         &&  (rThis.getRGBColorLeft()  == rOther.getRGBColorLeft())
         &&  (rThis.getRGBColorRight() == rOther.getRGBColorRight())
@@ -558,7 +558,7 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
         int nRet = 0;
         if (thisHeight > thisWidth) // vertical line
         {
-            if (rThis.getStart().getX() == rOther.getStart().getX())
+            if (rtl::math::approxEqual(rThis.getStart().getX(), rOther.getStart().getX()))
             {
                 assert(rThis.getEnd().getX() == rOther.getEnd().getX());
                 nRet = lcl_TryMergeLines(
@@ -569,7 +569,7 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
         }
         else // horizontal line
         {
-            if (rThis.getStart().getY() == rOther.getStart().getY())
+            if (rtl::math::approxEqual(rThis.getStart().getY(), rOther.getStart().getY()))
             {
                 assert(rThis.getEnd().getY() == rOther.getEnd().getY());
                 nRet = lcl_TryMergeLines(
