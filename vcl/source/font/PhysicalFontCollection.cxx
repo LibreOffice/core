@@ -17,26 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-
-#include <vector>
-
-#include <i18nlangtag/mslangid.hxx>
-#include <unotools/configmgr.hxx>
-#include <tools/debug.hxx>
-
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
 #include "graphite_features.hxx"
 #endif
+#include <i18nlangtag/mslangid.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "outdev.h"
-#include "fontinstance.hxx"
-#include "fontattributes.hxx"
-#include "PhysicalFontFace.hxx"
-
 #include "PhysicalFontCollection.hxx"
-
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
