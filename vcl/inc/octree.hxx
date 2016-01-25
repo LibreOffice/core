@@ -32,11 +32,11 @@ typedef struct OctreeNode
     sal_uLong       nRed;
     sal_uLong       nGreen;
     sal_uLong       nBlue;
-    OctreeNode* pChild[ 8 ];
-    OctreeNode* pNext;
-    OctreeNode* pNextInCache;
+    OctreeNode*     pChild[ 8 ];
+    OctreeNode*     pNext;
+    OctreeNode*     pNextInCache;
     sal_uInt16      nPalIndex;
-    bool        bLeaf;
+    bool            bLeaf;
 } NODE;
 
 class ImpNodeCache;
@@ -45,18 +45,6 @@ class BitmapReadAccess;
 class VCL_PLUGIN_PUBLIC Octree
 {
 private:
-
-    BitmapPalette               aPal;
-    sal_uLong                   nMax;
-    sal_uLong                   nLeafCount;
-    sal_uLong                   nLevel;
-    NODE*                       pTree;
-    NODE*                       pReduce[ OCTREE_BITS + 1 ];
-    BitmapColor*                pColor;
-    ImpNodeCache*               pNodeCache;
-    const BitmapReadAccess*     pAcc;
-    sal_uInt16                      nPalIndex;
-
                                 Octree() {}
 
     void                        CreatePalette( NODE* pNode );
@@ -67,13 +55,25 @@ private:
     SAL_DLLPRIVATE void         ImplAdd( NODE** ppNode );
     SAL_DLLPRIVATE void         ImplReduce();
 
+
+    BitmapPalette               aPal;
+    sal_uLong                   nMax;
+    sal_uLong                   nLeafCount;
+    sal_uLong                   nLevel;
+    NODE*                       pTree;
+    NODE*                       pReduce[ OCTREE_BITS + 1 ];
+    BitmapColor*                pColor;
+    ImpNodeCache*               pNodeCache;
+    const BitmapReadAccess*     pAcc;
+    sal_uInt16                  nPalIndex;
+
 public:
 
                                 Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors );
                                 ~Octree();
 
     inline const BitmapPalette& GetPalette();
-    inline sal_uInt16               GetBestPaletteIndex( const BitmapColor& rColor );
+    inline sal_uInt16           GetBestPaletteIndex( const BitmapColor& rColor );
 };
 
 inline const BitmapPalette& Octree::GetPalette()
@@ -97,18 +97,18 @@ class VCL_PLUGIN_PUBLIC InverseColorMap
 {
 private:
 
-    sal_uInt8*              pBuffer;
-    sal_uInt8*              pMap;
-    const sal_uLong         nBits;
+    sal_uInt8*                  pBuffer;
+    sal_uInt8*                  pMap;
+    const sal_uLong             nBits;
 
     SAL_DLLPRIVATE void ImplCreateBuffers( const sal_uLong nMax );
 
 public:
 
-    explicit            InverseColorMap( const BitmapPalette& rPal );
-                        ~InverseColorMap();
+    explicit                    InverseColorMap( const BitmapPalette& rPal );
+                                ~InverseColorMap();
 
-    inline sal_uInt16       GetBestPaletteIndex( const BitmapColor& rColor );
+    inline sal_uInt16           GetBestPaletteIndex( const BitmapColor& rColor );
 };
 
 inline sal_uInt16 InverseColorMap::GetBestPaletteIndex( const BitmapColor& rColor )
