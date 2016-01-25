@@ -302,7 +302,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
 {
     static AsyncRequests aNotify(RequestHandlerRef(new AsyncPickerEvents()));
 
-    ::comphelper::OInterfaceContainerHelper2* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
+    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
     if ( ! pContainer)
         return;
 

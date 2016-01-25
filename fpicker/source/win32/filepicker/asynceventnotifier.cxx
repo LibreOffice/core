@@ -263,7 +263,7 @@ void SAL_CALL CAsyncEventNotifier::run()
                 std::unique_ptr<CEventNotification> EventNotification(getNextEventRecord());
                 removeNextEventRecord();
 
-                ::comphelper::OInterfaceContainerHelper2* pICHelper =
+                ::cppu::OInterfaceContainerHelper* pICHelper =
                     m_rBroadcastHelper.getContainer(cppu::UnoType<XFilePickerListener>::get());
 
                 if (pICHelper)
