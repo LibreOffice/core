@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-
-#include <cassert>
-#include <cmath>
-
-#include <sal/types.h>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
@@ -33,26 +26,18 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/textrectinfo.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/controllayout.hxx>
 
-#include <outdata.hxx>
-#include <outdev.h>
-#include <salgdi.hxx>
-#include <svdata.hxx>
-#include <textlayout.hxx>
-
+#include "outdata.hxx"
+#include "outdev.h"
+#include "salgdi.hxx"
+#include "svdata.hxx"
+#include "textlayout.hxx"
 #include "textlineinfo.hxx"
-
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include "graphite_features.hxx"
-#endif
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
