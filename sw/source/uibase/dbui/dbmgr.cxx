@@ -1361,6 +1361,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         else
                         {
                             assert( bNeedsTempFiles );
+                            assert( pWorkShell->IsExpFieldsLocked() );
+
+                            // fields are locked, so it's fine to
+                            // restore the old / empty DB manager for save
+                            pWorkDoc->SetDBManager( pWorkDocOrigDBManager );
+
                             // save merged document
                             OUString sFileURL;
                             if( !lcl_SaveDoc( aTempFileURL.get(), pStoreToFilter, pStoreToFilterOptions,
@@ -1369,6 +1375,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             {
                                 m_aMergeStatus = MergeStatus::ERROR;
                             }
+
+                            // back to the MM DB manager
+                            pWorkDoc->SetDBManager( this );
+
                             if( bMT_EMAIL && !IsMergeError() )
                             {
                                 {
