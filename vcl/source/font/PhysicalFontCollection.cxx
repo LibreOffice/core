@@ -30,7 +30,6 @@
 #include "graphite_features.hxx"
 #endif
 
-#include "magic.h"
 #include "outdev.h"
 #include "fontinstance.hxx"
 #include "fontattributes.hxx"
@@ -156,7 +155,7 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
         if( !**ppNames ) // #i46456# check for empty string, i.e., deref string itself not only ptr to it
         {
             if( nBestQuality > 0 )
-                if( ++nMaxLevel >= MAX_FALLBACK )
+                if( ++nMaxLevel >= MAX_GLYPHFALLBACK )
                     break;
 
             if( !ppNames[1] )
@@ -182,7 +181,7 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
             nBestQuality = pFallbackFont->GetMinQuality();
             // store available glyph fallback fonts
             if( !pFallbackList )
-                pFallbackList = new PhysicalFontFamily*[ MAX_FALLBACK ];
+                pFallbackList = new PhysicalFontFamily*[ MAX_GLYPHFALLBACK ];
 
             pFallbackList[ nMaxLevel ] = pFallbackFont;
             if( !bHasEudc && !nMaxLevel )

@@ -36,8 +36,9 @@
 typedef unsigned short LanguageType;
 #endif
 
-#include "magic.h"
 #include "salglyphid.hxx"
+
+#define MAX_FALLBACK 16
 
 class SalGraphics;
 class PhysicalFontFace;

@@ -25,6 +25,8 @@
 #include "fontinstance.hxx"
 #include "PhysicalFontFamily.hxx"
 
+#define MAX_GLYPHFALLBACK 16
+
 class ImplGlyphFallbackFontSubstitution;
 class ImplPreMatchFontSubstitution;
 
