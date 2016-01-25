@@ -21,7 +21,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-#include "cupsmgr.hxx"
+#include "unx/cupsmgr.hxx"
 #include "vcl/strhelper.hxx"
 
 #include "unx/saldata.hxx"

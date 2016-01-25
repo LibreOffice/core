@@ -24,7 +24,7 @@
 
 #include <unistd.h>
 
-#include "cupsmgr.hxx"
+#include "unx/cupsmgr.hxx"
 
 #include "osl/thread.h"
 #include "osl/diagnose.h"

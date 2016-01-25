@@ -25,7 +25,9 @@
 #include "vcl/helper.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/settings.hxx"
-#include "cupsmgr.hxx"
+
+#include "unx/cupsmgr.hxx"
+
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
 #include "tools/zcodec.hxx"
