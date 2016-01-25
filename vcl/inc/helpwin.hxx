@@ -25,8 +25,6 @@
 
 enum class QuickHelpFlags;
 
-// - HelpTextWindow -
-
 class HelpTextWindow : public FloatingWindow
 {
 private:
