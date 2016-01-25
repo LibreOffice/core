@@ -710,7 +710,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             const SmNode *pCoNode   = pNode->GetLeftMost();
             RectHorAlign  eHorAlign = pCoNode->GetRectHorAlign();
 
-            aPos = rNodeRect.AlignTo(*this, RP_BOTTOM,
+            aPos = rNodeRect.AlignTo(*this, RectPos::Bottom,
                         eHorAlign, RVA_BASELINE);
             if (i)
                 aPos.Y() += nDist;
@@ -806,7 +806,7 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     for (i = 1;  i < nSize;  i++)
         if (nullptr != (pNode = GetSubNode(i)))
         {
-            aPos = pNode->AlignTo(*this, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
+            aPos = pNode->AlignTo(*this, RectPos::Right, RHA_CENTER, RVA_BASELINE);
 
             // add horizontal space to the left for each but the first sub node
             aPos.X() += nDist;
@@ -848,7 +848,7 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pOper->Arrange(rDev, rFormat);
     pBody->Arrange(rDev, rFormat);
 
-    Point  aPos = pOper->AlignTo(*pBody, bIsPostfix ? RP_RIGHT : RP_LEFT,
+    Point  aPos = pOper->AlignTo(*pBody, bIsPostfix ? RectPos::Right : RectPos::Left,
                         RHA_CENTER, RVA_BASELINE);
     // add a bit space between operator and argument
     // (worst case -{1 over 2} where - and over have almost no space inbetween)
@@ -934,7 +934,7 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     pRootSym->Arrange(rDev, rFormat);
 
-    Point  aPos = pRootSym->AlignTo(*pBody, RP_LEFT, RHA_CENTER, RVA_BASELINE);
+    Point  aPos = pRootSym->AlignTo(*pBody, RectPos::Left, RHA_CENTER, RVA_BASELINE);
     //! override calculated vertical position
     aPos.Y()  = pRootSym->GetTop() + pBody->GetBottom() - pRootSym->GetBottom();
     aPos.Y() -= nVerOffset;
@@ -992,7 +992,7 @@ void SmDynIntegralNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     pDynIntegralSym->Arrange(rDev, rFormat);
 
-    Point  aPos = pDynIntegralSym->AlignTo(*pBody, RP_LEFT, RHA_CENTER, RVA_BASELINE);
+    Point  aPos = pDynIntegralSym->AlignTo(*pBody, RectPos::Left, RHA_CENTER, RVA_BASELINE);
     //! override calculated vertical position
     aPos.Y()  = pDynIntegralSym->GetTop() + pBody->GetBottom() - pDynIntegralSym->GetBottom();
     pDynIntegralSym->MoveTo(aPos);
@@ -1049,12 +1049,12 @@ void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (*pLeft);
 
     Point aPos;
-    aPos = pOper->AlignTo(*this, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
+    aPos = pOper->AlignTo(*this, RectPos::Right, RHA_CENTER, RVA_BASELINE);
     aPos.X() += nDist;
     pOper->MoveTo(aPos);
     ExtendBy(*pOper, RCP_XOR);
 
-    aPos = pRight->AlignTo(*this, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
+    aPos = pRight->AlignTo(*this, RectPos::Right, RHA_CENTER, RVA_BASELINE);
     aPos.X() += nDist;
 
     pRight->MoveTo(aPos);
@@ -1105,7 +1105,7 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     RectHorAlign  eHorAlign = pLM->GetRectHorAlign();
 
     // move numerator to its position
-    Point  aPos = pNum->AlignTo(*pLine, RP_TOP, eHorAlign, RVA_BASELINE);
+    Point  aPos = pNum->AlignTo(*pLine, RectPos::Top, eHorAlign, RVA_BASELINE);
     aPos.Y() -= nNumDist;
     pNum->MoveTo(aPos);
 
@@ -1114,7 +1114,7 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     eHorAlign = pLM->GetRectHorAlign();
 
     // move denominator to its position
-    aPos = pDenom->AlignTo(*pLine, RP_BOTTOM, eHorAlign, RVA_BASELINE);
+    aPos = pDenom->AlignTo(*pLine, RectPos::Bottom, eHorAlign, RVA_BASELINE);
     aPos.Y() += nDenomDist;
     pDenom->MoveTo(aPos);
 
@@ -1457,7 +1457,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                     nDist = nOrigHeight
                             * rFormat.GetDistance(DIS_SUBSCRIPT) / 100L;
                 aPos  = pSubSup->GetRect().AlignTo(aTmpRect,
-                                eSubSup == LSUB ? RP_LEFT : RP_RIGHT,
+                                eSubSup == LSUB ? RectPos::Left : RectPos::Right,
                                 RHA_CENTER, RVA_BOTTOM);
                 aPos.Y() += nDist;
                 nDelta = nDelimLine - aPos.Y();
@@ -1470,7 +1470,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                     nDist = nOrigHeight
                             * rFormat.GetDistance(DIS_SUPERSCRIPT) / 100L;
                 aPos  = pSubSup->GetRect().AlignTo(aTmpRect,
-                                eSubSup == LSUP ? RP_LEFT : RP_RIGHT,
+                                eSubSup == LSUP ? RectPos::Left : RectPos::Right,
                                 RHA_CENTER, RVA_TOP);
                 aPos.Y() -= nDist;
                 nDelta = aPos.Y() + pSubSup->GetHeight() - nDelimLine;
@@ -1481,7 +1481,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                 if (!bIsTextmode)
                     nDist = nOrigHeight
                             * rFormat.GetDistance(DIS_LOWERLIMIT) / 100L;
-                aPos = pSubSup->GetRect().AlignTo(rBodyRect, RP_BOTTOM,
+                aPos = pSubSup->GetRect().AlignTo(rBodyRect, RectPos::Bottom,
                                 RHA_CENTER, RVA_BASELINE);
                 aPos.Y() += nDist;
                 break;
@@ -1489,7 +1489,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                 if (!bIsTextmode)
                     nDist = nOrigHeight
                             * rFormat.GetDistance(DIS_UPPERLIMIT) / 100L;
-                aPos = pSubSup->GetRect().AlignTo(rBodyRect, RP_TOP,
+                aPos = pSubSup->GetRect().AlignTo(rBodyRect, RectPos::Top,
                                 RHA_CENTER, RVA_BASELINE);
                 aPos.Y() -= nDist;
                 break;
@@ -1675,11 +1675,11 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     RectVerAlign  eVerAlign = bScale ? RVA_CENTERY : RVA_BASELINE;
 
     Point         aPos;
-    aPos = pLeft->AlignTo(*pBody, RP_LEFT, RHA_CENTER, eVerAlign);
+    aPos = pLeft->AlignTo(*pBody, RectPos::Left, RHA_CENTER, eVerAlign);
     aPos.X() -= nDist;
     pLeft->MoveTo(aPos);
 
-    aPos = pRight->AlignTo(*pBody, RP_RIGHT, RHA_CENTER, eVerAlign);
+    aPos = pRight->AlignTo(*pBody, RectPos::Right, RHA_CENTER, eVerAlign);
     aPos.X() += nDist;
     pRight->MoveTo(aPos);
 
@@ -1707,7 +1707,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     for (i = 0;  i < nNumSubNodes;  i += 2)
     {
         SmRect aTmpRect (*GetSubNode(i));
-        Point  aPos = aTmpRect.AlignTo(aRefRect, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
+        Point  aPos = aTmpRect.AlignTo(aRefRect, RectPos::Right, RHA_CENTER, RVA_BASELINE);
         aTmpRect.MoveTo(aPos);
         aRefRect.ExtendBy(aTmpRect, RCP_XOR);
     }
@@ -1741,8 +1741,8 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         RectVerAlign  eVerAlign    = bIsSeparator ? RVA_CENTERY : RVA_BASELINE;
 
         SmNode *pRight = GetSubNode(i);
-        Point  aPosX = pRight->AlignTo(*pLeft,   RP_RIGHT, RHA_CENTER, eVerAlign),
-               aPosY = pRight->AlignTo(aRefRect, RP_RIGHT, RHA_CENTER, eVerAlign);
+        Point  aPosX = pRight->AlignTo(*pLeft,   RectPos::Right, RHA_CENTER, eVerAlign),
+               aPosY = pRight->AlignTo(aRefRect, RectPos::Right, RHA_CENTER, eVerAlign);
         aPosX.X() += nDist;
 
         pRight->MoveTo(Point(aPosX.X(), aPosY.Y()));
@@ -1789,13 +1789,13 @@ void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
          nDistScript = nFontHeight;
     if (GetToken().eType == TOVERBRACE)
     {
-        eRectPos = RP_TOP;
+        eRectPos = RectPos::Top;
         nDistBody    = - nDistBody;
         nDistScript *= - rFormat.GetDistance(DIS_UPPERLIMIT);
     }
     else // TUNDERBRACE
     {
-        eRectPos = RP_BOTTOM;
+        eRectPos = RectPos::Bottom;
         nDistScript *= + rFormat.GetDistance(DIS_LOWERLIMIT);
     }
     nDistBody   /= 100L;
@@ -1877,7 +1877,7 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
           nDist = nOrigHeight
                   * rFormat.GetDistance(DIS_OPERATORSPACE) / 100L;
 
-    Point aPos = pOper->AlignTo(*pBody, RP_LEFT, RHA_CENTER, /*RVA_CENTERY*/RVA_MID);
+    Point aPos = pOper->AlignTo(*pBody, RectPos::Left, RHA_CENTER, /*RVA_CENTERY*/RVA_MID);
     aPos.X() -= nDist;
     pOper->MoveTo(aPos);
 
@@ -1945,7 +1945,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                 nDist = GetFont().GetSize().Height()
                         * rFormat.GetDistance(DIS_ORNAMENTSPACE) / 100L;
     }
-    Point  aPos = pAttr->AlignTo(*pBody, RP_ATTRIBUT, RHA_CENTER, eVerAlign);
+    Point  aPos = pAttr->AlignTo(*pBody, RectPos::Attribute, RHA_CENTER, eVerAlign);
     aPos.Y() -= nDist;
     pAttr->MoveTo(aPos);
 
@@ -2535,7 +2535,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             const SmRect &rNodeRect = pTmpNode->GetRect();
 
             // align all baselines in that row if possible
-            aPos = rNodeRect.AlignTo(aLineRect, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
+            aPos = rNodeRect.AlignTo(aLineRect, RectPos::Right, RHA_CENTER, RVA_BASELINE);
             aPos.X() += nHorDist;
 
             // get horizontal alignment
@@ -2563,7 +2563,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             aLineRect.ExtendBy(rNodeRect, RCP_XOR);
         }
 
-        aPos = aLineRect.AlignTo(*this, RP_BOTTOM, RHA_CENTER, RVA_BASELINE);
+        aPos = aLineRect.AlignTo(*this, RectPos::Bottom, RHA_CENTER, RVA_BASELINE);
         aPos.Y() += nVerDist;
 
         // move 'aLineRect' and rectangles in that line to final position
