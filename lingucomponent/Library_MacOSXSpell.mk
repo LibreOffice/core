@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,MacOSXSpell,\
 $(eval $(call gb_Library_use_sdk_api,MacOSXSpell))
 
 $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	lng \
