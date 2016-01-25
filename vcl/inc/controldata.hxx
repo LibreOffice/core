@@ -24,9 +24,6 @@
 
 namespace vcl
 {
-
-    //= ImplControlData
-
     struct ImplControlData
     {
         mutable ControlLayoutData*  mpLayoutData;
