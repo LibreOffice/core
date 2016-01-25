@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_513116ec",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 9
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-25T21:17:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_75796e93",
+      "range": {
+        "startLine": 76,
+        "startChar": 22,
+        "endLine": 76,
+        "endChar": 41
+      },
+      "revId": "3e9a4ef18f7bd7f1af5b74999e8567779dad9849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_d56e5ac8",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2016-01-22T22:21:07Z",
       "side": 1,
       "message": ".uno:FreezePanesFirstRow",
+      "range": {
+        "startLine": 84,
+        "startChar": 22,
+        "endLine": 84,
+        "endChar": 41
+      },
+      "revId": "3e9a4ef18f7bd7f1af5b74999e8567779dad9849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b14cba77",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-25T21:17:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_d56e5ac8",
       "range": {
         "startLine": 84,
         "startChar": 22,
@@ -82,6 +130,24 @@
       "writtenOn": "2016-01-22T22:21:07Z",
       "side": 1,
       "message": "ditto, .uno:FreezePanesFirstColumn and .uno:FreezePanesFirstRow",
+      "revId": "3e9a4ef18f7bd7f1af5b74999e8567779dad9849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_9151be11",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-25T21:17:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_b573d6b0",
       "revId": "3e9a4ef18f7bd7f1af5b74999e8567779dad9849",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
