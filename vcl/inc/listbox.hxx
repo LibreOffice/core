@@ -17,20 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_ILSTBOX_HXX
-#define INCLUDED_VCL_INC_ILSTBOX_HXX
+#ifndef INCLUDED_VCL_INC_LISTBOX_HXX
+#define INCLUDED_VCL_INC_LISTBOX_HXX
 
-#include <vector>
-#include <memory>
-#include <boost/signals2/signal.hpp>
-#include <vcl/image.hxx>
-#include <vcl/ctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/timer.hxx>
+#include <vcl/quickselectionengine.hxx>
 
-#include "vcl/quickselectionengine.hxx"
+#include <boost/signals2/signal.hpp>
 
 class ScrollBar;
 class ScrollBarBox;
@@ -603,6 +597,6 @@ public:
 
 void ImplInitDropDownButton( PushButton* pButton );
 
-#endif // INCLUDED_VCL_INC_ILSTBOX_HXX
+#endif // INCLUDED_VCL_INC_LISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
