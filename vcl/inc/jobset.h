@@ -51,10 +51,10 @@ struct ImplJobSetup
     std::unordered_map< OUString, OUString, OUStringHash > maValueMap;
 };
 
-// Papierformat wird wenn PAPER_USER im unabhaengigen Teil automatisch aus
-// Papierbreite/hoehe berechnet
-// Papierbreite/hoehe wird wenn 0 im unabhaengigen Teil automatisch aus
-// Papierformat berechnet, wenn dieses ungleich PAPER_USER ist
+// If paper format is PAPER_USER, in the system-independent part it will
+// automatically be computed from paper width/height.
+// If paper width/height is 0, in the system-independent part it will
+// automatically be computed from paper format, if the latter is not PAPER_USER.
 
 #endif // INCLUDED_VCL_INC_JOBSET_H
 
