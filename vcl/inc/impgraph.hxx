@@ -27,19 +27,15 @@
 #include <vcl/graph.hxx>
 #include <vcl/svgdata.hxx>
 
-// - ImpSwapInfo -
-
 struct ImpSwapInfo
 {
     MapMode     maPrefMapMode;
     Size        maPrefSize;
 };
 
-// - ImpGraphic -
-
-class   OutputDevice;
-class   GfxLink;
-struct  ImpSwapFile;
+class OutputDevice;
+class GfxLink;
+struct ImpSwapFile;
 class GraphicConversionParameters;
 
 class ImpGraphic
@@ -58,10 +54,9 @@ private:
     GraphicType         meType;
     mutable sal_uLong   mnSizeBytes;
     sal_uLong           mnRefCount;
-    bool            mbSwapOut;
-    bool            mbSwapUnderway;
+    bool                mbSwapOut;
+    bool                mbSwapUnderway;
 
-    // SvgData support
     SvgDataPtr          maSvgData;
 
 private:
@@ -86,15 +81,15 @@ private:
     void                ImplSetDefaultType();
     bool                ImplIsSupportedGraphic() const;
 
-    bool            ImplIsTransparent() const;
-    bool            ImplIsAlpha() const;
-    bool            ImplIsAnimated() const;
-    bool            ImplIsEPS() const;
+    bool                ImplIsTransparent() const;
+    bool                ImplIsAlpha() const;
+    bool                ImplIsAnimated() const;
+    bool                ImplIsEPS() const;
 
-    Bitmap                  ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
-    BitmapEx                ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
-    Animation               ImplGetAnimation() const;
-    const GDIMetaFile&      ImplGetGDIMetaFile() const;
+    Bitmap              ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
+    BitmapEx            ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
+    Animation           ImplGetAnimation() const;
+    const GDIMetaFile&  ImplGetGDIMetaFile() const;
 
     Size                ImplGetPrefSize() const;
     void                ImplSetPrefSize( const Size& rPrefSize );
@@ -102,7 +97,7 @@ private:
     MapMode             ImplGetPrefMapMode() const;
     void                ImplSetPrefMapMode( const MapMode& rPrefMapMode );
 
-    sal_uLong               ImplGetSizeBytes() const;
+    sal_uLong           ImplGetSizeBytes() const;
 
     void                ImplDraw( OutputDevice* pOutDev,
                                   const Point& rDestPt ) const;
@@ -119,7 +114,7 @@ private:
                                            long nExtraData = 0 );
 
     void                ImplSetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
-    Link<Animation*,void>  ImplGetAnimationNotifyHdl() const;
+    Link<Animation*,void> ImplGetAnimationNotifyHdl() const;
 
     sal_uLong           ImplGetAnimationLoopCount() const;
 
@@ -152,8 +147,7 @@ private:
     friend SvStream&    WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic );
     friend SvStream&    ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic );
 
-    // SvgData support
-    const SvgDataPtr& getSvgData() const { return maSvgData;}
+    const SvgDataPtr&   getSvgData() const { return maSvgData; }
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX
