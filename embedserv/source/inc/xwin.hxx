@@ -23,7 +23,7 @@
 
 #include "common.h"
 #include <osl/mutex.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
