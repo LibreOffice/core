@@ -96,6 +96,7 @@
 #define ALGO_C14N           "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"
 #define ALGO_RSASHA1            "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
 #define ALGO_XMLDSIGSHA1        "http://www.w3.org/2000/09/xmldsig#sha1"
+#define ALGO_RELATIONSHIP "http://schemas.openxmlformats.org/package/2006/RelationshipTransform"
 
 #define CHAR_FRAGMENT           "#"
 #define CHAR_BLANK          " "

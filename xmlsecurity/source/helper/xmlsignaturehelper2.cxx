@@ -184,14 +184,19 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     OSL_ASSERT(!rURI.isEmpty());
     uno::Reference < io::XInputStream > xInStream;
 
-    sal_Int32 nSepPos = rURI.indexOf( '/' );
+    OUString aURI(rURI);
+    // Ignore leading slash, don't attempt to open a storage with name "".
+    if (aURI.startsWith("/"))
+        aURI = aURI.copy(1);
+
+    sal_Int32 nSepPos = aURI.indexOf( '/' );
     if ( nSepPos == -1 )
     {
         // Cloning because of I can't keep all storage references open
         // MBA with think about a better API...
         const OUString sName = ::rtl::Uri::decode(
-            rURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
-        if (sName.isEmpty() && !rURI.isEmpty())
+            aURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
+        if (sName.isEmpty() && !aURI.isEmpty())
             throw uno::Exception("Could not decode URI for stream element.", nullptr);
 
         uno::Reference< io::XStream > xStream;
@@ -202,12 +207,17 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     }
     else
     {
+        // Ignore query part of the URI.
+        sal_Int32 nQueryPos = aURI.indexOf('?');
+        if (nQueryPos != -1)
+            aURI = aURI.copy(0, nQueryPos);
+
         const OUString aStoreName = ::rtl::Uri::decode(
-            rURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
-        if (aStoreName.isEmpty() && !rURI.isEmpty())
+            aURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
+        if (aStoreName.isEmpty() && !aURI.isEmpty())
             throw uno::Exception("Could not decode URI for stream element.", nullptr);
 
-        OUString aElement = rURI.copy( nSepPos+1 );
+        OUString aElement = aURI.copy( nSepPos+1 );
         uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );
         xInStream = OpenInputStream( xSubStore, aElement );
     }
