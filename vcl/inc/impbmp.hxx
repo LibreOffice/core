@@ -21,8 +21,6 @@
 #define INCLUDED_VCL_INC_IMPBMP_HXX
 
 #include <vcl/salbtype.hxx>
-#include <tools/gen.hxx>
-#include <tools/solar.h>
 
 extern const sal_uLong nVCLRLut[ 6 ];
 extern const sal_uLong nVCLGLut[ 6 ];
