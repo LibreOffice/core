@@ -76,15 +76,16 @@ public class _XCalendar extends MultiMethodTest {
                 XLocaleData.class,
                     tParam.getMSF().createInstance(
                     "com.sun.star.i18n.LocaleData"));
+
+            installed_locales = locData.getAllInstalledLocaleNames();
+            calendars = new String[installed_locales.length][];
+            count = new int[installed_locales.length];
+            oObj.loadDefaultCalendar(installed_locales[0]);
         } catch (com.sun.star.uno.Exception e) {
 
         }
-        installed_locales = locData.getAllInstalledLocaleNames();
-        calendars = new String[installed_locales.length][];
-        count = new int[installed_locales.length];
-        oObj.loadDefaultCalendar(installed_locales[0]);
-        aOriginalDTime = oObj.getDateTime();
 
+        aOriginalDTime = oObj.getDateTime();
         debug = tParam.getBool("DebugIsActive");
     }
 
