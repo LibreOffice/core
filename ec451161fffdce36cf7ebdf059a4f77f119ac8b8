@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_ced563ba",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-25T16:51:28Z",
+      "side": 1,
+      "message": "Though ODF 1.1 should only write it if extended, shouldn\u0027t it?",
+      "revId": "ec451161fffdce36cf7ebdf059a4f77f119ac8b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
