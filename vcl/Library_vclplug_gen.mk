@@ -96,7 +96,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
 	vcl/unx/generic/gdi/openglx11cairotextrender \
     vcl/unx/generic/gdi/salbmp \
     vcl/unx/generic/gdi/salgdi2 \
-    vcl/unx/generic/gdi/salgdi3 \
+    vcl/unx/generic/gdi/font \
     vcl/unx/generic/gdi/salgdi \
     vcl/unx/generic/gdi/salvd \
     vcl/unx/generic/gdi/xrender_peer \
