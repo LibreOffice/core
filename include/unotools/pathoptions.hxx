@@ -25,9 +25,12 @@
 
 #define SVT_SEARCHPATH_DELIMITER      ';'
 
-// class SvtPathOptions --------------------------------------------------
-
 class SvtPathOptions_Impl;
+
+/*! Handle various defined paths
+
+  All path functions return URLs!
+*/
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPathOptions : public utl::detail::Options
 {
 private:
