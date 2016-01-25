@@ -1,0 +1,173 @@
+From b7fb2699e3c383ae40f29369dc57afbd0d52004c Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Mon, 25 Jan 2016 09:50:03 +0100
+Subject: [PATCH] OOXML Relationship Transform skeleton
+
+---
+ include/xmlsec/strings.h    |  3 ++
+ include/xmlsec/transforms.h |  4 +++
+ src/strings.c               |  3 ++
+ src/transforms.c            | 11 ++++++
+ src/xpath.c                 | 82 +++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 103 insertions(+)
+
+diff --git a/include/xmlsec/strings.h b/include/xmlsec/strings.h
+index 07afb9d..9c72d1b 100644
+--- a/include/xmlsec/strings.h
++++ b/include/xmlsec/strings.h
+@@ -551,6 +551,9 @@ XMLSEC_EXPORT_VAR const xmlChar xmlSecXPath2FilterUnion[];
+ XMLSEC_EXPORT_VAR const xmlChar xmlSecNameXPointer[];
+ XMLSEC_EXPORT_VAR const xmlChar xmlSecNodeXPointer[];
+ 
++XMLSEC_EXPORT_VAR const xmlChar xmlSecNameRelationship[];
++XMLSEC_EXPORT_VAR const xmlChar xmlSecHrefRelationship[];
++
+ /*************************************************************************
+  *
+  * Xslt strings
+diff --git a/include/xmlsec/transforms.h b/include/xmlsec/transforms.h
+index 4008cae..b0e31e4 100644
+--- a/include/xmlsec/transforms.h
++++ b/include/xmlsec/transforms.h
+@@ -961,6 +961,10 @@ XMLSEC_EXPORT int		xmlSecTransformXPointerSetExpr		(xmlSecTransformPtr transform
+ 									 const xmlChar* expr,
+ 									 xmlSecNodeSetType nodeSetType,
+ 									 xmlNodePtr hereNode);
++
++#define xmlSecTransformRelationshipId xmlSecTransformRelationshipGetKlass()
++XMLSEC_EXPORT xmlSecTransformId xmlSecTransformRelationshipGetKlass (void);
++
+ #ifndef XMLSEC_NO_XSLT
+ /**
+  * xmlSecTransformXsltId:
+diff --git a/src/strings.c b/src/strings.c
+index 9897198..546e993 100644
+--- a/src/strings.c
++++ b/src/strings.c
+@@ -543,6 +543,9 @@ const xmlChar xmlSecXPath2FilterUnion[]		= "union";
+ const xmlChar xmlSecNameXPointer[]		= "xpointer";
+ const xmlChar xmlSecNodeXPointer[]		= "XPointer";
+ 
++const xmlChar xmlSecNameRelationship[] = "relationship";
++const xmlChar xmlSecHrefRelationship[] = "http://schemas.openxmlformats.org/package/2006/RelationshipTransform";
++
+ /*************************************************************************
+  *
+  * Xslt strings
+diff --git a/src/transforms.c b/src/transforms.c
+index 2ed3fe8..9e5ad27 100644
+--- a/src/transforms.c
++++ b/src/transforms.c
+@@ -271,6 +271,17 @@ xmlSecTransformIdsRegisterDefault(void) {
+ 	return(-1);
+     }
+ 
++    if (xmlSecTransformIdsRegister(xmlSecTransformRelationshipId) < 0)
++    {
++	xmlSecError(XMLSEC_ERRORS_HERE,
++		    NULL,
++		    "xmlSecTransformIdsRegister",
++		    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++		    "name=%s",
++		    xmlSecErrorsSafeString(xmlSecTransformKlassGetName(xmlSecTransformRelationshipId)));
++	return -1;
++    }
++
+ #ifndef XMLSEC_NO_XSLT
+     if(xmlSecTransformIdsRegister(xmlSecTransformXsltId) < 0) {
+ 	xmlSecError(XMLSEC_ERRORS_HERE,
+diff --git a/src/xpath.c b/src/xpath.c
+index 8b0b4f8..63b02d4 100644
+--- a/src/xpath.c
++++ b/src/xpath.c
+@@ -1144,5 +1144,87 @@ xmlSecTransformVisa3DHackExecute(xmlSecTransformPtr transform, int last,
+     return(0);
+ }
+ 
++/* OOXML Relationship Transform. */
++typedef struct _xmlSecRelationshipCtx xmlSecRelationshipCtx, *xmlSecRelationshipCtxPtr;
++struct _xmlSecRelationshipCtx
++{
++    xmlParserCtxtPtr parserCtx;
++};
++#define xmlSecRelationshipSize (sizeof(xmlSecTransform) + sizeof(xmlSecRelationshipCtx))
++#define xmlSecRelationshipGetCtx(transform) ((xmlSecRelationshipCtxPtr)(((xmlSecByte*)(transform)) + sizeof(xmlSecTransform)))
++
++static int xmlSecRelationshipInitialize (xmlSecTransformPtr transform);
++static void xmlSecRelationshipFinalize (xmlSecTransformPtr transform);
++static int xmlSecRelationshipReadNode (xmlSecTransformPtr transform, xmlNodePtr node, xmlSecTransformCtxPtr transformCtx);
++static int xmlSecRelationshipExecute (xmlSecTransformPtr transform, int last, xmlSecTransformCtxPtr transformCtx);
++
++static xmlSecTransformKlass xmlSecRelationshipKlass =
++{
++    /* klass/object sizes */
++    sizeof(xmlSecTransformKlass), /* xmlSecSize klassSize */
++    xmlSecRelationshipSize, /* xmlSecSize objSize */
++    xmlSecNameRelationship, /* const xmlChar* name; */
++    xmlSecHrefRelationship, /* const xmlChar* href; */
++    xmlSecTransformUsageDSigTransform, /* xmlSecAlgorithmUsage usage; */
++    xmlSecRelationshipInitialize, /* xmlSecTransformInitializeMethod initialize; */
++    xmlSecRelationshipFinalize, /* xmlSecTransformFinalizeMethod finalize; */
++    xmlSecRelationshipReadNode, /* xmlSecTransformNodeReadMethod readNode; */
++    NULL, /* xmlSecTransformNodeWriteMethod writeNode; */
++    NULL, /* xmlSecTransformSetKeyReqMethod setKeyReq; */
++    NULL, /* xmlSecTransformSetKeyMethod setKey; */
++    NULL, /* xmlSecTransformValidateMethod validate; */
++    xmlSecTransformDefaultGetDataType, /* xmlSecTransformGetDataTypeMethod getDataType; */
++    xmlSecTransformDefaultPushBin, /* xmlSecTransformPushBinMethod pushBin; */
++    xmlSecTransformDefaultPopBin, /* xmlSecTransformPopBinMethod popBin; */
++    NULL, /* xmlSecTransformPushXmlMethod pushXml; */
++    NULL, /* xmlSecTransformPopXmlMethod popXml; */
++    xmlSecRelationshipExecute, /* xmlSecTransformExecuteMethod execute; */
++    NULL, /* void* reserved0; */
++    NULL, /* void* reserved1; */
++};
++
++xmlSecTransformId xmlSecTransformRelationshipGetKlass(void)
++{
++    return &xmlSecRelationshipKlass;
++}
++
++static int xmlSecRelationshipInitialize(xmlSecTransformPtr transform)
++{
++    xmlSecRelationshipCtxPtr ctx;
++
++    xmlSecAssert2(xmlSecTransformCheckId(transform, xmlSecTransformRelationshipId), -1);
++    xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecRelationshipSize), -1);
++
++    ctx = xmlSecRelationshipGetCtx(transform);
++    xmlSecAssert2(ctx != NULL, -1);
+ 
++    /* initialize context */
++    memset(ctx, 0, sizeof(xmlSecRelationshipCtx));
++    return 0;
++}
++
++static void xmlSecRelationshipFinalize(xmlSecTransformPtr transform)
++{
++    xmlSecRelationshipCtxPtr ctx;
++
++    xmlSecAssert(xmlSecTransformCheckId(transform, xmlSecTransformRelationshipId));
++    xmlSecAssert(xmlSecTransformCheckSize(transform, xmlSecRelationshipSize));
++
++    ctx = xmlSecRelationshipGetCtx(transform);
++    xmlSecAssert(ctx != NULL);
++
++    if (ctx->parserCtx != NULL)
++	xmlFreeParserCtxt(ctx->parserCtx);
+ 
++    memset(ctx, 0, sizeof(xmlSecRelationshipCtx));
++}
++
++static int xmlSecRelationshipReadNode(xmlSecTransformPtr transform, xmlNodePtr node, xmlSecTransformCtxPtr transformCtx)
++{
++    return 0;
++}
++
++static int xmlSecRelationshipExecute(xmlSecTransformPtr transform, int last, xmlSecTransformCtxPtr transformCtx)
++{
++    return 0;
++}
+-- 
+2.6.2
+
