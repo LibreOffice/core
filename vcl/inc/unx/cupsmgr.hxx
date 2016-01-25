@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_CUPSMGR_HXX
-#define INCLUDED_VCL_INC_CUPSMGR_HXX
+#ifndef INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
+#define INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
 
 #include "vcl/printerinfomanager.hxx"
 #include "osl/module.h"
