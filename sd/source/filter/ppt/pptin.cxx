@@ -2123,11 +2123,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                             {
                                 OUString aBaseURL = pDocShell->GetMedium()->GetBaseURL();
                                 OUString aBookmarkURL( pInfo->GetBookmark() );
-                                INetURLObject aURL( pPtr->aTarget );
-                                if( INetProtocol::NotValid == aURL.GetProtocol()
-                                    && (osl::FileBase::getFileURLFromSystemPath(
-                                            pPtr->aTarget, aBookmarkURL)
-                                        != osl::FileBase::E_None) )
+                                if( INetURLObject::TryUrlFromSystemPathAsString( pPtr->aTarget ).isEmpty() )
                                     aBookmarkURL.clear();
                                 if( aBookmarkURL.isEmpty() )
                                     aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl() );

@@ -3205,16 +3205,8 @@ sal_uLong EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
 
     if( nErr == 0 )
     {
-        INetURLObject aURL( rURL );
-
-        if( aURL.GetProtocol() == INetProtocol::NotValid )
-        {
-            OUString aURLStr;
-            osl::FileBase::getFileURLFromSystemPath( rURL, aURLStr );
-            aURL = INetURLObject( aURLStr );
-        }
-        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-        rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        rFileName = INetURLObject::TryUrlFromSystemPathAsString( rURL, true );
+        assert( !rFileName.IsEmpty() && "invalid URL" );
     }
 
     return nErr;
