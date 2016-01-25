@@ -858,7 +858,11 @@ static bool lcl_SaveDoc(
         rWorkShell.ConvertFieldsToText();
 
     bool bAnyError = !xObjectShell->DoSaveAs(*pDstMed);
-    xObjectShell->DoSaveCompleted(pDstMed);
+
+    // Actually this should be a bool... so in case of email and individual
+    // files, where this is set, we skip the the recently used handling
+    if( !decodedURL )
+        xObjectShell->DoSaveCompleted( pDstMed );
     bAnyError = bAnyError || xObjectShell->GetError();
     if( bAnyError )
     {
