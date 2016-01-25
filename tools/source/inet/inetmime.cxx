@@ -684,9 +684,8 @@ bool parseParameters(ParameterList const & rInput,
                         break;
                 };
             }
-            auto const ret = pOutput->insert(
-                {p->m_aAttribute,
-                 {aValue}});
+            INetContentTypeParameter x {aValue}; // workaround ICE in VisualStudio2013
+            auto const ret = pOutput->insert({p->m_aAttribute, x });
             SAL_INFO_IF(!ret.second, "tools",
                 "INetMIME: dropping duplicate parameter: " << p->m_aAttribute);
             p = pNext;
