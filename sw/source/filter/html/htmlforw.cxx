@@ -1064,7 +1064,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
             {
                 float nHeight = *static_cast<float const *>(aTmp.getValue());
-                if( nHeight > 0  && (!bEdit || nHeight != 10.) )
+                if( nHeight > 0  && (!bEdit || !rtl::math::approxEqual(nHeight, 10.0)) )
                     aItemSet.Put( SvxFontHeightItem( sal_Int16(nHeight * 20.), 100, RES_CHRATR_FONTSIZE ) );
             }
         }
