@@ -189,7 +189,7 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
         {
             aGuard.clear( );
 
-            OInterfaceContainerHelper2* pICHelper = rBHelper.aLC.getContainer(
+            OInterfaceContainerHelper* pICHelper = rBHelper.aLC.getContainer(
                 cppu::UnoType<XClipboardListener>::get());
 
             if ( pICHelper )
