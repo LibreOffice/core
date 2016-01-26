@@ -48,6 +48,12 @@ public:
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Command( const CommandEvent& rCEvt ) override;
 
+    /**
+     * Returns the number of times OpenGL buffers have been swapped.
+     * Not really any good reason why this is in this class, but...
+     */
+    static sal_Int64 getBufferSwapCounter();
+
 private:
     std::unique_ptr<OpenGLWindowImpl> mxImpl;
     IRenderer* mpRenderer;

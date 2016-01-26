@@ -22,13 +22,6 @@
 #include <prewin.h>
 #include <postwin.h>
 #endif
-#if defined UNX && !defined MACOSX
-#include <prex.h>
-#include "GL/glxew.h"
-#include <postx.h>
-#undef None // Avoid clash with the one in <toolkit/awt/scrollabledialog.hxx>
-#undef Status // Sigh... used for instance as parameter name in css::awt::XImageConsumer
-#endif
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -105,6 +98,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/openglwin.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/split.hxx>
@@ -120,7 +114,6 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1929,7 +1922,7 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
 sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
     throw (css::uno::RuntimeException, std::exception)
 {
-     return OpenGLContext::getBufferSwapCounter();
+     return OpenGLWindow::getBufferSwapCounter();
 }
 
 // css:awt:XToolkitRobot

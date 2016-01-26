@@ -11,6 +11,7 @@
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/openglwin.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -50,7 +51,7 @@ static std::vector<GLXContext> g_vShareList;
 static std::vector<HGLRC> g_vShareList;
 #endif
 
-sal_Int64 OpenGLContext::mnBufferSwapCounter = 0;
+static sal_Int64 nBufferSwapCounter = 0;
 
 GLWindow::~GLWindow()
 {
@@ -1537,7 +1538,7 @@ void OpenGLContext::swapBuffers()
     glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
 #endif
 
-    mnBufferSwapCounter++;
+    nBufferSwapCounter++;
 
     static bool bSleep = getenv("SAL_GL_SLEEP_ON_SWAP");
     if (bSleep)
@@ -1548,9 +1549,9 @@ void OpenGLContext::swapBuffers()
     }
 }
 
-sal_Int64 OpenGLContext::getBufferSwapCounter()
+sal_Int64 OpenGLWindow::getBufferSwapCounter()
 {
-    return mnBufferSwapCounter;
+    return nBufferSwapCounter;
 }
 
 void OpenGLContext::sync()
