@@ -19,6 +19,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
+#include <svl/zformat.hxx>
 
 #include "helper/qahelper.hxx"
 
@@ -236,6 +237,17 @@ void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, 
         ScPostIt* pNote = rDoc.GetNote(aAddress);
         CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", pNote->GetText(), OUString("Test"));
+    }
+
+    //check custom format
+    if (nFormat != FORMAT_LOTUS123 && nFormat != FORMAT_XLSB)
+    {
+        SvNumberFormatter *pFormatter = rDoc.GetFormatTable();
+        CPPUNIT_ASSERT_MESSAGE("Failed to load number formatter", pFormatter);
+        sal_uInt32 nNumberFormat;
+        rDoc.GetNumberFormat(0, 0, 0, nNumberFormat);
+        OUString aFormatString = pFormatter->GetEntry( nNumberFormat )->GetFormatstring();
+        CPPUNIT_ASSERT_MESSAGE("number format not imported correctly", aFormatString == "0.???");
     }
 
     //add additional checks here

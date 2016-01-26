@@ -348,6 +348,10 @@ Sub Custom_Number_Format_Sample()
     TestLog_ASSERT TestStr = ".25%", "##.###\%: " & TestStr
     'MsgBox TestStr
 
+    TestStr = Format(12.25, "0.???") '12.25_
+    TestLog_ASSERT TestStr = "12.25 ", "0.???: " & TestStr
+    'MsgBox TestStr
+
     Exit Sub
 errorHandler:
         TestLog_ASSERT (false), testName & ": hit error handler"
