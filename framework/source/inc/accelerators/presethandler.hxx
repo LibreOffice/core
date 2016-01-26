@@ -150,10 +150,6 @@ class PresetHandler
 
         /** @short  does nothing real.
 
-            @descr  Because this class should be useable in combination
-                    with ::salhelper::SingletonRef template this ctor
-                    can't have any special parameters!
-
             @param  xContext
                     points to an uno service manager, which is used internally
                     to create own needed uno resources.
