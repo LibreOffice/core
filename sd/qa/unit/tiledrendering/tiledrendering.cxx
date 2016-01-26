@@ -491,7 +491,7 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
 
     lcl_search("third", /*bFindAll=*/true);
-    lcl_search("match", /*bFindAll=*/false);
+    lcl_search("match", /*bFindAll=false*/);
 
     OString aUsedFormat;
     // This used to give wrong result: 'search' after 'search all' still
