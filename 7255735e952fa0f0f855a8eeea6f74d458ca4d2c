@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_5169168b",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-26T07:42:01Z",
+      "side": 1,
+      "message": "surely the more normal C++ thing to do is to make this method virtual, and then override it in SvgTextNode?",
+      "revId": "7255735e952fa0f0f855a8eeea6f74d458ca4d2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
