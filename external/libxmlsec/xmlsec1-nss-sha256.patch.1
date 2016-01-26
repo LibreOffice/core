@@ -1,19 +1,36 @@
-From 8008aca4daa92316dcd44f2bb8d21b5439d8baf1 Mon Sep 17 00:00:00 2001
+From 0e343965d4c84480207a90d5a83dacfb826be386 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Mon, 25 Jan 2016 11:24:01 +0100
 Subject: [PATCH] NSS glue layer: add SHA-256 support
 
 ---
- include/xmlsec/nss/crypto.h | 16 +++++++++++++
- src/nss/crypto.c            |  3 +++
+ include/xmlsec/nss/crypto.h | 25 ++++++++++++++++++++
+ src/nss/crypto.c            |  4 ++++
  src/nss/digests.c           | 57 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 76 insertions(+)
+ src/nss/signatures.c        | 44 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 130 insertions(+)
 
 diff --git a/include/xmlsec/nss/crypto.h b/include/xmlsec/nss/crypto.h
-index 42ba6ca..8164f45 100644
+index 42ba6ca..707f8d9 100644
 --- a/include/xmlsec/nss/crypto.h
 +++ b/include/xmlsec/nss/crypto.h
-@@ -304,6 +304,22 @@ XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecNssTransformRsaOaepGetKlass(void);
+@@ -263,6 +263,15 @@ XMLSEC_CRYPTO_EXPORT xmlSecKeyDataId 	xmlSecNssKeyDataRsaGetKlass	(void);
+ XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecNssTransformRsaSha1GetKlass(void);
+ 
+ /**
++ * xmlSecNssTransformRsaSha256Id:
++ *
++ * The RSA-SHA256 signature transform klass.
++ */
++#define xmlSecNssTransformRsaSha256Id	\
++	xmlSecNssTransformRsaSha256GetKlass()
++XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecNssTransformRsaSha256GetKlass(void);
++
++/**
+  * xmlSecNssTransformRsaPkcs1Id:
+  * 
+  * The RSA PKCS1 key transport transform klass.
+@@ -304,6 +313,22 @@ XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecNssTransformRsaOaepGetKlass(void);
  XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecNssTransformSha1GetKlass	(void);
  #endif /* XMLSEC_NO_SHA1 */
  
@@ -37,10 +54,18 @@ index 42ba6ca..8164f45 100644
  }
  #endif /* __cplusplus */
 diff --git a/src/nss/crypto.c b/src/nss/crypto.c
-index 0495165..80adc50 100644
+index 0495165..33f17cc 100644
 --- a/src/nss/crypto.c
 +++ b/src/nss/crypto.c
-@@ -132,6 +132,9 @@ xmlSecCryptoGetFunctions_nss(void) {
+@@ -120,6 +120,7 @@ xmlSecCryptoGetFunctions_nss(void) {
+ 
+ #ifndef XMLSEC_NO_RSA
+     gXmlSecNssFunctions->transformRsaSha1GetKlass 	= xmlSecNssTransformRsaSha1GetKlass;
++    gXmlSecNssFunctions->transformRsaSha256GetKlass 	= xmlSecNssTransformRsaSha256GetKlass;
+     gXmlSecNssFunctions->transformRsaPkcs1GetKlass 	= xmlSecNssTransformRsaPkcs1GetKlass;
+ 
+ /* RSA OAEP is not supported by NSS yet */
+@@ -132,6 +133,9 @@ xmlSecCryptoGetFunctions_nss(void) {
  #ifndef XMLSEC_NO_SHA1    
      gXmlSecNssFunctions->transformSha1GetKlass 		= xmlSecNssTransformSha1GetKlass;
  #endif /* XMLSEC_NO_SHA1 */
@@ -129,6 +154,61 @@ index 5a1db91..0c4657c 100644
 +    return(&xmlSecNssSha256Klass);
 +}
 +#endif /* XMLSEC_NO_SHA256 */
+ 
+ 
+diff --git a/src/nss/signatures.c b/src/nss/signatures.c
+index 3c9639c..c9afa4e 100644
+--- a/src/nss/signatures.c
++++ b/src/nss/signatures.c
+@@ -545,6 +545,50 @@ xmlSecNssTransformRsaSha1GetKlass(void) {
+     return(&xmlSecNssRsaSha1Klass);
+ }
+ 
++/****************************************************************************
++ *
++ * RSA-SHA256 signature transform
++ *
++ ***************************************************************************/
++static xmlSecTransformKlass xmlSecNssRsaSha256Klass = {
++    /* klass/object sizes */
++    sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
++    xmlSecNssSignatureSize,		/* xmlSecSize objSize */
++
++    xmlSecNameRsaSha256,				/* const xmlChar* name; */
++    xmlSecHrefRsaSha256, 				/* const xmlChar* href; */
++    xmlSecTransformUsageSignatureMethod,	/* xmlSecTransformUsage usage; */
++
++    xmlSecNssSignatureInitialize,	/* xmlSecTransformInitializeMethod initialize; */
++    xmlSecNssSignatureFinalize,		/* xmlSecTransformFinalizeMethod finalize; */
++    NULL,					/* xmlSecTransformNodeReadMethod readNode; */
++    NULL,					/* xmlSecTransformNodeWriteMethod writeNode; */
++    xmlSecNssSignatureSetKeyReq,		/* xmlSecTransformSetKeyReqMethod setKeyReq; */
++    xmlSecNssSignatureSetKey,		/* xmlSecTransformSetKeyMethod setKey; */
++    xmlSecNssSignatureVerify,		/* xmlSecTransformVerifyMethod verify; */
++    xmlSecTransformDefaultGetDataType,		/* xmlSecTransformGetDataTypeMethod getDataType; */
++    xmlSecTransformDefaultPushBin,		/* xmlSecTransformPushBinMethod pushBin; */
++    xmlSecTransformDefaultPopBin,		/* xmlSecTransformPopBinMethod popBin; */
++    NULL,					/* xmlSecTransformPushXmlMethod pushXml; */
++    NULL,					/* xmlSecTransformPopXmlMethod popXml; */
++    xmlSecNssSignatureExecute,		/* xmlSecTransformExecuteMethod execute; */
++
++    NULL,					/* void* reserved0; */
++    NULL,					/* void* reserved1; */
++};
++
++/**
++ * xmlSecNssTransformRsaSha256GetKlass:
++ *
++ * The RSA-SHA256 signature transform klass.
++ *
++ * Returns: RSA-SHA256 signature transform klass.
++ */
++xmlSecTransformId
++xmlSecNssTransformRsaSha256GetKlass(void) {
++    return(&xmlSecNssRsaSha256Klass);
++}
++
+ #endif /* XMLSEC_NO_DSA */
  
  
 -- 
