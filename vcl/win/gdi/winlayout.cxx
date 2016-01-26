@@ -312,7 +312,7 @@ bool WinFontInstance::AddChunkOfGlyphs(bool bRealGlyphIndices, int nGlyphIndex, 
     }
     else
     {
-        if (!GetTextExtentExPointW(hDC, aGlyphIndices.data(), nCount, 0, NULL, NULL, &aSize))
+        if (!GetTextExtentExPointW(hDC, reinterpret_cast<wchar_t *>(aGlyphIndices.data()), nCount, 0, NULL, NULL, &aSize))
         {
             SAL_WARN("vcl.gdi", "GetTextExtentExPoint failed: " << WindowsErrorString(GetLastError()));
             SelectObject(hDC, hOrigFont);
