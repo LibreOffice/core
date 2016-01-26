@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <salhelper/singletonref.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace framework
@@ -68,34 +67,6 @@ class PresetHandler
 
     private:
 
-        /** @short  because a concurrent access to the same storage from different implementations
-                    isn't supported, we have to share it with others.
-
-            @descr  This struct makes it possible to use any shared storage
-                    in combination with a SingletonRef<> template ...
-
-                    This struct is allegedly shared and must be used within a
-                    synchronized section. But it isn't.
-         */
-        struct TSharedStorages
-        {
-            public:
-
-                StorageHolder m_lStoragesShare;
-                StorageHolder m_lStoragesUser;
-
-                TSharedStorages()
-                    : m_lStoragesShare()
-                    , m_lStoragesUser ()
-                {};
-
-                virtual ~TSharedStorages() {};
-        };
-
-    // member
-
-    private:
-
         /** @short  can be used to create on needed uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
@@ -120,12 +91,6 @@ class PresetHandler
                     then ...
          */
         OUString m_sModule;
-
-        /** @short  provides access to the:
-                    a) shared root storages
-                    b) shared "inbetween" storages
-                    of the share and user layer. */
-        ::salhelper::SingletonRef< TSharedStorages > m_aSharedStorages;
 
         /** @short  if we run in document mode, we can't use the global root storages!
                     We have to use a special document storage explicitly. */

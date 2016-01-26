@@ -46,10 +46,40 @@ static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
 namespace framework
 {
 
+namespace {
+
+/** @short  because a concurrent access to the same storage from different implementations
+            isn't supported, we have to share it with others.
+
+    @descr  This struct is allegedly shared and must be used within a
+            synchronized section. But it isn't.
+ */
+struct TSharedStorages
+{
+    public:
+
+        StorageHolder m_lStoragesShare;
+        StorageHolder m_lStoragesUser;
+
+        TSharedStorages()
+            : m_lStoragesShare()
+            , m_lStoragesUser ()
+        {};
+
+        virtual ~TSharedStorages() {};
+};
+
+/** @short  provides access to the:
+            a) shared root storages
+            b) shared "inbetween" storages
+            of the share and user layer. */
+struct SharedStorages: public rtl::Static<TSharedStorages, SharedStorages> {};
+
+}
+
 PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext(xContext)
     , m_eConfigType(E_GLOBAL)
-    , m_aSharedStorages()
     , m_lDocumentStorages()
     , m_aLanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE)
 {
@@ -62,7 +92,6 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
     m_eConfigType           = rCopy.m_eConfigType;
     m_sResourceType         = rCopy.m_sResourceType;
     m_sModule               = rCopy.m_sModule;
-    m_aSharedStorages       = rCopy.m_aSharedStorages;
     m_xWorkingStorageShare  = rCopy.m_xWorkingStorageShare;
     m_xWorkingStorageNoLang = rCopy.m_xWorkingStorageNoLang;
     m_xWorkingStorageUser   = rCopy.m_xWorkingStorageUser;
@@ -90,8 +119,9 @@ PresetHandler::~PresetHandler()
         Otherwise we will disconnect all other open configuration access
         objects which base on these storages.
      */
-    m_aSharedStorages->m_lStoragesShare.closePath(m_sRelPathShare);
-    m_aSharedStorages->m_lStoragesUser.closePath (m_sRelPathUser );
+    auto & sharedStorages = SharedStorages::get();
+    sharedStorages.m_lStoragesShare.closePath(m_sRelPathShare);
+    sharedStorages.m_lStoragesUser.closePath (m_sRelPathUser );
 
     /* On the other side closePath() is not needed for our special handled
        document storage. Because it's not shared with others ... so we can
@@ -155,7 +185,8 @@ void lcl_throwCorruptedUIConfigurationException(
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageShare()
 {
-    css::uno::Reference< css::embed::XStorage > xRoot = m_aSharedStorages->m_lStoragesShare.getRootStorage();
+    auto & sharedStorages = SharedStorages::get();
+    css::uno::Reference< css::embed::XStorage > xRoot = sharedStorages.m_lStoragesShare.getRootStorage();
     if (xRoot.is())
         return xRoot;
 
@@ -205,14 +236,15 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
             ex, ID_CORRUPT_UICONFIG_SHARE);
     }
 
-    m_aSharedStorages->m_lStoragesShare.setRootStorage(xStorage);
+    sharedStorages.m_lStoragesShare.setRootStorage(xStorage);
 
     return xStorage;
 }
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageUser()
 {
-    css::uno::Reference< css::embed::XStorage > xRoot = m_aSharedStorages->m_lStoragesUser.getRootStorage();
+    auto & sharedStorages = SharedStorages::get();
+    css::uno::Reference< css::embed::XStorage > xRoot = sharedStorages.m_lStoragesUser.getRootStorage();
     if (xRoot.is())
         return xRoot;
 
@@ -252,7 +284,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
             ex, ID_CORRUPT_UICONFIG_USER);
     }
 
-    m_aSharedStorages->m_lStoragesUser.setRootStorage(xStorage);
+    sharedStorages.m_lStoragesUser.setRootStorage(xStorage);
 
     return xStorage;
 }
@@ -277,7 +309,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
         xWorking = m_xWorkingStorageShare;
     }
 
-    return m_aSharedStorages->m_lStoragesShare.getParentStorage(xWorking);
+    return SharedStorages::get().m_lStoragesShare.getParentStorage(xWorking);
 }
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
@@ -288,7 +320,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(
         xWorking = m_xWorkingStorageUser;
     }
 
-    return m_aSharedStorages->m_lStoragesUser.getParentStorage(xWorking);
+    return SharedStorages::get().m_lStoragesUser.getParentStorage(xWorking);
 }
 
 void PresetHandler::connectToResource(      PresetHandler::EConfigType                   eConfigType  ,
@@ -616,9 +648,10 @@ void PresetHandler::commitUserChanges()
         case E_GLOBAL :
         case E_MODULES :
         {
-            sPath = m_aSharedStorages->m_lStoragesUser.getPathOfStorage(xWorking);
-            m_aSharedStorages->m_lStoragesUser.commitPath(sPath);
-            m_aSharedStorages->m_lStoragesUser.notifyPath(sPath);
+            auto & sharedStorages = SharedStorages::get();
+            sPath = sharedStorages.m_lStoragesUser.getPathOfStorage(xWorking);
+            sharedStorages.m_lStoragesUser.commitPath(sPath);
+            sharedStorages.m_lStoragesUser.notifyPath(sPath);
         }
         break;
 
@@ -650,7 +683,7 @@ void PresetHandler::addStorageListener(XMLBasedAcceleratorConfiguration* pListen
         case E_GLOBAL :
         case E_MODULES :
         {
-            m_aSharedStorages->m_lStoragesUser.addStorageListener(pListener, sRelPath);
+            SharedStorages::get().m_lStoragesUser.addStorageListener(pListener, sRelPath);
         }
         break;
 
@@ -680,7 +713,7 @@ void PresetHandler::removeStorageListener(XMLBasedAcceleratorConfiguration* pLis
         case E_GLOBAL :
         case E_MODULES :
         {
-            m_aSharedStorages->m_lStoragesUser.removeStorageListener(pListener, sRelPath);
+            SharedStorages::get().m_lStoragesUser.removeStorageListener(pListener, sRelPath);
         }
         break;
 
@@ -700,9 +733,9 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     try
     {
         if (bShare)
-            xPath = m_aSharedStorages->m_lStoragesShare.openPath(sPath, eMode);
+            xPath = SharedStorages::get().m_lStoragesShare.openPath(sPath, eMode);
         else
-            xPath = m_aSharedStorages->m_lStoragesUser.openPath(sPath, eMode);
+            xPath = SharedStorages::get().m_lStoragesUser.openPath(sPath, eMode);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
