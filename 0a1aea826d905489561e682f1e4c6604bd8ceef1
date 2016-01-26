@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_d148668a",
+        "filename": "vcl/source/app/vclevent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001172
+      },
+      "writtenOn": "2016-01-26T20:26:40Z",
+      "side": 1,
+      "message": "Directly casting VclSimpleEvent into VclWindowEvent may be undesirable as we have VclAccessibleEvent too.. Objects of VclAccessibleEvent are sent to this method too.. Casting them to VclWindowEvent might be incorrect.. So this might not work.. Any suggestions?",
+      "revId": "0a1aea826d905489561e682f1e4c6604bd8ceef1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
