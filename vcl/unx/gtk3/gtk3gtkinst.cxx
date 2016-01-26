@@ -805,7 +805,7 @@ void GtkDropTarget::setDefaultActions(sal_Int8 nDefaultActions) throw(std::excep
     m_nDefaultActions = nDefaultActions;
 }
 
-Reference< XInterface > SalInstance::CreateDropTarget()
+Reference< XInterface > GtkInstance::CreateDropTarget()
 {
     return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkDropTarget()) );
 }
