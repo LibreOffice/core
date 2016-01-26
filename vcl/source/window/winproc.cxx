@@ -1314,7 +1314,7 @@ static bool ImplCallWheelCommand( const VclPtr<vcl::Window>& pWindow, const Poin
 
 static bool acceptableWheelScrollTarget(const vcl::Window *pMouseWindow)
 {
-    return (pMouseWindow && pMouseWindow->IsInputEnabled() && !pMouseWindow->IsInModalMode());
+    return (pMouseWindow && !pMouseWindow->isDisposed() && pMouseWindow->IsInputEnabled() && !pMouseWindow->IsInModalMode());
 }
 
 //If the last event at the same absolute screen position was handled by a
@@ -1480,26 +1480,26 @@ public:
 bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
 {
     static SalWheelMouseEvent aPreviousEvent;
-    static vcl::Window *pPreviousWindow;
+    static VclPtr<vcl::Window> xPreviousWindow;
 
     if (!Setup())
         return false;
 
-    vcl::Window *pMouseWindow = FindTarget();
+    VclPtr<vcl::Window> xMouseWindow = FindTarget();
 
     // avoid the problem that scrolling via wheel to this point brings a widget
     // under the mouse that also accepts wheel commands, so stick with the old
     // widget if the time gap is very small
-    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(pPreviousWindow))
+    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(xPreviousWindow))
     {
-        pMouseWindow = pPreviousWindow;
+        xMouseWindow = xPreviousWindow.get();
     }
 
     aPreviousEvent = rEvt;
 
-    pPreviousWindow = Dispatch(pMouseWindow);
+    xPreviousWindow = Dispatch(xMouseWindow);
 
-    return pPreviousWindow != nullptr;
+    return xPreviousWindow;
 }
 
 class HandleGestureEvent : public HandleGestureEventBase
