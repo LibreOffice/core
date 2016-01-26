@@ -2041,6 +2041,8 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
         return FALSE;
     }
 
+//    priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, LOK_FEATURE_DOCUMENT_PASSWORD|LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY);
+
     return TRUE;
 }
 

@@ -11,6 +11,7 @@
 #define INCLUDED_DESKTOP_INC_LIB_INIT_HXX
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <memory>
@@ -39,10 +40,16 @@ namespace desktop {
         oslThread maThread;
         LibreOfficeKitCallback mpCallback;
         void *mpCallbackData;
+        int64_t mOptionalFeatures;
         std::map<OString, rtl::Reference<LOKInteractionHandler>> mInteractionMap;
 
         LibLibreOffice_Impl();
         ~LibLibreOffice_Impl();
+
+        bool hasOptionalFeature(LibreOfficeKitOptionalFeatures const feature)
+        {
+            return (mOptionalFeatures & feature) != 0;
+        }
     };
 }
 

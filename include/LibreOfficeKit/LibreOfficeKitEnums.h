@@ -40,6 +40,32 @@ typedef enum
 }
 LibreOfficeKitTileMode;
 
+/** Optional features of LibreOfficeKit, in particular callbacks that block
+ *  LibreOfficeKit until the corresponding reply is received, which would
+ *  deadlock if the client does not support the feature.
+ *
+ *  @see lok::Office::setOptionalFeatures().
+ */
+typedef enum
+{
+    /**
+     * Handle LOK_CALLBACK_DOCUMENT_PASSWORD by prompting the user
+     * for a password.
+     *
+     * @see lok::Office::setDocumentPassword().
+     */
+    LOK_FEATURE_DOCUMENT_PASSWORD = (1ULL << 0),
+
+    /**
+     * Handle LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY by prompting the user
+     * for a password.
+     *
+     * @see lok::Office::setDocumentPassword().
+     */
+    LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY = (1ULL << 1),
+}
+LibreOfficeKitOptionalFeatures;
+
 typedef enum
 {
     /**

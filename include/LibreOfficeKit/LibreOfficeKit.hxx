@@ -462,6 +462,16 @@ public:
     }
 
     /**
+     * Set bitmask of optional features supported by the client.
+     *
+     * @see LibreOfficeKitOptionalFeatures
+     */
+    void setOptionalFeatures(uint64_t features)
+    {
+        return mpThis->pClass->setOptionalFeatures(mpThis, features);
+    }
+
+    /**
      * Set password required for loading or editing a document.
      *
      * Loading the document is blocked until the password is provided.
