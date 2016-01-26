@@ -271,16 +271,45 @@ namespace svgio
                         }
                     }
 
-                    if(!aBitmapEx.IsEmpty())
+                    if(!aBitmapEx.IsEmpty() && 0 != aBitmapEx.GetSizePixel().Width()  && 0 != aBitmapEx.GetSizePixel().Height())
                     {
-                        // create content from created bitmap
+                        // calculate centered unit size
+                        const double fAspectRatio = (double)aBitmapEx.GetSizePixel().Width() / (double)aBitmapEx.GetSizePixel().Height();
+
+                        if(basegfx::fTools::equal(fAspectRatio, 0.0))
+                        {
+                            // use unit range
+                            aViewBox = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+                        }
+                        else if(basegfx::fTools::more(fAspectRatio, 0.0))
+                        {
+                            // width bigger height
+                            const double fHalfHeight((1.0 / fAspectRatio) * 0.5);
+                            aViewBox = basegfx::B2DRange(
+                                0.0,
+                                0.5 - fHalfHeight,
+                                1.0,
+                                0.5 + fHalfHeight);
+                        }
+                        else
+                        {
+                            // height bigger width
+                            const double fHalfWidth(fAspectRatio * 0.5);
+                            aViewBox = basegfx::B2DRange(
+                                0.5 - fHalfWidth,
+                                0.0,
+                                0.5 + fHalfWidth,
+                                1.0);
+                        }
+
+                        // create content from created bitmap, use calculated unit range size
+                        // as transformation to map the picture data correctly
                         aNewTarget.resize(1);
                         aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
                             aBitmapEx,
-                            basegfx::B2DHomMatrix());
-
-                        // fill aViewBox. No size set yet, use unit size
-                        aViewBox = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                aViewBox.getRange(),
+                                aViewBox.getMinimum()));
                     }
 
                     if(!aNewTarget.empty())
@@ -295,47 +324,30 @@ namespace svgio
                             // create mapping
                             const SvgAspectRatio& rRatio = getSvgAspectRatio();
 
-                            if(rRatio.isSet())
+                            // even when ratio is not set, use the defaults
+                            // let mapping be created from SvgAspectRatio
+                            const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createMapping(aTarget, aViewBox));
+
+                            if(!aEmbeddingTransform.isIdentity())
                             {
-                                // let mapping be created from SvgAspectRatio
-                                const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createMapping(aTarget, aViewBox));
+                                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                                        aEmbeddingTransform,
+                                        aNewTarget));
 
-                                if(!aEmbeddingTransform.isIdentity())
-                                {
-                                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                                            aEmbeddingTransform,
-                                            aNewTarget));
-
-                                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                                }
-
-                                if(!rRatio.isMeetOrSlice())
-                                {
-                                    // need to embed in MaskPrimitive2D to ensure clipping
-                                    const drawinglayer::primitive2d::Primitive2DReference xMask(
-                                        new drawinglayer::primitive2d::MaskPrimitive2D(
-                                            basegfx::B2DPolyPolygon(
-                                                basegfx::tools::createPolygonFromRect(aTarget)),
-                                            aNewTarget));
-
-                                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xMask };
-                                }
+                                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
                             }
-                            else
+
+                            if(!rRatio.isMeetOrSlice())
                             {
-                                // choose default mapping
-                                const basegfx::B2DHomMatrix aEmbeddingTransform(SvgAspectRatio::createLinearMapping(aTarget, aViewBox));
+                                // need to embed in MaskPrimitive2D to ensure clipping
+                                const drawinglayer::primitive2d::Primitive2DReference xMask(
+                                    new drawinglayer::primitive2d::MaskPrimitive2D(
+                                        basegfx::B2DPolyPolygon(
+                                            basegfx::tools::createPolygonFromRect(aTarget)),
+                                        aNewTarget));
 
-                                if(!aEmbeddingTransform.isIdentity())
-                                {
-                                    const drawinglayer::primitive2d::Primitive2DReference xRef(
-                                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                                            aEmbeddingTransform,
-                                            aNewTarget));
-
-                                    aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
-                                }
+                                aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xMask };
                             }
 
                             // embed and add to rTarget, take local extra-transform into account
