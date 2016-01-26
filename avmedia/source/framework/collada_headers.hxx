@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 
-#if defined __GNUC__
+#if defined __GNUC__ || defined __clang__
 #pragma GCC system_header
 #elif defined _MSC_VER
 #pragma warning(push, 1)

@@ -45,6 +45,7 @@
 #pragma clang diagnostic ignored "-Wall"
 #pragma clang diagnostic ignored "-Wattributes"
 #pragma clang diagnostic ignored "-Wdelete-incomplete"
+#pragma clang diagnostic ignored "-Wextra"
 #pragma clang diagnostic ignored "-Wint-to-pointer-cast"
 #pragma clang diagnostic ignored "-Winvalid-noreturn"
 #pragma clang diagnostic ignored "-Wmicrosoft"
