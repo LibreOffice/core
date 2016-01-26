@@ -1213,6 +1213,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                     rContext->Insert( PROP_NUMBERING_RULES, aRules );
                     // erase numbering from pStyle if already set
                     rContext->Erase(PROP_NUMBERING_STYLE_NAME);
+
+                    // Indentation can came from:
+                    // 1) Paragraph style's numbering's indentation: the current non-style numId has priority over it.
+                    // 2) Numbering's indentation: Writer handles that natively, so it should not be set on rContext.
+                    // 3) Paragraph style's indentation: ditto.
+                    // 4) Direct paragraph formatting: that will came later.
+                    // So no situation where keeping indentation at this point would make sense -> erase.
+                    rContext->Erase(PROP_PARA_FIRST_LINE_INDENT);
                 }
             }
             else
