@@ -64,9 +64,7 @@ OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::Runti
 
 uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessibleFixedHyperlink";
-    return aNames;
+    return { "com.sun.star.awt.AccessibleFixedHyperlink" };
 }
 
 
