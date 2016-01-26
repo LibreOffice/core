@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_719ff25f",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-26T11:00:08Z",
+      "side": 1,
+      "message": "As discussed on IRC, please move the body of this test into a separate method, as it is almost identical for both ODP and PPTX tests ..",
+      "revId": "6169e78e4f049445d1d4a92be84fa0bf547f07ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_519c7669",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-26T11:00:08Z",
+      "side": 1,
+      "message": "In order to have some nicer loop index here, you may want to change the slide layout to \u0027blank slide\u0027, so that there are only text fields (no title, no subtitle) shapes on the slide",
+      "revId": "6169e78e4f049445d1d4a92be84fa0bf547f07ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
