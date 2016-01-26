@@ -34,6 +34,24 @@
       "revId": "ec451161fffdce36cf7ebdf059a4f77f119ac8b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_71aa521b",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-26T19:38:43Z",
+      "side": 1,
+      "message": "I stand corrected..",
+      "parentUuid": "7aa08908_4e7e93af",
+      "revId": "ec451161fffdce36cf7ebdf059a4f77f119ac8b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
