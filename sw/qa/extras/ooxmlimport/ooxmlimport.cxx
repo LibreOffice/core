@@ -2859,6 +2859,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf92454, "tdf92454.docx")
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf95376, "tdf95376.docx")
+{
+    uno::Reference<beans::XPropertyState> xParagraph(getParagraph(2), uno::UNO_QUERY);
+    // This was beans::PropertyState_DIRECT_VALUE: indentation-from-numbering
+    // did not have priority over indentation-from-paragraph-style, due to a
+    // filter workaround that's not correct here.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf92124, "tdf92124.docx")
 {
     // Get the second paragraph's numbering style's 1st level's suffix.
