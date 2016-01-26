@@ -51,11 +51,11 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
-    return SetSizeUsingBuffer(nNewDX, nNewDY, std::shared_ptr<sal_uInt8>());
+    return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
 }
 
 bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
-        const std::shared_ptr<sal_uInt8> &pBuffer )
+        sal_uInt8 *const pBuffer)
 {
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )
@@ -75,7 +75,7 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         else
         {
             m_pSurface = pBuffer ?
-                             cairo_image_surface_create_for_data(pBuffer.get(), CAIRO_FORMAT_ARGB32,
+                             cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
                                    aDevSize.getX(),
                                    aDevSize.getY(),
                                    cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, aDevSize.getX()))
