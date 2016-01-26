@@ -19,6 +19,7 @@
 #include "attrib.hxx"
 #include "fillinfo.hxx"
 
+#include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
 
 void Test::testCopyPasteSkipEmptyConditionalFormatting()
@@ -626,5 +627,42 @@ void Test::testDataBarLengthMiddleAxis()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondFormatEndsWithStr()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionEntry aEntry(SC_COND_ENDS_WITH, "\"TestString\"", "", m_pDoc, ScAddress(),
+            "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    svl::SharedStringPool& rStringPool = m_pDoc->GetSharedStringPool();
+    svl::SharedString aStr = rStringPool.intern("SimpleTestString");
+    ScRefCellValue aVal(&aStr);
+    ScAddress aPos(0, 0, 0);
+
+    bool bValid = aEntry.IsCellValid(aVal, aPos);
+    CPPUNIT_ASSERT(bValid);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatEndsWithVal()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionEntry aEntry(SC_COND_ENDS_WITH, "2", "", m_pDoc, ScAddress(),
+            "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    for (sal_Int32 i = 0; i < 15; ++i)
+    {
+        ScRefCellValue aVal(i);
+        ScAddress aPos(0, 0, 0);
+
+        bool bValid = aEntry.IsCellValid(aVal, aPos);
+        bool bShouldBeValid = (i % 10) == 2;
+        CPPUNIT_ASSERT_EQUAL(bShouldBeValid, bValid);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
