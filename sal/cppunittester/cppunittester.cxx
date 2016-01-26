@@ -171,13 +171,29 @@ private:
 
 namespace {
 
+struct test_name_compare
+{
+    test_name_compare(const std::string& rName):
+        maName(rName)
+    {
+    }
+
+    bool operator()(const std::string& rCmp)
+    {
+        size_t nEndPos = maName.find(rCmp) + rCmp.size();
+        return nEndPos == maName.size();
+    }
+
+    std::string maName;
+};
+
 void addRecursiveTests(const std::vector<std::string>& test_names, CppUnit::Test* pTest, CppUnit::TestRunner& rRunner)
 {
     for (int i = 0; i < pTest->getChildTestCount(); ++i)
     {
         CppUnit::Test* pNewTest = pTest->getChildTestAt(i);
         addRecursiveTests(test_names, pNewTest, rRunner);
-        if (std::find(test_names.begin(), test_names.end(), pNewTest->getName()) != test_names.end())
+        if (std::find_if(test_names.begin(), test_names.end(), test_name_compare(pNewTest->getName())) != test_names.end())
             rRunner.addTest(pNewTest);
     }
 }
