@@ -52,10 +52,9 @@ using namespace ::com::sun::star;
 long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                        sal_uInt16 nEvent, const void* /* pEvent */ )
 {
-    SystemChildWindow* pWindow = static_cast<SystemChildWindow*>(pInst);
+    VclPtr<SystemChildWindow> pWindow = static_cast<SystemChildWindow*>(pInst);
     long nRet = 0;
 
-    ImplDelData aDogTag( pWindow );
     switch ( nEvent )
     {
         case SALOBJ_EVENT_GETFOCUS:
@@ -65,12 +64,12 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             pWindow->ImplGetFrameData()->mbSysObjFocus = true;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
             pWindow->ToTop( ToTopFlags::NoGrabFocus );
-            if( aDogTag.IsDead() )
+            if( pWindow->IsDisposed() )
                 break;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = false;
             pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = true;
             pWindow->GrabFocus();
-            if( aDogTag.IsDead() )
+            if( pWindow->IsDisposed() )
                 break;
             pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = false;
             break;
@@ -92,10 +91,10 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                 pWindow->ToTop( ToTopFlags::NoGrabFocus );
             else
                 pWindow->ToTop();
-            if( aDogTag.IsDead() )
+            if( pWindow->IsDisposed() )
                 break;
             pWindow->GrabFocus();
-            if( aDogTag.IsDead() )
+            if( pWindow->IsDisposed() )
                 break;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = false;
             break;
