@@ -71,7 +71,7 @@ static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
     if ( rRect.Bottom() > rVisible.Bottom()+1 ) rRect.Bottom() = rVisible.Bottom()+1;
 
-    // The header row must be drawn also when the inner rectangle is not visable,
+    // The header row must be drawn also when the inner rectangle is not visible,
     // that is why there is no return value anymore.
     // When it is far away, then lcl_DrawOneFrame is not even called.
 }
@@ -595,7 +595,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // FIXME this shouldn't be necessary once we change the entire Calc to
         // work in the logic coordinates (ideally 100ths of mm - so that it is
         // the same as editeng and drawinglayer), and get rid of all the
-        // SetMapMode's and other unneccessary fun we have with pixels
+        // SetMapMode's and other unnecessary fun we have with pixels
         // See also ScGridWindow::GetDrawMapMode() for the rest of this hack
         aDrawMode.SetOrigin(PixelToLogic(Point(nScrX, nScrY), aDrawMode));
     }

@@ -52,7 +52,7 @@ namespace sdr
             virtual ~ObjectContactOfPageView();
 
             // LazyInvalidate request. This is used from the VOCs to mark that they
-            // got invalidated by an ActionCanged() call. An active view needs to remember
+            // got invalidated by an ActionChanged() call. An active view needs to remember
             // this and take action on it. Default implementation directly calls back
             // triggerLazyInvalidate() which promptly handles the request
             virtual void setLazyInvalidate(ViewObjectContact& rVOC) override;
@@ -60,7 +60,7 @@ namespace sdr
             // call this to support evtl. preparations for repaint
             virtual void PrepareProcessDisplay() override;
 
-            // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
+            // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
             virtual void Invoke() override;
 
             // Process the whole displaying

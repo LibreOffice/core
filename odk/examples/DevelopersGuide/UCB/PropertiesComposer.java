@@ -55,7 +55,7 @@ public class PropertiesComposer {
     /**
      * Constructor.
      *
-     *@param      args   This construtor requires the arguments:
+     *@param      args   This constructor requires the arguments:
      *                          -url=...        (optional)
      *                          -propNames=...  (optional)
      *                          -propValues=... (optional)

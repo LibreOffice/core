@@ -1518,7 +1518,7 @@ void ColorPickerDialog::setColorComponent( sal_uInt16 nComp, double dValue )
 
 typedef ::cppu::WeakComponentImplHelper< XServiceInfo, XExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
 
-class ColorPicker : protected ::comphelper::OBaseMutex,    // Struct for right initalization of mutex member! Must be first of baseclasses.
+class ColorPicker : protected ::comphelper::OBaseMutex,    // Struct for right initialization of mutex member! Must be first of baseclasses.
                     public ColorPickerBase
 {
 public:

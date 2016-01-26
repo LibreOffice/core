@@ -47,7 +47,7 @@ public interface ReportJob
      * Although we might want to run the job as soon as it has been
      * created, sometimes it is wiser to let the user add some listeners
      * first. If we execute at once, the user either has to deal with
-     * threading code or wont receive any progress information in single
+     * threading code or won't receive any progress information in single
      * threaded environments.
      * @throws java.io.IOException
      * @throws ReportExecutionException

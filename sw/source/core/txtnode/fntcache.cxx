@@ -2571,7 +2571,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                 {
                     if (aFillAttributes.get() && aFillAttributes->isUsed())
                     {
-                        // First see if fill atttributes provide a color.
+                        // First see if fill attributes provide a color.
                         aColor = Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
                         pCol = &aColor;
                     }

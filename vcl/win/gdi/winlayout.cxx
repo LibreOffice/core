@@ -347,7 +347,7 @@ bool WinFontInstance::AddChunkOfGlyphs(bool bRealGlyphIndices, int nGlyphIndex, 
     // Try hard to avoid overlap as we want to be able to use
     // individual rectangles for each glyph. The ABC widths don't
     // take anti-aliasing into consideration. Let's hope that leaving
-    // "extra" space inbetween glyphs will help.
+    // "extra" space between glyphs will help.
     std::vector<int> aDX(nCount);
     int totWidth = 0;
     for (int i = 0; i < nCount; i++)

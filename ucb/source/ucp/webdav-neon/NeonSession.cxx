@@ -799,7 +799,7 @@ void NeonSession::Init()
         // set timeout to connect
         // if connect_timeout is not set, neon returns NE_CONNECT when the TCP socket default
         // timeout elapses
-        // whith connect_timeout set neon returns NE_TIMEOUT if elapsed when the connection
+        // with connect_timeout set neon returns NE_TIMEOUT if elapsed when the connection
         // didn't succeed
         // grab it from configuration
         uno::Reference< uno::XComponentContext > rContext = m_xFactory->getComponentContext();

@@ -55,7 +55,7 @@ public class ResourceManager {
     /**
      * Constructor.
      *
-     *@param      args   This construtor requires the arguments:
+     *@param      args   This constructor requires the arguments:
      *                          -url=...             (optional)
      *                          -targetFolderURL=... (optional)
      *                          -newTitle=...        (optional)
