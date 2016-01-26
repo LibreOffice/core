@@ -143,6 +143,7 @@ public:
     void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
     void testComplexIconSetsXLSX();
     void testCondFormatParentXLSX();
+    void testColorScaleNumWithRefXLSX();
 
     void testLiteralInFormulaXLS();
 
@@ -259,6 +260,7 @@ public:
     CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
     CPPUNIT_TEST(testComplexIconSetsXLSX);
     CPPUNIT_TEST(testCondFormatParentXLSX);
+    CPPUNIT_TEST(testColorScaleNumWithRefXLSX);
     CPPUNIT_TEST(testLiteralInFormulaXLS);
 
     CPPUNIT_TEST(testNumberFormatHTML);
@@ -2532,6 +2534,35 @@ void ScFiltersTest::testCondFormatParentXLSX()
     const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet);
     const SvxVerJustifyItem& rVerJustify = static_cast<const SvxVerJustifyItem&>(rPoolItem);
     CPPUNIT_ASSERT_EQUAL(SVX_VER_JUSTIFY_TOP, static_cast<SvxCellVerJustify>(rVerJustify.GetValue()));
+}
+
+void ScFiltersTest::testColorScaleNumWithRefXLSX()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("colorscale_num_with_ref.", FORMAT_XLSX);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load colorscale_num_with_ref.xlsx", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
+
+    ScConditionalFormat* pFormat = pList->begin()->get();
+    CPPUNIT_ASSERT(pFormat);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+
+    CPPUNIT_ASSERT_EQUAL(condformat::COLORSCALE, pEntry->GetType());
+
+    const ScColorScaleFormat* pColorScale= dynamic_cast<const ScColorScaleFormat*>(pEntry);
+    CPPUNIT_ASSERT(pColorScale);
+
+    const ScColorScaleEntry* pColorScaleEntry = pColorScale->GetEntry(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("=$A$1"),
+            pColorScaleEntry->GetFormula(formula::FormulaGrammar::GRAM_NATIVE));
 }
 
 void ScFiltersTest::testLiteralInFormulaXLS()
