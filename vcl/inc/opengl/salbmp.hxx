@@ -29,7 +29,7 @@
 #include <salbmp.hxx>
 
 #include <deque>
-#include <boost/shared_array.hpp>
+#include <memory>
 
 struct  BitmapBuffer;
 class   BitmapPalette;
@@ -40,7 +40,7 @@ private:
     OpenGLTexture                       maTexture;
     bool                                mbDirtyTexture;
     BitmapPalette                       maPalette;
-    boost::shared_array<sal_uInt8>      maUserBuffer;
+    std::shared_ptr<sal_uInt8>          mpUserBuffer;
     sal_uInt16                          mnBits;
     sal_uInt16                          mnBytesPerRow;
     int                                 mnWidth;
