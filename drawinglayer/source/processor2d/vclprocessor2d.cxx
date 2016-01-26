@@ -39,7 +39,6 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
-#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
@@ -55,16 +54,11 @@
 
 // control support
 
-#include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/XView.hpp>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 
-// for test, can be removed again
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dtrapezoid.hxx>
-// <- for test
 
 using namespace com::sun::star;
 
@@ -98,16 +92,6 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        // UNO class usages
-        using ::com::sun::star::uno::Reference;
-        using ::com::sun::star::uno::UNO_QUERY;
-        using ::com::sun::star::uno::UNO_QUERY_THROW;
-        using ::com::sun::star::uno::Exception;
-        using ::com::sun::star::awt::XView;
-        using ::com::sun::star::awt::XGraphics;
-        using ::com::sun::star::awt::XWindow;
-        using ::com::sun::star::awt::PosSize::POSSIZE;
-
         // rendering support
 
         // directdraw of text simple portion or decorated portion primitive. When decorated, all the extra
