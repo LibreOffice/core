@@ -265,7 +265,7 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
 {
     VCL_GL_INFO( "::ImplScale" );
 
-    maUserBuffer.reset();
+    mpUserBuffer.reset();
     OpenGLVCLContextZone aContextZone;
     rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
 

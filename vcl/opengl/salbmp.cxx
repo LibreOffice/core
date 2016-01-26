@@ -30,6 +30,8 @@
 #include "vcleventlisteners.hxx"
 #include "vcl/lazydelete.hxx"
 
+#include <o3tl/make_shared.hxx>
+
 #include "opengl/zone.hxx"
 #include "opengl/program.hxx"
 #include "opengl/salbmp.hxx"
@@ -202,12 +204,12 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
         mbDirtyTexture = false;
 
         // be careful here, we are share & reference-count the
-        // maUserBuffer, BUT this Create() is called from
+        // mpUserBuffer, BUT this Create() is called from
         // Bitmap::ImplMakeUnique().
         // Consequently, there might be cases when this needs to be made
         // unique later (when we don't do that right away here), like when
         // using the BitmapWriteAccess.
-        maUserBuffer = rSourceBitmap.maUserBuffer;
+        mpUserBuffer = rSourceBitmap.mpUserBuffer;
 
         return true;
     }
@@ -238,7 +240,7 @@ void OpenGLSalBitmap::Destroy()
     VCL_GL_INFO("Destroy OpenGLSalBitmap texture:" << maTexture.Id());
     maPendingOps.clear();
     maTexture = OpenGLTexture();
-    maUserBuffer.reset();
+    mpUserBuffer.reset();
 }
 
 bool OpenGLSalBitmap::AllocateUserData()
@@ -256,7 +258,7 @@ bool OpenGLSalBitmap::AllocateUserData()
     {
         try
         {
-            maUserBuffer.reset( new sal_uInt8[static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight] );
+            mpUserBuffer = o3tl::make_shared_array<sal_uInt8>(static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight);
             alloc = true;
         }
         catch (const std::bad_alloc &) {}
@@ -264,18 +266,18 @@ bool OpenGLSalBitmap::AllocateUserData()
     if (!alloc)
     {
         SAL_WARN("vcl.opengl", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
-        maUserBuffer.reset( static_cast<sal_uInt8*>(nullptr) );
+        mpUserBuffer.reset();
         mnBytesPerRow = 0;
     }
 #ifdef DBG_UTIL
     else
     {
         for (size_t i = 0; i < size_t(mnBytesPerRow * mnHeight); i++)
-            maUserBuffer.get()[i] = (i & 0xFF);
+            mpUserBuffer.get()[i] = (i & 0xFF);
     }
 #endif
 
-    return maUserBuffer.get() != nullptr;
+    return mpUserBuffer.get() != nullptr;
 }
 
 namespace {
@@ -436,19 +438,19 @@ GLuint OpenGLSalBitmap::CreateTexture()
     sal_uInt8* pData( nullptr );
     bool bAllocated( false );
 
-    if( maUserBuffer.get() != nullptr )
+    if (mpUserBuffer.get() != nullptr)
     {
         if( mnBits == 16 || mnBits == 24 || mnBits == 32 )
         {
             // no conversion needed for truecolor
-            pData = maUserBuffer.get();
+            pData = mpUserBuffer.get();
 
             determineTextureFormat(mnBits, nFormat, nType);
         }
         else if( mnBits == 8 && maPalette.IsGreyPalette() )
         {
             // no conversion needed for grayscale
-            pData = maUserBuffer.get();
+            pData = mpUserBuffer.get();
             nFormat = GL_LUMINANCE;
             nType = GL_UNSIGNED_BYTE;
         }
@@ -463,7 +465,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
             std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(mnBits, maPalette));
 
-            sal_uInt8* pSrcData = maUserBuffer.get();
+            sal_uInt8* pSrcData = mpUserBuffer.get();
             sal_uInt8* pDstData = pData;
 
             sal_uInt32 nY = mnBufHeight;
@@ -516,7 +518,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
 bool OpenGLSalBitmap::ReadTexture()
 {
-    sal_uInt8* pData = maUserBuffer.get();
+    sal_uInt8* pData = mpUserBuffer.get();
 
     GLenum nFormat = GL_RGBA;
     GLenum nType = GL_UNSIGNED_BYTE;
@@ -707,7 +709,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 
     if( nMode != BITMAP_INFO_ACCESS )
     {
-        if( !maUserBuffer.get() )
+        if (!mpUserBuffer.get())
         {
             if( !AllocateUserData() )
                 return nullptr;
@@ -723,14 +725,14 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
         }
     }
 
-    // maUserBuffer must be unique when we are doing the write access
-    if (nMode == BITMAP_WRITE_ACCESS && maUserBuffer && !maUserBuffer.unique())
+    // mpUserBuffer must be unique when we are doing the write access
+    if (nMode == BITMAP_WRITE_ACCESS && mpUserBuffer && !mpUserBuffer.unique())
     {
-        boost::shared_array<sal_uInt8> aBuffer(maUserBuffer);
+        std::shared_ptr<sal_uInt8> aBuffer(mpUserBuffer);
 
-        maUserBuffer.reset();
+        mpUserBuffer.reset();
         AllocateUserData();
-        memcpy(maUserBuffer.get(), aBuffer.get(), static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight);
+        memcpy(mpUserBuffer.get(), aBuffer.get(), static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight);
     }
 
     BitmapBuffer* pBuffer = new BitmapBuffer;
@@ -738,7 +740,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
     pBuffer->mnHeight = mnHeight;
     pBuffer->maPalette = maPalette;
     pBuffer->mnScanlineSize = mnBytesPerRow;
-    pBuffer->mpBits = maUserBuffer.get();
+    pBuffer->mpBits = mpUserBuffer.get();
     pBuffer->mnBitCount = mnBits;
 
     switch (mnBits)
@@ -847,7 +849,7 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
     if( pBuffer == NULL )
         return false;
 
-    if( !maUserBuffer.get() )
+    if (!mpUserBuffer.get())
     {
         if( !AllocateUserData() || !ReadTexture() )
         {
@@ -858,7 +860,7 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
 
     // TODO Might be more efficient to add a static method to SalBitmap
     //      to get system data from a buffer
-    memcpy( pBuffer->mpBits, maUserBuffer.get(), mnBytesPerRow * mnHeight );
+    memcpy( pBuffer->mpBits, mpUserBuffer.get(), mnBytesPerRow * mnHeight );
 
     rBitmap.ReleaseBuffer( pBuffer, false );
     return rBitmap.GetSystemData( rData );
