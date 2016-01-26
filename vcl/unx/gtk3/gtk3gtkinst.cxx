@@ -218,6 +218,7 @@ public:
     }
 
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector()
+        override
     {
         std::vector<css::datatransfer::DataFlavor> aVector;
 

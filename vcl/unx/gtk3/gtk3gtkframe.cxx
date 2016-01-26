@@ -3161,7 +3161,7 @@ public:
         return aRet;
     }
 
-    virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector()
+    virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() override
     {
         std::vector<GdkAtom> targets;
         for (GList* l = gdk_drag_context_list_targets(m_pContext); l; l = l->next)
