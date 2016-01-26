@@ -160,7 +160,7 @@ namespace svgio
             virtual double getCurrentFontSizeInherited() const override;
             virtual double getCurrentXHeightInherited() const override;
 
-            double getCurrentFontSize() const;
+            virtual double getCurrentFontSize() const;
             double getCurrentXHeight() const;
 
             /// Id access
