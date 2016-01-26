@@ -24,7 +24,6 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/outdev.hxx>
 
-#include <memory>
 
 class SalVirtualDevice;
 struct SystemGraphicsData;
@@ -47,9 +46,9 @@ private:
 
     SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr );
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                                     const std::shared_ptr<sal_uInt8>  &pBuffer );
+                                                     sal_uInt8* pBuffer );
     SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                                const std::shared_ptr<sal_uInt8> &pBuffer );
+                                                sal_uInt8* pBuffer );
 
     VirtualDevice (const VirtualDevice &) = delete;
     VirtualDevice & operator= (const VirtualDevice &) = delete;
@@ -127,7 +126,7 @@ public:
     bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize,
                                                                 const Fraction& rScale,
                                                                 const Point& rNewOffset,
-                                                                const std::shared_ptr<sal_uInt8>  &pBuffer );
+                                                                sal_uInt8* pBuffer);
 
     bool                SetOutputSize( const Size& rNewSize, bool bErase = true )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }

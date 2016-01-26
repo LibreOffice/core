@@ -280,7 +280,7 @@ void VirtualDevice::dispose()
 }
 
 bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                                 const std::shared_ptr<sal_uInt8> &pBuffer )
+                                                 sal_uInt8 *const pBuffer)
 {
     SAL_INFO( "vcl.gdi",
               "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
@@ -386,7 +386,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
 }
 
 bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                            const std::shared_ptr<sal_uInt8> &pBuffer )
+                                            sal_uInt8 *const pBuffer)
 {
     if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
     {
@@ -401,8 +401,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
             if( !mpAlphaVDev )
             {
                 mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meAlphaFormat);
-                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase,
-                                                         std::shared_ptr<sal_uInt8>());
+                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, nullptr);
             }
 
             // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
@@ -435,12 +434,12 @@ void VirtualDevice::EnableRTL( bool bEnable )
 
 bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
 {
-    return ImplSetOutputSizePixel(rNewSize, bErase, std::shared_ptr<sal_uInt8>());
+    return ImplSetOutputSizePixel(rNewSize, bErase, nullptr);
 }
 
 bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
     const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset,
-    const std::shared_ptr<sal_uInt8> &pBuffer )
+    sal_uInt8 *const pBuffer)
 {
     if (pBuffer) {
         MapMode mm = GetMapMode();
