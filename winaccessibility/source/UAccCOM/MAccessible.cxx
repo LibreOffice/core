@@ -22,6 +22,8 @@
 #include "MAccessible.h"
 
 #include <algorithm>
+#include <cstddef>
+
 #include "AccAction.h"
 #include "AccRelation.h"
 #include "AccComponent.h"
@@ -3063,7 +3065,7 @@ STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
     *states = 0x0;
     for( int i = 0; i < count; i++  )
     {
-        for( int j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
+        for( std::size_t j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
         {
             if( pStates[i] == UNO_STATES[j] )
             {
