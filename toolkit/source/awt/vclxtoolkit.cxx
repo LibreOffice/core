@@ -113,6 +113,7 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -193,6 +194,9 @@ public:
 
     // css::awt::XToolkitExperimental
     virtual void SAL_CALL processEventsToIdle()
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual sal_Int64 SAL_CALL getOpenGLBufferSwapCounter()
         throw (css::uno::RuntimeException, std::exception) override;
 
     // css::awt::XToolkit
@@ -1906,11 +1910,19 @@ void SAL_CALL VCLXToolkit::reschedule()
     Application::Reschedule(true);
 }
 
+// css::awt::XToolkitExperimental
+
 void SAL_CALL VCLXToolkit::processEventsToIdle()
     throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     Scheduler::ProcessEventsToIdle();
+}
+
+sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
+    throw (css::uno::RuntimeException, std::exception)
+{
+     return OpenGLWrapper::getBufferSwapCounter();
 }
 
 // css:awt:XToolkitRobot
