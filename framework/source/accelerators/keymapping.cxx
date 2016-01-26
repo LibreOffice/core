@@ -20,6 +20,7 @@
 #include <accelerators/keymapping.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
+#include <rtl/instance.hxx>
 
 namespace framework
 {
@@ -152,8 +153,14 @@ KeyMapping::KeyMapping()
     }
 }
 
-KeyMapping::~KeyMapping()
-{
+namespace {
+
+struct Instance: public rtl::Static<KeyMapping, Instance> {};
+
+}
+
+KeyMapping & KeyMapping::get() {
+    return Instance::get();
 }
 
 sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)

@@ -77,7 +77,8 @@ class KeyMapping
     public:
 
                  KeyMapping();
-        virtual ~KeyMapping();
+
+        static KeyMapping & get();
 
         /** @short  return a suitable key code
                     for the specified key identifier.

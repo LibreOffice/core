@@ -18,7 +18,7 @@
  */
 
 #include <accelerators/acceleratorconfiguration.hxx>
-
+#include <accelerators/keymapping.hxx>
 #include <accelerators/presethandler.hxx>
 
 #include <xml/saxnamespacefilter.hxx>
@@ -57,10 +57,10 @@ namespace framework
     const char CFG_ENTRY_SECONDARY[] = "SecondaryKeys";
     const char CFG_PROP_COMMAND[] = "Command";
 
-    OUString lcl_getKeyString(salhelper::SingletonRef<framework::KeyMapping>& _rKeyMapping, const css::awt::KeyEvent& aKeyEvent)
+    OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
     {
         const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of a identifier...
-        OUStringBuffer sKeyBuffer((_rKeyMapping->mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
+        OUStringBuffer sKeyBuffer((KeyMapping::get().mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
 
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
             sKeyBuffer.append("_SHIFT");
@@ -1135,7 +1135,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
             sal_Int32 nIndex = 0;
             OUString sKeyCommand = sKey.getToken(0, '_', nIndex);
             OUString sPrefix("KEY_");
-            aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(sPrefix + sKeyCommand);
+            aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode(sPrefix + sKeyCommand);
 
             css::uno::Sequence< OUString > sToken(4);
             const sal_Int32 nToken = 4;
@@ -1289,7 +1289,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         xModules->getByName(m_sModuleCFG) >>= xContainer;
     }
 
-    const OUString sKey = lcl_getKeyString(m_rKeyMapping,aKeyEvent);
+    const OUString sKey = lcl_getKeyString(aKeyEvent);
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameContainer > xCommand;
     if ( !xContainer->hasByName(sKey) )
@@ -1329,7 +1329,7 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
         xModules->getByName(m_sModuleCFG) >>= xContainer;
     }
 
-    const OUString sKey = lcl_getKeyString(m_rKeyMapping,aKeyEvent);
+    const OUString sKey = lcl_getKeyString(aKeyEvent);
     xContainer->removeByName(sKey);
 }
 
@@ -1355,7 +1355,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
 
     sal_Int32 nIndex = 0;
     sKeyIdentifier = sKey.getToken(0, '_', nIndex);
-    aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode("KEY_"+sKeyIdentifier);
+    aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_"+sKeyIdentifier);
 
     css::uno::Sequence< OUString > sToken(3);
     const sal_Int32 nToken = 3;

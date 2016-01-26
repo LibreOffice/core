@@ -21,12 +21,9 @@
 #define INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
 
 #include <accelerators/acceleratorcache.hxx>
-#include <accelerators/keymapping.hxx>
 #include <general.h>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-
-#include <salhelper/singletonref.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework{
@@ -44,14 +41,6 @@ class AcceleratorConfigurationWriter
         /** @short  reference to the outside container, where this
                     writer must work on. */
         const AcceleratorCache& m_rContainer;
-
-        /** @short  is used to map key codes to its
-                    string representation.
-
-            @descr  To perform this operation is
-                    created only one times and holded
-                    alive forever ...*/
-        ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
     // interface
 

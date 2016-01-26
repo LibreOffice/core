@@ -23,7 +23,6 @@
 #include <xml/saxnamespacefilter.hxx> // HACK: needed for MSVC 2013 ENABLE_LTO build: WeakImplHelper<XDocumentHandler>
 
 #include <accelerators/acceleratorcache.hxx>
-#include <accelerators/keymapping.hxx>
 #include <macros/xinterface.hxx>
 #include <general.h>
 
@@ -31,7 +30,6 @@
 
 #include <com/sun/star/xml/sax/XLocator.hpp>
 
-#include <salhelper/singletonref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 
@@ -84,14 +82,6 @@ class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper< css::xml::
         /** @short  used to detect if an accelerator item
                     occurs recursive inside xml. */
         bool m_bInsideAcceleratorItem;
-
-        /** @short  is used to map key codes to its
-                    string representation.
-
-            @descr  To perform this operation is
-                    created only one time and kept
-                    alive forever ...*/
-        ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
         /** @short  provide information about the parsing state.
 

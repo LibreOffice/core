@@ -22,7 +22,6 @@
 
 #include <accelerators/presethandler.hxx>
 #include <accelerators/acceleratorcache.hxx>
-#include <accelerators/keymapping.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <general.h>
@@ -46,7 +45,6 @@
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <salhelper/singletonref.hxx>
 
 // definition
 
@@ -256,8 +254,6 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
         OUString m_sGlobalOrModules;
         OUString m_sModuleCFG;
-
-        ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
         // native interface!
 

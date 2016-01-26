@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <accelerators/keymapping.hxx>
 #include <xml/acceleratorconfigurationreader.hxx>
 
 #include <acceleratorconst.h>
@@ -121,7 +124,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
                     break;
 
                 case E_ATTRIBUTE_KEYCODE :
-                    aEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(sValue);
+                    aEvent.KeyCode = KeyMapping::get().mapIdentifierToCode(sValue);
                     break;
 
                 case E_ATTRIBUTE_MOD_SHIFT :

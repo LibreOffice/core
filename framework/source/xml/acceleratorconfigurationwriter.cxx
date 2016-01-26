@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <accelerators/keymapping.hxx>
 #include <xml/acceleratorconfigurationwriter.hxx>
 
 #include <acceleratorconst.h>
@@ -94,7 +97,7 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
     ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
     css::uno::Reference< css::xml::sax::XAttributeList > xAttribs (static_cast< css::xml::sax::XAttributeList* >(pAttribs) , css::uno::UNO_QUERY_THROW);
 
-    OUString sKey = m_rKeyMapping->mapCodeToIdentifier(aKey.KeyCode);
+    OUString sKey = KeyMapping::get().mapCodeToIdentifier(aKey.KeyCode);
     // TODO check if key is empty!
 
     pAttribs->AddAttribute(AL_ATTRIBUTE_KEYCODE, ATTRIBUTE_TYPE_CDATA, sKey    );
