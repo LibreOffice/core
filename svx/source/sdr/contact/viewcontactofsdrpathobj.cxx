@@ -91,15 +91,17 @@ namespace sdr
             if(bIsLine)
             {
                 const SdrPage* pPage = GetPathObj().GetPage();
-                if (pPage)
+                double fPageWidth = pPage ? pPage->GetWdt() : 0.0;
+                double fPageHeight = pPage ? pPage->GetHgt() : 0.0;
+                if (fPageWidth && fPageHeight)
                 {
                     //tdf#63955 if we have an extremely long line then clip it
                     //to a very generous range of -1 page width/height vs +1
                     //page width/height to avoid oom and massive churn
                     //generating a huge polygon chain to cover the length in
                     //applyLineDashing if this line is dashed
-                    double fPageWidth = pPage->GetWdt();
-                    double fPageHeight = pPage->GetHgt();
+                    //tdf#97276 don't clip if the underlying page dimension
+                    //is unknown
                     basegfx::B2DRange aClipRange(-fPageWidth, -fPageHeight,
                                                  fPageWidth*2, fPageHeight*2);
                     aUnitPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(aUnitPolyPolygon,
