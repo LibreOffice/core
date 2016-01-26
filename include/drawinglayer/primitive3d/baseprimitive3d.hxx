@@ -53,7 +53,7 @@ namespace drawinglayer { namespace primitive3d {
     typedef css::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
     typedef css::uno::Sequence< Primitive3DReference > Primitive3DSequence;
 
-    class DRAWINGLAYER_DLLPUBLIC SAL_WARN_UNUSED Primitive3DContainer : public std::vector< Primitive3DReference >
+    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive3DContainer : public std::vector< Primitive3DReference >
     {
     public:
         explicit Primitive3DContainer() {}

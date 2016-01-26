@@ -54,7 +54,7 @@ namespace drawinglayer { namespace primitive2d {
     typedef css::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 
 
-    class DRAWINGLAYER_DLLPUBLIC SAL_WARN_UNUSED Primitive2DContainer : public std::vector< Primitive2DReference >
+    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer : public std::vector< Primitive2DReference >
     {
     public:
         explicit Primitive2DContainer() {}
