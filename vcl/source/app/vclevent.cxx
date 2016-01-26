@@ -51,9 +51,8 @@ void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
     std::vector<Link<VclSimpleEvent&,void>>::const_iterator aEnd( aCopy.end() );
     if( dynamic_cast<const VclWindowEvent*>( &rEvent ) != nullptr )
     {
-        VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(&rEvent);
-        ImplDelData aDel( pWinEvent->GetWindow() );
-        while ( aIter != aEnd && ! aDel.IsDead() )
+        VclPtr<vcl::Window> xWin((static_cast<VclWindowEvent*>(&rEvent))->GetWindow());
+        while ( aIter != aEnd && xWin && ! xWin->IsDisposed() )
         {
             Link<VclSimpleEvent&,void> &rLink = *aIter;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368

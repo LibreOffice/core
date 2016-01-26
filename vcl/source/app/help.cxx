@@ -342,9 +342,9 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 
 void HelpTextWindow::ImplShow()
 {
-    ImplDelData aDogTag( this );
+    VclPtr<HelpTextWindow> xWindow( this );
     Show( true, ShowFlags::NoActivate );
-    if( !aDogTag.IsDead() )
+    if( !xWindow->IsDisposed() )
     Update();
 }
 
