@@ -51,11 +51,11 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
-    return SetSizeUsingBuffer(nNewDX, nNewDY, boost::shared_array<sal_uInt8>());
+    return SetSizeUsingBuffer(nNewDX, nNewDY, std::shared_ptr<sal_uInt8>());
 }
 
 bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
-        const boost::shared_array<sal_uInt8> &pBuffer )
+        const std::shared_ptr<sal_uInt8> &pBuffer )
 {
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )

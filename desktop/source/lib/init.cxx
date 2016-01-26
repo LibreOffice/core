@@ -101,11 +101,11 @@ typedef struct
     const char *filterName;
 } ExtensionMap;
 
-// We need a shared_array for passing into the BitmapDevice (via
+// We need a shared_ptr for passing into the BitmapDevice (via
 // VirtualDevice.SetOutputSizePixelScaleOffsetAndBuffer which goes via the
 // SvpVirtualDevice, ending up in the cairo surface. However as we're
 // given the array externally we can't delete it, and hence need to override
-// shared_array's default of deleting its pointer.
+// shared_ptr's default of deleting its pointer.
 template<typename T>
 struct NoDelete
 {
@@ -924,7 +924,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
 #endif
 
-    boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
+    std::shared_ptr<sal_uInt8> aBuffer( pBuffer, NoDelete<sal_uInt8>() );
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
@@ -1569,7 +1569,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
 
             unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
             memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
-            boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
+            std::shared_ptr<sal_uInt8> aBuffer(pBuffer, NoDelete<sal_uInt8>());
 
             aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
             aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
