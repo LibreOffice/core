@@ -240,6 +240,9 @@ void log(
         syslog(prio, "%s", s.str().c_str());
 #endif
     } else {
+        TimeValue pTime = { 0, 0 };
+        osl_getSystemTime(&pTime);
+        std::fprintf(stderr, "T%ld.%.9ld - ", (long)pTime.Seconds, (long)pTime.Nanosec);
         std::fputs(s.str().c_str(), stderr);
         std::fflush(stderr);
     }
