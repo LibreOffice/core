@@ -89,16 +89,21 @@ throw (uno::RuntimeException, std::exception)
     task::DocumentPasswordRequest2 passwordRequest;
     if (request >>= passwordRequest)
     {
-        OString const url(passwordRequest.Name.toUtf8());
-        m_pLOKit->mpCallback(passwordRequest.IsRequestPasswordToModify
-                        ? LOK_CALLBACK_DOCUMENT_PASSWORD
-                        : LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY,
+        if (m_pLOKit->hasOptionalFeature((passwordRequest.IsRequestPasswordToModify)
+                    ? LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
+                    : LOK_FEATURE_DOCUMENT_PASSWORD))
+        {
+            OString const url(passwordRequest.Name.toUtf8());
+            m_pLOKit->mpCallback(passwordRequest.IsRequestPasswordToModify
+                        ? LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
+                        : LOK_CALLBACK_DOCUMENT_PASSWORD,
                     url.getStr(),
                     m_pLOKit->mpCallbackData);
 
-        // block until SetPassword is called
-        m_havePassword.wait();
-        m_havePassword.reset();
+            // block until SetPassword is called
+            m_havePassword.wait();
+            m_havePassword.reset();
+        }
 
         for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
         {

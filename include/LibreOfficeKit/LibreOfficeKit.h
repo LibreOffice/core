@@ -15,6 +15,7 @@
 #if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 // the unstable API needs C99's bool
 #include <stdbool.h>
+#include <stdint.h>
 #endif
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
@@ -64,6 +65,9 @@ struct _LibreOfficeKitClass
 
     /// @see lok::Office::getFilterTypes().
     char* (*getFilterTypes) (LibreOfficeKit* pThis);
+
+    /// @see lok::Office::setOptionalFeatures().
+    void (*setOptionalFeatures)(LibreOfficeKit* pThis, uint64_t features);
 
     /// @see lok::Office::setDocumentPassword().
     void (*setDocumentPassword) (LibreOfficeKit* pThis,

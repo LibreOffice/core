@@ -427,6 +427,7 @@ static void                    lo_registerCallback (LibreOfficeKit* pThis,
                                                     LibreOfficeKitCallback pCallback,
                                                     void* pData);
 static char* lo_getFilterTypes(LibreOfficeKit* pThis);
+static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t features);
 static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
@@ -436,6 +437,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
     , maThread(nullptr)
     , mpCallback(nullptr)
     , mpCallbackData(nullptr)
+    , mOptionalFeatures(0)
 {
     if(!m_pOfficeClass) {
         m_pOfficeClass.reset(new LibreOfficeKitClass);
@@ -448,6 +450,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
         m_pOfficeClass->registerCallback = lo_registerCallback;
         m_pOfficeClass->getFilterTypes = lo_getFilterTypes;
+        m_pOfficeClass->setOptionalFeatures = lo_setOptionalFeatures;
         m_pOfficeClass->setDocumentPassword = lo_setDocumentPassword;
 
         gOfficeClass = m_pOfficeClass;
@@ -1617,6 +1620,12 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     return strdup(aStream.str().c_str());
+}
+
+static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t const features)
+{
+    LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    pLib->mOptionalFeatures = features;
 }
 
 static void lo_setDocumentPassword(LibreOfficeKit* pThis,
