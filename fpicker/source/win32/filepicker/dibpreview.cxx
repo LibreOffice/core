@@ -241,7 +241,7 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
                 0, 0, cxDib, cyDib, pBits, pbmi,
                 DIB_RGB_COLORS, SRCCOPY);
 
-            OSL_ASSERT(GDI_ERROR != GDIError);
+            OSL_ASSERT(0 != GDIError);
 
             // paint the border
             RECT rc;
