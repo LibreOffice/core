@@ -1618,7 +1618,7 @@ static HRESULT mapCannotConvertException(const CannotConvertException &e, unsign
 // function returned VT_DISPATCH then the IDispatch of the same
 // object is being returned.
 // See InterfaceOleWrapper_Impl::Invoke, InterfaceOleWrapper_Impl::m_defaultValueType
-const VARTYPE getVarType( const Any& value)
+VARTYPE getVarType( const Any& value)
 {
     VARTYPE ret= VT_EMPTY;
 

@@ -59,7 +59,7 @@ using namespace std;
 namespace ole_adapter
 {
 
-const VARTYPE getVarType( const Any& val);
+VARTYPE getVarType( const Any& val);
 /* creates a Type object for a given type name.
 
     The function returns false if the name does not represent
