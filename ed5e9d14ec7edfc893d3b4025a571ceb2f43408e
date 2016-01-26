@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_91cb7e1e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-26T18:52:16Z",
+      "side": 1,
+      "message": "You mention here the \"FreezePanes button\", but I don\u0027t see such button anywhere in this commit. Can you clarify this please - Is it something you\u0027re going to add in next patchsets? Or maybe I misunderstood what you say?",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_11d82eef",
+        "filename": "framework/Library_fwk.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-26T18:52:16Z",
+      "side": 1,
+      "message": "I\u0027m not sure that putting something that\u0027s Calc-specific in framework/ is a good idea. Maybe sc/source/ui/cctrl/ could be a better place?",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_f1e762aa",
+        "filename": "framework/source/uielement/freezepanesmenucontroller.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-26T18:52:16Z",
+      "side": 1,
+      "message": "So this controller just adds 2 static commands to the menu. Then why create a controller, and not put it directly in menubar.xml?\n\n(Also there is no handling here for icon theme changes, so basically it will suffer from the same bug as in tdf#96736/tdf#92049. This can be fixed later of course, but still I had to mention this.)",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_d1ece691",
+        "filename": "framework/source/uielement/freezepanesmenucontroller.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-26T18:52:16Z",
+      "side": 1,
+      "message": "I think you should at least handle enable/disable states for FreezePanesFirstColumn/FirstRow commands.",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_91f25e6e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Controller.xcu",
+        "patchSetId": 13
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-26T18:52:16Z",
+      "side": 1,
+      "message": "This .uno:FreezePanesMenu doesn\u0027t seem to be used anywhere in the menu.",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_31028a3f",
+        "filename": "sc/sdi/scalc.sdi",
+        "patchSetId": 13
+      },
+      "lineNbr": 2908,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-26T18:52:16Z",
+      "side": 1,
+      "message": "Any reason this is not allowed to be added to toolbars?",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
