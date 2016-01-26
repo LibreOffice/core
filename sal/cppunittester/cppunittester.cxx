@@ -180,7 +180,11 @@ struct test_name_compare
 
     bool operator()(const std::string& rCmp)
     {
-        size_t nEndPos = maName.find(rCmp) + rCmp.size();
+        size_t nPos = maName.find(rCmp);
+        if (nPos == std::string::npos)
+            return false;
+
+        size_t nEndPos = nPos + rCmp.size();
         return nEndPos == maName.size();
     }
 
