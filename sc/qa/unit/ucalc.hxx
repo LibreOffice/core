@@ -443,6 +443,9 @@ public:
     void testDataBarLengthAutomaticAxis();
     void testDataBarLengthMiddleAxis();
 
+    void testCondFormatEndsWithStr();
+    void testCondFormatEndsWithVal();
+
     void testImportStream();
     void testDeleteContents();
     void testTransliterateText();
@@ -675,6 +678,8 @@ public:
     CPPUNIT_TEST(testCondCopyPasteSingleCellToRange);
     CPPUNIT_TEST(testCondCopyPasteSheetBetweenDoc);
     CPPUNIT_TEST(testCondCopyPasteSheet);
+    CPPUNIT_TEST(testCondFormatEndsWithStr);
+    CPPUNIT_TEST(testCondFormatEndsWithVal);
     CPPUNIT_TEST(testIconSet);
     CPPUNIT_TEST(testDataBarLengthAutomaticAxis);
     CPPUNIT_TEST(testDataBarLengthMiddleAxis);
