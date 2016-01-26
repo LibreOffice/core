@@ -1,0 +1,248 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_f1f2c205",
+        "filename": "basegfx/source/workbench/bezierclip.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "comparisions -\u003e comparisons",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_d1f7c6f3",
+        "filename": "embeddedobj/source/msole/advisesink.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "FYI: the previous location of the word \"already\" is correct too; no need to change it.",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_31dd6a71",
+        "filename": "extensions/source/propctrlr/defaultforminspection.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "You introduced an error here: the grammar was correct as it was.",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_11daee78",
+        "filename": "filter/source/config/cache/filterfactory.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "\"alphabetically\" is an adverb. Here it should say \"alphabetical\"",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_71e7f240",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3224,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "\"It may be\" is a correction closer to the original.",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_51e4763a",
+        "filename": "framework/source/services/frame.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "\"otherwhise\" -\u003e \"otherwise\"",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b1cf9ab2",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/FunctionHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "Useless change. Drop it from your next patchset.",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_91d41e48",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/NativeView.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "\"till\" is correct, \"untill\" is not. (\"Until\", with a single \"l\", is a newer form of the older \"till\".)",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_f1c922ae",
+        "filename": "officecfg/registry/schema/org/openoffice/TypeDetection/UISort.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "\"Its\" -\u003e \"It\u0027s\" (contraction of \"it is\")",
+      "range": {
+        "startLine": 31,
+        "startChar": 16,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_d1cea6b3",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "\"between\" -\u003e \"in between\"",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_31c44a91",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "also, \"followind\" -\u003e \"following\"",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_51bbd60e",
+        "filename": "svx/inc/sdr/contact/objectcontactofpageview.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "also, \"te\" -\u003e \"the\"",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b1367ab2",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "https://en.wiktionary.org/wiki/in_between\n\nSame for the rest of the changes to this file.",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_314baa2d",
+        "filename": "writerfilter/source/rtftok/rtfdocumentimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-01-26T07:23:40Z",
+      "side": 1,
+      "message": "I don\u0027t think so...",
+      "revId": "f68e12a1bb1c2c9d21f9e366be3026fd309df0b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
