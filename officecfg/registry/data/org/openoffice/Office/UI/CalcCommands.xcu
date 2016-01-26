@@ -284,7 +284,7 @@
       </node>
       <node oor:name=".uno:StatusSelectionMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Selection Mode</value>
+          <value xml:lang="en-US">Se~lection Mode</value>
         </prop>
       </node>
       <node oor:name=".uno:SimpleReferenz" oor:op="replace">

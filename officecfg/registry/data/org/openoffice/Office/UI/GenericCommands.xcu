@@ -3666,7 +3666,7 @@
       </node>
       <node oor:name=".uno:Redo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Redo</value>
+          <value xml:lang="en-US">~Redo</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3674,7 +3674,7 @@
       </node>
       <node oor:name=".uno:Undo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Undo</value>
+          <value xml:lang="en-US">~Undo</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3693,7 +3693,7 @@
       </node>
       <node oor:name=".uno:Repeat" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Repeat</value>
+          <value xml:lang="en-US">Repea~t</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3706,7 +3706,7 @@
       </node>
       <node oor:name=".uno:Cut" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Cu~t</value>
+          <value xml:lang="en-US">~Cut</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3714,7 +3714,7 @@
       </node>
       <node oor:name=".uno:Copy" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Copy</value>
+          <value xml:lang="en-US">Cop~y</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3883,7 +3883,7 @@
       </node>
       <node oor:name=".uno:ImageMapDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">ImageMap</value>
+          <value xml:lang="en-US">Image~Map</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -5775,7 +5775,7 @@
       </node>
       <node oor:name=".uno:EditCommentsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">C~omment</value>
+          <value xml:lang="en-US">Comme~nt</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatImageFilterMenu" oor:op="replace">
