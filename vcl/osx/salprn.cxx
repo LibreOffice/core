@@ -590,7 +590,7 @@ bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
 bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
                                const OUString& /*i_rJobName*/,
                                const OUString& /*i_rAppName*/,
-                               sal_uLong /*i_nCopies*/,
+                               sal_uInt32 /*i_nCopies*/,
                                bool /*i_bCollate*/,
                                bool /*i_bDirect*/,
                                ImplJobSetup* )
