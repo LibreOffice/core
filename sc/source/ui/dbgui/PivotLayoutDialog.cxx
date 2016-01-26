@@ -17,6 +17,7 @@
 #include "rangeutl.hxx"
 #include "uiitems.hxx"
 #include "dputil.hxx"
+#include "dbdocfun.hxx"
 
 #include <vector>
 
@@ -490,6 +491,8 @@ void ScPivotLayoutDialog::ApplyChanges()
     ApplySaveData(aSaveData);
     ApplyLabelData(aSaveData);
 
+    ScDPObject *pOldDPObj = mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
+    const ScRange& rOldRange = pOldDPObj->GetOutRange();
     ScRange aDestinationRange;
     bool bToNewSheet = false;
 
@@ -503,6 +506,7 @@ void ScPivotLayoutDialog::ApplyChanges()
     ScPivotItem aPivotItem(nWhichPivot, &aSaveData, &aDestinationRange, bToNewSheet);
     mpViewData->GetViewShell()->SetDialogDPObject(&maPivotTableObject);
 
+
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     SfxCallMode nCallMode = SfxCallMode::SLOT | SfxCallMode::RECORD;
     const SfxPoolItem* pResult = pDispatcher->Execute(SID_PIVOT_TABLE, nCallMode, &aPivotItem, nullptr, 0);
@@ -510,9 +514,22 @@ void ScPivotLayoutDialog::ApplyChanges()
     if (pResult != nullptr)
     {
         const SfxBoolItem* pItem = reinterpret_cast<const SfxBoolItem*>(pResult);
+
         if (pItem)
         {
-            return;
+           // User wants to move existing pivot table to another (non-overlapping)
+           // range or to a new sheet
+           // FIXME: if the new range overlaps with the old one, the table actually doesn't move
+           // and shouldn't therefore be deleted
+           if ( !rOldRange.In( aDestinationRange )
+                || (bToNewSheet && !mbNewPivotTable) )
+           {
+               ScDPObject *pDPObj = mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
+               ScDBDocFunc aFunc( *(mpViewData->GetDocShell() ));
+               aFunc.RemovePivotTable( *pDPObj, true, false);
+               mpViewData->GetView()->CursorPosChanged();
+           }
+           return;
         }
     }
 
