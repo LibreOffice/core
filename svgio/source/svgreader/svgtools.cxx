@@ -67,7 +67,9 @@ namespace svgio
 
         basegfx::B2DHomMatrix SvgAspectRatio::createMapping(const basegfx::B2DRange& rTarget, const basegfx::B2DRange& rSource) const
         {
-            if(!isSet() || Align_none == getSvgAlign())
+            // removed !isSet() from below. Due to correct defaults in the constructor an instance
+            // of this class is perfectly useful without being set by any importer
+            if(Align_none == getSvgAlign())
             {
                 // create linear mapping (default)
                 return createLinearMapping(rTarget, rSource);
