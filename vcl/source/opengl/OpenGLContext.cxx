@@ -11,6 +11,7 @@
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -22,7 +23,8 @@
 
 #if defined(MACOSX)
 #include <premac.h>
-#include "OpenGLWrapper.hxx"
+#include <AppKit/NSOpenGLView.h>
+#include <AppKit/NSOpenGL.h>
 #include <postmac.h>
 #endif
 
@@ -48,6 +50,8 @@ static std::vector<GLXContext> g_vShareList;
 #elif defined(WNT)
 static std::vector<HGLRC> g_vShareList;
 #endif
+
+static sal_Int64 nBufferSwapCounter = 0;
 
 GLWindow::~GLWindow()
 {
@@ -991,7 +995,7 @@ bool OpenGLContext::ImplInit()
 
     VCL_GL_INFO("OpenGLContext::ImplInit----start");
     NSOpenGLView* pView = getOpenGLView();
-    OpenGLWrapper::makeCurrent(pView);
+    [[pView openGLContext] makeCurrentContext];
 
     bool bRet = InitGLEW();
     InitGLEWDebugging();
@@ -1265,7 +1269,7 @@ void OpenGLContext::reset()
         m_aGLWin.hRC = 0;
     }
 #elif defined( MACOSX )
-    OpenGLWrapper::resetCurrent();
+    [NSOpenGLContext clearCurrentContext];
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
@@ -1421,7 +1425,7 @@ void OpenGLContext::makeCurrent()
     }
 #elif defined( MACOSX )
     NSOpenGLView* pView = getOpenGLView();
-    OpenGLWrapper::makeCurrent(pView);
+    [[pView openGLContext] makeCurrentContext];
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
@@ -1512,7 +1516,7 @@ void OpenGLContext::resetCurrent()
     wglMakeCurrent(NULL, NULL);
 #elif defined( MACOSX )
     (void) this; // loplugin:staticmethods
-    OpenGLWrapper::resetCurrent();
+    [NSOpenGLContext clearCurrentContext];
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
@@ -1529,12 +1533,14 @@ void OpenGLContext::swapBuffers()
     SwapBuffers(m_aGLWin.hDC);
 #elif defined( MACOSX )
     NSOpenGLView* pView = getOpenGLView();
-    OpenGLWrapper::swapBuffers(pView);
+    [[pView openGLContext] flushBuffer];
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
     glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
 #endif
+
+    nBufferSwapCounter++;
 
     static bool bSleep = getenv("SAL_GL_SLEEP_ON_SWAP");
     if (bSleep)
@@ -1543,6 +1549,11 @@ void OpenGLContext::swapBuffers()
         TimeValue aSleep( 0, 500*1000*1000 );
         osl::Thread::wait( aSleep );
     }
+}
+
+sal_Int64 OpenGLWrapper::getBufferSwapCounter()
+{
+    return nBufferSwapCounter;
 }
 
 void OpenGLContext::sync()
