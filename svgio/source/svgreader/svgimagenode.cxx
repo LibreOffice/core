@@ -324,8 +324,41 @@ namespace svgio
                             }
                             else
                             {
-                                // choose default mapping
-                                const basegfx::B2DHomMatrix aEmbeddingTransform(SvgAspectRatio::createLinearMapping(aTarget, aViewBox));
+                                // direct mapping aTarget to aViewBox will perfectly place the bitmap data into
+                                // the defined place, but not keep the aspect ratio of the bitmap data. But when
+                                // comparing to other SVG visualizers, exactly that seems to be intended.
+                                // Information about this in the SVG specification was not found, but keep conform
+                                // to behaviour of other SVG visualozers. Adapt destination aspect ratio
+                                // to source aspect ratio before creating the transformation mapping
+                                const double fSourceAspectRatio((double)aBitmapEx.GetSizePixel().Width() / (double)aBitmapEx.GetSizePixel().Height());
+                                const double fDestAspectRatio(fWidth / fHeight);
+                                basegfx::B2DRange aAdaptedTarget(aTarget);
+
+                                if(fDestAspectRatio > fSourceAspectRatio)
+                                {
+                                    // adapt width of destination range
+                                    const double fHalfFreeWidth((fWidth - (fSourceAspectRatio * fHeight)) * 0.5);
+
+                                    aAdaptedTarget = basegfx::B2DRange(
+                                        aTarget.getMinX() + fHalfFreeWidth,
+                                        aTarget.getMinY(),
+                                        aTarget.getMaxX() - fHalfFreeWidth,
+                                        aTarget.getMaxY());
+                                }
+                                else if(fSourceAspectRatio > fDestAspectRatio)
+                                {
+                                    // adopt height of destination range
+                                    const double fHalfFreeHeight((fHeight - (fWidth / fSourceAspectRatio)) * 0.5);
+
+                                    aAdaptedTarget = basegfx::B2DRange(
+                                        aTarget.getMinX(),
+                                        aTarget.getMinY() + fHalfFreeHeight,
+                                        aTarget.getMaxX(),
+                                        aTarget.getMaxY() - fHalfFreeHeight);
+                                }
+
+                                // create default mapping
+                                const basegfx::B2DHomMatrix aEmbeddingTransform(SvgAspectRatio::createLinearMapping(aAdaptedTarget, aViewBox));
 
                                 if(!aEmbeddingTransform.isIdentity())
                                 {
