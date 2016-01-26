@@ -11,7 +11,7 @@
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
-#include <vcl/openglwin.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -1549,7 +1549,7 @@ void OpenGLContext::swapBuffers()
     }
 }
 
-sal_Int64 OpenGLWindow::getBufferSwapCounter()
+sal_Int64 OpenGLWrapper::getBufferSwapCounter()
 {
     return nBufferSwapCounter;
 }

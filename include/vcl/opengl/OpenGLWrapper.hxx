@@ -23,6 +23,12 @@ struct VCL_DLLPUBLIC OpenGLWrapper
      * Returns true if VCL has OpenGL rendering enabled
      */
     static bool isVCLOpenGLEnabled();
+
+
+    /**
+     * Returns the number of times OpenGL buffers have been swapped.
+     */
+    static sal_Int64 getBufferSwapCounter();
 };
 
 #endif // INCLUDED_VCL_OPENGL_OPENGLWRAPPER_HXX

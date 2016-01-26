@@ -98,7 +98,6 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/openglwin.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/split.hxx>
@@ -114,6 +113,7 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1922,7 +1922,7 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
 sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
     throw (css::uno::RuntimeException, std::exception)
 {
-     return OpenGLWindow::getBufferSwapCounter();
+     return OpenGLWrapper::getBufferSwapCounter();
 }
 
 // css:awt:XToolkitRobot
