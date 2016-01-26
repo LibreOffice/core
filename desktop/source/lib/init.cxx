@@ -115,17 +115,6 @@ typedef struct
     const char *filterName;
 } ExtensionMap;
 
-// We need a shared_array for passing into the BitmapDevice (via
-// VirtualDevice.SetOutputSizePixelScaleOffsetAndBuffer which goes via the
-// SvpVirtualDevice, ending up in the basebmp BitmapDevice. However as we're
-// given the array externally we can't delete it, and hence need to override
-// shared_array's default of deleting its pointer.
-template<typename T>
-struct NoDelete
-{
-   void operator()(T* /* p */) {}
-};
-
 static const ExtensionMap aWriterExtensionMap[] =
 {
     { "doc",   "MS Word 97" },
@@ -1029,21 +1018,9 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
     memset(pBuffer, 0, nCanvasWidth * nCanvasHeight * 4);
     pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
 
-    boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
-
-    // Allocate a separate buffer for the alpha device.
-    std::vector<sal_uInt8> aAlpha(nCanvasWidth * nCanvasHeight);
-    memset(aAlpha.data(), 0, nCanvasWidth * nCanvasHeight);
-    boost::shared_array<sal_uInt8> aAlphaBuffer;
-
-    // No alpha buffer for Calc: it would result in misrendered hyperlinks with
-    // pre-cairo headless codepath.
-    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_SPREADSHEET)
-        aAlphaBuffer.reset(aAlpha.data(), NoDelete<sal_uInt8>());
-
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                aBuffer, aAlphaBuffer);
+                pBuffer);
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
@@ -1757,14 +1734,12 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
 
             unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
             memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
-            boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
-            boost::shared_array<sal_uInt8> aAlphaBuffer;
 
             aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
             aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
                         Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
-                        aBuffer, aAlphaBuffer);
-            aDevice.DrawText(Point(0,0), aFontName);
+                        pBuffer);
+            aDevice->DrawText(Point(0,0), aFontName);
 
             return pBuffer;
         }
