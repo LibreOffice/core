@@ -312,7 +312,7 @@
       </node>
       <node oor:name=".uno:EditHyperlink" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">H~yperlink</value>
+          <value xml:lang="en-US">~Hyperlink</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Edit Hyperlink...</value>
@@ -361,7 +361,7 @@
       </node>
       <node oor:name=".uno:ChangeDatabaseField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Exc~hange Database...</value>
+          <value xml:lang="en-US">Exchange Data~base...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -684,7 +684,7 @@
       </node>
       <node oor:name=".uno:SelectionMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Selection Mode</value>
+          <value xml:lang="en-US">Se~lection Mode</value>
         </prop>
       </node>
       <node oor:name=".uno:ExecHyperlinks" oor:op="replace">
