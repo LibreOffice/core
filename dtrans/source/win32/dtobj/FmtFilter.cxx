@@ -180,7 +180,7 @@ HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 >& aOOMetaFileP
 
 Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 {
-    OSL_ENSURE(aWinDIB.getLength() > sizeof(BITMAPINFOHEADER), "CF_DIBV5/CF_DIB too small (!)");
+    OSL_ENSURE(sal_uInt32(aWinDIB.getLength()) > sizeof(BITMAPINFOHEADER), "CF_DIBV5/CF_DIB too small (!)");
     Sequence< sal_Int8 > ooBmpStream;
 
     ooBmpStream.realloc(aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER));
