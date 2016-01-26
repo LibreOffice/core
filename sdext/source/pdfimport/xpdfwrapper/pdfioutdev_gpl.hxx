@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <config_poppler.h>
 
-#if defined __GNUC__
+#if defined __GNUC__ || defined __clang__
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wunused-parameter"
 #elif defined _MSC_VER
@@ -39,7 +39,7 @@
 #include "GlobalParams.h"
 #include "PDFDoc.h"
 
-#if defined __GNUC__
+#if defined __GNUC__ || defined __clang__
 # pragma GCC diagnostic pop
 #elif defined _MSC_VER
 #pragma warning(pop)

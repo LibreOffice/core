@@ -257,6 +257,8 @@ int issymbolic(char *dir, char *component)
             fatalerr("out of .. dirs, increase MAXDIRS\n");
         return TRUE;
     }
+#else
+    (void)dir; (void)component;
 #endif
     return FALSE;
 }

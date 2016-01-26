@@ -195,7 +195,7 @@ void AccContainerEventListener::HandleAllChildrenChangedEvent()
 /**
  *  handle the TEXT_CHANGED event
  */
-void AccContainerEventListener::HandleTextChangedEvent(Any oldValue, Any newValue)
+void AccContainerEventListener::HandleTextChangedEvent(Any, Any newValue)
 {
     pAgent->UpdateValue(m_xAccessible.get(), newValue);
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_TEXTCHANGE, m_xAccessible.get());
@@ -421,7 +421,7 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccContainerEventListener::HandleValueChangedEvent(Any oldValue, Any newValue)
+void AccContainerEventListener::HandleValueChangedEvent(Any, Any)
 {
     pAgent->UpdateValue(m_xAccessible.get());
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_VALUECHANGE, m_xAccessible.get());

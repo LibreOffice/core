@@ -93,7 +93,7 @@ throw (css::uno::RuntimeException)
  *  @param oldValue     in UNO, this parameter is always NULL
  *  @param newValue     in UNO, this parameter is always NULL
  */
-void AccParagraphEventListener::HandleCaretChangedEvent(Any oldValue, Any newValue)
+void AccParagraphEventListener::HandleCaretChangedEvent(Any, Any)
 {
     pAgent->UpdateLocation(m_xAccessible.get());
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_CARETCHANGE, m_xAccessible.get());

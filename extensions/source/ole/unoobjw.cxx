@@ -1556,7 +1556,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
 }
 
 HRESULT UnoObjectWrapperRemoteOpt::methodInvoke( DISPID /*dispidMember*/, DISPPARAMS * /*pdispparams*/, VARIANT * /*pvarResult*/,
-                              EXCEPINFO * /*pexcepinfo*/, unsigned int * /*puArgErr*/, Sequence<Any> params)
+                              EXCEPINFO * /*pexcepinfo*/, unsigned int * /*puArgErr*/, Sequence<Any>)
 {
     return S_OK;
 }

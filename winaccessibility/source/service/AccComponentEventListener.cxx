@@ -91,7 +91,7 @@ throw (css::uno::RuntimeException)
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccComponentEventListener::HandleValueChangedEvent(Any oldValue, Any newValue)
+void AccComponentEventListener::HandleValueChangedEvent(Any, Any)
 {
     pAgent->UpdateValue(m_xAccessible.get());
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_VALUECHANGE, m_xAccessible.get());
@@ -112,7 +112,7 @@ void AccComponentEventListener::HandleActionChangedEvent()
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccComponentEventListener::HandleTextChangedEvent(Any oldValue, Any newValue)
+void AccComponentEventListener::HandleTextChangedEvent(Any, Any newValue)
 {
     pAgent->UpdateValue(m_xAccessible.get(), newValue);
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_VALUECHANGE, m_xAccessible.get());
@@ -124,7 +124,7 @@ void AccComponentEventListener::HandleTextChangedEvent(Any oldValue, Any newValu
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccComponentEventListener::HandleCaretChangedEvent(Any oldValue, Any newValue)
+void AccComponentEventListener::HandleCaretChangedEvent(Any, Any)
 {
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_CARETCHANGE, m_xAccessible.get());
 }

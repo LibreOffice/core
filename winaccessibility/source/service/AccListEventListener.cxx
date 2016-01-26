@@ -111,7 +111,7 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccListEventListener::HandleValueChangedEvent(Any oldValue, Any newValue)
+void AccListEventListener::HandleValueChangedEvent(Any, Any)
 {
     //to enable value changed event
     if (GetParentRole() == AccessibleRole::COMBO_BOX)
