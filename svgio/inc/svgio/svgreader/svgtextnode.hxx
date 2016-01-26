@@ -58,6 +58,8 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
+            virtual double getCurrentFontSize() const override;
+
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
             void setTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
