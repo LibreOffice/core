@@ -106,10 +106,6 @@ $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/osx/OpenGLWrapper \
-))
-
 endif
 
 ifeq ($(ENABLE_JAVA),TRUE)
