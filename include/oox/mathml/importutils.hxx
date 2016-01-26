@@ -122,7 +122,7 @@ public:
         std::map< int, OUString > attrs;
     };
     /**
-     Structure representing a tag, including its attributes and content text immediatelly following it.
+     Structure representing a tag, including its attributes and content text immediately following it.
     */
     struct OOX_DLLPUBLIC Tag
     {

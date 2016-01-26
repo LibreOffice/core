@@ -780,7 +780,7 @@ public:
     css::uno::Reference<css::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel = nullptr);
 
     /**
-     Used for attributes/sprms which cannot be evaluated immediatelly (e.g. they depend
+     Used for attributes/sprms which cannot be evaluated immediately (e.g. they depend
      on another one that comes in the same CONTEXT_CHARACTER). The property will be processed
      again in DomainMapper::processDeferredCharacterProperties().
     */

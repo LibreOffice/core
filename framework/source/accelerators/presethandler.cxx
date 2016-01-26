@@ -81,7 +81,7 @@ PresetHandler::~PresetHandler()
     m_xWorkingStorageUser.clear();
 
     /* #i46497#
-        Dont call forgetCachedStorages() here for shared storages.
+        Don't call forgetCachedStorages() here for shared storages.
         Because we opened different sub storages by using openPath().
         And every already open path was reused and referenced (means it's
         ref count was increased!)

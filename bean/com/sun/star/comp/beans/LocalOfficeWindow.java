@@ -54,7 +54,7 @@ public class LocalOfficeWindow
     private boolean             bPeer = false;
 
     /**
-     * Construnctor.
+     * Constructor.
      *
      * @param connection The office connection object the window
      *  belongs to.

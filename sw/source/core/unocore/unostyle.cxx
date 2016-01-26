@@ -1822,7 +1822,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
     if(!pUnoToCore)
     {
         pUnoToCore.reset(new std::map<propertytype_t, coresetter_t> {
-            // these explicit std::mem_fn() calls shouldnt be needed, but apparently MSVC is currently too stupid for C++11 again
+            // these explicit std::mem_fn() calls shouldn't be needed, but apparently MSVC is currently too stupid for C++11 again
             { FN_UNO_HIDDEN,                 std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>)                 },
             { FN_UNO_STYLE_INTEROP_GRAB_BAG, std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>) },
             { XATTR_FILLGRADIENT,            std::mem_fn(&SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>)            },
@@ -3464,7 +3464,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     // TextLeft returns the left content if there is one,
                     // Text and TextRight return the master content.
                     // TextRight does the same as Text and is for
-                    // compatability only.
+                    // compatibility only.
                     if( bLeft && !bShare )
                     {
                         pFrameFormat = &pDesc->GetLeft();
