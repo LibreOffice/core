@@ -20,6 +20,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svgio/svgreader/svgdocument.hxx>
 #include <svgio/svgreader/svgnode.hxx>
+#include <svgio/svgreader/svgtextnode.hxx>
 #include <svgio/svgreader/svgstyleattributes.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <tools/urlobj.hxx>
@@ -623,8 +624,13 @@ namespace svgio
 
         double SvgNode::getCurrentFontSize() const
         {
-            if(getSvgStyleAttributes())
-                return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, xcoordinate);
+            //For nodes of type TextNode, font size numbers are parsed before in
+            //SvgCharacterNode::createSimpleTextPrimitive
+            //so avoid doing it again here or the font size will be double when using relative units (em, ex)
+            const SvgTextNode* isTextNode = dynamic_cast< const SvgTextNode*>(this);
+            if(!isTextNode)
+                if(getSvgStyleAttributes())
+                    return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, xcoordinate);
 
             return getCurrentFontSizeInherited();
         }
