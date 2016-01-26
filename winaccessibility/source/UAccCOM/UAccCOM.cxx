@@ -64,8 +64,14 @@ OBJECT_ENTRY(CLSID_AccValue, CAccValue)
 OBJECT_ENTRY(CLSID_AccTable, CAccTable)
 OBJECT_ENTRY(CLSID_AccHyperLink, CAccHyperLink)
 OBJECT_ENTRY(CLSID_AccHypertext, CAccHypertext)
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-field-initializers"
+#endif
 END_OBJECT_MAP()
-
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 // DLL Entry Point
 
