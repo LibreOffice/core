@@ -160,7 +160,7 @@ class PresetHandler
         PresetHandler(const PresetHandler& rCopy);
 
         /** @short  closes all open storages ... if user forgot that .-) */
-        virtual ~PresetHandler();
+        ~PresetHandler();
 
         /** @short  free all currently cache(!) storages. */
         void forgetCachedStorages();
