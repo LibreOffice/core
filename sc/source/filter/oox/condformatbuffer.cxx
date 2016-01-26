@@ -104,18 +104,30 @@ const sal_uInt16 BIFF12_CFRULE_ABOVEAVERAGE         = 0x0004;
 const sal_uInt16 BIFF12_CFRULE_BOTTOM               = 0x0008;
 const sal_uInt16 BIFF12_CFRULE_PERCENT              = 0x0010;
 
+bool isValue(const OUString& rStr, double& rVal)
+{
+    sal_Int32 nEnd = -1;
+    rVal = rtl::math::stringToDouble(rStr.trim(), '.', ',', nullptr, &nEnd);
+
+    if (nEnd < rStr.getLength())
+        return false;
+
+    return true;
+}
+
 void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_type, OUString() );
+    OUString aVal = rAttribs.getString(XML_val, OUString());
 
-    if( aType == "formula" )
+    double nVal = 0.0;
+    bool bVal = isValue(aVal, nVal);
+    if( !bVal || aType == "formula" )
     {
-        OUString aFormula = rAttribs.getString( XML_val, OUString() );
-        pEntry->maFormula = aFormula;
+        pEntry->maFormula = aVal;
     }
     else
     {
-        double nVal = rAttribs.getDouble( XML_val, 0.0 );
         pEntry->mnVal = nVal;
     }
 
@@ -357,11 +369,9 @@ void IconSetRule::importAttribs( const AttributeList& rAttribs )
 void IconSetRule::importFormula(const OUString& rFormula)
 {
     ColorScaleRuleModelEntry& rEntry = maEntries.back();
-    if (rEntry.mbNum ||
-            rEntry.mbPercent ||
-            rEntry.mbPercentile)
+    double nVal = 0.0;
+    if ((rEntry.mbNum || rEntry.mbPercent || rEntry.mbPercentile) && isValue(rFormula, nVal))
     {
-        double nVal = rFormula.toDouble();
         rEntry.mnVal = nVal;
     }
     else if (!rFormula.isEmpty())
